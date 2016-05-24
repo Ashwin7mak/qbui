@@ -97,13 +97,10 @@
         this.reportRecordsCount = this.reportToolsAndContentEl.element(by.className('recordsCount'));
         // Report filter search Box
         this.reportFilterSearchBox = this.reportsToolBar.element(by.className('searchInput'));
-
-        // Loaded Content Div
-        this.loadedContentEl = this.reportContainerEl.all(by.className('loadedContent')).first();
         // Table actions container
         this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
         // agGrid table
-        this.griddleWrapperEl = this.loadedContentEl.element(by.className('griddleWrapper'));
+        this.griddleWrapperEl = this.loadedContentEl.element(by.className('gridWrapper'));
         this.agGridContainerEl = this.griddleWrapperEl.all(by.className('agGrid')).first();
         this.agGridBodyEl = this.agGridContainerEl.element(by.className('ag-body-container'));
         this.agGridHeaderEl = this.agGridContainerEl.element(by.className('ag-header-container'));

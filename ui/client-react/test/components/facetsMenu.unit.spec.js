@@ -151,11 +151,11 @@ describe('FacetsMenu functions', () => {
         let tokens = TestUtils.scryRenderedDOMComponentsWithClass(component, "selectedTokenName");
         expect(tokens.length).toEqual(2);
 
-        //click on token doesn't deselects
+        //click on token deselects
         spyOn(callbacks, 'onFacetDeselect').and.callThrough();
         tokens = TestUtils.scryRenderedDOMComponentsWithClass(component, "selectedTokenName");
         TestUtils.Simulate.click(tokens[1]);
-        expect(callbacks.onFacetDeselect).not.toHaveBeenCalled();
+        expect(callbacks.onFacetDeselect).toHaveBeenCalled();
 
         //click on clear icon deselects
         let tokenClears = TestUtils.scryRenderedDOMComponentsWithClass(component, "clearFacet");

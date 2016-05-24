@@ -2,162 +2,79 @@ import React from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import CardView from './cardView';
 import Loader  from 'react-loader';
-import Fluxxor from 'fluxxor';
-
+import {Collapse} from 'react-bootstrap';
 import './cardViewList.scss';
+import QBicon from '../../qbIcon/qbIcon';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 /**
  * A list of CardView items used to render a report at the small breakpoint
  */
 let CardViewList = React.createClass({
-    mixins: [FluxMixin],
-    contextTypes: {
-        history: React.PropTypes.object
-    },
     propTypes: {
-        reportData: React.PropTypes.object.isRequired,
-        uniqueIdentifier: React.PropTypes.string,
-        reportHeader: React.PropTypes.element,
-        selectionActions: React.PropTypes.element,
-        onScroll: React.PropTypes.func
+        allowCardSelection: React.PropTypes.func,
+        onToggleCardSelection: React.PropTypes.func,
+        onRowSelected: React.PropTypes.func,
+        onRowClicked: React.PropTypes.func,
+        isRowSelected: React.PropTypes.func
     },
 
     getInitialState() {
         return {
-            allowCardSelection: false
+            open: true
         };
     },
 
-    /**
-     * are we in card selection mode
-     */
-    allowCardSelection() {
-        return this.state.allowCardSelection;
-    },
-
-    /**
-     * card has requested card selection (by swiping right)
-     * or has finished card selection (by swiping left to hide selection column)
-     */
-    onToggleCardSelection(allow = true, rowData = null) {
-        this.setState({allowCardSelection: allow});
-
-        const flux = this.getFlux();
-        if (!allow) {
-            flux.actions.selectedRows([]);
-        } else if (rowData) {
-            this.onCardRowSelected(rowData); // pre-select the card that started selection
-        }
-    },
-
-    /**
-     * is row selected callback
-     */
-    isRowSelected(row) {
-        return this.props.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
-    },
-
-    /**
-     * report row was clicked
-     * @param row data
-     */
-    onRowClicked(row) {
-
-        const {appId, tblId} = this.props.reportData;
-        let recId;
-
-        //check to see if props exist, if they do we need to get recId from row.props.data (this is for non-custom row component clicks)
-        if (row.props) {
-            recId = row.props.data[this.props.uniqueIdentifier];
-        } else {
-            recId = row[this.props.uniqueIdentifier];
-        }
-        //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
-        this.context.history.push(link);
-    },
-
-    /**
-     * card row selection callback
-     * @param row
-     */
-    onCardRowSelected(row) {
-
-        const flux = this.getFlux();
-
-        const id = row[this.props.uniqueIdentifier];
-
-        let selectedRows = this.props.selectedRows;
-
-        if (selectedRows.indexOf(id) === -1) {
-            // not already selected, add to selectedRows
-            selectedRows.push(row[this.props.uniqueIdentifier]);
-        } else {
-            // already selected, remove from selectedRows
-            selectedRows = _.without(selectedRows, id);
-        }
-        flux.actions.selectedRows(selectedRows);
-    },
-
-    getRows(results) {
-
-        let cardViewListClasses = this.props.selectedRows.length ? "cardViewList selectedRows" : "cardViewList";
-        if (this.state.allowCardSelection) {
-            cardViewListClasses += " allowCardSelection";
-        }
-        const records = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
-
-
-        return (
-            <div className={cardViewListClasses} ref="cardViewList">
-
-                {records.map((record, i) => {
-                    return <CardView key={i}
-                                     rowId={i}
-                                     data={record}
-                                     allowCardSelection={this.allowCardSelection}
-                                     onToggleCardSelection={this.onToggleCardSelection}
-                                     onRowSelected={this.onCardRowSelected}
-                                     onRowClicked={this.onRowClicked}
-                                     isRowSelected={this.isRowSelected}
-                                     metadataColumns={["actions"]}/>;
-                })
+    getRows() {
+        let childNodes;
+        if (this.props.node.children) {
+            childNodes = this.props.node.children.map((node, index) =>{
+                let groupId = index.toString();
+                if (this.props.groupId !== "") {
+                    groupId = this.props.groupId + "." + index;
                 }
-            </div>);
-    },
+                let groupLevel = groupId.split(".").length - 1;
+                return <CardViewList key={index} groupId={groupId} groupLevel={groupLevel} node={node}
+                                         allowCardSelection={this.props.allowCardSelection}
+                                         onToggleCardSelection={this.props.onToggleCardSelection}
+                                         onRowSelected={this.props.onRowSelected}
+                                         onRowClicked={this.props.onRowClicked}
+                                         isRowSelected={this.props.isRowSelected}/>;
+            });
+        }
 
-    /**
-     * tell parent we're scrolling so they can hide the add record icon
-     */
-    componentDidMount() {
-        this.refs.cardViewListWrapper.addEventListener("scroll", this.props.onScroll);
-    },
-
-    /**
-     * tell parent we've stopped scrolling so they can re-display the add record icon
-     */
-    componentWillUnmount() {
-        this.refs.cardViewListWrapper.removeEventListener("scroll", this.props.onScroll);
+        let className = "cardViewList group-level-" + this.props.groupLevel;
+        let groupIcon = this.state.open ? "caret-filled-down" : "icon_caretfilledright";
+        return (
+            <div>
+                {this.props.node.group || this.props.node.children && this.props.node.children.length ?
+                    <div className={className}>
+                        <div className="group-header" onClick={()=>this.setState({open: !this.state.open})}>
+                            <QBicon icon={groupIcon} /> {this.props.node.group}
+                        </div>
+                        <Collapse in={this.state.open}>
+                            <div>
+                                {childNodes}
+                            </div>
+                        </Collapse>
+                    </div> :
+                    <CardView key={this.props.node[this.props.uniqueIdentifier]}
+                              rowId={this.props.node[this.props.uniqueIdentifier]}
+                              data={this.props.node}
+                              allowCardSelection={this.props.allowCardSelection}
+                              onToggleCardSelection={this.props.onToggleCardSelection}
+                              onRowSelected={this.props.onRowSelected}
+                              onRowClicked={this.props.onRowClicked}
+                              isRowSelected={this.props.isRowSelected}
+                              metadataColumns={["actions"]}>
+                    </CardView>
+                }
+            </div>
+        );
     },
 
     render() {
-        let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
-
         return (
-            <div className="reportTable">
-
-                <div className="tableLoaderContainer" ref="cardViewListWrapper">
-                    <Loader loaded={!this.props.reportData.loading}>
-                        {results ?
-                            this.getRows(results) :
-                            <div className="noData"><I18nMessage message={'grid.no_data'}/></div>}
-                    </Loader>
-                    { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
-                        this.props.reportData.loading ? <div className="loadedContent"></div> : null
-                    }
-                </div>
-            </div>
+            this.props.node ? this.getRows() : null
         );
     }
 });
