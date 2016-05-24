@@ -1,13 +1,13 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {Button} from 'react-bootstrap';
-import {Popover} from 'react-bootstrap';
 import OverlayDialogHeader from '../overlay/overlayDialogHeader';
 import FieldSettings from './fieldSettings';
 import FieldsPanel from './fieldsPanel';
 import sortGroupFieldShape from './sortGroupProp';
 import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
 import closeOnEscape from '../hoc/catchEscapeKey';
+import QBToolTip from '../qbToolTip/qbToolTip';
 
 import './sortAndGroup.scss';
 import '../../assets/css/animate.min.css';
@@ -41,7 +41,7 @@ var SortAndGroupDialog = React.createClass({
         // are available, fields not visible in report are also available for selection
         fieldChoiceList: React.PropTypes.array,
 
-        // the visiable fields in the reports table groups
+        // the visible fields in the reports table groups
         visGroupEls: React.PropTypes.array,
 
         // the callback that is used when ready to close/hide this popover
@@ -87,6 +87,7 @@ var SortAndGroupDialog = React.createClass({
                               onRemoveField={this.props.onRemoveField}
                               onSetOrder={this.props.onSetOrder}
                               fieldChoiceList={this.props.fieldChoiceList}
+                              key={type + "Settings"}
               />
           );
     },
@@ -124,15 +125,14 @@ var SortAndGroupDialog = React.createClass({
     render() {
         // wrap the sort dialog in additional functionality to close the dialog on escape
         // and to not handle any outside clicks while the dialog is open
-        const SortAndGroupPopover = React.createClass({
+        const SortAndGroupWrapper = React.createClass({
             render() {
-                return <Popover
-                    {...this.props}
-                    {...this.state}
-                />;
+                return <div key="sng"
+                    {...this.props}>
+                </div>;
             }
         });
-        let SortAndGroupDialogWrapped = thwartClicksWrapper(closeOnEscape(SortAndGroupPopover));
+        let SortAndGroupDialogWrapped = thwartClicksWrapper(closeOnEscape(SortAndGroupWrapper));
 
         return (
             this.props.show ? (
@@ -142,43 +142,53 @@ var SortAndGroupDialog = React.createClass({
                      handleClickOutside={this.handleClickOutside}
                      onClose={this.props.onClose}
                      placement="bottom">
-                    <div>
-                        <div className={"settingsDialog" + (this.props.showFields ? ' fieldsShown' : '')} >
-                            <div className="dialogTop">
-                                <OverlayDialogHeader
-                                    iconName="sortButton"
-                                    icon="sort-az"
-                                    dialogTitleI18N="report.sortAndGroup.header"
-                                    onCancel={this.props.onClose}
-                                    onApplyChanges={this.props.onApplyChanges}
-                                    onReset={this.props.onReset}
-                                />
+
+                        <div className={"settingsDialog" + (this.props.showFields ? ' fieldsShown' : '')} key="sgSettings">
+                            <div className="dialogUpper">
+                                <div className="dialogTop">
+                                    <OverlayDialogHeader
+                                        iconName="sortButton"
+                                        icon="sort-az"
+                                        dialogTitleI18N="report.sortAndGroup.header"
+                                        onCancel={this.props.onClose}
+                                        onApplyChanges={this.props.onApplyChanges}
+                                        onReset={this.props.onReset}
+                                    />
+                                </div>
+                                 <div className="dialogContent">
+                                     {this.renderFieldSettings(3, "group", this.props.groupByFields)}
+                                     {this.renderFieldSettings(5, "sort", this.props.sortByFields)}
+                                 </div>
                             </div>
-                             <div className="dialogContent">
-                                 {this.renderFieldSettings(3, "group", this.props.groupByFields)}
-                                 {this.renderFieldSettings(5, "sort", this.props.sortByFields)}
-                             </div>
                             <div className="dialogBottom">
                                 <div className="dialogButtons">
-                                     <span className="action reset" tabIndex="0" onClick={this.props.onReset}>
-                                        <I18nMessage message="report.sortAndGroup.reset"/>
-                                     </span>
-                                     <Button className={"apply " + this.props.dirty}  bsStyle="primary"
-                                             onClick={this.props.onApplyChanges}>
-                                         <I18nMessage message="apply"/>
-                                     </Button>
+                                    <QBToolTip location="top" tipId="resetSrtGrpIcon" i18nMessageKey="report.sortAndGroup.resetTip">
+                                         <span className="action reset" tabIndex="0" onClick={this.props.onReset}>
+                                            <I18nMessage message="report.sortAndGroup.reset"/>
+                                         </span>
+                                    </QBToolTip>
+                                    <QBToolTip location="top" tipId="applySrtGrpIcon"
+                                               i18nMessageKey="applyTip">
+                                         <Button className={"apply " + this.props.dirty}  bsStyle="primary"
+                                                 onClick={this.props.onApplyChanges}>
+                                             <I18nMessage message="apply"/>
+                                         </Button>
+                                    </QBToolTip>
                                  </div>
                                 <div className="dialogBand">
-                                    <div className="action reset" tabIndex="0" onClick={this.props.onReset}>
-                                        <I18nMessage message="report.sortAndGroup.reset"/>
-                                    </div>
+                                    <QBToolTip location="top" tipId="resetSrtGrpIcon" i18nMessageKey="report.sortAndGroup.resetTip">
+                                        <div className="action reset" tabIndex="0" onClick={this.props.onReset}>
+                                            <I18nMessage message="report.sortAndGroup.reset"/>
+                                        </div>
+                                    </QBToolTip>
                                 </div>
                             </div>
                         </div>
                         <FieldsPanel onHideFields={this.props.onHideFields}
                                      showFields={this.props.showFields}
                                      fieldChoiceList={this.props.fieldChoiceList}
-                                     reportColumns={this.props.reportData && this.props.reportData.data ?
+                                     reportColumns={this.props.reportData &&
+                                        this.props.reportData.data ?
                                         this.props.reportData.data.columns :  null}
                                      visGroupEls={this.props.visGroupEls}
                                      sortByFields={this.props.sortByFields}
@@ -187,8 +197,8 @@ var SortAndGroupDialog = React.createClass({
                                      onShowMoreFields={this.props.onShowMoreFields}
                                      showNotVisible={this.props.showNotVisible}
                                      fieldsForType={this.props.fieldsForType}
+                                     key="fieldsPanel"
                         />
-                    </div>
             </SortAndGroupDialogWrapped>) :
                 null
         );

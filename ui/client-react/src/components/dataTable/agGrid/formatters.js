@@ -166,6 +166,10 @@ const CellFormatter = React.createClass({
     }
 });
 
+// formatter classes (cell formatters render an editor and a display value)
+// there is work to be done to use display formats for both input and output
+// The output part is at least partly done in Node now but that needs to be implemented in the UI layer!!!)
+
 const DateFormatter = React.createClass({
     render: function() {
         return  <CellFormatter type={DateFormat} params={this.props.params} />;

@@ -66,7 +66,6 @@ let ReportContent = React.createClass({
         if (this.props.reportData.data) {
             recordCount = this.props.reportData.data.filteredRecordsCount ? this.props.reportData.data.filteredRecordsCount : this.props.reportData.data.recordsCount;
         }
-
         return (<div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
@@ -74,7 +73,7 @@ let ReportContent = React.createClass({
                         {!isTouch ?
                             <AGGrid loading={this.props.reportData.loading}
                                     records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
-                                    columns={this.props.reportData.data.columns}
+                                    columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                     uniqueIdentifier="Record ID#"
                                     appId={this.props.reportData.appId}
                                     tblId={this.props.reportData.tblId}
@@ -84,7 +83,7 @@ let ReportContent = React.createClass({
                                     selectionActions={<ReportActions />}
                                     onScroll={this.onScrollRecords}
                                     onRowClick={this.openRow}
-                                    showGrouping={this.props.reportData.data.hasGrouping}
+                                    showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
                                     recordCount={recordCount}
                                     groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
                                     groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}

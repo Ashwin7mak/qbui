@@ -2,6 +2,7 @@ import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 import TableIcon from '../qbTableIcon/qbTableIcon';
+import QBToolTip from '../qbToolTip/qbToolTip';
 import Logger from '../../utils/logger';
 
 import './sortAndGroup.scss';
@@ -47,12 +48,14 @@ const FieldChoice = React.createClass({
         let hasField = !!this.props.field;
         let name =  '';
         let order = '';
+        let fid = '';
         let isEmpty = ' empty';
 
         if (hasField) {
             name = this.props.field.name;
             isEmpty = ' notEmpty';
             order =  (this.props.field.descendOrder && this.props.field.descendOrder === true) ? 'down' : 'up';
+            fid = " fid:" + this.props.field.id;
         }
         let byMessage = this.props.then ?
             "report.sortAndGroup.thenBy" : "report.sortAndGroup.by";
@@ -63,28 +66,37 @@ const FieldChoice = React.createClass({
                         <span className="prefix">
                           <I18nMessage message={byMessage}/>
                         </span>
-
-                        <span className="fieldName">{name}</span>
+                        <QBToolTip location="top" tipId="fieldName" plainMessage={name + fid}>
+                            <span className="fieldName">{name}</span>
+                        </QBToolTip>
                     </div>
                     <div className="fieldChoiceActions">
-                        { order &&
+                        { order ? (
+                        <QBToolTip location="top" tipId="orderIcon" i18nMessageKey="report.sortAndGroup.changeOrder">
                             <span className={"action sortOrderIcon " + order} tabIndex="0"
                                   onClick={() => this.props.onSetOrder(this.props.type, this.props.index,
                                                             !this.props.field.descendOrder, this.props.field)} >
                                   <TableIcon icon={"icon-TableIcons_sturdy_arrow" + order}/>
                             </span>
+                        </QBToolTip>) :
+                            null
                         }
                         <span>
                         { hasField ?
-                            <span className="action fieldDeleteIcon" tabIndex="0"
-                                onClick={() => this.props.onRemoveField(this.props.type,
-                                            this.props.index, this.props.field)} >
-                                <QBicon className="fieldDelete"
-                                    icon="clear-mini"/>
-                            </span> :
-                            <span className="action fieldOpenIcon" tabIndex="0" >
-                                <QBicon className="fieldOpen" icon="icon_caretfilledright"/>
-                            </span>
+                            <QBToolTip location="top" tipId="removeIcon"
+                                       i18nMessageKey={this.props.type === 'group' ? 'report.sortAndGroup.stopGroupingBy' : 'report.sortAndGroup.stopSortingBy'}>
+                                <span className="action fieldDeleteIcon" tabIndex="0"
+                                     onClick={() => this.props.onRemoveField(this.props.type,
+                                                this.props.index, this.props.field)} >
+                                    <QBicon className="fieldDelete"
+                                            icon="clear-mini"/>
+                                </span>
+                            </QBToolTip>  :
+                            <QBToolTip location="top" tipId="addIcon" i18nMessageKey="report.sortAndGroup.addField">
+                                <span className="action fieldOpenIcon" tabIndex="0" >
+                                    <QBicon className="fieldOpen" icon="icon_caretfilledright"/>
+                                </span>
+                            </QBToolTip>
                         }
                         </span>
                     </div>

@@ -609,10 +609,6 @@ let AGGrid = React.createClass({
                 }
                 return obj;
             });
-            /*eslint-disable*/
-            //console.log("columnProps=",columnsData);
-            /*eslint-enable*/
-
             return columnsData;
         }
         return [];
@@ -643,13 +639,11 @@ let AGGrid = React.createClass({
     },
 
     /**
-     * add a couple of extra rows which will be hidden to avoid
+     * add an extra row which will be hidden to avoid
      * clipping the row edit UI if it's at the bottom row
-     * @returns {*}
      */
     getRecordsToRender() {
 
-        const extraHiddenRows = 8; // don't forget to update the corresponding CSS!
         let paddedRecords = this.props.records.slice(0);
 
         paddedRecords.push({isHiddenLastRow:true});
