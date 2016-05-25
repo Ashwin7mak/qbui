@@ -27,7 +27,7 @@ export default {
             more: "More..."
         },
         footer: {
-            copyright: "{year} Intuit Inc. All rights reserved."
+            copyright: "{year} QuickBase, Inc. All rights reserved."
         },
         nav: {
             home: "Home",
@@ -106,7 +106,7 @@ export default {
                 header : "Sort & Group",
                 moreFields : "more fields...",
                 reset: "Reset",
-                resetTip : "Exit and restore to orginal report sort and group settings",
+                resetTip : "Exit and restore to original report sort and group settings",
                 sort:   "Sort",
                 stopGroupingBy: "Stop grouping by",
                 stopSortingBy: "Stop sorting by",

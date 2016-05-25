@@ -24,7 +24,7 @@ export default {
             more: "Plus..."
         },
         footer: {
-            copyright: "{year} Intuit Inc. Tous droits réservés."
+            copyright: "{year} QuickBase, Inc. Tous droits réservés."
         },
         nav: {
             home: "Accueil",
