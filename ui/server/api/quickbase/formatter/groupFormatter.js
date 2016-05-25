@@ -15,11 +15,12 @@
 
     var RAW_SUFFIX = '_raw_';
 
-    function isNumericDataType(dataType) {
+    function includeRawValue(dataType) {
         return dataType === constants.NUMERIC ||
                dataType === constants.CURRENCY ||
                dataType === constants.PERCENT ||
-               dataType === constants.RATING;
+               dataType === constants.RATING ||
+               dataType === constants.DURATION;
     }
 
     /**
@@ -60,9 +61,8 @@
                     if (fld !== undefined) {
                         columns[fld.name] = column.display;
 
-                        //  If grouping on a numeric data type, add a temporary element to
-                        //  hold the raw data value that is used to calculate the range.
-                        if (groupMap.get(column.id) !== undefined && isNumericDataType(fld.datatypeAttributes.type)) {
+                        //  if necessary, add a temporary element to hold the raw data value.
+                        if (groupMap.get(column.id) !== undefined && includeRawValue(fld.datatypeAttributes.type)) {
                             columns[fld.name + RAW_SUFFIX] = column.value;
                         }
                     }
@@ -109,17 +109,17 @@
         case constants.DURATION:
             switch (groupType) {
             case groupTypes.DURATION.equals:
-                return groupUtils.getDurationEquals(dataValue);
+                return groupUtils.getDurationEquals(rawDataValue);
             case groupTypes.DURATION.second:
-                return groupUtils.getDurationInSeconds(dataValue);
+                return groupUtils.getDurationInSeconds(rawDataValue);
             case groupTypes.DURATION.minute:
-                return groupUtils.getDurationInMinutes(dataValue);
+                return groupUtils.getDurationInMinutes(rawDataValue);
             case groupTypes.DURATION.hour:
-                return groupUtils.getDurationInHours(dataValue);
+                return groupUtils.getDurationInHours(rawDataValue);
             case groupTypes.DURATION.day:
-                return groupUtils.getDurationInDays(dataValue);
+                return groupUtils.getDurationInDays(rawDataValue);
             case groupTypes.DURATION.week:
-                return groupUtils.getDurationInWeeks(dataValue);
+                return groupUtils.getDurationInWeeks(rawDataValue);
             }
             break;
         case constants.EMAIL_ADDRESS:
