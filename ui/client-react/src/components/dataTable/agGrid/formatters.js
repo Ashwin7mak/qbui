@@ -211,8 +211,9 @@ const CheckBoxFormatter = React.createClass({
 const SelectionColumnCheckBoxFormatter = React.createClass({
 
     onClickEdit() {
-        if (this.props.params.context.defaultActionCallback)
+        if (this.props.params.context.defaultActionCallback) {
             this.props.params.context.defaultActionCallback(this.props.params.data);
+        }
     },
 
     getRecordActions() {
