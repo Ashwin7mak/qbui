@@ -7,7 +7,7 @@
     var log = require('../../logger').getLogger();
 
     module.exports[401] = function unauthorized(req, res) {
-        var viewFilePath = '403.html';
+        var viewFilePath = '401.html';
         var statusCode = 401;
         processError(req, res, viewFilePath, statusCode);
     };
