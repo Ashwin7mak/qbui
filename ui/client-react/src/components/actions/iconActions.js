@@ -37,6 +37,7 @@ let IconActions = React.createClass({
         maxButtonsBeforeMenu: React.PropTypes.number, // show action in dropdown after this,
         className: React.PropTypes.string,
         pullRight: React.PropTypes.bool,
+        dropdownTooltip: React.PropTypes.bool,
         menuIcons: React.PropTypes.bool
 
     },
@@ -44,7 +45,8 @@ let IconActions = React.createClass({
         return {
             maxButtonsBeforeMenu: Number.MAX_VALUE,
             pullRight: true,
-            menuIcons: false
+            menuIcons: false,
+            dropdownTooltip: false
         };
     },
     /**
@@ -74,11 +76,22 @@ let IconActions = React.createClass({
     getActionsMenu() {
 
         const classes = this.props.menuIcons ? "menuIcons" : "";
+        let dropdownTrigger;
+
+        if (this.props.dropdownTooltip) {
+            const tooltip = (<Tooltip id="more"><I18nMessage message="selection.more"/></Tooltip>);
+
+            dropdownTrigger = <OverlayTrigger bsRole="toggle" key="more" placement="bottom" overlay={tooltip}>
+                <Button tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
+            </OverlayTrigger>
+        } else {
+             dropdownTrigger = <Button bsRole="toggle" tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
+        }
+
         return (
             <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
 
-                <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
-
+                {dropdownTrigger}
                 <Dropdown.Menu onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit}>
                     {this.props.actions.map((action, index) => {
                         if (index >= this.props.maxButtonsBeforeMenu) {

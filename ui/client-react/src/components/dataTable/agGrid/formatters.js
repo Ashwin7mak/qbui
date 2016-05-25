@@ -220,7 +220,7 @@ const SelectionColumnCheckBoxFormatter = React.createClass({
             {msg: 'selection.delete', className:'delete', icon:'delete'}
         ];
 
-        return (<IconActions className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />);
+        return (<IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />);
     },
 
     render() {

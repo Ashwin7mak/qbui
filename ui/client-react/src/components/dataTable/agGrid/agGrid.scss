@@ -226,7 +226,7 @@ $cell-edit-background-edit: #f3f8fe;
         position: absolute;
         margin:0;
         left: $grid-default-group-padding + 1;
-        top: $grid-default-group-padding + 3
+        top: $grid-default-group-padding + 1;
     }
 
     .ag-menu-list {
@@ -379,6 +379,11 @@ $cell-edit-background-edit: #f3f8fe;
     display:none;
 }
 
+/* hide datepicker if it's been opened but we're not over that cell */
+.ag-row-selected .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget{
+    display:none !important;
+}
+
 /* last to rows are just for padding */
 .ag-row:last-child {
     visibility:hidden;
@@ -397,6 +402,9 @@ $cell-edit-background-edit: #f3f8fe;
 
 .reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
 
+    .ag-selection-checkbox {
+        top: $grid-default-group-padding + 5
+    }
     .gridCell.selectionCell .ag-cell-value {
         display:none; /* hide icons in 1st col */
     }
@@ -496,7 +504,6 @@ $cell-edit-background-edit: #f3f8fe;
             box-shadow: 2px 2px 2px $row-box-shadow-color;
             position:absolute;
             top:100%;
-            right:30px;
 
             border-left: 1px solid $row-border-color;
             border-right: 1px solid $row-border-color;
