@@ -210,9 +210,14 @@ const CheckBoxFormatter = React.createClass({
 
 const SelectionColumnCheckBoxFormatter = React.createClass({
 
+    onClickEdit() {
+        if (this.props.params.context.defaultActionCallback)
+            this.props.params.context.defaultActionCallback(this.props.params.data);
+    },
+
     getRecordActions() {
         const actions = [
-            {msg: 'selection.edit', className:'edit', icon:'edit'},
+            {msg: 'selection.edit', className:'edit', icon:'edit', onClick: this.onClickEdit},
 
             {msg: 'selection.print', className:'print', icon:'print'},
             {msg: 'selection.email', className:'email', icon:'mail'},
@@ -220,7 +225,7 @@ const SelectionColumnCheckBoxFormatter = React.createClass({
             {msg: 'selection.delete', className:'delete', icon:'delete'}
         ];
 
-        return (<IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />);
+        return (<IconActions dropdownTooltip={false} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />);
     },
 
     render() {

@@ -277,6 +277,7 @@ let AGGrid = React.createClass({
     },
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
+        this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
 
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
@@ -336,17 +337,21 @@ let AGGrid = React.createClass({
      */
     onRowClicked(params) {
 
+        const target = params.event.target;
+
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {
             params.node.expanded = !params.node.expanded;
             this.api.onGroupExpandedOrCollapsed();
             return;
         }
-        //For click on record action icons or input fields do nothing
-        if (params.event.target &&
-            params.event.target.className.indexOf("qbIcon") !== -1 ||
-            params.event.target.className.indexOf("iconLink") !== -1 ||
-            params.event.target.tagName === "INPUT") {
+        //For click on record action icons or input fields or links or link child elements do nothing
+        if (target &&
+            target.className.indexOf("qbIcon") !== -1 ||
+            target.className.indexOf("iconLink") !== -1 ||
+            target.tagName === "INPUT" ||
+            target.tagName === "A" ||
+            target.parentNode.tagName === "A") {
             return;
         }
 
