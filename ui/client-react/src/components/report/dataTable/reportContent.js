@@ -75,6 +75,17 @@ let ReportContent = React.createClass({
             dataType === DataTypes.RATING;
     },
 
+    /**
+     * Method that splits grouping data that contains multiple pieces of information.
+     *
+     * For example, if grouping by month, the grouping data will contain the month and
+     * year separated by a delimiter.
+     *
+     * Any exception trying to split the data will return the original grouping data.
+     *
+     * @param group
+     * @returns {*}
+     */
     splitGroup(group) {
         try {
             return group.split(GroupTypes.GROUP_TYPE.delimiter);
@@ -85,6 +96,15 @@ let ReportContent = React.createClass({
         }
     },
 
+    /**
+     * Scan through the grouped data object and where appropriate, localize the grouping headers.
+     * Dates, durations and numerics may require localization.  All others fall though and no operation
+     * is performed on those types.
+     *
+     * @param groupFields
+     * @param groupDataRecords
+     * @param lvl
+     */
     localizeGroupingHeaders(groupFields, groupDataRecords, lvl) {
 
         if (!groupFields || !groupDataRecords) {
@@ -117,33 +137,43 @@ let ReportContent = React.createClass({
                         continue;
                     }
 
-                    //  Apply locale specific formatting against certain data types.  Note all data types may
-                    //  drop through the conditional blocks.  That's okay as some grouping options will not
-                    //  have any localization requirements.
+                    //  Apply locale specific formatting against DATES, DURATIONS and NUMERICS.  Note that
+                    //  some data types and grouping options drop through the conditional blocks.  That's okay
+                    //  as these will not have any localization requirements.
                     if (this.isNumericDataType(groupField.datatypeAttributes.type)) {
+                        //
+                        //  Check if the numeric is a range, with a lower and upper value.
                         let range = this.splitGroup(groupData.group);
                         if (range.length > 1) {
-                            groupData.group = Locales.getMessage('groupHeader.numeric.range', {lower:range[0], upper:range[1]});
+                            //  For ranges,no symbol is used in the header..just localized the number
+                            let localizedRange = {
+                                lower:this.localizeNumber(range[0]),
+                                upper:this.localizeNumber(range[1])
+                            };
+                            groupData.group = Locales.getMessage('groupHeader.numeric.range', localizedRange);
                         } else {
                             /*eslint no-lonely-if:0*/
                             if (groupType === GroupTypes.COMMON.equals) {
-                                //  On old stack, only group type=equals includes the associated symbol..
-                                //  For now, will mirror that behavior
+                                //  Currency and percent symbols are added only when group type is equals.
                                 if (groupField.datatypeAttributes.type === DataTypes.CURRENCY) {
-                                    groupData.group = this.localizeCurrency(range[0]);
+                                    groupData.group = this.localizeNumber(range[0], {style: 'currency', currency: Locales.getCurrencyCode()});
                                 } else {
                                     if (groupField.datatypeAttributes.type === DataTypes.PERCENT) {
-                                        groupData.group = this.localizePercent(range[0]);
+                                        groupData.group = this.localizeNumber(range[0], {style: 'percent'});
                                     } else {
                                         groupData.group = this.localizeNumber(range[0]);
                                     }
                                 }
+                            } else {
+                                groupData.group = this.localizeNumber(range[0]);
                             }
                         }
                         continue;
                     }
 
                     if (groupField.datatypeAttributes.type === DataTypes.DATE || groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
+                        //
+                        //  Based on grouping option, dates may contain 2 pieces of data or just a single value.
                         let datePart = this.splitGroup(groupData.group);
                         if (datePart.length > 1) {
                             if (groupType === GroupTypes.GROUP_TYPE.date.month) {
@@ -164,8 +194,7 @@ let ReportContent = React.createClass({
                                 groupData.group = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[0];
                             }
                             if (groupType === GroupTypes.GROUP_TYPE.date.week) {
-                                let localizedDate = this.localizeDate(datePart[0]);
-                                groupData.group = Locales.getMessage('groupHeader.date.week', {date:localizedDate});
+                                groupData.group = Locales.getMessage('groupHeader.date.week', {date:this.localizeDate(datePart[0])});
                             }
                             if (groupType === GroupTypes.GROUP_TYPE.date.equals || groupType === GroupTypes.GROUP_TYPE.date.day) {
                                 groupData.group = this.localizeDate(datePart[0]);
@@ -175,10 +204,8 @@ let ReportContent = React.createClass({
                     }
 
                     if (groupField.datatypeAttributes.type === DataTypes.DURATION) {
-                        //  With duration of equals, the groupType is unknown as that is determined based
-                        //  on the most reasonable grouping bucket for the given duration.  For example,
-                        //  20 seconds --> seconds bucket; 200 seconds --> minute bucket; etc.  The returned
-                        //  include 2 pieces of information;  1st is the duration value; 2nd is the group type
+                        //  With duration of equals, the group value contains 2 pieces of information;
+                        //  the 1st is the duration value; the 2nd is the group type.
                         if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
                             let durationPart = this.splitGroup(groupData.group);
                             if (durationPart.length > 1) {
@@ -205,7 +232,7 @@ let ReportContent = React.createClass({
                         }
 
                         // this should not happen, but in the event messageKey is empty(meaning bad duration data),
-                        // the original content will be used as the grouping header.
+                        // this falls through and the original content is used as the grouping header.
                         if (messageKey) {
                             groupData.group = Locales.getMessage(messageKey, {duration:groupData.group});
                         }
@@ -215,14 +242,14 @@ let ReportContent = React.createClass({
         }
     },
 
-    localizeCurrency: function(currency) {
-        return this.localizeNumber(currency, {style: "currency", currency: Locales.getCurrencyCode()});
-    },
-
-    localizePercent: function(percentage) {
-        return this.localizeNumber(percentage, {style: "percent"});
-    },
-
+    /**
+     * Directly call the I18n mixin method to localize the number.  Any error
+     * trying to localize will return the original value.
+     *
+     * @param value
+     * @param opts
+     * @returns {*}
+     */
     localizeNumber: function(value, opts) {
         try {
             this.context.locales = Locales.getLocale();
@@ -233,6 +260,13 @@ let ReportContent = React.createClass({
         }
     },
 
+    /**
+     * Directly call the I18n mixin method to localize the date.  Any error
+     * trying to localize will return the original date.
+     *
+     * @param date
+     * @returns {*}
+     */
     localizeDate: function(date) {
         try {
             this.context.locales = Locales.getLocale();
