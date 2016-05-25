@@ -108,6 +108,9 @@ let ReportContent = React.createClass({
                 // unlikely, but possible that groupData is empty
                 if (groupData && !groupData.localized) {
 
+                    //  mark that the group label has been localized so that if this component is called
+                    //  with already localized data (ie: browser resize), we avoid localizing values
+                    //  that have already been localized.
                     groupData.localized = true;
 
                     //  If no grouping header, use the empty label
