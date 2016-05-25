@@ -76,27 +76,6 @@ let ReportContent = React.createClass({
     },
 
     /**
-     * Method that splits grouping data that contains multiple pieces of information.
-     *
-     * For example, if grouping by month, the grouping data will contain the month and
-     * year separated by a delimiter.
-     *
-     * Any exception trying to split the data will return the original grouping data.
-     *
-     * @param group
-     * @returns {*}
-     */
-    splitGroup(group) {
-        try {
-            return group.split(GroupTypes.GROUP_TYPE.delimiter);
-        } catch (e) {
-            // any problems splitting, log a warning and return the original
-            logger.warn("Error splitting grouing header.  Group: " + group + "; error" + e);
-            return group;
-        }
-    },
-
-    /**
      * Scan through the grouped data object and where appropriate, localize the grouping headers.
      * Dates, durations and numerics may require localization.  All others fall though and no operation
      * is performed on those types.
@@ -137,13 +116,16 @@ let ReportContent = React.createClass({
                         continue;
                     }
 
+                    // ensure group label is a string as String.split method is called
+                    groupData.group = groupData.group.toString();
+
                     //  Apply locale specific formatting against DATES, DURATIONS and NUMERICS.  Note that
                     //  some data types and grouping options drop through the conditional blocks.  That's okay
                     //  as these will not have any localization requirements.
                     if (this.isNumericDataType(groupField.datatypeAttributes.type)) {
                         //
                         //  Check if the numeric is a range, with a lower and upper value.
-                        let range = this.splitGroup(groupData.group);
+                        let range = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
                         if (range.length > 1) {
                             //  For ranges,no symbol is used in the header..just localized the number
                             let localizedRange = {
@@ -174,7 +156,7 @@ let ReportContent = React.createClass({
                     if (groupField.datatypeAttributes.type === DataTypes.DATE || groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
                         //
                         //  Based on grouping option, dates may contain 2 pieces of data or just a single value.
-                        let datePart = this.splitGroup(groupData.group);
+                        let datePart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
                         if (datePart.length > 1) {
                             if (groupType === GroupTypes.GROUP_TYPE.date.month) {
                                 let month = Locales.getMessage('month.' + datePart[0].toLowerCase());
@@ -207,7 +189,7 @@ let ReportContent = React.createClass({
                         //  With duration of equals, the group value contains 2 pieces of information;
                         //  the 1st is the duration value; the 2nd is the group type.
                         if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
-                            let durationPart = this.splitGroup(groupData.group);
+                            let durationPart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
                             if (durationPart.length > 1) {
                                 groupData.group = durationPart[0];
                                 groupType = durationPart[1];

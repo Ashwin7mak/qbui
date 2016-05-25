@@ -231,21 +231,21 @@ describe('ReportContent grouping functions', () => {
         {name: 'valid currency - equals', dataType: DataTypes.CURRENCY, groupType: GroupTypes.COMMON.equals, group: '10.50', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10.50'},
         {name: 'valid percent - equals', dataType: DataTypes.PERCENT, groupType: GroupTypes.COMMON.equals, group: '.98', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '.98'},
         //  group by a non-equals group type
-        {name: 'valid numeric - one', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.one, group: '1', localizeNumberSpy: 0, localeMessageSpy: 0, expected: '1'},
-        {name: 'valid numeric - five', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '15', localizeNumberSpy: 0, localeMessageSpy: 0, expected: '15'},
-        {name: 'valid numeric - ten', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.ten, group: '20', localizeNumberSpy: 0, localeMessageSpy: 0, expected: '20'},
-        {name: 'valid numeric - hundred', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundred, group: '100', localizeNumberSpy: 0, localeMessageSpy: 0, expected: '100'},
-        {name: 'valid numeric - one_k', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.one_k, group: '1000', localizeNumberSpy: 0, localeMessageSpy: 0, expected: '1000'},
-        {name: 'valid numeric - ten_k', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.ten_k, group: '10000', localizeNumberSpy: 0, localeMessageSpy: 0, expected: '10000'},
-        {name: 'valid numeric - hundred_k', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundred_k, group: '100000', localizeNumberSpy: 0, localeMessageSpy: 0, expected: '100000'},
-        {name: 'valid numeric - million', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.million, group: '1000000', localizeNumberSpy: 0, localeMessageSpy: 0, expected: '1000000'},
+        {name: 'valid numeric - one', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.one, group: '1', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1'},
+        {name: 'valid numeric - five', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '15', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '15'},
+        {name: 'valid numeric - ten', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.ten, group: '20', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '20'},
+        {name: 'valid numeric - hundred', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundred, group: '100', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100'},
+        {name: 'valid numeric - one_k', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.one_k, group: '1000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1000'},
+        {name: 'valid numeric - ten_k', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.ten_k, group: '10000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10000'},
+        {name: 'valid numeric - hundred_k', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundred_k, group: '100000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100000'},
+        {name: 'valid numeric - million', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.million, group: '1000000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1000000'},
         //  group by a non-equals currency and percent
-        {name: 'valid currency - five', dataType: DataTypes.CURRENCY, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '10.50', localizeNumberSpy: 0, localeMessageSpy: 0, expected: '10.50'},
-        {name: 'valid percent - five', dataType: DataTypes.PERCENT, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '.98', localizeNumberSpy: 0, localeMessageSpy: 0, expected: '.98'},
+        {name: 'valid currency - five', dataType: DataTypes.CURRENCY, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '10.50', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10.50'},
+        {name: 'valid percent - five', dataType: DataTypes.PERCENT, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '.98', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '.98'},
         //  group by a range
-        {name: 'valid numeric range - tenth', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.tenth, group: '2.1,2.2', localizeNumberSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
-        {name: 'valid numeric range - hundredth', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundredth, group: '2.10,2.11', localizeNumberSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
-        {name: 'valid numeric range - thousandth', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.thousandth, group: '2.101,2.102', localizeNumberSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
+        {name: 'valid numeric range - tenth', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.tenth, group: '2.1,2.2', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
+        {name: 'valid numeric range - hundredth', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundredth, group: '2.10,2.11', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
+        {name: 'valid numeric range - thousandth', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.thousandth, group: '2.101,2.102', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
         //
         {name: 'invalid numeric range..bad delimiter', dataType: DataTypes.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '2.00:2.10', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '2.00:2.10'}
     ];
