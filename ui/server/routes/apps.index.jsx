@@ -13,6 +13,7 @@ var Index = React.createClass({
                 </div>
 
                 <script src={this.props.hostBase + this.props.jsPath + this.props.bundleFileName}></script>
+                <script type="text/javascript" async="" src={this.props.walkMePath + this.props.walkMeUser + this.props.walkMeFileName}></script>
             </Html>
         );
     }

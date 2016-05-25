@@ -23,10 +23,16 @@ var lodash = require('lodash');
             jsPath  : '/dist/',
             settings: {views: viewPath},
             hostBase: (config.isProduction || config.noHotLoad) ? '' : HOT_BASE,
-            bundleFileName: config.isProduction ? 'bundle.min.js' : 'bundle.js'
+            bundleFileName: config.isProduction ? 'bundle.min.js' : 'bundle.js',
+            walkMePath: 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312',
+            walkMeUser: config.isProduction ? '' : '/test',
+            walkMeFileName: '/walkme_897ca46385a543cbbeaffbc655cdf312_https.js',
         };
     }
 
+    function returnBaseOpts() {
+        return BASE_PROPS;
+    }
 
     function renderJsx(req, res, filename, opts) {
         var templatePath = require.resolve(filename);
@@ -79,4 +85,5 @@ var lodash = require('lodash');
 
     };
 
+    module.exports.getBaseOpts = returnBaseOpts;
 }());

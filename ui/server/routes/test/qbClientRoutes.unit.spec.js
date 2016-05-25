@@ -12,6 +12,7 @@ var app = express();
 var mockConfig = {
     routeGroup: routeGroups.DEBUG,
 };
+var assert = require('assert');
 
 require('../../routes')(app, mockConfig);
 
@@ -76,4 +77,27 @@ describe('Express Client Routes', function() {
             expect(200, done);
     });
 
+    it('Validate production base opts', function(done) {
+        var testConfig = {
+            isProduction: true,
+        };
+
+        require('../../routes')(app, testConfig);
+        var qbcRoutes = require('../qbClientRoutes');
+
+        assert.equal(qbcRoutes.getBaseOpts().walkMeUser, '');
+        done();
+    });
+
+    it('Validate demo base opts', function(done) {
+        var testConfig = {
+            isProduction: false,
+        };
+
+        require('../../routes')(app, testConfig);
+        var qbcRoutes = require('../qbClientRoutes');
+
+        assert.equal(qbcRoutes.getBaseOpts().walkMeUser, '/test');
+        done();
+    });
 });
