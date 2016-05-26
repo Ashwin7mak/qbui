@@ -76,8 +76,8 @@ let ReportContent = React.createClass({
     },
 
     isDateDataType(dataType) {
-        return groupField.datatypeAttributes.type === DataTypes.DATE_TIME ||
-               groupField.datatypeAttributes.type === DataTypes.DATE;
+        return dataType === DataTypes.DATE_TIME ||
+               dataType === DataTypes.DATE;
     },
 
     /**
@@ -146,10 +146,7 @@ let ReportContent = React.createClass({
                             if (groupType === GroupTypes.COMMON.equals) {
                                 //  Currency and percent symbols are added only when group type is equals.
                                 if (groupField.datatypeAttributes.type === DataTypes.CURRENCY) {
-                                    groupData.group = this.localizeNumber(range[0], {
-                                        style: 'currency',
-                                        currency: Locales.getCurrencyCode()
-                                    });
+                                    groupData.group = this.localizeNumber(range[0], {style: 'currency', currency: Locales.getCurrencyCode()});
                                 } else {
                                     if (groupField.datatypeAttributes.type === DataTypes.PERCENT) {
                                         groupData.group = this.localizeNumber(range[0], {style: 'percent'});
@@ -161,47 +158,47 @@ let ReportContent = React.createClass({
                                 groupData.group = this.localizeNumber(range[0]);
                             }
                         }
+
+                        // continue to next element in the for loop
                         continue;
                     }
 
-                    if (isDateDataType(groupField.datatypeAttributes.type)) {
+                    if (this.isDateDataType(groupField.datatypeAttributes.type)) {
                         //
                         //  Based on grouping option, dates may contain 2 pieces of data or just a single value.
                         let datePart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
                         if (datePart.length > 1) {
-                            if (groupType === GroupTypes.GROUP_TYPE.date.month) {
+                            switch (groupType) {
+                            case GroupTypes.GROUP_TYPE.date.month:
                                 let month = Locales.getMessage('month.' + datePart[0].toLowerCase());
-                                groupData.group = Locales.getMessage('groupHeader.date.month', {
-                                    month: month,
-                                    year: datePart[1]
-                                });
-                            }
-                            if (groupType === GroupTypes.GROUP_TYPE.date.quarter) {
+                                groupData.group = Locales.getMessage('groupHeader.date.month', {month: month, year: datePart[1]});
+                                break;
+                            case GroupTypes.GROUP_TYPE.date.quarter:
                                 let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
-                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {
-                                    quarter: abbrQuarter,
-                                    year: datePart[1]
-                                });
-                            }
-                            if (groupType === GroupTypes.GROUP_TYPE.date.fiscalQuarter) {
-                                let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
+                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter: abbrQuarter, year: datePart[1]});
+                                break;
+                            case GroupTypes.GROUP_TYPE.date.fiscalQuarter:
+                                let abbrFiscalQtr = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
                                 let abbrFiscalYr = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[1];
-                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {
-                                    quarter: abbrQuarter,
-                                    year: abbrFiscalYr
-                                });
+                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter: abbrFiscalQtr, year: abbrFiscalYr});
+                                break;
                             }
                         } else {
-                            if (groupType === GroupTypes.GROUP_TYPE.date.fiscalYear) {
+                            switch (groupType) {
+                            case GroupTypes.GROUP_TYPE.date.fiscalYear:
                                 groupData.group = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[0];
-                            }
-                            if (groupType === GroupTypes.GROUP_TYPE.date.week) {
+                                break;
+                            case GroupTypes.GROUP_TYPE.date.week:
                                 groupData.group = Locales.getMessage('groupHeader.date.week', {date: this.localizeDate(datePart[0])});
-                            }
-                            if (groupType === GroupTypes.GROUP_TYPE.date.equals || groupType === GroupTypes.GROUP_TYPE.date.day) {
+                                break;
+                            case GroupTypes.GROUP_TYPE.date.day:
+                            case GroupTypes.GROUP_TYPE.date.equals:
                                 groupData.group = this.localizeDate(datePart[0]);
+                                break;
                             }
                         }
+
+                        // continue to next element in the for loop
                         continue;
                     }
 
@@ -212,29 +209,32 @@ let ReportContent = React.createClass({
                             let durationPart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
                             if (durationPart.length > 1) {
                                 groupData.group = durationPart[0];
+                                //  reset the groupType to the duration dimension
                                 groupType = durationPart[1];
                             }
                         }
 
                         let messageKey = '';
-                        if (groupType === GroupTypes.GROUP_TYPE.duration.second) {
+                        switch (groupType) {
+                        case GroupTypes.GROUP_TYPE.duration.second:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.second' : 'groupHeader.duration.seconds';
-                        }
-                        if (groupType === GroupTypes.GROUP_TYPE.duration.minute) {
+                            break;
+                        case GroupTypes.GROUP_TYPE.duration.minute:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.minute' : 'groupHeader.duration.minutes';
-                        }
-                        if (groupType === GroupTypes.GROUP_TYPE.duration.hour) {
+                            break;
+                        case GroupTypes.GROUP_TYPE.duration.hour:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.hour' : 'groupHeader.duration.hours';
-                        }
-                        if (groupType === GroupTypes.GROUP_TYPE.duration.week) {
+                            break;
+                        case GroupTypes.GROUP_TYPE.duration.week:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.week' : 'groupHeader.duration.weeks';
-                        }
-                        if (groupType === GroupTypes.GROUP_TYPE.duration.day) {
+                            break;
+                        case GroupTypes.GROUP_TYPE.duration.day:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.day' : 'groupHeader.duration.days';
+                            break;
                         }
 
                         // this should not happen, but in the event messageKey is empty(meaning bad duration data),
-                        // this falls through and the original content is used as the grouping header.
+                        // this falls through and the original content in groupData.group is used as the grouping header.
                         if (messageKey) {
                             groupData.group = Locales.getMessage(messageKey, {duration: groupData.group});
                         }
