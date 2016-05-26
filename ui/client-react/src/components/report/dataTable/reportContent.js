@@ -75,6 +75,11 @@ let ReportContent = React.createClass({
             dataType === DataTypes.RATING;
     },
 
+    isDateDataType(dataType) {
+        return groupField.datatypeAttributes.type === DataTypes.DATE_TIME ||
+               groupField.datatypeAttributes.type === DataTypes.DATE;
+    },
+
     /**
      * Scan through the grouped data object and where appropriate, localize the grouping headers.
      * Dates, durations and numerics may require localization.  All others fall though and no operation
@@ -132,8 +137,8 @@ let ReportContent = React.createClass({
                         if (range.length > 1) {
                             //  For ranges,no symbol is used in the header..just localized the number
                             let localizedRange = {
-                                lower:this.localizeNumber(range[0]),
-                                upper:this.localizeNumber(range[1])
+                                lower: this.localizeNumber(range[0]),
+                                upper: this.localizeNumber(range[1])
                             };
                             groupData.group = Locales.getMessage('groupHeader.numeric.range', localizedRange);
                         } else {
@@ -141,7 +146,10 @@ let ReportContent = React.createClass({
                             if (groupType === GroupTypes.COMMON.equals) {
                                 //  Currency and percent symbols are added only when group type is equals.
                                 if (groupField.datatypeAttributes.type === DataTypes.CURRENCY) {
-                                    groupData.group = this.localizeNumber(range[0], {style: 'currency', currency: Locales.getCurrencyCode()});
+                                    groupData.group = this.localizeNumber(range[0], {
+                                        style: 'currency',
+                                        currency: Locales.getCurrencyCode()
+                                    });
                                 } else {
                                     if (groupField.datatypeAttributes.type === DataTypes.PERCENT) {
                                         groupData.group = this.localizeNumber(range[0], {style: 'percent'});
@@ -156,30 +164,39 @@ let ReportContent = React.createClass({
                         continue;
                     }
 
-                    if (groupField.datatypeAttributes.type === DataTypes.DATE || groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
+                    if (isDateDataType(groupField.datatypeAttributes.type)) {
                         //
                         //  Based on grouping option, dates may contain 2 pieces of data or just a single value.
                         let datePart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
                         if (datePart.length > 1) {
                             if (groupType === GroupTypes.GROUP_TYPE.date.month) {
                                 let month = Locales.getMessage('month.' + datePart[0].toLowerCase());
-                                groupData.group = Locales.getMessage('groupHeader.date.month', {month:month, year:datePart[1]});
+                                groupData.group = Locales.getMessage('groupHeader.date.month', {
+                                    month: month,
+                                    year: datePart[1]
+                                });
                             }
                             if (groupType === GroupTypes.GROUP_TYPE.date.quarter) {
                                 let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
-                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter:abbrQuarter, year:datePart[1]});
+                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {
+                                    quarter: abbrQuarter,
+                                    year: datePart[1]
+                                });
                             }
                             if (groupType === GroupTypes.GROUP_TYPE.date.fiscalQuarter) {
                                 let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
                                 let abbrFiscalYr = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[1];
-                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter:abbrQuarter, year:abbrFiscalYr});
+                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {
+                                    quarter: abbrQuarter,
+                                    year: abbrFiscalYr
+                                });
                             }
                         } else {
                             if (groupType === GroupTypes.GROUP_TYPE.date.fiscalYear) {
                                 groupData.group = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[0];
                             }
                             if (groupType === GroupTypes.GROUP_TYPE.date.week) {
-                                groupData.group = Locales.getMessage('groupHeader.date.week', {date:this.localizeDate(datePart[0])});
+                                groupData.group = Locales.getMessage('groupHeader.date.week', {date: this.localizeDate(datePart[0])});
                             }
                             if (groupType === GroupTypes.GROUP_TYPE.date.equals || groupType === GroupTypes.GROUP_TYPE.date.day) {
                                 groupData.group = this.localizeDate(datePart[0]);
@@ -219,11 +236,12 @@ let ReportContent = React.createClass({
                         // this should not happen, but in the event messageKey is empty(meaning bad duration data),
                         // this falls through and the original content is used as the grouping header.
                         if (messageKey) {
-                            groupData.group = Locales.getMessage(messageKey, {duration:groupData.group});
+                            groupData.group = Locales.getMessage(messageKey, {duration: groupData.group});
                         }
                     }
                 }
             }
+
         }
     },
 
