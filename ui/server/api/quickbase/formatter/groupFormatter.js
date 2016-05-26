@@ -15,20 +15,12 @@
 
     var RAW_SUFFIX = '_raw_';
 
-    //  Temporary function to format numeric ranges for UI display.
-    //  TODO: JIRA-21803 -- Node should only return an object structure to the client
-    function formatNumericRange(range) {
-        if (range.lower === null && range.upper === null) {
-            return '';
-        }
-        return range.lower + ' to ' + range.upper;
-    }
-
-    function isNumericDataType(dataType) {
+    function includeRawValue(dataType) {
         return dataType === constants.NUMERIC ||
                dataType === constants.CURRENCY ||
                dataType === constants.PERCENT ||
-               dataType === constants.RATING;
+               dataType === constants.RATING ||
+               dataType === constants.DURATION;
     }
 
     /**
@@ -69,9 +61,8 @@
                     if (fld !== undefined) {
                         columns[fld.name] = column.display;
 
-                        //  If grouping on a numeric data type, add a temporary element to
-                        //  hold the raw data value that is used to calculate the range.
-                        if (groupMap.get(column.id) !== undefined && isNumericDataType(fld.datatypeAttributes.type)) {
+                        //  if necessary, add a temporary element to hold the raw data value.
+                        if (groupMap.get(column.id) !== undefined && includeRawValue(fld.datatypeAttributes.type)) {
                             columns[fld.name + RAW_SUFFIX] = column.value;
                         }
                     }
@@ -118,17 +109,17 @@
         case constants.DURATION:
             switch (groupType) {
             case groupTypes.DURATION.equals:
-                return groupUtils.getDurationEquals(dataValue);
+                return groupUtils.getDurationEquals(rawDataValue);
             case groupTypes.DURATION.second:
-                return groupUtils.getDurationInSeconds(dataValue);
+                return groupUtils.getDurationInSeconds(rawDataValue);
             case groupTypes.DURATION.minute:
-                return groupUtils.getDurationInMinutes(dataValue);
+                return groupUtils.getDurationInMinutes(rawDataValue);
             case groupTypes.DURATION.hour:
-                return groupUtils.getDurationInHours(dataValue);
+                return groupUtils.getDurationInHours(rawDataValue);
             case groupTypes.DURATION.day:
-                return groupUtils.getDurationInDays(dataValue);
+                return groupUtils.getDurationInDays(rawDataValue);
             case groupTypes.DURATION.week:
-                return groupUtils.getDurationInWeeks(dataValue);
+                return groupUtils.getDurationInWeeks(rawDataValue);
             }
             break;
         case constants.EMAIL_ADDRESS:
@@ -149,29 +140,29 @@
         case constants.RATING:      // RATING is a sub-type of NUMERIC
             switch (groupType) {
             case groupTypes.NUMERIC.equals:
-                return dataValue;
+                return rawDataValue;
             case groupTypes.NUMERIC.thousandth:
-                return formatNumericRange(groupUtils.getRangeFraction(rawDataValue, 4));
+                return groupUtils.getRangeFraction(rawDataValue, 4);
             case groupTypes.NUMERIC.hundredth:
-                return formatNumericRange(groupUtils.getRangeFraction(rawDataValue, 3));
+                return groupUtils.getRangeFraction(rawDataValue, 3);
             case groupTypes.NUMERIC.tenth:
-                return formatNumericRange(groupUtils.getRangeFraction(rawDataValue, 2));
+                return groupUtils.getRangeFraction(rawDataValue, 2);
             case groupTypes.NUMERIC.one:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 1));
+                return groupUtils.getRangeWhole(rawDataValue, 1);
             case groupTypes.NUMERIC.five:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 5));
+                return groupUtils.getRangeWhole(rawDataValue, 5);
             case groupTypes.NUMERIC.ten:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 10));
+                return groupUtils.getRangeWhole(rawDataValue, 10);
             case groupTypes.NUMERIC.hundred:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 100));
+                return groupUtils.getRangeWhole(rawDataValue, 100);
             case groupTypes.NUMERIC.one_k:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 1000));
+                return groupUtils.getRangeWhole(rawDataValue, 1000);
             case groupTypes.NUMERIC.ten_k:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 10000));
+                return groupUtils.getRangeWhole(rawDataValue, 10000);
             case groupTypes.NUMERIC.hundred_k:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 100000));
+                return groupUtils.getRangeWhole(rawDataValue, 100000);
             case groupTypes.NUMERIC.million:
-                return formatNumericRange(groupUtils.getRangeWhole(rawDataValue, 1000000));
+                return groupUtils.getRangeWhole(rawDataValue, 1000000);
             }
             break;
         case constants.TEXT:
@@ -233,10 +224,14 @@
             }
 
             let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
-
-            //  TODO: JIRA-21803 -- Node should only return an object structure to the client
+            //  Convert empty strings into null as both are treated the same by the client.
             if (groupedValue === '') {
-                groupedValue = '(Empty)';
+                groupedValue = null;
+            }
+
+            //  for non-null headers, convert into a string
+            if (groupedValue !== null) {
+                groupedValue = groupedValue.toString();
             }
 
             //  The lodash groupBy function uses the groupedValue as the key to an

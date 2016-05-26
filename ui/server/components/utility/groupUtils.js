@@ -6,6 +6,41 @@
     var moment = require('moment');
     var emailAddress = require('email-addresses');
 
+    /**
+     * For the given, return the lower and upper range as a string, separated by
+     * the group type delimiter.
+     *
+     * @param range
+     * @returns {*}
+     */
+    function formatNumericRange(range) {
+        if (range.lower === null && range.upper === null) {
+            return '';
+        }
+        return range.lower + groupTypes.delimiter + range.upper;
+    }
+
+    /**
+     * Convert the duration(ms) to the given precision(hours, minutes, seconds, days, weeks).
+     *
+     * @param duration (ms)
+     * @param precision - the conversion percision (hours, minutes, seconds, days, weeks)
+     * @param rounded - are fractional values rounded down to the largest integer less than or equal to the value
+     * @returns {*}
+     */
+    function convertDuration(duration, precision, rounded) {
+        let value = null;
+
+        if (typeof duration === 'number') {
+            value = duration / precision;
+            if (rounded === true) {
+                value = Math.floor(value);
+            }
+        }
+
+        return value;
+    }
+
     module.exports = {
 
         /**
@@ -158,7 +193,7 @@
          *      ...('04-30-2015','YYYY-MM-DD') is an invalid date
          *
          * If the input date is Apr 30, 2015, and it is parsed successfully, the return
-         * value is 'Apr 2015'.  Invalid input will result in an empty string being returned.
+         * value is 'Apr,2015'.  Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param format
@@ -168,7 +203,8 @@
             if (displayDate) {
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {
-                    return momentDate.format('MMM YYYY');
+                    let monthYear = momentDate.format('MMM YYYY');
+                    return monthYear.replace(" ", groupTypes.delimiter);
                 }
             }
             return '';
@@ -210,7 +246,7 @@
          *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
          *
          * If the input date is May 31, 2015, and it is parsed successfully, the return
-         * value is 'Q2 2015'.  Invalid input will result in an empty string being returned.
+         * value is '2,2015'.  Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param format
@@ -220,7 +256,7 @@
             if (displayDate) {
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {
-                    return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + momentDate.format('YYYY');
+                    return momentDate.quarter() + groupTypes.delimiter + momentDate.format('YYYY');
                 }
             }
             return '';
@@ -236,7 +272,7 @@
          *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
          *
          * If the input date is May 31, 2015, and it is parsed successfully, the return
-         * value is 'Q2 FY2015'.  Invalid input will result in an empty string being returned.
+         * value is '2,2015'.  Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param format
@@ -246,7 +282,7 @@
             if (displayDate) {
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {
-                    return constants.GROUPING.QUARTER + momentDate.quarter() + ' ' + constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
+                    return momentDate.quarter() + groupTypes.delimiter + momentDate.format('YYYY');
                 }
             }
             return '';
@@ -262,7 +298,7 @@
          *      ...('05-31-2015','YYYY-MM-DD') is an invalid date
          *
          * If the input date is May 31, 2015, and it is parsed successfully, the return
-         * value is 'FY2015'.  Invalid input will result in an empty string being returned.
+         * value is '2015'.  Invalid input will result in an empty string being returned.
          *
          * @param displayDate
          * @param format
@@ -272,7 +308,8 @@
             if (displayDate) {
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {
-                    return constants.GROUPING.FISCAL_YR + momentDate.format('YYYY');
+
+                    return momentDate.format('YYYY');
                 }
             }
             return '';
@@ -358,7 +395,7 @@
                 }
             }
 
-            return range;
+            return formatNumericRange(range);
         },
 
         /**
@@ -388,7 +425,7 @@
                 }
             }
 
-            return range;
+            return formatNumericRange(range);
         },
 
         /**
@@ -463,29 +500,29 @@
          */
         getDurationEquals: function(duration) {
 
-            let seconds = this.convertDuration(duration, constants.GROUPING.SECOND);
+            let seconds = convertDuration(duration, constants.MILLI.ONE_SECOND);
             if (seconds !== null && Math.abs(seconds) < 60) {
-                return seconds + ' ' + (Math.abs(seconds) === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+                return seconds + groupTypes.delimiter + groupTypes.DURATION.second;
             }
 
-            let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE);
+            let minutes = convertDuration(duration, constants.MILLI.ONE_MINUTE);
             if (minutes !== null && Math.abs(minutes) < 60) {
-                return minutes + ' ' + (Math.abs(minutes) === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+                return minutes + groupTypes.delimiter + groupTypes.DURATION.minute;
             }
 
-            let hours = this.convertDuration(duration, constants.GROUPING.HOUR);
+            let hours = convertDuration(duration, constants.MILLI.ONE_HOUR);
             if (hours !== null && Math.abs(hours) < 24) {
-                return hours + ' ' + (Math.abs(hours) === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+                return hours + groupTypes.delimiter + groupTypes.DURATION.hour;
             }
 
-            let days = this.convertDuration(duration, constants.GROUPING.DAY);
+            let days = convertDuration(duration, constants.MILLI.ONE_DAY);
             if (days !== null && Math.abs(days) < 7) {
-                return days + ' ' + (Math.abs(days) === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+                return days + groupTypes.delimiter + groupTypes.DURATION.day;
             }
 
-            let weeks = this.convertDuration(duration, constants.GROUPING.WEEK);
+            let weeks = convertDuration(duration, constants.MILLI.ONE_WEEK);
             if (weeks !== null) {
-                return weeks + ' ' + (Math.abs(weeks) === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+                return weeks + groupTypes.delimiter + groupTypes.DURATION.week;
             }
 
             return '';
@@ -498,9 +535,9 @@
          * @returns {*}
          */
         getDurationInSeconds: function(duration) {
-            let seconds = this.convertDuration(duration, constants.GROUPING.SECOND, true);
+            let seconds = convertDuration(duration, constants.MILLI.ONE_SECOND, true);
             if (seconds !== null) {
-                return seconds + ' ' + (Math.abs(seconds) === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
+                return seconds;
             }
             return '';
         },
@@ -513,9 +550,9 @@
          * @returns {*}
          */
         getDurationInMinutes: function(duration) {
-            let minutes = this.convertDuration(duration, constants.GROUPING.MINUTE, true);
+            let minutes = convertDuration(duration, constants.MILLI.ONE_MINUTE, true);
             if (minutes !== null) {
-                return minutes + ' ' + (Math.abs(minutes) === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
+                return minutes;
             }
             return '';
         },
@@ -528,9 +565,9 @@
          * @returns {*}
          */
         getDurationInHours: function(duration) {
-            let hours = this.convertDuration(duration, constants.GROUPING.HOUR, true);
+            let hours = convertDuration(duration, constants.MILLI.ONE_HOUR, true);
             if (hours !== null) {
-                return hours + ' ' + (Math.abs(hours) === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
+                return hours;
             }
             return '';
         },
@@ -543,9 +580,9 @@
          * @returns {*}
          */
         getDurationInDays: function(duration) {
-            let days = this.convertDuration(duration, constants.GROUPING.DAY, true);
+            let days = convertDuration(duration, constants.MILLI.ONE_DAY, true);
             if (days !== null) {
-                return days + ' ' + (Math.abs(days) === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
+                return days;
             }
             return '';
         },
@@ -558,46 +595,11 @@
          * @returns {*}
          */
         getDurationInWeeks: function(duration) {
-            let weeks = this.convertDuration(duration, constants.GROUPING.WEEK, true);
+            let weeks = convertDuration(duration, constants.MILLI.ONE_WEEK, true);
             if (weeks !== null) {
-                return weeks + ' ' + (Math.abs(weeks) === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
+                return weeks;
             }
             return '';
-        },
-
-        /**
-         * Convert the duration(ms) to the given precision(hours, minutes, seconds, days, weeks).
-         *
-         * @param duration (ms)
-         * @param precision - the conversion percision (hours, minutes, seconds, days, weeks)
-         * @param rounded - are fractional values rounded down to the largest integer less than or equal to the value
-         * @returns {*}
-         */
-        convertDuration: function(duration, precision, rounded) {
-            let value = null;
-            if (typeof duration === 'number') {
-                switch (precision) {
-                case constants.GROUPING.SECOND:
-                    value = duration / constants.MILLI.ONE_SECOND;
-                    break;
-                case constants.GROUPING.MINUTE:
-                    value = duration / constants.MILLI.ONE_MINUTE;
-                    break;
-                case constants.GROUPING.HOUR:
-                    value = duration / constants.MILLI.ONE_HOUR;
-                    break;
-                case constants.GROUPING.DAY:
-                    value = duration / constants.MILLI.ONE_DAY;
-                    break;
-                case constants.GROUPING.WEEK:
-                    value = duration / constants.MILLI.ONE_WEEK;
-                    break;
-                }
-                if (typeof value === 'number' && rounded === true) {
-                    value = Math.floor(value);
-                }
-            }
-            return value;
         }
 
     };
