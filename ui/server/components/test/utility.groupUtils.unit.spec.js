@@ -163,20 +163,20 @@ describe('Validate Group Utility functions', function() {
             var testCases = [];
             var testScale = 4;
 
-            testCases.push({name: 'thousandth (76.12345)', input:76.12345, expectation:{lower:'76.1230', upper:'76.1240'}});
-            testCases.push({name: 'thousandth (76.1234)', input:76.1234, expectation:{lower:'76.1230', upper:'76.1240'}});
-            testCases.push({name: 'thousandth (76.123)', input:76.123, expectation:{lower:'76.1230', upper:'76.1240'}});
-            testCases.push({name: 'thousandth (76.12)', input:76.12, expectation:{lower:'76.1200', upper:'76.1210'}});
-            testCases.push({name: 'thousandth (76.1)', input:76.1, expectation:{lower:'76.1000', upper:'76.1010'}});
-            testCases.push({name: 'thousandth (76)', input:76, expectation:{lower:'76.0000', upper:'76.0010'}});
-            testCases.push({name: 'thousandth (.76)', input:.76, expectation:{lower:'0.7600', upper:'0.7610'}});
-            testCases.push({name: 'thousandth (-.76)', input:-.76, expectation:{lower:'-0.7600', upper:'-0.7590'}});
-            testCases.push({name: 'thousandth (-76)', input:-76, expectation:{lower:'-76.0000', upper:'-75.9990'}});
-            testCases.push({name: 'thousandth (-76.1)', input:-76.1, expectation:{lower:'-76.1000', upper:'-76.0990'}});
-            testCases.push({name: 'thousandth (-76.12)', input:-76.12, expectation:{lower:'-76.1200', upper:'-76.1190'}});
-            testCases.push({name: 'thousandth (-76.123)', input:-76.123, expectation:{lower:'-76.1230', upper:'-76.1220'}});
-            testCases.push({name: 'thousandth (-76.1234)', input:-76.1234, expectation:{lower:'-76.1240', upper:'-76.1230'}});
-            testCases.push({name: 'thousandth (-76.12345)', input:-76.12345, expectation:{lower:'-76.1240', upper:'-76.1230'}});
+            testCases.push({name: 'thousandth (76.12345)', input:76.12345, expectation:'76.1230' + groupTypes.delimiter + '76.1240'});
+            testCases.push({name: 'thousandth (76.1234)', input:76.1234, expectation:'76.1230' + groupTypes.delimiter + '76.1240'});
+            testCases.push({name: 'thousandth (76.123)', input:76.123, expectation:'76.1230' + groupTypes.delimiter + '76.1240'});
+            testCases.push({name: 'thousandth (76.12)', input:76.12, expectation:'76.1200' + groupTypes.delimiter + '76.1210'});
+            testCases.push({name: 'thousandth (76.1)', input:76.1, expectation:'76.1000' + groupTypes.delimiter + '76.1010'});
+            testCases.push({name: 'thousandth (76)', input:76, expectation:'76.0000' + groupTypes.delimiter + '76.0010'});
+            testCases.push({name: 'thousandth (.76)', input:.76, expectation:'0.7600' + groupTypes.delimiter + '0.7610'});
+            testCases.push({name: 'thousandth (-.76)', input:-.76, expectation:'-0.7600' + groupTypes.delimiter + '-0.7590'});
+            testCases.push({name: 'thousandth (-76)', input:-76, expectation:'-76.0000' + groupTypes.delimiter + '-75.9990'});
+            testCases.push({name: 'thousandth (-76.1)', input:-76.1, expectation:'-76.1000' + groupTypes.delimiter + '-76.0990'});
+            testCases.push({name: 'thousandth (-76.12)', input:-76.12, expectation:'-76.1200' + groupTypes.delimiter + '-76.1190'});
+            testCases.push({name: 'thousandth (-76.123)', input:-76.123, expectation:'-76.1230' + groupTypes.delimiter + '-76.1220'});
+            testCases.push({name: 'thousandth (-76.1234)', input:-76.1234, expectation:'-76.1240' + groupTypes.delimiter + '-76.1230'});
+            testCases.push({name: 'thousandth (-76.12345)', input:-76.12345, expectation:'-76.1240' + groupTypes.delimiter + '-76.1230'});
 
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
@@ -190,20 +190,20 @@ describe('Validate Group Utility functions', function() {
             var testCases = [];
             var testScale = 3;
 
-            testCases.push({name: 'hundredth (76.12345)', input:76.12345, expectation:{lower:'76.120', upper:'76.130'}});
-            testCases.push({name: 'hundredth (76.1234)', input:76.1234, expectation:{lower:'76.120', upper:'76.130'}});
-            testCases.push({name: 'hundredth (76.123)', input:76.123, expectation:{lower:'76.120', upper:'76.130'}});
-            testCases.push({name: 'hundredth (76.12)', input:76.12, expectation:{lower:'76.120', upper:'76.130'}});
-            testCases.push({name: 'hundredth (76.1)', input:76.1, expectation:{lower:'76.100', upper:'76.110'}});
-            testCases.push({name: 'hundredth (76)', input:76, expectation:{lower:'76.000', upper:'76.010'}});
-            testCases.push({name: 'hundredth (.76)', input:.76, expectation:{lower:'0.760', upper:'0.770'}});
-            testCases.push({name: 'hundredth (-.76)', input:-.76, expectation:{lower:'-0.760', upper:'-0.750'}});
-            testCases.push({name: 'hundredth (-76)', input:-76, expectation:{lower:'-76.000', upper:'-75.990'}});
-            testCases.push({name: 'hundredth (-76.1)', input:-76.1, expectation:{lower:'-76.100', upper:'-76.090'}});
-            testCases.push({name: 'hundredth (-76.12)', input:-76.12, expectation:{lower:'-76.120', upper:'-76.110'}});
-            testCases.push({name: 'hundredth (-76.123)', input:-76.123, expectation:{lower:'-76.130', upper:'-76.120'}});
-            testCases.push({name: 'hundredth (-76.1234)', input:-76.1234, expectation:{lower:'-76.130', upper:'-76.120'}});
-            testCases.push({name: 'hundredth (-76.12345)', input:-76.12345, expectation:{lower:'-76.130', upper:'-76.120'}});
+            testCases.push({name: 'hundredth (76.12345)', input:76.12345, expectation:'76.120' + groupTypes.delimiter + '76.130'});
+            testCases.push({name: 'hundredth (76.1234)', input:76.1234, expectation:'76.120' + groupTypes.delimiter + '76.130'});
+            testCases.push({name: 'hundredth (76.123)', input:76.123, expectation:'76.120' + groupTypes.delimiter + '76.130'});
+            testCases.push({name: 'hundredth (76.12)', input:76.12, expectation:'76.120' + groupTypes.delimiter + '76.130'});
+            testCases.push({name: 'hundredth (76.1)', input:76.1, expectation:'76.100' + groupTypes.delimiter + '76.110'});
+            testCases.push({name: 'hundredth (76)', input:76, expectation:'76.000' + groupTypes.delimiter + '76.010'});
+            testCases.push({name: 'hundredth (.76)', input:.76, expectation:'0.760' + groupTypes.delimiter + '0.770'});
+            testCases.push({name: 'hundredth (-.76)', input:-.76, expectation:'-0.760' + groupTypes.delimiter + '-0.750'});
+            testCases.push({name: 'hundredth (-76)', input:-76, expectation:'-76.000' + groupTypes.delimiter + '-75.990'});
+            testCases.push({name: 'hundredth (-76.1)', input:-76.1, expectation:'-76.100' + groupTypes.delimiter + '-76.090'});
+            testCases.push({name: 'hundredth (-76.12)', input:-76.12, expectation:'-76.120' + groupTypes.delimiter + '-76.110'});
+            testCases.push({name: 'hundredth (-76.123)', input:-76.123, expectation:'-76.130' + groupTypes.delimiter + '-76.120'});
+            testCases.push({name: 'hundredth (-76.1234)', input:-76.1234, expectation:'-76.130' + groupTypes.delimiter + '-76.120'});
+            testCases.push({name: 'hundredth (-76.12345)', input:-76.12345, expectation:'-76.130' + groupTypes.delimiter + '-76.120'});
 
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
@@ -217,20 +217,20 @@ describe('Validate Group Utility functions', function() {
             var testCases = [];
             var testScale = 2;
 
-            testCases.push({name: 'tens (76.12345)', input:76.12345, expectation:{lower:'76.10', upper:'76.20'}});
-            testCases.push({name: 'tens (76.1234)', input:76.1234, expectation:{lower:'76.10', upper:'76.20'}});
-            testCases.push({name: 'tens (76.123)', input:76.123, expectation:{lower:'76.10', upper:'76.20'}});
-            testCases.push({name: 'tens (76.12)', input:76.12, expectation:{lower:'76.10', upper:'76.20'}});
-            testCases.push({name: 'tens (76.1)', input:76.1, expectation:{lower:'76.10', upper:'76.20'}});
-            testCases.push({name: 'tens (76)', input:76, expectation:{lower:'76.00', upper:'76.10'}});
-            testCases.push({name: 'tens (.76)', input:.76, expectation:{lower:'0.70', upper:'0.80'}});
-            testCases.push({name: 'tens (-.76)', input:-.76, expectation:{lower:'-0.80', upper:'-0.70'}});
-            testCases.push({name: 'tens (-76)', input:-76, expectation:{lower:'-76.00', upper:'-75.90'}});
-            testCases.push({name: 'tens (-76.1)', input:-76.1, expectation:{lower:'-76.10', upper:'-76.00'}});
-            testCases.push({name: 'tens (-76.12)', input:-76.12, expectation:{lower:'-76.20', upper:'-76.10'}});
-            testCases.push({name: 'tens (-76.123)', input:-76.123, expectation:{lower:'-76.20', upper:'-76.10'}});
-            testCases.push({name: 'tens (-76.1234)', input:-76.1234, expectation:{lower:'-76.20', upper:'-76.10'}});
-            testCases.push({name: 'tens (-76.12345)', input:-76.12345, expectation:{lower:'-76.20', upper:'-76.10'}});
+            testCases.push({name: 'tens (76.12345)', input:76.12345, expectation:'76.10' + groupTypes.delimiter + '76.20'});
+            testCases.push({name: 'tens (76.1234)', input:76.1234, expectation:'76.10' + groupTypes.delimiter + '76.20'});
+            testCases.push({name: 'tens (76.123)', input:76.123, expectation:'76.10' + groupTypes.delimiter + '76.20'});
+            testCases.push({name: 'tens (76.12)', input:76.12, expectation:'76.10' + groupTypes.delimiter + '76.20'});
+            testCases.push({name: 'tens (76.1)', input:76.1, expectation:'76.10' + groupTypes.delimiter + '76.20'});
+            testCases.push({name: 'tens (76)', input:76, expectation:'76.00' + groupTypes.delimiter + '76.10'});
+            testCases.push({name: 'tens (.76)', input:.76, expectation:'0.70' + groupTypes.delimiter + '0.80'});
+            testCases.push({name: 'tens (-.76)', input:-.76, expectation:'-0.80' + groupTypes.delimiter + '-0.70'});
+            testCases.push({name: 'tens (-76)', input:-76, expectation:'-76.00' + groupTypes.delimiter + '-75.90'});
+            testCases.push({name: 'tens (-76.1)', input:-76.1, expectation:'-76.10' + groupTypes.delimiter + '-76.00'});
+            testCases.push({name: 'tens (-76.12)', input:-76.12, expectation:'-76.20' + groupTypes.delimiter + '-76.10'});
+            testCases.push({name: 'tens (-76.123)', input:-76.123, expectation:'-76.20' + groupTypes.delimiter + '-76.10'});
+            testCases.push({name: 'tens (-76.1234)', input:-76.1234, expectation:'-76.20' + groupTypes.delimiter + '-76.10'});
+            testCases.push({name: 'tens (-76.12345)', input:-76.12345, expectation:'-76.20' + groupTypes.delimiter + '-76.10'});
 
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name + ':' + test.input, function() {
@@ -250,12 +250,12 @@ describe('Validate Group Utility functions', function() {
                 testCases.push({
                     name: 'ones scale ' + idx,
                     input: getRandomNumber(lowerBound, upperBound, idx),
-                    expectation: {lower: lowerBound.toString(), upper: upperBound.toString()}
-                });
+                    expectation: lowerBound.toString() + groupTypes.delimiter + upperBound.toString()}
+                );
             }
 
-            testCases.push({name: 'ones pos fraction', input:getRandomNumber(0, 1, 2), expectation:{lower:'0', upper:'1'}});
-            testCases.push({name: 'ones neg fraction', input:getRandomNumber(-1, 0, 2), expectation:{lower:'-1', upper:'0'}});
+            testCases.push({name: 'ones pos fraction', input:getRandomNumber(0, 1, 2), expectation:'0' + groupTypes.delimiter + '1'});
+            testCases.push({name: 'ones neg fraction', input:getRandomNumber(-1, 0, 2), expectation:'-1' + groupTypes.delimiter + '0'});
 
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
@@ -269,10 +269,10 @@ describe('Validate Group Utility functions', function() {
 
             var testCases = [];
 
-            testCases.push({name: 'null input', input:null, scale:1, expectation:{lower:null, upper:null}});
-            testCases.push({name: 'non-number input', input:'', scale:1, expectation:{lower:null, upper:null}});
-            testCases.push({name: 'null scale', input:76.1, scale:null, expectation:{lower:null, upper:null}});
-            testCases.push({name: 'non-number scale', input:76.1, scale:'', expectation:{lower:null, upper:null}});
+            testCases.push({name: 'null input', input:null, scale:1, expectation:''});
+            testCases.push({name: 'non-number input', input:'', scale:1, expectation:''});
+            testCases.push({name: 'null scale', input:76.1, scale:null, expectation:''});
+            testCases.push({name: 'non-number scale', input:76.1, scale:'', expectation:''});
 
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
@@ -285,20 +285,20 @@ describe('Validate Group Utility functions', function() {
 
             var testCases = [];
 
-            testCases.push({name: 'five (pos)', input:getRandomNumber(75, 80), factor:5, expectation:{lower:'75', upper:'80'}});
-            testCases.push({name: 'ten (pos)', input:getRandomNumber(70, 80), factor:10, expectation:{lower:'70', upper:'80'}});
-            testCases.push({name: 'hundred (pos)', input:getRandomNumber(0, 100), factor:100, expectation:{lower:'0', upper:'100'}});
-            testCases.push({name: 'thousand (pos)', input:getRandomNumber(0, 1000), factor:1000, expectation:{lower:'0', upper:'1000'}});
-            testCases.push({name: '10Thousand (pos)', input:getRandomNumber(0, 10000), factor:10000, expectation:{lower:'0', upper:'10000'}});
-            testCases.push({name: '100Thousand (pos)', input:getRandomNumber(0, 100000), factor:100000, expectation:{lower:'0', upper:'100000'}});
-            testCases.push({name: 'million (pos)', input:getRandomNumber(0, 1000000), factor:1000000, expectation:{lower:'0', upper:'1000000'}});
-            testCases.push({name: 'five (neg)', input:getRandomNumber(-80, -75), factor:5, expectation:{lower:'-80', upper:'-75'}});
-            testCases.push({name: 'ten (neg)', input:getRandomNumber(-80, -70), factor:10, expectation:{lower:'-80', upper:'-70'}});
-            testCases.push({name: 'hundred (neg)', input:getRandomNumber(-100, -1), factor:100, expectation:{lower:'-100', upper:'0'}});
-            testCases.push({name: 'thousand (neg)', input:getRandomNumber(-1000, -1), factor:1000, expectation:{lower:'-1000', upper:'0'}});
-            testCases.push({name: '10Thousand (neg)', input:getRandomNumber(-10000, -1), factor:10000, expectation:{lower:'-10000', upper:'0'}});
-            testCases.push({name: '100Thousand (neg)', input:getRandomNumber(-100000, -1), factor:100000, expectation:{lower:'-100000', upper:'0'}});
-            testCases.push({name: 'million (neg)', input:getRandomNumber(-1000000, -1), factor:1000000, expectation:{lower:'-1000000', upper:'0'}});
+            testCases.push({name: 'five (pos)', input:getRandomNumber(75, 80), factor:5, expectation:'75' + groupTypes.delimiter + '80'});
+            testCases.push({name: 'ten (pos)', input:getRandomNumber(70, 80), factor:10, expectation:'70' + groupTypes.delimiter + '80'});
+            testCases.push({name: 'hundred (pos)', input:getRandomNumber(0, 100), factor:100, expectation:'0' + groupTypes.delimiter + '100'});
+            testCases.push({name: 'thousand (pos)', input:getRandomNumber(0, 1000), factor:1000, expectation:'0' + groupTypes.delimiter + '1000'});
+            testCases.push({name: '10Thousand (pos)', input:getRandomNumber(0, 10000), factor:10000, expectation:'0' + groupTypes.delimiter + '10000'});
+            testCases.push({name: '100Thousand (pos)', input:getRandomNumber(0, 100000), factor:100000, expectation:'0' + groupTypes.delimiter + '100000'});
+            testCases.push({name: 'million (pos)', input:getRandomNumber(0, 1000000), factor:1000000, expectation:'0' + groupTypes.delimiter + '1000000'});
+            testCases.push({name: 'five (neg)', input:getRandomNumber(-80, -75), factor:5, expectation:'-80' + groupTypes.delimiter + '-75'});
+            testCases.push({name: 'ten (neg)', input:getRandomNumber(-80, -70), factor:10, expectation:'-80' + groupTypes.delimiter + '-70'});
+            testCases.push({name: 'hundred (neg)', input:getRandomNumber(-100, -1), factor:100, expectation:'-100' + groupTypes.delimiter + '0'});
+            testCases.push({name: 'thousand (neg)', input:getRandomNumber(-1000, -1), factor:1000, expectation:'-1000' + groupTypes.delimiter + '0'});
+            testCases.push({name: '10Thousand (neg)', input:getRandomNumber(-10000, -1), factor:10000, expectation:'-10000' + groupTypes.delimiter + '0'});
+            testCases.push({name: '100Thousand (neg)', input:getRandomNumber(-100000, -1), factor:100000, expectation:'-100000' + groupTypes.delimiter + '0'});
+            testCases.push({name: 'million (neg)', input:getRandomNumber(-1000000, -1), factor:1000000, expectation:'-1000000' + groupTypes.delimiter + '0'});
 
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name + ': ' + test.input, function() {
@@ -311,10 +311,10 @@ describe('Validate Group Utility functions', function() {
 
             var testCases = [];
 
-            testCases.push({name: 'null input', input:null, factor:5, expectation:{lower:null, upper:null}});
-            testCases.push({name: 'non-number input', input:'', factor:5, expectation:{lower:null, upper:null}});
-            testCases.push({name: 'null factor', input:76.1, factor:null, expectation:{lower:null, upper:null}});
-            testCases.push({name: 'non-number factor', input:76.1, factor:'', expectation:{lower:null, upper:null}});
+            testCases.push({name: 'null input', input:null, factor:5, expectation:''});
+            testCases.push({name: 'non-number input', input:'', factor:5, expectation:''});
+            testCases.push({name: 'null factor', input:76.1, factor:null, expectation:''});
+            testCases.push({name: 'non-number factor', input:76.1, factor:'', expectation:''});
 
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
@@ -340,7 +340,7 @@ describe('Validate Group Utility functions', function() {
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var month = groupUtils.getMonth(test.displayDate, test.momentFormat);
-                    assert.equal(month, test.testDate.expectation.month + ' ' + test.testDate.expectation.year);
+                    assert.equal(month, test.testDate.expectation.month + groupTypes.delimiter + test.testDate.expectation.year);
                 });
             });
         });
@@ -362,7 +362,7 @@ describe('Validate Group Utility functions', function() {
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var quarter = groupUtils.getQuarter(test.displayDate, test.momentFormat);
-                    assert.equal(quarter, constants.GROUPING.QUARTER + test.testDate.expectation.qtr + ' ' + test.testDate.expectation.year);
+                    assert.equal(quarter, test.testDate.expectation.qtr + groupTypes.delimiter + test.testDate.expectation.year);
                 });
             });
         });
@@ -373,7 +373,7 @@ describe('Validate Group Utility functions', function() {
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var quarter = groupUtils.getFiscalQuarter(test.displayDate, test.momentFormat);
-                    assert.equal(quarter, constants.GROUPING.QUARTER + test.testDate.expectation.qtr + ' ' + constants.GROUPING.FISCAL_YR + test.testDate.expectation.year);
+                    assert.equal(quarter, test.testDate.expectation.qtr + groupTypes.delimiter + test.testDate.expectation.year);
                 });
             });
         });
@@ -384,7 +384,7 @@ describe('Validate Group Utility functions', function() {
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
                     var year = groupUtils.getFiscalYear(test.displayDate, test.momentFormat);
-                    assert.equal(year, constants.GROUPING.FISCAL_YR + test.testDate.expectation.year);
+                    assert.equal(year, test.testDate.expectation.year + '');
                 });
             });
         });
@@ -478,9 +478,6 @@ describe('Validate Group Utility functions', function() {
                     it('Test case: ' + test.name, function() {
                         var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_SECOND * test.duration : test.duration;
                         var expectation = test.expectation;
-                        if (test.expectation !== '') {
-                            expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.SECOND : constants.GROUPING.SECONDS);
-                        }
                         assert.equal(groupUtils.getDurationInSeconds(duration), expectation);
                     });
                 });
@@ -491,9 +488,6 @@ describe('Validate Group Utility functions', function() {
                     it('Test case: ' + test.name, function() {
                         var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_MINUTE * test.duration : test.duration;
                         var expectation = test.expectation;
-                        if (test.expectation !== '') {
-                            expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.MINUTE : constants.GROUPING.MINUTES);
-                        }
                         assert.equal(groupUtils.getDurationInMinutes(duration), expectation);
                     });
                 });
@@ -504,9 +498,6 @@ describe('Validate Group Utility functions', function() {
                     it('Test case: ' + test.name, function() {
                         var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_HOUR * test.duration : test.duration;
                         var expectation = test.expectation;
-                        if (test.expectation !== '') {
-                            expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.HOUR : constants.GROUPING.HOURS);
-                        }
                         assert.equal(groupUtils.getDurationInHours(duration), expectation);
                     });
                 });
@@ -517,9 +508,6 @@ describe('Validate Group Utility functions', function() {
                     it('Test case: ' + test.name, function() {
                         var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_DAY * test.duration : test.duration;
                         var expectation = test.expectation;
-                        if (test.expectation !== '') {
-                            expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.DAY : constants.GROUPING.DAYS);
-                        }
                         assert.equal(groupUtils.getDurationInDays(duration), expectation);
                     });
                 });
@@ -530,9 +518,6 @@ describe('Validate Group Utility functions', function() {
                     it('Test case: ' + test.name, function() {
                         var duration = typeof test.duration === 'number' ? constants.MILLI.ONE_WEEK * test.duration : test.duration;
                         var expectation = test.expectation;
-                        if (test.expectation !== '') {
-                            expectation += ' ' + (test.expectation === 1 ? constants.GROUPING.WEEK : constants.GROUPING.WEEKS);
-                        }
                         assert.equal(groupUtils.getDurationInWeeks(duration), expectation);
                     });
                 });
@@ -544,33 +529,33 @@ describe('Validate Group Utility functions', function() {
                     {name: 'null input', duration: null, expectation: ''},
                     {name: 'string input', duration: 'something', expectation: ''},
 
-                    {name: 'second', duration: constants.MILLI.ONE_SECOND, expectation: '1 ' + constants.GROUPING.SECOND},
-                    {name: 'seconds', duration: constants.MILLI.ONE_SECOND * 55, expectation: '55 ' + constants.GROUPING.SECONDS},
-                    {name: 'second negative', duration: constants.MILLI.ONE_SECOND * -1, expectation: '-1 ' + constants.GROUPING.SECOND},
-                    {name: 'seconds negative', duration: constants.MILLI.ONE_SECOND * -55, expectation: '-55 ' + constants.GROUPING.SECONDS},
+                    {name: 'second', duration: constants.MILLI.ONE_SECOND, expectation: '1' + groupTypes.delimiter + groupTypes.DURATION.second},
+                    {name: 'seconds', duration: constants.MILLI.ONE_SECOND * 55, expectation: '55' + groupTypes.delimiter + groupTypes.DURATION.second},
+                    {name: 'second negative', duration: constants.MILLI.ONE_SECOND * -1, expectation: '-1' + groupTypes.delimiter + groupTypes.DURATION.second},
+                    {name: 'seconds negative', duration: constants.MILLI.ONE_SECOND * -55, expectation: '-55' + groupTypes.delimiter + groupTypes.DURATION.second},
 
-                    {name: 'minute', duration: constants.MILLI.ONE_MINUTE, expectation: '1 ' + constants.GROUPING.MINUTE},
-                    {name: 'minutes', duration: constants.MILLI.ONE_MINUTE * 5, expectation: '5 ' + constants.GROUPING.MINUTES},
-                    {name: 'minutes2', duration: (constants.MILLI.ONE_MINUTE * 5) + (constants.MILLI.ONE_SECOND * 30), expectation: '5.5 ' + constants.GROUPING.MINUTES},
-                    {name: 'minute negative', duration: constants.MILLI.ONE_MINUTE * -1, expectation: '-1 ' + constants.GROUPING.MINUTE},
-                    {name: 'minutes negative', duration: constants.MILLI.ONE_MINUTE * -5, expectation: '-5 ' + constants.GROUPING.MINUTES},
+                    {name: 'minute', duration: constants.MILLI.ONE_MINUTE, expectation: '1' + groupTypes.delimiter + groupTypes.DURATION.minute},
+                    {name: 'minutes', duration: constants.MILLI.ONE_MINUTE * 5, expectation: '5' + groupTypes.delimiter + groupTypes.DURATION.minute},
+                    {name: 'minutes2', duration: (constants.MILLI.ONE_MINUTE * 5) + (constants.MILLI.ONE_SECOND * 30), expectation: '5.5' + groupTypes.delimiter + groupTypes.DURATION.minute},
+                    {name: 'minute negative', duration: constants.MILLI.ONE_MINUTE * -1, expectation: '-1' + groupTypes.delimiter + groupTypes.DURATION.minute},
+                    {name: 'minutes negative', duration: constants.MILLI.ONE_MINUTE * -5, expectation: '-5' + groupTypes.delimiter + groupTypes.DURATION.minute},
 
-                    {name: 'hour', duration: constants.MILLI.ONE_HOUR, expectation: '1 ' + constants.GROUPING.HOUR},
-                    {name: 'hours', duration: constants.MILLI.ONE_HOUR * 4, expectation: '4 ' + constants.GROUPING.HOURS},
-                    {name: 'hours2', duration: (constants.MILLI.ONE_HOUR * 4) + (constants.MILLI.ONE_MINUTE * 15), expectation: '4.25 ' + constants.GROUPING.HOURS},
-                    {name: 'hour negative', duration: constants.MILLI.ONE_HOUR * -1, expectation: '-1 ' + constants.GROUPING.HOUR},
-                    {name: 'hours negative', duration: constants.MILLI.ONE_HOUR * -4, expectation: '-4 ' + constants.GROUPING.HOURS},
+                    {name: 'hour', duration: constants.MILLI.ONE_HOUR, expectation: '1' + groupTypes.delimiter + groupTypes.DURATION.hour},
+                    {name: 'hours', duration: constants.MILLI.ONE_HOUR * 4, expectation: '4' + groupTypes.delimiter + groupTypes.DURATION.hour},
+                    {name: 'hours2', duration: (constants.MILLI.ONE_HOUR * 4) + (constants.MILLI.ONE_MINUTE * 15), expectation: '4.25' + groupTypes.delimiter + groupTypes.DURATION.hour},
+                    {name: 'hour negative', duration: constants.MILLI.ONE_HOUR * -1, expectation: '-1' + groupTypes.delimiter + groupTypes.DURATION.hour},
+                    {name: 'hours negative', duration: constants.MILLI.ONE_HOUR * -4, expectation: '-4' + groupTypes.delimiter + groupTypes.DURATION.hour},
 
-                    {name: 'day', duration: constants.MILLI.ONE_DAY, expectation: '1 ' + constants.GROUPING.DAY},
-                    {name: 'days', duration: constants.MILLI.ONE_DAY * 3, expectation: '3 ' + constants.GROUPING.DAYS},
-                    {name: 'days2', duration: (constants.MILLI.ONE_DAY * 3) + (constants.MILLI.ONE_HOUR * 18), expectation: '3.75 ' + constants.GROUPING.DAYS},
-                    {name: 'day negative', duration: constants.MILLI.ONE_DAY * -1, expectation: '-1 ' + constants.GROUPING.DAY},
-                    {name: 'days negative', duration: constants.MILLI.ONE_DAY * -3, expectation: '-3 ' + constants.GROUPING.DAYS},
+                    {name: 'day', duration: constants.MILLI.ONE_DAY, expectation: '1' + groupTypes.delimiter + groupTypes.DURATION.day},
+                    {name: 'days', duration: constants.MILLI.ONE_DAY * 3, expectation: '3' + groupTypes.delimiter + groupTypes.DURATION.day},
+                    {name: 'days2', duration: (constants.MILLI.ONE_DAY * 3) + (constants.MILLI.ONE_HOUR * 18), expectation: '3.75' + groupTypes.delimiter + groupTypes.DURATION.day},
+                    {name: 'day negative', duration: constants.MILLI.ONE_DAY * -1, expectation: '-1' + groupTypes.delimiter + groupTypes.DURATION.day},
+                    {name: 'days negative', duration: constants.MILLI.ONE_DAY * -3, expectation: '-3' + groupTypes.delimiter + groupTypes.DURATION.day},
 
-                    {name: 'week', duration: (constants.MILLI.ONE_WEEK), expectation: '1 ' + constants.GROUPING.WEEK},
-                    {name: 'weeks', duration: (constants.MILLI.ONE_WEEK * 10), expectation: '10 ' + constants.GROUPING.WEEKS},
-                    {name: 'week negative', duration: (constants.MILLI.ONE_WEEK) * -1, expectation: '-1 ' + constants.GROUPING.WEEK},
-                    {name: 'weeks negative', duration: (constants.MILLI.ONE_WEEK * -10), expectation: '-10 ' + constants.GROUPING.WEEKS}
+                    {name: 'week', duration: (constants.MILLI.ONE_WEEK), expectation: '1' + groupTypes.delimiter + groupTypes.DURATION.week},
+                    {name: 'weeks', duration: (constants.MILLI.ONE_WEEK * 10), expectation: '10' + groupTypes.delimiter + groupTypes.DURATION.week},
+                    {name: 'week negative', duration: (constants.MILLI.ONE_WEEK) * -1, expectation: '-1' + groupTypes.delimiter + groupTypes.DURATION.week},
+                    {name: 'weeks negative', duration: (constants.MILLI.ONE_WEEK * -10), expectation: '-10' + groupTypes.delimiter + groupTypes.DURATION.week}
                 ];
 
                 equalTestCases.forEach(function(test) {

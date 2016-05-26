@@ -8,7 +8,7 @@ export const COMMON = {
 };
 
 export const GROUP_TYPE = {
-
+    delimiter: ',',
     date: {
         equals: COMMON.equals,
         day: COMMON.day,

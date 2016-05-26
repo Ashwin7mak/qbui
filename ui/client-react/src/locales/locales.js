@@ -1,6 +1,7 @@
 
 import Logger from '../utils/logger';
 import config from '../config/app.config';
+import StringUtils from '../utils/stringUtils';
 
 let logger = new Logger();
 
@@ -11,10 +12,29 @@ let locale = config.locale.default;
 
 class Locale {
 
+    /**
+     * Return the current locale
+     *
+     * @returns {*}
+     */
     static getLocale() {
         return locale;
     }
 
+    /**
+     * Return the currency code for the current locale.
+     *
+     * @returns {string|string}
+     */
+    static getCurrencyCode() {
+        return Locale.getI18nBundle().currencyCode;
+    }
+
+    /**
+     * Return the i18n bundle for the current locale.
+     *
+     * @returns {string}
+     */
     static getI18nBundle() {
         let bundle = "";
 
@@ -43,6 +63,12 @@ class Locale {
         return bundle;
     }
 
+    /**
+     * Change the locale to a new locale.  The locale supplied must be in the list of
+     * supported locales defined in the run-time configuration object or no change is made.
+     *
+     * @param newLocale
+     */
     static changeLocale(newLocale) {
         try {
             if (config.locale.supported.indexOf(newLocale.toLowerCase()) === -1) {
@@ -55,13 +81,25 @@ class Locale {
         }
     }
 
-    // return message in bundle.messages object by dot-separated path
-    static getMessage(msgPath) {
+    /**
+     * Return a localized message based on the msgPath key.  Add an
+     * optional token list for parameter substitution if the message
+     * includes tokens.
+     *
+     * @param msgPath
+     * @param tokens
+     * @returns {*}
+     */
+    static getMessage(msgPath, tokens) {
         var messages =  Locale.getI18nBundle().messages;
 
         let message = msgPath.split('.').reduce((obj, pathPart) => {
             return obj[pathPart];
         }, messages);
+
+        if (tokens) {
+            message = StringUtils.format(message, tokens);
+        }
 
         return message;
     }

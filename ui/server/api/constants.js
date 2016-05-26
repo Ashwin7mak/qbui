@@ -54,22 +54,6 @@
             LIST_DELIMITER: '.',
             GROUP_DELIMITER: ':'
         },
-
-        GROUPING : {
-            QUARTER: 'Q',
-            FISCAL_YR: 'FY',
-            SECOND: 'second',
-            SECONDS: 'seconds',
-            MINUTE: 'minute',
-            MINUTES: 'minutes',
-            DAY: 'day',
-            DAYS: 'days',
-            HOUR: 'hour',
-            HOURS: 'hours',
-            WEEK: 'week',
-            WEEKS: 'weeks'
-        },
-
         MILLI : {
             ONE_SECOND: 1000,
             ONE_MINUTE: 1000 * 60,
