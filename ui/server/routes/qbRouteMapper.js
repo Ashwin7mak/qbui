@@ -5,6 +5,8 @@
 (function() {
     'use strict';
     var log = require('../logger').getLogger();
+    var perfLogger = require('../perfLogger');
+    var sizeof = require('object-sizeof');
     var routeConsts = require('./routeConstants');
     var request = require('request');
     var requestHelper;
@@ -139,7 +141,34 @@
         };
     };
 
+    function filterNodeReq(req) {
+        let filtered = {};
+        if (req) {
+            filtered.method = req.method;
+            filtered.url = req.url;
+            if (req.headers) {
+                filtered.headers = {
+                    tid: req.headers.tid,
+                    sid: req.headers.sid
+                };
+            }
+        }
+        return filtered;
+    }
 
+    function logApiSuccess(req, response, perfLog, apiName) {
+        if (perfLog) {
+            perfLog.log();
+        }
+        log.debug({req: filterNodeReq(req), res:response}, apiName ? 'API SUCCESS:' + apiName : 'API SUCCESS');
+    }
+
+    function logApiFailure(req, response, perfLog, apiName) {
+        if (perfLog) {
+            perfLog.log();
+        }
+        log.error({req: filterNodeReq(req), res:response}, apiName ? 'API ERROR:' + apiName : 'API ERROR');
+    }
 
     /**
      * This helper method takes the request url produced and replaces the single /api with /api/api on the original
@@ -179,23 +208,29 @@
      */
     /*eslint no-shadow:0 */
     function fetchSingleRecord(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Single Record', filterNodeReq(req));
+
         processRequest(req, res, function(req, res) {
             recordsApi.fetchSingleRecordAndFields(req).then(
                 function(response) {
-                    log.debug({req:req, res:response}, 'FetchSingleRecord API SUCCESS');
                     res.send(response);
+
+                    perfLog.setPayload(sizeof(response));
+                    logApiSuccess(req, response, perfLog, 'Fetch Single Record');
                 },
                 function(response) {
-                    log.error({req:req, res:response}, 'FetchSingleRecord API ERROR');
-                    //  client needs a status code to respond..make sure one is always returned
+                    logApiFailure(req, response, perfLog, 'Fetch Single Record');
+
+                    //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
                         res.status(500).send(response);
                     }
-                });
+                }
+            );
         });
-
     }
 
     /**
@@ -206,21 +241,28 @@
      */
     /*eslint no-shadow:0 */
     function fetchAllRecords(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch All Records', filterNodeReq(req));
+
         processRequest(req, res, function(req, res) {
             recordsApi.fetchRecordsAndFields(req).then(
                 function(response) {
-                    log.debug({req:req, res:response}, 'FetchAllRecords API SUCCESS');
                     res.send(response);
+
+                    perfLog.setPayload(sizeof(response));
+                    logApiSuccess(req, response, perfLog, 'Fetch All Records');
                 },
                 function(response) {
-                    log.error({req:req, res:response}, 'FetchAllRecords API ERROR');
-                    //  client needs a status code to respond..make sure one is always returned
+                    logApiFailure(req, response, perfLog, 'Fetch All Records');
+
+                    //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
                         res.status(500).send(response);
                     }
-                });
+                }
+            );
         });
     }
 
@@ -233,21 +275,28 @@
      */
     /*eslint no-shadow:0 */
     function fetchReportComponents(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Report Components', filterNodeReq(req));
+
         processRequest(req, res, function(req, res) {
             reportsApi.fetchReportComponents(req).then(
                 function(response) {
-                    log.debug({req:req, res:response}, 'fetchReportComponents API SUCCESS');
                     res.send(response);
+
+                    perfLog.setPayload(sizeof(response));
+                    logApiSuccess(req, response, perfLog, 'Fetch Report Components');
                 },
                 function(response) {
-                    log.error({req:req, res:response}, 'fetchReportComponents API ERROR');
-                    //  client needs a status code to respond..make sure one is always returned
+                    logApiFailure(req, response, perfLog, 'Fetch Report Components');
+
+                    //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
                         res.status(500).send(response);
                     }
-                });
+                }
+            );
         });
     }
 
@@ -261,30 +310,42 @@
      */
     /*eslint no-shadow:0 */
     function fetchReportData(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Report Data', filterNodeReq(req));
+
         processRequest(req, res, function(req, res) {
             reportsApi.fetchReportResults(req).then(
                 function(response) {
-                    log.debug({req:req, res:response}, 'FetchReportData API SUCCESS');
                     res.send(response);
+
+                    perfLog.setPayload(sizeof(response));
+                    logApiSuccess(req, response, perfLog, 'Fetch Report Data');
                 },
                 function(response) {
-                    log.error({req:req, res:response}, 'FetchReportData API ERROR');
-                    //  client needs a status code to respond..make sure one is always returned
+                    logApiFailure(req, response, perfLog, 'Fetch Report Data');
+
+                    //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
                         res.status(500).send(response);
                     }
-                });
+                }
+            );
         });
     }
 
     function resolveFacets(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Resolve Facets', filterNodeReq(req));
+
         processRequest(req, res, function(req, res) {
-            queryFormatter.format(req)
-                .then(function(response) {
+            queryFormatter.format(req).then(
+                function(response) {
                     res.send(response);
-                });
+                    perfLog.log();
+                }
+            );
         });
     }
 
@@ -311,20 +372,49 @@
     }
 
     /**
-     * This is the function for forwarding a request
+     * This is the function for forwarding a request to the core server.  Expectation
+     * is that the data in the body of the response is a json structure for all requests.
+     *
      * @param req
      * @param res
      */
     /*eslint no-shadow:0 */
     function forwardApiRequest(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Forward API Request', filterNodeReq(req));
+
+        //processRequest(req, res, function(req, res) {
+        //    var opts = requestHelper.setOptions(req);
+        //    //opts.headers['Content-Type'] = 'application/json';
+        //
+        //    requestHelper.executeRequest(req, opts).then(
+        //        function(response) {
+        //            res.send(JSON.parse(response.body));
+        //
+        //            //perfLog.setPayload(sizeof(response));
+        //            logApiSuccess(req, response, perfLog);
+        //        },
+        //        function(response) {
+        //            logApiFailure(req, response, perfLog);
+        //
+        //            //  client is waiting for a response..make sure one is always returned
+        //            if (response && response.statusCode) {
+        //                res.status(response.statusCode).send(response);
+        //            } else {
+        //                res.status(500).send(response);
+        //            }
+        //        }
+        //    );
+        //});
+
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
             request(opts)
                 .on('response', function(response) {
-                    log.debug({req:req, res:response}, 'API SUCCESS');
+                    logApiSuccess(req, response, perfLog);
                 })
                 .on('error', function(error) {
-                    log.error({req:req, res:res}, 'API ERROR: ' + JSON.stringify(error));
+                    logApiFailure(req, response, perfLog);
                 })
                 .pipe(res);
         });

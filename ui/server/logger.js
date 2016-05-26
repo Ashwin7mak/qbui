@@ -23,6 +23,10 @@
     //  custom request serializer to include on all messages.  For example, log.info({req:req}, 'some message') will
     //  trigger the serializer and include the custom output on the message.
     function reqSerializer(req) {
+        if (!req) {
+            return {};
+        }
+
         var headers = req.headers || {};
         var agent = req.useragent || {};
         var body = req.body || {};

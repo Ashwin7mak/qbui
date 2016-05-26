@@ -39,20 +39,29 @@
     function PerfLogger() {
         let perfStartTime = null;
         let perfMessage = '';
+        let req = {};
+        let payload = '';
 
         return {
 
             /**
-             *  Init the start time.  Provide option to set the log message.  If no
-             *  message parameter is supplied, the message remains unchanged from its
-             *  prior state.
+             *  Init the start time.
+             *
+             *  Provide option to set the log message and reqInfo.  If no
+             *  parameter is supplied, the message and reqInfo remains unchanged
+             *  from its prior state.
              *
              *  @param msg
+             *  @param reqInfo
              */
-            init: function(msg) {
+            init: function(msg, reqInfo) {
                 perfStartTime = new Date();
                 if (msg) {
                     this.setMessage(msg);
+                }
+
+                if (reqInfo) {
+                    this.setReqInfo(reqInfo);
                 }
             },
 
@@ -71,6 +80,20 @@
             },
 
             /**
+             * Set the request information to include in the perf message.
+             */
+            setReqInfo: function(reqInfo) {
+                req = reqInfo;
+            },
+
+            /**
+             * Set the payload size to include in the perf message.
+             */
+            setPayload: function(size) {
+                payload = size;
+            },
+
+            /**
              * Log an info message, calculating the elapsed time from when the init function
              * was last called.
              */
@@ -83,8 +106,14 @@
                     //  log as info message
                     let params = {
                         type: 'PERF',
-                        elapsedTime: elapsedTime + 'ms'
+                        time: elapsedTime + 'ms'
                     };
+                    if (payload) {
+                        params.payload = payload + ' bytes';
+                    }
+                    if (req) {
+                        params.req = req;
+                    }
                     log.info(params, perfMessage);
                 }
             }
