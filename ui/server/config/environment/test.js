@@ -62,7 +62,10 @@
         noHotLoad : true,
 
         // the client to use
-        client: client
+        client: client,
+
+        // walkme java script
+        walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/test/walkme_897ca46385a543cbbeaffbc655cdf312_https.js'
 
     };
 }());

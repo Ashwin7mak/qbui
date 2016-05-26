@@ -1,6 +1,7 @@
 
 var sinon = require('sinon');
 var request = require('supertest');
+var should = require('should');
 
 var log = require('../../logger').getLogger();
 var errors = require('../../components/errors');
@@ -14,6 +15,7 @@ var mockConfig = {
 };
 var assert = require('assert');
 
+var envConsts = require('../../config/environment/environmentConstants');
 require('../../routes')(app, mockConfig);
 
 /*eslint-disable no-invalid-this */
@@ -78,26 +80,16 @@ describe('Express Client Routes', function() {
     });
 
     it('Validate production base opts', function(done) {
-        var testConfig = {
-            isProduction: true,
-        };
+        var origVal = process.env.NODE_ENV;
+        process.env.NODE_ENV = envConsts.PRODUCTION;
 
-        require('../../routes')(app, testConfig);
-        var qbcRoutes = require('../qbClientRoutes');
+        var testConfig = require('../../config/expressConfig')(app);
 
-        assert.equal(qbcRoutes.getBaseOpts().walkMeUser, '');
-        done();
-    });
+        console.log(testConfig);
+        console.log(process.env.NODE_ENV);
+        should.exist(testConfig.walkmeJSSnippet);
 
-    it('Validate demo base opts', function(done) {
-        var testConfig = {
-            isProduction: false,
-        };
-
-        require('../../routes')(app, testConfig);
-        var qbcRoutes = require('../qbClientRoutes');
-
-        assert.equal(qbcRoutes.getBaseOpts().walkMeUser, '/test');
+        process.env.NODE_ENV = origVal;
         done();
     });
 });
