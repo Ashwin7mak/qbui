@@ -50,7 +50,7 @@
             FORMAT: 'format',
             FACET_EXPRESSION: 'facetexpression',
             SORT_LIST: 'sortlist',
-            GROUP_LIST: 'glist',
+            SORT_LIST_CAMELCASE: 'sortList',
             LIST_DELIMITER: '.',
             GROUP_DELIMITER: ':'
         },

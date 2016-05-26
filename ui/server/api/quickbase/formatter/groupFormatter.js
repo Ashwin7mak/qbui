@@ -305,7 +305,7 @@
                 // Is there a grouping parameter included on the request.  The format of the parameter
                 // is 'fid1:groupType1.fid2:groupType2...fidN:groupTypeN'.
                 //
-                let groupList = req.param(constants.REQUEST_PARAMETER.GROUP_LIST);
+                let groupList = req.param(constants.REQUEST_PARAMETER.SORT_LIST_CAMELCASE);
                 if (groupList) {
                     let perfLog = perfLogger.getInstance();
                     perfLog.init("Time to build groupList: " + groupList + "; Number of fields: " + fields.length + "; Number of records: " + records.length);

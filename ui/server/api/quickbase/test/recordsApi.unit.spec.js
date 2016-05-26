@@ -196,7 +196,7 @@ describe("Validate recordsApi", function() {
         it('success return records array with display parameter type and no grouping', function(done) {
             req.url = '/reports/2/records/2/fields';
             req.param = function(key) {
-                if (key === constants.REQUEST_PARAMETER.GROUP_LIST) {
+                if (key === constants.REQUEST_PARAMETER.SORT_LIST_CAMELCASE) {
                     return '1:V';  // field id is not defined, so there is no grouping
                 }
                 return 'display';
@@ -244,7 +244,7 @@ describe("Validate recordsApi", function() {
         it('success return records array with display parameter type with grouping', function(done) {
             req.url = '/reports/2/records/2/fields';
             req.param = function(key) {
-                if (key === constants.REQUEST_PARAMETER.GROUP_LIST) {
+                if (key === constants.REQUEST_PARAMETER.SORT_LIST_CAMELCASE) {
                     return '2:V';
                 }
                 return 'display';

@@ -69,14 +69,12 @@ describe('ReportService functions', () => {
         queryParams[query.FORMAT_PARAM] = true;
         queryParams[query.OFFSET_PARAM] = 0;
         queryParams[query.NUMROWS_PARAM] = 10;
-        queryParams[query.GLIST_PARAM] = ['1', '2:V'].join('.');
         reportService.getReportData(appId, tblId, rptId, queryParams);
 
         var params = {};
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
         params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
         params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
-        params[query.GLIST_PARAM] = queryParams[query.GLIST_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 

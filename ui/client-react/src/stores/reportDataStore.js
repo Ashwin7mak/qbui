@@ -5,6 +5,7 @@ import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 
 let logger = new Logger();
+const groupDelimiter = ":";
 
 let reportModel = {
     model: {
@@ -36,8 +37,11 @@ let reportModel = {
 
         if (fields) {
             fields.forEach((field, index) => {
-                if (this.model.fids.length && (this.model.fids.indexOf(field.id) === -1)) {
-                    //skip this field since its not on report's column list
+                let groupedField = _.find(this.model.groupEls, function(el) {
+                    return el.split(groupDelimiter)[0] === field.id;
+                });
+                if (!groupedField && this.model.fids.length && (this.model.fids.indexOf(field.id) === -1)) {
+                    //skip this field since its not on report's column list or on group list
                 } else {
                     let column = {};
                     column.order = index;
