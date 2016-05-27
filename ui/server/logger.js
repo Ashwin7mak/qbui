@@ -56,6 +56,7 @@
         addElement(obj, 'host', headers.host);
         addElement(obj, 'sid', headers.sid);
         addElement(obj, 'tid', headers.tid);
+        addElement(obj, 'referer', headers.referer);
         addElement(obj, 'browser', agent.source);
         addElement(obj, 'platform', agent.platform);
         addElement(obj, 'ip', ip);

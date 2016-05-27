@@ -202,10 +202,12 @@ describe('Validate RequestHelper unit tests', function() {
         };
         req.method = method;
 
-        it('Test the TID header field does not change', function(done) {
+        it('Test the TID header field does change', function(done) {
             var newReq = requestHelper.setTidHeader(req);
-            assert.equal(req.headers.tid, tid);
-            assert.equal(newReq.headers.tid, tid);
+
+            //  new tid should always get generated
+            assert.notEqual(req.headers.tid, tid);
+            assert.notEqual(newReq.headers.tid, tid);
             assert.equal(newReq.method, method);
             done();
         });
