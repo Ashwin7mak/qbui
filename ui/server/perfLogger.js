@@ -51,7 +51,7 @@
              *  from its prior state.
              *
              *  @param msg
-             *  @param reqInfo
+             *  @param reqInfo {req:req, idsOnly:true}
              */
             init: function(msg, reqInfo) {
                 perfStartTime = new Date();
@@ -60,7 +60,7 @@
                 }
 
                 if (reqInfo) {
-                    this.setReqInfo(reqInfo);
+                    this.setReqInfo(reqInfo.req, reqInfo.idsOnly);
                 }
             },
 
@@ -80,8 +80,8 @@
             /**
              * Set the request information to include in the perf message.
              *
-             * @param reqInfo
-             * @param idsOnly
+             * @param reqInfo -- show request information
+             * @param idsOnly boolean -- log req.header.tid and req.header.sid only
              */
             setReqInfo: function(reqInfo, idsOnly) {
                 req = {};

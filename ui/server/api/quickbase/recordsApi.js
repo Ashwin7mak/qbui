@@ -103,13 +103,6 @@
             return null;
         }
 
-        function getPerfLoggerInstance(req, perfName) {
-            let perfLog = perfLogger.getInstance();
-            perfLog.init(perfName);
-            perfLog.setReqInfo(req, true);
-            return perfLog;
-        }
-
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         var recordsApi = {
 
@@ -209,14 +202,19 @@
                                 var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
 
                                 if (this.isDisplayFormat(req)) {
+                                    //  initialize perfLogger
+                                    let perfLog = perfLogger.getInstance();
+                                    perfLog.init("Format Display Records", {req:req, idsOnly:true});
 
-                                    let perfLog = getPerfLoggerInstance(req, "Format Display Records");
+                                    //  format records for display and log perf stats
                                     records = recordFormatter.formatRecords(records, fields);
                                     perfLog.log();
 
-                                    //  the formatter will determine if grouping is requested and return
-                                    //  a data structure organized according to the grouping requirements.
-                                    perfLog = getPerfLoggerInstance(req, "Build GroupList");
+                                    //  re-init perfLogger
+                                    perfLog.init("Build GroupList");
+
+                                    //  if grouping, return a data structure organized according to the
+                                    //  grouping requirements and log perf stats
                                     groupedRecords = groupFormatter.group(req, fields, records);
                                     perfLog.log();
                                 }
