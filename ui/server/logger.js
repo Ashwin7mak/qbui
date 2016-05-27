@@ -29,7 +29,7 @@
 
         var headers = req.headers || {};
         var agent = req.useragent || {};
-        var body = req.body || {};
+        var body = req.body || '';
         var ip;
 
         //  try to get the ip address

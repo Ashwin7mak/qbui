@@ -83,16 +83,18 @@
                              ... }
                              */
 
-                            var msg = req.body.msg.replace(/"/g, "'");
+                            var clientMsg = req.body.msg.replace(/"/g, "'");
                             if (req) {
-                                //  clean out the url and method (the node log url and post method will display, which does not apply)
+                                //  for client logging, since we are posting to the node logging endpoint, clear out theses variables
+                                //  as they contain node logging endpoint info, which is confusing when viewing a client message in the
+                                //  log output.
                                 req.url = '';
                                 req.method = '';
                                 req.body = '';
                             }
 
                             var args = [];
-                            args.push({type:'CLIENT', req: req, clientMsg: msg});   // the log message is included as part of the req.body, which is included as output in the logger serializer
+                            args.push({type:'CLIENT', req: req}, clientMsg);
 
                             fn.apply(null, args);
                             res.status(200).send('OK');

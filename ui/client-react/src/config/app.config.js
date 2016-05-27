@@ -20,7 +20,7 @@ let configuration = null;
 if (__QB_PROD__) {
     configuration = {
         env: 'PROD',
-        sid: uuid.v1(),
+        uid: uuid.v1(),
         api: {
             qbVersion: 'v1',
             nodeVersion: 'v1'
@@ -42,7 +42,7 @@ if (__QB_PROD__) {
 if (__QB_TEST__) {
     configuration = {
         env: 'TEST',
-        sid: uuid.v1(),
+        uid: uuid.v1(),
         api: {
             qbVersion: 'v1',
             nodeVersion: 'v1'
@@ -64,7 +64,7 @@ if (__QB_TEST__) {
 if (__QB_LOCAL__) {
     configuration = {
         env: 'LOCAL',
-        sid: uuid.v1(),
+        uid: uuid.v1(),
         api: {
             qbVersion: 'v1',
             nodeVersion: 'v1'

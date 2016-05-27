@@ -88,6 +88,9 @@
              * @returns request object used when submitting a server request
              */
             setOptions: function(req) {
+
+                this.setTidHeader(req);
+
                 var opts = {
                     url         : this.getRequestUrl(req),
                     method      : req.method,
@@ -112,8 +115,7 @@
             },
 
             /**
-             * If the request header does not include a transactionId (TID),
-             * generate a transaction ID (uuid.v1) and set on the request header.
+             * Generate a transaction ID (uuid.v1) and set on the request header.
              *
              * @param req
              * @returns req
@@ -123,10 +125,8 @@
                 if (req && req.headers) {
                     headers = req.headers;
                 }
-                //  if no tid, generate one
-                if (!headers.tid) {
-                    headers.tid = uuid.v1();
-                }
+                headers.tid = uuid.v1();
+
                 req.headers = headers;
                 return req;
             },
@@ -147,9 +147,17 @@
              * @returns {*}
              */
             executeRequest: function(req, opts, immediatelyResolve) {
-                //  Generate tid for all requests..and log it
-                this.setTidHeader(req);
+
+                //  if no tid on the header, add it now
+                if (req && req.headers) {
+                    if (!req.headers.tid) {
+                        this.setTidHeader(req);
+                    }
+                }
+
+                //  log all requests at info level
                 log.info({req: req});
+
                 return new Promise((resolve, reject) =>{
                     if (immediatelyResolve) {
                         resolve();

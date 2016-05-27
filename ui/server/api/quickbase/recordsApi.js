@@ -42,6 +42,7 @@
     var Promise = require('bluebird');
     var defaultRequest = require('request');
     var log = require('../../logger').getLogger();
+    var perfLogger = require('../../perfLogger');
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -100,6 +101,13 @@
                 }
             }
             return null;
+        }
+
+        function getPerfLoggerInstance(req, perfName) {
+            let perfLog = perfLogger.getInstance();
+            perfLog.init(perfName);
+            perfLog.setReqInfo(req, true);
+            return perfLog;
         }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
@@ -193,19 +201,24 @@
                             var records = jsonBigNum.parse(response[0].body);
                             var groupedRecords;
 
-                            //return raw undecorated record values due to flag format=raw
+                            //  return raw undecorated record values due to flag format=raw
                             if (this.isRawFormat(req)) {
                                 responseObject = records;
                             } else {
-                                //response object will include a fields meta data block plus record values
+                                //  response object will include a fields meta data block plus record values
                                 var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
 
                                 if (this.isDisplayFormat(req)) {
+
+                                    let perfLog = getPerfLoggerInstance(req, "Format Display Records");
                                     records = recordFormatter.formatRecords(records, fields);
+                                    perfLog.log();
 
                                     //  the formatter will determine if grouping is requested and return
-                                    //  a data structure grouped according to the grouping requirements.
+                                    //  a data structure organized according to the grouping requirements.
+                                    perfLog = getPerfLoggerInstance(req, "Build GroupList");
                                     groupedRecords = groupFormatter.group(req, fields, records);
+                                    perfLog.log();
                                 }
 
                                 responseObject = {};

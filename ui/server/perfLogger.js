@@ -71,18 +71,35 @@
              * @param msg
              */
             setMessage: function(msg) {
+                perfMessage = '';
                 if (msg && typeof msg === 'string') {
                     perfMessage = msg;
-                } else {
-                    perfMessage = '';
                 }
             },
 
             /**
              * Set the request information to include in the perf message.
+             *
+             * @param reqInfo
+             * @param idsOnly
              */
-            setReqInfo: function(reqInfo) {
-                req = reqInfo;
+            setReqInfo: function(reqInfo, idsOnly) {
+                req = {};
+                if (reqInfo) {
+                    if (idsOnly === true) {
+                        if (reqInfo.headers) {
+                            req.headers = {};
+                            if (reqInfo.headers.sid) {
+                                req.headers.sid = reqInfo.headers.sid;
+                            }
+                            if (reqInfo.headers.tid) {
+                                req.headers.tid = reqInfo.headers.tid;
+                            }
+                        }
+                    } else {
+                        req = reqInfo;
+                    }
+                }
             },
 
             /**
