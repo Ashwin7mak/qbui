@@ -149,8 +149,12 @@
             executeRequest: function(req, opts, immediatelyResolve) {
 
                 //  if no tid on the header, add it now
-                if (req && req.headers) {
-                    if (!req.headers.tid) {
+                if (req) {
+                    if (req.headers) {
+                        if (!req.headers.tid) {
+                            this.setTidHeader(req);
+                        }
+                    } else {
                         this.setTidHeader(req);
                     }
                 }
