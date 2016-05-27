@@ -40,7 +40,6 @@
         let perfStartTime = null;
         let perfMessage = '';
         let req = {};
-        let payload = '';
 
         return {
 
@@ -87,13 +86,6 @@
             },
 
             /**
-             * Set the payload size to include in the perf message.
-             */
-            setPayload: function(size) {
-                payload = size;
-            },
-
-            /**
              * Log an info message, calculating the elapsed time from when the init function
              * was last called.
              */
@@ -106,11 +98,8 @@
                     //  log as info message
                     let params = {
                         type: 'PERF',
-                        time: elapsedTime + 'ms'
+                        ms: elapsedTime + 'ms'
                     };
-                    if (payload) {
-                        params.payload = payload + ' bytes';
-                    }
                     if (req) {
                         params.req = req;
                     }

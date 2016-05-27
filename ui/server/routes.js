@@ -83,10 +83,16 @@
                              ... }
                              */
 
-                            req.body.msg = req.body.msg.replace(/"/g, "'");
+                            var msg = req.body.msg.replace(/"/g, "'");
+                            if (req) {
+                                //  clean out the url and method (the node log url and post method will display, which does not apply)
+                                req.url = '';
+                                req.method = '';
+                                req.body = '';
+                            }
 
                             var args = [];
-                            args.push({req: req});   // the log message is included as part of the req.body, which is included as output in the logger serializer
+                            args.push({type:'CLIENT', req: req, clientMsg: msg});   // the log message is included as part of the req.body, which is included as output in the logger serializer
 
                             fn.apply(null, args);
                             res.status(200).send('OK');

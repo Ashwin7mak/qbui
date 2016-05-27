@@ -48,18 +48,29 @@
             }
         }
 
-        return {
-            method: req.method,
-            url: req.url,
-            host: headers.host,
-            sid: headers.sid,
-            tid: headers.tid,
-            browser: agent.source,
-            platform: agent.platform,
-            referer: headers.referer,
-            ip: ip,
-            body: body
-        };
+        var obj = {};
+
+        //  only include in log message if defined
+        addElement(obj, 'method', req.method);
+        addElement(obj, 'url', req.url);
+        addElement(obj, 'host', headers.host);
+        addElement(obj, 'sid', headers.sid);
+        addElement(obj, 'tid', headers.tid);
+        addElement(obj, 'browser', agent.source);
+        addElement(obj, 'platform', agent.platform);
+        addElement(obj, 'ip', ip);
+
+        if (body) {
+            obj.body = body;
+        }
+
+        return obj;
+    }
+
+    function addElement(obj, objName, value) {
+        if (value) {
+            obj[objName] = value;
+        }
     }
 
     //  custom response serializer to include on all messages.  For example, log.info({res:res}, 'some message') will

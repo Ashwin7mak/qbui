@@ -6,7 +6,6 @@
     'use strict';
     var log = require('../logger').getLogger();
     var perfLogger = require('../perfLogger');
-    var sizeof = require('object-sizeof');
     var routeConsts = require('./routeConstants');
     var request = require('request');
     var requestHelper;
@@ -215,8 +214,6 @@
             recordsApi.fetchSingleRecordAndFields(req).then(
                 function(response) {
                     res.send(response);
-
-                    perfLog.setPayload(sizeof(response));
                     logApiSuccess(req, response, perfLog, 'Fetch Single Record');
                 },
                 function(response) {
@@ -248,8 +245,6 @@
             recordsApi.fetchRecordsAndFields(req).then(
                 function(response) {
                     res.send(response);
-
-                    perfLog.setPayload(sizeof(response));
                     logApiSuccess(req, response, perfLog, 'Fetch All Records');
                 },
                 function(response) {
@@ -282,8 +277,6 @@
             reportsApi.fetchReportComponents(req).then(
                 function(response) {
                     res.send(response);
-
-                    perfLog.setPayload(sizeof(response));
                     logApiSuccess(req, response, perfLog, 'Fetch Report Components');
                 },
                 function(response) {
@@ -317,8 +310,6 @@
             reportsApi.fetchReportResults(req).then(
                 function(response) {
                     res.send(response);
-
-                    perfLog.setPayload(sizeof(response));
                     logApiSuccess(req, response, perfLog, 'Fetch Report Data');
                 },
                 function(response) {
@@ -382,30 +373,6 @@
     function forwardApiRequest(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Forward API Request', filterNodeReq(req));
-
-        //processRequest(req, res, function(req, res) {
-        //    var opts = requestHelper.setOptions(req);
-        //    //opts.headers['Content-Type'] = 'application/json';
-        //
-        //    requestHelper.executeRequest(req, opts).then(
-        //        function(response) {
-        //            res.send(JSON.parse(response.body));
-        //
-        //            //perfLog.setPayload(sizeof(response));
-        //            logApiSuccess(req, response, perfLog);
-        //        },
-        //        function(response) {
-        //            logApiFailure(req, response, perfLog);
-        //
-        //            //  client is waiting for a response..make sure one is always returned
-        //            if (response && response.statusCode) {
-        //                res.status(response.statusCode).send(response);
-        //            } else {
-        //                res.status(500).send(response);
-        //            }
-        //        }
-        //    );
-        //});
 
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
