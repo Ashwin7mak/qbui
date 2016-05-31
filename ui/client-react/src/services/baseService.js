@@ -84,8 +84,7 @@ class BaseService {
                     window.location.replace(currentStackSignInUrl);
                     break;
                 case 403:
-                    currentStackSignInUrl = Configuration.unauthorizedRedirect || self.constructRedirectUrl();
-                    window.location.replace(currentStackSignInUrl);
+                    window.location.href = '/forbidden';
                     break;
                 }
                 //  let the service layer handle the error
