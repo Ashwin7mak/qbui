@@ -9,7 +9,9 @@ import moment from 'moment';
 import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
-import {DefaultCellEditor, ComboBoxCellEditor, DateCellEditor, DateTimeCellEditor, TimeCellEditor, CheckBoxEditor} from './cellEditors';
+import {DefaultCellEditor, ComboBoxCellEditor, DateCellEditor, DateTimeCellEditor, TimeCellEditor, UserCellEditor, CheckBoxEditor} from './cellEditors';
+import {UserCellRenderer} from './cellRenderers';
+
 import IconActions from '../../actions/iconActions';
 
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
@@ -20,6 +22,7 @@ const DateFormat = 3;
 const DateTimeFormat = 4;
 const TimeFormat = 5;
 const CheckBoxFormat = 6;
+const UserFormat = 7;
 
 /**
  * helper function to format date
@@ -64,6 +67,11 @@ const CellFormatter = React.createClass({
                 {this.state.value && <I18nNumber value={this.state.value}></I18nNumber>}
                 </span>;
 
+        case UserFormat:
+            return <span className="cellData">
+                <UserCellRenderer value={this.state.value} />
+                </span>;
+
         case DateFormat:
             return <span className="cellData">
                 {this.state.value && <I18nDate value={this.state.value}></I18nDate>}
@@ -89,8 +97,12 @@ const CellFormatter = React.createClass({
                 </span>;
 
         default: {
+            let display = this.state.value;
+            if (typeof display === 'object') {
+                display = JSON.stringify(display);
+            }
             return <span className="cellData">
-                {this.state.value}
+                {display}
                 </span>;
         }
         }
@@ -121,6 +133,10 @@ const CellFormatter = React.createClass({
             return <DefaultCellEditor value={this.state.value}
                                       type="number"
                                       onChange={this.cellEdited}/>;
+        }
+        case UserFormat: {
+            return <UserCellEditor value={this.state.value}
+                                   onChange={this.cellEdited}/>;
         }
         default: {
 
@@ -201,7 +217,12 @@ const TextFormatter = React.createClass({
         return  <CellFormatter type={TextFormat} params={this.props.params} />;
     }
 });
+const UserFormatter = React.createClass({
 
+    render: function() {
+        return  <CellFormatter type={UserFormat} params={this.props.params} />;
+    }
+});
 const CheckBoxFormatter = React.createClass({
 
     render: function() {
@@ -231,4 +252,4 @@ const SelectionColumnCheckBoxFormatter = React.createClass({
     }
 });
 
-export {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter, SelectionColumnCheckBoxFormatter};
+export {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter, SelectionColumnCheckBoxFormatter};

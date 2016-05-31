@@ -14,7 +14,7 @@ import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 
 import {DateFormatter, DateTimeFormatter, TimeFormatter,
-        NumericFormatter, TextFormatter, CheckBoxFormatter,
+        NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter,
         SelectionColumnCheckBoxFormatter}  from './formatters';
 
 import * as GroupTypes from '../../../constants/groupTypes';
@@ -562,6 +562,11 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(CheckBoxFormatter);
                                 obj.customComponent = CheckBoxFormatter;
                                 break;
+                            case "USER" :
+                                obj.cellRenderer = reactCellRendererFactory(UserFormatter);
+                                obj.customComponent = UserFormatter;
+                                break;
+
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextFormatter);
                                 obj.customComponent = TextFormatter;
