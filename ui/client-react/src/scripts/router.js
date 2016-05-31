@@ -38,12 +38,11 @@ import ReportRoute from '../components/report/reportRoute';
 import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
 
-<<<<<<< HEAD
 import ComponentLibrary from '../components/componentLibrary/componentLibrary';
 // import ComponentLibraryHome from '../components/componentLibrary/ComponentLibraryHome';
-=======
+
 import _ from 'lodash';
->>>>>>> master
+
 
 import FastClick from 'fastclick';
 
