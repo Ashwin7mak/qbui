@@ -18,7 +18,6 @@
 
     // Generator modules
     var appGenerator = require('../../../test_generators/app.generator.js');
-    var recordGenerator = require('../../../test_generators/record.generator.js');
 
     /*
      * Sorting and Grouping overview:
@@ -48,7 +47,7 @@
      * - klabak
      */
     describe('API - Validate report sorting and grouping execution', function() {
-        // Set global timeout for all tests in the spec file
+        // Set timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
         // Global vars
@@ -58,57 +57,10 @@
         var generatedRecords;
         var records;
         // fids to sort by
+        var sortByRecordIdFid = 3;
         var sortByTextFid = 6;
         var sortByNumFid = 7;
         var sortByDateFid = 8;
-
-        /**
-         * Given a table JSON object check for and return an array containing the non built-in fields
-         * @Returns An array containing the non built-in fields
-         */
-        function getNonBuiltInFields(createdTable) {
-            var nonBuiltIns = [];
-            createdTable.fields.forEach(function(field) {
-                if (field.builtIn !== true) {
-                    nonBuiltIns.push(field);
-                }
-            });
-            return nonBuiltIns;
-        }
-
-        /**
-         * Uses the generators in the test_generators package to generate a list of record objects based on the
-         * given list of fields and number of records. This list can then be passed into the addRecords function.
-         * @Returns An array of generated record JSON objects
-         */
-        function generateRecords(fields, numRecords) {
-            var genRecords = [];
-            for (var i = 0; i < numRecords; i++) {
-                var generatedRecord = recordGenerator.generateRecord(fields);
-                genRecords.push(generatedRecord);
-            }
-            return genRecords;
-        }
-
-        /**
-         * Given an already created app and table, create a list of generated record JSON objects via the API.
-         * @Returns A promise chain.
-         */
-        function addRecords(createdApp, createdTable, genRecords) {
-            //Resolve the proper record endpoint specific to the generated app and table
-            var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(createdApp.id, createdTable.id);
-            var fetchRecordPromises = [];
-            genRecords.forEach(function(currentRecord) {
-                fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord, null));
-            });
-            return Promise.all(fetchRecordPromises)
-                .then(function(results) {
-                    return results;
-                }).catch(function(error) {
-                    // Proper error handling, you need to rethrow not just return the error
-                    throw new Error(error);
-                });
-        }
 
         /*
          * Given an array of record JSON objects sort them by a certain field(s) (specified by a list of fids)
@@ -179,23 +131,28 @@
             recordBase.createApp(generatedApp).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                nonBuiltInFields = getNonBuiltInFields(app.tables[0]);
+                nonBuiltInFields = recordBase.getNonBuiltInFields(app.tables[0]);
                 // Generate some record JSON objects to add to the app
-                generatedRecords = generateRecords(nonBuiltInFields, 10);
+                generatedRecords = recordBase.generateRecords(nonBuiltInFields, 10);
+                // TODO: QBSE-22522
+                // TODO: Intermittent bug with duplicate records. By default Java core will sort by recordID value if no sortList specified
+                // TODO: It will not default to this if sortList criteria matches on each fid specified (and no sorting takes place)
+                // TODO: Sometimes 2 records with equal values (except for recordId) will come back in ascending order based on recordId
+                // TODO: and sometimes they will come back in descending order
                 // Duplicate and edit one of the records to have one field be different in value
                 // This will actually create you a new object with cloned object values (not just references to the original array)
-                var clonedArray = JSON.parse(JSON.stringify(generatedRecords));
-                var dupRecord = clonedArray[0];
+                //var clonedArray = JSON.parse(JSON.stringify(generatedRecords));
+                //var dupRecord = clonedArray[0];
                 // Edit the numeric field so we can check the second level sort (ex: 6.7)
-                dupRecord.forEach(function(field) {
-                    if (field.id === '7') {
-                        field.value = 1;
-                    }
-                });
+                //dupRecord.forEach(function(field) {
+                //    if (field.id === '7') {
+                //        field.value = 1;
+                //    }
+                //});
                 // Add the new record back in to create
-                generatedRecords.push(dupRecord);
+                //generatedRecords.push(dupRecord);
                 // Add the records to the app
-                addRecords(app, app.tables[0], generatedRecords).then(function(returnedRecords) {
+                recordBase.addRecords(app, app.tables[0], generatedRecords).then(function(returnedRecords) {
                     // Push the created records into an array (the add record call also returns the fields used)
                     var recordData = [];
                     for (var j in returnedRecords) {
@@ -203,7 +160,7 @@
                     }
                     records = recordData;
                     done();
-                }).done(null, done);
+                });
             }).done(null, function(error) {
                 // the then block threw an error
                 // so forward that error to Mocha
@@ -213,7 +170,7 @@
         });
 
         /**
-         * Data Provider for reports and faceting results.
+         * Data Provider for sorting and grouping test cases.
          */
         function sortingReportTestCases() {
             return [
@@ -226,20 +183,29 @@
                     message: 'Sort by Text field group by Equal values',
                     sortList: ['6:V'],
                     sortFids: [sortByTextFid]
-                },
+                }
+            ];
+        }
+
+        /**
+         * Data Provider for any tests that are failing.
+         */
+        function failingTestCases() {
+            return [
+                // TODO: QBSE-22522
                 // TODO: The Java Reports API accepts the below sortLists but returns them empty (Bug)
                 // TODO: Java core does throw an exception when trying to parse the sortList
                 // TODO: "message":"Invalid sList entry when parsing fid.
-                //{
-                //    message: 'Sort by Text field, then by Numeric field',
-                //    sortList: ['6.7'],
-                //    sortFids: [sortByTextFid, sortByNumFid]
-                //},
-                //{
-                //    message: 'Sort by Text field group by Equal values, then sort by Numeric field, then by date field',
-                //    sortList: ['6:V.7.8'],
-                //    sortFids: [sortByTextFid, sortByNumFid, sortByDateFid]
-                //},
+                {
+                    message: 'Sort by Text field, then by Numeric field',
+                    sortList: ['6.7'],
+                    sortFids: [sortByTextFid, sortByNumFid]
+                },
+                {
+                    message: 'Sort by Text field group by Equal values, then sort by Numeric field, then by date field',
+                    sortList: ['6:V.7.8'],
+                    sortFids: [sortByTextFid, sortByNumFid, sortByDateFid]
+                }
             ];
         }
 
@@ -341,7 +307,7 @@
             var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
 
             // Params to add to the record GET request
-            var sortList = '6.7';
+            var sortList = sortByTextFid.toString() + '.' + sortByNumFid.toString();
             // Fid order to sort the expected records by
             var sortFids = [sortByTextFid, sortByNumFid];
 
@@ -362,6 +328,8 @@
             });
         });
 
+        // TODO: QBSE-22556
+        // TODO: Reports API needs to throw proper errors when calling with invalid sortList param
         /**
          * Negative Test to validate 400 error when calling the Records API endpoint with invalid sortList param
          */
