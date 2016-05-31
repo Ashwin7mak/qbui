@@ -14,7 +14,7 @@ let reportModel = {
         fids: [],
         filteredRecords: null,
         filteredRecordsCount: null,
-        groupingFields: null,
+        groupFields: null,
         groupLevel: 0,
         hasGrouping: false,
         name: null,
@@ -47,6 +47,9 @@ let reportModel = {
                     column.fieldType = field.type;
                     column.builtIn = field.builtIn;
 
+                    if (field.multiChoiceSourceAllowed && field.multipleChoice) {
+                        column.choices = field.multipleChoice.choices;
+                    }
                     //  client side attributes..
                     column.datatypeAttributes = field.datatypeAttributes;
                     columns.push(column);
@@ -76,7 +79,7 @@ let reportModel = {
                 let columns = {};
                 record.forEach((column) => {
                     let fld = map.get(column.id);
-                    columns[fld.name] = column.display;
+                    columns[fld.name] = column.value;
                 });
                 columns.actions = record.id;
                 reportData.push(columns);
@@ -142,11 +145,13 @@ let reportModel = {
         if (this.model.hasGrouping === true) {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
-            //  TODO: with paging, this count is flawed...
+            this.model.groupFields = recordData.groups.fields;
+                //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.groups.totalRows;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.records = this.getReportData(recordData.fields, recordData.records);
+            this.model.groupFields = null;
 
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.records.length;
@@ -172,11 +177,14 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.filteredRecords = recordData.groups.gridData;
             this.model.filteredRecordsCount = recordData.groups.totalRows;
+            this.model.groupFields = recordData.groups.fields;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
             this.model.filteredRecordsCount = recordData.records.length;
+            this.model.groupFields = null;
         }
+
     },
     /**
      * Set facets data(if any) from response
@@ -278,6 +286,7 @@ let ReportDataStore = Fluxxor.createStore({
             reportModel.setGroupElements(response.sortList);
         }
         reportModel.setFacetData(response.recordData);
+
         this.emit('change');
     },
 
@@ -338,7 +347,7 @@ let ReportDataStore = Fluxxor.createStore({
 
             const newRecord = _.mapValues(maxRecord, (obj) => {return null;});
 
-            const id = parseInt(lastRecord["Record ID#"]) + 1;
+            const id = parseInt(maxRecord["Record ID#"]) + 1;
             newRecord["Record ID#"] = id;
 
             const newRecords = model.filteredRecords.slice(0);

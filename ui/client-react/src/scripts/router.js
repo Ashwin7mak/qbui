@@ -71,11 +71,13 @@ let NavWrapper = React.createClass({
         };
     },
     childContextTypes: {
-        touch: React.PropTypes.bool
+        touch: React.PropTypes.bool,
+        locales: React.PropTypes.string
     },
     getChildContext: function() {
         return {
-            touch: this.state.touch
+            touch: this.state.touch,
+            locales: this.state.locales
         };
     },
     render: function() {

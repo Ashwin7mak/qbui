@@ -10,6 +10,7 @@
     };
 
     module.exports = Object.freeze({
+        delimiter: ',',
         DATE: {
             equals: COMMON.equals,
             day: COMMON.day,

@@ -23,10 +23,10 @@ var lodash = require('lodash');
             jsPath  : '/dist/',
             settings: {views: viewPath},
             hostBase: (config.isProduction || config.noHotLoad) ? '' : HOT_BASE,
-            bundleFileName: config.isProduction ? 'bundle.min.js' : 'bundle.js'
+            bundleFileName: config.isProduction ? 'bundle.min.js' : 'bundle.js',
+            walkMeJS: config.walkmeJSSnippet
         };
     }
-
 
     function renderJsx(req, res, filename, opts) {
         var templatePath = require.resolve(filename);
@@ -78,5 +78,4 @@ var lodash = require('lodash');
         });
 
     };
-
 }());
