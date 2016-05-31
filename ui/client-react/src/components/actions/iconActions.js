@@ -31,13 +31,13 @@ let IconActions = React.createClass({
         actions: React.PropTypes.arrayOf(React.PropTypes.shape({
             icon: React.PropTypes.string,
             msg: React.PropTypes.string,
-            rawMsg: React.PropTypes.bool,
+            rawMsg: React.PropTypes.bool, // msg doesn't need to be localized
             onClick: React.PropTypes.function,
             className: React.PropTypes.string
         })).isRequired,
         maxButtonsBeforeMenu: React.PropTypes.number, // show action in dropdown after this,
         className: React.PropTypes.string,
-        pullRight: React.PropTypes.bool,
+        pullRight: React.PropTypes.bool, // for dropdowns positioned on right side of the UI
         dropdownTooltip: React.PropTypes.bool,
         menuIcons: React.PropTypes.bool
 

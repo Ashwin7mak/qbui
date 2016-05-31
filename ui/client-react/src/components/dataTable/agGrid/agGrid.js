@@ -532,7 +532,7 @@ let AGGrid = React.createClass({
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
-                obj.addEditActions = true;//(index === 1); // EMPOWER: add the row edit component to column 1
+                obj.addEditActions = true;
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;

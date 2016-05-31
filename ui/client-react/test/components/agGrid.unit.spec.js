@@ -138,15 +138,13 @@ describe('AGGrid functions', () => {
 
     var component;
 
-    /*eslint-disable*/
     let flux = {
         actions: {
             getFilteredRecords: ()=>{},
             selectedRows: ()=>{},
-            rowClicked: ()=>{console.log('CLICK');}
+            rowClicked: ()=>{}
         }
     };
-    /*eslint-enable*/
 
     beforeEach(() => {
         AGGrid.__Rewire__('AgGridReact', AGGridMock);
