@@ -205,7 +205,7 @@ describe('FacetsMenu functions', () => {
             let facetPanel = facetPanels[0];
 
             // expand the facet panel
-            component.handleToggleCollapse(null, {id:1});
+            component.handleToggleCollapse({id:1}, null);
 
             //ensure its in the expanded list
             expect(_.includes(component.state.expandedFacetFields, 1)).toBeTruthy();
@@ -249,9 +249,9 @@ describe('FacetsMenu functions', () => {
             let facetPanel = facetPanels[0];
 
             // expand the facet panel
-            component.handleToggleCollapse(null, {id:1});
+            component.handleToggleCollapse({id:1}, null);
             // then collapse the facet panel
-            component.handleToggleCollapse(null, {id:1});
+            component.handleToggleCollapse({id:1}, null);
 
             //ensure its not  the expanded list
             expect(_.includes(component.state.expandedFacetFields, 1)).toBeFalsy();

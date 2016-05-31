@@ -147,7 +147,7 @@ const FacetsMenu = React.createClass({
      * @param e - the event object from the browser/react
      * @param facetField - the fact field you want to toggle
      **/
-    handleToggleCollapse(e, facetField) {
+    handleToggleCollapse(facetField, e) {
         if (e && e.currentTarget) {
             e.currentTarget.scrollIntoView(true);
         }
