@@ -31,6 +31,7 @@ let IconActions = React.createClass({
         actions: React.PropTypes.arrayOf(React.PropTypes.shape({
             icon: React.PropTypes.string,
             msg: React.PropTypes.string,
+            rawMsg: React.PropTypes.bool,
             onClick: React.PropTypes.function,
             className: React.PropTypes.string
         })).isRequired,
@@ -54,7 +55,12 @@ let IconActions = React.createClass({
      * @param action
      */
     getActionButton(action) {
-        const tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg}/></Tooltip>);
+        let tooltip;
+        if (action.rawMsg) {
+            tooltip = (<Tooltip id={action.msg}>{action.msg}</Tooltip>);
+        } else {
+            tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg}/>{action.msg}</Tooltip>);
+        }
         let className = "iconActionButton ";
 
         if (action.className) {
@@ -97,7 +103,7 @@ let IconActions = React.createClass({
                         if (index >= this.props.maxButtonsBeforeMenu) {
                             return <MenuItem key={action.msg} href="#">
                                       {this.props.menuIcons && <QBicon className={action.className} icon={action.icon}/>}
-                                       <I18nMessage message={action.msg} />
+                                        {action.rawMsg ? action.msg : <I18nMessage message={action.msg} />}
                                    </MenuItem>;
                         }
                     })}

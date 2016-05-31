@@ -6,6 +6,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
 import {DefaultCellEditor, ComboBoxCellEditor, DateCellEditor, DateTimeCellEditor, TimeCellEditor, CheckBoxEditor} from './cellEditors';
@@ -217,13 +218,14 @@ const SelectionColumnCheckBoxFormatter = React.createClass({
     },
 
     getRecordActions() {
-        const actions = [
-            {msg: 'selection.edit', className:'edit', icon:'edit', onClick: this.onClickEdit},
+        const record = Locale.getMessage('records.singular');
 
-            {msg: 'selection.print', className:'print', icon:'print'},
-            {msg: 'selection.email', className:'email', icon:'mail'},
-            {msg: 'selection.copy', className:'duplicate', icon:'duplicate'},
-            {msg: 'selection.delete', className:'delete', icon:'delete'}
+        const actions = [
+            {msg: Locale.getMessage('selection.edit') + " " + record, rawMsg: true, className:'edit', icon:'edit', onClick: this.onClickEdit},
+            {msg: Locale.getMessage('selection.print') + " " + record, rawMsg: true, className:'print', icon:'print'},
+            {msg: Locale.getMessage('selection.email') + " " + record, rawMsg: true, className:'email', icon:'mail'},
+            {msg: Locale.getMessage('selection.copy') + " " + record, rawMsg: true, className:'duplicate', icon:'duplicate'},
+            {msg: Locale.getMessage('selection.delete') + " " + record, rawMsg: true, className:'delete', icon:'delete'}
         ];
 
         return (<IconActions dropdownTooltip={false} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />);
