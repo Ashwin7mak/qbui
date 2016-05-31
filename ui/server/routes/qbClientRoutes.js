@@ -65,10 +65,16 @@ var lodash = require('lodash');
         app.route('/app/:appId/table/:tblId').get(function(req, res) {
             renderIndex(req, res);
         });
+
         app.route('/app/:appId').get(function(req, res) {
             renderIndex(req, res);
         });
+
         app.route('/apps').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
+        app.route('/components').get(function(req, res) {
             renderIndex(req, res);
         });
 
