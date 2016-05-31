@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Forbidden</title>
+    <title>Invalid Credentials</title>
     <style>
         html {
             padding                  : 30px 10px;
@@ -60,10 +60,11 @@
 
 <body>
 <div class="container">
-    <h1>Forbidden</h1>
+    <h1>Invalid Credentials</h1>
 
-    <p>You are not allowed to be here.</p>
+    <p>Your authorization credentials are invalid or expired.</p>
     <!-- TODO:  tracking link ??  -->
+    <% include ./assets/csLogin.ejs %>
 </div>
 </body>
 

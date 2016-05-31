@@ -1,5 +1,6 @@
 export default {
     locales: "en-us",
+    currencyCode: "usd",
 
     messages: {
         test: {
@@ -26,7 +27,7 @@ export default {
             more: "More..."
         },
         footer: {
-            copyright: "{year} Intuit Inc. All rights reserved."
+            copyright: "{year} QuickBase, Inc. All rights reserved."
         },
         nav: {
             home: "Home",
@@ -99,17 +100,17 @@ export default {
                 changeOrder: "Change order",
                 chooseFields :  {
                     group: "Choose Field for grouping",
-                    sort: "Choose Field for sorting",
+                    sort: "Choose Field for sorting"
                 },
                 group: "Group",
                 header : "Sort & Group",
                 moreFields : "more fields...",
                 reset: "Reset",
-                resetTip : "Exit and restore to orginal report sort and group settings",
+                resetTip : "Exit and restore to original report sort and group settings",
                 sort:   "Sort",
                 stopGroupingBy: "Stop grouping by",
                 stopSortingBy: "Stop sorting by",
-                thenBy: "then by",
+                thenBy: "then by"
             },
             menu: {
                 sort: {
@@ -138,6 +139,83 @@ export default {
                 newTable: "New table based on this column",
                 columnProps: "Column properties",
                 fieldProps: "Field properties"
+            }
+        },
+        month: {
+            jan: {
+                short: "Jan",
+                full: "January"
+            },
+            feb: {
+                short: "Feb",
+                full: "February"
+            },
+            mar: {
+                short: "Mar",
+                full: "March"
+            },
+            apr: {
+                short: "Apr",
+                full: "April"
+            },
+            may: {
+                short: "May",
+                full: "May"
+            },
+            jun: {
+                short: "Jun",
+                full: "June"
+            },
+            jul: {
+                short: "Jul",
+                full: "July"
+            },
+            aug: {
+                short: "Aug",
+                full: "August"
+            },
+            sep: {
+                short: "Sep",
+                full: "September"
+            },
+            oct: {
+                short: "Oct",
+                full: "October"
+            },
+            nov: {
+                short: "Nov",
+                full: "November"
+            },
+            dec: {
+                short: "Dec",
+                full: "December"
+            }
+        },
+        groupHeader: {
+            empty: "(Empty)",
+            abbr: {
+                quarter: "Q",
+                fiscalYear: "FY"
+            },
+            numeric: {
+                range: "{lower} to {upper}"
+            },
+            duration: {
+                second: "{duration} second",
+                seconds: "{duration} seconds",
+                minute: "{duration} minute",
+                minutes: "{duration} minutes",
+                hour: "{duration} hour",
+                hours: "{duration} hours",
+                day: "{duration} day",
+                days: "{duration} days",
+                week: "{duration} week",
+                weeks: "{duration} weeks"
+            },
+            date: {
+                week: "Week of {date}",
+                month: "{month} {year}",
+                quarter: "{quarter} {year}"
             }
         },
         cancel: "Cancel",
