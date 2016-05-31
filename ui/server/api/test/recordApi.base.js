@@ -5,6 +5,8 @@
     var consts = require('../constants');
     var log = require('../../logger').getLogger();
 
+    var recordGenerator = require('../../../test_generators/record.generator.js');
+
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
      * result of the JavaScript implementation of its single numeric data type. In JS, all numbers are
@@ -182,6 +184,51 @@
                             });
                 }).catch(function(currError) {log.error(JSON.stringify(currError));});
                 return fetchRecordDeferred.promise;
+            },
+            /**
+             * Given a table JSON object check for and return an array containing the non built-in fields
+             * @Returns An array containing the non built-in fields
+             */
+            getNonBuiltInFields: function(createdTable) {
+                var nonBuiltIns = [];
+                createdTable.fields.forEach(function(field) {
+                    if (field.builtIn !== true) {
+                        nonBuiltIns.push(field);
+                    }
+                });
+                return nonBuiltIns;
+            },
+            /**
+             * Uses the generators in the test_generators package to generate a list of record objects based on the
+             * given list of fields and number of records. This list can then be passed into the addRecords function.
+             * @Returns An array of generated record JSON objects
+             */
+            generateRecords: function(fields, numRecords) {
+                var genRecords = [];
+                for (var i = 0; i < numRecords; i++) {
+                    var generatedRecord = recordGenerator.generateRecord(fields);
+                    genRecords.push(generatedRecord);
+                }
+                return genRecords;
+            },
+            /**
+             * Given an already created app and table, create a list of generated record JSON objects via the API.
+             * @Returns A promise chain.
+             */
+            addRecords: function(createdApp, createdTable, genRecords) {
+                //Resolve the proper record endpoint specific to the generated app and table
+                var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(createdApp.id, createdTable.id);
+                var fetchRecordPromises = [];
+                genRecords.forEach(function(currentRecord) {
+                    fetchRecordPromises.push(recordBase.createAndFetchRecord(recordsEndpoint, currentRecord, null));
+                });
+                return Promise.all(fetchRecordPromises)
+                    .then(function(results) {
+                        return results;
+                    }).catch(function(error) {
+                        // Proper error handling, you need to rethrow not just return the error
+                        throw new Error(error);
+                    });
             }
         };
         return recordBase;
