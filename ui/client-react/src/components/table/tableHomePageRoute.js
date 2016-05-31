@@ -1,106 +1,76 @@
 import React from 'react';
 import Stage from '../stage/stage';
+import ReportStage from '../report/reportStage';
+import ReportHeader from '../report/reportHeader';
 import QBicon from '../qbIcon/qbIcon';
+import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
+import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
 let FluxMixin = Fluxxor.FluxMixin(React);
-import Logger from '../../utils/logger';
-let logger = new Logger();
-
 import './tableHomePage.scss';
+import '../report/report.scss';
 
 let TableHomePageRoute = React.createClass({
     mixins: [FluxMixin],
+    nameForRecords: "Records",
 
-    selectTableId(tblId) {
-        let flux = this.getFlux();
-        flux.actions.selectTableId(tblId);
-        //flux.actions.loadReports(this.props.params.appId, tblId);
-    },
-    selectAppId(appId) {
-        let flux = this.getFlux();
-        flux.actions.selectAppId(appId);
-        //flux.actions.loadReports(this.props.params.appId, tblId);
-        //flux.actions.loadReports(this.props.params.appId, tblId);
+    getHeader() {
+        return (
+            <ReportHeader reportData={this.props.reportData}
+                          nameForRecords={this.nameForRecords}
+                          rptId={'1'} {...this.props}
+            />);
     },
 
-    loadReportsFromParams(params, checkParams) {
-
-        let flux = this.getFlux();
-
-        if (params) {
-            let appId = params.appId;
-            let tblId = params.tblId;
-
-            // VERY IMPORTANT: check URL params against props to prevent cycles
-
-            if (appId === this.props.reportData.appId &&
-                tblId === this.props.reportData.tblId) {
-                return;
-            }
-
-            if (checkParams) {
-                if (appId === this.props.params.appId &&
-                    tblId === this.props.params.tblId) {
-                    return;
-                }
-            }
-
-            if (appId && tblId) {
-                logger.debug('Loading reports. AppId:' + appId + ' ;tblId:' + tblId);
-
-                this.selectTableId(tblId);
-            }
-        }
-    },
-    componentDidMount() {
-        let flux = this.getFlux();
-        flux.actions.showTopNav();
-        flux.actions.setTopTitle();
-    },
-
-    getStageHeadline() {
-        return (this.props.selectedTable &&
-            <div className="stageHeadline">
-                <QBicon icon="favicon"/>
-                <h3 className="tableName">{this.props.selectedTable.name}</h3>
-            </div>
-        );
-    },
-    getPageActions(maxButtonsBeforeMenu = 0) {
+    getPageActions(maxButtonsBeforeMenu) {
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add'},
+            {msg: 'pageActions.favorite', icon:'star'},
             {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
             {msg: 'pageActions.email', icon:'mail'},
             {msg: 'pageActions.print', icon:'print'},
-            {msg: 'pageActions.customizePage', icon:'settings-hollow'}
+            {msg: 'pageActions.customizeReport', icon:'settings-hollow'},
         ];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
 
-    getSecondaryBar() {
+    getBreadcrumbs() {
+        let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
+
+        return (this.props.selectedTable &&
+        <h3 className="breadCrumbs"><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}
+            <span className="breadCrumbsSeparator"> | </span>{reportName}</h3>);
+
+    },
+
+    getStageHeadline() {
         return (
-            <div className="secondaryTableHomePageActions">
-                {/* todo */}
-            </div>);
+            <div className="stageHeadline">
+                {this.getBreadcrumbs()}
+            </div>
+        );
     },
 
     render() {
-
-        return (<div className="tableHomepageContainer">
-            <Stage stageHeadline={this.getStageHeadline()}
-                   pageActions={this.getPageActions(5)}>
-
-                <div className="table-content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </div>
-
+        return (<div className="reportContainer">
+            <Stage stageHeadline={this.getStageHeadline()} pageActions={this.getPageActions(5)}>
+                <ReportStage reportData={this.props.reportData} />
             </Stage>
-            <div className="tableHomePageActionsContainer secondaryBar">
-                {this.getSecondaryBar()}
-                {this.getPageActions()}
-            </div>
-            <div>Table homepage for {this.props.selectedTable && this.props.selectedTable.name} goes here...</div>
+
+            {this.getHeader()}
+
+            <ReportToolsAndContent
+                params={this.props.params}
+                reportData={this.props.reportData}
+                routeParams={this.props.routeParams}
+                selectedAppId={this.props.selectedAppId}
+                fields={this.props.fields}
+                searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                selectedRows={this.props.reportData.selectedRows}
+                scrollingReport={this.props.scrollingReport}
+                history={this.props.history}
+                rptId={'1'} />
         </div>);
     }
 });

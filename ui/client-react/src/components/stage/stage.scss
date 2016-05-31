@@ -11,15 +11,29 @@ $breadCrumbsSeparatorColor: #c7c7c7;
     .stageLeft {
         flex:1 1 auto;
         padding-left:10px;
+        white-space: nowrap;
+        overflow:hidden;
         .stageHeadline {
-            white-space: nowrap;
+            display:flex;
+            align-items:center;
+        }
+        .breadCrumbs {
+            line-height:40px;
+            display:flex;
+            align-items:center;
+            > .qbIcon {
+                margin-right:6px;
+            }
             > * {
-                display:inline-block;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                .breadCrumbsSeparator {
-                    color: $breadCrumbsSeparatorColor;
-                }
+                flex: 0 0 auto;
+            }
+            > *:last-child {
+                flex: 0 1 auto;
+                overflow:hidden;
+                text-overflow:ellipsis;
+            }
+            .breadCrumbsSeparator {
+                color: $breadCrumbsSeparatorColor;
             }
         }
         .qbIcon {
@@ -48,8 +62,6 @@ $breadCrumbsSeparatorColor: #c7c7c7;
         border: 1px solid $header-bg;
         border-radius: 0 0 2px 2px;
         background-color: $color2;
-        outline: none;
-        z-index: $zindex-dropdown;
         color: $icon-color;
     }
 

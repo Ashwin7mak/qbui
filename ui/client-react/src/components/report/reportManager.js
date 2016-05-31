@@ -1,30 +1,42 @@
 import React from 'react';
+import Fluxxor from 'fluxxor';
 import Locale from '../../locales/locales';
 import ReportGroup from './reportGroup';
 import './reportManager.scss';
+import SearchBox from '../search/searchBox';
+
+let FluxMixin = Fluxxor.FluxMixin(React);
 
 let ReportManager = React.createClass({
+    mixins: [FluxMixin],
 
     propTypes: {
         onSelectReport: React.PropTypes.func,
+        filterReportsName: React.PropTypes.string,
         reportsData: React.PropTypes.shape({
             list: React.PropTypes.array.isRequired
         })
     },
-    getInitialState() {
-        return {searchText:""};
+    getDefaultProps() {
+        return {filterReportsName:""};
     },
     onChangeSearch(ev) {
-        this.setState({searchText: ev.target.value});
+        const flux = this.getFlux();
+        flux.actions.filterReportsByName(ev.target.value);
+    },
+    clearSearch() {
+        const flux = this.getFlux();
+        flux.actions.filterReportsByName("");
     },
     searchMatches(name) {
-        return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
+        return name.toLowerCase().indexOf(this.props.filterReportsName.toLowerCase()) !== -1;
     },
     reportList() {
         return this.props.reportsData.list.filter((report) => {
             return this.searchMatches(report.name);
         });
     },
+
     /**
      * render a searchable set of report categories (hardcoded until we get the real ones...)
      */
@@ -35,7 +47,11 @@ let ReportManager = React.createClass({
                     <div className={"reportsTop"}>
 
                         <div className="searchReports">
-                            <input tabIndex={0} type="text" placeholder={Locale.getMessage('nav.searchReportsPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
+                            <SearchBox tabIndex="0"
+                                       value={this.props.filterReportsName}
+                                       onChange={this.onChangeSearch}
+                                       onClearSearch={this.clearSearch}
+                                       placeholder={Locale.getMessage('nav.searchReportsPlaceholder')}/>
                         </div>
 
                     </div>

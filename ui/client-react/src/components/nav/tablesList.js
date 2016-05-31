@@ -1,10 +1,14 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
 import NavItem from './navItem';
 import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
+import TableIconUtils from '../../utils/tableIconUtils';
+import SearchBox from '../search/searchBox';
+
 
 let TablesList = React.createClass({
 
@@ -33,6 +37,12 @@ let TablesList = React.createClass({
         this.setState({searchText: ev.target.value});
     },
     /**
+     * Clear search text
+     */
+    onClearSearch() {
+        this.setState({searchText:""});
+    },
+    /**
      * check for table name matching search text
      */
     searchMatches(name) {
@@ -42,11 +52,11 @@ let TablesList = React.createClass({
      * toggle search tables list
      */
     onClickTables() {
-        const wasSearching = this.state.searching;
-        this.setState({searching: !this.state.searching});
-
-        if (!wasSearching) {
-            this.setState({searchText: ""});
+        if (this.state.searching) {
+            this.setState({searching: false});
+        } else {
+            this.setState({searching: true, searchText: ""},
+                () => {setTimeout(() => ReactDOM.findDOMNode(this.refs.tablesSearchBox).querySelector("input.searchInput").focus(), 200);});
         }
     },
 
@@ -76,10 +86,10 @@ let TablesList = React.createClass({
     tablesList() {
         return this.props.getAppTables(this.props.selectedAppId).map((table) => {
             table.link = this.getTableLink(table);
-            table.icon = 'report-table';
             return this.searchMatches(table.name) &&
                 <NavItem item={table}
                          key={table.id}
+                         tableIcon={true}
                          showSecondary={this.props.expanded}
                          secondaryIcon={"report-menu-3"}
                          secondaryOnSelect={this.props.showReports}
@@ -112,18 +122,26 @@ let TablesList = React.createClass({
 
     render() {
         return (
-            <ul className="tablesList">
-                {this.getTopLinksItem()}
+            <div className="tablesHeadingAndList">
+                <ul className="tablesHeading">
+                    {this.getTopLinksItem()}
 
-                <NavItem item={{msg: 'nav.tablesHeading'}}
-                         isHeading={true}
-                         secondaryIcon={"search"}
-                         onClick={this.onClickTables} open={true} />
-                <li className={this.state.searching ? "search open" : "search"}>
-                    <input type="text" className={"searchInput"} placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} value={this.state.searchText} onChange={this.onChangeSearch}/>
-                </li>
-                {this.tablesList()}
-            </ul>
+                    <NavItem item={{msg: 'nav.tablesHeading'}}
+                             isHeading={true}
+                             secondaryIcon={"search"}
+                             onClick={this.onClickTables} open={true} />
+                    <li className={this.state.searching ? "search open" : "search"}>
+                        <SearchBox ref="tablesSearchBox" key="tablesSearchBox"
+                                   value={this.state.searchText}
+                                   onChange={this.onChangeSearch}
+                                   onClearSearch={this.onClearSearch}
+                                   placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} />                    </li>
+                </ul>
+                <ul className="tablesList">
+                    {this.tablesList()}
+                </ul>
+            </div>
+
         );
     }
 });

@@ -18,6 +18,9 @@ import ReportDataStore from '../stores/reportDataStore';
 import ReportDataSearchStore from '../stores/reportDataSearchStore';
 import reportDataActions from'../actions/reportDataActions';
 
+import FieldsStore from '../stores/fieldsStore';
+import fieldsActions from '../actions/fieldsActions';
+
 import AppsStore from '../stores/appsStore';
 import appsActions from '../actions/appsActions';
 
@@ -35,8 +38,12 @@ import ReportRoute from '../components/report/reportRoute';
 import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
 
+<<<<<<< HEAD
 import ComponentLibrary from '../components/componentLibrary/componentLibrary';
 // import ComponentLibraryHome from '../components/componentLibrary/ComponentLibraryHome';
+=======
+import _ from 'lodash';
+>>>>>>> master
 
 import FastClick from 'fastclick';
 
@@ -46,7 +53,8 @@ let stores = {
     AppsStore: new AppsStore(),
     NavStore: new NavStore(),
     FacetMenuStore: new FacetMenuStore(),
-    ReportDataSearchStore: new ReportDataSearchStore()
+    ReportDataSearchStore: new ReportDataSearchStore(),
+    FieldsStore: new FieldsStore()
 };
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
@@ -54,6 +62,7 @@ flux.addActions(reportDataActions);
 flux.addActions(appsActions);
 flux.addActions(navActions);
 flux.addActions(facetMenuActions);
+flux.addActions(fieldsActions);
 
 let NavWrapper = React.createClass({
 
@@ -67,11 +76,13 @@ let NavWrapper = React.createClass({
         };
     },
     childContextTypes: {
-        touch: React.PropTypes.bool
+        touch: React.PropTypes.bool,
+        locales: React.PropTypes.string
     },
     getChildContext: function() {
         return {
-            touch: this.state.touch
+            touch: this.state.touch,
+            locales: this.state.locales
         };
     },
     render: function() {
@@ -92,6 +103,7 @@ let NavWrapper = React.createClass({
 
             if (this.props.params.tblId) {
                 flux.actions.selectTableId(this.props.params.tblId);
+                flux.actions.loadFields(this.props.params.appId, this.props.params.tblId);
                 flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
             } else {
                 flux.actions.selectTableId(null);
@@ -114,6 +126,7 @@ let NavWrapper = React.createClass({
         if (props.params.tblId) {
             if (this.props.params.tblId !== props.params.tblId) {
                 flux.actions.selectTableId(props.params.tblId);
+                flux.actions.loadFields(props.params.appId, props.params.tblId);
                 flux.actions.loadReports(props.params.appId, props.params.tblId);
             }
         } else {

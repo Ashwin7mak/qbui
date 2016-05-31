@@ -32,7 +32,7 @@ describe('TopNav functions', () => {
         {msg: 'globalActions.user', link: '/user', icon: 'user'},
         {msg: 'globalActions.help', link: '/help', icon: 'help'}
     ];
-    let globalActions = (<GlobalActions actions={globalActionsData}
+    let globalActions = (<GlobalActions actions={globalActionsData} startTabIndex={0}
                            position={"top"}/>);
     let component;
 
@@ -101,15 +101,15 @@ describe('TopNav functions', () => {
         expect(flux.actions.changeLocale).toHaveBeenCalledWith(localeoption.title);
     });
 
-    it('test search on change of searchtext', () => {
+    it('test global search renders', () => {
         let searchInputContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-search");
         expect(searchInputContainer.length).toEqual(1);
         TestUtils.Simulate.click(searchInputContainer[0]);
 
-        let searchInputBox = document.querySelector(".searchPopover .searchInput");
-        searchInputBox.value = "value";
-        TestUtils.Simulate.change(searchInputBox);
-        expect(flux.actions.searchFor).toHaveBeenCalledWith(searchInputBox.value);
+        let searchPopOver = document.querySelectorAll(".searchPopover");
+        expect(searchPopOver.length).toEqual(1);
+        let searchInputBox = searchPopOver[0].querySelectorAll(".searchInput");
+        expect(searchInputBox.length).toEqual(1);
     });
 
 });

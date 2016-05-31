@@ -1,5 +1,6 @@
 export default {
     locales: "de-de",
+    currencyCode: "eur",
 
     messages: {
         apps: {
@@ -23,16 +24,7 @@ export default {
             more: "Mehr..."
         },
         footer: {
-            copyright: "{year} Intuit Inc. Alle Rechte vorbehalten."
-        },
-        stage: {
-            header: "Ein sehr wichtiger Bericht",
-            content: "Herzlichen Glückwunsch und willkommen! Sie sind Teil einer kleinen, frühen Zugang Programm. Ihr Rückgespräch jetzt, wird den Weg Quickbase sieht aus und verhält sich in der Zukunft zu gestalten. Unten ist eine Momentaufnahme der einem Ihrer Berichte . Durchsuchen Sie es, wie Sie normalerweise wurden. Wie sieht es aus? Hat Ihre Daten anzuzeigen, wie Sie es erwarten? Verwenden Sie den großen Knopf, auf der rechten Seite, um uns zu informieren. Wir freuen uns, zu hören, was Sie zu sagen haben.",
-            feedback: {
-                header: "Erinnern",
-                sub_header: "Ihr Feedback zählt.",
-                button: "Senden Sie Ihr Feedback"
-            }
+            copyright: "{year} QuickBase, Inc. Alle Rechte vorbehalten."
         },
         nav: {
             home: "zu Hause",
@@ -99,8 +91,135 @@ export default {
             newReport: "Neu",
             organizeReports: "Organisieren",
             recordCount : "{recordCount} {nameForRecords} ",
-            searchPlaceHolder:  "Suchen Sie diese {nameForRecords} ...",
+            searchPlaceHolder:  "Suchen Sie diese",
+            sortAndGroup : {
+                addField: "Feld hinzufügen",
+                by: "nach",
+                changeOrder: "Austausch bestellen",
+                chooseFields :  {
+                    group: "Wählen Sie Feld für die Gruppierung",
+                    sort: "Wählen Sie für die Sortierung"
+                },
+                group: "Gruppen",
+                header : "Sortieren & Gruppen",
+                moreFields : "mehr Felder ...",
+                reset: "Zurückstellen",
+                resetTip : "Verlassen und Wiederherstellung des ursprünglichen Berichts zu sortieren und zu Gruppeneinstellungen",
+                sort:   "Sortieren",
+                stopGroupingBy: "Stoppen Gruppierung von",
+                stopSortingBy: "Stoppen die Sortierung nach",
+                thenBy: "dann durch"
+            },
+            menu: {
+                sort: {
+                    aToZ: "Sortieren von A bis Z",
+                    highToLow: "Sortieren höchsten zum niedrigsten",
+                    newToOld: "Sortieren neu nach alt",
+                    zToA: "Sortieren von Z nach A",
+                    lowToHigh: "Sortieren der niedrigsten zur höchsten",
+                    oldToNew: "Sortieren ältesten Bild",
+                    uncheckedToChecked: "Sortieren ungeprüft geprüft",
+                    checkedToUnchecked: "Sortieren markiert zu nicht markiert"
+                },
+                group: {
+                    aToZ: "Gruppe A bis Z",
+                    highToLow: "Gruppe höchsten zum niedrigsten",
+                    newToOld: "Gruppe neu nach alt",
+                    zToA: "Gruppe Z bis A",
+                    lowToHigh: "Gruppe der niedrigsten zur höchsten",
+                    oldToNew: "Gruppe ältesten Bild",
+                    uncheckedToChecked: "Gruppe ungeprüft geprüft",
+                    checkedToUnchecked: "Gruppe geprüft ungeprüft"
+                },
+                addColumnBefore: "In Spalte vor",
+                addColumnAfter: "In Spalte nach",
+                hideColumn: "Ausblenden dieser Spalte",
+                newTable: "Neue Tabelle auf dieser Spalte über",
+                columnProps: "Spalteneigenschaften",
+                fieldProps: "Feldeigenschaften"
+            }
         },
-        cancel: "Stornieren"
+        month: {
+            jan: {
+                short: "Jän",
+                full: "Januar"
+            },
+            feb: {
+                short: "Feb",
+                full: "Februar"
+            },
+            mar: {
+                short: "März",
+                full: "März"
+            },
+            apr: {
+                short: "Apr",
+                full: "April"
+            },
+            may: {
+                short: "Mai",
+                full: "Mai"
+            },
+            jun: {
+                short: "Juni",
+                full: "Juni"
+            },
+            jul: {
+                short: "Juli",
+                full: "Juli"
+            },
+            aug: {
+                short: "Aug",
+                full: "August"
+            },
+            sep: {
+                short: "Sept",
+                full: "September"
+            },
+            oct: {
+                short: "Okt",
+                full: "Oktober"
+            },
+            nov: {
+                short: "Nov",
+                full: "November"
+            },
+            dec: {
+                short: "Dez",
+                full: "Dezember"
+            }
+        },
+        groupHeader: {
+            empty: "(Leer)",
+            abbr: {
+                quarter: "Q",
+                fiscalYear: "FY"
+            },
+            numeric: {
+                range: "{lower} bis {upper}"
+            },
+            duration: {
+                second: "{duration} zweite",
+                seconds: "{duration} sekunden",
+                minute: "{duration} minute",
+                minutes: "{duration} protokoll",
+                hour: "{duration} stunde",
+                hours: "{duration} stunden",
+                day: "{duration} tag",
+                days: "{duration} tage",
+                week: "{duration} woche",
+                weeks: "{duration} wochen"
+            },
+            date: {
+                week: "Woche {date}",
+                month: "{month} {year}",
+                quarter: "{quarter} {year}"
+            }
+        },
+        cancel: "Stornieren",
+        cancelTip: "Beenden und verwerfen alle Änderungen",
+        apply: "Anwenden",
+        applyTip: "Beenden und gelten alle Änderungen"
+
     }
 };

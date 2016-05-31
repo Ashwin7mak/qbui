@@ -1,5 +1,6 @@
 export default {
     locales: "en-us",
+    currencyCode: "usd",
 
     messages: {
         test: {
@@ -26,17 +27,7 @@ export default {
             more: "More..."
         },
         footer: {
-            copyright: "{year} Intuit Inc. All rights reserved."
-        },
-        stage: {
-            header: "A Very Important Report",
-            content: "Congratulations and welcome! You’re part of a small, early-access program. Your feedback now, will shape the way QuickBase looks and behaves in the future. Below is a snapshot of one of your reports. Browse through it as you normally would. How does it look? Does your data display the way you expect it to? Use the big button, to the right, to let us know. We look forward to hearing what you have to say.",
-            feedback: {
-                header: "Remember",
-                    //TODO: conform message key naming to camel case not snake
-                sub_header: "Your Feedback Matters",
-                button: "Send your feedback"
-            }
+            copyright: "{year} QuickBase, Inc. All rights reserved."
         },
         nav: {
             home: "Home",
@@ -102,8 +93,134 @@ export default {
             newReport: "New",
             organizeReports: "Organize",
             recordCount : "{recordCount} {nameForRecords} ",
-            searchPlaceHolder:  "Search these {nameForRecords} ...",
+            searchPlaceHolder:  "Search these",
+            sortAndGroup : {
+                addField: "Add a field",
+                by: "by",
+                changeOrder: "Change order",
+                chooseFields :  {
+                    group: "Choose Field for grouping",
+                    sort: "Choose Field for sorting"
+                },
+                group: "Group",
+                header : "Sort & Group",
+                moreFields : "more fields...",
+                reset: "Reset",
+                resetTip : "Exit and restore to original report sort and group settings",
+                sort:   "Sort",
+                stopGroupingBy: "Stop grouping by",
+                stopSortingBy: "Stop sorting by",
+                thenBy: "then by"
+            },
+            menu: {
+                sort: {
+                    aToZ: "Sort A to Z",
+                    highToLow: "Sort highest to lowest",
+                    newToOld: "Sort newest to oldest",
+                    zToA: "Sort Z to A",
+                    lowToHigh: "Sort lowest to highest",
+                    oldToNew: "Sort oldest to newest",
+                    uncheckedToChecked: "Sort unchecked to checked",
+                    checkedToUnchecked: "Sort checked to unchecked"
+                },
+                group: {
+                    aToZ: "Group A to Z",
+                    highToLow: "Group highest to lowest",
+                    newToOld: "Group newest to oldest",
+                    zToA: "Group Z to A",
+                    lowToHigh: "Group lowest to highest",
+                    oldToNew: "Group oldest to newest",
+                    uncheckedToChecked: "Group unchecked to checked",
+                    checkedToUnchecked: "Group checked to unchecked"
+                },
+                addColumnBefore: "Add column before",
+                addColumnAfter: "Add column after",
+                hideColumn: "Hide this column",
+                newTable: "New table based on this column",
+                columnProps: "Column properties",
+                fieldProps: "Field properties"
+            }
         },
-        cancel: "Cancel"
+        month: {
+            jan: {
+                short: "Jan",
+                full: "January"
+            },
+            feb: {
+                short: "Feb",
+                full: "February"
+            },
+            mar: {
+                short: "Mar",
+                full: "March"
+            },
+            apr: {
+                short: "Apr",
+                full: "April"
+            },
+            may: {
+                short: "May",
+                full: "May"
+            },
+            jun: {
+                short: "Jun",
+                full: "June"
+            },
+            jul: {
+                short: "Jul",
+                full: "July"
+            },
+            aug: {
+                short: "Aug",
+                full: "August"
+            },
+            sep: {
+                short: "Sep",
+                full: "September"
+            },
+            oct: {
+                short: "Oct",
+                full: "October"
+            },
+            nov: {
+                short: "Nov",
+                full: "November"
+            },
+            dec: {
+                short: "Dec",
+                full: "December"
+            }
+        },
+        groupHeader: {
+            empty: "(Empty)",
+            abbr: {
+                quarter: "Q",
+                fiscalYear: "FY"
+            },
+            numeric: {
+                range: "{lower} to {upper}"
+            },
+            duration: {
+                second: "{duration} second",
+                seconds: "{duration} seconds",
+                minute: "{duration} minute",
+                minutes: "{duration} minutes",
+                hour: "{duration} hour",
+                hours: "{duration} hours",
+                day: "{duration} day",
+                days: "{duration} days",
+                week: "{duration} week",
+                weeks: "{duration} weeks"
+            },
+            date: {
+                week: "Week of {date}",
+                month: "{month} {year}",
+                quarter: "{quarter} {year}"
+            }
+        },
+        cancel: "Cancel",
+        cancelTip: "Exit and discard any changes",
+        apply: "Apply",
+        applyTip: "Exit and apply any changes"
     }
 };

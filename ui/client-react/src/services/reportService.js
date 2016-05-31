@@ -1,6 +1,7 @@
 import constants from './constants';
 import BaseService from './baseService';
 import NumberUtils from '../utils/numberUtils';
+import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
 
 // a new service is constructed with each actions request..
@@ -127,13 +128,15 @@ class ReportService extends BaseService {
      * @param appId
      * @param tableId
      * @param reportId
-     * @param formatted - is output formatted for UI display or the raw data
-     * @param offset - zero based row offset
-     * @param rows - number of rows to return on the request
+     * @param queryParams
+     *   formatted - is output formatted for UI display or for raw data
+     *   offset - zero based row offset
+     *   rows - number of rows to return on the request
+     *   glist - grouping data
      * @returns promise
      */
-    getReportDataAndFacets(appId, tableId, reportId, formatted, offset, rows) {
-        return this.getReportData(appId, tableId, reportId, formatted, offset, rows, true);
+    getReportDataAndFacets(appId, tableId, reportId, queryParams) {
+        return this.getReportData(appId, tableId, reportId, queryParams, true);
     }
 
     /**
@@ -142,22 +145,38 @@ class ReportService extends BaseService {
      * @param appId
      * @param tableId
      * @param reportId
-     * @param formatted - is output formatted for UI display or the raw data
-     * @param offset - zero based row offset
-     * @param numRows - number of rows to return on the request
+     * @param queryParams
+     *   formatted - is output formatted for UI display or for raw data
+     *   offset - zero based row offset
+     *   rows - number of rows to return on the request
+     *   glist - grouping data
      * @param includeFacets - include facet data in result
      * @returns promise
      */
-    getReportData(appId, tableId, reportId, formatted, offset, numRows, includeFacets) {
+    getReportData(appId, tableId, reportId, optionalparams, includeFacets) {
         let params = {};
 
         //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
-        if (formatted === true) {
-            params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-        }
-        if (NumberUtils.isInt(offset) && NumberUtils.isInt(numRows)) {
-            params[query.OFFSET_PARAM] = offset;
-            params[query.NUMROWS_PARAM] = numRows;
+        if (optionalparams) {
+            if (optionalparams[query.FORMAT_PARAM] === true) {
+                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+            }
+            if (StringUtils.isNonEmptyString(optionalparams[query.QUERY_PARAM])) {
+                params[query.QUERY_PARAM] = optionalparams[query.QUERY_PARAM];
+            }
+            if (StringUtils.isNonEmptyString(optionalparams[query.COLUMNS_PARAM])) {
+                params[query.COLUMNS_PARAM] = optionalparams[query.COLUMNS_PARAM];
+            }
+            if (StringUtils.isNonEmptyString(optionalparams[query.SORT_LIST_PARAM])) {
+                params[query.SORT_LIST_PARAM] = optionalparams[query.SORT_LIST_PARAM];
+            }
+            if (StringUtils.isNonEmptyString(optionalparams[query.GLIST_PARAM])) {
+                params[query.GLIST_PARAM] = optionalparams[query.GLIST_PARAM];
+            }
+            if (NumberUtils.isInt(optionalparams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalparams[query.NUMROWS_PARAM])) {
+                params[query.OFFSET_PARAM] = optionalparams[query.OFFSET_PARAM];
+                params[query.NUMROWS_PARAM] = optionalparams[query.NUMROWS_PARAM];
+            }
         }
 
         let url = super.constructUrl(includeFacets === true ? this.API.GET_REPORT_COMPONENTS : this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);

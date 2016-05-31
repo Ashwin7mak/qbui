@@ -38,8 +38,9 @@
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
-        var LOCALHOST_REALM = 117000;
-        var TICKETS_ENDPOINT = '/ticket?uid=10000&realmID=';
+        var ADMIN_REALM = 'localhost';
+        var ADMIN_REALM_ID = 117000;
+        var TICKETS_ENDPOINT = '/ticket?uid=10000&realmId=';
         var HEALTH_ENDPOINT = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var CONTENT_TYPE = 'Content-Type';
@@ -69,8 +70,9 @@
             log.debug('baseUrl: ' + baseUrl + ' methodLess: ' + methodLess);
             //If there is no subdomain, hit the javaHost directly and don't proxy through the node server
             //This is required for actions like ticket creation and realm creation
+            //Both of these requests must now hit localhost.<javaHostUrl> to create the admin ticket and new realm
             if (realmSubdomain === '') {
-                fullPath = baseUrl + path;
+                fullPath = protocol + ADMIN_REALM + '.' + methodLess + path;
                 log.debug('resulting fullpath: ' + fullPath);
             } else {
                 fullPath = protocol + realmSubdomain + '.' + methodLess + path;
@@ -190,7 +192,7 @@
             },
             defaultHeaders              : DEFAULT_HEADERS,
             //Executes a REST request against the instance's realm using the configured javaHost
-            executeRequest              : function(stringPath, method, body, headers) {
+            executeRequest              : function(stringPath, method, body, headers, params) {
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
                 var subdomain = '';
                 if (this.realm) {
@@ -199,6 +201,12 @@
                 var opts = generateRequestOpts(stringPath, method, subdomain);
                 if (body) {
                     opts.body = jsonBigNum.stringify(body);
+                }
+                // if we have a GET request and have params to add (since GET requests don't use JSON body values)
+                // we have to add those to the end of the generated URL as ?param=value
+                if (params) {
+                    // remove the trailing slash and add the parameters
+                    opts.url = opts.url.substring(0, opts.url.length - 1) + params;
                 }
                 //Setup headers
                 if (headers) {
@@ -264,7 +272,7 @@
                      *  3) create a ticket valid on the realm in question
                      *  4) If any step above fails, assert!
                      */
-                    self.createTicket(LOCALHOST_REALM)
+                    self.createTicket(ADMIN_REALM_ID)
                             .then(function(authResponse) {
                                       //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
                                 self.authTicket = authResponse.body.replace(/"/g, '');

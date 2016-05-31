@@ -30,6 +30,9 @@
         // App Search
         this.searchAppsDivEl = this.appsListDivEl.element(by.className('search'));
         this.searchAppsInputEl = this.searchAppsDivEl.element(by.tagName('input'));
+        // Home and User links
+        this.topLinksEl = element(by.className('topLinks'));
+        this.topLinksElList = this.topLinksEl.all(by.className('link'));
         // Tables List
         this.tablesListDivEl = element(by.className('tablesList'));
         this.tableLinksElList = this.tablesListDivEl.all(by.className('link'));
@@ -46,6 +49,9 @@
         this.leftNavHelpGlobActEl = this.leftNavGlobActsListEl.get(0);
         this.leftNavUserGlobActEl = this.leftNavGlobActsListEl.get(1);
         this.leftNavUserGlobActLabelEl = this.leftNavUserGlobActEl.element(by.className('navLabel'));
+
+        // Report Trowser
+        this.reportTrowserContent = element(by.className('trowserContent'));
 
         // Top Nav
         this.topNavDivEl = element(by.className('topNav'));
@@ -81,30 +87,67 @@
         this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));
         // Loaded Content Div
         this.loadedContentEl = this.reportToolsAndContentEl.all(by.className('loadedContent')).first();
-        // report table
+        // Report table
         this.reportTable = this.loadedContentEl.element(by.className('reportTable'));
         // Table actions container
-        this.reportActionsContainerEl = this.reportTable.element(by.className('tableActionsContainer'));
+        this.reportToolbarContainerEl = this.reportToolsAndContentEl.element(by.className('reportToolbarContainer'));
         // Report toolbar
-        this.reportsToolBar = this.reportActionsContainerEl.element(by.className('reportToolbar'));
+        this.reportsToolBar = element(by.className('reportToolbar'));
         // Report records count
-        this.reportRecordsCount = this.reportsToolBar.element(by.className('recordsCount'));
+        this.reportRecordsCount = this.reportToolsAndContentEl.element(by.className('recordsCount'));
         // Report filter search Box
-        this.reportFilterSearchBox = this.reportsToolBar.element(by.className('filterSearchBox'));
-
-        // Loaded Content Div
-        this.loadedContentEl = this.reportContainerEl.all(by.className('loadedContent')).first();
+        this.reportFilterSearchBox = this.reportsToolBar.element(by.className('searchInput'));
         // Table actions container
         this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
         // agGrid table
-        this.griddleWrapperEl = this.loadedContentEl.element(by.className('griddleWrapper'));
+        this.griddleWrapperEl = this.loadedContentEl.element(by.className('gridWrapper'));
         this.agGridContainerEl = this.griddleWrapperEl.all(by.className('agGrid')).first();
         this.agGridBodyEl = this.agGridContainerEl.element(by.className('ag-body-container'));
         this.agGridHeaderEl = this.agGridContainerEl.element(by.className('ag-header-container'));
         // All column headers from agGrid including first checkbox and last hidden actions column
         this.agGridColHeaderElList = this.agGridHeaderEl.all(by.className('ag-header-cell'));
         this.agGridLastColHeaderEl = this.agGridColHeaderElList.last();
-        this.agGridRecordElList = this.agGridBodyEl.all(by.className('ag-row'));
+        this.agGridRecordElList = this.agGridBodyEl.all(by.className('ag-row')).filter(function(elem) {
+            // Return records that are being shown in the grid
+            return elem.getCssValue('visibility').then(function(visible) {
+                return visible === 'visible';
+            });
+        });
+        // Edit Record Menu
+        //TODO: We render an editTools element per row so create a element locator functions for that
+        this.agGridEditRecordMenu = this.agGridBodyEl.all(by.className('editTools')).first();
+        this.agGridEditRecordButtons = this.agGridEditRecordMenu.all(by.tagName('button'));
+        this.agGridSaveRecordButton = this.agGridEditRecordMenu.element(by.className('saveRecord'));
+        this.agGridCancelSelectionButton = this.agGridEditRecordMenu.element(by.className('cancelSelection'));
+        this.agGridAddRecordButton = this.agGridEditRecordMenu.element(by.className('addRecord'));
+
+        // Notification Container
+        this.notificationContainer = element(by.className('notification-container'));
+        this.editSuccessPopup = this.notificationContainer.element(by.className('notification-success'));
+
+        /**
+         * Given a record element that is being viewed in agGrid, return the cells for that row
+         * @param recordRowElement
+         */
+        this.getRecordRowCells = function(recordRowElement) {
+            return recordRowElement.all(by.className('ag-cell-no-focus'));
+        };
+
+        /**
+         * Given a record element in agGrid, click on the selection checkbox for that record to open the edit menu
+         * @param recordRowElement
+         */
+        this.openRecordEditMenu = function(recordRowElement) {
+            return recordRowElement.element(by.className('ag-selection-checkbox')).click();
+        };
+
+        /**
+         * Given a record element that is being edited in agGrid, return the input cells for that row
+         * @param recordRowElement
+         */
+        this.getRecordRowInputCells = function(recordRowElement) {
+            return recordRowElement.all(by.tagName('input'));
+        };
 
         /**
          * Given a table link element in the leftNav, open the reports menu for that table
@@ -123,6 +166,7 @@
          * @param reportName
          */
         this.selectReport = function(reportGroup, reportName) {
+            var self = this;
             // Let the trowser animate
             e2eBase.sleep(browser.params.smallSleep);
 
@@ -159,7 +203,9 @@
                         return text === reportName;
                     });
                 }).then(function(reportLinkElements) {
-                    return reportLinkElements[0].click();
+                    return reportLinkElements[0].click().then(function() {
+                        e2ePageBase.waitForElementToBeInvisible(self.reportTrowserContent);
+                    });
                 });
             });
         };

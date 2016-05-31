@@ -9,18 +9,21 @@ import TopNav from '../header/topNav';
 import Footer from '../footer/footer';
 import ReportManager from '../report/reportManager';
 import QBicon from '../qbIcon/qbIcon';
+import TableIcon from '../qbTableIcon/qbTableIcon';
 import GlobalActions from '../actions/globalActions';
 import Loader  from 'react-loader';
 import Breakpoints from '../../utils/breakpoints';
+import {NotificationContainer} from 'react-notifications';
 
 import './nav.scss';
+import 'react-notifications/lib/notifications.css';
 import '../../assets/css/animate.min.css';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'FieldsStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -33,7 +36,8 @@ var Nav = React.createClass({
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState(),
             reportsData: flux.store('ReportsStore').getState(),
-            reportData: flux.store('ReportDataStore').getState()
+            reportData: flux.store('ReportDataStore').getState(),
+            fields: flux.store('FieldsStore').getState(),
         };
     },
 
@@ -43,21 +47,24 @@ var Nav = React.createClass({
             {msg:'globalActions.help', link:'/help', icon:'help'}
         ];
         return (<GlobalActions actions={actions}
-                               position={"top"}/>);
+                               position={"top"}
+                               startTabIndex={4}/>);
     },
 
     getLeftGlobalActions() {
         const actions = [
-            {msg:'globalActions.help', link:'/help', icon:'help'}
+            {msg:'globalActions.user', link:'/user', icon:'user'}
         ];
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
-                               dropdownIcon="user"
-                               dropdownMsg="globalActions.user"
+                               dropdownIcon="help"
+                               dropdownMsg="globalActions.help"
+                               startTabIndex={100}
                                position={"left"}/>);
     },
     hideTrowser() {
         let flux = this.getFlux();
+        flux.actions.filterReportsByName("");
         flux.actions.hideTrowser();
     },
     onSelectTableReports(tableId) {
@@ -68,6 +75,8 @@ var Nav = React.createClass({
         }
         flux.actions.showTrowser();
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
+        //Whenever we change tables /via change report we get the set of fields in the table
+        flux.actions.loadFields(this.state.apps.selectedAppId, tableId);
     },
 
     getSelectedApp() {
@@ -97,7 +106,7 @@ var Nav = React.createClass({
 
         return (
             <h3>
-                <QBicon icon="report-table"/> {table ? table.name : ""} <QBicon icon="caret-right"/>
+                <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""} <QBicon icon="caret-right"/>
                 <I18nMessage message={'nav.reportsHeading'}/>
             </h3>);
 
@@ -123,8 +132,10 @@ var Nav = React.createClass({
                 this.context.history.pushState(null, report.link);
             });
         };
+
         return <ReportManager reportsData={this.state.reportsData}
-                              onSelectReport={selectReport}/>;
+                              onSelectReport={selectReport}
+                              filterReportsName={this.state.nav.filterReportsName} />;
     },
 
     /* toggle apps list - if on collapsed nav, open left nav and display apps */
@@ -141,7 +152,12 @@ var Nav = React.createClass({
     render() {
         const flux = this.getFlux();
 
-        return (<div className="navShell">
+        let classes = "navShell";
+        if (this.state.nav.leftNavVisible) {
+            classes += " leftNavOpen";
+        }
+
+        return (<div className={classes}>
 
             <Trowser position={"top"}
                      visible={this.state.nav.trowserOpen}
@@ -172,11 +188,13 @@ var Nav = React.createClass({
                         showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
+                        <NotificationContainer/>
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
                             key: this.props.location ? this.props.location.pathname : "",
                             selectedAppId: this.state.apps.selectedAppId,
                             reportData: this.state.reportData,
+                            fields: this.state.fields,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),
                             scrollingReport: this.state.nav.scrollingReport,

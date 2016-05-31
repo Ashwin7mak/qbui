@@ -3,7 +3,7 @@ import Locale from '../../locales/locales';
 import QBicon from '../qbIcon/qbIcon';
 import QBPanel from '../QBPanel/qbpanel';
 import {Link} from 'react-router';
-
+import A11Utils from '../../utils/a11yUtils';
 /**
  * a single report item
  */
@@ -37,13 +37,18 @@ let Report = React.createClass({
             return "report-table";
         }
     },
+    onClick(event) {
+        if (this.props.onSelect && A11Utils.isA11yClick(event)) {
+            this.props.onSelect(this.props.report);
+        }
+    },
     render() {
-        return (<div key={this.props.report.id}
+        return (<a key={this.props.report.id} tabIndex="0"
                       className="reportLink"
                       to={this.props.report.link}
-                      onClick={() => {this.props.onSelect(this.props.report);}}>
+                      onClick={this.onClick} onKeyDown={this.onClick}>
                     <QBicon icon={this.getIconForReport(this.props.report)}/>{this.props.report.name}
-                </div>);
+                </a>);
     }
 });
 

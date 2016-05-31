@@ -3,26 +3,30 @@
 $search-bar-bg: #5f8ba7;
 $report-group-bg: #fff;
 $report-icon-color: #f87878;
+$report-link-color: #404040;
+
+.reportsList {
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
+}
 
 .reportsContainer {
-
+    display:flex;
+    flex-direction:column;
+    flex: 1 1 auto;
     .reportsTop {
         background-color: $search-bar-bg;
-        padding:15px 0 15px 16px;
-
-        input {
-            width:220px;
-            padding-left:10px;
-            height:34px;
-            font-style:italic;
-        }
+        padding: 15px 16px;
+        flex: 0 0 auto;
     }
 }
 
 .reportGroups {
-    margin:16px;
-    max-height:60%;
-
+    flex:1 1 auto;
+    padding:16px;
+    overflow:auto;
+    -webkit-overflow-scrolling: touch;
     .qbPanel {
         width:100%;
     }
@@ -37,11 +41,13 @@ $report-icon-color: #f87878;
             flex-direction: row;
             justify-content: flex-start;
         }
+
         .reportLink {
             display:flex;
             align-items:baseline;
             text-overflow:ellipsis;
             overflow:hidden;
+            color: $report-link-color;
             .qbIcon {
                 flex: 0 0 auto;
                 width:22px;
@@ -71,6 +77,10 @@ $report-icon-color: #f87878;
             margin-bottom: 10px;
             flex:0 0 200px;
             cursor:pointer;
+
+            &:hover,&:focus {
+                text-decoration: none;
+            }
         }
     }
 }

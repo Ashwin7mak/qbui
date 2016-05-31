@@ -1,5 +1,5 @@
 
-let COMMON = {
+export const COMMON = {
     equals: 'V',
     firstLetter: 'F',
     firstWord: 'I',
@@ -8,7 +8,7 @@ let COMMON = {
 };
 
 export const GROUP_TYPE = {
-
+    delimiter: ',',
     date: {
         equals: COMMON.equals,
         day: COMMON.day,
@@ -25,11 +25,11 @@ export const GROUP_TYPE = {
         second: 's',
         minute: 'm',
         hour: 'h',
-        am_pm: 'a',
         week: COMMON.week,
         day: COMMON.day
     },
     email: {
+        equals: COMMON.equals,
         name: 'N',
         domain: 'O',
         domain_topLevel: 'C'

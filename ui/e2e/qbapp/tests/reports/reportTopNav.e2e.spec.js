@@ -110,8 +110,8 @@
                                 reportServicePage.clickTopNavHamburger();
                                 // Assert actions have moved to leftNav
                                 reportServicePage.assertGlobalActsDisplayedInLeftNav();
-                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavUserGlobActLabelEl).getText()).toBe('User');
-                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavHelpGlobActEl).getText()).toBe('Help');
+                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavUserGlobActLabelEl).getText()).toBe('Help');
+                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavHelpGlobActEl).getText()).toBe('User');
                                 // Verify global action icons are not displayed in topNav
                                 reportServicePage.assertGlobalActsNotDisplayedInTopNav();
                             }

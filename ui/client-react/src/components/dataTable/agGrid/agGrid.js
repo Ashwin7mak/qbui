@@ -1,17 +1,26 @@
 import React from 'react';
 import {AgGridReact} from 'ag-grid-react';
+import {AgGridEnterprise} from 'ag-grid-enterprise';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import ReportActions from '../../actions/reportActions';
 import RecordActions from '../../actions/recordActions';
+import Locale from '../../../locales/locales';
 import _ from 'lodash';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
+import * as query from '../../../constants/query';
+import ReportUtils from '../../../utils/reportUtils';
+
+import {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter}  from './formatters';
+import * as GroupTypes from '../../../constants/groupTypes';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
+import '../gridWrapper.scss';
 
 
 /**
@@ -28,7 +37,9 @@ function buildIconElement(icon) {
 }
 let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),
-    groupContracted: buildIconElement("icon_caretfilledright")
+    groupContracted: buildIconElement("icon_caretfilledright"),
+    menu: buildIconElement("caret-filled-down"),
+    check: buildIconElement("check")
 };
 let consts = {
     GROUP_HEADER_HEIGHT: 41,
@@ -36,7 +47,8 @@ let consts = {
     DEFAULT_CHECKBOX_COL_WIDTH: 30,
     GROUP_ICON_PADDING: 10,
     DEFAULT_CELL_PADDING: 8,
-    FONT_SIZE: 20
+    FONT_SIZE: 20,
+    HIDDEN_LAST_ROW_HEIGHT:270 // tall enough to accomodate date pickers etc.
 };
 
 let AGGrid = React.createClass({
@@ -50,7 +62,8 @@ let AGGrid = React.createClass({
         loading: React.PropTypes.bool,
         records: React.PropTypes.array,
         appId: React.PropTypes.string,
-        tblId: React.PropTypes.string
+        tblId: React.PropTypes.string,
+        onRowClick: React.PropTypes.func
     },
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -64,35 +77,170 @@ let AGGrid = React.createClass({
     gridOptions: {
         context: {}
     },
-    getInitialState() {
-        return {
-            toolsMenuOpen: false,
-            allRowsSelected: false
-        };
-    },
+
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
+        this.onMenuClose();
     },
-
     /**
-     * when we scroll the grid wrapper, hide the add record
-     * icon for a bit
+     * Build the menu items for sort/group
+     * @param column
+     * @param prependText
+     * @returns {*}
      */
-    onScrollGriddleWrapper() {
-
-        if (this.scrollTimer) {
+    getSortAscText(column, prependText) {
+        let message = " ";
+        switch (column.datatypeAttributes.type) {
+        case "CHECKBOX": message =  "uncheckedToChecked"; break;
+        case "TEXT":
+        case "URL":
+        case "USER":
+        case "EMAIL_ADDRESS": message =  "aToZ"; break;
+        case "DATE":
+        case "DATE_TIME": message =  "oldToNew"; break;
+        case "NUMERIC":
+        case "RATING":
+        default: message = "lowToHigh"; break;
+        }
+        return Locale.getMessage("report.menu." + prependText + "." + message);
+    },
+    getSortDescText(column, prependText) {
+        let message = " ";
+        switch (column.datatypeAttributes.type) {
+        case "CHECKBOX": message =  "checkedToUnchecked"; break;
+        case "TEXT":
+        case "URL":
+        case "USER":
+        case "EMAIL_ADDRESS": message =  "zToA"; break;
+        case "DATE":
+        case "DATE_TIME": message =  "newToOld"; break;
+        case "NUMERIC":
+        case "RATING":
+        default: message =  "highToLow"; break;
+        }
+        return Locale.getMessage("report.menu." + prependText + "." + message);
+    },
+    /**
+     * On selection of sort option from menu fire off the action to sort the data
+     * @param column
+     * @param asc
+     */
+    sortReport(column, asc, alreadySorted) {
+        if (alreadySorted) {
             return;
         }
-        const flux = this.getFlux();
+        let flux = this.getFlux();
 
-        flux.actions.scrollingReport(true);
+        let queryParams = {};
+        // for on-the-fly sort selection, this selection will result in removal of old sort order
+        // BUT since out grouped fields are also sorted we still need to keep those in the sort list.
+        let sortFid = asc ? column.id.toString() : "-" + column.id.toString();
 
-        this.scrollTimer = setTimeout(() => {
-            this.scrollTimer = null;
-            flux.actions.scrollingReport(false);
-        }, 500);
+        let sortList = ReportUtils.getSortListString(this.props.groupEls);
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
+        queryParams[query.GLIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
+
+        flux.actions.getFilteredRecords(this.props.appId,
+            this.props.tblId,
+            this.props.rptId, {format:true}, this.props.filter, queryParams);
     },
+    /**
+     * On selection of group option from menu fire off the action to group the data
+     * @param column
+     * @param asc
+     */
+    groupReport(column, asc) {
+        let flux = this.getFlux();
+
+        //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
+        let sortFid = column.id.toString();
+        let groupString = ReportUtils.getGroupString(sortFid, asc, GroupTypes.GROUP_TYPE.text.equals);
+        let sortList = ReportUtils.getSortListString(this.props.sortFids);
+        let sortList_param = ReportUtils.prependSortFidToList(sortList, groupString);
+
+        /** AG-grid has a bug where on re-render it doesnt call groupRenderer
+         And hence doesnt render group headers.
+         To get around that, on grouping rebuild the whole report
+         If the report was grouped on the previous render then groupRender was already called so no need to re-load everything.
+         So optimize for that case..
+        */
+        if (this.props.groupEls.length) {
+            let queryParams = {};
+            queryParams[query.SORT_LIST_PARAM] = sortList_param;
+            queryParams[query.GLIST_PARAM] = sortList_param;
+            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, queryParams);
+        } else {
+            flux.actions.loadReport(this.props.appId,
+                this.props.tblId,
+                this.props.rptId, true, null, null, sortList_param);
+        }
+    },
+    /**
+     * AG-grid doesnt fire any events or add any classes to the column for which menu has been opened
+     * This makes the menu look like its detached from the header. The following is a hack to handle this.
+     * When a menu opens store the selectedColumn and then on DonNodeRemoved event if menu has been closed then
+     * remove the class from selectedColumn
+     */
+    selectedColumnId: [],
+    selectColumnHeader(column) {
+        let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + column.field + '"]');
+        if (columnHeader.length) {
+            columnHeader[0].classList.add("selected");
+            this.selectedColumnId.push(column.field);
+        }
+    },
+    onMenuClose() {
+
+        document.addEventListener("DOMNodeRemoved", (ev) => {
+            if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
+                if (this.selectedColumnId.length) {
+                    let toRemove = this.selectedColumnId[0];
+                    let occurences = _.filter(this.selectedColumnId, (column) => {
+                        return column === toRemove;
+                    });
+                    this.selectedColumnId = this.selectedColumnId.splice(1, this.selectedColumnId.length);
+                    let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + toRemove + '"]');
+                    if (occurences.length <= 1) {
+                        columnHeader[0].classList.remove("selected");
+                    }
+                }
+            }
+        });
+    },
+    /**
+     * Build the column menu. This gets called every time menu is opened
+     * @param params
+     * @returns {*[]}
+     */
+    getMainMenuItems(params) {
+        this.selectColumnHeader(params.column.colDef);
+        let isSortedAsc = true;
+        let isFieldSorted = _.find(this.props.sortFids, (fid) => {
+            if (Math.abs(fid) === params.column.colDef.id) {
+                isSortedAsc = fid > 0;
+                return true;
+            }
+        });
+        let menuItems = [
+            {"name": this.getSortAscText(params.column.colDef, "sort"), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true, isFieldSorted && isSortedAsc)},
+            {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}];
+        menuItems.push("separator");
+        menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
+            {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, false)});
+        menuItems.push("separator");
+        menuItems.push({"name": Locale.getMessage("report.menu.addColumnBefore")},
+            {"name": Locale.getMessage("report.menu.addColumnAfter")},
+            {"name": Locale.getMessage("report.menu.hideColumn")}
+        );
+        menuItems.push("separator");
+        menuItems.push({"name": Locale.getMessage("report.menu.newTable")});
+        menuItems.push("separator");
+        menuItems.push({"name": Locale.getMessage("report.menu.columnProps")},
+            {"name": Locale.getMessage("report.menu.fieldProps")});
+        return menuItems;
+    },
+
     /**
      * Callback that the grid uses to figure out whether to show grouped data or not.
      * And if so then how to use the rowItems to figure out grouped info.
@@ -113,7 +261,10 @@ let AGGrid = React.createClass({
         }
     },
     getRowHeight(rowItem) {
-        if (rowItem.node.field === "group") {
+        if (rowItem.data.isHiddenLastRow) {
+            // in in selection mode set the height of the hidden last row to make space for datepickers etc.
+            return consts.HIDDEN_LAST_ROW_HEIGHT;
+        } else if (rowItem.node.field === "group") {
             return consts.GROUP_HEADER_HEIGHT;
         } else {
             return consts.ROW_HEIGHT;
@@ -134,48 +285,26 @@ let AGGrid = React.createClass({
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
 
-        this.refs.griddleWrapper.addEventListener("scroll", this.onScrollGriddleWrapper);
+        this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
     },
     componentWillUnmount() {
-        this.refs.griddleWrapper.removeEventListener("scroll", this.onScrollGriddleWrapper);
+        this.refs.gridWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
-// For some reason react always thinks the component needs to be re-rendered because props have changed.
-    // Analysis shows that the action column renderer is returning notEquals, event though nothing has changed.
-    // Since re-render is expensive the following figures out if ALL is same
-    // and the only piece that has changed is the "actions" column then don't update.
-    shouldComponentUpdate(nextProps, nextState) {
-        if (!_.isEqual(nextState, this.state)) {
+    // Performance improvement - only update the component when certain state/props change
+    // Since this is a heavy component we dont want this updating all times.
+    shouldComponentUpdate(nextProps) {
+
+        if (!_.isEqual(nextProps.loading, this.props.loading)) {
             return true;
         }
-        if (nextProps !== this.props) {
-            //iterate over props and state
-            for (var property in nextProps) {
-                if (nextProps.hasOwnProperty(property)) {
-                    if (!_.isEqual(this.props[property], nextProps[property])) {
-                        if (property === "columns") {
-                            if (this.props[property].length !== nextProps[property].length) {
-                                return true;
-                            }
-                            let prevColumns = this.props[property];
-                            let nextColumns = nextProps[property];
-                            for (var i = 0; i < prevColumns.length; i++) {
-                                if (!_.isEqual(prevColumns[i], nextColumns[i])) {
-                                    if (prevColumns[i].field === "actions") {
-                                        return false;
-                                    }
-                                    return true;
-                                }
-                            }
-                        } else if (property !== "reportHeader" && property !== "pageActions") {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
+        if (!_.isEqual(nextProps.records, this.props.records)) {
+            return true;
         }
-        return true;
+        if (!_.isEqual(nextProps.columns, this.props.columns)) {
+            return true;
+        }
+        return false;
     },
     /**
      * Helper method to auto-resize all columns to the content's width. This is not called anywhere right now - more design is needed on sizing.
@@ -184,7 +313,7 @@ let AGGrid = React.createClass({
         var allColumnIds = [];
         if (this.columnApi) {
             if (this.props.columns) {
-                this.props.columns.forEach(function(columnDef) {
+                this.props.columns.forEach(columnDef => {
                     allColumnIds.push(columnDef.field);
                 });
                 this.columnApi.autoSizeColumns(allColumnIds);
@@ -195,58 +324,81 @@ let AGGrid = React.createClass({
      * Grid API - selectAll "selects" all rows.
      */
     selectAll() {
+        const flux = this.getFlux();
         this.api.selectAll();
+        flux.actions.selectedRows(this.getSelectedRows());
     },
     /**
      * Grid API - deselectAll "deselects" all rows.
      */
     deselectAll() {
+        const flux = this.getFlux();
         this.api.deselectAll();
+        flux.actions.selectedRows([]);
     },
     /**
      * Capture the row-click event. Send to record view on row-click
      * @param params
      */
     onRowClicked(params) {
+
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {
             params.node.expanded = !params.node.expanded;
             this.api.onGroupExpandedOrCollapsed();
             return;
         }
-        //For click on record action icons do nothing
+        //For click on record action icons or input fields do nothing
         if (params.event.target &&
             params.event.target.className.indexOf("qbIcon") !== -1 ||
-            params.event.target.className.indexOf("iconLink") !== -1) {
+            params.event.target.className.indexOf("iconLink") !== -1 ||
+            params.event.target.tagName === "INPUT") {
             return;
         }
 
-        const appId = this.props.appId;
-        const tblId = this.props.tblId;
-        var recId = params.data[this.props.uniqueIdentifier];
-        //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
-        this.context.history.push(link);
+        //Click on checkbox column should select the row instead of going to a form.
+        if (params.event.target && (params.event.target.getAttribute("colid") === "checkbox")) {
+            params.node.setSelected(true, true);
+            return;
+        }
+
+        // select row on doubleclick
+        if (params.event.detail === 2) {
+            clearTimeout(this.clickTimeout);
+            this.clickTimeout = null;
+            params.node.setSelected(true, true);
+            return;
+        }
+        if (this.clickTimeout) {
+            // already waiting for 2nd click
+            return;
+        }
+
+        this.clickTimeout = setTimeout(() => {
+            // navigate to record if timeout wasn't canceled by 2nd click
+            this.clickTimeout = null;
+            if (this.props.onRowClick && (this.api.getSelectedRows().length === 0)) {
+                this.props.onRowClick(params.data);
+            }
+        }, 500);
     },
     /**
      * Capture the row-selection/deselection change events.
      * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
     onSelectionChanged() {
-        this.updateAllCheckbox();
+        let flux = this.getFlux();
+
+        flux.actions.selectedRows(this.getSelectedRows());
     },
 
     /**
      * Helper method to flip the master checkbox if all rows are checked
      */
-    updateAllCheckbox() {
+    allRowsSelected() {
         let selectedRows = this.getSelectedRows().length;
-        let allRowsSelected = this.props.filteredRecordsCount === selectedRows;
-        var newState = {
-            toolsMenuOpen: selectedRows > 0,
-            allRowsSelected: allRowsSelected
-        };
-        this.setState(newState);
+
+        return this.props.recordCount === selectedRows;
     },
     /**
      * Capture the event if all-select checkbox is clicked.
@@ -262,20 +414,9 @@ let AGGrid = React.createClass({
         } else {
             this.deselectAll();
         }
-        this.updateAllCheckbox();
+
     },
-    /**
-     * keep track of tools menu being open (need to change overflow css style)
-     */
-    onMenuEnter() {
-        this.setState({toolsMenuOpen: true});
-    },
-    /**
-     * keep track of tools menu being closed (need to change overflow css style)
-     */
-    onMenuExit() {
-        this.setState({toolsMenuOpen: false});
-    },
+
     /**
      * There seems to be bug in getSelectedRows callback of grid where
      * it also returns group header rows. This one weans those out to select
@@ -293,34 +434,7 @@ let AGGrid = React.createClass({
         }
         return rows;
     },
-    /**
-     * get table actions if we have them - render selectionActions prop if we have an active selection,
-     * otherwise the reportHeader prop (cloned with extra key prop for transition group, and selected rows
-     * for selectionActions component)
-     */
-    getTableActions() {
 
-        const selectedRows = this.getSelectedRows();
-        const hasSelection = selectedRows.length;
-
-        let classes = "tableActionsContainer secondaryBar";
-        if (this.state.toolsMenuOpen) {
-            classes += " toolsMenuOpen";
-        }
-        if (hasSelection) {
-            classes += " selectionActionsOpen";
-        }
-        return (this.props.reportHeader && this.props.selectionActions && (
-            <div className={classes}>{hasSelection ?
-                React.cloneElement(this.props.selectionActions, {key: "selectionActions", selection: selectedRows}) :
-                React.cloneElement(this.props.reportHeader, {
-                    key: "reportHeader",
-                    pageActions: this.props.pageActions,
-                    onMenuEnter: this.onMenuEnter,
-                    onMenuExit: this.onMenuExit
-                })}
-            </div>));
-    },
     /**
      * Callback - what to do when the master group expand/collapse is clicked
      * @param element
@@ -360,7 +474,7 @@ let AGGrid = React.createClass({
         var checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.className = "selectAllCheckbox";
-        checkbox.checked = this.state.allRowsSelected;
+        checkbox.checked = this.allRowsSelected();
         checkbox.onclick = (event) => {
             this.allCheckBoxSelected(event);
         };
@@ -380,7 +494,7 @@ let AGGrid = React.createClass({
 
         headerCell.appendChild(checkbox);
         //ag-grid doesnt seem to allow react components sent into headerCellRender.
-        checkBoxCol.headerCellRenderer = function() {
+        checkBoxCol.headerCellRenderer = () => {
             return headerCell;
         };
         checkBoxCol.checkboxSelection = true;
@@ -393,6 +507,7 @@ let AGGrid = React.createClass({
         } else {
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
+
         return checkBoxCol;
     },
     /**
@@ -400,9 +515,8 @@ let AGGrid = React.createClass({
      */
     getActionsColumn() {
         return {
-            headerName: "", //for ag-grid
-            field: "actions",      //for ag-grid
-            columnName: "actions", //for griddle
+            headerName: "",
+            field: "actions",
             cellRenderer: reactCellRendererFactory(ActionsColumn),
             cellClass: "gridCell actions",
             headerClass: "gridHeaderCell",
@@ -411,17 +525,101 @@ let AGGrid = React.createClass({
             suppressResize: true
         };
     },
+    setCSSClass_helper: function(obj, classname) {
+        if (typeof (obj.cellClass) === 'undefined') {
+            obj.cellClass = classname;
+        } else {
+            obj.cellClass += " " + classname;
+        }
+        if (typeof (obj.headerClass) === 'undefined') {
+            obj.headerClass = classname;
+        } else {
+            obj.headerClass += " " + classname;
+        }
+    },
+    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
+    getColumnProps: function() {
+        let columns = this.props.columns;
+
+        if (columns) {
+            let columnsData = columns.map((obj, index) => {
+                obj.headerClass = "gridHeaderCell";
+                obj.cellClass = "gridCell";
+                obj.suppressResize = true;
+                obj.minWidth = 100;
+                obj.addEditActions = (index === 1); // EMPOWER: add the row edit component to column 1
+
+                if (obj.datatypeAttributes) {
+                    var datatypeAttributes = obj.datatypeAttributes;
+                    for (var attr in datatypeAttributes) {
+                        switch (attr) {
+
+                        case 'type': {
+                            switch (datatypeAttributes[attr]) {
+                            case "NUMERIC" :
+                                this.setCSSClass_helper(obj, "AlignRight");
+                                obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
+                                obj.customComponent = NumericFormatter;
+                                break;
+                            case "DATE" :
+                                obj.cellRenderer = reactCellRendererFactory(DateFormatter);
+                                obj.customComponent = DateFormatter;
+                                break;
+                            case "DATE_TIME" :
+                                obj.cellRenderer = reactCellRendererFactory(DateTimeFormatter);
+                                obj.customComponent = DateTimeFormatter;
+                                break;
+                            case "TIME_OF_DAY" :
+                                obj.cellRenderer = reactCellRendererFactory(TimeFormatter);
+                                obj.customComponent = TimeFormatter;
+                                break;
+                            case "CHECKBOX" :
+                                obj.cellRenderer = reactCellRendererFactory(CheckBoxFormatter);
+                                obj.customComponent = CheckBoxFormatter;
+                                break;
+                            default:
+                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
+                                obj.customComponent = TextFormatter;
+                                break;
+                            }
+                        }
+                        }
+                    }
+
+                    if (datatypeAttributes.clientSideAttributes) {
+                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
+                        for (var cattr in clientSideAttributes) {
+                            switch (cattr) {
+                            case 'bold':
+                                if (clientSideAttributes[cattr]) {
+                                    this.setCSSClass_helper(obj, "Bold");
+                                }
+                                break;
+                            case 'word-wrap':
+                                if (clientSideAttributes[cattr]) {
+                                    this.setCSSClass_helper(obj, "NoWrap");
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                return obj;
+            });
+            return columnsData;
+        }
+        return [];
+    },
     /**
      * Add a couple of columns to the column definition sent through props -
      * add checkbox column to the beginning of the array and
      * add actions column to the end of the array.
      */
     getColumns() {
-        if (!this.props.columns) {
-            return;
-        }
+        let columnProps = this.getColumnProps();
 
-        let columns = this.props.columns.slice(0);
+
+        let columns = columnProps.slice(0);
 
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
         columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
@@ -433,32 +631,44 @@ let AGGrid = React.createClass({
         if (columns.length > 0) {
             columns.push(this.getActionsColumn());
         }
+
         return columns;
+    },
+
+    /**
+     * add an extra row which will be hidden to avoid
+     * clipping the row edit UI if it's at the bottom row
+     */
+    getRecordsToRender() {
+
+        let paddedRecords = this.props.records.slice(0);
+
+        paddedRecords.push({isHiddenLastRow:true});
+
+        return paddedRecords;
     },
 
     render() {
         let columnDefs = this.getColumns();
-        let griddleWrapperClasses = this.getSelectedRows().length ? "griddleWrapper selectedRows" : "griddleWrapper";
+
+        let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
         return (
             <div className="reportTable">
 
-                {this.getTableActions()}
-                <div className={griddleWrapperClasses} ref="griddleWrapper">
+                <div className={gridWrapperClasses} ref="gridWrapper">
                     <Loader loaded={!this.props.loading}>
                         {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
                                 <AgGridReact
                                     gridOptions={this.gridOptions}
-
                                     // listening for events
                                     onGridReady={this.onGridReady}
                                     onRowClicked={this.onRowClicked}
                                     onSelectionChanged={this.onSelectionChanged}
 
-
                                     // binding to array properties
                                     columnDefs={columnDefs}
-                                    rowData={this.props.records}
+                                    rowData={this.getRecordsToRender()}
 
                                     //default behavior properties
                                     rowSelection="multiple"
@@ -469,10 +679,17 @@ let AGGrid = React.createClass({
                                     suppressRowClickSelection="true"
                                     suppressCellSelection="true"
 
+                                    //column menus
+                                    getMainMenuItems={this.getMainMenuItems}
+                                    suppressMenuFilterPanel="true"
+                                    suppressMenuColumnPanel="true"
+                                    suppressContextMenu="true"
+
+
                                     //grouping behavior
                                     groupSelectsChildren="true"
-                                    groupUseEntireRow={this.props.showGrouping}
                                     groupRowInnerRenderer={this.getGroupRowRenderer}
+                                    groupUseEntireRow={this.props.showGrouping}
 
                                     icons={gridIcons}
                                 />

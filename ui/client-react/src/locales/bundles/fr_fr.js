@@ -1,5 +1,6 @@
 export default {
     locales: "fr-fr",
+    currencyCode: "eur",
 
     messages: {
         apps: {
@@ -23,16 +24,7 @@ export default {
             more: "Plus..."
         },
         footer: {
-            copyright: "{year} Intuit Inc. Tous droits réservés."
-        },
-        stage: {
-            header: "Un rapport très à l'importation",
-            content: "Félicitations et bienvenue! Vous faites partie d'un petit programme, début de l'accès. Vos commentaires maintenant, va façonner la manière dont QuickBase ressemble et se comporte à l'avenir. Voici un aperçu de l'un de vos rapports. Parcourez -le comme vous le feriez normalement. De quoi ça a l'air? Ne affiche vos données comme vous le souhaitez? Utilisez le gros bouton, à droite, à nous le faire savoir. Nous avons hâte d'entendre ce que vous avez à dire.",
-            feedback: {
-                header: "Rappelez-vous",
-                sub_header: "Vos commentaires sont important",
-                button: "Envoyer vos commentaires"
-            }
+            copyright: "{year} QuickBase, Inc. Tous droits réservés."
         },
         nav: {
             home: "Accueil",
@@ -98,8 +90,135 @@ export default {
             newReport: "Nouveau",
             organizeReports: "Organiser",
             recordCount : "{recordCount} {nameForRecords} ",
-            searchPlaceHolder:  "Rechercher ces {nameForRecords} ...",
+            searchPlaceHolder:  "Rechercher ces",
+            sortAndGroup : {
+                addField: "Ajouter le champ",
+                by: "par",
+                changeOrder: "ordre de changement",
+                chooseFields :  {
+                    group: "Choisir un champ pour le groupement",
+                    sort: "Choisir un champ pour le tri"
+                },
+                group: "Groupe",
+                header : "Trier & Groupe",
+                moreFields : "plus de champs ...",
+                reset: "Réinitialiser",
+                resetTip : "Sortir et restaurer à l'original tri du rapport et les paramètres du groupe",
+                sort:   "Trier",
+                stopGroupingBy: "Arrêter le regroupement par",
+                stopSortingBy: "Arrêter le tri par",
+                thenBy: "puis par"
+            },
+            menu: {
+                sort: {
+                    aToZ: "Trier A à Z",
+                    highToLow: "Trier du plus haut au plus bas",
+                    newToOld: "Trier récent au plus ancien",
+                    zToA: "Trier Z à A",
+                    lowToHigh: "Trier du plus bas au plus élevé",
+                    oldToNew: "Trier le plus ancien au plus récent",
+                    uncheckedToChecked: "Trier décochée à vérifier",
+                    checkedToUnchecked: "Trier vérifié pour décochée"
+                },
+                group: {
+                    aToZ: "Groupe A à Z",
+                    highToLow: "Groupe haut au plus bas",
+                    newToOld: "Groupe récent au plus ancien",
+                    zToA: "Groupe Z à A",
+                    lowToHigh: "Groupe bas au plus haut",
+                    oldToNew: "Groupe le plus ancien au plus récent",
+                    uncheckedToChecked: "Groupe décochée à vérifier",
+                    checkedToUnchecked: "Groupe cochés décochée"
+                },
+                addColumnBefore: "Ajouter une colonne avant",
+                addColumnAfter: "Ajouter colonne après",
+                hideColumn: "Masquer cette colonne",
+                newTable: "Nouvelle table basée sur cette colonne",
+                columnProps: "Propriétés de la colonne",
+                fieldProps: "Propriétés de champ"
+            }
         },
-        cancel: "Annuler"
+        month: {
+            jan: {
+                short: "Janv",
+                full: "Janvier"
+            },
+            feb: {
+                short: "Fébr",
+                full: "Février"
+            },
+            mar: {
+                short: "Mars",
+                full: "Mars"
+            },
+            apr: {
+                short: "Avril",
+                full: "Avril"
+            },
+            may: {
+                short: "Mai",
+                full: "Mai"
+            },
+            jun: {
+                short: "Juin",
+                full: "Juin"
+            },
+            jul: {
+                short: "Juil",
+                full: "Juillet"
+            },
+            aug: {
+                short: "Août",
+                full: "Août"
+            },
+            sep: {
+                short: "Sept",
+                full: "Septembre"
+            },
+            oct: {
+                short: "Oct",
+                full: "Octobre"
+            },
+            nov: {
+                short: "Nov",
+                full: "Novembre"
+            },
+            dec: {
+                short: "Déc",
+                full: "Décembre"
+            }
+        },
+        groupHeader: {
+            empty: "(Vide)",
+            abbr: {
+                quarter: "Q",
+                fiscalYear: "FY"
+            },
+            numeric: {
+                range: "{lower} à {upper}"
+            },
+            duration: {
+                second: "{duration} seconde",
+                seconds: "{duration} secondes",
+                minute: "{duration} minute",
+                minutes: "{duration} minutes",
+                hour: "{duration} heure",
+                hours: "{duration} heures",
+                day: "{duration} journée",
+                days: "{duration} journées",
+                week: "{duration} semaine",
+                weeks: "{duration} semaines"
+            },
+            date: {
+                week: "Semaine du {date}",
+                month: "{month} {year}",
+                quarter: "{quarter} {year}"
+            }
+        },
+        cancel: "Annuler",
+        cancelTip: "Quitter et ignorer les modifications",
+        apply: "Aappliquer",
+        applyTip: "Sortez et appliquer les modifications"
+
     }
 };

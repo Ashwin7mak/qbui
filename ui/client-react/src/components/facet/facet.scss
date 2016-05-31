@@ -1,16 +1,11 @@
 @import '../../assets/css/qbVariables';
 
 
-.filterSearchBox { /* input box for filtering records containing the string */
-  padding: .8rem;
-  width: 25em;
-}
-
 .facetsMenuContainer {
   margin-left: 10px;
 
-  //the generated wrapper on facetMenuPopup
-  > div:not(.facetsMenuButton) > div:first-child {
+  //under the generated wrapper on facetMenuPopup
+  > div:not(.facetsMenuButton) > div.facetsRelativePos {
     position: relative;
   }
 }
@@ -50,8 +45,7 @@
 .facetsMenuContainer .facetMenuPopup.popover {
     border-radius: 3px;
     border-color : $facetMenu-BorderColor;
-    min-width: 300px;
-    max-width: 98%;
+    width: 300px;
     position: absolute;
     margin-left: -29px;
     > .arrow {
@@ -127,6 +121,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       padding-left: 15px;
+      padding-right: 5px;
     }
 
     .panel-default {
@@ -138,6 +133,11 @@
     .list-group-item {
       font-family: $font-family;
       padding-top: 4px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-start
     }
 
     .list-group-item:hover {
@@ -147,10 +147,6 @@
     .list-group-item:focus {
       outline: none;
       background-color: $facetMenu-backgroundColor;
-    }
-
-    .list-group-item .checkMark {
-      margin-left: auto;
     }
 
     .listMore {
@@ -169,7 +165,7 @@
     }
 
     .checkMark-selected {
-      color: $facetSelected-color;
+      color: $selected-check-color;
       padding-right: 5px;
     }
 
@@ -210,6 +206,7 @@
     .selectedTokenName {
       white-space: normal;
       padding: 2px 3px;
+      cursor: pointer;
 
       span {
         white-space: nowrap;
@@ -221,6 +218,16 @@
     }
   }
 }
+
+
+@include medium-breakpoint {
+  .filterSearchBoxContainer .searchInputBox .searchInput {
+    padding-right: 5px;
+    width: 111px;
+  }
+}
+
+
 
 @include small-breakpoint {
     .selectedFacets {

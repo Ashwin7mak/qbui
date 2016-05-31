@@ -1,7 +1,5 @@
 @import '../../assets/css/qbVariables';
 
-$fieldLabel-color: $color3;
-
 .formContainer {
     padding: 2%;
 }
@@ -11,21 +9,22 @@ $fieldLabel-color: $color3;
     flex-direction: row;
     align-items: stretch;
     flex-wrap: wrap;
-    overflow-y: hidden;
 }
+.qbPanelBody {
+    display: block;
 
-.field {
-    //top right bottom left
-    padding: 0 35px 20px 0;
-    max-width: 25%;
-    .fieldLabel {
-        display: block;
-        color: $fieldLabel-color;
-        padding-bottom: 2px;
-    }
-    .fieldValue {
-        display: block;
-        min-width: 0;
+    .field {
+        //top right bottom left
+        padding: 0 35px 20px 0;
+        .fieldLabel {
+            display: block;
+            color: $fieldLabel-color;
+            padding-bottom: 2px;
+        }
+        .fieldValue {
+            display: block;
+            min-width: 0;
+        }
     }
 }
 
@@ -40,20 +39,24 @@ $fieldLabel-color: $color3;
 
 /* For mobile phones: */
 @include small-breakpoint {
-    .field {
-        max-width: 100%;
-        .fieldLabel {
-            font-size: $font-size-small;
-        }
-        .fieldValue {
-            font-size: $font-size-small;
+    .qbPanelBody {
+        .field {
+            max-width: 100%;
+            .fieldLabel {
+                font-size: $font-size-small;
+            }
+            .fieldValue {
+                font-size: $font-size-small;
+            }
         }
     }
 }
 
 /* For tablet like devices: */
 @include medium-breakpoint {
-    .field {
-        max-width: 60%;
+    .qbPanelBody {
+        .field {
+            max-width: 60%;
+        }
     }
 }

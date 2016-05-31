@@ -2,7 +2,7 @@ import React from 'react';
 import Fluxxor from 'fluxxor';
 import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
-import {MenuItem, Dropdown} from 'react-bootstrap';
+import {MenuItem, Dropdown, Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -18,12 +18,14 @@ const actionPropType = React.PropTypes.shape({
  */
 let GlobalAction = React.createClass({
     propTypes: {
-        action: actionPropType
+        action: actionPropType,
+        tabIndex: React.PropTypes.number.isRequired
     },
+
     render: function() {
         return (
             <li className={"link globalAction"}>
-                <Link className={"globalActionLink"} to={this.props.action.link} onClick={this.props.onSelect}>
+                <Link className={"globalActionLink"} tabIndex={this.props.tabIndex} to={this.props.action.link} onClick={this.props.onSelect}>
                     <QBicon icon={this.props.action.icon}/>
                     <span className={"navLabel"}><I18nMessage message={this.props.action.msg}/></span>
                 </Link>
@@ -44,6 +46,7 @@ let GlobalActions = React.createClass({
         actions: React.PropTypes.arrayOf(actionPropType),
         dropdownIcon: React.PropTypes.string,
         dropdownMsg: React.PropTypes.string,
+        startTabIndex: React.PropTypes.number.isRequired
     },
 
     getDefaultProps() {
@@ -53,9 +56,9 @@ let GlobalActions = React.createClass({
         };
     },
 
-    onSelect: function(ev) {
+    changeLocale: function(locale) {
         let flux = this.getFlux();
-        flux.actions.changeLocale(ev.currentTarget.title);
+        flux.actions.changeLocale(locale);
     },
     getGlobalDropdown() {
         let supportedLocales = Locale.getSupportedLocales();
@@ -63,10 +66,12 @@ let GlobalActions = React.createClass({
         return (
             <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"}>
 
-                <a bsRole="toggle" className={"dropdownToggle globalActionLink"}>
+                <Button bsRole="toggle"
+                        className={"dropdownToggle globalActionLink"}
+                        tabIndex={this.props.startTabIndex + this.props.actions.length}>
                     <QBicon icon={this.props.dropdownIcon}/>
                     <span className={"navLabel"}>{this.props.dropdownMsg !== '' ? <I18nMessage message={this.props.dropdownMsg}/> : ''}</span>
-                </a>
+                </Button>
 
                 <Dropdown.Menu>
                     <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage
@@ -74,7 +79,7 @@ let GlobalActions = React.createClass({
                     <MenuItem divider/>
 
                     {supportedLocales.length > 1 ? supportedLocales.map((locale) => {
-                        return <MenuItem href="#" className="localeLink" onSelect={this.onSelect} title={locale}
+                        return <MenuItem href="#" className="localeLink" onSelect={() => this.changeLocale(locale)} title={locale}
                                          key={eventKeyIdx} eventKey={eventKeyIdx++}><I18nMessage
                             message={'header.menu.locale.' + locale}/></MenuItem>;
                     }) : null}
@@ -89,8 +94,12 @@ let GlobalActions = React.createClass({
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
-                    {this.props.actions && this.props.actions.map((action) => {
-                        return <GlobalAction key={action.msg} linkClass={this.props.linkClass} onSelect={this.props.onSelect} action={action}/>;
+                    {this.props.actions && this.props.actions.map((action, index) => {
+                        return <GlobalAction tabIndex={this.props.startTabIndex + index}
+                                             key={action.msg}
+                                             linkClass={this.props.linkClass}
+                                             onSelect={this.props.onSelect}
+                                             action={action}/>;
                     })}
                     <li className={"link globalAction withDropdown"}>{this.getGlobalDropdown()}</li>
                 </ul>

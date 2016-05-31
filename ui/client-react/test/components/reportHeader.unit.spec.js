@@ -3,6 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import ReportHeader  from '../../src/components/report/reportHeader';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 import Fluxxor from 'fluxxor';
+import SearchBox from '../../src/components/search/searchBox';
 
 describe('ReportHeader functions', () => {
     'use strict';
@@ -29,6 +30,9 @@ describe('ReportHeader functions', () => {
             return;
         },
         filterReport() {
+            return;
+        },
+        filterSearchPending() {
             return;
         }
     };
@@ -79,19 +83,11 @@ describe('ReportHeader functions', () => {
     });
 
     it('test perform search', () => {
-
         let toggleNav = TestUtils.findRenderedDOMComponentWithClass(component, "toggleNavButton");
         TestUtils.Simulate.click(toggleNav);
 
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
         expect(filterSearchBox.length).toEqual(1);
-
-        var searchInput = filterSearchBox[0];
-        var testValue = 'xxx';
-
-        //simulate search string was input
-        TestUtils.Simulate.change(searchInput, {target: {value: testValue}});
-        expect(mockCallbacks.searchHappened).toHaveBeenCalled();
     });
 
 });

@@ -41,16 +41,131 @@
                 return deferred.promise;
             },
             /**
-             * Generates a report and creates it in a table via the API. Not supplying a query string
+             * Generates a report with Fids and creates it in a table via the API. Not supplying a query string
              * will generate a 'list all' report. Returns a promise.
              */
             // TODO: QBSE-13518 Write a report generator in the test_generators package
-            createReportWithFacets: function(appId, tableId, fids, query) {
+            createReportWithFids: function(appId, tableId, fids, query) {
                 var deferred = promise.pending();
                 var reportJSON = {
-                    name      : 'Report With Facets',
+                    name      : 'Report With Sorting',
+                    type      : 'TABLE',
+                    fids  : fids,
+                    ownerId   : '10000',
+                    hideReport: false
+                };
+                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
+
+                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
+                recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
+                    //console.log('Report create result');
+                    var parsed = JSON.parse(result.body);
+                    var id = parsed.id;
+                    deferred.resolve(id);
+                }).catch(function(error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+            /**
+             * Generates a report with sorting and grouping and creates it in a table via the API. Not supplying a query string
+             * will generate a 'list all' report. Returns a promise.
+             */
+            // TODO: QBSE-13518 Write a report generator in the test_generators package
+            createReportWithSortAndGroup: function(appId, tableId, fids, query, reportName) {
+                var deferred = promise.pending();
+                var reportJSON = {
+                    name      : reportName || 'Report With Sorting And Grouping',
+                    type      : 'TABLE',
+                    sortList  : fids,
+                    ownerId   : '10000',
+                    hideReport: false
+                };
+                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
+
+                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
+                recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
+                    //console.log('Report create result');
+                    var parsed = JSON.parse(result.body);
+                    var id = parsed.id;
+                    deferred.resolve(id);
+                }).catch(function(error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+            /**
+             * Generates a report with Fids and sorting and creates it in a table via the API. Not supplying a query string
+             * will generate a 'list all' report. Returns a promise.
+             */
+            // TODO: QBSE-13518 Write a report generator in the test_generators package
+            createReportWithFidsAndSort: function(appId, tableId, fids, sortfids, query) {
+                var deferred = promise.pending();
+                var reportJSON = {
+                    name      : 'Report With Sorting',
+                    type      : 'TABLE',
+                    fids  : fids,
+                    sortList  : sortfids,
+                    ownerId   : '10000',
+                    hideReport: false
+                };
+                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
+
+                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
+                recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
+                    //console.log('Report create result');
+                    var parsed = JSON.parse(result.body);
+                    var id = parsed.id;
+                    deferred.resolve(id);
+                }).catch(function(error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+            /**
+             * Generates a report with filters and creates it in a table via the API. Not supplying a query string
+             * will generate a 'list all' report. Returns a promise.
+             */
+            // TODO: QBSE-13518 Write a report generator in the test_generators package
+            createReportWithFacets: function(appId, tableId, fids, query, reportName) {
+                var deferred = promise.pending();
+                var reportJSON = {
+                    name      : reportName || 'Report With Facets',
                     type      : 'TABLE',
                     facetFids : fids,
+                    ownerId   : '10000',
+                    hideReport: false
+                };
+                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
+
+                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
+                recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
+                    //console.log('Report create result');
+                    var parsed = JSON.parse(result.body);
+                    var id = parsed.id;
+                    deferred.resolve(id);
+                }).catch(function(error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+                return deferred.promise;
+            },
+            /**
+             * Generates a report with filters and sortLists and creates it in a table via the API. Not supplying a query string
+             * will generate a 'list all' report. Returns a promise.
+             */
+            // TODO: QBSE-13518 Write a report generator in the test_generators package
+            createReportWithFidsAndFacetsAndSortLists: function(appId, tableId, fids, facetFids, sortFids, query, reportName) {
+                var deferred = promise.pending();
+                var reportJSON = {
+                    name      : reportName || 'Report With Facets',
+                    type      : 'TABLE',
+                    fids      : fids,
+                    facetFids : facetFids,
+                    sortList  : sortFids,
                     ownerId   : '10000',
                     hideReport: false
                 };

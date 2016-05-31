@@ -59,6 +59,7 @@
 
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
+        var groupFormatter = require('./formatter/groupFormatter');
         var recordFormatter = require('./formatter/recordFormatter')();
         var constants = require('./../constants');
 
@@ -70,6 +71,7 @@
         var RECORD = 'record';
         var RECORDS = 'records';
         var REPORTS = 'reports';
+        var GROUPS = 'groups';
         var REPORTCOMPONENTS = 'reportcomponents';
         var RESULTS = 'results';
         var request = defaultRequest;
@@ -126,95 +128,150 @@
                 return req.param(constants.REQUEST_PARAMETER.FORMAT) === 'raw';
             },
 
+            /**
+             * Fetch a single record and associated fields meta data from a table.
+             *
+             * @param req
+             * @returns Promise
+             */
             fetchSingleRecordAndFields: function(req) {
-                var deferred = Promise.pending();
-                var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
-                Promise.all(fetchRequests).then(
-                    function(response) {
-                        var record = jsonBigNum.parse(response[0].body);
-                        var responseObject;
+                return new Promise(function(resolve, reject) {
+                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
-                        //return raw undecorated record values due to flag format=raw
-                        if (this.isRawFormat(req)) {
-                            responseObject = record;
-                        } else {
-                            //response object will include a fields meta data block plus record values
-                            var fields = removeUnusedFields(record, JSON.parse(response[1].body));
+                    Promise.all(fetchRequests).then(
+                        function(response) {
+                            var record = jsonBigNum.parse(response[0].body);
+                            var responseObject;
 
-                            //format records for display if requested with the flag format=display
-                            if (this.isDisplayFormat(req)) {
-                                record = recordFormatter.formatRecords([record], fields)[0];
+                            //return raw undecorated record values due to flag format=raw
+                            if (this.isRawFormat(req)) {
+                                responseObject = record;
+                            } else {
+                                //response object will include a fields meta data block plus record values
+                                var fields = removeUnusedFields(record, JSON.parse(response[1].body));
+
+                                //format records for display if requested with the flag format=display
+                                if (this.isDisplayFormat(req)) {
+                                    record = recordFormatter.formatRecords([record], fields)[0];
+                                }
+
+                                responseObject = {};
+                                responseObject[FIELDS] = fields;
+                                responseObject[RECORD] = record;
                             }
-                            responseObject = {};
-                            responseObject[FIELDS] = fields;
-                            responseObject[RECORD] = record;
+
+                            resolve(responseObject);
+
+                        }.bind(this),
+                        function(response) {
+                            reject(response);
                         }
-                        deferred.resolve(responseObject);
-                    }.bind(this),
-                    function(response) {
-                        deferred.reject(response);
-                    }
-                ).catch(function(error) {
-                    log.error("Caught unexpected error in fetchSingleRecordAndFields: " + JSON.stringify(error));
-                    deferred.reject(error);
-                });
-                return deferred.promise;
+                    ).catch(function(error) {
+                        requestHelper.logUnexpectedError('recordsAPI..fetchSingleRecordAndFields', error, true);
+                        reject(error);
+                    });
+                }.bind(this));
+
             },
 
-            //Returns a promise that is resolved with the records and fields meta data
-            //or is rejected with a descriptive error code
+            /**
+             * Fetch all records and the fields meta data from a table.
+             *
+             * @param req
+             * @returns Promise
+             */
             fetchRecordsAndFields: function(req) {
-                var deferred = Promise.pending();
-                var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
-                Promise.all(fetchRequests).then(
-                    function(response) {
-                        var records = jsonBigNum.parse(response[0].body);
-                        var responseObject;
+                return new Promise(function(resolve, reject) {
+                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
-                        //return raw undecorated record values due to flag format=raw
-                        if (this.isRawFormat(req)) {
-                            responseObject = records;
-                        } else {
-                            //response object will include a fields meta data block plus record values
-                            var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
+                    Promise.all(fetchRequests).then(
+                        function(response) {
+                            var responseObject;
 
-                            //format records for display if requested with the flag format=display
-                            if (this.isDisplayFormat(req)) {
-                                records = recordFormatter.formatRecords(records, fields);
+                            var records = jsonBigNum.parse(response[0].body);
+                            var groupedRecords;
+
+                            //return raw undecorated record values due to flag format=raw
+                            if (this.isRawFormat(req)) {
+                                responseObject = records;
+                            } else {
+                                //response object will include a fields meta data block plus record values
+                                var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
+
+                                if (this.isDisplayFormat(req)) {
+                                    records = recordFormatter.formatRecords(records, fields);
+
+                                    //  the formatter will determine if grouping is requested and return
+                                    //  a data structure grouped according to the grouping requirements.
+                                    groupedRecords = groupFormatter.group(req, fields, records);
+                                }
+
+                                responseObject = {};
+                                responseObject[FIELDS] = fields;
+                                responseObject[RECORDS] = [];
+                                responseObject[GROUPS] = [];
+
+                                //  if we are grouping our results, no need to send the flat result set.
+                                if (groupedRecords && groupedRecords.hasGrouping === true) {
+                                    responseObject[GROUPS] = groupedRecords;
+                                } else {
+                                    responseObject[RECORDS] = records;
+                                }
                             }
-                            responseObject = {};
-                            responseObject[FIELDS] = fields;
-                            responseObject[RECORDS] = records;
+
+                            resolve(responseObject);
+
+                        }.bind(this),
+                        function(response) {
+                            reject(response);
                         }
-                        deferred.resolve(responseObject);
-                    }.bind(this),
-                    function(response) {
-                        deferred.reject(response);
-                    }
-                ).catch(function(error) {
-                    log.error("Caught unexpected error in fetchRecordsAndFields: " + JSON.stringify(error));
-                    deferred.reject(error);
-                });
-                return deferred.promise;
+                    ).catch(function(error) {
+                        requestHelper.logUnexpectedError('recordsAPI..fetchRecordsAndFields', error, true);
+                        reject(error);
+                    });
+                }.bind(this));
+
             },
 
-            //Returns a promise that is resolved with the records array or rejected with an error code
+            /**
+             * Fetch the requested records data for a table.
+             *
+             * @param req
+             * @returns Promise
+             */
             fetchRecords: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                let inputUrl = opts.url.toLowerCase();
+
+                let inputUrl = opts.url; //JAVA api is case sensitive so dont loose camel case here.
+                let inputUrl_toLower = opts.url.toLowerCase(); // but for convinience of string matches convert to lower case
+
                 //the request came in for report/{reportId}/results.
                 // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl.indexOf(REPORTCOMPONENTS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTCOMPONENTS)) + RESULTS;
+                if (inputUrl_toLower.indexOf(REPORTCOMPONENTS) !== -1) {
+                    // this bypass is for grouping but in ag-grid
+                    // change url from .../reports/<id>/reportcomponents?sortList=..
+                    // to .../records?sortList=.. because /reports/results api does not support sortList param.
+                    if (inputUrl_toLower.indexOf(constants.REQUEST_PARAMETER.SORT_LIST) !== -1) {
+                        let reportIndex = inputUrl_toLower.indexOf(REPORTS);
+                        let paramsIndex = inputUrl_toLower.indexOf("?"); // get the index for url params starting after ?
+                        opts.url = inputUrl.substring(0, reportIndex) + RECORDS + inputUrl.substring(paramsIndex);
+                    } else {
+                        opts.url = inputUrl.substring(0, inputUrl_toLower.indexOf(REPORTCOMPONENTS)) + RESULTS;
+                    }
                 }
 
                 return requestHelper.executeRequest(req, opts);
             },
 
-            //Returns a promise that is resolved with the table fields or rejected with an error code
+            /**
+             * Fetch the requested field meta data for a table.
+             *
+             * @param req
+             * @returns Promise
+             */
             fetchFields: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;

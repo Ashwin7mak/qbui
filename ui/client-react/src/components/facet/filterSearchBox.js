@@ -1,9 +1,10 @@
 import React from 'react';
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
-
+import Locale from '../../locales/locales';
 import './facet.scss';
 import Fluxxor from 'fluxxor';
+import SearchBox from '../search/searchBox';
 
 let logger = new Logger();
 
@@ -20,11 +21,7 @@ const FilterSearchBox = React.createClass({
     displayName: 'FilterSearchBox',
     propTypes: {
         onChange : React.PropTypes.func,
-        nameForRecords: React.PropTypes.string
-    },
-
-    defaultProps: {
-        nameForRecords :"Records"
+        clearSearchString : React.PropTypes.func,
     },
 
     getStateFromFlux() {
@@ -33,21 +30,15 @@ const FilterSearchBox = React.createClass({
     },
 
     render() {
-        //TODO: use Search these X records in i18n message formatter at "record.searchPlaceHolder" once React.intl
-        // supports string only, currently it wraps the generated message with a span tag which is not valid
-        // within a placeholder element attribute.
-        //
-        // looks like this will be supported in
-        // reactintl 2.0 see - http://stackoverflow.com/questions/35286239/how-to-put-valuedata-into-html-attribute-with-reactjs-and-reactintl
-        let placeMsg = "Search these " + this.props.nameForRecords + "...";
-        logger.debug('rendering search box with:' + this.state.searchStringInput);
+
+        let placeMsg = Locale.getMessage("report.searchPlaceHolder") + " " + Locale.getMessage("records.plural") + "...";
+
         return (<div className="filterSearchBoxContainer">
-                    <input className="filterSearchBox" type="text"
-                           key={"filterSearchBox_" + this.props.searchBoxKey}
-                           value={this.state.searchStringInput}
-                           onChange={this.props.onChange}
-                           onDoubleClick={this.props.clearSearchString} // till we get the icon
-                           placeholder={placeMsg}/>
+                    <SearchBox className="filterSearchBox" key={"filterSearchBox_" + this.props.searchBoxKey}
+                               value={this.state.searchStringInput}
+                               onChange={this.props.onChange}
+                               onClearSearch={this.props.clearSearchString}
+                               placeholder={placeMsg} />
                 </div>
         );
     }

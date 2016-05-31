@@ -12,11 +12,16 @@ $grid-font-size: $font-size - 2;
 
 $grid-group-row-header-bkgrd-color: $color1;
 $grid-group-row-header-border-top: $color7;
-$grid-group-row-header-divider: $ghost;
+$grid-group-row-header-divider: $color21;
 
 $grid-group-expand-icon-size: 20px;
 $grid-default-group-padding: 7px;
 $grid-default-cell-padding: 8px;
+
+$row-bg-color: #fff;
+$row-border-color: #ddd;
+$row-box-shadow-color: #888;
+$cell-edit-background-edit: #f3f8fe;
 
 // override default font style
 .ag-font-style {
@@ -51,6 +56,22 @@ $grid-default-cell-padding: 8px;
 
         .ag-header-cell-label {
             padding: 4px $grid-default-cell-padding 3px $grid-default-cell-padding;
+        }
+        &.selected {
+            background-color: $color5;
+            .ag-header-cell-menu-button {
+                opacity: 1!important;
+                display: block;
+            }
+        }
+    }
+    .ag-header-cell-menu-button {
+        display: none;
+        padding: 4px 0px 3px 0px;
+    }
+    .ag-header-cell:hover {
+        .ag-header-cell-menu-button {
+            display: block;
         }
     }
 
@@ -152,6 +173,46 @@ $grid-default-cell-padding: 8px;
         position: absolute;
         right: $grid-default-group-padding + 1;
     }
+
+    .ag-menu-list {
+        border: 1px solid $color4;
+        background: $color2;
+    }
+    .ag-menu-option {
+        line-height: 28px;
+    }
+    .ag-menu-separator {
+        border-bottom: 1px solid $color4;
+    }
+    .ag-menu-option-text {
+        padding-right: 20px;
+    }
+    .ag-menu-option:hover {
+        background-color: $color1;
+    }
+    .ag-menu-option-icon {
+        padding: 0 5px;
+    }
+    .qbIcon.iconssturdy-check {
+        font-size: $grid-font-size + 2;
+        width: $grid-font-size + 2;
+        vertical-align: middle;
+        color: $color22;
+    }
+    .ag-menu {
+        top: 24px!important;
+        -webkit-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+        -moz-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+        box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+    }
+    .ag-tab-selected {
+        display: none;
+    }
+}
+
+//Temporary hack - opened an issue with ag-grid
+#centerRow {
+    height: 100%!important;
 }
 
 .tableActionsContainer {
@@ -179,7 +240,7 @@ $grid-default-cell-padding: 8px;
     .recordActions {
         padding: 0;
         height:100%;
-        width:240px;
+        width:200px;
 
         .actionIcons {
             display:flex;
@@ -190,11 +251,12 @@ $grid-default-cell-padding: 8px;
             .iconLink {
                 flex:1 1 auto;
                 height:100%;
+
                 position:relative;
                 .qbIcon {
                     position:absolute;
-                    top: calc(50% - 8px);
-                    left: calc(50% - 8px);
+                    top: calc(50% - 10px);
+                    left: calc(50% - 10px);
                 }
             }
         }
@@ -256,4 +318,163 @@ $grid-default-cell-padding: 8px;
 .selectedRows .ag-row:hover .ag-cell.actions > div {
     visibility: hidden;
 }
+
+/* hide row editing tools by default */
+.editTools {
+    display:none;
+}
+
+/* last to rows are just for padding */
+.ag-row:last-child {
+    visibility:hidden;
+
+}
+
+.ag-body-container {
+    .ag-row {
+        background-color: $row-bg-color;
+    }
+    background-color:inherit !important;
+}
+.ag-row .gridCell .cellWrapper > :not(.cellData) {
+     display:none;
+}
+
+.reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
+
+    .ag-cell.gridCell {
+
+        overflow:visible;
+        padding: 0;
+        margin: 0;
+
+
+        > .cellWrapper,.ag-cell-wrapper {
+            padding:8px;
+            position: absolute;
+            border-top:1px solid $row-border-color;
+            border-bottom:1px solid $row-border-color;
+            top:-5px;
+            left:-5px;
+            right:-5px;
+            bottom:-5px;
+            background-color: $cell-edit-background-edit;
+            box-shadow: 2px 2px 2px $row-box-shadow-color;
+            z-index:1;
+            display:flex;
+
+            .cellData {
+                display:none;
+            }
+            .cellEdit {
+                display:inline-block;
+                border:1px solid $row-border-color;
+                border-right:2px solid $row-border-color;
+                background: $row-bg-color;
+                flex:1 1 auto;
+                padding:0 0 0 2px;
+                margin-right:2px;
+
+                &.dateTimeField>* {
+                    border:0;
+                    .input-group.date input.form-control {
+                        border:0;
+                        padding:0;
+                        font-size: 12px;
+                        height: 21px;
+                        border-radius:0;
+                    }
+                    .input-group.date .input-group-addon {
+                        background: #fff;
+                        height:21px;
+                        padding:0;
+                        border:0;
+                    }
+                }
+                &.input-group {
+                    flex: 1 1 auto;
+                    display:flex;
+                    flex-direction: row;
+                    margin-right:0;
+                    padding-right:0;
+                    border-right:0;
+                    >input {
+                        flex:1 1 auto;
+                        border-radius:0;
+                        border:0;
+                        height:21px;
+                        margin-right:1px;
+                        font-size: 12px;
+                        padding-left:2px;
+                    }
+                    >span.dropdown {
+                        flex:0 0 auto;
+                        width: 20px;
+                        button {
+                            padding-left:4px;
+                            padding-top:0;
+                            height: 21px;
+                            width:20px;
+                            border-radius:0;
+                        }
+                    }
+                }
+            }
+
+
+        }
+        > .ag-cell-wrapper:first-child {
+            border-left:1px solid $row-border-color;
+            left:0;
+        }
+    }
+
+    .gridCell {
+
+        .editTools {
+            display:block;
+            flex: 0 0 auto;
+            background-color:$cell-edit-background-edit;
+            box-shadow: 2px 2px 2px $row-box-shadow-color;
+            position:absolute;
+            top:100%;
+            right:30px;
+
+            border-left: 1px solid $row-border-color;
+            border-right: 1px solid $row-border-color;
+            border-bottom:1px solid $row-border-color;
+            button {
+                border:0;
+                background-color:$cell-edit-background-edit;
+                margin-right:2px;
+                padding:6px 8px;
+
+                .qbIcon {
+                    width:20px;
+                    font-size: 20px;
+                    vertical-align:top;
+                }
+                .qbIcon.saveRecord {
+                    color:green;
+                    font-size:24px;
+                }
+                .qbIcon.cancelSelection {
+                    color:$icon-color;
+                }
+                .qbIcon.deleteRecord {
+                    color:red;
+                }
+                .qbIcon.addRecord {
+                    color:$icon-color;
+                }
+            }
+        }
+    }
+}
+
+/* errant horizontal scrolllbars sometimes appear */
+.ag-body-viewport {
+    overflow-x:hidden;
+}
+
 

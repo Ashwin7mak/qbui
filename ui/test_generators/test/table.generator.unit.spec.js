@@ -313,7 +313,7 @@
                     }
 
                     _.forEach(fields, function(field) {
-                        if (!_.contains(entry.choicesArray, field[fieldConsts.fieldKeys.TYPE])) {
+                        if (!_.includes(entry.choicesArray, field[fieldConsts.fieldKeys.TYPE])) {
                             assert.fail('Did not find a valid fieldType. one of allowed but got ' +
                                         field[fieldConsts.fieldKeys.TYPE] + '. Table: ' +
                                         tableGenerator.tableToJsonString(table));

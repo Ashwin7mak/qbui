@@ -13,7 +13,7 @@
      */
     describe('API - Negative /realms & /ticket test cases', function() {
 
-        it('Should fail to create a realm with a 404', function(done) {
+        it('Should fail to create a realm with a 401', function(done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
             var opts = {
                 url   : config.DOMAIN + apiBase.resolveRealmsEndpoint(117000),
@@ -22,12 +22,12 @@
             request(opts, function(error, response) {
                 assert.notEqual(response, undefined, 'Unexpected  response. undefined');
                 assert.notEqual(response.statusCode, undefined, 'Unexpected  response.statusCode undefined');
-                assert.equal(response.statusCode, 403, 'Unexpected status code.');
+                assert.equal(response.statusCode, 401, 'Unexpected status code.');
                 done();
             });
         });
 
-        it('Should fail to create a ticket with a 404', function(done) {
+        it('Should fail to create a ticket with a 500', function(done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
             var opts = {
                 url   : config.DOMAIN + apiBase.resolveTicketEndpoint(),

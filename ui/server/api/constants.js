@@ -48,10 +48,19 @@
         //Formatting request parameter
         REQUEST_PARAMETER : {
             FORMAT: 'format',
-            FACET_EXPRESSION: 'facetexpression'
+            FACET_EXPRESSION: 'facetexpression',
+            SORT_LIST: 'sortlist',
+            GROUP_LIST: 'glist',
+            LIST_DELIMITER: '.',
+            GROUP_DELIMITER: ':'
+        },
+        MILLI : {
+            ONE_SECOND: 1000,
+            ONE_MINUTE: 1000 * 60,
+            ONE_HOUR: 1000 * 60 * 60,
+            ONE_DAY: 1000 * 60 * 60 * 24,
+            ONE_WEEK: 1000 * 60 * 60 * 24 * 7
         }
-
-
     });
 
 }());

@@ -15,6 +15,9 @@ let logger = new Logger();
 let AppHomePageRoute = React.createClass({
     mixins: [FluxMixin],
 
+    contextTypes: {
+        touch: React.PropTypes.bool
+    },
     selectAppId(appId) {
         let flux = this.getFlux();
         flux.actions.selectAppId(appId);
@@ -53,7 +56,7 @@ let AppHomePageRoute = React.createClass({
         // no title for now...
         let flux = this.getFlux();
         flux.actions.showTopNav();
-        flux.actions.setTopTitle(this.getTopTitle());
+        flux.actions.setTopTitle();
         this.selectAppFromParams(this.props.params);
     },
     // Triggered when properties change
@@ -71,8 +74,8 @@ let AppHomePageRoute = React.createClass({
     getStageHeadline() {
         return (this.props.selectedApp &&
             <div className="stageHeadline">
-                <QBicon icon="favicon"/>
-                <h3 className="appName">{this.props.selectedApp.name}</h3>
+
+                <h3 className="appName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedApp.name}</h3>
             </div>
         );
     },
@@ -83,22 +86,18 @@ let AppHomePageRoute = React.createClass({
             </div>);
     },
     render: function() {
-        return (<div className="appHomePageContainer">
-            <Stage stageHeadline={this.getStageHeadline()}
-                   pageActions={this.getPageActions(2)}>
-
-                <div className="app-content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </div>
-
-            </Stage>
-
-            <div className="appHomePageActionsContainer secondaryBar">
-                {this.getSecondaryBar()}
-                {this.getPageActions(2)}
-            </div>
-            <div>App Dashboard goes here...</div>
-        </div>);
+        let isTouch = this.context.touch;
+        return (
+            isTouch ?
+                <div className="appHomePageContainer">
+                    <div className="appHomePageActionsContainer secondaryBar">
+                        {this.getSecondaryBar()}
+                        {this.getPageActions(2)}
+                    </div>
+                    <div className="appHomePageImageContainer"><img className="appHomePageMobileImage"/></div>
+                </div> :
+                <div className="appHomePageImageContainer"><img className="appHomePageImage"/></div>
+        );
     }
 });
 

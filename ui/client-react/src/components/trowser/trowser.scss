@@ -17,9 +17,11 @@ $action-separator-color: #486c8f;
     -webkit-transition: max-height ease 250ms;
     transition: max-height ease 250ms;
     padding:0;
+    visibility:hidden;
 
     &.visible {
         max-height:100%;
+        visibility:visible;
     }
 
     .rightIcons {
@@ -34,12 +36,18 @@ $action-separator-color: #486c8f;
         display:flex;
         align-items:center;
         .qbIcon {
-            font-size:16px;
+            font-size:20px;
             vertical-align: baseline;
         }
         .breadcrumbs {
             flex:1 1 auto;
             margin-left:16px;
+            overflow:hidden;
+            white-space:nowrap;
+            h3 {
+                overflow:hidden;
+                text-overflow:ellipsis;
+            }
         }
         .rightIcons {
             flex: 0 0 auto;
@@ -58,8 +66,9 @@ $action-separator-color: #486c8f;
         }
     }
     .trowserChildren {
+        display:flex;
+        flex-direction:column;
         flex: 1 1 auto;
-        overflow-y:auto;
     }
     .trowserFooter {
         color: #fff;

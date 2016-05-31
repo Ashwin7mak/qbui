@@ -50,7 +50,6 @@ describe('ReportService functions', () => {
         });
     });
 
-
     it('test getReports function', () => {
         var appId = 1;
         var tblId = 2;
@@ -66,15 +65,18 @@ describe('ReportService functions', () => {
         var rptId = 3;
         var url = reportService.constructUrl(reportService.API.GET_REPORT_RESULTS, [appId, tblId, rptId]);
 
-        var formatted = true;
-        var offset = 0;
-        var rows = 10;
-        reportService.getReportData(appId, tblId, rptId, formatted, offset, rows);
+        var queryParams = {};
+        queryParams[query.FORMAT_PARAM] = true;
+        queryParams[query.OFFSET_PARAM] = 0;
+        queryParams[query.NUMROWS_PARAM] = 10;
+        queryParams[query.GLIST_PARAM] = ['1', '2:V'].join('.');
+        reportService.getReportData(appId, tblId, rptId, queryParams);
 
         var params = {};
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-        params[query.OFFSET_PARAM] = offset;
-        params[query.NUMROWS_PARAM] = rows;
+        params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
+        params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
+        params[query.GLIST_PARAM] = queryParams[query.GLIST_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -84,14 +86,15 @@ describe('ReportService functions', () => {
         var rptId = 3;
         var url = reportService.constructUrl(reportService.API.GET_REPORT_RESULTS, [appId, tblId, rptId]);
 
-        var formatted = false;
-        var offset = 0;
-        var rows = 10;
-        reportService.getReportData(appId, tblId, rptId, formatted, offset, rows);
+        var queryParams = {};
+        queryParams[query.FORMAT_PARAM] = false;
+        queryParams[query.OFFSET_PARAM] = 0;
+        queryParams[query.NUMROWS_PARAM] = 10;
+        reportService.getReportData(appId, tblId, rptId, queryParams);
 
         var params = {};
-        params[query.OFFSET_PARAM] = offset;
-        params[query.NUMROWS_PARAM] = rows;
+        params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
+        params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -101,10 +104,11 @@ describe('ReportService functions', () => {
         var rptId = 3;
         var url = reportService.constructUrl(reportService.API.GET_REPORT_RESULTS, [appId, tblId, rptId]);
 
-        var formatted = true;
-        var offset = [];
-        var rows = 10;
-        reportService.getReportData(appId, tblId, rptId, formatted, offset, rows);
+        var queryParams = {};
+        queryParams[query.FORMAT_PARAM] = true;
+        queryParams[query.OFFSET_PARAM] = [];
+        queryParams[query.NUMROWS_PARAM] = 10;
+        reportService.getReportData(appId, tblId, rptId, queryParams);
 
         var params = {};
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
@@ -117,9 +121,10 @@ describe('ReportService functions', () => {
         var rptId = 3;
         var url = reportService.constructUrl(reportService.API.GET_REPORT_RESULTS, [appId, tblId, rptId]);
 
-        var formatted = true;
-        var offset = 0;
-        reportService.getReportData(appId, tblId, rptId, formatted, offset);
+        var queryParams = {};
+        queryParams[query.FORMAT_PARAM] = true;
+        queryParams[query.OFFSET_PARAM] = 0;
+        reportService.getReportData(appId, tblId, rptId, queryParams);
 
         var params = {};
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
@@ -144,15 +149,16 @@ describe('ReportService functions', () => {
         var rptId = 3;
         var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
 
-        var formatted = true;
-        var offset = 0;
-        var rows = 10;
-        reportService.getReportDataAndFacets(appId, tblId, rptId, formatted, offset, rows);
+        var queryParams = {};
+        queryParams[query.FORMAT_PARAM] = true;
+        queryParams[query.OFFSET_PARAM] = 0;
+        queryParams[query.NUMROWS_PARAM] = 10;
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
 
         var params = {};
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-        params[query.OFFSET_PARAM] = offset;
-        params[query.NUMROWS_PARAM] = rows;
+        params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
+        params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -162,14 +168,14 @@ describe('ReportService functions', () => {
         var rptId = 3;
         var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
 
-        var formatted = false;
-        var offset = 0;
-        var rows = 10;
-        reportService.getReportDataAndFacets(appId, tblId, rptId, formatted, offset, rows);
+        var queryParams = {};
+        queryParams[query.OFFSET_PARAM] = 0;
+        queryParams[query.NUMROWS_PARAM] = 10;
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
 
         var params = {};
-        params[query.OFFSET_PARAM] = offset;
-        params[query.NUMROWS_PARAM] = rows;
+        params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
+        params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -179,14 +185,15 @@ describe('ReportService functions', () => {
         var rptId = 3;
         var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
 
-        var formatted = false;
-        var offset = 0;
-        var rows = 10;
-        reportService.getReportDataAndFacets(appId, tblId, rptId, formatted, offset, rows);
+        var queryParams = {};
+        queryParams[query.FORMAT_PARAM] = false;
+        queryParams[query.OFFSET_PARAM] = 0;
+        queryParams[query.NUMROWS_PARAM] = 10;
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
 
         var params = {};
-        params[query.OFFSET_PARAM] = offset;
-        params[query.NUMROWS_PARAM] = rows;
+        params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
+        params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
@@ -196,10 +203,11 @@ describe('ReportService functions', () => {
         var rptId = 3;
         var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
 
-        var formatted = true;
-        var offset = [];
-        var rows = 10;
-        reportService.getReportDataAndFacets(appId, tblId, rptId, formatted, offset, rows);
+        var queryParams = {};
+        queryParams[query.FORMAT_PARAM] = true;
+        queryParams[query.OFFSET_PARAM] = [];
+        queryParams[query.NUMROWS_PARAM] = 10;
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
 
         var params = {};
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
@@ -212,12 +220,100 @@ describe('ReportService functions', () => {
         var rptId = 3;
         var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
 
-        var formatted = true;
-        var offset = 0;
-        reportService.getReportDataAndFacets(appId, tblId, rptId, formatted, offset);
+        var queryParams = {};
+        queryParams[query.FORMAT_PARAM] = true;
+        queryParams[query.OFFSET_PARAM] = 0;
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
 
         var params = {};
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with sortlist', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = "6:V";
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        params[query.SORT_LIST_PARAM] = queryParams[query.SORT_LIST_PARAM];
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with null sortlist', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = null;
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with columns', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.COLUMNS_PARAM] = "6.7";
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        params[query.COLUMNS_PARAM] = queryParams[query.COLUMNS_PARAM];
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with empty columns', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.COLUMNS_PARAM] = "";
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with query', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.QUERY_PARAM] = "'6'.EX.'7'";
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
+        params[query.QUERY_PARAM] = queryParams[query.QUERY_PARAM];
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getReport and facets function with no query', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var url = reportService.constructUrl(reportService.API.GET_REPORT_COMPONENTS, [appId, tblId, rptId]);
+
+        var queryParams = {};
+        queryParams[query.QUERY_PARAM] = [];
+        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams);
+
+        var params = {};
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 

@@ -12,6 +12,8 @@ import FacetsItem from './facetsItem';
 import QBicon from '../qbIcon/qbIcon';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import * as schemaConsts from '../../constants/schema.js';
+import thwartClicksWrapper from '../hoc/thwartClicksWrapper';
+import closeOnEscape from '../hoc/catchEscapeKey';
 
 import './facet.scss';
 import _ from 'lodash';
@@ -41,7 +43,7 @@ var FacetsList = React.createClass({
 
     getDefaultProps() {
         return {
-            isCollapsed() {return false;}
+            isCollapsed() {return false;},
         };
     },
 
@@ -144,13 +146,28 @@ var FacetsList = React.createClass({
      */
     render() {
         let noFacetsMessage = "report.facets.noFacets";
+        const FacetPopover = React.createClass({
+            render() {
+                return <Popover
+                    {...this.props}
+                    {...this.state}
+                />;
+            }
+        });
+        let PopoverWrapped = closeOnEscape(thwartClicksWrapper(FacetPopover));
+
         //TODO get xd specific for handle no facet info returned from server see https://jira.intuit.com/browse/QBSE-19865
         return (
-            <Popover id={this.props.popoverId}
+            <PopoverWrapped id={this.props.popoverId}
+                     handleClickOutside={this.props.hideMenu}
+                     onClose={this.props.hideMenu}
+                     outsideClickIgnoreClass="facetsMenuContainer"
                      arrowOffsetLeft={28}
                      placement="bottom"
                      className="facetMenuPopup"
-                     ref={(thisComponent) => this._facetMenuArea = thisComponent}>
+                     ref="facetMenuPopup"
+                     showMenu={this.props.showMenu}
+            >
                     {this.props.reportData && this.props.reportData.data  &&
                     this.props.reportData.data.facets && (this.props.reportData.data.facets.length > 0) &&
                     this.props.reportData.data.facets[0].values ?
@@ -158,7 +175,7 @@ var FacetsList = React.createClass({
                         <div className="noFacetValues">
                             <I18nMessage message={noFacetsMessage}/>
                         </div>}
-            </Popover>
+            </PopoverWrapped>
         );
     }
 });
