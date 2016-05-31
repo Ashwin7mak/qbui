@@ -35,6 +35,9 @@ import ReportRoute from '../components/report/reportRoute';
 import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
 
+import ComponentLibrary from '../components/componentLibrary/componentLibrary';
+// import ComponentLibraryHome from '../components/componentLibrary/ComponentLibraryHome';
+
 import FastClick from 'fastclick';
 
 let stores = {
@@ -142,6 +145,8 @@ render((
             <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
             <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
         </Route>
+
+        <Route path="/components" component={ComponentLibrary} />
 
     </Router>
 ), document.getElementById('content'));
