@@ -217,9 +217,8 @@ const SelectionColumnCheckBoxFormatter = React.createClass({
         }
     },
 
-    getRecordActions() {
+    render() {
         const record = Locale.getMessage('records.singular');
-
         const actions = [
             {msg: Locale.getMessage('selection.edit') + " " + record, rawMsg: true, className:'edit', icon:'edit', onClick: this.onClickEdit},
             {msg: Locale.getMessage('selection.print') + " " + record, rawMsg: true, className:'print', icon:'print'},
@@ -229,10 +228,6 @@ const SelectionColumnCheckBoxFormatter = React.createClass({
         ];
 
         return (<IconActions dropdownTooltip={false} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />);
-    },
-
-    render() {
-        return this.getRecordActions();
     }
 });
 
