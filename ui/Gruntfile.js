@@ -527,7 +527,7 @@ module.exports = function(grunt) {
         sauce_connect: {
             local: {
                 options: {
-                    username        : 'sbg_qbse',
+                    username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
                     proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,
@@ -538,7 +538,7 @@ module.exports = function(grunt) {
             },
             aws: {
                 options: {
-                    username        : 'sbg_qbse',
+                    username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
                     proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,

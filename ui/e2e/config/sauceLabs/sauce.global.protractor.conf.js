@@ -17,7 +17,7 @@
         // Pass the proxy agent down into Protractor's DriverProvider
         sauceAgent: agent,
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
-        sauceUser           : 'sbg_qbse',
+        sauceUser           : 'QuickBaseNS',
         sauceKey            : process.env.SAUCE_KEY,
         // We have to specify the selenium address to point locally so that we use the tunnel properly
         sauceSeleniumAddress: 'localhost:4445/wd/hub',

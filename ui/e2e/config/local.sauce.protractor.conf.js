@@ -20,11 +20,11 @@
             idleTimeout: '120',
             screenResolution : '1680x1050',
             //shardTestFiles: true,
-            //maxInstances: 5,
+            //maxInstances: 2,
             maxDuration: 10800
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
-        sauceUser           : 'sbg_qbse',
+        sauceUser           : 'QuickBaseNS',
         sauceKey            : process.env.SAUCE_KEY,
         // We have to specify the selenium address to point locally so that we use the tunnel properly
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
