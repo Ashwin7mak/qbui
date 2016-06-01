@@ -501,7 +501,11 @@ let AGGrid = React.createClass({
         checkBoxCol.cellClass = "gridCell selectionCell";
         checkBoxCol.suppressMenu = true;
         checkBoxCol.suppressResize = true;
-        checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
+        if (this.props.showGrouping) {
+            checkBoxCol.width = Math.max(this.getCheckBoxColumnGroupedHeaderWidth(), consts.DEFAULT_CHECKBOX_COL_WIDTH);
+        } else {
+            checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
+        }
         checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxFormatter);
 
         return checkBoxCol;
