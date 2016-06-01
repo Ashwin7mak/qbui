@@ -29,7 +29,6 @@
 
         var headers = req.headers || {};
         var agent = req.useragent || {};
-        var body = req.body || '';
         var ip;
 
         //  try to get the ip address
@@ -61,26 +60,42 @@
         addElement(obj, 'platform', agent.platform);
         addElement(obj, 'ip', ip);
 
-        if (body) {
-            obj.body = body;
+        if (req.body) {
+            if (typeof req.body === 'string') {
+                obj.body = req.body.toString().replace(/"/g, "'");
+            } else {
+                obj.body = req.body;
+            }
         }
 
         return obj;
     }
 
+    //  custom response serializer to include on all messages.  For example, log.info({res:res}, 'some message') will
+    //  trigger the serializer and include the custom output on the message.
+    function resSerializer(res) {
+        var obj = {};
+
+        addElement(obj, res.statusCode);
+        addElement(obj, res.statusMessage);
+
+        if (res.body) {
+            if (typeof res.body === 'string') {
+                obj.body = res.body.toString().replace(/"/g, "'");
+            } else {
+                obj.body = res.body;
+            }
+        }
+
+        return obj;
+    }
+
+    //  Helper method to add an element to the supplied array obj
+    //  only when the element has content.
     function addElement(obj, objName, value) {
         if (value) {
             obj[objName] = value;
         }
-    }
-
-    //  custom response serializer to include on all messages.  For example, log.info({res:res}, 'some message') will
-    //  trigger the serializer and include the custom output on the message.
-    function resSerializer(res) {
-        return {
-            statusCode: res.statusCode,
-            statusMessage: res.statusMessage
-        };
     }
 
     module.exports = {
