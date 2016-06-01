@@ -208,7 +208,7 @@
     /*eslint no-shadow:0 */
     function fetchSingleRecord(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Fetch Single Record', filterNodeReq(req));
+        perfLog.init('Fetch Single Record', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             recordsApi.fetchSingleRecordAndFields(req).then(
@@ -239,7 +239,7 @@
     /*eslint no-shadow:0 */
     function fetchAllRecords(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Fetch All Records', filterNodeReq(req));
+        perfLog.init('Fetch All Records', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             recordsApi.fetchRecordsAndFields(req).then(
@@ -271,7 +271,7 @@
     /*eslint no-shadow:0 */
     function fetchReportComponents(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Fetch Report Components', filterNodeReq(req));
+        perfLog.init('Fetch Report Components', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             reportsApi.fetchReportComponents(req).then(
@@ -304,7 +304,7 @@
     /*eslint no-shadow:0 */
     function fetchReportData(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Fetch Report Data', filterNodeReq(req));
+        perfLog.init('Fetch Report Data', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             reportsApi.fetchReportResults(req).then(
@@ -328,7 +328,7 @@
 
     function resolveFacets(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Resolve Facets', filterNodeReq(req));
+        perfLog.init('Resolve Facets', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             queryFormatter.format(req).then(
@@ -372,7 +372,7 @@
     /*eslint no-shadow:0 */
     function forwardApiRequest(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Forward API Request', filterNodeReq(req));
+        perfLog.init('Forward API Request', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             var opts = requestHelper.setOptions(req);
