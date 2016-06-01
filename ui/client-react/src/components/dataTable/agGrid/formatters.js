@@ -11,6 +11,7 @@ import RowEditActions from './rowEditActions';
 import {DefaultCellEditor, ComboBoxCellEditor, DateCellEditor, DateTimeCellEditor, TimeCellEditor, CheckBoxEditor} from './cellEditors';
 
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
+import './dateTimePicker.scss';
 
 const TextFormat = 1;
 const NumberFormat = 2;

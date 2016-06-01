@@ -40,6 +40,7 @@ $color30:   #193048;
 $color31:   #13dbf1;
 $color32:   #131f2b;
 $color33:   #365ebf; //big-leaf
+$color34:   #00b0c2; //waterpebble
 
 $left-nav-bg: $color30; // deep-sea
 $icon-color: $color23;
@@ -121,3 +122,11 @@ $secondary-bar-page-actions-bg: #476B90;
 
 //== Field labels used on report card view and forms
 $fieldLabel-color: $color3;
+
+
+$datepicker-header-bg: $color34;
+$datepicker-header-fg: $color2;
+$datepicker-date-hover-bg: $color5;
+$datepicker-select-button-fg: $color11;
+$datepicker-select-button-bg: $color3;
+

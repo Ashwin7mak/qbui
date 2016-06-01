@@ -1,0 +1,74 @@
+@import '../../../../src/assets/css/qbVariables';
+
+.bootstrap-datetimepicker-widget.dropdown-menu {
+    background-color:$datepicker-header-bg;
+    padding-bottom:0;
+    padding-top:0;
+
+    .picker-switch {
+        color: $datepicker-select-button-fg;
+        background-color:#fff;
+        &:hover {
+            background-color:$datepicker-date-hover-bg;
+        }
+    }
+
+    .timepicker {
+        background-color: #fff;
+    }
+
+    .btn-primary, td.active  {
+        background-color: $datepicker-header-bg;
+        font-weight:bold;
+        border:0;
+    }
+}
+.bootstrap-datetimepicker-widget.pull-right:after{
+    border-bottom-color:$datepicker-header-bg;
+}
+.datepicker {
+    .table-condensed {
+
+        td,th {
+            border-radius:0;
+        }
+
+        thead {
+            font-size:14px;
+            background-color: #fff;
+            tr:first-child {
+                background-color:  $datepicker-header-bg;
+                color: $datepicker-header-fg;
+            }
+            tr:first-child th {
+                text-decoration: none;
+            }
+            tr:first-child th:hover {
+                background-color:  $datepicker-header-bg;
+                color: $datepicker-header-fg;
+                text-decoration: underline;
+            }
+
+            .glyphicon-chevron-right:before {
+                font-family: "QuickBase-Sturdy";
+                content: "\E90B";
+            }
+            .glyphicon-chevron-left     {
+                transform: rotate(180deg);
+            }
+            .glyphicon-chevron-left:before {
+                font-family: "QuickBase-Sturdy";
+                content: "\E90B";
+            }
+        }
+
+        tbody tr {
+            background-color: #fff;
+
+        }
+        td.day:hover {
+            background-color: $datepicker-date-hover-bg;
+        }
+
+    }
+}
