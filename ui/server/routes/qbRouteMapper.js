@@ -166,7 +166,7 @@
         if (perfLog) {
             perfLog.log();
         }
-        log.error({req: filterNodeReq(req), res:response}, apiName ? 'API ERROR:' + apiName : 'API ERROR');
+        log.error({req: req, res:response}, apiName ? 'API ERROR:' + apiName : 'API ERROR');
     }
 
     /**
