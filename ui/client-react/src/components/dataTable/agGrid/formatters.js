@@ -6,9 +6,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
+import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
-import {DefaultCellEditor, ComboBoxCellEditor, DateCellEditor, DateTimeCellEditor, TimeCellEditor, CheckBoxEditor} from './cellEditors';
+import {DefaultCellEditor, ComboBoxCellEditor, DateCellEditor, DateTimeCellEditor, TimeCellEditor, UserCellEditor, CheckBoxEditor} from './cellEditors';
+import {UserCellRenderer} from './cellRenderers';
+
+import IconActions from '../../actions/iconActions';
 
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
 
@@ -18,6 +22,7 @@ const DateFormat = 3;
 const DateTimeFormat = 4;
 const TimeFormat = 5;
 const CheckBoxFormat = 6;
+const UserFormat = 7;
 
 /**
  * helper function to format date
@@ -62,6 +67,11 @@ const CellFormatter = React.createClass({
                 {this.state.value && <I18nNumber value={this.state.value}></I18nNumber>}
                 </span>;
 
+        case UserFormat:
+            return <span className="cellData">
+                <UserCellRenderer value={this.state.value} />
+                </span>;
+
         case DateFormat:
             return <span className="cellData">
                 {this.state.value && <I18nDate value={this.state.value}></I18nDate>}
@@ -75,20 +85,24 @@ const CellFormatter = React.createClass({
                 </span>;
         }
 
-        case TimeFormat: {
-            let time = formatDate(this.state.value, "h:mm:ss A");
-            return <span className="cellData">
-                {this.state.value && time}
-                </span>;
-        }
+        //case TimeFormat: {
+        //    let time = formatDate(this.state.value, "h:mm:ss A");
+        //    return <span className="cellData">
+        //        {this.state.value && time}
+        //        </span>;
+        //}
         case CheckBoxFormat:
             return <span className="cellData">
                     <input type="checkbox" disabled checked={this.state.value} />{this.state.value}
                 </span>;
 
         default: {
+            let display = this.state.value;
+            if (typeof display === 'object') {
+                display = JSON.stringify(display);
+            }
             return <span className="cellData">
-                {this.state.value}
+                {display}
                 </span>;
         }
         }
@@ -119,6 +133,10 @@ const CellFormatter = React.createClass({
             return <DefaultCellEditor value={this.state.value}
                                       type="number"
                                       onChange={this.cellEdited}/>;
+        }
+        case UserFormat: {
+            return <UserCellEditor value={this.state.value}
+                                   onChange={this.cellEdited}/>;
         }
         default: {
 
@@ -199,7 +217,12 @@ const TextFormatter = React.createClass({
         return  <CellFormatter type={TextFormat} params={this.props.params} />;
     }
 });
+const UserFormatter = React.createClass({
 
+    render: function() {
+        return  <CellFormatter type={UserFormat} params={this.props.params} />;
+    }
+});
 const CheckBoxFormatter = React.createClass({
 
     render: function() {
@@ -207,4 +230,26 @@ const CheckBoxFormatter = React.createClass({
     }
 });
 
-export {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter};
+const SelectionColumnCheckBoxFormatter = React.createClass({
+
+    onClickEdit() {
+        if (this.props.params.context.defaultActionCallback) {
+            this.props.params.context.defaultActionCallback(this.props.params.data);
+        }
+    },
+
+    render() {
+        const record = Locale.getMessage('records.singular');
+        const actions = [
+            {msg: Locale.getMessage('selection.edit') + " " + record, rawMsg: true, className:'edit', icon:'edit', onClick: this.onClickEdit},
+            {msg: Locale.getMessage('selection.print') + " " + record, rawMsg: true, className:'print', icon:'print'},
+            {msg: Locale.getMessage('selection.email') + " " + record, rawMsg: true, className:'email', icon:'mail'},
+            {msg: Locale.getMessage('selection.copy') + " " + record, rawMsg: true, className:'duplicate', icon:'duplicate'},
+            {msg: Locale.getMessage('selection.delete') + " " + record, rawMsg: true, className:'delete', icon:'delete'}
+        ];
+
+        return (<IconActions dropdownTooltip={false} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />);
+    }
+});
+
+export {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter, SelectionColumnCheckBoxFormatter};

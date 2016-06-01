@@ -13,7 +13,10 @@ import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 
-import {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter}  from './formatters';
+import {DateFormatter, DateTimeFormatter, TimeFormatter,
+        NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter,
+        SelectionColumnCheckBoxFormatter}  from './formatters';
+
 import * as GroupTypes from '../../../constants/groupTypes';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -22,15 +25,6 @@ import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 import '../gridWrapper.scss';
 
-
-/**
- * Renderer component for record-actions column.
- */
-let ActionsColumn = React.createClass({
-    render() {
-        return (<div><RecordActions {...this.props}/></div>);
-    }
-});
 
 function buildIconElement(icon) {
     return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
@@ -44,7 +38,7 @@ let gridIcons = {
 let consts = {
     GROUP_HEADER_HEIGHT: 41,
     ROW_HEIGHT: 32,
-    DEFAULT_CHECKBOX_COL_WIDTH: 30,
+    DEFAULT_CHECKBOX_COL_WIDTH: 80,
     GROUP_ICON_PADDING: 10,
     DEFAULT_CELL_PADDING: 8,
     FONT_SIZE: 20,
@@ -281,6 +275,7 @@ let AGGrid = React.createClass({
     },
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
+        this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
 
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
@@ -340,17 +335,21 @@ let AGGrid = React.createClass({
      */
     onRowClicked(params) {
 
+        const target = params.event.target;
+
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {
             params.node.expanded = !params.node.expanded;
             this.api.onGroupExpandedOrCollapsed();
             return;
         }
-        //For click on record action icons or input fields do nothing
-        if (params.event.target &&
-            params.event.target.className.indexOf("qbIcon") !== -1 ||
-            params.event.target.className.indexOf("iconLink") !== -1 ||
-            params.event.target.tagName === "INPUT") {
+        //For click on record action icons or input fields or links or link child elements do nothing
+        if (target &&
+            target.className.indexOf("qbIcon") !== -1 ||
+            target.className.indexOf("iconLink") !== -1 ||
+            target.tagName === "INPUT" ||
+            target.tagName === "A" ||
+            target.parentNode.tagName === "A") {
             return;
         }
 
@@ -497,32 +496,19 @@ let AGGrid = React.createClass({
         };
         checkBoxCol.checkboxSelection = true;
         checkBoxCol.headerClass = "gridHeaderCell";
-        checkBoxCol.cellClass = "gridCell";
+        checkBoxCol.cellClass = "gridCell selectionCell";
         checkBoxCol.suppressMenu = true;
         checkBoxCol.suppressResize = true;
         if (this.props.showGrouping) {
-            checkBoxCol.width = this.getCheckBoxColumnGroupedHeaderWidth();
+            checkBoxCol.width = Math.max(this.getCheckBoxColumnGroupedHeaderWidth(), consts.DEFAULT_CHECKBOX_COL_WIDTH);
         } else {
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
+        checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxFormatter);
 
         return checkBoxCol;
     },
-    /**
-     * Builder for record actions column for the grid.
-     */
-    getActionsColumn() {
-        return {
-            headerName: "",
-            field: "actions",
-            cellRenderer: reactCellRendererFactory(ActionsColumn),
-            cellClass: "gridCell actions",
-            headerClass: "gridHeaderCell",
-            width: 1,
-            suppressMenu: true,
-            suppressResize: true
-        };
-    },
+
     setCSSClass_helper: function(obj, classname) {
         if (typeof (obj.cellClass) === 'undefined') {
             obj.cellClass = classname;
@@ -545,7 +531,7 @@ let AGGrid = React.createClass({
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
-                obj.addEditActions = (index === 1); // EMPOWER: add the row edit component to column 1
+                obj.addEditActions = true;
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
@@ -575,6 +561,11 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(CheckBoxFormatter);
                                 obj.customComponent = CheckBoxFormatter;
                                 break;
+                            case "USER" :
+                                obj.cellRenderer = reactCellRendererFactory(UserFormatter);
+                                obj.customComponent = UserFormatter;
+                                break;
+
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextFormatter);
                                 obj.customComponent = TextFormatter;
@@ -621,14 +612,6 @@ let AGGrid = React.createClass({
 
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
         columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
-
-        // Add Actions column. Put this as the last column in the grid and then make the column 1px wide so it doesnt really "show".
-        // CSS takes care of positioning the content of this column over the previous columns so it looks like an overlay.
-
-        // todo: optimize/refactor actions hover for performance
-        if (columns.length > 0) {
-            columns.push(this.getActionsColumn());
-        }
 
         return columns;
     },
