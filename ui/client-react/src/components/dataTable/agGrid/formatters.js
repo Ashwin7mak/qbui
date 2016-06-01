@@ -76,12 +76,12 @@ const CellFormatter = React.createClass({
                 </span>;
         }
 
-        case TimeFormat: {
-            let time = formatDate(this.state.value, "h:mm:ss A");
-            return <span className="cellData">
-                {this.state.value && time}
-                </span>;
-        }
+        //case TimeFormat: {
+        //    let time = formatDate(this.state.value, "h:mm:ss A");
+        //    return <span className="cellData">
+        //        {this.state.value && time}
+        //        </span>;
+        //}
         case CheckBoxFormat:
             return <span className="cellData">
                     <input type="checkbox" disabled checked={this.state.value} />{this.state.value}
