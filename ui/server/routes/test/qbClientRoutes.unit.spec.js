@@ -1,6 +1,7 @@
 
 var sinon = require('sinon');
 var request = require('supertest');
+var should = require('should');
 
 var log = require('../../logger').getLogger();
 var errors = require('../../components/errors');
@@ -12,7 +13,9 @@ var app = express();
 var mockConfig = {
     routeGroup: routeGroups.DEBUG,
 };
+var assert = require('assert');
 
+var envConsts = require('../../config/environment/environmentConstants');
 require('../../routes')(app, mockConfig);
 
 /*eslint-disable no-invalid-this */
@@ -76,4 +79,17 @@ describe('Express Client Routes', function() {
             expect(200, done);
     });
 
+    it('Validate production base opts', function(done) {
+        var origVal = process.env.NODE_ENV;
+        process.env.NODE_ENV = envConsts.PRODUCTION;
+
+        var testConfig = require('../../config/expressConfig')(app);
+
+        console.log(testConfig);
+        console.log(process.env.NODE_ENV);
+        should.exist(testConfig.walkmeJSSnippet);
+
+        process.env.NODE_ENV = origVal;
+        done();
+    });
 });

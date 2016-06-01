@@ -108,7 +108,7 @@ describe('Express Routes', function() {
     it('Validate unauthorized route', function(done) {
         request(app).
             get('/unauthorized').
-            expect(403).
+            expect(401).
             end(function(err, res) {
                 if (err) {return done(err);}
                 done();
@@ -147,8 +147,8 @@ describe('Express Routes', function() {
 
     it('Validate an forbidden route', function(done) {
         request(app).
-            get('/assets').
-            expect(404).
+            get('/forbidden').
+            expect(403).
             end(function(err, res) {
                 if (err) {return done(err);}
                 done();
