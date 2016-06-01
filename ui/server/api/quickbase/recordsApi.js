@@ -254,7 +254,7 @@
                     // this bypass is for grouping but in ag-grid
                     // change url from .../reports/<id>/reportcomponents?sortList=..
                     // to .../records?sortList=.. because /reports/results api does not support sortList param.
-                    if (inputUrl_toLower.indexOf(constants.REQUEST_PARAMETER.SORT_LIST) !== -1) {
+                    if (inputUrl_toLower.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
                         let reportIndex = inputUrl_toLower.indexOf(REPORTS);
                         let paramsIndex = inputUrl_toLower.indexOf("?"); // get the index for url params starting after ?
                         opts.url = inputUrl.substring(0, reportIndex) + RECORDS + inputUrl.substring(paramsIndex);
