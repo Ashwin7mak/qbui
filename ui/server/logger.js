@@ -136,6 +136,7 @@
 
                 appLogger = logger.child({
                     // custom logger attributes go here..
+                    type: 'NODE'
                 });
 
             }
