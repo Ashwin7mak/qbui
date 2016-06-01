@@ -381,7 +381,7 @@
                     logApiSuccess(req, response, perfLog);
                 })
                 .on('error', function(error) {
-                    logApiFailure(req, response, perfLog);
+                    logApiFailure(req, error, perfLog);
                 })
                 .pipe(res);
         });

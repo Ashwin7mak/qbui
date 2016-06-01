@@ -76,8 +76,9 @@
     function resSerializer(res) {
         var obj = {};
 
-        addElement(obj, res.statusCode);
-        addElement(obj, res.statusMessage);
+        addElement(obj, 'statusCode', res.statusCode);
+        addElement(obj, 'statusMessage', res.statusMessage);
+        addElement(obj, 'message', res.message);
 
         if (res.body) {
             if (typeof res.body === 'string') {
