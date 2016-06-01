@@ -137,7 +137,11 @@
 
         // unauthorized
         app.route('/unauthorized*')
-                .get(errors[403]);
+            .get(errors[401]);
+
+        // forbidden
+        app.route('/forbidden*')
+            .get(errors[403]);
 
         app.route('/pageNotFound*')
                 .get(errors[404]);
