@@ -49,8 +49,7 @@
         REQUEST_PARAMETER : {
             FORMAT: 'format',
             FACET_EXPRESSION: 'facetexpression',
-            SORT_LIST: 'sortlist',
-            SORT_LIST_CAMELCASE: 'sortList',
+            SORT_LIST: 'sortList',
             LIST_DELIMITER: '.',
             GROUP_DELIMITER: ':'
         },
