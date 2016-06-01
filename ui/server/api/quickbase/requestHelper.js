@@ -1,11 +1,12 @@
 (function() {
     'use strict';
 
-    var fs = require('fs');
-    var uuid = require('uuid');
+    let fs = require('fs');
+    let uuid = require('uuid');
     let Promise = require('bluebird');
     let defaultRequest = require('request');
     let log = require('../../logger').getLogger();
+    let perfLogger = require('../../perfLogger');
 
     module.exports = function(config) {
         let request = defaultRequest;
@@ -159,13 +160,12 @@
                     }
                 }
 
-                //  log all requests at info level
-                log.info({req: req});
-
                 return new Promise((resolve, reject) =>{
                     if (immediatelyResolve) {
                         resolve();
                     } else {
+                        let perfLog = perfLogger.getInstance();
+                        perfLog.init("Execute Request", {req:opts});
                         request(opts, function(error, response) {
                             if (error) {
                                 reject(new Error(error));
@@ -174,6 +174,7 @@
                             } else {
                                 resolve(response);
                             }
+                            perfLog.log();
                         });
                     }
                 });

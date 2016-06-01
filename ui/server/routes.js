@@ -114,13 +114,10 @@
         });
 
         //  For all requests:
-        //     -- generate a new Transaction Id(TID) and add to the request header.
         //     -- log the request route.
         //     -- continue matching subsequent routes
-        //
         app.all('*', function(req, res, next) {
-            requestHelper.setTidHeader(req);
-            log.info({req: req});
+            log.info({req: req}, 'Router');
             next();
         });
 
