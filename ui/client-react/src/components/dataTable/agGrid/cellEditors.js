@@ -35,6 +35,17 @@ export const DefaultCellEditor = React.createClass({
 });
 
 /**
+ * placeholder for user picker
+ */
+export const UserCellEditor = React.createClass({
+
+    render() {
+        return <input ref="cellInput"
+                      tabIndex="0"
+                      className="cellEdit"/>;
+    }
+});
+/**
  * combo box cell editor
  */
 export const ComboBoxCellEditor = React.createClass({

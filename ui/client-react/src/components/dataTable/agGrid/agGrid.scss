@@ -54,6 +54,10 @@ $cell-edit-background-edit: #f3f8fe;
         background-color: $header-cell-background-color;
         text-align: left;
 
+        .collapser {
+            position: absolute;
+            right: $grid-default-group-padding - $grid-default-group-padding;
+        }
         .ag-header-cell-label {
             padding: 4px $grid-default-cell-padding 3px $grid-default-cell-padding;
         }
@@ -112,6 +116,55 @@ $cell-edit-background-edit: #f3f8fe;
     .gridHeaderCell.AlignRight, .gridCell.AlignRight {
         text-align: right;
     }
+    .gridCell.selectionCell {
+        overflow:visible;
+        .ag-cell-value {
+            padding: 0;
+            position: absolute;
+            left: 30px;
+            top: 1px;
+
+            .iconActions {
+
+                line-height: inherit;
+                .dropdown-menu a {
+
+                    padding-left:8px;
+                    .qbIcon {
+                        margin-right:6px;
+                        vertical-align:middle;
+                    }
+                }
+                .iconActionButton {
+                    opacity: .2;
+                    transition: opacity 200ms ease-in-out;
+
+                    height: 30px;
+                    width: auto;
+                    background: inherit;
+                    &:hover {
+                        color: $topnav-icon-color;
+                    }
+                }
+                .qbIcon.print {
+                    color: $icon-print-color;
+                }
+                .qbIcon.mail {
+                    color: $icon-mail-color;
+                }
+                .qbIcon.duplicate {
+                    color: $icon-duplicate-color;
+                }
+                .qbIcon.delete {
+                    color: $icon-delete-color;
+                }
+            }
+        }
+        &:hover .ag-cell-value .iconActions .iconActionButton {
+            transition: opacity 200ms ease-in-out;
+            opacity:1;
+        }
+    }
 
     .qbIcon {
         font-size: $grid-group-expand-icon-size;
@@ -167,11 +220,13 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .selectAllCheckbox {
         position: absolute;
-        right: $grid-default-group-padding - $grid-default-group-padding;
+        left: $grid-default-group-padding - $grid-default-group-padding;
     }
     .ag-selection-checkbox {
         position: absolute;
-        right: $grid-default-group-padding + 1;
+        margin:0;
+        left: $grid-default-group-padding + 1;
+        top: $grid-default-group-padding + 1;
     }
 
     .ag-menu-list {
@@ -324,6 +379,11 @@ $cell-edit-background-edit: #f3f8fe;
     display:none;
 }
 
+/* hide datepicker if it's been opened but we're not over that cell */
+.ag-row-selected .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget{
+    display:none !important;
+}
+
 /* last to rows are just for padding */
 .ag-row:last-child {
     visibility:hidden;
@@ -342,6 +402,12 @@ $cell-edit-background-edit: #f3f8fe;
 
 .reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
 
+    .ag-selection-checkbox {
+        top: $grid-default-group-padding + 5
+    }
+    .gridCell.selectionCell .ag-cell-value {
+        display:none; /* hide icons in 1st col */
+    }
     .ag-cell.gridCell {
 
         overflow:visible;
@@ -429,7 +495,7 @@ $cell-edit-background-edit: #f3f8fe;
         }
     }
 
-    .gridCell {
+    .gridCell:hover {
 
         .editTools {
             display:block;
@@ -438,7 +504,6 @@ $cell-edit-background-edit: #f3f8fe;
             box-shadow: 2px 2px 2px $row-box-shadow-color;
             position:absolute;
             top:100%;
-            right:30px;
 
             border-left: 1px solid $row-border-color;
             border-right: 1px solid $row-border-color;
