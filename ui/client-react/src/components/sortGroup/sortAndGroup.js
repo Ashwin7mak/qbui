@@ -161,7 +161,6 @@ const SortAndGroup = React.createClass({
                 this.props.rptId, true, null, null, sortGroupString);
         } else {
             overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-            overrideParams[query.GLIST_PARAM] = sortGroupString;
             flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, overrideParams);
         }
     },
