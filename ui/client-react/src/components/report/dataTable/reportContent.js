@@ -15,6 +15,10 @@ import * as DataTypes from '../../../constants/schema';
 import * as GroupTypes from '../../../constants/groupTypes';
 import Locales from '../../../locales/locales';
 
+//  load and set to use the current locale
+import moment from 'moment';
+moment.locale(Locales.getLocale());
+
 let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -196,6 +200,27 @@ let ReportContent = React.createClass({
                                 groupData.group = this.localizeDate(datePart[0]);
                                 break;
                             }
+                        }
+
+                        // continue to next element in the for loop
+                        continue;
+                    }
+
+                    if (groupField.datatypeAttributes.type === DataTypes.TIME_OF_DAY) {
+                        switch (groupType) {
+                        case GroupTypes.GROUP_TYPE.timeOfDay.equals:
+                        case GroupTypes.GROUP_TYPE.timeOfDay.second:
+                            groupData.group = moment.unix(groupData.group).format("h:mm:ss A");
+                            break;
+                        case GroupTypes.GROUP_TYPE.timeOfDay.minute:
+                            groupData.group = moment.unix(groupData.group).format("h:mm A");
+                            break;
+                        case GroupTypes.GROUP_TYPE.timeOfDay.hour:
+                            groupData.group = moment.unix(groupData.group).format("h:00 A");
+                            break;
+                        case GroupTypes.GROUP_TYPE.timeOfDay.am_pm:
+                            groupData.group = moment.unix(groupData.group).format("A");
+                            break;
                         }
 
                         // continue to next element in the for loop

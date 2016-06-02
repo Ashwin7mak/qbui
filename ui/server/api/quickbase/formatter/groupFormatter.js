@@ -20,7 +20,8 @@
                dataType === constants.CURRENCY ||
                dataType === constants.PERCENT ||
                dataType === constants.RATING ||
-               dataType === constants.DURATION;
+               dataType === constants.DURATION ||
+               dataType === constants.TIME_OF_DAY;
     }
 
     /**
@@ -120,6 +121,24 @@
                 return groupUtils.getDurationInDays(rawDataValue);
             case groupTypes.DURATION.week:
                 return groupUtils.getDurationInWeeks(rawDataValue);
+            }
+            break;
+        case constants.TIME_OF_DAY:
+            var timeZone = consts.UTC_TIMEZONE;
+            if (groupField.useTimezone) {
+                timeZone = groupField.timeZone;
+            }
+            switch (groupType) {
+            case groupTypes.TIME_OF_DAY.equals:
+                return groupUtils.getBySecond(rawDataValue);
+            case groupTypes.TIME_OF_DAY.second:
+                return groupUtils.getBySecond(rawDataValue);
+            case groupTypes.TIME_OF_DAY.minute:
+                return groupUtils.getByMinute(rawDataValue);
+            case groupTypes.TIME_OF_DAY.hour:
+                return groupUtils.getByHour(rawDataValue);
+            case groupTypes.TIME_OF_DAY.am_pm:
+                return groupUtils.getByAmPm(rawDataValue);
             }
             break;
         case constants.EMAIL_ADDRESS:

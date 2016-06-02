@@ -567,6 +567,50 @@ describe('Validate Group Utility functions', function() {
 
         });
 
+        //1464879417 --> jun 02 2016 10:56:57 AM  GMT-0400 (EDT)
+        //1464889938 --> jun 02 2016 01:52:18 PM  GMT-0400 (EDT)
+        describe('time of day tests', function() {
+            var testCases = [
+                {name: 'null input', timeOfDay: null, second:'', minute:'', hour:'', am_pm:''},
+                {name: 'invalid input', timeOfDay: 'bad input', second:'', minute:'', hour:'', am_pm:''},
+                {name: 'AM time - numeric', timeOfDay: 1464879417, second:'1464879417', minute:'1464879360', hour:'1464876000', am_pm:'1464840000'},
+                {name: 'PM time - string', timeOfDay: '1464889938', second:'1464889938', minute:'1464889920', hour:'1464886800', am_pm:'1464926399'}
+            ];
+
+            describe('validate time of day second tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        assert.equal(groupUtils.getBySecond(test.timeOfDay), test.second);
+                    });
+                });
+            });
+
+            describe('validate time of day minute tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        assert.equal(groupUtils.getByMinute(test.timeOfDay), test.minute);
+                    });
+                });
+            });
+
+            describe('validate time of day hour tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        assert.equal(groupUtils.getByHour(test.timeOfDay), test.hour);
+                    });
+                });
+            });
+
+            describe('validate time of day AmPm tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        assert.equal(groupUtils.getByAmPm(test.timeOfDay), test.am_pm);
+                    });
+                });
+            });
+
+        });
+
 
         describe('validate negative test cases against date functions', function() {
             //  negative test cases against all of the implemented date functions
@@ -660,6 +704,31 @@ describe('Validate Group Utility functions', function() {
                 {name: 'duration missing group type', dataType: constants.DURATION, groupType: null, expectation: false},
                 {name: 'duration empty group type', dataType: constants.DURATION, groupType: '', expectation: false},
                 {name: 'duration invalid group type', dataType: constants.DURATION, groupType: groupTypes.TEXT.firstLetter, expectation: false}
+            ];
+            validGroupTypeTestCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
+                });
+            });
+            invalidGroupTypeTestCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
+                });
+            });
+        });
+
+        describe('validate TIME_OF_DAY group types', function() {
+            var validGroupTypeTestCases = [
+                {name: 'timeOfDay equals', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TIME_OF_DAY.equals, expectation: true},
+                {name: 'timeOfDay second', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TIME_OF_DAY.second, expectation: true},
+                {name: 'timeOfDay minute', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TIME_OF_DAY.minute, expectation: true},
+                {name: 'timeOfDay hour', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TIME_OF_DAY.hour, expectation: true},
+                {name: 'timeOfDay week', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TIME_OF_DAY.am_pm, expectation: true}
+            ];
+            var invalidGroupTypeTestCases = [
+                {name: 'timeOfDay missing group type', dataType: constants.TIME_OF_DAY, groupType: null, expectation: false},
+                {name: 'timeOfDay empty group type', dataType: constants.TIME_OF_DAY, groupType: '', expectation: false},
+                {name: 'timeOfDay invalid group type', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TEXT.firstLetter, expectation: false}
             ];
             validGroupTypeTestCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
@@ -780,7 +849,6 @@ describe('Validate Group Utility functions', function() {
                 {name: 'CHECKBOX', dataType: constants.CHECKBOX},
                 {name: 'FILE_ATTACHMENT', dataType: constants.FILE_ATTACHMENT},
                 {name: 'PHONE_NUMBER', dataType: constants.PHONE_NUMBER},
-                {name: 'TIME_OF_DAY', dataType: constants.TIME_OF_DAY},
                 {name: 'URL', dataType: constants.URL}
             ];
 

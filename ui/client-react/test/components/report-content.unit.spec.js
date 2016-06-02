@@ -274,6 +274,47 @@ describe('ReportContent grouping functions', () => {
         });
     });
 
+    var groupByTimeOfDayCases = [
+        {name: 'null duration', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 1, expected: 'groupHeader.empty'},
+        {name: 'empty duration', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 1, expected: 'groupHeader.empty'},
+        //  group by an AM time
+        {name: 'valid equal timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.equals, group: '1464879417', localeMessageSpy: 0, expected: '10:56:57 AM'},
+        {name: 'valid second timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.second, group: '1464879417', localeMessageSpy: 0, expected: '10:56:57 AM'},
+        {name: 'valid minute timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.minute, group: '1464879360', localeMessageSpy: 0, expected: '10:56 AM'},
+        {name: 'valid hour timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.hour, group: '1464876000', localeMessageSpy: 0, expected: '10:00 AM'},
+        {name: 'valid AmPm timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '1464840000', localeMessageSpy: 0, expected: 'AM'},
+        //  group by a PM time
+        {name: 'valid equal timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.equals, group: '1464889938', localeMessageSpy: 0, expected: '1:52:18 PM'},
+        {name: 'valid second timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.second, group: '1464889938', localeMessageSpy: 0, expected: '1:52:18 PM'},
+        {name: 'valid minute timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.minute, group: '1464889920', localeMessageSpy: 0, expected: '1:52 PM'},
+        {name: 'valid hour timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.hour, group: '1464886800', localeMessageSpy: 0, expected: '1:00 PM'},
+        {name: 'valid AmPm timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '1464926399', localeMessageSpy: 0, expected: 'PM'}
+    ];
+
+    groupByTimeOfDayCases.forEach(function(test) {
+        it('Test case: ' + test.name, function() {
+            let reportData = _.cloneDeep(fakeReportGroupData_template);
+
+            reportData.data.groupFields[0].field.datatypeAttributes.type = DataTypes.TIME_OF_DAY;
+            reportData.data.groupFields[0].groupType = test.groupType;
+            reportData.data.filteredRecords[0].group = test.group;
+            reportData.data.filteredRecords[0].localized = false;
+
+            component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                    reportData={reportData} reportHeader={header_empty}/>);
+
+            //  validate the returned grouped header
+            expect(reportData.data.filteredRecords[0].group).toEqual(test.expected);
+
+            //  validate whether the locale.getMessage method is called
+            expect(localeGetMessageSpy.calls.count()).toEqual(test.localeMessageSpy);
+
+            //  localize number and date should not be called for time of day
+            expect(localizeNumberSpy.calls.count()).toEqual(0);
+            expect(localizeDateSpy.calls.count()).toEqual(0);
+        });
+    });
+
     var groupByTextCases = [
         {name: 'null text', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 1, expected: 'groupHeader.empty'},
         {name: 'empty text', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 1, expected: 'groupHeader.empty'},

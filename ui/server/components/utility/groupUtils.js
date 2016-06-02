@@ -77,6 +77,15 @@
                 case groupTypes.DURATION.day: return true;
                 }
                 return false;
+            case constants.TIME_OF_DAY:
+                switch (groupType) {
+                case groupTypes.TIME_OF_DAY.equals: return true;
+                case groupTypes.TIME_OF_DAY.second: return true;
+                case groupTypes.TIME_OF_DAY.minute: return true;
+                case groupTypes.TIME_OF_DAY.hour: return true;
+                case groupTypes.TIME_OF_DAY.am_pm: return true;
+                }
+                return false;
             case constants.EMAIL_ADDRESS:
                 switch (groupType) {
                 case groupTypes.EMAIL_ADDRESS.equals: return true;
@@ -122,6 +131,75 @@
 
             return false;
 
+        },
+
+        /**
+         * For the given unix epoch time, round down to the nearest hour.
+         *
+         * @param timeOfDay - ms since unix epoch
+         * @returns {*}
+         */
+        getByHour: function(timeOfDay) {
+            if (timeOfDay) {
+                let momentDate = moment.unix(timeOfDay);
+                if (momentDate.isValid()) {
+                    return momentDate.startOf('hour').unix();
+                }
+            }
+            return '';
+        },
+
+        /**
+         * For the given unix epoch time, round down to the nearest minute.
+         *
+         * @param timeOfDay - ms since unix epoch
+         * @returns {*}
+         */
+        getByMinute: function(timeOfDay) {
+            if (timeOfDay) {
+                let momentDate = moment.unix(timeOfDay);
+                if (momentDate.isValid()) {
+                    return momentDate.startOf('minute').unix();
+                }
+            }
+            return '';
+        },
+
+        /**
+         * For the given unix epoch time, round down to the nearest second.
+         *
+         * @param timeOfDay - ms since unix epoch
+         * @returns {*}
+         */
+        getBySecond: function(timeOfDay) {
+            if (timeOfDay) {
+                let momentDate = moment.unix(timeOfDay);
+                if (momentDate.isValid()) {
+                    return momentDate.startOf('second').unix();
+                }
+            }
+            return '';
+        },
+
+        /**
+         * Return the start of the day(12:00am) if the timeOfDay is in the AM;
+         * otherwise, return the end of the day(11:59pm).
+         *
+         * @param timeOfDay
+         * @returns {*}
+         */
+        getByAmPm: function(timeOfDay) {
+            if (timeOfDay) {
+                let momentDate = moment.unix(timeOfDay);
+                if (momentDate.isValid()) {
+                    if (momentDate.format("A") === 'AM') {
+                        return moment.unix(timeOfDay).startOf('day').unix();
+                    } else {
+                        return moment.unix(timeOfDay).endOf('day').unix();
+                    }
+                }
+            }
+            return '';
         },
 
         /**
