@@ -95,7 +95,7 @@ let IconActions = React.createClass({
         }
 
         return (
-            <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
+            <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} rootClose>
 
                 {dropdownTrigger}
                 <Dropdown.Menu onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit}>
