@@ -70,7 +70,13 @@
                             resolve(response);
                         },
                         (error) => {
-                            log.error("Error getting report results in fetchReportResults: " + error.message);
+                            let errorMsg = 'Error undefined';
+                            if (error) {
+                                if (error.body) {
+                                    errorMsg = error.body ? error.body.replace(/"/g, "'") : error.statusMessage;
+                                }
+                            }
+                            log.error("Error getting report results in fetchReportResults: " + errorMsg);
                             reject(error);
                         }
                     ).catch((ex) => {
@@ -92,7 +98,7 @@
                             resolve1(resultsResponse);
                         },
                         (error) => {
-                            log.error("Error getting report results in fetchReportComponents: " + error.message);
+                            // no need to generate an error message as it's logged in fetchReportResults
                             reject1(error);
                         }
                     ).catch((ex) => {

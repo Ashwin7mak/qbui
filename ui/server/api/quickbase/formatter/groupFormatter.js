@@ -8,7 +8,6 @@
     var constants = require('../../constants');
     var groupTypes = require('../../groupTypes');
     var log = require('../../../logger').getLogger();
-    var perfLogger = require('../../../perfLogger');
     var lodash = require('lodash');
     var groupUtils = require('../../../components/utility/groupUtils');
     var dateFormatter = require('../../../api/quickbase/formatter/dateTimeFormatter');
@@ -36,8 +35,6 @@
         let data = [];
 
         if (groupFields && fields && records) {
-            let perfLog = perfLogger.getInstance();
-            perfLog.init('Time to createGroupDataGrid');
 
             let map = new Map();
             let groupMap = new Map();
@@ -71,7 +68,7 @@
             });
 
             data = groupTheData(groupFields, reportData, 0);
-            perfLog.log();
+
         }
 
         return data;
@@ -307,9 +304,6 @@
                 //
                 let groupList = req.param(constants.REQUEST_PARAMETER.SORT_LIST);
                 if (groupList) {
-                    let perfLog = perfLogger.getInstance();
-                    perfLog.init("Time to build groupList: " + groupList + "; Number of fields: " + fields.length + "; Number of records: " + records.length);
-
                     //  build a fields map for quick field access when looping through the groups list.
                     let map = new Map();
                     fields.forEach((field) => {
@@ -385,7 +379,6 @@
                             groupBy.totalRows = records.length;
                         }
                     }
-                    perfLog.log();
                 }
             }
 

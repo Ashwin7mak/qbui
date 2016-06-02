@@ -23,9 +23,12 @@
     //  custom request serializer to include on all messages.  For example, log.info({req:req}, 'some message') will
     //  trigger the serializer and include the custom output on the message.
     function reqSerializer(req) {
+        if (!req) {
+            return {};
+        }
+
         var headers = req.headers || {};
         var agent = req.useragent || {};
-        var body = req.body || {};
         var ip;
 
         //  try to get the ip address
@@ -44,27 +47,46 @@
             }
         }
 
-        return {
-            method: req.method,
-            url: req.url,
-            host: headers.host,
-            sid: headers.sid,
-            tid: headers.tid,
-            browser: agent.source,
-            platform: agent.platform,
-            referer: headers.referer,
-            ip: ip,
-            body: body
-        };
+        var obj = {};
+
+        //  only include in log message if defined
+        addElement(obj, 'method', req.method);
+        addElement(obj, 'url', req.url);
+        addElement(obj, 'host', headers.host);
+        addElement(obj, 'sid', headers.sid);
+        addElement(obj, 'tid', headers.tid);
+        addElement(obj, 'referer', headers.referer);
+        addElement(obj, 'browser', agent.source);
+        addElement(obj, 'platform', agent.platform);
+        addElement(obj, 'ip', ip);
+        addElement(obj, 'body', req.body);
+
+        return obj;
     }
 
     //  custom response serializer to include on all messages.  For example, log.info({res:res}, 'some message') will
     //  trigger the serializer and include the custom output on the message.
     function resSerializer(res) {
-        return {
-            statusCode: res.statusCode,
-            statusMessage: res.statusMessage
-        };
+        var obj = {};
+
+        addElement(obj, 'statusCode', res.statusCode);
+        addElement(obj, 'statusMessage', res.statusMessage);
+        addElement(obj, 'message', res.message);
+        addElement(obj, 'body', res.body);
+
+        return obj;
+    }
+
+    //  Helper method to add an element to the supplied array obj
+    //  only when the element has content.
+    function addElement(obj, objName, value) {
+        if (value) {
+            if (typeof value === 'string') {
+                obj[objName] = value.replace(/"/g, "'");
+            } else {
+                obj[objName] = value;
+            }
+        }
     }
 
     module.exports = {
@@ -104,6 +126,7 @@
 
                 appLogger = logger.child({
                     // custom logger attributes go here..
+                    type: 'NODE'
                 });
 
             }
