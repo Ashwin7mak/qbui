@@ -68,10 +68,10 @@ const CellFormatter = React.createClass({
                 {this.state.value && <I18nNumber value={this.state.value}></I18nNumber>}
                 </span>;
 
-        case UserFormat:
-            return <span className="cellData">
-                <UserCellRenderer value={this.state.value} />
-                </span>;
+        //case UserFormat:
+        //    return <span className="cellData">
+        //        <UserCellRenderer value={this.state.value} />
+        //        </span>;
 
         case DateFormat:
             return <span className="cellData">
