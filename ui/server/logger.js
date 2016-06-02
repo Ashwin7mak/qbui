@@ -59,14 +59,7 @@
         addElement(obj, 'browser', agent.source);
         addElement(obj, 'platform', agent.platform);
         addElement(obj, 'ip', ip);
-
-        if (req.body) {
-            if (typeof req.body === 'string') {
-                obj.body = req.body.toString().replace(/"/g, "'");
-            } else {
-                obj.body = req.body;
-            }
-        }
+        addElement(obj, 'body', req.body);
 
         return obj;
     }
@@ -79,14 +72,7 @@
         addElement(obj, 'statusCode', res.statusCode);
         addElement(obj, 'statusMessage', res.statusMessage);
         addElement(obj, 'message', res.message);
-
-        if (res.body) {
-            if (typeof res.body === 'string') {
-                obj.body = res.body.toString().replace(/"/g, "'");
-            } else {
-                obj.body = res.body;
-            }
-        }
+        addElement(obj, 'body', res.body);
 
         return obj;
     }
@@ -95,7 +81,11 @@
     //  only when the element has content.
     function addElement(obj, objName, value) {
         if (value) {
-            obj[objName] = value;
+            if (typeof value === 'string') {
+                obj[objName] = value.replace(/"/g, "'");
+            } else {
+                obj[objName] = value;
+            }
         }
     }
 

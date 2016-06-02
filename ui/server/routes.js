@@ -87,7 +87,7 @@
                             if (req) {
                                 //  for client logging, since we are posting to the node logging endpoint, clear out theses variables
                                 //  as they contain node logging endpoint info, which is confusing when viewing a client message in the
-                                //  log output.
+                                //  log output.  By initializing to empty, the value will not display in the log message.
                                 req.url = '';
                                 req.method = '';
                                 req.body = '';
