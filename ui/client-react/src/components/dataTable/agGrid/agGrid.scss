@@ -129,10 +129,30 @@ $cell-edit-background-edit: #f3f8fe;
                 line-height: inherit;
                 .dropdown-menu a {
 
-                    padding-left:8px;
+                    padding-left:4px;
                     .qbIcon {
                         margin-right:6px;
                         vertical-align:middle;
+                        width:28px;
+                        padding:4px;
+                    }
+
+                    &:hover {
+                        .qbIcon {
+                            color: #fff;
+                        }
+                        .qbIcon.print {
+                            background-color: $icon-print-color;
+                        }
+                        .qbIcon.email {
+                            background-color: $icon-mail-color;
+                        }
+                        .qbIcon.duplicate {
+                            background-color: $icon-duplicate-color;
+                        }
+                        .qbIcon.delete {
+                            background-color: $icon-delete-color;
+                        }
                     }
                 }
                 .iconActionButton {
@@ -149,7 +169,7 @@ $cell-edit-background-edit: #f3f8fe;
                 .qbIcon.print {
                     color: $icon-print-color;
                 }
-                .qbIcon.mail {
+                .qbIcon.email {
                     color: $icon-mail-color;
                 }
                 .qbIcon.duplicate {
@@ -440,7 +460,9 @@ $cell-edit-background-edit: #f3f8fe;
                 flex:1 1 auto;
                 padding:0 0 0 2px;
                 margin-right:2px;
-
+                .glyphicon {
+                    color: $icon-color;
+                }
                 &.dateTimeField>* {
                     border:0;
                     .input-group.date input.form-control {
@@ -464,6 +486,7 @@ $cell-edit-background-edit: #f3f8fe;
                     margin-right:0;
                     padding-right:0;
                     border-right:0;
+
                     >input {
                         flex:1 1 auto;
                         border-radius:0;
