@@ -543,7 +543,7 @@ module.exports = function(grunt) {
                     proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,
                     verbose         : grunt.option('verbose') === true,
-                    logger          : console.log,
+                    logger          : console.log
                 }
             }
         },

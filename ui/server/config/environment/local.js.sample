@@ -1,4 +1,3 @@
-
 // Local configuration
 // ===========================
 
@@ -50,32 +49,28 @@
 
         //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.intuit.com:8443',
-        javaHost: 'http://localhost.intuit.com:8080',
+        javaHost: 'http://quickbase-dev:8080',
         //javaHost: 'http://localhost:8080',
-        isMockServer : false,
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443',
-        DOMAIN: 'http://localhost.intuit.com:9000',
+        DOMAIN: 'http://quickbase-dev:9000',
         //DOMAIN  : 'http://localhost:9000',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
 
-        //set false if you don't want growl notifications on webpack / watch updates
-        growlNotify: true,
-
         //Node's understanding of a grouping of routes to be enabled/disabled
         routeGroup: routeGroups.DEBUG,
 
         //set notHotLoad true to disable hotloading
-        //noHotLoad : true,
+        noHotLoad : true,
 
         // the client to use
-        client : client,
+        client: clientConsts.REACT,
 
         // walkme java script
-        walkmeJSSnippet : ''
+        //walkmeJSSnippet : 'https://cdn.walkme.com/users/897ca46385a543cbbeaffbc655cdf312/test/walkme_897ca46385a543cbbeaffbc655cdf312_https.js'
 
     };
 }());

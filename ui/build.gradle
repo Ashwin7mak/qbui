@@ -96,7 +96,7 @@ if(System.getProperty("endpoint")) {
 def instanceId = System.getenv("INSTANCE_ID");
 def executorId = System.getenv("EXECUTOR_NUMBER");
 //def sauceURL = "https://localhost."+ instanceId + "-" + executorId + ".slave.ci.quickbaserocks.com";
-def sauceURL = "http://localhost:9000";
+def sauceURL = "http://quickbase-dev.com:9000";
 def sauceKey = System.getenv("SAUCE_KEY");
 def sauceJobName = "JENKINS_UI_E2E_" + System.getenv("BUILD_NUMBER");
 def tunnelIdentifier = "JENKINS_TUNNEL_E2E_" + System.getenv("BUILD_NUMBER");
@@ -447,7 +447,7 @@ task gruntE2EAWSSauce(type: GruntTask) {
     doFirst {
         tasks.invokeInstallSauceLabs.execute()
         tasks.invokeCheckForApiUp.execute()
-        args = ["test:e2eAWSSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
+        args = ["test:e2eLocalSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
     dependsOn startTomcat
     finalizedBy stopTomcat
