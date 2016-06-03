@@ -112,14 +112,17 @@
         }
 
         /* insert our icons */
-        th.next:before, th.prev:after {
+        th.next:after, th.prev:after {
             font-family: "QuickBase-Sturdy";
             content: "\E90B";
             font-size: 22px;
             color: #fff;
         }
-        th.next:hover:before, th.prev:hover:after {
+        th.next:hover:after, th.prev:hover:after {
             color: $datepicker-select-button-fg;
+        }
+        th.next {
+            padding-bottom:0;
         }
         th.prev {
             /* flip the next icon around */

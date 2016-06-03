@@ -456,16 +456,14 @@ $cell-edit-background-edit: #f3f8fe;
                 flex:1 1 auto;
                 padding:0 0 0 2px;
                 margin-right:2px;
-                .glyphicon {
-                    color: $icon-color;
-                }
+
                 &.dateTimeField>* {
                     border:0;
                     .input-group.date input.form-control {
                         border:0;
                         padding:0;
                         font-size: 12px;
-                        height: 21px;
+                        height: 25px;
                         border-radius:0;
                     }
                     .input-group.date .input-group-addon {
@@ -473,6 +471,8 @@ $cell-edit-background-edit: #f3f8fe;
                         height:21px;
                         padding:0;
                         border:0;
+                        color: $icon-color;
+
                     }
                 }
                 &.input-group {
