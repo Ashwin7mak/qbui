@@ -49,13 +49,13 @@
 
         //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.intuit.com:8443',
-        javaHost: 'http://quickbase-dev:8080',
-        //javaHost: 'http://localhost:8080',
+        //javaHost: 'http://quickbase-dev:8080',
+        javaHost: 'http://localhost:8080',
 
         //Express Server
         //DOMAIN: 'https://localhost.intuit.com:9443',
-        DOMAIN: 'http://quickbase-dev:9000',
-        //DOMAIN  : 'http://localhost:9000',
+        //DOMAIN: 'http://quickbase-dev:9000',
+        DOMAIN  : 'http://localhost:9000',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
