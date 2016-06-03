@@ -27,13 +27,14 @@ class QBPanel extends React.Component {
 
     render() {
         let panelId = this.props.panelNum && ("panelId" + this.props.panelNum); // ID is optional
-
+        let icon = (this.props.iconRight ? "iconRight" : "iconLeft");
+        let iconClass = (this.state.open ? "qbPanelHeaderIcon rotateDown " : "qbPanelHeaderIcon rotateUp ") + icon;
         return (
-            <div className={"qbPanel " + (this.props.iconRight ? "iconRight" : "iconLeft") } id={panelId}>
+            <div className="qbPanel" id={panelId}>
                 <div className="qbPanelHeader" >
                     <h3 className="qbPanelHeaderTitle">
                         <div className="qbPanelHeaderTitleText">{this.props.title}</div>
-                        <QBicon icon="caret-right" onClick={this.toggleOpen} className={this.state.open ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
+                        <QBicon icon="caret-right" onClick={this.toggleOpen} className={iconClass}/>
                     </h3>
                 </div>
                 <Panel collapsible expanded={this.state.open}>

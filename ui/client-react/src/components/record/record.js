@@ -8,9 +8,7 @@ let Record = React.createClass({
 
     render: function() {
         return (
-            <div className="formContainer">
-                <QBForm formData={this.props.formData}></QBForm>
-            </div>
+            <QBForm formData={this.props.formData}></QBForm>
         );
     }
 });

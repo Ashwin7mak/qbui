@@ -1230,7 +1230,10 @@ export const sampleFormJSON = {
                                 "useAlternateLabel": false,
                                 "readOnly": false,
                                 "required": false,
-                                "fieldId": 2
+                                "fieldId": 2,
+                                "fieldLabel": "testLabel2",
+                                "fieldValue": 123,
+                                "fieldType": "NUMERIC"
                             }
                         },
                         "1": {

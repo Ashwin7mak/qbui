@@ -11,59 +11,29 @@ import './tabs.scss';
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
  */
 class QBForm extends React.Component {
-
     constructor(...args) {
         super(...args);
-        this.state = this.initState(...args);
     }
-
-    initState() {
-        let initialState = {
-           // "externalData": this.props.formData,
-            readonly : true
-        };
-        return initialState;
-    }
-
-    //createCheckBox(curElement) {
-    //    return (
-    //        <input type="checkbox" className="fieldValue" disabled={this.state.readonly} checked={curElement.value}></input>
-    //    );
-    //}
-    //
-    //createSpan(curElement) {
-    //    return (
-    //        <span className="fieldValue">{curElement.value}</span>
-    //    );
-    //}
-    //
-    //createField(curElement) {
-    //    let isCheckbox = curElement.type === "checkbox";
-    //    return (
-    //        <div key={curElement.id} className="field">
-    //            <h5><small className={"fieldLabel"}>{curElement.name}</small></h5>
-    //            {isCheckbox ? this.createCheckBox(curElement) : this.createSpan(curElement)}
-    //        </div>
-    //    );
-    //}
-    createFieldElement(element, labelPosition) {
+    createFieldElement(element, sectionIndex, labelPosition) {
         let fieldLabel = element.fieldLabel ? element.fieldLabel : "test label";
         let fieldValue = element.fieldValue ? element.fieldValue : "test value";
+        let key = "field" + sectionIndex + "-" + element.orderIndex;
         return (
-            <div key={element.orderIndex} className="field">
+            <div key={key} className="field">
                 <h5><small className={"fieldLabel"}>{fieldLabel}</small></h5>
                 <span className="fieldValue">{fieldValue}</span>
             </div>
         );
     }
-    createTextElement(element) {
-        return <div className="textElement">{element.displayText}</div>;
+    createTextElement(element, sectionIndex) {
+        let key = "field" + sectionIndex + "-" + element.orderIndex;
+        return <div key={key} className="field textElement">{element.displayText}</div>;
     }
     createRow(fields) {
         return <div className="fieldRow">{fields}</div>;
     }
 
-    createSection(section, index) {
+    createSection(section) {
         let sectionTitle = "";
         let fieldLabelPosition = "";
 
@@ -74,33 +44,31 @@ class QBForm extends React.Component {
         }
 
         //build each of the elements
-        let fieldElements = [];
-        let textElement = "";
+        let elements = [];
         _.each(section.elements, (element) => {
             if (element.FormTextElement) {
-                textElement = this.createTextElement(element.FormTextElement);
+                elements.push(this.createTextElement(element.FormTextElement, section.orderIndex));
             } else if (element.FormFieldElement) {
-                fieldElements.push(this.createFieldElement(element.FormFieldElement, fieldLabelPosition));
+                elements.push(this.createFieldElement(element.FormFieldElement, section.orderIndex, fieldLabelPosition));
             }  else {
                 //log error
             }
         });
 
         return (
-            <QBPanel title={sectionTitle} key={section.orderIndex} isOpen={true} panelNum={section.orderIndex}>
-                {this.createRow(textElement)}
-                {this.createRow(fieldElements)}
+            <QBPanel title={sectionTitle} key={"section" + section.orderIndex} isOpen={true} panelNum={section.orderIndex}>
+                {this.createRow(elements)}
             </QBPanel>
         );
     }
 
-    createTab(tab, index) {
+    createTab(tab) {
         let sections = [];
         _.each(tab.sections, (section, idx) => {
-            sections.push(this.createSection(section, idx));
+            sections.push(this.createSection(section));
         });
         return (
-            <TabPane key={tab.orderIndex} tab={tab.title}>
+            <TabPane key={"tab" + tab.orderIndex} tab={tab.title}>
                 <br/>
                 {sections}
             </TabPane>
@@ -111,7 +79,7 @@ class QBForm extends React.Component {
         let tabs = [];
         if (this.props.formData && this.props.formData.tabs) {
             _.each(this.props.formData.tabs, (tab, index) => {
-                tabs.push(this.createTab(tab, index));
+                tabs.push(this.createTab(tab));
             });
         }
         return (

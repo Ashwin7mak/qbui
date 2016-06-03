@@ -15,8 +15,9 @@
         padding: 5px 0;
 
         .field {
-            //top right bottom left
-            padding: 0 35px 20px 0;
+            margin: 0 35px 20px 0;
+            word-wrap: break-word;
+            max-width: 100%;
             .fieldLabel {
                 display: block;
                 color: $fieldLabel-color;
@@ -50,15 +51,6 @@
             .fieldValue {
                 font-size: $font-size-small;
             }
-        }
-    }
-}
-
-/* For tablet like devices: */
-@include medium-breakpoint {
-    .qbPanelBody {
-        .field {
-            max-width: 60%;
         }
     }
 }

@@ -38,92 +38,61 @@ h5 {
  * Custom css classes for our QBPanel component
 */
 .qbPanel {
-    margin:2px 2px 6px 2px;
+    margin: 2px 2px 6px 2px;
     font-family: $font-family;
     color: $font-color;
     font-size: $font-size;
     -webkit-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
     -moz-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
     box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
-}
-
-.qbPanelHeader {
-    padding: 5px 10px 5px 10px;
-    cursor: pointer;
-    min-width: 30%;
-    background-color: $panel-background-color;
-}
-
-.qbPanelHeaderTitle {
-    position:relative;
-    padding: 10px 0 10px 0;
-}
-
-.qbPanel.iconRight {
-    .qbPanelHeaderIcon {
-        position:absolute;
-        right:4px;
-        top:14px;
-    }
-}
-
-.qbPanel.iconLeft {
     .qbPanelHeaderIcon {
         position: absolute;
-        left: 4px;
         top: 14px;
     }
-    .qbPanelHeaderTitleText, .panel {
-        margin-left:30px;
+    .iconLeft {
+        left: 4px;
     }
-}
+    .iconRight {
+        right: 4px;
+    }
+    .qbPanelHeader {
+        padding: 5px 10px 5px 10px;
+        cursor: pointer;
+        min-width: 30%;
+        background-color: $panel-background-color;
 
-.qbPanelHeaderIcon {
-    color: $panel-header-icon-color;
-}
-.qbPanelHeaderIcon:hover {
-    color: $panel-header-icon-hover-color;
-}
-
-.qbPanelBody {
-    padding: 0 10px 10px 10px;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-}
-
-.rotateDown {
-    transition: all .25s linear;
-    transform: rotate(90deg);
-    font-size: 16px;
-    width:auto;
-}
-
-.rotateUp {
-    transition: all .25s linear;
-    transform: rotate(0deg);
-    font-size: 16px;
-    width:auto;
-}
-
-.fieldRow {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    flex-wrap: wrap;
-    padding: 5px 0;
-
-    .field {
-        //top right bottom left
-        padding: 0 35px 20px 0;
-        .fieldLabel {
-            display: block;
-            color: $fieldLabel-color;
-            padding-bottom: 2px;
+        .qbPanelHeaderTitle {
+            position: relative;
+            padding: 10px 0 10px 0;
+            .qbPanelHeaderTitleText {
+                margin-right: 30px;
+                word-wrap: break-word;
+            }
+            .rotateDown {
+                transition: all .25s linear;
+                transform: rotate(90deg);
+                font-size: 16px;
+                width: auto;
+            }
+            .rotateUp {
+                transition: all .25s linear;
+                transform: rotate(0deg);
+                font-size: 16px;
+                width: auto;
+            }
         }
-        .fieldValue {
-            display: block;
-            min-width: 0;
+    }
+
+    .qbPanelBody {
+        padding: 0 10px 10px 10px;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        .qbPanelHeaderIcon {
+            color: $panel-header-icon-color;
+        }
+        .qbPanelHeaderIcon:hover {
+            color: $panel-header-icon-hover-color;
         }
     }
 }
@@ -136,13 +105,7 @@ h5 {
 
 @include small-breakpoint {
     .qbPanel {
-
         font-size: $font-size;
-        .qbPanelBody {
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-        }
     }
 }
 
@@ -150,10 +113,5 @@ h5 {
 @include medium-breakpoint {
     .qbPanel {
         font-size: $font-size;
-        .qbPanelBody {
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-        }
     }
 }
