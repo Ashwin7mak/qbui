@@ -569,18 +569,29 @@ describe('Validate Group Utility functions', function() {
 
         //1464879417 --> jun 02 2016 10:56:57 AM  GMT-0400 (EDT)
         //1464889938 --> jun 02 2016 01:52:18 PM  GMT-0400 (EDT)
+        //var inputTod = '1980-01-01 18:51:21';
         describe('time of day tests', function() {
             var testCases = [
                 {name: 'null input', timeOfDay: null, second:'', minute:'', hour:'', am_pm:''},
-                {name: 'invalid input', timeOfDay: 'bad input', second:'', minute:'', hour:'', am_pm:''},
-                {name: 'AM time - numeric', timeOfDay: 1464879417, second:'1464879417', minute:'1464879360', hour:'1464876000', am_pm:'1464840000'},
-                {name: 'PM time - string', timeOfDay: '1464889938', second:'1464889938', minute:'1464889920', hour:'1464886800', am_pm:'1464926399'}
+               // {name: 'invalid input', timeOfDay: 'bad input', second:'', minute:'', hour:'', am_pm:''},
+                {name: 'Time - UTC', timeOfDay: '1970-01-01T18:51:21', timeZone:constants.UTC_TIMEZONE, second:'67881', minute:'67860', hour:'64800', am_pm:'86399'},
+                {name: 'Time - UTC implied', timeOfDay: '1970-01-01T18:51:21', second:'67881', minute:'67860', hour:'64800', am_pm:'86399'},
+                {name: 'Time - EST', timeOfDay: '1970-01-01T18:51:21', timeZone:constants.EST_TIMEZONE, second:'67881', minute:'67860', hour:'64800', am_pm:'86399'},
+                {name: 'Time - PST', timeOfDay: '1970-01-01T18:51:21', timeZone:constants.PST_TIMEZONE, second:'67881', minute:'67860', hour:'64800', am_pm:'0'}
+
+
+                //{name: 'Time - jun 2 2016 10:56:57 AM EDT', timeOfDay: 1464865016, timeZone:constants.EST_TIMEZONE, second:'1464879417', minute:'1464879360', hour:'1464876000', am_pm:'1464840000'},
+                //{name: 'Time - jun 2 2016 1:56:57 PM EDT', timeOfDay: '1464832338', timeZone:constants.EST_TIMEZONE, second:'1464889938', minute:'1464889920', hour:'1464886800', am_pm:'1464926399'},
+                //{name: 'Time - jun 2 2016 2:56:57 PM UTC', timeOfDay: 1464879417, timeZone:constants.UTC_TIMEZONE, second:'1464879417', minute:'1464879360', hour:'1464876000', am_pm:'1464926399'},
+                //{name: 'Time - jun 2 2016 5:56:57 PM UTC', timeOfDay: '1464889938', timeZone:constants.UTC_TIMEZONE, second:'1464889938', minute:'1464889920', hour:'1464886800', am_pm:'1464926399'},
+                //{name: 'Time - jun 2 2016 2:56:57 PM UTC implied', timeOfDay: 1464879417, second:'1464879417', minute:'1464879360', hour:'1464876000', am_pm:'1464926399'},
+                //{name: 'Time - jun 2 2016 5:56:57 PM UTC implied', timeOfDay: '1464889938', second:'1464889938', minute:'1464889920', hour:'1464886800', am_pm:'1464926399'}
             ];
 
             describe('validate time of day second tests', function() {
                 testCases.forEach(function(test) {
                     it('Test case: ' + test.name, function() {
-                        assert.equal(groupUtils.getBySecond(test.timeOfDay), test.second);
+                        assert.equal(groupUtils.getBySecond(test.timeOfDay, test.timeZone), test.second);
                     });
                 });
             });
@@ -588,7 +599,7 @@ describe('Validate Group Utility functions', function() {
             describe('validate time of day minute tests', function() {
                 testCases.forEach(function(test) {
                     it('Test case: ' + test.name, function() {
-                        assert.equal(groupUtils.getByMinute(test.timeOfDay), test.minute);
+                        assert.equal(groupUtils.getByMinute(test.timeOfDay, test.timeZone), test.minute);
                     });
                 });
             });
@@ -596,7 +607,7 @@ describe('Validate Group Utility functions', function() {
             describe('validate time of day hour tests', function() {
                 testCases.forEach(function(test) {
                     it('Test case: ' + test.name, function() {
-                        assert.equal(groupUtils.getByHour(test.timeOfDay), test.hour);
+                        assert.equal(groupUtils.getByHour(test.timeOfDay, test.timeZone), test.hour);
                     });
                 });
             });
@@ -604,7 +615,7 @@ describe('Validate Group Utility functions', function() {
             describe('validate time of day AmPm tests', function() {
                 testCases.forEach(function(test) {
                     it('Test case: ' + test.name, function() {
-                        assert.equal(groupUtils.getByAmPm(test.timeOfDay), test.am_pm);
+                        assert.equal(groupUtils.getByAmPm(test.timeOfDay, test.timeZone), test.am_pm);
                     });
                 });
             });

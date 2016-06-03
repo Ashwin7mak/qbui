@@ -3,7 +3,7 @@
 
     var constants = require('../../api/constants');
     var groupTypes = require('../../api/groupTypes');
-    var moment = require('moment');
+    var moment = require('moment-timezone');
     var emailAddress = require('email-addresses');
 
     /**
@@ -39,6 +39,21 @@
         }
 
         return value;
+    }
+
+    function convertUtcToMomentDate(utcTimestamp, timeZone) {
+        if (utcTimestamp) {
+            //  Time on server is always UTC
+            let momentDate = moment.tz(utcTimestamp, constants.UTC_TIMEZONE);
+            if (momentDate.isValid()) {
+                //  convert to requested timezone (if defined and not UTC)
+                if (timeZone && timeZone !== constants.UTC_TIMEZONE) {
+                    momentDate.tz(timeZone);
+                }
+                return momentDate;
+            }
+        }
+        return null;
     }
 
     module.exports = {
@@ -139,12 +154,10 @@
          * @param timeOfDay - ms since unix epoch
          * @returns {*}
          */
-        getByHour: function(timeOfDay) {
-            if (timeOfDay) {
-                let momentDate = moment.unix(timeOfDay);
-                if (momentDate.isValid()) {
-                    return momentDate.startOf('hour').unix();
-                }
+        getByHour: function(utcTimestamp, timeZone) {
+            let momentDate = convertUtcToMomentDate(utcTimestamp, timeZone);
+            if (momentDate) {
+                return momentDate.startOf('hour').unix();
             }
             return '';
         },
@@ -155,12 +168,10 @@
          * @param timeOfDay - ms since unix epoch
          * @returns {*}
          */
-        getByMinute: function(timeOfDay) {
-            if (timeOfDay) {
-                let momentDate = moment.unix(timeOfDay);
-                if (momentDate.isValid()) {
-                    return momentDate.startOf('minute').unix();
-                }
+        getByMinute: function(utcTimestamp, timeZone) {
+            let momentDate = convertUtcToMomentDate(utcTimestamp, timeZone);
+            if (momentDate) {
+                return momentDate.startOf('minute').unix();
             }
             return '';
         },
@@ -171,12 +182,10 @@
          * @param timeOfDay - ms since unix epoch
          * @returns {*}
          */
-        getBySecond: function(timeOfDay) {
-            if (timeOfDay) {
-                let momentDate = moment.unix(timeOfDay);
-                if (momentDate.isValid()) {
-                    return momentDate.startOf('second').unix();
-                }
+        getBySecond: function(utcTimestamp, timeZone) {
+            let momentDate = convertUtcToMomentDate(utcTimestamp, timeZone);
+            if (momentDate) {
+                return momentDate.startOf('second').unix();
             }
             return '';
         },
@@ -188,15 +197,13 @@
          * @param timeOfDay
          * @returns {*}
          */
-        getByAmPm: function(timeOfDay) {
-            if (timeOfDay) {
-                let momentDate = moment.unix(timeOfDay);
-                if (momentDate.isValid()) {
-                    if (momentDate.format("A") === 'AM') {
-                        return moment.unix(timeOfDay).startOf('day').unix();
-                    } else {
-                        return moment.unix(timeOfDay).endOf('day').unix();
-                    }
+        getByAmPm: function(utcTimestamp, timeZone) {
+            let momentDate = convertUtcToMomentDate(utcTimestamp, timeZone);
+            if (momentDate) {
+                if (momentDate.format("A") === 'AM') {
+                    return moment.tz(utcTimestamp, constants.UTC_TIMEZONE).startOf("day").unix();
+                } else {
+                    return moment.tz(utcTimestamp, constants.UTC_TIMEZONE).endOf("day").unix();
                 }
             }
             return '';
