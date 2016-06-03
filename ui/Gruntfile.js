@@ -544,7 +544,6 @@ module.exports = function(grunt) {
                     tunnelIdentifier: tunnelIdentifier,
                     verbose         : grunt.option('verbose') === true,
                     logger          : console.log,
-                    dns             : sauceDns
                 }
             }
         },
