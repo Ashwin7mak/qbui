@@ -39,20 +39,28 @@
     function PerfLogger() {
         let perfStartTime = null;
         let perfMessage = '';
+        let req = {};
 
         return {
 
             /**
-             *  Init the start time.  Provide option to set the log message.  If no
-             *  message parameter is supplied, the message remains unchanged from its
-             *  prior state.
+             *  Init the start time.
+             *
+             *  Provide option to set the log message and reqInfo.  If no
+             *  parameter is supplied, the message and reqInfo remains unchanged
+             *  from its prior state.
              *
              *  @param msg
+             *  @param reqInfo {req:req, idsOnly:true}
              */
-            init: function(msg) {
+            init: function(msg, reqInfo) {
                 perfStartTime = new Date();
                 if (msg) {
                     this.setMessage(msg);
+                }
+
+                if (reqInfo) {
+                    this.setReqInfo(reqInfo.req, reqInfo.idsOnly);
                 }
             },
 
@@ -63,10 +71,34 @@
              * @param msg
              */
             setMessage: function(msg) {
+                perfMessage = '';
                 if (msg && typeof msg === 'string') {
                     perfMessage = msg;
-                } else {
-                    perfMessage = '';
+                }
+            },
+
+            /**
+             * Set the request information to include in the perf message.
+             *
+             * @param reqInfo -- show request information
+             * @param idsOnly boolean -- log req.header.tid and req.header.sid only
+             */
+            setReqInfo: function(reqInfo, idsOnly) {
+                req = {};
+                if (reqInfo) {
+                    if (idsOnly === true) {
+                        if (reqInfo.headers) {
+                            req.headers = {};
+                            if (reqInfo.headers.sid) {
+                                req.headers.sid = reqInfo.headers.sid;
+                            }
+                            if (reqInfo.headers.tid) {
+                                req.headers.tid = reqInfo.headers.tid;
+                            }
+                        }
+                    } else {
+                        req = reqInfo;
+                    }
                 }
             },
 
@@ -83,8 +115,11 @@
                     //  log as info message
                     let params = {
                         type: 'PERF',
-                        elapsedTime: elapsedTime + 'ms'
+                        ms: elapsedTime + 'ms'
                     };
+                    if (req) {
+                        params.req = req;
+                    }
                     log.info(params, perfMessage);
                 }
             }

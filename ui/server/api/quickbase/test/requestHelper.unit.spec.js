@@ -202,17 +202,19 @@ describe('Validate RequestHelper unit tests', function() {
         };
         req.method = method;
 
-        it('Test the TID header field does not change', function(done) {
+        it('Test the TID header field does change', function(done) {
             var newReq = requestHelper.setTidHeader(req);
-            assert.equal(req.headers.tid, tid);
-            assert.equal(newReq.headers.tid, tid);
+
+            //  new tid should always get generated
+            assert.notEqual(req.headers.tid, tid);
+            assert.notEqual(newReq.headers.tid, tid);
             assert.equal(newReq.method, method);
             done();
         });
 
     });
 
-    describe('validate executeRequest method', function() {
+    describe('validate executeRequest method with TID', function() {
         var tid = 'tid';
 
         var req = {
@@ -266,6 +268,41 @@ describe('Validate RequestHelper unit tests', function() {
                 },
                 function(error) {
                     assert.deepEqual(error, {statusCode: 400});
+                }
+            );
+            done();
+        });
+    });
+
+    describe('validate executeRequest method with out TID', function() {
+
+        var requestStub = sinon.stub();
+        requestHelper.setRequestObject(requestStub);
+
+        it('Test executeRequest', function(done) {
+            var req = {
+                headers: {}
+            };
+
+            requestStub.yields(null, {statusCode: 200}, {}); // override the params (error, response, body)
+            var promise = requestHelper.executeRequest(req, {}, false);
+            promise.then(
+                function(response) {
+                    assert.ok(req.headers.tid, 'Tid not defined');
+                    assert.deepEqual(response, {statusCode: 200});
+                }
+            );
+            done();
+        });
+
+        it('Test executeRequest with immediateResolve ', function(done) {
+            var req = {};
+
+            var promise = requestHelper.executeRequest(req, {}, true);
+            promise.then(
+                function(response) {
+                    assert.ok(req.headers.tid, 'Tid not defined');
+                    assert.equal(response, null);
                 }
             );
             done();

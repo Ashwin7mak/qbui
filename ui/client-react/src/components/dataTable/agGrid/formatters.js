@@ -15,6 +15,7 @@ import {UserCellRenderer} from './cellRenderers';
 import IconActions from '../../actions/iconActions';
 
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
+import './dateTimePicker.scss';
 
 const TextFormat = 1;
 const NumberFormat = 2;
@@ -67,10 +68,10 @@ const CellFormatter = React.createClass({
                 {this.state.value && <I18nNumber value={this.state.value}></I18nNumber>}
                 </span>;
 
-        case UserFormat:
-            return <span className="cellData">
-                <UserCellRenderer value={this.state.value} />
-                </span>;
+        //case UserFormat:
+        //    return <span className="cellData">
+        //        <UserCellRenderer value={this.state.value} />
+        //        </span>;
 
         case DateFormat:
             return <span className="cellData">

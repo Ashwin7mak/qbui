@@ -83,10 +83,18 @@
                              ... }
                              */
 
-                            req.body.msg = req.body.msg.replace(/"/g, "'");
+                            var clientMsg = req.body.msg.replace(/"/g, "'");
+                            if (req) {
+                                //  for client logging, since we are posting to the node logging endpoint, clear out theses variables
+                                //  as they contain node logging endpoint info, which is confusing when viewing a client message in the
+                                //  log output.  By initializing to empty, the value will not display in the log message.
+                                req.url = '';
+                                req.method = '';
+                                req.body = '';
+                            }
 
                             var args = [];
-                            args.push({req: req});   // the log message is included as part of the req.body, which is included as output in the logger serializer
+                            args.push({type:'CLIENT', req: req}, clientMsg);
 
                             fn.apply(null, args);
                             res.status(200).send('OK');
@@ -106,13 +114,10 @@
         });
 
         //  For all requests:
-        //     -- generate a new Transaction Id(TID) and add to the request header.
         //     -- log the request route.
         //     -- continue matching subsequent routes
-        //
         app.all('*', function(req, res, next) {
-            requestHelper.setTidHeader(req);
-            log.info({req: req});
+            log.info({req: req}, 'Router');
             next();
         });
 
