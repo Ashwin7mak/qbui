@@ -66,31 +66,32 @@ class BaseService {
      */
     setResponseInterceptor() {
         var self = this;
-        axios.interceptors.response.use(
-            function(response) {
-                //  success
-                return response;
-            },
-            function(error) {
-                /**
-                 * certain rest endpoint errors get redirected immediately
-                 * if the unauthorizedRedirect config value is setup for the current runtime environment in app.config.js
-                 * use that first, other wise try and create one
-                */
-                let currentStackSignInUrl = "";
-                switch (error.status) {
-                case 401:
-                    currentStackSignInUrl = Configuration.unauthorizedRedirect || self.constructRedirectUrl();
-                    window.location.replace(currentStackSignInUrl);
-                    break;
-                case 403:
-                    window.location.href = '/forbidden';
-                    break;
-                }
-                //  let the service layer handle the error
-                return Promise.reject(error);
-            }
-        );
+        axios.interceptors.response.use(self.responseInterceptorSuccess, self.responseInterceptorError);
+    }
+
+    responseInterceptorSuccess(response) {
+        return response;
+    }
+
+    /**
+     * certain rest endpoint errors get redirected immediately
+     * if the unauthorizedRedirect config value is setup for the current runtime environment in app.config.js
+     * use that first, other wise try and create one
+     */
+    responseInterceptorError(error) {
+        var self = this;
+        let currentStackSignInUrl = "";
+        switch (error.status) {
+        case 401:
+            currentStackSignInUrl = Configuration.unauthorizedRedirect || self.constructRedirectUrl();
+            window.location.replace(currentStackSignInUrl);
+            break;
+        case 403:
+            window.location.href = '/forbidden';
+            break;
+        }
+        //  let the service layer handle the error
+        return Promise.reject(error);
     }
 
     /**

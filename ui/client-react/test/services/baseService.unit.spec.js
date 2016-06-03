@@ -19,7 +19,7 @@ describe('BaseService rewire tests', () => {
 
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
-        //spyOn(BaseService.prototype, 'setResponseInterceptor');
+        spyOn(BaseService.prototype, 'setResponseInterceptor');
 
         BaseService.__Rewire__('cookie', mockCookie);
         BaseService.__Rewire__('axios', mockAxios);
@@ -33,15 +33,31 @@ describe('BaseService rewire tests', () => {
     it('test constructor', () => {
         baseService = new BaseService();
         expect(BaseService.prototype.setRequestInterceptor).toHaveBeenCalled();
-        //expect(BaseService.prototype.setResponseInterceptor).toHaveBeenCalled();
+        expect(BaseService.prototype.setResponseInterceptor).toHaveBeenCalled();
     });
 
-    it('test setResponseInterceptor', () => {
+    it('test setResponseInterceptor with 401 error', () => {
         baseService = new BaseService();
-        var duder = baseService.setResponseInterceptor();
-        console.log("this is my test");
-        console.log(duder);
-        console.log("done with my test");
+        var error = {status: 401};
+        var location = window.location;
+        baseService.responseInterceptorError(error);
+        expect(window.location).toEqual(location);
+    });
+
+    it('test setResponseInterceptor with 403 error', () => {
+        baseService = new BaseService();
+        var error = {status: 403};
+        var location = window.location.href;
+        baseService.responseInterceptorError(error);
+        expect(window.location.href).toEqual(location);
+    });
+
+    it('test setResponseInterceptor with no error', () => {
+        baseService = new BaseService();
+        var error = {status: 200};
+        var location = window.location;
+        baseService.responseInterceptorError(error);
+        expect(window.location).toEqual(location);
     });
 
     it('test getCookie', () => {
