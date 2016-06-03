@@ -36,7 +36,7 @@ describe('BaseService rewire tests', () => {
         expect(BaseService.prototype.setResponseInterceptor).toHaveBeenCalled();
     });
 
-    it('test setResponseInterceptor with 401 error', () => {
+    it('test setResponseInterceptor with 401 status', () => {
         baseService = new BaseService();
         var error = {status: 401};
         var location = window.location;
@@ -44,7 +44,7 @@ describe('BaseService rewire tests', () => {
         expect(window.location).toEqual(location);
     });
 
-    it('test setResponseInterceptor with 403 error', () => {
+    it('test setResponseInterceptor with 403 status', () => {
         baseService = new BaseService();
         var error = {status: 403};
         var location = window.location.href;
@@ -52,7 +52,7 @@ describe('BaseService rewire tests', () => {
         expect(window.location.href).toEqual(location);
     });
 
-    it('test setResponseInterceptor with no error', () => {
+    it('test setResponseInterceptor with 200 status', () => {
         baseService = new BaseService();
         var error = {status: 200};
         var location = window.location;
