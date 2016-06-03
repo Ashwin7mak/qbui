@@ -447,7 +447,6 @@ task gruntE2EAWSSauce(type: GruntTask) {
     doFirst {
         tasks.invokeInstallSauceLabs.execute()
         tasks.invokeCheckForApiUp.execute()
-        tasks.invokeCheckForNodeUp.execute()
         args = ["test:e2eAWSSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
     dependsOn startTomcat

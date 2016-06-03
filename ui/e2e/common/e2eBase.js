@@ -8,6 +8,9 @@
     'use strict';
     //Bluebird Promise library
     var Promise = require('bluebird');
+    //Have the tests start an instance of node
+    require('../../server/app');
+
     module.exports = function(config) {
         var recordBase = require('../../server/api/test/recordApi.base.js')(config);
         var e2eUtils = require('./e2eUtils.js');
