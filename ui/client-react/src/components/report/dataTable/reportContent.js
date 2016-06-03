@@ -196,6 +196,8 @@ let ReportContent = React.createClass({
                                 groupData.group = Locales.getMessage('groupHeader.date.week', {date: this.localizeDate(datePart[0])});
                                 break;
                             case GroupTypes.GROUP_TYPE.date.day:
+                                groupData.group = this.localizeDate(datePart[0]);
+                                break;
                             case GroupTypes.GROUP_TYPE.date.equals:
                                 groupData.group = this.localizeDate(datePart[0], groupField.datatypeAttributes.type);
                                 break;
@@ -304,7 +306,7 @@ let ReportContent = React.createClass({
                     year: 'numeric', month: 'numeric', day: 'numeric',
                     hour: 'numeric', minute: 'numeric'//, hour12: true
                 };
-                let localizedDateTime = this.formatTime(date, options);
+                let localizedDateTime = this.formatDate(date, options);
                 localizedDateTime = localizedDateTime.replace(',', ' ');
                 return localizedDateTime;
             } else {
