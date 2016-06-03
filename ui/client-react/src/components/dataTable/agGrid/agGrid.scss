@@ -412,9 +412,6 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 .ag-body-container {
-    .ag-row {
-       //background-color: $row-bg-color;
-    }
     background-color:inherit !important;
 }
 .ag-row .gridCell .cellWrapper > :not(.cellData) {
