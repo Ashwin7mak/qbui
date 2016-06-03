@@ -410,6 +410,11 @@ task invokeCheckForApiUp(type:Exec) {
     args '60', testURL
 }
 
+task invokeCheckForNodeUp(type:Exec) {
+    executable cwd + "/../tools/ci/checkForApiUp.sh"
+    args '60', sauceURL
+}
+
 task checkForApiUp() {
     doFirst {
         tasks.invokeCheckForApiUp.execute()
@@ -442,6 +447,7 @@ task gruntE2EAWSSauce(type: GruntTask) {
     doFirst {
         tasks.invokeInstallSauceLabs.execute()
         tasks.invokeCheckForApiUp.execute()
+        tasks.invokeCheckForNodeUp.execute()
         args = ["test:e2eAWSSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
     dependsOn startTomcat

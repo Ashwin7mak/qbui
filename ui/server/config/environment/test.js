@@ -46,7 +46,7 @@
 
         //REST endpoint (protocol,server,port)
         //javaHost: 'https://quickbase-dev.com:8443',
-        javaHost: 'http://quickbase-dev.com:8082',
+        javaHost: 'http://quickbase-dev.com:' + javaHostPort,
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
