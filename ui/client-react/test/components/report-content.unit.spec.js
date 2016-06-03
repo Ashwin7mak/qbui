@@ -277,18 +277,13 @@ describe('ReportContent grouping functions', () => {
     var groupByTimeOfDayCases = [
         {name: 'null duration', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 1, expected: 'groupHeader.empty'},
         {name: 'empty duration', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        //  group by an AM time
-        {name: 'valid equal timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.equals, group: '1464879417', localeMessageSpy: 0, expected: '10:56:57 AM'},
-        {name: 'valid second timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.second, group: '1464879417', localeMessageSpy: 0, expected: '10:56:57 AM'},
-        {name: 'valid minute timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.minute, group: '1464879360', localeMessageSpy: 0, expected: '10:56 AM'},
-        {name: 'valid hour timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.hour, group: '1464876000', localeMessageSpy: 0, expected: '10:00 AM'},
-        {name: 'valid AmPm timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '1464840000', localeMessageSpy: 0, expected: 'AM'},
-        //  group by a PM time
-        {name: 'valid equal timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.equals, group: '1464889938', localeMessageSpy: 0, expected: '1:52:18 PM'},
-        {name: 'valid second timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.second, group: '1464889938', localeMessageSpy: 0, expected: '1:52:18 PM'},
-        {name: 'valid minute timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.minute, group: '1464889920', localeMessageSpy: 0, expected: '1:52 PM'},
-        {name: 'valid hour timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.hour, group: '1464886800', localeMessageSpy: 0, expected: '1:00 PM'},
-        {name: 'valid AmPm timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '1464926399', localeMessageSpy: 0, expected: 'PM'}
+
+        {name: 'valid equal timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.equals, group: '18:51:21', localeMessageSpy: 0, expected: '6:51:21 PM'},
+        {name: 'valid second timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.second, group: '18:51:21', localeMessageSpy: 0, expected: '6:51:21 PM'},
+        {name: 'valid minute timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.minute, group: '18:51', localeMessageSpy: 0, expected: '6:51 PM'},
+        {name: 'valid hour timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.hour, group: '18:00', localeMessageSpy: 0, expected: '6:00 PM'},
+        {name: 'valid AmPm timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '23:59:59', localeMessageSpy: 0, expected: 'PM'},
+        {name: 'valid AmPm timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '00:00:00', localeMessageSpy: 0, expected: 'AM'}
     ];
 
     groupByTimeOfDayCases.forEach(function(test) {

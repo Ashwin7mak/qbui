@@ -41,16 +41,21 @@
         return value;
     }
 
-    function convertUtcToMomentDate(utcTimestamp, timeZone) {
+    function convertUtcDateToMomentDate(utcTimestamp, timeZone) {
         if (utcTimestamp) {
             //  Time on server is always UTC
-            let momentDate = moment.tz(utcTimestamp, constants.UTC_TIMEZONE);
-            if (momentDate.isValid()) {
-                //  convert to requested timezone (if defined and not UTC)
-                if (timeZone && timeZone !== constants.UTC_TIMEZONE) {
-                    momentDate.tz(timeZone);
+            try {
+                var d = new Date(utcTimestamp.replace(/(\[.*?\])/, ''));
+                let momentDate = moment.tz(d, constants.UTC_TIMEZONE);
+                if (momentDate.isValid()) {
+                    //  convert to requested timezone (if defined and not UTC)
+                    if (timeZone && timeZone !== constants.UTC_TIMEZONE) {
+                        momentDate.tz(timeZone);
+                    }
+                    return momentDate;
                 }
-                return momentDate;
+            } catch (e) {
+                // any exception means invalid date..return null
             }
         }
         return null;
@@ -155,9 +160,9 @@
          * @returns {*}
          */
         getByHour: function(utcTimestamp, timeZone) {
-            let momentDate = convertUtcToMomentDate(utcTimestamp, timeZone);
+            let momentDate = convertUtcDateToMomentDate(utcTimestamp, timeZone);
             if (momentDate) {
-                return momentDate.startOf('hour').unix();
+                return momentDate.startOf('hour').format('HH:mm');
             }
             return '';
         },
@@ -169,9 +174,9 @@
          * @returns {*}
          */
         getByMinute: function(utcTimestamp, timeZone) {
-            let momentDate = convertUtcToMomentDate(utcTimestamp, timeZone);
+            let momentDate = convertUtcDateToMomentDate(utcTimestamp, timeZone);
             if (momentDate) {
-                return momentDate.startOf('minute').unix();
+                return momentDate.startOf('minute').format('HH:mm');
             }
             return '';
         },
@@ -183,9 +188,9 @@
          * @returns {*}
          */
         getBySecond: function(utcTimestamp, timeZone) {
-            let momentDate = convertUtcToMomentDate(utcTimestamp, timeZone);
+            let momentDate = convertUtcDateToMomentDate(utcTimestamp, timeZone);
             if (momentDate) {
-                return momentDate.startOf('second').unix();
+                return momentDate.startOf('second').format('HH:mm:ss');
             }
             return '';
         },
@@ -198,12 +203,12 @@
          * @returns {*}
          */
         getByAmPm: function(utcTimestamp, timeZone) {
-            let momentDate = convertUtcToMomentDate(utcTimestamp, timeZone);
+            let momentDate = convertUtcDateToMomentDate(utcTimestamp, timeZone);
             if (momentDate) {
                 if (momentDate.format("A") === 'AM') {
-                    return moment.tz(utcTimestamp, constants.UTC_TIMEZONE).startOf("day").unix();
+                    return '00:00:00';
                 } else {
-                    return moment.tz(utcTimestamp, constants.UTC_TIMEZONE).endOf("day").unix();
+                    return '23:59:59';
                 }
             }
             return '';

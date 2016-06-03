@@ -210,16 +210,16 @@ let ReportContent = React.createClass({
                         switch (groupType) {
                         case GroupTypes.GROUP_TYPE.timeOfDay.equals:
                         case GroupTypes.GROUP_TYPE.timeOfDay.second:
-                            groupData.group = moment.unix(groupData.group).format("h:mm:ss A");
+                            groupData.group = moment(groupData.group, 'hh:mm:ss').format("h:mm:ss A");
                             break;
                         case GroupTypes.GROUP_TYPE.timeOfDay.minute:
-                            groupData.group = moment.unix(groupData.group).format("h:mm A");
+                            groupData.group = moment(groupData.group, 'hh:mm').format("h:mm A");
                             break;
                         case GroupTypes.GROUP_TYPE.timeOfDay.hour:
-                            groupData.group = moment.unix(groupData.group).format("h:00 A");
+                            groupData.group = moment(groupData.group, 'hh:mm').format("h:00 A");
                             break;
                         case GroupTypes.GROUP_TYPE.timeOfDay.am_pm:
-                            groupData.group = moment.unix(groupData.group).format("A");
+                            groupData.group = moment(groupData.group, 'hh:mm:ss').format("A");
                             break;
                         }
 

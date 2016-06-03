@@ -567,25 +567,16 @@ describe('Validate Group Utility functions', function() {
 
         });
 
-        //1464879417 --> jun 02 2016 10:56:57 AM  GMT-0400 (EDT)
-        //1464889938 --> jun 02 2016 01:52:18 PM  GMT-0400 (EDT)
-        //var inputTod = '1980-01-01 18:51:21';
         describe('time of day tests', function() {
             var testCases = [
                 {name: 'null input', timeOfDay: null, second:'', minute:'', hour:'', am_pm:''},
-               // {name: 'invalid input', timeOfDay: 'bad input', second:'', minute:'', hour:'', am_pm:''},
-                {name: 'Time - UTC', timeOfDay: '1970-01-01T18:51:21', timeZone:constants.UTC_TIMEZONE, second:'67881', minute:'67860', hour:'64800', am_pm:'86399'},
-                {name: 'Time - UTC implied', timeOfDay: '1970-01-01T18:51:21', second:'67881', minute:'67860', hour:'64800', am_pm:'86399'},
-                {name: 'Time - EST', timeOfDay: '1970-01-01T18:51:21', timeZone:constants.EST_TIMEZONE, second:'67881', minute:'67860', hour:'64800', am_pm:'86399'},
-                {name: 'Time - PST', timeOfDay: '1970-01-01T18:51:21', timeZone:constants.PST_TIMEZONE, second:'67881', minute:'67860', hour:'64800', am_pm:'0'}
-
-
-                //{name: 'Time - jun 2 2016 10:56:57 AM EDT', timeOfDay: 1464865016, timeZone:constants.EST_TIMEZONE, second:'1464879417', minute:'1464879360', hour:'1464876000', am_pm:'1464840000'},
-                //{name: 'Time - jun 2 2016 1:56:57 PM EDT', timeOfDay: '1464832338', timeZone:constants.EST_TIMEZONE, second:'1464889938', minute:'1464889920', hour:'1464886800', am_pm:'1464926399'},
-                //{name: 'Time - jun 2 2016 2:56:57 PM UTC', timeOfDay: 1464879417, timeZone:constants.UTC_TIMEZONE, second:'1464879417', minute:'1464879360', hour:'1464876000', am_pm:'1464926399'},
-                //{name: 'Time - jun 2 2016 5:56:57 PM UTC', timeOfDay: '1464889938', timeZone:constants.UTC_TIMEZONE, second:'1464889938', minute:'1464889920', hour:'1464886800', am_pm:'1464926399'},
-                //{name: 'Time - jun 2 2016 2:56:57 PM UTC implied', timeOfDay: 1464879417, second:'1464879417', minute:'1464879360', hour:'1464876000', am_pm:'1464926399'},
-                //{name: 'Time - jun 2 2016 5:56:57 PM UTC implied', timeOfDay: '1464889938', second:'1464889938', minute:'1464889920', hour:'1464886800', am_pm:'1464926399'}
+                {name: 'invalid input', timeOfDay: 'bad input', second:'', minute:'', hour:'', am_pm:''},
+                {name: 'Time - UTC', timeOfDay: '1970-01-01T18:51:21Z', timeZone:constants.UTC_TIMEZONE, second:'18:51:21', minute:'18:51', hour:'18:00', am_pm:'23:59:59'},
+                {name: 'Time - UTC implied', timeOfDay: '1970-01-01T18:51:21Z', second:'18:51:21', minute:'18:51', hour:'18:00', am_pm:'23:59:59'},
+                {name: 'Time - EST', timeOfDay: '1970-01-01T18:51:21Z', timeZone:constants.EST_TIMEZONE, second:'13:51:21', minute:'13:51', hour:'13:00', am_pm:'23:59:59'},
+                {name: 'Time - PST', timeOfDay: '1970-01-01T18:51:21Z', timeZone:constants.PST_TIMEZONE, second:'10:51:21', minute:'10:51', hour:'10:00', am_pm:'00:00:00'},
+                {name: 'Time - CET', timeOfDay: '1970-01-01T18:51:21Z', timeZone:constants.CET_TIMEZONE, second:'19:51:21', minute:'19:51', hour:'19:00', am_pm:'23:59:59'},
+                {name: 'Time - JST', timeOfDay: '1970-01-01T18:51:21Z', timeZone:constants.JST_TIMEZONE, second:'03:51:21', minute:'03:51', hour:'03:00', am_pm:'00:00:00'}
             ];
 
             describe('validate time of day second tests', function() {

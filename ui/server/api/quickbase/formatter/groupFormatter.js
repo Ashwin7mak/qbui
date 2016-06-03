@@ -121,21 +121,21 @@
             }
             break;
         case constants.TIME_OF_DAY:
-            var timeZone = consts.UTC_TIMEZONE;
+            var timeZone = constants.UTC_TIMEZONE;
             if (groupField.useTimezone) {
                 timeZone = groupField.timeZone;
             }
             switch (groupType) {
             case groupTypes.TIME_OF_DAY.equals:
-                return groupUtils.getBySecond(rawDataValue);
+                return groupUtils.getBySecond(rawDataValue, timeZone);
             case groupTypes.TIME_OF_DAY.second:
-                return groupUtils.getBySecond(rawDataValue);
+                return groupUtils.getBySecond(rawDataValue, timeZone);
             case groupTypes.TIME_OF_DAY.minute:
-                return groupUtils.getByMinute(rawDataValue);
+                return groupUtils.getByMinute(rawDataValue, timeZone);
             case groupTypes.TIME_OF_DAY.hour:
-                return groupUtils.getByHour(rawDataValue);
+                return groupUtils.getByHour(rawDataValue, timeZone);
             case groupTypes.TIME_OF_DAY.am_pm:
-                return groupUtils.getByAmPm(rawDataValue);
+                return groupUtils.getByAmPm(rawDataValue, timeZone);
             }
             break;
         case constants.EMAIL_ADDRESS:
