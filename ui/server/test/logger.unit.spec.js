@@ -182,13 +182,14 @@ describe('Validate Logger', function() {
             assert.equal(undefined, reqSerializer.method);
             assert.equal(undefined, reqSerializer.url);
             assert.equal(undefined, reqSerializer.host);
-            assert.equal(undefined, reqSerializer.tid);
             assert.equal(undefined, reqSerializer.sid);
+            assert.equal(undefined, reqSerializer.tid);
             assert.equal(undefined, reqSerializer.browser);
             assert.equal(undefined, reqSerializer.platform);
             assert.equal(undefined, reqSerializer.ip);
             assert.equal(undefined, reqSerializer.referer);
-            assert.deepEqual({}, reqSerializer.body);
+
+            assert.deepEqual(undefined, reqSerializer.body);
 
             done();
         });

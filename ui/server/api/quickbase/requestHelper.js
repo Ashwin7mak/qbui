@@ -1,11 +1,12 @@
 (function() {
     'use strict';
 
-    var fs = require('fs');
-    var uuid = require('uuid');
+    let fs = require('fs');
+    let uuid = require('uuid');
     let Promise = require('bluebird');
     let defaultRequest = require('request');
     let log = require('../../logger').getLogger();
+    let perfLogger = require('../../perfLogger');
 
     module.exports = function(config) {
         let request = defaultRequest;
@@ -88,6 +89,9 @@
              * @returns request object used when submitting a server request
              */
             setOptions: function(req) {
+
+                this.setTidHeader(req);
+
                 var opts = {
                     url         : this.getRequestUrl(req),
                     method      : req.method,
@@ -112,8 +116,7 @@
             },
 
             /**
-             * If the request header does not include a transactionId (TID),
-             * generate a transaction ID (uuid.v1) and set on the request header.
+             * Generate a transaction ID (uuid.v1) and set on the request header.
              *
              * @param req
              * @returns req
@@ -123,10 +126,8 @@
                 if (req && req.headers) {
                     headers = req.headers;
                 }
-                //  if no tid, generate one
-                if (!headers.tid) {
-                    headers.tid = uuid.v1();
-                }
+                headers.tid = uuid.v1();
+
                 req.headers = headers;
                 return req;
             },
@@ -147,13 +148,24 @@
              * @returns {*}
              */
             executeRequest: function(req, opts, immediatelyResolve) {
-                //  Generate tid for all requests..and log it
-                this.setTidHeader(req);
-                log.info({req: req});
+
+                //  if no tid on the header, add it now
+                if (req) {
+                    if (req.headers) {
+                        if (!req.headers.tid) {
+                            this.setTidHeader(req);
+                        }
+                    } else {
+                        this.setTidHeader(req);
+                    }
+                }
+
                 return new Promise((resolve, reject) =>{
                     if (immediatelyResolve) {
                         resolve();
                     } else {
+                        let perfLog = perfLogger.getInstance();
+                        perfLog.init("Execute Request", {req:opts});
                         request(opts, function(error, response) {
                             if (error) {
                                 reject(new Error(error));
@@ -162,6 +174,7 @@
                             } else {
                                 resolve(response);
                             }
+                            perfLog.log();
                         });
                     }
                 });
