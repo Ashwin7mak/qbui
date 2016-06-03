@@ -42,14 +42,14 @@ describe('Validate Group Utility functions', function() {
 
         if (positiveTests) {
             var testDates = [
-                {day: 'Sun', date: '02-28-2016', expectation:{week:'02-22-2016', month:'Feb', year:2016, qtr:1, decade:2010}},
-                {day: 'Mon', date: '02-29-2016', expectation:{week:'02-29-2016', month:'Feb', year:2016, qtr:1, decade:2010}},
-                {day: 'Tue', date: '03-01-2016', expectation:{week:'02-29-2016', month:'Mar', year:2016, qtr:1, decade:2010}},
-                {day: 'Tue', date: '04-05-2016', expectation:{week:'04-04-2016', month:'Apr', year:2016, qtr:2, decade:2010}},
-                {day: 'Wed', date: '12-31-2008', expectation:{week:'12-29-2008', month:'Dec', year:2008, qtr:4, decade:2000}},
-                {day: 'Thu', date: '01-01-2009', expectation:{week:'12-29-2008', month:'Jan', year:2009, qtr:1, decade:2000}},
-                {day: 'Fri', date: '01-01-2010', expectation:{week:'12-28-2009', month:'Jan', year:2010, qtr:1, decade:2010}},
-                {day: 'Sat', date: '01-09-2010', expectation:{week:'01-04-2010', month:'Jan', year:2010, qtr:1, decade:2010}}
+                {day: 'Sun', date: '02-28-2016', expectation:{day: '02-28-2016', week:'02-22-2016', month:'Feb', year:2016, qtr:1, decade:2010}},
+                {day: 'Mon', date: '02-29-2016', expectation:{day: '02-29-2016', week:'02-29-2016', month:'Feb', year:2016, qtr:1, decade:2010}},
+                {day: 'Tue', date: '03-01-2016', expectation:{day: '03-01-2016', week:'02-29-2016', month:'Mar', year:2016, qtr:1, decade:2010}},
+                {day: 'Tue', date: '04-05-2016', expectation:{day: '04-05-2016', week:'04-04-2016', month:'Apr', year:2016, qtr:2, decade:2010}},
+                {day: 'Wed', date: '12-31-2008', expectation:{day: '12-31-2008', week:'12-29-2008', month:'Dec', year:2008, qtr:4, decade:2000}},
+                {day: 'Thu', date: '01-01-2009', expectation:{day: '01-01-2009', week:'12-29-2008', month:'Jan', year:2009, qtr:1, decade:2000}},
+                {day: 'Fri', date: '01-01-2010', expectation:{day: '01-01-2010', week:'12-28-2009', month:'Jan', year:2010, qtr:1, decade:2010}},
+                {day: 'Sat', date: '01-09-2010', expectation:{day: '01-09-2010', week:'01-04-2010', month:'Jan', year:2010, qtr:1, decade:2010}}
             ];
 
             var obj = dateTimeFormatter.getJavaToJavaScriptDateFormats();
@@ -323,8 +323,19 @@ describe('Validate Group Utility functions', function() {
             });
         });
 
+        describe('validate getDay', function() {
+            //  positive test cases
+            var testCases = generateDateGroupingTestCases(true);
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    var date = groupUtils.getDay(test.displayDate, test.momentFormat);
+                    assert.equal(date, moment(test.testDate.expectation.day, 'MM-DD-YYYY').format(test.momentFormat));
+                });
+            });
+        });
+
         describe('validate getFirstDayOfWeek', function() {
-            //  negative test cases
+            //  positive test cases
             var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {

@@ -45,13 +45,12 @@
         if (utcTimestamp) {
             //  Time on server is always UTC
             try {
+                if (!timeZone) {
+                    timeZone = constants.UTC_TIMEZONE;
+                }
                 var d = new Date(utcTimestamp.replace(/(\[.*?\])/, ''));
-                let momentDate = moment.tz(d, constants.UTC_TIMEZONE);
+                let momentDate = moment.tz(d, timeZone);
                 if (momentDate.isValid()) {
-                    //  convert to requested timezone (if defined and not UTC)
-                    if (timeZone && timeZone !== constants.UTC_TIMEZONE) {
-                        momentDate.tz(timeZone);
-                    }
                     return momentDate;
                 }
             } catch (e) {
@@ -268,6 +267,16 @@
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {
                     return momentDate.startOf('isoWeek').format(format);
+                }
+            }
+            return '';
+        },
+
+        getDay: function(displayDate, format) {
+            if (displayDate) {
+                let momentDate = moment(displayDate, format, true);
+                if (momentDate.isValid()) {
+                    return momentDate.format(format);
                 }
             }
             return '';

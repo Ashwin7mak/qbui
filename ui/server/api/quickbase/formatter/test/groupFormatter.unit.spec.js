@@ -48,8 +48,7 @@ describe('Validate GroupFormatter unit tests', function() {
 
             if (dataType === constants.TIME_OF_DAY) {
                 if (idx === 1) {
-                    field.useTimezone = true;
-                    field.timeZone = constants.EST_TIMEZONE;
+                    field.datatypeAttributes.timeZone = constants.EST_TIMEZONE;
                 }
             }
 

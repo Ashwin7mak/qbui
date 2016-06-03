@@ -197,7 +197,7 @@ let ReportContent = React.createClass({
                                 break;
                             case GroupTypes.GROUP_TYPE.date.day:
                             case GroupTypes.GROUP_TYPE.date.equals:
-                                groupData.group = this.localizeDate(datePart[0]);
+                                groupData.group = this.localizeDate(datePart[0], groupField.datatypeAttributes.type);
                                 break;
                             }
                         }
@@ -219,6 +219,7 @@ let ReportContent = React.createClass({
                             groupData.group = moment(groupData.group, 'hh:mm').format("h:00 A");
                             break;
                         case GroupTypes.GROUP_TYPE.timeOfDay.am_pm:
+                            // TODO: do other localizations, especially those with 24 hour clock, have the concept of AM/PM...
                             groupData.group = moment(groupData.group, 'hh:mm:ss').format("A");
                             break;
                         }
@@ -295,10 +296,20 @@ let ReportContent = React.createClass({
      * @param date
      * @returns {*}
      */
-    localizeDate: function(date) {
+    localizeDate: function(date, type) {
         try {
             this.context.locales = Locales.getLocale();
-            return this.formatDate(date);
+            if (type === DataTypes.DATE_TIME) {
+                let options = {
+                    year: 'numeric', month: 'numeric', day: 'numeric',
+                    hour: 'numeric', minute: 'numeric'//, hour12: true
+                };
+                let localizedDateTime = this.formatTime(date, options);
+                localizedDateTime = localizedDateTime.replace(',', ' ');
+                return localizedDateTime;
+            } else {
+                return this.formatDate(date);
+            }
         } catch (e) {
             logger.warn("Error attempting to localize a date group.  Group value: " + date);
             return date;
