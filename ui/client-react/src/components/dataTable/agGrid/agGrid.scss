@@ -123,6 +123,7 @@ $cell-edit-background-edit: #f3f8fe;
             position: absolute;
             left: 30px;
             top: 1px;
+            height:100%;
 
             .iconActions {
 
@@ -412,7 +413,7 @@ $cell-edit-background-edit: #f3f8fe;
 
 .ag-body-container {
     .ag-row {
-        background-color: $row-bg-color;
+       //background-color: $row-bg-color;
     }
     background-color:inherit !important;
 }
@@ -420,14 +421,12 @@ $cell-edit-background-edit: #f3f8fe;
      display:none;
 }
 
-.reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .ag-cell-value {
+.reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .iconActions {
     display:none;
 }
 .reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
 
-    .ag-selection-checkbox {
-        top: $grid-default-group-padding + 5
-    }
+    box-shadow: 2px 2px 2px $row-box-shadow-color;
 
     .ag-cell.gridCell {
 
@@ -435,18 +434,17 @@ $cell-edit-background-edit: #f3f8fe;
         padding: 0;
         margin: 0;
 
-
+        border-right: 1px solid $row-border-color;
         > .cellWrapper,.ag-cell-wrapper {
-            padding:8px;
+            padding:2px;
             position: absolute;
-            border-top:1px solid $row-border-color;
-            border-bottom:1px solid $row-border-color;
-            top:-5px;
-            left:-5px;
-            right:-5px;
-            bottom:-5px;
+
+            top:0px;
+            left:0px;
+            right:0px;
+            bottom:0px;
             background-color: $cell-edit-background-edit;
-            box-shadow: 2px 2px 2px $row-box-shadow-color;
+
             z-index:1;
             display:flex;
 
@@ -456,7 +454,7 @@ $cell-edit-background-edit: #f3f8fe;
             .cellEdit {
                 display:inline-block;
                 border:1px solid $row-border-color;
-                border-right:2px solid $row-border-color;
+
                 background: $row-bg-color;
                 flex:1 1 auto;
                 padding:0 0 0 2px;
@@ -519,7 +517,7 @@ $cell-edit-background-edit: #f3f8fe;
         }
     }
 
-    .gridCell:hover {
+    .gridCell {
 
         .editTools {
             display:block;
@@ -527,7 +525,8 @@ $cell-edit-background-edit: #f3f8fe;
             background-color:$cell-edit-background-edit;
             box-shadow: 2px 2px 2px $row-box-shadow-color;
             position:absolute;
-            top:100%;
+            top:30px;
+            left:-31px;
 
             border-left: 1px solid $row-border-color;
             border-right: 1px solid $row-border-color;

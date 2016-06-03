@@ -531,7 +531,7 @@ let AGGrid = React.createClass({
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
-                obj.addEditActions = true;
+                obj.addEditActions = false;
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
