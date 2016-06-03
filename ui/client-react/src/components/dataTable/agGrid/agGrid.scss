@@ -420,14 +420,15 @@ $cell-edit-background-edit: #f3f8fe;
      display:none;
 }
 
+.reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .ag-cell-value {
+    display:none;
+}
 .reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
 
     .ag-selection-checkbox {
         top: $grid-default-group-padding + 5
     }
-    .gridCell.selectionCell .ag-cell-value {
-        display:none; /* hide icons in 1st col */
-    }
+
     .ag-cell.gridCell {
 
         overflow:visible;
