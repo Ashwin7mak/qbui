@@ -1,9 +1,10 @@
 import React from 'react';
 import QBPanel from '../QBPanel/qbpanel.js';
-import {fakeFormEmpowerData} from './fakeData.js';
 import Tabs, {TabPane} from 'rc-tabs';
+import _ from 'lodash';
 import './qbform.scss';
 import './tabs.scss';
+
 
 /*
  Custom QuickBase Form component that has 1 property.
@@ -18,64 +19,88 @@ class QBForm extends React.Component {
 
     initState() {
         let initialState = {
-            "externalData": fakeFormEmpowerData,
+           // "externalData": this.props.formData,
             readonly : true
         };
         return initialState;
     }
 
-    createCheckBox(curElement) {
+    //createCheckBox(curElement) {
+    //    return (
+    //        <input type="checkbox" className="fieldValue" disabled={this.state.readonly} checked={curElement.value}></input>
+    //    );
+    //}
+    //
+    //createSpan(curElement) {
+    //    return (
+    //        <span className="fieldValue">{curElement.value}</span>
+    //    );
+    //}
+    //
+    //createField(curElement) {
+    //    let isCheckbox = curElement.type === "checkbox";
+    //    return (
+    //        <div key={curElement.id} className="field">
+    //            <h5><small className={"fieldLabel"}>{curElement.name}</small></h5>
+    //            {isCheckbox ? this.createCheckBox(curElement) : this.createSpan(curElement)}
+    //        </div>
+    //    );
+    //}
+    createFieldElement(element, labelPosition) {
+        let fieldLabel = element.fieldLabel ? element.fieldLabel : "test label";
+        let fieldValue = element.fieldValue ? element.fieldValue : "test value";
         return (
-            <input type="checkbox" className="fieldValue" disabled={this.state.readonly} checked={curElement.value}></input>
-        );
-    }
-
-    createSpan(curElement) {
-        return (
-            <span className="fieldValue">{curElement.value}</span>
-        );
-    }
-
-    createField(curElement) {
-        var isCheckbox = curElement.type === "checkbox";
-        return (
-            <div key={curElement.id} className="field">
-                <h5><small className={"fieldLabel"}>{curElement.name}</small></h5>
-                {isCheckbox ? this.createCheckBox(curElement) : this.createSpan(curElement)}
+            <div key={element.orderIndex} className="field">
+                <h5><small className={"fieldLabel"}>{fieldLabel}</small></h5>
+                <span className="fieldValue">{fieldValue}</span>
             </div>
         );
+    }
+    createTextElement(element) {
+        return <div className="textElement">{element.displayText}</div>;
     }
     createRow(fields) {
         return <div className="fieldRow">{fields}</div>;
     }
 
-    createSection(curSection) {
+    createSection(section, index) {
+        let sectionTitle = "";
+        let fieldLabelPosition = "";
 
-        var fields = [];
-        var rows = [];
-        for (var j = 0; j < curSection.elements.length; j++) {
-            if (curSection.elements[j].id !== -1) {
-                fields.push(this.createField(curSection.elements[j]));
-            } else {
-                rows.push(this.createRow(fields));
-                fields = [];
-            }
+        //build the section header.
+        if (section.headerElement && section.headerElement.FormHeaderElement && section.headerElement.FormHeaderElement) {
+            sectionTitle = section.headerElement.FormHeaderElement.displayText ? section.headerElement.FormHeaderElement.displayText : "";
+            fieldLabelPosition = section.headerElement.FormHeaderElement.position;
         }
-        rows.push(this.createRow(fields));
+
+        //build each of the elements
+        let fieldElements = [];
+        let textElement = "";
+        _.each(section.elements, (element) => {
+            if (element.FormTextElement) {
+                textElement = this.createTextElement(element.FormTextElement);
+            } else if (element.FormFieldElement) {
+                fieldElements.push(this.createFieldElement(element.FormFieldElement, fieldLabelPosition));
+            }  else {
+                //log error
+            }
+        });
+
         return (
-            <QBPanel title={curSection.title} key={curSection.id} isOpen={true} panelNum={curSection.id}>
-                {rows}
+            <QBPanel title={sectionTitle} key={section.orderIndex} isOpen={true} panelNum={section.orderIndex}>
+                {this.createRow(textElement)}
+                {this.createRow(fieldElements)}
             </QBPanel>
         );
     }
 
-    createTab(curTab) {
-        var sections = [];
-        for (var c = 0; c < curTab.sections.length; c++) {
-            sections.push(this.createSection(curTab.sections[c]));
-        }
+    createTab(tab, index) {
+        let sections = [];
+        _.each(tab.sections, (section, idx) => {
+            sections.push(this.createSection(section, idx));
+        });
         return (
-            <TabPane key={curTab.id} tab={curTab.title}>
+            <TabPane key={tab.orderIndex} tab={tab.title}>
                 <br/>
                 {sections}
             </TabPane>
@@ -83,9 +108,11 @@ class QBForm extends React.Component {
     }
 
     render() {
-        var tabs = [];
-        for (var i = 0; i < this.state.externalData.tabs.length; i++) {
-            tabs.push(this.createTab(this.state.externalData.tabs[i]));
+        let tabs = [];
+        if (this.props.formData && this.props.formData.tabs) {
+            _.each(this.props.formData.tabs, (tab, index) => {
+                tabs.push(this.createTab(tab, index));
+            });
         }
         return (
             <div className="formContainer">

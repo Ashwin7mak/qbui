@@ -1,29 +1,34 @@
 @import '../../assets/css/qbVariables';
 
 .formContainer {
-    padding: 2%;
+    padding: 10px;
 }
 
-.fieldRow {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    flex-wrap: wrap;
-}
 .qbPanelBody {
     display: block;
 
-    .field {
-        //top right bottom left
-        padding: 0 35px 20px 0;
-        .fieldLabel {
-            display: block;
-            color: $fieldLabel-color;
-            padding-bottom: 2px;
+    .fieldRow {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        flex-wrap: wrap;
+        padding: 5px 0;
+
+        .field {
+            //top right bottom left
+            padding: 0 35px 20px 0;
+            .fieldLabel {
+                display: block;
+                color: $fieldLabel-color;
+                padding-bottom: 2px;
+            }
+            .fieldValue {
+                display: block;
+                min-width: 0;
+            }
         }
-        .fieldValue {
-            display: block;
-            min-width: 0;
+        .textElement {
+            max-wi
         }
     }
 }

@@ -27,7 +27,7 @@ describe('Test Fields Store', () => {
     it('test default fields store state', () => {
         // verify default states
         expect(flux.store(STORE_NAME).fields.length).toBe(0);
-        expect(flux.store(STORE_NAME).fieldsLoading).toBeFalsy();
+        expect(flux.store(STORE_NAME).formLoading).toBeFalsy();
         expect(flux.store(STORE_NAME).currentTable).toBeNull();
         expect(flux.store(STORE_NAME).error).toBeFalsy();
 
@@ -45,7 +45,7 @@ describe('Test Fields Store', () => {
         };
 
         flux.dispatcher.dispatch(loadFieldsAction);
-        expect(flux.store(STORE_NAME).fieldsLoading).toBeTruthy();
+        expect(flux.store(STORE_NAME).formLoading).toBeTruthy();
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
@@ -58,7 +58,7 @@ describe('Test Fields Store', () => {
         };
 
         flux.dispatcher.dispatch(loadFieldsAction);
-        expect(flux.store(STORE_NAME).fieldsLoading).toBeFalsy();
+        expect(flux.store(STORE_NAME).formLoading).toBeFalsy();
         expect(flux.store(STORE_NAME).fields.length).toBe(0);
         expect(flux.store(STORE_NAME).error).toBeTruthy();
 
@@ -83,7 +83,7 @@ describe('Test Fields Store', () => {
         };
 
         flux.dispatcher.dispatch(loadFieldsAction);
-        expect(flux.store(STORE_NAME).fieldsLoading).toBeFalsy();
+        expect(flux.store(STORE_NAME).formLoading).toBeFalsy();
         expect(flux.store(STORE_NAME).error).toBeFalsy();
 
         let fields = flux.store(STORE_NAME).fields;
@@ -114,7 +114,7 @@ describe('Test Fields Store', () => {
 
         //  expect the following to be returned when 'getting state'
         expect(state.error).toBeDefined();
-        expect(state.fieldsLoading).toBeDefined();
+        expect(state.formLoading).toBeDefined();
         expect(state.fields).toBeDefined();
         expect(state.currentTable).toBeDefined();
 

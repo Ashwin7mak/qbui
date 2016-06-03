@@ -106,6 +106,28 @@ h5 {
     width:auto;
 }
 
+.fieldRow {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    flex-wrap: wrap;
+    padding: 5px 0;
+
+    .field {
+        //top right bottom left
+        padding: 0 35px 20px 0;
+        .fieldLabel {
+            display: block;
+            color: $fieldLabel-color;
+            padding-bottom: 2px;
+        }
+        .fieldValue {
+            display: block;
+            min-width: 0;
+        }
+    }
+}
+
 /*
  * This needs to be cleaned up once we decide what will happen with Lisa's universal pattern story
  * Right now there is no different, but I'd rather leave a place holder incase in the future we do need it
