@@ -153,9 +153,10 @@
         },
 
         /**
-         * For the given unix epoch time, round down to the nearest hour.
+         * For the given utc time, round down to the nearest hour.
          *
-         * @param timeOfDay - ms since unix epoch
+         * @param utcTimestamp - utc timestamp
+         * @param timeZone - the timezone to use
          * @returns {*}
          */
         getByHour: function(utcTimestamp, timeZone) {
@@ -167,9 +168,10 @@
         },
 
         /**
-         * For the given unix epoch time, round down to the nearest minute.
+         * For the given utc time, round down to the nearest minute.
          *
-         * @param timeOfDay - ms since unix epoch
+         * @param utcTimestamp - utc timestamp
+         * @param timeZone - the timezone to use
          * @returns {*}
          */
         getByMinute: function(utcTimestamp, timeZone) {
@@ -181,9 +183,10 @@
         },
 
         /**
-         * For the given unix epoch time, round down to the nearest second.
+         * For the given utc time, round down to the nearest second.
          *
-         * @param timeOfDay - ms since unix epoch
+         * @param utcTimestamp - utc timestamp
+         * @param timeZone - the timezone to use
          * @returns {*}
          */
         getBySecond: function(utcTimestamp, timeZone) {
@@ -198,7 +201,8 @@
          * Return the start of the day(12:00am) if the timeOfDay is in the AM;
          * otherwise, return the end of the day(11:59pm).
          *
-         * @param timeOfDay
+         * @param utcTimestamp - utc timestamp
+         * @param timeZone - the timezone to use
          * @returns {*}
          */
         getByAmPm: function(utcTimestamp, timeZone) {

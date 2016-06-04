@@ -15,10 +15,6 @@ import * as DataTypes from '../../../constants/schema';
 import * as GroupTypes from '../../../constants/groupTypes';
 import Locales from '../../../locales/locales';
 
-//  load and set to use the current locale
-import moment from 'moment';
-moment.locale(Locales.getLocale());
-
 let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -82,6 +78,29 @@ let ReportContent = React.createClass({
     isDateDataType(dataType) {
         return dataType === DataTypes.DATE_TIME ||
                dataType === DataTypes.DATE;
+    },
+
+    parseTimeOfDay(timeOfDay) {
+        if (timeOfDay) {
+            let hr = 0;
+            let min = 0;
+            let sec = 0;
+
+            //  format is either hh:mm or hh:mm:ss
+            let el = timeOfDay.split(":");
+            if (el.length === 2) {
+                hr = el[0];
+                min = el[1];
+            }
+            if (el.length === 3) {
+                hr = el[0];
+                min = el[1];
+                sec = el[2];
+            }
+            //  the date component means nothing..it's needed so that the i18n parser functions properly
+            return new Date(1970, 1, 1, hr, min, sec);
+        }
+        return null;
     },
 
     /**
@@ -199,7 +218,20 @@ let ReportContent = React.createClass({
                                 groupData.group = this.localizeDate(datePart[0]);
                                 break;
                             case GroupTypes.GROUP_TYPE.date.equals:
-                                groupData.group = this.localizeDate(datePart[0], groupField.datatypeAttributes.type);
+                                let opts = null;
+                                if (groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
+                                    opts = {
+                                        year: 'numeric', month: 'numeric', day: 'numeric',
+                                        hour: 'numeric', minute: 'numeric'
+                                    };
+                                }
+                                groupData.group = this.localizeDate(datePart[0], opts);
+
+                                //  i18n-react appends a comma after the date for en-us --> 07/22/2015, 09:44 AM -- Replace with space
+                                if (groupField.datatypeAttributes.type === DataTypes.DATE_TIME && Locales.getLocale() === 'en-us') {
+                                    groupData.group = groupData.group.replace(',', ' ');
+                                }
+
                                 break;
                             }
                         }
@@ -209,20 +241,34 @@ let ReportContent = React.createClass({
                     }
 
                     if (groupField.datatypeAttributes.type === DataTypes.TIME_OF_DAY) {
+
+                        let timeOfDay = null;
+
                         switch (groupType) {
                         case GroupTypes.GROUP_TYPE.timeOfDay.equals:
                         case GroupTypes.GROUP_TYPE.timeOfDay.second:
-                            groupData.group = moment(groupData.group, 'hh:mm:ss').format("h:mm:ss A");
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric', second: 'numeric'});
+                            }
                             break;
                         case GroupTypes.GROUP_TYPE.timeOfDay.minute:
-                            groupData.group = moment(groupData.group, 'hh:mm').format("h:mm A");
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
+                            }
                             break;
                         case GroupTypes.GROUP_TYPE.timeOfDay.hour:
-                            groupData.group = moment(groupData.group, 'hh:mm').format("h:00 A");
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
+                            }
                             break;
                         case GroupTypes.GROUP_TYPE.timeOfDay.am_pm:
-                            // TODO: do other localizations, especially those with 24 hour clock, have the concept of AM/PM...
-                            groupData.group = moment(groupData.group, 'hh:mm:ss').format("A");
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = (timeOfDay.getHours() < 12 ? Locales.getMessage('groupHeader.am') : Locales.getMessage('groupHeader.pm'));
+                            }
                             break;
                         }
 
@@ -298,20 +344,10 @@ let ReportContent = React.createClass({
      * @param date
      * @returns {*}
      */
-    localizeDate: function(date, type) {
+    localizeDate: function(date, opts) {
         try {
             this.context.locales = Locales.getLocale();
-            if (type === DataTypes.DATE_TIME) {
-                let options = {
-                    year: 'numeric', month: 'numeric', day: 'numeric',
-                    hour: 'numeric', minute: 'numeric'//, hour12: true
-                };
-                let localizedDateTime = this.formatDate(date, options);
-                localizedDateTime = localizedDateTime.replace(',', ' ');
-                return localizedDateTime;
-            } else {
-                return this.formatDate(date);
-            }
+            return this.formatDate(date, opts);
         } catch (e) {
             logger.warn("Error attempting to localize a date group.  Group value: " + date);
             return date;

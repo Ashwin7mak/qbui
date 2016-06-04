@@ -275,15 +275,15 @@ describe('ReportContent grouping functions', () => {
     });
 
     var groupByTimeOfDayCases = [
-        {name: 'null duration', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'empty duration', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 1, expected: 'groupHeader.empty'},
+        {name: 'null duration', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.empty'},
+        {name: 'empty duration', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.empty'},
 
-        {name: 'valid equal timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.equals, group: '18:51:21', localeMessageSpy: 0, expected: '6:51:21 PM'},
-        {name: 'valid second timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.second, group: '18:51:21', localeMessageSpy: 0, expected: '6:51:21 PM'},
-        {name: 'valid minute timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.minute, group: '18:51', localeMessageSpy: 0, expected: '6:51 PM'},
-        {name: 'valid hour timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.hour, group: '18:00', localeMessageSpy: 0, expected: '6:00 PM'},
-        {name: 'valid AmPm timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '23:59:59', localeMessageSpy: 0, expected: 'PM'},
-        {name: 'valid AmPm timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '00:00:00', localeMessageSpy: 0, expected: 'AM'}
+        {name: 'valid equal timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.equals, group: '18:51:21', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 51, 21)},
+        {name: 'valid second timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.second, group: '18:51:21', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 51, 21)},
+        {name: 'valid minute timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.minute, group: '18:51', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 51, 0)},
+        {name: 'valid hour timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.hour, group: '18:00', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 0, 0)},
+        {name: 'valid AmPm timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '23:59:59', localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.pm'},
+        {name: 'valid AmPm timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '00:00:00', localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.am'}
     ];
 
     groupByTimeOfDayCases.forEach(function(test) {
@@ -303,10 +303,10 @@ describe('ReportContent grouping functions', () => {
 
             //  validate whether the locale.getMessage method is called
             expect(localeGetMessageSpy.calls.count()).toEqual(test.localeMessageSpy);
+            expect(localizeDateSpy.calls.count()).toEqual(test.localeDateSpy);
 
             //  localize number and date should not be called for time of day
             expect(localizeNumberSpy.calls.count()).toEqual(0);
-            expect(localizeDateSpy.calls.count()).toEqual(0);
         });
     });
 
