@@ -81,25 +81,29 @@ let ReportContent = React.createClass({
     },
 
     parseTimeOfDay(timeOfDay) {
-        if (timeOfDay) {
-            let hr = 0;
-            let min = 0;
-            let sec = 0;
 
-            //  format is either hh:mm or hh:mm:ss
+        if (timeOfDay && typeof timeOfDay === 'string') {
+            //  format is expected to be either hh:mm or hh:mm:ss
             let el = timeOfDay.split(":");
-            if (el.length === 2) {
-                hr = el[0];
-                min = el[1];
+            if (el.length === 2 || el.length === 3) {
+                let hr = el[0];
+                let min = el[1];
+                let sec = 0;
+                if (el.length === 3) {
+                    sec = el[2];
+                }
+
+                //  the date component means nothing to the app..its only purpose is for verifying unit tests
+                let parsedDate = new Date(1970, 1, 1, hr, min, sec);
+                if (parsedDate instanceof Date) {
+                    if (!isNaN(parsedDate.getTime())) {
+                        return parsedDate;
+                    }
+                }
             }
-            if (el.length === 3) {
-                hr = el[0];
-                min = el[1];
-                sec = el[2];
-            }
-            //  the date component means nothing..it's needed so that the i18n parser functions properly
-            return new Date(1970, 1, 1, hr, min, sec);
         }
+
+        logger.warn('Invalid grouping header.  Unable to parse time of day group header: ' + timeOfDay);
         return null;
     },
 
