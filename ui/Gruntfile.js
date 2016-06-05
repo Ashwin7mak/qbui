@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
     var currentDateTime = new Date().getTime();
 
-    var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
+    var baseUrl = grunt.option('baseUrl') || 'http://quickbase-dev:9000';
     var buildDir =  path.join(__dirname, '/build');
     var localJsFile =  path.join(__dirname, '/server/config/environment/local.js');
 
@@ -532,8 +532,8 @@ module.exports = function(grunt) {
                     proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,
                     verbose         : grunt.option('verbose') === true,
-                    logger          : console.log
-                    //dns             : sauceDns
+                    logger          : console.log,
+                    dns             : sauceDns
                 }
             },
             aws: {
@@ -843,7 +843,7 @@ module.exports = function(grunt) {
         // Run your protractor tests via Sauce Labs against an existing AWS swimlane
         if (target === 'e2eAWSSauce') {
             return grunt.task.run([
-                'env:e2e',
+                'env:test',
                 'sauce_connect:aws',
                 'protractor:sauce_osx_chrome'
             ]);
