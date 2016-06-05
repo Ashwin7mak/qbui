@@ -97,7 +97,6 @@ var RecordRoute = React.createClass({
     },
 
     render() {
-        console.log(this.props);
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
             _.isUndefined(this.props.params.tblId) ||

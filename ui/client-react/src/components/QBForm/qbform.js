@@ -14,6 +14,7 @@ class QBForm extends React.Component {
     constructor(...args) {
         super(...args);
     }
+    //TODO : handle field types
     createFieldElement(element, sectionIndex, labelPosition) {
         let fieldLabel = element.fieldLabel ? element.fieldLabel : "test label";
         let fieldValue = element.fieldValue ? element.fieldValue : "test value";

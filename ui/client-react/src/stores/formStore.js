@@ -6,8 +6,8 @@ var logger = new Logger();
 import {sampleFormJSON} from '../components/QBForm/fakeData.js';
 
 /**
- * FieldStore keeps the list of fields in a table since the sort and group feature (and others later) allow selecting a field that is not in the report for sorting/grouping.
- * So we need to be able to access all the fields for the table. This store provide it.
+ * Form store keeps the layout + record data needed to display a record on a form.
+ * This needs to be extended to support add/edit form types
  */
 let FormStore = Fluxxor.createStore({
 
@@ -35,7 +35,6 @@ let FormStore = Fluxxor.createStore({
         this.emit("change");
     },
     onLoadFormAndRecordSuccess: function(formData) {
-        console.log("filling form data");
         this.formLoading = false;
         this.formData = sampleFormJSON;
         this.error = false;
