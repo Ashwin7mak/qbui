@@ -531,7 +531,7 @@ module.exports = function(grunt) {
                     accessKey       : sauceKey,
                     proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,
-                    verbose         : grunt.option('verbose') === true,
+                    verbose         : true,
                     logger          : console.log,
                     dns             : sauceDns
                 }
@@ -542,7 +542,7 @@ module.exports = function(grunt) {
                     accessKey       : sauceKey,
                     proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,
-                    verbose         : grunt.option('verbose') === true,
+                    verbose         : true,
                     logger          : console.log
                 }
             }
