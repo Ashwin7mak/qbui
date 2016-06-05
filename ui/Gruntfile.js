@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
     var currentDateTime = new Date().getTime();
 
-    var baseUrl = grunt.option('baseUrl') || 'http://quickbase-dev:9000';
+    var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
     var buildDir =  path.join(__dirname, '/build');
     var localJsFile =  path.join(__dirname, '/server/config/environment/local.js');
 
