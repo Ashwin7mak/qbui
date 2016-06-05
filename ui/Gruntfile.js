@@ -843,7 +843,7 @@ module.exports = function(grunt) {
         // Run your protractor tests via Sauce Labs against an existing AWS swimlane
         if (target === 'e2eAWSSauce') {
             return grunt.task.run([
-                'env:test',
+                'env:e2e',
                 'sauce_connect:aws',
                 'protractor:sauce_osx_chrome'
             ]);
