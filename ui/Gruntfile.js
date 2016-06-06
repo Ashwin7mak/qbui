@@ -544,7 +544,7 @@ module.exports = function(grunt) {
                     tunnelIdentifier: tunnelIdentifier,
                     verbose         : true,
                     logger          : console.log,
-                    proxyTunnel     : ''
+                    proxyTunnel     : httpProxy
                 }
             }
         },
