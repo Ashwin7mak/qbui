@@ -1,6 +1,7 @@
 
 import BaseService from '../../src/services/baseService';
 import StringUtils from '../../src/utils/stringUtils';
+import WindowLocationUtils from '../../src/utils/windowLocationUtils.js';
 
 describe('BaseService rewire tests', () => {
     'use strict';
@@ -14,6 +15,18 @@ describe('BaseService rewire tests', () => {
     var mockAxios = {
         get: function() {
             return {getMethodCalled:true};
+        }
+    };
+
+    var mockReplace = {
+        replace: function(url) {
+            return url;
+        }
+    };
+
+    var mockUpdate = {
+        update: function(url) {
+            return url;
         }
     };
 
@@ -36,7 +49,9 @@ describe('BaseService rewire tests', () => {
         expect(BaseService.prototype.setResponseInterceptor).toHaveBeenCalled();
     });
 
+
     it('test setResponseInterceptor with 401 status', () => {
+        BaseService.__Rewire__('WindowLocationUtils', mockUpdate);
         baseService = new BaseService();
         var error = {status: 401};
         var location = window.location;
@@ -45,6 +60,7 @@ describe('BaseService rewire tests', () => {
     });
 
     it('test setResponseInterceptor with 403 status', () => {
+        BaseService.__Rewire__('WindowLocationUtils', mockReplace);
         baseService = new BaseService();
         var error = {status: 403};
         var location = window.location.href;

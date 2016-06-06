@@ -4,6 +4,7 @@ import constants from './constants';
 import axios from 'axios';
 import Configuration from '../config/app.config';
 import StringUtils from '../utils/stringUtils';
+import WindowLocationUtils from '../utils/windowLocationUtils';
 
 class BaseService {
 
@@ -84,10 +85,10 @@ class BaseService {
         switch (error.status) {
         case 401:
             currentStackSignInUrl = Configuration.unauthorizedRedirect || self.constructRedirectUrl();
-            window.location.replace(currentStackSignInUrl);
+            WindowLocationUtils.update(currentStackSignInUrl);
             break;
         case 403:
-            window.location.href = '/forbidden';
+            WindowLocationUtils.replace('/forbidden');
             break;
         }
         //  let the service layer handle the error
