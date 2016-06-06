@@ -4,7 +4,10 @@ export const COMMON = {
     firstLetter: 'F',
     firstWord: 'I',
     day: 'D',
-    week: 'W'
+    week: 'W',
+    hour: 'h',
+    minute: 'm',
+    second: 's'
 };
 
 export const GROUP_TYPE = {
@@ -22,11 +25,18 @@ export const GROUP_TYPE = {
     },
     duration: {
         equals: COMMON.equals,
-        second: 's',
-        minute: 'm',
-        hour: 'h',
+        second: COMMON.second,
+        minute: COMMON.minute,
+        hour: COMMON.hour,
         week: COMMON.week,
         day: COMMON.day
+    },
+    timeOfDay: {
+        equals: COMMON.equals,
+        second: COMMON.second,
+        minute: COMMON.minute,
+        hour: COMMON.hour,
+        am_pm: 'a'
     },
     email: {
         equals: COMMON.equals,

@@ -23,6 +23,9 @@ describe('Validate GroupFormatter unit tests', function() {
         if (dataType === constants.DATE || dataType === constants.DATE_TIME) {
             return dateUtils.formatDate(new Date(), '%M-%D-%Y');
         }
+        if (dataType === constants.TIME_OF_DAY) {
+            return dateUtils.formatDate(new Date(), '%Y-%M-%DT%h:%m:%sZ');
+        }
         return '';
     }
 
@@ -42,6 +45,13 @@ describe('Validate GroupFormatter unit tests', function() {
                     type: dataType
                 }
             };
+
+            if (dataType === constants.TIME_OF_DAY) {
+                if (idx === 1) {
+                    field.datatypeAttributes.timeZone = constants.EST_TIMEZONE;
+                }
+            }
+
             setup.fields.push(field);
         }
 
@@ -132,6 +142,33 @@ describe('Validate GroupFormatter unit tests', function() {
         });
     });
 
+    describe('Invalid grouping tests', function() {
+        var testCases = [
+            //  All tests have an invalid group type('ZZ') for each data type
+            {message: 'TEXT', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.TEXT},
+            {message: 'USER', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.USER},
+            {message: 'EMAIL_ADDRESS', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.EMAIL_ADDRESS},
+            {message: 'DURATION', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.DURATION},
+            {message: 'TIME_OF_DAY', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.TIME_OF_DAY},
+            {message: 'DATE', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.DATE},
+            {message: 'DATE_TIME', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.DATE_TIME},
+            {message: 'NUMERIC', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.NUMERIC},
+            {message: 'CURRENCY', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.CURRENCY},
+            {message: 'PERCENT', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.PERCENT},
+            {message: 'RATING', numFields: 5, numRecords: 2, gList: '1:ZZ', dataType: constants.RATING}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.message, function(done) {
+                var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
+                var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
+                assert.equal(groupData.hasGrouping, false);
+                assert.equal(groupData.totalRows, 0);
+                done();
+            });
+        });
+    });
+
     describe('Valid grouping tests', function() {
         var testCases = [
             //  TEXT data type
@@ -161,6 +198,12 @@ describe('Validate GroupFormatter unit tests', function() {
             {message: 'DURATION: hour grouping', numFields: 5, numRecords: 2, gList: '1:h', dataType: constants.DURATION},
             {message: 'DURATION: week grouping', numFields: 5, numRecords: 2, gList: '1:W', dataType: constants.DURATION},
             {message: 'DURATION: day grouping', numFields: 5, numRecords: 2, gList: '1:D', dataType: constants.DURATION},
+            //  TIME OF DAY data type
+            {message: 'TIME_OF_DAY: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.TIME_OF_DAY},
+            {message: 'TIME_OF_DAY: second grouping', numFields: 5, numRecords: 2, gList: '1:s', dataType: constants.TIME_OF_DAY},
+            {message: 'TIME_OF_DAY: minute grouping', numFields: 5, numRecords: 2, gList: '1:m', dataType: constants.TIME_OF_DAY},
+            {message: 'TIME_OF_DAY: hour grouping', numFields: 5, numRecords: 2, gList: '1:h', dataType: constants.TIME_OF_DAY},
+            {message: 'TIME_OF_DAY: am_pm grouping', numFields: 5, numRecords: 2, gList: '1:a', dataType: constants.TIME_OF_DAY},
             //  DATE data type
             {message: 'DATE: equals grouping', numFields: 5, numRecords: 2, gList: '1:V', dataType: constants.DATE},
             {message: 'DATE: day grouping', numFields: 5, numRecords: 2, gList: '1:D', dataType: constants.DATE},
