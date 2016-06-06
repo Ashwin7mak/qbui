@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
     var currentDateTime = new Date().getTime();
 
-    var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
+    var baseUrl = grunt.option('baseUrl') || 'http://127.0.0.1:9000';
     var buildDir =  path.join(__dirname, '/build');
     var localJsFile =  path.join(__dirname, '/server/config/environment/local.js');
 
@@ -544,7 +544,6 @@ module.exports = function(grunt) {
                     tunnelIdentifier: tunnelIdentifier,
                     verbose         : true,
                     logger          : console.log,
-                    proxyTunnel     : httpProxy
                 }
             }
         },
