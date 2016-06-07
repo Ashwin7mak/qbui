@@ -47,7 +47,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         flex-direction: row;
     }
     .fieldRow.collapsed {
-        max-height: 25px;
+        max-height: 35px;
         -moz-transition: .35s;
         -ms-transition: .35s;
         -webkit-transition: .35s;
@@ -77,7 +77,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         padding: 5px 0;
         .field {
             flex: 1 1 50%;
-            padding: 0 35px 10px 0;
+            padding: 0 0 10px 0;
             .fieldLabel {
                 color: $fieldLabel-color;
                 padding-bottom: 2px;
@@ -215,6 +215,17 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
     &.open {
         transition: width 100ms ease-in;
         width: 240px;
+    }
+}
+
+/* For mobile phones: */
+@include small-breakpoint {
+    .custom-row-card {
+        .field {
+            .fieldLabel {
+                font-size: $font-size-small - 1;
+            }
+        }
     }
 }
 

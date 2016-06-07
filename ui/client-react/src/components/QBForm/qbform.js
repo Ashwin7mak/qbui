@@ -21,7 +21,7 @@ class QBForm extends React.Component {
         let key = "field" + sectionIndex + "-" + element.orderIndex;
         return (
             <div key={key} className="formElement field">
-                <h5><small className={"fieldLabel"}>{fieldLabel}</small></h5>
+                <span className={"fieldLabel"}>{fieldLabel}</span>
                 <span className="fieldValue">{fieldValue}</span>
             </div>
         );
@@ -52,7 +52,7 @@ class QBForm extends React.Component {
             } else if (element.FormFieldElement) {
                 elements.push(this.createFieldElement(element.FormFieldElement, section.orderIndex, fieldLabelPosition));
             }  else {
-                //log error
+                //unknown element type.. not sure how to render.
             }
         });
 
