@@ -38,7 +38,8 @@ module.exports = function(grunt) {
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
 
-    var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
+    //var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
+    var tunnelIdentifier = 'testTunnel';
     //We need to pass along --proxy-tunnel so that the tunnel will also use the proxy to communicate with the sauce apis
     //sauce-connect-launcher won't take an explicit no arg argument, so we are "leveraging" their mechanism for passing
     //arguments along to sauce-connect-launcher
@@ -540,10 +541,10 @@ module.exports = function(grunt) {
                 options: {
                     username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
-                    proxy           : httpProxy,
+                    //proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,
-                    verbose         : true,
-                    logger          : console.log,
+                    verbose         : true
+                    //logger          : console.log,
                 }
             }
         },
