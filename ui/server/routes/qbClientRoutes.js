@@ -78,6 +78,10 @@ var lodash = require('lodash');
             renderIndex(req, res);
         });
 
+        app.route('/components/:componentName').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
         //  default application dashboard
         app.route('/').get(function(req, res) {
             renderIndex(req, res);
