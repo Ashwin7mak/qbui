@@ -4,7 +4,7 @@
     padding: 10px;
 }
 
-.qbPanelBody {
+.formSection {
     display: block;
 
     .fieldRow {
@@ -14,7 +14,7 @@
         flex-wrap: wrap;
         padding: 5px 0;
 
-        .field {
+        .formElement {
             margin: 0 35px 20px 0;
             word-wrap: break-word;
             max-width: 100%;
@@ -29,15 +29,6 @@
             }
         }
     }
-}
-
-.qbPanelHeaderIcon {
-    float: right;
-    color: #404040;
-}
-
-.qbPanelHeaderIcon:hover {
-    color: #0098cd;
 }
 
 /* For mobile phones: */

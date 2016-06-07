@@ -29,8 +29,9 @@ class QBPanel extends React.Component {
         let panelId = this.props.panelNum && ("panelId" + this.props.panelNum); // ID is optional
         let icon = (this.props.iconRight ? "iconRight" : "iconLeft");
         let iconClass = (this.state.open ? "qbPanelHeaderIcon rotateDown " : "qbPanelHeaderIcon rotateUp ") + icon;
+        let className = this.props.className ? "qbPanel " + this.props.className : "qbPanel";
         return (
-            <div className="qbPanel" id={panelId}>
+            <div className={className} id={panelId}>
                 <div className="qbPanelHeader" >
                     <h3 className="qbPanelHeaderTitle">
                         <div className="qbPanelHeaderTitleText">{this.props.title}</div>
@@ -51,7 +52,8 @@ QBPanel.propTypes = {
     title: React.PropTypes.string,
     isOpen: React.PropTypes.bool,
     panelNum: React.PropTypes.number,
-    iconRight: React.PropTypes.bool
+    iconRight: React.PropTypes.bool,
+    className: React.PropTypes.string
 };
 QBPanel.defaultProps = {
     title: "Untitled",

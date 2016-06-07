@@ -20,7 +20,7 @@ class QBForm extends React.Component {
         let fieldValue = element.fieldValue ? element.fieldValue : "test value";
         let key = "field" + sectionIndex + "-" + element.orderIndex;
         return (
-            <div key={key} className="field">
+            <div key={key} className="formElement field">
                 <h5><small className={"fieldLabel"}>{fieldLabel}</small></h5>
                 <span className="fieldValue">{fieldValue}</span>
             </div>
@@ -28,7 +28,7 @@ class QBForm extends React.Component {
     }
     createTextElement(element, sectionIndex) {
         let key = "field" + sectionIndex + "-" + element.orderIndex;
-        return <div key={key} className="field textElement">{element.displayText}</div>;
+        return <div key={key} className="formElement text">{element.displayText}</div>;
     }
     createRow(fields) {
         return <div className="fieldRow">{fields}</div>;
@@ -44,7 +44,7 @@ class QBForm extends React.Component {
             fieldLabelPosition = section.headerElement.FormHeaderElement.position;
         }
 
-        //build each of the elements
+        //build each of the elements, stuff them into one row for now
         let elements = [];
         _.each(section.elements, (element) => {
             if (element.FormTextElement) {
@@ -57,7 +57,7 @@ class QBForm extends React.Component {
         });
 
         return (
-            <QBPanel title={sectionTitle} key={"section" + section.orderIndex} isOpen={true} panelNum={section.orderIndex}>
+            <QBPanel className="formSection" title={sectionTitle} key={"section" + section.orderIndex} isOpen={true} panelNum={section.orderIndex}>
                 {this.createRow(elements)}
             </QBPanel>
         );
