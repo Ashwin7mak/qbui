@@ -67,7 +67,7 @@ class BaseService {
      */
     setResponseInterceptor() {
         var self = this;
-        axios.interceptors.response.use(self.responseInterceptorSuccess, self.responseInterceptorError);
+        axios.interceptors.response.use(self.responseInterceptorSuccess, error => {self.responseInterceptorError(error);});
     }
 
     responseInterceptorSuccess(response) {
