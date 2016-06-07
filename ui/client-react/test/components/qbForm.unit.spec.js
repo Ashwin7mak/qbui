@@ -9,7 +9,7 @@ const fakeQBFormData = {
     "tabs": {
         "0": {
             "orderIndex": 0,
-            "title": "nameMdhfp1464879524917",
+            "title": "tab0",
             "sections": {
                 "0": {
                     "orderIndex": 0,
@@ -75,11 +75,15 @@ const fakeQBFormData = {
                     }
                 }
             }
+        },
+        "1": {
+            "orderIndex": 1,
+            "title": "tab1",
         }
     }
 };
 
-describe('qbForm functions', () => {
+describe('QBForm functions', () => {
     'use strict';
 
     var component;
@@ -89,22 +93,5 @@ describe('qbForm functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         var qbForm = ReactDOM.findDOMNode(component);
         expect(qbForm).toBeDefined();
-    });
-
-    it('test render of tabs and sections', () => {
-        component = TestUtils.renderIntoDocument(<QBForm formData={fakeQBFormData}></QBForm>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        let tabs = TestUtils.scryRenderedComponentsWithType(component, TabPane);
-        expect(tabs.length).toEqual(1);
-        let tabSections = TestUtils.scryRenderedComponentsWithType(component, QBPanel);
-        expect(tabSections.length).toEqual(2);
-        let sections = TestUtils.scryRenderedDOMComponentsWithClass(tabs[0], "formSection");
-        expect(sections.length).toEqual(2);
-        let formElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement");
-        expect(formElements.length).toEqual(2);
-        let textElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement text");
-        expect(textElements.length).toEqual(1);
-        let fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
-        expect(fieldElements.length).toEqual(1);
     });
 });
