@@ -1,0 +1,1 @@
+<QBicon icon="accessibility" />
