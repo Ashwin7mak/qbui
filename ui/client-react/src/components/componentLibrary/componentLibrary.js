@@ -1,17 +1,31 @@
 import React from 'react';
+import {Link} from 'react-router';
 import {ButtonToolbar, Dropdown, Modal, OverlayTrigger, Popover, Tooltip, Button, FormGroup, HelpBlock, ControlLabel, FormControl, InputGroup, Col, Checkbox, Radio, Form} from 'react-bootstrap';
 
-var ComponentLibrary = React.createClass({
+import './componentLibrary.scss';
+
+var ComponentLibraryWrapper = React.createClass({
     render() {
         return (
-            <form>
-                <FormGroup controlId="formValidationWarning1" validationState="warning">
-                  <ControlLabel>Input with warning</ControlLabel>
-                  <FormControl type="text" />
-                </FormGroup>
-            </form>
+            <div className="componentLibrary">
+                <div className="componentLibraryNavigation">
+                    <div className="header">
+                        <h3 className="title">QuickBase<br />Component Library
+                        </h3>
+                    </div>
+                    <nav>
+                        <ul>
+                            <li><Link to="/components/qbpanel">QBPanel</Link></li>
+                            <li><Link to="/components/qbicon">QBIcon</Link></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div className="componentLibraryPage">
+                    {this.props.children}
+                </div>
+            </div>
         );
     }
 });
 
-export default ComponentLibrary;
+export default ComponentLibraryWrapper;
