@@ -18,14 +18,11 @@ describe('BaseService rewire tests', () => {
         }
     };
 
-    var mockReplace = {
-        replace: function(url) {
-            return url;
-        }
-    };
-
-    var mockUpdate = {
+    var mockWindowUtils = {
         update: function(url) {
+            return url;
+        },
+        replace: function(url) {
             return url;
         }
     };
@@ -33,14 +30,18 @@ describe('BaseService rewire tests', () => {
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
+        spyOn(mockWindowUtils, 'update');
+        spyOn(mockWindowUtils, 'replace');
 
         BaseService.__Rewire__('cookie', mockCookie);
         BaseService.__Rewire__('axios', mockAxios);
+        BaseService.__Rewire__('WindowLocationUtils', mockWindowUtils);
     });
 
     afterEach(() => {
         BaseService.__ResetDependency__('cookie');
         BaseService.__ResetDependency__('axios');
+        BaseService.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
     });
 
     it('test constructor', () => {
@@ -51,29 +52,22 @@ describe('BaseService rewire tests', () => {
 
 
     it('test setResponseInterceptor with 401 status', () => {
-        BaseService.__Rewire__('WindowLocationUtils', mockUpdate);
         baseService = new BaseService();
-        var error = {status: 401};
-        var location = window.location;
-        baseService.responseInterceptorError(error);
-        expect(window.location).toEqual(location);
+        baseService.responseInterceptorError({status: 401});
+        expect(mockWindowUtils.update).toHaveBeenCalled();
     });
 
     it('test setResponseInterceptor with 403 status', () => {
-        BaseService.__Rewire__('WindowLocationUtils', mockReplace);
         baseService = new BaseService();
-        var error = {status: 403};
-        var location = window.location.href;
-        baseService.responseInterceptorError(error);
-        expect(window.location.href).toEqual(location);
+        baseService.responseInterceptorError({status: 403});
+        expect(mockWindowUtils.replace).toHaveBeenCalled();
     });
 
     it('test setResponseInterceptor with 200 status', () => {
         baseService = new BaseService();
-        var error = {status: 200};
-        var location = window.location;
-        baseService.responseInterceptorError(error);
-        expect(window.location).toEqual(location);
+        baseService.responseInterceptorError({status: 200});
+        expect(mockWindowUtils.replace).not.toHaveBeenCalled();
+        expect(mockWindowUtils.update).not.toHaveBeenCalled();
     });
 
     it('test getCookie', () => {
