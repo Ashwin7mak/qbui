@@ -4,12 +4,9 @@ import {Panel}  from 'react-bootstrap';
 import QBicon from '../qbIcon/qbIcon';
 import './qbpanel.scss';
 
-/*
-    Custom QuickBase Panel component that has 4 properties.
-        title: the title to display in the Panel Header
-        isOpen: boolean if we should start with the panel expanded or not
-        panelNum: creates a unique id for each panel object (helps with accessibility)
-        children: the content displayed within the panel itself
+/**
+ *  # QBPanel
+ *  Custom QuickBase Panel component that wraps the bootstrap component. You can pass content by wrapping it in a `<QBPanel></QBPanel>` tag.
  */
 class QBPanel extends React.Component {
 
@@ -47,9 +44,21 @@ class QBPanel extends React.Component {
 }
 
 QBPanel.propTypes = {
+    /**
+     * the title to display in the Panel Header.
+     */
     title: React.PropTypes.string,
+    /**
+    * boolean if we should start with the panel expanded or not
+    */
     isOpen: React.PropTypes.bool,
+    /**
+     * creates a unique id for each panel object (helps with accessibility)
+     */
     panelNum: React.PropTypes.number,
+    /**
+     * I guess the toggle icon is optional.
+     */
     iconRight: React.PropTypes.bool
 };
 QBPanel.defaultProps = {
