@@ -178,11 +178,13 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .ag-row-level-0 .ag-group-cell-entire-row {
         border-top: 4px solid $grid-group-row-header-border-top;
+        padding-top: 0px;
     }
     .ag-row-group {
         &:first-of-type {
             .ag-group-cell-entire-row {
                 border-top: 0;
+                padding-top: 2px;
             }
         }
     }
