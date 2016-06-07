@@ -23,25 +23,25 @@ let formActions = {
         return new Promise((resolve, reject) => {
             if (appId && tblId && recordId) {
                 this.dispatch(actions.LOAD_FORM_AND_RECORD);
-                let formService = new FormService();
 
-                this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS);
+                //this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS);
                 //TODO: make the real call after node supports the end point.
-                //formService.getFormAndRecord(appId, tblId, recordId, formType).then(
-                //    (response) => {
-                //        this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS, {appId, tblId, data: response.data});
-                //        resolve();
-                //    },
-                //    (error) => {
-                //        logger.debug('FormService getFormAndRecord error:' + JSON.stringify(error));
-                //        this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED);
-                //        reject();
-                //    }
-                //).catch((ex) => {
-                //    logger.debug('FormService getFormAndRecord exception:' + JSON.stringify(ex));
-                //    this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED);
-                //    reject();
-                //});
+                let formService = new FormService();
+                formService.getFormAndRecord(appId, tblId, recordId, formType).then(
+                    (response) => {
+                        this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS, response.data);
+                        resolve();
+                    },
+                    (error) => {
+                        logger.debug('FormService getFormAndRecord error:' + JSON.stringify(error));
+                        this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED);
+                        reject();
+                    }
+                ).catch((ex) => {
+                    logger.debug('FormService getFormAndRecord exception:' + JSON.stringify(ex));
+                    this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED);
+                    reject();
+                });
             } else {
                 logger.error('Missing required input parameters for formService.getFormAndRecord.');
                 this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED);

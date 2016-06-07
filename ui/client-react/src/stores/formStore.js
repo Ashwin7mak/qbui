@@ -3,7 +3,6 @@ import * as actions from '../constants/actions';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 var logger = new Logger();
-import {sampleFormJSON} from '../components/QBForm/fakeData.js';
 
 /**
  * Form store keeps the layout + record data needed to display a record on a form.
@@ -36,7 +35,7 @@ let FormStore = Fluxxor.createStore({
     },
     onLoadFormAndRecordSuccess: function(formData) {
         this.formLoading = false;
-        this.formData = sampleFormJSON;
+        this.formData = formData;
         this.error = false;
         this.emit('change');
     },

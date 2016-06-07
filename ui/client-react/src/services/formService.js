@@ -3,6 +3,8 @@ import BaseService from './baseService';
 import NumberUtils from '../utils/numberUtils';
 import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
+import Promise from 'bluebird';
+import {sampleFormJSON} from '../components/QBForm/fakeData.js';
 
 class RecordService extends BaseService {
 
@@ -36,8 +38,10 @@ class RecordService extends BaseService {
             params[query.FORM_TYPE] = formType;
         }
 
-        let url = super.constructUrl(this.API.GET_FORM_AND_RECORD, [appId, tableId]);
-        return super.get(url, {params:params});
+        return Promise.resolve({data: sampleFormJSON});
+        //TODO add a node end point.
+        //let url = super.constructUrl(this.API.GET_FORM_AND_RECORD, [appId, tableId]);
+        //return super.get(url, {params:params});
     }
 }
 
