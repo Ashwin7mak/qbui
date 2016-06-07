@@ -8,6 +8,11 @@
     var errors = require('./components/errors');
     var authentication = require('./components/authentication');
     var log = require('./logger').getLogger();
+    var _ = require('lodash');
+    var mixins = require('./../common/src/lodashMixins');
+
+    require('./logger').getLogger();
+
 
     module.exports = function(app, config) {
 
@@ -112,6 +117,71 @@
             }
             // ...route terminates...logging a client side message only
         });
+
+
+        /*
+         *  Route to log a performance stats from the client. Only a post request is supported.
+         */
+        log.debug('Routing POST method for route ' + routeConstants.LOG_CLIENT_PERF_MSG);
+        app.all(routeConstants.LOG_CLIENT_PERF_MSG, function(req, res, next) {
+
+            // TODO: this endpoint needs to be protected...validate that the requested
+            // TODO: endpoint includes a valid authenticated ticket.
+            if (config  === undefined || config.LOG  === undefined ||
+                config.LOG.logClient === undefined || config.LOG.logClient === true) {
+                if (requestHelper.isPost(req)) {
+
+                    if (req.body) {
+                        let level = 'info';
+                        var fn;
+                        try {
+                            fn = log[level].bind(log);
+                        } catch (e) {
+                            // if invalid level, log it and return a bad request
+                            log.error({req: req}, 'ERROR logging message: ' + e);
+                        }
+
+                        if (typeof fn === 'function') {
+                            //  generate a new Transaction Id(TID) and add to the request header.
+                            requestHelper.setTidHeader(req);
+
+                            // serialize all the params for message output
+                            let stats = req.body;
+                            stats.browser = req.useragent.browser;
+                            stats.browserVersion = req.useragent.version;
+                            if (req) {
+                                //  for client logging, since we are posting to the node logging endpoint, clear out theses variables
+                                //  as they contain node logging endpoint info, which is confusing when viewing a client message in the
+                                //  log output.  By initializing to empty, the value will not display in the log message.
+                                req.url = '';
+                                req.method = '';
+                                req.body = '';
+                            }
+                            let msg = "Client Perf stats (ms): " + JSON.stringify(_.sortKeysBy(stats,
+                                    (val, key) => key.toLowerCase()));
+                            msg = msg.replace(/"/g, "'");
+                            var args = [];
+                            args.push({type:'CLIENT_PERF', req: req}, msg);
+
+                            fn.apply(null, args);
+
+                            // Send a 204 Response (no content)
+                            res.status(204).send();
+                        } else {
+                            res.status(400).send('Bad Request');
+                        }
+                    } else {
+                        res.status(400).send('Bad Request');
+                    }
+                } else {
+                    res.status(405).send('Method not supported');
+                }
+            } else {
+                res.status(200).send('OK');
+            }
+            // ...route terminates...logging a client side message only
+        });
+
 
         //  For all requests:
         //     -- log the request route.

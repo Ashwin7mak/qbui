@@ -97,6 +97,12 @@ var config = require('./environment');
                 config.ip = 'localhost';
             }
         }
+        //performance tracking code
+        app.use(express.static(path.join(config.root, 'server/public')));
+        //vendor static files
+        app.use(express.static(path.join(config.root, 'server/public/vendor')));
+
+
         //   allows for ability to run multiple clients...right now only REACT
         var client = config.client;
 

@@ -4,6 +4,7 @@ import ReactIntl from 'react-intl';
 import CardViewListHolder from '../../../components/dataTable/cardView/cardViewListHolder';
 import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
+import PerfLogUtils from '../../../utils/perf/perfLogUtils';
 
 import Logger from '../../../utils/logger';
 let logger = new Logger();
@@ -356,6 +357,43 @@ let ReportContent = React.createClass({
             logger.warn("Error attempting to localize a date group.  Group value: " + date);
             return date;
         }
+    },
+
+    //when report changed from not loading to loading start measure of components performance
+    startPerfTiming(nextProps) {
+        if (_.has(this.props,'reportData.loading') &&
+                !this.props.reportData.loading &&
+                nextProps.reportData.loading) {
+            PerfLogUtils.mark('component-ReportContent start')
+        }
+    },
+
+    //when report changed from loading to loaded finish measure of components performance
+    capturePerfTiming(prevProps) {
+        let timingContextData = {numReportCols:0, numReportRows:0};
+        if (_.has(this.props,'reportData.loading') &&
+                !this.props.reportData.loading &&
+                prevProps.reportData.loading) {
+            PerfLogUtils.measure('component-ReportContent', 'component-ReportContent start');
+
+            // note the size of the report with the measure
+            if (_.has(this.props, 'reportData.data.columns.length')) {
+                let reportData = this.props.reportData.data;
+                timingContextData.numReportCols = reportData.columns.length;
+                timingContextData.numReportRows = reportData.filteredRecordsCount ?
+                    reportData.filteredRecordsCount : reportData.recordsCount;
+            }
+            PerfLogUtils.send(timingContextData);
+            PerfLogUtils.done();
+        }
+    },
+
+    componentWillUpdate(nextProps) {
+        this.startPerfTiming(nextProps);
+    },
+
+    componentDidUpdate(prevProps){
+        this.capturePerfTiming(prevProps);
     },
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/

@@ -37,10 +37,17 @@ import AppHomePageRoute from '../components/app/appHomePageRoute';
 import ReportRoute from '../components/report/reportRoute';
 import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
+import PerfLogUtils from '../utils/perf/perfLogUtils';
+import ReactPerfUtils from '../utils/perf/ReactPerfUtils';
+
+import Configuration from '../../src/config/app.config.js';
+
+import Logger from '../utils/logger';
 
 import _ from 'lodash';
 
 import FastClick from 'fastclick';
+let logger = new Logger();
 
 let stores = {
     ReportsStore: new ReportsStore(),
@@ -59,6 +66,32 @@ flux.addActions(navActions);
 flux.addActions(facetMenuActions);
 flux.addActions(fieldsActions);
 
+
+//init the perf measurements for development environment
+let ReactPerf = ReactPerfUtils.devPerfInit(Configuration, window);
+
+
+var history;
+/**
+ * Instrumentation code of SPA history route change perf timing
+ */
+function hookHistory(history) {
+    if (PerfLogUtils.isEnabled()) {
+        history.listen(function(ev) {
+            // mark start of new route
+            if (ev.action === "PUSH" || ev.action === "REPLACE" ) {
+                PerfLogUtils.mark("newroute:" + ev.pathname);
+            }
+        });
+        return true;
+    }
+}
+
+function setupHistory() {
+    history = createBrowserHistory();
+    hookHistory(history);
+    return history;
+}
 let NavWrapper = React.createClass({
 
     /* touch detection */
@@ -140,7 +173,7 @@ let Apps = React.createClass({
 });
 
 render((
-    <Router history={createBrowserHistory()}>
+    <Router history={setupHistory()}>
         <Route path="/" component={Apps} />
 
         <Route path="apps" component={NavWrapper} >
@@ -155,6 +188,8 @@ render((
         </Route>
 
     </Router>
-), document.getElementById('content'));
+), document.getElementById('content'),
+    //browser console the performance measurements
+    ReactPerfUtils.devPerfPrint(Configuration, ReactPerf));
 
 

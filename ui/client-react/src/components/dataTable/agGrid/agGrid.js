@@ -12,6 +12,7 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
+import PerfLogUtils from '../../../utils/perf/perfLogUtils';
 
 import {DateFormatter, DateTimeFormatter, TimeFormatter,
         NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter,
@@ -279,11 +280,22 @@ let AGGrid = React.createClass({
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
 
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
+
     },
     componentWillUnmount() {
         this.refs.gridWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
+    componentWillUpdate(nextProps) {
+        if (nextProps.loading) {
+            PerfLogUtils.mark('component-AgGrid start');
+        }
+    },
+    componentDidUpdate() {
+        if (!this.props.loading) {
+            PerfLogUtils.measure('component-AgGrid', 'component-AgGrid start');
+        }
+    },
     // Performance improvement - only update the component when certain state/props change
     // Since this is a heavy component we dont want this updating all times.
     shouldComponentUpdate(nextProps) {
@@ -631,7 +643,6 @@ let AGGrid = React.createClass({
 
     render() {
         let columnDefs = this.getColumns();
-
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
         return (
             <div className="reportTable">

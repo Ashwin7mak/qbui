@@ -60,6 +60,9 @@
         //Node understanding of RuntimeEnvironment
         env: envConsts.PRODUCTION,
 
+        //enable to track performance stats to server/splunk
+        isPerfTrackingEnabled: true,
+
         //Node's understanding of a grouping of routes to be enabled/disabled
         routeGroup: routeGroups.LH_V1,
 

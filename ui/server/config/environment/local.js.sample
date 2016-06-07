@@ -62,6 +62,9 @@
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
 
+        //enable to track performance stats to server/splunk
+        isPerfTrackingEnabled: false,
+
         //set false if you don't want growl notifications on webpack / watch updates
         growlNotify: true,
 

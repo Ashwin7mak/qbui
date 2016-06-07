@@ -1,5 +1,6 @@
 import LogLevel from '../utils/logLevels';
 import uuid from 'uuid';
+import _ from 'lodash';
 
 //
 // Set application configuration settings per run-time environment.  The webpack configuration defines and sets
@@ -15,71 +16,59 @@ import uuid from 'uuid';
 // blocks because that code is NOT included in the evaluated bundle, and therefore not testable.  This is
 // accomplished by annotating the if statements that evaluate to false with /* istanbul ignore if */
 //
+
 let configuration = null;
 
+let defaultConfig = {
+    uid: uuid.v1(),
+    api: {
+        qbVersion: 'v1',
+        nodeVersion: 'v1'
+    },
+    locale: {
+        supported: ['en-us', 'de-de', 'fr-fr'],
+        default: 'en-us'
+    },
+    consoleLogReactPerf: false
+};
+
 if (__QB_PROD__) {
-    configuration = {
+    configuration = _.extend({}, defaultConfig, {
         env: 'PROD',
-        uid: uuid.v1(),
-        api: {
-            qbVersion: 'v1',
-            nodeVersion: 'v1'
-        },
-        locale: {
-            supported:['en-us', 'de-de', 'fr-fr'],
-            default: 'en-us'
-        },
         logger: {
             logLevel: LogLevel.WARN,
             logToConsole: false,
             logToServer: true
         },
         unauthorizedRedirect: null
-    };
+    });
 }
 
 /* istanbul ignore if */
 if (__QB_TEST__) {
-    configuration = {
+    configuration = _.extend({}, defaultConfig, {
         env: 'TEST',
-        uid: uuid.v1(),
-        api: {
-            qbVersion: 'v1',
-            nodeVersion: 'v1'
-        },
-        locale: {
-            supported: ['en-us', 'de-de', 'fr-fr'],
-            default: 'en-us'
-        },
         logger: {
             logLevel: LogLevel.DEBUG,
             logToConsole: true,
             logToServer: true
         },
         unauthorizedRedirect: '/unauthorized'
-    };
+    });
 }
 
 /* istanbul ignore if */
 if (__QB_LOCAL__) {
-    configuration = {
+    configuration = _.extend({}, defaultConfig, {
         env: 'LOCAL',
-        uid: uuid.v1(),
-        api: {
-            qbVersion: 'v1',
-            nodeVersion: 'v1'
-        },
-        locale: {
-            supported:['en-us', 'de-de', 'fr-fr'],
-            default: 'en-us'
-        },
         logger: {
             logLevel: LogLevel.DEBUG,
             logToConsole: true,
             logToServer: true
         },
-        unauthorizedRedirect: '/unauthorized'
-    };
+        unauthorizedRedirect: '/unauthorized',
+        consoleLogReactPerf: true,
+    });
 }
 
 /* istanbul ignore if */
