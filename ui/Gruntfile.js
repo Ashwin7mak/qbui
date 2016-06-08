@@ -846,7 +846,7 @@ module.exports = function(grunt) {
         if (target === 'e2eAWSSauce') {
             return grunt.task.run([
                 'env:e2e',
-                'sauce_connect:aws',
+                //'sauce_connect:aws',
                 'protractor:sauce_osx_chrome'
             ]);
         }
