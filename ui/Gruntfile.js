@@ -541,9 +541,10 @@ module.exports = function(grunt) {
                 options: {
                     username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
-                    proxy           : httpProxy,
+                    proxy           : 'http://egressproxy.quickbaserocks.com:80',
                     tunnelIdentifier: tunnelIdentifier,
-                    verbose         : true
+                    verbose         : true,
+                    proxyTunnel     : true
                     //logger          : console.log,
                 }
             }
