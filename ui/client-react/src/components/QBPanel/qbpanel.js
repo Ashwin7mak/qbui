@@ -29,7 +29,9 @@ class QBPanel extends React.Component {
         let panelId = this.props.panelNum && ("panelId" + this.props.panelNum); // ID is optional
         let icon = (this.props.iconRight ? "iconRight" : "iconLeft");
         let iconClass = (this.state.open ? "qbPanelHeaderIcon rotateDown " : "qbPanelHeaderIcon rotateUp ") + icon;
-        let className = this.props.className ? "qbPanel " + this.props.className : "qbPanel";
+        let className = "qbPanel ";
+        className += this.state.open ? "open " : "closed ";
+        className += this.props.className ? this.props.className : "";
         return (
             <div className={className} id={panelId}>
                 <div className="qbPanelHeader" >

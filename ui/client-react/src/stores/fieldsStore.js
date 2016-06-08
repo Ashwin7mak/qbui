@@ -14,7 +14,7 @@ let FieldsStore = Fluxxor.createStore({
     initialize: function() {
         this.fields = [];
         this.currentTable = null;
-        this.formLoading = false;
+        this.fieldsLoading = false;
         this.error = false;
 
         this.bindActions(
@@ -27,17 +27,17 @@ let FieldsStore = Fluxxor.createStore({
         this.logger = new Logger();
     },
     onLoadFields: function() {
-        this.formLoading = true;
+        this.fieldsLoading = true;
         this.emit("change");
     },
     onLoadFieldsFailed: function() {
-        this.formLoading = false;
+        this.fieldsLoading = false;
         this.fields = [];
         this.error = true;
         this.emit("change");
     },
     onLoadFieldsSuccess: function(fields) {
-        this.formLoading = false;
+        this.fieldsLoading = false;
         this.fields = fields;
         this.error = false;
         this.emit('change');
@@ -51,7 +51,7 @@ let FieldsStore = Fluxxor.createStore({
         return {
             fields: this.fields,
             currentTable: this.currentTable,
-            formLoading: this.formLoading,
+            fieldsLoading: this.fieldsLoading,
             error: this.error
         };
     }

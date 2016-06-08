@@ -24,8 +24,6 @@ let formActions = {
             if (appId && tblId && recordId) {
                 this.dispatch(actions.LOAD_FORM_AND_RECORD);
 
-                //this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS);
-                //TODO: make the real call after node supports the end point.
                 let formService = new FormService();
                 formService.getFormAndRecord(appId, tblId, recordId, formType).then(
                     (response) => {
