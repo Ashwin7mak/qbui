@@ -94,4 +94,34 @@ describe('QBForm functions', () => {
         var qbForm = ReactDOM.findDOMNode(component);
         expect(qbForm).toBeDefined();
     });
+
+    it('test render of tabs', () => {
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        let tabs = TestUtils.scryRenderedComponentsWithType(component, TabPane);
+        expect(tabs.length).toEqual(2);
+    });
+
+    it('test render of sections', () => {
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        let sections = TestUtils.scryRenderedDOMComponentsWithClass(component, "formSection");
+        expect(sections.length).toEqual(2);
+    });
+
+    it('test render of formElements', () => {
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        let formElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement");
+        expect(formElements.length).toEqual(2);
+    });
+
+    it('test render of text form elements', () => {
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        let textElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement text");
+        expect(textElements.length).toEqual(1);
+    });
+
+    it('test render of field form elements', () => {
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        let fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
+        expect(fieldElements.length).toEqual(1);
+    });
 });

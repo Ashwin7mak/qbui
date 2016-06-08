@@ -69,7 +69,7 @@ class QBForm extends React.Component {
             sections.push(this.createSection(section));
         });
         return (
-            <TabPane key={"tab" + tab.orderIndex} tab={tab.title}>
+            <TabPane key={tab.orderIndex} tab={tab.title}>
                 <br/>
                 {sections}
             </TabPane>
@@ -86,7 +86,7 @@ class QBForm extends React.Component {
         return (
             <div className="formContainer">
                 <form>
-                    <Tabs defaultActiveKey={this.props.activeTab}>
+                    <Tabs activeKey={this.props.activeTab}>
                         {tabs}
                     </Tabs>
                 </form>
