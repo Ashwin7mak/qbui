@@ -141,8 +141,7 @@
                 fieldNames: [],
                 fieldOrder: []
             };
-
-            let buildGroupList = false;
+            
             for (let index = 0; index < groupFields.length; index++) {
                 if (secondarySort.index !== null) {
                     //  any group AFTER a field identified as one where the sort order of the result set is not
