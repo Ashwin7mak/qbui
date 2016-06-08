@@ -127,33 +127,42 @@
             //          norm@domain2.com, 2016-07-14
             //
             let secondarySort = {
-                index: null,
-                fieldNames: [],
-                fieldOrder: []
+                required: false,
+                //  group fields
+                groupFieldIndex: 0,
+                groupFieldNames: [],
+                groupFieldOrder: [],
+                //  sort fields
+                sortFieldIndex: 0,
+                sortFieldNames: [],
+                sortFieldOrder: []
             };
 
             for (let index = 0; index < groupFields.length; index++) {
-                if (secondarySort.index !== null) {
+                if (secondarySort.required === true) {
                     //  any group AFTER a field identified as one where the sort order of the result set is not
-                    //  guarenteed to be correct from sql query, is added to the secondarySort list for node
-                    //  side sorting.
-                    secondarySort.fieldNames.push(groupFields[index].field.name);
-                    secondarySort.fieldOrder.push(groupFields[index].field.ascending ? 'asc' : 'desc');
+                    //  a guarantee, is added to the secondarySort list for node side sorting.
+                    secondarySort.groupFieldNames.push(groupFields[index].field.name);
+                    secondarySort.groupFieldOrder.push(groupFields[index].field.ascending ? 'asc' : 'desc');
+
+                    //  the sort field index is always the last group index..or 0 if no grouping requires additional sorting
+                    secondarySort.sortFieldIndex = index;
                 } else {
                     //  if the group type is not equals ('V'), then a secondary sort is necessary.  Set the
                     //  index in the secondarySort object to identify the level at which to perform the sort.
                     /*eslint no-lonely-if:0 */
                     if (groupFields[index].groupType !== groupTypes.COMMON.equals) {
-                        secondarySort.index = index;
+                        secondarySort.required = true;
+                        secondarySort.groupFieldIndex = index;
                     }
                 }
             }
 
             //  If we have any sort only fields, add those to the sortFieldObj if there is to be node sorting.
-            if (secondarySort.index !== null) {
+            if (secondarySort.required === true) {
                 for (let index = 0; index < sortFields.length; index++) {
-                    secondarySort.fieldNames.push(sortFields[index].name);
-                    secondarySort.fieldOrder.push(sortFields[index].ascending ? 'asc' : 'desc');
+                    secondarySort.sortFieldNames.push(sortFields[index].name);
+                    secondarySort.sortFieldOrder.push(sortFields[index].ascending ? 'asc' : 'desc');
                 }
             }
 
@@ -366,10 +375,17 @@
             let children = [];
 
             //  Check the fieldNames list for fields to sort.
-            if (secondarySort.fieldNames.length > 0) {
-                //  only sort when the sort index matches the current idx level
-                if (secondarySort.index === idx) {
-                    groupedData[group] = lodash.orderBy(groupedData[group], secondarySort.fieldNames, secondarySort.fieldOrder);
+            if (secondarySort.required === true) {
+                //  if needing to sort against a groupBy field, sort against that specific field.
+                if (secondarySort.groupFieldIndex <= idx && secondarySort.groupFieldNames.length > idx) {
+                    groupedData[group] = lodash.orderBy(groupedData[group], [secondarySort.groupFieldNames[idx]], [secondarySort.groupFieldOrder[idx]]);
+                }
+
+                //  any sortOnly fields to reorder.  The index should be the lowest level in the tree
+                if (secondarySort.sortFieldNames.length > 0) {
+                    if (secondarySort.sortFieldIndex === idx) {
+                        groupedData[group] = lodash.orderBy(groupedData[group], secondarySort.sortFieldNames, secondarySort.sortFieldOrder);
+                    }
                 }
             }
 
