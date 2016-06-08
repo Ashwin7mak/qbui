@@ -4,7 +4,7 @@ import QBicon from '../qbIcon/qbIcon';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
-import Record from './record';
+import QBForm from './../QBForm/qbform.js';
 import {Link} from 'react-router';
 import Fluxxor from 'fluxxor';
 import './record.scss';
@@ -117,7 +117,7 @@ var RecordRoute = React.createClass({
                     {this.getSecondaryBar()}
                     {this.getPageActions(4)}
                 </div>
-                <Record formData={this.props.form ? this.props.form.formData : null}/>
+                <QBForm formData={this.props.form ? this.props.form.formData : null}></QBForm>
             </div>);
         }
     }
