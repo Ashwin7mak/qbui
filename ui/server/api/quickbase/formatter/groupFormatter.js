@@ -32,16 +32,6 @@
     }
 
     /**
-     * Is the field being grouped using the 'group by equals' option
-     *
-     * @param groupField
-     * @returns {boolean}
-     */
-    function isSecondarySortRequired(groupField) {
-        return groupField.groupType !== groupTypes.COMMON.equals;
-    }
-
-    /**
      * Return the supplied record data grouped to match the grouping
      * requirements of each groupField element.
      *
@@ -150,8 +140,10 @@
                     secondarySort.fieldNames.push(groupFields[index].field.name);
                     secondarySort.fieldOrder.push(groupFields[index].field.ascending ? 'asc' : 'desc');
                 } else {
+                    //  if the group type is not equals ('V'), then a secondary sort is necessary.  Set the
+                    //  index in the secondarySort object to identify the level at which to perform the sort.
                     /*eslint no-lonely-if:0 */
-                    if (isSecondarySortRequired(groupFields[index]) === true) {
+                    if (groupFields[index].groupType !== groupTypes.COMMON.equals) {
                         secondarySort.index = index;
                     }
                 }
