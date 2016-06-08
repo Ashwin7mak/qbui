@@ -3,6 +3,7 @@ import ReactBootstrap from 'react-bootstrap';
 import {Panel}  from 'react-bootstrap';
 import QBicon from '../qbIcon/qbIcon';
 import './qbpanel.scss';
+import {Collapse} from 'react-bootstrap';
 
 /*
     Custom QuickBase Panel component that has 4 properties.
@@ -41,11 +42,13 @@ class QBPanel extends React.Component {
                         <QBicon icon="caret-right" onClick={this.toggleOpen} className={iconClass}/>
                     </h3>
                 </div>
-                <Panel collapsible expanded={this.state.open}>
+                <Collapse in={this.state.open}>
                     <div className="qbPanelBody">
-                        {this.props.children}
+                        <div>
+                            {this.props.children}
+                        </div>
                     </div>
-                </Panel>
+                </Collapse>
             </div>
         );
     }
