@@ -49,7 +49,6 @@
             }
         }
     }
-
     .qbPanelBody {
         padding: 0 10px 10px 10px;
         display: flex;
@@ -60,6 +59,14 @@
         }
         .qbPanelHeaderIcon:hover {
             color: $panel-header-icon-hover-color;
+        }
+    }
+    &.iconLeft {
+        .qbPanelHeaderTitleText {
+            margin-left: 30px;
+        }
+        .qbPanelBody {
+            margin-left: 30px;
         }
     }
     /*
