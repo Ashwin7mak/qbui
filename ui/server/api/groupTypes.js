@@ -14,6 +14,9 @@
 
     module.exports = Object.freeze({
         delimiter: ',',
+        COMMON: {
+            equals: COMMON.equals
+        },
         DATE: {
             equals: COMMON.equals,
             day: COMMON.day,

@@ -14,6 +14,13 @@
 
     var RAW_SUFFIX = '_raw_';
 
+    /**
+     * Provide a list of data types where grouping is to be performed against the raw
+     * data value.
+     *
+     * @param dataType
+     * @returns {boolean}
+     */
     function includeRawValue(dataType) {
         return dataType === constants.NUMERIC ||
                dataType === constants.CURRENCY ||
@@ -24,15 +31,14 @@
                dataType === constants.DATE_TIME;
     }
 
-    function isSecondaryGroupSortRequired(groupField) {
-        var sortDataType = groupField.field.datatypeAttributes.type === constants.NUMERIC ||
-            groupField.field.datatypeAttributes.type === constants.CURRENCY ||
-            groupField.field.datatypeAttributes.type === constants.PERCENT ||
-            groupField.field.datatypeAttributes.type === constants.RATING;
-        if (sortDataType === true) {
-            return groupField.groupType !== groupTypes.NUMERIC.equals;
-        }
-        return false;
+    /**
+     * Is the groupField being grouped by equals
+     *
+     * @param groupField
+     * @returns {boolean}
+     */
+    function isSecondarySortRequired(groupField) {
+        return groupField.groupType !== groupTypes.COMMON.equals;
     }
 
     /**
@@ -87,11 +93,11 @@
                 fieldOrder: []
             };
 
-            //  loop through the grouping fields and determine if we are grouping by a numeric range.  If yes,
-            //  we need to enforce a sort in the node layer as the sql data set returned does not properly
-            //  sort the result set.  This is because the sql query does not know about the group range.  For example:
-            //  it knows to sort on the record id column, but doesn't know that if we group by a 0..10 range, that all
-            //  record id's between 0..10 are equivalent.
+            // if grouping by any type other than equals, we need to perform a node side sort on all grouping and
+            // sorting fileds after the non-equal group field.  This is because the API does not have visibility to
+            // the concept of grouping and can not return a result set in the proper order when grouping by non-equal
+            // fields.  For example, if grouping RECORD_ID by 10's and then having a secondary sort by activity type,
+            // the secondary sort by activity type will not be guarenteed as the result set is order by record id.
             let buildGroupList = false;
             for (let index = 0; index < groupFields.length; index++) {
                 if (buildGroupList === true) {
@@ -102,7 +108,7 @@
                     secondarySort.fieldOrder.push(groupFields[index].field.ascending ? 'asc' : 'desc');
                 } else {
                     /*eslint no-lonely-if:0 */
-                    if (isSecondaryGroupSortRequired(groupFields[index]) === true) {
+                    if (isSecondarySortRequired(groupFields[index]) === true) {
                         buildGroupList = true;
                         secondarySort.index = index;
                     }
@@ -326,9 +332,9 @@
         for (let group in groupedData) {
             let children = [];
 
-            //  If there is secondary sorting fields, sort the group data based on the sort
-            //  order request after the identified sort index.
+            //  If there is secondary sorting fields, sort the grouped data based on the sorting order
             if (secondarySort.fieldNames.length > 0) {
+                //  only sort when the sort index matches the current idx level
                 if (secondarySort.index === idx) {
                     var sortedGroup = lodash.orderBy(groupedData[group], secondarySort.fieldNames, secondarySort.fieldOrder);
                     groupedData[group] = sortedGroup;
@@ -408,56 +414,52 @@
                     groups.forEach((group) => {
                         if (group) {
                             let el = group.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER, 2);
+                            let groupFidId = el[0];
 
-                            //  must have a fid with a group type AND no prior entry in list that is sort only
-                            if (el.length === 2 && sortFidWithNoGroupingFound === false) {
-                                let groupFidId = el[0];
-                                let groupType = el[1];
+                            //  Take the absolute value as the fid may be a negative value (descending sort)
+                            //
+                            //  Note: Math.abs(''), Math.abs(null) returns 0.  Given a fid must be > 0, this
+                            //  results in the field not being found in the map, which is the correct expectation.
+                            let field = map.get(Math.abs(groupFidId));
+                            if (field) {
 
-                                //  Take the absolute value as the fid may be a negative value (descending sort)
-                                //
-                                //  Note: Math.abs(''), Math.abs(null) returns 0.  Given a fid must be > 0, this
-                                //  results in the field not being found in the map, which is the correct expectation.
-                                let field = map.get(Math.abs(groupFidId));
-                                if (field) {
+                                //  identify the ordering of the field
+                                field.ascending = groupFidId > 0;
+
+                                //  do we have a group type AND we have yet to encounter an entry in list that is sort only
+                                if (el.length === 2 && sortFidWithNoGroupingFound === false) {
+                                    //  get the group type
+                                    let groupType = el[1];
+
                                     // found the field; now see if the data type/group type combination is valid.
                                     if (groupUtils.isValidGroupType(field.datatypeAttributes.type, groupType) === true) {
-                                        // add the field and the group type to the groupBy list
+                                        // mark the field as one that is grouped
                                         field.grouped = true;
-                                        field.ascending = groupFidId > 0;
-                                        groupBy.fields.push(
-                                            {field: field,
-                                                groupType: groupType}
-                                        );
+                                        groupBy.fields.push({field: field, groupType: groupType});
                                     } else {
-                                        log.warn("Unsupported group type.  FieldId: " + field.id + "; name: " + field.name + "; DataType: " + field.datatypeAttributes.type + "; GroupType: " + groupType);
+                                        log.warn("Unsupported group type.  FieldId: " + field.id + "; FieldName: " + field.name + "; DataType: " + field.datatypeAttributes.type + "; GroupType: " + groupType);
                                     }
                                 } else {
-                                    log.warn("Invalid field for grouping.  FieldId: " + groupFidId + "; GroupType: " + groupType);
+                                    //  Once we find a sortList entry defined without grouping, any subsequent grouping fid
+                                    //  found in the groupList parameter is ignored as far as grouping is concerned.  For example:
+                                    //      7.8:V.9:V      ==>  no grouping as 1st element is a sort only fid
+                                    //      7:V.8:V        ==>  group by fid 7, then fid 8
+                                    //      7:V.8.9.10:V   ==>  group by fid 7 only as 2nd element is a sort only fid
+                                    //      7:V.8:V.9.10:V ==>  group by fid 7, fid 8 only as 3rd element is a sort only fid
+                                    //
+                                    //  NOTE: The builder on the new stack UI should restrict the possibility of this
+                                    //  behavior, but we could run into this scenario when migrating old stack data.
+                                    //
+                                    //  Group the remaining fids into a sorting array.  These will be used if sorting is
+                                    //  performed in the node layer.
+                                    if (field) {
+                                        sortBy.fields.push(field);
+                                    }
+
+                                    sortFidWithNoGroupingFound = true;
                                 }
                             } else {
-                                //  Once we find a sortList entry defined without grouping, any subsequent grouping fid
-                                //  found in the groupList parameter is ignored as far as grouping is concerned.  For example:
-                                //      7.8:V.9:V      ==>  no grouping as 1st element is a sort only fid
-                                //      7:V.8:V        ==>  group by fid 7, then fid 8
-                                //      7:V.8.9.10:V   ==>  group by fid 7 only as 2nd element is a sort only fid
-                                //      7:V.8:V.9.10:V ==>  group by fid 7, fid 8 only as 3rd element is a sort only fid
-                                //
-                                //  NOTE: The builder on the new stack UI should restrict the possibility of this
-                                //  behavior, but we could run into this scenario when migrating old stack data.
-                                //
-                                //  Group the remaining fids into a sorting array.  These will be used if sorting is
-                                //  performed in the node layer.
-
-                                let groupFidId = el[0];
-                                let field = map.get(Math.abs(groupFidId));
-                                if (field) {
-                                    field.ascending = groupFidId > 0;
-                                    sortBy.fields.push(field);
-                                }
-
-                                sortFidWithNoGroupingFound = true;
-
+                                log.warn("Invalid field for grouping. Field not found on report.  FieldId: " + groupFidId);
                             }
                         }
                     });
@@ -465,9 +467,9 @@
                     // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
                     // to true and populate the grid columns and data arrays.
                     if (groupBy.fields.length > 0) {
-                        //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
-                        //  array the fields NOT designated to be grouped.
                         fields.forEach(function(field) {
+                            //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
+                            //  array the fields NOT designated to be grouped.
                             if (!field.grouped) {
                                 groupBy.gridColumns.push(field);
                             }
