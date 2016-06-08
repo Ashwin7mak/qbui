@@ -36,10 +36,10 @@ let gridIcons = {
     check: buildIconElement("check")
 };
 let consts = {
-    GROUP_HEADER_HEIGHT: 41,
+    GROUP_HEADER_HEIGHT: 24,
     ROW_HEIGHT: 32,
     DEFAULT_CHECKBOX_COL_WIDTH: 80,
-    GROUP_ICON_PADDING: 10,
+    GROUP_ICON_PADDING: 4,
     DEFAULT_CELL_PADDING: 8,
     FONT_SIZE: 20,
     HIDDEN_LAST_ROW_HEIGHT:270 // tall enough to accomodate date pickers etc.
@@ -531,7 +531,7 @@ let AGGrid = React.createClass({
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
-                obj.addEditActions = true;
+                obj.addEditActions = false;
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;

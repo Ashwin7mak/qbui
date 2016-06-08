@@ -19,7 +19,9 @@
                dataType === constants.CURRENCY ||
                dataType === constants.PERCENT ||
                dataType === constants.RATING ||
-               dataType === constants.DURATION;
+               dataType === constants.DURATION ||
+               dataType === constants.TIME_OF_DAY ||
+               dataType === constants.DATE_TIME;
     }
 
     /**
@@ -79,14 +81,19 @@
         //  Extract the grouping header based on the request group type, field type and data value
         //
         switch (groupField.datatypeAttributes.type) {
-        case constants.DATE_TIME:   // DATE_TIME and DATE are treated the same for grouping
+        case constants.DATE_TIME:
         case constants.DATE:
+            // DATE_TIME and DATE are treated the same for grouping.  Also, since using the formatted
+            // value, the time zone conversion has already been performed.
+
+            //  get the format of the date
             let dateFormat = dateFormatter.generateFormat({dateFormat: groupField.datatypeAttributes.dateFormat});
+
             switch (groupType) {
             case groupTypes.DATE.equals:
                 return dataValue;
             case groupTypes.DATE.day:
-                return dataValue;
+                return groupUtils.getDay(dataValue, dateFormat);
             case groupTypes.DATE.week:
                 return groupUtils.getFirstDayOfWeek(dataValue, dateFormat);
             case groupTypes.DATE.month:
@@ -117,6 +124,24 @@
                 return groupUtils.getDurationInDays(rawDataValue);
             case groupTypes.DURATION.week:
                 return groupUtils.getDurationInWeeks(rawDataValue);
+            }
+            break;
+        case constants.TIME_OF_DAY:
+            var timeZone = groupField.datatypeAttributes.timeZone;
+            if (!timeZone) {
+                timeZone = constants.UTC_TIMEZONE;
+            }
+            switch (groupType) {
+            case groupTypes.TIME_OF_DAY.equals:
+                return groupUtils.getBySecond(rawDataValue, timeZone);
+            case groupTypes.TIME_OF_DAY.second:
+                return groupUtils.getBySecond(rawDataValue, timeZone);
+            case groupTypes.TIME_OF_DAY.minute:
+                return groupUtils.getByMinute(rawDataValue, timeZone);
+            case groupTypes.TIME_OF_DAY.hour:
+                return groupUtils.getByHour(rawDataValue, timeZone);
+            case groupTypes.TIME_OF_DAY.am_pm:
+                return groupUtils.getByAmPm(rawDataValue, timeZone);
             }
             break;
         case constants.EMAIL_ADDRESS:

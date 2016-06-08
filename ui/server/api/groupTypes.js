@@ -6,7 +6,10 @@
         firstLetter: 'F',
         firstWord: 'I',
         day: 'D',
-        week: 'W'
+        week: 'W',
+        hour: 'h',
+        minute: 'm',
+        second: 's'
     };
 
     module.exports = Object.freeze({
@@ -24,11 +27,18 @@
         },
         DURATION: {
             equals: COMMON.equals,
-            second: 's',
-            minute: 'm',
-            hour: 'h',
+            second: COMMON.second,
+            minute: COMMON.minute,
+            hour: COMMON.hour,
             week: COMMON.week,
             day: COMMON.day
+        },
+        TIME_OF_DAY: {
+            equals: COMMON.equals,
+            second: COMMON.second,
+            minute: COMMON.minute,
+            hour: COMMON.hour,
+            am_pm: 'a'
         },
         EMAIL_ADDRESS: {
             equals: COMMON.equals,

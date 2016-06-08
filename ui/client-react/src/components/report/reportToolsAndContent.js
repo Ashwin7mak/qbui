@@ -174,8 +174,13 @@ let ReportToolsAndContent = React.createClass({
     render() {
 
         let classes = "reportToolsAndContentContainer";
-        if (this.props.selectedRows && (this.props.selectedRows.length === 1)) {
-            classes += " singleSelection";
+        if (this.props.selectedRows) {
+            if (this.props.selectedRows.length > 0) {
+                classes += " activeSelection";
+            }
+            if (this.props.selectedRows.length === 1) {
+                classes += " singleSelection";
+            }
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
