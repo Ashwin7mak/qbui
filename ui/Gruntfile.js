@@ -541,7 +541,7 @@ module.exports = function(grunt) {
                 options: {
                     username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
-                    //proxy           : httpProxy,
+                    proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,
                     verbose         : true
                     //logger          : console.log,
