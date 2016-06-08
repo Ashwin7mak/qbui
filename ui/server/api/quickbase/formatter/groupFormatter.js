@@ -32,7 +32,7 @@
     }
 
     /**
-     * Is the groupField being grouped by equals
+     * Is the field being grouped using the 'group by equals' option
      *
      * @param groupField
      * @returns {boolean}
@@ -87,20 +87,59 @@
                 reportData.push(columns);
             });
 
+            // We may have to perform a sort on the node layer if grouping by a group type != equals AND there is a
+            // secondary group/sort request after the non-equals group type.
+            //
+            // For example, a report has a group request as follows will require a secondary sort:
+            //      - group by email address domain; sort by date created
+            //
+            // The result set returned from the API request will be ordered by email address, date created as follows:
+            //
+            //      bill@domain1.com, 2016-07-20
+            //      mary@domain1.com, 2016-07-21
+            //      norm@domain2.com, 2016-07-14
+            //      sally@domain1.com, 2016-07-20
+            //      tom@domain1.com, 2016-06-20
+            //      vince@domain2.com, 2016-05-20
+            //      zoe@domain1.com, 2016-08-10
+            //
+            // We use lodash to group the result set, which preserves the order of the records.  So, if grouping by domain,
+            // the output form the lodash.groupBy function is:
+            //
+            //      domain1:
+            //          test@domain1.com, 2016-07-20
+            //          mary@domain1.com, 2016-07-21
+            //          sally@domain1.com, 2016-07-20
+            //          tom@domain1.com, 2016-06-20
+            //          zoe@domain1.com, 2016-08-10
+            //      domain2:
+            //          norm@domain2.com, 2016-07-14
+            //          vince@domain2.com, 2016-05-20
+            //
+            // If no additional sort was run, the sort order request on date created would not be honored.  So, we'll build a list
+            // of fields and their sort order after any non-equal group request(in this example, any grouping/sorting after the
+            // groupBy domain) and run a lodash.orderBy with this list.  The output of the secondary sort is in the order needed
+            // to satisfy the request and render on the UI:
+            //
+            //      domain1:
+            //          tom@domain1.com, 2016-06-20
+            //          sally@domain1.com, 2016-07-20
+            //          test@domain1.com, 2016-07-20
+            //          mary@domain1.com, 2016-07-21
+            //          zoe@domain1.com, 2016-08-10
+            //      domain2:
+            //          vince@domain2.com, 2016-05-20
+            //          norm@domain2.com, 2016-07-14
+            //
             let secondarySort = {
                 index: null,
                 fieldNames: [],
                 fieldOrder: []
             };
 
-            // if grouping by any type other than equals, we need to perform a node side sort on all grouping and
-            // sorting fileds after the non-equal group field.  This is because the API does not have visibility to
-            // the concept of grouping and can not return a result set in the proper order when grouping by non-equal
-            // fields.  For example, if grouping RECORD_ID by 10's and then having a secondary sort by activity type,
-            // the secondary sort by activity type will not be guarenteed as the result set is order by record id.
             let buildGroupList = false;
             for (let index = 0; index < groupFields.length; index++) {
-                if (buildGroupList === true) {
+                if (secondarySort.index !== null) {
                     //  any group AFTER a field identified as one where the sort order of the result set is not
                     //  guarenteed to be correct from sql query, is added to the secondarySort list for node
                     //  side sorting.
@@ -109,15 +148,13 @@
                 } else {
                     /*eslint no-lonely-if:0 */
                     if (isSecondarySortRequired(groupFields[index]) === true) {
-                        buildGroupList = true;
                         secondarySort.index = index;
                     }
                 }
             }
 
-            //  If we have secondary sorting from the groups, then we also have to add any sort only
-            //  fields to the sortFieldObj.
-            if (buildGroupList === true) {
+            //  If we have any sort only fields, add those to the sortFieldObj if there is to be node sorting.
+            if (secondarySort.index !== null) {
                 for (let index = 0; index < sortFields.length; index++) {
                     secondarySort.fieldNames.push(sortFields[index].name);
                     secondarySort.fieldOrder.push(sortFields[index].ascending ? 'asc' : 'desc');
@@ -332,12 +369,11 @@
         for (let group in groupedData) {
             let children = [];
 
-            //  If there is secondary sorting fields, sort the grouped data based on the sorting order
+            //  Check the fieldNames list for fields to sort.
             if (secondarySort.fieldNames.length > 0) {
                 //  only sort when the sort index matches the current idx level
                 if (secondarySort.index === idx) {
-                    var sortedGroup = lodash.orderBy(groupedData[group], secondarySort.fieldNames, secondarySort.fieldOrder);
-                    groupedData[group] = sortedGroup;
+                    groupedData[group] = lodash.orderBy(groupedData[group], secondarySort.fieldNames, secondarySort.fieldOrder);
                 }
             }
 
@@ -433,7 +469,8 @@
 
                                     // found the field; now see if the data type/group type combination is valid.
                                     if (groupUtils.isValidGroupType(field.datatypeAttributes.type, groupType) === true) {
-                                        // mark the field as one that is grouped
+                                        // Mark the field as one that is grouped.  This is referenced when building the
+                                        // groupBy.gridColumns as grouped fields are not displayed in the grid.
                                         field.grouped = true;
                                         groupBy.fields.push({field: field, groupType: groupType});
                                     } else {
@@ -450,13 +487,13 @@
                                     //  NOTE: The builder on the new stack UI should restrict the possibility of this
                                     //  behavior, but we could run into this scenario when migrating old stack data.
                                     //
-                                    //  Group the remaining fids into a sorting array.  These will be used if sorting is
-                                    //  performed in the node layer.
+                                    sortFidWithNoGroupingFound = true;
+
+                                    //  Group the sort-only fids into an array.  These will be used if additional
+                                    //  sorting is necessary.
                                     if (field) {
                                         sortBy.fields.push(field);
                                     }
-
-                                    sortFidWithNoGroupingFound = true;
                                 }
                             } else {
                                 log.warn("Invalid field for grouping. Field not found on report.  FieldId: " + groupFidId);
