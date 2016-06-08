@@ -9,7 +9,7 @@
         root: path.normalize(path.join(__dirname,  '/../../..')),
 
         // Server port
-        port   : 9000,
+        port   : 9001,
         sslPort: 9443,
 
         //  configure to empty...require explicit environment override to offer ssl
