@@ -543,9 +543,9 @@ module.exports = function(grunt) {
                     accessKey       : sauceKey,
                     proxy           : 'http://egressproxy.quickbaserocks.com:80',
                     tunnelIdentifier: tunnelIdentifier,
+                    proxyTunnel     : true,
                     verbose         : true,
-                    proxyTunnel     : true
-                    //logger          : console.log,
+                    logfile         : 'sauceLog.txt'
                 }
             }
         },
