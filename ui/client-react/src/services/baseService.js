@@ -5,6 +5,7 @@ import axios from 'axios';
 import Configuration from '../config/app.config';
 import StringUtils from '../utils/stringUtils';
 import WindowLocationUtils from '../utils/windowLocationUtils';
+import uuid from 'uuid';
 
 class BaseService {
 
@@ -53,7 +54,11 @@ class BaseService {
      */
     setRequestInterceptor() {
         axios.interceptors.request.use(config => {
-            config.headers[constants.HEADER.SESSION_ID] = Configuration.sid;
+            //  a unique id per request
+            config.headers[constants.HEADER.SESSION_ID] = uuid.v1();
+            //  not including now, but this is where we would add another header
+            //  if want to send unique id per user session --> config.uid
+
             let ticket = this.getCookie(constants.COOKIE.TICKET);
             if (ticket) {
                 config.headers[constants.HEADER.TICKET] = ticket;

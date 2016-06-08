@@ -192,7 +192,7 @@
             },
             defaultHeaders              : DEFAULT_HEADERS,
             //Executes a REST request against the instance's realm using the configured javaHost
-            executeRequest              : function(stringPath, method, body, headers) {
+            executeRequest              : function(stringPath, method, body, headers, params) {
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
                 var subdomain = '';
                 if (this.realm) {
@@ -201,6 +201,12 @@
                 var opts = generateRequestOpts(stringPath, method, subdomain);
                 if (body) {
                     opts.body = jsonBigNum.stringify(body);
+                }
+                // if we have a GET request and have params to add (since GET requests don't use JSON body values)
+                // we have to add those to the end of the generated URL as ?param=value
+                if (params) {
+                    // remove the trailing slash and add the parameters
+                    opts.url = opts.url.substring(0, opts.url.length - 1) + params;
                 }
                 //Setup headers
                 if (headers) {

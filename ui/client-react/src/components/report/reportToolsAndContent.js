@@ -114,7 +114,6 @@ let ReportToolsAndContent = React.createClass({
 
         let queryParams = {};
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
-        queryParams[query.GLIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
         flux.actions.getFilteredRecords(this.props.selectedAppId,
             this.props.routeParams.tblId,
             typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true}, filter, queryParams);
@@ -175,8 +174,13 @@ let ReportToolsAndContent = React.createClass({
     render() {
 
         let classes = "reportToolsAndContentContainer";
-        if (this.props.selectedRows && (this.props.selectedRows.length === 1)) {
-            classes += " singleSelection";
+        if (this.props.selectedRows) {
+            if (this.props.selectedRows.length > 0) {
+                classes += " activeSelection";
+            }
+            if (this.props.selectedRows.length === 1) {
+                classes += " singleSelection";
+            }
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;

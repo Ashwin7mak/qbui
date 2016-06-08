@@ -96,8 +96,7 @@ describe('Report Data Actions success -- ', () => {
         queryParams[query.OFFSET_PARAM] = 0;
         queryParams[query.NUMROWS_PARAM] = 0;
         queryParams[query.FORMAT_PARAM] = true;
-        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(ReportUtils.getSortFids(sortList));
-        queryParams[query.GLIST_PARAM] = sortList;
+        queryParams[query.SORT_LIST_PARAM] = sortList;
         queryParams[query.QUERY_PARAM] = '';
         flux.actions.loadReport(appId, tblId, rptId, true, 0, 0, sortList).then(
             () => {

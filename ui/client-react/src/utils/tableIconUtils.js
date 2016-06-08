@@ -25,7 +25,7 @@ class TableIconUtils {
             return ICON_PREFIX + TAGS_TO_ICONS_MAP[tableName];
         }
         let matchedTag = _.find(Tags, function(tag) {
-            if (tag.indexOf(tableName) !== -1 || tableName.indexOf(tag) !== -1) {
+            if (tag.indexOf(tableName) !== -1 || (tableName && tableName.indexOf(tag) !== -1)) {
                 return true;
             }
         });

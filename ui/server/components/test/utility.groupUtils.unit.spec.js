@@ -42,14 +42,14 @@ describe('Validate Group Utility functions', function() {
 
         if (positiveTests) {
             var testDates = [
-                {day: 'Sun', date: '02-28-2016', expectation:{week:'02-22-2016', month:'Feb', year:2016, qtr:1, decade:2010}},
-                {day: 'Mon', date: '02-29-2016', expectation:{week:'02-29-2016', month:'Feb', year:2016, qtr:1, decade:2010}},
-                {day: 'Tue', date: '03-01-2016', expectation:{week:'02-29-2016', month:'Mar', year:2016, qtr:1, decade:2010}},
-                {day: 'Tue', date: '04-05-2016', expectation:{week:'04-04-2016', month:'Apr', year:2016, qtr:2, decade:2010}},
-                {day: 'Wed', date: '12-31-2008', expectation:{week:'12-29-2008', month:'Dec', year:2008, qtr:4, decade:2000}},
-                {day: 'Thu', date: '01-01-2009', expectation:{week:'12-29-2008', month:'Jan', year:2009, qtr:1, decade:2000}},
-                {day: 'Fri', date: '01-01-2010', expectation:{week:'12-28-2009', month:'Jan', year:2010, qtr:1, decade:2010}},
-                {day: 'Sat', date: '01-09-2010', expectation:{week:'01-04-2010', month:'Jan', year:2010, qtr:1, decade:2010}}
+                {day: 'Sun', date: '02-28-2016', expectation:{day: '02-28-2016', week:'02-22-2016', month:'Feb', year:2016, qtr:1, decade:2010}},
+                {day: 'Mon', date: '02-29-2016', expectation:{day: '02-29-2016', week:'02-29-2016', month:'Feb', year:2016, qtr:1, decade:2010}},
+                {day: 'Tue', date: '03-01-2016', expectation:{day: '03-01-2016', week:'02-29-2016', month:'Mar', year:2016, qtr:1, decade:2010}},
+                {day: 'Tue', date: '04-05-2016', expectation:{day: '04-05-2016', week:'04-04-2016', month:'Apr', year:2016, qtr:2, decade:2010}},
+                {day: 'Wed', date: '12-31-2008', expectation:{day: '12-31-2008', week:'12-29-2008', month:'Dec', year:2008, qtr:4, decade:2000}},
+                {day: 'Thu', date: '01-01-2009', expectation:{day: '01-01-2009', week:'12-29-2008', month:'Jan', year:2009, qtr:1, decade:2000}},
+                {day: 'Fri', date: '01-01-2010', expectation:{day: '01-01-2010', week:'12-28-2009', month:'Jan', year:2010, qtr:1, decade:2010}},
+                {day: 'Sat', date: '01-09-2010', expectation:{day: '01-09-2010', week:'01-04-2010', month:'Jan', year:2010, qtr:1, decade:2010}}
             ];
 
             var obj = dateTimeFormatter.getJavaToJavaScriptDateFormats();
@@ -323,8 +323,19 @@ describe('Validate Group Utility functions', function() {
             });
         });
 
+        describe('validate getDay', function() {
+            //  positive test cases
+            var testCases = generateDateGroupingTestCases(true);
+            testCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    var date = groupUtils.getDay(test.displayDate, test.momentFormat);
+                    assert.equal(date, moment(test.testDate.expectation.day, 'MM-DD-YYYY').format(test.momentFormat));
+                });
+            });
+        });
+
         describe('validate getFirstDayOfWeek', function() {
-            //  negative test cases
+            //  positive test cases
             var testCases = generateDateGroupingTestCases(true);
             testCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
@@ -567,6 +578,52 @@ describe('Validate Group Utility functions', function() {
 
         });
 
+        describe('time of day tests', function() {
+            var testCases = [
+                {name: 'null input', timeOfDay: null, second:'', minute:'', hour:'', am_pm:''},
+                {name: 'invalid input', timeOfDay: 'bad input', second:'', minute:'', hour:'', am_pm:''},
+                {name: 'Time - UTC', timeOfDay: '1970-01-01T18:51:21Z', timeZone:constants.UTC_TIMEZONE, second:'18:51:21', minute:'18:51', hour:'18:00', am_pm:'23:59:59'},
+                {name: 'Time - UTC implied', timeOfDay: '1970-01-01T18:51:21Z', second:'18:51:21', minute:'18:51', hour:'18:00', am_pm:'23:59:59'},
+                {name: 'Time - EST', timeOfDay: '1970-01-01T18:51:21Z', timeZone:constants.EST_TIMEZONE, second:'13:51:21', minute:'13:51', hour:'13:00', am_pm:'23:59:59'},
+                {name: 'Time - PST', timeOfDay: '1970-01-01T18:51:21Z', timeZone:constants.PST_TIMEZONE, second:'10:51:21', minute:'10:51', hour:'10:00', am_pm:'00:00:00'},
+                {name: 'Time - CET', timeOfDay: '1970-01-01T18:51:21Z', timeZone:constants.CET_TIMEZONE, second:'19:51:21', minute:'19:51', hour:'19:00', am_pm:'23:59:59'},
+                {name: 'Time - JST', timeOfDay: '1970-01-01T18:51:21Z', timeZone:constants.JST_TIMEZONE, second:'03:51:21', minute:'03:51', hour:'03:00', am_pm:'00:00:00'}
+            ];
+
+            describe('validate time of day second tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        assert.equal(groupUtils.getBySecond(test.timeOfDay, test.timeZone), test.second);
+                    });
+                });
+            });
+
+            describe('validate time of day minute tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        assert.equal(groupUtils.getByMinute(test.timeOfDay, test.timeZone), test.minute);
+                    });
+                });
+            });
+
+            describe('validate time of day hour tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        assert.equal(groupUtils.getByHour(test.timeOfDay, test.timeZone), test.hour);
+                    });
+                });
+            });
+
+            describe('validate time of day AmPm tests', function() {
+                testCases.forEach(function(test) {
+                    it('Test case: ' + test.name, function() {
+                        assert.equal(groupUtils.getByAmPm(test.timeOfDay, test.timeZone), test.am_pm);
+                    });
+                });
+            });
+
+        });
+
 
         describe('validate negative test cases against date functions', function() {
             //  negative test cases against all of the implemented date functions
@@ -660,6 +717,31 @@ describe('Validate Group Utility functions', function() {
                 {name: 'duration missing group type', dataType: constants.DURATION, groupType: null, expectation: false},
                 {name: 'duration empty group type', dataType: constants.DURATION, groupType: '', expectation: false},
                 {name: 'duration invalid group type', dataType: constants.DURATION, groupType: groupTypes.TEXT.firstLetter, expectation: false}
+            ];
+            validGroupTypeTestCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
+                });
+            });
+            invalidGroupTypeTestCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
+                });
+            });
+        });
+
+        describe('validate TIME_OF_DAY group types', function() {
+            var validGroupTypeTestCases = [
+                {name: 'timeOfDay equals', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TIME_OF_DAY.equals, expectation: true},
+                {name: 'timeOfDay second', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TIME_OF_DAY.second, expectation: true},
+                {name: 'timeOfDay minute', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TIME_OF_DAY.minute, expectation: true},
+                {name: 'timeOfDay hour', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TIME_OF_DAY.hour, expectation: true},
+                {name: 'timeOfDay week', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TIME_OF_DAY.am_pm, expectation: true}
+            ];
+            var invalidGroupTypeTestCases = [
+                {name: 'timeOfDay missing group type', dataType: constants.TIME_OF_DAY, groupType: null, expectation: false},
+                {name: 'timeOfDay empty group type', dataType: constants.TIME_OF_DAY, groupType: '', expectation: false},
+                {name: 'timeOfDay invalid group type', dataType: constants.TIME_OF_DAY, groupType: groupTypes.TEXT.firstLetter, expectation: false}
             ];
             validGroupTypeTestCases.forEach(function(test) {
                 it('Test case: ' + test.name, function() {
@@ -780,7 +862,6 @@ describe('Validate Group Utility functions', function() {
                 {name: 'CHECKBOX', dataType: constants.CHECKBOX},
                 {name: 'FILE_ATTACHMENT', dataType: constants.FILE_ATTACHMENT},
                 {name: 'PHONE_NUMBER', dataType: constants.PHONE_NUMBER},
-                {name: 'TIME_OF_DAY', dataType: constants.TIME_OF_DAY},
                 {name: 'URL', dataType: constants.URL}
             ];
 

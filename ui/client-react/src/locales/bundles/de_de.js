@@ -214,7 +214,9 @@ export default {
                 week: "Woche {date}",
                 month: "{month} {year}",
                 quarter: "{quarter} {year}"
-            }
+            },
+            am: "AM",
+            pm: "PM"
         },
         cancel: "Stornieren",
         cancelTip: "Beenden und verwerfen alle Änderungen",
