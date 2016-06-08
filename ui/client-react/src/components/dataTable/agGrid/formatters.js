@@ -253,7 +253,7 @@ const SelectionColumnCheckBoxFormatter = React.createClass({
             <RowEditActions flux={this.props.params.context.flux}
                             api={this.props.params.api}
                             data={this.props.params.data} />
-            <IconActions dropdownTooltip={false} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
+            <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
         </div>);
     }
 });
