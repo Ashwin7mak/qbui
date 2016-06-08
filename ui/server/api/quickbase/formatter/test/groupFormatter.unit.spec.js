@@ -125,8 +125,8 @@ describe('Validate GroupFormatter unit tests', function() {
         var testCases = [
             {message: 'Sort fid is first element in group list', sortList:'3.1:V', expectation: 0},
             {message: 'Sort fid is last element in group list', sortList:'1:V.3', expectation: 1},
-            {message: 'Sort fid is last element in group list with secondard sort', sortList:'1:F.3', expectation: 1},
-            {message: 'Negative sort fid is last element in group list with secondard sort', sortList:'1:F.-3', expectation: 1},
+            {message: 'Sort fid is last element in group list with secondary sort', sortList:'1:F.3', expectation: 1},
+            {message: 'Negative sort fid is last element in group list with multi secondary sort', sortList:'1:F.2.-3', expectation: 1},
             {message: 'Sort fid is second element in group list', sortList:'1:V.2.3:V', expectation: 1},
             {message: 'Sort fid is last 2 elements in group list', sortList:'1:V.2:V.3.4', expectation: 2},
             {message: 'Sort fid is middle elements in group list', sortList:'1:V.2:V.3.4.5:V', expectation: 2}
