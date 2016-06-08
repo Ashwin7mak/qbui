@@ -376,9 +376,13 @@
 
             //  Check the fieldNames list for fields to sort.
             if (secondarySort.required === true) {
-                //  if needing to sort against a groupBy field, sort against that specific field.
-                if (secondarySort.groupFieldIndex <= idx && secondarySort.groupFieldNames.length > idx) {
-                    groupedData[group] = lodash.orderBy(groupedData[group], [secondarySort.groupFieldNames[idx]], [secondarySort.groupFieldOrder[idx]]);
+                //  The groupFieldIndex is the first level in the tree where groupBy ordering is necessary.  There should
+                //  be an entry in the list for each groupBy field thereafter.
+                if (secondarySort.groupFieldIndex <= idx) {
+                    let offset = idx - secondarySort.groupFieldIndex;
+                    if (secondarySort.groupFieldNames.length > offset) {
+                        groupedData[group] = lodash.orderBy(groupedData[group], [secondarySort.groupFieldNames[offset]], [secondarySort.groupFieldOrder[offset]]);
+                    }
                 }
 
                 //  any sortOnly fields to reorder.  The index should be the lowest level in the tree
