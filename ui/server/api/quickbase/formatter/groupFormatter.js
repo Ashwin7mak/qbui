@@ -87,28 +87,32 @@
                 reportData.push(columns);
             });
 
-            // We may have to perform a sort on the node layer if grouping by a group type != equals AND there is a
+            // A sort on the node layer is necessary if there is a group type != equals('V') AND there is a
             // secondary group/sort request after the non-equals group type.
             //
-            // For example, a report has a group request as follows will require a secondary sort:
+            // For example, the following grouping request will require a secondary sort:
             //      - group by email address domain; sort by date created
             //
-            // The result set returned from the API request will be ordered by email address, date created as follows:
+            // Given an API request for the above grouping, the following fictitious result set will be returned by
+            // the core server, ordered by email address/date created:
             //
             //      bill@domain1.com, 2016-07-20
             //      mary@domain1.com, 2016-07-21
+            //      mary@domain1.com, 2016-08-28
             //      norm@domain2.com, 2016-07-14
             //      sally@domain1.com, 2016-07-20
             //      tom@domain1.com, 2016-06-20
             //      vince@domain2.com, 2016-05-20
             //      zoe@domain1.com, 2016-08-10
             //
-            // We use lodash to group the result set, which preserves the order of the records.  So, if grouping by domain,
-            // the output form the lodash.groupBy function is:
+            // Since the core server doesn't support grouping(it's a UI concept), we use lodash to group the result set,
+            // So, if grouping by domain, the output from the lodash.groupBy function is as follows (NOTE: record order
+            // is preserved):
             //
             //      domain1:
             //          test@domain1.com, 2016-07-20
             //          mary@domain1.com, 2016-07-21
+            //          mary@domain1.com, 2016-08-28
             //          sally@domain1.com, 2016-07-20
             //          tom@domain1.com, 2016-06-20
             //          zoe@domain1.com, 2016-08-10
@@ -116,10 +120,10 @@
             //          norm@domain2.com, 2016-07-14
             //          vince@domain2.com, 2016-05-20
             //
-            // If no additional sort was run, the sort order request on date created would not be honored.  So, we'll build a list
-            // of fields and their sort order after any non-equal group request(in this example, any grouping/sorting after the
-            // groupBy domain) and run a lodash.orderBy with this list.  The output of the secondary sort is in the order needed
-            // to satisfy the request and render on the UI:
+            // If no additional sort was run, the sort order on date created would not be correct.  So, we'll build an
+            // array that holds the list of fields and their sort order after any non-equal group request(in this
+            // example, any group fid/sort fid after the groupBy domain fid) and run a lodash.orderBy using this list.
+            // The output of the secondary sort is now in the correct order and satisfies the request:
             //
             //      domain1:
             //          tom@domain1.com, 2016-06-20
@@ -127,6 +131,7 @@
             //          test@domain1.com, 2016-07-20
             //          mary@domain1.com, 2016-07-21
             //          zoe@domain1.com, 2016-08-10
+            //          mary@domain1.com, 2016-08-28
             //      domain2:
             //          vince@domain2.com, 2016-05-20
             //          norm@domain2.com, 2016-07-14
