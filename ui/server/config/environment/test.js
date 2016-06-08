@@ -41,7 +41,7 @@
         //},
 
         // allow for override of default ports
-        port   : 9000,
+        port   : 9001,
         sslPort: 9443,
 
         //REST endpoint (protocol,server,port)
