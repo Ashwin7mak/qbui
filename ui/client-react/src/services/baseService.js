@@ -75,6 +75,12 @@ class BaseService {
         axios.interceptors.response.use(self.responseInterceptorSuccess, error => {self.responseInterceptorError(error);});
     }
 
+    /**
+     * If we have a successful response, we want to automatically just return the response
+     *
+     * @param response - the response object
+     * @returns {response}
+     */
     responseInterceptorSuccess(response) {
         return response;
     }
@@ -83,6 +89,9 @@ class BaseService {
      * certain rest endpoint errors get redirected immediately
      * if the unauthorizedRedirect config value is setup for the current runtime environment in app.config.js
      * use that first, other wise try and create one
+     *
+     * @param error - the error object
+     * @returns {*} - promise
      */
     responseInterceptorError(error) {
         var self = this;
