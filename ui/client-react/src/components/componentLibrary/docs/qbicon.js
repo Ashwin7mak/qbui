@@ -1,13 +1,20 @@
 import React from 'react';
 
-// import QBicon from '../../qbIcon/qbIcon';
+import Metadata from '../src/Metadata';
+import ReactPlayground from '../src/ReactPlayground';
+import Examples from '../src/Examples';
+import PropTable from '../src/PropTable';
+import QBicon from '../../qbIcon/qbIcon';
 
 export default function QBIconDoc() {
-  return (
-    <div className="bs-docs-section">
-      <h2 className="page-header">
-        Hello World
-      </h2>
-    </div>
-  );
+    return (
+        <div className="componentContent">
+            <div dangerouslySetInnerHTML={{__html: Metadata.QBicon.descHtml}} />
+
+            <ReactPlayground codeText={Examples.QBIcon} />
+
+            <h2>Props</h2>
+            <PropTable component="QBicon" metadata={Metadata} />
+        </div>
+    );
 }
