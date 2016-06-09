@@ -66,7 +66,7 @@ if (__QB_LOCAL__) {
             logToConsole: true,
             logToServer: true
         },
-        unauthorizedRedirect: '/unauthorized',
+        unauthorizedRedirect: '/unauthorized'
     });
 }
 
