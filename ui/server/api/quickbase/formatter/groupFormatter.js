@@ -150,9 +150,7 @@
                         secondarySort.required = true;
                         //  Additional sorting is necessary for all remaining groups..Save the index
                         //  to mark the starting index offset to know when to enforce group re-ordering.
-                        if (secondarySort.groupFieldIndex === null) {
-                            secondarySort.groupFieldIndex = index;
-                        }
+                        secondarySort.groupFieldIndex = index;
                     }
                 }
             }
