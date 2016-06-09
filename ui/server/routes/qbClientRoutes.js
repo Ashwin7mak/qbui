@@ -35,7 +35,7 @@ var lodash = require('lodash');
         jsxEngine(templatePath, opts, function transformedJsxCallback(err, str) {
             if (!err) {
                 res.write(str);
-               // log.info('rendering jsx file:' + filename + '; MESSAGE: ' + str);
+                log.debug('rendering jsx file:' + filename + '; MESSAGE: ' + str);
                 res.end();
             } else {
                 log.error({req:req}, 'ERROR rendering jsx file:' + filename + '; MESSAGE: ' + err.message);

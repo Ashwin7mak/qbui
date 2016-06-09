@@ -53,3 +53,9 @@ export const SHOW_TOP_NAV = 'SHOW_TOP_NAV';
 
 export const SCROLLING_REPORT = 'SCROLLING_REPORT';
 
+export const MARK_PERF = 'MARK_PERF';
+export const MEASURE_PERF = 'MEASURE_PERF';
+export const NEW_ROUTE_PERF = 'NEW_ROUTE_PERF';
+export const DONE_ROUTE_PERF = 'DONE_ROUTE_PERF';
+export const LOG_MEASUREMENTS_PERF = 'LOG_MEASUREMENTS_PERF';
+

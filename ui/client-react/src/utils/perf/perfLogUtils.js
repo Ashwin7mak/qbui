@@ -1,7 +1,7 @@
+
 /**
  * Static class of Client Performance Logging Utility functions
  */
-import _ from 'lodash';
 
 class PerfLogUtils {
 
@@ -9,7 +9,7 @@ class PerfLogUtils {
      * @return true if we are tracking client side performance
      */
     static isEnabled() {
-        return (typeof(EPISODES) !== 'undefined')
+        return (nodeConfig && nodeConfig.isPerfTrackingEnabled && typeof (EPISODES) !== 'undefined');
     }
 
 
@@ -42,7 +42,8 @@ class PerfLogUtils {
      */
     static send(params) {
         if (PerfLogUtils.isEnabled()) {
-            EPISODES.sendBeacon(EPISODES.beaconUrl, _.extend({}, userInfo, params));
+            EPISODES.sendBeacon(EPISODES.beaconUrl, Object.assign({},
+                typeof (userInfo) !== 'undefined' ? userinfo : null, params));
         }
     }
 
@@ -53,36 +54,18 @@ class PerfLogUtils {
     static done(cb) {
         if (PerfLogUtils.isEnabled()) {
             EPISODES.done(cb);
-            PerfLogUtils.isDone = true;
         }
     }
-
 
     /**
-     * call "isDone()" to find out if its done measuring.
-     * @return bool
+     * call "setLogger()" to set method for logging perf debug.
      */
-    static isDone() {
+    static setLogger(logger) {
         if (PerfLogUtils.isEnabled()) {
-            return PerfLogUtils.isDone;
-        }
-        return null;
-    }
-
-
-    /**
-     * call "setNotDone" to set to undone measuring.
-     * @return bool
-     */
-    static setNotDone() {
-        if (PerfLogUtils.isEnabled()) {
-            EPISODES.bDone = false;
-            PerfLogUtils.isDone = false;
+            EPISODES.dprint = logger.debug.bind(logger);
         }
     }
-
 
 }
-PerfLogUtils.isDone = false;
 export default PerfLogUtils;
 

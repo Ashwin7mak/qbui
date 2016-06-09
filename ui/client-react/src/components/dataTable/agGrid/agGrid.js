@@ -1,31 +1,22 @@
-import React from 'react';
-import {AgGridReact} from 'ag-grid-react';
-import {AgGridEnterprise} from 'ag-grid-enterprise';
-import {reactCellRendererFactory} from 'ag-grid-react';
-import {I18nMessage} from '../../../utils/i18nMessage';
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import ReportActions from '../../actions/reportActions';
-import RecordActions from '../../actions/recordActions';
-import Locale from '../../../locales/locales';
-import _ from 'lodash';
-import Loader  from 'react-loader';
-import Fluxxor from 'fluxxor';
-import * as query from '../../../constants/query';
-import ReportUtils from '../../../utils/reportUtils';
-import PerfLogUtils from '../../../utils/perf/perfLogUtils';
-
+import React from "react";
+import {AgGridReact, reactCellRendererFactory} from "ag-grid-react";
+import {AgGridEnterprise} from "ag-grid-enterprise";
+import {I18nMessage} from "../../../utils/i18nMessage";
+import Locale from "../../../locales/locales";
+import _ from "lodash";
+import Loader from "react-loader";
+import Fluxxor from "fluxxor";
+import * as query from "../../../constants/query";
+import ReportUtils from "../../../utils/reportUtils";
 import {DateFormatter, DateTimeFormatter, TimeFormatter,
-        NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter,
-        SelectionColumnCheckBoxFormatter}  from './formatters';
-
-import * as GroupTypes from '../../../constants/groupTypes';
+    NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter,
+    SelectionColumnCheckBoxFormatter}  from './formatters';
+import * as GroupTypes from "../../../constants/groupTypes";
+import "../../../../../node_modules/ag-grid/dist/styles/ag-grid.css";
+import "./agGrid.scss";
+import "../gridWrapper.scss";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
-
-import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
-import './agGrid.scss';
-import '../gridWrapper.scss';
-
 
 function buildIconElement(icon) {
     return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
@@ -288,12 +279,14 @@ let AGGrid = React.createClass({
 
     componentWillUpdate(nextProps) {
         if (nextProps.loading) {
-            PerfLogUtils.mark('component-AgGrid start');
+            let flux = this.getFlux();
+            flux.actions.mark('component-AgGrid start');
         }
     },
     componentDidUpdate() {
         if (!this.props.loading) {
-            PerfLogUtils.measure('component-AgGrid', 'component-AgGrid start');
+            let flux = this.getFlux();
+            flux.actions.measure('component-AgGrid', 'component-AgGrid start');
         }
     },
     // Performance improvement - only update the component when certain state/props change

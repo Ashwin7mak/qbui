@@ -1,20 +1,15 @@
-import React from 'react';
-import ReactIntl from 'react-intl';
+import React from "react";
+import ReactIntl from "react-intl";
+import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
+import AGGrid from "../../../components/dataTable/agGrid/agGrid";
+import Logger from "../../../utils/logger";
+import ReportActions from "../../actions/reportActions";
+import Fluxxor from "fluxxor";
+import * as DataTypes from "../../../constants/schema";
+import * as GroupTypes from "../../../constants/groupTypes";
+import Locales from "../../../locales/locales";
 
-import CardViewListHolder from '../../../components/dataTable/cardView/cardViewListHolder';
-import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
-import {reactCellRendererFactory} from 'ag-grid-react';
-import PerfLogUtils from '../../../utils/perf/perfLogUtils';
-
-import Logger from '../../../utils/logger';
 let logger = new Logger();
-
-import ReportActions from '../../actions/reportActions';
-import Fluxxor from 'fluxxor';
-
-import * as DataTypes from '../../../constants/schema';
-import * as GroupTypes from '../../../constants/groupTypes';
-import Locales from '../../../locales/locales';
 
 let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -361,20 +356,22 @@ let ReportContent = React.createClass({
 
     //when report changed from not loading to loading start measure of components performance
     startPerfTiming(nextProps) {
-        if (_.has(this.props,'reportData.loading') &&
+        if (_.has(this.props, 'reportData.loading') &&
                 !this.props.reportData.loading &&
                 nextProps.reportData.loading) {
-            PerfLogUtils.mark('component-ReportContent start')
+            let flux = this.getFlux();
+            flux.actions.mark('component-ReportContent start');
         }
     },
 
     //when report changed from loading to loaded finish measure of components performance
     capturePerfTiming(prevProps) {
         let timingContextData = {numReportCols:0, numReportRows:0};
-        if (_.has(this.props,'reportData.loading') &&
+        let flux = this.getFlux();
+        if (_.has(this.props, 'reportData.loading') &&
                 !this.props.reportData.loading &&
                 prevProps.reportData.loading) {
-            PerfLogUtils.measure('component-ReportContent', 'component-ReportContent start');
+            flux.actions.measure('component-ReportContent', 'component-ReportContent start');
 
             // note the size of the report with the measure
             if (_.has(this.props, 'reportData.data.columns.length')) {
@@ -383,8 +380,8 @@ let ReportContent = React.createClass({
                 timingContextData.numReportRows = reportData.filteredRecordsCount ?
                     reportData.filteredRecordsCount : reportData.recordsCount;
             }
-            PerfLogUtils.send(timingContextData);
-            PerfLogUtils.done();
+            flux.actions.logMeasurements(timingContextData);
+            flux.actions.doneRoute();
         }
     },
 
@@ -392,7 +389,7 @@ let ReportContent = React.createClass({
         this.startPerfTiming(nextProps);
     },
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate(prevProps) {
         this.capturePerfTiming(prevProps);
     },
 

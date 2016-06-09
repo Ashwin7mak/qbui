@@ -5,22 +5,27 @@
 
 class ReactPerfUtils {
 
+
     /**
      * devPerfInit starts the React client side perf reporting
      * NOTE: this is only available development **NOT in production**
      * @see https://facebook.github.io/react/docs/perf.html
      * @param configuration
-     * @param global
+     * @param global if supplied will set global.Perf to the reactPerf object
      * @returns  the reactPerf object you can call stop and print methods on
      */
    static devPerfInit(configuration, global) {
-        let reactPerf;
-        if (configuration.env !== 'PROD' && _.has(configuration, this.consoleLogReactPerf) && configuration.consoleLogReactPerf) {
-            global.Perf = reactPerf = require('react/lib/ReactDefaultPerf');
-            reactPerf.start();
-        }
-        return reactPerf;
-    }
+       let reactPerf;
+       if (configuration && configuration.env !== 'PROD' &&
+           nodeConfig &&  nodeConfig.isPerfTrackingEnabled) {
+           reactPerf = ReactPerfUtils.requireReactDefaultPerf();
+           if (global) {
+               global.Perf = reactPerf;
+           }
+           reactPerf.start();
+       }
+       return reactPerf;
+   }
 
     /**
      * devPerfPrint stops measuring and prints out the captured react component measurements
@@ -28,7 +33,8 @@ class ReactPerfUtils {
      * @param reactPerf
      */
     static devPerfPrint(configuration, reactPerf) {
-        if (configuration.env !== 'PROD' && _.has(configuration, this.consoleLogReactPerf) && configuration.consoleLogReactPerf) {
+        if (configuration && configuration.env !== 'PROD' &&
+            reactPerf && nodeConfig && nodeConfig.isPerfTrackingEnabled) {
             reactPerf.stop();
             var measurements = reactPerf.getLastMeasurements();
 
@@ -47,7 +53,14 @@ class ReactPerfUtils {
         }
     }
 
+    /**
+     * this module is loaded only in nonproduction
+     * use getter to enable testability
+     * @returns {any|*}
+     */
+    static requireReactDefaultPerf() {
+        return require('react/lib/ReactDefaultPerf');
+    }
 }
-ReactPerfUtils.consoleLogReactPerf = "consoleLogReactPerf";
 export default ReactPerfUtils;
 

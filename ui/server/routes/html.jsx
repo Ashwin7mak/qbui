@@ -1,5 +1,5 @@
-import React, {PropTypes} from 'react';
-import _ from 'lodash';
+import React, {PropTypes} from "react";
+import _ from "lodash";
 
 var Html = React.createClass({
     propTypes: {
@@ -10,17 +10,25 @@ var Html = React.createClass({
         hostBase: PropTypes.string,
         isPerfTrackingEnabled: PropTypes.bool
     },
-
+    renderNodeConfig() {
+        return `
+            var nodeConfig = {
+                isPerfTrackingEnabled : ${this.props.isPerfTrackingEnabled || false},
+                lang :  "${this.props.lang}"
+            };
+        `;
+    },
     renderPerfList() {
-        let components = null;
+        let components = [];
+        let nodeConfig = this.renderNodeConfig();
 
         if (this.props.isPerfTrackingEnabled) {
-            components = [];
             let scriptKey = 1;
-            let url = _.has(this.props, 'req.url') ? this.props.req.url: 'undefined';
-            components.push(<script key={"s"+ scriptKey++}  dangerouslySetInnerHTML={{__html:`
-                userInfo = {};
-                userInfo.url = "${url}";
+            let initialUrl = _.has(this.props, 'req.url') ? this.props.req.url : 'undefined';
+            components.push(<script key={"s" + scriptKey++}  dangerouslySetInnerHTML={{__html:`
+                var userInfo = {};
+                userInfo.url = "${initialUrl}";
+                ${nodeConfig}
 
                 var EPISODES = EPISODES || {};
                 EPISODES.q = [];    // command queue
@@ -33,11 +41,15 @@ var Html = React.createClass({
                 EPISODES.beaconType = 'POST';  // URL to use for the metrics beacon
                 EPISODES.bPostMessage = false; // no iframes to notify
                 EPISODES.autorun = false; // done will be called after all routes rendering is done
-                EPISODES.bResourceTimingAgg = false; // no Resource Timing aggregate
+                EPISODES.bResourceTimingAgg = false; // no Resource Timing aggregate (only loads a js)
                 EPISODES.mark("firstbyte");
             `}} ></script>);
-            components.push(<script key={"s"+ scriptKey++} async="async" defer="defer" src="/vendor/episodes.js"></script>);
+            components.push(<script key={"s" + scriptKey++} async="async" defer="defer" src="/vendor/episodes.js"></script>);
 
+        } else {
+            components.push(<script key="s1"  dangerouslySetInnerHTML={{__html:`
+                ${nodeConfig}
+            `}} ></script>);
         }
         return components;
     },

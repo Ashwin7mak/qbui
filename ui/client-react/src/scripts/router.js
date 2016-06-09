@@ -1,53 +1,36 @@
 //these two imports are needed for safari and iOS to work with internationalization
-import Intl from 'intl';
-import en from 'intl/locale-data/jsonp/en.js';
-
-import React from 'react';
-import {render} from 'react-dom';
-import {Router, Route, IndexRoute} from 'react-router';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
-
-import Nav from '../components/nav/nav';
-
-import Fluxxor from 'fluxxor';
-
-import ReportsStore from '../stores/reportsStore';
-import reportActions from'../actions/reportActions';
-
-import ReportDataStore from '../stores/reportDataStore';
-import ReportDataSearchStore from '../stores/reportDataSearchStore';
-import reportDataActions from'../actions/reportDataActions';
-
-import FieldsStore from '../stores/fieldsStore';
-import fieldsActions from '../actions/fieldsActions';
-
-import AppsStore from '../stores/appsStore';
-import appsActions from '../actions/appsActions';
-
-import NavStore from '../stores/navStore';
-import navActions from '../actions/navActions';
-
-import FacetMenuStore from '../stores/facetMenuStore';
-import facetMenuActions from '../actions/facetMenuActions';
-
-import AppsHome from '../components/apps/home';
-import AppsRoute from '../components/apps/appsRoute';
-import AppHomePageRoute from '../components/app/appHomePageRoute';
-
-import ReportRoute from '../components/report/reportRoute';
-import RecordRoute from '../components/record/recordRoute';
-import TableHomePageRoute from '../components/table/tableHomePageRoute';
-import PerfLogUtils from '../utils/perf/perfLogUtils';
-import ReactPerfUtils from '../utils/perf/ReactPerfUtils';
-
-import Configuration from '../../src/config/app.config.js';
-
-import Logger from '../utils/logger';
-
-import _ from 'lodash';
-
-import FastClick from 'fastclick';
+import React from "react";
+import ReactDOM, {render} from "react-dom";
+import {Router, Route, IndexRoute} from "react-router";
+import createBrowserHistory from "history/lib/createBrowserHistory";
+import Nav from "../components/nav/nav";
+import Fluxxor from "fluxxor";
+import ReportsStore from "../stores/reportsStore";
+import reportActions from "../actions/reportActions";
+import ReportDataStore from "../stores/reportDataStore";
+import ReportDataSearchStore from "../stores/reportDataSearchStore";
+import reportDataActions from "../actions/reportDataActions";
+import FieldsStore from "../stores/fieldsStore";
+import fieldsActions from "../actions/fieldsActions";
+import AppsStore from "../stores/appsStore";
+import appsActions from "../actions/appsActions";
+import NavStore from "../stores/navStore";
+import navActions from "../actions/navActions";
+import FacetMenuStore from "../stores/facetMenuStore";
+import facetMenuActions from "../actions/facetMenuActions";
+import PerfStore from "../stores/perfStore";
+import perfActions from "../actions/perfActions";
+import AppsHome from "../components/apps/home";
+import AppsRoute from "../components/apps/appsRoute";
+import AppHomePageRoute from "../components/app/appHomePageRoute";
+import ReportRoute from "../components/report/reportRoute";
+import RecordRoute from "../components/record/recordRoute";
+import TableHomePageRoute from "../components/table/tableHomePageRoute";
+import PerfLogUtils from "../utils/perf/perfLogUtils";
+import Logger from "../utils/logger";
+import FastClick from "fastclick";
 let logger = new Logger();
+PerfLogUtils.setLogger(logger);
 
 let stores = {
     ReportsStore: new ReportsStore(),
@@ -56,7 +39,8 @@ let stores = {
     NavStore: new NavStore(),
     FacetMenuStore: new FacetMenuStore(),
     ReportDataSearchStore: new ReportDataSearchStore(),
-    FieldsStore: new FieldsStore()
+    FieldsStore: new FieldsStore(),
+    PerfStore: new PerfStore()
 };
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
@@ -65,22 +49,30 @@ flux.addActions(appsActions);
 flux.addActions(navActions);
 flux.addActions(facetMenuActions);
 flux.addActions(fieldsActions);
+flux.addActions(perfActions);
 
-
-//init the perf measurements for development environment
-let ReactPerf = ReactPerfUtils.devPerfInit(Configuration, window);
+//to ensure you don't get cascading dispatch errors with Fluxxor
+// if you dispatch actions from within componentWillMount or componentDidMount
+// this ties Fluxxor action dispatches to the React batched update
+flux.setDispatchInterceptor(function(action, dispatch) {
+    ReactDOM.unstable_batchedUpdates(function() {
+        dispatch(action);
+    });
+});
 
 
 var history;
 /**
  * Instrumentation code of SPA history route change perf timing
  */
-function hookHistory(history) {
+function hookHistory(theHistory) {
+    flux.actions.newRoute("initialFullPageLoad");
+
     if (PerfLogUtils.isEnabled()) {
-        history.listen(function(ev) {
+        theHistory.listen(function(ev) {
             // mark start of new route
-            if (ev.action === "PUSH" || ev.action === "REPLACE" ) {
-                PerfLogUtils.mark("newroute:" + ev.pathname);
+            if (ev.action === "PUSH" || ev.action === "REPLACE") {
+                flux.actions.newRoute("newroute:" + ev.pathname);
             }
         });
         return true;
@@ -131,7 +123,6 @@ let NavWrapper = React.createClass({
 
             if (this.props.params.tblId) {
                 flux.actions.selectTableId(this.props.params.tblId);
-                flux.actions.loadFields(this.props.params.appId, this.props.params.tblId);
                 flux.actions.loadReports(this.props.params.appId, this.props.params.tblId);
             } else {
                 flux.actions.selectTableId(null);
@@ -154,7 +145,6 @@ let NavWrapper = React.createClass({
         if (props.params.tblId) {
             if (this.props.params.tblId !== props.params.tblId) {
                 flux.actions.selectTableId(props.params.tblId);
-                flux.actions.loadFields(props.params.appId, props.params.tblId);
                 flux.actions.loadReports(props.params.appId, props.params.tblId);
             }
         } else {
@@ -188,8 +178,6 @@ render((
         </Route>
 
     </Router>
-), document.getElementById('content'),
-    //browser console the performance measurements
-    ReactPerfUtils.devPerfPrint(Configuration, ReactPerf));
+), document.getElementById('content'));
 
 
