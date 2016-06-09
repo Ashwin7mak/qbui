@@ -133,7 +133,6 @@
                 groupFieldNames: [],
                 groupFieldOrder: [],
                 //  sort fields
-                sortFieldIndex: 0,
                 sortFieldNames: [],
                 sortFieldOrder: []
             };
@@ -144,17 +143,16 @@
                     //  a guarantee, is added to the secondarySort list for node side sorting.
                     secondarySort.groupFieldNames.push(groupFields[index].field.name);
                     secondarySort.groupFieldOrder.push(groupFields[index].field.ascending ? 'asc' : 'desc');
-
-                    //  the sort field index is always the last group index.
-                    secondarySort.sortFieldIndex = index;
                 } else {
-                    //  if the group type is not equals ('V'), then a secondary sort is necessary.  Set the
-                    //  index in the secondarySort object to identify the level at which to perform the sort.
+                    //  if the group type is not equals ('V'), then a secondary sort is necessary.
                     /*eslint no-lonely-if:0 */
                     if (groupFields[index].groupType !== groupTypes.COMMON.equals) {
                         secondarySort.required = true;
-                        secondarySort.groupFieldIndex = index;
-                        secondarySort.sortFieldIndex = index;
+                        //  Additional sorting is necessary for all remaining groups..Save the index
+                        //  to mark the starting index offset to know when to enforce group re-ordering.
+                        if (secondarySort.groupFieldIndex === null) {
+                            secondarySort.groupFieldIndex = index;
+                        }
                     }
                 }
             }
@@ -360,12 +358,6 @@
      */
     function groupTheData(groupFields, secondarySort, reportData, idx) {
 
-        function groupOrderByCallback(a) {
-            let offset = idx - secondarySort.groupFieldIndex;
-            let val = a[secondarySort.groupFieldNames[offset]];
-            return val.toLowerCase();
-        }
-
         let data = [];
         let numericGroupTypeIdx = null;
 
@@ -417,11 +409,11 @@
         for (let group in groupedData) {
             let children = [];
 
-            //  Check the fieldNames list for fields to sort.
-            if (secondarySort.required === true) {
-                //  The groupFieldIndex is the first level in the tree where groupBy ordering is necessary.  There should
-                //  be an entry in the list for each groupBy field thereafter.
-                if (secondarySort.groupFieldNames.length > 0) {
+            //  Check to determine if we have additional grouping levels to process.
+            if (idx < groupFields.length - 1) {
+
+                //  Do we have any sorting requirements to perform on the next group
+                if (secondarySort.required === true) {
                     if (secondarySort.groupFieldIndex <= idx) {
                         let offset = idx - secondarySort.groupFieldIndex;
                         if (secondarySort.groupFieldNames.length > offset) {
@@ -430,15 +422,6 @@
                     }
                 }
 
-                //  any sortOnly fields to reorder.  The index should be the lowest level in the tree
-                if (secondarySort.sortFieldNames.length > 0) {
-                    if (secondarySort.sortFieldIndex === idx) {
-                        groupedData[group] = reOrderGroupData(groupedData[group], secondarySort.sortFieldNames, secondarySort.sortFieldOrder);
-                    }
-                }
-            }
-
-            if (idx < groupFields.length - 1) {
                 //
                 //  recursive call to get the children of the next group node in the groupFields list.
                 //  Continue until we get to the last grouping field, and then populate the data
@@ -446,6 +429,14 @@
                 //
                 children = groupTheData(groupFields, secondarySort, groupedData[group], idx + 1);
             } else {
+
+                //  No more grouping levels to process.  Do we have any final sorting requirements to perform on the child data.
+                if (secondarySort.required === true) {
+                    if (secondarySort.sortFieldNames.length > 0) {
+                        groupedData[group] = reOrderGroupData(groupedData[group], secondarySort.sortFieldNames, secondarySort.sortFieldOrder);
+                    }
+                }
+
                 children = groupedData[group];
             }
 
