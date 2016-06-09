@@ -53,8 +53,9 @@ var config = {
         // main entry point to the app
         // TODO:entry point...when more pages are flushed out
         // we probably should rename to something like quickbase.js and add a builder entry
-        path.resolve(clientPath, 'src/scripts/router.js'),
-        'bootstrap-sass!./client-react/bootstrap-sass.config.js'
+        'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+        path.resolve(clientPath, 'src/scripts/router.js')
+        
     ],
     output: {
         // pathinfo - false disable outputting file info comments in prod bundle
