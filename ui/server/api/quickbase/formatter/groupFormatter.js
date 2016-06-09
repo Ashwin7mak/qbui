@@ -165,6 +165,11 @@
                     secondarySort.sortFieldNames.push(sortFields[index].name);
                     secondarySort.sortFieldOrder.push(sortFields[index].ascending ? 'asc' : 'desc');
                 }
+
+                // it's possible both fieldName lists are empty..which means we have nothing to do
+                if (secondarySort.groupFieldNames.length === 0 && secondarySort.sortFieldNames.length === 0) {
+                    secondarySort.required = false;
+                }
             }
 
             data = groupTheData(groupFields, secondarySort, reportData, 0);
@@ -313,7 +318,7 @@
     }
 
     /**
-     * Function that reorders the group data based on the fields in the fieldArray.
+     * Function to reorder the group data based on the fields in the fieldArray.
      *
      * @param group
      * @param fieldArray - list of fields to reorder
@@ -328,8 +333,8 @@
         fieldArray.forEach(function(sortField) {
             callBackArray.push(
                 function callback(a) {
-                    //  text ordering is case insensitive so ensure text is always lowercase for comparison.
-                    //  Note: this does not affect the display data; strings are rendered with mixed case..
+                    //  want case insensitive ordering, so ensure text is always lowercase for comparison.
+                    //  Note: this does not affect the display data; strings are rendered with proper case..
                     if (a[sortField] && typeof a[sortField] === 'string') {
                         return a[sortField].toLowerCase();
                     }
