@@ -341,7 +341,6 @@
         //  orderBy function to reorder the group data using supplied function callback array
         //  and field ordering requirement.
         return lodash.orderBy(group, callBackArray, fieldOrderArray);
-
     }
 
     /**
@@ -420,14 +419,11 @@
                     }
                 }
 
-                //
-                //  recursive call to get the children of the next group node in the groupFields list.
-                //  Continue until we get to the last grouping field, and then populate the data
-                //  object as we work our way back to the top of the stack.
+                //  Recursive call to get the next group node in the groupFields list.  Continue until we get to
+                //  the last to the last grouping field where we populate the final group node with the child data.
                 //
                 children = groupTheData(groupFields, secondarySort, groupedData[group], idx + 1);
             } else {
-
                 //  No more grouping levels to process.  Do we have any final sorting requirements to perform on the child data.
                 if (secondarySort.required === true) {
                     if (secondarySort.sortFieldNames.length > 0) {
