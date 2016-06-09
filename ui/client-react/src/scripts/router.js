@@ -44,7 +44,7 @@ let stores = {
     FacetMenuStore: new FacetMenuStore(),
     ReportDataSearchStore: new ReportDataSearchStore(),
     FieldsStore: new FieldsStore(),
-    FormStore: new FormStore()
+    FormStore: new FormStore(),
     PerfStore: new PerfStore()
 };
 let flux = new Fluxxor.Flux(stores);
@@ -55,7 +55,6 @@ flux.addActions(navActions);
 flux.addActions(facetMenuActions);
 flux.addActions(fieldsActions);
 flux.addActions(formActions);
-
 flux.addActions(perfActions);
 
 //to ensure you don't get cascading dispatch errors with Fluxxor
