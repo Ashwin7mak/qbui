@@ -14,7 +14,7 @@ describe('Validate lodashMixin Functionality', () => {
 
         var answer = _.sortKeysBy(obj);
         var expected = {Company: 'Hooli', Contact: 'Gavin Belson', Type: 1};
-        assert.deepEqual(answer, expected);
+        assert.equal(JSON.stringify(answer), JSON.stringify(expected));
     });
 
     it('objects are ordered with comparator', () => {
@@ -23,8 +23,8 @@ describe('Validate lodashMixin Functionality', () => {
             return val.toString().length;
         }
         var answer = _.sortKeysBy(obj, compareByValStringSize);
-        var expected = {Company: 'Pied Piper', Contact: 'Richard Hendricks', Type: 1};
-        assert.deepEqual(answer, expected);
+        var expected = { Type: 1,Company: 'Pied Piper', Contact: 'Richard Hendricks'};
+        assert.equal(JSON.stringify(answer), JSON.stringify(expected));
     });
 
     it('objects are ordered by name', () => {
@@ -79,7 +79,7 @@ describe('Validate lodashMixin Functionality', () => {
             return key.toLowerCase();
         }
         var answer = _.sortKeysBy(obj, compareByKeyName);
-        assert.deepEqual(answer, expected);
+        assert.equal(JSON.stringify(answer), JSON.stringify(expected));
     });
 
 
@@ -109,33 +109,33 @@ describe('Validate lodashMixin Functionality', () => {
         };
 
         var expected = {
-            "redirectEnd": 0,
-            "redirectStart": 0,
-            "secureConnectionStart": 0,
-            "navigationStart": 1465435467526,
-            "connectEnd": 1465435467532,
-            "connectStart": 1465435467532,
-            "domainLookupEnd": 1465435467532,
-            "domainLookupStart": 1465435467532,
-            "fetchStart": 1465435467532,
-            "requestStart": 1465435467540,
-            "responseStart": 1465435467658,
-            "responseEnd": 1465435467664,
-            "unloadEventEnd": 1465435467664,
-            "unloadEventStart": 1465435467664,
-            "domLoading": 1465435467686,
-            "domContentLoadedEventStart": 1465435469178,
-            "domInteractive": 1465435469178,
-            "domContentLoadedEventEnd": 1465435469183,
-            "domComplete": 1465435471693,
-            "loadEventEnd": 1465435471693,
-            "loadEventStart": 1465435471693
+            "redirectStart":0,
+            "redirectEnd":0,
+            "secureConnectionStart":0,
+            "navigationStart":1465435467526,
+            "fetchStart":1465435467532,
+            "domainLookupStart":1465435467532,
+            "domainLookupEnd":1465435467532,
+            "connectStart":1465435467532,
+            "connectEnd":1465435467532,
+            "requestStart":1465435467540,
+            "responseStart":1465435467658,
+            "unloadEventStart":1465435467664,
+            "unloadEventEnd":1465435467664,
+            "responseEnd":1465435467664,
+            "domLoading":1465435467686,
+            "domInteractive":1465435469178,
+            "domContentLoadedEventStart":1465435469178,
+            "domContentLoadedEventEnd":1465435469183,
+            "domComplete":1465435471693,
+            "loadEventStart":1465435471693,
+            "loadEventEnd":1465435471693
         };
         function compareByKeyVal(val, key) {
             return val;
         }
         var answer = _.sortKeysBy(obj, compareByKeyVal);
-        assert.deepEqual(answer, expected);
+        assert.equal(JSON.stringify(answer), JSON.stringify(expected));
     });
 
 });
