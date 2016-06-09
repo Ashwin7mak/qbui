@@ -145,7 +145,7 @@
                     secondarySort.groupFieldNames.push(groupFields[index].field.name);
                     secondarySort.groupFieldOrder.push(groupFields[index].field.ascending ? 'asc' : 'desc');
 
-                    //  the sort field index is always the last group index..or 0 if no grouping requires additional sorting
+                    //  the sort field index is always the last group index.
                     secondarySort.sortFieldIndex = index;
                 } else {
                     //  if the group type is not equals ('V'), then a secondary sort is necessary.  Set the
@@ -154,6 +154,7 @@
                     if (groupFields[index].groupType !== groupTypes.COMMON.equals) {
                         secondarySort.required = true;
                         secondarySort.groupFieldIndex = index;
+                        secondarySort.sortFieldIndex = index;
                     }
                 }
             }
@@ -312,6 +313,37 @@
     }
 
     /**
+     * Function that reorders the group data based on the fields in the fieldArray.
+     *
+     * @param group
+     * @param fieldArray - list of fields to reorder
+     * @param fieldOrderArray - for each field, ascending or descending order
+     * @returns {Array}
+     */
+    function reOrderGroupData(group, fieldArray, fieldOrderArray) {
+
+        let callBackArray = [];
+
+        //  loop through the list of fieldArray elements and create a callback function for each..
+        fieldArray.forEach(function(sortField) {
+            callBackArray.push(
+                function callback(a) {
+                    //  text ordering is case insensitive so ensure text is always lowercase for comparison.
+                    //  Note: this does not affect the display data; strings are rendered with mixed case..
+                    if (a[sortField] && typeof a[sortField] === 'string') {
+                        return a[sortField].toLowerCase();
+                    }
+                }
+            );
+        });
+
+        //  orderBy function to reorder the group data using supplied function callback array
+        //  and field ordering requirement.
+        return lodash.orderBy(group, callBackArray, fieldOrderArray);
+
+    }
+
+    /**
      * For each group field, group the supplied report data according to the business
      * rules defined for each field type and group type combination.
      *
@@ -322,6 +354,12 @@
      * @returns {Array}
      */
     function groupTheData(groupFields, secondarySort, reportData, idx) {
+
+        function groupOrderByCallback(a) {
+            let offset = idx - secondarySort.groupFieldIndex;
+            let val = a[secondarySort.groupFieldNames[offset]];
+            return val.toLowerCase();
+        }
 
         let data = [];
         let numericGroupTypeIdx = null;
@@ -378,17 +416,19 @@
             if (secondarySort.required === true) {
                 //  The groupFieldIndex is the first level in the tree where groupBy ordering is necessary.  There should
                 //  be an entry in the list for each groupBy field thereafter.
-                if (secondarySort.groupFieldIndex <= idx) {
-                    let offset = idx - secondarySort.groupFieldIndex;
-                    if (secondarySort.groupFieldNames.length > offset) {
-                        groupedData[group] = lodash.orderBy(groupedData[group], [secondarySort.groupFieldNames[offset]], [secondarySort.groupFieldOrder[offset]]);
+                if (secondarySort.groupFieldNames.length > 0) {
+                    if (secondarySort.groupFieldIndex <= idx) {
+                        let offset = idx - secondarySort.groupFieldIndex;
+                        if (secondarySort.groupFieldNames.length > offset) {
+                            groupedData[group] = reOrderGroupData(groupedData[group], [secondarySort.groupFieldNames[offset]], [secondarySort.groupFieldOrder[offset]]);
+                        }
                     }
                 }
 
                 //  any sortOnly fields to reorder.  The index should be the lowest level in the tree
                 if (secondarySort.sortFieldNames.length > 0) {
                     if (secondarySort.sortFieldIndex === idx) {
-                        groupedData[group] = lodash.orderBy(groupedData[group], secondarySort.sortFieldNames, secondarySort.sortFieldOrder);
+                        groupedData[group] = reOrderGroupData(groupedData[group], secondarySort.sortFieldNames, secondarySort.sortFieldOrder);
                     }
                 }
             }
