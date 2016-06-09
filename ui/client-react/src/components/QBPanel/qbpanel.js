@@ -7,6 +7,7 @@ import './qbpanel.scss';
 /**
  *  # QBPanel
  *  Custom QuickBase Panel component that wraps the bootstrap component. You can pass content by wrapping it in a `<QBPanel></QBPanel>` tag.
+ *
  */
 class QBPanel extends React.Component {
 
