@@ -18,7 +18,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'FieldsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'FieldsStore', 'FormStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -33,6 +33,7 @@ var Nav = React.createClass({
             reportsData: flux.store('ReportsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
+            form: flux.store('FormStore').getState()
         };
     },
 
@@ -188,6 +189,7 @@ var Nav = React.createClass({
                             selectedAppId: this.state.apps.selectedAppId,
                             reportData: this.state.reportData,
                             fields: this.state.fields,
+                            form: this.state.form,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),
                             scrollingReport: this.state.nav.scrollingReport,

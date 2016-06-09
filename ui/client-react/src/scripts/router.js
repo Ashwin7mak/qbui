@@ -20,13 +20,17 @@ import FacetMenuStore from "../stores/facetMenuStore";
 import facetMenuActions from "../actions/facetMenuActions";
 import PerfStore from "../stores/perfStore";
 import perfActions from "../actions/perfActions";
+import PerfLogUtils from "../utils/perf/perfLogUtils";
+
 import AppsHome from "../components/apps/home";
 import AppsRoute from "../components/apps/appsRoute";
 import AppHomePageRoute from "../components/app/appHomePageRoute";
 import ReportRoute from "../components/report/reportRoute";
 import RecordRoute from "../components/record/recordRoute";
 import TableHomePageRoute from "../components/table/tableHomePageRoute";
-import PerfLogUtils from "../utils/perf/perfLogUtils";
+
+import FormStore from '../stores/formStore';
+import formActions from '../actions/formActions';
 import Logger from "../utils/logger";
 import FastClick from "fastclick";
 let logger = new Logger();
@@ -40,6 +44,7 @@ let stores = {
     FacetMenuStore: new FacetMenuStore(),
     ReportDataSearchStore: new ReportDataSearchStore(),
     FieldsStore: new FieldsStore(),
+    FormStore: new FormStore()
     PerfStore: new PerfStore()
 };
 let flux = new Fluxxor.Flux(stores);
@@ -49,6 +54,8 @@ flux.addActions(appsActions);
 flux.addActions(navActions);
 flux.addActions(facetMenuActions);
 flux.addActions(fieldsActions);
+flux.addActions(formActions);
+
 flux.addActions(perfActions);
 
 //to ensure you don't get cascading dispatch errors with Fluxxor

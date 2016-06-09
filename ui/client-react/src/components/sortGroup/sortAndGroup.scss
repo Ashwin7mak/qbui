@@ -77,11 +77,10 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     }
     .fieldName {
       color: $popover-text;
-      max-width: 100%;
-      width: 100%;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
+      flex: 1 1 0;
     }
     .sortOrderIcon {
       margin-right: 10px;

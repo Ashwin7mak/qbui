@@ -35,7 +35,7 @@ let CardView = React.createClass({
 
     createField(c, curKey) {
         return (<div key={c} className="field">
-            <h5><small className="fieldLabel">{curKey}</small></h5>
+            <span className="fieldLabel">{curKey}</span>
             <span className="fieldValue">{this.props.data[curKey]}</span>
         </div>);
     },
