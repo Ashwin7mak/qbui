@@ -80,7 +80,11 @@ var config = {
                     path.resolve(__dirname, 'client-react/src'),
                     path.resolve(__dirname, 'client-react/test')
                 ],
-                exclude: [nodeModulesPath],
+                exclude: [
+                    nodeModulesPath,
+                    // these get compiled when they are imported into ReactPlayground component
+                    path.resolve(__dirname, 'client-react/src/components/componentLibrary/examples')
+                ],
                 loaders: ['react-hot-loader', 'babel-loader']
             },
             {

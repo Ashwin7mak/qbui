@@ -1,6 +1,7 @@
-/* eslint no-path-concat: 0, no-var: 0, key-spacing: 0 */
-import fs from 'fs';
+import QBPanelExample from 'raw!../examples/QBPanelExample.js';
+import QBIconExample from 'raw!../examples/QBIconExample.js';
 
 export default {
-  QBIconBasic:  require('fs').readFileSync(__dirname + './examples/QBIconExample.js', 'utf8'),
-};
+        QBPanel: QBPanelExample,
+        QBIcon: QBIconExample
+    };
