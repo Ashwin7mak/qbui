@@ -9,16 +9,16 @@ var lodashMixins = require('./../src/lodashMixins');
  */
 describe('Validate lodashMixin Functionality', () => {
 
-    it ('objects are ordered', () => {
-        var obj = { Contact: 'Gavin Belson', Company: 'Hooli', Type: 1};
+    it('objects are ordered', () => {
+        var obj = {Contact: 'Gavin Belson', Company: 'Hooli', Type: 1};
 
         var answer = _.sortKeysBy(obj);
         var expected = {Company: 'Hooli', Contact: 'Gavin Belson', Type: 1};
         assert.deepEqual(answer, expected);
     });
 
-    it ('objects are ordered with comparator', () => {
-        var obj = { Contact: 'Richard Hendricks', Company: 'Pied Piper', Type: 1};
+    it('objects are ordered with comparator', () => {
+        var obj = {Contact: 'Richard Hendricks', Company: 'Pied Piper', Type: 1};
         function compareByValStringSize(val, key) {
             return val.toString().length;
         }
@@ -27,7 +27,7 @@ describe('Validate lodashMixin Functionality', () => {
         assert.deepEqual(answer, expected);
     });
 
-    it ('objects are ordered by name', () => {
+    it('objects are ordered by name', () => {
         var obj = {
             "navigationStart":1465435467526,
             "unloadEventStart":1465435467664,
@@ -83,7 +83,7 @@ describe('Validate lodashMixin Functionality', () => {
     });
 
 
-    it ('objects are ordered by name', () => {
+    it('objects are ordered by name', () => {
         var obj = {
             "navigationStart":1465435467526,
             "unloadEventStart":1465435467664,
