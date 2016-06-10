@@ -14,6 +14,10 @@
         APPLICATION_XML : 'application/xml',
         TEXT_HTML       : 'text/html',
         UTC_TIMEZONE    : 'Universal',
+        EST_TIMEZONE    : 'US/Eastern',
+        PST_TIMEZONE    : 'US/Pacific',
+        CET_TIMEZONE    : 'Europe/Berlin',
+        JST_TIMEZONE    : 'Asia/Tokyo',
         //Field types
         FORMULA         : 'FORMULA',
         SCALAR          : 'SCALAR',
@@ -49,8 +53,7 @@
         REQUEST_PARAMETER : {
             FORMAT: 'format',
             FACET_EXPRESSION: 'facetexpression',
-            SORT_LIST: 'sortlist',
-            GROUP_LIST: 'glist',
+            SORT_LIST: 'sortList',
             LIST_DELIMITER: '.',
             GROUP_DELIMITER: ':'
         },

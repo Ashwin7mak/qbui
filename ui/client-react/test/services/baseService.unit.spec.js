@@ -1,6 +1,7 @@
 
 import BaseService from '../../src/services/baseService';
 import StringUtils from '../../src/utils/stringUtils';
+import WindowLocationUtils from '../../src/utils/windowLocationUtils.js';
 
 describe('BaseService rewire tests', () => {
     'use strict';
@@ -17,23 +18,56 @@ describe('BaseService rewire tests', () => {
         }
     };
 
+    var mockWindowUtils = {
+        update: function(url) {
+            return url;
+        },
+        replace: function(url) {
+            return url;
+        }
+    };
+
     beforeEach(() => {
         spyOn(BaseService.prototype, 'setRequestInterceptor');
         spyOn(BaseService.prototype, 'setResponseInterceptor');
+        spyOn(mockWindowUtils, 'update');
+        spyOn(mockWindowUtils, 'replace');
 
         BaseService.__Rewire__('cookie', mockCookie);
         BaseService.__Rewire__('axios', mockAxios);
+        BaseService.__Rewire__('WindowLocationUtils', mockWindowUtils);
     });
 
     afterEach(() => {
         BaseService.__ResetDependency__('cookie');
         BaseService.__ResetDependency__('axios');
+        BaseService.__ResetDependency__('WindowLocationUtils', mockWindowUtils);
     });
 
     it('test constructor', () => {
         baseService = new BaseService();
         expect(BaseService.prototype.setRequestInterceptor).toHaveBeenCalled();
         expect(BaseService.prototype.setResponseInterceptor).toHaveBeenCalled();
+    });
+
+
+    it('test setResponseInterceptor with 401 status', () => {
+        baseService = new BaseService();
+        baseService.responseInterceptorError({status: 401});
+        expect(mockWindowUtils.update).toHaveBeenCalled();
+    });
+
+    it('test setResponseInterceptor with 403 status', () => {
+        baseService = new BaseService();
+        baseService.responseInterceptorError({status: 403});
+        expect(mockWindowUtils.replace).toHaveBeenCalled();
+    });
+
+    it('test setResponseInterceptor with 200 status', () => {
+        baseService = new BaseService();
+        baseService.responseInterceptorError({status: 200});
+        expect(mockWindowUtils.replace).not.toHaveBeenCalled();
+        expect(mockWindowUtils.update).not.toHaveBeenCalled();
     });
 
     it('test getCookie', () => {

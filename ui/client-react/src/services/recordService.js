@@ -45,9 +45,6 @@ class RecordService extends BaseService {
             if (StringUtils.isNonEmptyString(optionalparams[query.SORT_LIST_PARAM])) {
                 params[query.SORT_LIST_PARAM] = optionalparams[query.SORT_LIST_PARAM];
             }
-            if (StringUtils.isNonEmptyString(optionalparams[query.GLIST_PARAM])) {
-                params[query.GLIST_PARAM] = optionalparams[query.GLIST_PARAM];
-            }
             if (NumberUtils.isInt(optionalparams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalparams[query.NUMROWS_PARAM])) {
                 params[query.OFFSET_PARAM] = optionalparams[query.OFFSET_PARAM];
                 params[query.NUMROWS_PARAM] = optionalparams[query.NUMROWS_PARAM];

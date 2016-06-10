@@ -38,6 +38,9 @@ import ReportRoute from '../components/report/reportRoute';
 import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
 
+import FormStore from '../stores/formStore';
+import formActions from '../actions/formActions';
+
 import _ from 'lodash';
 
 import FastClick from 'fastclick';
@@ -49,7 +52,8 @@ let stores = {
     NavStore: new NavStore(),
     FacetMenuStore: new FacetMenuStore(),
     ReportDataSearchStore: new ReportDataSearchStore(),
-    FieldsStore: new FieldsStore()
+    FieldsStore: new FieldsStore(),
+    FormStore: new FormStore()
 };
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
@@ -58,6 +62,7 @@ flux.addActions(appsActions);
 flux.addActions(navActions);
 flux.addActions(facetMenuActions);
 flux.addActions(fieldsActions);
+flux.addActions(formActions);
 
 let NavWrapper = React.createClass({
 

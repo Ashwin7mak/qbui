@@ -14,6 +14,26 @@ class WindowLocationUtils {
     static searchIncludes(lookFor) {
         return window.location.search.includes(lookFor);
     }
+
+    /**
+     * Function to replace the current url history in the browser with a new url
+     * this exists for testability
+     *
+     * @param url
+     */
+    static replace(url) {
+        window.location.replace(url);
+    }
+
+    /**
+     * Function to update the current url history in the browser with a new url
+     * this exists for testability
+     *
+     * @param url
+     */
+    static update(url) {
+        window.location.href = url;
+    }
 }
 
 export default WindowLocationUtils;

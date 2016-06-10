@@ -36,6 +36,7 @@ export default {
     LOG                 : 'log',
 
     // API Entity actions
+    FORMANDRECORD       : 'formAndRecord',
     REPORTCOMPONENTS    : 'reportComponents',
     RESULTS             : 'results',
     PARSE               : 'parse'

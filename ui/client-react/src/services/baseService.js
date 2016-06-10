@@ -4,6 +4,8 @@ import constants from './constants';
 import axios from 'axios';
 import Configuration from '../config/app.config';
 import StringUtils from '../utils/stringUtils';
+import WindowLocationUtils from '../utils/windowLocationUtils';
+import uuid from 'uuid';
 
 class BaseService {
 
@@ -52,7 +54,11 @@ class BaseService {
      */
     setRequestInterceptor() {
         axios.interceptors.request.use(config => {
-            config.headers[constants.HEADER.SESSION_ID] = Configuration.sid;
+            //  a unique id per request
+            config.headers[constants.HEADER.SESSION_ID] = uuid.v1();
+            //  not including now, but this is where we would add another header
+            //  if want to send unique id per user session --> config.uid
+
             let ticket = this.getCookie(constants.COOKIE.TICKET);
             if (ticket) {
                 config.headers[constants.HEADER.TICKET] = ticket;
@@ -66,32 +72,41 @@ class BaseService {
      */
     setResponseInterceptor() {
         var self = this;
-        axios.interceptors.response.use(
-            function(response) {
-                //  success
-                return response;
-            },
-            function(error) {
-                /**
-                 * certain rest endpoint errors get redirected immediately
-                 * if the unauthorizedRedirect config value is setup for the current runtime environment in app.config.js
-                 * use that first, other wise try and create one
-                */
-                let currentStackSignInUrl = "";
-                switch (error.status) {
-                case 401:
-                    currentStackSignInUrl = Configuration.unauthorizedRedirect || self.constructRedirectUrl();
-                    window.location.replace(currentStackSignInUrl);
-                    break;
-                case 403:
-                    currentStackSignInUrl = Configuration.unauthorizedRedirect || self.constructRedirectUrl();
-                    window.location.replace(currentStackSignInUrl);
-                    break;
-                }
-                //  let the service layer handle the error
-                return Promise.reject(error);
-            }
-        );
+        axios.interceptors.response.use(self.responseInterceptorSuccess, error => {self.responseInterceptorError(error);});
+    }
+
+    /**
+     * If we have a successful response, we want to automatically just return the response
+     *
+     * @param response - the response object
+     * @returns {response}
+     */
+    responseInterceptorSuccess(response) {
+        return response;
+    }
+
+    /**
+     * certain rest endpoint errors get redirected immediately
+     * if the unauthorizedRedirect config value is setup for the current runtime environment in app.config.js
+     * use that first, other wise try and create one
+     *
+     * @param error - the error object
+     * @returns {*} - promise
+     */
+    responseInterceptorError(error) {
+        var self = this;
+        let currentStackSignInUrl = "";
+        switch (error.status) {
+        case 401:
+            currentStackSignInUrl = Configuration.unauthorizedRedirect || self.constructRedirectUrl();
+            WindowLocationUtils.update(currentStackSignInUrl);
+            break;
+        case 403:
+            WindowLocationUtils.replace('/forbidden');
+            break;
+        }
+        //  let the service layer handle the error
+        return Promise.reject(error);
     }
 
     /**
