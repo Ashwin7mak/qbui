@@ -1,6 +1,7 @@
 import React from 'react';
 import {Input, InputGroup, FormControl, MenuItem, FormGroup, DropdownButton} from 'react-bootstrap';
 import DateTimeField from 'react-bootstrap-datetimepicker';
+import moment from 'moment';
 
 /**
  * simple non-validating cell editor for text
@@ -8,7 +9,7 @@ import DateTimeField from 'react-bootstrap-datetimepicker';
 export const DefaultCellEditor = React.createClass({
 
     propTypes: {
-        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object]),
+        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]),
         type: React.PropTypes.string,
         onChange: React.PropTypes.func
     },
@@ -91,6 +92,21 @@ export const ComboBoxCellEditor = React.createClass({
 });
 
 /**
+ * helper function to format date
+ * @param dateStr raw date string, empty string for current dateTime
+ * @param format moment.js format
+ * @returns moment.js formatted date
+ */
+function formatDate(dateStr, format) {
+
+    if (dateStr) {
+        const fixedDate = dateStr.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
+        return moment(fixedDate).format(format);
+    }
+    return moment().format(format);
+}
+
+/**
  * date-only cell editor
  */
 export const DateCellEditor = React.createClass({
@@ -105,8 +121,10 @@ export const DateCellEditor = React.createClass({
     },
 
     render() {
+        let formatted = this.props.value ? formatDate(this.props.value, "YYYY-MM-DD") : "";
+
         return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={this.props.value}
+            <DateTimeField dateTime={formatted}
                            format="YYYY-MM-DD"
                            inputFormat="MM/DD/YYYY"
                            onChange={this.onChange}
@@ -130,8 +148,10 @@ export const DateTimeCellEditor = React.createClass({
     },
 
     render() {
+        let formatted = this.props.value ? formatDate(this.props.value, "YYYY-MM-DDThh:mm:ss A") : "" ;
+
         return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={this.props.value}
+            <DateTimeField dateTime={formatted}
                            format="YYYY-MM-DDThh:mm:ss A"
                            inputFormat="MM/DD/YYYY hh:mm:ss A"
                            onChange={this.onChange}
@@ -153,9 +173,10 @@ export const TimeCellEditor = React.createClass({
         this.props.onChange(newValue);
     },
     render() {
+        let formatted = this.props.value ? formatDate(this.props.value, "YYYY-MM-DDThh:mm:ss A") : "" ;
 
         return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={this.props.value} format="YYYY-MM-DDThh:mm:ss A" inputFormat="h:mm:ss A"
+            <DateTimeField dateTime={formatted} format="YYYY-MM-DDThh:mm:ss A" inputFormat="h:mm:ss A"
                            onChange={this.onChange} mode="time"/>
         </div>;
     }
@@ -169,6 +190,12 @@ export const CheckBoxEditor = React.createClass({
     propTypes: {
         value: React.PropTypes.bool,
         onChange: React.PropTypes.func
+    },
+
+    getDefaultProps() {
+        return {
+            value: false
+        };
     },
 
     onChange(ev) {

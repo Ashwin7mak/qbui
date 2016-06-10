@@ -8,10 +8,12 @@ import {NotificationManager} from 'react-notifications';
  */
 const RowEditActions = React.createClass({
 
+    propTypes: {
+        api: React.PropTypes.object,
+        flux: React.PropTypes.object,
+    },
     onClickSave() {
         this.props.api.deselectAll();
-
-        const id = this.props.data["Record ID#"];
 
         // EMPOWER
         setTimeout(()=> {

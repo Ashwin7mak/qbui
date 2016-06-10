@@ -6,8 +6,8 @@
 (function() {
     'use strict';
     var Promise = require('bluebird');
-    var consts = require('../../constants');
-    var log = require('../../../logger').getLogger();
+    var consts = require('../constants');
+    //var log = require('../../../logger').getLogger();
 
     module.exports = {
         format: function(req) {

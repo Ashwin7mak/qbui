@@ -13,9 +13,9 @@ import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 
-import {DateFormatter, DateTimeFormatter, TimeFormatter,
-        NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter,
-        SelectionColumnCheckBoxFormatter}  from './formatters';
+import {DateCellFormatter, DateTimeCellFormatter, TimeCellFormatter,
+        NumericCellFormatter, TextCellFormatter, UserCellFormatter, CheckBoxCellFormatter,
+        CurrencyCellFormatter, SelectionColumnCheckBoxCellFormatter, PercentCellFormatter, RatingCellFormatter}  from './formatters';
 
 import * as GroupTypes from '../../../constants/groupTypes';
 
@@ -25,6 +25,7 @@ import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 import '../gridWrapper.scss';
 
+const serverTypeConsts = require('../../../../../common/src/constants');
 
 function buildIconElement(icon) {
     return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
@@ -504,7 +505,7 @@ let AGGrid = React.createClass({
         } else {
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
-        checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxFormatter);
+        checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxCellFormatter);
 
         return checkBoxCol;
     },
@@ -525,13 +526,13 @@ let AGGrid = React.createClass({
     getColumnProps: function() {
         let columns = this.props.columns;
 
+
         if (columns) {
             let columnsData = columns.map((obj, index) => {
                 obj.headerClass = "gridHeaderCell";
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
-                obj.addEditActions = false;
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
@@ -540,35 +541,48 @@ let AGGrid = React.createClass({
 
                         case 'type': {
                             switch (datatypeAttributes[attr]) {
-                            case "NUMERIC" :
+
+                            case serverTypeConsts.NUMERIC:
                                 this.setCSSClass_helper(obj, "AlignRight");
-                                obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
-                                obj.customComponent = NumericFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(NumericCellFormatter);
+                                obj.customComponent = NumericCellFormatter;
                                 break;
-                            case "DATE" :
-                                obj.cellRenderer = reactCellRendererFactory(DateFormatter);
-                                obj.customComponent = DateFormatter;
+                            case serverTypeConsts.DATE :
+                                obj.cellRenderer = reactCellRendererFactory(DateCellFormatter);
+                                obj.customComponent = DateCellFormatter;
                                 break;
-                            case "DATE_TIME" :
-                                obj.cellRenderer = reactCellRendererFactory(DateTimeFormatter);
-                                obj.customComponent = DateTimeFormatter;
+                            case serverTypeConsts.DATE_TIME:
+                                obj.cellRenderer = reactCellRendererFactory(DateTimeCellFormatter);
+                                obj.customComponent = DateTimeCellFormatter;
                                 break;
-                            case "TIME_OF_DAY" :
-                                obj.cellRenderer = reactCellRendererFactory(TimeFormatter);
-                                obj.customComponent = TimeFormatter;
+                            case serverTypeConsts.TIME_OF_DAY :
+                                obj.cellRenderer = reactCellRendererFactory(TimeCellFormatter);
+                                obj.customComponent = TimeCellFormatter;
                                 break;
-                            case "CHECKBOX" :
-                                obj.cellRenderer = reactCellRendererFactory(CheckBoxFormatter);
-                                obj.customComponent = CheckBoxFormatter;
+                            case serverTypeConsts.CHECKBOX :
+                                obj.cellRenderer = reactCellRendererFactory(CheckBoxCellFormatter);
+                                obj.customComponent = CheckBoxCellFormatter;
                                 break;
-                            case "USER" :
-                                obj.cellRenderer = reactCellRendererFactory(UserFormatter);
-                                obj.customComponent = UserFormatter;
+                            case serverTypeConsts.USER :
+                                obj.cellRenderer = reactCellRendererFactory(UserCellFormatter);
+                                obj.customComponent = UserCellFormatter;
+                                break;
+                            case serverTypeConsts.CURRENCY :
+                                obj.cellRenderer = reactCellRendererFactory(CurrencyCellFormatter);
+                                obj.customComponent = CurrencyCellFormatter;
+                                break;
+                            case serverTypeConsts.RATING :
+                                obj.cellRenderer = reactCellRendererFactory(RatingCellFormatter);
+                                obj.customComponent = CurrencyCellFormatter;
+                                break;
+                            case serverTypeConsts.PERCENT :
+                                obj.cellRenderer = reactCellRendererFactory(PercentCellFormatter);
+                                obj.customComponent = CurrencyCellFormatter;
                                 break;
 
                             default:
-                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
-                                obj.customComponent = TextFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(TextCellFormatter);
+                                obj.customComponent = TextCellFormatter;
                                 break;
                             }
                         }
@@ -625,7 +639,6 @@ let AGGrid = React.createClass({
         let paddedRecords = this.props.records.slice(0);
 
         paddedRecords.push({isHiddenLastRow:true});
-
         return paddedRecords;
     },
 

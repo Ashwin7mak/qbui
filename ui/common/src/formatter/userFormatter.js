@@ -19,6 +19,7 @@
     module.exports = {
         //Given a user string as input, formats as a email with display preferences applied.
         format: function(fieldValue, fieldInfo) {
+
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }

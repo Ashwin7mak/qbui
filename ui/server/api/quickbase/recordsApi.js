@@ -61,7 +61,7 @@
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
         var groupFormatter = require('./formatter/groupFormatter');
-        var recordFormatter = require('./formatter/recordFormatter')();
+        var recordFormatter = require('./../../../common/src/formatter/recordFormatter')();
         var constants = require('./../constants');
 
         //Module constants:

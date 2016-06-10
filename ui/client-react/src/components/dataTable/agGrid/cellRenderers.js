@@ -1,29 +1,50 @@
 import React from 'react';
 
+import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
+
 /**
  * placeholder for rendering users
  */
 export const UserCellRenderer = React.createClass({
 
     propTypes: {
-        format: React.PropTypes.string,
-        value: React.PropTypes.object
+        value: React.PropTypes.string
     },
 
-    getDefaultProps() {
-        return {
-            format: "FIRST_THEN_LAST"
-        };
-    },
     render() {
-        let display = "";
-        switch (this.props.format) {
-        case "FIRST_THEN_LAST":
-            if (this.props.value && this.props.value.firstName && this.props.value.lastName) {
-                display = this.props.value.firstName + ' ' + this.props.value.lastName;
-            }
-            break;
-        }
-        return <div>{display}</div>;
+        return <div className="userCell">{this.props.value}</div>;
+    }
+});
+
+export const NumberCellRenderer = React.createClass({
+
+    propTypes: {
+        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number])
+    },
+
+    render() {
+        return <div className="numberCell"><I18nNumber value={this.props.value}></I18nNumber></div>;
+    }
+});
+
+export const DateCellRenderer = React.createClass({
+
+    propTypes: {
+        value: React.PropTypes.string
+    },
+
+    render() {
+        return <div className="dateCell">{this.props.value}</div>;
+    }
+});
+
+export const TextCellRenderer = React.createClass({
+
+    propTypes: {
+        value: React.PropTypes.string
+    },
+
+    render() {
+        return <div className="textCell">{this.props.value}</div>;
     }
 });

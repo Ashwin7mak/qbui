@@ -83,9 +83,9 @@ let reportModel = {
                 let columns = {};
                 record.forEach((column) => {
                     let fld = map.get(column.id);
-                    columns[fld.name] = column.display;
+                    columns[fld.name] = column;
                 });
-                columns.actions = record.id;
+                //columns.actions = record.id;
                 reportData.push(columns);
             });
         }

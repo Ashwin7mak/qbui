@@ -2,10 +2,11 @@
  Given raw records input and field meta data from the Java capabilities API, this module is capable of
  display formatting the raw record field values by adding a display properties attribute.
  */
+
 (function() {
     'use strict';
     var _ = require('lodash');
-    var consts = require('../../constants');
+    var consts = require('../constants');
     var dateFormatter = require('./dateTimeFormatter');
     var phoneFormatter = require('./phoneNumberFormatter');
     var todFormatter = require('./timeOfDayFormatter');
@@ -58,6 +59,7 @@
     module.exports = function() {
         //Display formats record field values according to the field's display settings
         function formatRecordValue(fieldValue, fieldInfo) {
+
             var tempFieldInfo = _.cloneDeep(fieldInfo.datatypeAttributes);
             switch (tempFieldInfo.type) {
             case consts.PHONE_NUMBER:

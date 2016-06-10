@@ -10,7 +10,10 @@ import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
 import {DefaultCellEditor, ComboBoxCellEditor, DateCellEditor, DateTimeCellEditor, TimeCellEditor, UserCellEditor, CheckBoxEditor} from './cellEditors';
-import {UserCellRenderer} from './cellRenderers';
+import {UserCellRenderer, NumberCellRenderer, DateCellRenderer, TextCellRenderer} from './cellRenderers';
+
+import * as dateTimeFormatter from '../../../../../common/src/formatter/dateTimeFormatter';
+import * as numericFormatter from '../../../../../common/src/formatter/numericFormatter';
 
 import IconActions from '../../actions/iconActions';
 
@@ -24,22 +27,9 @@ const DateTimeFormat = 4;
 const TimeFormat = 5;
 const CheckBoxFormat = 6;
 const UserFormat = 7;
-
-/**
- * helper function to format date
- * @param dateStr raw date string, empty string for current dateTime
- * @param format moment.js format
- * @returns moment.js formatted date
- */
-function formatDate(dateStr, format) {
-
-    if (dateStr) {
-        const fixedDate = dateStr.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
-        return moment(fixedDate).format(format);
-    }
-    return moment().format(format);
-}
-
+const CurrencyFormat = 8;
+const PercentFormat = 9;
+const RatingFormat = 10;
 
 /**
  * cell formatter (renderer)
@@ -48,12 +38,19 @@ const CellFormatter = React.createClass({
 
     propTypes: {
         type: React.PropTypes.number.isRequired,
-        params: React.PropTypes.object.isRequired
+        colDef: React.PropTypes.object,
+        initialValue: React.PropTypes.object
     },
 
+    getDefaultProps() {
+        return {
+            initialValue: null
+        };
+    },
+    /* setting state from props is an anti-pattern but we're doing it to avoid rerendering */
     getInitialState() {
         return {
-            value: this.props.params.value
+            value: this.props.initialValue
         };
     },
 
@@ -62,49 +59,49 @@ const CellFormatter = React.createClass({
      */
     renderCellValue() {
 
+        const attributes = this.props.colDef.datatypeAttributes;
+
         switch (this.props.type) {
         case NumberFormat:
-            return <span className="cellData">
-                {this.state.value && <I18nNumber value={this.state.value}></I18nNumber>}
-                </span>;
+        case RatingFormat:
+            return (<span className="cellData">
+                {this.state.value.display && <NumberCellRenderer value={this.state.value.display} attributes={attributes} />}
+                </span>);
 
-        //case UserFormat:
-        //    return <span className="cellData">
-        //        <UserCellRenderer value={this.state.value} />
-        //        </span>;
+        case UserFormat:
+            return (<span className="cellData">
+                <UserCellRenderer value={this.state.value.display} />
+                </span>);
 
         case DateFormat:
-            return <span className="cellData">
-                {this.state.value && <I18nDate value={this.state.value}></I18nDate>}
-                </span>;
+            return (<span className="cellData">
+                <DateCellRenderer value={this.state.value.display} />
+                </span>);
 
         case DateTimeFormat: {
-            let dateTime = formatDate(this.state.value, "MM/DD/YY h:mm:ss A");
-
-            return <span className="cellData">
-                {this.state.value && dateTime}
-                </span>;
+            return (<span className="cellData">
+                <DateCellRenderer value={this.state.value.display} />
+                </span>);
         }
 
-        //case TimeFormat: {
-        //    let time = formatDate(this.state.value, "h:mm:ss A");
-        //    return <span className="cellData">
-        //        {this.state.value && time}
-        //        </span>;
-        //}
+        case TimeFormat: {
+            return (<span className="cellData">
+                <DateCellRenderer value={this.state.value.display} />
+                </span>);
+        }
         case CheckBoxFormat:
-            return <span className="cellData">
-                    <input type="checkbox" disabled checked={this.state.value} />{this.state.value}
-                </span>;
+            return (<span className="cellData">
+                    <input type="checkbox" disabled checked={this.state.value.value} />
+                </span>);
 
+        case PercentFormat:
+        case CurrencyFormat:
+
+        case TextFormat:
         default: {
-            let display = this.state.value;
-            if (typeof display === 'object') {
-                display = JSON.stringify(display);
-            }
-            return <span className="cellData">
-                {display}
-                </span>;
+            return (<span className="cellData">
+                <TextCellRenderer value={this.state.value.display} />
+                </span>);
         }
         }
     },
@@ -115,72 +112,91 @@ const CellFormatter = React.createClass({
     renderCellEditor() {
         switch (this.props.type) {
         case CheckBoxFormat:
-            return <CheckBoxEditor value={this.state.value} onChange={this.cellEdited} />;
+            return <CheckBoxEditor value={this.state.value.value} onChange={this.cellEdited} />;
 
         case DateFormat: {
-            let formatted = this.state.value ? formatDate(this.state.value, "YYYY-MM-DD") : "";
-            return <DateCellEditor value={formatted} onChange={this.cellEdited}/>;
+            return <DateCellEditor value={this.state.value.value} onChange={this.cellEdited} />;
         }
-        case DateTimeFormat: {
-            let formatted = this.state.value ? formatDate(this.state.value, "YYYY-MM-DDThh:mm:ss A") : "" ;
-            return <DateTimeCellEditor value={formatted} onChange={this.cellEdited}/>;
-        }
-        case TimeFormat: {
-            let formatted = this.state.value ? formatDate(this.state.value, "YYYY-MM-DDThh:mm:ss A") : "" ;
 
-            return <TimeCellEditor value={formatted} onChange={this.cellEdited}/>;
+        case DateTimeFormat: {
+            return <DateTimeCellEditor value={this.state.value.value} onChange={this.cellEdited} />;
         }
-        case NumberFormat: {
-            return <DefaultCellEditor value={this.state.value}
+
+        case TimeFormat: {
+            return <TimeCellEditor value={this.state.value.value} onChange={this.cellEdited} />;
+        }
+
+        case NumberFormat:
+        case RatingFormat:
+        case CurrencyFormat:
+        case PercentFormat: {
+            return <DefaultCellEditor value={this.state.value.value}
                                       type="number"
-                                      onChange={this.cellEdited}/>;
+                                      onChange={this.numericCellEdited} />;
         }
+
         case UserFormat: {
-            return <UserCellEditor value={this.state.value}
-                                   onChange={this.cellEdited}/>;
+            return <UserCellEditor value={this.state.value.value}
+                                   onChange={this.cellEdited} />;
         }
         default: {
 
-            if (this.props.params.colDef.choices) {
-                return <ComboBoxCellEditor choices={this.props.params.colDef.choices} value={this.state.value}
-                                          onChange={this.cellEdited}/>;
+            if (this.props.colDef.choices) {
+                return <ComboBoxCellEditor choices={this.props.colDef.choices} value={this.state.value.value}
+                                          onChange={this.cellEdited} />;
             } else {
-                return <DefaultCellEditor value={this.state.value}
-                                          onChange={this.cellEdited}/>;
+                return <DefaultCellEditor value={this.state.value.value}
+                                          onChange={this.cellEdited} />;
             }
         }
         }
     },
+
     /**
      * cell was edited, update the r/w and r/o value
      * @param newValue
      */
     cellEdited(value) {
-        let newValue = value;
+        let newDisplay = value;
+
+        this.state.value.value = value;
+        this.state.value.display = newDisplay;
+        this.setState(this.state);
+    },
+
+    dateTimeCellEdited(value) {
+        let newDisplay = value;
+
         switch (this.props.type) {
         case TimeFormat:
         case DateTimeFormat: {
             let time = moment(value, "YYYY-MM-DDThh:mm:ss A");
             time.seconds(0);
             newValue = time.utc().format();
+            break;
         }
         }
-
-        this.setState({value: newValue});
+        this.state.value.value = value;
+        this.state.value.display = newDisplay;
+        this.setState(this.state);
     },
+    numericCellEdited(value) {
+        let newValue = Number(value);
 
+        this.state.value.value = newValue;
+
+        let newDisplay = numericFormatter.format(this.state.value, this.props.colDef.datatypeAttributes);
+
+        this.state.value.display = newDisplay;
+        this.setState(this.state);
+    },
     render: function() {
         // render the cell value and editor (CSS will hide one or the other)
 
         return (<span className="cellWrapper">
-                {this.props.params.colDef && this.props.params.colDef.addEditActions &&
-                    <RowEditActions flux={this.props.params.context.flux}
-                                    api={this.props.params.api}
-                                    data={this.props.params.data} />
-                }
-                {this.renderCellValue()}
-                {this.renderCellEditor()}
-                </span>);
+            {this.props.initialValue !== null && this.renderCellValue()}
+            {this.props.initialValue !== null && this.renderCellEditor()}
+        </span>);
     }
 });
 
@@ -188,50 +204,70 @@ const CellFormatter = React.createClass({
 // there is work to be done to use display formats for both input and output
 // The output part is at least partly done in Node now but that needs to be implemented in the UI layer!!!)
 
-const DateFormatter = React.createClass({
+export const TextCellFormatter = React.createClass({
     render: function() {
-        return  <CellFormatter type={DateFormat} params={this.props.params} />;
+        return  <CellFormatter type={TextFormat} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
 
-const DateTimeFormatter = React.createClass({
+export const DateCellFormatter = React.createClass({
     render: function() {
-        return  <CellFormatter type={DateTimeFormat} params={this.props.params} />;
+        return  <CellFormatter type={DateFormat} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
 
-const TimeFormatter = React.createClass({
+export const DateTimeCellFormatter = React.createClass({
     render: function() {
-        return  <CellFormatter type={TimeFormat} params={this.props.params} />;
+        return  <CellFormatter type={DateTimeFormat} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
 
-const NumericFormatter = React.createClass({
+export const TimeCellFormatter = React.createClass({
     render: function() {
-        return  <CellFormatter type={NumberFormat} params={this.props.params}/>;
+        return  <CellFormatter type={TimeFormat} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
 
-const TextFormatter = React.createClass({
-
+export const NumericCellFormatter = React.createClass({
     render: function() {
-        return  <CellFormatter type={TextFormat} params={this.props.params} />;
-    }
-});
-const UserFormatter = React.createClass({
-
-    render: function() {
-        return  <CellFormatter type={UserFormat} params={this.props.params} />;
-    }
-});
-const CheckBoxFormatter = React.createClass({
-
-    render: function() {
-        return  <CellFormatter type={CheckBoxFormat} params={this.props.params} />;
+        return  <CellFormatter type={NumberFormat}  colDef={this.props.params.column.colDef} initialValue={this.props.params.value}/>;
     }
 });
 
-const SelectionColumnCheckBoxFormatter = React.createClass({
+export const CurrencyCellFormatter = React.createClass({
+
+    render: function() {
+        return  <CellFormatter type={CurrencyFormat} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+    }
+});
+
+export const PercentCellFormatter = React.createClass({
+
+    render: function() {
+        return  <CellFormatter type={PercentFormat} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+    }
+});
+
+export const RatingCellFormatter = React.createClass({
+
+    render: function() {
+        return  <CellFormatter type={RatingFormat} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+    }
+});
+export const UserCellFormatter = React.createClass({
+
+    render: function() {
+        return  <CellFormatter type={UserFormat} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+    }
+});
+export const CheckBoxCellFormatter = React.createClass({
+
+    render: function() {
+        return  <CellFormatter type={CheckBoxFormat} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+    }
+});
+
+export const SelectionColumnCheckBoxCellFormatter = React.createClass({
 
     onClickEdit() {
         if (this.props.params.context.defaultActionCallback) {
@@ -258,4 +294,3 @@ const SelectionColumnCheckBoxFormatter = React.createClass({
     }
 });
 
-export {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter, SelectionColumnCheckBoxFormatter};
