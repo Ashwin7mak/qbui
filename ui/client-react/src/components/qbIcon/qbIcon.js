@@ -13,7 +13,6 @@ import './style.css';
 const QBicon = React.createClass({
     propTypes: {
         /**
-         * @required
          * See QuickBase.design for full list of icons.
          */
         icon: React.PropTypes.string.isRequired,
