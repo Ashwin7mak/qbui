@@ -49,20 +49,27 @@ var config = {
     devtool: PROD ? 'source-map' : 'eval',
     watchDelay: 50,
 
-    entry: [
+    entry: {
         // main entry point to the app
         // TODO:entry point...when more pages are flushed out
         // we probably should rename to something like quickbase.js and add a builder entry
-        'bootstrap-sass!./client-react/bootstrap-sass.config.js',
-        path.resolve(clientPath, 'src/scripts/router.js')
-    ],
+        bundle: [
+            'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(clientPath, 'src/scripts/router.js')
+        ],
+        componentLibrary: [
+            'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(clientPath, 'src/components/componentLibrary/index.js')
+        ]
+    },
     output: {
         // pathinfo - false disable outputting file info comments in prod bundle
         pathinfo: !PROD,
         // generated files directory for output
         path: buildPath,
         // generated js file
-        filename: PROD ? 'bundle.min.js' : 'bundle.js',
+        filename: PROD ? '[name].min.js' : '[name].js',
+        chunkFilename: PROD ? '[id].bundle.min.js' : '[id].bundle.js',
         //publicPath is path from the view of the Javascript / HTML page.
         // where all js/css http://.. references will use for relative base
         publicPath: '/dist/' // Required for webpack-dev-server

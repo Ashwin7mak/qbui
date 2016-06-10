@@ -17,12 +17,11 @@
             var hotPort = config.webpackDevServerPort || 3000;
 
             webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-            webpackConfig.entry = [
-                    // WebpackDevServer host and port
-                'webpack-dev-server/client?http://0.0.0.0:' + hotPort,
-                    // 'only-dev-server' prevents reload on syntax errors
-                'webpack/hot/only-dev-server'
-            ].concat(webpackConfig.entry);
+
+            for (var entryItem in webpackConfig.entry) {
+                webpackConfig.entry[entryItem].unshift('webpack-dev-server/client?http://0.0.0.0:' + hotPort);
+                webpackConfig.entry[entryItem].unshift('webpack/hot/only-dev-server');
+            }
 
             webpackConfig.output.publicPath = 'http://' + config.ip + ':' + hotPort + webpackConfig.output.publicPath;
 
