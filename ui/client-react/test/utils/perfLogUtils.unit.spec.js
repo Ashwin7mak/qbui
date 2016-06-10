@@ -32,7 +32,7 @@ describe('PerfLogUtils', () => {
         let logger = new Logger();
 
         beforeEach(() => {
-            window.nodeConfig = {isPerfTrackingEnabled: true};
+            window.nodeConfig = {isClientPerfTrackingEnabled: true};
             window.EPISODES = mockEPISODES;
 
             Logger.__Rewire__('LogService', mockLogService);
@@ -141,7 +141,7 @@ describe('PerfLogUtils', () => {
         let logger = new Logger();
 
         beforeEach(() => {
-            window.nodeConfig = {isPerfTrackingEnabled: false};
+            window.nodeConfig = {isClientPerfTrackingEnabled: false};
             window.EPISODES = mockEPISODES;
 
             Logger.__Rewire__('LogService', mockLogService);

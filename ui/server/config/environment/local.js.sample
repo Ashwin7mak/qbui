@@ -63,7 +63,7 @@
         env: envConsts.LOCAL,
 
         //enable to track performance stats to server/splunk
-        isPerfTrackingEnabled: true,
+        isClientPerfTrackingEnabled: true,
 
         //set false if you don't want growl notifications on webpack / watch updates
         growlNotify: true,

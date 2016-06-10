@@ -48,8 +48,8 @@ describe('ReactPerfUtils', () => {
     describe('test devPerfInit function falsy parms', () => {
         let nonProdConfig = {env: "nonProd"};
         let prodConfig = {env: "PROD"};
-        let noTrackingNodeConfig = {isPerfTrackingEnabled: false};
-        let enableTrackingNodeConfig = {isPerfTrackingEnabled: true};
+        let noTrackingNodeConfig = {isClientPerfTrackingEnabled: false};
+        let enableTrackingNodeConfig = {isClientPerfTrackingEnabled: true};
         let globalRecipient = {};
         let dataProvider = [
             {type: "no envConfig, no nodeConfig, no globalRecipient",
@@ -97,8 +97,8 @@ describe('ReactPerfUtils', () => {
 
     describe('test devPerfInit function true parms', () => {
         let nonProdConfig = {env: "nonProd"};
-        let noTrackingNodeConfig = {isPerfTrackingEnabled: false};
-        let enableTrackingNodeConfig = {isPerfTrackingEnabled: true};
+        let noTrackingNodeConfig = {isClientPerfTrackingEnabled: false};
+        let enableTrackingNodeConfig = {isClientPerfTrackingEnabled: true};
         let globalRecipient = {some: "values"};
         let dataProvider = [
             {type: "nonProd envConfig, a true nodeConfig, a globalRecipient",
@@ -132,8 +132,8 @@ describe('ReactPerfUtils', () => {
     describe('test devPerfPrint function falsy parms', () => {
         let nonProdConfig = {env: "nonProd"};
         let prodConfig = {env: "PROD"};
-        let noTrackingNodeConfig = {isPerfTrackingEnabled: false};
-        let enableTrackingNodeConfig = {isPerfTrackingEnabled: true};
+        let noTrackingNodeConfig = {isClientPerfTrackingEnabled: false};
+        let enableTrackingNodeConfig = {isClientPerfTrackingEnabled: true};
         let globalRecipient = {};
         let dataProvider = [
             {type: "no envConfig, no nodeConfig, no reactPerf",
@@ -171,7 +171,7 @@ describe('ReactPerfUtils', () => {
 
     it('test devPerfPrint function true parms', () => {
         let nonProdConfig = {env: "local"};
-        window.nodeConfig = {isPerfTrackingEnabled: true};
+        window.nodeConfig = {isClientPerfTrackingEnabled: true};
         let returnVal = ReactPerfUtils.devPerfPrint(nonProdConfig, mockReactPerf);
         expect(returnVal).toBeUndefined();
         expect(mockReactPerf.stop).toHaveBeenCalled();

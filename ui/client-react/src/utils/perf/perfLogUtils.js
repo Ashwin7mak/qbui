@@ -9,7 +9,7 @@ class PerfLogUtils {
      * @return true if we are tracking client side performance
      */
     static isEnabled() {
-        return (nodeConfig && nodeConfig.isPerfTrackingEnabled && typeof (EPISODES) !== 'undefined');
+        return (nodeConfig && nodeConfig.isClientPerfTrackingEnabled && typeof (EPISODES) !== 'undefined');
     }
 
 

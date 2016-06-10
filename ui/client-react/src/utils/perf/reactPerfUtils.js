@@ -19,7 +19,7 @@ class ReactPerfUtils {
    static devPerfInit(configuration, global) {
        let reactPerf;
        if (configuration && configuration.env !== 'PROD' &&
-           nodeConfig &&  nodeConfig.isPerfTrackingEnabled) {
+           nodeConfig &&  nodeConfig.isClientPerfTrackingEnabled) {
            reactPerf = ReactPerfUtils.requireReactDefaultPerf();
            if (global) {
                global.Perf = reactPerf;
@@ -36,7 +36,7 @@ class ReactPerfUtils {
      */
     static devPerfPrint(configuration, reactPerf) {
         if (configuration && configuration.env !== 'PROD' &&
-            reactPerf && nodeConfig && nodeConfig.isPerfTrackingEnabled) {
+            reactPerf && nodeConfig && nodeConfig.isClientPerfTrackingEnabled) {
             reactPerf.stop();
             var measurements = reactPerf.getLastMeasurements();
             // this info is only available in non-production dev mode

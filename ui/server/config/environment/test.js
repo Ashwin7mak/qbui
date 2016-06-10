@@ -59,7 +59,7 @@
         routeGroup: routeGroups.DEBUG,
 
         //enable to track performance stats to server/splunk
-        isPerfTrackingEnabled: false,
+        isClientPerfTrackingEnabled: false,
 
         //set notHotLoad true to disable hotloading
         noHotLoad : true,

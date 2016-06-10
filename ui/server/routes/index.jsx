@@ -7,7 +7,7 @@ var Index = React.createClass({
         hostBase      : PropTypes.string,
         bundleFileName: PropTypes.string,
         jsPath        : PropTypes.string,
-        isPerfTrackingEnabled: PropTypes.bool
+        isClientPerfTrackingEnabled: PropTypes.bool
     },
     render() {
         return (

@@ -8,12 +8,12 @@ var Html = React.createClass({
         favicon : PropTypes.string,
         jsPath  : PropTypes.string,
         hostBase: PropTypes.string,
-        isPerfTrackingEnabled: PropTypes.bool
+        isClientPerfTrackingEnabled: PropTypes.bool
     },
     renderNodeConfig() {
         return `
             var nodeConfig = {
-                isPerfTrackingEnabled : ${this.props.isPerfTrackingEnabled || false},
+                isClientPerfTrackingEnabled : ${this.props.isClientPerfTrackingEnabled || false},
                 lang :  "${this.props.lang}"
             };
         `;
@@ -22,7 +22,7 @@ var Html = React.createClass({
         let components = [];
         let nodeConfig = this.renderNodeConfig();
 
-        if (this.props.isPerfTrackingEnabled) {
+        if (this.props.isClientPerfTrackingEnabled) {
             let scriptKey = 1;
             let initialUrl = _.has(this.props, 'req.url') ? this.props.req.url : 'undefined';
             components.push(<script key={"s" + scriptKey++}  dangerouslySetInnerHTML={{__html:`

@@ -25,7 +25,7 @@ var lodash = require('lodash');
             hostBase: (config.isProduction || config.noHotLoad) ? '' : HOT_BASE,
             bundleFileName: config.isProduction ? 'bundle.min.js' : 'bundle.js',
             walkMeJS: config.walkmeJSSnippet,
-            isPerfTrackingEnabled: config.isProduction || !!config.isPerfTrackingEnabled
+            isClientPerfTrackingEnabled: config.isProduction || !!config.isClientPerfTrackingEnabled
 
         };
     }
