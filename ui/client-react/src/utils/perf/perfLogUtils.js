@@ -43,7 +43,7 @@ class PerfLogUtils {
     static send(params) {
         if (PerfLogUtils.isEnabled()) {
             EPISODES.sendBeacon(EPISODES.beaconUrl, Object.assign({},
-                typeof (userInfo) !== 'undefined' ? userinfo : null, params));
+                typeof (userInfo) !== 'undefined' ? userInfo : null, params));
         }
     }
 

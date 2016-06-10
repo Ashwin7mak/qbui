@@ -2,6 +2,8 @@
  * Static class of React Component Performance Utility functions
  * FOR DEV only not PROD
  */
+import Logger from '../../utils/logger';
+let logger = new Logger();
 
 class ReactPerfUtils {
 
@@ -37,19 +39,26 @@ class ReactPerfUtils {
             reactPerf && nodeConfig && nodeConfig.isPerfTrackingEnabled) {
             reactPerf.stop();
             var measurements = reactPerf.getLastMeasurements();
+            // this info is only available in non-production dev mode
+            logger.logToServer = false;
+            logger.logToConsole = true;
 
             //Prints the overall time taken.
+            logger.debug('\n\nInclusive measurements table');
             reactPerf.printInclusive(measurements);
 
             //"Exclusive" times don't include the times taken to mount the components: processing props,
             // getInitialState, call componentWillMount and componentDidMount etc.
+            logger.debug('\n\nExclusive measurements table');
             reactPerf.printExclusive(measurements);
 
             //"Wasted" time is spent on components that didn't actually render anything,
             // e.g. the render stayed the same, so the DOM wasn't touched.
+            logger.debug('\n\nWasted time on render');
             reactPerf.printWasted(measurements);
 
-            reactPerf.printDOM(measurements);
+            //reactPerf.printDOM is not as useful and is a lot of data generation
+
         }
     }
 

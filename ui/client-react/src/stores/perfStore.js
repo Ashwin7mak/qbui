@@ -5,7 +5,15 @@ import Configuration from "../config/app.config.js";
 import _ from "lodash";
 import Fluxxor from "fluxxor";
 import Logger from "../utils/logger";
+import WindowLocationUtils from '../utils/windowLocationUtils';
 var logger = new Logger();
+
+/**
+In addition to splunk timing measurements captured Devs can use :
+    - in debug console: EPISODES.drawEpisodes($('.mainContent')) to see timeline
+    - add ?perfTables to pages url to see page load stats via ReactPerf utility
+**/
+
 
 let PerfStore = Fluxxor.createStore({
 
@@ -49,17 +57,21 @@ let PerfStore = Fluxxor.createStore({
         PerfLogUtils.send(payload);
     },
     devConsoleStats() {
-        //browser console the performance measurements
-        ReactPerfUtils.devPerfPrint(Configuration, this.ReactPerf) ;
+        if (WindowLocationUtils.searchIncludes('perfTables')) {
+            //browser console the performance measurements
+            ReactPerfUtils.devPerfPrint(Configuration, this.ReactPerf);
+        }
     },
     initDevConsoleStats() {
-        //init the perf measurements for development environment
-        this.ReactPerf = ReactPerfUtils.devPerfInit(Configuration, window);
+        if (WindowLocationUtils.searchIncludes('perfTables')) {
+            //init the perf measurements for development environment
+            this.ReactPerf = ReactPerfUtils.devPerfInit(Configuration, window);
+        }
     },
 
     onDone(payload) {
-        this.logInitalStats();
         PerfLogUtils.done(payload);
+        this.logInitalStats();
     },
     onNewRoute(payload) {
         this.initInitalStats();
@@ -71,6 +83,10 @@ let PerfStore = Fluxxor.createStore({
     },
     onLoadEnd(type) {
         this.onMeasure({label:type, start:"loading-" + type});
+        // apps page is done when apps are loaded
+        if (type === actions.LOAD_APPS) {
+            this.onDone();
+        }
     },
 
     getState() {

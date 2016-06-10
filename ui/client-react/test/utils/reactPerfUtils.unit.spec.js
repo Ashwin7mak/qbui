@@ -179,6 +179,5 @@ describe('ReactPerfUtils', () => {
         expect(mockReactPerf.printInclusive).toHaveBeenCalled();
         expect(mockReactPerf.printExclusive).toHaveBeenCalled();
         expect(mockReactPerf.printWasted).toHaveBeenCalled();
-        expect(mockReactPerf.printDOM).toHaveBeenCalled();
     });
 });

@@ -58,6 +58,7 @@ let AppHomePageRoute = React.createClass({
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
         this.selectAppFromParams(this.props.params);
+        flux.actions.doneRoute();
     },
     // Triggered when properties change
     componentWillReceiveProps: function(props) {
