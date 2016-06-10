@@ -29,7 +29,6 @@ function getPropsData(component, metadata) {
   return props;
 }
 
-
 const PropTable = React.createClass({
 
   contextTypes: {
