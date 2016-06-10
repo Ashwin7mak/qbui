@@ -7,7 +7,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 
 // Keep these in sync with src/index.js.
-// const QBIcon = require('../qbIcon/qbIcon');
+const QBicon = require('../../qbIcon/qbIcon');
 const QBPanel = require('../../QBPanel/qbpanel');
 import {SafeAnchor, Alert} from 'react-bootstrap';
 /* eslint-enable */
