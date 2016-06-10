@@ -2,8 +2,6 @@ import React from 'react';
 import {Link} from 'react-router';
 import {ButtonToolbar, Dropdown, Modal, OverlayTrigger, Popover, Tooltip, Button, FormGroup, HelpBlock, ControlLabel, FormControl, InputGroup, Col, Checkbox, Radio, Form} from 'react-bootstrap';
 
-import './componentLibrary.scss';
-
 var ComponentLibraryWrapper = React.createClass({
     render() {
         return (

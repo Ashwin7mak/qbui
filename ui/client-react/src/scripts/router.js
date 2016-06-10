@@ -4,7 +4,7 @@ import en from 'intl/locale-data/jsonp/en.js';
 
 import React from 'react';
 import {render} from 'react-dom';
-import {Router, Route, IndexRoute, IndexRedirect} from 'react-router';
+import {Router, Route, IndexRoute} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import Nav from '../components/nav/nav';
@@ -37,9 +37,6 @@ import AppHomePageRoute from '../components/app/appHomePageRoute';
 import ReportRoute from '../components/report/reportRoute';
 import RecordRoute from '../components/record/recordRoute';
 import TableHomePageRoute from '../components/table/tableHomePageRoute';
-
-import ComponentLibraryWrapper from '../components/componentLibrary/componentLibrary';
-import ComponentRoute from '../components/componentLibrary/src/ComponentLibraryRoute';
 
 import _ from 'lodash';
 
@@ -155,11 +152,6 @@ render((
             <Route path="table/:tblId" component={TableHomePageRoute} />
             <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
             <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
-        </Route>
-
-        <Route path="components" component={ComponentLibraryWrapper}>
-            <IndexRedirect to="qbpanel" />
-            <Route path=":componentName" component={ComponentRoute} />
         </Route>
 
     </Router>
