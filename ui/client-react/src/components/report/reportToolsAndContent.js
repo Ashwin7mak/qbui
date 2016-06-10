@@ -46,22 +46,6 @@ let ReportToolsAndContent = React.createClass({
             selections:null,
         };
     },
-    loadReport(appId, tblId, rptId) {
-        const flux = this.getFlux();
-        flux.actions.selectTableId(tblId);
-        flux.actions.loadFields(appId, tblId);
-        flux.actions.loadReport(appId, tblId, rptId, true);
-    },
-    loadReportFromParams(params) {
-        let appId = params.appId;
-        let tblId = params.tblId;
-        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
-
-        if (appId && tblId && rptId) {
-            //logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
-            this.loadReport(appId, tblId, rptId);
-        }
-    },
     componentWillMount() {
         // Create a debounced function that delays invoking filterReport func
         // until after debounceInputMillis milliseconds have elapsed since the
@@ -69,14 +53,6 @@ let ReportToolsAndContent = React.createClass({
         this.debouncedFilterReport = _.debounce(this.filterReport, this.debounceInputMillis);
         // note the facets by id
         this.mapFacetFields();
-    },
-    componentDidMount() {
-        const flux = this.getFlux();
-        flux.actions.hideTopNav();
-
-        if (this.props.params) {
-            this.loadReportFromParams(this.props.params);
-        }
     },
     componentWillReceiveProps() {
         this.mapFacetFields();

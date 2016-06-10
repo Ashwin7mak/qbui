@@ -19,8 +19,32 @@ let TableHomePageRoute = React.createClass({
         return (
             <ReportHeader reportData={this.props.reportData}
                           nameForRecords={this.nameForRecords}
-                          rptId={'1'} {...this.props}
+                          rptId={this.props.reportData ? this.props.reportData.rptId : null} {...this.props}
             />);
+    },
+
+    loadTableHomePageReportFromParams(appId, tblId) {
+        const flux = this.getFlux();
+        flux.actions.selectTableId(tblId);
+        flux.actions.loadFields(appId, tblId);
+        flux.actions.loadTableHomePage(appId, tblId);
+    },
+    loadHomePageForParams(params) {
+        let appId = params.appId;
+        let tblId = params.tblId;
+
+        if (appId && tblId) {
+            //logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
+            this.loadTableHomePageReportFromParams(appId, tblId);
+        }
+    },
+    componentDidMount() {
+        const flux = this.getFlux();
+        flux.actions.hideTopNav();
+
+        if (this.props.params) {
+            this.loadHomePageForParams(this.props.params);
+        }
     },
 
     getPageActions(maxButtonsBeforeMenu) {
@@ -70,7 +94,7 @@ let TableHomePageRoute = React.createClass({
                 selectedRows={this.props.reportData.selectedRows}
                 scrollingReport={this.props.scrollingReport}
                 history={this.props.history}
-                rptId={'1'} />
+                rptId={this.props.reportData ? this.props.reportData.rptId : null} />
         </div>);
     }
 });

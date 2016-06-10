@@ -41,6 +41,8 @@ import TableHomePageRoute from '../components/table/tableHomePageRoute';
 import FormStore from '../stores/formStore';
 import formActions from '../actions/formActions';
 
+import tableActions from '../actions/tableActions';
+
 import _ from 'lodash';
 
 import FastClick from 'fastclick';
@@ -63,6 +65,7 @@ flux.addActions(navActions);
 flux.addActions(facetMenuActions);
 flux.addActions(fieldsActions);
 flux.addActions(formActions);
+flux.addActions(tableActions);
 
 let NavWrapper = React.createClass({
 
