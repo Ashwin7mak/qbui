@@ -7,14 +7,14 @@ import PropTable from '../src/PropTable';
 import QBPanel from '../../QBPanel/qbpanel';
 
 export default function QBPanelDoc() {
-  return (
-    <div className="componentContent">
-        <div dangerouslySetInnerHTML={{__html: Metadata.QBPanel.descHtml}} />
+    return (
+        <div className="componentContent">
+            <div dangerouslySetInnerHTML={{__html: Metadata.QBPanel.descHtml}} />
 
-        <ReactPlayground codeText={Examples.QBPanel}/>
+            <ReactPlayground codeText={Examples.QBPanel}/>
 
-        <h2>Props</h2>
-        <PropTable component="QBPanel" metadata={Metadata} />
-    </div>
-  );
+            <h2>Props</h2>
+            <PropTable component="QBPanel" metadata={Metadata} />
+        </div>
+    );
 }
