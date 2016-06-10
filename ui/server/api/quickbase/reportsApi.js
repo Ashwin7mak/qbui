@@ -231,8 +231,7 @@
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('reportsAPI..fetch report homepage in fetchTableHomePageReport', ex, true);
-                        var errorObj = {id: null, errorCode: errorCodes.UNKNOWN};
-                        reject(errorObj);
+                        reject(ex);
                     });
                 });
 
