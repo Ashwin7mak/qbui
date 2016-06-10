@@ -131,7 +131,11 @@ EPISODES.mark = function(markName, markTime) {
     }
 
     EPISODES.marks[markName] = parseInt(markTime || new Date().getTime());
+    var performance = window.performance;
 
+    if ("undefined" !== typeof (performance) && "undefined" !== typeof (performance.mark)) {
+        performance.mark(markName);
+    }
     if (EPISODES.bPostMessage) {
         window.postMessage("EPISODES:mark:" + markName + ":" + markTime, EPISODES.targetOrigin);
     }
@@ -192,7 +196,11 @@ EPISODES.measure = function(episodeName, startNameOrTime, endNameOrTime) {
     EPISODES.starts[episodeName] = parseInt(startEpochTime);
     EPISODES.measures[episodeName] = parseInt(endEpochTime - startEpochTime);
     EPISODES.dprint("EPISODES.measure: " + episodeName + " from " + startNameOrTime + " til " + (endNameOrTime ? endNameOrTime : "now") + ' = '+ EPISODES.measures[episodeName] );
+    var performance = window.performance;
 
+    if ("undefined" !== typeof (performance) && "undefined" !== typeof (performance.measure)) {
+        performance.measure(episodeName, startNameOrTime, endNameOrTime);
+    }
     if (EPISODES.bPostMessage) {
         window.postMessage("EPISODES:measure:" + episodeName + ":" + startEpochTime + ":" + endEpochTime, EPISODES.targetOrigin);
     }

@@ -29,7 +29,7 @@
                     name: 'qbse-local-' + dateUtils.formatDate(new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
                 }
             },
-            src: true               // this is slow...do not use in prod
+            src: false               // this is slow...do not use in prod
         },
 
         // to run using ssl, copy the private key and cert for

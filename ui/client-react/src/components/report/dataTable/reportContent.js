@@ -381,7 +381,6 @@ let ReportContent = React.createClass({
                     reportData.filteredRecordsCount : reportData.recordsCount;
             }
             flux.actions.logMeasurements(timingContextData);
-            flux.actions.doneRoute();
         }
     },
 

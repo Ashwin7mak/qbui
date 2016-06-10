@@ -4,4 +4,4 @@ coverage/*
 dist/*
 client-react/dist/*
 nodejs/*
-server/public/vendor/*
+vendor/*
