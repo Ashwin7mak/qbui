@@ -23,7 +23,7 @@ describe('Validate lodashMixin Functionality', () => {
             return val.toString().length;
         }
         var answer = _.sortKeysBy(obj, compareByValStringSize);
-        var expected = { Type: 1,Company: 'Pied Piper', Contact: 'Richard Hendricks'};
+        var expected = {Type: 1, Company: 'Pied Piper', Contact: 'Richard Hendricks'};
         assert.equal(JSON.stringify(answer), JSON.stringify(expected));
     });
 

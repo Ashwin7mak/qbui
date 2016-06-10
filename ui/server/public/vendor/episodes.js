@@ -123,7 +123,7 @@ EPISODES.processQ = function() {
 
 // Set a time marker (typically the beginning of an episode).
 EPISODES.mark = function(markName, markTime) {
-    EPISODES.dprint("EPISODES.mark: " + markName + ", " + markTime);
+    EPISODES.dprint("EPISODES.mark: " + markName +  (markTime ? ( ", " + markTime) : ""));
 
     if (!markName) {
         EPISODES.dprint("Error: markName is undefined in EPISODES.mark.");
@@ -150,7 +150,6 @@ EPISODES.mark = function(markName, markTime) {
 
 // Measure an episode.
 EPISODES.measure = function(episodeName, startNameOrTime, endNameOrTime) {
-    EPISODES.dprint("EPISODES.measure: " + episodeName + ", " + startNameOrTime + ", " + endNameOrTime);
 
     if (!episodeName) {
         EPISODES.dprint("Error: episodeName is undefined in EPISODES.measure.");
@@ -192,6 +191,7 @@ EPISODES.measure = function(episodeName, startNameOrTime, endNameOrTime) {
 
     EPISODES.starts[episodeName] = parseInt(startEpochTime);
     EPISODES.measures[episodeName] = parseInt(endEpochTime - startEpochTime);
+    EPISODES.dprint("EPISODES.measure: " + episodeName + " from " + startNameOrTime + " til " + (endNameOrTime ? endNameOrTime : "now") + ' = '+ EPISODES.measures[episodeName] );
 
     if (EPISODES.bPostMessage) {
         window.postMessage("EPISODES:measure:" + episodeName + ":" + startEpochTime + ":" + endEpochTime, EPISODES.targetOrigin);

@@ -10,6 +10,7 @@ describe('Test PerfStore Store', () => {
     const STORE_NAME = 'PerfStore';
     let stores;
     let flux;
+    let hasUrlParm = false;
 
     var mockPerfLogUtils = {
         mark: function(info) {
@@ -21,6 +22,12 @@ describe('Test PerfStore Store', () => {
         done: function(info) {
         }
     };
+
+    class mockMethod {
+        static searchIncludes(findThis) {
+            return hasUrlParm;
+        }
+    }
 
     var mockReactPerfUtils  = {
         devPerfInit: function(config, perf) {
@@ -42,6 +49,7 @@ describe('Test PerfStore Store', () => {
         spyOn(mockReactPerfUtils, 'devPerfPrint').and.callThrough();
         PerfStore.__Rewire__('PerfLogUtils', mockPerfLogUtils);
         PerfStore.__Rewire__('ReactPerfUtils', mockReactPerfUtils);
+        PerfStore.__Rewire__('WindowLocationUtils', mockMethod);
 
         spyOn(flux.store(STORE_NAME), 'emit');
 
@@ -59,6 +67,7 @@ describe('Test PerfStore Store', () => {
         afterEach(() => {
             PerfStore.__ResetDependency__('PerfLogUtils');
             PerfStore.__ResetDependency__('ReactPerfUtils');
+            PerfStore.__ResetDependency__('WindowLocationUtils');
         });
 
     });
@@ -137,7 +146,6 @@ describe('Test PerfStore Store', () => {
 
         expect(flux.store(STORE_NAME).emit).not.toHaveBeenCalled();
         expect(flux.store(STORE_NAME).emit).not.toHaveBeenCalledWith('change');
-        expect(mockReactPerfUtils.devPerfPrint).toHaveBeenCalled();
         expect(mockPerfLogUtils.done).toHaveBeenCalled();
         expect(mockPerfLogUtils.done).toHaveBeenCalledWith('test');
     });
@@ -153,10 +161,45 @@ describe('Test PerfStore Store', () => {
 
         expect(flux.store(STORE_NAME).emit).not.toHaveBeenCalled();
         expect(flux.store(STORE_NAME).emit).not.toHaveBeenCalledWith('change');
-        expect(mockReactPerfUtils.devPerfInit).toHaveBeenCalled();
         expect(mockPerfLogUtils.mark).toHaveBeenCalled();
         expect(mockPerfLogUtils.mark).toHaveBeenCalledWith('test');
     });
+
+    describe('test with dev tables ', () => {
+        beforeEach(() => {
+            hasUrlParm = true;
+        });
+
+        afterEach(() => {
+            hasUrlParm = false;
+        });
+
+        it('doneRoutePerf ', () => {
+            let doneRoutePerf = {
+                type: actions.DONE_ROUTE_PERF,
+                payload: 'test'
+            };
+            flux.dispatcher.dispatch(doneRoutePerf);
+
+            expect(mockReactPerfUtils.devPerfPrint).toHaveBeenCalled();
+            expect(mockPerfLogUtils.done).toHaveBeenCalledWith('test');
+
+        });
+
+        it('newRoutePerf', () => {
+            let newRoutePerf = {
+                type: actions.NEW_ROUTE_PERF,
+                payload: 'test'
+            };
+            flux.dispatcher.dispatch(newRoutePerf);
+
+            expect(mockReactPerfUtils.devPerfInit).toHaveBeenCalled();
+            expect(mockPerfLogUtils.mark).toHaveBeenCalledWith('test');
+        });
+
+    });
+
+
 
     describe('test perf loadActions', () => {
 
