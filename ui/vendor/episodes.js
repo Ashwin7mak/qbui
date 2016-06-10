@@ -297,6 +297,19 @@ EPISODES.sendBeacon = function(url, params) {
         sTimes += "," + escape(key) + ":" + measures[key];
         allVars[key] = measures[key];
     }
+    var browserMeasures = {};
+    var performance = window.performance;
+
+    if ("undefined" !== typeof (performance) && "undefined" !== typeof (performance.timing)) {
+        browserMeasures = performance.timing;
+        for (var key in browserMeasures) {
+            if ("undefined" == typeof(allVars[key])) {
+                allVars[key] = browserMeasures[key];
+            }
+        }
+    }
+
+
 
     if (sTimes) {
         // strip the leading ","
