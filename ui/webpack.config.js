@@ -55,7 +55,6 @@ var config = {
         // we probably should rename to something like quickbase.js and add a builder entry
         'bootstrap-sass!./client-react/bootstrap-sass.config.js',
         path.resolve(clientPath, 'src/scripts/router.js')
-        
     ],
     output: {
         // pathinfo - false disable outputting file info comments in prod bundle
@@ -82,7 +81,7 @@ var config = {
                 ],
                 exclude: [
                     nodeModulesPath,
-                    // these get compiled when they are imported into ReactPlayground component
+                    // We don't want these to get compiled because ReactPlayground does that in the browser
                     path.resolve(__dirname, 'client-react/src/components/componentLibrary/examples')
                 ],
                 loaders: ['react-hot-loader', 'babel-loader']
