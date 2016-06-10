@@ -64,18 +64,14 @@
     server.get('/api/api/v1/ticket', (req, res) => {
         res.send('8_bkbn766qp_j2s_duii_a_9s59gbbvatm7dbqvp5incc7pp4sbeaj99sb7eaua5da7djzwmmzsdv');
     });
-<<<<<<< HEAD
 
     server.post('api/n/v1/log', function(req, res) {
         res.send('foobar');
     });
-//Add any additional custom or generated route responses here
-=======
     //Add any additional custom or generated route responses here
 
     // Returns an Express router
     let router = jsonServer.router(dbfile);
->>>>>>> master
 
     server.use(router);
 
