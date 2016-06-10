@@ -1,29 +1,24 @@
-import React from 'react';
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import {I18nMessage} from '../../utils/i18nMessage';
-import Trowser from '../trowser/trowser';
-import TrowserRecordActions from '../actions/trowserRecordActions';
-import Fluxxor from 'fluxxor';
-import LeftNav from './leftNav';
-import TopNav from '../header/topNav';
-import Footer from '../footer/footer';
-import ReportManager from '../report/reportManager';
-import QBicon from '../qbIcon/qbIcon';
-import TableIcon from '../qbTableIcon/qbTableIcon';
-import GlobalActions from '../actions/globalActions';
-import Loader  from 'react-loader';
-import Breakpoints from '../../utils/breakpoints';
-import {NotificationContainer} from 'react-notifications';
-
-import './nav.scss';
-import 'react-notifications/lib/notifications.css';
-import '../../assets/css/animate.min.css';
+import React from "react";
+import {I18nMessage} from "../../utils/i18nMessage";
+import Trowser from "../trowser/trowser";
+import Fluxxor from "fluxxor";
+import LeftNav from "./leftNav";
+import TopNav from "../header/topNav";
+import ReportManager from "../report/reportManager";
+import QBicon from "../qbIcon/qbIcon";
+import TableIcon from "../qbTableIcon/qbTableIcon";
+import GlobalActions from "../actions/globalActions";
+import Breakpoints from "../../utils/breakpoints";
+import {NotificationContainer} from "react-notifications";
+import "./nav.scss";
+import "react-notifications/lib/notifications.css";
+import "../../assets/css/animate.min.css";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'FieldsStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'FieldsStore', 'FormStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -38,6 +33,7 @@ var Nav = React.createClass({
             reportsData: flux.store('ReportsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
+            form: flux.store('FormStore').getState()
         };
     },
 
@@ -75,8 +71,6 @@ var Nav = React.createClass({
         }
         flux.actions.showTrowser();
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
-        //Whenever we change tables /via change report we get the set of fields in the table
-        flux.actions.loadFields(this.state.apps.selectedAppId, tableId);
     },
 
     getSelectedApp() {
@@ -195,6 +189,7 @@ var Nav = React.createClass({
                             selectedAppId: this.state.apps.selectedAppId,
                             reportData: this.state.reportData,
                             fields: this.state.fields,
+                            form: this.state.form,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),
                             scrollingReport: this.state.nav.scrollingReport,

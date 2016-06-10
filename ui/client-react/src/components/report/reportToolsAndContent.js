@@ -81,6 +81,46 @@ let ReportToolsAndContent = React.createClass({
     componentWillReceiveProps() {
         this.mapFacetFields();
     },
+
+
+    //when report changed from not loading to loading start measure of components performance
+    startPerfTiming(nextProps) {
+        if (_.has(this.props, 'reportData.loading') &&
+            !this.props.reportData.loading &&
+            nextProps.reportData.loading) {
+            let flux = this.getFlux();
+            flux.actions.mark('component-ReportToolsAndContent start');
+        }
+    },
+
+    //when report changed from loading to loaded finish measure of components performance
+    capturePerfTiming(prevProps) {
+        let timingContextData = {numReportCols:0, numReportRows:0};
+        let flux = this.getFlux();
+        if (_.has(this.props, 'reportData.loading') &&
+            !this.props.reportData.loading &&
+            prevProps.reportData.loading) {
+            flux.actions.measure('component-ReportToolsAndContent', 'component-ReportToolsAndContent start');
+            // note the size of the report with the measure
+            if (_.has(this.props, 'reportData.data.columns.length')) {
+                let reportData = this.props.reportData.data;
+                timingContextData.numReportCols = reportData.columns.length;
+                timingContextData.numReportRows = reportData.filteredRecordsCount ?
+                    reportData.filteredRecordsCount : reportData.recordsCount;
+            }
+            flux.actions.logMeasurements(timingContextData);
+            flux.actions.doneRoute();
+        }
+    },
+
+    componentWillUpdate(nextProps) {
+        this.startPerfTiming(nextProps);
+    },
+
+    componentDidUpdate(prevProps) {
+        this.capturePerfTiming(prevProps);
+    },
+
     mapFacetFields() {
         this.facetFields = {};
         if (this.props.reportData && this.props.reportData.data &&

@@ -280,11 +280,24 @@ let AGGrid = React.createClass({
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
 
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
+
     },
     componentWillUnmount() {
         this.refs.gridWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
+    componentWillUpdate(nextProps) {
+        if (nextProps.loading) {
+            let flux = this.getFlux();
+            flux.actions.mark('component-AgGrid start');
+        }
+    },
+    componentDidUpdate() {
+        if (!this.props.loading) {
+            let flux = this.getFlux();
+            flux.actions.measure('component-AgGrid', 'component-AgGrid start');
+        }
+    },
     // Performance improvement - only update the component when certain state/props change
     // Since this is a heavy component we dont want this updating all times.
     shouldComponentUpdate(nextProps) {
@@ -644,7 +657,6 @@ let AGGrid = React.createClass({
 
     render() {
         let columnDefs = this.getColumns();
-
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
         return (
             <div className="reportTable">

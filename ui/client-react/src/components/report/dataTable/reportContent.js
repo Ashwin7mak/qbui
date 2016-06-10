@@ -1,19 +1,15 @@
-import React from 'react';
-import ReactIntl from 'react-intl';
+import React from "react";
+import ReactIntl from "react-intl";
+import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
+import AGGrid from "../../../components/dataTable/agGrid/agGrid";
+import Logger from "../../../utils/logger";
+import ReportActions from "../../actions/reportActions";
+import Fluxxor from "fluxxor";
+import * as DataTypes from "../../../constants/schema";
+import * as GroupTypes from "../../../constants/groupTypes";
+import Locales from "../../../locales/locales";
 
-import CardViewListHolder from '../../../components/dataTable/cardView/cardViewListHolder';
-import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
-import {reactCellRendererFactory} from 'ag-grid-react';
-
-import Logger from '../../../utils/logger';
 let logger = new Logger();
-
-import ReportActions from '../../actions/reportActions';
-import Fluxxor from 'fluxxor';
-
-import * as DataTypes from '../../../constants/schema';
-import * as GroupTypes from '../../../constants/groupTypes';
-import Locales from '../../../locales/locales';
 
 let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -356,6 +352,44 @@ let ReportContent = React.createClass({
             logger.warn("Error attempting to localize a date group.  Group value: " + date);
             return date;
         }
+    },
+
+    //when report changed from not loading to loading start measure of components performance
+    startPerfTiming(nextProps) {
+        if (_.has(this.props, 'reportData.loading') &&
+                !this.props.reportData.loading &&
+                nextProps.reportData.loading) {
+            let flux = this.getFlux();
+            flux.actions.mark('component-ReportContent start');
+        }
+    },
+
+    //when report changed from loading to loaded finish measure of components performance
+    capturePerfTiming(prevProps) {
+        let timingContextData = {numReportCols:0, numReportRows:0};
+        let flux = this.getFlux();
+        if (_.has(this.props, 'reportData.loading') &&
+                !this.props.reportData.loading &&
+                prevProps.reportData.loading) {
+            flux.actions.measure('component-ReportContent', 'component-ReportContent start');
+
+            // note the size of the report with the measure
+            if (_.has(this.props, 'reportData.data.columns.length')) {
+                let reportData = this.props.reportData.data;
+                timingContextData.numReportCols = reportData.columns.length;
+                timingContextData.numReportRows = reportData.filteredRecordsCount ?
+                    reportData.filteredRecordsCount : reportData.recordsCount;
+            }
+            flux.actions.logMeasurements(timingContextData);
+        }
+    },
+
+    componentWillUpdate(nextProps) {
+        this.startPerfTiming(nextProps);
+    },
+
+    componentDidUpdate(prevProps) {
+        this.capturePerfTiming(prevProps);
     },
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/

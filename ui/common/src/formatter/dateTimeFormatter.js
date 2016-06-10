@@ -4,7 +4,7 @@
  */
 (function() {
     'use strict';
-    var moment = require('moment');
+    var moment = require('moment-timezone');
     var consts = require('../constants');
     //var log = require('../../../logger').getLogger();
 

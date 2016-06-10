@@ -14,7 +14,8 @@ var mockRes = {
     },
     json: function(result, status) {},
     render: function(path, callback) {},
-    clearCookie: function(name, options) {}
+    clearCookie: function(name, options) {},
+    cookie: function(name, value, options) {}
 };
 var stubLog, stubMockJson, spyRender;
 

@@ -22,12 +22,13 @@
      */
     var nodeApiEndpoints = {
         FACET_EXPRESSION_PARSE  : baseUrl.NODE + '/facets/parse',
-        LOG_CLIENT_MSG          : baseUrl.NODE + '/log'
+        LOG_CLIENT_MSG          : baseUrl.NODE + '/log',
+        LOG_CLIENT_PERF_MSG     : baseUrl.NODE + '/clientPerf'
     };
 
     /*
      *  List of QuickBase public API endpoints used by the client which perform pre/post operations
-     *  in the node layer and are not just proxyed through to the quickbase public api.
+     *  in the node layer and are not just proxied through to the quickbase public api.
      */
     var quickBaseApiEndpoints = {
         HEALTH_CHECK            : baseUrl.QUICKBASE_2 + '/health',
@@ -37,7 +38,7 @@
         RECORDS                 : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
         REPORT_COMPONENTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/reportComponents',
         REPORT_RESULTS          : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
-        // No need to explictly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
+        // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
         // is configured to act as proxy and pass the request directly to the server side resource.
         TOMCAT_ALL              : baseUrl.QUICKBASE + '/*'
     };
