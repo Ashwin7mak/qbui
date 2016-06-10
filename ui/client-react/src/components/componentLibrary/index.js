@@ -18,7 +18,9 @@ import RecordRoute from '../record/recordRoute';
 import TableHomePageRoute from '../table/tableHomePageRoute';
 
 import ComponentLibraryWrapper from './src/componentLibrary';
-import ComponentRoute from './src/ComponentLibraryRoute';
+
+import QBPanelDoc from './docs/qbpanel';
+import QBIconDoc from './docs/qbicon';
 
 import './assets/componentLibrary.scss';
 
@@ -26,7 +28,8 @@ render((
     <Router history={createBrowserHistory()}>
         <Route path="components" component={ComponentLibraryWrapper}>
             <IndexRedirect to="qbpanel" />
-            <Route path=":componentName" component={ComponentRoute} />
+            <Route path="qbpanel" component={QBPanelDoc} />
+            <Route path="qbicon" component={QBIconDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));
