@@ -20,9 +20,27 @@
         //Module constants:
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
+
+        //  url components for facets
         let FACETS = 'facets';
-        let RESULTS = 'results';
-        let REPORTCOMPONENTS = 'reportcomponents';
+        let REPORTS = 'reports';
+        let NODE_REPORTCOMPONENT_ROUTE = 'reportcomponents';
+        let CORE_REPORTFACETS_ROUTE = FACETS + '/results';
+
+        //  url components for table report home page
+        let NODE_HOMEPAGE_ROUTE = 'homepage';
+        let CORE_HOMEPAGE_ID_ROUTE = 'homepagereportid';
+
+        function transformUrlRoute(requestUrl, curRoute, newRoute) {
+            if (requestUrl) {
+                let offset = requestUrl.toLowerCase().indexOf(curRoute);
+                if (offset !== -1) {
+                    return requestUrl.substring(0, offset) + newRoute;
+                }
+            }
+            //  return requestUrl unchanged
+            return requestUrl;
+        }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
@@ -52,13 +70,10 @@
             fetchFacetResults: function(req) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                let inputUrl = opts.url.toLowerCase();
 
-                // The request came in for report/{reportId}/reportComponents.
-                // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl.indexOf(REPORTCOMPONENTS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTCOMPONENTS)) + FACETS + "/" + RESULTS;
-                }
+                // Node request is ../report/{reportId}/reportComponents  --> convert to
+                // ../report/{reportId}/facets/results to return the facet data from core
+                opts.url = transformUrlRoute(opts.url, NODE_REPORTCOMPONENT_ROUTE, CORE_REPORTFACETS_ROUTE);
 
                 return requestHelper.executeRequest(req, opts);
             },
@@ -168,6 +183,59 @@
                         reject(ex);
                     });
                 });
+            },
+
+            fetchTableHomePageReport: function(req) {
+
+                return new Promise((resolve, reject) => {
+
+                    let opts = requestHelper.setOptions(req);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+
+                    // Node request is ../tables/{tableId}/homepage  --> transform the url to
+                    // ../tables/{tableId}/homepagereportid to return the table report homepage id from core
+                    opts.url = transformUrlRoute(opts.url, NODE_HOMEPAGE_ROUTE, CORE_HOMEPAGE_ID_ROUTE);
+
+                    //  make the api request to get the table homepage report id
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            // parse out the id and fetch the report components.
+                            var homepageReportId = JSON.parse(response.body)[0];
+                            let reportComponentRoute = REPORTS + '/' + homepageReportId + '/' + NODE_REPORTCOMPONENT_ROUTE;
+                            req.url = transformUrlRoute(CORE_HOMEPAGE_ID_ROUTE, reportComponentRoute);
+
+                            this.fetchReportComponents(req).then(
+                                (reportResponse) => {
+                                    resolve(reportResponse);
+                                },
+                                (reportError) => {
+                                    //  the core error has already been logged...just want to ensure visibility that the
+                                    //  error is when fetching the table homepage report
+                                    log.error('Error fetching table homepage report in fetchTableHomePageReport.  ReportRoute: ' + reportComponentRoute);
+                                    reject(reportError);
+                                }
+                            ).catch((ex) => {
+                                requestHelper.logUnexpectedError('reportsAPI..fetchReportComponents in fetchTableHomePageReport', ex, true);
+                                reject(ex);
+                            });
+                        },
+                        (error) => {
+                            let errorMsg = 'Error undefined';
+                            if (error) {
+                                if (error.body) {
+                                    errorMsg = error.body ? error.body.replace(/"/g, "'") : error.statusMessage;
+                                }
+                            }
+                            log.error("Error getting table homepage reportId in fetchTableHomePageReport: " + errorMsg);
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('reportsAPI..fetch report homepage in fetchTableHomePageReport', ex, true);
+                        var errorObj = {id: null, errorCode: errorCodes.UNKNOWN};
+                        reject(errorObj);
+                    });
+                });
+
             }
         };
         return reportsApi;

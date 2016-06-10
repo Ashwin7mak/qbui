@@ -145,6 +145,59 @@ describe('Validate ReportsApi unit tests', function() {
     });
 
     /**
+     * Unit test fetchReportResults api
+     */
+    describe('validate fetchReportTableHomepage api', function() {
+        var req = {
+            headers: {
+                'tid': 'tid'
+            },
+            'Content-Type': 'content-type',
+            'url': '/testurl.com',
+            'method': 'get'
+        };
+        var getExecuteRequestStub;
+        var getReportComponentsStub;
+        beforeEach(function() {
+            getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
+            getReportComponentsStub = sinon.stub(reportsApi, "fetchReportComponents");
+            //reportsApi.setRecordsApi(recordsApi);
+        });
+        afterEach(function() {
+            getExecuteRequestStub.restore();
+            getReportComponentsStub.restore();
+        });
+        it('Test success ', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body:'1'}));
+            getReportComponentsStub.returns(Promise.resolve({
+                response: {status:'success'}
+            }));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, 1);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchTableHomePageReport success: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('Test failure ', function(done) {
+            getRecordsStub.returns(Promise.reject(new Error("error")));
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                },
+                function(error) {
+                    assert.deepEqual(error, new Error("error"));
+                }
+            );
+            done();
+        });
+    });
+
+    /**
      * Unit test fetchReportComponents api
      */
     describe('validate fetchReportComponents api', function() {
