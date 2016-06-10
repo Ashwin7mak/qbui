@@ -34,7 +34,6 @@ let TableHomePageRoute = React.createClass({
         let tblId = params.tblId;
 
         if (appId && tblId) {
-            //logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
             this.loadTableHomePageReportFromParams(appId, tblId);
         }
     },
