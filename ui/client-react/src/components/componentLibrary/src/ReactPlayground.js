@@ -1,16 +1,15 @@
 // These do not use ES6 imports, because the evaluated code requires un-mangled
 // variable names.
-
+/* eslint indent: 0 */
 /* eslint-disable */
 const classNames = require('classnames');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-// Keep these in sync with src/index.js.
 const QBicon = require('../../qbIcon/qbIcon');
 const QBPanel = require('../../QBPanel/qbpanel');
-import {SafeAnchor, Alert} from 'react-bootstrap';
 /* eslint-enable */
+import {SafeAnchor, Alert} from 'react-bootstrap';
 
 import {transform} from "babel-standalone";
 import CodeExample from './CodeExample';
@@ -31,9 +30,6 @@ const IS_MOBILE = typeof navigator !== 'undefined' && (
 
 var CodeMirrorEditor = React.createClass({
   handleChange: function(foobar) {
-    // console.log('editor handle change'); //eslint-disable-line
-    // console.log(this.refs.editor); //eslint-disable-line
-    // console.log(foobar);
     if (!this.props.readOnly && this.props.onChange) {
       this.props.onChange(foobar);
     }
@@ -179,7 +175,7 @@ const ReactPlayground = React.createClass({
     ReactDOM.render = (element) => this._initialExample = element;
 
     // Stub out mountNode for the example code.
-    const mountNode = null;  // eslint-disable-line no-unused-vars
+    const mountNode = null;
 
     try {
       const compiledCode = this.props.transformer(this.props.codeText);

@@ -1,7 +1,7 @@
+/* eslint indent: 0 */
 import _ from 'lodash';
 import React from 'react';
 import {Glyphicon, Label, Table} from 'react-bootstrap';
-
 
 let cleanDocletValue = str => str.trim().replace(/^\{/, '').replace(/\}$/, '');
 let capitalize = str => str[0].toUpperCase() + str.substr(1);
