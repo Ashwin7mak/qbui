@@ -25,7 +25,7 @@ describe('PerfLogUtils', () => {
             constructor() {
             }
 
-            debug(msg) {
+            warn(msg) {
                 return msg;
             }
         }
@@ -36,7 +36,7 @@ describe('PerfLogUtils', () => {
             window.EPISODES = mockEPISODES;
 
             Logger.__Rewire__('LogService', mockLogService);
-            spyOn(logger, 'debug');
+            spyOn(logger, 'warn');
 
             spyOn(mockEPISODES, 'mark').and.callThrough();
             spyOn(mockEPISODES, 'measure').and.callThrough();
@@ -47,7 +47,7 @@ describe('PerfLogUtils', () => {
 
         afterEach(() => {
             Logger.__ResetDependency__('LogService');
-            logger.debug.calls.reset();
+            logger.warn.calls.reset();
             mockEPISODES.mark.calls.reset();
             mockEPISODES.measure.calls.reset();
             mockEPISODES.sendBeacon.calls.reset();
@@ -103,10 +103,10 @@ describe('PerfLogUtils', () => {
         it('test setLogger function', () => {
             expect(PerfLogUtils.setLogger).toBeTruthy();
             PerfLogUtils.setLogger(logger);
-            let theMsg = 'helloFromLoggerDebug';
+            let theMsg = 'helloFromLogger';
             mockEPISODES.dprint(theMsg);
-            expect(logger.debug).toHaveBeenCalled();
-            expect(logger.debug).toHaveBeenCalledWith(theMsg);
+            expect(logger.warn).toHaveBeenCalled();
+            expect(logger.warn).toHaveBeenCalledWith(theMsg);
         });
 
     });
@@ -134,7 +134,7 @@ describe('PerfLogUtils', () => {
             constructor() {
             }
 
-            debug(msg) {
+            warn(msg) {
                 return msg;
             }
         }
@@ -145,7 +145,7 @@ describe('PerfLogUtils', () => {
             window.EPISODES = mockEPISODES;
 
             Logger.__Rewire__('LogService', mockLogService);
-            spyOn(logger, 'debug');
+            spyOn(logger, 'warn');
 
             spyOn(mockEPISODES, 'mark').and.callThrough();
             spyOn(mockEPISODES, 'measure').and.callThrough();
@@ -156,7 +156,7 @@ describe('PerfLogUtils', () => {
 
         afterEach(() => {
             Logger.__ResetDependency__('LogService');
-            logger.debug.calls.reset();
+            logger.warn.calls.reset();
             mockEPISODES.mark.calls.reset();
             mockEPISODES.measure.calls.reset();
             mockEPISODES.sendBeacon.calls.reset();
@@ -208,10 +208,10 @@ describe('PerfLogUtils', () => {
         it('test setLogger function', () => {
             expect(PerfLogUtils.setLogger).toBeTruthy();
             PerfLogUtils.setLogger(logger);
-            let theMsg = 'helloFromLoggerDebug';
+            let theMsg = 'helloFromLogger';
             mockEPISODES.dprint(theMsg);
-            expect(logger.debug).not.toHaveBeenCalled();
-            expect(logger.debug).not.toHaveBeenCalledWith(theMsg);
+            expect(logger.warn).not.toHaveBeenCalled();
+            expect(logger.warn).not.toHaveBeenCalledWith(theMsg);
         });
 
     });
