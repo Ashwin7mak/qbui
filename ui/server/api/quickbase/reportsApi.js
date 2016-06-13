@@ -254,7 +254,7 @@
                                 let promises = this.homePageReportPromises(req, homepageReportId);
                                 Promise.all(promises).then(
                                     (reportResult) => {
-                                        reportObj.reportMetaData.data = JSON.parse(reportResult[0].body);
+                                        reportObj.reportMetaData.data = reportResult[0].body;
                                         reportObj.reportData.data = reportResult[1];
                                         resolve(reportObj);
                                     },

@@ -33,15 +33,15 @@
             tables: [
                 {
                     name: 'table1', fields: [
-                    {name: 'Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                    {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
-                    {name: 'Date Time Field', datatypeAttributes: {type: 'DATE_TIME'}, type: 'SCALAR'},
-                    {name: 'Email Field', datatypeAttributes: {type: 'EMAIL_ADDRESS'}, type: 'SCALAR'},
-                    {name: 'Checkbox Field', datatypeAttributes: {type: 'CHECKBOX'}, type: 'SCALAR'},
-                    {name: 'Null Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                    {name: 'Empty Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                    {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
-                ]
+                        {name: 'Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                        {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
+                        {name: 'Date Time Field', datatypeAttributes: {type: 'DATE_TIME'}, type: 'SCALAR'},
+                        {name: 'Email Field', datatypeAttributes: {type: 'EMAIL_ADDRESS'}, type: 'SCALAR'},
+                        {name: 'Checkbox Field', datatypeAttributes: {type: 'CHECKBOX'}, type: 'SCALAR'},
+                        {name: 'Null Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                        {name: 'Empty Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                        {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'}
+                    ]
                 }
             ]
 
@@ -101,9 +101,9 @@
          * Setup method. Generates JSON for an app, a table with different fields, and a single record with different field types.
          */
         before(function(done) {
-            this.timeout(consts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+            timeout(consts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             //create app, table with random fields and records
-            recordBase.createApp(appWithNoFlags).then(function (appResponse) {
+            recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
 
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
@@ -111,7 +111,7 @@
                 // Generate some record JSON objects to add to the app
                 generatedRecords = recordBase.generateRecords(nonBuiltInFields, 10);
                 // Add the records to the app
-                recordBase.addRecords(app, app.tables[0], generatedRecords).then(function (returnedRecords) {
+                recordBase.addRecords(app, app.tables[0], generatedRecords).then(function(returnedRecords) {
                     // Push the created records into an array (the add record call also returns the fields used)
                     var recordData = [];
                     for (var j in returnedRecords) {
@@ -120,25 +120,25 @@
                     records = recordData;
                 }).then(function() {
                     //create 5 different users
-                    recordBase.apiBase.createSpecificUser(user1).then(function (response) {
+                    recordBase.apiBase.createSpecificUser(user1).then(function(response) {
                         userIdsList.push(JSON.parse(response.body).id);
                         console.log("the user id list is: " + userIdsList);
-                        recordBase.apiBase.createSpecificUser(user2).then(function (response) {
-                            userIdsList.push(JSON.parse(response.body).id);
+                        recordBase.apiBase.createSpecificUser(user2).then(function(response1) {
+                            userIdsList.push(JSON.parse(response1.body).id);
                             console.log("the user id list is: " + userIdsList);
-                            recordBase.apiBase.createSpecificUser(user3).then(function (response) {
-                                userIdsList.push(JSON.parse(response.body).id);
+                            recordBase.apiBase.createSpecificUser(user3).then(function(response2) {
+                                userIdsList.push(JSON.parse(response2.body).id);
                                 console.log("the user id list is: " + userIdsList);
-                                recordBase.apiBase.createSpecificUser(user4).then(function (response) {
-                                    userIdsList.push(JSON.parse(response.body).id);
+                                recordBase.apiBase.createSpecificUser(user4).then(function(response3) {
+                                    userIdsList.push(JSON.parse(response3.body).id);
                                     console.log("the user id list is: " + userIdsList);
-                                    recordBase.apiBase.createSpecificUser(user5).then(function (response) {
-                                        userIdsList.push(JSON.parse(response.body).id);
+                                    recordBase.apiBase.createSpecificUser(user5).then(function(response4) {
+                                        userIdsList.push(JSON.parse(response4.body).id);
                                         console.log("the user id list is: " + userIdsList);
                                         //add participant role to user1 and user2
-                                        recordBase.apiBase.assignUsersToAppRole(app.id, 11, [userIdsList[0], userIdsList[1]]).then(function () {
+                                        recordBase.apiBase.assignUsersToAppRole(app.id, 11, [userIdsList[0], userIdsList[1]]).then(function() {
                                             //add viewer role to user3 and user4
-                                            recordBase.apiBase.assignUsersToAppRole(app.id, 10, [userIdsList[2], userIdsList[3]]).then(function () {
+                                            recordBase.apiBase.assignUsersToAppRole(app.id, 10, [userIdsList[2], userIdsList[3]]).then(function() {
                                                //add NONE role to user5
                                                 recordBase.apiBase.assignUsersToAppRole(app.id, 9, [userIdsList[4]]);
                                                 done();
@@ -150,11 +150,11 @@
                         });
                     });
                 });
-            }).catch(function (error) {
+            }).catch(function(error) {
                 log.error(JSON.stringify(error));
                 done();
             });
-            return app, userIdsList;
+            return app;
         });
 
         /**
@@ -165,7 +165,7 @@
                 {
                     message: 'Report with just Participant permissions',
                     accessId: [10]
-                },
+                }
                 //{
                 //    message: 'Report with just Viewer permissions',
                 //    accessId: [11]
@@ -190,8 +190,8 @@
         }
 
         reportUserPermissions().forEach(function(testCase) {
-            it.only('Test case: ' + testCase.message, function (done) {
-                this.timeout(consts.INTEGRATION_TIMEOUT * reportUserPermissions().length);
+            it.only('Test case: ' + testCase.message, function(done) {
+                timeout(consts.INTEGRATION_TIMEOUT * reportUserPermissions().length);
                 //Create a report with different access permissions
                 var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 var reportToCreate = {
@@ -220,4 +220,5 @@
 
 
     });
+
 }());

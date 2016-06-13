@@ -350,14 +350,14 @@
             //Create realm helper method generates an arbitrary realm, calls execute request and returns a promise
             assignUsersToAppRole       : function(appId, roleId, userIds) {
                 var deferred = promise.pending();
-                    this.executeRequest(this.resolveAppRolesEndpoint(appId, roleId), consts.POST, userIds).then(function(appRoleResponse) {
-                        log.debug('assign Users to App Role create response: ' + appRoleResponse);
-                        deferred.resolve(appRoleResponse);
-                    }).catch(function(error) {
-                        deferred.reject(error);
-                        //TODO: figure out how we want to handle
-                        assert(false, 'failed to assign Users to App Role: ' + JSON.stringify(error) + ', usersToCreate: ' + JSON.stringify(userIds));
-                    });
+                this.executeRequest(this.resolveAppRolesEndpoint(appId, roleId), consts.POST, userIds).then(function(appRoleResponse) {
+                    log.debug('assign Users to App Role create response: ' + appRoleResponse);
+                    deferred.resolve(appRoleResponse);
+                }).catch(function(error) {
+                    deferred.reject(error);
+                    //TODO: figure out how we want to handle
+                    assert(false, 'failed to assign Users to App Role: ' + JSON.stringify(error) + ', usersToCreate: ' + JSON.stringify(userIds));
+                });
                 return deferred.promise;
             },
             //Helper method creates a ticket given a realm ID.  Returns a promise

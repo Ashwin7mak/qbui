@@ -175,26 +175,38 @@ describe('Validate ReportsApi unit tests', function() {
             'url': 'apps/123/tables/456/homepagereportid',
             'method': 'get'
         };
+
+        var reportObj = {
+            reportMetaData: {
+                data: ''
+            },
+            reportData: {
+                data: ''
+            }
+        };
+
         var getExecuteRequestStub;
-        var getReportComponentsStub;
+        var getHomePageReportPromises;
         beforeEach(function() {
             getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
-            getReportComponentsStub = sinon.stub(reportsApi, "fetchReportComponents");
+            getHomePageReportPromises = sinon.stub(reportsApi, "homePageReportPromises");
         });
         afterEach(function() {
             getExecuteRequestStub.restore();
-            getReportComponentsStub.restore();
+            getHomePageReportPromises.restore();
         });
         it('Test success ', function(done) {
             getExecuteRequestStub.returns(Promise.resolve({body:'1'}));
-            getReportComponentsStub.returns(Promise.resolve(
-                {status:'success'}
-            ));
+            getHomePageReportPromises.returns(
+                [Promise.resolve({body:'metaData'}), Promise.resolve('reportData')]
+            );
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, {status:'success'});
+                    reportObj.reportMetaData.data = 'metaData';
+                    reportObj.reportData.data = 'reportData';
+                    assert.deepEqual(response, reportObj);
                     done();
                 },
                 function(error) {
@@ -206,7 +218,7 @@ describe('Validate ReportsApi unit tests', function() {
         });
         it('Test failure on fetchReportComponent', function(done) {
             getExecuteRequestStub.returns(Promise.resolve({body:'1'}));
-            getReportComponentsStub.returns(Promise.reject(new Error("error")));
+            getHomePageReportPromises.returns(Promise.reject(new Error("error")));
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
@@ -226,7 +238,7 @@ describe('Validate ReportsApi unit tests', function() {
                 body: 'error body'
             };
             getExecuteRequestStub.returns(Promise.reject(errorObj));
-            getReportComponentsStub.returns(Promise.reject(new Error("report component error")));
+            getHomePageReportPromises.returns(Promise.reject(new Error("report component error")));
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
@@ -246,7 +258,7 @@ describe('Validate ReportsApi unit tests', function() {
                 statusMessage: 'error statusMessage'
             };
             getExecuteRequestStub.returns(Promise.reject(errorObj));
-            getReportComponentsStub.returns(Promise.reject(new Error("report component error")));
+            getHomePageReportPromises.returns(Promise.reject(new Error("report component error")));
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
@@ -263,7 +275,7 @@ describe('Validate ReportsApi unit tests', function() {
 
         it('Test unexpected error on fetch table homepage report id', function(done) {
             getExecuteRequestStub.returns(Promise.resolve({body:'1'}));
-            getReportComponentsStub.returns(new Error("report component error"));
+            getHomePageReportPromises.returns(new Error("report component error"));
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
