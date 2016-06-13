@@ -12,7 +12,8 @@ describe('AppHomePageRoute functions', () => {
         actions:{
             selectAppId: function() {return;},
             showTopNav: function() {return;},
-            setTopTitle: function() {return;}
+            setTopTitle: function() {return;},
+            doneRoute: function() {return;}
         }
     };
 

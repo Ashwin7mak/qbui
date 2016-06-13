@@ -214,7 +214,8 @@ describe('FacetsMenu functions', () => {
             expect(panelCollapses.length).toBe(1);
 
             let panelCollapse = panelCollapses[0];
-            expect(panelCollapse.innerText).toBe('abc');
+            let innerText = panelCollapse.innerText;
+            expect(innerText.replace(/\s/g, '')).toBe('abc');
             //and not hidden
             let subItem = panelCollapse.getElementsByClassName('list-group-item');
             expect(subItem.length).toBe(3); //expanded has children

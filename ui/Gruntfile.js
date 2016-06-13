@@ -90,6 +90,7 @@ module.exports = function(grunt) {
             commonDir   : 'common',
             distPublic: 'dist/public'
         },
+        vendorDir : 'vendor',
         express  : {
             root   : 'server',
             options: {
@@ -305,6 +306,13 @@ module.exports = function(grunt) {
                         src   : [
                             'package.json',
                             '<%= express.root %>/**/*'
+                        ]
+                    },
+                    {
+                        expand: true,
+                        dest  : '<%= quickbase.distPublic %>',
+                        src   : [
+                            '<%= vendorDir %>/**/*'
                         ]
                     },
                     {
