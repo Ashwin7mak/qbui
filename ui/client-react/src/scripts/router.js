@@ -40,8 +40,6 @@ import tableActions from '../actions/tableActions';
 
 import _ from 'lodash';
 
-import FastClick from 'fastclick';
-
 let stores = {
     ReportsStore: new ReportsStore(),
     ReportDataStore: new ReportDataStore(),
