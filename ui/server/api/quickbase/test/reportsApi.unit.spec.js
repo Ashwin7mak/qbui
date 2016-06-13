@@ -221,8 +221,11 @@ describe('Validate ReportsApi unit tests', function() {
             });
         });
 
-        it('Test failure on fetch table homepage report id', function(done) {
-            getExecuteRequestStub.returns(Promise.reject(new Error("homepage error")));
+        it('Test failure on fetch table homepage report id and error body', function(done) {
+            var errorObj = {
+                body: 'error body'
+            };
+            getExecuteRequestStub.returns(Promise.reject(errorObj));
             getReportComponentsStub.returns(Promise.reject(new Error("report component error")));
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
@@ -230,7 +233,7 @@ describe('Validate ReportsApi unit tests', function() {
                     done(new Error("promise success response return unexpectely"));
                 },
                 function(error) {
-                    assert.deepEqual(error, new Error("homepage error"));
+                    assert.deepEqual(error, errorObj);
                     done();
                 }
             ).catch(function(errorMsg) {
@@ -238,6 +241,25 @@ describe('Validate ReportsApi unit tests', function() {
             });
         });
 
+        it('Test failure on fetch table homepage report id with error status message', function(done) {
+            var errorObj = {
+                statusMessage: 'error statusMessage'
+            };
+            getExecuteRequestStub.returns(Promise.reject(errorObj));
+            getReportComponentsStub.returns(Promise.reject(new Error("report component error")));
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done(new Error("promise success response return unexpectely"));
+                },
+                function(error) {
+                    assert.deepEqual(error, errorObj);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetch table homepage failure: ' + JSON.stringify(errorMsg)));
+            });
+        });
 
         it('Test unexpected error on fetch table homepage report id', function(done) {
             getExecuteRequestStub.returns(Promise.resolve({body:'1'}));

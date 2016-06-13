@@ -236,9 +236,7 @@
                         (error) => {
                             let errorMsg = 'Error undefined';
                             if (error) {
-                                if (error.body) {
-                                    errorMsg = error.body ? error.body.replace(/"/g, "'") : error.statusMessage;
-                                }
+                                errorMsg = error.body ? error.body.replace(/"/g, "'") : error.statusMessage;
                             }
                             log.error("Error getting table homepage reportId in fetchTableHomePageReport: " + errorMsg);
                             reject(error);
