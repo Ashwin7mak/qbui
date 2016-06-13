@@ -31,15 +31,23 @@
         let NODE_HOMEPAGE_ROUTE = 'homepage';
         let CORE_HOMEPAGE_ID_ROUTE = 'homepagereportid';
 
-        function transformUrlRoute(requestUrl, curRoute, newRoute) {
-            if (requestUrl) {
-                let offset = requestUrl.toLowerCase().indexOf(curRoute);
+        /**
+         * Supporting method to transform a segment of a url route component
+         *
+         * @param url - url to examine
+         * @param curRoute - route to search
+         * @param newRoute - new route to replace
+         * @returns {*}
+         */
+        function transformUrlRoute(url, curRoute, newRoute) {
+            if (url) {
+                let offset = url.toLowerCase().indexOf(curRoute);
                 if (offset !== -1) {
-                    return requestUrl.substring(0, offset) + newRoute;
+                    return url.substring(0, offset) + newRoute;
                 }
             }
             //  return requestUrl unchanged
-            return requestUrl;
+            return url;
         }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
@@ -185,6 +193,12 @@
                 });
             },
 
+            /**
+             * Return the id of the table homepage report
+             *
+             * @param req
+             * @returns {bluebird|exports|module.exports}
+             */
             fetchTableHomePageReport: function(req) {
 
                 return new Promise((resolve, reject) => {
@@ -202,7 +216,7 @@
                             // parse out the id and fetch the report components.
                             var homepageReportId = JSON.parse(response.body)[0];
                             let reportComponentRoute = REPORTS + '/' + homepageReportId + '/' + NODE_REPORTCOMPONENT_ROUTE;
-                            req.url = transformUrlRoute(CORE_HOMEPAGE_ID_ROUTE, reportComponentRoute);
+                            req.url = transformUrlRoute(req.url, CORE_HOMEPAGE_ID_ROUTE, reportComponentRoute);
 
                             this.fetchReportComponents(req).then(
                                 (reportResponse) => {

@@ -172,7 +172,7 @@ describe('Validate ReportsApi unit tests', function() {
                 'tid': 'tid'
             },
             'Content-Type': 'content-type',
-            'url': '/testurl.com',
+            'url': 'apps/123/tables/456/homepagereportid',
             'method': 'get'
         };
         var getExecuteRequestStub;
