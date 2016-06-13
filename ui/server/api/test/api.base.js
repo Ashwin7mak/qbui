@@ -38,6 +38,7 @@
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
+        var ROLES_ENDPOINT = '/roles/';
         var ADMIN_REALM = 'localhost';
         var ADMIN_REALM_ID = 117000;
         var TICKETS_ENDPOINT = '/ticket?uid=10000&realmId=';
@@ -190,6 +191,13 @@
                 }
                 return endpoint;
             },
+            resolveAppRolesEndpoint        : function(appId, roleId) {
+                var endpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + ROLES_ENDPOINT + roleId + USERS_ENDPOINT;
+                //if (roleId) {
+                //    endpoint = endpoint + roleId;
+                //}
+                return endpoint;
+            },
             defaultHeaders              : DEFAULT_HEADERS,
             //Executes a REST request against the instance's realm using the configured javaHost
             executeRequest              : function(stringPath, method, body, headers, params) {
@@ -338,6 +346,19 @@
                     challengeAnswer  : 'blue'
                 };
                 return this.createSpecificUser(userToMake);
+            },
+            //Create realm helper method generates an arbitrary realm, calls execute request and returns a promise
+            assignUsersToAppRole       : function(appId, roleId, userIds) {
+                var deferred = promise.pending();
+                    this.executeRequest(this.resolveAppRolesEndpoint(appId, roleId), consts.POST, userIds).then(function(appRoleResponse) {
+                        log.debug('assign Users to App Role create response: ' + appRoleResponse);
+                        deferred.resolve(appRoleResponse);
+                    }).catch(function(error) {
+                        deferred.reject(error);
+                        //TODO: figure out how we want to handle
+                        assert(false, 'failed to assign Users to App Role: ' + JSON.stringify(error) + ', usersToCreate: ' + JSON.stringify(userIds));
+                    });
+                return deferred.promise;
             },
             //Helper method creates a ticket given a realm ID.  Returns a promise
             createTicket      : function(realmId) {

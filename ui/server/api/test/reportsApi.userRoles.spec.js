@@ -1,12 +1,12 @@
 (function() {
     'use strict';
     var assert = require('assert');
-    var promise = require('bluebird');
     require('../../app');
     var config = require('../../config/environment');
     var recordBase = require('./recordApi.base')(config);
     var log = require('../../logger').getLogger();
-    var testConsts = require('./api.test.constants');
+    //var testConsts = require('./api.test.constants');
+    var consts = require('../constants');
     var testUtils = require('./api.test.Utils');
     var errorCodes = require('../errorCodes');
 
@@ -15,10 +15,9 @@
     // Generator modules
     var appGenerator = require('../../../test_generators/app.generator.js');
 
-    describe('API - Validate report visibility for different users with different roles', function() {
-        // Set timeout for all tests in the spec file
-        this.timeout(testConsts.INTEGRATION_TIMEOUT);
+    var FORMAT = 'display';
 
+    describe('API - Validate report visibility for different users with different roles', function() {
         // Global vars
         var app;
         var nonBuiltInFields;
@@ -98,73 +97,11 @@
             challengeAnswer  : 'blue'
         };
 
-        function addUsersToAppRole(appId, roleId, userIds) {
-            var deferred = promise.pending();
-            var userJSON = {
-                id      : userIds
-            };
-            var userRolesEndpoint = recordBase.apiBase.resolveUserRolesEndpoint(appId, roleId);
-            recordBase.apiBase.executeRequest(userRolesEndpoint, 'POST',userJSON).then(function(result) {
-                //console.log('Report create result');
-                var parsed = JSON.parse(result.body);
-                var id = parsed.id;
-                deferred.resolve(id);
-            }).catch(function(error) {
-                console.error(JSON.stringify(error));
-                deferred.reject(error);
-            });
-            return deferred.promise;
-        };
-
-        ///**
-        // * Setup method. Generates JSON for an app, a table with different fields, and a single record with different field types.
-        // */
-        //before(function(done) {
-        //    this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
-        //    //create app, table with random fields and records
-        //    recordBase.createApp(appWithNoFlags).then(function (appResponse) {
-        //        app = JSON.parse(appResponse.body);
-        //        // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-        //        nonBuiltInFields = recordBase.getNonBuiltInFields(app.tables[0]);
-        //        // Generate some record JSON objects to add to the app
-        //        generatedRecords = recordBase.generateRecords(nonBuiltInFields, 10);
-        //        // Add the records to the app
-        //        recordBase.addRecords(app, app.tables[0], generatedRecords).then(function (returnedRecords) {
-        //            // Push the created records into an array (the add record call also returns the fields used)
-        //            var recordData = [];
-        //            for (var j in returnedRecords) {
-        //                recordData.push(returnedRecords[j].record);
-        //            }
-        //            records = recordData;
-        //            //create 10 users
-        //            for (var i = 0; i <= 10; i++) {
-        //                recordBase.apiBase.createUser().then(function (userResponse) {
-        //                    userId = JSON.parse(userResponse.body).id;
-        //                    userIdsList.push(userId);
-        //                    console.log("the userids list is: " + userIdsList);
-        //                });
-        //            }
-        //        }).then(function() {
-        //            //add users from the list to access NONE ie role is none
-        //            addUsersToAppRole(app.id, 9, [userIdsList[0], userIdsList[1]]);
-        //            //add users from the list to access BASIC ie role is VIEWER
-        //            addUsersToAppRole(app.id, 10, [userIdsList[2], userIdsList[3], userIdsList[9]]);
-        //            //add users from the list to access BASIC_WITH_SHARE ie role is PARTCIPANT
-        //            addUsersToAppRole(app.id, 11, [userIdsList[4], userIdsList[5], userIdsList[8]]);
-        //            //add users from the list to access ADMIN ie role is ADMINISTRATOR
-        //            addUsersToAppRole(app.id, 12, [userIdsList[6], userIdsList[7]]);
-        //            done();
-        //        });
-        //        }).catch(function (error) {
-        //            log.error(JSON.stringify(error));
-        //            done();
-        //        });
-        //});
         /**
          * Setup method. Generates JSON for an app, a table with different fields, and a single record with different field types.
          */
         before(function(done) {
-            this.timeout(testConsts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+            this.timeout(consts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             //create app, table with random fields and records
             recordBase.createApp(appWithNoFlags).then(function (appResponse) {
                 app = JSON.parse(appResponse.body);
@@ -198,7 +135,15 @@
                                     recordBase.apiBase.createSpecificUser(user5).then(function (response) {
                                         userIdsList.push(JSON.parse(response.body).id);
                                         console.log("the user id list is: " + userIdsList);
-                                        done();
+                                        //add participant role to user1 and user2
+                                        recordBase.apiBase.assignUsersToAppRole(app.id, 11, [userIdsList[0], userIdsList[1]]).then(function () {
+                                            //add viewer role to user3 and user4
+                                            recordBase.apiBase.assignUsersToAppRole(app.id, 10, [userIdsList[2], userIdsList[3]]).then(function () {
+                                               //add NONE role to user5
+                                                recordBase.apiBase.assignUsersToAppRole(app.id, 9, [userIdsList[4]]);
+                                                done();
+                                            });
+                                        });
                                     });
                                 });
                             });
@@ -218,16 +163,58 @@
         function reportUserPermissions() {
             return [
                 {
-                    message: 'raw user with all format flags',
-                }
+                    message: 'Report with just Participant permissions',
+                    accessId: [10]
+                },
+                //{
+                //    message: 'Report with just Viewer permissions',
+                //    accessId: [11]
+                //},
+                //{
+                //    message: 'Report with just None permissions',
+                //    accessId: [9]
+                //},
+                //{
+                //    message: 'Report with Viewer and participant permissions',
+                //    accessId: [10, 11]
+                //},
+                //{
+                //    message: 'Report with Viewer and None permissions',
+                //    accessId: [9, 11]
+                //},
+                //{
+                //    message: 'Report with Participant, Viewer and None permissions',
+                //    accessId: [9, 10, 11]
+                //}
             ];
         }
 
-        reportUserPermissions().forEach(function(testcase) {
-            it.only('Test case: '+testcase.message, function (done) {
-                this.timeout(testConsts.INTEGRATION_TIMEOUT * reportUserPermissions().length);
-                console.log("the user id's list is: "+userIdsList);
-                done();
+        reportUserPermissions().forEach(function(testCase) {
+            it.only('Test case: ' + testCase.message, function (done) {
+                this.timeout(consts.INTEGRATION_TIMEOUT * reportUserPermissions().length);
+                //Create a report with different access permissions
+                var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+                var reportToCreate = {
+                    name: testUtils.generateRandomString(5),
+                    type: 'TABLE',
+                    tableId: app.tables[0].id,
+                    query: null,
+                    rolesWithGrantedAccess: testCase.accessId
+                };
+                //Create a report
+                recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
+                    var r = JSON.parse(report.body);
+                    //Execute a report
+                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
+                        var results = JSON.parse(reportResults.body);
+                        //Verify returned record ids
+                        //verifyRecords(results);
+                        done();
+                    });
+                }).catch(function(error) {
+                    log.error(JSON.stringify(error));
+                    done();
+                });
             });
         });
 
