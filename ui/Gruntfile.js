@@ -546,7 +546,8 @@ module.exports = function(grunt) {
                     proxyTunnel     : true,
                     verbose         : true,
                     logfile         : 'sauceLog.txt',
-                    noAutodetect    : true
+                    noAutodetect    : true,
+                    dns             : '127.0.0.1'
                 }
             }
         },
