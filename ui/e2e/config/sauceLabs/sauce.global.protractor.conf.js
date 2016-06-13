@@ -18,7 +18,7 @@
         sauceAgent: agent,
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
-        sauceKey            : 'f814e1b3-ac25-4369-af02-90d61c6b1c04',
+        sauceKey            : process.env.SAUCE_KEY,
         // We have to specify the selenium address to point locally so that we use the tunnel properly
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
