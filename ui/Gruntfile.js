@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
     var currentDateTime = new Date().getTime();
 
-    var baseUrl = grunt.option('baseUrl') || 'http://kenslocal:9000';
+    var baseUrl = grunt.option('baseUrl') || 'http://ip-10-82-148-7.quickbaserocks.com:9000';
     var buildDir =  path.join(__dirname, '/build');
     var localJsFile =  path.join(__dirname, '/server/config/environment/local.js');
 
@@ -540,14 +540,14 @@ module.exports = function(grunt) {
             aws: {
                 options: {
                     username        : 'QuickBaseNS',
-                    accessKey       : sauceKey,
+                    accessKey       : 'f814e1b3-ac25-4369-af02-90d61c6b1c04',
                     proxy           : 'egressproxy.quickbaserocks.com:80',
-                    tunnelIdentifier: tunnelIdentifier,
+                    tunnelIdentifier: 'testTunnel',
                     proxyTunnel     : true,
                     verbose         : true,
                     logfile         : 'sauceLog.txt',
                     noAutodetect    : true,
-                    dns             : '127.0.0.1'
+                    dns             : '10.82.144.2'
                 }
             }
         },

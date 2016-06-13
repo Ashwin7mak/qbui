@@ -50,7 +50,7 @@
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
-        DOMAIN: 'http://kenslocal:9000',
+        DOMAIN: 'http://ip-10-82-148-7.quickbaserocks.com:9000',
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,
