@@ -29,7 +29,7 @@
 
         //  url components for table report home page
         let NODE_HOMEPAGE_ROUTE = 'homepage';
-        let CORE_HOMEPAGE_ID_ROUTE = 'homepagereportid';
+        let CORE_HOMEPAGE_ID_ROUTE = 'defaulthomepage';
 
         /**
          * Supporting method to transform a segment of a url route component
@@ -193,6 +193,30 @@
                 });
             },
 
+            homePageReportPromises(req, homepageReportId) {
+
+                let REPORT_ROUTE = REPORTS + '/' + homepageReportId;
+
+                let reportMetaPromise = new Promise((resolve1, reject1) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.url = transformUrlRoute(opts.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE);
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve1(response);
+                        },
+                        (error) => {
+                            reject1(error);
+                        }
+                    );
+                });
+
+                req.url = transformUrlRoute(req.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE + '/' + NODE_REPORTCOMPONENT_ROUTE);
+                let reportDataPromise = this.fetchReportComponents(req);
+
+                return [reportMetaPromise, reportDataPromise];
+            },
+
             /**
              * Return the id of the table homepage report
              *
@@ -200,6 +224,15 @@
              * @returns {bluebird|exports|module.exports}
              */
             fetchTableHomePageReport: function(req) {
+
+                var reportObj = {
+                    reportMetaData: {
+                        data: ''
+                    },
+                    reportData: {
+                        data: ''
+                    }
+                };
 
                 return new Promise((resolve, reject) => {
 
@@ -214,24 +247,31 @@
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             // parse out the id and fetch the report components.
-                            var homepageReportId = JSON.parse(response.body)[0];
-                            let reportComponentRoute = REPORTS + '/' + homepageReportId + '/' + NODE_REPORTCOMPONENT_ROUTE;
-                            req.url = transformUrlRoute(req.url, CORE_HOMEPAGE_ID_ROUTE, reportComponentRoute);
+                            if (response.body) {
+                                let homepageReportId = JSON.parse(response.body);
 
-                            this.fetchReportComponents(req).then(
-                                (reportResponse) => {
-                                    resolve(reportResponse);
-                                },
-                                (reportError) => {
-                                    //  the core error has already been logged...just want to ensure visibility that the
-                                    //  error is when fetching the table homepage report
-                                    log.error('Error fetching table homepage report in fetchTableHomePageReport.  ReportRoute: ' + reportComponentRoute);
-                                    reject(reportError);
-                                }
-                            ).catch((ex) => {
-                                requestHelper.logUnexpectedError('reportsAPI..fetchReportComponents in fetchTableHomePageReport', ex, true);
-                                reject(ex);
-                            });
+                                //  using the reportId, fetch the home page report meta data and content
+                                let promises = this.homePageReportPromises(req, homepageReportId);
+                                Promise.all(promises).then(
+                                    (reportResult) => {
+                                        reportObj.reportMetaData.data = JSON.parse(reportResult[0].body);
+                                        reportObj.reportData.data = reportResult[1];
+                                        resolve(reportObj);
+                                    },
+                                    (reportError) => {
+                                        //  the core error has already been logged...just want to ensure visibility that the
+                                        //  error is when fetching the table homepage report
+                                        log.error('Error fetching table homepage report in fetchTableHomePageReport.');
+                                        reject(reportError);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('reportsAPI..fetchReportComponents in fetchTableHomePageReport', ex, true);
+                                    reject(ex);
+                                });
+                            } else {
+                                //  no report id returned (because one is not defined); return empty report object
+                                resolve(reportObj);
+                            }
                         },
                         (error) => {
                             let errorMsg = 'Error undefined';
@@ -252,4 +292,3 @@
         return reportsApi;
     };
 }());
-
