@@ -146,7 +146,9 @@ const fakeReportData_attributes = {
 
 const flux = {
     actions: {
-        scrollingReport(scrolling) { }
+        scrollingReport(scrolling) { },
+        mark: ()=>{},
+        measure: ()=>{}
     }
 };
 
