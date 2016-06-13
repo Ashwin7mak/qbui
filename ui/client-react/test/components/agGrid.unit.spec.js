@@ -142,7 +142,9 @@ describe('AGGrid functions', () => {
         actions: {
             getFilteredRecords: ()=>{},
             selectedRows: ()=>{},
-            rowClicked: ()=>{}
+            rowClicked: ()=>{},
+            mark: ()=>{},
+            measure: ()=>{}
         }
     };
 

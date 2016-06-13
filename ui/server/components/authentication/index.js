@@ -11,7 +11,6 @@
         var statusCode = 200;
         var message = "User is signing out";
         res.cookie('ticket', "", {expires: new Date(Date.now())});
-        res.clearCookie('ticket');
         processAuthentication(req, res, viewFilePath, statusCode, message);
     };
 
