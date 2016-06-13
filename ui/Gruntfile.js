@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
     var currentDateTime = new Date().getTime();
 
-    var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
+    var baseUrl = grunt.option('baseUrl') || 'http://kenslocal:9000';
     var buildDir =  path.join(__dirname, '/build');
     var localJsFile =  path.join(__dirname, '/server/config/environment/local.js');
 
@@ -541,11 +541,12 @@ module.exports = function(grunt) {
                 options: {
                     username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
-                    //proxy           : 'http://egressproxy.quickbaserocks.com:80',
+                    proxy           : 'http://egressproxy.quickbaserocks.com:80',
                     tunnelIdentifier: tunnelIdentifier,
                     proxyTunnel     : true,
                     verbose         : true,
-                    logfile         : 'sauceLog.txt'
+                    logfile         : 'sauceLog.txt',
+                    noAutodetect    : true
                 }
             }
         },
@@ -846,7 +847,7 @@ module.exports = function(grunt) {
         if (target === 'e2eAWSSauce') {
             return grunt.task.run([
                 'env:e2e',
-                //'sauce_connect:aws',
+                'sauce_connect:aws',
                 'protractor:sauce_osx_chrome'
             ]);
         }

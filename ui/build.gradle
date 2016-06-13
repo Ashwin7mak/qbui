@@ -96,7 +96,7 @@ if(System.getProperty("endpoint")) {
 def instanceId = System.getenv("INSTANCE_ID");
 def executorId = System.getenv("EXECUTOR_NUMBER");
 //def sauceURL = "https://localhost."+ instanceId + "-" + executorId + ".slave.ci.quickbaserocks.com";
-def sauceURL = "http://quickbase-dev.com:9001";
+def sauceURL = "http://kenslocal:9000";
 def sauceKey = System.getenv("SAUCE_KEY");
 def sauceJobName = "JENKINS_UI_E2E_" + System.getenv("BUILD_NUMBER");
 def tunnelIdentifier = "testTunnel";
@@ -450,7 +450,7 @@ task gruntE2EAWSSauce(type: GruntTask) {
         args = ["test:e2eAWSSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
     dependsOn startTomcat
-    //finalizedBy stopTomcat
+    finalizedBy stopTomcat
 }
 
 task cleanBuildDir (type: Delete) {

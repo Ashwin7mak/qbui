@@ -41,7 +41,7 @@
         //},
 
         // allow for override of default ports
-        port   : 9001,
+        port   : 9000,
         sslPort: 9443,
 
         //REST endpoint (protocol,server,port)
@@ -50,7 +50,7 @@
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
-        DOMAIN: 'http://quickbase-dev.com:9001',
+        DOMAIN: 'http://kenslocal:9000',
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,
