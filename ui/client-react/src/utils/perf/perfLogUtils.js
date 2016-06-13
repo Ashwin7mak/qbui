@@ -58,11 +58,12 @@ class PerfLogUtils {
     }
 
     /**
-     * call "setLogger()" to set method for logging perf debug.
+     * call "setLogger()" to set method for logging perf warn.
      */
     static setLogger(logger) {
         if (PerfLogUtils.isEnabled()) {
-            EPISODES.dprint = logger.debug.bind(logger);
+
+            EPISODES.dprint = logger.warn.bind(logger);
         }
     }
 
