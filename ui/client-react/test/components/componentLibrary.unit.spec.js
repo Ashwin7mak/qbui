@@ -112,17 +112,46 @@ const exampleCodeText = "const basicIcon = (<QBicon icon='hamburger' />);ReactDO
 describe('Component Library functions', () => {
     'use strict';
 
-    var component;
-
     it('test render component library wrapper', () => {
-        component = TestUtils.renderIntoDocument(<ComponentLibraryWrapper />);
+        let component = TestUtils.renderIntoDocument(<ComponentLibraryWrapper />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    it('test render prop table', () => {
-        component = TestUtils.renderIntoDocument(<PropTable component="QBicon" metadata={fakeMetadata} />);
-    });
-
+    // ReactPlayground
     it('test render react playground', () => {
-        component = TestUtils.renderIntoDocument(<ReactPlayground codeText={exampleCodeText} />);
+        let component = TestUtils.renderIntoDocument(<ReactPlayground codeText={exampleCodeText} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
+
+    // ReactPlayground Renders the Example
+    // ReactPlayground Renders the Description
+
+    it('code editor should show', () => {
+        let component = TestUtils.renderIntoDocument(<ReactPlayground codeText={exampleCodeText} showCode={false} />);
+
+        // const codeToggler = TestUtils.findRenderedDOMComponentWithClass(component, 'code-toggle');
+        const codeToggler = ReactDOM.findDOMNode(component).querySelector(".code-toggle");
+        TestUtils.Simulate.click(codeToggler);
+
+        const codeEditor = TestUtils.findRenderedDOMComponentWithClass(component, 'highlight');
+        expect(codeEditor).toBeTruthy();
+    });
+
+    it('code editor should bail on bad code', () => {
+        // ReferenceError: asdf is not defined
+    });
+
+    // Router
+    it('router default should be QBPanel', () => {
+    });
+
+    // PropTable
+    it('test render prop table', () => {
+        let component = TestUtils.renderIntoDocument(<PropTable component="QBicon" metadata={fakeMetadata} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
+
+    // PropTable Required Label Renders
+    // PropTable Renders a row correctly
+
 });

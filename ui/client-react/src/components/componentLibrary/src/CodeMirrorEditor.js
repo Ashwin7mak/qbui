@@ -57,6 +57,8 @@ var CodeMirrorEditor = React.createClass({
             <div style={this.props.style} className={this.props.className}>
                 {editor}
             </div>
-            );
+        );
     }
 });
+
+export default CodeMirrorEditor;
