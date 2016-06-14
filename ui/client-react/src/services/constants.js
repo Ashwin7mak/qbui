@@ -38,6 +38,7 @@ export default {
 
     // API Entity actions
     FORMANDRECORD       : 'formAndRecord',
+    HOMEPAGE            : 'homePage',
     REPORTCOMPONENTS    : 'reportComponents',
     RESULTS             : 'results',
     PARSE               : 'parse'

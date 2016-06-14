@@ -21,15 +21,15 @@
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
 
-        //  url components for facets
         let FACETS = 'facets';
-        let REPORTS = 'reports';
-        let NODE_REPORTCOMPONENT_ROUTE = 'reportcomponents';
-        let CORE_REPORTFACETS_ROUTE = FACETS + '/results';
 
-        //  url components for table report home page
-        let NODE_HOMEPAGE_ROUTE = 'homepage';
+        //  url components for facets, report components and table report home page
+        let CORE_REPORTS_ROUTE = 'reports';
+        let CORE_REPORTFACETS_ROUTE = FACETS + '/results';
         let CORE_HOMEPAGE_ID_ROUTE = 'defaulthomepage';
+
+        let NODE_REPORTCOMPONENT_ROUTE = 'reportcomponents';
+        let NODE_HOMEPAGE_ROUTE = 'homepage';
 
         /**
          * Supporting method to transform a segment of a url route component
@@ -193,10 +193,19 @@
                 });
             },
 
+            /**
+             * Helper method that returns 2 promises that can be run asynchronously to fetch reportMetaData
+             * and report content.  This method is used in support of return a table homepage report.
+             *
+             * @param req
+             * @param homepageReportId
+             * @returns {*[]}
+             */
             homePageReportPromises(req, homepageReportId) {
 
-                let REPORT_ROUTE = REPORTS + '/' + homepageReportId;
+                let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + homepageReportId;
 
+                //  promise to return report meta data
                 let reportMetaPromise = new Promise((resolve1, reject1) => {
                     let opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
@@ -211,6 +220,7 @@
                     );
                 });
 
+                //  promise to return report data content
                 req.url = transformUrlRoute(req.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE + '/' + NODE_REPORTCOMPONENT_ROUTE);
                 let reportDataPromise = this.fetchReportComponents(req);
 
@@ -218,7 +228,7 @@
             },
 
             /**
-             * Return the id of the table homepage report
+             * Return the table homepage report
              *
              * @param req
              * @returns {bluebird|exports|module.exports}
@@ -261,7 +271,7 @@
                                     (reportError) => {
                                         //  the core error has already been logged...just want to ensure visibility that the
                                         //  error is when fetching the table homepage report
-                                        log.error('Error fetching table homepage report in fetchTableHomePageReport.');
+                                        log.error({req:req}, 'Error fetching table homepage report in fetchTableHomePageReport.');
                                         reject(reportError);
                                     }
                                 ).catch((ex) => {
@@ -270,15 +280,12 @@
                                 });
                             } else {
                                 //  no report id returned (because one is not defined); return empty report object
+                                log.warn({req:req}, 'No report homepage defined for table.');
                                 resolve(reportObj);
                             }
                         },
                         (error) => {
-                            let errorMsg = 'Error undefined';
-                            if (error) {
-                                errorMsg = error.body ? error.body.replace(/"/g, "'") : error.statusMessage;
-                            }
-                            log.error("Error getting table homepage reportId in fetchTableHomePageReport: " + errorMsg);
+                            log.error({req: req}, "Error getting table homepage reportId in fetchTableHomePageReport");
                             reject(error);
                         }
                     ).catch((ex) => {
