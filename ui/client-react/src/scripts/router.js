@@ -82,6 +82,7 @@ function hookHistory(theHistory) {
             // mark start of new route
             if (ev.action === "PUSH" || ev.action === "REPLACE") {
                 flux.actions.newRoute("newroute:" + ev.pathname);
+                userInfo = ev.pathname;
             }
         });
         return true;
