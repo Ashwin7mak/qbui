@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
 import Formatters from '../../src/components/dataTable/agGrid/formatters';
+import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
 import {DateCellFormatter, DateTimeCellFormatter, TimeCellFormatter, NumericCellFormatter, TextCellFormatter, CheckBoxCellFormatter} from '../../src/components/dataTable/agGrid/formatters';
 
 describe('AGGrid cell editor functions', () => {
@@ -19,11 +20,14 @@ describe('AGGrid cell editor functions', () => {
     beforeEach(() => {
         Formatters.__Rewire__('I18nNumber', I18nMessageMock);
         Formatters.__Rewire__('I18nDate', I18nMessageMock);
+        CellRenderers.__Rewire__('I18nNumber', I18nMessageMock);
+
     });
 
     afterEach(() => {
         Formatters.__ResetDependency__('I18nNumber');
         Formatters.__ResetDependency__('I18nDate');
+        CellRenderers.__ResetDependency__('I18nNumber');
     });
 
     it('test TextFormatter', () => {
@@ -52,30 +56,34 @@ describe('AGGrid cell editor functions', () => {
         expect(value.innerHTML).toEqual("newValue");
     });
 
-    //it('test NumericFormatter', () => {
-    //    const params = {
-    //        value: {
-    //            value: 123,
-    //            display: "123"
-    //        },
-    //        column: {
-    //            colDef: {}
-    //        }
-    //    };
-    //
-    //    component = TestUtils.renderIntoDocument(<NumericCellFormatter params={params} />);
-    //    expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    //
-    //    const value = TestUtils.findRenderedDOMComponentWithClass(component, "numberCell");
-    //    expect(value.innerHTML).toEqual(params.value.toString());
-    //
-    //    const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
-    //    expect(edit.type).toEqual("number");
-    //
-    //    edit.value = 456;
-    //    TestUtils.Simulate.change(edit);
-    //    expect(value.innerHTML).toEqual("456");
-    //});
+    it('test NumericFormatter', () => {
+        const params = {
+            value: {
+                value: 123,
+                display: "123"
+            },
+            column: {
+                colDef: {
+                    datatypeAttributes: {}
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<NumericCellFormatter params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll(".numberCell span");
+        expect(valueElements.length).toBe(1);
+
+        expect(valueElements[0].innerHTML).toEqual(params.value.display);
+
+        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+        expect(edit.type).toEqual("number");
+
+        edit.value = 456;
+        TestUtils.Simulate.change(edit);
+        expect(valueElements[0].innerHTML).toEqual("456");
+    });
 
     it('test CheckBoxFormatter', () => {
         const params = {
@@ -100,41 +108,47 @@ describe('AGGrid cell editor functions', () => {
         expect(inputs[0].checked).toBe(false);
     });
 
-    //it('test DateFormatter', () => {
-    //    const params = {
-    //        value: "2097-01-17T00:33:03Z",
-    //        column: {
-    //            colDef: {}
-    //        }
-    //    };
-    //
-    //    component = TestUtils.renderIntoDocument(<DateCellFormatter params={params} />);
-    //    expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    //});
-    //
-    //it('test DateTimeFormatter', () => {
-    //    const params = {
-    //        value: "2097-01-17T00:33:03Z",
-    //        column: {
-    //            colDef: {}
-    //        }
-    //    };
-    //
-    //    component = TestUtils.renderIntoDocument(<DateTimeCellFormatter params={params} />);
-    //    expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    //
-    //});
-    //
-    //it('test TimeFormatter', () => {
-    //    const params = {
-    //        value: "1970-01-01T19:13:44Z",
-    //        column: {
-    //            colDef: {}
-    //        }
-    //    };
-    //
-    //    component = TestUtils.renderIntoDocument(<TimeCellFormatter params={params} />);
-    //    expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    //});
+    it('test DateFormatter', () => {
+        const params = {
+            value: {
+                value: "2097-01-17"
+            },
+            column: {
+                colDef: {}
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<DateCellFormatter params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
+
+    it('test DateTimeFormatter', () => {
+        const params = {
+            value: {
+                value: "2097-01-17T00:33:03Z",
+            },
+            column: {
+                colDef: {}
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<DateTimeCellFormatter params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+    });
+
+    it('test TimeFormatter', () => {
+        const params = {
+            value: {
+                value: "1970-01-01T19:13:44Z"
+            },
+            column: {
+                colDef: {}
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<TimeCellFormatter params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
 });
 

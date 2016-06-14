@@ -85,7 +85,6 @@ let reportModel = {
                     let fld = map.get(column.id);
                     columns[fld.name] = column;
                 });
-                //columns.actions = record.id;
                 reportData.push(columns);
             });
         }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
+import {I18nNumber} from '../../../utils/i18nMessage';
 
 /**
  * placeholder for rendering users

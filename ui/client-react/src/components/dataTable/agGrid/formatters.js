@@ -162,9 +162,14 @@ const CellFormatter = React.createClass({
 
         this.state.value.value = value;
         this.state.value.display = newDisplay;
+
         this.setState(this.state);
     },
 
+    /**
+     * date, datetime, or time cell was edited
+     * @param value
+     */
     dateTimeCellEdited(value) {
         let newValue = value;
         this.state.value.value = value;
@@ -192,6 +197,11 @@ const CellFormatter = React.createClass({
         this.state.value.display = newDisplay;
         this.setState(this.state);
     },
+
+    /**
+     * numeric cell edited, update the display value from common formatter
+     * @param value
+     */
     numericCellEdited(value) {
         let newValue = Number(value);
 
@@ -213,8 +223,6 @@ const CellFormatter = React.createClass({
 });
 
 // formatter classes (cell formatters render an editor and a display value)
-// there is work to be done to use display formats for both input and output
-// The output part is at least partly done in Node now but that needs to be implemented in the UI layer!!!)
 
 export const TextCellFormatter = React.createClass({
     render: function() {
