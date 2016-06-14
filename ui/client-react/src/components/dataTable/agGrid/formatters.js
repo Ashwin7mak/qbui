@@ -179,7 +179,6 @@ const CellFormatter = React.createClass({
         }
         case TimeFormat: {
             // normalized form is 1970-01-01THH:MM:SSZ
-            console.log('time',this.state.value);
             newDisplay = timeOfDayFormatter.format(this.state.value, this.props.colDef.datatypeAttributes);
             break;
         }
