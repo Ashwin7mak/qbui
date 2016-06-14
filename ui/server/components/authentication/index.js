@@ -10,8 +10,8 @@
         var viewFilePath = 'signout.html';
         var statusCode = 200;
         var message = "User is signing out";
-        res.cookie('ticket', "", {expires: new Date(Date.now())});
-        res.clearCookie('ticket');
+        var hostname = (req.headers.host.match(/:/g)) ? req.headers.host.slice(0, req.headers.host.indexOf(":")) : req.headers.host;
+        res.cookie('ticket', "", {domain: hostname, expires: new Date(0)});
         processAuthentication(req, res, viewFilePath, statusCode, message);
     };
 
