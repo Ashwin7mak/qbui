@@ -10,13 +10,9 @@ const RowEditActions = React.createClass({
 
     onClickSave() {
         this.props.api.deselectAll();
+        const id = this.props.data[this.props.params.context.keyField];
+       this.props.params.context.onRecordChange(+id, this.props.params.context.recordChanges);
 
-        const id = this.props.data["Record ID#"];
-
-        // EMPOWER
-        setTimeout(()=> {
-            NotificationManager.success('Record saved', 'Success', 1500);
-        }, 1000);
     },
 
     /**

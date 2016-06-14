@@ -8,6 +8,7 @@ import Fluxxor from "fluxxor";
 import * as DataTypes from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
+import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
 
@@ -20,12 +21,12 @@ let ReportContent = React.createClass({
     contextTypes: {
         history: React.PropTypes.object
     },
-
     getInitialState: function() {
         return {
-            showSelectionColumn: false
+            showSelectionColumn: false,
         };
     },
+    recordChanges:{},
 
     // row was clicked once, navigate to record
     openRow(data) {
@@ -39,6 +40,34 @@ let ReportContent = React.createClass({
         this.props.history.pushState(null, link);
     },
 
+    handleRecordChange(recId, changes) {
+        //call action to save the record changes
+
+        // validate happen here or in action
+        console.log(`record ${recId} changed` + JSON.stringify(changes) );
+
+        let payload = [];
+        // columns id and new values array
+        //[{"id":6, "value":"Claire"}]
+        Object.keys(changes).forEach(function (key) {
+            if (changes[key].oldVal != changes[key].newVal){
+                let colChange = {};
+                colChange.id = +key;
+                colChange.value = changes[key].newVal;
+                payload.push(colChange);
+            }
+        });
+        //for (changes)
+        this.props.flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId, payload);
+
+        // to be moved on success response action in store..
+        //
+        // EMPOWER
+        setTimeout(()=> {
+            NotificationManager.success('Record saved', 'Success', 1500);
+        }, 1000);
+
+    },
     /**
      * when we scroll the grid wrapper, hide the add record
      * icon for a bit
@@ -395,7 +424,6 @@ let ReportContent = React.createClass({
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
         let isTouch = this.context.touch;
-
         let recordCount = 0;
         if (this.props.reportData) {
             let reportData = this.props.reportData.data;
@@ -413,7 +441,10 @@ let ReportContent = React.createClass({
                                     records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                     columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                     uniqueIdentifier="Record ID#"
+                                    keyField={this.props.fields && this.props.fields.keyField ? this.props.fields.keyField.name : "Record ID#" }
                                     appId={this.props.reportData.appId}
+                                    recordChanges={this.recordChanges}
+                                    onRecordChange={this.handleRecordChange}
                                     tblId={this.props.reportData.tblId}
                                     rptId={this.props.reportData.rptId}
                                     reportHeader={this.props.reportHeader}
@@ -431,6 +462,7 @@ let ReportContent = React.createClass({
                                         search: this.props.reportData.searchStringForFiltering}} /> :
                             <CardViewListHolder reportData={this.props.reportData}
                                 uniqueIdentifier="Record ID#"
+                                keyField={this.props.fields ? this.props.fields.keyField.name : "Record ID#" }
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}
                                 onScroll={this.onScrollRecords}

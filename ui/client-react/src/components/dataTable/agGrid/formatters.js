@@ -165,7 +165,10 @@ const CellFormatter = React.createClass({
             newValue = time.utc().format();
         }
         }
-
+        let change = {oldVal : this.props.params.data[this.props.params.column.colId],
+                    newVal: newValue, fid: +this.props.params.colDef.id};
+        this.props.params.context.recordChanges[this.props.params.colDef.id] = change
+        // this.props.params.context.recordChanges[this.props.params.colDef.headerName] = change;
         this.setState({value: newValue});
     },
 
@@ -252,7 +255,9 @@ const SelectionColumnCheckBoxFormatter = React.createClass({
         return (<div>
             <RowEditActions flux={this.props.params.context.flux}
                             api={this.props.params.api}
-                            data={this.props.params.data} />
+                            data={this.props.params.data}
+                            params={this.props.params}
+            />
             <IconActions dropdownTooltip={false} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
         </div>);
     }

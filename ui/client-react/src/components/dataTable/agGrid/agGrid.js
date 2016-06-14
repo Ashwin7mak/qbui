@@ -266,8 +266,13 @@ let AGGrid = React.createClass({
         return groupCellText;
     },
     componentDidMount() {
-        this.gridOptions.context.flux = this.getFlux();
+        let flux =  this.getFlux();
+        this.gridOptions.context.flux = flux;
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
+        this.gridOptions.context.recordChanges=this.props.recordChanges;
+        this.gridOptions.context.onRecordChange=this.props.onRecordChange;
+        this.gridOptions.context.keyField = this.props.keyField;
+
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
 
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
@@ -654,6 +659,8 @@ let AGGrid = React.createClass({
                                     // binding to array properties
                                     columnDefs={columnDefs}
                                     rowData={this.getRecordsToRender()}
+                                    recordChanges={this.props.recordChanges}
+                                    onRecordChange={this.props.onRecordChange}
 
                                     //default behavior properties
                                     rowSelection="multiple"

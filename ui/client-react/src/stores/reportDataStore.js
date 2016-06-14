@@ -235,6 +235,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.facetExpression = {};
         this.selections  = new FacetSelections();
         this.selectedRows = [];
+        this.lastSaveOk = null;
+        this.lastSaveRecordId = null;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -249,7 +251,11 @@ let ReportDataStore = Fluxxor.createStore({
             actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.ADD_REPORT_RECORD, this.onAddReportRecord, // for empower demo
-            actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord // for empower demo
+            actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord, // for empower demo
+            actions.SAVE_REPORT_RECORD, this.onSaveRecord,
+            actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
+            actions.SAVE_REPORT_RECORD_FAILED, this.onSaveRecordFailed,
+
         );
     },
 
@@ -369,6 +375,21 @@ let ReportDataStore = Fluxxor.createStore({
 
         model.filteredRecords.splice(index, 1);
         this.emit('change');
+    },
+
+    onSaveRecord(payload) {
+        this.lastSaveOk = null;
+        this.lastSaveRecordId = payload.recordId
+    },
+    onSaveRecordSuccess() {
+        this.lastSaveOk = true;
+        this.saveRecordError = null;
+        this.emit("change");
+    },
+    onSaveRecordFailed(payload) {
+        this.lastSaveOk = false;
+        this.saveRecordError = payload.error;
+        this.emit("change");
     },
 
     getState() {

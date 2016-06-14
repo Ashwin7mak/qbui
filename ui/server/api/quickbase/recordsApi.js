@@ -298,7 +298,26 @@
 
                 //TODO: why do we immediately resolve if the format is raw?
                 return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
-            }
+            },
+
+
+
+            /**
+             * Save a single record data to a table.
+             *
+             * @param req
+             * @returns Promise
+             */
+            saveSingleRecord: function(req) {
+                var opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                var responseObject;
+                // //convert data to raw form for java if not already in raw form
+                // var record = jsonBigNum.parse(req[0].body);
+                // send put to server to update the record and return the result promise
+                return requestHelper.executeRequest(req, opts);
+            },
+
         };
         return recordsApi;
     };

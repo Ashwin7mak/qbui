@@ -177,6 +177,39 @@ let reportDataActions = {
     deleteReportRecord(id) {
         this.dispatch(actions.DELETE_REPORT_RECORD, id);
     },
+    /**
+     * save a record
+     */
+    saveReportRecord(appId, tblId, recId, changes) {
+        // promise is returned in support of unit testing only
+        return new Promise(function(resolve, reject)  {
+            if (appId && tblId && changes) {
+                this.dispatch(actions.SAVE_REPORT_RECORD, {appId, tblId, recId, changes});
+                let recordService = new RecordService();
+
+                //  save the changes to the record
+                recordService.saveRecord(appId, tblId, recId, changes).then(
+                    response => {
+                        logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
+                        this.dispatch(actions.SAVE_REPORT_RECORD_SUCCESS, {appId, tblId, recId, changes});
+
+                    },
+                    error => {
+                        logger.error('RecordService saveRecord call error:', JSON.stringify(error));
+                        this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {error: error});
+                        reject();
+                    }
+                )
+            } else {
+                var errMessage = 'Missing one or more required input parameters to reportDataActions.saveReportRecord. AppId:' +
+                    appId + '; TblId:' + tblId + '; recId:' + recId + '; changes:' + changes ;
+                logger.error(errMessage);
+                this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {error: errMessage});
+                reject();
+            }
+        }.bind(this));
+    },
+
 
     /* Action called to get a new set of records given a report.
      * Override params can override report's sortlist/query etc

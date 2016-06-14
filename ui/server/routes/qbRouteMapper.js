@@ -53,6 +53,7 @@
          * routeToGetFunction maps each route to the proper function associated with that route for a PATCH request
          */
         var routeToPatchFunction = {};
+        routeToPatchFunction[routeConsts.RECORD] = saveSingleRecord;
 
         /*
          * routeToGetFunction maps each route to the proper function associated with that route for a DELETE request
@@ -339,6 +340,27 @@
             );
         });
     }
+
+    function saveSingleRecord(req, res) {
+        let activityName = 'Save Record';
+        let perfLog = perfLogger.getInstance();
+        perfLog.init(activityName, {req:filterNodeReq(req)});
+        recordsApi.saveSingleRecord(req).then(
+            function(response) {
+                res.send(response);
+                logApiSuccess(req, response, perfLog, activityName);
+            },
+            function(response) {
+                logApiFailure(req, response, perfLog, activityName);
+                //  client is waiting for a response..make sure one is always returned
+                if (response && response.statusCode) {
+                    res.status(response.statusCode).send(response);
+                } else {
+                    res.status(500).send(response);
+                }
+            }
+        );
+    };
 
     /**
      * This is the function for proxying to the swagger endpoint
