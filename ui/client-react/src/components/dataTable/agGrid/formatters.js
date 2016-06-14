@@ -9,10 +9,11 @@ import moment from 'moment';
 import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
-import {DefaultCellEditor, ComboBoxCellEditor, DateCellEditor, DateTimeCellEditor, TimeCellEditor, UserCellEditor, CheckBoxEditor} from './cellEditors';
+import {DefaultFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from '../../fields/fieldEditors';
 import {UserCellRenderer, NumberCellRenderer, DateCellRenderer, TextCellRenderer} from './cellRenderers';
 
 import * as dateTimeFormatter from '../../../../../common/src/formatter/dateTimeFormatter';
+import * as timeOfDayFormatter from '../../../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../../../common/src/formatter/numericFormatter';
 
 import IconActions from '../../actions/iconActions';
@@ -112,40 +113,40 @@ const CellFormatter = React.createClass({
     renderCellEditor() {
         switch (this.props.type) {
         case CheckBoxFormat:
-            return <CheckBoxEditor value={this.state.value.value} onChange={this.cellEdited} />;
+            return <CheckBoxFieldEditor value={this.state.value.value} onChange={this.cellEdited} />;
 
         case DateFormat: {
-            return <DateCellEditor value={this.state.value.value} onChange={this.cellEdited} />;
+            return <DateFieldEditor value={this.state.value.value} onChange={this.dateTimeCellEdited} />;
         }
 
         case DateTimeFormat: {
-            return <DateTimeCellEditor value={this.state.value.value} onChange={this.cellEdited} />;
+            return <DateTimeFieldEditor value={this.state.value.value} onChange={this.dateTimeCellEdited} />;
         }
 
         case TimeFormat: {
-            return <TimeCellEditor value={this.state.value.value} onChange={this.cellEdited} />;
+            return <TimeFieldEditor value={this.state.value.value} onChange={this.dateTimeCellEdited} />;
         }
 
         case NumberFormat:
         case RatingFormat:
         case CurrencyFormat:
         case PercentFormat: {
-            return <DefaultCellEditor value={this.state.value.value}
+            return <DefaultFieldEditor value={this.state.value.value}
                                       type="number"
                                       onChange={this.numericCellEdited} />;
         }
 
         case UserFormat: {
-            return <UserCellEditor value={this.state.value.value}
+            return <UserFieldEditor value={this.state.value.value}
                                    onChange={this.cellEdited} />;
         }
         default: {
 
             if (this.props.colDef.choices) {
-                return <ComboBoxCellEditor choices={this.props.colDef.choices} value={this.state.value.value}
+                return <ComboBoxFieldEditor choices={this.props.colDef.choices} value={this.state.value.value}
                                           onChange={this.cellEdited} />;
             } else {
-                return <DefaultCellEditor value={this.state.value.value}
+                return <DefaultFieldEditor value={this.state.value.value}
                                           onChange={this.cellEdited} />;
             }
         }
@@ -165,18 +166,30 @@ const CellFormatter = React.createClass({
     },
 
     dateTimeCellEdited(value) {
+        let newValue = value;
+        this.state.value.value = value;
+
         let newDisplay = value;
 
         switch (this.props.type) {
-        case TimeFormat:
+        case DateFormat: {
+            // normalized form is YYYY-MM-DD
+            newDisplay = dateTimeFormatter.format(this.state.value, this.props.colDef.datatypeAttributes);
+            break;
+        }
+        case TimeFormat: {
+            // normalized form is 1970-01-01THH:MM:SSZ
+            console.log('time',this.state.value);
+            newDisplay = timeOfDayFormatter.format(this.state.value, this.props.colDef.datatypeAttributes);
+            break;
+        }
         case DateTimeFormat: {
-            let time = moment(value, "YYYY-MM-DDThh:mm:ss A");
-            time.seconds(0);
-            newValue = time.utc().format();
+            // normalized form is YYYY-MM-DDTHH:MM:SSZ
+            newDisplay = dateTimeFormatter.format(this.state.value, this.props.colDef.datatypeAttributes);
             break;
         }
         }
-        this.state.value.value = value;
+
         this.state.value.display = newDisplay;
         this.setState(this.state);
     },
