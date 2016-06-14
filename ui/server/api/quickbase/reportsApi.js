@@ -21,15 +21,15 @@
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
 
-        //  url components for facets
         let FACETS = 'facets';
-        let REPORTS = 'reports';
-        let NODE_REPORTCOMPONENT_ROUTE = 'reportcomponents';
-        let CORE_REPORTFACETS_ROUTE = FACETS + '/results';
 
-        //  url components for table report home page
-        let NODE_HOMEPAGE_ROUTE = 'homepage';
+        //  url components for facets, report components and table report home page
+        let CORE_REPORTS_ROUTE = 'reports';
+        let CORE_REPORTFACETS_ROUTE = FACETS + '/results';
         let CORE_HOMEPAGE_ID_ROUTE = 'defaulthomepage';
+
+        let NODE_REPORTCOMPONENT_ROUTE = 'reportcomponents';
+        let NODE_HOMEPAGE_ROUTE = 'homepage';
 
         /**
          * Supporting method to transform a segment of a url route component
@@ -203,7 +203,7 @@
              */
             homePageReportPromises(req, homepageReportId) {
 
-                let REPORT_ROUTE = REPORTS + '/' + homepageReportId;
+                let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + homepageReportId;
 
                 //  promise to return report meta data
                 let reportMetaPromise = new Promise((resolve1, reject1) => {
