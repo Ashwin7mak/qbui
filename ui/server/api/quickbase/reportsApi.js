@@ -193,10 +193,19 @@
                 });
             },
 
+            /**
+             * Helper method that returns 2 promises that can be run asynchronously to fetch reportMetaData
+             * and report content.  This method is used in support of return a table homepage report.
+             *
+             * @param req
+             * @param homepageReportId
+             * @returns {*[]}
+             */
             homePageReportPromises(req, homepageReportId) {
 
                 let REPORT_ROUTE = REPORTS + '/' + homepageReportId;
 
+                //  promise to return report meta data
                 let reportMetaPromise = new Promise((resolve1, reject1) => {
                     let opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
@@ -211,6 +220,7 @@
                     );
                 });
 
+                //  promise to return report data content
                 req.url = transformUrlRoute(req.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE + '/' + NODE_REPORTCOMPONENT_ROUTE);
                 let reportDataPromise = this.fetchReportComponents(req);
 
@@ -218,7 +228,7 @@
             },
 
             /**
-             * Return the id of the table homepage report
+             * Return the table homepage report
              *
              * @param req
              * @returns {bluebird|exports|module.exports}
