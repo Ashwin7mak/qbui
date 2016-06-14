@@ -26,10 +26,8 @@ let tableActions = {
                 let tableService = new TableService();
                 tableService.getHomePage(appId, tblId).then(
                     (response) => {
-                        let rptId = response.data.reportMetadata && response.data.reportMetadata.data && response.data.reportMetadata.data.id ?
-                                        response.data.reportMetadata.data.id : "";
-                        this.dispatch(actions.LOAD_REPORT, {appId, tblId, "rptId": rptId});
-                        var model = reportModel.set(response.data.reportMetadata, response.data.reportData);
+                        var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
+                        this.dispatch(actions.LOAD_REPORT, {appId, tblId, "rptId": model.rptId});
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
                         resolve();
                     },

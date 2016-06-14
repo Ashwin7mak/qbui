@@ -151,7 +151,8 @@ describe('Report Data Actions Filter Report functions -- success', () => {
             fields: [],
             records: [],
             query: 'someQuery'
-        }
+        },
+        rptId: null
     };
     let loadReportInputs = {
         appId: appId,

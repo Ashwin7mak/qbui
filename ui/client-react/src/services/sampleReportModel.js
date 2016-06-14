@@ -3,7 +3,7 @@
  */
 
 export const sampleReportModel = {
-    reportMetadata: {
+    reportMetaData: {
         "data" : {
             "name": "Ribef for table-We- appBa",
             "description": null,

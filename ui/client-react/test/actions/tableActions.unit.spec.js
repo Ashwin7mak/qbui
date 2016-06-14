@@ -9,7 +9,7 @@ describe('Table Actions functions', () => {
     let appId = 'appId';
     let tblId = 'tblId';
     let responseData = {
-        reportMetadata: {data: {id: 3}},
+        reportMetaData: {data: {id: 3}},
         reportData: {}
     };
 
@@ -45,7 +45,8 @@ describe('Table Actions functions', () => {
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId: '3'}]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, {
                         metaData: {id: 3},
-                        recordData: {}
+                        recordData: {},
+                        rptId: '3'
                     }]);
                     done();
                 },
