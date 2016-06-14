@@ -1,13 +1,15 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
+import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
-import TableHomePage  from '../../src/components/table/tableHomePageRoute';
+import TableHomePageRoute  from '../../src/components/table/tableHomePageRoute';
 import FacetSelections  from '../../src/components/facet/facetSelections';
 
-describe('TableHomePage functions', () => {
+describe('TableHomePageRoute functions', () => {
     'use strict';
 
     let component;
+
     let reportDataSearchStore = Fluxxor.createStore({
         getState() {
             return {searchStringInput :''};
@@ -18,37 +20,26 @@ describe('TableHomePage functions', () => {
         ReportDataSearchStore: new reportDataSearchStore()
     };
 
+    let routeParams = {appId:1, tblId:2};
+    let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+
     let flux = new Fluxxor.Flux(stores);
 
     flux.actions = {
-        selectTableId() {
-            return;
-        },
-        loadReport() {
-            return;
-        },
-        loadFields() {
-            return;
-        },
-        showTopNav() {
-            return;
-        },
-        setTopTitle() {
-            return;
-        },
-        hideTopNav() {
-            return;
-        }
+        selectTableId() {return;},
+        loadTableHomePage() {return;},
+        loadFields() {return;},
+        hideTopNav() {return;}
     };
 
     beforeEach(() => {
-        spyOn(flux.actions, 'loadReport');
+        spyOn(flux.actions, 'loadTableHomePage');
         spyOn(flux.actions, 'loadFields');
         spyOn(flux.actions, 'selectTableId');
     });
 
     afterEach(() => {
-        flux.actions.loadReport.calls.reset();
+        flux.actions.loadTableHomePage.calls.reset();
         flux.actions.loadFields.calls.reset();
         flux.actions.selectTableId.calls.reset();
     });
@@ -87,7 +78,7 @@ describe('TableHomePage functions', () => {
                 }
             }
         };
-        component = TestUtils.renderIntoDocument(<TableHomePage params={params} {...oldProps} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<TableHomePageRoute params={params} {...oldProps} flux={flux}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -126,7 +117,7 @@ describe('TableHomePage functions', () => {
                 return {params, reportData};
             },
             render() {
-                return <TableHomePage ref="thp" params={this.state.params} reportData={this.state.reportData} flux={flux} />;
+                return <TableHomePageRoute ref="thp" params={this.state.params} reportData={this.state.reportData} flux={flux} />;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -139,6 +130,26 @@ describe('TableHomePage functions', () => {
         // change params to match current props
         parent.setState({params: {appId:1, tblId:1}});
         expect(TestUtils.isCompositeComponent(parent.refs.thp)).toBeTruthy();
+    });
+
+    it('test flux action loadTableHomePage is called with app data', () => {
+        component = TestUtils.renderIntoDocument(<TableHomePageRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute>);
+        expect(flux.actions.loadTableHomePage).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId);
+    });
+
+    it('test flux action loadTableHomePage is not called on 2nd called with same app data', () => {
+        var div = document.createElement('div');
+        ReactDOM.render(<TableHomePageRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute>, div);
+        expect(flux.actions.loadTableHomePage).toHaveBeenCalled();
+        //  on subsequent call with same parameter data, the loadReport function is not called
+        ReactDOM.render(<TableHomePageRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute>, div);
+        expect(flux.actions.loadTableHomePage).not.toHaveBeenCalledWith();
+    });
+
+    it('test flux action loadTableHomePage is not called with missing app data', () => {
+        routeParams.appId = null;
+        component = TestUtils.renderIntoDocument(<TableHomePageRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute>);
+        expect(flux.actions.loadTableHomePage).not.toHaveBeenCalled();
     });
 
 });

@@ -6,7 +6,7 @@ import * as query from '../constants/query';
 import Promise from 'bluebird';
 import {sampleFormJSON} from '../components/QBForm/fakeData.js';
 
-class RecordService extends BaseService {
+class FormService extends BaseService {
 
     constructor() {
         super();
@@ -45,4 +45,4 @@ class RecordService extends BaseService {
     }
 }
 
-export default RecordService;
+export default FormService;

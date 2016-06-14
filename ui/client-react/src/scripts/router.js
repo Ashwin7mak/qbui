@@ -36,6 +36,8 @@ import FastClick from "fastclick";
 let logger = new Logger();
 PerfLogUtils.setLogger(logger);
 
+import tableActions from '../actions/tableActions';
+
 let stores = {
     ReportsStore: new ReportsStore(),
     ReportDataStore: new ReportDataStore(),
@@ -55,6 +57,7 @@ flux.addActions(navActions);
 flux.addActions(facetMenuActions);
 flux.addActions(fieldsActions);
 flux.addActions(formActions);
+flux.addActions(tableActions);
 flux.addActions(perfActions);
 
 //to ensure you don't get cascading dispatch errors with Fluxxor
