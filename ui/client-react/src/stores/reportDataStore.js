@@ -158,10 +158,10 @@ let reportModel = {
             this.model.groupFields = null;
 
             //  TODO: with paging, this count is flawed...
-            this.model.recordsCount = recordData.records.length;
+            this.model.recordsCount = recordData.records ? recordData.records.length : null;
         }
         this.model.filteredRecords = this.model.records;
-        this.model.filteredRecordsCount = recordData.records.length;
+        this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
     },
     /**
      * Set just the filteredRecords. No change to fields. This has to be client side

@@ -62,35 +62,12 @@ describe('ReportToolsAndContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(1);
     });
 
-    it('test flux action loadReport is called with app data', () => {
+    it('test report is not rendered with missing app data', () => {
         var div = document.createElement('div');
-        ReactDOM.render(<ReportToolsAndContent {...i18n} flux={flux} params={reportParams} {...reportDataParams} />, div);
-        expect(flux.actions.loadReport).toHaveBeenCalledWith(reportParams.appId, reportParams.tblId, reportParams.rptId, true);
-    });
+        reportParams.appId = undefined;
+        component = ReactDOM.render(<ReportToolsAndContent flux={flux} params={reportParams} {...reportDataParams} />, div);
 
-    it('test flux action loadReport is not called on 2nd called with same app data', () => {
-        var div = document.createElement('div');
-        ReactDOM.render(<ReportToolsAndContent {...i18n} flux={flux} params={reportParams} {...reportDataParams} />, div);
-        expect(flux.actions.loadReport).toHaveBeenCalled();
-
-        //  on subsequent call with same parameter data, the loadReport function is not called
-        ReactDOM.render(<ReportToolsAndContent {...i18n} flux={flux} params={reportParams} {...reportDataParams}/>, div);
-        expect(flux.actions.loadReport).not.toHaveBeenCalledWith();
-    });
-
-    it('test flux action loadReport is not called with missing app data', () => {
-        var div = document.createElement('div');
-
-        reportParams.appId = null;
-        ReactDOM.render(<ReportToolsAndContent {...i18n} flux={flux} params={reportParams} {...reportDataParams}/>, div);
-        expect(flux.actions.loadReport).not.toHaveBeenCalled();
-    });
-
-    it('test flux action loadReport is not called with app data while reportData loading is true', () => {
-        var div = document.createElement('div');
-
-        reportDataParams.reportData.loading = true;
-        ReactDOM.render(<ReportToolsAndContent {...i18n} flux={flux} params={reportParams} {...reportDataParams} />, div);
-        expect(flux.actions.loadReport).not.toHaveBeenCalled();
+        //  test that the reportContentMock is rendered
+        expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(0);
     });
 });

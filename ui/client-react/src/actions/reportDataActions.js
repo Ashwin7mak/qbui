@@ -11,29 +11,7 @@ import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
 
 let logger = new Logger();
-
-//  Report model object used by the client to render a report
-let reportModel = {
-
-    set: function(reportMeta, reportData) {
-        var obj = {
-            metaData: {},
-            recordData: {}
-        };
-
-        //  make available to the client the report meta data
-        if (reportMeta && reportMeta.data) {
-            obj.metaData = reportMeta.data;
-        }
-
-        //  make available to the client the report grid data
-        if (reportData && reportData.data) {
-            obj.recordData = reportData.data;
-        }
-
-        return obj;
-    }
-};
+import reportModel from '../models/reportModel';
 
 //  Build the request query parameters needed to properly filter the report request based on the report
 //  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
