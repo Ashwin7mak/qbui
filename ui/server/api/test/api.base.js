@@ -33,6 +33,7 @@
         var APPS_ENDPOINT = '/apps/';
         var RELATIONSHIPS_ENDPOINT = '/relationships/';
         var TABLES_ENDPOINT = '/tables/';
+        var TABLE_DEFAULT_HOME_PAGE = '/defaulthomepage';
         var FIELDS_ENDPOINT = '/fields/';
         var REPORTS_ENDPOINT = '/reports/';
         var RECORDS_ENDPOINT = '/records/';
@@ -193,9 +194,6 @@
             },
             resolveAppRolesEndpoint        : function(appId, roleId) {
                 var endpoint = JAVA_BASE_ENDPOINT + APPS_ENDPOINT + appId + ROLES_ENDPOINT + roleId + USERS_ENDPOINT;
-                //if (roleId) {
-                //    endpoint = endpoint + roleId;
-                //}
                 return endpoint;
             },
             defaultHeaders              : DEFAULT_HEADERS,
@@ -347,7 +345,7 @@
                 };
                 return this.createSpecificUser(userToMake);
             },
-            //Create realm helper method generates an arbitrary realm, calls execute request and returns a promise
+            //Assign User to AppRole helper method , calls execute request and returns a promise
             assignUsersToAppRole       : function(appId, roleId, userIds) {
                 var deferred = promise.pending();
                 this.executeRequest(this.resolveAppRolesEndpoint(appId, roleId), consts.POST, userIds).then(function(appRoleResponse) {
@@ -357,6 +355,32 @@
                     deferred.reject(error);
                     //TODO: figure out how we want to handle
                     assert(false, 'failed to assign Users to App Role: ' + JSON.stringify(error) + ', usersToCreate: ' + JSON.stringify(userIds));
+                });
+                return deferred.promise;
+            },
+            //Update Default table home page , calls execute request and returns a promise
+            setDefaultTableHomePage       : function(appId, tableId, reportId) {
+                var deferred = promise.pending();
+                this.executeRequest(this.resolveTablesEndpoint(appId, tableId) + '/defaulthomepage', consts.POST, reportId, DEFAULT_HEADERS).then(function(defaultHPResponse) {
+                    log.debug('set default table home page response: ' + defaultHPResponse);
+                    deferred.resolve(defaultHPResponse);
+                }).catch(function(error) {
+                    deferred.reject(error);
+                    //TODO: figure out how we want to handle
+                    assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(reportId));
+                });
+                return deferred.promise;
+            },
+            //Update Default table home page , calls execute request and returns a promise
+            setCustDefaultTableHomePageForRole       : function(appId, tableId, roleReportMap) {
+                var deferred = promise.pending();
+                this.executeRequest(this.resolveTablesEndpoint(appId, tableId) + '/custhomepage', consts.POST, roleReportMap, DEFAULT_HEADERS).then(function(defaultHPResponse) {
+                    log.debug('set default table home page for role response: ' + defaultHPResponse);
+                    deferred.resolve(defaultHPResponse);
+                }).catch(function(error) {
+                    deferred.reject(error);
+                    //TODO: figure out how we want to handle
+                    assert(false, 'failed to set default table home page with report for role: ' + JSON.stringify(error) + ', report role map is: ' + JSON.stringify(roleReportMap));
                 });
                 return deferred.promise;
             },

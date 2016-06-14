@@ -33,14 +33,14 @@
             tables: [
                 {
                     name: 'table1', fields: [
-                        {name: 'Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                        {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
-                        {name: 'Date Time Field', datatypeAttributes: {type: 'DATE_TIME'}, type: 'SCALAR'},
-                        {name: 'Email Field', datatypeAttributes: {type: 'EMAIL_ADDRESS'}, type: 'SCALAR'},
-                        {name: 'Checkbox Field', datatypeAttributes: {type: 'CHECKBOX'}, type: 'SCALAR'},
-                        {name: 'Null Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                        {name: 'Empty Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
-                        {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'}
+                    {name: 'Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                    {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
+                    {name: 'Date Time Field', datatypeAttributes: {type: 'DATE_TIME'}, type: 'SCALAR'},
+                    {name: 'Email Field', datatypeAttributes: {type: 'EMAIL_ADDRESS'}, type: 'SCALAR'},
+                    {name: 'Checkbox Field', datatypeAttributes: {type: 'CHECKBOX'}, type: 'SCALAR'},
+                    {name: 'Null Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                    {name: 'Empty Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
+                    {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'}
                     ]
                 }
             ]
@@ -101,11 +101,10 @@
          * Setup method. Generates JSON for an app, a table with different fields, and a single record with different field types.
          */
         before(function(done) {
-            timeout(consts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
+            this.timeout(consts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             //create app, table with random fields and records
             recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
-
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                 nonBuiltInFields = recordBase.getNonBuiltInFields(app.tables[0]);
                 // Generate some record JSON objects to add to the app
@@ -135,12 +134,14 @@
                                     recordBase.apiBase.createSpecificUser(user5).then(function(response4) {
                                         userIdsList.push(JSON.parse(response4.body).id);
                                         console.log("the user id list is: " + userIdsList);
-                                        //add participant role to user1 and user2
-                                        recordBase.apiBase.assignUsersToAppRole(app.id, 11, [userIdsList[0], userIdsList[1]]).then(function() {
-                                            //add viewer role to user3 and user4
-                                            recordBase.apiBase.assignUsersToAppRole(app.id, 10, [userIdsList[2], userIdsList[3]]).then(function() {
-                                               //add NONE role to user5
-                                                recordBase.apiBase.assignUsersToAppRole(app.id, 9, [userIdsList[4]]);
+                                        //add none role to user1
+                                        recordBase.apiBase.assignUsersToAppRole(app.id, 9, [userIdsList[0]]).then(function() {
+                                            //add participant role to user2 and user3
+                                            recordBase.apiBase.assignUsersToAppRole(app.id, 10, [userIdsList[1], userIdsList[2]]).then(function() {
+                                                //add viewer role to user4
+                                                recordBase.apiBase.assignUsersToAppRole(app.id, 11, [userIdsList[3]]);
+                                                //add admin role to user5
+                                                recordBase.apiBase.assignUsersToAppRole(app.id, 12, [userIdsList[4]]);
                                                 done();
                                             });
                                         });
@@ -163,8 +164,10 @@
         function reportUserPermissions() {
             return [
                 {
-                    message: 'Report with just Participant permissions',
-                    accessId: [10]
+                    message: 'Set the default table home page for Participant Role',
+                    accessId: 10,
+                    //roleReportIdMap: {"10":"1"}
+                    reportId: '1'
                 }
                 //{
                 //    message: 'Report with just Viewer permissions',
@@ -191,7 +194,7 @@
 
         reportUserPermissions().forEach(function(testCase) {
             it.only('Test case: ' + testCase.message, function(done) {
-                timeout(consts.INTEGRATION_TIMEOUT * reportUserPermissions().length);
+                this.timeout(consts.INTEGRATION_TIMEOUT * reportUserPermissions().length);
                 //Create a report with different access permissions
                 var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 var reportToCreate = {
@@ -199,17 +202,21 @@
                     type: 'TABLE',
                     tableId: app.tables[0].id,
                     query: null,
-                    rolesWithGrantedAccess: testCase.accessId
+                    //rolesWithGrantedAccess: [testCase.accessId]
                 };
                 //Create a report
-                recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
-                    var r = JSON.parse(report.body);
-                    //Execute a report
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
-                        var results = JSON.parse(reportResults.body);
-                        //Verify returned record ids
-                        //verifyRecords(results);
-                        done();
+                recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(reportResults) {
+                    var report = JSON.parse(reportResults.body);
+                    //set custom table HomePage with above created report and role map
+                    recordBase.apiBase.setDefaultTableHomePage(app.id, app.tables[0].id, testCase.reportId).then(function() {
+                        //Execute a table home Page
+                        recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(homePageResults) {
+                            var results = JSON.parse(homePageResults.body);
+                            console.log("the homepgae results are:" + JSON.stringify(results));
+                            //Verify returned results has right report Id and role info
+                            //
+                            done();
+                        });
                     });
                 }).catch(function(error) {
                     log.error(JSON.stringify(error));
