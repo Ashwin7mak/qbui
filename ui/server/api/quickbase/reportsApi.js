@@ -261,7 +261,7 @@
                                     (reportError) => {
                                         //  the core error has already been logged...just want to ensure visibility that the
                                         //  error is when fetching the table homepage report
-                                        log.error('Error fetching table homepage report in fetchTableHomePageReport.');
+                                        log.error({req:req}, 'Error fetching table homepage report in fetchTableHomePageReport.');
                                         reject(reportError);
                                     }
                                 ).catch((ex) => {
@@ -270,15 +270,12 @@
                                 });
                             } else {
                                 //  no report id returned (because one is not defined); return empty report object
+                                log.warn({req:req}, 'No report homepage defined for table.');
                                 resolve(reportObj);
                             }
                         },
                         (error) => {
-                            let errorMsg = 'Error undefined';
-                            if (error) {
-                                errorMsg = error.body ? error.body.replace(/"/g, "'") : error.statusMessage;
-                            }
-                            log.error("Error getting table homepage reportId in fetchTableHomePageReport: " + errorMsg);
+                            log.error({req: req}, "Error getting table homepage reportId in fetchTableHomePageReport");
                             reject(error);
                         }
                     ).catch((ex) => {

@@ -32,6 +32,7 @@ describe('Validate ReportsApi unit tests', function() {
             'url': '/testurl.com',
             'method': 'get'
         };
+
         beforeEach(function() {
             reportsApi.setRequestHelper(requestHelper);
             executeReqSpy = sinon.spy(requestHelper, "executeRequest");
@@ -39,6 +40,7 @@ describe('Validate ReportsApi unit tests', function() {
         afterEach(function() {
             executeReqSpy.restore();
         });
+
         it('Test success ', function(done) {
             var requestStub = sinon.stub();
             requestHelper.setRequestObject(requestStub);
@@ -46,11 +48,11 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchFacetResults(req);
             promise.then(
                 function(response) {
+                    done();
                     assert.deepEqual(response, {statusCode: 200});
                     assert(executeReqSpy.called);
                     var opts = executeReqSpy.args[0][1];
                     assert.equal(opts.headers['Content-Type'], 'application/json');
-                    done();
                 },
                 function(error) {
                     done(new Error("Unexpected promise error returned with test success"));
@@ -67,13 +69,13 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchFacetResults(req);
             promise.then(
                 function(response) {
+                    done();
                     assert.deepEqual(response, {statusCode: 200});
                     assert(executeReqSpy.called);
                     var opts = executeReqSpy.args[0][1];
                     assert.equal(opts.headers['Content-Type'], 'application/json');
                     var indexOfFacetsURL = opts.url.indexOf('reports/2/facets/results');
                     assert.notEqual(indexOfFacetsURL, -1);
-                    done();
                 },
                 function(error) {
                     done(new Error("Unexpected promise error returned with test facets url"));
@@ -154,8 +156,8 @@ describe('Validate ReportsApi unit tests', function() {
                     done(new Error('Success promise unexpectedly return testing fetchReportResults failure'));
                 },
                 function(error) {
-                    assert.deepEqual(error, new Error("error"));
                     done();
+                    assert.deepEqual(error, new Error("error"));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve fetchReportResults failure: ' + JSON.stringify(errorMsg)));
@@ -186,45 +188,89 @@ describe('Validate ReportsApi unit tests', function() {
         };
 
         var getExecuteRequestStub;
+        var executeReqLogSpy;
         var fetchReportComponentsStub;
         beforeEach(function() {
+            reportObj.reportMetaData.data = '';
+            reportObj.reportData.data = '';
+
             getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
+            executeReqLogSpy = sinon.spy(requestHelper, "logUnexpectedError");
             fetchReportComponentsStub = sinon.stub(reportsApi, "fetchReportComponents");
         });
         afterEach(function() {
             getExecuteRequestStub.restore();
+            executeReqLogSpy.restore();
             fetchReportComponentsStub.restore();
         });
         it('Test success ', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body:'1'}));
+            getExecuteRequestStub.returns(Promise.resolve({body: '1'}));
             fetchReportComponentsStub.returns(Promise.resolve('reportData'));
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
+                    done();
                     reportObj.reportMetaData.data = '1';
                     reportObj.reportData.data = 'reportData';
                     assert.deepEqual(response, reportObj);
-                    done();
                 },
                 function(error) {
-                    done(new Error("promise error response return unexpectely"));
+                    done(new Error("promise error response returned when testing success"));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve fetchTableHomePageReport success: ' + JSON.stringify(errorMsg)));
             });
         });
+
+        it('Test report table homepage not defined ', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body: ''}));
+            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done();
+                    assert.deepEqual(response, reportObj);
+                },
+                function(error) {
+                    done(new Error("promise error response returned when testing undefined table homepage"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchTableHomePageReport success when testing undefined table homepage: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test unexpected failure when fetching table homepage report id', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body: new Error()}));
+            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done(new Error("promise success response returned when testing unexpected homepage report failure"));
+                },
+                function(error) {
+                    done();
+                    assert.ok(error);
+                    assert(executeReqLogSpy.called);
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchTableHomePageReport success when testing undefined table homepage: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
         it('Test failure on fetchReportComponent', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body:'1'}));
+            getExecuteRequestStub.returns(Promise.resolve({body: '1'}));
             fetchReportComponentsStub.returns(Promise.reject(new Error("error")));
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
-                    done(new Error("promise success response return unexpectely"));
+                    done(new Error("promise success response returned when testing failure"));
                 },
                 function(error) {
-                    assert.deepEqual(error, new Error("error"));
                     done();
+                    assert.deepEqual(error, new Error("error"));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve fetchReportComponent failure: ' + JSON.stringify(errorMsg)));
@@ -240,14 +286,14 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
-                    done(new Error("promise success response return unexpectely"));
+                    done(new Error("promise success response return when testing failure on reportId and error body"));
                 },
                 function(error) {
-                    assert.deepEqual(error, errorObj);
                     done();
+                    assert.deepEqual(error, errorObj);
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve fetch table homepage failure: ' + JSON.stringify(errorMsg)));
+                done(new Error('unable to resolve fetch table homepage failure when testing failure on reportId and error body: ' + JSON.stringify(errorMsg)));
             });
         });
 
@@ -260,24 +306,24 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
-                    done(new Error("promise success response return unexpectely"));
+                    done(new Error("promise success response return when testing with error status message"));
                 },
                 function(error) {
-                    assert.deepEqual(error, errorObj);
                     done();
+                    assert.deepEqual(error, errorObj);
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve fetch table homepage failure: ' + JSON.stringify(errorMsg)));
+                done(new Error('unable to resolve fetch table homepage failure when testing with error status message: ' + JSON.stringify(errorMsg)));
             });
         });
 
-        it('Test unexpected error on fetch table homepage report id', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body:'1'}));
+        it('Test error on fetch table homepage report id', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body: '1'}));
             fetchReportComponentsStub.returns(Promise.reject('report component error'));
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
-                    done(new Error("promise success response return unexpectely"));
+                    done(new Error("promise success response returned when testing unexpected error on table home page"));
                 },
                 function(error) {
                     //  an error was thrown
@@ -288,7 +334,6 @@ describe('Validate ReportsApi unit tests', function() {
                 done(new Error('unable to resolve fetch table homepage unexpected failure: ' + JSON.stringify(errorMsg)));
             });
         });
-
     });
 
     /**
