@@ -28,6 +28,7 @@
     "history": "1.13.1",
     "html-minifier": "^0.7.0",
     "json-bignum": "0.0.3",
+    "json-loader": "^0.5.4",
     "json-server": "^0.8.2",
     "lodash": "~4.11.1",
     "method-override": "~1.0.2",
