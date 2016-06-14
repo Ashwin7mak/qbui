@@ -3,7 +3,7 @@
  */
 
 var assert = require('assert');
-var constants = require('../../../constants');
+var constants = require('../../../../../common/src/constants');
 var groupFormatter = require('./../groupFormatter');
 var groupUtils = require('../../../../components/utility/groupUtils');
 var dateUtils = require('../../../../components/utility/dateUtils');

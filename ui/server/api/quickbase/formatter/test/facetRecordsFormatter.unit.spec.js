@@ -1,7 +1,7 @@
 'use strict';
 
-var facetRecordsFormatter = require('../../../../../common/src/formatter/facetRecordsFormatter')();
-var recordFormatter = require('../../../../../common/src/formatter/recordFormatter')();
+var facetRecordsFormatter = require('..//facetRecordsFormatter')();
+var recordFormatter = require('../recordFormatter')();
 var assert = require('assert');
 var errorCodes = require('../../../errorCodes');
 var constants = require('../../../../../common/src/constants');

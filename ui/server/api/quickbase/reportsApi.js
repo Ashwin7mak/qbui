@@ -14,7 +14,7 @@
 
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
-        let facetRecordsFormatter = require('../../../common/src/formatter/facetRecordsFormatter')();
+        let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
         let recordsApi = require('./recordsApi')(config);
 
         //Module constants:

@@ -1,7 +1,7 @@
 'use strict';
 
 var queryFormatter = require('./../queryFormatter');
-var consts = require('../../../constants');
+var consts = require('../../../../../common/src/constants');
 var assert = require('assert');
 
 /**
