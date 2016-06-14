@@ -32,9 +32,9 @@ $font-path: '../../../assets/fonts/';
 .comp-library-nav {
     flex: 0 1 auto;
     width: 100%;
-    background: #28313a;
+    background: $color30;
     h3 {
-        color: #E3EAF3;
+        color: $color7;
         font-size: 20px;
         font-weight: normal;
         text-align: center;
@@ -46,28 +46,28 @@ $font-path: '../../../assets/fonts/';
     }
     li {
         list-style: none;
-        border-bottom: 2px solid #3e454e;
+        border-bottom: 1px solid $color32;
     }
     li:first-child {
-        border-top: 2px solid #3e454e;
+        border-top: 1px solid $color32;
     }
     li a {
         display: block;
-        height: 57px;
         line-height: 1.8;
-        color: #68747f;
+        color: #fff;
         width: 100%;
         font-size: 14px;
         text-decoration: none;
-        font-weight: bold;
         padding: 20px;
-        background: #2F3942;
-        &:hover, &.active {
-            color: #E3EAF3;
-            background: #28313A;
+        // margin-bottom: 3px;
+        &:hover {
+            background: $color26;
+        }
+        &.active {
+            background: $color27;
         }
         @media (min-width: 768px) {
-            padding: 20px 10%;
+            padding: 10px 10%;
         }
     }
 
@@ -79,7 +79,7 @@ $font-path: '../../../assets/fonts/';
         flex: 0 1 245px;
         width: 245px;
         height: 100%;
-        padding-top: 30px;
+        padding-top: 10px;
         overflow: scroll;
         overflow-x: hidden;
     }
@@ -114,7 +114,7 @@ $font-path: '../../../assets/fonts/';
         position: relative;
         border: 1px solid #ddd;
         border-top: none;
-        background: white;
+        background: #fff;
     }
 
     .highlight, .code-toggle.open {
@@ -122,7 +122,7 @@ $font-path: '../../../assets/fonts/';
     }
 
     .code-toggle.open {
-        color: white;
+        color: #fff;
     }
 
     .highlight {
@@ -146,7 +146,7 @@ $font-path: '../../../assets/fonts/';
 
     .highlight pre code {
       font-size: inherit;
-      color: white; /* Effectively the base text color */
+      color: #fff; /* Effectively the base text color */
     }
 
     .highlight pre code:first-child {
