@@ -8,7 +8,7 @@ import QBicon from '../../qbIcon/qbIcon';
 
 export default function QBIconDoc() {
     return (
-        <div className="componentContent">
+        <div>
             <div dangerouslySetInnerHTML={{__html: Metadata.QBicon.descHtml}} />
 
             <ReactPlayground codeText={Examples.QBIcon} />

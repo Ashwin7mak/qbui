@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 export default class CodeExample extends React.Component {
     render() {
         return (
-            <pre className="cm-s-solarized cm-s-light">
+            <pre className="CodeMirror cm-s-monokai">
                 <code>
                     {this.props.codeText}
                 </code>

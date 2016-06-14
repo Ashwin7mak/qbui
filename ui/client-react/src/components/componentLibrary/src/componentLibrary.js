@@ -5,8 +5,8 @@ import {Link} from 'react-router';
 var ComponentLibraryWrapper = React.createClass({
     render() {
         return (
-            <div className="componentLibrary">
-                <div className="componentLibraryNavigation">
+            <div className="comp-library">
+                <div className="comp-library-nav">
                     <div className="header">
                         <h3 className="title">QuickBase<br />Component Library
                         </h3>
@@ -18,7 +18,7 @@ var ComponentLibraryWrapper = React.createClass({
                         </ul>
                     </nav>
                 </div>
-                <div className="componentLibraryPage">
+                <div className="comp-library-content">
                     {this.props.children}
                 </div>
             </div>

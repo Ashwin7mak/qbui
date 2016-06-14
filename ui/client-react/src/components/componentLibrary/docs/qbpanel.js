@@ -8,7 +8,7 @@ import QBPanel from '../../QBPanel/qbpanel';
 
 export default function QBPanelDoc() {
     return (
-        <div className="componentContent">
+        <div>
             <div dangerouslySetInnerHTML={{__html: Metadata.QBPanel.descHtml}} />
 
             <ReactPlayground codeText={Examples.QBPanel}/>
