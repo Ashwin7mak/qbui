@@ -38,8 +38,6 @@ PerfLogUtils.setLogger(logger);
 
 import tableActions from '../actions/tableActions';
 
-import _ from 'lodash';
-
 let stores = {
     ReportsStore: new ReportsStore(),
     ReportDataStore: new ReportDataStore(),
