@@ -632,6 +632,7 @@ describe('Validate Group Utility functions', function() {
                 var results = [];
                 it('Test case: ' + test.name, function() {
                     results.push(groupUtils.getFirstDayOfWeek(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getDay(test.displayDate, test.momentFormat));
                     results.push(groupUtils.getMonth(test.displayDate, test.momentFormat));
                     results.push(groupUtils.getYear(test.displayDate, test.momentFormat));
                     results.push(groupUtils.getQuarter(test.displayDate, test.momentFormat));
