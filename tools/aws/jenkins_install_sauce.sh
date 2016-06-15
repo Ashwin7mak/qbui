@@ -14,7 +14,7 @@ fi
 
 if [ ! -f "$SAUCELABS_SC_INSTALL_DIR/$SAUCELABS_SC_TARBALL" ]; then
   echo fetching saucelabs_sc
-  wget -q "--directory-prefix=$SAUCELABS_SC_INSTALL_DIR" "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/thirdparty/saucelabs_sc/sc/4.3.11/sc-4.3.11-linux.tar.gz"
+  wget -q "--directory-prefix=$SAUCELABS_SC_INSTALL_DIR" "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/thirdparty/saucelabs_sc/sc/4.3.16/sc-4.3.16-linux.tar.gz"
   ls "$SAUCELABS_SC_INSTALL_DIR"
 else
   echo "SauceLabs_sc archive $SAUCELABS_SC_INSTALL_DIR/$SAUCELABS_SC_TARBALL already exists"

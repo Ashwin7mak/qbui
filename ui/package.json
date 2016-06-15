@@ -171,8 +171,7 @@
     "testClient": "karma start",
     "testServer": "grunt test:server",
     "testIntegration": "grunt test:integration",
-    "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update",
-    "startSauce" : "node startSauce.js"
+    "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
   },
   "private": true
 }

@@ -38,8 +38,7 @@ module.exports = function(grunt) {
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
 
-    //var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
-    var tunnelIdentifier = 'testTunnel';
+    var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'default_tunnel_' + currentDateTime;
     //We need to pass along --proxy-tunnel so that the tunnel will also use the proxy to communicate with the sauce apis
     //sauce-connect-launcher won't take an explicit no arg argument, so we are "leveraging" their mechanism for passing
     //arguments along to sauce-connect-launcher
@@ -545,7 +544,7 @@ module.exports = function(grunt) {
                     tunnelIdentifier: tunnelIdentifier,
                     proxyTunnel     : true,
                     verbose         : true,
-                    logfile         : 'sauceLog.txt'
+                    logfile         : 'sauceConnect.log'
                 }
             }
         },
@@ -847,7 +846,8 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'env:e2e',
                 'sauce_connect:aws',
-                'protractor:sauce_osx_chrome'
+                'protractor:sauce_osx_chrome',
+                'sauce-connect-close'
             ]);
         }
 

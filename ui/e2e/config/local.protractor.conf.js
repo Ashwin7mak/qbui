@@ -6,10 +6,6 @@
     var baseE2EPath = '../../e2e/';
 
     exports.config = {
-        sauceUser: 'QuickBaseNS',
-        sauceKey: 'f814e1b3-ac25-4369-af02-90d61c6b1c04',
-        // We have to specify the selenium address to point locally so that we use the tunnel properly
-        sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 120000,
@@ -17,7 +13,7 @@
         baseUrl: process.env.DOMAIN,
         // list of files / patterns to load in the browser
         specs: [
-            baseE2EPath + 'qbapp/tests/reports/reportTable.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [],
@@ -28,7 +24,6 @@
         // and
         // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
         capabilities: {
-            tunnelIdentifier: 'localTunnel',
             browserName: 'chrome'
             //shardTestFiles: true,
             //maxInstances: 3

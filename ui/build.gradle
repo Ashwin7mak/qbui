@@ -99,7 +99,7 @@ def executorId = System.getenv("EXECUTOR_NUMBER");
 def sauceURL = "http://quickbase-dev.com:9000";
 def sauceKey = System.getenv("SAUCE_KEY");
 def sauceJobName = "JENKINS_UI_E2E_" + System.getenv("BUILD_NUMBER");
-def tunnelIdentifier = "testTunnel";
+def tunnelIdentifier = "JENKINS_TUNNEL_E2E_" + System.getenv("BUILD_NUMBER");
 
 // TODO: Pull the code below out into a separate groovy class - QBSE-19142
 // If running in AWS, there is no manually created properties file, so the settings must be retrieved using secret-cli
