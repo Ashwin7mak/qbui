@@ -361,7 +361,7 @@
             //Update Default table home page , calls execute request and returns a promise
             setDefaultTableHomePage       : function(appId, tableId, reportId) {
                 var deferred = promise.pending();
-                this.executeRequest(this.resolveTablesEndpoint(appId, tableId) + '/defaulthomepage', consts.POST, reportId, DEFAULT_HEADERS).then(function(defaultHPResponse) {
+                this.executeRequest(this.resolveTablesEndpoint(appId, tableId) + '/defaulthomepage', consts.POST, reportId).then(function(defaultHPResponse) {
                     log.debug('set default table home page response: ' + defaultHPResponse);
                     deferred.resolve(defaultHPResponse);
                 }).catch(function(error) {
