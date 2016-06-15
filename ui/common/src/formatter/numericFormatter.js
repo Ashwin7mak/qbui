@@ -17,7 +17,7 @@
      * of precision. For more info, google it!
      */
     var bigDecimal = require('bigdecimal');
-    var consts = require('../../constants');
+    var consts = require('../constants');
     //Module constants:
     var COMMA = ',';
     var DASH = '-';
@@ -240,7 +240,8 @@
          * @param fieldInfo the meta data about the field
          * @returns A formatted display string
          */
-        format        : function(fieldValue, fieldInfo) {
+        format: function(fieldValue, fieldInfo) {
+
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }

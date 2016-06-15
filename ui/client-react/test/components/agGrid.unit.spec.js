@@ -4,18 +4,18 @@ import ReactDOM from 'react-dom';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
 
-import Formatters from '../../src/components/dataTable/agGrid/formatters';
-import {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter} from '../../src/components/dataTable/agGrid/formatters';
+import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
+import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
 
 
 import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
 import Locale from '../../src/locales/locales';
 
-var NumericFormatterMock = function() {
+var NumericCellRendererMock = function() {
     return "mock numeric";
 };
-var DateFormatterMock = function() {
+var DateCellRendererMock = function() {
     return "mock date";
 };
 
@@ -44,7 +44,7 @@ var I18nMessageMock = React.createClass({
     }
 });
 
-var CellFormatterMock =  React.createClass({
+var CellRendererMock =  React.createClass({
     render: function() {
         return (
             <div>I18Mock</div>
@@ -151,7 +151,7 @@ describe('AGGrid functions', () => {
     beforeEach(() => {
         AGGrid.__Rewire__('AgGridReact', AGGridMock);
         AGGrid.__Rewire__('I18nMessage', I18nMessageMock);
-        Formatters.__Rewire__('CellFormatter', CellFormatterMock);
+        CellRenderers.__Rewire__('CellRenderer', CellRendererMock);
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'rowClicked');
 
@@ -160,7 +160,7 @@ describe('AGGrid functions', () => {
     afterEach(() => {
         AGGrid.__ResetDependency__('AgGridReact');
         AGGrid.__ResetDependency__('I18nMessage');
-        Formatters.__ResetDependency__('CellFormatter');
+        CellRenderers.__ResetDependency__('CellRenderer');
         flux.actions.getFilteredRecords.calls.reset();
         flux.actions.rowClicked.calls.reset();
     });

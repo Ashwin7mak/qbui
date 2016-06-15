@@ -1,7 +1,7 @@
 var sinon = require('sinon');
 
 var error = require('../errors/index');
-var consts = require('../../api/constants');
+var consts = require('../../../common/src/constants');
 var assert = require('assert');
 var log = require('./../../logger').getLogger();
 
