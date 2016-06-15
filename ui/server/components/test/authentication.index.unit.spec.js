@@ -34,7 +34,8 @@ describe('Validate https response authentication functions', function() {
 
     it('validate http response 200 json request for signout', function() {
         mockReq.headers = {
-            accept: consts.APPLICATION_JSON
+            accept: consts.APPLICATION_JSON,
+            host: 'localhost'
         };
 
         authentication.signout(mockReq, mockRes);
@@ -49,7 +50,8 @@ describe('Validate https response authentication functions', function() {
 
     it('validate http response 200 xml request for signout', function() {
         mockReq.headers = {
-            accept: consts.APPLICATION_XML
+            accept: consts.APPLICATION_XML,
+            host: 'localhost'
         };
 
         authentication.signout(mockReq, mockRes);
