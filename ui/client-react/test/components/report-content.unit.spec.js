@@ -146,7 +146,9 @@ const fakeReportData_attributes = {
 
 const flux = {
     actions: {
-        scrollingReport(scrolling) { }
+        scrollingReport(scrolling) { },
+        mark: ()=>{},
+        measure: ()=>{}
     }
 };
 
@@ -211,7 +213,7 @@ describe('ReportContent grouping functions', () => {
         ReportContent.__Rewire__('AGGrid', AGGridMock);
         ReportContent.__Rewire__('Locales', LocalesMock);
         localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatNumber').and.callFake(function(val) {return val;});
-        localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatDate').and.callFake(function(date) {return date;});
+        localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatDate').and.callFake(function(date, opts) {return date;});
         localeGetMessageSpy = spyOn(LocalesMock, 'getMessage').and.callThrough();
     });
 
@@ -274,6 +276,44 @@ describe('ReportContent grouping functions', () => {
         });
     });
 
+    var groupByTimeOfDayCases = [
+        {name: 'null duration', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.empty'},
+        {name: 'empty duration', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.empty'},
+        {name: 'bad duration', groupType: GroupTypes.COMMON.equals, group: '01/01/2016', localeMessageSpy: 0, localeDateSpy: 0, expected: '01/01/2016'},
+        {name: 'bad duration', groupType: GroupTypes.COMMON.equals, group: '01/01/2016 18:51', localeMessageSpy: 0, localeDateSpy: 0, expected: '01/01/2016 18:51'},
+
+        {name: 'valid equal timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.equals, group: '18:51:21', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 51, 21)},
+        {name: 'valid second timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.second, group: '18:51:21', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 51, 21)},
+        {name: 'valid minute timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.minute, group: '18:51', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 51, 0)},
+        {name: 'valid hour timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.hour, group: '18:00', localeMessageSpy: 0, localeDateSpy: 1, expected: new Date(1970, 1, 1, 18, 0, 0)},
+        {name: 'valid AmPm timeOfDay PM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '23:59:59', localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.pm'},
+        {name: 'valid AmPm timeOfDay AM', groupType: GroupTypes.GROUP_TYPE.timeOfDay.am_pm, group: '00:00:00', localeMessageSpy: 1, localeDateSpy: 0, expected: 'groupHeader.am'}
+    ];
+
+    groupByTimeOfDayCases.forEach(function(test) {
+        it('Test case: ' + test.name, function() {
+            let reportData = _.cloneDeep(fakeReportGroupData_template);
+
+            reportData.data.groupFields[0].field.datatypeAttributes.type = DataTypes.TIME_OF_DAY;
+            reportData.data.groupFields[0].groupType = test.groupType;
+            reportData.data.filteredRecords[0].group = test.group;
+            reportData.data.filteredRecords[0].localized = false;
+
+            component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                    reportData={reportData} reportHeader={header_empty}/>);
+
+            //  validate the returned grouped header
+            expect(reportData.data.filteredRecords[0].group).toEqual(test.expected);
+
+            //  validate whether the locale.getMessage method is called
+            expect(localeGetMessageSpy.calls.count()).toEqual(test.localeMessageSpy);
+            expect(localizeDateSpy.calls.count()).toEqual(test.localeDateSpy);
+
+            //  localize number and date should not be called for time of day
+            expect(localizeNumberSpy.calls.count()).toEqual(0);
+        });
+    });
+
     var groupByTextCases = [
         {name: 'null text', groupType: GroupTypes.COMMON.equals, group: null, localeMessageSpy: 1, expected: 'groupHeader.empty'},
         {name: 'empty text', groupType: GroupTypes.COMMON.equals, group: '', localeMessageSpy: 1, expected: 'groupHeader.empty'},
@@ -318,7 +358,7 @@ describe('ReportContent grouping functions', () => {
         {name: 'valid date - decade', dataType: DataTypes.DATE, groupType: GroupTypes.GROUP_TYPE.date.decade, group: '2010', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2010'},
         //
         {name: 'empty datetime', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'valid datetime - equals', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
+        {name: 'valid datetime - equals', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '05-10-2016 07:45', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016 07:45'},
         {name: 'valid datetime - day', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.day, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
         {name: 'valid datetime - fiscalYr', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.fiscalYear, group: '2016', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.abbr.fiscalYear2016'},
         {name: 'valid datetime - week', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.week, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 1, expected: 'groupHeader.date.week'},

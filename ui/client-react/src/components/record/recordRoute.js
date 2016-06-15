@@ -4,7 +4,7 @@ import QBicon from '../qbIcon/qbIcon';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
-import Record from './record';
+import QBForm from './../QBForm/qbform.js';
 import {Link} from 'react-router';
 import Fluxxor from 'fluxxor';
 import './record.scss';
@@ -17,18 +17,25 @@ var RecordRoute = React.createClass({
     contextTypes: {
         history: React.PropTypes.object
     },
-    componentDidMount: function() {
+    loadRecord(appId, tblId, recordId) {
+        const flux = this.getFlux();
+        flux.actions.selectTableId(tblId);
+        flux.actions.loadFormAndRecord(appId, tblId, recordId);
+    },
+    loadRecordFromParams(params) {
+        let appId = params.appId;
+        let tblId = params.tblId;
+        let recordId = params.recordId;
 
+        if (appId && tblId && recordId) {
+            this.loadRecord(appId, tblId, recordId);
+        }
+    },
+    componentDidMount: function() {
         let flux = this.getFlux();
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
-        //this.loadRecordFromParams(this.props.params);
-    },
-
-    // Triggered when properties change
-    componentWillReceiveProps: function(/* props */) {
-
-        //this.loadRecordFromParams(props.params,true);
+        this.loadRecordFromParams(this.props.params);
     },
 
     getSecondaryBar() {
@@ -90,20 +97,29 @@ var RecordRoute = React.createClass({
     },
 
     render() {
-        return (<div className="recordContainer">
-            <Stage stageHeadline={this.getStageHeadline()}
-                   pageActions={this.getPageActions(6)}>
+        if (_.isUndefined(this.props.params) ||
+            _.isUndefined(this.props.params.appId) ||
+            _.isUndefined(this.props.params.tblId) ||
+            (_.isUndefined(this.props.params.recordId))
+        ) {
+            logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
+            return null;
+        } else {
+            return (<div className="recordContainer">
+                <Stage stageHeadline={this.getStageHeadline()}
+                       pageActions={this.getPageActions(6)}>
 
-                <div className="record-content">
+                    <div className="record-content">
+                    </div>
+                </Stage>
+
+                <div className="recordActionsContainer secondaryBar">
+                    {this.getSecondaryBar()}
+                    {this.getPageActions(4)}
                 </div>
-            </Stage>
-
-            <div className="recordActionsContainer secondaryBar">
-                {this.getSecondaryBar()}
-                {this.getPageActions(4)}
-            </div>
-            <Record recordData={this.props.recordData} />
-        </div>);
+                <QBForm formData={this.props.form ? this.props.form.formData : null}></QBForm>
+            </div>);
+        }
     }
 });
 

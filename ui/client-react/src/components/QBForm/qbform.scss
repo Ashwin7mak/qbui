@@ -1,40 +1,34 @@
 @import '../../assets/css/qbVariables';
 
 .formContainer {
-    padding: 2%;
+    padding: 10px;
 }
 
-.fieldRow {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    flex-wrap: wrap;
-}
-.qbPanelBody {
+.formSection {
     display: block;
 
-    .field {
-        //top right bottom left
-        padding: 0 35px 20px 0;
-        .fieldLabel {
-            display: block;
-            color: $fieldLabel-color;
-            padding-bottom: 2px;
-        }
-        .fieldValue {
-            display: block;
-            min-width: 0;
+    .fieldRow {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        flex-wrap: wrap;
+        padding: 5px 0;
+
+        .formElement {
+            margin: 0 35px 20px 0;
+            word-wrap: break-word;
+            max-width: 100%;
+            .fieldLabel {
+                display: block;
+                color: $fieldLabel-color;
+                padding-bottom: 2px;
+            }
+            .fieldValue {
+                display: block;
+                min-width: 0;
+            }
         }
     }
-}
-
-.qbPanelHeaderIcon {
-    float: right;
-    color: #404040;
-}
-
-.qbPanelHeaderIcon:hover {
-    color: #0098cd;
 }
 
 /* For mobile phones: */
@@ -48,15 +42,6 @@
             .fieldValue {
                 font-size: $font-size-small;
             }
-        }
-    }
-}
-
-/* For tablet like devices: */
-@include medium-breakpoint {
-    .qbPanelBody {
-        .field {
-            max-width: 60%;
         }
     }
 }

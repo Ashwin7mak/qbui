@@ -15,7 +15,7 @@ $grid-group-row-header-border-top: $color7;
 $grid-group-row-header-divider: $color21;
 
 $grid-group-expand-icon-size: 20px;
-$grid-default-group-padding: 7px;
+$grid-default-group-padding: 2px;
 $grid-default-cell-padding: 8px;
 
 $row-bg-color: #fff;
@@ -56,7 +56,7 @@ $cell-edit-background-edit: #f3f8fe;
 
         .collapser {
             position: absolute;
-            right: $grid-default-group-padding - $grid-default-group-padding;
+            left: 18px;
         }
         .ag-header-cell-label {
             padding: 4px $grid-default-cell-padding 3px $grid-default-cell-padding;
@@ -195,15 +195,17 @@ $cell-edit-background-edit: #f3f8fe;
     //styling for grouped row headers
     .ag-group-cell-entire-row {
         background-color: $grid-group-row-header-bkgrd-color;
-        padding: $grid-default-cell-padding + 2 $grid-default-cell-padding $grid-default-cell-padding $grid-default-cell-padding;
+        padding: 2px $grid-default-cell-padding $grid-default-cell-padding $grid-default-cell-padding + 18;
     }
     .ag-row-level-0 .ag-group-cell-entire-row {
         border-top: 4px solid $grid-group-row-header-border-top;
+        padding-top: 0px;
     }
     .ag-row-group {
         &:first-of-type {
             .ag-group-cell-entire-row {
                 border-top: 0;
+                padding-top: 2px;
             }
         }
     }
@@ -226,7 +228,7 @@ $cell-edit-background-edit: #f3f8fe;
     @for $i from 1 through 6 {
         .ag-row-level-#{$i}{
             .ag-group-cell-entire-row {
-                padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size)!important;
+                padding-left: 18 + $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size)!important;
             }
         }
     }
@@ -246,8 +248,8 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-selection-checkbox {
         position: absolute;
         margin:0;
-        left: $grid-default-group-padding + 1;
-        top: $grid-default-group-padding + 1;
+        left: $grid-default-cell-padding;
+        top: $grid-default-cell-padding;
     }
 
     .ag-menu-list {

@@ -35,7 +35,7 @@ function formatDate(dateStr, format) {
 
     if (dateStr) {
         const fixedDate = dateStr.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
-        return moment(fixedDate).format(format);
+        return moment(new Date(fixedDate)).format(format);
     }
     return moment().format(format);
 }

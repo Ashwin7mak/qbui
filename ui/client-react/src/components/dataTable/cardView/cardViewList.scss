@@ -51,6 +51,7 @@ $table-actions-container-bg: #fff;
         .group-level-#{$i}{
             position: relative;
             >.group-header {
+                border-top: 1px solid #dcdcdc;
                 padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) !important;
             }
             .custom-row-card {

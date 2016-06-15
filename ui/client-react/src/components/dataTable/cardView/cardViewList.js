@@ -53,7 +53,9 @@ let CardViewList = React.createClass({
                         </div>
                         <Collapse in={this.state.open}>
                             <div>
-                                {childNodes}
+                                <div>
+                                    {childNodes}
+                                </div>
                             </div>
                         </Collapse>
                     </div> :
