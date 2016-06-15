@@ -116,7 +116,7 @@
              */
             fetchReportComponents: function(req) {
 
-                //  Fetch report meta and grid data
+                //  Fetch field meta data and grid data for a report
                 var reportPromise = new Promise((resolve1, reject1) => {
                     this.fetchReportResults(req).then(
                         (resultsResponse) => {
@@ -259,21 +259,20 @@
                             if (response.body) {
                                 let homepageReportId = JSON.parse(response.body);
 
-                                //  first get the report meta data
+                                //  have a homepage id; first get the report meta data
                                 this.fetchReportMetaData(req, homepageReportId, NODE_HOMEPAGE_ROUTE).then(
                                     (metaDataResult) => {
-                                        //  parse the metadata
+                                        //  parse the metadata and set the request parameters for the default sortList, fidList and query expression (if defined).
+                                        //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
                                         let reportMetaData = JSON.parse(metaDataResult.body);
 
-                                        if (!Array.isArray(req.params)) {
-                                            req.params = {};
-                                        }
+                                        //  make sure we have an empty object if one does not exist
+                                        req.params = req.params || {};
 
                                         // set format request parameter to display
                                         req.params[constants.REQUEST_PARAMETER.FORMAT] = 'display';
 
-                                        // Use the sortList, fidsList and/or query expression defined in the metadata on the request.  Note this always overrides
-                                        // any values that may be set on the request.
+                                        // Use the sortList, fidsList and/or query expression defined in the metadata on the request.
                                         req.params[constants.REQUEST_PARAMETER.SORT_LIST] = stringUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
                                         req.params[constants.REQUEST_PARAMETER.COLUMNS] = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
                                         req.params[constants.REQUEST_PARAMETER.QUERY] = reportMetaData.query ? [reportMetaData.query] : '';
