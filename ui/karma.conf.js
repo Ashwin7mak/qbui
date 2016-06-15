@@ -76,7 +76,11 @@ module.exports = function(config) {
                     {
                         test   : /\.woff|\.woff2|\.svg|.eot|\.ttf/,
                         loader : 'url?prefix=font/&limit=10000'
-                    }
+                    },
+                    {
+                        include: /\.json$/,
+                        loaders: ["json-loader"]
+                    },
                 ],
                 postLoaders: [
                     { //delays coverage til after tests are run, fixing transpiled source coverage error
