@@ -1,4 +1,5 @@
 import React from 'react';
+import Intl from 'intl';
 import ReactIntl from 'react-intl';
 import Locale from '../locales/locales';
 
