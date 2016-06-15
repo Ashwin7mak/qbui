@@ -53,17 +53,19 @@ const RowEditActions = React.createClass({
     render: function() {
         return (
             <span className="editTools">
+
+                 <OverlayTrigger  placement="bottom" overlay={<Tooltip id="cancelSelection">Cancel changes</Tooltip>}>
+                     <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
+                 </OverlayTrigger>
+
                 <OverlayTrigger  placement="bottom" overlay={<Tooltip id="saveRecord">Save changes</Tooltip>}>
                     <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
-                </OverlayTrigger>
-
-                <OverlayTrigger  placement="bottom" overlay={<Tooltip id="cancelSelection">Cancel changes</Tooltip>}>
-                    <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
                 </OverlayTrigger>
 
                 <OverlayTrigger placement="bottom" overlay={<Tooltip id="addRecord" >Add new record</Tooltip>}>
                     <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
                 </OverlayTrigger>
+
             </span>);
     }
 });

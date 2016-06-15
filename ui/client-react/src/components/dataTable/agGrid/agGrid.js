@@ -13,9 +13,9 @@ import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 
-import {DateCellFormatter, DateTimeCellFormatter, TimeCellFormatter,
-        NumericCellFormatter, TextCellFormatter, UserCellFormatter, CheckBoxCellFormatter,
-        CurrencyCellFormatter, SelectionColumnCheckBoxCellFormatter, PercentCellFormatter, RatingCellFormatter}  from './formatters';
+import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
+        NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
+        CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer}  from './cellRenderers';
 
 import * as GroupTypes from '../../../constants/groupTypes';
 
@@ -518,7 +518,7 @@ let AGGrid = React.createClass({
         } else {
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
-        checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxCellFormatter);
+        checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxCellRenderer);
 
         return checkBoxCol;
     },
@@ -557,45 +557,45 @@ let AGGrid = React.createClass({
 
                             case serverTypeConsts.NUMERIC:
                                 this.setCSSClass_helper(obj, "AlignRight");
-                                obj.cellRenderer = reactCellRendererFactory(NumericCellFormatter);
-                                obj.customComponent = NumericCellFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
+                                obj.customComponent = NumericCellRenderer;
                                 break;
                             case serverTypeConsts.DATE :
-                                obj.cellRenderer = reactCellRendererFactory(DateCellFormatter);
-                                obj.customComponent = DateCellFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(DateCellRenderer);
+                                obj.customComponent = DateCellRenderer;
                                 break;
                             case serverTypeConsts.DATE_TIME:
-                                obj.cellRenderer = reactCellRendererFactory(DateTimeCellFormatter);
-                                obj.customComponent = DateTimeCellFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(DateTimeCellRenderer);
+                                obj.customComponent = DateTimeCellRenderer;
                                 break;
                             case serverTypeConsts.TIME_OF_DAY :
-                                obj.cellRenderer = reactCellRendererFactory(TimeCellFormatter);
-                                obj.customComponent = TimeCellFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(TimeCellRenderer);
+                                obj.customComponent = TimeCellRenderer;
                                 break;
                             case serverTypeConsts.CHECKBOX :
-                                obj.cellRenderer = reactCellRendererFactory(CheckBoxCellFormatter);
-                                obj.customComponent = CheckBoxCellFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(CheckBoxCellRenderer);
+                                obj.customComponent = CheckBoxCellRenderer;
                                 break;
                             case serverTypeConsts.USER :
-                                obj.cellRenderer = reactCellRendererFactory(UserCellFormatter);
-                                obj.customComponent = UserCellFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(UserCellRenderer);
+                                obj.customComponent = UserCellRenderer;
                                 break;
                             case serverTypeConsts.CURRENCY :
-                                obj.cellRenderer = reactCellRendererFactory(CurrencyCellFormatter);
-                                obj.customComponent = CurrencyCellFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(CurrencyCellRenderer);
+                                obj.customComponent = CurrencyCellRenderer;
                                 break;
                             case serverTypeConsts.RATING :
-                                obj.cellRenderer = reactCellRendererFactory(RatingCellFormatter);
-                                obj.customComponent = CurrencyCellFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(RatingCellRenderer);
+                                obj.customComponent = RatingCellRenderer;
                                 break;
                             case serverTypeConsts.PERCENT :
-                                obj.cellRenderer = reactCellRendererFactory(PercentCellFormatter);
-                                obj.customComponent = CurrencyCellFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
+                                obj.customComponent = PercentCellRenderer;
                                 break;
 
                             default:
-                                obj.cellRenderer = reactCellRendererFactory(TextCellFormatter);
-                                obj.customComponent = TextCellFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
+                                obj.customComponent = TextCellRenderer;
                                 break;
                             }
                         }
