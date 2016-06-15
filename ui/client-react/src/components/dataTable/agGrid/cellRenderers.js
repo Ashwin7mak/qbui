@@ -10,7 +10,7 @@ import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
 import {CellValueRenderer, UserCellValueRenderer, NumberCellValueRenderer, DateCellValueRenderer, TextCellValueRenderer} from './cellValueRenderers';
-import CellEditor from './cellEditor'
+import CellEditor from './cellEditor';
 
 import * as dateTimeFormatter from '../../../../../common/src/formatter/dateTimeFormatter';
 import * as timeOfDayFormatter from '../../../../../common/src/formatter/timeOfDayFormatter';
@@ -46,14 +46,13 @@ const CellRenderer = React.createClass({
         };
     },
 
-
-
     render: function() {
         // render the cell value and editor (CSS will hide one or the other)
 
         return (<span className="cellWrapper">
             {this.props.initialValue !== null &&
-            <CellValueRenderer value={this.state.valueAndDisplay.value}
+            <CellValueRenderer type={this.props.type}
+                               value={this.state.valueAndDisplay.value}
                                display={this.state.valueAndDisplay.display}
                                attributes={this.props.colDef.datatypeAttributes}/>  }
 
@@ -69,20 +68,20 @@ const CellRenderer = React.createClass({
         switch (this.props.type) {
         case formats.DATE_FORMAT:
         case formats.DATETIME_FORMAT:
-        case formats.TIME_FORMAT: {
+        case formats.TIME_FORMAT:
             this.dateTimeCellEdited(value);
             break;
-        };
+
         case formats.NUMBER_FORMAT:
         case formats.RATING_FORMAT:
         case formats.CURRENCY_FORMAT:
-        case formats.PERCENT_FORMAT: {
+        case formats.PERCENT_FORMAT:
             this.numericCellEdited(value);
             break;
-        }
-        default: {
+
+        default:
             this.cellEdited(value);
-        }
+
         }
     },
     /**

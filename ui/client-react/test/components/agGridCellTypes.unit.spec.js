@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
-import Formatters from '../../src/components/dataTable/agGrid/formatters';
 import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
-import {DateCellFormatter, DateTimeCellFormatter, TimeCellFormatter, NumericCellFormatter, TextCellFormatter, CheckBoxCellFormatter} from '../../src/components/dataTable/agGrid/formatters';
+import CellValueRenderers from '../../src/components/dataTable/agGrid/cellValueRenderers';
+
+import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
 
 describe('AGGrid cell editor functions', () => {
     'use strict';
@@ -18,19 +19,20 @@ describe('AGGrid cell editor functions', () => {
     });
 
     beforeEach(() => {
-        Formatters.__Rewire__('I18nNumber', I18nMessageMock);
-        Formatters.__Rewire__('I18nDate', I18nMessageMock);
-        CellRenderers.__Rewire__('I18nNumber', I18nMessageMock);
 
+        CellRenderers.__Rewire__('I18nDate', I18nMessageMock);
+        CellRenderers.__Rewire__('I18nNumber', I18nMessageMock);
+        CellValueRenderers.__Rewire__('I18nNumber', I18nMessageMock);
     });
 
     afterEach(() => {
-        Formatters.__ResetDependency__('I18nNumber');
-        Formatters.__ResetDependency__('I18nDate');
+
+        CellRenderers.__ResetDependency__('I18nDate');
         CellRenderers.__ResetDependency__('I18nNumber');
+        CellValueRenderers.__ResetDependency__('I18nNumber');
     });
 
-    it('test TextFormatter', () => {
+    it('test TextCellRenderer', () => {
         const params = {
             value: {
                 value: "Testing",
@@ -41,7 +43,7 @@ describe('AGGrid cell editor functions', () => {
             }
         };
 
-        component = TestUtils.renderIntoDocument(<TextCellFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const value = TestUtils.findRenderedDOMComponentWithClass(component, "textCell");
@@ -56,7 +58,7 @@ describe('AGGrid cell editor functions', () => {
         expect(value.innerHTML).toEqual("newValue");
     });
 
-    it('test NumericFormatter', () => {
+    it('test NumericCellRenderer', () => {
         const params = {
             value: {
                 value: 123,
@@ -69,7 +71,7 @@ describe('AGGrid cell editor functions', () => {
             }
         };
 
-        component = TestUtils.renderIntoDocument(<NumericCellFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<NumericCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const valueElements = ReactDOM.findDOMNode(component).querySelectorAll(".numberCell span");
@@ -85,7 +87,7 @@ describe('AGGrid cell editor functions', () => {
         expect(valueElements[0].innerHTML).toEqual("456");
     });
 
-    it('test CheckBoxFormatter', () => {
+    it('test CheckBoxCellRenderer', () => {
         const params = {
             value: {
                 value: true
@@ -95,7 +97,7 @@ describe('AGGrid cell editor functions', () => {
             }
         };
 
-        component = TestUtils.renderIntoDocument(<CheckBoxCellFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<CheckBoxCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const inputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellData input");
@@ -118,7 +120,7 @@ describe('AGGrid cell editor functions', () => {
             }
         };
 
-        component = TestUtils.renderIntoDocument(<DateCellFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<DateCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -132,7 +134,7 @@ describe('AGGrid cell editor functions', () => {
             }
         };
 
-        component = TestUtils.renderIntoDocument(<DateTimeCellFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<DateTimeCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
     });
@@ -147,7 +149,7 @@ describe('AGGrid cell editor functions', () => {
             }
         };
 
-        component = TestUtils.renderIntoDocument(<TimeCellFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<TimeCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 });
