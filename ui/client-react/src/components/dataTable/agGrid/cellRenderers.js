@@ -42,7 +42,7 @@ const CellRenderer = React.createClass({
     /* setting state from props is an anti-pattern but we're doing it to avoid rerendering */
     getInitialState() {
         return {
-            value: this.props.initialValue
+            valueAndDisplay: this.props.initialValue
         };
     },
 
@@ -53,13 +53,13 @@ const CellRenderer = React.createClass({
 
         return (<span className="cellWrapper">
             {this.props.initialValue !== null &&
-            <CellValueRenderer value={this.state.value.value}
-                               display={this.state.value.display}
+            <CellValueRenderer value={this.state.valueAndDisplay.value}
+                               display={this.state.valueAndDisplay.display}
                                attributes={this.props.colDef.datatypeAttributes}/>  }
 
             {this.props.initialValue !== null &&
             <CellEditor type={this.props.type}
-                        value={this.state.value.value}
+                        value={this.state.valueAndDisplay.value}
                         colDef={this.props.colDef}
                         onChange={this.onChange}/>  }
         </span>);
@@ -92,8 +92,8 @@ const CellRenderer = React.createClass({
     cellEdited(value) {
         let newDisplay = value;
 
-        this.state.value.value = value;
-        this.state.value.display = newDisplay;
+        this.state.valueAndDisplay.value = value;
+        this.state.valueAndDisplay.display = newDisplay;
 
         this.setState(this.state);
     },
@@ -104,24 +104,24 @@ const CellRenderer = React.createClass({
      */
     dateTimeCellEdited(value) {
         let newValue = value;
-        this.state.value.value = value;
+        this.state.valueAndDisplay.value = value;
 
         let newDisplay = value;
 
         switch (this.props.type) {
         case formats.DATE_FORMAT: {
             // normalized form is YYYY-MM-DD
-            newDisplay = dateTimeFormatter.format(this.state.value, this.props.colDef.datatypeAttributes);
+            newDisplay = dateTimeFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
             break;
         }
         case formats.TIME_FORMAT: {
             // normalized form is 1970-01-01THH:MM:SSZ
-            newDisplay = timeOfDayFormatter.format(this.state.value, this.props.colDef.datatypeAttributes);
+            newDisplay = timeOfDayFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
             break;
         }
         case formats.DATETIME_FORMAT: {
             // normalized form is YYYY-MM-DDTHH:MM:SSZ
-            newDisplay = dateTimeFormatter.format(this.state.value, this.props.colDef.datatypeAttributes);
+            newDisplay = dateTimeFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
             break;
         }
         }
@@ -137,11 +137,11 @@ const CellRenderer = React.createClass({
     numericCellEdited(value) {
         let newValue = Number(value);
 
-        this.state.value.value = newValue;
+        this.state.valueAndDisplay.value = newValue;
 
-        let newDisplay = numericFormatter.format(this.state.value, this.props.colDef.datatypeAttributes);
+        let newDisplay = numericFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
 
-        this.state.value.display = newDisplay;
+        this.state.valueAndDisplay.display = newDisplay;
         this.setState(this.state);
     }
 });
