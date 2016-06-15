@@ -175,7 +175,8 @@ describe('Validate ReportsApi unit tests', function() {
             },
             'Content-Type': 'content-type',
             'url': 'apps/123/tables/456/homepagereportid',
-            'method': 'get'
+            'method': 'get',
+            params: null
         };
 
         var reportObj = {
@@ -190,6 +191,14 @@ describe('Validate ReportsApi unit tests', function() {
         var getExecuteRequestStub;
         var executeReqLogSpy;
         var fetchReportComponentsStub;
+
+        var responseBody = '' +
+            '{"name":"Activity Summary","description":"","type":"NEWSUMMARY","ownerId":null,"tableId":"bkqw6gbkb",' +
+            '"id":44,"showDescriptionOnReport":false,"hideReport":false,"showSearchBox":false,' +
+            '"fids":[142,167,10,112,8,109,58,145,51,87,88,146,147,166,1,2,3,4,5],"sortList":["7:V","142:FY"],' +
+            '"facetFids":[142,7,167],"facetBehavior":"none","query":null,"allowEdit":true,"allowView":true,' +
+            '"displayNewlyChangedRecords":false,"reportFormat":"","rolesWithGrantedAccess":[12,15,16],"summary":"show"}';
+
         beforeEach(function() {
             reportObj.reportMetaData.data = '';
             reportObj.reportData.data = '';
@@ -204,15 +213,15 @@ describe('Validate ReportsApi unit tests', function() {
             fetchReportComponentsStub.restore();
         });
         it('Test success ', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body: '1'}));
+            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
             fetchReportComponentsStub.returns(Promise.resolve('reportData'));
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
                     done();
-                    reportObj.reportMetaData.data = '1';
-                    reportObj.reportData.data = 'reportData';
+                    reportObj.reportMetaData.data = JSON.parse(responseBody);
+                    reportObj.reportData.data = 'reportData' ;
                     assert.deepEqual(response, reportObj);
                 },
                 function(error) {
@@ -241,14 +250,38 @@ describe('Validate ReportsApi unit tests', function() {
             });
         });
 
-        it('Test unexpected failure when fetching table homepage report id', function(done) {
+        it('Test failure when fetching table homepage meta data', function(done) {
+            var fetchReportMetaStub = sinon.stub(reportsApi, "fetchReportMetaData");
+
+            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
+            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
+            fetchReportMetaStub.returns(Promise.reject('error'));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    fetchReportMetaStub.restore();
+                    done(new Error("promise success response returned when testing unexpected homepage report metaData failure"));
+                },
+                function(error) {
+                    fetchReportMetaStub.restore();
+                    done();
+                    assert.ok(error);
+                }
+            ).catch(function(errorMsg) {
+                fetchReportMetaStub.restore();
+                done(new Error('unable to resolve fetchTableHomePageReport success when testing report table homepage metadata failure: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test unexpected failure when parsing meta data', function(done) {
             getExecuteRequestStub.returns(Promise.resolve({body: new Error()}));
             fetchReportComponentsStub.returns(Promise.resolve('reportData'));
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
-                    done(new Error("promise success response returned when testing unexpected homepage report failure"));
+                    done(new Error("promise success response returned when testing parsing meta data failure"));
                 },
                 function(error) {
                     done();
@@ -256,13 +289,14 @@ describe('Validate ReportsApi unit tests', function() {
                     assert(executeReqLogSpy.called);
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve fetchTableHomePageReport success when testing undefined table homepage: ' + JSON.stringify(errorMsg)));
+                done(new Error('unable to resolve fetchTableHomePageReport when parsing meta data failure: ' + JSON.stringify(errorMsg)));
             });
         });
 
         it('Test failure on fetchReportComponent', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body: '1'}));
+            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
             fetchReportComponentsStub.returns(Promise.reject(new Error("error")));
+
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
@@ -283,6 +317,7 @@ describe('Validate ReportsApi unit tests', function() {
             };
             getExecuteRequestStub.returns(Promise.reject(errorObj));
             fetchReportComponentsStub.returns(Promise.reject(new Error("report component error")));
+
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
@@ -303,6 +338,7 @@ describe('Validate ReportsApi unit tests', function() {
             };
             getExecuteRequestStub.returns(Promise.reject(errorObj));
             fetchReportComponentsStub.returns(Promise.reject(new Error("report component error")));
+
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
@@ -318,8 +354,9 @@ describe('Validate ReportsApi unit tests', function() {
         });
 
         it('Test error on fetch table homepage report id', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body: '1'}));
+            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
             fetchReportComponentsStub.returns(Promise.reject('report component error'));
+
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {

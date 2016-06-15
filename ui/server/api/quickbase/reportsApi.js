@@ -11,6 +11,8 @@
     /* See comment in recordsApi.js */
     let jsonBigNum = require('json-bignum');
     let errorCodes = require('../errorCodes');
+    let constants = require('./../constants');
+    let stringUtils = require('../../components/utility/stringUtils');
 
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
@@ -194,22 +196,24 @@
             },
 
             /**
-             * Helper method that returns 2 promises that can be run asynchronously to fetch reportMetaData
-             * and report content.  This method is used in support of return a table homepage report.
+             * Fetch the meta data for a given report id
              *
              * @param req
-             * @param homepageReportId
-             * @returns {*[]}
+             * @param opts
+             * @returns {bluebird|exports|module.exports}
              */
-            homePageReportPromises(req, homepageReportId) {
+            fetchReportMetaData(req, reportId, referRoute) {
 
-                let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + homepageReportId;
+                let opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + reportId;
+
+                if (referRoute) {
+                    opts.url = transformUrlRoute(opts.url, referRoute, REPORT_ROUTE);
+                }
 
                 //  promise to return report meta data
-                let reportMetaPromise = new Promise((resolve1, reject1) => {
-                    let opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                    opts.url = transformUrlRoute(opts.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE);
+                return new Promise((resolve1, reject1) => {
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             resolve1(response);
@@ -219,16 +223,10 @@
                         }
                     );
                 });
-
-                //  promise to return report data content
-                req.url = transformUrlRoute(req.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE + '/' + NODE_REPORTCOMPONENT_ROUTE);
-                let reportDataPromise = this.fetchReportComponents(req);
-
-                return [reportMetaPromise, reportDataPromise];
             },
 
             /**
-             * Return the table homepage report
+             * Return the table homepage report using it's meta data to determine its initial display state.
              *
              * @param req
              * @returns {bluebird|exports|module.exports}
@@ -256,26 +254,60 @@
                     //  make the api request to get the table homepage report id
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            // parse out the id and fetch the report components.
+                            // parse out the id and use to fetch the report meta data.  Process the meta data
+                            // to fetch and return the report content.
                             if (response.body) {
                                 let homepageReportId = JSON.parse(response.body);
 
-                                //  using the reportId, fetch the home page report meta data and content
-                                let promises = this.homePageReportPromises(req, homepageReportId);
-                                Promise.all(promises).then(
-                                    (reportResult) => {
-                                        reportObj.reportMetaData.data = reportResult[0].body;
-                                        reportObj.reportData.data = reportResult[1];
-                                        resolve(reportObj);
+                                //  first get the report meta data
+                                this.fetchReportMetaData(req, homepageReportId, NODE_HOMEPAGE_ROUTE).then(
+                                    (metaDataResult) => {
+                                        //  parse the metadata
+                                        let reportMetaData = JSON.parse(metaDataResult.body);
+
+                                        if (!Array.isArray(req.params)) {
+                                            req.params = {};
+                                        }
+
+                                        // set format request parameter to display
+                                        req.params[constants.REQUEST_PARAMETER.FORMAT] = 'display';
+
+                                        // Use the sortList, fidsList and/or query expression defined in the metadata on the request.  Note this always overrides
+                                        // any values that may be set on the request.
+                                        req.params[constants.REQUEST_PARAMETER.SORT_LIST] = stringUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                        req.params[constants.REQUEST_PARAMETER.COLUMNS] = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                        req.params[constants.REQUEST_PARAMETER.QUERY] = reportMetaData.query ? [reportMetaData.query] : '';
+
+                                        //  TODO: initial page size
+                                        //req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
+                                        //req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = ?;
+
+                                        //  set to the fetch the report components url
+                                        let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + homepageReportId;
+                                        req.url = transformUrlRoute(req.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE + '/' + NODE_REPORTCOMPONENT_ROUTE);
+
+                                        this.fetchReportComponents(req).then(
+                                            (reportData) => {
+                                                //  return the metadata and report content
+                                                reportObj.reportMetaData.data = reportMetaData;
+                                                reportObj.reportData.data = reportData;
+                                                resolve(reportObj);
+                                            },
+                                            (reportError) => {
+                                                log.error({req:req}, 'Error fetching table homepage report content in fetchTableHomePageReport.');
+                                                reject(reportError);
+                                            }
+                                        ).catch((ex) => {
+                                            requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
+                                            reject(ex);
+                                        });
                                     },
-                                    (reportError) => {
-                                        //  the core error has already been logged...just want to ensure visibility that the
-                                        //  error is when fetching the table homepage report
-                                        log.error({req:req}, 'Error fetching table homepage report in fetchTableHomePageReport.');
-                                        reject(reportError);
+                                    (metaDataError) => {
+                                        log.error({req:req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
+                                        reject(metaDataError);
                                     }
                                 ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('reportsAPI..fetchReportComponents in fetchTableHomePageReport', ex, true);
+                                    requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
                                     reject(ex);
                                 });
                             } else {

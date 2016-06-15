@@ -101,6 +101,8 @@ let reportDataActions = {
                 let reportService = new ReportService();
 
                 //  query for the report meta data
+                //  TODO: refactor by having just 1 network call to node to retrieve a report...
+                //  TODO: leverage how homepage report is loaded..
                 reportService.getReport(appId, tblId, rptId).then(
                     (reportMetaData) => {
                         let requiredParams = {};
