@@ -1,10 +1,10 @@
 'use strict';
 
-var facetRecordsFormatter = require('./../facetRecordsFormatter')();
-var recordFormatter = require('./../recordFormatter')();
+var facetRecordsFormatter = require('..//facetRecordsFormatter')();
+var recordFormatter = require('../recordFormatter')();
 var assert = require('assert');
 var errorCodes = require('../../../errorCodes');
-var constants = require('../../../constants');
+var constants = require('../../../../../common/src/constants');
 
 /**
  * Unit tests for query formatter

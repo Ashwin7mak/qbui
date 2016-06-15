@@ -8,7 +8,7 @@ var sinon = require('sinon');
 var assert = require('assert');
 var requestHelper = require('./../requestHelper')(config);
 var recordsApi = require('../recordsApi')(config);
-var constants = require('../../constants');
+var constants = require('../../../../common/src/constants');
 
 /**
  * Unit tests for records apis

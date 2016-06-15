@@ -7,7 +7,7 @@
     'use strict';
     var routeGroups = require('./routeGroups'),
         _ = require('lodash'),
-        constants = require('../api/constants'),
+        constants = require('../../common/src/constants'),
         routeConsts = require('./routeConstants');
 
     /*

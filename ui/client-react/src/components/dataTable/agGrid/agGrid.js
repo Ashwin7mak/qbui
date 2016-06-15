@@ -1,22 +1,31 @@
-import React from "react";
-import {AgGridReact, reactCellRendererFactory} from "ag-grid-react";
-import {AgGridEnterprise} from "ag-grid-enterprise";
-import {I18nMessage} from "../../../utils/i18nMessage";
-import Locale from "../../../locales/locales";
-import _ from "lodash";
-import Loader from "react-loader";
-import Fluxxor from "fluxxor";
-import * as query from "../../../constants/query";
-import ReportUtils from "../../../utils/reportUtils";
-import {DateFormatter, DateTimeFormatter, TimeFormatter,
-    NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter,
-    SelectionColumnCheckBoxFormatter}  from './formatters';
-import * as GroupTypes from "../../../constants/groupTypes";
-import "../../../../../node_modules/ag-grid/dist/styles/ag-grid.css";
-import "./agGrid.scss";
-import "../gridWrapper.scss";
+import React from 'react';
+import {AgGridReact} from 'ag-grid-react';
+import {AgGridEnterprise} from 'ag-grid-enterprise';
+import {reactCellRendererFactory} from 'ag-grid-react';
+import {I18nMessage} from '../../../utils/i18nMessage';
+import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
+import ReportActions from '../../actions/reportActions';
+import RecordActions from '../../actions/recordActions';
+import Locale from '../../../locales/locales';
+import _ from 'lodash';
+import Loader  from 'react-loader';
+import Fluxxor from 'fluxxor';
+import * as query from '../../../constants/query';
+import ReportUtils from '../../../utils/reportUtils';
+
+import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
+        NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
+        CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer}  from './cellRenderers';
+
+import * as GroupTypes from '../../../constants/groupTypes';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
+
+import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
+import './agGrid.scss';
+import '../gridWrapper.scss';
+
+const serverTypeConsts = require('../../../../../common/src/constants');
 
 function buildIconElement(icon) {
     return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
@@ -514,7 +523,7 @@ let AGGrid = React.createClass({
         } else {
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
-        checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxFormatter);
+        checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxCellRenderer);
 
         return checkBoxCol;
     },
@@ -535,13 +544,13 @@ let AGGrid = React.createClass({
     getColumnProps: function() {
         let columns = this.props.columns;
 
+
         if (columns) {
             let columnsData = columns.map((obj, index) => {
                 obj.headerClass = "gridHeaderCell";
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
-                obj.addEditActions = false;
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
@@ -550,35 +559,48 @@ let AGGrid = React.createClass({
 
                         case 'type': {
                             switch (datatypeAttributes[attr]) {
-                            case "NUMERIC" :
+
+                            case serverTypeConsts.NUMERIC:
                                 this.setCSSClass_helper(obj, "AlignRight");
-                                obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
-                                obj.customComponent = NumericFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
+                                obj.customComponent = NumericCellRenderer;
                                 break;
-                            case "DATE" :
-                                obj.cellRenderer = reactCellRendererFactory(DateFormatter);
-                                obj.customComponent = DateFormatter;
+                            case serverTypeConsts.DATE :
+                                obj.cellRenderer = reactCellRendererFactory(DateCellRenderer);
+                                obj.customComponent = DateCellRenderer;
                                 break;
-                            case "DATE_TIME" :
-                                obj.cellRenderer = reactCellRendererFactory(DateTimeFormatter);
-                                obj.customComponent = DateTimeFormatter;
+                            case serverTypeConsts.DATE_TIME:
+                                obj.cellRenderer = reactCellRendererFactory(DateTimeCellRenderer);
+                                obj.customComponent = DateTimeCellRenderer;
                                 break;
-                            case "TIME_OF_DAY" :
-                                obj.cellRenderer = reactCellRendererFactory(TimeFormatter);
-                                obj.customComponent = TimeFormatter;
+                            case serverTypeConsts.TIME_OF_DAY :
+                                obj.cellRenderer = reactCellRendererFactory(TimeCellRenderer);
+                                obj.customComponent = TimeCellRenderer;
                                 break;
-                            case "CHECKBOX" :
-                                obj.cellRenderer = reactCellRendererFactory(CheckBoxFormatter);
-                                obj.customComponent = CheckBoxFormatter;
+                            case serverTypeConsts.CHECKBOX :
+                                obj.cellRenderer = reactCellRendererFactory(CheckBoxCellRenderer);
+                                obj.customComponent = CheckBoxCellRenderer;
                                 break;
-                            case "USER" :
-                                obj.cellRenderer = reactCellRendererFactory(UserFormatter);
-                                obj.customComponent = UserFormatter;
+                            case serverTypeConsts.USER :
+                                obj.cellRenderer = reactCellRendererFactory(UserCellRenderer);
+                                obj.customComponent = UserCellRenderer;
+                                break;
+                            case serverTypeConsts.CURRENCY :
+                                obj.cellRenderer = reactCellRendererFactory(CurrencyCellRenderer);
+                                obj.customComponent = CurrencyCellRenderer;
+                                break;
+                            case serverTypeConsts.RATING :
+                                obj.cellRenderer = reactCellRendererFactory(RatingCellRenderer);
+                                obj.customComponent = RatingCellRenderer;
+                                break;
+                            case serverTypeConsts.PERCENT :
+                                obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
+                                obj.customComponent = PercentCellRenderer;
                                 break;
 
                             default:
-                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
-                                obj.customComponent = TextFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
+                                obj.customComponent = TextCellRenderer;
                                 break;
                             }
                         }
@@ -635,7 +657,6 @@ let AGGrid = React.createClass({
         let paddedRecords = this.props.records.slice(0);
 
         paddedRecords.push({isHiddenLastRow:true});
-
         return paddedRecords;
     },
 

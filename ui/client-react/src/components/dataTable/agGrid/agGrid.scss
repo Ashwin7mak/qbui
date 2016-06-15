@@ -352,6 +352,9 @@ $cell-edit-background-edit: #f3f8fe;
 /* row actions on aggrid trickery
 -- this isnt pretty but there is a good chance row actions design will change so for now just porting over logic from griddle*/
 
+.ag-body-viewport {
+    overflow:visible !important;
+}
 /* hide griddle cell containing actions */
 .ag-row .ag-cell {
     &:nth-last-child(2) {
@@ -425,7 +428,7 @@ $cell-edit-background-edit: #f3f8fe;
 }
 .reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
 
-    box-shadow: 2px 2px 2px $row-box-shadow-color;
+    box-shadow: -2px -2px 24px $row-box-shadow-color;
 
     .ag-cell.gridCell {
 
@@ -519,31 +522,37 @@ $cell-edit-background-edit: #f3f8fe;
     .gridCell {
 
         .editTools {
-            display:block;
+            display:flex;
+            flex-direction:column;
             flex: 0 0 auto;
             background-color:$cell-edit-background-edit;
-            box-shadow: 2px 2px 2px $row-box-shadow-color;
+            box-shadow: -8px -2px 12px $row-box-shadow-color;
             position:absolute;
-            top:30px;
+            top:-26px;
             left:-31px;
 
             border-left: 1px solid $row-border-color;
-            border-right: 1px solid $row-border-color;
             border-bottom:1px solid $row-border-color;
             button {
+                flex: 0 0 auto;
                 border:0;
                 background-color:$cell-edit-background-edit;
                 margin-right:2px;
-                padding:6px 8px;
+                padding:6px 4px;
 
+
+                .qbIcon:hover {
+                    opacity:1;
+                }
                 .qbIcon {
+                    opacity:.7;
                     width:20px;
-                    font-size: 20px;
+                    font-size: 16px;
                     vertical-align:top;
                 }
                 .qbIcon.saveRecord {
                     color:green;
-                    font-size:24px;
+                    font-size:18px;
                 }
                 .qbIcon.cancelSelection {
                     color:$icon-color;
@@ -557,11 +566,6 @@ $cell-edit-background-edit: #f3f8fe;
             }
         }
     }
-}
-
-/* errant horizontal scrolllbars sometimes appear */
-.ag-body-viewport {
-    overflow-x:hidden;
 }
 
 
