@@ -27,7 +27,7 @@
 
     //Require the e2e base class and constants modules
     var e2eBase = require('../common/e2eBase.js')(config);
-    var consts = require('../../server/src/api/constants.js');
+    var consts = require('../../common/src/constants.js');
 
     var promise = require('bluebird');
     var chance = require('chance').Chance();

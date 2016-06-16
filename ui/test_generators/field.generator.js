@@ -5,7 +5,7 @@
  */
 (function() {
     'use strict';
-    var consts = require('../server/src/api/constants');
+    var consts = require('../common/src/constants');
     var fieldConsts = require('./field.constants');
     var defaultConsts = require('./field.schema.defaults');
     var rawValueGenerator = require('./rawValue.generator');

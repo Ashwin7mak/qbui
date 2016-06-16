@@ -4,7 +4,7 @@
  */
 (function() {
     'use strict';
-    //var consts = require('../server/src/api/constants');
+    //var consts = require('../common/src/constants');
     var rawValueGenerator = require('./rawValue.generator');
     var tableBuilder = require('./table.builder');
     var tableConsts = require('./table.constants');

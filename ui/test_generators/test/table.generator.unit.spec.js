@@ -10,7 +10,7 @@
     var tableConsts = require('../table.constants');
     var fieldConsts = require('../field.constants');
     var datatypeConsts = require('../datatype.attributes.constants');
-    var consts = require('../../server/src/api/constants');
+    var consts = require('../../common/src/constants');
     var _ = require('lodash');
     var assert = require('assert');
 

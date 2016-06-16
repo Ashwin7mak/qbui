@@ -7,7 +7,7 @@
 
     var fieldGenerator = require('../field.generator');
     var fieldConsts = require('../field.constants');
-    var consts = require('../../server/src/api/constants');
+    var consts = require('../../common/src/constants');
     var assert = require('assert');
 
     /**
