@@ -5,7 +5,7 @@
  */
 (function() {
     'use strict';
-    //var consts = require('../server/api/constants');
+    //var consts = require('../server/src/api/constants');
 
     //These are constants common to all fields
     module.exports = Object.freeze({

@@ -9,7 +9,7 @@
     var appConsts = require('../app.constants');
     var tableConsts = require('../table.constants');
     var fieldConsts = require('../field.constants');
-    var consts = require('../../server/api/constants');
+    var consts = require('../../server/src/api/constants');
     var _ = require('lodash');
     var assert = require('assert');
 
