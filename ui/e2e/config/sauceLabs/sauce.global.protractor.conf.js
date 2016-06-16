@@ -67,7 +67,7 @@
 
             // Read the base classes
             global.e2eBase = requireCommon('common/e2eBase')();
-            global.consts = require('../../../server/api/constants');
+            global.consts = require('../../../common/src/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
 
             // Lets Protractor know there is no Angular code to wait for
