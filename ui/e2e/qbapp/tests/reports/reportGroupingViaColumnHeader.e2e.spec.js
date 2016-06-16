@@ -355,7 +355,7 @@
                             getGroupedTableRows();
                         }).then(function() {
                             //finally verify both the arrays
-                            expect(groupedTableResults.sort()).toEqual(groupingTestcase.expectedTableResults.sort());
+                            expect(groupedTableResults.sort()).toEqual(groupingTestcase.expectedDescTableResults.sort());
                         }).then(function() {
                             //clear the array
                             groupedTableResults = [];
