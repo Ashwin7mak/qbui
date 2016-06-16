@@ -462,7 +462,8 @@ let ReportContent = React.createClass({
                                         search: this.props.reportData.searchStringForFiltering}} /> :
                             <CardViewListHolder reportData={this.props.reportData}
                                 uniqueIdentifier="Record ID#"
-                                keyField={this.props.fields ? this.props.fields.keyField.name : "Record ID#" }
+                                keyField={this.props.fields && this.props.fields.keyField ?
+                                    this.props.fields.keyField.name : "Record ID#" }
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}
                                 onScroll={this.onScrollRecords}

@@ -231,7 +231,8 @@ let ReportToolsAndContent = React.createClass({
                                     rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
                                     reportData={this.props.reportData}
                                     reportHeader={toolbar}
-                                    keyField={this.props.fields.keyField}
+                                    keyField={this.props.fields && this.props.fields.keyField ?
+                                        this.props.fields.keyField.name : "Record ID#" }
                                     uniqueIdentifier="Record ID#"
                                     flux={this.getFlux()}
                         {...this.props} />
