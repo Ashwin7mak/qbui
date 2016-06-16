@@ -55,7 +55,11 @@
             FACET_EXPRESSION: 'facetexpression',
             SORT_LIST: 'sortList',
             LIST_DELIMITER: '.',
-            GROUP_DELIMITER: ':'
+            GROUP_DELIMITER: ':',
+            QUERY: 'query',
+            COLUMNS: 'columns',
+            OFFSET: 'offset',
+            NUM_ROWS: 'numRows'
         },
         MILLI : {
             ONE_SECOND: 1000,

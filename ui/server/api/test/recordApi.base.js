@@ -2,7 +2,7 @@
     'use strict';
     var promise = require('bluebird');
     var assert = require('assert');
-    var consts = require('../constants');
+    var consts = require('../../../common/src/constants');
     var log = require('../../logger').getLogger();
 
     var recordGenerator = require('../../../test_generators/record.generator.js');

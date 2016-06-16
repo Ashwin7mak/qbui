@@ -7,7 +7,6 @@
     var _ = require('lodash');
 
     module.exports = function(app, config, routeMapper) {
-
         // This config.env refers to the node env - it is the way in which we know what routes to enable versus disable,
         // and configure anything environment specific.
         // This differs from runtime env which corresponds to process.env.NODE_ENV. This is the way node knows which
@@ -20,11 +19,9 @@
 
         if (undefined === allRoutes) {
             log.error('No routes have been configured for env ' + env);
-            return;
+        } else {
+            initializeRoutes(allRoutes, app, routeMapper);
         }
-
-        initializeRoutes(allRoutes, app, routeMapper);
-
     };
 
     /**
@@ -46,34 +43,28 @@
 
             //if this route has an all mapping, then ignore individual mappings
             if (undefined !== allFunctionForRoute) {
-                log.debug('Routing ALL method for route ' + route);
                 app.route(route).all(allFunctionForRoute);
                 return;
             }
 
             //map each individual mapping understanding that we may want to map the get function but not the post
             if (undefined !== getFunctionForRoute) {
-                log.debug('Routing GET method for route ' + route);
                 app.route(route).get(getFunctionForRoute);
             }
 
             if (undefined !== postFunctionForRoute) {
-                log.debug('Routing POST method for route ' + route);
                 app.route(route).post(postFunctionForRoute);
             }
 
             if (undefined !== deleteFunctionForRoute) {
-                log.debug('Routing DELETE method for route ' + route);
                 app.route(route).delete(deleteFunctionForRoute);
             }
 
             if (undefined !== putFunctionForRoute) {
-                log.debug('Routing PUT method for route ' + route);
                 app.route(route).put(putFunctionForRoute);
             }
 
             if (undefined !== patchFunctionForRoute) {
-                log.debug('Routing PATCH method for route ' + route);
                 app.route(route).patch(patchFunctionForRoute);
             }
         });
