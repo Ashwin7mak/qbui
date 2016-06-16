@@ -24,6 +24,8 @@ if [ ! -d "$SAUCELABS_SC_INSTALLED_DIR" ]; then
  echo unpacking saucelabs_sc
   tar -zxvf  $SAUCELABS_SC_INSTALL_DIR/$SAUCELABS_SC_TARBALL -C $SAUCELABS_SC_INSTALL_DIR
   ls "$SAUCELABS_SC_INSTALL_DIR"
+# grunt-sauce-connect-launcher is expecting 4.3.11 but we need 4.3.16 to get through the proxy issues in CI
+  ln -s $SAUCELABS_SC_INSTALL_DIR/sc-4.3.16-linux $SAUCELABS_SC_INSTALL_DIR/sc-4.3.11-linux
 else
   echo "Saucelabs_sc install dir $SAUCELABS_SC_INSTALLED_DIR already exists"
 fi
