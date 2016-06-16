@@ -1,6 +1,7 @@
 import React from 'react';
 import QBPanel from '../QBPanel/qbpanel.js';
 import Tabs, {TabPane} from 'rc-tabs';
+import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './qbform.scss';
 import './tabs.scss';
@@ -8,24 +9,45 @@ const serverTypeConsts = require('../../../../common/src/constants');
 import {CellValueRenderer} from '../dataTable/agGrid/cellValueRenderers';
 
 
+let FluxMixin = Fluxxor.FluxMixin(React);
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
  */
-class QBForm extends React.Component {
-    constructor(...args) {
-        super(...args);
-    }
+let QBForm = React.createClass({
+    mixins: [FluxMixin],
+    propTypes: {
+        activeTab: React.PropTypes.string
+    },
+    contextTypes: {
+        touch: React.PropTypes.bool
+    },
+
+    getDefaultProps: function() {
+        return {
+            activeTab: '0'
+        };
+    },
+
     createFieldElement(element, sectionIndex, labelPosition) {
-        let fieldLabel = element.fieldLabel ? element.fieldLabel : "test label";
+        let fieldLabel = "";
+
+        if (element.useAlternateLabel) {
+            fieldLabel = element.displayText;
+        } else  {
+            fieldLabel = element.fieldLabel ? element.fieldLabel : "test label"; //TODO "test label" text is only for testing
+        }
+
         let fieldRawValue = element.fieldRawValue ? element.fieldRawValue : "test raw value";
         let fieldDisplayValue = element.fieldDisplayValue ? element.fieldDisplayValue : "test display value";
         let fieldType = element.fieldType ? element.fieldType : serverTypeConsts.TEXT;
         let fieldDatatypeAttributes = element.fieldDatatypeAttributes ? element.fieldDatatypeAttributes : {};
         let key = "field" + sectionIndex + "-" + element.orderIndex;
 
+        let classes = "formElement field ";
+        classes += labelPosition === "ABOVE" ? "labelAbove" : "labelLeft";
         return (
-            <div key={key} className="formElement field">
+            <div key={key} className={classes}>
                 <span className={"fieldLabel"}>{fieldLabel}</span>
                 <span className="cellWrapper">
                     {fieldDisplayValue !== null &&
@@ -37,14 +59,14 @@ class QBForm extends React.Component {
                 </span>
             </div>
         );
-    }
+    },
     createTextElement(element, sectionIndex) {
         let key = "field" + sectionIndex + "-" + element.orderIndex;
         return <div key={key} className="formElement text">{element.displayText}</div>;
-    }
+    },
     createRow(fields) {
         return <div className="fieldRow">{fields}</div>;
-    }
+    },
 
     createSection(section) {
         let sectionTitle = "";
@@ -73,7 +95,7 @@ class QBForm extends React.Component {
                 {this.createRow(elements)}
             </QBPanel>
         );
-    }
+    },
 
     createTab(tab) {
         let sections = [];
@@ -86,7 +108,7 @@ class QBForm extends React.Component {
                 {sections}
             </TabPane>
         );
-    }
+    },
 
     render() {
         let tabs = [];
@@ -105,9 +127,6 @@ class QBForm extends React.Component {
             </div>
         );
     }
-}
-
-QBForm.propTypes = {activeTab: React.PropTypes.string};
-QBForm.defaultProps = {activeTab: '0'};
+});
 
 export default QBForm;
