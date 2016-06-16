@@ -4,6 +4,8 @@ import Tabs, {TabPane} from 'rc-tabs';
 import _ from 'lodash';
 import './qbform.scss';
 import './tabs.scss';
+const serverTypeConsts = require('../../../../common/src/constants');
+import {CellValueRenderer} from '../dataTable/agGrid/cellValueRenderers';
 
 
 /*
@@ -14,15 +16,25 @@ class QBForm extends React.Component {
     constructor(...args) {
         super(...args);
     }
-    //TODO : handle field types
     createFieldElement(element, sectionIndex, labelPosition) {
         let fieldLabel = element.fieldLabel ? element.fieldLabel : "test label";
-        let fieldValue = element.fieldValue ? element.fieldValue : "test value";
+        let fieldRawValue = element.fieldRawValue ? element.fieldRawValue : "test raw value";
+        let fieldDisplayValue = element.fieldDisplayValue ? element.fieldDisplayValue : "test display value";
+        let fieldType = element.fieldType ? element.fieldType : serverTypeConsts.TEXT;
+        let fieldDatatypeAttributes = element.fieldDatatypeAttributes ? element.fieldDatatypeAttributes : {};
         let key = "field" + sectionIndex + "-" + element.orderIndex;
+
         return (
             <div key={key} className="formElement field">
                 <span className={"fieldLabel"}>{fieldLabel}</span>
-                <span className="fieldValue">{fieldValue}</span>
+                <span className="cellWrapper">
+                    {fieldDisplayValue !== null &&
+                    <CellValueRenderer type={fieldType}
+                               value={fieldRawValue}
+                               display={fieldDisplayValue}
+                               attributes={fieldDatatypeAttributes}
+                    />  }
+                </span>
             </div>
         );
     }
