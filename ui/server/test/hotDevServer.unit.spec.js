@@ -1,7 +1,7 @@
 var assert = require('assert');
 var sinon = require('sinon');
 var WebpackDevServer = require('webpack-dev-server');
-var log = require('../logger').getLogger();
+var log = require('../src/logger').getLogger();
 
 /**
  * Unit tests for Hot Dev Server
@@ -39,7 +39,7 @@ describe('HotDevServer Unit Test', function() {
             noHotLoad: false,
             hotServer: HotServerMock
         };
-        require('../hotDevServer')(mockConfig);
+        require('../src/hotDevServer')(mockConfig);
 
         assert(hotServerMockStub.callCount === 0, true);
         assert(webpackDevServerStub.callCount === 0, true);
@@ -52,7 +52,7 @@ describe('HotDevServer Unit Test', function() {
             noHotLoad: true,
             hotServer: HotServerMock
         };
-        require('../hotDevServer')(mockConfig);
+        require('../src/hotDevServer')(mockConfig);
 
         assert(hotServerMockStub.callCount === 0, true);
         assert(webpackDevServerStub.callCount === 0, true);
@@ -65,7 +65,7 @@ describe('HotDevServer Unit Test', function() {
             noHotLoad: true,
             hotServer: HotServerMock
         };
-        require('../hotDevServer')(mockConfig);
+        require('../src/hotDevServer')(mockConfig);
 
         assert(hotServerMockStub.callCount === 0, true);
         assert(webpackDevServerStub.callCount === 0, true);
@@ -79,7 +79,7 @@ describe('HotDevServer Unit Test', function() {
             hotServer: HotServerMock
         };
 
-        require('../hotDevServer')(mockConfig);
+        require('../src/hotDevServer')(mockConfig);
 
         assert(hotServerMockStub.callCount === 1, true);
         assert(webpackDevServerStub.callCount === 0, true);

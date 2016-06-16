@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 
     var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
     var buildDir =  path.join(__dirname, '/build');
-    var localJsFile =  path.join(__dirname, '/server/config/environment/local.js');
+    var localJsFile =  path.join(__dirname, '/server/src/config/environment/local.js');
 
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';

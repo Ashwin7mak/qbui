@@ -2,9 +2,9 @@
 
 var sinon = require('sinon');
 var assert = require('assert');
-var config = require('./../config/environment');
-var perfLogger = require('./../perfLogger');
-var log = require('./../logger').getLogger();
+var config = require('../src/config/environment');
+var perfLogger = require('../src/perfLogger');
+var log = require('../src/logger').getLogger();
 
 /**
  * Unit tests for User field formatting
