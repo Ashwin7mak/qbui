@@ -3,7 +3,7 @@
     var request = require('request');
     var promise = require('bluebird');
     var assert = require('assert');
-    var consts = require('../../../../../common/src/constants');
+    var consts = require('../../../common/src/constants');
     var log = require('../../logger').getLogger();
     //This is the url that will be used for making requests to the node server or the java server
     var baseUrl;
