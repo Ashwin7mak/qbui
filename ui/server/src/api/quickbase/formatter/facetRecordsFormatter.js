@@ -82,7 +82,7 @@
     'use strict';
 
     var recordFormatter = require('./recordFormatter')();
-    var constants = require('../../../../common/src/constants');
+    var constants = require('../../../../../common/src/constants');
 
     module.exports = function() {
 

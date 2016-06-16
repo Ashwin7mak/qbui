@@ -26,7 +26,7 @@
         },
 
         // to run using ssl, copy the private key and cert for
-        // your development host to ../server/config/environment/keys
+        // your development host to ../server/src/config/environment/keys
         // folder...no keys defined equates to no SSL support.
         SSL_KEY: {
             private: '',

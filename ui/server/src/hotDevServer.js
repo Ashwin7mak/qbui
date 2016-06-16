@@ -13,7 +13,7 @@
 
             var webpack = require('webpack');
             var WebpackDevServer = require('webpack-dev-server');
-            var webpackConfig = require('../webpack.config.js');
+            var webpackConfig = require('../../webpack.config.js');
             var hotPort = config.webpackDevServerPort || 3000;
 
             webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());

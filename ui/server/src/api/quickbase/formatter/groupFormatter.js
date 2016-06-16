@@ -5,12 +5,12 @@
 //
 (function() {
     'use strict';
-    var constants = require('../../../../common/src/constants');
+    var constants = require('../../../../../common/src/constants');
     var groupTypes = require('../../groupTypes');
     var log = require('../../../logger').getLogger();
     var lodash = require('lodash');
     var groupUtils = require('../../../components/utility/groupUtils');
-    var dateFormatter = require('../../../../common/src/formatter/dateTimeFormatter');
+    var dateFormatter = require('../../../../../common/src/formatter/dateTimeFormatter');
     var logger = require('../../../logger').getLogger();
     dateFormatter.setLogger(logger);
 

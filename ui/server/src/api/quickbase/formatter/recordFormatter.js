@@ -6,15 +6,15 @@
 (function() {
     'use strict';
     var _ = require('lodash');
-    var consts = require('../../../../common/src/constants');
-    var phoneFormatter = require('../../../../common/src/formatter/phoneNumberFormatter');
-    var todFormatter = require('../../../../common/src/formatter/timeOfDayFormatter');
-    var numericFormatter = require('../../../../common/src/formatter/numericFormatter');
-    var urlAndFileReportLinkFormatter = require('../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter');
-    var emailFormatter = require('../../../../common/src/formatter/emailFormatter');
-    var durationFormatter = require('../../../../common/src/formatter/durationFormatter');
-    var userFormatter = require('../../../../common/src/formatter/userFormatter');
-    var dateFormatter = require('../../../../common/src/formatter/dateTimeFormatter');
+    var consts = require('../../../../../common/src/constants');
+    var phoneFormatter = require('../../../../../common/src/formatter/phoneNumberFormatter');
+    var todFormatter = require('../../../../../common/src/formatter/timeOfDayFormatter');
+    var numericFormatter = require('../../../../../common/src/formatter/numericFormatter');
+    var urlAndFileReportLinkFormatter = require('../../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter');
+    var emailFormatter = require('../../../../../common/src/formatter/emailFormatter');
+    var durationFormatter = require('../../../../../common/src/formatter/durationFormatter');
+    var userFormatter = require('../../../../../common/src/formatter/userFormatter');
+    var dateFormatter = require('../../../../../common/src/formatter/dateTimeFormatter');
     var logger = require('../../../logger').getLogger();
     dateFormatter.setLogger(logger);
     /**

@@ -9,7 +9,7 @@
     var authentication = require('./components/authentication');
     var log = require('./logger').getLogger();
     var _ = require('lodash');
-    var mixins = require('./../common/src/lodashMixins');
+    var mixins = require('./../../common/src/lodashMixins');
 
     require('./logger').getLogger();
 

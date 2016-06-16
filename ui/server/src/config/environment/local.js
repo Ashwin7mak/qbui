@@ -33,7 +33,7 @@
         },
 
         // to run using ssl, copy the private key and cert for
-        // your host(ie:localhost.intuit.com) to ../server/config/keys
+        // your host(ie:localhost.intuit.com) to ../server/src/config/keys
         // folder.. comment this out if don't want to offer ssl support.
 
         //SSL_KEY: {

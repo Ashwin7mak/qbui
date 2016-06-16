@@ -33,7 +33,7 @@
         },
 
         // to run using ssl, copy the private key and cert for
-        // your test host to ../server/config/environment/keys
+        // your test host to ../server/src/config/environment/keys
         // folder...no keys defined equates to no SSL support.
         //SSL_KEY: {
         //    private: '',

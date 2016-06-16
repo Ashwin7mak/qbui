@@ -13,7 +13,7 @@
     var reportsApi;
     var routeGroupMapper = require('./qbRouteGroupMapper');
     var routeGroup;
-    var simpleStringify = require('./../../common/src/simpleStringify.js');
+    var simpleStringify = require('./../../../common/src/simpleStringify.js');
     var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
 
     module.exports = function(config) {

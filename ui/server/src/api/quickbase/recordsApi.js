@@ -62,7 +62,7 @@
         var requestHelper = require('./requestHelper')(config);
         var groupFormatter = require('./formatter/groupFormatter');
         var recordFormatter = require('./formatter/recordFormatter')();
-        var constants = require('../../../common/src/constants');
+        var constants = require('../../../../common/src/constants');
 
         //Module constants:
         var APPLICATION_JSON = 'application/json';
