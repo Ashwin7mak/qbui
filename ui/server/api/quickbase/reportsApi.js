@@ -11,7 +11,7 @@
     /* See comment in recordsApi.js */
     let jsonBigNum = require('json-bignum');
     let errorCodes = require('../errorCodes');
-    let constants = require('./../constants');
+    let constants = require('../../../common/src/constants');
     let stringUtils = require('../../components/utility/stringUtils');
 
     module.exports = function(config) {
