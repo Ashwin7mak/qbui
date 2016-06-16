@@ -17,7 +17,7 @@
     'use strict';
     var tableOneNumberOfRecords = 10;  // change value to how many records you want to generate for table 1
     var tableTwoNumberOfRecords = 10; // change value to how many records you want to generate for table 2
-    var realmToUse = 'realm1';       // change this to a string i.e. "myRealm" of an existing realm to use
+    var realmToUse = 'localhost';       // change this to a string i.e. "myRealm" of an existing realm to use
                                        // if you leave realmToUse null it will randomly generated a new realm name
 
     var config = require('../../server/config/environment');
