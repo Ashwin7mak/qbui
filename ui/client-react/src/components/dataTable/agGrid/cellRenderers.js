@@ -125,7 +125,7 @@ const CellRenderer = React.createClass({
         }
         }
 
-        this.state.value.display = newDisplay;
+        this.state.valueAndDisplay.display = newDisplay;
         this.setState(this.state);
     },
 

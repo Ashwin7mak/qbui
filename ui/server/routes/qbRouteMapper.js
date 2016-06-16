@@ -32,6 +32,7 @@
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
+        routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
         routeToGetFunction[routeConsts.SWAGGER_RESOURCES] = fetchSwagger;
@@ -250,6 +251,38 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Fetch All Records');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * This is the function for fetching a the report home page for the given app and table.
+     * Currently, a hydrated report means report data, meta data and facet information
+     *
+     * @param req
+     * @param res
+     */
+    /*eslint no-shadow:0 */
+    function fetchTableHomePageReport(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Table HomePage Report Components', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            reportsApi.fetchTableHomePageReport(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Table HomePage Report Components');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Table HomePage Report Components');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
