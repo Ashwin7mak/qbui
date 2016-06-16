@@ -449,8 +449,6 @@ task gruntE2EAWSSauce(type: GruntTask) {
         tasks.invokeCheckForApiUp.execute()
         args = ["test:e2eAWSSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
-    dependsOn startTomcat
-    finalizedBy stopTomcat
 }
 
 task cleanBuildDir (type: Delete) {
