@@ -4,8 +4,8 @@
  */
 (function() {
     'use strict';
-    var moment = require('moment-timezone');
-    var consts = require('../../constants');
+    var moment = require('moment');
+    var consts = require('../constants');
     //Module constants:
     var TWENTY_FOUR_HOUR_CLOCK = 'HH:';
     var TWELVE_HOUR_CLOCK = 'h:';

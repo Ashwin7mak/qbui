@@ -32,6 +32,7 @@ describe('Validate ReportsApi unit tests', function() {
             'url': '/testurl.com',
             'method': 'get'
         };
+
         beforeEach(function() {
             reportsApi.setRequestHelper(requestHelper);
             executeReqSpy = sinon.spy(requestHelper, "executeRequest");
@@ -39,6 +40,7 @@ describe('Validate ReportsApi unit tests', function() {
         afterEach(function() {
             executeReqSpy.restore();
         });
+
         it('Test success ', function(done) {
             var requestStub = sinon.stub();
             requestHelper.setRequestObject(requestStub);
@@ -46,13 +48,18 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchFacetResults(req);
             promise.then(
                 function(response) {
+                    done();
                     assert.deepEqual(response, {statusCode: 200});
                     assert(executeReqSpy.called);
                     var opts = executeReqSpy.args[0][1];
                     assert.equal(opts.headers['Content-Type'], 'application/json');
+                },
+                function(error) {
+                    done(new Error("Unexpected promise error returned with test success"));
                 }
-            );
-            done();
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve test success: ' + JSON.stringify(errorMsg)));
+            });
         });
         it('Test facets url ', function(done) {
             req.url = "/reports/2/reportComponents";
@@ -62,15 +69,20 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchFacetResults(req);
             promise.then(
                 function(response) {
+                    done();
                     assert.deepEqual(response, {statusCode: 200});
                     assert(executeReqSpy.called);
                     var opts = executeReqSpy.args[0][1];
                     assert.equal(opts.headers['Content-Type'], 'application/json');
                     var indexOfFacetsURL = opts.url.indexOf('reports/2/facets/results');
                     assert.notEqual(indexOfFacetsURL, -1);
+                },
+                function(error) {
+                    done(new Error("Unexpected promise error returned with test facets url"));
                 }
-            );
-            done();
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve test facets url: ' + JSON.stringify(errorMsg)));
+            });
         });
         it('Test failure ', function(done) {
             var requestStub = sinon.stub();
@@ -79,16 +91,19 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchFacetResults(req);
             promise.then(
                 function(response) {
+                    done();
                     assert.deepEqual(response, {statusCode: 200});
                     assert(executeReqSpy.called);
                     var opts = executeReqSpy.args[0][1];
                     assert.equal(opts.headers['Content-Type'], 'application/json');
                 },
                 function(response) {
+                    done();
                     assert.deepEqual(response, new Error("error"));
                 }
-            );
-            done();
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve test failure: ' + JSON.stringify(errorMsg)));
+            });
         });
     });
 
@@ -125,6 +140,9 @@ describe('Validate ReportsApi unit tests', function() {
                         fields: []
                     });
                     done();
+                },
+                function(error) {
+                    done(new Error('Failure promise unexpectedly returned testing fetchReportResults success'));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve fetchReportResults success: ' + JSON.stringify(errorMsg)));
@@ -135,12 +153,223 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchReportResults(req);
             promise.then(
                 function(response) {
+                    done(new Error('Success promise unexpectedly return testing fetchReportResults failure'));
                 },
                 function(error) {
+                    done();
                     assert.deepEqual(error, new Error("error"));
                 }
-            );
-            done();
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportResults failure: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    /**
+     * Unit test fetchReportResults api
+     */
+    describe('validate fetchReportTableHomepage api', function() {
+        var req = {
+            headers: {
+                'tid': 'tid'
+            },
+            'Content-Type': 'content-type',
+            'url': 'apps/123/tables/456/homepagereportid',
+            'method': 'get',
+            params: null
+        };
+
+        var reportObj = {
+            reportMetaData: {
+                data: ''
+            },
+            reportData: {
+                data: ''
+            }
+        };
+
+        var getExecuteRequestStub;
+        var executeReqLogSpy;
+        var fetchReportComponentsStub;
+
+        var responseBody = '' +
+            '{"name":"Activity Summary","description":"","type":"NEWSUMMARY","ownerId":null,"tableId":"bkqw6gbkb",' +
+            '"id":44,"showDescriptionOnReport":false,"hideReport":false,"showSearchBox":false,' +
+            '"fids":[142,167,10,112,8,109,58,145,51,87,88,146,147,166,1,2,3,4,5],"sortList":["7:V","142:FY"],' +
+            '"facetFids":[142,7,167],"facetBehavior":"none","query":null,"allowEdit":true,"allowView":true,' +
+            '"displayNewlyChangedRecords":false,"reportFormat":"","rolesWithGrantedAccess":[12,15,16],"summary":"show"}';
+
+        beforeEach(function() {
+            reportObj.reportMetaData.data = '';
+            reportObj.reportData.data = '';
+
+            getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
+            executeReqLogSpy = sinon.spy(requestHelper, "logUnexpectedError");
+            fetchReportComponentsStub = sinon.stub(reportsApi, "fetchReportComponents");
+        });
+        afterEach(function() {
+            getExecuteRequestStub.restore();
+            executeReqLogSpy.restore();
+            fetchReportComponentsStub.restore();
+        });
+        it('Test success ', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
+            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done();
+                    reportObj.reportMetaData.data = JSON.parse(responseBody);
+                    reportObj.reportData.data = 'reportData' ;
+                    assert.deepEqual(response, reportObj);
+                },
+                function(error) {
+                    done(new Error("promise error response returned when testing success"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchTableHomePageReport success: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test report table homepage not defined ', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body: ''}));
+            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done();
+                    assert.deepEqual(response, reportObj);
+                },
+                function(error) {
+                    done(new Error("promise error response returned when testing undefined table homepage"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchTableHomePageReport success when testing undefined table homepage: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test failure when fetching table homepage meta data', function(done) {
+            var fetchReportMetaStub = sinon.stub(reportsApi, "fetchReportMetaData");
+
+            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
+            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
+            fetchReportMetaStub.returns(Promise.reject('error'));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    fetchReportMetaStub.restore();
+                    done(new Error("promise success response returned when testing unexpected homepage report metaData failure"));
+                },
+                function(error) {
+                    fetchReportMetaStub.restore();
+                    done();
+                    assert.ok(error);
+                }
+            ).catch(function(errorMsg) {
+                fetchReportMetaStub.restore();
+                done(new Error('unable to resolve fetchTableHomePageReport success when testing report table homepage metadata failure: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test unexpected failure when parsing meta data', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body: new Error()}));
+            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done(new Error("promise success response returned when testing parsing meta data failure"));
+                },
+                function(error) {
+                    done();
+                    assert.ok(error);
+                    assert(executeReqLogSpy.called);
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchTableHomePageReport when parsing meta data failure: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test failure on fetchReportComponent', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
+            fetchReportComponentsStub.returns(Promise.reject(new Error("error")));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done(new Error("promise success response returned when testing failure"));
+                },
+                function(error) {
+                    done();
+                    assert.deepEqual(error, new Error("error"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportComponent failure: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test failure on fetch table homepage report id and error body', function(done) {
+            var errorObj = {
+                body: 'error body'
+            };
+            getExecuteRequestStub.returns(Promise.reject(errorObj));
+            fetchReportComponentsStub.returns(Promise.reject(new Error("report component error")));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done(new Error("promise success response return when testing failure on reportId and error body"));
+                },
+                function(error) {
+                    done();
+                    assert.deepEqual(error, errorObj);
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetch table homepage failure when testing failure on reportId and error body: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test failure on fetch table homepage report id with error status message', function(done) {
+            var errorObj = {
+                statusMessage: 'error statusMessage'
+            };
+            getExecuteRequestStub.returns(Promise.reject(errorObj));
+            fetchReportComponentsStub.returns(Promise.reject(new Error("report component error")));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done(new Error("promise success response return when testing with error status message"));
+                },
+                function(error) {
+                    done();
+                    assert.deepEqual(error, errorObj);
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetch table homepage failure when testing with error status message: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test error on fetch table homepage report id', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
+            fetchReportComponentsStub.returns(Promise.reject('report component error'));
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done(new Error("promise success response returned when testing unexpected error on table home page"));
+                },
+                function(error) {
+                    //  an error was thrown
+                    done();
+                    assert.ok(error);
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetch table homepage unexpected failure: ' + JSON.stringify(errorMsg)));
+            });
         });
     });
 
@@ -181,10 +410,13 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchReportComponents(req);
             promise.then(
                 function(response) {
+                    done();
                     assert.deepEqual(response, expectedSuccessResponse);
+                },
+                function(error) {
+                    done(new Error("error"));
                 }
             );
-            done();
         });
         it('Test error from reportResults', function(done) {
             var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
@@ -194,12 +426,13 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchReportComponents(req);
             promise.then(
                 function(response) {
+                    done(new Error("Unexpected success promise return with test error from reportResults"));
                 },
                 function(error) {
+                    done();
                     assert.deepEqual(error, new Error("error"));
                 }
             );
-            done();
         });
         it('Test error from fetchFacets', function(done) {
             var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
@@ -209,10 +442,13 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchReportComponents(req);
             promise.then(
                 function(response) {
+                    done();
                     assert.deepEqual(response, expectedUnknownErrorResponse);
+                },
+                function(error) {
+                    done(new Error("unexpected failure promise returned with fetch facets"));
                 }
             );
-            done();
         });
         it('Test 10K error from fetchFacets', function(done) {
             var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
@@ -229,10 +465,13 @@ describe('Validate ReportsApi unit tests', function() {
             var promise = reportsApi.fetchReportComponents(req);
             promise.then(
                 function(response) {
+                    done();
                     assert.deepEqual(response, errorExpectedResponse);
+                },
+                function(error) {
+                    done(new Error("unexpected failure promise returned with 10k fetch facets"));
                 }
             );
-            done();
         });
     });
 });

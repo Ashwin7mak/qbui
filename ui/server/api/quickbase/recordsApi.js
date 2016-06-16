@@ -42,6 +42,7 @@
     var Promise = require('bluebird');
     var defaultRequest = require('request');
     var log = require('../../logger').getLogger();
+    var perfLogger = require('../../perfLogger');
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -61,7 +62,7 @@
         var requestHelper = require('./requestHelper')(config);
         var groupFormatter = require('./formatter/groupFormatter');
         var recordFormatter = require('./formatter/recordFormatter')();
-        var constants = require('./../constants');
+        var constants = require('../../../common/src/constants');
 
         //Module constants:
         var APPLICATION_JSON = 'application/json';
@@ -193,19 +194,29 @@
                             var records = jsonBigNum.parse(response[0].body);
                             var groupedRecords;
 
-                            //return raw undecorated record values due to flag format=raw
+                            //  return raw undecorated record values due to flag format=raw
                             if (this.isRawFormat(req)) {
                                 responseObject = records;
                             } else {
-                                //response object will include a fields meta data block plus record values
+                                //  response object will include a fields meta data block plus record values
                                 var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
 
                                 if (this.isDisplayFormat(req)) {
-                                    records = recordFormatter.formatRecords(records, fields);
+                                    //  initialize perfLogger
+                                    let perfLog = perfLogger.getInstance();
+                                    perfLog.init("Format Display Records", {req:req, idsOnly:true});
 
-                                    //  the formatter will determine if grouping is requested and return
-                                    //  a data structure grouped according to the grouping requirements.
+                                    //  format records for display and log perf stats
+                                    records = recordFormatter.formatRecords(records, fields);
+                                    perfLog.log();
+
+                                    //  re-init perfLogger
+                                    perfLog.init("Build GroupList");
+
+                                    //  if grouping, return a data structure organized according to the
+                                    //  grouping requirements and log perf stats
                                     groupedRecords = groupFormatter.group(req, fields, records);
+                                    perfLog.log();
                                 }
 
                                 responseObject = {};
@@ -254,7 +265,7 @@
                     // this bypass is for grouping but in ag-grid
                     // change url from .../reports/<id>/reportcomponents?sortList=..
                     // to .../records?sortList=.. because /reports/results api does not support sortList param.
-                    if (inputUrl_toLower.indexOf(constants.REQUEST_PARAMETER.SORT_LIST) !== -1) {
+                    if (inputUrl_toLower.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
                         let reportIndex = inputUrl_toLower.indexOf(REPORTS);
                         let paramsIndex = inputUrl_toLower.indexOf("?"); // get the index for url params starting after ?
                         opts.url = inputUrl.substring(0, reportIndex) + RECORDS + inputUrl.substring(paramsIndex);

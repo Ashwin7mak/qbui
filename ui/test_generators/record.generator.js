@@ -6,7 +6,7 @@
 
 (function() {
     'use strict';
-    var consts = require('../server/api/constants');
+    var consts = require('../common/src/constants');
     var fieldConsts = require('./field.constants');
     var dataTypeConsts = require('./datatype.attributes.constants');
     var tableConsts = require('./table.constants');

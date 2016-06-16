@@ -2,8 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
-import Formatters from '../../src/components/dataTable/agGrid/formatters';
-import {DateFormatter, DateTimeFormatter, TimeFormatter, NumericFormatter, TextFormatter, CheckBoxFormatter} from '../../src/components/dataTable/agGrid/formatters';
+import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
+import CellValueRenderers from '../../src/components/dataTable/agGrid/cellValueRenderers';
+
+import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
 
 describe('AGGrid cell editor functions', () => {
     'use strict';
@@ -17,63 +19,85 @@ describe('AGGrid cell editor functions', () => {
     });
 
     beforeEach(() => {
-        Formatters.__Rewire__('I18nNumber', I18nMessageMock);
-        Formatters.__Rewire__('I18nDate', I18nMessageMock);
+
+        CellRenderers.__Rewire__('I18nDate', I18nMessageMock);
+        CellRenderers.__Rewire__('I18nNumber', I18nMessageMock);
+        CellValueRenderers.__Rewire__('I18nNumber', I18nMessageMock);
     });
 
     afterEach(() => {
-        Formatters.__ResetDependency__('I18nNumber');
-        Formatters.__ResetDependency__('I18nDate');
+
+        CellRenderers.__ResetDependency__('I18nDate');
+        CellRenderers.__ResetDependency__('I18nNumber');
+        CellValueRenderers.__ResetDependency__('I18nNumber');
     });
 
-    it('test TextFormatter', () => {
+    it('test TextCellRenderer', () => {
         const params = {
-            value: "Testing",
-            colDef: {}
+            value: {
+                value: "Testing",
+                display: "Testing"
+            },
+            column: {
+                colDef: {}
+            }
         };
 
-        component = TestUtils.renderIntoDocument(<TextFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const value = TestUtils.findRenderedDOMComponentWithClass(component, "cellData");
-        expect(value.innerHTML).toEqual(params.value);
+        const value = TestUtils.findRenderedDOMComponentWithClass(component, "textCell");
+        expect(value.innerHTML).toEqual(params.value.display);
 
         const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
         expect(edit.type).toEqual("text");
-        expect(edit.value).toEqual(params.value);
+        expect(edit.value).toEqual(params.value.display);
 
         edit.value = "newValue";
         TestUtils.Simulate.change(edit);
         expect(value.innerHTML).toEqual("newValue");
     });
 
-    it('test NumericFormatter', () => {
+    it('test NumericCellRenderer', () => {
         const params = {
-            value: 123,
-            colDef: {}
+            value: {
+                value: 123,
+                display: "123"
+            },
+            column: {
+                colDef: {
+                    datatypeAttributes: {}
+                }
+            }
         };
 
-        component = TestUtils.renderIntoDocument(<NumericFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<NumericCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const value = ReactDOM.findDOMNode(component).querySelector(".cellData span");
-        expect(value.innerHTML).toEqual(params.value.toString());
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll(".numberCell span");
+        expect(valueElements.length).toBe(1);
+
+        expect(valueElements[0].innerHTML).toEqual(params.value.display);
 
         const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
         expect(edit.type).toEqual("number");
 
         edit.value = 456;
         TestUtils.Simulate.change(edit);
-        expect(value.innerHTML).toEqual("456");
+        expect(valueElements[0].innerHTML).toEqual("456");
     });
 
-    it('test CheckBoxFormatter', () => {
+    it('test CheckBoxCellRenderer', () => {
         const params = {
-            value: true,
-            colDef: {}
+            value: {
+                value: true
+            },
+            column: {
+                colDef: {}
+            }
         };
 
-        component = TestUtils.renderIntoDocument(<CheckBoxFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<CheckBoxCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const inputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellData input");
@@ -88,32 +112,44 @@ describe('AGGrid cell editor functions', () => {
 
     it('test DateFormatter', () => {
         const params = {
-            value: "2097-01-17T00:33:03Z",
-            colDef: {}
+            value: {
+                value: "2097-01-17"
+            },
+            column: {
+                colDef: {}
+            }
         };
 
-        component = TestUtils.renderIntoDocument(<DateFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<DateCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test DateTimeFormatter', () => {
         const params = {
-            value: "2097-01-17T00:33:03Z",
-            colDef: {}
+            value: {
+                value: "2097-01-17T00:33:03Z",
+            },
+            column: {
+                colDef: {}
+            }
         };
 
-        component = TestUtils.renderIntoDocument(<DateTimeFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<DateTimeCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
     });
 
     it('test TimeFormatter', () => {
         const params = {
-            value: "1970-01-01T19:13:44Z",
-            colDef: {}
+            value: {
+                value: "1970-01-01T19:13:44Z"
+            },
+            column: {
+                colDef: {}
+            }
         };
 
-        component = TestUtils.renderIntoDocument(<TimeFormatter params={params} />);
+        component = TestUtils.renderIntoDocument(<TimeCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 });

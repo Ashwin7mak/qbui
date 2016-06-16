@@ -1,9 +1,9 @@
 (function() {
     'use strict';
 
-    var constants = require('../../api/constants');
+    var constants = require('../../../common/src/constants');
     var groupTypes = require('../../api/groupTypes');
-    var moment = require('moment');
+    var moment = require('moment-timezone');
     var emailAddress = require('email-addresses');
 
     /**
@@ -41,6 +41,25 @@
         return value;
     }
 
+    function convertUtcDateToMomentDate(utcTimestamp, timeZone) {
+        if (utcTimestamp) {
+            //  Time on server is always UTC
+            try {
+                if (!timeZone) {
+                    timeZone = constants.UTC_TIMEZONE;
+                }
+                var d = new Date(utcTimestamp.replace(/(\[.*?\])/, ''));
+                let momentDate = moment.tz(d, timeZone);
+                if (momentDate.isValid()) {
+                    return momentDate;
+                }
+            } catch (e) {
+                // any exception means invalid date..return null
+            }
+        }
+        return null;
+    }
+
     module.exports = {
 
         /**
@@ -75,6 +94,15 @@
                 case groupTypes.DURATION.hour: return true;
                 case groupTypes.DURATION.week: return true;
                 case groupTypes.DURATION.day: return true;
+                }
+                return false;
+            case constants.TIME_OF_DAY:
+                switch (groupType) {
+                case groupTypes.TIME_OF_DAY.equals: return true;
+                case groupTypes.TIME_OF_DAY.second: return true;
+                case groupTypes.TIME_OF_DAY.minute: return true;
+                case groupTypes.TIME_OF_DAY.hour: return true;
+                case groupTypes.TIME_OF_DAY.am_pm: return true;
                 }
                 return false;
             case constants.EMAIL_ADDRESS:
@@ -122,6 +150,71 @@
 
             return false;
 
+        },
+
+        /**
+         * For the given utc time, round down to the nearest hour.
+         *
+         * @param utcTimestamp - utc timestamp
+         * @param timeZone - the timezone to use
+         * @returns {*}
+         */
+        getByHour: function(utcTimestamp, timeZone) {
+            let momentDate = convertUtcDateToMomentDate(utcTimestamp, timeZone);
+            if (momentDate) {
+                return momentDate.startOf('hour').format('HH:mm');
+            }
+            return '';
+        },
+
+        /**
+         * For the given utc time, round down to the nearest minute.
+         *
+         * @param utcTimestamp - utc timestamp
+         * @param timeZone - the timezone to use
+         * @returns {*}
+         */
+        getByMinute: function(utcTimestamp, timeZone) {
+            let momentDate = convertUtcDateToMomentDate(utcTimestamp, timeZone);
+            if (momentDate) {
+                return momentDate.startOf('minute').format('HH:mm');
+            }
+            return '';
+        },
+
+        /**
+         * For the given utc time, round down to the nearest second.
+         *
+         * @param utcTimestamp - utc timestamp
+         * @param timeZone - the timezone to use
+         * @returns {*}
+         */
+        getBySecond: function(utcTimestamp, timeZone) {
+            let momentDate = convertUtcDateToMomentDate(utcTimestamp, timeZone);
+            if (momentDate) {
+                return momentDate.startOf('second').format('HH:mm:ss');
+            }
+            return '';
+        },
+
+        /**
+         * Return the start of the day(12:00am) if the timeOfDay is in the AM;
+         * otherwise, return the end of the day(11:59pm).
+         *
+         * @param utcTimestamp - utc timestamp
+         * @param timeZone - the timezone to use
+         * @returns {*}
+         */
+        getByAmPm: function(utcTimestamp, timeZone) {
+            let momentDate = convertUtcDateToMomentDate(utcTimestamp, timeZone);
+            if (momentDate) {
+                if (momentDate.format("A") === 'AM') {
+                    return '00:00:00';
+                } else {
+                    return '23:59:59';
+                }
+            }
+            return '';
         },
 
         /**
@@ -178,6 +271,16 @@
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {
                     return momentDate.startOf('isoWeek').format(format);
+                }
+            }
+            return '';
+        },
+
+        getDay: function(displayDate, format) {
+            if (displayDate) {
+                let momentDate = moment(displayDate, format, true);
+                if (momentDate.isValid()) {
+                    return momentDate.format(format);
                 }
             }
             return '';

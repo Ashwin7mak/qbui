@@ -29,7 +29,7 @@
                     name: 'qbse-local-' + dateUtils.formatDate(new Date(), '%Y-%M-%D-%h.%m.%s') + '.log'
                 }
             },
-            src: true               // this is slow...do not use in prod
+            src: false               // this is slow...do not use in prod
         },
 
         // to run using ssl, copy the private key and cert for
@@ -59,6 +59,9 @@
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.PRODUCTION,
+
+        //enable to track performance stats to server/splunk
+        isClientPerfTrackingEnabled: true,
 
         //Node's understanding of a grouping of routes to be enabled/disabled
         routeGroup: routeGroups.LH_V1,

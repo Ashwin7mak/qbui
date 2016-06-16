@@ -46,22 +46,6 @@ let ReportToolsAndContent = React.createClass({
             selections:null,
         };
     },
-    loadReport(appId, tblId, rptId) {
-        const flux = this.getFlux();
-        flux.actions.selectTableId(tblId);
-        flux.actions.loadFields(appId, tblId);
-        flux.actions.loadReport(appId, tblId, rptId, true);
-    },
-    loadReportFromParams(params) {
-        let appId = params.appId;
-        let tblId = params.tblId;
-        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
-
-        if (appId && tblId && rptId) {
-            //logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
-            this.loadReport(appId, tblId, rptId);
-        }
-    },
     componentWillMount() {
         // Create a debounced function that delays invoking filterReport func
         // until after debounceInputMillis milliseconds have elapsed since the
@@ -70,17 +54,49 @@ let ReportToolsAndContent = React.createClass({
         // note the facets by id
         this.mapFacetFields();
     },
-    componentDidMount() {
-        const flux = this.getFlux();
-        flux.actions.hideTopNav();
-
-        if (this.props.params) {
-            this.loadReportFromParams(this.props.params);
-        }
-    },
     componentWillReceiveProps() {
         this.mapFacetFields();
     },
+
+
+    //when report changed from not loading to loading start measure of components performance
+    startPerfTiming(nextProps) {
+        if (_.has(this.props, 'reportData.loading') &&
+            !this.props.reportData.loading &&
+            nextProps.reportData.loading) {
+            let flux = this.getFlux();
+            flux.actions.mark('component-ReportToolsAndContent start');
+        }
+    },
+
+    //when report changed from loading to loaded finish measure of components performance
+    capturePerfTiming(prevProps) {
+        let timingContextData = {numReportCols:0, numReportRows:0};
+        let flux = this.getFlux();
+        if (_.has(this.props, 'reportData.loading') &&
+            !this.props.reportData.loading &&
+            prevProps.reportData.loading) {
+            flux.actions.measure('component-ReportToolsAndContent', 'component-ReportToolsAndContent start');
+            // note the size of the report with the measure
+            if (_.has(this.props, 'reportData.data.columns.length')) {
+                let reportData = this.props.reportData.data;
+                timingContextData.numReportCols = reportData.columns.length;
+                timingContextData.numReportRows = reportData.filteredRecordsCount ?
+                    reportData.filteredRecordsCount : reportData.recordsCount;
+            }
+            flux.actions.logMeasurements(timingContextData);
+            flux.actions.doneRoute();
+        }
+    },
+
+    componentWillUpdate(nextProps) {
+        this.startPerfTiming(nextProps);
+    },
+
+    componentDidUpdate(prevProps) {
+        this.capturePerfTiming(prevProps);
+    },
+
     mapFacetFields() {
         this.facetFields = {};
         if (this.props.reportData && this.props.reportData.data &&
@@ -114,7 +130,6 @@ let ReportToolsAndContent = React.createClass({
 
         let queryParams = {};
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
-        queryParams[query.GLIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
         flux.actions.getFilteredRecords(this.props.selectedAppId,
             this.props.routeParams.tblId,
             typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true}, filter, queryParams);
@@ -175,8 +190,13 @@ let ReportToolsAndContent = React.createClass({
     render() {
 
         let classes = "reportToolsAndContentContainer";
-        if (this.props.selectedRows && (this.props.selectedRows.length === 1)) {
-            classes += " singleSelection";
+        if (this.props.selectedRows) {
+            if (this.props.selectedRows.length > 0) {
+                classes += " activeSelection";
+            }
+            if (this.props.selectedRows.length === 1) {
+                classes += " singleSelection";
+            }
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;

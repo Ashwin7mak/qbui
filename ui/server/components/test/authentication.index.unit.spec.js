@@ -1,7 +1,7 @@
 var sinon = require('sinon');
 
 var authentication = require('../authentication/index');
-var consts = require('../../api/constants');
+var consts = require('../../../common/src/constants');
 var assert = require('assert');
 var log = require('./../../logger').getLogger();
 
@@ -14,7 +14,8 @@ var mockRes = {
     },
     json: function(result, status) {},
     render: function(path, callback) {},
-    clearCookie: function(name, options) {}
+    clearCookie: function(name, options) {},
+    cookie: function(name, value, options) {}
 };
 var stubLog, stubMockJson, spyRender;
 
@@ -33,7 +34,8 @@ describe('Validate https response authentication functions', function() {
 
     it('validate http response 200 json request for signout', function() {
         mockReq.headers = {
-            accept: consts.APPLICATION_JSON
+            accept: consts.APPLICATION_JSON,
+            host: 'localhost'
         };
 
         authentication.signout(mockReq, mockRes);
@@ -48,7 +50,8 @@ describe('Validate https response authentication functions', function() {
 
     it('validate http response 200 xml request for signout', function() {
         mockReq.headers = {
-            accept: consts.APPLICATION_XML
+            accept: consts.APPLICATION_XML,
+            host: 'localhost'
         };
 
         authentication.signout(mockReq, mockRes);

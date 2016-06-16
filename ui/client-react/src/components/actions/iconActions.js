@@ -31,16 +31,23 @@ let IconActions = React.createClass({
         actions: React.PropTypes.arrayOf(React.PropTypes.shape({
             icon: React.PropTypes.string,
             msg: React.PropTypes.string,
+            rawMsg: React.PropTypes.bool, // msg doesn't need to be localized
             onClick: React.PropTypes.function,
             className: React.PropTypes.string
         })).isRequired,
         maxButtonsBeforeMenu: React.PropTypes.number, // show action in dropdown after this,
-        className: React.PropTypes.string
+        className: React.PropTypes.string,
+        pullRight: React.PropTypes.bool, // for dropdowns positioned on right side of the UI
+        dropdownTooltip: React.PropTypes.bool,
+        menuIcons: React.PropTypes.bool
 
     },
     getDefaultProps() {
         return {
-            maxButtonsBeforeMenu: Number.MAX_VALUE
+            maxButtonsBeforeMenu: Number.MAX_VALUE,
+            pullRight: true,
+            menuIcons: false,
+            dropdownTooltip: false
         };
     },
     /**
@@ -48,7 +55,12 @@ let IconActions = React.createClass({
      * @param action
      */
     getActionButton(action) {
-        const tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg}/></Tooltip>);
+        let tooltip;
+        if (action.rawMsg) {
+            tooltip = (<Tooltip id={action.msg}>{action.msg}</Tooltip>);
+        } else {
+            tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg}/>{action.msg}</Tooltip>);
+        }
         let className = "iconActionButton ";
 
         if (action.className) {
@@ -68,15 +80,31 @@ let IconActions = React.createClass({
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
      */
     getActionsMenu() {
+
+        const classes = this.props.menuIcons ? "menuIcons" : "";
+        let dropdownTrigger;
+
+        if (this.props.dropdownTooltip) {
+            const tooltip = (<Tooltip id="more"><I18nMessage message="selection.more"/></Tooltip>);
+
+            dropdownTrigger = <OverlayTrigger bsRole="toggle" key="more" placement="bottom" overlay={tooltip}>
+                <Button tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
+            </OverlayTrigger>;
+        } else {
+            dropdownTrigger = <Button bsRole="toggle" tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>;
+        }
+
         return (
-            <Dropdown id="nav-right-dropdown" pullRight onToggle={this.onToggleMenu} onClose={this.onCloseMenu}>
+            <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} rootClose>
 
-                <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
-
+                {dropdownTrigger}
                 <Dropdown.Menu onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit}>
                     {this.props.actions.map((action, index) => {
                         if (index >= this.props.maxButtonsBeforeMenu) {
-                            return <MenuItem key={action.msg} href="#"><I18nMessage message={action.msg} /></MenuItem>;
+                            return <MenuItem key={action.msg} href="#">
+                                      {this.props.menuIcons && <QBicon className={action.className} icon={action.icon}/>}
+                                        {action.rawMsg ? action.msg : <I18nMessage message={action.msg} />}
+                                   </MenuItem>;
                         }
                     })}
                 </Dropdown.Menu>

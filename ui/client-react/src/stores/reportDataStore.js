@@ -5,6 +5,7 @@ import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 
 let logger = new Logger();
+const groupDelimiter = ":";
 
 let reportModel = {
     model: {
@@ -36,8 +37,11 @@ let reportModel = {
 
         if (fields) {
             fields.forEach((field, index) => {
-                if (this.model.fids.length && (this.model.fids.indexOf(field.id) === -1)) {
-                    //skip this field since its not on report's column list
+                let groupedField = _.find(this.model.groupEls, function(el) {
+                    return el.split(groupDelimiter)[0] === field.id;
+                });
+                if (!groupedField && this.model.fids.length && (this.model.fids.indexOf(field.id) === -1)) {
+                    //skip this field since its not on report's column list or on group list
                 } else {
                     let column = {};
                     column.order = index;
@@ -79,9 +83,8 @@ let reportModel = {
                 let columns = {};
                 record.forEach((column) => {
                     let fld = map.get(column.id);
-                    columns[fld.name] = column.value;
+                    columns[fld.name] = column;
                 });
-                columns.actions = record.id;
                 reportData.push(columns);
             });
         }
@@ -154,10 +157,10 @@ let reportModel = {
             this.model.groupFields = null;
 
             //  TODO: with paging, this count is flawed...
-            this.model.recordsCount = recordData.records.length;
+            this.model.recordsCount = recordData.records ? recordData.records.length : null;
         }
         this.model.filteredRecords = this.model.records;
-        this.model.filteredRecordsCount = recordData.records.length;
+        this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
     },
     /**
      * Set just the filteredRecords. No change to fields. This has to be client side

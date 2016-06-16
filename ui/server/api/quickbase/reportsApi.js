@@ -11,6 +11,8 @@
     /* See comment in recordsApi.js */
     let jsonBigNum = require('json-bignum');
     let errorCodes = require('../errorCodes');
+    let constants = require('../../../common/src/constants');
+    let stringUtils = require('../../components/utility/stringUtils');
 
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
@@ -20,9 +22,35 @@
         //Module constants:
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
+
         let FACETS = 'facets';
-        let RESULTS = 'results';
-        let REPORTCOMPONENTS = 'reportcomponents';
+
+        //  url components for facets, report components and table report home page
+        let CORE_REPORTS_ROUTE = 'reports';
+        let CORE_REPORTFACETS_ROUTE = FACETS + '/results';
+        let CORE_HOMEPAGE_ID_ROUTE = 'defaulthomepage';
+
+        let NODE_REPORTCOMPONENT_ROUTE = 'reportcomponents';
+        let NODE_HOMEPAGE_ROUTE = 'homepage';
+
+        /**
+         * Supporting method to transform a segment of a url route component
+         *
+         * @param url - url to examine
+         * @param curRoute - route to search
+         * @param newRoute - new route to replace
+         * @returns {*}
+         */
+        function transformUrlRoute(url, curRoute, newRoute) {
+            if (url) {
+                let offset = url.toLowerCase().indexOf(curRoute);
+                if (offset !== -1) {
+                    return url.substring(0, offset) + newRoute;
+                }
+            }
+            //  return requestUrl unchanged
+            return url;
+        }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
@@ -52,13 +80,10 @@
             fetchFacetResults: function(req) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                let inputUrl = opts.url.toLowerCase();
 
-                // The request came in for report/{reportId}/reportComponents.
-                // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl.indexOf(REPORTCOMPONENTS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTCOMPONENTS)) + FACETS + "/" + RESULTS;
-                }
+                // Node request is ../report/{reportId}/reportComponents  --> convert to
+                // ../report/{reportId}/facets/results to return the facet data from core
+                opts.url = transformUrlRoute(opts.url, NODE_REPORTCOMPONENT_ROUTE, CORE_REPORTFACETS_ROUTE);
 
                 return requestHelper.executeRequest(req, opts);
             },
@@ -70,7 +95,13 @@
                             resolve(response);
                         },
                         (error) => {
-                            log.error("Error getting report results in fetchReportResults: " + error.message);
+                            let errorMsg = 'Error undefined';
+                            if (error) {
+                                if (error.body) {
+                                    errorMsg = error.body ? error.body.replace(/"/g, "'") : error.statusMessage;
+                                }
+                            }
+                            log.error("Error getting report results in fetchReportResults: " + errorMsg);
                             reject(error);
                         }
                     ).catch((ex) => {
@@ -85,14 +116,14 @@
              */
             fetchReportComponents: function(req) {
 
-                //  Fetch report meta and grid data
+                //  Fetch field meta data and grid data for a report
                 var reportPromise = new Promise((resolve1, reject1) => {
                     this.fetchReportResults(req).then(
                         (resultsResponse) => {
                             resolve1(resultsResponse);
                         },
                         (error) => {
-                            log.error("Error getting report results in fetchReportComponents: " + error.message);
+                            // no need to generate an error message as it's logged in fetchReportResults
                             reject1(error);
                         }
                     ).catch((ex) => {
@@ -162,9 +193,140 @@
                         reject(ex);
                     });
                 });
+            },
+
+            /**
+             * Fetch the meta data for a given report id
+             *
+             * @param req
+             * @param opts
+             * @returns {bluebird|exports|module.exports}
+             */
+            fetchReportMetaData(req, reportId, referRoute) {
+
+                let opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + reportId;
+
+                if (referRoute) {
+                    opts.url = transformUrlRoute(opts.url, referRoute, REPORT_ROUTE);
+                }
+
+                //  promise to return report meta data
+                return new Promise((resolve1, reject1) => {
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve1(response);
+                        },
+                        (error) => {
+                            reject1(error);
+                        }
+                    );
+                });
+            },
+
+            /**
+             * Return the table homepage report using it's meta data to determine its initial display state.
+             *
+             * @param req
+             * @returns {bluebird|exports|module.exports}
+             */
+            fetchTableHomePageReport: function(req) {
+
+                var reportObj = {
+                    reportMetaData: {
+                        data: ''
+                    },
+                    reportData: {
+                        data: ''
+                    }
+                };
+
+                return new Promise((resolve, reject) => {
+
+                    let opts = requestHelper.setOptions(req);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+
+                    // Node request is ../tables/{tableId}/homepage  --> transform the url to
+                    // ../tables/{tableId}/homepagereportid to return the table report homepage id from core
+                    opts.url = transformUrlRoute(opts.url, NODE_HOMEPAGE_ROUTE, CORE_HOMEPAGE_ID_ROUTE);
+
+                    //  make the api request to get the table homepage report id
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            // parse out the id and use to fetch the report meta data.  Process the meta data
+                            // to fetch and return the report content.
+                            if (response.body) {
+                                let homepageReportId = JSON.parse(response.body);
+
+                                //  have a homepage id; first get the report meta data
+                                this.fetchReportMetaData(req, homepageReportId, NODE_HOMEPAGE_ROUTE).then(
+                                    (metaDataResult) => {
+                                        //  parse the metadata and set the request parameters for the default sortList, fidList and query expression (if defined).
+                                        //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
+                                        let reportMetaData = JSON.parse(metaDataResult.body);
+
+                                        //  make sure we have an empty object if one does not exist
+                                        req.params = req.params || {};
+
+                                        // set format request parameter to display
+                                        req.params[constants.REQUEST_PARAMETER.FORMAT] = 'display';
+
+                                        // Use the sortList, fidsList and/or query expression defined in the metadata on the request.
+                                        req.params[constants.REQUEST_PARAMETER.SORT_LIST] = stringUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                        req.params[constants.REQUEST_PARAMETER.COLUMNS] = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                        req.params[constants.REQUEST_PARAMETER.QUERY] = reportMetaData.query ? [reportMetaData.query] : '';
+
+                                        //  TODO: initial page size
+                                        //req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
+                                        //req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = ?;
+
+                                        //  set to the fetch the report components url
+                                        let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + homepageReportId;
+                                        req.url = transformUrlRoute(req.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE + '/' + NODE_REPORTCOMPONENT_ROUTE);
+
+                                        this.fetchReportComponents(req).then(
+                                            (reportData) => {
+                                                //  return the metadata and report content
+                                                reportObj.reportMetaData.data = reportMetaData;
+                                                reportObj.reportData.data = reportData;
+                                                resolve(reportObj);
+                                            },
+                                            (reportError) => {
+                                                log.error({req:req}, 'Error fetching table homepage report content in fetchTableHomePageReport.');
+                                                reject(reportError);
+                                            }
+                                        ).catch((ex) => {
+                                            requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
+                                            reject(ex);
+                                        });
+                                    },
+                                    (metaDataError) => {
+                                        log.error({req:req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
+                                        reject(metaDataError);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
+                                    reject(ex);
+                                });
+                            } else {
+                                //  no report id returned (because one is not defined); return empty report object
+                                log.warn({req:req}, 'No report homepage defined for table.');
+                                resolve(reportObj);
+                            }
+                        },
+                        (error) => {
+                            log.error({req: req}, "Error getting table homepage reportId in fetchTableHomePageReport");
+                            reject(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('reportsAPI..fetch report homepage in fetchTableHomePageReport', ex, true);
+                        reject(ex);
+                    });
+                });
+
             }
         };
         return reportsApi;
     };
 }());
-

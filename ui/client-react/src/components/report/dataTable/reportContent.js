@@ -1,19 +1,15 @@
-import React from 'react';
-import ReactIntl from 'react-intl';
+import React from "react";
+import ReactIntl from "react-intl";
+import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
+import AGGrid from "../../../components/dataTable/agGrid/agGrid";
+import Logger from "../../../utils/logger";
+import ReportActions from "../../actions/reportActions";
+import Fluxxor from "fluxxor";
+import * as DataTypes from "../../../constants/schema";
+import * as GroupTypes from "../../../constants/groupTypes";
+import Locales from "../../../locales/locales";
 
-import CardViewListHolder from '../../../components/dataTable/cardView/cardViewListHolder';
-import AGGrid  from '../../../components/dataTable/agGrid/agGrid';
-import {reactCellRendererFactory} from 'ag-grid-react';
-
-import Logger from '../../../utils/logger';
 let logger = new Logger();
-
-import ReportActions from '../../actions/reportActions';
-import Fluxxor from 'fluxxor';
-
-import * as DataTypes from '../../../constants/schema';
-import * as GroupTypes from '../../../constants/groupTypes';
-import Locales from '../../../locales/locales';
 
 let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -78,6 +74,33 @@ let ReportContent = React.createClass({
     isDateDataType(dataType) {
         return dataType === DataTypes.DATE_TIME ||
                dataType === DataTypes.DATE;
+    },
+
+    parseTimeOfDay(timeOfDay) {
+
+        if (timeOfDay && typeof timeOfDay === 'string') {
+            //  format is expected to be either hh:mm or hh:mm:ss
+            let el = timeOfDay.split(":");
+            if (el.length === 2 || el.length === 3) {
+                let hr = el[0];
+                let min = el[1];
+                let sec = 0;
+                if (el.length === 3) {
+                    sec = el[2];
+                }
+
+                //  the date component means nothing to the app..its only purpose is for verifying unit tests
+                let parsedDate = new Date(1970, 1, 1, hr, min, sec);
+                if (parsedDate instanceof Date) {
+                    if (!isNaN(parsedDate.getTime())) {
+                        return parsedDate;
+                    }
+                }
+            }
+        }
+
+        logger.warn('Invalid grouping header.  Unable to parse time of day group header: ' + timeOfDay);
+        return null;
     },
 
     /**
@@ -192,10 +215,61 @@ let ReportContent = React.createClass({
                                 groupData.group = Locales.getMessage('groupHeader.date.week', {date: this.localizeDate(datePart[0])});
                                 break;
                             case GroupTypes.GROUP_TYPE.date.day:
-                            case GroupTypes.GROUP_TYPE.date.equals:
                                 groupData.group = this.localizeDate(datePart[0]);
                                 break;
+                            case GroupTypes.GROUP_TYPE.date.equals:
+                                let opts = null;
+                                if (groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
+                                    opts = {
+                                        year: 'numeric', month: 'numeric', day: 'numeric',
+                                        hour: 'numeric', minute: 'numeric'
+                                    };
+                                }
+                                groupData.group = this.localizeDate(datePart[0], opts);
+
+                                //  i18n-react appends a comma after the date for en-us --> 07/22/2015, 09:44 AM -- Replace with space
+                                if (groupField.datatypeAttributes.type === DataTypes.DATE_TIME && Locales.getLocale() === 'en-us') {
+                                    groupData.group = groupData.group.replace(',', ' ');
+                                }
+
+                                break;
                             }
+                        }
+
+                        // continue to next element in the for loop
+                        continue;
+                    }
+
+                    if (groupField.datatypeAttributes.type === DataTypes.TIME_OF_DAY) {
+
+                        let timeOfDay = null;
+
+                        switch (groupType) {
+                        case GroupTypes.GROUP_TYPE.timeOfDay.equals:
+                        case GroupTypes.GROUP_TYPE.timeOfDay.second:
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric', second: 'numeric'});
+                            }
+                            break;
+                        case GroupTypes.GROUP_TYPE.timeOfDay.minute:
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
+                            }
+                            break;
+                        case GroupTypes.GROUP_TYPE.timeOfDay.hour:
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
+                            }
+                            break;
+                        case GroupTypes.GROUP_TYPE.timeOfDay.am_pm:
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = (timeOfDay.getHours() < 12 ? Locales.getMessage('groupHeader.am') : Locales.getMessage('groupHeader.pm'));
+                            }
+                            break;
                         }
 
                         // continue to next element in the for loop
@@ -270,14 +344,52 @@ let ReportContent = React.createClass({
      * @param date
      * @returns {*}
      */
-    localizeDate: function(date) {
+    localizeDate: function(date, opts) {
         try {
             this.context.locales = Locales.getLocale();
-            return this.formatDate(date);
+            return this.formatDate(date, opts);
         } catch (e) {
             logger.warn("Error attempting to localize a date group.  Group value: " + date);
             return date;
         }
+    },
+
+    //when report changed from not loading to loading start measure of components performance
+    startPerfTiming(nextProps) {
+        if (_.has(this.props, 'reportData.loading') &&
+                !this.props.reportData.loading &&
+                nextProps.reportData.loading) {
+            let flux = this.getFlux();
+            flux.actions.mark('component-ReportContent start');
+        }
+    },
+
+    //when report changed from loading to loaded finish measure of components performance
+    capturePerfTiming(prevProps) {
+        let timingContextData = {numReportCols:0, numReportRows:0};
+        let flux = this.getFlux();
+        if (_.has(this.props, 'reportData.loading') &&
+                !this.props.reportData.loading &&
+                prevProps.reportData.loading) {
+            flux.actions.measure('component-ReportContent', 'component-ReportContent start');
+
+            // note the size of the report with the measure
+            if (_.has(this.props, 'reportData.data.columns.length')) {
+                let reportData = this.props.reportData.data;
+                timingContextData.numReportCols = reportData.columns.length;
+                timingContextData.numReportRows = reportData.filteredRecordsCount ?
+                    reportData.filteredRecordsCount : reportData.recordsCount;
+            }
+            flux.actions.logMeasurements(timingContextData);
+        }
+    },
+
+    componentWillUpdate(nextProps) {
+        this.startPerfTiming(nextProps);
+    },
+
+    componentDidUpdate(prevProps) {
+        this.capturePerfTiming(prevProps);
     },
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/

@@ -11,29 +11,7 @@ import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
 
 let logger = new Logger();
-
-//  Report model object used by the client to render a report
-let reportModel = {
-
-    set: function(reportMeta, reportData) {
-        var obj = {
-            metaData: {},
-            recordData: {}
-        };
-
-        //  make available to the client the report meta data
-        if (reportMeta && reportMeta.data) {
-            obj.metaData = reportMeta.data;
-        }
-
-        //  make available to the client the report grid data
-        if (reportData && reportData.data) {
-            obj.recordData = reportData.data;
-        }
-
-        return obj;
-    }
-};
+import reportModel from '../models/reportModel';
 
 //  Build the request query parameters needed to properly filter the report request based on the report
 //  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
@@ -60,31 +38,20 @@ function buildRequestQuery(reportMetaData, requiredQueryParams, overrideQueryPar
         //  Optional parameters used to return a result set in sorted and/or grouped order for
         //  easier client rendering of the result set data.
         //
-        //      sortList: ==>  '2.1.33'
-        //      glist: ==> '2.1:V.33:C'
+        //      sortList: ==>  '2.1:V.33:C'
         //
-        //  NOTE: the optional gList parameter is used by the node layer only;  it is ignored on the api server.
-        //
-        let groupList = '';
-
         // if the report started out with sort/group settings defined and you removed them via the sort/group popover
         // to modify the sort/group settings adhoc, it should use the empty sort/group param and not fall
         // thru to use the original report settings. So here we test for hasOwnProperty since an empty value in the property
         // means to overide the sort/group with no sort/grouping. if the property is excluded only then do we default to the
         // original report settings for sort/group
         if (overrideQueryParams.hasOwnProperty(query.SORT_LIST_PARAM)) {
-            let sortList = ReportUtils.getSortFids(overrideQueryParams[query.SORT_LIST_PARAM]);
-            queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(sortList);
-            groupList = overrideQueryParams[query.SORT_LIST_PARAM];
+            queryParams[query.SORT_LIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
         } else {
             /*eslint no-lonely-if:0*/
             if (reportMetaData.data.sortList) {
-                queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(ReportUtils.getSortFids(reportMetaData.data.sortList));
-                groupList = ReportUtils.getSortListString(reportMetaData.data.sortList);
+                queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(reportMetaData.data.sortList);
             }
-        }
-        if (ReportUtils.hasGroupingFids(groupList)) {
-            queryParams[query.GLIST_PARAM] = groupList;
         }
 
         if (overrideQueryParams.hasOwnProperty(query.QUERY_PARAM)) {
@@ -134,6 +101,8 @@ let reportDataActions = {
                 let reportService = new ReportService();
 
                 //  query for the report meta data
+                //  TODO: refactor by having just 1 network call to node to retrieve a report...
+                //  TODO: leverage how homepage report is loaded..
                 reportService.getReport(appId, tblId, rptId).then(
                     (reportMetaData) => {
                         let requiredParams = {};

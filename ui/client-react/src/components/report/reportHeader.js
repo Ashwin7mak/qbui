@@ -46,7 +46,6 @@ var ReportHeader = React.createClass({
 
         let queryParams = {};
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
-        queryParams[query.GLIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
         this.getFlux().actions.getFilteredRecords(this.props.selectedAppId,
             this.props.routeParams.tblId,
             typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true}, filter, queryParams);

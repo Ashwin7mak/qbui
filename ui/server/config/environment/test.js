@@ -58,6 +58,9 @@
         //Node's understanding of a grouping of routes to be enabled/disabled
         routeGroup: routeGroups.DEBUG,
 
+        //enable to track performance stats to server/splunk
+        isClientPerfTrackingEnabled: false,
+
         //set notHotLoad true to disable hotloading
         noHotLoad : true,
 

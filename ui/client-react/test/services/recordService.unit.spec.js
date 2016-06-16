@@ -46,7 +46,6 @@ describe('RecordService functions', () => {
         params[query.QUERY_PARAM] = "testQuery";
         params[query.COLUMNS_PARAM] = "testClist";
         params[query.SORT_LIST_PARAM] = "testSlist";
-        params[query.GLIST_PARAM] = "testGlist";
         params[query.OFFSET_PARAM] = 10;
         params[query.NUMROWS_PARAM] = 10;
         recordService.getRecords(appId, tblId, params);
@@ -56,7 +55,6 @@ describe('RecordService functions', () => {
         expectedParams[query.QUERY_PARAM] = params[query.QUERY_PARAM];
         expectedParams[query.COLUMNS_PARAM] = params[query.COLUMNS_PARAM];
         expectedParams[query.SORT_LIST_PARAM] = params[query.SORT_LIST_PARAM];
-        expectedParams[query.GLIST_PARAM] = params[query.GLIST_PARAM];
         expectedParams[query.OFFSET_PARAM] = params[query.OFFSET_PARAM];
         expectedParams[query.NUMROWS_PARAM] = params[query.NUMROWS_PARAM];
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : expectedParams});

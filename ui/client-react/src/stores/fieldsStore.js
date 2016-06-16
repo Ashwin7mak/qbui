@@ -54,7 +54,7 @@ let FieldsStore = Fluxxor.createStore({
             fieldsLoading: this.fieldsLoading,
             error: this.error
         };
-    },
+    }
 });
 
 export default FieldsStore;
