@@ -3,7 +3,7 @@
  */
 (function() {
     'use strict';
-    var consts = require('../../../common/src/constants');
+    var consts = require('../../../../common/src/constants');
     var log = require('../../logger').getLogger();
 
     module.exports[401] = function unauthorized(req, res) {

@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var constants = require('../../../common/src/constants');
+    var constants = require('../../../../common/src/constants');
     var groupTypes = require('../../api/groupTypes');
     var moment = require('moment-timezone');
     var emailAddress = require('email-addresses');
