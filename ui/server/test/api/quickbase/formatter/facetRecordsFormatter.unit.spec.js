@@ -1,9 +1,9 @@
 'use strict';
 
-var facetRecordsFormatter = require('..//facetRecordsFormatter')();
-var recordFormatter = require('../recordFormatter')();
+var facetRecordsFormatter = require('../../../../src/api/quickbase/formatter/facetRecordsFormatter')();
+var recordFormatter = require('../../../../src/api/quickbase/formatter/recordFormatter')();
 var assert = require('assert');
-var errorCodes = require('../../../errorCodes');
+var errorCodes = require('../../../../src/api/errorCodes');
 var constants = require('../../../../../common/src/constants');
 
 /**
