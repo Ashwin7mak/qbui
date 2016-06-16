@@ -7,8 +7,8 @@
 
 
 var config = require('../../src/config/environment');
-var routeMapper = require('../src/qbRouteMapper')(config);
-var routeConsts = require('../src/routeConstants');
+var routeMapper = require('../../src/routes/qbRouteMapper')(config);
+var routeConsts = require('../../src/routes/routeConstants');
 var assert = require('assert');
 var sinon = require('sinon');
 var recordsApi = require('../../src/api/quickbase/recordsApi')(config);

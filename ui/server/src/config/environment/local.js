@@ -14,7 +14,12 @@
     var routeGroups = require('../../routes/routeGroups');
     var clientConsts = require('./clientConsts');
 
+    //Temporary support CLIENT=ANGULAR
+    // default is CLIENT=REACT for ci which we'll deploy
     var client = clientConsts.REACT;
+    if (process.env.CLIENT) {
+        client = process.env.CLIENT;
+    }
 
     module.exports = {
 
@@ -33,12 +38,12 @@
         },
 
         // to run using ssl, copy the private key and cert for
-        // your host(ie:localhost.intuit.com) to ../server/src/config/keys
+        // your host(ie:localhost.intuit.com) to ../server/config/keys
         // folder.. comment this out if don't want to offer ssl support.
 
         //SSL_KEY: {
         //    private: path.normalize(__dirname + '/keys/private.pem'),
-        //    cert: path.normalize(__dirname + '/keys/cert.pem'),
+        //    cert: path.normalize(__dirname + '/keys/cert.pem')
         //    requireCert: false  // set to false for self signed certs
         //},
 
@@ -46,36 +51,25 @@
         port: 9000,
         sslPort: 9443,
 
-        ip : 'localhost', // replace with your host or machine name user use (that is in your hosts file i.e.'CMBL13XXXXXX' for mobile testing)
-
         //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.intuit.com:8443',
-        javaHost: 'http://localhost.intuit.com:8080',
-        //javaHost: 'http://localhost:8080',
-        isMockServer : false,
+        //javaHost: 'http://localhost.intuit.com:8080'
+        javaHost: 'http://localhost:8080',
 
         //Express Server
-        //DOMAIN: 'https://localhost.intuit.com:9443',
-        DOMAIN: 'http://localhost.intuit.com:9000',
-        //DOMAIN  : 'http://localhost:9000',
-
-        //Node understanding of RuntimeEnvironment
-        env: envConsts.LOCAL,
-
-        //enable to track performance stats to server/splunk
-        isClientPerfTrackingEnabled: true,
-
-        //set false if you don't want growl notifications on webpack / watch updates
-        growlNotify: true,
-
-        //Node's understanding of a grouping of routes to be enabled/disabled
-        routeGroup: routeGroups.DEBUG,
+        //DOMAIN: 'https://localhost.intuit.com:9443'
+        DOMAIN  : 'http://localhost:9000',
+        ip : 'cmbl130e9e44d',
 
         //set notHotLoad true to disable hotloading
         //noHotLoad : true,
 
-        // the client to use
-        client : client,
+        //Node understanding of RuntimeEnvironment
+        env: envConsts.LOCAL,
+        client: client,
+
+        //Node's understanding of a grouping of routes to be enabled/disabled
+        routeGroup: routeGroups.DEBUG,
 
         // walkme java script
         walkmeJSSnippet : ''
