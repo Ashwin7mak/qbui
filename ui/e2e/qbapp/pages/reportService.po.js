@@ -232,7 +232,7 @@
                 // Remove the select all checkbox column header
                 colHeaders.shift();
                 // Remove the actions column header
-                colHeaders.pop();
+                //colHeaders.pop();
                 colHeaders.forEach(function(headerText) {
                     if (!headerText) {
                         throw Error('Did not find text for column header');

@@ -17,9 +17,9 @@
         var searchTableResults = [];
 
         var testRecord = [
-            [{'id': 6, 'value': ''}, {'id': 7, 'value': '2016-04-12'}, {'id': 8, 'value': '2016-04-12T05:51:19Z'}, {'id': 9, 'value': 'first_name_last_name@quickbase.com'}, {'id': 10, 'value': true}, {'id': 11, 'value': 7.642}],
-            [{'id': 6, 'value': 'xyz'}, {'id': 7, 'value': '2015-04-12'}, {'id': 8, 'value': '2015-04-12T05:51:19Z'}, {'id': 9, 'value': 'xyz_last_name@quickbase.com'}, {'id': 10, 'value': false}, {'id': 11, 'value': 9.292}],
-            [{'id': 6, 'value': 'wuv'}, {'id': 7, 'value': '2016-01-12'}, {'id': 8, 'value': '2016-01-12T05:51:19Z'}, {'id': 9, 'value': 'abcxyz_LastName@quickbase.com'}, {'id': 10, 'value': true}, {'id': 11, 'value': 6.05}]
+            [{'id': 6, 'value': ''}, {'id': 7, 'value': '2016-04-12'}, {'id': 8, 'value': '2016-04-12T05:51:19Z'}, {'id': 9, 'value': 'first_name_last_name@quickbase.com'}, {'id': 10, 'value': 'true'}, {'id': 11, 'value': 7.642}],
+            [{'id': 6, 'value': 'xyz'}, {'id': 7, 'value': '2015-04-12'}, {'id': 8, 'value': '2015-04-12T05:51:19Z'}, {'id': 9, 'value': 'xyz_last_name@quickbase.com'}, {'id': 10, 'value': 'false'}, {'id': 11, 'value': 9.292}],
+            [{'id': 6, 'value': 'wuv'}, {'id': 7, 'value': '2016-01-12'}, {'id': 8, 'value': '2016-01-12T05:51:19Z'}, {'id': 9, 'value': 'abcxyz_LastName@quickbase.com'}, {'id': 10, 'value': 'true'}, {'id': 11, 'value': 6.05}]
         ];
 
         beforeAll(function(done) {
@@ -82,7 +82,7 @@
                             cells.get(3).getText(),
                             cells.get(4).getText(),
                             cells.get(5).getText(),
-                            cells.get(6).getText(),
+                            cells.get(6).element(by.tagName('input')).isSelected(),
                             cells.get(7).getText()
                         ];
                     }).then(function(results) {
