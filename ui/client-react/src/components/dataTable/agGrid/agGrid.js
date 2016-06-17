@@ -520,6 +520,7 @@ let AGGrid = React.createClass({
         }
         checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxCellRenderer);
 
+        checkBoxCol.pinned = 'left';
         return checkBoxCol;
     },
 
@@ -643,18 +644,6 @@ let AGGrid = React.createClass({
         return columns;
     },
 
-    /**
-     * add an extra row which will be hidden to avoid
-     * clipping the row edit UI if it's at the bottom row
-     */
-    getRecordsToRender() {
-
-        let paddedRecords = this.props.records.slice(0);
-
-        paddedRecords.push({isHiddenLastRow:true});
-        return paddedRecords;
-    },
-
     render() {
         let columnDefs = this.getColumns();
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
@@ -674,7 +663,7 @@ let AGGrid = React.createClass({
 
                                     // binding to array properties
                                     columnDefs={columnDefs}
-                                    rowData={this.getRecordsToRender()}
+                                    rowData={this.props.records}
 
                                     //default behavior properties
                                     rowSelection="multiple"

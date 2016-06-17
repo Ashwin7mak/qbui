@@ -53,7 +53,7 @@ let IconActions = React.createClass({
     getInitialState() {
         return {
             dropdownOpen: false
-        }
+        };
     },
     /**
      * get an action button
@@ -62,12 +62,11 @@ let IconActions = React.createClass({
     getActionButton(action) {
         let tooltip;
         if (action.rawMsg) {
-            tooltip = (<Tooltip id={action.msg}>{action.rawMsg}</Tooltip>);
+            tooltip = (<Tooltip id={action.msg}>{action.msg}</Tooltip>);
         } else {
             tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg}/></Tooltip>);
         }
         let className = "iconActionButton ";
-
         if (action.className) {
             className += action.className;
         }
@@ -84,7 +83,7 @@ let IconActions = React.createClass({
 
     /* callback from opening pickle menu */
     onDropdownToggle(open) {
-         this.setState({dropdownOpen: open});
+        this.setState({dropdownOpen: open});
     },
     /**
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
