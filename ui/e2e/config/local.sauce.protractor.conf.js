@@ -33,7 +33,7 @@
             baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [],
+        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGrpAndSortViaIcon.e2e.spec.js'],
         // ----- The test framework -----
         //
         // Jasmine and Cucumber are fully supported as a test and assertion framework.

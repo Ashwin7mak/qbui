@@ -17,9 +17,9 @@
         var searchTableResults = [];
 
         var testRecord = [
-            [{'id': 6, 'value': ''}, {'id': 7, 'value': '2016-04-12'}, {'id': 8, 'value': '2016-04-12T05:51:19Z'}, {'id': 9, 'value': 'first_name_last_name@quickbase.com'}, {'id': 10, 'value': 'true'}, {'id': 11, 'value': 7.642}],
-            [{'id': 6, 'value': 'xyz'}, {'id': 7, 'value': '2015-04-12'}, {'id': 8, 'value': '2015-04-12T05:51:19Z'}, {'id': 9, 'value': 'xyz_last_name@quickbase.com'}, {'id': 10, 'value': 'false'}, {'id': 11, 'value': 9.292}],
-            [{'id': 6, 'value': 'wuv'}, {'id': 7, 'value': '2016-01-12'}, {'id': 8, 'value': '2016-01-12T05:51:19Z'}, {'id': 9, 'value': 'abcxyz_LastName@quickbase.com'}, {'id': 10, 'value': 'true'}, {'id': 11, 'value': 6.05}]
+            [{'id': 6, 'value': ''}, {'id': 7, 'value': '2016-04-12'}, {'id': 8, 'value': '2016-04-12T05:51:19Z'}, {'id': 9, 'value': 'first_name_last_name@quickbase.com'}, {'id': 10, 'value': true}, {'id': 11, 'value': 7.642}],
+            [{'id': 6, 'value': 'xyz'}, {'id': 7, 'value': '2015-04-12'}, {'id': 8, 'value': '2015-04-12T05:51:19Z'}, {'id': 9, 'value': 'xyz_last_name@quickbase.com'}, {'id': 10, 'value': false}, {'id': 11, 'value': 9.292}],
+            [{'id': 6, 'value': 'wuv'}, {'id': 7, 'value': '2016-01-12'}, {'id': 8, 'value': '2016-01-12T05:51:19Z'}, {'id': 9, 'value': 'abcxyz_LastName@quickbase.com'}, {'id': 10, 'value': true}, {'id': 11, 'value': 6.05}]
         ];
 
         beforeAll(function(done) {
@@ -82,7 +82,8 @@
                             cells.get(3).getText(),
                             cells.get(4).getText(),
                             cells.get(5).getText(),
-                            cells.get(6).element(by.tagName('input')).isSelected(),
+                            // Checkbox field no longer a text field with value
+                            cells.get(6).all(by.tagName('input')).first().isSelected(),
                             cells.get(7).getText()
                         ];
                     }).then(function(results) {
@@ -109,23 +110,23 @@
                     query: '7.642',
                     columnId: 7,
                     expectedSearchResults:[
-                        ['', '4/12/2016', '04-11-2016 10:51 PM', 'first_name_last_name@quickbase.com', 'true', '7.642']
+                        ['', '4/12/2016', '04/11/16 10:51:00 PM', 'first_name_last_name@quickbase.com', true, '7.642']
                     ]
                 },
                 {
                     message: ' Checkbox value',
                     query: 'true',
                     expectedSearchResults: [
-                        ['', '4/12/2016', '04-11-2016 10:51 PM', 'first_name_last_name@quickbase.com', 'true', '7.642'],
-                        ['wuv', '1/12/2016', '01-11-2016 9:51 PM', 'abcxyz_LastName@quickbase.com', 'true', '6.05']
+                        ['', '4/12/2016', '04/11/16 10:51:00 PM', 'first_name_last_name@quickbase.com', true, '7.642'],
+                        ['wuv', '1/12/2016', '01/11/16 9:51:00 PM', 'abcxyz_LastName@quickbase.com', true, '6.05']
                     ]
                 },
                 {
                     message: ' Text value',
                     query: 'xyz',
                     expectedSearchResults: [
-                        ['wuv', '1/12/2016', '01-11-2016 9:51 PM', 'abcxyz_LastName@quickbase.com', 'true', '6.05'],
-                        ['xyz', '4/12/2015', '04-11-2015 10:51 PM', 'xyz_last_name@quickbase.com', 'false', '9.292']
+                        ['wuv', '1/12/2016', '01/11/16 9:51:00 PM', 'abcxyz_LastName@quickbase.com', true, '6.05'],
+                        ['xyz', '4/12/2015', '04/11/15 10:51:00 PM', 'xyz_last_name@quickbase.com', false, '9.292']
                     ]
                 }
                 //TODO the below gives error loading report error
