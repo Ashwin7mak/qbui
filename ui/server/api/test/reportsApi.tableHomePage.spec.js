@@ -76,24 +76,37 @@
         });
 
         /**
+         * Function that creates JSON for tableId reportId map for defaulthomepage POST
+         */
+        function createTableReportMapJSON(tableId, reportId_Id) {
+            var jsonStr = '{"' + tableId + '":"' + reportId_Id + '"}';
+            return JSON.parse(jsonStr);
+        }
+
+        /**
+         * Function that creates JSON for roleId reportId map for custdefaulthomepage POST
+         */
+        function createRoleReportMapJSON(roleId, report_Id) {
+            var jsonStr = '{"' + roleId + '":"' + report_Id + '"}';
+            return JSON.parse(jsonStr);
+        }
+
+        /**
          * Data Provider for report homepage for various user roles
          */
         function reportHomePageTestCases() {
             return [
                 {
                     message: 'Viewer Role',
-                    roleId: 10,
-                    roleReportIdMap: {"10":"1"},
+                    roleId: 10
                 },
                 {
                     message: 'Participant Role',
-                    roleId: 11,
-                    roleReportIdMap: {"11":"1"}
+                    roleId: 11
                 },
                 {
                     message: 'Admin Role',
-                    roleId: 12,
-                    roleReportIdMap: {"12":"1"}
+                    roleId: 12
                 }
             ];
         }
@@ -106,7 +119,7 @@
                     //add user to appRole
                     recordBase.apiBase.assignUsersToAppRole(app.id, testcase.roleId, [userId]).then(function() {
                         //POST custdefaulthomepage for a table
-                        recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, testcase.roleReportIdMap).then(function() {
+                        recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, reportId)).then(function() {
                             //get the user authentication
                             recordBase.apiBase.createUserAuthentication(userId).then(function() {
                                 //Execute a GET table defaulthomepage
@@ -142,7 +155,7 @@
 
         it('Verify API calls POST defaulthomepage, GET defaulthomepage and GET homepage for ', function(done) {
             //POST defaulthomepage for a table
-            recordBase.apiBase.setDefaultTableHomePage(app.id, '{\"' + app.tables[0].id + '\":"1"}').then(function() {
+            recordBase.apiBase.setDefaultTableHomePage(app.id, createTableReportMapJSON(app.tables[0].id, reportId)).then(function() {
                 //Execute a GET table home Page
                 recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
                     assert.deepEqual(JSON.parse(defaultHomePageResults.body), "1");
@@ -166,7 +179,7 @@
             });
         });
 
-        it('Verify GET defaulthomepage and GET report homepage returns empty meta data if defaulthomepage not set', function(done) {
+        it('Negative Test - Verify GET defaulthomepage and GET report homepage returns empty meta data if defaulthomepage not set', function(done) {
             //Execute a GET table home Page
             recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
                 assert.deepEqual(defaultHomePageResults.body, '');
@@ -180,6 +193,45 @@
                     var reportData = results.reportData.data;
                     assert.deepEqual(results.reportData.data, '');
                     done();
+                });
+            });
+        });
+
+        it('Negative Test - Give custdefaulthomepage permission to participant verify GET defaulthomepage as viewer', function(done) {
+            //create user 1
+            recordBase.apiBase.createUser().then(function(userResponse1) {
+                var userId1 = JSON.parse(userResponse1.body).id;
+                //add userId1 to participant appRole
+                recordBase.apiBase.assignUsersToAppRole(app.id, "11", [userId1]).then(function() {
+                    //create user2
+                    recordBase.apiBase.createUser().then(function(userResponse2) {
+                        var userId2 = JSON.parse(userResponse2.body).id;
+                        //add userId2 to viewer appRole
+                        recordBase.apiBase.assignUsersToAppRole(app.id, "10", [userId2]).then(function() {
+                            //add custdefaulthomepage permission to participant
+                            recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON("11", reportId)).then(function() {
+                                //get the user authentication as viewer
+                                recordBase.apiBase.createUserAuthentication(userId2).then(function() {
+                                    //Execute a GET table defaulthomepage
+                                    recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
+                                        //verify GET defaulthomepage returns empty
+                                        assert.deepEqual(defaultHomePageResults.body, "");
+                                        //Execute a GET report homepage
+                                        recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
+                                            var results = JSON.parse(reportHomePageResults.body);
+                                            //verify report meta Data is empty
+                                            assert.deepEqual(results.reportMetaData.data, '');
+
+                                            //verify report data is empty
+                                            var reportData = results.reportData.data;
+                                            assert.deepEqual(results.reportData.data, '');
+                                            done();
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
                 });
             });
         });
