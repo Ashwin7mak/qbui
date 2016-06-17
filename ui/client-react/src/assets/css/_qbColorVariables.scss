@@ -1,14 +1,13 @@
-/* This file should contain ALL the colors used in QuickBase. This may be used to create themes in future. */
-/* per our discussion around color we will keep the 2 levels of indirection on color. So that if we change the value
+/* This file should contain ALL the colors used in QuickBase. This may be used to create themes in future.
+ * per our discussion around color we will keep the 2 levels of indirection on color. So that if we change the value
  * of $colorx we are replacing every use of it with a new color(i.e colorblind can't see $colorx, or for theme usage).
  * If we want to modify a category of colors use we will change the semantic category
  * ie from $icon_background: $colorx to $icon_background:$colory
  * and the scss for color will refer to the semantic category not the color number
-*/
-/* see http://quickbase.design/colors/ */
+ * see http://quickbase.design/colors/ */
 
 $color1:    #f3f8fe; // wispy-water
-$color2:    #ffffff; // white
+$color2:    #fff; // white
 $color3:    #486c8f;
 $color4:    #dcdcdc; // rabbit
 $color5:    #c0d0e4; // periwinkle
@@ -16,7 +15,7 @@ $color6:    #d2dce7;
 $color7:    #e3eaf3; // clear-day
 $color8:    #486c8f;
 $color9:    #969696; // walrus
-$color10:   #243F7F;
+$color10:   #243f7f;
 $color11:   #404040; // charcoal
 $color12:   #f5f5f5; // kitten
 $color13:   #f6f8fb;
@@ -24,14 +23,14 @@ $color14:   #f9fafb;
 $color15:   #f0f3f9;
 $color16:   #2ca01c; // lazy-lizard
 $color17:   #f3f5f8;
-$color18:   #cccccc;
+$color18:   #ccc;
 $color19:   #c7c7c7; // porpoise
 $color20:   #486c8f; // dull-sapphire
 $color21:   #b8b8b8; //ghost
 $color22:   #56b349; //fiddlehead
 $color23:   #7090ab; // dragon-foot
 $color24:   #002b48;
-$color25:   #555555;
+$color25:   #555;
 $color26:   #254a6d;
 $color27:   #00b0c2;
 $color28:   #264a6d;
@@ -48,7 +47,7 @@ $icon-color-hover: #0098cd; // caribbean
 $topnav-icon-color: $icon-color;
 
 $header-bg: $color7;
-$nav-hover-bg: #0097CD;
+$nav-hover-bg: #0097cd;
 $nav-hover-fg: $color2;
 $nav-link-fg: $color2;
 $nav-border: $color18;
@@ -115,10 +114,10 @@ $report-icon-map-color: #00c4d8;
 $search-input-fg: $color25;
 $popup-fg: #404040;
 
-$top-nav-title-icon-color: #009AAE;
+$top-nav-title-icon-color: #009aae;
 $secondary-bar-fg: #fff;
-$secondary-bar-bg: #009AAE;
-$secondary-bar-page-actions-bg: #476B90;
+$secondary-bar-bg: #009aae;
+$secondary-bar-page-actions-bg: #476b90;
 
 //== Field labels used on report card view and forms
 $fieldLabel-color: $color3;

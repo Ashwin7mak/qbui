@@ -5,11 +5,12 @@
     flex-direction: column;
     flex: 1 1 auto;
     min-width: 0;
+
     @include not-small-breakpoint {
         background: $report-container-bg;
     }
     .layout-stage {
-        flex:0 0 auto;
+        flex: 0 0 auto;
     }
     margin-top: 0;
     margin-left: 0;
@@ -31,16 +32,18 @@
 
     }
 }
+
 .reportToolsAndContentContainer {
-    display:flex;
+    display: flex;
     flex: 1 1 auto;
-    flex-direction:column;
+    flex-direction: column;
 
     .tableActionsContainer {
         position: relative;
         padding-left: 10px;
+
         @include small-breakpoint {
-            padding-top: 0px; // no stage so to need add space after
+            padding-top: 0; /* no stage so to need add space after */
             &:not(.selectionActionsOpen) {
                 background-color: $secondary-bar-bg;
             }
@@ -60,9 +63,9 @@
             justify-content: flex-start;
         }
 
-        >.pageActions {
-            line-height:40px;
-            align-self:stretch;
+        > .pageActions {
+            line-height: 40px;
+            align-self: stretch;
         }
         .leftReportToolbar {
             display: flex;
@@ -72,9 +75,9 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
-        .recordsCount{
+        .recordsCount {
             flex: 0 0 auto;
-            margin-left:5px;
+            margin-left: 5px;
         }
         .filterSearchBoxContainer {
             flex-shrink: 0;
@@ -83,14 +86,14 @@
                 max-width: 180px;
             }
         }
-        >.facetsMenuContainer {
+        > .facetsMenuContainer {
             flex-shrink: 1;
         }
 
         .clearAllFacets {
             display: inline-block;
-            margin-right: .5rem;
-            margin-left: .5rem;
+            margin-right: 0.5rem;
+            margin-left: 0.5rem;
             vertical-align: top;
             font-size: 16px;
             cursor: pointer;
@@ -102,9 +105,9 @@
     }
 
     .loadedContent {
-        display:flex;
+        display: flex;
         flex: 1 1 auto;
-        width:100%;
+        width: 100%;
     }
 
 }
@@ -140,9 +143,9 @@
 }
 
 .reportContent {
-    width:100%;
-    flex:1 1 auto;
-    display:flex;
+    width: 100%;
+    flex: 1 1 auto;
+    display: flex;
 }
 
 
@@ -150,27 +153,30 @@
     width: 100%;
 
 }
+
 .noData {
     padding-left: 1.5rem;
 
 }
+
 .addNewRecord {
-    display:none;
+    display: none;
 }
 
 .sortAndGroupPopoverContainer {
     margin-left: 10px;
 }
 
-.sortButtonSpan  {
+.sortButtonSpan {
     display: inline-block;
     cursor: pointer;
     margin-top: 13px;
     margin-bottom: 4px;
     color: $icon-color;
-        @include small-breakpoint {
-            color:$secondary-bar-fg;
-        }
+
+    @include small-breakpoint {
+        color: $secondary-bar-fg;
+    }
 
     .sortButton {
         font-size: 20px;
@@ -187,29 +193,29 @@ $add-record-radius: 20px;
 
 @include small-breakpoint {
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
-        color:$secondary-bar-fg;
-        justify-content:space-between;
+        color: $secondary-bar-fg;
+        justify-content: space-between;
 
         .popover-content {
-            color:$icon-color;
+            color: $icon-color;
             max-height: 100%;
         }
     }
     .reportContainer .reportToolsAndContentContainer .loadedContent {
-        margin:0;
-        width:100%;
+        margin: 0;
+        width: 100%;
     }
     .addNewRecord {
-        display:inline-block;
-        position:fixed;
-        right:24px;
-        bottom:24px;
-        font-size:24px;
+        display: inline-block;
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        font-size: 24px;
 
         color: $add-record-fg;
         background-color: $add-record-bg;
         vertical-align: middle;
-        text-align:center;
+        text-align: center;
         width: $add-record-radius * 2;
         height: $add-record-radius * 2;
         -moz-border-radius: $add-record-radius;
@@ -222,7 +228,7 @@ $add-record-radius: 20px;
             color: $add-record-fg;
         }
         &:focus {
-            color:$add-record-fg;
+            color: $add-record-fg;
         }
     }
 }

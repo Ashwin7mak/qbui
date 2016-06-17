@@ -1,376 +1,376 @@
 @import '../../assets/css/qbVariables';
 
-$shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
+$shadow: 0 4px 15px 0 rgba(70, 66, 66, 0.15);
 
 .sortAndGroupContainer {
-  margin-left: 9px;
+    margin-left: 9px;
 
-  //the generated wrapper on sortAndGroupDialog
-  > div:not(.sortAndGroupButton)  {
-    position: relative;
-  }
+    //the generated wrapper on sortAndGroupDialog
+    > div:not(.sortAndGroupButton) {
+        position: relative;
+    }
 
-  .sortAndGroupButton .sortButtonSpan:hover {
-    color: $icon-color-hover;
-  }
+    .sortAndGroupButton .sortButtonSpan:hover {
+        color: $icon-color-hover;
+    }
 }
 
 .sortAndGroupDialog {
-  height: 530px;
-  width: 360px;
-  min-width: 290px;
-  overflow: hidden;
-  background-color: $popover-background;
-  z-index: $zindex-popover;
-  top: -37px;
-  left: -10px;
-  position: absolute;
-  box-shadow: $shadow;
-
-  .sortButtonSpan.btn.btn-default {
-    margin-top: 0;
-    margin-bottom: 0;
-    color: $icon-color-hover;
-  }
-  .popover-content {
-    padding: 0;
-  }
-
-  .action {
-    cursor: pointer;
-    &:hover {
-      color: $icon-color-hover;
-    }
-  }
-
-
-  .settingsDialog{
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    height:100%;
-    justify-content: space-between;
-    visibility: visible;
-
-  }
-
-  .settingsDialogTopContainer {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-  }
-
-  .settingsDialog.fieldsShown {
-    .dialogTop, .dialogContent, .dialogBottom {
-      visibility: hidden;
-    }
-  }
-
-  .dialogContent {
-    overflow: auto;
-  }
-
-  .fieldSelectorContainer {
-
-    .fieldSelector {
-      width: 100%;
-    }
-    .fieldName {
-      color: $popover-text;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      white-space: nowrap;
-      flex: 1 1 0;
-    }
-    .sortOrderIcon {
-      margin-right: 10px;
-    }
-
-  }
-
-  .title {
-    color: $popover-title;
-    margin-bottom: 6px;
-  }
-
-  .sortBySettings {
-    margin-top: 20px;
-    margin-left : 10px;
-
-    .fieldChoice {
-      background-color: $color12;
-      border-top : 3px solid $color4;
-    }
-  }
-
-  .groupBySettings {
-    margin-top: 20px;
-
-    .fieldChoice {
-      background-color: $color1;
-      border-top : 3px solid $color7;
-    }
-  }
-  .fieldOpen.qbIcon {
-    font-size: 22px;
-  }
-
-  .fieldChoice {
-    padding : 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 2px;
-
-    .fieldChoiceLeft {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      width: 88%;
-      max-width: 88%;
-    }
-    .prefix {
-      color: $color9;
-      padding-right: 5px;
-      white-space: nowrap;
-    }
-    .fieldChoiceActions {
-      white-space: nowrap;
-    }
-  }
-  .empty .fieldChoiceActions {
-    margin: -4px 0; //adjusts for icon height differences for empty state vs field state
-  }
-
-  .dialogButtons {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: auto;
-    padding: 20px 0 5px 0;
-    .reset {
-      margin-right : 10px;
-    }
-  }
-  .dialogBand {
-      display: none;
-  }
-}
-
-.fieldsPanel {
-  position: absolute;
-  width: 100%;
-  top:0;
-  left:0;
-
-  &.animated{
-    -webkit-animation-duration:500ms;
-    animation-duration:500ms;
-    box-shadow: $shadow;
-  }
-  &.notShown {
-    display: none;
-  }
-
-  .fieldPanelHeader {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    padding: 10px;
-    color:$color11;
-    border-bottom: 1px solid $color19;
-
-    .cancel  {
-      padding-right: 10px;
-      color:$icon-color;
-
-      &.action {
-        cursor: pointer;
-        &:hover {
-          color: $icon-color-hover;
-        }
-      }
-    }
-  }
-  .fieldItem.animated {
-      -webkit-animation-duration:400ms;
-      animation-duration:400ms;
-  }
-  .panel {
-    box-shadow : none;
-    width: 100%;
-    border : 1px solid $color4;
-    .list-group-item:first-child {
-      border-radius : 0;
-    }
-  }
-  .panel-body {
-    display: flex;
-    flex-direction: column;
-  }
-  .list-group {
-    height: 490px;
-    min-height: 244px;
-    overflow: auto;
-    margin-bottom: 0;
-  }
-  .list-group-item {
-    color:$color11;
-    width: 100%;
-    text-overflow: ellipsis;
+    height: 530px;
+    width: 360px;
+    min-width: 290px;
     overflow: hidden;
-    white-space: nowrap;
-    border: 1px solid $color4;
-    border-right: none;
-    border-left: none;
-  }
-  .list-group-item:first-child {
-    border-top: none;
-  }
-  .list-group-item:first-child,
-  .list-group-item:last-child {
-    border-radius: 0;
-  }
+    background-color: $popover-background;
+    z-index: $zindex-popover;
+    top: -37px;
+    left: -10px;
+    position: absolute;
+    box-shadow: $shadow;
 
-  .list-group-item .checkMark {
-    margin-left: auto;
-  }
-
-  .checkMark {
-    color: transparent;
-    padding-right: 5px;
-  }
-
-  .checkMark-selected {
-    color: $selected-check-color;
-    padding-right: 5px;
-  }
-  .moreFields {
-    color:$icon-color;
-  }
-
-}
-@include medium-breakpoint {
-  .reportContainer .reportToolsAndContentContainer .reportToolbar
-  .sortAndGroupDialog {
-    width: 323px;
-    .fieldChoice .fieldChoiceLeft {
-        width: 86%;
-        max-width: 86%;
-      }
-  }
-}
-
-@include small-breakpoint {
-  .reportContainer .reportToolsAndContentContainer .reportToolbar
-  .sortAndGroupDialog {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin-top: 0;
-    margin-left: 0;
-    width: 100%;
-    max-width: $small-breakpoint-width;
-    height:100%;
-    max-height: 100%;
-
+    .sortButtonSpan.btn.btn-default {
+        margin-top: 0;
+        margin-bottom: 0;
+        color: $icon-color-hover;
+    }
+    .popover-content {
+        padding: 0;
+    }
 
     .action {
-      cursor: pointer;
-      color: $icon-color;
-      &:hover {
-        color: $icon-color-hover;
-      }
-    }
-
-    .action.fieldItem {
-      color: $popover-text;
-      &:hover {
-        color: $icon-color-hover;
-      }
-    }
-
-
-    .dialogContent {
-      overflow: auto;
-    }
-
-    .groupBySettings {
-      margin-top: 10px;
-      .fieldChoice {
-        background-color: $color1;
-        border-top-width: 3px;
-      }
-    }
-    .sortBySettings {
-      .fieldChoice {
-        border-top-width: 3px;
-      }
+        cursor: pointer;
+        &:hover {
+            color: $icon-color-hover;
+        }
     }
 
     .settingsDialog {
-      padding: 5px 0 0;
-      height: 100%;
-      max-height: 100%;
-
-      .overlayDialogHeader {
-        border-bottom: 1px solid $color19;
-        padding: 0 10px 10px;
-      }
-      .dialogUpper {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
         height: 100%;
-        max-height: 100%;
-      }
+        justify-content: space-between;
+        visibility: visible;
 
-      .dialogContent {
-        max-height: 80%;
-      }
-
-      .title {
-        padding: 0 10px;
-      }
     }
-    .fieldsPanel {
-      max-height: 100%;
-      height: 100%;
 
-      .panel-body {
-        max-height: 100%;
-        height: 100%;
+    .settingsDialogTopContainer {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+    }
 
-        .list-group {
-          height: 100%;
-          max-height: 100%;
+    .settingsDialog.fieldsShown {
+        .dialogTop, .dialogContent, .dialogBottom {
+            visibility: hidden;
         }
-      }
     }
 
+    .dialogContent {
+        overflow: auto;
+    }
+
+    .fieldSelectorContainer {
+
+        .fieldSelector {
+            width: 100%;
+        }
+        .fieldName {
+            color: $popover-text;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            flex: 1 1 0;
+        }
+        .sortOrderIcon {
+            margin-right: 10px;
+        }
+
+    }
+
+    .title {
+        color: $popover-title;
+        margin-bottom: 6px;
+    }
+
+    .sortBySettings {
+        margin-top: 20px;
+        margin-left: 10px;
+
+        .fieldChoice {
+            background-color: $color12;
+            border-top: 3px solid $color4;
+        }
+    }
+
+    .groupBySettings {
+        margin-top: 20px;
+
+        .fieldChoice {
+            background-color: $color1;
+            border-top: 3px solid $color7;
+        }
+    }
+    .fieldOpen.qbIcon {
+        font-size: 22px;
+    }
+
+    .fieldChoice {
+        padding: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 2px;
+
+        .fieldChoiceLeft {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            width: 88%;
+            max-width: 88%;
+        }
+        .prefix {
+            color: $color9;
+            padding-right: 5px;
+            white-space: nowrap;
+        }
+        .fieldChoiceActions {
+            white-space: nowrap;
+        }
+    }
+    .empty .fieldChoiceActions {
+        margin: -4px 0; //adjusts for icon height differences for empty state vs field state
+    }
 
     .dialogButtons {
-      display: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: auto;
+        padding: 20px 0 5px;
+        .reset {
+            margin-right: 10px;
+        }
     }
     .dialogBand {
-      background-color: $color12;
-      display:flex;
-      padding: 15px;
-      justify-content: center;
-      border-top: 1px solid $color19;
-    }
-
-    .sortAndGroupButton .sortButtonSpan { //icon in popover
-      margin-top: 8px;
-      &:hover {
-        color: $secondary-bar-fg;
-      }
+        display: none;
     }
 }
 
-  .sortAndGroupContainer .sortAndGroupButton .sortButtonSpan {//icon in toolbar
-      margin-top: 8px;
-      &:hover {
-        color: $secondary-bar-fg;
-      }
-  }
+.fieldsPanel {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+
+    &.animated {
+        -webkit-animation-duration: 500ms;
+        animation-duration: 500ms;
+        box-shadow: $shadow;
+    }
+    &.notShown {
+        display: none;
+    }
+
+    .fieldPanelHeader {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 10px;
+        color: $color11;
+        border-bottom: 1px solid $color19;
+
+        .cancel {
+            padding-right: 10px;
+            color: $icon-color;
+
+            &.action {
+                cursor: pointer;
+                &:hover {
+                    color: $icon-color-hover;
+                }
+            }
+        }
+    }
+    .fieldItem.animated {
+        -webkit-animation-duration: 400ms;
+        animation-duration: 400ms;
+    }
+    .panel {
+        box-shadow: none;
+        width: 100%;
+        border: 1px solid $color4;
+        .list-group-item:first-child {
+            border-radius: 0;
+        }
+    }
+    .panel-body {
+        display: flex;
+        flex-direction: column;
+    }
+    .list-group {
+        height: 490px;
+        min-height: 244px;
+        overflow: auto;
+        margin-bottom: 0;
+    }
+    .list-group-item {
+        color: $color11;
+        width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        border: 1px solid $color4;
+        border-right: none;
+        border-left: none;
+    }
+    .list-group-item:first-child {
+        border-top: none;
+    }
+    .list-group-item:first-child,
+    .list-group-item:last-child {
+        border-radius: 0;
+    }
+
+    .list-group-item .checkMark {
+        margin-left: auto;
+    }
+
+    .checkMark {
+        color: transparent;
+        padding-right: 5px;
+    }
+
+    .checkMark-selected {
+        color: $selected-check-color;
+        padding-right: 5px;
+    }
+    .moreFields {
+        color: $icon-color;
+    }
+
+}
+
+@include medium-breakpoint {
+    .reportContainer .reportToolsAndContentContainer .reportToolbar
+    .sortAndGroupDialog {
+        width: 323px;
+        .fieldChoice .fieldChoiceLeft {
+            width: 86%;
+            max-width: 86%;
+        }
+    }
+}
+
+@include small-breakpoint {
+    .reportContainer .reportToolsAndContentContainer .reportToolbar
+    .sortAndGroupDialog {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin-top: 0;
+        margin-left: 0;
+        width: 100%;
+        max-width: $small-breakpoint-width;
+        height: 100%;
+        max-height: 100%;
+
+
+        .action {
+            cursor: pointer;
+            color: $icon-color;
+            &:hover {
+                color: $icon-color-hover;
+            }
+        }
+
+        .action.fieldItem {
+            color: $popover-text;
+            &:hover {
+                color: $icon-color-hover;
+            }
+        }
+
+
+        .dialogContent {
+            overflow: auto;
+        }
+
+        .groupBySettings {
+            margin-top: 10px;
+            .fieldChoice {
+                background-color: $color1;
+                border-top-width: 3px;
+            }
+        }
+        .sortBySettings {
+            .fieldChoice {
+                border-top-width: 3px;
+            }
+        }
+
+        .settingsDialog {
+            padding: 5px 0 0;
+            height: 100%;
+            max-height: 100%;
+
+            .overlayDialogHeader {
+                border-bottom: 1px solid $color19;
+                padding: 0 10px 10px;
+            }
+            .dialogUpper {
+                height: 100%;
+                max-height: 100%;
+            }
+
+            .dialogContent {
+                max-height: 80%;
+            }
+
+            .title {
+                padding: 0 10px;
+            }
+        }
+        .fieldsPanel {
+            max-height: 100%;
+            height: 100%;
+
+            .panel-body {
+                max-height: 100%;
+                height: 100%;
+
+                .list-group {
+                    height: 100%;
+                    max-height: 100%;
+                }
+            }
+        }
+
+
+        .dialogButtons {
+            display: none;
+        }
+        .dialogBand {
+            background-color: $color12;
+            display: flex;
+            padding: 15px;
+            justify-content: center;
+            border-top: 1px solid $color19;
+        }
+
+        .sortAndGroupButton .sortButtonSpan { //icon in popover
+            margin-top: 8px;
+            &:hover {
+                color: $secondary-bar-fg;
+            }
+        }
+    }
+
+    .sortAndGroupContainer .sortAndGroupButton .sortButtonSpan { //icon in toolbar
+        margin-top: 8px;
+        &:hover {
+            color: $secondary-bar-fg;
+        }
+    }
 }

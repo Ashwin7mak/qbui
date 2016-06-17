@@ -29,10 +29,10 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 .reportTable {
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    flex:1 1 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
 }
 
 .agGrid {
@@ -64,14 +64,14 @@ $cell-edit-background-edit: #f3f8fe;
         &.selected {
             background-color: $color5;
             .ag-header-cell-menu-button {
-                opacity: 1!important;
+                opacity: 1 !important;
                 display: block;
             }
         }
     }
     .ag-header-cell-menu-button {
         display: none;
-        padding: 4px 0px 3px 0px;
+        padding: 4px 0 3px;
     }
     .ag-header-cell:hover {
         .ag-header-cell-menu-button {
@@ -88,7 +88,7 @@ $cell-edit-background-edit: #f3f8fe;
         border-right: 1px solid $header-cell-border;
         border-bottom: 2px solid $header-cell-border-bottom;
         &:last-of-type {
-            border-right: 0px;
+            border-right: 0;
         }
     }
 
@@ -96,16 +96,16 @@ $cell-edit-background-edit: #f3f8fe;
         border-right: 1px solid $row-cell-border-color;
         border-bottom: 1px solid $row-cell-border-color;
         &:last-of-type {
-            border-right: 0px;
+            border-right: 0;
         }
     }
     .ag-row-group .gridCell {
-        border-right: 0px;
+        border-right: 0;
     }
 
     .ag-row:hover {
         background-color: $row-background-color-hover;
-        cursor:pointer;
+        cursor: pointer;
     }
     .gridCell.Bold {
         font-weight: bold;
@@ -117,25 +117,25 @@ $cell-edit-background-edit: #f3f8fe;
         text-align: right;
     }
     .gridCell.selectionCell {
-        overflow:visible;
+        overflow: visible;
         .ag-cell-value {
             padding: 0;
             position: absolute;
             left: 30px;
             top: 1px;
-            height:100%;
+            height: 100%;
 
             .iconActions {
 
                 line-height: inherit;
                 .dropdown-menu a {
 
-                    padding-left:4px;
+                    padding-left: 4px;
                     .qbIcon {
-                        margin-right:6px;
-                        vertical-align:middle;
-                        width:28px;
-                        padding:4px;
+                        margin-right: 6px;
+                        vertical-align: middle;
+                        width: 28px;
+                        padding: 4px;
                     }
 
                     &:hover {
@@ -157,7 +157,7 @@ $cell-edit-background-edit: #f3f8fe;
                     }
                 }
                 .iconActionButton {
-                    opacity: .2;
+                    opacity: 0.2;
                     transition: opacity 200ms ease-in-out;
 
                     height: 30px;
@@ -183,7 +183,7 @@ $cell-edit-background-edit: #f3f8fe;
         }
         &:hover .ag-cell-value .iconActions .iconActionButton {
             transition: opacity 200ms ease-in-out;
-            opacity:1;
+            opacity: 1;
         }
     }
 
@@ -199,7 +199,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .ag-row-level-0 .ag-group-cell-entire-row {
         border-top: 4px solid $grid-group-row-header-border-top;
-        padding-top: 0px;
+        padding-top: 0;
     }
     .ag-row-group {
         &:first-of-type {
@@ -209,7 +209,7 @@ $cell-edit-background-edit: #f3f8fe;
             }
         }
     }
-    .ag-group-cell-entire-row::before {
+    .ag-group-cell-entire-row:before {
         border-top: 1px solid $grid-group-row-header-divider;
         position: absolute;
         top: -1px;
@@ -226,9 +226,9 @@ $cell-edit-background-edit: #f3f8fe;
     }
     //assuming that we can have upto 6 group levels
     @for $i from 1 through 6 {
-        .ag-row-level-#{$i}{
+        .ag-row-level-#{$i} {
             .ag-group-cell-entire-row {
-                padding-left: 18 + $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size)!important;
+                padding-left: 18 + $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size) !important;
             }
         }
     }
@@ -238,7 +238,7 @@ $cell-edit-background-edit: #f3f8fe;
         height: 30px;
     }
     .selectAllCheckbox {
-        margin: 0px;
+        margin: 0;
         height: 20px;
     }
     .selectAllCheckbox {
@@ -247,7 +247,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .ag-selection-checkbox {
         position: absolute;
-        margin:0;
+        margin: 0;
         left: $grid-default-cell-padding;
         top: $grid-default-cell-padding;
     }
@@ -278,10 +278,10 @@ $cell-edit-background-edit: #f3f8fe;
         color: $color22;
     }
     .ag-menu {
-        top: 24px!important;
-        -webkit-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
-        -moz-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
-        box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+        top: 24px !important;
+        -webkit-box-shadow: 0 4px 15px 0 rgba(70, 66, 66, 0.15);
+        -moz-box-shadow: 0 4px 15px 0 rgba(70, 66, 66, 0.15);
+        box-shadow: 0 4px 15px 0 rgba(70, 66, 66, 0.15);
     }
     .ag-tab-selected {
         display: none;
@@ -290,17 +290,16 @@ $cell-edit-background-edit: #f3f8fe;
 
 //Temporary hack - opened an issue with ag-grid
 #centerRow {
-    height: 100%!important;
+    height: 100% !important;
 }
 
 .tableActionsContainer {
     position: relative;
 }
+
 .tableActionsContainer.toolsMenuOpen {
-    overflow:visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */
+    overflow: visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */
 }
-
-
 
 .swipeable {
     position: relative;
@@ -317,22 +316,22 @@ $cell-edit-background-edit: #f3f8fe;
 
     .recordActions {
         padding: 0;
-        height:100%;
-        width:200px;
+        height: 100%;
+        width: 200px;
 
         .actionIcons {
-            display:flex;
-            flex-direction:row;
-            width:100%;
-            height:100%;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100%;
 
             .iconLink {
-                flex:1 1 auto;
-                height:100%;
+                flex: 1 1 auto;
+                height: 100%;
 
-                position:relative;
+                position: relative;
                 .qbIcon {
-                    position:absolute;
+                    position: absolute;
                     top: calc(50% - 10px);
                     left: calc(50% - 10px);
                 }
@@ -350,20 +349,23 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 /* row actions on aggrid trickery
--- this isnt pretty but there is a good chance row actions design will change so for now just porting over logic from griddle*/
+ * -- this isnt pretty but there is a good chance row actions design will change
+ * so for now just porting over logic from griddle */
 
 /* hide griddle cell containing actions */
 .ag-row .ag-cell {
     &:nth-last-child(2) {
-        border-right: 0px;
+        border-right: 0;
     }
 }
+
 .ag-header-row .ag-header-cell {
     &:nth-last-child(2) {
-        border-right: 0px;
+        border-right: 0;
     }
 }
-.ag-cell[colid="actions"]{
+
+.ag-cell[colid="actions"] {
     position: relative;
     width: 0;
     border: 0;
@@ -399,160 +401,159 @@ $cell-edit-background-edit: #f3f8fe;
 
 /* hide row editing tools by default */
 .editTools {
-    display:none;
+    display: none;
 }
 
 /* hide datepicker if it's been opened but we're not over that cell */
-.ag-row-selected .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget{
-    display:none !important;
+.ag-row-selected .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget {
+    display: none !important;
 }
 
 /* last to rows are just for padding */
 .ag-row:last-child {
-    visibility:hidden;
+    visibility: hidden;
 
 }
 
 .ag-body-container {
-    background-color:inherit !important;
+    background-color: inherit !important;
 }
+
 .ag-row .gridCell .cellWrapper > :not(.cellData) {
-     display:none;
+    display: none;
 }
 
 .reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .iconActions {
-    display:none;
+    display: none;
 }
+
 .reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
 
     box-shadow: 2px 2px 2px $row-box-shadow-color;
 
     .ag-cell.gridCell {
-
-        overflow:visible;
+        overflow: visible;
         padding: 0;
         margin: 0;
 
         border-right: 1px solid $row-border-color;
-        > .cellWrapper,.ag-cell-wrapper {
-            padding:2px;
+        > .cellWrapper, .ag-cell-wrapper {
+            padding: 2px;
             position: absolute;
 
-            top:0px;
-            left:0px;
-            right:0px;
-            bottom:0px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-color: $cell-edit-background-edit;
 
-            z-index:1;
-            display:flex;
+            z-index: 1;
+            display: flex;
 
             .cellData {
-                display:none;
+                display: none;
             }
             .cellEdit {
-                display:inline-block;
-                border:1px solid $row-border-color;
+                display: inline-block;
+                border: 1px solid $row-border-color;
 
                 background: $row-bg-color;
-                flex:1 1 auto;
-                padding:0 0 0 2px;
-                margin-right:2px;
+                flex: 1 1 auto;
+                padding: 0 0 0 2px;
+                margin-right: 2px;
 
-                &.dateTimeField>* {
-                    border:0;
+                &.dateTimeField > * {
+                    border: 0;
                     .input-group.date input.form-control {
-                        border:0;
-                        padding:0;
+                        border: 0;
+                        padding: 0;
                         font-size: 12px;
                         height: 25px;
-                        border-radius:0;
+                        border-radius: 0;
                     }
                     .input-group.date .input-group-addon {
                         background: #fff;
-                        height:21px;
-                        padding:0;
-                        border:0;
+                        height: 21px;
+                        padding: 0;
+                        border: 0;
                         color: $icon-color;
 
                     }
                 }
                 &.input-group {
                     flex: 1 1 auto;
-                    display:flex;
+                    display: flex;
                     flex-direction: row;
-                    margin-right:0;
-                    padding-right:0;
-                    border-right:0;
+                    margin-right: 0;
+                    padding-right: 0;
+                    border-right: 0;
 
-                    >input {
-                        flex:1 1 auto;
-                        border-radius:0;
-                        border:0;
-                        height:21px;
-                        margin-right:1px;
+                    > input {
+                        flex: 1 1 auto;
+                        border-radius: 0;
+                        border: 0;
+                        height: 21px;
+                        margin-right: 1px;
                         font-size: 12px;
-                        padding-left:2px;
+                        padding-left: 2px;
                     }
-                    >span.dropdown {
-                        flex:0 0 auto;
+                    > span.dropdown {
+                        flex: 0 0 auto;
                         width: 20px;
                         button {
-                            padding-left:4px;
-                            padding-top:0;
+                            padding-left: 4px;
+                            padding-top: 0;
                             height: 21px;
-                            width:20px;
-                            border-radius:0;
+                            width: 20px;
+                            border-radius: 0;
                         }
                     }
                 }
             }
 
-
         }
         > .ag-cell-wrapper:first-child {
-            border-left:1px solid $row-border-color;
-            left:0;
+            border-left: 1px solid $row-border-color;
+            left: 0;
         }
     }
 
     .gridCell {
 
         .editTools {
-            display:block;
+            display: block;
             flex: 0 0 auto;
-            background-color:$cell-edit-background-edit;
+            background-color: $cell-edit-background-edit;
             box-shadow: 2px 2px 2px $row-box-shadow-color;
-            position:absolute;
-            top:30px;
-            left:-31px;
-
+            position: absolute;
+            top: 30px;
+            left: -31px;
             border-left: 1px solid $row-border-color;
             border-right: 1px solid $row-border-color;
-            border-bottom:1px solid $row-border-color;
+            border-bottom: 1px solid $row-border-color;
             button {
-                border:0;
-                background-color:$cell-edit-background-edit;
-                margin-right:2px;
-                padding:6px 8px;
+                border: 0;
+                background-color: $cell-edit-background-edit;
+                margin-right: 2px;
+                padding: 6px 8px;
 
                 .qbIcon {
-                    width:20px;
+                    width: 20px;
                     font-size: 20px;
-                    vertical-align:top;
+                    vertical-align: top;
                 }
                 .qbIcon.saveRecord {
-                    color:green;
-                    font-size:24px;
+                    color: green;
+                    font-size: 24px;
                 }
                 .qbIcon.cancelSelection {
-                    color:$icon-color;
+                    color: $icon-color;
                 }
                 .qbIcon.deleteRecord {
-                    color:red;
+                    color: red;
                 }
                 .qbIcon.addRecord {
-                    color:$icon-color;
+                    color: $icon-color;
                 }
             }
         }
@@ -561,7 +562,5 @@ $cell-edit-background-edit: #f3f8fe;
 
 /* errant horizontal scrolllbars sometimes appear */
 .ag-body-viewport {
-    overflow-x:hidden;
+    overflow-x: hidden;
 }
-
-

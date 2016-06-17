@@ -2,7 +2,6 @@
 
 $font-path: '../../assets/fonts/';
 
-
 @font-face {
     font-family: 'Open Sans';
     src: url('#{$font-path}Open_Sans/OpenSans-Regular.ttf') format('truetype');
@@ -18,7 +17,6 @@ html, body {
 }
 
 html body {
-
     font-family: Open Sans, Arial, Sans-Serif;
     font-size: 14px;
     font-style: normal;
@@ -34,6 +32,7 @@ html body {
         font-weight: 500;
         line-height: 24px;
     }
+
     h3 {
         font-family: Open Sans, Arial, Sans-Serif;
         font-size: 24px;
@@ -42,11 +41,9 @@ html body {
         font-weight: 500;
         line-height: 24px;
     }
-
 }
 
 body.touch {
-
     .tooltip {
         display: none !important;
     }
@@ -66,11 +63,11 @@ body.touch {
     -webkit-transition: transform ease 250ms;
 
     .main {
-        position:relative;
+        position: relative;
         display: flex;
         flex-direction: column;
         flex: 1 1 auto;
-        min-width:0px; //wtf?
+        min-width: 0; //wtf?
         .topNav {
             min-width: 200px;
             flex: 0 0 auto;
@@ -91,11 +88,12 @@ body.touch {
                 flex: 0 0 auto;
                 white-space: nowrap;
             }
+
             @include small-breakpoint {
                 .navGroup.left {
                     flex: 1 1 auto;
-                    overflow:hidden;
-                    text-overflow:ellipsis;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
             }
             .navGroup.center {
@@ -105,6 +103,7 @@ body.touch {
                     display: flex;
                     justify-content: center;
                 }
+
                 @include small-breakpoint {
                     flex: 0 0 auto;
                     .navItem {
@@ -116,14 +115,14 @@ body.touch {
             .btn-group {
                 height: 40px;
                 button {
-                    width:40px;
+                    width: 40px;
                     color: $topnav-icon-color;
                     border-radius: 0;
-                    padding:0;
+                    padding: 0;
                     height: $top-nav-height;
-                    text-align:center;
+                    text-align: center;
                     &.dropdownToggle {
-                        width:20px;
+                        width: 20px;
                     }
                 }
                 button:hover .hi {
@@ -149,7 +148,7 @@ body.touch {
             // Enable momentum scrolling on iOS devices
             -webkit-overflow-scrolling: touch;
             // Enable hardware acceleration for scrolling through content.
-            transform: translate3d(0,0,0);
+            transform: translate3d(0, 0, 0);
         }
 
         .footer {
@@ -163,14 +162,15 @@ body.touch {
         }
     }
 }
+
 body:not(.touch) .navShell .main .topNav .iconLink:hover {
     color: #fff;
-    background: $nav-hover-bg
+    background: $nav-hover-bg;
 }
 
 @include small-breakpoint {
     .layout-stage {
-        display:none;
+        display: none;
     }
 
 }
@@ -182,5 +182,3 @@ body:not(.touch) .navShell .main .topNav .iconLink:hover {
     bottom: 0;
     left: 0;
 }
-
-

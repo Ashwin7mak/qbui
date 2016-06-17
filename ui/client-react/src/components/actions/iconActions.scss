@@ -11,9 +11,9 @@ $page-actions-background-color: #486c8f;
     .iconActions {
 
         .iconActionButton {
-            border:0;
-            margin-right:2px;
-            border-radius:0;
+            border: 0;
+            margin-right: 2px;
+            border-radius: 0;
             display: inline-block;
             vertical-align: middle;
             text-align: center;
@@ -21,7 +21,7 @@ $page-actions-background-color: #486c8f;
             height: 40px;
             font-size: 20px;
             color: $topnav-icon-color;
-            padding:0;
+            padding: 0;
             &.dropdownToggle {
                 width: 20px;
             }
@@ -40,10 +40,10 @@ $page-actions-background-color: #486c8f;
         display: flex;
         flex-direction: row;
         flex: 0 0 auto;
-        justify-content:space-between;
-        height:40px;
+        justify-content: space-between;
+        height: 40px;
         background-color: $secondary-bar-bg;
-        width:100%;
+        width: 100%;
         .iconActions {
             flex: 0 0 auto;
             line-height: 40px;
@@ -51,11 +51,11 @@ $page-actions-background-color: #486c8f;
 
 
             .iconActionButton {
-                border:0;
-                border-radius:0;
+                border: 0;
+                border-radius: 0;
                 padding: 0;
-                padding-right:6px;
-                padding-left:6px;
+                padding-right: 6px;
+                padding-left: 6px;
                 display: inline-block;
                 vertical-align: middle;
                 text-align: center;

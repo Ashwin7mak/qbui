@@ -20,21 +20,25 @@ $large-breakpoint-width: 1440px;
         @content;
     }
 }
+
 @mixin medium-breakpoint {
     @media (min-width: #{$small-breakpoint-width + 1px}) and (max-width: #{$medium-breakpoint-width}) {
         @content;
     }
 }
+
 @mixin large-breakpoint {
     @media (min-width: #{$medium-breakpoint-width + 1px}) and (max-width: #{$large-breakpoint-width}) {
         @content;
     }
 }
+
 @mixin xlarge-breakpoint {
     @media (min-width: #{$large-breakpoint-width + 1px}) {
         @content;
     }
 }
+
 @mixin not-small-breakpoint {
     @media (min-width: #{$small-breakpoint-width + 1px}) {
         @content;

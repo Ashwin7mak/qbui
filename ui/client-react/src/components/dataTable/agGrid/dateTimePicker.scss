@@ -3,18 +3,17 @@
 /* CSS hacks to the 3rd part date time picker to meet visual spec */
 
 .bootstrap-datetimepicker-widget.dropdown-menu {
-    background-color:$datepicker-header-bg;
-    padding-bottom:0;
-    padding-top:0;
-
+    background-color: $datepicker-header-bg;
+    padding-bottom: 0;
+    padding-top: 0;
 
     /* the button that switches between views */
     .picker-switch {
         color: $datepicker-select-button-fg;
-        background-color:$datepicker-bg;
-        border-radius:0;
+        background-color: $datepicker-bg;
+        border-radius: 0;
         &:hover {
-            background-color:$datepicker-date-hover-bg;
+            background-color: $datepicker-date-hover-bg;
         }
     }
 
@@ -28,8 +27,8 @@
 
     /* the table cells (day, year etc)   */
     button, .month, .day, .year, .minute, .timepicker-minute, .timepicker-hour {
-        border:0;
-        border-radius:0;
+        border: 0;
+        border-radius: 0;
         &:hover {
             background-color: $datepicker-date-hover-bg;
         }
@@ -37,42 +36,42 @@
     .btn .glyphicon:hover {
         background: $datepicker-date-hover-bg;
     }
-    .btn-primary, .active  {
+    .btn-primary, .active {
         background-color: $datepicker-header-bg;
-        font-weight:bold;
+        font-weight: bold;
     }
 
 }
 
 /* the little arrow on the top top right of the popup */
 .bootstrap-datetimepicker-widget.pull-right:after {
-    border-bottom-color:$datepicker-header-bg;
+    border-bottom-color: $datepicker-header-bg;
 }
 
 .datepicker {
 
     .table-condensed {
 
-        td,th {
-            border-radius:0;
+        td, th {
+            border-radius: 0;
         }
 
         /* the title bar with prev/next/date etc */
         thead {
-            font-size:14px;
+            font-size: 14px;
             background-color: $datepicker-bg;
             tr:first-child {
                 background-color: $datepicker-header-bg;
                 color: $datepicker-header-fg;
 
-                th.switch,th.prev,th.next {
+                th.switch, th.prev, th.next {
                     .glyphicon {
                         font-size: 22px;
                     }
                 }
             }
             tr:first-child th:hover {
-                background-color:  $datepicker-date-hover-bg;
+                background-color: $datepicker-date-hover-bg;
                 color: $datepicker-select-button-fg;
             }
 
@@ -83,7 +82,7 @@
             }
 
             /* we don't have a left so use the right one an flip it around */
-            .glyphicon-chevron-left     {
+            .glyphicon-chevron-left {
                 transform: rotate(180deg);
             }
             .glyphicon-chevron-left:before {
@@ -94,10 +93,10 @@
 
         tbody tr {
             background-color: $datepicker-bg;
-            line-height:20px;
+            line-height: 20px;
             th {
-                border:0;
-                padding:5px;
+                border: 0;
+                padding: 5px;
             }
         }
     }
@@ -105,7 +104,6 @@
     /* ugh, the year and month views use < and > characters not icons */
 
     .datepicker-years, .datepicker-months {
-
         /* hide the text node with the < and > characters by making them transparent */
         th.next, th.prev, th.next:hover, th.prev:hover {
             color: transparent !important;
@@ -122,7 +120,7 @@
             color: $datepicker-select-button-fg;
         }
         th.next {
-            padding-bottom:0;
+            padding-bottom: 0;
         }
         th.prev {
             /* flip the next icon around */
