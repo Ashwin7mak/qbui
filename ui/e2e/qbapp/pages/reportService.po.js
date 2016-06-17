@@ -156,7 +156,9 @@
         this.openReportsMenu = function(tableLinkEl) {
             e2ePageBase.waitForElement(tableLinkEl).then(function() {
                 var hamburgerEl = tableLinkEl.all(by.className('right')).first();
-                return hamburgerEl.click();
+                return e2ePageBase.waitForElementToBeClickable(hamburgerEl).then(function() {
+                    hamburgerEl.click();
+                });
             });
         };
 
