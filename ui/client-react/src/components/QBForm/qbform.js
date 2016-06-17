@@ -46,6 +46,7 @@ let QBForm = React.createClass({
 
         let classes = "formElement field ";
         classes += labelPosition === "ABOVE" ? "labelAbove" : "labelLeft";
+
         return (
             <div key={key} className={classes}>
                 <span className={"fieldLabel"}>{fieldLabel}</span>
