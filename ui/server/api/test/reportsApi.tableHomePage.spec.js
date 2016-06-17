@@ -111,8 +111,11 @@
             ];
         }
 
+        /**
+         * Tests for API call for table POST custdefaulthomepage and GET report homepage which is intercepted by node and returns a report obj (metaData and data)
+         */
         reportHomePageTestCases().forEach(function(testcase) {
-            it('Verify API calls POST custdefaulthomepage, GET defaulthomepage and GET homepage for ', function(done) {
+            it('Verify API calls POST custdefaulthomepage, and GET homepage for ', function(done) {
                 //create user
                 recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
@@ -122,28 +125,24 @@
                         recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, reportId)).then(function() {
                             //get the user authentication
                             recordBase.apiBase.createUserAuthentication(userId).then(function() {
-                                //Execute a GET table defaulthomepage
-                                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
-                                    assert.deepEqual(JSON.parse(defaultHomePageResults.body), "1");
-                                    //Execute a GET report homepage
-                                    recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
-                                        var results = JSON.parse(reportHomePageResults.body);
-                                        //Verify returned results has right report Id and role info
-                                        //verify report meta Data
-                                        var reportMetaData = results.reportMetaData.data;
-                                        assert.deepEqual(reportMetaData.id, reportId);
-                                        assert.deepEqual(reportMetaData.name, 'testReport');
+                                //Execute a GET report homepage which returns report object (metaData and data)
+                                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
+                                    var results = JSON.parse(reportHomePageResults.body);
+                                    //Verify returned results has right report Id and role info
+                                    //verify report meta Data
+                                    var reportMetaData = results.reportMetaData.data;
+                                    assert.deepEqual(reportMetaData.id, reportId);
+                                    assert.deepEqual(reportMetaData.name, 'testReport');
 
-                                        //verify report data
-                                        var reportData = results.reportData.data;
-                                        assert.deepEqual(reportData.groups, []);
-                                        assert.deepEqual(reportData.facets, []);
-                                        assert.deepEqual(reportData.records.length, 10);
+                                    //verify report data
+                                    var reportData = results.reportData.data;
+                                    assert.deepEqual(reportData.groups, []);
+                                    assert.deepEqual(reportData.facets, []);
+                                    assert.deepEqual(reportData.records.length, 10);
 
-                                        //finally reset authentication back to Admin
-                                        recordBase.apiBase.createUserAuthentication(ADMIN_USER_ID).then(function() {
-                                            done();
-                                        });
+                                    //finally reset authentication back to Admin
+                                    recordBase.apiBase.createUserAuthentication(ADMIN_USER_ID).then(function() {
+                                        done();
                                     });
                                 });
                             });
@@ -153,32 +152,24 @@
             });
         });
 
-        it('Verify API calls POST defaulthomepage, GET defaulthomepage and GET homepage for ', function(done) {
+        /**
+         * Tests for API call for table POST defaulthomepage and GET defaulthomepage which is a call to the core api from node (node is only forwarding the request)
+         * that returns the homepage report id(if any).
+         */
+        it('Verify API calls POST defaulthomepage and GET defaulthomepage ', function(done) {
             //POST defaulthomepage for a table
             recordBase.apiBase.setDefaultTableHomePage(app.id, createTableReportMapJSON(app.tables[0].id, reportId)).then(function() {
                 //Execute a GET table home Page
                 recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
                     assert.deepEqual(JSON.parse(defaultHomePageResults.body), "1");
-                    //Execute a GET report homepage
-                    recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
-                        var results = JSON.parse(reportHomePageResults.body);
-                        //Verify returned results has right report Id and role info
-                        //verify report meta Data
-                        var reportMetaData = results.reportMetaData.data;
-                        assert.deepEqual(reportMetaData.id, reportId);
-                        assert.deepEqual(reportMetaData.name, 'testReport');
-
-                        //verify report data
-                        var reportData = results.reportData.data;
-                        assert.deepEqual(reportData.groups, []);
-                        assert.deepEqual(reportData.facets, []);
-                        assert.deepEqual(reportData.records.length, 10);
-                        done();
-                    });
+                    done();
                 });
             });
         });
 
+        /**
+         * Negative Test the API GET table defaulthomepage and GET homepage should return empty if table POST defaulthomepage not set
+         */
         it('Negative Test - Verify GET defaulthomepage and GET report homepage returns empty meta data if defaulthomepage not set', function(done) {
             //Execute a GET table home Page
             recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
@@ -197,6 +188,9 @@
             });
         });
 
+        /**
+         * Negative Test for roles.If POST custdefaulthomepage is set for participant and authenticate as viewer should return empty data for defaulthomepage and homepages GET'S.
+         */
         it('Negative Test - Give custdefaulthomepage permission to participant verify GET defaulthomepage as viewer', function(done) {
             //create user 1
             recordBase.apiBase.createUser().then(function(userResponse1) {
@@ -236,6 +230,13 @@
             });
         });
 
-
+        //Cleanup the test realm after all tests in the block
+        after(function(done) {
+            //Realm deletion takes time, bump the timeout
+            this.timeout(testConsts.INTEGRATION_TIMEOUT);
+            recordBase.apiBase.cleanup().then(function() {
+                done();
+            });
+        });
     });
 }());

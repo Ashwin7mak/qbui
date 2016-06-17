@@ -42,8 +42,8 @@
         var ROLES_ENDPOINT = '/roles/';
         var ADMIN_REALM = 'localhost';
         var ADMIN_REALM_ID = 117000;
-        var TICKETS_ENDPOINT = '/ticket?uid=10000&realmId=';
-        var TICKETS_ENDPOINT2 = '/ticket';
+        var ADMIN_TICKETS_ENDPOINT = '/ticket?uid=10000&realmId=';
+        var TICKETS_ENDPOINT = '/ticket';
         var HEALTH_ENDPOINT = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var CONTENT_TYPE = 'Content-Type';
@@ -181,10 +181,10 @@
                 return endpoint;
             },
             resolveTicketEndpoint       : function() {
-                return JAVA_BASE_ENDPOINT + TICKETS_ENDPOINT;
+                return JAVA_BASE_ENDPOINT + ADMIN_TICKETS_ENDPOINT;
             },
             resolveUserTicketEndpoint       : function() {
-                return JAVA_BASE_ENDPOINT + TICKETS_ENDPOINT2;
+                return JAVA_BASE_ENDPOINT + TICKETS_ENDPOINT;
             },
             resolveHealthEndpoint       : function() {
                 return JAVA_BASE_ENDPOINT + HEALTH_ENDPOINT;
