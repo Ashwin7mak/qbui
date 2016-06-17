@@ -446,7 +446,6 @@ task gruntCiE2ETestsNoColor(type: GruntTask) {
 task gruntE2EAWSSauce(type: GruntTask) {
     doFirst {
         tasks.invokeInstallSauceLabs.execute()
-        tasks.invokeCheckForApiUp.execute()
         args = ["test:e2eAWSSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
 }
