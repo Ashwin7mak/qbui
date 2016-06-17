@@ -57,9 +57,9 @@ let IconActions = React.createClass({
     getActionButton(action) {
         let tooltip;
         if (action.rawMsg) {
-            tooltip = (<Tooltip id={action.msg}>{action.msg}</Tooltip>);
+            tooltip = (<Tooltip id={action.msg}>{action.rawMsg}</Tooltip>);
         } else {
-            tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg}/>{action.msg}</Tooltip>);
+            tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg}/></Tooltip>);
         }
         let className = "iconActionButton ";
 
