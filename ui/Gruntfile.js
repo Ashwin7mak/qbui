@@ -49,6 +49,8 @@ module.exports = function(grunt) {
     var webpack = require('webpack');
     var webpackConfig = require('./webpack.config.js');
 
+    var stylelint = require('stylelint');
+
     // define the source client(REACT) folder hierarchy...
     function updateClientRoot() {
         var clientRoot = 'client-react';
@@ -555,7 +557,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-
         shell: {
             lint: {
                 // Make sure code styles are up to par and there are no obvious mistakes
@@ -910,10 +911,32 @@ module.exports = function(grunt) {
         'build'
     ]);
 
-    grunt.registerTask('lint', 'Run eslint on code', function() {
+    grunt.registerTask('lint', 'Run eslint and stylelint on code', function() {
         return grunt.task.run([
-            'shell:lint',
+            'lintStyles',
+            'shell:lint'
         ]);
+    });
+
+    grunt.registerTask('lintStyles', 'Run stylelint on code', function() {
+        var done = this.async();
+        stylelint.lint({
+            configFile: '.stylelintrc',
+            syntax: 'scss',
+            formatter: 'string',
+            files:  'client-react/src/**/*.scss'
+        })
+        .then(function(data) {
+            console.log(data.output);
+            done();
+            // do things with data.output, data.errored,
+            // and data.results
+        })
+        .catch(function(err) {
+            // do things with err e.g.
+            grunt.log.writeln(err.stack);
+            done();
+        });
     });
 
     grunt.loadNpmTasks('grunt-shell-spawn');
