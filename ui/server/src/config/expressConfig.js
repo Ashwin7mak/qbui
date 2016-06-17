@@ -53,7 +53,7 @@ var config = require('./environment');
 
         log.info('env : %s, client: %s, routegroup: %s', config.env, config.client, config.routeGroup);
 
-        app.set('views', config.root + '/server/views');
+        app.set('views', config.root + '/server/src/views');
         app.engine('html', require('ejs').renderFile);
         app.set('view engine', 'html');
 

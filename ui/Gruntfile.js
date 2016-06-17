@@ -388,7 +388,7 @@ module.exports = function(grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src    : ['server/**/test/' + mochaUnitTest]
+                src    : ['server/test/' + mochaUnitTest]
             },
 
             testGen: {
@@ -399,7 +399,7 @@ module.exports = function(grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src    : ['server/**/test/' + mochaUnitTest]
+                src    : ['server/test/' + mochaUnitTest]
             },
 
             integration: {
@@ -412,16 +412,16 @@ module.exports = function(grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src    : ['server/**/test/' + mochaIntTest]
+                src    : ['server/test/' + mochaIntTest]
             }
         },
 
         //  Code coverage against the express code
         mocha_istanbul: {
             coverage: {
-                src    : ['server/**/test/*.unit.spec.js', 'common/**/test/*.unit.spec.js'],
+                src    : ['server/test', 'common/test'],
                 options: {
-                    mask          : '**/*.spec.js',
+                    mask          : '**/*.unit.spec.js',
                     root          : '.',
                     noColors      : !useColors,
                     reportFormats : ['lcov'],
