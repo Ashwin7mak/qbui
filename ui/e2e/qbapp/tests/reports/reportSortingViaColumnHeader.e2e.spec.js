@@ -174,52 +174,50 @@
             /*
              * Ascending Testcases
              */
-            sortingTestCases().forEach(function(sortingTestcase) {
-                it('Ascending : ' + sortingTestcase.message, function(done) {
-                    var actualTableResults;
-                    var sortedTableResults;
-                    // Get the records from column before sorting
-                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
-                        actualTableResults = actualResults;
-                    }).then(function() {
-                        //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.AscItemText);
-                    }).then(function() {
-                        // Get the records from column after sorting
-                        reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
-                            sortedTableResults = sortedResults;
-                        });
-                    }).then(function() {
-                        //Finally verify both the arrays
-                        reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
-                        done();
+            // Grab a random test case from the data provider
+            var sortingTestcase = sortingTestCases()[Math.floor(Math.random() * sortingTestCases().length)];
+            it('Ascending : ' + sortingTestcase.message, function(done) {
+                var actualTableResults;
+                var sortedTableResults;
+                // Get the records from column before sorting
+                reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
+                    actualTableResults = actualResults;
+                }).then(function() {
+                    //expand column header menu and select the Item
+                    reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.AscItemText);
+                }).then(function() {
+                    // Get the records from column after sorting
+                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
+                        sortedTableResults = sortedResults;
                     });
+                }).then(function() {
+                    //Finally verify both the arrays
+                    reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
+                    done();
                 });
             });
 
             /*
              * Descending Testcases
              */
-            sortingTestCases().forEach(function(sortingTestcase) {
-                it('Descending : ' + sortingTestcase.message, function(done) {
-                    var actualTableResults;
-                    var sortedTableResults;
-                    // Get the records from column before sorting
-                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
-                        actualTableResults = actualResults;
-                    }).then(function() {
-                        //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.DescItemText);
-                    }).then(function() {
-                        // Get the records from column after sorting
-                        reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
-                            sortedTableResults = sortedResults;
-                        });
-                    }).then(function() {
-                        //Finally verify both the arrays
-                        reportSortingPage.verifyDescending(sortingTestcase.message, actualTableResults, sortedTableResults);
-                        done();
+            it('Descending : ' + sortingTestcase.message, function(done) {
+                var actualTableResults;
+                var sortedTableResults;
+                // Get the records from column before sorting
+                reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
+                    actualTableResults = actualResults;
+                }).then(function() {
+                    //expand column header menu and select the Item
+                    reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.DescItemText);
+                }).then(function() {
+                    // Get the records from column after sorting
+                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
+                        sortedTableResults = sortedResults;
                     });
+                }).then(function() {
+                    //Finally verify both the arrays
+                    reportSortingPage.verifyDescending(sortingTestcase.message, actualTableResults, sortedTableResults);
+                    done();
                 });
             });
         });
@@ -246,52 +244,50 @@
             /*
              * Ascending Testcases
              */
-            sortingTestCases().forEach(function(sortingTestcase) {
-                it('Ascending : ' + sortingTestcase.message, function(done) {
-                    var actualTableResults;
-                    var sortedTableResults;
-                    // Get the records from column before sorting
-                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
-                        actualTableResults = actualResults;
-                    }).then(function() {
-                        //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.AscItemText);
-                    }).then(function() {
-                        // Get the records from column after sorting
-                        reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
-                            sortedTableResults = sortedResults;
-                        });
-                    }).then(function() {
-                        //Finally verify both the arrays
-                        reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
-                        done();
+            // Grab a random test case from the data provider
+            var sortingTestcase = sortingTestCases()[Math.floor(Math.random() * sortingTestCases().length)];
+            it('Ascending : ' + sortingTestcase.message, function(done) {
+                var actualTableResults;
+                var sortedTableResults;
+                // Get the records from column before sorting
+                reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
+                    actualTableResults = actualResults;
+                }).then(function() {
+                    //expand column header menu and select the Item
+                    reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.AscItemText);
+                }).then(function() {
+                    // Get the records from column after sorting
+                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
+                        sortedTableResults = sortedResults;
                     });
+                }).then(function() {
+                    //Finally verify both the arrays
+                    reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
+                    done();
                 });
             });
 
             /*
              * Descending Testcases
              */
-            sortingTestCases().forEach(function(sortingTestcase) {
-                it('Descending : ' + sortingTestcase.message, function(done) {
-                    var actualTableResults;
-                    var sortedTableResults;
-                    // Get the records from column before sorting
-                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
-                        actualTableResults = actualResults;
-                    }).then(function() {
-                        //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.DescItemText);
-                    }).then(function() {
-                        // Get the records from column after sorting
-                        reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
-                            sortedTableResults = sortedResults;
-                        });
-                    }).then(function() {
-                        //Finally verify both the arrays
-                        reportSortingPage.verifyDescending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
-                        done();
+            it('Descending : ' + sortingTestcase.message, function(done) {
+                var actualTableResults;
+                var sortedTableResults;
+                // Get the records from column before sorting
+                reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
+                    actualTableResults = actualResults;
+                }).then(function() {
+                    //expand column header menu and select the Item
+                    reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.DescItemText);
+                }).then(function() {
+                    // Get the records from column after sorting
+                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
+                        sortedTableResults = sortedResults;
                     });
+                }).then(function() {
+                    //Finally verify both the arrays
+                    reportSortingPage.verifyDescending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
+                    done();
                 });
             });
         });

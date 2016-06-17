@@ -272,46 +272,43 @@
             /*
              * Ascending Testcases
              */
-            groupingTestCases().forEach(function(groupingTestcase) {
-                it('Ascending : Group ' + groupingTestcase.message, function(done) {
-                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                        //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupAscItemText);
-                    }).then(function() {
-                        // Get all records from table before filter applied
-                        getGroupedTableRows();
-                    }).then(function() {
-                        //finally verify both the arrays
-                        expect(groupedTableResults).toEqual(groupingTestcase.expectedAscTableResults);
-                    }).then(function() {
-                        //clear the array
-                        groupedTableResults = [];
-                        done();
-                    });
+            // Grab a random test case from the data provider
+            var groupingTestcase = groupingTestCases()[Math.floor(Math.random() * groupingTestCases().length)];
+            it('Ascending : Group ' + groupingTestcase.message, function(done) {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    //expand column header menu and select the Item
+                    reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupAscItemText);
+                }).then(function() {
+                    // Get all records from table before filter applied
+                    getGroupedTableRows();
+                }).then(function() {
+                    //finally verify both the arrays
+                    expect(groupedTableResults).toEqual(groupingTestcase.expectedAscTableResults);
+                }).then(function() {
+                    //clear the array
+                    groupedTableResults = [];
+                    done();
                 });
             });
 
             /*
              * Descending Testcases
              */
-            groupingTestCases().forEach(function(groupingTestcase) {
-                it('Descending : Group ' + groupingTestcase.message, function(done) {
-                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                        //expand column header menu and select the Item
-                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupDescItemText);
-                    }).then(function() {
-                        // Get all records from table before filter applied
-                        getGroupedTableRows();
-                    }).then(function() {
-                        //finally verify both the arrays
-                        expect(groupedTableResults).toEqual(groupingTestcase.expectedDescTableResults);
-                    }).then(function() {
-                        //clear the array
-                        groupedTableResults = [];
-                        done();
-                    });
+            it('Descending : Group ' + groupingTestcase.message, function(done) {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    //expand column header menu and select the Item
+                    reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupDescItemText);
+                }).then(function() {
+                    // Get all records from table before filter applied
+                    getGroupedTableRows();
+                }).then(function() {
+                    //finally verify both the arrays
+                    expect(groupedTableResults).toEqual(groupingTestcase.expectedDescTableResults);
+                }).then(function() {
+                    //clear the array
+                    groupedTableResults = [];
+                    done();
                 });
-
             });
 
             describe('Report Grouping Tests with Facets', function() {
@@ -323,49 +320,45 @@
                 /*
                  * Ascending Testcases
                  */
-                groupingTestCases().forEach(function(groupingTestcase) {
-                    it('Ascending : Group ' + groupingTestcase.message, function(done) {
-                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                            //expand column header menu and select the Item
-                            reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupAscItemText);
-                        }).then(function() {
-                            // Get all records from table before filter applied
-                            getGroupedTableRows();
-                        }).then(function() {
-                            //finally verify both the arrays
-                            expect(groupedTableResults).toEqual(groupingTestcase.expectedAscTableResults);
-                        }).then(function() {
-                            //clear the array
-                            groupedTableResults = [];
-                            done();
-                        });
+                // Grab a random test case from the data provider
+                var groupingFacetsTestcase = groupingTestCases()[Math.floor(Math.random() * groupingTestCases().length)];
+                it('Ascending : Group ' + groupingFacetsTestcase.message, function(done) {
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        //expand column header menu and select the Item
+                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingFacetsTestcase.ColumnName, groupingFacetsTestcase.GroupAscItemText);
+                    }).then(function() {
+                        // Get all records from table before filter applied
+                        getGroupedTableRows();
+                    }).then(function() {
+                        //finally verify both the arrays
+                        expect(groupedTableResults).toEqual(groupingFacetsTestcase.expectedAscTableResults);
+                    }).then(function() {
+                        //clear the array
+                        groupedTableResults = [];
+                        done();
                     });
                 });
 
                 /*
                  * Descending Testcases
                  */
-                groupingTestCases().forEach(function(groupingTestcase) {
-                    it('Descending : Group ' + groupingTestcase.message, function(done) {
-                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                            //expand column header menu and select the Item
-                            reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingTestcase.ColumnName, groupingTestcase.GroupDescItemText);
-                        }).then(function() {
-                            // Get all records from table before filter applied
-                            getGroupedTableRows();
-                        }).then(function() {
-                            //finally verify both the arrays
-                            expect(groupedTableResults.sort()).toEqual(groupingTestcase.expectedDescTableResults.sort());
-                        }).then(function() {
-                            //clear the array
-                            groupedTableResults = [];
-                            done();
-                        });
+                it('Descending : Group ' + groupingFacetsTestcase.message, function(done) {
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        //expand column header menu and select the Item
+                        reportSortingPage.expandColumnHeaderMenuAndSelectItem(groupingFacetsTestcase.ColumnName, groupingFacetsTestcase.GroupDescItemText);
+                    }).then(function() {
+                        // Get all records from table before filter applied
+                        getGroupedTableRows();
+                    }).then(function() {
+                        //finally verify both the arrays
+                        expect(groupedTableResults.sort()).toEqual(groupingFacetsTestcase.expectedDescTableResults.sort());
+                    }).then(function() {
+                        //clear the array
+                        groupedTableResults = [];
+                        done();
                     });
                 });
-
             });
-
         });
         /**
          * After all tests are done, run the cleanup function in the base class

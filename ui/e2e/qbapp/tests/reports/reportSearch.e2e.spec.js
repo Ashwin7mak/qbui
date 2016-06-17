@@ -152,32 +152,33 @@
             ];
         }
 
-        searchTestCases().forEach(function(testcase) {
-            it(' With Facets - ' + testcase.message, function(done) {
-                //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
-                        reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
-                            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                                verifySearchTableResults(testcase.expectedSearchResults);
-                                done();
-                            });
+        // Grab a random test case from the data provider
+        var testcase = searchTestCases()[Math.floor(Math.random() * searchTestCases().length)];
+
+        it(' With Facets - ' + testcase.message, function(done) {
+            //go to report page directly
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
+                    reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                            verifySearchTableResults(testcase.expectedSearchResults);
+                            done();
                         });
                     });
                 });
             });
+        });
 
-            it(' Without Facets - ' + testcase.message, function(done) {
-                //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
-                        reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
-                            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                                verifySearchTableResults(testcase.expectedSearchResults);
-                                done();
-                            });
+        it(' Without Facets - ' + testcase.message, function(done) {
+            //go to report page directly
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
+                    reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                            verifySearchTableResults(testcase.expectedSearchResults);
+                            done();
                         });
                     });
                 });
