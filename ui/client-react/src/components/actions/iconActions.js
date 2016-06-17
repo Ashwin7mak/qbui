@@ -50,6 +50,11 @@ let IconActions = React.createClass({
             dropdownTooltip: false
         };
     },
+    getInitialState() {
+        return {
+            dropdownOpen: false
+        }
+    },
     /**
      * get an action button
      * @param action
@@ -76,6 +81,11 @@ let IconActions = React.createClass({
                     </Button>
                 </OverlayTrigger>);
     },
+
+    /* callback from opening pickle menu */
+    onDropdownToggle(open) {
+         this.setState({dropdownOpen: open});
+    },
     /**
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
      */
@@ -84,7 +94,7 @@ let IconActions = React.createClass({
         const classes = this.props.menuIcons ? "menuIcons" : "";
         let dropdownTrigger;
 
-        if (this.props.dropdownTooltip) {
+        if (this.props.dropdownTooltip && !this.state.dropdownOpen) {
             const tooltip = (<Tooltip id="more"><I18nMessage message="selection.more"/></Tooltip>);
 
             dropdownTrigger = <OverlayTrigger bsRole="toggle" key="more" placement="bottom" overlay={tooltip}>
@@ -95,10 +105,10 @@ let IconActions = React.createClass({
         }
 
         return (
-            <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} rootClose>
+            <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} onToggle={this.onDropdownToggle} rootClose>
 
                 {dropdownTrigger}
-                <Dropdown.Menu onEntering={this.props.onMenuEnter} onExited={this.props.onMenuExit}>
+                <Dropdown.Menu >
                     {this.props.actions.map((action, index) => {
                         if (index >= this.props.maxButtonsBeforeMenu) {
                             return <MenuItem key={action.msg} href="#">
