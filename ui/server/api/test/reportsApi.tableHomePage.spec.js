@@ -120,7 +120,7 @@
                 recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
                     //add user to appRole
-                    recordBase.apiBase.assignUsersToAppRole(app.id, testcase.roleId, [userId]).then(function() {
+                    recordBase.apiBase.assignUsersToAppRole(app.id, testcase.roleId, [userId]).then(function(userRoleResponse) {
                         //POST custdefaulthomepage for a table
                         recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, reportId)).then(function() {
                             //get the user authentication

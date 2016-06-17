@@ -352,57 +352,55 @@
             //Create authentication for a specific user , calls execute request and returns a promise
             createUserAuthentication     : function(userId) {
                 var self = this;
-                var deferred = promise.pending();
-                this.executeRequest(this.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId=' + this.realm.id, consts.GET).then(function(ticketResponse) {
-                    var userTicketId = JSON.parse(ticketResponse.body);
-                    self.authTicket = ticketResponse.body.replace(/"/g, '');
-                    //console.log("the user ticket id is: "+JSON.stringify(self.authTicket));
-                    deferred.resolve(self.authTicket);
-                }).catch(function(error) {
-                    deferred.reject(error);
-                    //TODO: figure out how we want to handle
-                    assert(false, 'failed to get authentication : ' + JSON.stringify(error) + ',for user: ' + JSON.stringify(userId));
+                return new promise(function(resolve, reject) {
+                    self.executeRequest(self.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId=' + self.realm.id, consts.GET).then(function(ticketResponse) {
+                        var userTicketId = JSON.parse(ticketResponse.body);
+                        self.authTicket = ticketResponse.body.replace(/"/g, '');
+                        resolve(self.authTicket);
+                    }).catch(function(error) {
+                        reject(error);
+                        assert(false, 'failed to get authentication : ' + JSON.stringify(error) + ',for user: ' + JSON.stringify(userId));
+                    });
                 });
-                return deferred.promise;
             },
             //Assign User to AppRole helper method , calls execute request and returns a promise
             assignUsersToAppRole       : function(appId, roleId, userIds) {
-                var deferred = promise.pending();
-                this.executeRequest(this.resolveAppRolesEndpoint(appId, roleId), consts.POST, userIds).then(function(appRoleResponse) {
-                    log.debug('assign Users to App Role create response: ' + appRoleResponse);
-                    deferred.resolve(appRoleResponse);
-                }).catch(function(error) {
-                    deferred.reject(error);
-                    //TODO: figure out how we want to handle
-                    assert(false, 'failed to assign Users to App Role: ' + JSON.stringify(error) + ', usersToCreate: ' + JSON.stringify(userIds));
+                var self = this;
+                return new promise(function(resolve, reject) {
+                    self.executeRequest(self.resolveAppRolesEndpoint(appId, roleId), consts.POST, userIds).then(function(appRoleResponse) {
+                        log.debug('assign Users to App Role create response: ' + appRoleResponse);
+                        resolve(appRoleResponse);
+                    }).catch(function(error) {
+                        reject(error);
+                        assert(false, 'failed to assign Users to App Role: ' + JSON.stringify(error) + ', usersToCreate: ' + JSON.stringify(userIds));
+                    });
                 });
-                return deferred.promise;
             },
             //Update Default table home page , calls execute request and returns a promise
             setDefaultTableHomePage       : function(appId, tableIdReportIdMap) {
-                var deferred = promise.pending();
-                this.executeRequest(this.resolveTablesEndpoint(appId) + '/defaulthomepage', consts.POST, tableIdReportIdMap).then(function(defaultHPResponse) {
-                    log.debug('set default table home page response: ' + defaultHPResponse);
-                    deferred.resolve(defaultHPResponse);
-                }).catch(function(error) {
-                    deferred.reject(error);
-                    //TODO: figure out how we want to handle
-                    assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(tableIdReportIdMap));
+                var self = this;
+                return new promise(function(resolve, reject) {
+                    self.executeRequest(self.resolveTablesEndpoint(appId) + '/defaulthomepage', consts.POST, tableIdReportIdMap).then(function(defaultHPResponse) {
+                        log.debug('set default table home page response: ' + defaultHPResponse);
+                        resolve(defaultHPResponse);
+                    }).catch(function(error) {
+                        reject(error);
+                        assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(tableIdReportIdMap));
+                    });
                 });
-                return deferred.promise;
             },
             //Create Default table home page for a role, calls execute request and returns a promise
             setCustDefaultTableHomePageForRole       : function(appId, tableId, roleReportMap) {
-                var deferred = promise.pending();
-                this.executeRequest(this.resolveTablesEndpoint(appId, tableId) + '/custhomepage', consts.POST, roleReportMap, DEFAULT_HEADERS).then(function(defaultHPResponse) {
-                    log.debug('set default table home page for role response: ' + defaultHPResponse);
-                    deferred.resolve(defaultHPResponse);
-                }).catch(function(error) {
-                    deferred.reject(error);
-                    //TODO: figure out how we want to handle
-                    assert(false, 'failed to set default table home page with report for role: ' + JSON.stringify(error) + ', report role map is: ' + JSON.stringify(roleReportMap));
+                var self = this;
+                return new promise(function(resolve, reject) {
+                    self.executeRequest(self.resolveTablesEndpoint(appId, tableId) + '/custhomepage', consts.POST, roleReportMap, DEFAULT_HEADERS).then(function(defaultHPResponse) {
+                        log.debug('set default table home page for role response: ' + defaultHPResponse);
+                        resolve(defaultHPResponse);
+                    }).catch(function(error) {
+                        reject(error);
+                        assert(false, 'failed to set default table home page with report for role: ' + JSON.stringify(error) + ', report role map is: ' + JSON.stringify(roleReportMap));
+                    });
                 });
-                return deferred.promise;
             },
             //Helper method creates a ticket given a realm ID.  Returns a promise
             createTicket      : function(realmId) {
