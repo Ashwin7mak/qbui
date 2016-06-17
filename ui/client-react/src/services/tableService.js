@@ -23,10 +23,8 @@ class TableService extends BaseService {
      * @returns {Promise.<{data}>}
      */
     getHomePage(appId, tableId) {
-        let params = {};
-
         let url = super.constructUrl(this.API.GET_HOMEPAGE, [appId, tableId]);
-        return super.get(url, {params:params});
+        return super.get(url);
     }
 }
 

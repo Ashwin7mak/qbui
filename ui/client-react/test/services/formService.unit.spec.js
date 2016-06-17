@@ -14,7 +14,7 @@ describe('FormService functions', () => {
         formService = new FormService();
     });
 
-    it('test getFormAndRecord function', () => {
+    xit('test getFormAndRecord function', () => {
         var appId = '123';
         var tableId = '456';
         var recordId = '10';
