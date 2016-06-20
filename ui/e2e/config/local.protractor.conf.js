@@ -78,7 +78,7 @@
 
             // Add jasmine spec reporter
             var SpecReporter = require('jasmine-spec-reporter');
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'none', displaySpecDuration: true, displayFailuresSummary: false, displayFailedSpec: false}));
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'specs', displaySpecDuration: true, displayFailuresSummary: false, displayFailedSpec: false}));
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
