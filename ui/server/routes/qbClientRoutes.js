@@ -48,7 +48,7 @@ var lodash = require('lodash');
     /**
      * Use options to pass in parameters based on the route
      */
-    function renderIndex(req, res) {
+    function renderIndex(req, res, options) {
         var opts = lodash.merge({}, BASE_PROPS, {title: 'QuickBase', req: req}, options);
         renderJsx(req, res, './index.jsx', opts);
     }
