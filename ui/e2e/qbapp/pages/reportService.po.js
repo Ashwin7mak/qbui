@@ -156,7 +156,9 @@
         this.openReportsMenu = function(tableLinkEl) {
             e2ePageBase.waitForElement(tableLinkEl).then(function() {
                 var hamburgerEl = tableLinkEl.all(by.className('right')).first();
-                return hamburgerEl.click();
+                return e2ePageBase.waitForElementToBeClickable(hamburgerEl).then(function() {
+                    hamburgerEl.click();
+                });
             });
         };
 
@@ -231,8 +233,6 @@
                 // Remove the first column header (record select column) and the last (hidden record actions)
                 // Remove the select all checkbox column header
                 colHeaders.shift();
-                // Remove the actions column header
-                colHeaders.pop();
                 colHeaders.forEach(function(headerText) {
                     if (!headerText) {
                         throw Error('Did not find text for column header');

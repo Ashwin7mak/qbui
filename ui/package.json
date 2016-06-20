@@ -143,7 +143,7 @@
     "requirejs": "~2.1.16",
     "rewire": "^2.5.1",
     "sass-loader": "^2.0.1",
-    "sauce-connect-launcher": "^0.12.0",
+    "sauce-connect-launcher": "^0.14.0",
     "should": "~3.3.2",
     "sinon": "~1.15.4",
     "style-loader": "^0.12.4",
