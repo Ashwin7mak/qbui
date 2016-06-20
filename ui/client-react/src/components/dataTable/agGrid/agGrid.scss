@@ -93,17 +93,11 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-header-row .gridHeaderCell {
         border-right: 1px solid $header-cell-border;
         border-bottom: 2px solid $header-cell-border-bottom;
-        //&:last-of-type {
-        //    border-right: 0px;
-        //}
     }
 
     .ag-row .gridCell {
         border-right: 1px solid $row-cell-border-color;
         border-bottom: 1px solid $row-cell-border-color;
-        //&:last-of-type {
-        //    border-right: 0px;
-        //}
     }
     .ag-row-group .gridCell {
         border-right: 0px;
@@ -376,12 +370,6 @@ $cell-edit-background-edit: #f3f8fe;
 /* hide datepicker if it's been opened but we're not over that cell */
 .ag-row-selected .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget{
     display:none !important;
-}
-
-/* last to rows are just for padding */
-.ag-row:last-child {
-    //visibility:hidden;
-
 }
 
 .emptyCell {
