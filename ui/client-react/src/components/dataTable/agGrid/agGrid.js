@@ -13,9 +13,9 @@ import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 
-import {DateFormatter, DateTimeFormatter, TimeFormatter,
-        NumericFormatter, TextFormatter, UserFormatter, CheckBoxFormatter,
-        SelectionColumnCheckBoxFormatter}  from './formatters';
+import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
+        NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
+        CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer}  from './cellRenderers';
 
 import * as GroupTypes from '../../../constants/groupTypes';
 
@@ -25,6 +25,7 @@ import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 import '../gridWrapper.scss';
 
+const serverTypeConsts = require('../../../../../common/src/constants');
 
 function buildIconElement(icon) {
     return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
@@ -279,11 +280,24 @@ let AGGrid = React.createClass({
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
 
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
+
     },
     componentWillUnmount() {
         this.refs.gridWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
+    componentWillUpdate(nextProps) {
+        if (nextProps.loading) {
+            let flux = this.getFlux();
+            flux.actions.mark('component-AgGrid start');
+        }
+    },
+    componentDidUpdate() {
+        if (!this.props.loading) {
+            let flux = this.getFlux();
+            flux.actions.measure('component-AgGrid', 'component-AgGrid start');
+        }
+    },
     // Performance improvement - only update the component when certain state/props change
     // Since this is a heavy component we dont want this updating all times.
     shouldComponentUpdate(nextProps) {
@@ -504,7 +518,7 @@ let AGGrid = React.createClass({
         } else {
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
-        checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxFormatter);
+        checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxCellRenderer);
 
         return checkBoxCol;
     },
@@ -525,13 +539,13 @@ let AGGrid = React.createClass({
     getColumnProps: function() {
         let columns = this.props.columns;
 
+
         if (columns) {
             let columnsData = columns.map((obj, index) => {
                 obj.headerClass = "gridHeaderCell";
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
-                obj.addEditActions = false;
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
@@ -540,35 +554,48 @@ let AGGrid = React.createClass({
 
                         case 'type': {
                             switch (datatypeAttributes[attr]) {
-                            case "NUMERIC" :
+
+                            case serverTypeConsts.NUMERIC:
                                 this.setCSSClass_helper(obj, "AlignRight");
-                                obj.cellRenderer = reactCellRendererFactory(NumericFormatter);
-                                obj.customComponent = NumericFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
+                                obj.customComponent = NumericCellRenderer;
                                 break;
-                            case "DATE" :
-                                obj.cellRenderer = reactCellRendererFactory(DateFormatter);
-                                obj.customComponent = DateFormatter;
+                            case serverTypeConsts.DATE :
+                                obj.cellRenderer = reactCellRendererFactory(DateCellRenderer);
+                                obj.customComponent = DateCellRenderer;
                                 break;
-                            case "DATE_TIME" :
-                                obj.cellRenderer = reactCellRendererFactory(DateTimeFormatter);
-                                obj.customComponent = DateTimeFormatter;
+                            case serverTypeConsts.DATE_TIME:
+                                obj.cellRenderer = reactCellRendererFactory(DateTimeCellRenderer);
+                                obj.customComponent = DateTimeCellRenderer;
                                 break;
-                            case "TIME_OF_DAY" :
-                                obj.cellRenderer = reactCellRendererFactory(TimeFormatter);
-                                obj.customComponent = TimeFormatter;
+                            case serverTypeConsts.TIME_OF_DAY :
+                                obj.cellRenderer = reactCellRendererFactory(TimeCellRenderer);
+                                obj.customComponent = TimeCellRenderer;
                                 break;
-                            case "CHECKBOX" :
-                                obj.cellRenderer = reactCellRendererFactory(CheckBoxFormatter);
-                                obj.customComponent = CheckBoxFormatter;
+                            case serverTypeConsts.CHECKBOX :
+                                obj.cellRenderer = reactCellRendererFactory(CheckBoxCellRenderer);
+                                obj.customComponent = CheckBoxCellRenderer;
                                 break;
-                            case "USER" :
-                                obj.cellRenderer = reactCellRendererFactory(UserFormatter);
-                                obj.customComponent = UserFormatter;
+                            case serverTypeConsts.USER :
+                                obj.cellRenderer = reactCellRendererFactory(UserCellRenderer);
+                                obj.customComponent = UserCellRenderer;
+                                break;
+                            case serverTypeConsts.CURRENCY :
+                                obj.cellRenderer = reactCellRendererFactory(CurrencyCellRenderer);
+                                obj.customComponent = CurrencyCellRenderer;
+                                break;
+                            case serverTypeConsts.RATING :
+                                obj.cellRenderer = reactCellRendererFactory(RatingCellRenderer);
+                                obj.customComponent = RatingCellRenderer;
+                                break;
+                            case serverTypeConsts.PERCENT :
+                                obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
+                                obj.customComponent = PercentCellRenderer;
                                 break;
 
                             default:
-                                obj.cellRenderer = reactCellRendererFactory(TextFormatter);
-                                obj.customComponent = TextFormatter;
+                                obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
+                                obj.customComponent = TextCellRenderer;
                                 break;
                             }
                         }
@@ -625,13 +652,11 @@ let AGGrid = React.createClass({
         let paddedRecords = this.props.records.slice(0);
 
         paddedRecords.push({isHiddenLastRow:true});
-
         return paddedRecords;
     },
 
     render() {
         let columnDefs = this.getColumns();
-
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
         return (
             <div className="reportTable">

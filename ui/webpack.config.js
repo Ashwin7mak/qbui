@@ -114,7 +114,10 @@ var config = {
                 ],
                 loader: 'url-loader'
             },
-
+            {
+                include: /\.json$/,
+                loaders: ["json-loader"]
+            },
             // SASS - transformed to css,
             {
                 test: /\.scss$/,

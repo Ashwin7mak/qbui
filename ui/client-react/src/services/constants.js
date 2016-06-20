@@ -34,9 +34,11 @@ export default {
     FIELDS              : 'fields',
     FACETS              : 'facets',
     LOG                 : 'log',
+    LOG_PERF            : 'clientPerf',
 
     // API Entity actions
     FORMANDRECORD       : 'formAndRecord',
+    HOMEPAGE            : 'homePage',
     REPORTCOMPONENTS    : 'reportComponents',
     RESULTS             : 'results',
     PARSE               : 'parse'

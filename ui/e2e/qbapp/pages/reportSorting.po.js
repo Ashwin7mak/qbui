@@ -249,7 +249,7 @@
                     var index2 = actualColumnRecords.indexOf('');
                     actualColumnRecords.splice(index2, 1);
                     //sort the array to ascending
-                    actualColumnRecords.sort(function(a, b) {return new Date(a).getTime() - new Date(b).getTime();});
+                    actualColumnRecords.sort(function(a, b) {return new Date(a).getDate() - new Date(b).getDate();});
                     //reverse and add null bck
                     actualColumnRecords.reverse();
                     actualColumnRecords.push('');

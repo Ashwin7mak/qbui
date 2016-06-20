@@ -24,7 +24,9 @@ var lodash = require('lodash');
             settings: {views: viewPath},
             hostBase: (config.isProduction || config.noHotLoad) ? '' : HOT_BASE,
             bundleFileName: config.isProduction ? 'bundle.min.js' : 'bundle.js',
-            walkMeJS: config.walkmeJSSnippet
+            walkMeJS: config.walkmeJSSnippet,
+            isClientPerfTrackingEnabled: config.isProduction || !!config.isClientPerfTrackingEnabled
+
         };
     }
 
@@ -33,6 +35,7 @@ var lodash = require('lodash');
         jsxEngine(templatePath, opts, function transformedJsxCallback(err, str) {
             if (!err) {
                 res.write(str);
+                //log.debug('rendering jsx file:' + filename + '; MESSAGE: ' + str);
                 res.end();
             } else {
                 log.error({req:req}, 'ERROR rendering jsx file:' + filename + '; MESSAGE: ' + err.message);
@@ -45,8 +48,8 @@ var lodash = require('lodash');
     /**
      * Use options to pass in parameters based on the route
      */
-    function renderIndex(req, res, options) {
-        var opts = lodash.merge({}, BASE_PROPS, {title: 'QuickBase'}, options);
+    function renderIndex(req, res) {
+        var opts = lodash.merge({}, BASE_PROPS, {title: 'QuickBase', req: req}, options);
         renderJsx(req, res, './index.jsx', opts);
     }
 

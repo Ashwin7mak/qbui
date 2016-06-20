@@ -87,7 +87,7 @@ def cargoHttpPort=8080;
 def cargoAjpPort = 9090;
 def cargoRmiPort = 8200;
 
-def testURL = "http://localhost:8080/api";
+def testURL = "http://quickbase-dev.com:8080/api";
 if(System.getProperty("endpoint")) {
     testURL = System.getProperty("endpoint");
 }
@@ -411,6 +411,11 @@ task invokeCheckForApiUp(type:Exec) {
     args '60', testURL
 }
 
+task invokeCheckForNodeUp(type:Exec) {
+    executable cwd + "/../tools/ci/checkForApiUp.sh"
+    args '60', sauceURL
+}
+
 task checkForApiUp() {
     doFirst {
         tasks.invokeCheckForApiUp.execute()
@@ -442,11 +447,8 @@ task gruntCiE2ETestsNoColor(type: GruntTask) {
 task gruntE2EAWSSauce(type: GruntTask) {
     doFirst {
         tasks.invokeInstallSauceLabs.execute()
-        tasks.invokeCheckForApiUp.execute()
         args = ["test:e2eAWSSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
-    dependsOn startTomcat
-    finalizedBy stopTomcat
 }
 
 task cleanBuildDir (type: Delete) {

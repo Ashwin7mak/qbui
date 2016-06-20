@@ -4,7 +4,7 @@
     require('../../app');
     var config = require('../../config/environment');
     var recordBase = require('./recordApi.base')(config);
-    var consts = require('../constants');
+    var consts = require('../../../common/src/constants');
     var log = require('../../logger').getLogger();
     var testConsts = require('./api.test.constants');
     var testUtils = require('./api.test.Utils');

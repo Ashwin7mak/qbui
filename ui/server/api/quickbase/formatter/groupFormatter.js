@@ -5,14 +5,14 @@
 //
 (function() {
     'use strict';
-    var constants = require('../../constants');
+    var constants = require('../../../../common/src/constants');
     var groupTypes = require('../../groupTypes');
     var log = require('../../../logger').getLogger();
     var lodash = require('lodash');
     var groupUtils = require('../../../components/utility/groupUtils');
-    var dateFormatter = require('../../../api/quickbase/formatter/dateTimeFormatter');
-
-    var RAW_SUFFIX = '_raw_';
+    var dateFormatter = require('../../../../common/src/formatter/dateTimeFormatter');
+    var logger = require('../../../logger').getLogger();
+    dateFormatter.setLogger(logger);
 
     /**
      * Provide a list of data types where grouping is to be performed against the raw
@@ -66,12 +66,7 @@
                 record.forEach((column) => {
                     let fld = map.get(column.id);
                     if (fld !== undefined) {
-                        columns[fld.name] = column.display;
-
-                        //  if necessary, add a temporary element to hold the raw data value.
-                        if (groupMap.get(column.id) !== undefined && includeRawValue(fld.datatypeAttributes.type)) {
-                            columns[fld.name + RAW_SUFFIX] = column.value;
-                        }
+                        columns[fld.name] = column;
                     }
                 });
                 reportData.push(columns);
@@ -366,16 +361,8 @@
         let groupedData = lodash.groupBy(reportData, function(record) {
 
             //  the data value to group by
-            let dataValue = record[groupField.name];
-
-            //  If a raw value is defined(currently only numeric data types have this need),
-            //  set a local variable and remove from the array once we have that reference.
-            let rawDataValue = null;
-            if (record.hasOwnProperty(groupField.name + RAW_SUFFIX)) {
-                rawDataValue = record[groupField.name + RAW_SUFFIX];
-                delete record[groupField.name + RAW_SUFFIX];
-            }
-
+            let dataValue = record[groupField.name].display;
+            let rawDataValue = record[groupField.name].value;
             let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
             //  Convert empty strings into null as both are treated the same by the client.
             if (groupedValue === '') {

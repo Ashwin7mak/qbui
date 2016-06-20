@@ -4,7 +4,7 @@ import ReportContent from '../../src/components/report/dataTable/reportContent';
 import CardViewListHolder from '../../src/components/dataTable/cardView/cardViewListHolder';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
-import {NumericFormatter, DateFormatter} from '../../src/components/dataTable/agGrid/formatters';
+import {NumericCellRenderer, DateCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
 import _ from 'lodash';
 import Locales from '../../src/locales/locales';
 import * as DataTypes from '../../src/constants/schema';
@@ -146,7 +146,9 @@ const fakeReportData_attributes = {
 
 const flux = {
     actions: {
-        scrollingReport(scrolling) { }
+        scrollingReport(scrolling) { },
+        mark: ()=>{},
+        measure: ()=>{}
     }
 };
 

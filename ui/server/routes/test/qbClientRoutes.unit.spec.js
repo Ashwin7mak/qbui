@@ -79,17 +79,10 @@ describe('Express Client Routes', function() {
             expect(200, done);
     });
 
-    it('Validate production base opts', function(done) {
-        var origVal = process.env.NODE_ENV;
-        process.env.NODE_ENV = envConsts.PRODUCTION;
-
+    //TODO: Should this test be removed and/or moved to a diff location
+    it('Validate config has walkmeJS', function(done) {
         var testConfig = require('../../config/expressConfig')(app);
-
-        console.log(testConfig);
-        console.log(process.env.NODE_ENV);
         should.exist(testConfig.walkmeJSSnippet);
-
-        process.env.NODE_ENV = origVal;
         done();
     });
 });

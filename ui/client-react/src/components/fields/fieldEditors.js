@@ -1,14 +1,15 @@
 import React from 'react';
 import {Input, InputGroup, FormControl, MenuItem, FormGroup, DropdownButton} from 'react-bootstrap';
 import DateTimeField from 'react-bootstrap-datetimepicker';
+import moment from 'moment';
 
 /**
  * simple non-validating cell editor for text
  */
-export const DefaultCellEditor = React.createClass({
+export const DefaultFieldEditor = React.createClass({
 
     propTypes: {
-        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object]),
+        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]),
         type: React.PropTypes.string,
         onChange: React.PropTypes.func
     },
@@ -37,7 +38,7 @@ export const DefaultCellEditor = React.createClass({
 /**
  * placeholder for user picker
  */
-export const UserCellEditor = React.createClass({
+export const UserFieldEditor = React.createClass({
 
     render() {
         return <input ref="cellInput"
@@ -48,7 +49,7 @@ export const UserCellEditor = React.createClass({
 /**
  * combo box cell editor
  */
-export const ComboBoxCellEditor = React.createClass({
+export const ComboBoxFieldEditor = React.createClass({
 
     propTypes: {
         choices: React.PropTypes.array, // array of choices with display value props
@@ -93,7 +94,7 @@ export const ComboBoxCellEditor = React.createClass({
 /**
  * date-only cell editor
  */
-export const DateCellEditor = React.createClass({
+export const DateFieldEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DD
@@ -105,10 +106,12 @@ export const DateCellEditor = React.createClass({
     },
 
     render() {
+        //let formatted = this.props.value ? formatDate(this.props.value, "YYYY-MM-DD") : "";
+        const fixedDate = this.props.value.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
         return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={this.props.value}
+            <DateTimeField dateTime={fixedDate}
                            format="YYYY-MM-DD"
-                           inputFormat="MM/DD/YYYY"
+                           inputFormat="MM-DD-YYYY"
                            onChange={this.onChange}
                            mode="date"/>
         </div>;
@@ -116,9 +119,23 @@ export const DateCellEditor = React.createClass({
 });
 
 /**
+ * convert an ISO datetime string to the same string with fixed number of milliseconds digits
+ *
+ * 2063-05-25T02:59:32.76Z returns 2063-05-25T02:59:32.760Z for example
+ */
+function dateTimeStringWithFixedMillisSuffix(dateTimeStr, places) {
+
+    const millisSuffix = dateTimeStr.match(/\.[0-9]*/);
+    if (millisSuffix) {
+        let fixedMillis = parseFloat(millisSuffix).toFixed(places).substring(1);
+        return dateTimeStr.replace(/\.[0-9]*/, fixedMillis);
+    }
+    return dateTimeStr;
+}
+/**
  * date + time cell editor
  */
-export const DateTimeCellEditor = React.createClass({
+export const DateTimeFieldEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss
@@ -130,10 +147,14 @@ export const DateTimeCellEditor = React.createClass({
     },
 
     render() {
+
+        let dateTime = this.props.value.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
+        dateTime = dateTimeStringWithFixedMillisSuffix(dateTime, 3);
+
         return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={this.props.value}
-                           format="YYYY-MM-DDThh:mm:ss A"
-                           inputFormat="MM/DD/YYYY hh:mm:ss A"
+            <DateTimeField dateTime={dateTime}
+                           format="YYYY-MM-DDTHH:mm:ss.SSSZ"
+                           inputFormat="MM-DD-YYYY hh:mm:ss A"
                            onChange={this.onChange}
                            mode="datetime"/>
         </div>;
@@ -143,10 +164,10 @@ export const DateTimeCellEditor = React.createClass({
 /**
  * time of day cell editor
  */
-export const TimeCellEditor = React.createClass({
+export const TimeFieldEditor = React.createClass({
 
     propTypes: {
-        value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss (Epoch date)
+        value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss.SSS (Epoch date)
         onChange: React.PropTypes.func
     },
     onChange(newValue) {
@@ -154,9 +175,15 @@ export const TimeCellEditor = React.createClass({
     },
     render() {
 
+        let localTime = this.props.value.replace(/Z(\[.*?\])/, ''); // remove Z[utc] suffix if present
+        localTime = dateTimeStringWithFixedMillisSuffix(localTime, 3);
+
         return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={this.props.value} format="YYYY-MM-DDThh:mm:ss A" inputFormat="h:mm:ss A"
-                           onChange={this.onChange} mode="time"/>
+            <DateTimeField dateTime={localTime}
+                           format="YYYY-MM-DDTHH:mm:ss.SSS"
+                           inputFormat="h:mm:ss A"
+                           onChange={this.onChange}
+                           mode="time"/>
         </div>;
     }
 });
@@ -164,11 +191,17 @@ export const TimeCellEditor = React.createClass({
 /**
  * checkbox cell editor
  */
-export const CheckBoxEditor = React.createClass({
+export const CheckBoxFieldEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.bool,
         onChange: React.PropTypes.func
+    },
+
+    getDefaultProps() {
+        return {
+            value: false
+        };
     },
 
     onChange(ev) {

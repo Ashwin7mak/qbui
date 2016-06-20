@@ -4,9 +4,13 @@ var should = require('should');
 var assert = require('assert');
 var groupUtils = require('../utility/groupUtils.js');
 var groupTypes = require('../../api/groupTypes');
-var constants = require('../../api/constants');
-var dateTimeFormatter = require('../../api/quickbase/formatter/dateTimeFormatter');
+var constants = require('../../../common/src/constants');
+var dateTimeFormatter = require('../../../common/src/formatter/dateTimeFormatter');
+var logger = require('../../logger').getLogger();
+dateTimeFormatter.setLogger(logger);
+
 var moment = require('moment');
+
 /**
  * Unit tests for Group Utility functions
  */
@@ -632,6 +636,7 @@ describe('Validate Group Utility functions', function() {
                 var results = [];
                 it('Test case: ' + test.name, function() {
                     results.push(groupUtils.getFirstDayOfWeek(test.displayDate, test.momentFormat));
+                    results.push(groupUtils.getDay(test.displayDate, test.momentFormat));
                     results.push(groupUtils.getMonth(test.displayDate, test.momentFormat));
                     results.push(groupUtils.getYear(test.displayDate, test.momentFormat));
                     results.push(groupUtils.getQuarter(test.displayDate, test.momentFormat));
