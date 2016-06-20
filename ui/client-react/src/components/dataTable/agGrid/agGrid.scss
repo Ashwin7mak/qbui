@@ -20,7 +20,7 @@ $grid-default-cell-padding: 8px;
 
 $row-bg-color: #fff;
 $row-border-color: #ddd;
-$row-box-shadow-color: #888;
+$row-box-shadow-color: #dcdcdc;
 $cell-edit-background-edit: #f3f8fe;
 
 // override default font style
@@ -36,6 +36,7 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 .agGrid {
+    flex: 1 1 auto;
     font-family: $font-family;
     color: $font-color;
     font-size: $grid-font-size;
@@ -399,7 +400,7 @@ $cell-edit-background-edit: #f3f8fe;
 }
 .reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
 
-    box-shadow: -2px -2px 24px $row-box-shadow-color;
+    box-shadow: 0px 0px 14px $row-box-shadow-color;
 
     .ag-cell.gridCell {
 
@@ -497,7 +498,7 @@ $cell-edit-background-edit: #f3f8fe;
             flex-direction:column;
             flex: 0 0 auto;
             background-color:$cell-edit-background-edit;
-            box-shadow: -8px -2px 12px $row-box-shadow-color;
+            box-shadow: -2px 2px 8px $row-box-shadow-color;
             position:absolute;
             top:-26px;
             left:-31px;

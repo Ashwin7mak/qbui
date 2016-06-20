@@ -550,7 +550,7 @@ let AGGrid = React.createClass({
 
                 if (obj.datatypeAttributes) {
                     var datatypeAttributes = obj.datatypeAttributes;
-                    for (var attr in datatypeAttributes) {
+                    for (let attr in datatypeAttributes) {
                         switch (attr) {
 
                         case 'type': {
@@ -559,44 +559,34 @@ let AGGrid = React.createClass({
                             case serverTypeConsts.NUMERIC:
                                 this.setCSSClass_helper(obj, "AlignRight");
                                 obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
-                                obj.customComponent = NumericCellRenderer;
                                 break;
                             case serverTypeConsts.DATE :
                                 obj.cellRenderer = reactCellRendererFactory(DateCellRenderer);
-                                obj.customComponent = DateCellRenderer;
                                 break;
                             case serverTypeConsts.DATE_TIME:
                                 obj.cellRenderer = reactCellRendererFactory(DateTimeCellRenderer);
-                                obj.customComponent = DateTimeCellRenderer;
                                 break;
                             case serverTypeConsts.TIME_OF_DAY :
                                 obj.cellRenderer = reactCellRendererFactory(TimeCellRenderer);
-                                obj.customComponent = TimeCellRenderer;
                                 break;
                             case serverTypeConsts.CHECKBOX :
                                 obj.cellRenderer = reactCellRendererFactory(CheckBoxCellRenderer);
-                                obj.customComponent = CheckBoxCellRenderer;
                                 break;
                             case serverTypeConsts.USER :
                                 obj.cellRenderer = reactCellRendererFactory(UserCellRenderer);
-                                obj.customComponent = UserCellRenderer;
                                 break;
                             case serverTypeConsts.CURRENCY :
                                 obj.cellRenderer = reactCellRendererFactory(CurrencyCellRenderer);
-                                obj.customComponent = CurrencyCellRenderer;
                                 break;
                             case serverTypeConsts.RATING :
                                 obj.cellRenderer = reactCellRendererFactory(RatingCellRenderer);
-                                obj.customComponent = RatingCellRenderer;
                                 break;
                             case serverTypeConsts.PERCENT :
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
-                                obj.customComponent = PercentCellRenderer;
                                 break;
 
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
-                                obj.customComponent = TextCellRenderer;
                                 break;
                             }
                         }
