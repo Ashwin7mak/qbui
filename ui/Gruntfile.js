@@ -854,8 +854,8 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'env:e2e',
                 'sauce_connect:aws',
-                'protractor:sauce_osx_chrome',
-                'sauce-connect-close'
+                'protractor:sauce_osx_chrome'
+                //'sauce-connect-close'
             ]);
         }
 
