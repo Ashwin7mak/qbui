@@ -13,7 +13,6 @@
     "body-parser": "~1.5.2",
     "bunyan": "^1.5.1",
     "classnames": "^2.2.5",
-    "codemirror": "^5.15.2",
     "component-metadata-loader": "^2.0.3",
     "component-playground": "^1.2.1",
     "composable-middleware": "^0.3.0",
