@@ -6,7 +6,7 @@
 (function() {
     'use strict';
 
-    var consts = require('../../server/api/constants');
+    var consts = require('../../common/src/constants');
     var fieldGenerator = require('./../field.generator.js');
     var recordGenerator = require('./../record.generator.js');
     var tableGenerator = require('./../table.generator.js');
