@@ -233,8 +233,6 @@
                 // Remove the first column header (record select column) and the last (hidden record actions)
                 // Remove the select all checkbox column header
                 colHeaders.shift();
-                // Remove the actions column header
-                //colHeaders.pop();
                 colHeaders.forEach(function(headerText) {
                     if (!headerText) {
                         throw Error('Did not find text for column header');

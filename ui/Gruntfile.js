@@ -855,7 +855,6 @@ module.exports = function(grunt) {
                 'env:e2e',
                 'sauce_connect:aws',
                 'protractor:sauce_osx_chrome'
-                //'sauce-connect-close'
             ]);
         }
 
