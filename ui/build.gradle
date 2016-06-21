@@ -251,7 +251,6 @@ task zip(type: Zip) {
 
     archiveName = getProjectArchive()
     destinationDir = file("$buildDir/distributions/")
-    zip64 = true
 
     from ('dist') {
         into('dist')
