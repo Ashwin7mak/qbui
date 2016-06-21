@@ -6,7 +6,7 @@
     var path = require('path');
     var all = {
         // Root path of server
-        root: path.normalize(path.join(__dirname,  '/../../..')),
+        root: path.normalize(path.join(__dirname,  '/../../../..')),
 
         // Server port
         port   : 9000,
