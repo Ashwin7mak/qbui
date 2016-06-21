@@ -45,7 +45,6 @@
     "react-bootstrap": "^0.29.0",
     "react-bootstrap-datetimepicker": "0.0.22",
     "react-codemirror": "^0.2.6",
-    "react-component-metadata": "^3.0.0",
     "react-cookie": "^0.3.4",
     "react-dom": "0.14.0",
     "react-intl": "1.2.0",
