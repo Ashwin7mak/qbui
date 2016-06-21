@@ -18,3 +18,12 @@ You can build `Proptables` easily. Just include a `<PropTable component='yourCom
 For this to all show up you need to add your component to the `metadata.js` file.
 
 Wrapper -> Router -> Doc -> ComponentDescription (or your own) + ReactPlayground + Proptable
+
+
+## Adding a component to the library
+
+1. Setup a new 'doc' file in `componentLibrary/docs`
+1. Add a reference to `componentLibrary/src/Metadata.js` so it has the components description and proptype descriptions
+1. Add a code example to `componentLibrary/examples`
+1. Import that example in the `componentLibrary/src/Examples.js` file
+1. Add a route to `componentLibrary/index.js` that points to the original doc file

@@ -1,5 +1,5 @@
-// These do not use ES6 imports, because the evaluated code requires un-mangled
-// variable names.
+// THESE DO NOT USE ES6 IMPORTS, BECAUSE THE EVALUATED CODE REQUIRES UN-MANGLED
+// VARIABLE NAMES.
 /* eslint-disable */
 const classNames = require('classnames');
 const React = require('react');
