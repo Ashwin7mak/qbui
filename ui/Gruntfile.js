@@ -388,7 +388,7 @@ module.exports = function(grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src    : ['server/test/' + mochaUnitTest]
+                src    : ['server/test/**/' + mochaUnitTest]
             },
 
             testGen: {
@@ -399,7 +399,7 @@ module.exports = function(grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src    : ['server/test/' + mochaUnitTest]
+                src    : ['server/test/**/' + mochaUnitTest]
             },
 
             integration: {
