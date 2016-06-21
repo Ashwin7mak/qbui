@@ -36,13 +36,13 @@ let CardView = React.createClass({
     createField(c, curKey) {
         return (<div key={c} className="field">
             <span className="fieldLabel">{curKey}</span>
-            <span className="fieldValue">{this.props.data[curKey]}</span>
+            <span className="fieldValue">{this.props.data[curKey].display}</span>
         </div>);
     },
     createTopField(firstFieldValue) {
         return (
             <div className="top-card-row field">
-                <strong>{firstFieldValue}</strong>
+                <strong>{firstFieldValue.display}</strong>
                 <div className="card-expander" onClick={this.handleMoreCard}>
                     <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
                 </div>
