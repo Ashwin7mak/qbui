@@ -38,7 +38,7 @@ module.exports = function(grunt) {
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
 
-    var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
+    var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'default_tunnel_' + currentDateTime;
     //We need to pass along --proxy-tunnel so that the tunnel will also use the proxy to communicate with the sauce apis
     //sauce-connect-launcher won't take an explicit no arg argument, so we are "leveraging" their mechanism for passing
     //arguments along to sauce-connect-launcher
@@ -535,23 +535,24 @@ module.exports = function(grunt) {
         sauce_connect: {
             local: {
                 options: {
-                    username        : 'sbg_qbse',
+                    username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
                     proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,
-                    verbose         : grunt.option('verbose') === true,
+                    verbose         : true,
                     logger          : console.log,
                     dns             : sauceDns
                 }
             },
             aws: {
                 options: {
-                    username        : 'sbg_qbse',
+                    username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
-                    proxy           : httpProxy,
+                    proxy           : 'egressproxy.quickbaserocks.com:80',
                     tunnelIdentifier: tunnelIdentifier,
-                    verbose         : grunt.option('verbose') === true,
-                    logger          : console.log
+                    proxyTunnel     : true,
+                    verbose         : true,
+                    logfile         : 'sauceConnect.log'
                 }
             }
         },

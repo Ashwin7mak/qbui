@@ -42,7 +42,8 @@
         var ROLES_ENDPOINT = '/roles/';
         var ADMIN_REALM = 'localhost';
         var ADMIN_REALM_ID = 117000;
-        var TICKETS_ENDPOINT = '/ticket?uid=10000&realmId=';
+        var ADMIN_TICKETS_ENDPOINT = '/ticket?uid=10000&realmId=';
+        var TICKETS_ENDPOINT = '/ticket';
         var HEALTH_ENDPOINT = '/health';
         var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
         var CONTENT_TYPE = 'Content-Type';
@@ -180,6 +181,9 @@
                 return endpoint;
             },
             resolveTicketEndpoint       : function() {
+                return JAVA_BASE_ENDPOINT + ADMIN_TICKETS_ENDPOINT;
+            },
+            resolveUserTicketEndpoint       : function() {
                 return JAVA_BASE_ENDPOINT + TICKETS_ENDPOINT;
             },
             resolveHealthEndpoint       : function() {
@@ -279,35 +283,35 @@
                      *  4) If any step above fails, assert!
                      */
                     self.createTicket(ADMIN_REALM_ID)
-                            .then(function(authResponse) {
-                                      //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
-                                self.authTicket = authResponse.body.replace(/"/g, '');
-                                var realmPromise;
-                                if (config && config.realmToUse) {
-                                    realmPromise = self.getRealm(config.realmToUse);
-                                } else {
-                                    realmPromise = self.createRealm();
-                                }
-                                realmPromise.then(function(realmResponse) {
-                                    self.realm = JSON.parse(realmResponse.body);
-                                    self.createTicket(self.realm.id)
-                                                    .then(function(realmTicketResponse) {
-                                                        self.authTicket = realmTicketResponse.body.replace(/"/g, '');
-                                                        deferred.resolve(self.realm);
-                                                    }).catch(function(realmTicketError) {
-                                                        deferred.reject(realmTicketError);
-                                                        assert(false, 'failed to create ticket for realm: ' + self.realm.id);
-                                                    });
-                                }).catch(function(realmError) {
-                                    deferred.reject(realmError);
-                                    assert(false, 'failed to create realm: ' + JSON.stringify(realmError));
-                                });
-                            }).catch(function(authError) {
-                                               //If auth request fails, delete the realm & fail the tests
-                                self.cleanup();
-                                deferred.reject(authError);
-                                assert(false, 'failed to resolve ticket: ' + JSON.stringify(authError));
+                        .then(function(authResponse) {
+                            //TODO: tickets come back quoted, invalid JSON, we regex the quotes away.  hack.
+                            self.authTicket = authResponse.body.replace(/"/g, '');
+                            var realmPromise;
+                            if (config && config.realmToUse) {
+                                realmPromise = self.getRealm(config.realmToUse);
+                            } else {
+                                realmPromise = self.createRealm();
+                            }
+                            realmPromise.then(function(realmResponse) {
+                                self.realm = JSON.parse(realmResponse.body);
+                                self.createTicket(self.realm.id)
+                                    .then(function(realmTicketResponse) {
+                                        self.authTicket = realmTicketResponse.body.replace(/"/g, '');
+                                        deferred.resolve(self.realm);
+                                    }).catch(function(realmTicketError) {
+                                        deferred.reject(realmTicketError);
+                                        assert(false, 'failed to create ticket for realm: ' + self.realm.id);
+                                    });
+                            }).catch(function(realmError) {
+                                deferred.reject(realmError);
+                                assert(false, 'failed to create realm: ' + JSON.stringify(realmError));
                             });
+                        }).catch(function(authError) {
+                        //If auth request fails, delete the realm & fail the tests
+                            self.cleanup();
+                            deferred.reject(authError);
+                            assert(false, 'failed to resolve ticket: ' + JSON.stringify(authError));
+                        });
                 } else {
                     //The realm already exists, no-op
                     deferred.resolve(self.realm);
@@ -345,44 +349,58 @@
                 };
                 return this.createSpecificUser(userToMake);
             },
+            //Create authentication for a specific user , calls execute request and returns a promise
+            createUserAuthentication     : function(userId) {
+                var self = this;
+                return new promise(function(resolve, reject) {
+                    self.executeRequest(self.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId=' + self.realm.id, consts.GET).then(function(ticketResponse) {
+                        var userTicketId = JSON.parse(ticketResponse.body);
+                        self.authTicket = ticketResponse.body.replace(/"/g, '');
+                        resolve(self.authTicket);
+                    }).catch(function(error) {
+                        reject(error);
+                        assert(false, 'failed to get authentication : ' + JSON.stringify(error) + ',for user: ' + JSON.stringify(userId));
+                    });
+                });
+            },
             //Assign User to AppRole helper method , calls execute request and returns a promise
             assignUsersToAppRole       : function(appId, roleId, userIds) {
-                var deferred = promise.pending();
-                this.executeRequest(this.resolveAppRolesEndpoint(appId, roleId), consts.POST, userIds).then(function(appRoleResponse) {
-                    log.debug('assign Users to App Role create response: ' + appRoleResponse);
-                    deferred.resolve(appRoleResponse);
-                }).catch(function(error) {
-                    deferred.reject(error);
-                    //TODO: figure out how we want to handle
-                    assert(false, 'failed to assign Users to App Role: ' + JSON.stringify(error) + ', usersToCreate: ' + JSON.stringify(userIds));
+                var self = this;
+                return new promise(function(resolve, reject) {
+                    self.executeRequest(self.resolveAppRolesEndpoint(appId, roleId), consts.POST, userIds).then(function(appRoleResponse) {
+                        log.debug('assign Users to App Role create response: ' + appRoleResponse);
+                        resolve(appRoleResponse);
+                    }).catch(function(error) {
+                        reject(error);
+                        assert(false, 'failed to assign Users to App Role: ' + JSON.stringify(error) + ', usersToCreate: ' + JSON.stringify(userIds));
+                    });
                 });
-                return deferred.promise;
             },
             //Update Default table home page , calls execute request and returns a promise
-            setDefaultTableHomePage       : function(appId, tableId, reportId) {
-                var deferred = promise.pending();
-                this.executeRequest(this.resolveTablesEndpoint(appId, tableId) + '/defaulthomepage', consts.POST, reportId).then(function(defaultHPResponse) {
-                    log.debug('set default table home page response: ' + defaultHPResponse);
-                    deferred.resolve(defaultHPResponse);
-                }).catch(function(error) {
-                    deferred.reject(error);
-                    //TODO: figure out how we want to handle
-                    assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(reportId));
+            setDefaultTableHomePage       : function(appId, tableIdReportIdMap) {
+                var self = this;
+                return new promise(function(resolve, reject) {
+                    self.executeRequest(self.resolveTablesEndpoint(appId) + '/defaulthomepage', consts.POST, tableIdReportIdMap).then(function(defaultHPResponse) {
+                        log.debug('set default table home page response: ' + defaultHPResponse);
+                        resolve(defaultHPResponse);
+                    }).catch(function(error) {
+                        reject(error);
+                        assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(tableIdReportIdMap));
+                    });
                 });
-                return deferred.promise;
             },
-            //Update Default table home page , calls execute request and returns a promise
+            //Create Default table home page for a role, calls execute request and returns a promise
             setCustDefaultTableHomePageForRole       : function(appId, tableId, roleReportMap) {
-                var deferred = promise.pending();
-                this.executeRequest(this.resolveTablesEndpoint(appId, tableId) + '/custhomepage', consts.POST, roleReportMap, DEFAULT_HEADERS).then(function(defaultHPResponse) {
-                    log.debug('set default table home page for role response: ' + defaultHPResponse);
-                    deferred.resolve(defaultHPResponse);
-                }).catch(function(error) {
-                    deferred.reject(error);
-                    //TODO: figure out how we want to handle
-                    assert(false, 'failed to set default table home page with report for role: ' + JSON.stringify(error) + ', report role map is: ' + JSON.stringify(roleReportMap));
+                var self = this;
+                return new promise(function(resolve, reject) {
+                    self.executeRequest(self.resolveTablesEndpoint(appId, tableId) + '/custhomepage', consts.POST, roleReportMap, DEFAULT_HEADERS).then(function(defaultHPResponse) {
+                        log.debug('set default table home page for role response: ' + defaultHPResponse);
+                        resolve(defaultHPResponse);
+                    }).catch(function(error) {
+                        reject(error);
+                        assert(false, 'failed to set default table home page with report for role: ' + JSON.stringify(error) + ', report role map is: ' + JSON.stringify(roleReportMap));
+                    });
                 });
-                return deferred.promise;
             },
             //Helper method creates a ticket given a realm ID.  Returns a promise
             createTicket      : function(realmId) {
@@ -396,18 +414,18 @@
                 // remove created realm if it was not an existing specified realmToUse in the config
                 if (self.realm  && (!config || !config.realmToUse)) {
                     self.executeRequest(self.resolveRealmsEndpoint(self.realm.id),
-                                           consts.DELETE, '', DEFAULT_HEADERS)
-                            .then(function(response) {
-                                deferred.resolve(response);
-                                self.realm = null;
-                            }).catch(function(error) {
-                                var realm = self.realm;
-                                self.realm = null;
-                                assert(false, 'Unable to delete realm ' +
-                                                             JSON.stringify(realm) + ' due to: ' +
-                                                             JSON.stringify(error));
-                                deferred.reject(error);
-                            });
+                        consts.DELETE, '', DEFAULT_HEADERS)
+                        .then(function(response) {
+                            deferred.resolve(response);
+                            self.realm = null;
+                        }).catch(function(error) {
+                            var realm = self.realm;
+                            self.realm = null;
+                            assert(false, 'Unable to delete realm ' +
+                            JSON.stringify(realm) + ' due to: ' +
+                            JSON.stringify(error));
+                            deferred.reject(error);
+                        });
                 } else {
                     deferred.resolve();
                 }

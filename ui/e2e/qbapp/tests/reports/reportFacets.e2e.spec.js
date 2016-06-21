@@ -265,47 +265,48 @@
                 ];
             }
 
-            facetTestCases().forEach(function(facetTestcase) {
-                it('Test case: ' + facetTestcase.message, function(done) {
-                    // Click on facet carat
-                    reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
-                        reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                            reportFacetsPage.reportFacetFilterBtnCaret.click();
-                            // Verify the popup menu is displayed
-                            reportFacetsPage.waitForElement(reportFacetsPage.reportFacetPopUpMenu).then(function() {
-                                expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+
+            // Grab a random test case from the data provider
+            var facetTestcase = facetTestCases()[Math.floor(Math.random() * facetTestCases().length)];
+            it('Test case: ' + facetTestcase.message, function(done) {
+                // Click on facet carat
+                reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
+                    reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                        reportFacetsPage.reportFacetFilterBtnCaret.click();
+                        // Verify the popup menu is displayed
+                        reportFacetsPage.waitForElement(reportFacetsPage.reportFacetPopUpMenu).then(function() {
+                            expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                        });
+                    });
+                }).then(function() {
+                    for (var i = 0; i < facetTestcase.facets.length; i++) {
+                        // Select facet group and items
+                        reportFacetsPage.selectGroupAndFacetItems(facetTestcase.facets[i].group, facetTestcase.facets[i].ItemIndex).then(function(facetSelections) {
+                            // Get facet tokens from the reports toolbar and verify against selected items on reports toolbar
+                            reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
+                                return tokenName.getText();
+                            }).then(function(selections) {
+                                // Sort each array before comparing
+                                expect(selections.sort()).toEqual(facetSelections.sort());
                             });
                         });
-                    }).then(function() {
-                        for (var i = 0; i < facetTestcase.facets.length; i++) {
-                            // Select facet group and items
-                            reportFacetsPage.selectGroupAndFacetItems(facetTestcase.facets[i].group, facetTestcase.facets[i].ItemIndex).then(function(facetSelections) {
-                                // Get facet tokens from the reports toolbar and verify against selected items on reports toolbar
-                                reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
-                                    return tokenName.getText();
-                                }).then(function(selections) {
-                                    // Sort each array before comparing
-                                    expect(selections.sort()).toEqual(facetSelections.sort());
-                                });
-                            });
-                        }
-                    }).then(function() {
-                        //sleep for loading of table to finish
-                        e2eBase.sleep(browser.params.smallSleep);
-                        reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
-                            if (txt === 'There is no data to display.') {
-                                //Verify the toolbar still displays with filter button in it
-                                expect(reportServicePage.griddleWrapperEl.getAttribute('innerText')).toEqual('There is no data to display.');
-                                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('0 of 6 Records');
-                                expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
+                    }
+                }).then(function() {
+                    //sleep for loading of table to finish
+                    e2eBase.sleep(browser.params.smallSleep);
+                    reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
+                        if (txt === 'There is no data to display.') {
+                            //Verify the toolbar still displays with filter button in it
+                            expect(reportServicePage.griddleWrapperEl.getAttribute('innerText')).toEqual('There is no data to display.');
+                            expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('0 of 6 Records');
+                            expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
+                            done();
+                        } else if (txt !== 'There is no data to display.') {
+                            for (var i = 0; i < facetTestcase.facets.length; i++) {
+                                verifyFacetTableResults(facetTestcase.facets[i].group);
                                 done();
-                            } else if (txt !== 'There is no data to display.') {
-                                for (var i = 0; i < facetTestcase.facets.length; i++) {
-                                    verifyFacetTableResults(facetTestcase.facets[i].group);
-                                    done();
-                                }
                             }
-                        });
+                        }
                     });
                 });
             });

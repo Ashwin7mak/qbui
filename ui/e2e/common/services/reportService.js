@@ -19,6 +19,7 @@
                 var reportJSON = {
                     name      : reportName || 'Test Report',
                     type      : 'TABLE',
+                    description : 'This is the report description and it belongs in the stage. We could be so lucky!',
                     ownerId   : '10000',
                     hideReport: false,
                     query: query
