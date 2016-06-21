@@ -4,7 +4,6 @@ import Metadata from '../src/Metadata';
 import ReactPlayground from '../src/ReactPlayground';
 import Examples from '../src/Examples';
 import PropTable from '../src/PropTable';
-import QBPanel from '../../QBPanel/qbpanel';
 
 export default function QBPanelDoc() {
     return (

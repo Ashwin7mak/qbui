@@ -4,7 +4,6 @@ import Metadata from '../src/Metadata';
 import ReactPlayground from '../src/ReactPlayground';
 import Examples from '../src/Examples';
 import PropTable from '../src/PropTable';
-import QBicon from '../../qbIcon/qbIcon';
 
 export default function QBIconDoc() {
     return (
