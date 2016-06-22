@@ -94,13 +94,13 @@
         // Report toolbar
         this.reportsToolBar = element(by.className('reportToolbar'));
         // Report records count
-        this.reportRecordsCount = this.reportToolsAndContentEl.element(by.className('recordsCount'));
+        this.reportRecordsCount = element(by.className('recordsCount'));
         // Report filter search Box
         this.reportFilterSearchBox = this.reportsToolBar.element(by.className('searchInput'));
         // Table actions container
         this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
         // agGrid table
-        this.griddleWrapperEl = this.loadedContentEl.element(by.className('gridWrapper'));
+        this.griddleWrapperEl = element(by.className('gridWrapper'));
         this.agGridContainerEl = this.griddleWrapperEl.all(by.className('agGrid')).first();
         this.agGridBodyEl = this.agGridContainerEl.element(by.className('ag-body-container'));
         this.agGridHeaderEl = this.agGridContainerEl.element(by.className('ag-header-container'));
@@ -221,7 +221,7 @@
                 var fetchTextPromises = [];
                 for (var i = 0; i < elements.length; i++) {
                     // Firefox has innerHTML instead of innerText so use that instead
-                    if (browser.browserName === 'firefox') {
+                    if (browserName === 'firefox') {
                         fetchTextPromises.push(elements[i].getAttribute('innerHTML'));
                     } else {
                         fetchTextPromises.push(elements[i].getAttribute('innerText'));
@@ -258,7 +258,6 @@
          */
         this.assertNavProperties = function(breakpointSize, open, offsetWidth) {
             var self = this;
-
             return browser.controlFlow().execute(function() {
                 // Check properties of nav bar
                 // First subclass of leftNav deals with the small BP - either open or closed
@@ -277,7 +276,6 @@
                     expect(self.navMenuEl.getAttribute('offsetWidth')).toMatch(offsetWidth);
                 }
             });
-
         };
 
         // Click the app list toggle in the leftNav
@@ -431,40 +429,53 @@
 
         // Does element show up on the Left Nav bar.
         this.isElementInLeftNav = function(element, clientWidth) {
-            expect(element.isDisplayed()).toBeTruthy();
-            expect(element.getAttribute('offsetLeft')).toBe('0');
-            expect(element.getAttribute('offsetWidth')).toBe(clientWidth);
+            return browser.controlFlow().execute(function() {
+                expect(element.isDisplayed()).toBeTruthy();
+                expect(element.getAttribute('offsetLeft')).toBe('0');
+                expect(element.getAttribute('offsetWidth')).toBe(clientWidth);
+            });
         };
 
         // Assert that global actions are present in the Left Nav
         this.assertGlobalActsDisplayedInLeftNav = function() {
-            expect(this.leftNavGlobActsUlEl.isPresent()).toBeTruthy();
-            // We can't use Protractor's isDisplayed method in this case because dev implementation is not using
-            // display value or the hidden property to hide the element from view, it is changing the widths of the elements
-            expect(this.leftNavGlobActsUlEl.getAttribute('clientWidth')).toBeGreaterThan('0');
-            expect(this.leftNavGlobActsUlEl.getAttribute('offsetWidth')).toBeGreaterThan('0');
+            var self = this;
+            return browser.controlFlow().execute(function() {
+                expect(self.leftNavGlobActsUlEl.isPresent()).toBeTruthy();
+                // We can't use Protractor's isDisplayed method in this case because dev implementation is not using
+                // display value or the hidden property to hide the element from view, it is changing the widths of the elements
+                expect(self.leftNavGlobActsUlEl.getAttribute('clientWidth')).toBeGreaterThan('0');
+                expect(self.leftNavGlobActsUlEl.getAttribute('offsetWidth')).toBeGreaterThan('0');
+            });
         };
 
         // Assert that global actions are present in the Left Nav
         this.assertGlobalActsNotDisplayedInLeftNav = function() {
-            expect(this.leftNavGlobActsUlEl.isPresent()).toBeTruthy();
-            expect(this.leftNavGlobActsUlEl.getAttribute('clientWidth')).toBe('0');
-            expect(this.leftNavGlobActsUlEl.getAttribute('offsetWidth')).toBe('0');
+            var self = this;
+            return browser.controlFlow().execute(function() {
+                expect(self.leftNavGlobActsUlEl.isPresent()).toBeTruthy();
+                expect(self.leftNavGlobActsUlEl.getAttribute('clientWidth')).toBe('0');
+                expect(self.leftNavGlobActsUlEl.getAttribute('offsetWidth')).toBe('0');
+            });
         };
-
 
         // Assert that global actions are present in the Top Nav bar
         this.assertGlobalActsDisplayedInTopNav = function() {
-            expect(this.topNavGlobalActionsListUlEl.isPresent()).toBeTruthy();
-            expect(this.topNavGlobalActionsListUlEl.getAttribute('clientWidth')).toBeGreaterThan('0');
-            expect(this.topNavGlobalActionsListUlEl.getAttribute('offsetWidth')).toBeGreaterThan('0');
+            var self = this;
+            return browser.controlFlow().execute(function() {
+                expect(self.topNavGlobalActionsListUlEl.isPresent()).toBeTruthy();
+                expect(self.topNavGlobalActionsListUlEl.getAttribute('clientWidth')).toBeGreaterThan('0');
+                expect(self.topNavGlobalActionsListUlEl.getAttribute('offsetWidth')).toBeGreaterThan('0');
+            });
         };
 
         // Assert that global actions are present in the Top Nav bar
         this.assertGlobalActsNotDisplayedInTopNav = function() {
-            expect(this.topNavGlobalActionsListUlEl.isPresent()).toBeTruthy();
-            expect(this.topNavGlobalActionsListUlEl.getAttribute('clientWidth')).toBe('0');
-            expect(this.topNavGlobalActionsListUlEl.getAttribute('offsetWidth')).toBe('0');
+            var self = this;
+            return browser.controlFlow().execute(function() {
+                expect(self.topNavGlobalActionsListUlEl.isPresent()).toBeTruthy();
+                expect(self.topNavGlobalActionsListUlEl.getAttribute('clientWidth')).toBe('0');
+                expect(self.topNavGlobalActionsListUlEl.getAttribute('offsetWidth')).toBe('0');
+            });
         };
     };
     ReportServicePage.prototype = e2ePageBase;

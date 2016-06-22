@@ -16,7 +16,9 @@
             baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGrpAndSortViaIcon.e2e.spec.js'],
+        exclude: [baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportGrpAndSortViaIcon.e2e.spec.js'],
         // ----- Capabilities to be passed to the webdriver instance ----
         //
         // For a full list of available capabilities, see
@@ -78,26 +80,12 @@
 
             // Add jasmine spec reporter
             var SpecReporter = require('jasmine-spec-reporter');
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'specs', displaySpecDuration: true, displayFailuresSummary: false, displayFailedSpec: false}));
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true, displayFailuresSummary: false, displayFailedSpec: true}));
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
-                browser.browserName = cap.caps_.browserName;
+                global.browserName = cap.get('browserName');
             });
-
-            //// Use this code if you want to slow down your Protractor tests (does not work in Protractor 3.0)
-            //var origFn = browser.driver.controlFlow().execute;
-            //
-            //browser.driver.controlFlow().execute = function() {
-            //    var args = arguments;
-            //
-            //    // Queue 10ms wait
-            //    origFn.call(browser.driver.controlFlow(), function() {
-            //        return protractor.promise.delayed(10);
-            //    });
-            //
-            //    return origFn.apply(browser.driver.controlFlow(), args);
-            //};
         }
     };
 }());

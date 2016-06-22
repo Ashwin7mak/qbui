@@ -90,7 +90,7 @@
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
-                browser.browserName = cap.caps_.browserName;
+                global.browserName = cap.get('browserName');
             });
         }
     };

@@ -196,15 +196,12 @@
                             expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeFalsy();
                             done();
                         } else {
-                            reportServicePage.reportFilterSearchBox.clear().sendKeys('@#^&*!!', protractor.Key.ENTER).then(function() {
-                                reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                                    //sleep for loading of table to finish
-                                    e2eBase.sleep(browser.params.smallSleep);
-                                    expect(reportServicePage.griddleWrapperEl.getText()).toEqual('There is no data to display.');
-                                    expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
-                                    done();
-                                });
-                            });
+                            reportServicePage.reportFilterSearchBox.clear().sendKeys('@#^&*!!', protractor.Key.ENTER);
+                            //sleep for loading of table to finish
+                            e2eBase.sleep(browser.params.mediumSleep);
+                            expect(reportServicePage.griddleWrapperEl.getText()).toEqual('There is no data to display.');
+                            expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
+                            done();
                         }
                     });
                 });
