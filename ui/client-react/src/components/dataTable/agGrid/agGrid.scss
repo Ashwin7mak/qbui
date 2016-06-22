@@ -350,18 +350,6 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 
-/* hide griddle cell containing actions */
-.ag-row .ag-cell {
-    &:nth-last-child(2) {
-        border-right: 0px;
-    }
-}
-.ag-header-row .ag-header-cell {
-    &:nth-last-child(2) {
-        border-right: 0px;
-    }
-}
-
 /* hide row editing tools by default */
 .editTools {
     display:none;
