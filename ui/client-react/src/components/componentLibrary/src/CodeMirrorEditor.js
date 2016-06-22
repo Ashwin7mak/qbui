@@ -2,8 +2,10 @@ import React from 'react';
 import CodeExample from './CodeExample';
 
 import Codemirror from 'react-codemirror';
-import 'react-codemirror/node_modules/codemirror/addon/runmode/runmode';
-import 'react-codemirror/node_modules/codemirror/mode/jsx/jsx';
+require('../../../../../node_modules/react-codemirror/node_modules/codemirror/addon/runmode/runmode.js');
+// import 'react-codemirror/node_modules/codemirror/addon/runmode/runmode';
+require('../../../../../node_modules/react-codemirror/node_modules/codemirror/mode/jsx/jsx.js');
+// import 'react-codemirror/node_modules/codemirror/mode/jsx/jsx';
 import '../assets/codemirror.scss';
 import '../assets/theme-monokai.scss';
 
