@@ -516,5 +516,13 @@ $cell-edit-background-edit: #f3f8fe;
     }
 }
 
+/* ensure that group labels are visible with pinned left column */
 
+.ag-pinned-left-cols-container {
+    z-index:999;
+}
+
+.ag-group-cell-entire-row {
+    overflow: visible;
+}
 
