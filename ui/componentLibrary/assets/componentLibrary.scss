@@ -1,6 +1,6 @@
-@import '../../../assets/css/qbVariables';
+@import '../../client-react/src/assets/css/qbVariables';
 
-$font-path: '../../../assets/fonts/';
+$font-path: '../../client-react/src/assets/fonts/';
 
 // We just let people scroll as they will on mobile
 @media (max-width: 767px) {

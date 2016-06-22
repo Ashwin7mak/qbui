@@ -12,6 +12,8 @@ var buildPath = path.join(__dirname, 'client-react/dist');
 
 var clientPath = path.join(__dirname, 'client-react');
 
+var componentLibraryPath = path.join(__dirname, 'componentLibrary');
+
 var envConfig = require('./server/config/environment');
 
 // 3 supported run-time environments..ONE and ONLY ONE variable is to be set to true.
@@ -59,7 +61,7 @@ var config = {
         ],
         componentLibrary: [
             'bootstrap-sass!./client-react/bootstrap-sass.config.js',
-            path.resolve(clientPath, 'src/components/componentLibrary/index.js')
+            path.resolve(componentLibraryPath, 'index.js')
         ]
     },
     output: {
@@ -84,12 +86,13 @@ var config = {
                 test: /\.js?$/,
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
-                    path.resolve(__dirname, 'client-react/test')
+                    path.resolve(__dirname, 'client-react/test'),
+                    componentLibraryPath
                 ],
                 exclude: [
                     nodeModulesPath,
                     // We don't want these to get compiled because ReactPlayground does that in the browser
-                    path.resolve(__dirname, 'client-react/src/components/componentLibrary/examples')
+                    path.resolve(componentLibraryPath, '/examples')
                 ],
                 loaders: ['react-hot-loader', 'babel-loader']
             },
@@ -98,6 +101,7 @@ var config = {
                 test: /\.css?$/,
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
+                    componentLibraryPath,
                     path.resolve(__dirname, 'node_modules/ag-grid'),
                     path.resolve(__dirname, 'node_modules/react-notifications'),
                     path.resolve(__dirname, 'node_modules/react-bootstrap-datetimepicker')
@@ -116,7 +120,7 @@ var config = {
             },
             {
                 include: /\.json$/,
-                loaders: ["json-loader"]
+                loaders: ['json-loader']
             },
             // SASS - transformed to css,
             {

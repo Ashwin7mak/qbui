@@ -5,12 +5,12 @@ const classNames = require('classnames');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-const QBicon = require('../../qbIcon/qbIcon');
-const QBPanel = require('../../QBPanel/qbpanel');
+const QBicon = require('../../client-react/src/components/qbIcon/qbIcon');
+const QBPanel = require('../../client-react/src/components/QBPanel/qbpanel');
 /* eslint-enable */
 import {SafeAnchor, Alert} from 'react-bootstrap';
 
-import {transform} from "babel-standalone";
+import {transform} from 'babel-standalone';
 import CodeMirrorEditor from './CodeMirrorEditor';
 
 const selfCleaningTimeout = {
