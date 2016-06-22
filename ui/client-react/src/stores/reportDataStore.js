@@ -3,6 +3,7 @@ import FacetSelections from '../components/facet/facetSelections';
 import ReportUtils from '../utils/reportUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
+import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -383,11 +384,13 @@ let ReportDataStore = Fluxxor.createStore({
     onSaveRecordSuccess() {
         this.lastSaveOk = true;
         this.saveRecordError = null;
+        NotificationManager.success('Record saved', 'Success', 1500);
         this.emit("change");
     },
     onSaveRecordFailed(payload) {
         this.lastSaveOk = false;
         this.saveRecordError = payload.error;
+        NotificationManager.error('Record saved', 'Failed', 1500);
         this.emit("change");
     },
 

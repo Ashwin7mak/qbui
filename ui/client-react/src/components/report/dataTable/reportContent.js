@@ -8,7 +8,7 @@ import Fluxxor from "fluxxor";
 import * as DataTypes from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
-import {NotificationManager} from 'react-notifications';
+import _ from 'lodash';
 
 let logger = new Logger();
 
@@ -24,7 +24,6 @@ let ReportContent = React.createClass({
     getInitialState: function() {
         return {
             showSelectionColumn: false,
-            recordChanges: {}
         };
     },
 
@@ -40,29 +39,56 @@ let ReportContent = React.createClass({
         this.props.history.pushState(null, link);
     },
 
-    handleEditRecordStart(recId, origRec) {
+    getKeyField() {
+        return this.props.fields && this.props.fields.keyField ? this.props.fields.keyField.name : "Record ID#";
+    },
+
+    getOrigRec(recid) {
+        let orig = {names:{}, fids:{}};
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+        let keyField =  this.getKeyField();
+        recs.find(function(rec) {
+            //console.log("recid =" + JSON.stringify(recid));
+            var keys = Object.keys(rec);
+            keys.find(function(col) {
+                if (col === keyField && rec[col].value === recid) {
+                    orig.names = rec;
+                    //console.log("col =" + col + ":" +JSON.stringify(rec));
+                    var fids = {};
+                    var recKeys = Object.keys(rec);
+                    // have fid lookup hash
+                    recKeys.forEach(function(item){
+                        fids[rec[item].id] = rec[item];
+                    });
+                    orig.fids = fids;
+                    return true;
+                }
+            });
+        });
+        return _.cloneDeep(orig);
+    },
+
+    handleEditRecordStart(recId) {
         const flux = this.getFlux();
+        let origRec = this.getOrigRec(recId);
         flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec);
-        this.setState({recordChanges:{}});
     },
 
     handleEditRecordCancel(recId) {
         const flux = this.getFlux();
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId);
-        this.setState({recordChanges:{}});
+        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, recId);
     },
 
     handleFieldChange(change) {
         // call action to hold the field value change
         const flux = this.getFlux();
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
-        let changes = _.cloneDeep(this.state.recordChanges);
+        let changes = _.cloneDeep(this.props.pendEdits.recordChanges);
         changes[change.fid] = change.values;
-        this.setState({recordChanges:changes});
     },
 
     handleRecordChange(recId) {
-        let changes = this.state.recordChanges;
+        let changes = _.cloneDeep(this.props.pendEdits.recordChanges);
         //calls action to save the record changes
         // validate happen here or in action
         //console.log(`record ${recId} changed` + JSON.stringify(changes) );
@@ -70,23 +96,17 @@ let ReportContent = React.createClass({
         let payload = [];
         // columns id and new values array
         //[{"id":6, "value":"Claire"}]
-        Object.keys(changes).forEach(function(key) {
-            if (changes[key].oldVal !== changes[key].newVal) {
+        Object.keys(changes).forEach((key) => {
+            let newValue = changes[key].newVal.value;
+            if (newValue !== this.props.pendEdits.originalRecord.fids[key].value) {
                 let colChange = {};
                 colChange.id = +key;
-                colChange.value = changes[key].newVal;
+                colChange.value = _.cloneDeep(newValue);
                 payload.push(colChange);
             }
         });
         //for (changes)
-        this.props.flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId, payload);
-
-        // to be moved on success response action in store..
-        //
-        // EMPOWER
-        setTimeout(()=> {
-            NotificationManager.success('Record saved', 'Success', 1500);
-        }, 1000);
+        this.props.flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.id, payload);
 
     },
 
@@ -470,6 +490,7 @@ let ReportContent = React.createClass({
                                     onEditRecordCancel={this.handleEditRecordCancel}
                                     onFieldChange={this.handleFieldChange}
                                     onRecordChange={this.handleRecordChange}
+                                    getOrigRec={this.getOrigRec}
                                     tblId={this.props.reportData.tblId}
                                     rptId={this.props.reportData.rptId}
                                     reportHeader={this.props.reportHeader}

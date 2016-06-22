@@ -42,7 +42,7 @@ const CellRenderer = React.createClass({
     /* setting state from props is an anti-pattern but we're doing it to avoid rerendering */
     getInitialState() {
         return {
-            valueAndDisplay: this.props.initialValue
+            valueAndDisplay: _.cloneDeep(this.props.initialValue)
         };
     },
 

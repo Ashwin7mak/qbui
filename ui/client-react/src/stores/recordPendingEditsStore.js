@@ -34,7 +34,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.currentEditingRecordId = payload.recId.value;
             this.currentEditingAppId = payload.appId;
             this.currentEditingTableId = payload.tblId;
-            this.originalRecord = _.clone(payload.origRec);
+            this.originalRecord = _.cloneDeep(payload.origRec);
         } else {
             this.currentEditingRecordId = undefined;
             this.currentEditingAppId = undefined;
@@ -72,7 +72,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
 
     getState() {
         return {
-            changes : this.recordChanges,
+            recordChanges : this.recordChanges,
             currentEditingAppId : this.currentEditingAppId,
             currentEditingRecordId : this.currentEditingRecordId,
             currentEditingTableId : this.currentEditingTableId,

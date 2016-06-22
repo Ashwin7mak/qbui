@@ -18,7 +18,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'FieldsStore', 'FormStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore','FieldsStore', 'FormStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -31,6 +31,7 @@ var Nav = React.createClass({
             nav: flux.store('NavStore').getState(),
             apps: flux.store('AppsStore').getState(),
             reportsData: flux.store('ReportsStore').getState(),
+            pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
             form: flux.store('FormStore').getState()
@@ -188,6 +189,7 @@ var Nav = React.createClass({
                             key: this.props.location ? this.props.location.pathname : "",
                             selectedAppId: this.state.apps.selectedAppId,
                             reportData: this.state.reportData,
+                            pendEdits:this.state.pendEdits,
                             fields: this.state.fields,
                             form: this.state.form,
                             selectedApp: this.getSelectedApp(),

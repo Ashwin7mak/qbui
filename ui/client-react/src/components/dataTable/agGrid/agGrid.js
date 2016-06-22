@@ -340,9 +340,7 @@ let AGGrid = React.createClass({
         // select one row starts inline edit on row
         if (rows && rows.length === 1) {
             let recId = rows[0].value;
-            if (this.props.records[recId]) {
-                this.props.onEditRecordStart(recId, this.props.records[recId]);
-            }
+            this.props.onEditRecordStart(recId);
         }
     },
     /**
