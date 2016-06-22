@@ -10,14 +10,16 @@ const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 let CardView = React.createClass({
     propTypes: {
         data: React.PropTypes.object,
-        rowId: React.PropTypes.number
+        rowId: React.PropTypes.number,
+        onSwipe: React.PropTypes.func
     },
 
     getInitialState() {
         return {
             showMoreCards: false,
             showActions: false,
-            swiping:false
+            swipingRight:false,
+            swipingLeft:false
         };
     },
 
@@ -36,13 +38,13 @@ let CardView = React.createClass({
     createField(c, curKey) {
         return (<div key={c} className="field">
             <span className="fieldLabel">{curKey}</span>
-            <span className="fieldValue">{this.props.data[curKey]}</span>
+            <span className="fieldValue">{this.props.data[curKey].display}</span>
         </div>);
     },
     createTopField(firstFieldValue) {
         return (
             <div className="top-card-row field">
-                <strong>{firstFieldValue}</strong>
+                <strong>{firstFieldValue.display}</strong>
                 <div className="card-expander" onClick={this.handleMoreCard}>
                     <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
                 </div>
@@ -58,9 +60,7 @@ let CardView = React.createClass({
         let firstFieldValue = this.props.data[keys[0]];
         var topField = this.createTopField(firstFieldValue);
         for (var i = 1; i < keys.length; i++) {
-            if (this.props.metadataColumns && this.props.metadataColumns.indexOf(keys[i]) === -1) {
-                fields.push(this.createField(i, keys[i]));
-            }
+            fields.push(this.createField(i, keys[i]));
         }
 
         return <div className="card">{topField}<div className={this.state.showMoreCards ? "fieldRow expanded" : "fieldRow collapsed"}>{fields}</div></div>;
@@ -72,13 +72,30 @@ let CardView = React.createClass({
      * @param delta x delta from touch starting position
      */
     swiping(event, delta) {
+        let swipingLeft = this.state.swipingLeft || this.state.showActions;
+        let swipingRight = this.state.swipingRight;
 
-        if (!this.props.allowCardSelection()) {
+        if (!swipingLeft && !this.props.allowCardSelection()) {
+            // starting a new swipe
+            if (delta > 0) {
+                // started left swipe
+                swipingLeft = true;
+            } else {
+                // started right swipe
+                this.setState({
+                    swipingRight: true
+                });
+            }
+        }
+        if (swipingLeft) {
             // add delta to current width (MAX_ACTIONS_RESIZE_WITH if open, 0 if closed) to get new size
             this.setState({
                 resizeWidth: Math.max(this.state.showActions ? (delta + MAX_ACTIONS_RESIZE_WITH) : delta, 0),
-                swiping: true
+                swipingLeft
             });
+        } else {
+            // swiping right - delegate swipe to parent components (swiping checkbox column)
+            this.props.onSwipe(delta);
         }
     },
 
@@ -87,7 +104,8 @@ let CardView = React.createClass({
      */
     swiped() {
         this.setState({
-            swiping:false
+            swipingLeft:false,
+            swipingRight:false
         });
     },
 
@@ -144,7 +162,7 @@ let CardView = React.createClass({
 
             let rowActionsClasses = "rowActions ";
 
-            if (this.state.swiping) {
+            if (this.state.swipingLeft) {
                 rowActionsClasses += "swiping";
                 actionsStyle = {
                     width: Math.min(MAX_ACTIONS_RESIZE_WITH, this.state.resizeWidth)
@@ -161,7 +179,7 @@ let CardView = React.createClass({
             const isSelected = this.props.isRowSelected(this.props.data);
 
             return (
-                <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swiping ? "actionsOpen" : "actionsClosed") }
+                <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swipingLeft ? "actionsOpen" : "actionsClosed") }
                             onSwiping={this.swiping}
                             onSwiped={this.swiped}
                             onSwipedLeft={this.swipedLeft}
@@ -169,7 +187,9 @@ let CardView = React.createClass({
 
                     <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"} >
                         <div style={cardStyle} className="flexRow">
-                            {this.props.allowCardSelection() && <div className={"checkboxContainer"}><input checked={isSelected} onChange={this.onRowSelected} type="checkbox"></input></div>}
+                            <div className={"checkboxContainer"}>
+                                <input checked={isSelected} onChange={this.onRowSelected} type="checkbox"></input>
+                            </div>
                             <div className="card" onClick={this.onRowClick}>
                                 {row}
                             </div>
