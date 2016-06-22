@@ -6,6 +6,8 @@ import ComponentLibraryWrapper from '../../src/components/componentLibrary/src/c
 import PropTable from '../../src/components/componentLibrary/src/PropTable';
 import ReactPlayground from '../../src/components/componentLibrary/src/ReactPlayground';
 
+import QBIconDoc from '../../src/components/componentLibrary/docs/qbicon';
+
 const fakeMetadata = {
     "QBPanel": {
         "props": {
@@ -123,9 +125,6 @@ describe('Component Library functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    // ReactPlayground Renders the Example
-    // ReactPlayground Renders the Description
-
     it('code editor should show', () => {
         let component = TestUtils.renderIntoDocument(<ReactPlayground codeText={exampleCodeText} showCode={false} />);
 
@@ -137,13 +136,12 @@ describe('Component Library functions', () => {
         expect(codeEditor).toBeTruthy();
     });
 
-    it('code editor should bail on bad code', () => {
-        // ReferenceError: asdf is not defined
-    });
+    // it('code editor should bail on bad code', () => {
+    // });
 
     // Router
-    it('router default should be QBPanel', () => {
-    });
+    // it('router default should be QBPanel', () => {
+    // });
 
     // PropTable
     it('test render prop table', () => {
@@ -151,7 +149,10 @@ describe('Component Library functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    // PropTable Required Label Renders
-    // PropTable Renders a row correctly
+    // Test doc files
+    // it('test render QBIcon Doc', () => {
+    //     var component = TestUtils.renderIntoDocument(<QBIconDoc />);
+    //     expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    // });
 
 });
