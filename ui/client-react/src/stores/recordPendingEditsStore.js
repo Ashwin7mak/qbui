@@ -34,11 +34,13 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.currentEditingRecordId = payload.recId.value;
             this.currentEditingAppId = payload.appId;
             this.currentEditingTableId = payload.tblId;
+            this.recordChanges = {};
             this.originalRecord = _.cloneDeep(payload.origRec);
         } else {
             this.currentEditingRecordId = undefined;
             this.currentEditingAppId = undefined;
             this.currentEditingTableId = undefined;
+            this.recordChanges = {};
             this.originalRecord = undefined;
         }
         this.emit('change');
