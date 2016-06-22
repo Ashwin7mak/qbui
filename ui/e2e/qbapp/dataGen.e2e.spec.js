@@ -13,46 +13,36 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000; //10 minutes max allows for adding ma
 
     describe('Data Generation for E2E Tests', function() {
         var app;
+        var recordList;
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
          */
         beforeAll(function(done) {
-            //Create the table schema (map object) to pass into the app generator
-            /*eslint-disable dot-notation */
-            var tableToFieldToFieldTypeMap = {};
-            tableToFieldToFieldTypeMap['table 1'] = {};
-            tableToFieldToFieldTypeMap['table 1']['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
-            tableToFieldToFieldTypeMap['table 1']['Numeric'] = {fieldType: consts.SCALAR, dataType: consts.NUMERIC};
-            tableToFieldToFieldTypeMap['table 1']['Currency'] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
-            tableToFieldToFieldTypeMap['table 1']['Percent'] = {fieldType: consts.SCALAR, dataType: consts.PERCENT};
-            tableToFieldToFieldTypeMap['table 1']['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-            tableToFieldToFieldTypeMap['table 1']['Date Field'] = {fieldType: consts.SCALAR, dataType : consts.DATE};
-            tableToFieldToFieldTypeMap['table 1']['Date Time Field'] = {fieldType: consts.SCALAR, dataType : consts.DATE_TIME};
-            tableToFieldToFieldTypeMap['table 1']['Time of Day Field'] = {fieldType: consts.SCALAR, dataType : consts.TIME_OF_DAY};
-            tableToFieldToFieldTypeMap['table 1']['Duration'] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
-            tableToFieldToFieldTypeMap['table 1']['Checkbox Field'] = {fieldType: consts.SCALAR, dataType : consts.CHECKBOX};
-            tableToFieldToFieldTypeMap['table 1']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-            tableToFieldToFieldTypeMap['table 1']['Email'] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
-            tableToFieldToFieldTypeMap['table 1']['Url'] = {fieldType: consts.SCALAR, dataType: consts.URL};
-            tableToFieldToFieldTypeMap['table 2'] = {};
-            tableToFieldToFieldTypeMap['table 2']['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
-            tableToFieldToFieldTypeMap['table 2']['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-            tableToFieldToFieldTypeMap['table 2']['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-            //Call the basic app setup function
-            e2eBase.basicSetup(tableToFieldToFieldTypeMap, tableOneNumberOfRecords)
-                .then(function(results) {
-                    //Set your global objects to use in the test functions
-                    app = results[0];
-                    //Check that your setup completed properly
-                    //This will fail the test if setup did not complete properly so at least it doesn't run
-                    if (!app) {
-                        throw new Error('app not created successfully');
-                    }
-                    done();
-                })
-                .catch(function(err) {
-                    done.fail(err);
-                });
+            var nonBuiltInFields;
+            e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
+                // Set your global objects to use in the test functions
+                app = appAndRecords[0];
+                recordList = appAndRecords[1];
+                // Get the appropriate fields out of the third table
+                nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE3]);
+                // Generate the record JSON objects
+                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 5);
+                // Via the API create some records
+                return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedRecords);
+            }).then(function() {
+                // Generate 1 empty record
+                var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
+                return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedEmptyRecords);
+            }).then(function() {
+                //Create a report with facets in table 3
+                return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
+            }).then(function() {
+                done();
+            }).catch(function(error) {
+                // Global catch that will grab any errors from chain above
+                // Will appropriately fail the beforeAll method so other tests won't run
+                done.fail('Error during test setup beforeAll: ' + error.message);
+            });
         });
         /**
          * Test method. Prints out the generated test data and endpoints to the console.
