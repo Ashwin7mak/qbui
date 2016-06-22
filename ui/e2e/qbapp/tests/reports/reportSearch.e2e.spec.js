@@ -82,7 +82,8 @@
                             cells.get(3).getText(),
                             cells.get(4).getText(),
                             cells.get(5).getText(),
-                            cells.get(6).getText(),
+                            // Checkbox field no longer a text field with value
+                            cells.get(6).all(by.tagName('input')).first().isSelected(),
                             cells.get(7).getText()
                         ];
                     }).then(function(results) {
@@ -109,23 +110,23 @@
                     query: '7.642',
                     columnId: 7,
                     expectedSearchResults:[
-                        ['', '4/12/2016', '04-11-2016 10:51 PM', 'first_name_last_name@quickbase.com', 'true', '7.642']
+                        ['', '4/12/2016', '04/11/16 10:51:00 PM', 'first_name_last_name@quickbase.com', true, '7.642']
                     ]
                 },
                 {
                     message: ' Checkbox value',
                     query: 'true',
                     expectedSearchResults: [
-                        ['', '4/12/2016', '04-11-2016 10:51 PM', 'first_name_last_name@quickbase.com', 'true', '7.642'],
-                        ['wuv', '1/12/2016', '01-11-2016 9:51 PM', 'abcxyz_LastName@quickbase.com', 'true', '6.05']
+                        ['', '4/12/2016', '04/11/16 10:51:00 PM', 'first_name_last_name@quickbase.com', true, '7.642'],
+                        ['wuv', '1/12/2016', '01/11/16 9:51:00 PM', 'abcxyz_LastName@quickbase.com', true, '6.05']
                     ]
                 },
                 {
                     message: ' Text value',
                     query: 'xyz',
                     expectedSearchResults: [
-                        ['wuv', '1/12/2016', '01-11-2016 9:51 PM', 'abcxyz_LastName@quickbase.com', 'true', '6.05'],
-                        ['xyz', '4/12/2015', '04-11-2015 10:51 PM', 'xyz_last_name@quickbase.com', 'false', '9.292']
+                        ['wuv', '1/12/2016', '01/11/16 9:51:00 PM', 'abcxyz_LastName@quickbase.com', true, '6.05'],
+                        ['xyz', '4/12/2015', '04/11/15 10:51:00 PM', 'xyz_last_name@quickbase.com', false, '9.292']
                     ]
                 }
                 //TODO the below gives error loading report error
@@ -151,32 +152,33 @@
             ];
         }
 
-        searchTestCases().forEach(function(testcase) {
-            it(' With Facets - ' + testcase.message, function(done) {
-                //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
-                        reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
-                            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                                verifySearchTableResults(testcase.expectedSearchResults);
-                                done();
-                            });
+        // Grab a random test case from the data provider
+        var testcase = searchTestCases()[Math.floor(Math.random() * searchTestCases().length)];
+
+        it(' With Facets - ' + testcase.message, function(done) {
+            //go to report page directly
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
+                    reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                            verifySearchTableResults(testcase.expectedSearchResults);
+                            done();
                         });
                     });
                 });
             });
+        });
 
-            it(' Without Facets - ' + testcase.message, function(done) {
-                //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
-                        reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
-                            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                                verifySearchTableResults(testcase.expectedSearchResults);
-                                done();
-                            });
+        it(' Without Facets - ' + testcase.message, function(done) {
+            //go to report page directly
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
+                    reportServicePage.reportFilterSearchBox.clear().sendKeys(testcase.query, protractor.Key.ENTER).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                            verifySearchTableResults(testcase.expectedSearchResults);
+                            done();
                         });
                     });
                 });

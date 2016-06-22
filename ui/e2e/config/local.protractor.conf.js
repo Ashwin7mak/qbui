@@ -16,7 +16,7 @@
             baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [],
+        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGrpAndSortViaIcon.e2e.spec.js'],
         // ----- Capabilities to be passed to the webdriver instance ----
         //
         // For a full list of available capabilities, see
@@ -67,7 +67,7 @@
 
             // Read the base classes
             global.e2eBase = requireCommon('common/e2eBase')();
-            global.consts = require('../../server/api/constants');
+            global.consts = require('../../common/src/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
 
             // Lets Protractor know there is no Angular code to wait for
@@ -78,7 +78,7 @@
 
             // Add jasmine spec reporter
             var SpecReporter = require('jasmine-spec-reporter');
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'none', displaySpecDuration: true, displayFailuresSummary: false, displayFailedSpec: false}));
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'specs', displaySpecDuration: true, displayFailuresSummary: false, displayFailedSpec: false}));
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {

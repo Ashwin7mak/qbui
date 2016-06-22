@@ -56,10 +56,12 @@
             var hour = chance.hour({twentyfour: true}) - 1;
             var minute = date.getMinutes();
             var seconds = date.getSeconds();
+            var millis = date.getMilliseconds();
 
             // see comment for apiFormattedDate
             return year + '-' + chance.pad(month + 1, 2) + '-' + chance.pad(day, 2) +
-                'T' + chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + ':' + chance.pad(seconds, 2) + 'Z[UTC]';
+                'T' + chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + ':' + chance.pad(seconds, 2) +
+                '.' + millis + 'Z[UTC]';
         },
 
         userId: function(options) {

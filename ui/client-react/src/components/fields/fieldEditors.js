@@ -119,6 +119,20 @@ export const DateFieldEditor = React.createClass({
 });
 
 /**
+ * convert an ISO datetime string to the same string with fixed number of milliseconds digits
+ *
+ * 2063-05-25T02:59:32.76Z returns 2063-05-25T02:59:32.760Z for example
+ */
+function dateTimeStringWithFixedMillisSuffix(dateTimeStr, places) {
+
+    const millisSuffix = dateTimeStr.match(/\.[0-9]*/);
+    if (millisSuffix) {
+        let fixedMillis = parseFloat(millisSuffix).toFixed(places).substring(1);
+        return dateTimeStr.replace(/\.[0-9]*/, fixedMillis);
+    }
+    return dateTimeStr;
+}
+/**
  * date + time cell editor
  */
 export const DateTimeFieldEditor = React.createClass({
@@ -134,11 +148,12 @@ export const DateTimeFieldEditor = React.createClass({
 
     render() {
 
-        const fixedDate = this.props.value.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
+        let dateTime = this.props.value.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
+        dateTime = dateTimeStringWithFixedMillisSuffix(dateTime, 3);
 
         return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={fixedDate}
-                           format="YYYY-MM-DDTHH:mm:ssZ"
+            <DateTimeField dateTime={dateTime}
+                           format="YYYY-MM-DDTHH:mm:ss.SSSZ"
                            inputFormat="MM-DD-YYYY hh:mm:ss A"
                            onChange={this.onChange}
                            mode="datetime"/>
@@ -152,7 +167,7 @@ export const DateTimeFieldEditor = React.createClass({
 export const TimeFieldEditor = React.createClass({
 
     propTypes: {
-        value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss (Epoch date)
+        value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss.SSS (Epoch date)
         onChange: React.PropTypes.func
     },
     onChange(newValue) {
@@ -160,10 +175,12 @@ export const TimeFieldEditor = React.createClass({
     },
     render() {
 
-        const localTime = this.props.value.replace(/Z(\[.*?\])/, ''); // remove Z[utc] suffix if present
+        let localTime = this.props.value.replace(/Z(\[.*?\])/, ''); // remove Z[utc] suffix if present
+        localTime = dateTimeStringWithFixedMillisSuffix(localTime, 3);
+
         return <div className="cellEdit dateTimeField">
             <DateTimeField dateTime={localTime}
-                           format="YYYY-MM-DDTHH:mm:ss"
+                           format="YYYY-MM-DDTHH:mm:ss.SSS"
                            inputFormat="h:mm:ss A"
                            onChange={this.onChange}
                            mode="time"/>
