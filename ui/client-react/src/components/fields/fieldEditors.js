@@ -107,7 +107,7 @@ export const DateFieldEditor = React.createClass({
 
     render() {
         //let formatted = this.props.value ? formatDate(this.props.value, "YYYY-MM-DD") : "";
-        const fixedDate = this.props.value.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
+        const fixedDate = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : ""; // remove [utc] suffix if present
         return <div className="cellEdit dateTimeField">
             <DateTimeField dateTime={fixedDate}
                            format="YYYY-MM-DD"
@@ -148,7 +148,7 @@ export const DateTimeFieldEditor = React.createClass({
 
     render() {
 
-        let dateTime = this.props.value.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
+        let dateTime = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : ""; // remove [utc] suffix if present
         dateTime = dateTimeStringWithFixedMillisSuffix(dateTime, 3);
 
         return <div className="cellEdit dateTimeField">
@@ -175,7 +175,7 @@ export const TimeFieldEditor = React.createClass({
     },
     render() {
 
-        let localTime = this.props.value.replace(/Z(\[.*?\])/, ''); // remove Z[utc] suffix if present
+        let localTime = this.props.value ? this.props.value.replace(/Z(\[.*?\])/, '') : ""; // remove Z[utc] suffix if present
         localTime = dateTimeStringWithFixedMillisSuffix(localTime, 3);
 
         return <div className="cellEdit dateTimeField">
