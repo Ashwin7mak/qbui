@@ -5,8 +5,8 @@ var should = require('should');
 var assert = require('assert');
 var bunyan = require('bunyan');
 var fs = require('fs');
-var config = require('./../config/environment');
-var log = require('./../logger');
+var config = require('../src/config/environment');
+var log = require('../src/logger');
 
 /**
  * Unit tests for User field formatting
