@@ -49,19 +49,22 @@ const CellRenderer = React.createClass({
     render: function() {
         // render the cell value and editor (CSS will hide one or the other)
 
-        return (<span className="cellWrapper">
-            {this.props.initialValue !== null &&
-            <CellValueRenderer type={this.props.type}
-                               value={this.state.valueAndDisplay.value}
-                               display={this.state.valueAndDisplay.display}
-                               attributes={this.props.colDef.datatypeAttributes}/>  }
+        if (this.props.initialValue === null) {
+            return (<span className="emptyCell" />);
+        }
+        return (
+            <span className="cellWrapper">
 
-            {this.props.initialValue !== null &&
-            <CellEditor type={this.props.type}
-                        value={this.state.valueAndDisplay.value}
-                        colDef={this.props.colDef}
-                        onChange={this.onChange}/>  }
-        </span>);
+                <CellValueRenderer type={this.props.type}
+                                   value={this.state.valueAndDisplay.value}
+                                   display={this.state.valueAndDisplay.display}
+                                   attributes={this.props.colDef.datatypeAttributes} />
+
+                <CellEditor type={this.props.type}
+                            value={this.state.valueAndDisplay.value}
+                            colDef={this.props.colDef}
+                            onChange={this.onChange} />
+            </span>);
     },
 
     onChange(value) {

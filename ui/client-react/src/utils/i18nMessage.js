@@ -3,6 +3,10 @@ import Intl from 'intl';
 import ReactIntl from 'react-intl';
 import Locale from '../locales/locales';
 
+import 'intl/locale-data/jsonp/en';
+import 'intl/locale-data/jsonp/de';
+import 'intl/locale-data/jsonp/fr';
+
 import Logger from '../utils/logger';
 var logger = new Logger();
 
