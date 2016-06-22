@@ -278,8 +278,10 @@ let AGGrid = React.createClass({
         let flux =  this.getFlux();
         this.gridOptions.context.flux = flux;
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
-        this.gridOptions.context.recordChanges=this.props.recordChanges;
-        this.gridOptions.context.onRecordChange=this.props.onRecordChange;
+        this.gridOptions.context.onRecordChange = this.props.onRecordChange;
+        this.gridOptions.context.onFieldChange = this.props.onFieldChange;
+        this.gridOptions.context.onEditRecordStart = this.props.onEditRecordStart;
+        this.gridOptions.context.onEditRecordCancel = this.props.onEditRecordCancel;
         this.gridOptions.context.keyField = this.props.keyField;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
@@ -332,21 +334,30 @@ let AGGrid = React.createClass({
             }
         }
     },
+    setSelectedRows(rows) {
+        const flux = this.getFlux();
+        flux.actions.selectedRows(rows);
+        // select one row starts inline edit on row
+        if (rows && rows.length === 1) {
+            let recId = rows[0].value;
+            if (this.props.records[recId]) {
+                this.props.onEditRecordStart(recId, this.props.records[recId]);
+            }
+        }
+    },
     /**
      * Grid API - selectAll "selects" all rows.
      */
     selectAll() {
-        const flux = this.getFlux();
         this.api.selectAll();
-        flux.actions.selectedRows(this.getSelectedRows());
+        this.setSelectedRows(this.getSelectedRows());
     },
     /**
      * Grid API - deselectAll "deselects" all rows.
      */
     deselectAll() {
-        const flux = this.getFlux();
         this.api.deselectAll();
-        flux.actions.selectedRows([]);
+        this.setSelectedRows([]);
     },
     /**
      * Capture the row-click event. Send to record view on row-click
@@ -403,9 +414,7 @@ let AGGrid = React.createClass({
      * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
     onSelectionChanged() {
-        let flux = this.getFlux();
-
-        flux.actions.selectedRows(this.getSelectedRows());
+        this.setSelectedRows(this.getSelectedRows());
     },
 
     /**
@@ -680,8 +689,11 @@ let AGGrid = React.createClass({
                                     // binding to array properties
                                     columnDefs={columnDefs}
                                     rowData={this.getRecordsToRender()}
-                                    recordChanges={this.props.recordChanges}
+                                    //handlers on col or row changes
+                                    onFieldChange={this.props.onFieldChange}
                                     onRecordChange={this.props.onRecordChange}
+                                    onEditRecordStart={this.props.onEditRecordStart}
+                                    onEditRecordCancel={this.props.onEditRecordCancel}
 
                                     //default behavior properties
                                     rowSelection="multiple"

@@ -393,7 +393,7 @@
                 }
             }
         );
-    };
+    }
 
     /**
      * This is the function for proxying to the swagger endpoint

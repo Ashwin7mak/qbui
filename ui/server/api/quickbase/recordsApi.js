@@ -312,9 +312,7 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 var responseObject;
-                //convert data to raw form for java if not already in raw form?
-                // var record = jsonBigNum.parse(req[0].body);
-                // send put to server to update the record and return the result promise
+                //input expected in raw form for java
                 return requestHelper.executeRequest(req, opts);
             },
 

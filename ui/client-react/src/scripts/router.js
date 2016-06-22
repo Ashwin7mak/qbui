@@ -9,6 +9,7 @@ import ReportsStore from "../stores/reportsStore";
 import reportActions from "../actions/reportActions";
 import ReportDataStore from "../stores/reportDataStore";
 import ReportDataSearchStore from "../stores/reportDataSearchStore";
+import RecordPendingEditsStore from "../stores/recordPendingEditsStore";
 import reportDataActions from "../actions/reportDataActions";
 import FieldsStore from "../stores/fieldsStore";
 import fieldsActions from "../actions/fieldsActions";
@@ -45,6 +46,7 @@ let stores = {
     NavStore: new NavStore(),
     FacetMenuStore: new FacetMenuStore(),
     ReportDataSearchStore: new ReportDataSearchStore(),
+    RecordPendingEditsStore: new RecordPendingEditsStore(),
     FieldsStore: new FieldsStore(),
     FormStore: new FormStore(),
     PerfStore: new PerfStore()

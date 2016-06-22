@@ -12,11 +12,11 @@ const RowEditActions = React.createClass({
         api: React.PropTypes.object,
         flux: React.PropTypes.object,
     },
+
     onClickSave() {
         this.props.api.deselectAll();
         const id = this.props.data[this.props.params.context.keyField];
-       this.props.params.context.onRecordChange(+id, this.props.params.context.recordChanges);
-
+        this.props.params.context.onRecordChange(id);
     },
 
     /**
@@ -34,6 +34,7 @@ const RowEditActions = React.createClass({
     onClickCancel() {
         this.props.api.deselectAll();
         this.props.flux.actions.selectedRows([]);
+        this.props.params.context.onEditRecordCancel();
     },
 
     /**

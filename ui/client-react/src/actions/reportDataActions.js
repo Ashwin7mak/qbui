@@ -179,6 +179,24 @@ let reportDataActions = {
     deleteReportRecord(id) {
         this.dispatch(actions.DELETE_REPORT_RECORD, id);
     },
+
+    /* the start of editing a record */
+    recordPendingEditsStart(appId, tblId, recId, origRec) {
+        this.dispatch(actions.RECORD_EDIT_START, {appId, tblId, recId, origRec});
+    },
+    /* the change of a field while editing a record */
+    recordPendingEditsChangeField(appId, tblId, recId, changes) {
+        this.dispatch(actions.RECORD_EDIT_CHANGE_FIELD, {appId, tblId, recId, changes});
+    },
+    /* cancel editing a record */
+    recordPendingEditsCancel() {
+        this.dispatch(actions.RECORD_EDIT_CANCEL);
+    },
+    /* committing changes from editing a record */
+    recordPendingEditsCommit(appId, tblId, recId) {
+        this.dispatch(actions.RECORD_EDIT_SAVE, {appId, tblId, recId});
+    },
+
     /**
      * save a record
      */
@@ -201,7 +219,7 @@ let reportDataActions = {
                         this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {error: error});
                         reject();
                     }
-                )
+                );
             } else {
                 var errMessage = 'Missing one or more required input parameters to reportDataActions.saveReportRecord. AppId:' +
                     appId + '; TblId:' + tblId + '; recId:' + recId + '; changes:' + changes ;

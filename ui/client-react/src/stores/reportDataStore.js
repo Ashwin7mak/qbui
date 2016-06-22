@@ -378,7 +378,7 @@ let ReportDataStore = Fluxxor.createStore({
 
     onSaveRecord(payload) {
         this.lastSaveOk = null;
-        this.lastSaveRecordId = payload.recordId
+        this.lastSaveRecordId = payload.recordId;
     },
     onSaveRecordSuccess() {
         this.lastSaveOk = true;

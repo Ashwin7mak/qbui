@@ -282,7 +282,7 @@ describe("Validate recordsApi", function() {
 
         it('success return results ', function(done) {
             req.url = '/records/2';
-            req.body=[];
+            req.body = [];
             var targetObject = "{}";
             executeReqStub.returns(Promise.resolve(targetObject));
             var promise = recordsApi.saveSingleRecord(req);

@@ -24,9 +24,9 @@ let ReportContent = React.createClass({
     getInitialState: function() {
         return {
             showSelectionColumn: false,
+            recordChanges: {}
         };
     },
-    recordChanges:{},
 
     // row was clicked once, navigate to record
     openRow(data) {
@@ -40,17 +40,38 @@ let ReportContent = React.createClass({
         this.props.history.pushState(null, link);
     },
 
-    handleRecordChange(recId, changes) {
-        //call action to save the record changes
+    handleEditRecordStart(recId, origRec) {
+        const flux = this.getFlux();
+        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec);
+        this.setState({recordChanges:{}});
+    },
 
+    handleEditRecordCancel(recId) {
+        const flux = this.getFlux();
+        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId);
+        this.setState({recordChanges:{}});
+    },
+
+    handleFieldChange(change) {
+        // call action to hold the field value change
+        const flux = this.getFlux();
+        flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
+        let changes = _.cloneDeep(this.state.recordChanges);
+        changes[change.fid] = change.values;
+        this.setState({recordChanges:changes});
+    },
+
+    handleRecordChange(recId) {
+        let changes = this.state.recordChanges;
+        //calls action to save the record changes
         // validate happen here or in action
-        console.log(`record ${recId} changed` + JSON.stringify(changes) );
+        //console.log(`record ${recId} changed` + JSON.stringify(changes) );
 
         let payload = [];
         // columns id and new values array
         //[{"id":6, "value":"Claire"}]
-        Object.keys(changes).forEach(function (key) {
-            if (changes[key].oldVal != changes[key].newVal){
+        Object.keys(changes).forEach(function(key) {
+            if (changes[key].oldVal !== changes[key].newVal) {
                 let colChange = {};
                 colChange.id = +key;
                 colChange.value = changes[key].newVal;
@@ -68,6 +89,8 @@ let ReportContent = React.createClass({
         }, 1000);
 
     },
+
+
     /**
      * when we scroll the grid wrapper, hide the add record
      * icon for a bit
@@ -443,7 +466,9 @@ let ReportContent = React.createClass({
                                     uniqueIdentifier="Record ID#"
                                     keyField={this.props.fields && this.props.fields.keyField ? this.props.fields.keyField.name : "Record ID#" }
                                     appId={this.props.reportData.appId}
-                                    recordChanges={this.recordChanges}
+                                    onEditRecordStart={this.handleEditRecordStart}
+                                    onEditRecordCancel={this.handleEditRecordCancel}
+                                    onFieldChange={this.handleFieldChange}
                                     onRecordChange={this.handleRecordChange}
                                     tblId={this.props.reportData.tblId}
                                     rptId={this.props.reportData.rptId}
