@@ -161,15 +161,17 @@
             };
 
             it('Verify reports toolbar', function(done) {
-                // Verify the records count
-                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
-                // Verify display of filter search box
-                expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
-                // Verify display of facets filter button
-                expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
-                // Verify display of facets filter carat/dropdown button
-                expect(reportFacetsPage.reportFacetFilterBtnCaret.isDisplayed()).toBeTruthy();
-                done();
+                reportServicePage.waitForElement(reportServicePage.reportContainerEl).then(function() {
+                    // Verify the records count
+                    expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
+                    // Verify display of filter search box
+                    expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
+                    // Verify display of facets filter button
+                    expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
+                    // Verify display of facets filter carat/dropdown button
+                    expect(reportFacetsPage.reportFacetFilterBtnCaret.isDisplayed()).toBeTruthy();
+                    done();
+                });
             });
 
             it('Verify facet overlay menu contents are collapsed to start with and match table column headers', function(done) {
