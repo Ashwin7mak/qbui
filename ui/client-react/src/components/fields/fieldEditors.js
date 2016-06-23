@@ -176,7 +176,7 @@ export const TimeFieldEditor = React.createClass({
     },
     render() {
         const format = "YYYY-MM-DDTHH:mm:ss.SSS";
-        let localTime = this.props.value ? this.props.value.replace(/Z(\[.*?\])/, '') : moment.format(format);
+        let localTime = this.props.value ? this.props.value.replace(/Z(\[.*?\])/, '') : moment().format(format);
         localTime = dateTimeStringWithFixedMillisSuffix(localTime, 3);
 
         return <div className="cellEdit dateTimeField">
