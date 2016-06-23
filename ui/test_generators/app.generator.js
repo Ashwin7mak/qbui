@@ -10,7 +10,7 @@
 (function() {
     'use strict';
 
-    //var consts = require('../server/api/constants');
+    //var consts = require('../common/src/constants');
     var tableGenerator = require('./table.generator');
     var appConsts = require('./app.constants');
     var appBuilder = require('./app.builder');

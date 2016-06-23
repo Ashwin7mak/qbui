@@ -2,10 +2,10 @@
 var sinon = require('sinon');
 var request = require('supertest');
 
-var log = require('../logger').getLogger();
-var errors = require('../components/errors');
-var routeGroups = require('../routes/routeGroups');
-var routeConstants = require('../routes/routeConstants');
+var log = require('../src/logger').getLogger();
+var errors = require('../src/components/errors');
+var routeGroups = require('../src/routes/routeGroups');
+var routeConstants = require('../src/routes/routeConstants');
 
 var express = require('express');
 var app = express();
@@ -19,7 +19,7 @@ var mockConfig = {
     routeGroup: routeGroups.DEBUG,
 };
 
-require('../routes')(app, mockConfig);
+require('../src/routes')(app, mockConfig);
 
 /**
  * Unit tests for app generator

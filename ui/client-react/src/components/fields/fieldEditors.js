@@ -106,11 +106,11 @@ export const DateFieldEditor = React.createClass({
     },
 
     render() {
-        //let formatted = this.props.value ? formatDate(this.props.value, "YYYY-MM-DD") : "";
-        const fixedDate = this.props.value.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
+        const format = "YYYY-MM-DD";
+        const fixedDate = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : moment().format(format);
         return <div className="cellEdit dateTimeField">
             <DateTimeField dateTime={fixedDate}
-                           format="YYYY-MM-DD"
+                           format={format}
                            inputFormat="MM-DD-YYYY"
                            onChange={this.onChange}
                            mode="date"/>
@@ -148,12 +148,13 @@ export const DateTimeFieldEditor = React.createClass({
 
     render() {
 
-        let dateTime = this.props.value.replace(/(\[.*?\])/, ''); // remove [utc] suffix if present
+        const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
+        let dateTime = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : moment().format(format);
         dateTime = dateTimeStringWithFixedMillisSuffix(dateTime, 3);
 
         return <div className="cellEdit dateTimeField">
             <DateTimeField dateTime={dateTime}
-                           format="YYYY-MM-DDTHH:mm:ss.SSSZ"
+                           format={format}
                            inputFormat="MM-DD-YYYY hh:mm:ss A"
                            onChange={this.onChange}
                            mode="datetime"/>
@@ -174,13 +175,13 @@ export const TimeFieldEditor = React.createClass({
         this.props.onChange(newValue);
     },
     render() {
-
-        let localTime = this.props.value.replace(/Z(\[.*?\])/, ''); // remove Z[utc] suffix if present
+        const format = "YYYY-MM-DDTHH:mm:ss.SSS";
+        let localTime = this.props.value ? this.props.value.replace(/Z(\[.*?\])/, '') : moment().format(format);
         localTime = dateTimeStringWithFixedMillisSuffix(localTime, 3);
 
         return <div className="cellEdit dateTimeField">
             <DateTimeField dateTime={localTime}
-                           format="YYYY-MM-DDTHH:mm:ss.SSS"
+                           format={format}
                            inputFormat="h:mm:ss A"
                            onChange={this.onChange}
                            mode="time"/>

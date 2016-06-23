@@ -11,7 +11,7 @@
     var dataTypeConsts = require('./datatype.attributes.constants');
     var tableConsts = require('./table.constants');
     var rawValueGenerator = require('./rawValue.generator');
-    var log = require('../server/logger').getLogger();
+    var log = require('../server/src/logger').getLogger();
     var recordTypeMapping = {};
 
     module.exports = {

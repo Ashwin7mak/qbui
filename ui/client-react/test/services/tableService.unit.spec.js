@@ -14,7 +14,7 @@ describe('TableService functions', () => {
         tableService = new TableService();
     });
 
-    xit('test getHomePage function', () => {
+    it('test getHomePage function', () => {
         var appId = '123';
         var tableId = '456';
         var url = tableService.constructUrl(tableService.API.GET_HOMEPAGE, [appId, tableId]);

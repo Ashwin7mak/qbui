@@ -17,7 +17,7 @@ export const CellValueRenderer = React.createClass({
         case formats.NUMBER_FORMAT:
         case formats.RATING_FORMAT:
             return (<span className="cellData">
-                {this.props.value && <NumberCellValueRenderer value={this.props.display} attributes={this.props.attributes} />}
+                {this.props.value && <NumberCellValueRenderer value={this.props.value} attributes={this.props.attributes} />}
                 </span>);
 
         case formats.USER_FORMAT:

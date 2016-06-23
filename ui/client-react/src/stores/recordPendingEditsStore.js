@@ -47,7 +47,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     },
 
     onRecordEditCancel() {
-        // restore orginalRecord?
+        // restore originalRecord?
         this._initData();
         this.emit('change');
     },

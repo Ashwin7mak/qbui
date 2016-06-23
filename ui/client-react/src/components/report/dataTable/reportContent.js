@@ -32,7 +32,7 @@ let ReportContent = React.createClass({
 
         const appId = this.props.appId;
         const tblId = this.props.tblId;
-        var recId = data[this.props.uniqueIdentifier];
+        var recId = data[this.props.uniqueIdentifier].value;
         //create the link we want to send the user to and then send them on their way
         const link = `/app/${appId}/table/${tblId}/record/${recId}`;
 

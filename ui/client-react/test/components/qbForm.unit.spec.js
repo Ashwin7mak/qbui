@@ -83,44 +83,46 @@ const fakeQBFormData = {
     }
 };
 
+let flux = {};
+
 describe('QBForm functions', () => {
     'use strict';
 
     var component;
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} flux={flux}></QBForm>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         var qbForm = ReactDOM.findDOMNode(component);
         expect(qbForm).toBeDefined();
     });
 
     it('test render of tabs', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
         let tabs = TestUtils.scryRenderedComponentsWithType(component, TabPane);
         expect(tabs.length).toEqual(2);
     });
 
     it('test render of sections', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
         let sections = TestUtils.scryRenderedDOMComponentsWithClass(component, "formSection");
         expect(sections.length).toEqual(2);
     });
 
     it('test render of formElements', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
         let formElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement");
         expect(formElements.length).toEqual(2);
     });
 
     it('test render of text form elements', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
         let textElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement text");
         expect(textElements.length).toEqual(1);
     });
 
     it('test render of field form elements', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
         let fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
         expect(fieldElements.length).toEqual(1);
     });
