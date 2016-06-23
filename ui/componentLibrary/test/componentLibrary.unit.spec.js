@@ -2,11 +2,11 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 
-import ComponentLibraryWrapper from '../src/componentLibrary';
-import PropTable from '../src/PropTable';
-import ReactPlayground from '../src/ReactPlayground';
+import ComponentLibraryWrapper from '../src/components/componentLibrary';
+import PropTable from '../src/components/PropTable';
+import ReactPlayground from '../src/components/ReactPlayground';
 
-import QBIconDoc from '../docs/qbicon';
+import QBIconDoc from '../src/docs/qbicon';
 
 const fakeMetadata = {
     "QBPanel": {

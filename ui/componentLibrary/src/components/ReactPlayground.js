@@ -5,8 +5,8 @@ const classNames = require('classnames');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
-const QBicon = require('../../client-react/src/components/qbIcon/qbIcon');
-const QBPanel = require('../../client-react/src/components/QBPanel/qbpanel');
+const QBicon = require('../../../client-react/src/components/qbIcon/qbIcon');
+const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel');
 /* eslint-enable */
 import {SafeAnchor, Alert} from 'react-bootstrap';
 

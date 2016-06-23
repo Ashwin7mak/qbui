@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Metadata from '../src/Metadata';
-import ReactPlayground from '../src/ReactPlayground';
-import Examples from '../src/Examples';
-import PropTable from '../src/PropTable';
+import Metadata from '../components/Metadata';
+import ReactPlayground from '../components/ReactPlayground';
+import Examples from '../components/Examples';
+import PropTable from '../components/PropTable';
 
 export default function QBPanelDoc() {
     return (

@@ -12,7 +12,7 @@ var buildPath = path.join(__dirname, 'client-react/dist');
 
 var clientPath = path.join(__dirname, 'client-react');
 
-var componentLibraryPath = path.join(__dirname, 'componentLibrary');
+var componentLibraryPath = path.join(__dirname, 'componentLibrary/src');
 
 var envConfig = require('./server/src/config/environment');
 
