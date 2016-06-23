@@ -326,8 +326,10 @@
                 function callback(a) {
                     //  want case insensitive ordering, so ensure text is always lowercase for comparison.
                     //  Note: this does not affect the display data; strings are rendered with proper case..
-                    if (a[sortField] && typeof a[sortField] === 'string') {
-                        return a[sortField].toLowerCase();
+                    if (a[sortField]) {
+                        if (typeof a[sortField].value === 'string') {
+                            return a[sortField].value.toLowerCase();
+                        }
                     }
                 }
             );
