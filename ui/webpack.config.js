@@ -92,7 +92,7 @@ var config = {
                 exclude: [
                     nodeModulesPath,
                     // We don't want these to get compiled because ReactPlayground does that in the browser
-                    path.resolve(componentLibraryPath, '/examples')
+                    path.resolve(componentLibraryPath, 'examples')
                 ],
                 loaders: ['react-hot-loader', 'babel-loader']
             },
