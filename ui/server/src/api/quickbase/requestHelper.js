@@ -99,6 +99,8 @@
                     headers     : req.headers
                 };
 
+                this.setUserIdHeader(req);
+
                 if (config.isMockServer) {
                     opts.gzip = false;
                     opts.headers["accept-encoding"] = "";
@@ -133,6 +135,59 @@
             },
 
             /**
+             * Get the user ID from our ticket and set on the request object for logging.
+             *
+             * @param req
+             * @returns req
+             */
+            setUserIdHeader: function(req) {
+                var userId = "";
+                if (req && req.headers.cookie && !req.userId) {
+                    userId = this.ob32decoder(this.breakTicketDown(req.headers.cookie, 2));
+                }
+                req.userId = userId;
+                return req;
+            },
+
+            /**  final String ticket = this.currentTicketVersion + "_" + ob32When + "_" + ob32UserID + "_" + ob32RealmID + "_" + ob32UserTicketVersion + "_" + digest;
+             * A ticket is made up of 6 sections
+             * 0) current ticket version
+             * 1) ob32 encoded time in milliseconds when ticket expires
+             * 2) ob32 encoded userId
+             * 3) ob32 encoded realmId
+             * 4) ob32 encoded user Ticket Version
+             * 5) sha256 digest value (refer to createTicket in QBTicket.java for more information)
+             *
+             * @param fullTicket: the complete ticket as stored in the req.headers object
+             * @param section: the section of the ticket you want to return
+             * @returns {*}
+             */
+            breakTicketDown: function(fullTicket, section) {
+                var ticket = fullTicket.replace("ticket=","");
+                var ticketSections = ticket.split("_");
+                return ticketSections[section];
+            },
+
+            /**
+             * Decode a ob32 encoded string
+             *
+             * @param ticket
+             * @return userId
+             */
+            ob32decoder: function(ob32string) {
+                var ob32Characters = "abcdefghijkmnpqrstuvwxyz23456789";
+                var decoded = 0;
+                var place = 1;
+                for (var counter = ob32string.length -1; counter >= 0; counter--) {
+                    var oneChar = ob32string.charAt(counter);
+                    var oneDigit = ob32Characters.indexOf(oneChar);
+                    decoded += (oneDigit * place);
+                    place = place*32;
+                }
+                return decoded;
+            },
+
+            /**
              * Allows you to override the
              * @param requestOverride
              */
@@ -154,9 +209,11 @@
                     if (req.headers) {
                         if (!req.headers.tid) {
                             this.setTidHeader(req);
+                            this.setUserIdHeader(req);
                         }
                     } else {
                         this.setTidHeader(req);
+                        this.setUserIdHeader(req);
                     }
                 }
 

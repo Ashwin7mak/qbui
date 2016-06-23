@@ -146,6 +146,7 @@
         if (req) {
             filtered.method = req.method;
             filtered.url = req.url;
+            filtered.userId = req.userId
             if (req.headers) {
                 filtered.headers = {
                     tid: req.headers.tid,

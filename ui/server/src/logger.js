@@ -60,6 +60,7 @@
         addElement(obj, 'platform', agent.platform);
         addElement(obj, 'ip', ip);
         addElement(obj, 'body', req.body);
+        addElement(obj, 'userId', req.userId);
 
         return obj;
     }
