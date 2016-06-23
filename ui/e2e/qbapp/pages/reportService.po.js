@@ -256,6 +256,7 @@
         this.assertNavProperties = function(breakpointSize, open, offsetWidth) {
             var self = this;
             return browser.controlFlow().execute(function() {
+                e2eBase.sleep(browser.params.mediumSleep);
                 // Check properties of nav bar
                 // First subclass of leftNav deals with the small BP - either open or closed
                 // Second subclass is for the other BPs - either collapsed or expanded
