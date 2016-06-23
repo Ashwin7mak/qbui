@@ -14,7 +14,7 @@ var clientPath = path.join(__dirname, 'client-react');
 
 var componentLibraryPath = path.join(__dirname, 'componentLibrary');
 
-var envConfig = require('./server/config/environment');
+var envConfig = require('./server/src/config/environment');
 
 // 3 supported run-time environments..ONE and ONLY ONE variable is to be set to true.
 var PROD = (envConfig.env === 'PRODUCTION' || false);

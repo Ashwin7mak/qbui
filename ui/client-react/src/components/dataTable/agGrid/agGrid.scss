@@ -20,7 +20,7 @@ $grid-default-cell-padding: 8px;
 
 $row-bg-color: #fff;
 $row-border-color: #ddd;
-$row-box-shadow-color: #888;
+$row-box-shadow-color: #dcdcdc;
 $cell-edit-background-edit: #f3f8fe;
 
 // override default font style
@@ -36,15 +36,21 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 .agGrid {
+    flex: 1 1 auto;
     font-family: $font-family;
     color: $font-color;
     font-size: $grid-font-size;
     -webkit-font-smoothing: antialiased;
+    width:100%;
 
     .ag-body-container {
         background-color: $color2;
     }
 
+    /* prevent clipping of actions and dropdowns in 1st column */
+    .ag-pinned-left-cols-viewport {
+        overflow:visible;
+    }
     .gridHeaderCell {
         color: $header-cell-color;
         font-size: 12px;
@@ -87,17 +93,11 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-header-row .gridHeaderCell {
         border-right: 1px solid $header-cell-border;
         border-bottom: 2px solid $header-cell-border-bottom;
-        &:last-of-type {
-            border-right: 0px;
-        }
     }
 
     .ag-row .gridCell {
         border-right: 1px solid $row-cell-border-color;
         border-bottom: 1px solid $row-cell-border-color;
-        &:last-of-type {
-            border-right: 0px;
-        }
     }
     .ag-row-group .gridCell {
         border-right: 0px;
@@ -349,56 +349,6 @@ $cell-edit-background-edit: #f3f8fe;
     }
 }
 
-/* row actions on aggrid trickery
--- this isnt pretty but there is a good chance row actions design will change so for now just porting over logic from griddle*/
-
-.ag-body-viewport {
-    overflow:visible !important;
-}
-/* hide griddle cell containing actions */
-.ag-row .ag-cell {
-    &:nth-last-child(2) {
-        border-right: 0px;
-    }
-}
-.ag-header-row .ag-header-cell {
-    &:nth-last-child(2) {
-        border-right: 0px;
-    }
-}
-.ag-cell[colid="actions"]{
-    position: relative;
-    width: 0;
-    border: 0;
-    margin: 0;
-    padding: 0;
-    overflow: visible;
-
-    /* actions */
-    > div {
-        margin: 0;
-        visibility: hidden;
-        position: absolute;
-        display: flex;
-        flex-direction: row;
-        //align-items: center;
-        top: 0;
-        right: 0;
-        height: 100%;
-        background-color: $row-background-color-hover;
-        white-space: nowrap;
-        border-top: 1px dotted $row-cell-border-color;
-    }
-}
-
-.ag-row:hover .ag-cell.actions > div {
-    visibility: visible;
-
-}
-
-.selectedRows .ag-row:hover .ag-cell.actions > div {
-    visibility: hidden;
-}
 
 /* hide row editing tools by default */
 .editTools {
@@ -410,10 +360,8 @@ $cell-edit-background-edit: #f3f8fe;
     display:none !important;
 }
 
-/* last to rows are just for padding */
-.ag-row:last-child {
+.emptyCell {
     visibility:hidden;
-
 }
 
 .ag-body-container {
@@ -428,7 +376,7 @@ $cell-edit-background-edit: #f3f8fe;
 }
 .reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
 
-    box-shadow: -2px -2px 24px $row-box-shadow-color;
+    box-shadow: 0px 0px 14px $row-box-shadow-color;
 
     .ag-cell.gridCell {
 
@@ -526,7 +474,7 @@ $cell-edit-background-edit: #f3f8fe;
             flex-direction:column;
             flex: 0 0 auto;
             background-color:$cell-edit-background-edit;
-            box-shadow: -8px -2px 12px $row-box-shadow-color;
+            box-shadow: -2px 2px 8px $row-box-shadow-color;
             position:absolute;
             top:-26px;
             left:-31px;
@@ -568,4 +516,13 @@ $cell-edit-background-edit: #f3f8fe;
     }
 }
 
+/* ensure that group labels are visible with pinned left column */
+
+.ag-pinned-left-cols-container {
+    z-index:999;
+}
+
+.ag-group-cell-entire-row {
+    overflow: visible;
+}
 
