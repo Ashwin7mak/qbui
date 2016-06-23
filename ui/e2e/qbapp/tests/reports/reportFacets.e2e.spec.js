@@ -172,12 +172,12 @@
                 done();
             });
 
-            it('Verify facet overlay menu contents are collapsed to start with and matches with table column headers', function(done) {
+            it('Verify facet overlay menu contents are collapsed to start with and match table column headers', function(done) {
                 // Click on facet carat
                 reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
                     // Make sure the popup is displayed
-                    reportFacetsPage.waitForElement(reportFacetsPage.reportFacetPopUpMenu).then(function() {
-                        // Verify expand and collapse of each items in an popup menu
+                    reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetPopUpMenu).then(function() {
+                        // Verify expand and collapse of each items in popup menu
                         reportFacetsPage.unselectedFacetGroupsElList.then(function(elements) {
                             expect(elements.length).toBe(2);
                             elements.forEach(function(menuItem) {
@@ -200,10 +200,10 @@
                                 });
                             }).then(function() {
                                 reportServicePage.reportRecordsCount.click().then(function() {
-                                    reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetMenuContainer).then(function() {
-                                        reportFacetsPage.waitForElementToBeStale(reportFacetsPage.reportFacetPopUpMenu).then(function() {
-                                            done();
-                                        });
+                                    // Needed to get around stale element error
+                                    e2eBase.sleep(browser.params.smallSleep);
+                                    reportFacetsPage.waitForElementToBeStale(reportFacetsPage.reportFacetPopUpMenu).then(function() {
+                                        done();
                                     });
                                 });
                             });
@@ -264,7 +264,6 @@
                     }
                 ];
             }
-
 
             // Grab a random test case from the data provider
             var facetTestcase = facetTestCases()[Math.floor(Math.random() * facetTestCases().length)];

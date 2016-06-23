@@ -103,6 +103,7 @@
         this.griddleWrapperEl = element(by.className('gridWrapper'));
         this.agGridContainerEl = this.griddleWrapperEl.all(by.className('agGrid')).first();
         this.agGridBodyEl = this.agGridContainerEl.element(by.className('ag-body-container'));
+        this.agGridBodyViewportEl = element(by.className('ag-body-viewport'));
         this.agGridHeaderEl = this.agGridContainerEl.element(by.className('ag-header-container'));
         // All column headers from agGrid including first checkbox and last hidden actions column
         this.agGridColHeaderElList = this.agGridHeaderEl.all(by.className('ag-header-cell'));
@@ -115,7 +116,7 @@
         });
         // Edit Record Menu
         //TODO: We render an editTools element per row so create a element locator functions for that
-        this.agGridEditRecordMenu = this.agGridBodyEl.all(by.className('editTools')).first();
+        this.agGridEditRecordMenu = element(by.className('ag-body')).all(by.className('editTools')).first();
         this.agGridEditRecordButtons = this.agGridEditRecordMenu.all(by.tagName('button'));
         this.agGridSaveRecordButton = this.agGridEditRecordMenu.element(by.className('saveRecord'));
         this.agGridCancelSelectionButton = this.agGridEditRecordMenu.element(by.className('cancelSelection'));
@@ -137,8 +138,8 @@
          * Given a record element in agGrid, click on the selection checkbox for that record to open the edit menu
          * @param recordRowElement
          */
-        this.openRecordEditMenu = function(recordRowElement) {
-            return recordRowElement.element(by.className('ag-selection-checkbox')).click();
+        this.openRecordEditMenu = function(recordRowIndex) {
+            return element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-row')).get(recordRowIndex).element(by.className('ag-selection-checkbox')).click();
         };
 
         /**
