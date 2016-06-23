@@ -230,9 +230,6 @@
                 return Promise.all(fetchTextPromises);
             }).then(function(colHeaders) {
                 var fieldColHeaders = [];
-                // Remove the first column header (record select column) and the last (hidden record actions)
-                // Remove the select all checkbox column header
-                colHeaders.shift();
                 colHeaders.forEach(function(headerText) {
                     if (!headerText) {
                         throw Error('Did not find text for column header');

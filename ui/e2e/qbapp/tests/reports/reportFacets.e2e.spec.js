@@ -90,8 +90,8 @@
                             // Get all records from table before filter applied
                             reportServicePage.agGridRecordElList.map(function(row) {
                                 return {
-                                    'Text Field': row.all(by.className('ag-cell-no-focus')).get(2).getText(),
-                                    'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(5).getText()
+                                    'Text Field': row.all(by.className('ag-cell-no-focus')).get(1).getText(),
+                                    'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(4).getText()
                                 };
                             }).then(function(results) {
                                 for (var i = 0; i < results.length; i++) {
@@ -133,8 +133,8 @@
                     reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
                         reportServicePage.agGridRecordElList.map(function(row) {
                             return {
-                                'Text Field': row.all(by.className('ag-cell-no-focus')).get(2).getText(),
-                                'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(5).getText()
+                                'Text Field': row.all(by.className('ag-cell-no-focus')).get(1).getText(),
+                                'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(4).getText()
                             };
                         }).then(function(results) {
                             for (var i = 0; i < results.length; i++) {
