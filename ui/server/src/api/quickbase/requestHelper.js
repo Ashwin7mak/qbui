@@ -206,15 +206,8 @@
 
                 //  if no tid on the header, add it now
                 if (req) {
-                    if (req.headers) {
-                        if (!req.headers.tid) {
-                            this.setTidHeader(req);
-                            this.setUserIdHeader(req);
-                        }
-                    } else {
-                        this.setTidHeader(req);
-                        this.setUserIdHeader(req);
-                    }
+                    this.setTidHeader(req);
+                    this.setUserIdHeader(req);
                 }
 
                 return new Promise((resolve, reject) =>{
