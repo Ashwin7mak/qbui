@@ -102,11 +102,14 @@ let CardViewListHolder = React.createClass({
 
     /** card was swiped right, expose expose the checkboxes */
     onSwipe(delta) {
-        console.log(delta);
-        //this.setState({
-        //    resizeWidth: Math.max(delta, 40),
-        //    swiping: true
-        //});
+        let leftOffset = this.state.allowCardSelection ? -delta : -40-delta;
+        leftOffset = Math.min(leftOffset, 0);
+        leftOffset = Math.max(leftOffset, -40);
+
+        this.setState({
+            leftOffset,
+            swiping: true
+        });
 
     },
 
@@ -126,15 +129,12 @@ let CardViewListHolder = React.createClass({
 
         let cardViewListStyle = {};
         if (this.state.swiping) {
-            cardViewListClasses += "swiping";
+            cardViewListClasses += " swiping";
             cardViewListStyle = {
-                width: Math.max(0, this.state.resizeWidth)
+                left: this.state.leftOffset
             };
-            //cardStyle = {
-            //    marginLeft: -actionsStyle.width,
-            //    marginRight: actionsStyle.width
-            //};
         }
+
         return (
             <div className={cardViewListClasses} style={cardViewListStyle}>
                 <CardViewList ref="cardViewList" node={recordNodes}
