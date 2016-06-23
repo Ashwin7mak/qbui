@@ -39,7 +39,7 @@ let PerfStore = Fluxxor.createStore({
             actions.MEASURE_PERF, this.onMeasure,
             actions.LOG_MEASUREMENTS_PERF, this.onLogMeasurements,
             actions.DONE_ROUTE_PERF, this.onDone,
-            actions.NEW_ROUTE_PERF, this.onNewRoute,
+            actions.NEW_ROUTE_PERF, this.onNewRoute
 
         );
         this.ReactPerf = null;

@@ -9,10 +9,10 @@
     //Bluebird Promise library
     var Promise = require('bluebird');
     //Have the tests start an instance of node
-    require('../../server/app');
+    require('../../server/src/app');
 
     module.exports = function(config) {
-        var recordBase = require('../../server/api/test/recordApi.base.js')(config);
+        var recordBase = require('../../server/test/api/recordApi.base.js')(config);
         var e2eUtils = require('./e2eUtils.js');
         var appService = require('./services/appService.js');
         var recordService = require('./services/recordService.js');
@@ -104,11 +104,21 @@
                 e2eBase.appService.createApp(generatedApp).then(function(app) {
                     createdApp = app;
                     // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
+                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
                     // Generate the record JSON objects
-                    var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, numberOfRecords);
+                    var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
                     // Via the API create the records, a new report, then run the report.
-                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords);
+                    e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
+
+                    if (createdApp.tables[1]) {
+                        // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                        var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);
+                        // Generate the record JSON objects
+                        var table2GeneratedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, numberOfRecords);
+                        // Via the API create the records, a new report, then run the report.
+                        e2eBase.recordService.addRecords(createdApp, createdApp.tables[1], table2GeneratedRecords);
+                        e2eBase.reportService.createReport(createdApp.id, createdApp.tables[1].id);
+                    }
                 }).then(function() {
                     //TODO: Creating / running a report can be run async so break it out of this chain into a separate function
                     return e2eBase.reportService.createReport(createdApp.id, createdApp.tables[0].id);

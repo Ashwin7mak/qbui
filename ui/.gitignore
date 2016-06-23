@@ -15,11 +15,11 @@
 client-react/dist/
 
 # exclude express server local configuration and logs directory
-server/config/environment/local.js
-server/logs/
+server/src/config/environment/local.js
+server/src/logs/
 
 # local mock
-server/mockserver/db.json
+server/src/mockserver/db.json
 
 # miscellaneous files to not track
 npm-debug.log

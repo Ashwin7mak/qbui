@@ -26,7 +26,7 @@
     * to generate the ui/dist folder for deploy 
         * which will contain the server dir and
         * public/dist dir with the react and client bundle files 
-    * run NODE_ENV=prod server/app from ui/dist  for prod react interface 
+    * run NODE_ENV=prod server/src/app from ui/dist  for prod react interface 
      
 ## Run Unit tests with Karma:
 * From command window:
