@@ -18,7 +18,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
 var Nav = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore','FieldsStore', 'FormStore')],
+    mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore', 'FormStore')],
 
     contextTypes: {
         touch: React.PropTypes.bool,

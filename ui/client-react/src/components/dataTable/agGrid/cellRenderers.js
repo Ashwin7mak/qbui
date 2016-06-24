@@ -22,6 +22,7 @@ import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
 import './dateTimePicker.scss';
 
 import * as formats from '../../../constants/fieldFormats';
+import _ from 'lodash';
 
 /**
  * cell renderer
@@ -46,9 +47,10 @@ const CellRenderer = React.createClass({
         };
     },
 
+
     render: function() {
         // render the cell value and editor (CSS will hide one or the other)
-
+        let isEditable = !this.props.colDef.builtIn;
         if (this.props.initialValue === null) {
             return (<span className="emptyCell" />);
         }
@@ -56,14 +58,16 @@ const CellRenderer = React.createClass({
             <span className="cellWrapper">
 
                 <CellValueRenderer type={this.props.type}
+                                   isEditable={isEditable}
                                    value={this.state.valueAndDisplay.value}
                                    display={this.state.valueAndDisplay.display}
                                    attributes={this.props.colDef.datatypeAttributes} />
 
-                <CellEditor type={this.props.type}
+                { isEditable ?  <CellEditor type={this.props.type}
                             value={this.state.valueAndDisplay.value}
                             colDef={this.props.colDef}
-                            onChange={this.onChange} />
+                            onChange={this.onChange} /> :
+                    null}
             </span>);
     },
 
@@ -89,15 +93,18 @@ const CellRenderer = React.createClass({
     },
 
     cellChanges() {
-        let change = {
-            values : {
-                oldVal: this.props.params.data[this.props.params.column.colId],
-                newVal: this.state.valueAndDisplay
-            },
-            recId: this.props.params.data[this.props.params.context.keyField],
-            fid: +this.props.params.colDef.id
-        };
-        this.props.params.context.onFieldChange(change);
+        if (this.props && this.props.params &&
+            _.has(this.props.params, ['data', 'column.colId', 'context.keyField', 'colDef.id'])) {
+            let change = {
+                    values: {
+                        oldVal: this.props.params.data[this.props.params.column.colId],
+                        newVal: this.state.valueAndDisplay
+                    },
+                    recId: this.props.params.data[this.props.params.context.keyField],
+                    fid: +this.props.params.colDef.id
+                };
+            this.props.params.context.onFieldChange(change);
+        }
     },
     /**
      * cell was edited, update the r/w and r/o value
@@ -105,45 +112,47 @@ const CellRenderer = React.createClass({
      */
     cellEdited(value) {
         let newDisplay = value;
+        let theVals = {
+            value: value,
+            display: newDisplay
+        };
+        // this.state.valueAndDisplay.value = value;
+        // this.state.valueAndDisplay.display = newDisplay;
 
-        this.state.valueAndDisplay.value = value;
-        this.state.valueAndDisplay.display = newDisplay;
-
-        this.setState(this.state);
-        this.cellChanges();
+        this.setState({valueAndDisplay : _.clone(theVals)}, ()=>{this.cellChanges();});
     },
 
     /**
      * date, datetime, or time cell was edited
      * @param value
      */
-    dateTimeCellEdited(value) {
-        let newValue = value;
-        this.state.valueAndDisplay.value = value;
-
+    dateTimeCellEdited(newValue) {
         let newDisplay = value;
 
         switch (this.props.type) {
         case formats.DATE_FORMAT: {
             // normalized form is YYYY-MM-DD
-            newDisplay = dateTimeFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
+            newDisplay = dateTimeFormatter.format(value, this.props.colDef.datatypeAttributes);
             break;
         }
         case formats.TIME_FORMAT: {
             // normalized form is 1970-01-01THH:MM:SSZ
-            newDisplay = timeOfDayFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
+            newDisplay = timeOfDayFormatter.format(value, this.props.colDef.datatypeAttributes);
             break;
         }
         case formats.DATETIME_FORMAT: {
             // normalized form is YYYY-MM-DDTHH:MM:SSZ
-            newDisplay = dateTimeFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
+            newDisplay = dateTimeFormatter.format(value, this.props.colDef.datatypeAttributes);
             break;
         }
         }
-
-        this.state.valueAndDisplay.display = newDisplay;
-        this.setState(this.state);
-        this.cellChanges();
+        // this.state.valueAndDisplay.value = value;
+        // this.state.valueAndDisplay.display = newDisplay;
+        let theVals = {
+            value: newValue,
+            display: newDisplay
+        };
+        this.setState({valueAndDisplay : _.clone(theVals)}, ()=>{this.cellChanges();});
     },
 
     /**
@@ -153,13 +162,14 @@ const CellRenderer = React.createClass({
     numericCellEdited(value) {
         let newValue = Number(value);
 
-        this.state.valueAndDisplay.value = newValue;
+        let theVals = {
+            value: newValue,
+        };
+        let newDisplay = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
 
-        let newDisplay = numericFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
+        theVals.display  = newDisplay;
 
-        this.state.valueAndDisplay.display = newDisplay;
-        this.setState(this.state);
-        this.cellChanges();
+        this.setState({valueAndDisplay : _.clone(theVals)}, ()=>{this.cellChanges();});
     }
 });
 
@@ -169,7 +179,7 @@ class CellRendererFactory  {
         return <CellRenderer type={type}
                              colDef={props.params.column.colDef}
                              initialValue={props.params.value}
-                             params={props.params}/>
+                             params={props.params}/>;
     }
 }
 

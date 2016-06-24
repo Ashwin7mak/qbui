@@ -282,6 +282,8 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onFieldChange = this.props.onFieldChange;
         this.gridOptions.context.onEditRecordStart = this.props.onEditRecordStart;
         this.gridOptions.context.onEditRecordCancel = this.props.onEditRecordCancel;
+        this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
+
         this.gridOptions.context.keyField = this.props.keyField;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;

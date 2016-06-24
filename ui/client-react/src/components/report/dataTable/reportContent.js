@@ -57,7 +57,7 @@ let ReportContent = React.createClass({
                     var fids = {};
                     var recKeys = Object.keys(rec);
                     // have fid lookup hash
-                    recKeys.forEach(function(item){
+                    recKeys.forEach(function(item) {
                         fids[rec[item].id] = rec[item];
                     });
                     orig.fids = fids;
@@ -86,7 +86,9 @@ let ReportContent = React.createClass({
         let changes = _.cloneDeep(this.props.pendEdits.recordChanges);
         changes[change.fid] = change.values;
     },
-
+    getPendingChanges() {
+        return this.props.pendEdits.recordChanges;
+    },
     handleRecordChange(recId) {
         let changes = _.cloneDeep(this.props.pendEdits.recordChanges);
         //calls action to save the record changes
@@ -106,7 +108,7 @@ let ReportContent = React.createClass({
             }
         });
         //for (changes)
-        this.props.flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.id, payload);
+        this.props.flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);
 
     },
 
@@ -491,6 +493,7 @@ let ReportContent = React.createClass({
                                     onFieldChange={this.handleFieldChange}
                                     onRecordChange={this.handleRecordChange}
                                     getOrigRec={this.getOrigRec}
+                                    getPendingChanges={this.getPendingChanges}
                                     tblId={this.props.reportData.tblId}
                                     rptId={this.props.reportData.rptId}
                                     reportHeader={this.props.reportHeader}
