@@ -186,27 +186,17 @@
             });
         });
 
-        e2eConsts.NavDimensionsDataProvider().forEach(function(testBreakpoints) {
-            it(testBreakpoints.breakpointSize + ' breakpoint Special characters Test', function(done) {
-                e2eBase.resizeBrowser(testBreakpoints.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    //go to report page directly
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
-                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                        if (testBreakpoints.breakpointSize === 'small') {
-                            //verify present in DOM but not displayed
-                            expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeFalsy();
-                            done();
-                        } else {
-                            reportServicePage.reportFilterSearchBox.clear().sendKeys('@#^&*!!', protractor.Key.ENTER);
-                            //sleep for loading of table to finish
-                            e2eBase.sleep(browser.params.mediumSleep);
-                            expect(reportServicePage.griddleWrapperEl.getText()).toEqual('There is no data to display.');
-                            expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
-                            done();
-                        }
-                    });
-                });
+        it('Special characters Test', function(done) {
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                reportServicePage.reportFilterSearchBox.clear().sendKeys('@#^&*!!', protractor.Key.ENTER);
+                //sleep for loading of table to finish
+                e2eBase.sleep(browser.params.mediumSleep);
+                expect(reportServicePage.griddleWrapperEl.getText()).toEqual('There is no data to display.');
+                expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
+                done();
             });
         });
+
     });
 }());

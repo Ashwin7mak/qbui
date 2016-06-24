@@ -263,47 +263,48 @@
                 ];
             }
 
-            TestCases().forEach(function(testCase) {
-                it('' + testCase.message, function(done) {
-                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                        //click on sort/grp Icon
-                        reportSortingPage.clickSortAndGroupIcon();
-                    }).then(function() {
-                        //Verify the title
-                        expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
-                        //Verify title of groupBy
-                        expect(reportSortingPage.reportGroupByContainerTitle.getText()).toEqual('Group');
-                    }).then(function() {
-                        //Select group By items
-                        for (var i = 0; i < testCase.groupBy.length; i++) {
-                            reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
-                        }
-                    }).then(function() {
-                        //Select sort By items
-                        for (var i = 0; i < testCase.sortBy.length; i++) {
-                            reportSortingPage.selectSortByItems(testCase.sortBy[i]);
-                        }
-                    }).then(function() {
-                        //verify the grpBy fields
-                        //verify the field name, delete button, sort button and prefix
-                        reportSortingPage.verifySelectedGroupByFields(testCase.groupBy);
-                    }).then(function() {
-                        //Verify the sortBy fields
-                        //verify the field name, delete button, sort button and prefix
-                        reportSortingPage.verifySelectedSortByFields(testCase.sortBy);
-                    }).then(function() {
-                        //Click apply button
-                        reportSortingPage.clickApply();
-                    }).then(function() {
-                        //verify the sorting/grouping results with expected
-                        if (testCase.flag.includes("groupOnly")) {
-                            verifyTableResults(true, testCase.expectedTableResults);
-                        } else {
-                            // Verify table results with expected
-                            verifyTableResults(false, testCase.expectedTableResults);
-                        }
-                        done();
-                    });
+            // Grab a random test case from the data provider
+            var sortAndGroupTestCase = TestCases()[Math.floor(Math.random() * TestCases().length)];
+
+            it('' + sortAndGroupTestCase.message, function(done) {
+                reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                    //click on sort/grp Icon
+                    reportSortingPage.clickSortAndGroupIcon();
+                }).then(function() {
+                    //Verify the title
+                    expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                    //Verify title of groupBy
+                    expect(reportSortingPage.reportGroupByContainerTitle.getText()).toEqual('Group');
+                }).then(function() {
+                    //Select group By items
+                    for (var i = 0; i < sortAndGroupTestCase.groupBy.length; i++) {
+                        reportSortingPage.selectGroupByItems(sortAndGroupTestCase.groupBy[i]);
+                    }
+                }).then(function() {
+                    //Select sort By items
+                    for (var i = 0; i < sortAndGroupTestCase.sortBy.length; i++) {
+                        reportSortingPage.selectSortByItems(sortAndGroupTestCase.sortBy[i]);
+                    }
+                }).then(function() {
+                    //verify the grpBy fields
+                    //verify the field name, delete button, sort button and prefix
+                    reportSortingPage.verifySelectedGroupByFields(sortAndGroupTestCase.groupBy);
+                }).then(function() {
+                    //Verify the sortBy fields
+                    //verify the field name, delete button, sort button and prefix
+                    reportSortingPage.verifySelectedSortByFields(sortAndGroupTestCase.sortBy);
+                }).then(function() {
+                    //Click apply button
+                    reportSortingPage.clickApply();
+                }).then(function() {
+                    //verify the sorting/grouping results with expected
+                    if (sortAndGroupTestCase.flag.includes("groupOnly")) {
+                        verifyTableResults(true, sortAndGroupTestCase.expectedTableResults);
+                    } else {
+                        // Verify table results with expected
+                        verifyTableResults(false, sortAndGroupTestCase.expectedTableResults);
+                    }
+                    done();
                 });
             });
 
@@ -408,41 +409,43 @@
                 ];
             }
 
-            sortIconTestCases().forEach(function(testCase) {
-                it('' + testCase.message, function(done) {
-                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                        //click on sort/grp Icon
-                        reportSortingPage.clickSortAndGroupIcon();
-                    }).then(function() {
-                        //Select group By items
-                        for (var i = 0; i < testCase.groupBy.length; i++) {
-                            reportSortingPage.selectGroupByItems(testCase.groupBy[i]);
-                        }
-                    }).then(function() {
-                        //Select sort By items
-                        for (var i = 0; i < testCase.sortBy.length; i++) {
-                            reportSortingPage.selectSortByItems(testCase.sortBy[i]);
-                        }
-                    }).then(function() {
-                        for (var i = 0; i < testCase.sortOrderIconInGrpBy.length; i++) {
-                            // Click on sortOrderIcon in GroupBy Fields
-                            reportSortingPage.selectSortByIconInGroupBy(testCase.sortOrderIconInGrpBy[i].fieldIndex, testCase.sortOrderIconInGrpBy[i].sortOrder);
-                        }
-                    }).then(function() {
-                        for (var j = 0; j < testCase.sortOrderIconInSortBy.length; j++) {
-                            //Click on sortOrderIcon in SortBy Fields
-                            reportSortingPage.selectSortByIconInSortBy(testCase.sortOrderIconInSortBy[j].fieldIndex, testCase.sortOrderIconInSortBy[j].sortOrder);
-                        }
-                    }).then(function() {
-                        //Click apply button
-                        reportSortingPage.clickApply();
-                    }).then(function() {
-                        //verify the sorting/grouping results with expected
-                        verifyTableResults(false, testCase.expectedTableResults);
-                        done();
-                    });
+            // Grab a random test case from the data provider
+            var sortIconTestCase = sortIconTestCases()[Math.floor(Math.random() * sortIconTestCases().length)];
+
+            it('' + sortIconTestCase.message, function(done) {
+                reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                    //click on sort/grp Icon
+                    reportSortingPage.clickSortAndGroupIcon();
+                }).then(function() {
+                    //Select group By items
+                    for (var i = 0; i < sortIconTestCase.groupBy.length; i++) {
+                        reportSortingPage.selectGroupByItems(sortIconTestCase.groupBy[i]);
+                    }
+                }).then(function() {
+                    //Select sort By items
+                    for (var i = 0; i < sortIconTestCase.sortBy.length; i++) {
+                        reportSortingPage.selectSortByItems(sortIconTestCase.sortBy[i]);
+                    }
+                }).then(function() {
+                    for (var i = 0; i < sortIconTestCase.sortOrderIconInGrpBy.length; i++) {
+                        // Click on sortOrderIcon in GroupBy Fields
+                        reportSortingPage.selectSortByIconInGroupBy(sortIconTestCase.sortOrderIconInGrpBy[i].fieldIndex, sortIconTestCase.sortOrderIconInGrpBy[i].sortOrder);
+                    }
+                }).then(function() {
+                    for (var j = 0; j < sortIconTestCase.sortOrderIconInSortBy.length; j++) {
+                        //Click on sortOrderIcon in SortBy Fields
+                        reportSortingPage.selectSortByIconInSortBy(sortIconTestCase.sortOrderIconInSortBy[j].fieldIndex, sortIconTestCase.sortOrderIconInSortBy[j].sortOrder);
+                    }
+                }).then(function() {
+                    //Click apply button
+                    reportSortingPage.clickApply();
+                }).then(function() {
+                    //verify the sorting/grouping results with expected
+                    verifyTableResults(false, sortIconTestCase.expectedTableResults);
+                    done();
                 });
             });
+
 
             it('Report Settings: with sortLists no Facets : Verify the Sort & Group popup respects the report settings', function(done) {
                 //go to report with sortLists page directly
@@ -620,7 +623,7 @@
          * SMALL BREAKPOINT - Use Reports without facets or sortLists
          */
 
-        describe('SMALL: Report Settings: No Facets No sortLists', function() {
+        xdescribe('SMALL: Report Settings: No Facets No sortLists', function() {
 
             beforeAll(function(done) {
                 e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
