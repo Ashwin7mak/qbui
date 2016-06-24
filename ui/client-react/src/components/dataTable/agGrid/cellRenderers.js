@@ -96,13 +96,13 @@ const CellRenderer = React.createClass({
         if (this.props && this.props.params &&
             _.has(this.props.params, ['data', 'column.colId', 'context.keyField', 'colDef.id'])) {
             let change = {
-                    values: {
-                        oldVal: this.props.params.data[this.props.params.column.colId],
-                        newVal: this.state.valueAndDisplay
-                    },
-                    recId: this.props.params.data[this.props.params.context.keyField],
-                    fid: +this.props.params.colDef.id
-                };
+                values: {
+                    oldVal: this.props.params.data[this.props.params.column.colId],
+                    newVal: this.state.valueAndDisplay
+                },
+                recId: this.props.params.data[this.props.params.context.keyField],
+                fid: +this.props.params.colDef.id
+            };
             this.props.params.context.onFieldChange(change);
         }
     },
