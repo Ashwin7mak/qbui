@@ -1,2 +1,0 @@
-        "no-descending-specificity": true,
-        "no-unsupported-browser-features": [true, { "severity": "warning" }],
