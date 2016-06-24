@@ -36,15 +36,21 @@ let CardView = React.createClass({
     },
 
     createField(c, curKey) {
+        let fieldObject = this.props.data[curKey];
+        let fieldValue = "";
+        if (fieldObject) {
+            fieldValue = fieldObject.display;
+        }
+
         return (<div key={c} className="field">
             <span className="fieldLabel">{curKey}</span>
-            <span className="fieldValue">{this.props.data[curKey].display}</span>
+            <span className="fieldValue">{fieldValue}</span>
         </div>);
     },
     createTopField(firstFieldValue) {
         return (
             <div className="top-card-row field">
-                <strong>{firstFieldValue.display}</strong>
+                <strong>{firstFieldValue}</strong>
                 <div className="card-expander" onClick={this.handleMoreCard}>
                     <QBicon icon="caret-right" className={this.state.showMoreCards ? "qbPanelHeaderIcon rotateDown" : "qbPanelHeaderIcon rotateUp"}/>
                 </div>
@@ -57,7 +63,11 @@ let CardView = React.createClass({
         if (!keys.length) {
             return null;
         }
-        let firstFieldValue = this.props.data[keys[0]];
+        let firstFieldObject = this.props.data[keys[0]];
+        let firstFieldValue = "";
+        if (firstFieldObject) {
+            firstFieldValue = firstFieldObject.display;
+        }
         var topField = this.createTopField(firstFieldValue);
         for (var i = 1; i < keys.length; i++) {
             fields.push(this.createField(i, keys[i]));
