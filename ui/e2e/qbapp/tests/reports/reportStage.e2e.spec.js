@@ -68,14 +68,14 @@
                 if (testcase.breakpointSize !== 'small') {
                     e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                         // Verify that the report Stage is expanded by default
-                        reportServicePage.waitForElement(reportServicePage.reportStageBtn).then(function () {
+                        reportServicePage.waitForElement(reportServicePage.reportStageBtn).then(function() {
                             // Click on report Stage button to collapse the stage
-                            reportServicePage.reportStageBtn.click().then(function () {
+                            reportServicePage.reportStageBtn.click().then(function() {
                                 // Sleep needed for animation of stage
                                 e2eBase.sleep(browser.params.smallSleep);
                                 expect(reportServicePage.reportStageArea.getAttribute('clientHeight')).toMatch("0");
                                 expect(reportServicePage.reportStageArea.getAttribute('clientWidth')).toMatch("0");
-                                reportServicePage.reportStageBtn.click().then(function () {
+                                reportServicePage.reportStageBtn.click().then(function() {
                                     // Sleep needed for animation of stage
                                     e2eBase.sleep(browser.params.smallSleep);
                                     expect(reportServicePage.reportStageArea.isDisplayed()).toBeTruthy();

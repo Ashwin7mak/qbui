@@ -16,9 +16,8 @@
             baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportGrpAndSortViaIcon.e2e.spec.js'],
+        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'],
         // ----- Capabilities to be passed to the webdriver instance ----
         //
         // For a full list of available capabilities, see
