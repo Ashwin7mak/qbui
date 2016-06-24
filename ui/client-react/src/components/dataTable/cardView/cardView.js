@@ -78,10 +78,16 @@ let CardView = React.createClass({
 
     /**
      * swipe in progress
-     * @param event
+     *
      * @param delta x delta from touch starting position
+     * @param isLeftSwipe (swiped left relative to starting point)
      */
-    swiping(event, delta) {
+    swiping(deltaX, isLeftSwipe) {
+
+        // as we swipe we either continue resizing either a) the row actions
+        // or b) the selection column if we've started that process, or start
+        // to resize one or the other depending on the swipe direction
+        // (hence the tricky logic below)
 
         const selectionOpen = this.props.allowCardSelection();
 
@@ -91,7 +97,7 @@ let CardView = React.createClass({
         if (!this.state.swipingActions && !this.state.swipingSelection) {
             // starting a new swipe
 
-            swipingActions = this.state.showActions || (!selectionOpen && delta > 0);
+            swipingActions = this.state.showActions || (!selectionOpen && isLeftSwipe);
             swipingSelection = !swipingActions;
 
             this.setState({
@@ -100,16 +106,20 @@ let CardView = React.createClass({
             });
         }
 
-        // handle the swipe itself
+        // handle the resize of the relevant component
+
+        if (!isLeftSwipe) {
+            deltaX = -deltaX;
+        }
 
         if (swipingActions) {
-            // add delta to current width (MAX_ACTIONS_RESIZE_WITH if open, 0 if closed) to get new size
+            // add deltaX to current width (MAX_ACTIONS_RESIZE_WITH if open, 0 if closed) to get new size
             this.setState({
-                resizeWidth: Math.max(this.state.showActions ? (delta + MAX_ACTIONS_RESIZE_WITH) : delta, 0)
+                resizeWidth: Math.max(this.state.showActions ? (deltaX + MAX_ACTIONS_RESIZE_WITH) : deltaX, 0)
             });
         } else {
             // swiping right - delegate swipe to parent components (swiping checkbox column)
-            this.props.onSwipe(delta);
+            this.props.onSwipe(deltaX);
         }
     },
 
@@ -191,7 +201,8 @@ let CardView = React.createClass({
 
             return (
                 <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swipingActions ? "actionsOpen" : "actionsClosed") }
-                            onSwiping={this.swiping}
+                            onSwipingLeft={(ev, delta) => {this.swiping(delta, true);}}
+                            onSwipingRight={(ev, delta) => {this.swiping(delta, false);}}
                             onSwipedLeft={this.swipedLeft}
                             onSwipedRight={this.swipedRight} >
 

@@ -166,19 +166,19 @@ describe('Report Mobile View functions', () => {
         // with null event (not needed) and -/+ deltas (right/left)
 
         // swipe left to reveal row actions
-        cardView.swiping(null, 100);
+        cardView.swiping(100, true);
         cardView.swipedLeft();
 
         // close row actions
-        cardView.swiping(null, -100);
+        cardView.swiping(100, false);
         cardView.swipedRight();
 
         // swipe right to reveal checkboxes
-        cardView.swiping(null, -100);
+        cardView.swiping(100, false);
         cardView.swipedRight();
 
         // close checkboxes
-        cardView.swiping(null, 100);
+        cardView.swiping(100, true);
         cardView.swipedLeft();
     });
 });

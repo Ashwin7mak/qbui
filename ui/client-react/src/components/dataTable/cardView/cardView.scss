@@ -167,11 +167,12 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
     top: 0;
     right: 0;
     overflow-x: hidden;
+
     white-space: nowrap;
     position: absolute;
 
     .recordActions {
-
+        width: 100%;
         .actionIcons {
             display: flex;
             flex-direction: row;
