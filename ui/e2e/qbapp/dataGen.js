@@ -20,14 +20,14 @@
     var realmToUse = 'localhost';       // change this to a string i.e. "myRealm" of an existing realm to use
                                        // if you leave realmToUse null it will randomly generated a new realm name
 
-    var config = require('../../server/config/environment');
+    var config = require('../../server/src/config/environment');
     if (realmToUse) {
         config.realmToUse = realmToUse;
     }
 
     //Require the e2e base class and constants modules
     var e2eBase = require('../common/e2eBase.js')(config);
-    var consts = require('../../server/api/constants.js');
+    var consts = require('../../common/src/constants.js');
 
     var promise = require('bluebird');
     var chance = require('chance').Chance();

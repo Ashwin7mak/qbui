@@ -11,7 +11,7 @@ module.exports = function(grunt) {
 
     var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
     var buildDir =  path.join(__dirname, '/build');
-    var localJsFile =  path.join(__dirname, '/server/config/environment/local.js');
+    var localJsFile =  path.join(__dirname, '/server/src/config/environment/local.js');
 
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
     var sauceJobName = grunt.option('sauceJobName') || 'e2e_' + currentDateTime;
     var sauceKey = grunt.option('sauceKey');
 
-    var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'tunnel_' + currentDateTime;
+    var tunnelIdentifier = grunt.option('tunnelIdentifier') || 'default_tunnel_' + currentDateTime;
     //We need to pass along --proxy-tunnel so that the tunnel will also use the proxy to communicate with the sauce apis
     //sauce-connect-launcher won't take an explicit no arg argument, so we are "leveraging" their mechanism for passing
     //arguments along to sauce-connect-launcher
@@ -390,7 +390,7 @@ module.exports = function(grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src    : ['server/**/test/' + mochaUnitTest]
+                src    : ['server/test/**/' + mochaUnitTest]
             },
 
             testGen: {
@@ -401,7 +401,7 @@ module.exports = function(grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src    : ['server/**/test/' + mochaUnitTest]
+                src    : ['server/test/**/' + mochaUnitTest]
             },
 
             integration: {
@@ -414,16 +414,16 @@ module.exports = function(grunt) {
                         return 'mocha-jenkins-reporter';
                     }())
                 },
-                src    : ['server/**/test/' + mochaIntTest]
+                src    : ['server/test/**/' + mochaIntTest]
             }
         },
 
         //  Code coverage against the express code
         mocha_istanbul: {
             coverage: {
-                src    : ['server/**/test/*.unit.spec.js', 'common/**/test/*.unit.spec.js'],
+                src    : ['server/test', 'common/test'],
                 options: {
-                    mask          : '**/*.spec.js',
+                    mask          : '**/*.unit.spec.js',
                     root          : '.',
                     noColors      : !useColors,
                     reportFormats : ['lcov'],
@@ -537,23 +537,24 @@ module.exports = function(grunt) {
         sauce_connect: {
             local: {
                 options: {
-                    username        : 'sbg_qbse',
+                    username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
                     proxy           : httpProxy,
                     tunnelIdentifier: tunnelIdentifier,
-                    verbose         : grunt.option('verbose') === true,
+                    verbose         : true,
                     logger          : console.log,
                     dns             : sauceDns
                 }
             },
             aws: {
                 options: {
-                    username        : 'sbg_qbse',
+                    username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
-                    proxy           : httpProxy,
+                    proxy           : 'egressproxy.quickbaserocks.com:80',
                     tunnelIdentifier: tunnelIdentifier,
-                    verbose         : grunt.option('verbose') === true,
-                    logger          : console.log
+                    proxyTunnel     : true,
+                    verbose         : true,
+                    logfile         : 'sauceConnect.log'
                 }
             }
         },

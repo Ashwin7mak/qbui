@@ -13,7 +13,7 @@ var buildPath = path.join(__dirname, 'client-react/dist');
 
 var clientPath = path.join(__dirname, 'client-react');
 
-var envConfig = require('./server/config/environment');
+var envConfig = require('./server/src/config/environment');
 
 // 3 supported run-time environments..ONE and ONLY ONE variable is to be set to true.
 var PROD = (envConfig.env === 'PRODUCTION' || false);
@@ -104,7 +104,10 @@ var config = {
                 ],
                 loader: 'url-loader'
             },
-
+            {
+                include: /\.json$/,
+                loaders: ["json-loader"]
+            },
             // SASS - transformed to css,
             {
                 test: /\.scss$/,

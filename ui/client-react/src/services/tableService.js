@@ -4,9 +4,6 @@ import NumberUtils from '../utils/numberUtils';
 import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
 import Promise from 'bluebird';
-import {sampleReportModel} from './sampleReportModel.js';
-
-
 
 class TableService extends BaseService {
 
@@ -26,12 +23,8 @@ class TableService extends BaseService {
      * @returns {Promise.<{data}>}
      */
     getHomePage(appId, tableId) {
-        let params = {};
-
-        return Promise.resolve({data: sampleReportModel});
-        //TODO add a node end point.
-        //let url = super.constructUrl(this.API.GET_HOMEPAGE, [appId, tableId]);
-        //return super.get(url, {params:params});
+        let url = super.constructUrl(this.API.GET_HOMEPAGE, [appId, tableId]);
+        return super.get(url);
     }
 }
 

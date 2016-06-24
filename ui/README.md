@@ -72,7 +72,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
 
     The top level of the project holds the CI Jenkins Gradle related files and the source for the ui is under the ui directory
 
-     There is a node_modules folder which is managed by package.json. 
+     Node modules are managed by package.json. 
 
     Grunt tasks are defined in the Gruntfile.js 
 
@@ -88,17 +88,17 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
     git clone -b master https://github.intuit.com/QuickBase/qbui.git
     ```
 
-    *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed. Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12). 
+    *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12). 
 
 ##Configuring
-Environment specific configurations reside in the qbui/ui/server/config/environment directory. The application requires a run-time environment to be defined and configured.  
+Environment specific configurations reside in the qbui/ui/server/src/config/environment directory. The application requires a run-time environment to be defined and configured.  
 
 For developing set this environment variable in your bash profile
 `export NODE_ENV=local`
 
 By default, the server runs in local development mode, meaning a local configuration file must be defined. As this file is not tracked by git, to run locally, you will need to do the following:
 
-- copy \<project root\>qbui/ui/server/config/environment/local.js.sample into the local.js
+- copy \<project root\>qbui/ui/server/src/config/environment/local.js.sample into the local.js
 
 Notes about the above configuration:
 
@@ -122,6 +122,8 @@ The following run-time environment variable is supported:
 ##Instructions to run server and watch for changes 
 
 * `cd` to the \<project root\>qbui/ui directory.
+
+* run 'npm install' to install node modules
 
 * To launch the node web server (express) and it will update server as you make edits run
 
@@ -372,7 +374,7 @@ based on the security requirements of each.
 
   a) Copy the certificate(cert.pem) and private key(private.pem) to the 'keys' folder within the project.  The path is:
 
-     ../quickbaseui/ui/server/config/keys
+     ../quickbaseui/ui/server/src/config/keys
 
      NOTE: this is a new folder intended to hold run-time environments certs.  Given the sensitive nature of the content, other than the
      .gitignore file, all files put into this folder are not tracked by git.
@@ -454,6 +456,7 @@ Contributors
 + Lisa Davidson
 + Mark Roper
 + Micah Zimring
++ Rick Beyer
 
       
       

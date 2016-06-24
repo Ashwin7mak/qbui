@@ -8,8 +8,11 @@
     'use strict';
     //Bluebird Promise library
     var Promise = require('bluebird');
+    //Have the tests start an instance of node
+    require('../../server/src/app');
+
     module.exports = function(config) {
-        var recordBase = require('../../server/api/test/recordApi.base.js')(config);
+        var recordBase = require('../../server/test/api/recordApi.base.js')(config);
         var e2eUtils = require('./e2eUtils.js');
         var appService = require('./services/appService.js');
         var recordService = require('./services/recordService.js');
@@ -101,11 +104,21 @@
                 e2eBase.appService.createApp(generatedApp).then(function(app) {
                     createdApp = app;
                     // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
+                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
                     // Generate the record JSON objects
-                    var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, numberOfRecords);
+                    var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
                     // Via the API create the records, a new report, then run the report.
-                    return e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords);
+                    e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
+
+                    if (createdApp.tables[1]) {
+                        // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                        var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);
+                        // Generate the record JSON objects
+                        var table2GeneratedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, numberOfRecords);
+                        // Via the API create the records, a new report, then run the report.
+                        e2eBase.recordService.addRecords(createdApp, createdApp.tables[1], table2GeneratedRecords);
+                        e2eBase.reportService.createReport(createdApp.id, createdApp.tables[1].id);
+                    }
                 }).then(function() {
                     //TODO: Creating / running a report can be run async so break it out of this chain into a separate function
                     return e2eBase.reportService.createReport(createdApp.id, createdApp.tables[0].id);
@@ -130,91 +143,91 @@
                 var recordList;
                 // Create the table schema (map object) to pass into the app generator
                 var tableToFieldToFieldTypeMap = {};
-                tableToFieldToFieldTypeMap['table 1'] = {};
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[1]] = {
+                tableToFieldToFieldTypeMap['Table 1'] = {};
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[1]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.TEXT
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[2]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[2]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.NUMERIC
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[3]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[3]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.CURRENCY
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[4]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[4]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.PERCENT
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[5]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[5]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.RATING
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[6]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[6]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.DATE
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[7]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[7]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.DATE_TIME
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[8]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[8]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.TIME_OF_DAY
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[9]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[9]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.DURATION
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[10]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[10]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.CHECKBOX
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[11]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[11]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.PHONE_NUMBER
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[12]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[12]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.EMAIL_ADDRESS
                 };
-                tableToFieldToFieldTypeMap['table 1'][e2eConsts.reportFieldNames[13]] = {
+                tableToFieldToFieldTypeMap['Table 1'][e2eConsts.reportFieldNames[13]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.URL
                 };
-                tableToFieldToFieldTypeMap['table 2'] = {};
-                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[2]] = {
+                tableToFieldToFieldTypeMap['Table 2'] = {};
+                tableToFieldToFieldTypeMap['Table 2'][e2eConsts.reportFieldNames[2]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.TEXT
                 };
-                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[6]] = {
+                tableToFieldToFieldTypeMap['Table 2'][e2eConsts.reportFieldNames[6]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.DATE
                 };
-                tableToFieldToFieldTypeMap['table 2'][e2eConsts.reportFieldNames[12]] = {
+                tableToFieldToFieldTypeMap['Table 2'][e2eConsts.reportFieldNames[12]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.PHONE_NUMBER
                 };
-                tableToFieldToFieldTypeMap['table 3'] = {};
-                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[1]] = {
+                tableToFieldToFieldTypeMap['Table 3'] = {};
+                tableToFieldToFieldTypeMap['Table 3'][e2eConsts.reportFieldNames[1]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.TEXT
                 };
-                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[6]] = {
+                tableToFieldToFieldTypeMap['Table 3'][e2eConsts.reportFieldNames[6]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.DATE
                 };
-                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[7]] = {
+                tableToFieldToFieldTypeMap['Table 3'][e2eConsts.reportFieldNames[7]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.DATE_TIME
                 };
-                tableToFieldToFieldTypeMap['table 3'][e2eConsts.reportFieldNames[10]] = {
+                tableToFieldToFieldTypeMap['Table 3'][e2eConsts.reportFieldNames[10]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.CHECKBOX
                 };
-                tableToFieldToFieldTypeMap['table 4'] = {};
-                tableToFieldToFieldTypeMap['table 4'][e2eConsts.reportFieldNames[1]] = {
+                tableToFieldToFieldTypeMap['Table 4'] = {};
+                tableToFieldToFieldTypeMap['Table 4'][e2eConsts.reportFieldNames[1]] = {
                     fieldType: consts.SCALAR,
                     dataType: consts.TEXT
                 };

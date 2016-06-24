@@ -14,7 +14,7 @@ fi
 
 if [ ! -f "$SAUCELABS_SC_INSTALL_DIR/$SAUCELABS_SC_TARBALL" ]; then
   echo fetching saucelabs_sc
-  wget -q "--directory-prefix=$SAUCELABS_SC_INSTALL_DIR" "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/thirdparty/saucelabs_sc/sc/4.3.11/sc-4.3.11-linux.tar.gz"
+  wget -q "--directory-prefix=$SAUCELABS_SC_INSTALL_DIR" "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/thirdparty/saucelabs_sc/sc/4.3.16/sc-4.3.16-linux.tar.gz"
   ls "$SAUCELABS_SC_INSTALL_DIR"
 else
   echo "SauceLabs_sc archive $SAUCELABS_SC_INSTALL_DIR/$SAUCELABS_SC_TARBALL already exists"
@@ -24,6 +24,8 @@ if [ ! -d "$SAUCELABS_SC_INSTALLED_DIR" ]; then
  echo unpacking saucelabs_sc
   tar -zxvf  $SAUCELABS_SC_INSTALL_DIR/$SAUCELABS_SC_TARBALL -C $SAUCELABS_SC_INSTALL_DIR
   ls "$SAUCELABS_SC_INSTALL_DIR"
+# grunt-sauce-connect-launcher is expecting 4.3.11 but we need 4.3.16 to get through the proxy issues in CI
+  ln -sf $SAUCELABS_SC_INSTALL_DIR/sc-4.3.16-linux $SAUCELABS_SC_INSTALL_DIR/sc-4.3.11-linux
 else
   echo "Saucelabs_sc install dir $SAUCELABS_SC_INSTALLED_DIR already exists"
 fi

@@ -43,7 +43,7 @@ fully formed objects. These objects are generated as new, so they **do not conta
 ### Example
 #### Import
 
-Use relative path to get ahold of the proper generator. From ui/server/api/quickbase/recordsApi.js it would look like:
+Use relative path to get ahold of the proper generator. From ui/server/src/api/quickbase/recordsApi.js it would look like:
 
     var fieldGenerator = require('../../../test_generators/field.generator');
     var consts = require('../constants');

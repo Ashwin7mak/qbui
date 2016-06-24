@@ -18,14 +18,19 @@
             margin: 0 35px 20px 0;
             word-wrap: break-word;
             max-width: 100%;
+            display: flex;
             .fieldLabel {
                 display: block;
                 color: $fieldLabel-color;
                 padding-bottom: 2px;
             }
-            .fieldValue {
-                display: block;
-                min-width: 0;
+            &.labelAbove {
+                flex-direction: column;
+            }
+            &.labelLeft {
+                .fieldLabel {
+                    padding-right: 5px;
+                }
             }
         }
     }

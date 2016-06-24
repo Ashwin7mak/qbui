@@ -17,16 +17,17 @@
         // Pass the proxy agent down into Protractor's DriverProvider
         sauceAgent: agent,
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
-        sauceUser           : 'sbg_qbse',
+        sauceUser           : 'QuickBaseNS',
         sauceKey            : process.env.SAUCE_KEY,
         // We have to specify the selenium address to point locally so that we use the tunnel properly
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/reportLayout.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportLeftNav.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [],
+        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGrpAndSortViaIcon.e2e.spec.js'],
         // ----- The test framework -----
         //
         // Jasmine and Cucumber are fully supported as a test and assertion framework.
@@ -67,7 +68,7 @@
 
             // Read the base classes
             global.e2eBase = requireCommon('common/e2eBase')();
-            global.consts = require('../../../server/api/constants');
+            global.consts = require('../../../common/src/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
 
             // Lets Protractor know there is no Angular code to wait for
