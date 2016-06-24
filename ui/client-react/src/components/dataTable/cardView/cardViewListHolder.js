@@ -9,6 +9,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 /**
  * A list of CardView items used to render a report at the small breakpoint
  */
+const CHECKBOX_COL_WIDTH = 40; // 40px checkbox column can be toggled
+
 let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
     contextTypes: {
@@ -100,14 +102,19 @@ let CardViewListHolder = React.createClass({
         flux.actions.selectedRows(selectedRows);
     },
 
-    /** card was swiped right, expose expose the checkboxes */
+    /** swiping to expose/hide checkbox column */
     onSwipe(delta) {
-        let leftOffset = this.state.allowCardSelection ? -delta : -40-delta;
-        leftOffset = Math.min(leftOffset, 0);
-        leftOffset = Math.max(leftOffset, -40);
+        // delta is number of pixels swiped to the LEFT!
+
+        let horizontalOffset = this.state.allowCardSelection ? 0 : -CHECKBOX_COL_WIDTH;
+        horizontalOffset -= delta;
+
+        // constrain movement to between closed and opened values
+        horizontalOffset = Math.min(horizontalOffset, 0);
+        horizontalOffset = Math.max(horizontalOffset, -CHECKBOX_COL_WIDTH);
 
         this.setState({
-            leftOffset,
+            horizontalOffset,
             swiping: true
         });
 
@@ -131,7 +138,8 @@ let CardViewListHolder = React.createClass({
         if (this.state.swiping) {
             cardViewListClasses += " swiping";
             cardViewListStyle = {
-                left: this.state.leftOffset
+                transform: "translate3d(" + this.state.horizontalOffset + "px,0,0)",
+                WebkitTransform: "translate3d(" + this.state.horizontalOffset + "px,0,0)"
             };
         }
 

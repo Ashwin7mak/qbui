@@ -126,59 +126,59 @@ describe('Report Mobile View functions', () => {
 
     });
 
-    //it('test row swiping', () => {
-    //    var TestParent = React.createFactory(React.createClass({
-    //
-    //        getInitialState() {
-    //            return {cardSelection: false};
-    //        },
-    //        allowCardSelection() {
-    //            return this.state.cardSelection;
-    //        },
-    //        onToggleCardSelection() {
-    //            this.setState({cardSelection: !this.state.cardSelection});
-    //        },
-    //        isRowSelected() {
-    //            return false;
-    //        },
-    //        render() {
-    //            return <CardView ref="refCardView"
-    //                             data={fakeReportData_valid.data.results}
-    //                             allowCardSelection={this.allowCardSelection }
-    //                             onToggleCardSelection={this.onToggleCardSelection}
-    //                             isRowSelected={this.isRowSelected}
-    //            />;
-    //        }
-    //    }));
-    //    var parent = TestUtils.renderIntoDocument(TestParent());
-    //    var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView)[0];
-    //
-    //    var node = ReactDOM.findDOMNode(cardView);
-    //    var rows = node.getElementsByClassName("fieldRow");
-    //    TestUtils.Simulate.click(rows[0]);
-    //    expect(rows[0].className).toContain("collapsed");
-    //
-    //    // not sure how to simulate these so just call the functions
-    //    // with null event (not needed) and -/+ deltas (left/right)
-    //
-    //    // swipe left to reveal row actions
-    //    cardView.swiping(null, -100);
-    //    cardView.swipedLeft();
-    //    cardView.swiped();
-    //
-    //    // close row actions
-    //    cardView.swiping(null, 100);
-    //    cardView.swipedRight();
-    //    cardView.swiped();
-    //
-    //    // swipe right to reveal checkboxes
-    //    cardView.swiping(null, 100);
-    //    cardView.swipedRight();
-    //    cardView.swiped();
-    //
-    //    // close checkboxes
-    //    cardView.swiping(null, -100);
-    //    cardView.swipedLeft();
-    //    cardView.swiped();
-    //});
+    it('test row swiping', () => {
+        var TestParent = React.createFactory(React.createClass({
+
+            getInitialState() {
+                return {cardSelection: false};
+            },
+            allowCardSelection() {
+                return this.state.cardSelection;
+            },
+            onToggleCardSelection() {
+                this.setState({cardSelection: !this.state.cardSelection});
+            },
+            isRowSelected() {
+                return false;
+            },
+            onSwipe() {
+
+            },
+            render() {
+                return <CardView ref="refCardView"
+                                 data={fakeReportData_valid.data.results}
+                                 allowCardSelection={this.allowCardSelection }
+                                 onToggleCardSelection={this.onToggleCardSelection}
+                                 isRowSelected={this.isRowSelected}
+                                 onSwipe={this.onSwipe}
+                />;
+            }
+        }));
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        var cardView = TestUtils.scryRenderedComponentsWithType(parent.refs.refCardView, CardView)[0];
+
+        var node = ReactDOM.findDOMNode(cardView);
+        var rows = node.getElementsByClassName("fieldRow");
+        TestUtils.Simulate.click(rows[0]);
+        expect(rows[0].className).toContain("collapsed");
+
+        // not sure how to simulate these so just call the functions
+        // with null event (not needed) and -/+ deltas (right/left)
+
+        // swipe left to reveal row actions
+        cardView.swiping(null, 100);
+        cardView.swipedLeft();
+
+        // close row actions
+        cardView.swiping(null, -100);
+        cardView.swipedRight();
+
+        // swipe right to reveal checkboxes
+        cardView.swiping(null, -100);
+        cardView.swipedRight();
+
+        // close checkboxes
+        cardView.swiping(null, 100);
+        cardView.swipedLeft();
+    });
 });
