@@ -141,12 +141,16 @@ describe('Report Mobile View functions', () => {
             isRowSelected() {
                 return false;
             },
+            onSwipe() {
+
+            },
             render() {
                 return <CardView ref="refCardView"
                                  data={fakeReportData_valid.data.results}
                                  allowCardSelection={this.allowCardSelection }
                                  onToggleCardSelection={this.onToggleCardSelection}
                                  isRowSelected={this.isRowSelected}
+                                 onSwipe={this.onSwipe}
                 />;
             }
         }));
@@ -159,26 +163,22 @@ describe('Report Mobile View functions', () => {
         expect(rows[0].className).toContain("collapsed");
 
         // not sure how to simulate these so just call the functions
-        // with null event (not needed) and -/+ deltas (left/right)
+        // with null event (not needed) and -/+ deltas (right/left)
 
         // swipe left to reveal row actions
-        cardView.swiping(null, -100);
+        cardView.swiping(100, true);
         cardView.swipedLeft();
-        cardView.swiped();
 
         // close row actions
-        cardView.swiping(null, 100);
+        cardView.swiping(100, false);
         cardView.swipedRight();
-        cardView.swiped();
 
         // swipe right to reveal checkboxes
-        cardView.swiping(null, 100);
+        cardView.swiping(100, false);
         cardView.swipedRight();
-        cardView.swiped();
 
         // close checkboxes
-        cardView.swiping(null, -100);
+        cardView.swiping(100, true);
         cardView.swipedLeft();
-        cardView.swiped();
     });
 });

@@ -15,7 +15,8 @@ let CardViewList = React.createClass({
         onToggleCardSelection: React.PropTypes.func,
         onRowSelected: React.PropTypes.func,
         onRowClicked: React.PropTypes.func,
-        isRowSelected: React.PropTypes.func
+        isRowSelected: React.PropTypes.func,
+        onSwipe: React.PropTypes.func
     },
 
     getInitialState() {
@@ -38,7 +39,8 @@ let CardViewList = React.createClass({
                                          onToggleCardSelection={this.props.onToggleCardSelection}
                                          onRowSelected={this.props.onRowSelected}
                                          onRowClicked={this.props.onRowClicked}
-                                         isRowSelected={this.props.isRowSelected}/>;
+                                         isRowSelected={this.props.isRowSelected}
+                                         onSwipe={this.props.onSwipe}/>;
             });
         }
 
@@ -67,7 +69,7 @@ let CardViewList = React.createClass({
                               onRowSelected={this.props.onRowSelected}
                               onRowClicked={this.props.onRowClicked}
                               isRowSelected={this.props.isRowSelected}
-                              metadataColumns={["actions"]}>
+                              onSwipe={this.props.onSwipe}>
                     </CardView>
                 }
             </div>
