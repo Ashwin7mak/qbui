@@ -37,7 +37,6 @@
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                 //Create a viewer report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report1);
-                //return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE1].id, [6]);
             }).then(function() {
                 var report2 = {
                     name: 'Participant Report',
@@ -113,7 +112,7 @@
         }
 
         /**
-         * Data Provider for report homepage for various user roles
+         * Data Provider for table homepage for various user roles
          */
         function reportHomePageTestCases() {
             return [
@@ -139,7 +138,8 @@
         }
 
         /**
-         * Tests for default table home page UI.
+         * Tests for default table home page UI.The test creates user and add user to app role and assign the report to appRole.
+         * Authenticate the created User and verify the default table home page displays the report set or not.
          */
         reportHomePageTestCases().forEach(function(testcase) {
             it('Verify default table home page for ', function(done) {
@@ -171,6 +171,9 @@
             });
         });
 
+        /**
+         * Negative test to verify the personal reports for a user cannot be accessed by others.
+         */
         it('Negative test to verify personal reports not accessable by other users', function(done) {
             e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                 userId = JSON.parse(userResponse.body).id;

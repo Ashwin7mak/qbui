@@ -98,7 +98,7 @@ module.exports = function(grunt) {
                 port   : 9000,
                 sslPort: 9443,
                 host   : process.env.HOST || 'localhost',
-                script : '<%= express.root %>/app.js',
+                script : '<%= express.root %>/src/app.js',
                 realm : process.env.REALM ? (process.env.REALM + '.') : ''
             },
             local  : {
