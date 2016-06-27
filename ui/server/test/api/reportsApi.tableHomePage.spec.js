@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var assert = require('assert');
-    require('../../app');
+    require('../../src/app');
     var config = require('../../src/config/environment');
     var log = require('../../src/logger').getLogger();
     var recordBase = require('./recordApi.base')(config);
@@ -9,7 +9,7 @@
     var testConsts = require('./api.test.constants');
     var errorCodes = require('../../src/api/errorCodes');
 
-    describe('API - Validate report table home page execution', function() {
+    describe.only('API - Validate report table home page execution', function() {
         // Set timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
         var app;

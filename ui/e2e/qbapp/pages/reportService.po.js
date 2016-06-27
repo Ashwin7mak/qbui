@@ -80,6 +80,7 @@
         this.reportContainerEl = element(by.className('reportContainer'));
         // Report Stage
         this.reportStageContentEl = this.reportContainerEl.element(by.className('layout-stage '));
+        this.stageHeadLine = this.reportStageContentEl.element(by.className('breadCrumbs'));
         this.reportStageBtn = this.reportContainerEl.element(by.className('toggleStage'));
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
 
@@ -232,7 +233,7 @@
                 var fieldColHeaders = [];
                 // Remove the first column header (record select column) and the last (hidden record actions)
                 // Remove the select all checkbox column header
-                colHeaders.shift();
+                //colHeaders.shift();
                 colHeaders.forEach(function(headerText) {
                     if (!headerText) {
                         throw Error('Did not find text for column header');

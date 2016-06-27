@@ -20,6 +20,8 @@
         TABLE3 : 2,
         TABLE4 : 3,
 
+        invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
+
         /**
          * Data Provider for the different breakpoints. Also contains the state of the leftNav at each size for assertion
          */
