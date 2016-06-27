@@ -37,7 +37,7 @@ export default {
     LOG_PERF            : 'clientPerf',
 
     // API Entity actions
-    FORMANDRECORD       : 'formAndRecord',
+    FORMCOMPONENTS      : 'formComponents',
     HOMEPAGE            : 'homePage',
     REPORTCOMPONENTS    : 'reportComponents',
     RESULTS             : 'results',

@@ -13,7 +13,7 @@ class FormService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_FORM_AND_RECORD  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMANDRECORD}`
+            GET_FORM_COMPONENTS  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMCOMPONENTS}`
         };
     }
 
@@ -40,7 +40,7 @@ class FormService extends BaseService {
 
         return Promise.resolve({data: sampleFormJSON});
         //TODO add a node end point.
-        //let url = super.constructUrl(this.API.GET_FORM_AND_RECORD, [appId, tableId]);
+        //let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId]);
         //return super.get(url, {params:params});
     }
 }
