@@ -45,8 +45,11 @@ var lodash = require('lodash');
         });
     }
 
-    function renderIndex(req, res) {
-        var opts = lodash.merge({}, BASE_PROPS, {title: 'QuickBase', req: req});
+    /**
+     * Use options to pass in parameters based on the route
+     */
+    function renderIndex(req, res, options) {
+        var opts = lodash.merge({}, BASE_PROPS, {title: 'QuickBase', req: req}, options);
         renderJsx(req, res, './index.jsx', opts);
     }
 
@@ -68,11 +71,21 @@ var lodash = require('lodash');
         app.route('/app/:appId/table/:tblId').get(function(req, res) {
             renderIndex(req, res);
         });
+
         app.route('/app/:appId').get(function(req, res) {
             renderIndex(req, res);
         });
+
         app.route('/apps').get(function(req, res) {
             renderIndex(req, res);
+        });
+
+        app.route('/components').get(function(req, res) {
+            renderIndex(req, res, {bundleFileName: 'componentLibrary.js'});
+        });
+
+        app.route('/components/:componentName').get(function(req, res) {
+            renderIndex(req, res, {bundleFileName: 'componentLibrary.js'});
         });
 
         //  default application dashboard
