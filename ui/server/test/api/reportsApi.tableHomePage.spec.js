@@ -9,7 +9,7 @@
     var testConsts = require('./api.test.constants');
     var errorCodes = require('../../src/api/errorCodes');
 
-    describe.only('API - Validate report table home page execution', function() {
+    describe('API - Validate report table home page execution', function() {
         // Set timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
         var app;
