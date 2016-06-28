@@ -55,6 +55,7 @@ var lodash = require('lodash');
 
     module.exports = function(app, config) {
         getBaseOpts(config);
+        var compBundleFileName = config.isProduction ? 'componentLibrary.min.js' : 'componentLibrary.js';
 
         app.route('/app/:appId/table/:tblId/report/:rptId').get(function(req, res) {
             renderIndex(req, res);
@@ -81,11 +82,11 @@ var lodash = require('lodash');
         });
 
         app.route('/components').get(function(req, res) {
-            renderIndex(req, res, {bundleFileName: 'componentLibrary.js'});
+            renderIndex(req, res, {bundleFileName: compBundleFileName});
         });
 
         app.route('/components/:componentName').get(function(req, res) {
-            renderIndex(req, res, {bundleFileName: 'componentLibrary.js'});
+            renderIndex(req, res, {bundleFileName: compBundleFileName});
         });
 
         //  default application dashboard
