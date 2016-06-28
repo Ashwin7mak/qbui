@@ -9,6 +9,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 /**
  * A list of CardView items used to render a report at the small breakpoint
  */
+const CHECKBOX_COL_WIDTH = 40; // 40px checkbox column can be toggled
+
 let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
     contextTypes: {
@@ -24,7 +26,8 @@ let CardViewListHolder = React.createClass({
 
     getInitialState() {
         return {
-            allowCardSelection: false
+            allowCardSelection: false,
+            swiping:false
         };
     },
 
@@ -40,7 +43,7 @@ let CardViewListHolder = React.createClass({
      * or has finished card selection (by swiping left to hide selection column)
      */
     onToggleCardSelection(allow = true, rowData = null) {
-        this.setState({allowCardSelection: allow});
+        this.setState({allowCardSelection: allow, swiping:false});
 
         const flux = this.getFlux();
         if (!allow) {
@@ -99,9 +102,30 @@ let CardViewListHolder = React.createClass({
         flux.actions.selectedRows(selectedRows);
     },
 
+    /** swiping to expose/hide checkbox column */
+    onSwipe(delta) {
+        // delta is number of pixels swiped to the LEFT!
+
+        let horizontalOffset = this.state.allowCardSelection ? 0 : -CHECKBOX_COL_WIDTH;
+        horizontalOffset -= delta;
+
+        // constrain movement to between closed and opened values
+        horizontalOffset = Math.min(horizontalOffset, 0);
+        horizontalOffset = Math.max(horizontalOffset, -CHECKBOX_COL_WIDTH);
+
+        this.setState({
+            horizontalOffset,
+            swiping: true
+        });
+
+    },
+
     getRows(results) {
 
-        let cardViewListClasses = this.props.selectedRows.length ? "cardViewList selectedRows" : "cardViewList";
+        let cardViewListClasses = "cardViewList cardViewListHolder";
+        if (this.props.selectedRows.length) {
+            cardViewListClasses += " selectedRows";
+        }
         if (this.state.allowCardSelection) {
             cardViewListClasses += " allowCardSelection";
         }
@@ -110,8 +134,17 @@ let CardViewListHolder = React.createClass({
         let recordNodes = {};
         recordNodes.children = records;
 
+        let cardViewListStyle = {};
+        if (this.state.swiping) {
+            cardViewListClasses += " swiping";
+            cardViewListStyle = {
+                transform: "translate3d(" + this.state.horizontalOffset + "px,0,0)",
+                WebkitTransform: "translate3d(" + this.state.horizontalOffset + "px,0,0)"
+            };
+        }
+
         return (
-            <div className={cardViewListClasses}>
+            <div className={cardViewListClasses} style={cardViewListStyle}>
                 <CardViewList ref="cardViewList" node={recordNodes}
                               groupId=""
                               groupLevel={-1}
@@ -119,7 +152,8 @@ let CardViewListHolder = React.createClass({
                               onToggleCardSelection={this.onToggleCardSelection}
                               onRowSelected={this.onCardRowSelected}
                               onRowClicked={this.onRowClicked}
-                              isRowSelected={this.isRowSelected}/>
+                              isRowSelected={this.isRowSelected}
+                              onSwipe={this.onSwipe}/>
             </div>);
     },
 
@@ -139,6 +173,7 @@ let CardViewListHolder = React.createClass({
 
     render() {
         let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+
 
         return (
             <div className="reportTable">
