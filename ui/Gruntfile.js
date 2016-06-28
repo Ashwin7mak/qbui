@@ -712,9 +712,11 @@ module.exports = function(grunt) {
         if (target === 'AWSe2e') {
             return grunt.task.run([
                 'clean:server',
-                'build',
-                'env:e2e',
-                'express:test'
+                'shell:webpack',
+                'env:local',
+                'express:local',
+                'wait',
+                'open'
             ]);
         }
         grunt.task.run([
@@ -853,6 +855,7 @@ module.exports = function(grunt) {
         if (target === 'e2eAWSSauce') {
             return grunt.task.run([
                 'env:e2e',
+                'serve:AWSe2e',
                 'sauce_connect:aws',
                 'protractor:sauce_osx_chrome'
             ]);

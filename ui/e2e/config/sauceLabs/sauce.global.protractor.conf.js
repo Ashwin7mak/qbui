@@ -23,7 +23,7 @@
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/reportTable.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
