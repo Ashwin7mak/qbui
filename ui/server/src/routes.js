@@ -128,8 +128,6 @@
                         //  generate a new Transaction Id(TID) and add to the request header.
                         requestHelper.setTidHeader(req);
                         
-                        // find the userId and add to the request object
-                        requestHelper.setUserIdHeader(req);
                         //
                         //  for readability in the outputted log message, convert all double quotes to single quotes.
                         //
