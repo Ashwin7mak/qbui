@@ -109,13 +109,13 @@ module.exports = function(grunt) {
             prod   : {
                 options: {
                     debug   : false,
-                    script  : '<%= quickbase.distDir %>/<%= express.root %>/app.js',
+                    script  : '<%= quickbase.distDir %>/<%= express.root %>/src/app.js',
                     node_env: 'production'
                 }
             },
             test   : {
                 options: {
-                    script  : '<%= quickbase.distDir %>/<%= express.root %>/app.js',
+                    script  : '<%= quickbase.distDir %>/<%= express.root %>/src/app.js',
                     node_env: 'test'
                 }
             }
@@ -251,7 +251,7 @@ module.exports = function(grunt) {
         // Use nodemon to run server in debug mode with an initial breakpoint
         nodemon: {
             debug: {
-                script : '<%= express.root %>/app.js',
+                script : '<%= express.root %>/src/app.js',
                 options: {
                     nodeArgs: ['--debug-brk'],
                     env     : {
