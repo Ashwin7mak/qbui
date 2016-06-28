@@ -402,44 +402,6 @@ describe('AGGrid functions', () => {
         expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.checkedToUnchecked"));
     });
 
-    it('test edit cells visible based on selection ', () => {
-        AGGrid.__ResetDependency__('AgGridReact');
-
-        const TestParent = React.createFactory(React.createClass({
-
-            // wrap the grid in a container with styles needed to render editing UI
-            render() {
-                return (<div className="reportToolsAndContentContainer singleSelection">
-                    <AGGrid ref="grid"
-                            flux={flux}
-                            actions={TableActionsMock}
-                            records={fakeReportData_before.data.records}
-                            columns={fakeReportData_before.data.columns}
-                            loading={false}
-                            />
-                </div>);
-            }
-        }));
-        const parent = TestUtils.renderIntoDocument(TestParent());
-        const grid = parent.refs.grid;
-
-        // find the checkboxes (ag-grid renders a bunch of hidden ag-row elements)
-        const checkBoxes = ReactDOM.findDOMNode(grid).querySelectorAll(".gridCell:first-child");
-        expect(checkBoxes.length).toBe(fakeReportData_before.data.records.length + 1);
-
-        const selected = TestUtils.scryRenderedDOMComponentsWithClass(grid, "ag-row-selected");
-        expect(selected.length).toBe(0);
-
-        // select a row via double click
-        const firstRow = checkBoxes[0].parentElement;
-        mouseclick(firstRow, 2);
-
-        // look for newly selected row (element with ag-row-selected class containing grid cells)
-        const selectedAfterDblClick = ReactDOM.findDOMNode(grid).querySelectorAll(".ag-row-selected .gridCell:first-child");
-        expect(selectedAfterDblClick.length).toBe(2);
-    });
-
-
 
     it('test row actions ', () => {
         AGGrid.__ResetDependency__('AgGridReact');
