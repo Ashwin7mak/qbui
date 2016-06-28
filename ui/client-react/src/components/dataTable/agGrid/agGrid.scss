@@ -356,7 +356,7 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 /* hide datepicker if it's been opened but we're not over that cell */
-.ag-row-selected .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget{
+.ag-row.editing .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget{
     display:none !important;
 }
 
@@ -374,7 +374,7 @@ $cell-edit-background-edit: #f3f8fe;
 .reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .iconActions {
     display:none;
 }
-.reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
+.reportToolsAndContentContainer. .ag-row.editing {
 
     box-shadow: 0px 0px 14px $row-box-shadow-color;
 
