@@ -715,8 +715,7 @@ module.exports = function(grunt) {
                 'shell:webpack',
                 'env:test',
                 'express:test',
-                'wait',
-                'open'
+                'wait'
             ]);
         }
         grunt.task.run([
