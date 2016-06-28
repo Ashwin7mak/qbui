@@ -9,6 +9,12 @@
     var agent = new HttpsProxyAgent('http://egressproxy.quickbaserocks.com:80');
     // Global properties file with params common to all Sauce lab config files
     module.exports = {
+        // A callback function called once configs are read but before any environment
+        // setup. This will only run once, and before onPrepare.
+        beforeLaunch: function() {
+            //Have the tests start an instance of node
+            require('../../server/src/app');
+        },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 300000,
@@ -23,7 +29,7 @@
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            baseE2EPath + 'qbapp/tests/reports/reportTable.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',

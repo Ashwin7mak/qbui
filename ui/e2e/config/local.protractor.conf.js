@@ -6,6 +6,12 @@
     var baseE2EPath = '../../e2e/';
 
     exports.config = {
+        // A callback function called once configs are read but before any environment
+        // setup. This will only run once, and before onPrepare.
+        beforeLaunch: function() {
+            //Have the tests start an instance of node
+            require('../../server/src/app');
+        },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 120000,
@@ -27,7 +33,7 @@
         capabilities: {
             browserName: 'chrome'
             //shardTestFiles: true,
-            //maxInstances: 3
+            //maxInstances: 2
         },
         // ----- The test framework -----
         //
