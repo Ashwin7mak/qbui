@@ -715,7 +715,8 @@ module.exports = function(grunt) {
                 'shell:webpack',
                 'env:test',
                 'express:test',
-                'wait'
+                'wait',
+                'express-keepalive'
             ]);
         }
         grunt.task.run([
@@ -854,7 +855,6 @@ module.exports = function(grunt) {
         if (target === 'e2eAWSSauce') {
             return grunt.task.run([
                 'env:e2e',
-                'serve:AWSe2e',
                 'sauce_connect:aws',
                 'protractor:sauce_osx_chrome'
             ]);
