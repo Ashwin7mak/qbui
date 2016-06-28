@@ -13,7 +13,7 @@
         // setup. This will only run once, and before onPrepare.
         beforeLaunch: function() {
             //Have the tests start an instance of node
-            require('../../server/src/app');
+            require('../../../server/src/app');
         },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
