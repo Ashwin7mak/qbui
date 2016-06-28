@@ -103,13 +103,10 @@
                 element1.getLocation().then(function(navDivLocation) {
                     var element1xPosition = navDivLocation.x;
                     var element1yPosition = navDivLocation.y;
-                    //TODO Require logger.js instead of using console.log
-                    //console.log("The coordinates of element1 are: " + element1xPosition + "," + element1yPosition);
                     // Get element2 location
                     element2.getLocation().then(function(navDivLocation2) {
                         var element2xPosition = navDivLocation2.x;
                         var element2yPosition = navDivLocation2.y;
-                        //console.log("The coordinates of element2 are: " + element2xPosition + "," + element2yPosition);
                         // Compare element2 coordinates to be greater than element1
                         expect(element2xPosition === element1xPosition || element2xPosition > element1xPosition).toBeTruthy();
                         expect(element2yPosition > element1yPosition).toBeTruthy();
