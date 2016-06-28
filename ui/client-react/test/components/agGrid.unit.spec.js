@@ -68,24 +68,31 @@ const fakeReportData_empty = {
 const fakeReportData_before = {
     loading: false,
     data: {
-        records: [{
-            col_num: 1,
-            col_text: "abc",
-            col_date: "01-01-2015",
-            col_checkbox: true
-        }],
-        columns: [
+        records: [
             {
-                id: 1,
-                field: "col_num",
-                headerName: "col_num",
-                datatypeAttributes: {type:"NUMERIC"}
+                col_num: {value: 1, display: "1"},
+                col_text: {value: "abc", display: "abc"},
+                col_date: {value: "01-01-2015", display: "01-01-2015"},
+                col_checkbox: {value: true, display: true}
             },
             {
-                id:2,
+                col_num: {value: 2, display: "2"},
+                col_text: {value: "xyz", display: "xyz"},
+                col_date: {value: "01-18-1966", display: "01-18-1966"},
+                col_checkbox: {value: false, display: false}
+            }],
+        columns: [
+            {
+                id:1,
                 field: "col_text",
                 headerName: "col_text",
                 datatypeAttributes: {type:"TEXT"}
+            },
+            {
+                id: 2,
+                field: "col_num",
+                headerName: "col_num",
+                datatypeAttributes: {type:"NUMERIC"}
             },
             {
                 id:3,
@@ -105,9 +112,9 @@ const fakeReportData_after = {
     loading: false,
     data: {
         records: [{
-            col_num1: 2,
-            col_text1: "xyz",
-            col_date1: "01-01-2018"
+            col_num1: {value: 2, display: "2"},
+            col_text1: {value: "xyz", display: "xyz"},
+            col_date1: {value: "01-01-2018", display: "01-01-2018"}
         }],
         columns: [{
             field: "col_num",
@@ -443,5 +450,58 @@ describe('AGGrid functions', () => {
         //find the open dropdown
         const dropdownMenus = ReactDOM.findDOMNode(grid).querySelectorAll(".gridCell .dropdown.open .dropdown-menu");
         expect(dropdownMenus.length).toBe(1);
+    });
+
+    it('test edit cells by double clicking ', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+
+        const TestParent = React.createFactory(React.createClass({
+
+            // wrap the grid in a container with styles needed to render editing UI
+            render() {
+                return (<div className="reportToolsAndContentContainer singleSelection">
+                        <AGGrid ref="grid"
+                                flux={flux}
+                                actions={TableActionsMock}
+                                records={fakeReportData_before.data.records}
+                                columns={fakeReportData_before.data.columns}
+                                loading={false}
+                                />
+                </div>);
+            }
+        }));
+
+        const parent = TestUtils.renderIntoDocument(TestParent());
+
+        // find the edited rows
+
+        const editRows = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing");
+        expect(editRows.length).toBe(0);
+
+        // find the field cells in the 1st row
+
+        const columnCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row:first-child .gridCell");
+        expect(columnCells.length).toBe(fakeReportData_before.data.columns.length);
+
+        // select a row via double click on the 1st cell
+        let firstCell = columnCells[0].parentElement;
+        mouseclick(firstCell, 2);
+        // look for row with the editing class added
+        const editRowsAfterDblClick = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing");
+        expect(editRowsAfterDblClick.length).toBe(1);
+
+        // find the field cells in the last row
+        const lastRowColumnCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row:last-child .gridCell");
+        expect(lastRowColumnCells.length).toBe(fakeReportData_before.data.columns.length);
+
+        // select the 2nd row
+        firstCell = lastRowColumnCells[0].parentElement;
+        mouseclick(firstCell, 2);
+        // look for row with the editing class added
+        const editRowsAfterSecondDblClick = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing");
+        expect(editRowsAfterSecondDblClick.length).toBe(1);
+
+        // make sure it's a different row
+        expect(editRowsAfterDblClick).not.toBe(editRowsAfterSecondDblClick);
     });
 });
