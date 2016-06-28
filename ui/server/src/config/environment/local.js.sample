@@ -9,7 +9,7 @@
     // The local.js should not be tracked by git.
 
     //var path = require('path');
-    var dateUtils = require('../../components/utility/dateUtils');
+    var dateUtils = require('../../utility/dateUtils');
     var envConsts = require('./environmentConstants');
     var routeGroups = require('../../routes/routeGroups');
     var clientConsts = require('./clientConsts');

@@ -22,6 +22,8 @@
     // Setup the express server
     var app = module.exports = express();
 
+    let serverUtils = require('./utility/serverUtils');
+
     /*
      * Express automatically populates the req.body attribute with a JSON parsed object in the case
      * where Content-Type is application/json. Because there may be numeric values with greater precision
@@ -34,6 +36,18 @@
         req.on('data', function(chunk) {
             req.rawBody += chunk;
         });
+        next();
+    });
+
+    /*
+     * We need to intercept every request and response and add the userId for logging purposes.
+     */
+    app.use(function(req, res, next) {
+        if (req.headers.cookie) {
+            var userId = serverUtils.ob32decoder(serverUtils.breakTicketDown(req.headers.cookie, 2));
+            req.userId = userId;
+            res.setHeader('userId', userId);
+        }
         next();
     });
 

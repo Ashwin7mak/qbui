@@ -127,7 +127,6 @@
                     if (typeof fn === 'function') {
                         //  generate a new Transaction Id(TID) and add to the request header.
                         requestHelper.setTidHeader(req);
-                        
                         //
                         //  for readability in the outputted log message, convert all double quotes to single quotes.
                         //

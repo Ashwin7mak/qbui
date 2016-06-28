@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var stringUtils = require('../../../src/components/utility/stringUtils.js');
+var stringUtils = require('../../src/utility/stringUtils.js');
 
 /**
  * Unit tests for String Utility Functions
