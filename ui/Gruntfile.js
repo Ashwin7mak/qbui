@@ -713,8 +713,8 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'clean:server',
                 'shell:webpack',
-                'env:local',
-                'express:local',
+                'env:test',
+                'express:test',
                 'wait',
                 'open'
             ]);
