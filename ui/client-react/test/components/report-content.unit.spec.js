@@ -7,7 +7,7 @@ import {reactCellRendererFactory} from 'ag-grid-react';
 import {NumericCellRenderer, DateCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
 import _ from 'lodash';
 import Locales from '../../src/locales/locales';
-import * as DataTypes from '../../src/constants/schema';
+import * as SchemaConsts from '../../src/constants/schema';
 import * as GroupTypes from '../../src/constants/groupTypes';
 
 var LocalesMock = {
@@ -226,30 +226,30 @@ describe('ReportContent grouping functions', () => {
     });
 
     var groupByNumberCases = [
-        {name: 'null numeric', dataType: DataTypes.NUMERIC, groupType: GroupTypes.COMMON.equals, group: null, localizeNumberSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'empty numeric', dataType: DataTypes.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '', localizeNumberSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
+        {name: 'null numeric', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: null, localizeNumberSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
+        {name: 'empty numeric', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '', localizeNumberSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
         //  group by the equals group type
-        {name: 'valid numeric - equals', dataType: DataTypes.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '100', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100'},
-        {name: 'valid currency - equals', dataType: DataTypes.CURRENCY, groupType: GroupTypes.COMMON.equals, group: '10.50', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10.50'},
-        {name: 'valid percent - equals', dataType: DataTypes.PERCENT, groupType: GroupTypes.COMMON.equals, group: '.98', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '.98'},
+        {name: 'valid numeric - equals', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '100', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100'},
+        {name: 'valid currency - equals', dataType: SchemaConsts.CURRENCY, groupType: GroupTypes.COMMON.equals, group: '10.50', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10.50'},
+        {name: 'valid percent - equals', dataType: SchemaConsts.PERCENT, groupType: GroupTypes.COMMON.equals, group: '.98', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '.98'},
         //  group by a non-equals group type
-        {name: 'valid numeric - one', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.one, group: '1', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1'},
-        {name: 'valid numeric - five', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '15', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '15'},
-        {name: 'valid numeric - ten', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.ten, group: '20', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '20'},
-        {name: 'valid numeric - hundred', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundred, group: '100', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100'},
-        {name: 'valid numeric - one_k', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.one_k, group: '1000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1000'},
-        {name: 'valid numeric - ten_k', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.ten_k, group: '10000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10000'},
-        {name: 'valid numeric - hundred_k', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundred_k, group: '100000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100000'},
-        {name: 'valid numeric - million', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.million, group: '1000000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1000000'},
+        {name: 'valid numeric - one', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.one, group: '1', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1'},
+        {name: 'valid numeric - five', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '15', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '15'},
+        {name: 'valid numeric - ten', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.ten, group: '20', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '20'},
+        {name: 'valid numeric - hundred', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundred, group: '100', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100'},
+        {name: 'valid numeric - one_k', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.one_k, group: '1000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1000'},
+        {name: 'valid numeric - ten_k', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.ten_k, group: '10000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10000'},
+        {name: 'valid numeric - hundred_k', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundred_k, group: '100000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '100000'},
+        {name: 'valid numeric - million', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.million, group: '1000000', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '1000000'},
         //  group by a non-equals currency and percent
-        {name: 'valid currency - five', dataType: DataTypes.CURRENCY, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '10.50', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10.50'},
-        {name: 'valid percent - five', dataType: DataTypes.PERCENT, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '.98', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '.98'},
+        {name: 'valid currency - five', dataType: SchemaConsts.CURRENCY, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '10.50', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '10.50'},
+        {name: 'valid percent - five', dataType: SchemaConsts.PERCENT, groupType: GroupTypes.GROUP_TYPE.numeric.five, group: '.98', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '.98'},
         //  group by a range
-        {name: 'valid numeric range - tenth', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.tenth, group: '2.1,2.2', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
-        {name: 'valid numeric range - hundredth', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundredth, group: '2.10,2.11', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
-        {name: 'valid numeric range - thousandth', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.thousandth, group: '2.101,2.102', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
+        {name: 'valid numeric range - tenth', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.tenth, group: '2.1,2.2', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
+        {name: 'valid numeric range - hundredth', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.hundredth, group: '2.10,2.11', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
+        {name: 'valid numeric range - thousandth', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.numeric.thousandth, group: '2.101,2.102', localizeNumberSpy: 2, localeMessageSpy: 1, expected: 'groupHeader.numeric.range'},
         //
-        {name: 'invalid numeric range..bad delimiter', dataType: DataTypes.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '2.00:2.10', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '2.00:2.10'}
+        {name: 'invalid numeric range..bad delimiter', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.COMMON.equals, group: '2.00:2.10', localizeNumberSpy: 1, localeMessageSpy: 0, expected: '2.00:2.10'}
     ];
 
     groupByNumberCases.forEach(function(test) {
@@ -294,7 +294,7 @@ describe('ReportContent grouping functions', () => {
         it('Test case: ' + test.name, function() {
             let reportData = _.cloneDeep(fakeReportGroupData_template);
 
-            reportData.data.groupFields[0].field.datatypeAttributes.type = DataTypes.TIME_OF_DAY;
+            reportData.data.groupFields[0].field.datatypeAttributes.type = SchemaConsts.TIME_OF_DAY;
             reportData.data.groupFields[0].groupType = test.groupType;
             reportData.data.filteredRecords[0].group = test.group;
             reportData.data.filteredRecords[0].localized = false;
@@ -324,7 +324,7 @@ describe('ReportContent grouping functions', () => {
         it('Test case: ' + test.name, function() {
             let reportData = _.cloneDeep(fakeReportGroupData_template);
 
-            reportData.data.groupFields[0].field.datatypeAttributes.type = DataTypes.TEXT;
+            reportData.data.groupFields[0].field.datatypeAttributes.type = SchemaConsts.TEXT;
             reportData.data.groupFields[0].groupType = test.groupType;
             reportData.data.filteredRecords[0].group = test.group;
             reportData.data.filteredRecords[0].localized = false;
@@ -345,28 +345,28 @@ describe('ReportContent grouping functions', () => {
     });
 
     var groupByDateCases = [
-        {name: 'null date', dataType: DataTypes.DATE, groupType: GroupTypes.COMMON.equals, group: null, localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'empty date', dataType: DataTypes.DATE, groupType: GroupTypes.COMMON.equals, group: '', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'valid date - equals', dataType: DataTypes.DATE, groupType: GroupTypes.COMMON.equals, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
-        {name: 'valid date - day', dataType: DataTypes.DATE, groupType: GroupTypes.GROUP_TYPE.date.day, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
-        {name: 'valid date - fiscalYr', dataType: DataTypes.DATE, groupType: GroupTypes.GROUP_TYPE.date.fiscalYear, group: '2016', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.abbr.fiscalYear2016'},
-        {name: 'valid date - week', dataType: DataTypes.DATE, groupType: GroupTypes.GROUP_TYPE.date.week, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 1, expected: 'groupHeader.date.week'},
-        {name: 'valid date - month', dataType: DataTypes.DATE, groupType: GroupTypes.GROUP_TYPE.date.month, group: 'May,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.month'},
-        {name: 'valid date - quarter', dataType: DataTypes.DATE, groupType: GroupTypes.GROUP_TYPE.date.quarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.quarter'},
-        {name: 'valid date - fiscalQtr', dataType: DataTypes.DATE, groupType: GroupTypes.GROUP_TYPE.date.fiscalQuarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: 'groupHeader.date.quarter'},
-        {name: 'valid date - year', dataType: DataTypes.DATE, groupType: GroupTypes.GROUP_TYPE.date.year, group: '2016', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2016'},
-        {name: 'valid date - decade', dataType: DataTypes.DATE, groupType: GroupTypes.GROUP_TYPE.date.decade, group: '2010', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2010'},
+        {name: 'null date', dataType: SchemaConsts.DATE, groupType: GroupTypes.COMMON.equals, group: null, localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
+        {name: 'empty date', dataType: SchemaConsts.DATE, groupType: GroupTypes.COMMON.equals, group: '', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
+        {name: 'valid date - equals', dataType: SchemaConsts.DATE, groupType: GroupTypes.COMMON.equals, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
+        {name: 'valid date - day', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.day, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
+        {name: 'valid date - fiscalYr', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.fiscalYear, group: '2016', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.abbr.fiscalYear2016'},
+        {name: 'valid date - week', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.week, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 1, expected: 'groupHeader.date.week'},
+        {name: 'valid date - month', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.month, group: 'May,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.month'},
+        {name: 'valid date - quarter', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.quarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.quarter'},
+        {name: 'valid date - fiscalQtr', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.fiscalQuarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: 'groupHeader.date.quarter'},
+        {name: 'valid date - year', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.year, group: '2016', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2016'},
+        {name: 'valid date - decade', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.decade, group: '2010', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2010'},
         //
-        {name: 'empty datetime', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
-        {name: 'valid datetime - equals', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '05-10-2016 07:45', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016 07:45'},
-        {name: 'valid datetime - day', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.day, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
-        {name: 'valid datetime - fiscalYr', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.fiscalYear, group: '2016', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.abbr.fiscalYear2016'},
-        {name: 'valid datetime - week', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.week, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 1, expected: 'groupHeader.date.week'},
-        {name: 'valid datetime - month', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.month, group: 'May,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.month'},
-        {name: 'valid datetime - quarter', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.quarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.quarter'},
-        {name: 'valid datetime - fiscalQtr', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.fiscalQuarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: 'groupHeader.date.quarter'},
-        {name: 'valid datetime - year', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.year, group: '2016', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2016'},
-        {name: 'valid datetime - decade', dataType: DataTypes.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.decade, group: '2010', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2010'},
+        {name: 'empty datetime', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.empty'},
+        {name: 'valid datetime - equals', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.COMMON.equals, group: '05-10-2016 07:45', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016 07:45'},
+        {name: 'valid datetime - day', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.day, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 0, expected: '05-10-2016'},
+        {name: 'valid datetime - fiscalYr', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.fiscalYear, group: '2016', localizeDateSpy: 0, localeMessageSpy: 1, expected: 'groupHeader.abbr.fiscalYear2016'},
+        {name: 'valid datetime - week', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.week, group: '05-10-2016', localizeDateSpy: 1, localeMessageSpy: 1, expected: 'groupHeader.date.week'},
+        {name: 'valid datetime - month', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.month, group: 'May,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.month'},
+        {name: 'valid datetime - quarter', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.quarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 2, expected: 'groupHeader.date.quarter'},
+        {name: 'valid datetime - fiscalQtr', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.fiscalQuarter, group: '1,2016', localizeDateSpy: 0, localeMessageSpy: 3, expected: 'groupHeader.date.quarter'},
+        {name: 'valid datetime - year', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.year, group: '2016', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2016'},
+        {name: 'valid datetime - decade', dataType: SchemaConsts.DATE_TIME, groupType: GroupTypes.GROUP_TYPE.date.decade, group: '2010', localizeDateSpy: 0, localeMessageSpy: 0, expected: '2010'},
     ];
 
     groupByDateCases.forEach(function(test) {
@@ -418,7 +418,7 @@ describe('ReportContent grouping functions', () => {
         it('Test case: ' + test.name, function() {
             let reportData = _.cloneDeep(fakeReportGroupData_template);
 
-            reportData.data.groupFields[0].field.datatypeAttributes.type = DataTypes.DURATION;
+            reportData.data.groupFields[0].field.datatypeAttributes.type = SchemaConsts.DURATION;
             reportData.data.groupFields[0].groupType = test.groupType;
             reportData.data.filteredRecords[0].group = test.group;
             reportData.data.filteredRecords[0].localized = false;
@@ -473,8 +473,8 @@ describe('ReportContent grouping functions exception handling', () => {
     });
 
     var groupTestExceptionCases = [
-        {name: 'exception handling formatting date', dataType: DataTypes.DATE, groupType: GroupTypes.GROUP_TYPE.date.equals, group: '05-10-2016', localizeDateSpy: 1, localizeNumberSpy: 0, expected: '05-10-2016'},
-        {name: 'exception handling formatting number', dataType: DataTypes.NUMERIC, groupType: GroupTypes.GROUP_TYPE.date.equals, group: '1234', localizeDateSpy: 0, localizeNumberSpy: 1, expected: '1234'}
+        {name: 'exception handling formatting date', dataType: SchemaConsts.DATE, groupType: GroupTypes.GROUP_TYPE.date.equals, group: '05-10-2016', localizeDateSpy: 1, localizeNumberSpy: 0, expected: '05-10-2016'},
+        {name: 'exception handling formatting number', dataType: SchemaConsts.NUMERIC, groupType: GroupTypes.GROUP_TYPE.date.equals, group: '1234', localizeDateSpy: 0, localizeNumberSpy: 1, expected: '1234'}
     ];
 
     groupTestExceptionCases.forEach(function(test) {

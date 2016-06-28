@@ -23,6 +23,10 @@ import './dateTimePicker.scss';
 
 import * as formats from '../../../constants/fieldFormats';
 import _ from 'lodash';
+import Logger from "../../../utils/logger";
+
+
+let logger = new Logger();
 
 /**
  * cell renderer
@@ -40,11 +44,21 @@ const CellRenderer = React.createClass({
             initialValue: null
         };
     },
-    /* setting state from props is an anti-pattern but we're doing it to avoid rerendering */
+
+    /* setting state from props is an anti-pattern but we're doing it to avoid re-rendering */
     getInitialState() {
-        return {
-            valueAndDisplay: _.cloneDeep(this.props.initialValue)
-        };
+        if (!_.isUndefined(this.props.initialValue)) {
+            return {
+                valueAndDisplay:  {
+                    id: this.props.initialValue.id,
+                    value : this.props.initialValue.value,
+                    display : this.props.initialValue.display,
+                }
+            };
+        } else {
+            logger.warn('"this.props.initialValue" in getInitialState is undefined');
+            return {};
+        }
     },
 
 
@@ -93,8 +107,13 @@ const CellRenderer = React.createClass({
     },
 
     cellChanges() {
-        if (this.props && this.props.params &&
-            _.has(this.props.params, ['data', 'column.colId', 'context.keyField', 'colDef.id'])) {
+        if (this.props &&
+            _.has(this.props, 'params') &&
+            _.has(this.props.params, 'data') &&
+            _.has(this.props.params, 'column.colId') &&
+            _.has(this.props.params, 'context.keyField') &&
+            _.has(this.props.params, 'colDef.id')) {
+
             let change = {
                 values: {
                     oldVal: this.props.params.data[this.props.params.column.colId],
@@ -108,51 +127,48 @@ const CellRenderer = React.createClass({
     },
     /**
      * cell was edited, update the r/w and r/o value
-     * @param newValue
+     * @param value
      */
     cellEdited(value) {
-        let newDisplay = value;
         let theVals = {
             value: value,
-            display: newDisplay
+            display: value
         };
-        // this.state.valueAndDisplay.value = value;
-        // this.state.valueAndDisplay.display = newDisplay;
 
-        this.setState({valueAndDisplay : _.clone(theVals)}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals)}, ()=>{this.cellChanges();});
     },
 
     /**
      * date, datetime, or time cell was edited
-     * @param value
+     * @param newValue
      */
     dateTimeCellEdited(newValue) {
-        let newDisplay = value;
-
+        let theVals = {
+            value: newValue,
+        };
         switch (this.props.type) {
         case formats.DATE_FORMAT: {
             // normalized form is YYYY-MM-DD
-            newDisplay = dateTimeFormatter.format(value, this.props.colDef.datatypeAttributes);
+            theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
             break;
         }
         case formats.TIME_FORMAT: {
             // normalized form is 1970-01-01THH:MM:SSZ
-            newDisplay = timeOfDayFormatter.format(value, this.props.colDef.datatypeAttributes);
+            theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
             break;
         }
         case formats.DATETIME_FORMAT: {
             // normalized form is YYYY-MM-DDTHH:MM:SSZ
-            newDisplay = dateTimeFormatter.format(value, this.props.colDef.datatypeAttributes);
+            theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+            break;
+        }
+        default: {
+            theVals.display = newValue;
             break;
         }
         }
-        // this.state.valueAndDisplay.value = value;
-        // this.state.valueAndDisplay.display = newDisplay;
-        let theVals = {
-            value: newValue,
-            display: newDisplay
-        };
-        this.setState({valueAndDisplay : _.clone(theVals)}, ()=>{this.cellChanges();});
+
+        this.setState({valueAndDisplay : Object.assign({}, theVals)}, ()=>{this.cellChanges();});
     },
 
     /**
@@ -160,16 +176,12 @@ const CellRenderer = React.createClass({
      * @param value
      */
     numericCellEdited(value) {
-        let newValue = Number(value);
-
         let theVals = {
-            value: newValue,
+            value: Number(value)
         };
-        let newDisplay = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+        theVals.display = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
 
-        theVals.display  = newDisplay;
-
-        this.setState({valueAndDisplay : _.clone(theVals)}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals)}, ()=>{this.cellChanges();});
     }
 });
 

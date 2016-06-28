@@ -1,7 +1,5 @@
 import React from 'react';
-
 import Logger from '../../utils/logger';
-let logger = new Logger();
 import ReportActions from '../actions/reportActions';
 import ReportToolbar from './reportToolbar';
 import ReportContent from './dataTable/reportContent';
@@ -15,6 +13,10 @@ import './report.scss';
 import FilterUtils from '../../utils/filterUtils';
 import * as query from '../../constants/query';
 import ReportUtils from '../../utils/reportUtils';
+import * as SchemaConsts from "../../constants/schema";
+
+
+let logger = new Logger();
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -232,8 +234,8 @@ let ReportToolsAndContent = React.createClass({
                                     reportData={this.props.reportData}
                                     reportHeader={toolbar}
                                     keyField={this.props.fields && this.props.fields.keyField ?
-                                        this.props.fields.keyField.name : "Record ID#" }
-                                    uniqueIdentifier="Record ID#"
+                                        this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
+                                    uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                     flux={this.getFlux()}
                         {...this.props} />
 

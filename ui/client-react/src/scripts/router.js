@@ -11,6 +11,7 @@ import ReportDataStore from "../stores/reportDataStore";
 import ReportDataSearchStore from "../stores/reportDataSearchStore";
 import RecordPendingEditsStore from "../stores/recordPendingEditsStore";
 import reportDataActions from "../actions/reportDataActions";
+import recordPendingEditsActions from "../actions/recordPendingEditsActions";
 import FieldsStore from "../stores/fieldsStore";
 import fieldsActions from "../actions/fieldsActions";
 import AppsStore from "../stores/appsStore";
@@ -54,6 +55,7 @@ let stores = {
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportActions);
 flux.addActions(reportDataActions);
+flux.addActions(recordPendingEditsActions);
 flux.addActions(appsActions);
 flux.addActions(navActions);
 flux.addActions(facetMenuActions);

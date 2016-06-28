@@ -13,36 +13,37 @@ export const CellValueRenderer = React.createClass({
     },
 
     render() {
+        let className = "cellData" + (this.props.isEditable ? "" : " nonEditable cellEdit");
         switch (this.props.type) {
         case formats.NUMBER_FORMAT:
         case formats.RATING_FORMAT:
-            return (<span className={"cellData" + (this.props.isEditable ? "" : " nonEditable cellEdit")}>
+            return (<span className={className}>
                 {this.props.value && <NumberCellValueRenderer value={this.props.value} attributes={this.props.attributes} />}
                 </span>);
 
         case formats.USER_FORMAT:
-            return (<span className={"cellData" + (this.props.isEditable ? "" : " nonEditable cellEdit")}>
+            return (<span className={className}>
                 <UserCellValueRenderer value={this.props.display} />
                 </span>);
 
         case formats.DATE_FORMAT:
-            return (<span className={"cellData" + (this.props.isEditable ? "" : " nonEditable cellEdit")}>
+            return (<span className={className}>
                 <DateCellValueRenderer value={this.props.display} />
                 </span>);
 
         case formats.DATETIME_FORMAT: {
-            return (<span className={"cellData" + (this.props.isEditable ? "" : " nonEditable cellEdit")}>
+            return (<span className={className}>
                 <DateCellValueRenderer value={this.props.display} />
                 </span>);
         }
 
         case formats.TIME_FORMAT: {
-            return (<span className={"cellData" + (this.props.isEditable ? "" : " nonEditable cellEdit")}>
+            return (<span className={className}>
                 <DateCellValueRenderer value={this.props.display} />
                 </span>);
         }
         case formats.CHECKBOX_FORMAT:
-            return (<span className={"cellData" + (this.props.isEditable ? "" : " nonEditable cellEdit")}>
+            return (<span className={className}>
                     <input type="checkbox" disabled checked={this.props.value} />
                 </span>);
 
@@ -50,7 +51,7 @@ export const CellValueRenderer = React.createClass({
         case formats.CURRENCY_FORMAT:
         case formats.TEXT_FORMAT:
         default: {
-            return (<span className={"cellData" + (this.props.isEditable ? "" : " nonEditable cellEdit")}>
+            return (<span className={className}>
                 <TextCellValueRenderer value={this.props.display} />
                 </span>);
         }

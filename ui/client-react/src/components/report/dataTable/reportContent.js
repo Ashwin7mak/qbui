@@ -5,7 +5,7 @@ import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import Logger from "../../../utils/logger";
 import ReportActions from "../../actions/reportActions";
 import Fluxxor from "fluxxor";
-import * as DataTypes from "../../../constants/schema";
+import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
 import _ from 'lodash';
@@ -40,7 +40,7 @@ let ReportContent = React.createClass({
     },
 
     getKeyField() {
-        return this.props.fields && this.props.fields.keyField ? this.props.fields.keyField.name : "Record ID#";
+        return this.props.fields && this.props.fields.keyField ? this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY;
     },
 
     getOrigRec(recid) {
@@ -139,15 +139,15 @@ let ReportContent = React.createClass({
     },
 
     isNumericDataType(dataType) {
-        return dataType === DataTypes.NUMERIC ||
-            dataType === DataTypes.CURRENCY ||
-            dataType === DataTypes.PERCENT ||
-            dataType === DataTypes.RATING;
+        return dataType === SchemaConsts.NUMERIC ||
+            dataType === SchemaConsts.CURRENCY ||
+            dataType === SchemaConsts.PERCENT ||
+            dataType === SchemaConsts.RATING;
     },
 
     isDateDataType(dataType) {
-        return dataType === DataTypes.DATE_TIME ||
-               dataType === DataTypes.DATE;
+        return dataType === SchemaConsts.DATE_TIME ||
+               dataType === SchemaConsts.DATE;
     },
 
     parseTimeOfDay(timeOfDay) {
@@ -242,10 +242,10 @@ let ReportContent = React.createClass({
                             /*eslint no-lonely-if:0*/
                             if (groupType === GroupTypes.COMMON.equals) {
                                 //  Currency and percent symbols are added only when group type is equals.
-                                if (groupField.datatypeAttributes.type === DataTypes.CURRENCY) {
+                                if (groupField.datatypeAttributes.type === SchemaConsts.CURRENCY) {
                                     groupData.group = this.localizeNumber(range[0], {style: 'currency', currency: Locales.getCurrencyCode()});
                                 } else {
-                                    if (groupField.datatypeAttributes.type === DataTypes.PERCENT) {
+                                    if (groupField.datatypeAttributes.type === SchemaConsts.PERCENT) {
                                         groupData.group = this.localizeNumber(range[0], {style: 'percent'});
                                     } else {
                                         groupData.group = this.localizeNumber(range[0]);
@@ -293,7 +293,7 @@ let ReportContent = React.createClass({
                                 break;
                             case GroupTypes.GROUP_TYPE.date.equals:
                                 let opts = null;
-                                if (groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
+                                if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME) {
                                     opts = {
                                         year: 'numeric', month: 'numeric', day: 'numeric',
                                         hour: 'numeric', minute: 'numeric'
@@ -302,7 +302,7 @@ let ReportContent = React.createClass({
                                 groupData.group = this.localizeDate(datePart[0], opts);
 
                                 //  i18n-react appends a comma after the date for en-us --> 07/22/2015, 09:44 AM -- Replace with space
-                                if (groupField.datatypeAttributes.type === DataTypes.DATE_TIME && Locales.getLocale() === 'en-us') {
+                                if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME && Locales.getLocale() === 'en-us') {
                                     groupData.group = groupData.group.replace(',', ' ');
                                 }
 
@@ -314,7 +314,7 @@ let ReportContent = React.createClass({
                         continue;
                     }
 
-                    if (groupField.datatypeAttributes.type === DataTypes.TIME_OF_DAY) {
+                    if (groupField.datatypeAttributes.type === SchemaConsts.TIME_OF_DAY) {
 
                         let timeOfDay = null;
 
@@ -350,7 +350,7 @@ let ReportContent = React.createClass({
                         continue;
                     }
 
-                    if (groupField.datatypeAttributes.type === DataTypes.DURATION) {
+                    if (groupField.datatypeAttributes.type === SchemaConsts.DURATION) {
                         //  With duration of equals, the group value contains 2 pieces of information;
                         //  the 1st is the duration value; the 2nd is the group type.
                         if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
@@ -485,8 +485,9 @@ let ReportContent = React.createClass({
                             <AGGrid loading={this.props.reportData.loading}
                                     records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                     columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                    uniqueIdentifier="Record ID#"
-                                    keyField={this.props.fields && this.props.fields.keyField ? this.props.fields.keyField.name : "Record ID#" }
+                                    uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                    keyField={this.props.fields && this.props.fields.keyField ?
+                                            this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
                                     appId={this.props.reportData.appId}
                                     onEditRecordStart={this.handleEditRecordStart}
                                     onEditRecordCancel={this.handleEditRecordCancel}
@@ -510,9 +511,9 @@ let ReportContent = React.createClass({
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}} /> :
                             <CardViewListHolder reportData={this.props.reportData}
-                                uniqueIdentifier="Record ID#"
+                                uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={this.props.fields && this.props.fields.keyField ?
-                                    this.props.fields.keyField.name : "Record ID#" }
+                                    this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}
                                 onScroll={this.onScrollRecords}

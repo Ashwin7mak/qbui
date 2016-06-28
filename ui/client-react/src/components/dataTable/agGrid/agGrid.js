@@ -19,14 +19,14 @@ import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
 
 import * as GroupTypes from '../../../constants/groupTypes';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 import '../gridWrapper.scss';
-
+import simpleStringify from '../../../../../common/src/simpleStringify';
 const serverTypeConsts = require('../../../../../common/src/constants');
 
+let FluxMixin = Fluxxor.FluxMixin(React);
 function buildIconElement(icon) {
     return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
 }
@@ -58,7 +58,11 @@ let AGGrid = React.createClass({
         records: React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
-        onRowClick: React.PropTypes.func
+        onRowClick: React.PropTypes.func,
+        onFieldChange: React.PropTypes.func,
+        onRecordChange: React.PropTypes.func,
+        onEditRecordStart: React.PropTypes.func,
+        onEditRecordCancel: React.PropTypes.func
     },
     contextTypes: {
         touch: React.PropTypes.bool,

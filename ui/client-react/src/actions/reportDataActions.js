@@ -9,6 +9,8 @@ import Logger from '../utils/logger';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
+import Locale from '../locales/locales';
+import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
 import reportModel from '../models/reportModel';
@@ -181,22 +183,6 @@ let reportDataActions = {
     },
 
     /* the start of editing a record */
-    recordPendingEditsStart(appId, tblId, recId, origRec) {
-        this.dispatch(actions.RECORD_EDIT_START, {appId, tblId, recId, origRec});
-    },
-    /* the change of a field while editing a record */
-    recordPendingEditsChangeField(appId, tblId, recId, changes) {
-        this.dispatch(actions.RECORD_EDIT_CHANGE_FIELD, {appId, tblId, recId, changes});
-    },
-    /* cancel editing a record */
-    recordPendingEditsCancel() {
-        this.dispatch(actions.RECORD_EDIT_CANCEL);
-    },
-    /* committing changes from editing a record */
-    recordPendingEditsCommit(appId, tblId, recId) {
-        this.dispatch(actions.RECORD_EDIT_SAVE, {appId, tblId, recId});
-    },
-
     /**
      * save a record
      */
@@ -212,11 +198,12 @@ let reportDataActions = {
                     response => {
                         logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.SAVE_REPORT_RECORD_SUCCESS, {appId, tblId, recId, changes});
-
+                        NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
                     },
                     error => {
                         logger.error('RecordService saveRecord call error:', JSON.stringify(error));
                         this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {error: error});
+                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
                         reject();
                     }
                 );

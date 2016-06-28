@@ -31,7 +31,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
 
     onRecordEditStart(payload) {
         if (typeof (payload.recId) !== 'undefined') {
-            this.currentEditingRecordId = payload.recId.value;
+            this.currentEditingRecordId = payload.recId;
             this.currentEditingAppId = payload.appId;
             this.currentEditingTableId = payload.tblId;
             this.recordChanges = {};

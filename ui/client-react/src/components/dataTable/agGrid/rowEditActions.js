@@ -43,7 +43,7 @@ const RowEditActions = React.createClass({
      * delete icon is not included but may come back shortly
      */
     onClickDelete() {
-        const id = this.props.data["Record ID#"];
+        const id = this.props.data[SchemaConsts.DEFAULT_RECORD_KEY];
         this.props.api.deselectAll();
 
         this.props.flux.actions.deleteReportRecord(id);

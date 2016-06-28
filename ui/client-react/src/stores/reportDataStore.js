@@ -3,7 +3,8 @@ import FacetSelections from '../components/facet/facetSelections';
 import ReportUtils from '../utils/reportUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
-import {NotificationManager} from 'react-notifications';
+import * as SchemaConsts from "../constants/schema";
+
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -346,7 +347,7 @@ let ReportDataStore = Fluxxor.createStore({
     onAddReportRecord() {
         const model = this.reportModel.get();
 
-        const recordKey = "Record ID#";
+        const recordKey = SchemaConsts.DEFAULT_RECORD_KEY;
 
         if (model.filteredRecords.length > 0) {
 
@@ -357,8 +358,8 @@ let ReportDataStore = Fluxxor.createStore({
 
             const newRecord = _.mapValues(maxRecord, (obj) => {return null;});
 
-            const id = parseInt(maxRecord["Record ID#"]) + 1;
-            newRecord["Record ID#"] = id;
+            const id = parseInt(maxRecord[SchemaConsts.DEFAULT_RECORD_KEY]) + 1;
+            newRecord[SchemaConsts.DEFAULT_RECORD_KEY] = id;
 
             const newRecords = model.filteredRecords.slice(0);
             newRecords.push(newRecord);
@@ -384,13 +385,11 @@ let ReportDataStore = Fluxxor.createStore({
     onSaveRecordSuccess() {
         this.lastSaveOk = true;
         this.saveRecordError = null;
-        NotificationManager.success('Record saved', 'Success', 1500);
         this.emit("change");
     },
     onSaveRecordFailed(payload) {
         this.lastSaveOk = false;
         this.saveRecordError = payload.error;
-        NotificationManager.error('Record saved', 'Failed', 1500);
         this.emit("change");
     },
 
