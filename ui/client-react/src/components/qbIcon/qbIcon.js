@@ -3,10 +3,18 @@ import './qbIcon.scss';
 import './style.css';
 
 /**
- * an icon using a new qb icon font (from Lisa)
+ * # QuickBase Icon Font
+ * An icon using a new qb icon font (from Lisa)
+ * ## Usage
+ * ```
+ *   <QBicon icon="accessibility" />
+ * ```
  */
 const QBicon = React.createClass({
     propTypes: {
+        /**
+         * See QuickBase.design for full list of icons.
+         */
         icon: React.PropTypes.string.isRequired,
         className: React.PropTypes.string,
         onClick: React.PropTypes.func

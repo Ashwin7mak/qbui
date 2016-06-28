@@ -10,14 +10,16 @@ const MAX_ACTIONS_RESIZE_WITH = 240; // max width while swiping
 let CardView = React.createClass({
     propTypes: {
         data: React.PropTypes.object,
-        rowId: React.PropTypes.number
+        rowId: React.PropTypes.number,
+        onSwipe: React.PropTypes.func
     },
 
     getInitialState() {
         return {
             showMoreCards: false,
             showActions: false,
-            swiping:false
+            swipingSelection:false,
+            swipingActions:false
         };
     },
 
@@ -68,9 +70,7 @@ let CardView = React.createClass({
         }
         var topField = this.createTopField(firstFieldValue);
         for (var i = 1; i < keys.length; i++) {
-            if (this.props.metadataColumns && this.props.metadataColumns.indexOf(keys[i]) === -1) {
-                fields.push(this.createField(i, keys[i]));
-            }
+            fields.push(this.createField(i, keys[i]));
         }
 
         return <div className="card">{topField}<div className={this.state.showMoreCards ? "fieldRow expanded" : "fieldRow collapsed"}>{fields}</div></div>;
@@ -78,56 +78,85 @@ let CardView = React.createClass({
 
     /**
      * swipe in progress
-     * @param event
+     *
      * @param delta x delta from touch starting position
+     * @param isLeftSwipe (swiped left relative to starting point)
      */
-    swiping(event, delta) {
+    swiping(deltaX, isLeftSwipe) {
 
-        if (!this.props.allowCardSelection()) {
-            // add delta to current width (MAX_ACTIONS_RESIZE_WITH if open, 0 if closed) to get new size
+        // as we swipe we either continue resizing either a) the row actions
+        // or b) the selection column if we've started that process, or start
+        // to resize one or the other depending on the swipe direction
+        // (hence the tricky logic below)
+
+        const selectionOpen = this.props.allowCardSelection();
+
+        let swipingActions = this.state.swipingActions || this.state.showActions;
+        let swipingSelection = this.state.swipingSelection || selectionOpen;
+
+        if (!this.state.swipingActions && !this.state.swipingSelection) {
+            // starting a new swipe
+
+            swipingActions = this.state.showActions || (!selectionOpen && isLeftSwipe);
+            swipingSelection = !swipingActions;
+
             this.setState({
-                resizeWidth: Math.max(this.state.showActions ? (delta + MAX_ACTIONS_RESIZE_WITH) : delta, 0),
-                swiping: true
+                swipingSelection,
+                swipingActions
             });
+        }
+
+        // handle the resize of the relevant component
+
+        if (!isLeftSwipe) {
+            deltaX = -deltaX;
+        }
+
+        if (swipingActions) {
+            // add deltaX to current width (MAX_ACTIONS_RESIZE_WITH if open, 0 if closed) to get new size
+            this.setState({
+                resizeWidth: Math.max(this.state.showActions ? (deltaX + MAX_ACTIONS_RESIZE_WITH) : deltaX, 0)
+            });
+        } else {
+            // swiping right - delegate swipe to parent components (swiping checkbox column)
+            this.props.onSwipe(deltaX);
         }
     },
 
-    /**
-     * finished swipe
-     */
-    swiped() {
-        this.setState({
-            swiping:false
-        });
-    },
 
     /**
      * either close selection column or show actions
      * @param e
      */
     swipedLeft(e) {
-
-        if (this.props.allowCardSelection()) {
+        if (this.state.swipingSelection) {
             this.props.onToggleCardSelection(false);
-        } else if (!this.state.showActions) {
+        } else if (this.state.swipingActions) {
             this.setState({
                 showActions: true
             });
         }
+        this.setState({
+            swipingActions:false,
+            swipingSelection:false
+        });
     },
 
     /**
      * hide actions column or show selection column if actions are not open
      */
     swipedRight() {
-
-        if (this.state.showActions) {
+        if (this.state.swipingActions) {
             this.setState({
                 showActions: false
             });
         } else if (!this.props.allowCardSelection()) {
             this.props.onToggleCardSelection(true, this.props.data);
         }
+        this.setState({
+            swipingActions:false,
+            swipingSelection:false
+        });
     },
     /* callback when row is selected */
     onRowSelected(e) {
@@ -154,7 +183,7 @@ let CardView = React.createClass({
 
             let rowActionsClasses = "rowActions ";
 
-            if (this.state.swiping) {
+            if (this.state.swipingActions) {
                 rowActionsClasses += "swiping";
                 actionsStyle = {
                     width: Math.min(MAX_ACTIONS_RESIZE_WITH, this.state.resizeWidth)
@@ -171,15 +200,17 @@ let CardView = React.createClass({
             const isSelected = this.props.isRowSelected(this.props.data);
 
             return (
-                <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swiping ? "actionsOpen" : "actionsClosed") }
-                            onSwiping={this.swiping}
-                            onSwiped={this.swiped}
+                <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swipingActions ? "actionsOpen" : "actionsClosed") }
+                            onSwipingLeft={(ev, delta) => {this.swiping(delta, true);}}
+                            onSwipingRight={(ev, delta) => {this.swiping(delta, false);}}
                             onSwipedLeft={this.swipedLeft}
                             onSwipedRight={this.swipedRight} >
 
                     <div className={this.state.showMoreCards ? "custom-row-card expanded" : "custom-row-card"} >
                         <div style={cardStyle} className="flexRow">
-                            {this.props.allowCardSelection() && <div className={"checkboxContainer"}><input checked={isSelected} onChange={this.onRowSelected} type="checkbox"></input></div>}
+                            <div className={"checkboxContainer"}>
+                                <input checked={isSelected} onChange={this.onRowSelected} type="checkbox"></input>
+                            </div>
                             <div className="card" onClick={this.onRowClick}>
                                 {row}
                             </div>

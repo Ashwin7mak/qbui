@@ -12,6 +12,8 @@ var buildPath = path.join(__dirname, 'client-react/dist');
 
 var clientPath = path.join(__dirname, 'client-react');
 
+var componentLibraryPath = path.join(__dirname, 'componentLibrary/src');
+
 var envConfig = require('./server/src/config/environment');
 
 // 3 supported run-time environments..ONE and ONLY ONE variable is to be set to true.
@@ -49,20 +51,27 @@ var config = {
     devtool: PROD ? 'source-map' : 'eval',
     watchDelay: 50,
 
-    entry: [
+    entry: {
         // main entry point to the app
         // TODO:entry point...when more pages are flushed out
         // we probably should rename to something like quickbase.js and add a builder entry
-        path.resolve(clientPath, 'src/scripts/router.js'),
-        'bootstrap-sass!./client-react/bootstrap-sass.config.js'
-    ],
+        bundle: [
+            'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(clientPath, 'src/scripts/router.js')
+        ],
+        componentLibrary: [
+            'bootstrap-sass!./client-react/bootstrap-sass.config.js',
+            path.resolve(componentLibraryPath, 'index.js')
+        ]
+    },
     output: {
         // pathinfo - false disable outputting file info comments in prod bundle
         pathinfo: !PROD,
         // generated files directory for output
         path: buildPath,
         // generated js file
-        filename: PROD ? 'bundle.min.js' : 'bundle.js',
+        filename: PROD ? '[name].min.js' : '[name].js',
+        chunkFilename: PROD ? '[id].bundle.min.js' : '[id].bundle.js',
         //publicPath is path from the view of the Javascript / HTML page.
         // where all js/css http://.. references will use for relative base
         publicPath: '/dist/' // Required for webpack-dev-server
@@ -77,9 +86,14 @@ var config = {
                 test: /\.js?$/,
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
-                    path.resolve(__dirname, 'client-react/test')
+                    path.resolve(__dirname, 'client-react/test'),
+                    componentLibraryPath
                 ],
-                exclude: [nodeModulesPath],
+                exclude: [
+                    nodeModulesPath,
+                    // We don't want these to get compiled because ReactPlayground does that in the browser
+                    path.resolve(componentLibraryPath, 'examples')
+                ],
                 loaders: ['react-hot-loader', 'babel-loader']
             },
             {
@@ -87,6 +101,7 @@ var config = {
                 test: /\.css?$/,
                 include: [
                     path.resolve(__dirname, 'client-react/src'),
+                    componentLibraryPath,
                     path.resolve(__dirname, 'node_modules/ag-grid'),
                     path.resolve(__dirname, 'node_modules/react-notifications'),
                     path.resolve(__dirname, 'node_modules/react-bootstrap-datetimepicker')
@@ -105,7 +120,7 @@ var config = {
             },
             {
                 include: /\.json$/,
-                loaders: ["json-loader"]
+                loaders: ['json-loader']
             },
             // SASS - transformed to css,
             {
@@ -130,7 +145,12 @@ var config = {
 
         // for prod we also de-dupe, obfuscate and minimize
         new webpack.optimize.DedupePlugin(),
-        new webpack.optimize.UglifyJsPlugin({minimize: true}),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            compress: {
+                warnings: false
+            }
+        }),
 
         //  run-time environment for our application
         envPlugin
