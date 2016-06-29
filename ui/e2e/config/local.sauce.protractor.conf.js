@@ -5,6 +5,12 @@
     var baseE2EPath = '../../e2e/';
     // Global properties file with params common to all Sauce lab config files
     exports.config = {
+        // A callback function called once configs are read but before any environment
+        // setup. This will only run once, and before onPrepare.
+        beforeLaunch: function() {
+            //Have the tests start an instance of node
+            require('../../server/src/app');
+        },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 300000,
@@ -30,11 +36,11 @@
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            baseE2EPath + 'qbapp/tests/reports/reportLayout.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportLeftNav.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGrpAndSortViaIcon.e2e.spec.js'],
+        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'],
         // ----- The test framework -----
         //
         // Jasmine and Cucumber are fully supported as a test and assertion framework.
@@ -90,7 +96,7 @@
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
-                browser.browserName = cap.caps_.browserName;
+                global.browserName = cap.get('browserName');
             });
         }
     };

@@ -192,8 +192,9 @@
                     });
                 }).then(function() {
                     //Finally verify both the arrays
-                    reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
-                    done();
+                    reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults).then(function() {
+                        done();
+                    });
                 });
             });
 
@@ -216,8 +217,9 @@
                     });
                 }).then(function() {
                     //Finally verify both the arrays
-                    reportSortingPage.verifyDescending(sortingTestcase.message, actualTableResults, sortedTableResults);
-                    done();
+                    reportSortingPage.verifyDescending(sortingTestcase.message, actualTableResults, sortedTableResults).then(function() {
+                        done();
+                    });
                 });
             });
         });
@@ -236,7 +238,7 @@
              * Before each test starts just make sure the report list has loaded
              */
             beforeEach(function(done) {
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
                     done();
                 });
             });
@@ -262,8 +264,9 @@
                     });
                 }).then(function() {
                     //Finally verify both the arrays
-                    reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
-                    done();
+                    reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults).then(function() {
+                        done();
+                    });
                 });
             });
 
@@ -286,8 +289,9 @@
                     });
                 }).then(function() {
                     //Finally verify both the arrays
-                    reportSortingPage.verifyDescending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults);
-                    done();
+                    reportSortingPage.verifyDescending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults).then(function() {
+                        done();
+                    });
                 });
             });
         });
