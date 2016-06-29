@@ -115,14 +115,6 @@
                     ]
                 },
                 {
-                    message: ' Checkbox value',
-                    query: 'true',
-                    expectedSearchResults: [
-                        ['', '04-12-2016', '04-11-2016 10:51 PM', 'first_name_last_name@quickbase.com', true, '7.642'],
-                        ['wuv', '01-12-2016', '01-11-2016 9:51 PM', 'abcxyz_LastName@quickbase.com', true, '6.05']
-                    ]
-                },
-                {
                     message: ' Text value',
                     query: 'xyz',
                     expectedSearchResults: [
