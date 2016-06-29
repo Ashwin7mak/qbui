@@ -75,6 +75,7 @@ $cell-edit-background-edit: #f3f8fe;
             }
         }
     }
+
     .ag-header-cell-menu-button {
         display: none;
         padding: 4px 0 3px;
@@ -355,7 +356,7 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 /* hide datepicker if it's been opened but we're not over that cell */
-.ag-row.editing .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget{
+.ag-row.editing .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget {
     display: none !important;
 }
 
@@ -521,9 +522,9 @@ $cell-edit-background-edit: #f3f8fe;
 
 .reportToolsAndContentContainer.singleSelection .ag-pinned-left-cols-container .ag-row.ag-row-selected.ag-row.ag-row-selected {
     .ag-cell.gridCell > .ag-cell-wrapper {
-        border-left:0;
+        border-left: 0;
     }
-    box-shadow:0;
+    box-shadow: 0;
 }
 
 .ag-group-cell-entire-row {
