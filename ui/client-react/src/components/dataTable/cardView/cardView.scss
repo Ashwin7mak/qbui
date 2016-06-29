@@ -150,28 +150,14 @@ $chevron_closed_icon: url("../../../../src/assets/images/chevron_closed.svg");
 }
 
 .checkboxContainer {
-    width: 0;
-    transition: all 300ms ease-in;
-    position: relative;
+    width: 40px;
     input {
         height: 100%;
+        display:inline-block;
         position: absolute;
-        display: none;
     }
 }
 
-.allowCardSelection {
-
-    .checkboxContainer {
-        overflow: hidden;
-        width: 40px;
-        transition: all 300ms ease-in;
-
-        input {
-            display: inline-block;
-        }
-    }
-}
 
 .rowActions {
     height: 100%;
@@ -183,10 +169,7 @@ $chevron_closed_icon: url("../../../../src/assets/images/chevron_closed.svg");
     position: absolute;
 
     .recordActions {
-        padding: 0;
-        height: 100%;
-        width: 240px;
-
+        width: 100%;
         .actionIcons {
             display: flex;
             flex-direction: row;
@@ -200,7 +183,7 @@ $chevron_closed_icon: url("../../../../src/assets/images/chevron_closed.svg");
                 .qbIcon {
                     position: absolute;
                     top: calc(50% - 8px);
-                    left: calc(50% - 8px);
+                    left: 12px;
                 }
             }
         }

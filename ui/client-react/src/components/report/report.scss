@@ -108,10 +108,10 @@
         display: flex;
         flex: 1 1 auto;
         width: 100%;
+        position: relative;
     }
 
 }
-
 
 @include small-breakpoint {
     .layout-stage {
@@ -186,7 +186,6 @@
     }
 }
 
-
 $add-record-fg: #fff;
 $add-record-bg: #a52363;
 $add-record-radius: 20px;
@@ -211,7 +210,6 @@ $add-record-radius: 20px;
         right: 24px;
         bottom: 24px;
         font-size: 24px;
-
         color: $add-record-fg;
         background-color: $add-record-bg;
         vertical-align: middle;

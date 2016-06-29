@@ -66,6 +66,12 @@
             return browser.wait(EC.visibilityOf(element), browser.params.ecTimeout, 'Timed out waiting for element to appear');
         };
 
+        this.waitForElements = function(element1, element2) {
+            var condition = EC.and(EC.visibilityOf(element1), EC.visibilityOf(element2));
+            //wait for condition to be true.
+            return browser.wait(condition, browser.params.ecTimeout, 'Timed out waiting for elements to be visible');
+        };
+
         this.waitForElementToBePresent = function(element) {
             return browser.wait(EC.presenceOf(element), browser.params.ecTimeout, 'Timed out waiting for element to be present on the DOM');
         };
@@ -90,24 +96,21 @@
 
         // Verify the element is located on top of the other
         this.isElementOnTop = function(element1, element2) {
+            var self = this;
             // First check that both elements are being displayed
-            this.assertElementDisplayed(element1);
-            this.assertElementDisplayed(element2);
-
-            // Get element1 location
-            element1.getLocation().then(function(navDivLocation) {
-                var element1xPosition = navDivLocation.x;
-                var element1yPosition = navDivLocation.y;
-                //TODO Require logger.js instead of using console.log
-                //console.log("The coordinates of element1 are: " + element1xPosition + "," + element1yPosition);
-                // Get element2 location
-                element2.getLocation().then(function(navDivLocation2) {
-                    var element2xPosition = navDivLocation2.x;
-                    var element2yPosition = navDivLocation2.y;
-                    //console.log("The coordinates of element2 are: " + element2xPosition + "," + element2yPosition);
-                    // Compare element2 coordinates to be greater than element1
-                    expect(element2xPosition === element1xPosition || element2xPosition > element1xPosition).toBeTruthy();
-                    expect(element2yPosition > element1yPosition).toBeTruthy();
+            return self.waitForElements(element1, element2).then(function() {
+                // Get element1 location
+                element1.getLocation().then(function(navDivLocation) {
+                    var element1xPosition = navDivLocation.x;
+                    var element1yPosition = navDivLocation.y;
+                    // Get element2 location
+                    element2.getLocation().then(function(navDivLocation2) {
+                        var element2xPosition = navDivLocation2.x;
+                        var element2yPosition = navDivLocation2.y;
+                        // Compare element2 coordinates to be greater than element1
+                        expect(element2xPosition === element1xPosition || element2xPosition > element1xPosition).toBeTruthy();
+                        expect(element2yPosition > element1yPosition).toBeTruthy();
+                    });
                 });
             });
         };

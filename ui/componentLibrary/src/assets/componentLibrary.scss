@@ -1,0 +1,219 @@
+@import '../../../client-react/src/assets/css/qbVariables';
+
+$font-path: '../../../client-react/src/assets/fonts/';
+
+// We just let people scroll as they will on mobile
+@media (max-width: 767px) {
+    html, body {
+        overflow: auto;
+        height: auto;
+        min-height: auto;
+    }
+}
+
+.comp-library {
+    width: 100%;
+    overflow-x: scroll;
+    display: flex;
+    flex-direction: column;
+    textarea {
+        width: 500px;
+        height: 300px;
+        margin-bottom: 30px;
+    }
+
+    @media (min-width: 768px) {
+        flex-direction: row;
+        height: 100%;
+        overflow-x: auto;
+    }
+}
+
+.comp-library-nav {
+    flex: 0 1 auto;
+    width: 100%;
+    background: $color30;
+    h3 {
+        color: $color7;
+        font-size: 20px;
+        font-weight: normal;
+        text-align: center;
+        margin-bottom: 20px !important;
+    }
+    ul {
+        margin: 0;
+        padding: 0;
+    }
+    li {
+        list-style: none;
+        border-bottom: 1px solid $color32;
+    }
+    li:first-child {
+        border-top: 1px solid $color32;
+    }
+    li a {
+        display: block;
+        line-height: 1.8;
+        color: #fff;
+        width: 100%;
+        font-size: 14px;
+        text-decoration: none;
+        padding: 20px;
+        // margin-bottom: 3px;
+        &:hover {
+            background: $color26;
+        }
+        &.active {
+            background: $color27;
+        }
+        @media (min-width: 768px) {
+            padding: 10px 10%;
+        }
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    @media (min-width: 768px) {
+        flex: 0 1 245px;
+        width: 245px;
+        height: 100%;
+        padding-top: 10px;
+        overflow: scroll;
+        overflow-x: hidden;
+    }
+}
+
+.comp-library-content {
+    flex: 0 1 100%;
+    flex-basis: auto; // Safari bug that causes container to collapse
+    overflow-x: scroll;
+    padding: 20px;
+
+    @media (min-width: 768px) {
+        overflow: auto;
+
+        > div {
+            width: 100%;
+            max-width: 700px;
+        }
+    }
+
+    .playground {
+        margin-bottom: 60px;
+    }
+
+    .code-toggle {
+        padding: 4px 8px;
+        top: -1px;
+        margin-left: 1px;
+        border-radius: 0 0 4px 4px;
+        float: right;
+        display: inline-block;
+        position: relative;
+        border: 1px solid #ddd;
+        border-top: none;
+        background: #fff;
+    }
+
+    .highlight, .code-toggle.open {
+      background-color: #272822;
+    }
+
+    .code-toggle.open {
+        color: #fff;
+    }
+
+    .highlight {
+      padding: 20px 10px;
+      margin-bottom: 14px;
+      background-color: #272822;
+      border: 1px solid #e1e1e8;
+      border-radius: 4px 4px 0 4px;
+    }
+
+    .highlight pre {
+      padding: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+      word-break: normal;
+      word-wrap: nowrap;
+      white-space: nowrap;
+      background-color: transparent;
+      border: 0;
+    }
+
+    .highlight pre code {
+      font-size: inherit;
+      color: #fff; /* Effectively the base text color */
+    }
+
+    .highlight pre code:first-child {
+      display: inline-block;
+      padding-right: 45px;
+    }
+
+    /*
+     * Examples
+     *
+     * Isolated sections of example content for each component or feature. Usually
+     * followed by a code snippet.
+     */
+
+    .bs-example {
+      position: relative;
+      padding: 45px 15px 15px;
+      margin: 0 -15px 0;
+      border-color: #e5e5e5 #eee #eee;
+      border-style: solid;
+      border-width: 1px 0;
+      -webkit-box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
+              box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
+    }
+
+    /* Echo out a label for the example */
+    .bs-example:after {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #959595;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      content: "Example";
+    }
+
+    /* Tweak display of the code snippets when following an example */
+    .bs-example + .highlight {
+      margin: -15px -15px 0;
+      border-width: 0 0 1px;
+      border-radius: 0;
+    }
+
+    /* Make the examples and snippets not full-width */
+    @media (min-width: 768px) {
+      .bs-example {
+        margin-right: 0;
+        margin-left: 0;
+        background-color: #fff;
+        border-color: #ddd;
+        border-width: 1px;
+        border-radius: 4px 4px 0 0;
+        -webkit-box-shadow: none;
+                box-shadow: none;
+      }
+      .bs-example + .highlight {
+        margin-top: -10px;
+        margin-right: 0;
+        margin-left: 0;
+        border-width: 1px;
+      }
+    }
+
+    /* Undo width of container */
+    .bs-example .container {
+      width: auto;
+    }
+}
