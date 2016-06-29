@@ -286,13 +286,31 @@ let AGGrid = React.createClass({
      * @param params ag row data
      */
     getRowClass(params) {
-
         return (params.node === this.state.editingRowNode) ? "editing" : "";
     },
 
+    /**
+     * user has tabbed out of a cell, move the edit row if necessary
+     * @param colDef
+     */
+    onCellTab(colDef) {
+
+        if (colDef.order === (this.props.columns.length - 1)) {
+            // tabbed out of last column
+            const currentIndex = this.state.editingRowNode.childIndex;
+            const allRows = this.api.getModel().allRows;
+
+            if (currentIndex < allRows.length - 1) {
+                this.editRow(allRows[currentIndex + 1]); // edit next row
+            } else if (allRows.length > 1) {
+                this.editRow(allRows[0]); // on last row, edit 1st row
+            }
+        }
+    },
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
+        this.gridOptions.context.cellTabCallback = this.onCellTab;
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
         this.gridOptions.getRowClass = this.getRowClass;
 
@@ -361,12 +379,34 @@ let AGGrid = React.createClass({
         flux.actions.selectedRows([]);
     },
     /**
+     * is an element inside the edit-mode grid cell?
+     * @param elem
+     * @returns {boolean}
+     */
+    isEditChild(elem) {
+
+        let parent = elem.parentNode;
+        while (parent) {
+            if (parent.classList.contains("editing")) {
+                return true;
+            }
+            if (parent.classList.contains("ag-row") || parent.classList.contains("agGrid")) {
+                return false;
+            }
+            parent = parent.parentNode; // traverse up the DOM
+        }
+        return false;
+    },
+    /**
      * Capture the row-click event. Send to record view on row-click
      * @param params
      */
     onRowClicked(params) {
 
         const target = params.event.target;
+
+        if (this.isEditChild(target.parentNode))
+            return;
 
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {

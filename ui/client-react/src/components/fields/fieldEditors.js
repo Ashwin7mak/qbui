@@ -53,7 +53,8 @@ export const ComboBoxFieldEditor = React.createClass({
 
     propTypes: {
         choices: React.PropTypes.array, // array of choices with display value props
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        onTab: React.PropTypes.func
     },
 
     // handle text input
@@ -62,7 +63,6 @@ export const ComboBoxFieldEditor = React.createClass({
 
         this.props.onChange(newValue);
     },
-
     // handle dropdown selection
     onSelect(choice) {
         this.props.onChange(choice);
@@ -73,7 +73,8 @@ export const ComboBoxFieldEditor = React.createClass({
             <InputGroup className="cellEdit">
                 <FormControl type="text"
                              value={this.props.value}
-                             onChange={this.onChange}/>
+                             onChange={this.onChange}
+                             />
                 <DropdownButton pullRight={true}
                                 componentClass={InputGroup.Button}
                                 id="input-dropdown-addon"
