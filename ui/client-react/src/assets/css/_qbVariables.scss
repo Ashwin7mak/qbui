@@ -23,7 +23,7 @@ $large-breakpoint-width: 1440px;
 }
 
 @mixin medium-breakpoint {
-    @media (min-wisdth: #{$small-breakpoint-width + 1px}) and (max-width: #{$medium-breakpoint-width}) {
+    @media (min-width: #{$small-breakpoint-width + 1px}) and (max-width: #{$medium-breakpoint-width}) {
         @content;
     }
 }
