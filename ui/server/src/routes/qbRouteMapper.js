@@ -8,6 +8,7 @@
     var perfLogger = require('../perfLogger');
     var routeConsts = require('./routeConstants');
     var request = require('request');
+
     var requestHelper;
 
     var formsApi;
@@ -219,8 +220,10 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Single Record', {req:filterNodeReq(req)});
 
+        let rootUrl = requestHelper.transformUrlRoute(req.url, 'records', '');
+
         processRequest(req, res, function(req, res) {
-            recordsApi.fetchSingleRecordAndFields(req).then(
+            recordsApi.fetchSingleRecordAndFields(req, rootUrl).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Single Record');
@@ -250,8 +253,10 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch All Records', {req:filterNodeReq(req)});
 
+        let rootUrl = requestHelper.transformUrlRoute(req.url, 'records', '');
+
         processRequest(req, res, function(req, res) {
-            recordsApi.fetchRecordsAndFields(req).then(
+            recordsApi.fetchRecordsAndFields(req, rootUrl).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch All Records');
@@ -282,8 +287,10 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Table HomePage Report Components', {req:filterNodeReq(req)});
 
+        let rootUrl = requestHelper.transformUrlRoute(req.url, 'homepage', '');
+
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchTableHomePageReport(req).then(
+            reportsApi.fetchTableHomePageReport(req, rootUrl).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Table HomePage Report Components');
@@ -312,8 +319,10 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
 
+        let rootUrl = requestHelper.transformUrlRoute(req.url, 'formcomponents', '');
+
         processRequest(req, res, function(req, res) {
-            formsApi.fetchFormComponents(req).then(
+            formsApi.fetchFormComponents(req, rootUrl).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Form Components');
@@ -344,8 +353,10 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report Components', {req:filterNodeReq(req)});
 
+        let rootUrl = requestHelper.transformUrlRoute(req.url, 'reportcomponents', '');
+
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportComponents(req).then(
+            reportsApi.fetchReportComponents(req, rootUrl).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Components');
@@ -377,8 +388,10 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report Data', {req:filterNodeReq(req)});
 
+        let rootUrl = requestHelper.transformUrlRoute(req.url, 'results', '');
+
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportResults(req).then(
+            reportsApi.fetchReportResults(req, rootUrl).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Data');

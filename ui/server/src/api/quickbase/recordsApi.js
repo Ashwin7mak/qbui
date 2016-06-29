@@ -71,10 +71,7 @@
         var FIELDS = 'fields';
         var RECORD = 'record';
         var RECORDS = 'records';
-        var REPORTS = 'reports';
         var GROUPS = 'groups';
-        var REPORTCOMPONENTS = 'reportcomponents';
-        var RESULTS = 'results';
         var request = defaultRequest;
 
         //Given an array of records and array of fields, remove any fields
@@ -135,10 +132,10 @@
              * @param req
              * @returns Promise
              */
-            fetchSingleRecordAndFields: function(req) {
+            fetchSingleRecordAndFields: function(req, rootUrl) {
 
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
+                    var fetchRequests = [this.fetchRecords(req, rootUrl), this.fetchFields(req, rootUrl)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -182,10 +179,10 @@
              * @param req
              * @returns Promise
              */
-            fetchRecordsAndFields: function(req) {
+            fetchRecordsAndFields: function(req, rootUrl) {
 
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
+                    var fetchRequests = [this.fetchRecords(req, rootUrl), this.fetchFields(req, rootUrl)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -252,26 +249,27 @@
              * @param req
              * @returns Promise
              */
-            fetchRecords: function(req) {
+            fetchRecords: function(req, rootUrl) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
                 let inputUrl = opts.url; //JAVA api is case sensitive so dont loose camel case here.
                 let inputUrl_toLower = opts.url.toLowerCase(); // but for convinience of string matches convert to lower case
 
-                //the request came in for report/{reportId}/results.
-                // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl_toLower.indexOf(REPORTCOMPONENTS) !== -1) {
-                    // this bypass is for grouping but in ag-grid
-                    // change url from .../reports/<id>/reportcomponents?sortList=..
-                    // to .../records?sortList=.. because /reports/results api does not support sortList param.
+                if (inputUrl_toLower.indexOf('reportcomponents') !== -1) {
+                    //  report components endpoint does not support sort request parameters.  If sorting, use the records
+                    //  endpoint, with the parameter list, to get the data; otherwise use the report/results endpoint.
                     if (inputUrl_toLower.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
-                        let reportIndex = inputUrl_toLower.indexOf(REPORTS);
                         let paramsIndex = inputUrl_toLower.indexOf("?"); // get the index for url params starting after ?
-                        opts.url = inputUrl.substring(0, reportIndex) + RECORDS + inputUrl.substring(paramsIndex);
+                        if (rootUrl) {
+                            rootUrl = requestHelper.transformUrlRoute(rootUrl, 'reports', '');  //  if coming from a reports endpoint, remove the report info
+                        }
+                        opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + 'records' + inputUrl.substring(paramsIndex));
                     } else {
-                        opts.url = inputUrl.substring(0, inputUrl_toLower.indexOf(REPORTCOMPONENTS)) + RESULTS;
+                        opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + 'results');
                     }
+                } else {
+                    opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + 'records');
                 }
 
                 return requestHelper.executeRequest(req, opts);
@@ -283,22 +281,19 @@
              * @param req
              * @returns Promise
              */
-            fetchFields: function(req) {
+            fetchFields: function(req, rootUrl) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                var inputUrl = opts.url.toLowerCase();
 
-                //If the endpoint provided is the records or report execution endpoint,
-                // replace records or reports with the /fields path
-                if (inputUrl.indexOf(RECORDS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(RECORDS)) + FIELDS;
-                } else if (inputUrl.indexOf(REPORTS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTS)) + FIELDS;
+                if (rootUrl) {
+                    //  if coming from a reports endpoint, remove the report info
+                    rootUrl = requestHelper.transformUrlRoute(rootUrl, 'reports', '');
+                    opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + 'fields');
                 }
 
-                //TODO: why do we immediately resolve if the format is raw?
                 return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
             }
+
         };
         return recordsApi;
     };

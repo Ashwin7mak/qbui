@@ -193,6 +193,30 @@
                 } else {
                     log.error("Caught unexpected error in " + func + "\nError Message: Unknown error...no error object defined");
                 }
+            },
+
+            /**
+             * Supporting method to transform a segment of the url component.  If curRoute segement is found
+             * in the url, the new route segment is placed in the starting position of where curRoute is located.
+             *
+             * Example:
+             *  let newUrl = transformUrlRoute('apps/123/tables/456/component', 'tables', 'forms/789');
+             *  newUrl ==> apps/123/forms/789
+             *
+             * @param url - url to examine
+             * @param curRoute - route to search
+             * @param newRoute - new route to replace
+             * @returns {*}
+             */
+            transformUrlRoute: function(url, curRoute, newRoute) {
+                if (url) {
+                    var offset = url.toLowerCase().indexOf(curRoute);
+                    if (offset !== -1) {
+                        return url.substring(0, offset) + newRoute;
+                    }
+                }
+                //  return requestUrl unchanged
+                return url;
             }
         };
 

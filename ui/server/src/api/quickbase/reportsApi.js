@@ -33,25 +33,6 @@
         let NODE_REPORTCOMPONENT_ROUTE = 'reportcomponents';
         let NODE_HOMEPAGE_ROUTE = 'homepage';
 
-        /**
-         * Supporting method to transform a segment of a url route component
-         *
-         * @param url - url to examine
-         * @param curRoute - route to search
-         * @param newRoute - new route to replace
-         * @returns {*}
-         */
-        function transformUrlRoute(url, curRoute, newRoute) {
-            if (url) {
-                let offset = url.toLowerCase().indexOf(curRoute);
-                if (offset !== -1) {
-                    return url.substring(0, offset) + newRoute;
-                }
-            }
-            //  return requestUrl unchanged
-            return url;
-        }
-
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
 
@@ -77,20 +58,22 @@
              * @param req
              * @returns {*}
              */
-            fetchFacetResults: function(req) {
+            fetchFacetResults: function(req, rootUrl) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
                 // Node request is ../report/{reportId}/reportComponents  --> convert to
                 // ../report/{reportId}/facets/results to return the facet data from core
-                opts.url = transformUrlRoute(opts.url, NODE_REPORTCOMPONENT_ROUTE, CORE_REPORTFACETS_ROUTE);
+                if (rootUrl) {
+                    opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + CORE_REPORTFACETS_ROUTE);
+                }
 
                 return requestHelper.executeRequest(req, opts);
             },
 
-            fetchReportResults: function(req) {
+            fetchReportResults: function(req, rootUrl) {
                 return new Promise((resolve, reject) => {
-                    recordsApi.fetchRecordsAndFields(req).then(
+                    recordsApi.fetchRecordsAndFields(req, rootUrl).then(
                         (response) => {
                             resolve(response);
                         },
@@ -114,11 +97,11 @@
             /** Returns a promise that is resolved with the records, fields meta data and facets
              *  or is rejected with a descriptive error code
              */
-            fetchReportComponents: function(req) {
+            fetchReportComponents: function(req, rootUrl) {
 
                 //  Fetch field meta data and grid data for a report
                 var reportPromise = new Promise((resolve1, reject1) => {
-                    this.fetchReportResults(req).then(
+                    this.fetchReportResults(req, rootUrl).then(
                         (resultsResponse) => {
                             resolve1(resultsResponse);
                         },
@@ -136,8 +119,8 @@
                 //
                 //  NOTE:  if an error occurs while fetching the faceting information, we still want the promise to
                 //  resolve as we want to always display the report data if that promise returns w/o error.
-                var facetPromise = new Promise((resolve2, reject2) => {
-                    this.fetchFacetResults(req).then(
+                var facetPromise = new Promise((resolve2) => {
+                    this.fetchFacetResults(req, rootUrl).then(
                         (facetResponse) => {
                             resolve2(facetResponse);
                         },
@@ -202,14 +185,14 @@
              * @param opts
              * @returns {bluebird|exports|module.exports}
              */
-            fetchReportMetaData(req, reportId, referRoute) {
+            fetchReportMetaData(req, reportId, rootUrl) {
 
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + reportId;
 
-                if (referRoute) {
-                    opts.url = transformUrlRoute(opts.url, referRoute, REPORT_ROUTE);
+                if (rootUrl) {
+                    opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + REPORT_ROUTE);
                 }
 
                 //  promise to return report meta data
@@ -231,7 +214,7 @@
              * @param req
              * @returns {bluebird|exports|module.exports}
              */
-            fetchTableHomePageReport: function(req) {
+            fetchTableHomePageReport: function(req, rootUrl) {
 
                 var reportObj = {
                     reportMetaData: {
@@ -249,18 +232,21 @@
 
                     // Node request is ../tables/{tableId}/homepage  --> transform the url to
                     // ../tables/{tableId}/homepagereportid to return the table report homepage id from core
-                    opts.url = transformUrlRoute(opts.url, NODE_HOMEPAGE_ROUTE, CORE_HOMEPAGE_ID_ROUTE);
+                    if (rootUrl) {
+                        opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + CORE_HOMEPAGE_ID_ROUTE);
+                    }
 
                     //  make the api request to get the table homepage report id
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
+                            response.body = "1";
                             // parse out the id and use to fetch the report meta data.  Process the meta data
                             // to fetch and return the report content.
                             if (response.body) {
                                 let homepageReportId = JSON.parse(response.body);
 
                                 //  have a homepage id; first get the report meta data
-                                this.fetchReportMetaData(req, homepageReportId, NODE_HOMEPAGE_ROUTE).then(
+                                this.fetchReportMetaData(req, homepageReportId, rootUrl).then(
                                     (metaDataResult) => {
                                         //  parse the metadata and set the request parameters for the default sortList, fidList and query expression (if defined).
                                         //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
@@ -282,10 +268,10 @@
                                         //req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = ?;
 
                                         //  set to the fetch the report components url
-                                        let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + homepageReportId;
-                                        req.url = transformUrlRoute(req.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE + '/' + NODE_REPORTCOMPONENT_ROUTE);
+                                        let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + homepageReportId + '/';
+                                        req.url = requestHelper.transformUrlRoute(req.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE + NODE_REPORTCOMPONENT_ROUTE);
 
-                                        this.fetchReportComponents(req).then(
+                                        this.fetchReportComponents(req, rootUrl + REPORT_ROUTE).then(
                                             (reportData) => {
                                                 //  return the metadata and report content
                                                 reportObj.reportMetaData.data = reportMetaData;
