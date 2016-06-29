@@ -85,20 +85,32 @@
             });
         });
 
+        beforeEach(function(done) {
+            //Set the session back to ADMIN
+            // Get a session ticket for that subdomain and realmId (stores it in the browser)
+            realmName = e2eBase.recordBase.apiBase.realm.subdomain;
+            realmId = e2eBase.recordBase.apiBase.realm.id;
+            //get the Admin authentication
+            RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            done();
+        });
+
         /**
          * Function to verify default table home page report's title and column headers.
          */
         var verifyTableLoad = function(reportTitle) {
             // Wait until the table has loaded
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                //Assert report heading
-                expect(reportServicePage.stageHeadLine.getAttribute('innerText')).toEqual(reportTitle);
-                // Assert the record count
-                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toBe('10 Records');
+            reportServicePage.waitForElement(reportServicePage.reportContainerEl).then(function() {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    //Assert report heading
+                    expect(reportServicePage.stageHeadLine.getAttribute('innerText')).toEqual(reportTitle);
+                    // Assert the record count
+                    expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toBe('10 Records');
 
-                //verify that the table report loaded by verifying the column headers
-                reportServicePage.getReportColumnHeaders().then(function(tableColHeaders) {
-                    expect(tableColHeaders).toEqual(e2eConsts.reportFieldNames);
+                    //verify that the table report loaded by verifying the column headers
+                    reportServicePage.getReportColumnHeaders().then(function(tableColHeaders) {
+                        expect(tableColHeaders).toEqual(e2eConsts.reportFieldNames);
+                    });
                 });
             });
         };
@@ -142,7 +154,7 @@
          * Authenticate the created User and verify the default table home page displays the report set or not.
          */
         reportHomePageTestCases().forEach(function(testcase) {
-            it('Verify default table home page for ', function(done) {
+            it('Verify default table home page for ' + testcase.message, function(done) {
                 //create user
                 e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
@@ -159,11 +171,20 @@
                             //load the table home page
                             return RequestAppsPage.get(e2eBase.getRequestTableHomePageEndpoint(e2eBase.recordBase.apiBase.realm.subdomain, app.id, app.tables[0].id));
                         }).then(function() {
-                            return verifyTableLoad(testcase.reportTitle);
-                        }).then(function() {
-                            //finally reset authentication back to Admin
-                            e2eBase.recordBase.apiBase.createUserAuthentication(ADMIN_USER_ID).then(function() {
-                                done();
+                            return reportServicePage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
+                                //Assert report stage heading
+                                expect(reportServicePage.stageHeadLine.getAttribute('innerText')).toEqual(testcase.reportTitle);
+                            }).then(function() {
+                                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                                    e2eBase.sleep(browser.params.smallSleep);
+                                    // Assert the record count
+                                    expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toBe('10 Records');
+                                    //verify that the table report loaded by verifying the column headers
+                                    reportServicePage.getReportColumnHeaders().then(function(tableColHeaders) {
+                                        expect(tableColHeaders).toEqual(e2eConsts.reportFieldNames);
+                                        done();
+                                    });
+                                });
                             });
                         });
                     });
@@ -183,22 +204,15 @@
                     realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                     realmId = e2eBase.recordBase.apiBase.realm.id;
                     //get the user authentication
-                    return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
-                }).then(function() {
-                    //load the table home page
-                    return RequestAppsPage.get(e2eBase.getRequestTableHomePageEndpoint(e2eBase.recordBase.apiBase.realm.subdomain, app.id, app.tables[0].id));
+                    RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                 }).then(function() {
                     //go to report page directly to load personal report(report 1 which is Test Report).
-                    return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                 }).then(function() {
                     // Make sure the report not loaded and gives unAuthorized error
-                    // Make sure the table report has loaded
-                    reportServicePage.waitForElement(RequestSessionTicketPage.ticketResponseBodyEl).then(function() {
-                        expect(RequestSessionTicketPage.ticketResponseBodyEl.getText()).toEqual(e2eConsts.invalidCredentials);
-                        done();
-                    });
+                    expect(RequestSessionTicketPage.ticketResponseBodyEl.getText()).toEqual(e2eConsts.invalidCredentials);
+                    done();
                 });
-
             });
         });
 

@@ -83,6 +83,9 @@
         this.reportStageBtn = this.reportContainerEl.element(by.className('toggleStage'));
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
 
+        //stage heading
+        this.stageHeadLine = this.reportStageContentEl.element(by.className('breadCrumbs'));
+
         // Report tools and content container
         this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));
         // Loaded Content Div
