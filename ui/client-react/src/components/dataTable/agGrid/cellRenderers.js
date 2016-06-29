@@ -120,7 +120,8 @@ const CellRenderer = React.createClass({
                     newVal: this.state.valueAndDisplay
                 },
                 recId: this.props.params.data[this.props.params.context.keyField],
-                fid: +this.props.params.colDef.id
+                fid: +this.props.params.colDef.id,
+                fieldName: this.props.params.column.colId
             };
             this.props.params.context.onFieldChange(change);
         }

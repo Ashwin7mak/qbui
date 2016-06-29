@@ -84,12 +84,18 @@ let ReportContent = React.createClass({
         const flux = this.getFlux();
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
         let changes = _.cloneDeep(this.props.pendEdits.recordChanges);
-        changes[change.fid] = change.values;
+        if (typeof (changes[change.fid]) === 'undefined') {
+            changes[change.fid] = {};
+        }
+        changes[change.fid].oldVal = change.values.oldVal;
+        changes[change.fid].newVal = change.values.newVal;
+        changes[change.fid].fieldName = change.fieldName;
+
     },
-    getPendingChanges() {
-        return this.props.pendEdits.recordChanges;
-    },
+
+
     handleRecordChange(recId) {
+        // get the current data
         let changes = _.cloneDeep(this.props.pendEdits.recordChanges);
         //calls action to save the record changes
         // validate happen here or in action
@@ -100,14 +106,18 @@ let ReportContent = React.createClass({
         //[{"id":6, "value":"Claire"}]
         Object.keys(changes).forEach((key) => {
             let newValue = changes[key].newVal.value;
+            let newDisplay = changes[key].newVal.display;
             if (newValue !== this.props.pendEdits.originalRecord.fids[key].value) {
                 let colChange = {};
+                colChange.fieldName = changes[key].fieldName;
                 colChange.id = +key;
                 colChange.value = _.cloneDeep(newValue);
+                colChange.display = _.cloneDeep(newDisplay);
                 payload.push(colChange);
             }
         });
         //for (changes)
+        this.props.flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
         this.props.flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);
 
     },
@@ -483,7 +493,7 @@ let ReportContent = React.createClass({
                     <div className="reportContent">
                         {!isTouch ?
                             <AGGrid loading={this.props.reportData.loading}
-                                    records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
+                                    records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                     columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                     uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                     keyField={this.props.fields && this.props.fields.keyField ?

@@ -202,7 +202,7 @@ let reportDataActions = {
                     },
                     error => {
                         logger.error('RecordService saveRecord call error:', JSON.stringify(error));
-                        this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {error: error});
+                        this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
                         reject();
                     }

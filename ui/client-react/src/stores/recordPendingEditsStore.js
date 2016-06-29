@@ -15,12 +15,14 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.RECORD_EDIT_CHANGE_FIELD, this.onRecordEditChangeField,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             actions.RECORD_EDIT_SAVE, this.onRecordEditSave,
+            actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
+            actions.SAVE_REPORT_RECORD_FAILED, this.onSaveRecordFailed,
         );
         this._initData();
-        this.committedChanges = [];
+        this.commitChanges = [];
     },
     _initData() {
-        this.pendingEdit = false;
+        this.isPendingEdit = false;
         this.currentEditingRecordId = undefined;
         this.currentEditingAppId = undefined;
         this.currentEditingTableId = undefined;
@@ -29,6 +31,23 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    onSaveRecordSuccess(payload) {
+        this.currentEditingRecordId = payload.recId;
+        let entry = this._getEntryKey();
+        if (typeof (this.commitChanges[entry]) !== 'undefined') {
+            this.commitChanges[entry].status = actions.SAVE_REPORT_RECORD_SUCCESS;
+        }
+        this.emit('change');
+
+    },
+    onSaveRecordFailed(payload) {
+        this.currentEditingRecordId = payload.recId;
+        let entry = this._getEntryKey();
+        if (typeof (this.commitChanges[entry]) !== 'undefined') {
+            this.commitChanges[entry].status = actions.SAVE_REPORT_RECORD_FAILED;
+        }
+        this.emit('change');
+    },
     onRecordEditStart(payload) {
         if (typeof (payload.recId) !== 'undefined') {
             this.currentEditingRecordId = payload.recId;
@@ -47,40 +66,52 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     },
 
     onRecordEditCancel() {
-        // restore originalRecord?
+        // record wasn't saved
         this._initData();
         this.emit('change');
     },
 
     onRecordEditSave(payload) {
         //keep list of changes made to records
-        this.currentEditingRecordId = payload.recId.value;
-        let entry = '' + this.currentEditingAppId + '/' + this.currentEditingTableId + '/' + this.currentEditingRecordId;
-        if (typeof (this.committedChanges[entry] === 'undefined')) {
-            this.committedChanges[entry] = [];
+        this.currentEditingRecordId = payload.recId;
+        let entry = this._getEntryKey();
+        if (typeof (this.commitChanges[entry]) === 'undefined') {
+            this.commitChanges[entry] = {};
         }
-        this.committedChanges[entry].push(this.recordChanges);
+        if (typeof (this.commitChanges[entry].changes) === 'undefined') {
+            this.commitChanges[entry].changes = [];
+        }
+        this.commitChanges[entry].changes.push(this.recordChanges);
+        this.commitChanges[entry].status = "..."; //status is pending response from server
+
         this.emit('change');
     },
 
     onRecordEditChangeField(payload) {
-        this.recordChanges[payload.changes.fid] = payload.changes.values;
+        if (typeof (this.recordChanges[payload.changes.fid]) === 'undefined') {
+            this.recordChanges[payload.changes.fid] = {};
+        }
+        this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
+        this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
+        this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
         this.currentEditingAppId = payload.appId;
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = payload.recId.value;
-        this.pendingEdit = true;
+        this.isPendingEdit = true;
         this.emit('change');
     },
-
+    _getEntryKey() {
+        return '' + this.currentEditingAppId + '/' + this.currentEditingTableId + '/' + this.currentEditingRecordId;
+    },
     getState() {
         return {
-            recordChanges : this.recordChanges,
+            isPendingEdit : this.isPendingEdit,
             currentEditingAppId : this.currentEditingAppId,
-            currentEditingRecordId : this.currentEditingRecordId,
             currentEditingTableId : this.currentEditingTableId,
+            currentEditingRecordId : this.currentEditingRecordId,
             originalRecord : this.originalRecord,
-            pendingEdit : this.pendingEdit,
-            committedChanges : this.committedChanges
+            recordChanges : _.cloneDeep(this.recordChanges),
+            commitChanges : _.cloneDeep(this.commitChanges)
         };
     },
 });

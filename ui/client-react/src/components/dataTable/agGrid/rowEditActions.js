@@ -13,37 +13,21 @@ const RowEditActions = React.createClass({
         flux: React.PropTypes.object,
     },
 
-    updatePropsData() {
-        // get the changes from flux into the agrid data vals
-        // and refresh as an optimisic update
-        // on save fail will need to reinstate pending changes..
-        let chg = this.props.params.context.getPendingChanges();
-        let prp = this.props;
-        Object.keys(chg).forEach(function(key) {
-            let ch = chg[key];
-            Object.keys(prp.data).forEach(function(dat) {
-                if (prp.data[dat].id === ch.oldVal.id) {
-                    prp.data[dat].display = ch.newVal.display;
-                    prp.data[dat].value = ch.newVal.value;
-                }
-            });
-        });
-    },
 
     onClickSave() {
-        this.updatePropsData();
-        this.props.api.deselectAll();
+        //get the current record id
         const id = this.props.data[this.props.params.context.keyField];
+        //signal record change action, will update the records values
         this.props.params.context.onRecordChange(id);
-        //refresh the view
-        this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
+        this.props.api.deselectAll();
+
     },
 
     /**
      * delete icon is not included but may come back shortly
      */
     onClickDelete() {
-        const id = this.props.data[SchemaConsts.DEFAULT_RECORD_KEY];
+        const id = this.props.data[this.props.params.context.keyField];
         this.props.api.deselectAll();
 
         this.props.flux.actions.deleteReportRecord(id);

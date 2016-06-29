@@ -4,7 +4,7 @@ import ReportUtils from '../utils/reportUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 import * as SchemaConsts from "../constants/schema";
-
+import simpleStringify from '../../../common/src/simpleStringify';
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -17,6 +17,8 @@ let reportModel = {
         fids: [],
         filteredRecords: null,
         filteredRecordsCount: null,
+        fields: null,
+        keyField: null,
         groupFields: null,
         groupLevel: 0,
         hasGrouping: false,
@@ -102,10 +104,46 @@ let reportModel = {
 
 
     /**
+     * temporary helper to understand what is modifying the model outside of the store
+     */
+    // diffModels() {
+    //     var combo = {};
+    //     _.merge(combo, this.model, this.priorModel);
+    //     var scombo = combo;//sortJson(combo);
+    //
+    //     var answer = _.transform(scombo, (result, n, key) => {
+    //         if (!this.model[key] || !this.priorModel[key] || (JSON.stringify(this.model[key]) !== JSON.stringify(this.priorModel[key]))) {
+    //             if (this.model[key] && this.priorModel[key]) {
+    //                 if (_.isArray(this.priorModel[key])) {
+    //                     var diffs = _.differenceWith(this.priorModel[key], this.model[key], _.isEqual);
+    //                     if (diffs.length) {
+    //                         logger.debug('different ' + key + ' array ' + JSON.stringify(diffs, 2) +  '\n');
+    //                     }
+    //                 } else {
+    //                     logger.debug('different ' + key + ' - this.model[key]' + JSON.stringify(this.model[key], 2) + '\n  ' +
+    //                         'this.priorModel[key]' + JSON.stringify(this.priorModel[key], 2) + '\n result' + JSON.stringify(result, 2) + '\n');
+    //                 }
+    //                 result[key] = {};
+    //                 result[key].model = this.model[key] || 'null';
+    //                 result[key].priorModel = this.priorModel[key] || 'null';
+    //             }
+    //         }
+    //         return result;
+    //     });
+    //     //logger.debug("diff:" + JSON.stringify(answer, 2));
+    // },
+    /**
      * Returns the model object
      * @returns {reportModel.model|{columns, facets, filteredRecords, filteredRecordsCount, groupingFields, groupLevel, hasGrouping, name, records, recordsCount}}
      */
     get: function() {
+        // to debug what is modifying the model outide of store
+        // if (this.priorModel && this.priorModel.columns) {
+        //     if (!_.isEqual(this.model, this.priorModel)) {
+        //         this.diffModels();
+        //     }
+        // }
+        // this.priorModel = _.cloneDeep(this.model);
         return this.model;
     },
 
@@ -161,10 +199,45 @@ let reportModel = {
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.records ? recordData.records.length : null;
         }
+        this.model.fields = recordData.fields;
+        this.model.keyField =  recordData.fields.find(field => field.keyField);
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
     },
-    /**
+    findFieldById(fid) {
+        return this.model.fields.find(field => field.id === fid);
+    },
+    findFieldByName(name) {
+        return this.model.fields.find(field => field.name === name);
+    },
+    findRecordById(records, recId) {
+        return records.find(rec => rec[this.model.keyField.name].value === recId);
+    },
+    updateARecord(recId, changes) {
+        // update the record value inplace, for inline edits
+        // per xd user will not get reload of sort/group/filtered effects of the
+        // edit until they reload
+
+
+        //get the record with the keyfield value of recid
+        let record = this.findRecordById(this.model.records, recId);
+        let filtRecord = this.findRecordById(this.model.filteredRecords, recId);
+
+        // change the data values
+        changes.forEach(change => {
+            if (record) {
+                record[change.fieldName].value = change.value;
+                record[change.fieldName].display = change.display;
+            }
+            if (filtRecord) {
+                filtRecord[change.fieldName].value = change.value;
+                filtRecord[change.fieldName].display = change.display;
+            }
+        });
+
+    },
+
+/**
      * Set just the filteredRecords. No change to fields. This has to be client side
      * TODO: Is this being used anymore?
      * @param records
@@ -382,9 +455,11 @@ let ReportDataStore = Fluxxor.createStore({
         this.lastSaveOk = null;
         this.lastSaveRecordId = payload.recordId;
     },
-    onSaveRecordSuccess() {
+    onSaveRecordSuccess(payload) {
         this.lastSaveOk = true;
         this.saveRecordError = null;
+        // update the changed record values
+        this.reportModel.updateARecord(payload.recId, payload.changes);
         this.emit("change");
     },
     onSaveRecordFailed(payload) {
