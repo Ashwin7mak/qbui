@@ -1,6 +1,8 @@
 (function() {
     'use strict';
 
+    var cookie = require('../constants/cookie');
+
     module.exports = {
         /**  final String ticket = this.currentTicketVersion + "_" + ob32When + "_" + ob32UserID + "_" + ob32RealmID + "_" + ob32UserTicketVersion + "_" + digest;
          * A ticket is made up of 6 sections
@@ -16,7 +18,7 @@
          * @returns {*}
          */
         breakTicketDown: function(fullTicket, section) {
-            var ticket = fullTicket.replace("ticket=", "");
+            var ticket = fullTicket.replace(cookie.TICKET + "=", "");
             var ticketSections = ticket.split("_");
             return ticketSections[section];
         }
