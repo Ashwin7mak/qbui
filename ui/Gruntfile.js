@@ -928,7 +928,7 @@ module.exports = function(grunt) {
             configFile: '.stylelintrc',
             syntax: 'scss',
             formatter: 'string',
-            files:  'client-react/src/**/*.scss'
+            files:  'client-react/src/**/*.{scss,css}'
         })
         .then(function(data) {
             grunt.log.writeln(data.output);

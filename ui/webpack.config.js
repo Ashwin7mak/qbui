@@ -161,7 +161,7 @@ var config = {
         new webpack.NoErrorsPlugin(),
         new styleLintPlugin({
             configFile: '.stylelintrc',
-            files: '**/*.scss',
+            files: 'client-react/src/**/*.{scss,css}',
             failOnError: false,
             syntax: 'scss'
         }),
