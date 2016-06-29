@@ -100,7 +100,7 @@ module.exports = function(grunt) {
                 port   : 9000,
                 sslPort: 9443,
                 host   : process.env.HOST || 'localhost',
-                script : '<%= express.root %>/app.js',
+                script : '<%= express.root %>/src/app.js',
                 realm : process.env.REALM ? (process.env.REALM + '.') : ''
             },
             local  : {
@@ -929,10 +929,25 @@ module.exports = function(grunt) {
             files:  'client-react/src/**/*.scss'
         })
         .then(function(data) {
-            console.log(data.output);
+            grunt.log.writeln(data.output);
+            var errors = 0;
+            var warnings = 0;
+
+            data.results.forEach(function(cssFile) {
+                cssFile.warnings.forEach(function(item) {
+                    if (item.severity === 'error') {
+                        errors++;
+                    }
+
+                    if (item.severity === 'warning') {
+                        warnings++;
+                    }
+                });
+            });
+
+            grunt.log.writeln('Total of ' + errors + ' errors found.');
+            grunt.log.writeln('Total of ' + warnings + ' warnings found.');
             done();
-            // do things with data.output, data.errored,
-            // and data.results
         })
         .catch(function(err) {
             // do things with err e.g.
