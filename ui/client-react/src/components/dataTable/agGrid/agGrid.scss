@@ -1,4 +1,4 @@
-@import '../../../../src/assets/css/qbVariables';
+@import "../../../../src/assets/css/qbVariables";
 
 $header-cell-border: $color5;
 $header-cell-border-bottom: $color6;
@@ -497,14 +497,14 @@ $cell-edit-background-edit: #f3f8fe;
                     vertical-align: top;
                 }
                 .qbIcon.saveRecord {
-                    color: green;
+                    color: #00ff00;
                     font-size: 18px;
                 }
                 .qbIcon.cancelSelection {
                     color: $icon-color;
                 }
                 .qbIcon.deleteRecord {
-                    color: red;
+                    color: #ff0000;
                 }
                 .qbIcon.addRecord {
                     color: $icon-color;

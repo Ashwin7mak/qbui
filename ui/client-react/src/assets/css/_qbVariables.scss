@@ -1,8 +1,9 @@
+/* stylelint-disable media-feature-no-missing-punctuation */
 /* This file should contain all shared variables for QuickBase styling. */
-@import 'customVariables';
-@import 'qbColorVariables';
+@import "customVariables";
+@import "qbColorVariables";
 
-$font-family: 'Open Sans', sans-serif;  /* default font face */
+$font-family: "Open Sans", sans-serif;  /* default font face */
 
 $font-size:               $font-size-base;          /* base/default body font size */
 $font-color:              $color11;                 /* default font color */
@@ -22,7 +23,7 @@ $large-breakpoint-width: 1440px;
 }
 
 @mixin medium-breakpoint {
-    @media (min-width: #{$small-breakpoint-width + 1px}) and (max-width: #{$medium-breakpoint-width}) {
+    @media (min-wisdth: #{$small-breakpoint-width + 1px}) and (max-width: #{$medium-breakpoint-width}) {
         @content;
     }
 }

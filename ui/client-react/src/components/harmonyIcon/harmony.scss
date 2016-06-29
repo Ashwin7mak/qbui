@@ -1,11 +1,11 @@
-@import '../../assets/css/qbVariables';
+@import "../../assets/css/qbVariables";
 
-$icon-path: './fonts/';
+$icon-path: "./fonts/";
 
 @font-face {
-    font-family: 'harmonyicons';
-    src: url('#{$icon-path}harmonyicons-regular-webfont.eot');
-    src: url('#{$icon-path}harmonyicons-regular-webfont.eot?#iefix') format('embedded-opentype'), url('#{$icon-path}harmonyicons-regular-webfont.woff') format('woff'), url('#{$icon-path}harmonyicons-regular-webfont.ttf') format('truetype'), url('#{$icon-path}harmonyicons-regular-webfont.svg#harmonyicons-regular-webfontRg') format('svg');
+    font-family: "harmonyicons";
+    src: url("#{$icon-path}harmonyicons-regular-webfont.eot");
+    src: url("#{$icon-path}harmonyicons-regular-webfont.eot?#iefix") format("embedded-opentype"), url("#{$icon-path}harmonyicons-regular-webfont.woff") format("woff"), url("#{$icon-path}harmonyicons-regular-webfont.ttf") format("truetype"), url("#{$icon-path}harmonyicons-regular-webfont.svg#harmonyicons-regular-webfontRg") format("svg");
     font-weight: normal;
     font-style: normal;
 }
@@ -16,7 +16,7 @@ $icon-path: './fonts/';
     display: inline-block;
     color: $icon-color;
     font-size: 20px;
-    font-family: 'harmonyicons';
+    font-family: "harmonyicons";
     font-style: normal;
     font-weight: normal;
     line-height: 1;

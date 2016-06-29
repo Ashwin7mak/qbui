@@ -1,4 +1,4 @@
-@import '../../../../src/assets/css/qbVariables';
+@import "../../../../src/assets/css/qbVariables";
 
 $report-background-color: $color1;
 $card-expanded-background-color: $color2;
@@ -10,8 +10,8 @@ $fieldLabel-color: $color3;
 $card-border-color: $color4;
 
 /* TODO: move to qbVariables after figuring out relative urls */
-$chevron_opened_icon: url('../../../../src/assets/images/chevron_opened.svg');
-$chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
+$chevron_opened_icon: url("../../../../src/assets/images/chevron_opened.svg");
+$chevron_closed_icon: url("../../../../src/assets/images/chevron_closed.svg");
 
 .swipeable.actionsOpen .custom-row-card {
     margin-left: -240px;

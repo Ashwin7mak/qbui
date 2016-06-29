@@ -1,10 +1,10 @@
-@import '../../assets/css/qbVariables';
+@import "../../assets/css/qbVariables";
 
-$font-path: '../../assets/fonts/';
+$font-path: "../../assets/fonts/";
 
 @font-face {
-    font-family: 'Open Sans';
-    src: url('#{$font-path}Open_Sans/OpenSans-Regular.ttf') format('truetype');
+    font-family: "Open Sans";
+    src: url("#{$font-path}Open_Sans/OpenSans-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
@@ -17,15 +17,15 @@ html, body {
 }
 
 html body {
-    font-family: Open Sans, Arial, Sans-Serif;
+    font-family: "Open Sans", Arial, sans-serif;
     font-size: 14px;
     font-style: normal;
     font-variant: normal;
-    font-weight: 400;
+    font-weight: normal;
     line-height: 1.3em;
 
     h1 {
-        font-family: Open Sans, Arial, Sans-Serif;
+        font-family: "Open Sans", Arial, sans-serif;
         font-size: 24px;
         font-style: normal;
         font-variant: normal;
@@ -34,7 +34,7 @@ html body {
     }
 
     h3 {
-        font-family: Open Sans, Arial, Sans-Serif;
+        font-family: "Open Sans", Arial, sans-serif;
         font-size: 24px;
         font-style: normal;
         font-variant: normal;

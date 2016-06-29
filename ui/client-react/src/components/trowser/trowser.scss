@@ -1,4 +1,4 @@
-@import '../../assets/css/qbVariables';
+@import "../../assets/css/qbVariables";
 
 $trowser-fg: #000;
 $trowser-icons-color: #fff;
@@ -132,7 +132,7 @@ $action-separator-color: #486c8f;
         width: 100%;
         bottom: 0;
         opacity: 0.4;
-        background: black;
+        background: #000;
     }
 }
 
