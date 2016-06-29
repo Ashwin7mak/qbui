@@ -139,5 +139,7 @@ module.exports = {
         "value-list-comma-space-after": "always-single-line",
         "value-list-comma-space-before": "never"
     },
-    "ignoreFiles": []
+    "ignoreFiles": [
+        "client-react/src/assets/css/vendor/**/*.{scss,css}"
+    ]
 };

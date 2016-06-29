@@ -12,7 +12,7 @@ import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
-import "../../assets/css/animate.min.css";
+import "../../assets/css/vendor/animate.min.css";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
