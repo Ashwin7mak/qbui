@@ -8,8 +8,6 @@
     'use strict';
     //Bluebird Promise library
     var Promise = require('bluebird');
-    //Have the tests start an instance of node
-    require('../../server/src/app');
 
     module.exports = function(config) {
         var recordBase = require('../../server/test/api/recordApi.base.js')(config);
@@ -90,7 +88,7 @@
                     } else {
                         // Resize browser if not at same width
                         browser.driver.manage().window().setSize(width, height).then(function() {
-                            e2eBase.sleep(browser.params.smallSleep).then(function() {
+                            e2eBase.sleep(browser.params.mediumSleep).then(function() {
                                 deferred.resolve();
                             });
                         });

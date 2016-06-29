@@ -36,7 +36,9 @@ module.exports = function(config) {
                         test: /\.js?$/,
                         include: [
                             path.resolve(__dirname, "client-react/src"),
-                            path.resolve(__dirname, "client-react/test")
+                            path.resolve(__dirname, "client-react/test"),
+                            path.resolve(__dirname, "componentLibrary/src"),
+                            path.resolve(__dirname, "componentLibrary/test")
                         ],
                         exclude: [nodeModulesPath],
                         loader: "babel-loader",
@@ -49,6 +51,7 @@ module.exports = function(config) {
                         test: /\.css?$/,
                         include: [
                             path.resolve(__dirname, "client-react/src"),
+                            path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "node_modules/ag-grid"),
                             path.resolve(__dirname, "node_modules/react-notifications"),
                             path.resolve(__dirname, "node_modules/react-bootstrap-datetimepicker")
@@ -70,7 +73,8 @@ module.exports = function(config) {
                         test: /\.scss$/,
                         loader: "style!css!sass",
                         include: [
-                            path.resolve(__dirname, "client-react/src")
+                            path.resolve(__dirname, "client-react/src"),
+                            path.resolve(__dirname, "componentLibrary/src")
                         ],
                     },
                     {
@@ -86,11 +90,13 @@ module.exports = function(config) {
                     { //delays coverage til after tests are run, fixing transpiled source coverage error
                         test: /\.js$/,
                         include: [
-                            path.resolve(__dirname, "client-react/src")
+                            path.resolve(__dirname, "client-react/src"),
+                            path.resolve(__dirname, "componentLibrary/src")
                         ],
                         exclude: [
                             nodeModulesPath,
-                            path.resolve(__dirname, "client-react/test")
+                            path.resolve(__dirname, "client-react/test"),
+                            path.resolve(__dirname, "componentLibrary/test")
                         ],
                         loader: "istanbul-instrumenter"
                     }
