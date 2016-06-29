@@ -295,7 +295,8 @@ let AGGrid = React.createClass({
      */
     onCellTab(colDef) {
 
-        if (colDef.order === (this.props.columns.length - 1)) {
+        const lastColumn = this.props.columns[this.props.columns.length - 1];
+        if (colDef.field === lastColumn.field) {
             // tabbed out of last column
             const currentIndex = this.state.editingRowNode.childIndex;
             const allRows = this.api.getModel().allRows;
@@ -405,8 +406,9 @@ let AGGrid = React.createClass({
 
         const target = params.event.target;
 
-        if (this.isEditChild(target.parentNode))
+        if (this.isEditChild(target.parentNode)) {
             return;
+        }
 
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {

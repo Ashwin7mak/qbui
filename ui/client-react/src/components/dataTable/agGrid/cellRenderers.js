@@ -160,7 +160,7 @@ const CellRenderer = React.createClass({
 // formatter classes (cell formatters render an editor and a display value)
 
 export const TextCellRenderer = React.createClass({
-    render: function() {
+    render() {
         return  <CellRenderer type={formats.TEXT_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
@@ -178,13 +178,13 @@ export const DateTimeCellRenderer = React.createClass({
 });
 
 export const TimeCellRenderer = React.createClass({
-    render: function() {
+    render() {
         return  <CellRenderer type={formats.TIME_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
 
 export const NumericCellRenderer = React.createClass({
-    render: function() {
+    render() {
         return  <CellRenderer type={formats.NUMBER_FORMAT} context={this.props.params.context}  colDef={this.props.params.column.colDef} initialValue={this.props.params.value}/>;
     }
 });
@@ -198,26 +198,26 @@ export const CurrencyCellRenderer = React.createClass({
 
 export const PercentCellRenderer = React.createClass({
 
-    render: function() {
+    render() {
         return  <CellRenderer type={formats.PERCENT_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
 
 export const RatingCellRenderer = React.createClass({
 
-    render: function() {
+    render() {
         return  <CellRenderer type={formats.RATING_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
 export const UserCellRenderer = React.createClass({
 
-    render: function() {
+    render() {
         return  <CellRenderer type={formats.USER_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
 export const CheckBoxCellRenderer = React.createClass({
 
-    render: function() {
+    render() {
         return  <CellRenderer type={formats.CHECKBOX_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
