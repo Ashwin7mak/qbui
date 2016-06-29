@@ -22,7 +22,8 @@
     // Setup the express server
     var app = module.exports = express();
 
-    let serverUtils = require('./utility/serverUtils');
+    let cookieUtils = require('./utility/cookieUtils');
+    let ob32Utils = require('./utility/ob32Utils');
 
     /*
      * Express automatically populates the req.body attribute with a JSON parsed object in the case
@@ -40,11 +41,11 @@
     });
 
     /*
-     * We need to intercept every request and response and add the userId for logging purposes.
+     * We need to intercept every request/response and add the userId for logging purposes.
      */
     app.use(function(req, res, next) {
         if (req.headers.cookie) {
-            var userId = serverUtils.ob32decoder(serverUtils.breakTicketDown(req.headers.cookie, 2));
+            var userId = ob32Utils.ob32decoder(cookieUtils.breakTicketDown(req.headers.cookie, 2));
             req.userId = userId;
             res.setHeader('userId', userId);
         }
