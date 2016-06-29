@@ -10,7 +10,7 @@
          * @param ticket
          * @return ob32 decoded string
          */
-        ob32decoder: function(ob32string) {
+        decoder: function(ob32string) {
             var decoded = 0;
             var place = 1;
             for (var counter = ob32string.length - 1; counter >= 0; counter--) {

@@ -45,7 +45,7 @@
      */
     app.use(function(req, res, next) {
         if (req.headers.cookie) {
-            var userId = ob32Utils.ob32decoder(cookieUtils.breakTicketDown(req.headers.cookie, 2));
+            var userId = ob32Utils.decoder(cookieUtils.breakTicketDown(req.headers.cookie, 2));
             req.userId = userId;
             res.setHeader('userId', userId);
         }
