@@ -62,7 +62,7 @@
             fetchFacetResults: function(req) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportFacetRoute(req.url);
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsFacetRoute(req.url);
                 return requestHelper.executeRequest(req, opts);
             },
 
@@ -184,7 +184,7 @@
 
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportRoute(req.url, reportId);
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url, reportId);
 
                 //  promise to return report meta data
                 return new Promise((resolve1, reject1) => {

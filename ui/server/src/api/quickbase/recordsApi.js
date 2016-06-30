@@ -265,7 +265,7 @@
                     if (search.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url) + search;
                     } else {
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportResultsRoute(req.url);
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
                     }
                 } else {
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);

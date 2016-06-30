@@ -20,9 +20,13 @@
                 if (elements[idx].toLowerCase() === type) {
                     path += elements[idx];
                     if (idx + 1 < elements.length) {
-                        path += '/' + elements[idx + 1];
+                        if (elements[idx + 1].length > 0) {
+                            path += '/' + elements[idx + 1];
+                            return path;
+                        }
                     }
-                    return path;
+                    //  no id associated with the type, that's an invalid root..
+                    break;
                 }
                 path += elements[idx] + '/';
             }
@@ -107,7 +111,7 @@
             return url;
         },
 
-        getReportFacetRoute: function(url) {
+        getReportsFacetRoute: function(url) {
             let root = getUrlRoot(url, REPORTS);
             if (root) {
                 return root + "/" + FACET_RESULTS;
@@ -117,7 +121,7 @@
             return url;
         },
 
-        getReportRoute: function(url, reportId) {
+        getReportsRoute: function(url, reportId) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
                 return root + '/' + REPORTS + (reportId ? '/' + reportId : '');
@@ -127,8 +131,17 @@
             return url;
         },
 
-        getReportResultsRoute: function(url, reportId) {
-            let root = (reportId ? this.getReportRoute(url, reportId) : getUrlRoot(url, REPORTS));
+        getReportsResultsRoute: function(url, reportId) {
+            let root = '';
+            if (reportId) {
+                root = getUrlRoot(url, TABLES);
+                if (root) {
+                    root += '/' + REPORTS + '/' + reportId;
+                }
+            } else {
+                root = getUrlRoot(url, REPORTS);
+            }
+
             if (root) {
                 return root + '/' + REPORT_RESULTS;
             }
