@@ -12,24 +12,23 @@
 
         let requestHelper = require('./requestHelper')(config);
         let recordsApi = require('./recordsApi')(config);
+        let routeHelper = require('../../routes/routeHelper');
 
         let formsApi = {
 
-            fetchFormMetaData: function(req, rootUrl) {
-                var opts = requestHelper.setOptions(req);
+            fetchFormMetaData: function(req) {
+                let opts = requestHelper.setOptions(req);
                 opts.headers['Content-Type'] = 'application/json';
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsRoute(req.url, 1);
 
-                if (rootUrl) {
-                    opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + 'forms/1');
-                }
                 return requestHelper.executeRequest(req, opts);
             },
 
-            fetchFormComponents: function(req, rootUrl) {
+            fetchFormComponents: function(req) {
 
                 return new Promise(function(resolve, reject) {
 
-                    var fetchRequests = [this.fetchFormMetaData(req, rootUrl), recordsApi.fetchSingleRecordAndFields(req, rootUrl)];
+                    var fetchRequests = [this.fetchFormMetaData(req), recordsApi.fetchSingleRecordAndFields(req)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {

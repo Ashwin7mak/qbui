@@ -220,10 +220,8 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Single Record', {req:filterNodeReq(req)});
 
-        let rootUrl = requestHelper.transformUrlRoute(req.url, 'records', '');
-
         processRequest(req, res, function(req, res) {
-            recordsApi.fetchSingleRecordAndFields(req, rootUrl).then(
+            recordsApi.fetchSingleRecordAndFields(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Single Record');
@@ -253,10 +251,8 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch All Records', {req:filterNodeReq(req)});
 
-        let rootUrl = requestHelper.transformUrlRoute(req.url, 'records', '');
-
         processRequest(req, res, function(req, res) {
-            recordsApi.fetchRecordsAndFields(req, rootUrl).then(
+            recordsApi.fetchRecordsAndFields(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch All Records');
@@ -287,10 +283,8 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Table HomePage Report Components', {req:filterNodeReq(req)});
 
-        let rootUrl = requestHelper.transformUrlRoute(req.url, 'homepage', '');
-
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchTableHomePageReport(req, rootUrl).then(
+            reportsApi.fetchTableHomePageReport(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Table HomePage Report Components');
@@ -319,10 +313,8 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
 
-        let rootUrl = requestHelper.transformUrlRoute(req.url, 'formcomponents', '');
-
         processRequest(req, res, function(req, res) {
-            formsApi.fetchFormComponents(req, rootUrl).then(
+            formsApi.fetchFormComponents(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Form Components');
@@ -353,10 +345,8 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report Components', {req:filterNodeReq(req)});
 
-        let rootUrl = requestHelper.transformUrlRoute(req.url, 'reportcomponents', '');
-
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportComponents(req, rootUrl).then(
+            reportsApi.fetchReportComponents(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Components');
@@ -388,10 +378,8 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report Data', {req:filterNodeReq(req)});
 
-        let rootUrl = requestHelper.transformUrlRoute(req.url, 'results', '');
-
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportResults(req, rootUrl).then(
+            reportsApi.fetchReportResults(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Data');

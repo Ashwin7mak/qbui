@@ -60,9 +60,11 @@
 
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
+        let routeHelper = require('../../routes/routeHelper');
         var groupFormatter = require('./formatter/groupFormatter');
         var recordFormatter = require('./formatter/recordFormatter')();
         var constants = require('../../../../common/src/constants');
+        var url = require('url');
 
         //Module constants:
         var APPLICATION_JSON = 'application/json';
@@ -132,10 +134,10 @@
              * @param req
              * @returns Promise
              */
-            fetchSingleRecordAndFields: function(req, rootUrl) {
+            fetchSingleRecordAndFields: function(req) {
 
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecords(req, rootUrl), this.fetchFields(req, rootUrl)];
+                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -179,10 +181,10 @@
              * @param req
              * @returns Promise
              */
-            fetchRecordsAndFields: function(req, rootUrl) {
+            fetchRecordsAndFields: function(req) {
 
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecords(req, rootUrl), this.fetchFields(req, rootUrl)];
+                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -249,7 +251,7 @@
              * @param req
              * @returns Promise
              */
-            fetchRecords: function(req, rootUrl) {
+            fetchRecords: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
@@ -259,17 +261,14 @@
                 if (inputUrl_toLower.indexOf('reportcomponents') !== -1) {
                     //  report components endpoint does not support sort request parameters.  If sorting, use the records
                     //  endpoint, with the parameter list, to get the data; otherwise use the report/results endpoint.
-                    if (inputUrl_toLower.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
-                        let paramsIndex = inputUrl_toLower.indexOf("?"); // get the index for url params starting after ?
-                        if (rootUrl) {
-                            rootUrl = requestHelper.transformUrlRoute(rootUrl, 'reports', '');  //  if coming from a reports endpoint, remove the report info
-                        }
-                        opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + 'records' + inputUrl.substring(paramsIndex));
+                    let search = url.parse(inputUrl_toLower).search;
+                    if (search.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url) + search;
                     } else {
-                        opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + 'results');
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportResultsRoute(req.url);
                     }
                 } else {
-                    opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + 'records');
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                 }
 
                 return requestHelper.executeRequest(req, opts);
@@ -281,15 +280,10 @@
              * @param req
              * @returns Promise
              */
-            fetchFields: function(req, rootUrl) {
+            fetchFields: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-
-                if (rootUrl) {
-                    //  if coming from a reports endpoint, remove the report info
-                    rootUrl = requestHelper.transformUrlRoute(rootUrl, 'reports', '');
-                    opts.url = requestHelper.transformUrlRoute(opts.url, rootUrl, rootUrl + 'fields');
-                }
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
 
                 return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
             }
