@@ -169,7 +169,7 @@
                             return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
                         }).then(function() {
                             //load the table home page
-                            return RequestAppsPage.get(e2eBase.getRequestTableHomePageEndpoint(e2eBase.recordBase.apiBase.realm.subdomain, app.id, app.tables[0].id));
+                            return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(e2eBase.recordBase.apiBase.realm.subdomain, app.id, app.tables[0].id));
                         }).then(function() {
                             return reportServicePage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                                 //Assert report stage heading
