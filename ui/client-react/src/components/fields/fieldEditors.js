@@ -53,8 +53,7 @@ export const ComboBoxFieldEditor = React.createClass({
 
     propTypes: {
         choices: React.PropTypes.array, // array of choices with display value props
-        onChange: React.PropTypes.func,
-        onTab: React.PropTypes.func
+        onChange: React.PropTypes.func
     },
 
     // handle text input
