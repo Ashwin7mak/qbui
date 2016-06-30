@@ -62,6 +62,11 @@
                 var requestAppsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/apps/');
                 return requestAppsPageEndPoint;
             },
+            // Helper method to get the proper URL for loading the table home page containing a list of tables for a realm for an app
+            getRequestTableEndpoint: function(realmName, appId, tableId) {
+                var requestTableEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/app/' + appId + '/table/' + tableId);
+                return requestTableEndPoint;
+            },
             // Helper method to get the proper URL for loading the reports page for particular app and particular table for a realm
             getRequestReportsPageEndpoint: function(realmName, appId, tableId, reportId) {
                 var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
