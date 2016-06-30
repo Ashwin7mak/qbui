@@ -48,7 +48,11 @@ let FieldsStore = Fluxxor.createStore({
         this.emit('change');
     },
     getKeyField() {
-        return this.fields.find(field => (field.keyField && field.keyField === true));
+        let answer;
+        if (typeof this.fields.data !== 'undefined') {
+            answer = this.fields.data.find(field => (field.keyField && field.keyField === true));
+        }
+        return answer;
     },
     getState() {
         return {

@@ -104,15 +104,15 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         return '' + this.currentEditingAppId + '/' + this.currentEditingTableId + '/' + this.currentEditingRecordId;
     },
     getState() {
-        return {
+        return _.cloneDeep({
             isPendingEdit : this.isPendingEdit,
             currentEditingAppId : this.currentEditingAppId,
             currentEditingTableId : this.currentEditingTableId,
             currentEditingRecordId : this.currentEditingRecordId,
             originalRecord : this.originalRecord,
-            recordChanges : _.cloneDeep(this.recordChanges),
-            commitChanges : _.cloneDeep(this.commitChanges)
-        };
+            recordChanges : this.recordChanges,
+            commitChanges : this.commitChanges
+        });
     },
 });
 

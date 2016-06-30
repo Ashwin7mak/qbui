@@ -39,18 +39,14 @@ let ReportContent = React.createClass({
         this.props.history.pushState(null, link);
     },
 
-    getKeyField() {
-        return this.props.fields && this.props.fields.keyField ? this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY;
-    },
 
     getOrigRec(recid) {
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
-        let keyField =  this.getKeyField();
+        let keyField =  this.props.keyField;
         recs.find(function(rec) {
-            //console.log("recid =" + JSON.stringify(recid));
             var keys = Object.keys(rec);
-            keys.find(function(col) {
+            keys.find((col) => {
                 if (col === keyField && rec[col].value === recid) {
                     orig.names = rec;
                     //console.log("col =" + col + ":" +JSON.stringify(rec));
@@ -83,20 +79,27 @@ let ReportContent = React.createClass({
         // call action to hold the field value change
         const flux = this.getFlux();
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
-        let changes = _.cloneDeep(this.props.pendEdits.recordChanges);
+        let changes = {};
+        if (_.has(this.props, 'pendEdits.recordChanges')) {
+            changes = _.cloneDeep(this.props.pendEdits.recordChanges);
+        }
         if (typeof (changes[change.fid]) === 'undefined') {
             changes[change.fid] = {};
         }
-        changes[change.fid].oldVal = change.values.oldVal;
-        changes[change.fid].newVal = change.values.newVal;
-        changes[change.fid].fieldName = change.fieldName;
+        changes[change.fid].oldVal = _.has(change, 'values.oldVal') ? change.values.oldVal : null;
+        changes[change.fid].newVal = _.has(change, 'values.newVal') ? change.values.newVal : null;
+        changes[change.fid].fieldName = _.has(change, 'fieldName') ? change.fieldName : null;
 
     },
 
-
     handleRecordChange(recId) {
+        const flux = this.getFlux();
+
         // get the current data
-        let changes = _.cloneDeep(this.props.pendEdits.recordChanges);
+        let changes = {};
+        if (_.has(this.props, 'pendEdits.recordChanges')) {
+            changes = _.cloneDeep(this.props.pendEdits.recordChanges);
+        }
         //calls action to save the record changes
         // validate happen here or in action
         //console.log(`record ${recId} changed` + JSON.stringify(changes) );
@@ -107,18 +110,20 @@ let ReportContent = React.createClass({
         Object.keys(changes).forEach((key) => {
             let newValue = changes[key].newVal.value;
             let newDisplay = changes[key].newVal.display;
-            if (newValue !== this.props.pendEdits.originalRecord.fids[key].value) {
-                let colChange = {};
-                colChange.fieldName = changes[key].fieldName;
-                colChange.id = +key;
-                colChange.value = _.cloneDeep(newValue);
-                colChange.display = _.cloneDeep(newDisplay);
-                payload.push(colChange);
+            if (_.has(this.props, 'pendEdits.originalRecord.fids')) {
+                if (newValue !== this.props.pendEdits.originalRecord.fids[key].value) {
+                    let colChange = {};
+                    colChange.fieldName = changes[key].fieldName;
+                    colChange.id = +key;
+                    colChange.value = _.cloneDeep(newValue);
+                    colChange.display = _.cloneDeep(newDisplay);
+                    payload.push(colChange);
+                }
             }
         });
         //for (changes)
-        this.props.flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-        this.props.flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);
+        flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
+        flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);
 
     },
 
@@ -496,8 +501,7 @@ let ReportContent = React.createClass({
                                     records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                     columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                     uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                    keyField={this.props.fields && this.props.fields.keyField ?
-                                            this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
+                                    keyField={this.props.keyField}
                                     appId={this.props.reportData.appId}
                                     onEditRecordStart={this.handleEditRecordStart}
                                     onEditRecordCancel={this.handleEditRecordCancel}

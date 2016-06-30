@@ -31,12 +31,12 @@ let formActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.debug('FormService getFormAndRecord error:' + JSON.stringify(error));
+                        logger.error('FormService getFormAndRecord error:' + JSON.stringify(error), error);
                         this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.debug('FormService getFormAndRecord exception:' + JSON.stringify(ex));
+                    logger.error('FormService getFormAndRecord exception:' + JSON.stringify(ex), ex);
                     this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED);
                     reject();
                 });
