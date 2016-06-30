@@ -503,8 +503,5 @@ describe('AGGrid functions', () => {
 
         // make sure it's a different row
         expect(editRowsAfterDblClick).not.toBe(editRowsAfterSecondDblClick);
-
-        const cellEditors = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing");
-        expect(cellEditors.length).toBe(fakeReportData_before.data.columns.length);
     });
 });
