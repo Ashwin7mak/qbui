@@ -259,8 +259,8 @@
                 let inputUrl_toLower = opts.url.toLowerCase(); // but for convinience of string matches convert to lower case
 
                 if (inputUrl_toLower.indexOf('reportcomponents') !== -1) {
-                    //  report components endpoint does not support sort request parameters.  If sorting, use the records
-                    //  endpoint, with the parameter list, to get the data; otherwise use the report/results endpoint.
+                    //  For a reportComponents endpoing request, if sorting, use the records endpoint, with the
+                    //  parameter list to retrieve the data; otherwise use the report/results endpoint.
                     let search = url.parse(inputUrl_toLower).search;
                     if (search.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url) + search;

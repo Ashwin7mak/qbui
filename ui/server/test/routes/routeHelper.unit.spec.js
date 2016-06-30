@@ -20,7 +20,6 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate transformUrlRoute method', function() {
-
         var testCases = [
             {name: 'test empty url', url: '', curRoute:'abc', newRoute:'def', expectation: ''},
             {name: 'test null url', url: null, curRoute:'abc', newRoute:'def', expectation: null},
@@ -37,7 +36,24 @@ describe('Validate RequestHelper unit tests', function() {
                 done();
             });
         });
+    });
 
+    describe('validate getTablesRoute method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', tableId: '1', expectation: ''},
+            {name: 'test null url', url: null, tableId: '1', expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', tableId: '1', expectation: '/non/parsing/url'},
+            {name: 'test valid url with table id', url: '/apps/123', tableId: '1', expectation: '/apps/123/tables/1'},
+            {name: 'test valid url with table id and no leading slash', url: 'apps/123', tableId: 1, expectation: 'apps/123/tables/1'},
+            {name: 'test valid url without table id', url: '/apps/123', tableId: null, expectation: '/apps/123/tables'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getTablesRoute(testCase.url, testCase.tableId), testCase.expectation);
+                done();
+            });
+        });
     });
 
 });

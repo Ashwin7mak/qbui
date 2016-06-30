@@ -62,6 +62,8 @@
             if (root) {
                 return root + '/' + TABLES + (tableId ? '/' + tableId : '');
             }
+
+            //  no url root for APPS found; return original url unchanged
             return url;
         },
 
@@ -70,6 +72,8 @@
             if (root) {
                 return root + '/' + DEFAULT_HOMEPAGE;
             }
+
+            //  no url root for TABLES found; return original url unchanged
             return url;
         },
 
@@ -78,6 +82,8 @@
             if (root) {
                 return root + '/' + FIELDS + (fieldId ? '/' + fieldId : '');
             }
+
+            //  no url root for TABLES found; return original url unchanged
             return url;
         },
 
@@ -86,6 +92,8 @@
             if (root) {
                 return root + '/' + FORMS + (formId ? '/' + formId : '');
             }
+
+            //  no url root for TABLES found; return original url unchanged
             return url;
         },
 
@@ -94,6 +102,8 @@
             if (root) {
                 return root + '/' + RECORDS + (recordId ? '/' + recordId : '');
             }
+
+            //  no url root for TABLES found; return original url unchanged
             return url;
         },
 
@@ -102,6 +112,8 @@
             if (root) {
                 return root + "/" + FACET_RESULTS;
             }
+
+            //  no url root for REPORTS found; return original url unchanged
             return url;
         },
 
@@ -110,6 +122,8 @@
             if (root) {
                 return root + '/' + REPORTS + (reportId ? '/' + reportId : '');
             }
+
+            //  no url root for TABLES found; return original url unchanged
             return url;
         },
 
@@ -118,6 +132,8 @@
             if (root) {
                 return root + '/' + REPORT_RESULTS;
             }
+
+            //  no url root for REPORTS found; return original url unchanged
             return url;
         }
 
