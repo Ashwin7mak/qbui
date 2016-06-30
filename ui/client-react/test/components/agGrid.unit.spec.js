@@ -5,6 +5,7 @@ import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
 
 import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
+import CellValueRenderers from '../../src/components/dataTable/agGrid/cellValueRenderers';
 import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
 
 
@@ -12,39 +13,12 @@ import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
 import Locale from '../../src/locales/locales';
 
-var NumericCellRendererMock = function() {
-    return "mock numeric";
-};
-var DateCellRendererMock = function() {
-    return "mock date";
-};
-
-var reactCellRendererFactoryMock = function(component) {
-    return component;
-};
-
-
-var AGGridMock = React.createClass({
-    render() {
-        return (
-            <div>test</div>
-        );
-    }
-});
 
 var TableActionsMock = React.createClass({
     render: function() {return <div>table actions</div>;}
 });
 
 var I18nMessageMock = React.createClass({
-    render: function() {
-        return (
-            <div>I18Mock</div>
-        );
-    }
-});
-
-var CellRendererMock =  React.createClass({
     render: function() {
         return (
             <div>I18Mock</div>
@@ -156,18 +130,16 @@ describe('AGGrid functions', () => {
     };
 
     beforeEach(() => {
-        AGGrid.__Rewire__('AgGridReact', AGGridMock);
         AGGrid.__Rewire__('I18nMessage', I18nMessageMock);
-        CellRenderers.__Rewire__('CellRenderer', CellRendererMock);
+        CellValueRenderers.__Rewire__('I18nNumber', I18nMessageMock);
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'rowClicked');
 
     });
 
     afterEach(() => {
-        AGGrid.__ResetDependency__('AgGridReact');
         AGGrid.__ResetDependency__('I18nMessage');
-        CellRenderers.__ResetDependency__('CellRenderer');
+        CellValueRenderers.__ResetDependency__('I18nNumber');
         flux.actions.getFilteredRecords.calls.reset();
         flux.actions.rowClicked.calls.reset();
     });
@@ -503,5 +475,17 @@ describe('AGGrid functions', () => {
 
         // make sure it's a different row
         expect(editRowsAfterDblClick).not.toBe(editRowsAfterSecondDblClick);
+
+        // find the cell editors ag-grid has added
+        const cellEditors = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing .cellEditWrapper");
+        expect(cellEditors.length).toBe(fakeReportData_before.data.columns.length);
+
+        // tab out of the last column
+        TestUtils.Simulate.keyDown(cellEditors[fakeReportData_before.data.columns.length - 1], {key : "Tab"});
+        const editRowsTabbingOutOfLast = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing");
+
+        // make sure we have a different edit row
+        expect(editRowsTabbingOutOfLast.length).toBe(1);
+        expect(editRowsTabbingOutOfLast).not.toBe(editRowsAfterSecondDblClick);
     });
 });
