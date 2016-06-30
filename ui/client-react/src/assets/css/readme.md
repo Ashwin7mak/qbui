@@ -507,6 +507,19 @@ Additional Reading:
   - The value is likely to be updated at least once
   - **All occurrences of the value are tied to the variable (i.e. not by coincidence)** *(this is for you Drew)*
 
+- Variables should always start with a letter and can use all lowercase letters, numbers, and/or dashes.
+
+```sass
+// Bad
+$thisIsCamelCase: 1px;
+$*&%!(&*)Variable: 1px;
+$191variable: 1px;
+
+// Good
+$a-variable-93: 1px;
+$avriable: 1px;
+```
+
 - Use the `!default` flag to allow overriding when setting variables.
   - [Further Reading](https://robots.thoughtbot.com/sass-default)
 - You can set variables at the top of a component file, just be sure to use the `!default` flag.

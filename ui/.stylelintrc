@@ -4,6 +4,8 @@ module.exports = {
         "stylelint-declaration-use-variable"
     ],
     "rules": {
+        // See rules here
+        // https://github.com/stylelint/stylelint/blob/master/docs/user-guide/rules.md
         "scss/selector-no-redundant-nesting-selector": [true, {"severity": "warning"}],
         "scss/dollar-variable-pattern": ["^[a-z-0-9]+$", {"severity": "warning"}],
         "declaration-use-variable": [
@@ -85,14 +87,20 @@ module.exports = {
         "no-extra-semicolons": true,
         "no-invalid-double-slash-comments": true,
         "no-missing-eof-newline": true,
-        // "no-unsupported-browser-features": [
-        //     true,
-        //     {
-        //         "severity": "warning",
-        //         "browsers": [">5%", "ie > 11"],
-        //         "ignore": []
-        //     }
-        // ],
+        // This is set to the same option collection of browsers that Autoprefixer uses.
+        "no-unsupported-browser-features": [
+            true,
+            {
+                "severity": "warning",
+                "browsers": [
+                    "last 3 Chrome versions",
+                    "last 3 Safari versions",
+                    "last 3 Firefox versions",
+                    "last 3 Edge versions"
+                ],
+                "ignore": []
+            }
+        ],
         "number-leading-zero": "always",
         "number-no-trailing-zeros": true,
         "property-case": "lower",

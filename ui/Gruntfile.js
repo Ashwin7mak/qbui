@@ -949,8 +949,10 @@ module.exports = function(grunt) {
 
             if (errors > 0 || warnings > 0) {
                 grunt.log.writeln(data.output);
-                grunt.log.writeln('Total of ' + errors + ' errors found.');
-                grunt.log.writeln('Total of ' + warnings + ' warnings found.');
+                grunt.log.error('Total of ' + errors + ' errors found.');
+                grunt.log.error('Total of ' + warnings + ' warnings found.');
+                grunt.log.error('For details on errors visit:');
+                grunt.log.error('https://github.com/stylelint/stylelint/blob/master/docs/user-guide/rules.md');
                 if (lintStylesFail && errors > 0) {
                     grunt.fail.fatal('Too many errors');
                 }
