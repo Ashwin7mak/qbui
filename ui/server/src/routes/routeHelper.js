@@ -13,7 +13,7 @@
 
     function getUrlRoot(url, type) {
 
-        if (url) {
+        if (typeof url === 'string') {
             let elements = url.split('/');
             let path = '';
             for (let idx = 0; idx < elements.length; idx++) {
@@ -51,7 +51,7 @@
          * @returns {*}
          */
         transformUrlRoute: function(url, curRoute, newRoute) {
-            if (url) {
+            if (typeof url === 'string') {
                 var offset = url.toLowerCase().indexOf(curRoute);
                 if (offset !== -1) {
                     return url.substring(0, offset) + newRoute;
@@ -61,6 +61,17 @@
             return url;
         },
 
+        /**
+         * For the given req.url, extract the APPS identifier/id and
+         * append the TABLE identifier and optional tableId.
+         *
+         * Example:  url: /apps/123/rest/of/url
+         *           return: /apps/123/tables/<tableId>
+         *
+         * @param url
+         * @param tableId
+         * @returns {*}
+         */
         getTablesRoute: function(url, tableId) {
             let root = getUrlRoot(url, APPS);
             if (root) {
@@ -71,6 +82,16 @@
             return url;
         },
 
+        /**
+         * For the given req.url, extract the APPS and TABLES identifiers/ids and
+         * append the DEFAULT HOMEPAGE identifier
+         *
+         * Example:  url: /apps/123/tables/456/rest/of/url
+         *           return: /apps/123/tables/456/defaulthomepage
+         *
+         * @param url
+         * @returns {*}
+         */
         getTablesDefaultReportHomepageRoute: function(url) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
@@ -81,6 +102,17 @@
             return url;
         },
 
+        /**
+         * For the given req.url, extract the APPS and TABLES identifiers/ids and
+         * append the FIELDS identifier and optional fieldId.
+         *
+         * Example:  url: /apps/123/tables/456/rest/of/url
+         *           return: /apps/123/tables/456/fields/<fieldId>
+         *
+         * @param url
+         * @param fieldId
+         * @returns {*}
+         */
         getFieldsRoute: function(url, fieldId) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
@@ -91,6 +123,17 @@
             return url;
         },
 
+        /**
+         * For the given req.url, extract the APPS and TABLES identifiers/ids and
+         * append the FORMS identifier and optional formId.
+         *
+         * Example:  url: /apps/123/tables/456/rest/of/url
+         *           return: /apps/123/tables/456/forms/<formId>
+         *
+         * @param url
+         * @param formId
+         * @returns {*}
+         */
         getFormsRoute: function(url, formId) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
@@ -101,6 +144,17 @@
             return url;
         },
 
+        /**
+         * For the given req.url, extract the APPS and TABLES identifiers/ids and
+         * append the RECORDS identifier and optional recordId.
+         *
+         * Example:  url: /apps/123/tables/456/rest/of/url
+         *           return: /apps/123/tables/456/records/<recordId>
+         *
+         * @param url
+         * @param recordId
+         * @returns {*}
+         */
         getRecordsRoute: function(url, recordId) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
@@ -111,6 +165,16 @@
             return url;
         },
 
+        /**
+         * For the given req.url, extract the APPS, TABLES and REPORTS identifiers/ids and
+         * append the FACETS RESULTS identifier.
+         *
+         * Example:  url: /apps/123/tables/456/reports/789/rest/of/url
+         *           return: /apps/123/tables/456/reports/789/facets/results
+         *
+         * @param url
+         * @returns {*}
+         */
         getReportsFacetRoute: function(url) {
             let root = getUrlRoot(url, REPORTS);
             if (root) {
@@ -121,6 +185,17 @@
             return url;
         },
 
+        /**
+         * For the given req.url, extract the APPS and TABLES identifiers/ids and
+         * append the REPORTS identifier and optional recordId.
+         *
+         * Example:  url: /apps/123/tables/456/rest/of/url
+         *           return: /apps/123/tables/456/reports/<recordId>
+         *
+         * @param url
+         * @param reportId
+         * @returns {*}
+         */
         getReportsRoute: function(url, reportId) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
@@ -131,6 +206,22 @@
             return url;
         },
 
+        /**
+         * For the given req.url:
+         *  a) if no reportID, extract the APPS, TABLES and REPORTS identifiers/ids and
+         *    append the REPORT RESULTS identifier.
+         *    Example:  url: /apps/123/tables/456/reports/789/rest/of/url
+         *              return: /apps/123/tables/456/reports/789/results
+         *
+         *  b) if reportId, extract the APPS and TABLES identifiers/ids and
+         *    append the REPORTS identifier and recordId.
+
+         *    Example:  url: /apps/123/tables/456/rest/of/url
+         *               return: /apps/123/tables/456/reports/<reportId>/results
+         * @param url
+         * @param reportId
+         * @returns {*}
+         */
         getReportsResultsRoute: function(url, reportId) {
             let root = '';
             if (reportId) {
@@ -146,7 +237,7 @@
                 return root + '/' + REPORT_RESULTS;
             }
 
-            //  no url root for REPORTS found; return original url unchanged
+            //  no url root found; return original url unchanged
             return url;
         }
 

@@ -42,6 +42,7 @@ describe('Validate RequestHelper unit tests', function() {
         var testCases = [
             {name: 'test empty url', url: '', id: '1', expectation: ''},
             {name: 'test null url', url: null, id: '1', expectation: null},
+            {name: 'test non string url', url: 45, id: '1', expectation: 45},
             {name: 'test invalid url', url: '/non/parsing/url', id: '1', expectation: '/non/parsing/url'},
             {name: 'test valid url with table id', url: '/apps/123', id: '1', expectation: '/apps/123/tables/1'},
             {name: 'test valid url with table id and no leading slash', url: 'apps/123', id: 1, expectation: 'apps/123/tables/1'},
