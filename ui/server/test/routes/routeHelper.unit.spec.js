@@ -45,6 +45,7 @@ describe('Validate RequestHelper unit tests', function() {
             {name: 'test invalid url', url: '/non/parsing/url', id: '1', expectation: '/non/parsing/url'},
             {name: 'test valid url with table id', url: '/apps/123', id: '1', expectation: '/apps/123/tables/1'},
             {name: 'test valid url with table id and no leading slash', url: 'apps/123', id: 1, expectation: 'apps/123/tables/1'},
+            {name: 'test valid url with table id and no trailing slash', url: '/apps/123/', id: 1, expectation: '/apps/123/tables/1'},
             {name: 'test valid url without table id', url: '/apps/123', id: null, expectation: '/apps/123/tables'}
         ];
 

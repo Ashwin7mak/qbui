@@ -23,16 +23,7 @@
         //Module constants:
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
-
         let FACETS = 'facets';
-
-        //  url components for facets, report components and table report home page
-        let CORE_REPORTS_ROUTE = 'reports';
-        let CORE_REPORTFACETS_ROUTE = FACETS + '/results';
-        let CORE_HOMEPAGE_ID_ROUTE = 'defaulthomepage';
-
-        let NODE_REPORTCOMPONENT_ROUTE = 'reportcomponents';
-        let NODE_HOMEPAGE_ROUTE = 'homepage';
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
@@ -225,7 +216,6 @@
                     //  make the api request to get the table homepage report id
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            response.body = "1";
                             // parse out the id and use to fetch the report meta data.  Process the meta data
                             // to fetch and return the report content.
                             if (response.body) {

@@ -1,6 +1,5 @@
 /**
  The purpose of this module is to process /apps/<id>/tables/<id>/form api requests.
- This uses recordsApi to make calls out to /apps/<id>/tables/<id>/records end points when needed.
  */
 (function() {
     'use strict';
@@ -10,6 +9,10 @@
 
     module.exports = function(config) {
 
+        //Module constants:
+        var APPLICATION_JSON = 'application/json';
+        var CONTENT_TYPE = 'Content-Type';
+
         let requestHelper = require('./requestHelper')(config);
         let recordsApi = require('./recordsApi')(config);
         let routeHelper = require('../../routes/routeHelper');
@@ -18,12 +21,20 @@
 
             fetchFormMetaData: function(req) {
                 let opts = requestHelper.setOptions(req);
-                opts.headers['Content-Type'] = 'application/json';
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsRoute(req.url, 1);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
+                //  TODO: TEMPORARAY...JUST RETURN FORM ID 1 for now...
+                //  TODO: NEED NEW ENDPOINT THAT DOES NOT REQUIRE AN ID...
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsRoute(req.url, 1);
                 return requestHelper.executeRequest(req, opts);
             },
 
+            /**
+             * Fetch form meta data, a single record and associated fields meta data from a table.
+             *
+             * @param req
+             * @returns Promise
+             */
             fetchFormComponents: function(req) {
 
                 return new Promise(function(resolve, reject) {

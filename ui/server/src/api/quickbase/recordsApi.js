@@ -262,7 +262,7 @@
                     //  For a reportComponents endpoing request, if sorting, use the records endpoint, with the
                     //  parameter list to retrieve the data; otherwise use the report/results endpoint.
                     let search = url.parse(inputUrl_toLower).search;
-                    if (search.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
+                    if (search && search.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url) + search;
                     } else {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
