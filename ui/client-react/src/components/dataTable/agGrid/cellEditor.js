@@ -51,8 +51,7 @@ const CellEditor = React.createClass({
             if (this.props.colDef.choices) {
                 return (
                     <ComboBoxFieldEditor choices={this.props.colDef.choices} value={this.props.value}
-                                     onChange={this.props.onChange}
-                                     onTab={this.props.onTabColumn}/>
+                                     onChange={this.props.onChange} />
                 );
             } else {
                 return <DefaultFieldEditor value={this.props.value}
