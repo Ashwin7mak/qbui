@@ -38,10 +38,11 @@ class FormService extends BaseService {
             params[query.FORM_TYPE] = formType;
         }
 
-        return Promise.resolve({data: sampleFormJSON});
-        //TODO add a node end point.
-        //let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId]);
-        //return super.get(url, {params:params});
+        // TODO - remove once confirmed this all works..
+        //return Promise.resolve({data: sampleFormJSON});
+
+        let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId]);
+        return super.get(url, {params:params});
     }
 }
 
