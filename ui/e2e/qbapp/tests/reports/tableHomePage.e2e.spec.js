@@ -13,7 +13,6 @@
         var app;
         var recordList;
         var userId;
-        var ADMIN_USER_ID = "10000";
 
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and multiple reports.
