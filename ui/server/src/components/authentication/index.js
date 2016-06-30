@@ -4,6 +4,7 @@
 (function() {
     'use strict';
     var consts = require('../../../../common/src/constants');
+    var cookies = require('../../constants/cookie');
     var log = require('../../logger').getLogger();
 
     module.exports.signout = function signout(req, res) {
@@ -11,7 +12,7 @@
         var statusCode = 200;
         var message = "User is signing out";
         var hostname = (req.headers.host.match(/:/g)) ? req.headers.host.slice(0, req.headers.host.indexOf(":")) : req.headers.host;
-        res.cookie('ticket', "", {domain: hostname, expires: new Date(0)});
+        res.cookie(cookies.TICKET, "", {domain: hostname, expires: new Date(0)});
         processAuthentication(req, res, viewFilePath, statusCode, message);
     };
 
@@ -20,7 +21,7 @@
         var statusCode = 200;
         var message = "User is signing in";
         //TODO: when signin is implemented on newstack, update this to create cookie
-        //res.cookie('ticket',  {path: '/'});
+        //res.cookie(cookies.TICKET,  {path: '/'});
         processAuthentication(req, res, viewFilePath, statusCode, message);
     };
 

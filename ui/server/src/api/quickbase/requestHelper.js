@@ -151,7 +151,13 @@
 
                 //  if no tid on the header, add it now
                 if (req) {
-                    this.setTidHeader(req);
+                    if (req.headers) {
+                        if (!req.headers.tid) {
+                            this.setTidHeader(req);
+                        }
+                    } else {
+                        this.setTidHeader(req);
+                    }
                 }
 
                 return new Promise((resolve, reject) =>{
