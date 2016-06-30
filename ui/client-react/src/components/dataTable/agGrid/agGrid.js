@@ -77,6 +77,12 @@ let AGGrid = React.createClass({
         context: {}
     },
 
+    getInitialState() {
+        return {
+            editingRowNode: null // which ag-grid row node object is being edited
+        };
+    },
+
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
@@ -278,6 +284,16 @@ let AGGrid = React.createClass({
         groupCellText.textContent = params.data.group;
         return groupCellText;
     },
+
+    /**
+     * add editing class to the ag-row of the edited row node
+     * @param params ag row data
+     */
+    getRowClass(params) {
+
+        return (params.node === this.state.editingRowNode) ? "editing" : "";
+    },
+
     componentDidMount() {
         let flux =  this.getFlux();
         this.gridOptions.context.flux = flux;
@@ -291,6 +307,7 @@ let AGGrid = React.createClass({
         this.gridOptions.context.keyField = this.props.keyField;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
+        this.gridOptions.getRowClass = this.getRowClass;
 
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
 
@@ -393,11 +410,12 @@ let AGGrid = React.createClass({
             return;
         }
 
-        // select row on doubleclick
+        // edit row on doubleclick
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            params.node.setSelected(true, true);
+            this.editRow(params.node);
+
             return;
         }
         if (this.clickTimeout) {
@@ -413,6 +431,31 @@ let AGGrid = React.createClass({
             }
         }, 500);
     },
+
+    /**
+     * put a node into editing mode
+     * @param node new row node to edit, or null if not editing
+     */
+    editRow(node = null) {
+
+        const currentRow = this.state.editingRowNode;
+        const rowsToRefresh = [];
+
+        if (currentRow) {
+            // force grid to rerender the previously edited row
+            rowsToRefresh.push(currentRow);
+        }
+        if (node) {
+            // force grid to edit the newly edited row
+            rowsToRefresh.push(node);
+        }
+
+        // the refresh needs the new state so refresh in the setState callback
+        this.setState({editingRowNode: node}, () => {
+            this.api.refreshRows(rowsToRefresh);
+        });
+    },
+
     /**
      * Capture the row-selection/deselection change events.
      * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.

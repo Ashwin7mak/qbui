@@ -42,13 +42,13 @@
                     breakpointSize: 'medium',
                     open: true,
                     offsetWidth: '200'
-                },
-                {
-                    browserWidth: e2eConsts.SMALL_BP_WIDTH,
-                    breakpointSize: 'small',
-                    open: true,
-                    offsetWidth: '300'
                 }
+                //{
+                //    browserWidth: e2eConsts.SMALL_BP_WIDTH,
+                //    breakpointSize: 'small',
+                //    open: true,
+                //    offsetWidth: '300'
+                //}
             ];
         }
     });

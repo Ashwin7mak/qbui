@@ -84,18 +84,18 @@
                     // Resize browser at different widths to check responsiveness
                     e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                         if (testcase.breakpointSize === 'small') {
-                            // On small the leftNav will be hidden on a loaded report by default
-                            reportServicePage.assertNavProperties(testcase.breakpointSize, false, '0').then(function() {
-                                // Open the leftNav
-                                reportServicePage.openLeftNav().then(function() {
-                                    reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, false, '0');
+                            // Open the leftNav
+                            reportServicePage.openLeftNav().then(function() {
+                                reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth).then(function() {
                                     done();
                                 });
                             });
                         } else {
                             // Assert leftNav properties
-                            reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
-                            done();
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth).then(function() {
+                                done();
+                            });
                         }
                     });
                 });
@@ -113,13 +113,15 @@
                             // Open the leftNav
                             reportServicePage.openLeftNav().then(function() {
                                 // leftNav will be shown due to previous test (we want this state to be sticky)
-                                reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
-                                done();
+                                reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth).then(function() {
+                                    done();
+                                });
                             });
                         } else {
                             // Assert leftNav properties
-                            reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth);
-                            done();
+                            reportServicePage.assertNavProperties(testcase.breakpointSize, true, testcase.offsetWidth).then(function() {
+                                done();
+                            });
                         }
                     });
                 });
@@ -206,7 +208,7 @@
                  */
                 it('Verify leftNav can load the reportsMenu when collapsed', function(done) {
                     //TODO: SafariDriver does not currently have an implementation for the mouseMove hover action (haven't found a workaround), need to skip this test if running Safari
-                    if (browser.browserName !== 'safari' && testcase.breakpointSize !== 'small') {
+                    if (browserName !== 'safari' && testcase.breakpointSize !== 'small') {
                         try {
                             // Collapse the leftNav
                             reportServicePage.waitForElementToBeClickable(reportServicePage.topNavToggleHamburgerEl).then(function() {

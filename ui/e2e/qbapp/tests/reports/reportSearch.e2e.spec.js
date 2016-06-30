@@ -78,13 +78,14 @@
                     reportServicePage.agGridRecordElList.map(function(row) {
                         var cells = row.all(by.className('ag-cell-no-focus'));
                         return [
-                            cells.get(2).getText(),
+                            cells.get(1).all(by.tagName('input')).first().getAttribute('value'),
+                            cells.get(2).all(by.tagName('input')).first().getAttribute('value'),
+                            // Selenium returns 'Invalid date' when trying to get the value of a Date/Time field, getText works however
                             cells.get(3).getText(),
-                            cells.get(4).getText(),
-                            cells.get(5).getText(),
+                            cells.get(4).all(by.tagName('input')).first().getAttribute('value'),
                             // Checkbox field no longer a text field with value
-                            cells.get(6).all(by.tagName('input')).first().isSelected(),
-                            cells.get(7).getText()
+                            cells.get(5).all(by.tagName('input')).first().isSelected(),
+                            cells.get(6).all(by.tagName('input')).first().getAttribute('value')
                         ];
                     }).then(function(results) {
                         for (var i = 0; i < results.length; i++) {
@@ -110,23 +111,15 @@
                     query: '7.642',
                     columnId: 7,
                     expectedSearchResults:[
-                        ['', '4/12/2016', '04/11/16 10:51:00 PM', 'first_name_last_name@quickbase.com', true, '7.642']
-                    ]
-                },
-                {
-                    message: ' Checkbox value',
-                    query: 'true',
-                    expectedSearchResults: [
-                        ['', '4/12/2016', '04/11/16 10:51:00 PM', 'first_name_last_name@quickbase.com', true, '7.642'],
-                        ['wuv', '1/12/2016', '01/11/16 9:51:00 PM', 'abcxyz_LastName@quickbase.com', true, '6.05']
+                        ['', '04-12-2016', '04-11-2016 10:51 PM', 'first_name_last_name@quickbase.com', true, '7.642']
                     ]
                 },
                 {
                     message: ' Text value',
                     query: 'xyz',
                     expectedSearchResults: [
-                        ['wuv', '1/12/2016', '01/11/16 9:51:00 PM', 'abcxyz_LastName@quickbase.com', true, '6.05'],
-                        ['xyz', '4/12/2015', '04/11/15 10:51:00 PM', 'xyz_last_name@quickbase.com', false, '9.292']
+                        ['wuv', '01-12-2016', '01-11-2016 9:51 PM', 'abcxyz_LastName@quickbase.com', true, '6.05'],
+                        ['xyz', '04-12-2015', '04-11-2015 10:51 PM', 'xyz_last_name@quickbase.com', false, '9.292']
                     ]
                 }
                 //TODO the below gives error loading report error
@@ -185,30 +178,17 @@
             });
         });
 
-        e2eConsts.NavDimensionsDataProvider().forEach(function(testBreakpoints) {
-            it(testBreakpoints.breakpointSize + ' breakpoint Special characters Test', function(done) {
-                e2eBase.resizeBrowser(testBreakpoints.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    //go to report page directly
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
-                    reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                        if (testBreakpoints.breakpointSize === 'small') {
-                            //verify present in DOM but not displayed
-                            expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeFalsy();
-                            done();
-                        } else {
-                            reportServicePage.reportFilterSearchBox.clear().sendKeys('@#^&*!!', protractor.Key.ENTER).then(function() {
-                                reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                                    //sleep for loading of table to finish
-                                    e2eBase.sleep(browser.params.smallSleep);
-                                    expect(reportServicePage.griddleWrapperEl.getText()).toEqual('There is no data to display.');
-                                    expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
-                                    done();
-                                });
-                            });
-                        }
-                    });
-                });
+        it('Special characters Test', function(done) {
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+                reportServicePage.reportFilterSearchBox.clear().sendKeys('@#^&*!!', protractor.Key.ENTER);
+                //sleep for loading of table to finish
+                e2eBase.sleep(browser.params.mediumSleep);
+                expect(reportServicePage.griddleWrapperEl.getText()).toEqual('There is no data to display.');
+                expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
+                done();
             });
         });
+
     });
 }());

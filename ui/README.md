@@ -5,8 +5,8 @@ The QuickBase ui project is the ui layer of the QuickBase application. It is an 
 
 Other repos for QuickBase:
 
-* [java backend](https://github.intuit.com/QuickBase/QuickBase)
-*  and [aws](https://github.intuit.com/QuickBase/aws) 
+* [java backend](https://github.com/QuickBase/QuickBase)
+*  and [aws](https://github.com/QuickBase/aws)
 are also part of the Quickbase application. 
 
 see also:
@@ -15,12 +15,12 @@ see also:
 
 ##Knowledge Prerequisites
 1. Writing Javascript, Node.js, React
-2. Read coding conventions (convention settings in https://github.intuit.com/QuickBase/qbui/tree/master/documents/devDesign)
+2. Read coding conventions (convention settings in https://github.com/QuickBase/qbui/tree/master/documents/devDesign)
 
 
 ##Pre-installation
 
-FIRST - Do all the Quickbase java backend development [setup instructions](https://github.intuit.com/QuickBase/QuickBase/blob/master/README.md) so that you have installed
+FIRST - Do all the Quickbase java backend development [setup instructions](https://github.com/QuickBase/QuickBase/blob/master/README.md) so that you have installed
 
 * Git & SourceTree Source code control
 * Intellij IDE
@@ -80,12 +80,12 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
 * Then get the qbui project repo 
 
     ```
-    git clone -b master ssh://git@github.intuit.com/quickbase/qbui.git
+    git clone -b master ssh://git@github.com/quickbase/qbui.git
     ```
     or
 
     ```
-    git clone -b master https://github.intuit.com/QuickBase/qbui.git
+    git clone -b master https://github.com/QuickBase/qbui.git
     ```
 
     *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12). 
@@ -331,7 +331,7 @@ CREATE CERTS:
 
 The two files you need are a PEM encoded SSL certificate and private key.
 
-If you already have a certificate(self-signed is okay) in your local keystore for the express server CommonName (ie: localhost, localhost.intuit.com, etc),
+If you already have a certificate(self-signed is okay) in your local keystore for the express server CommonName (ie: localhost, localhost.com, etc),
 you can create the files from your local keystore.
 For more information, click [here](http://security.stackexchange.com/questions/3779/how-can-i-export-my-private-key-from-a-java-keytool-keystore):
 
@@ -404,7 +404,7 @@ Update the javahost run-time configuration parameter to use the https protocol a
 setting in the local.env.js file:
 
     //REST endpoint (protocol,server,port)
-    javaHost: 'https://localhost.intuit.com:8443'
+    javaHost: 'https://localhost.com:8443'
 
 
 ##Troubleshooting
@@ -414,7 +414,7 @@ POSSIBLE ISSUES -- and how to resolve
     
     1.1. your Tomcat server is running 
     
-    * see [Quickbase repo](https://github.intuit.com/QuickBase/QuickBase/raw/master/README.md)
+    * see [Quickbase repo](https://github.com/QuickBase/QuickBase/raw/master/README.md)
     
     1.2. your Oracle DB is up 
     
@@ -440,11 +440,11 @@ POSSIBLE ISSUES -- and how to resolve
       
 ##Other Resources
 
-* Links for learning Node, react, etc - [https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md]([https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md)
+* Links for learning Node, react, etc - [https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md]([https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md)
 
-* Information on the ui ops tools we use to build and deploy the you - [https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/TOOLS_AND_LIBS.md](https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/TOOLS_AND_LIBS.md)
+* Information on the ui ops tools we use to build and deploy the you - [https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/TOOLS_AND_LIBS.md](https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/TOOLS_AND_LIBS.md)
 
-* Globalization in the UI - [https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/UI%20i18n.md](https://github.intuit.com/QuickBase/QuickBaseUIProto/blob/development/ui/UI%20i18n.md)
+* Globalization in the UI - [https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/UI%20i18n.md](https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/UI%20i18n.md)
 
 Contributors
 ---------------------

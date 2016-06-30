@@ -177,7 +177,7 @@ let ReportToolsAndContent = React.createClass({
     },
     getTableActions() {
         const selectedRows = this.props.selectedRows;
-        const hasSelection = !!(selectedRows && selectedRows.length > 1);
+        const hasSelection = !!(selectedRows && selectedRows.length > 0);
 
         let classes = "tableActionsContainer secondaryBar";
 
