@@ -638,9 +638,9 @@ describe('ReportContent functions', () => {
         spyOn(flux.actions, 'saveReportRecord');
         let edits = {recordChanges:{
             4:{
-                    fieldName : 'col_num',
-                    newVal: {value:"hi", display:"there"},
-                },
+                fieldName : 'col_num',
+                newVal: {value:"hi", display:"there"},
+            },
         },
                 originalRecord: {fids:{
                     4: {value: 'older'}}
