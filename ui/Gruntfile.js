@@ -44,6 +44,7 @@ module.exports = function(grunt) {
     //arguments along to sauce-connect-launcher
     var httpProxy = grunt.option('httpProxyHost') !== undefined ? grunt.option('httpProxyHost') + ':80 --proxy-tunnel' : null;
     var useColors = grunt.option('colors') || false;
+    var lintStylesFail = grunt.option('lintStylesFail') || false;
 
     //  webpack is our module builder
     var webpack = require('webpack');
@@ -931,7 +932,6 @@ module.exports = function(grunt) {
             files:  'client-react/src/**/*.{scss,css}'
         })
         .then(function(data) {
-            grunt.log.writeln(data.output);
             var errors = 0;
             var warnings = 0;
 
@@ -947,12 +947,20 @@ module.exports = function(grunt) {
                 });
             });
 
-            grunt.log.writeln('Total of ' + errors + ' errors found.');
-            grunt.log.writeln('Total of ' + warnings + ' warnings found.');
+            if (errors > 0 || warnings > 0) {
+                grunt.log.writeln(data.output);
+                grunt.log.writeln('Total of ' + errors + ' errors found.');
+                grunt.log.writeln('Total of ' + warnings + ' warnings found.');
+                if (lintStylesFail && errors > 0) {
+                    grunt.fail.fatal('Too many errors');
+                }
+            } else {
+                grunt.log.ok('No stylelint errors found');
+            }
+
             done();
         })
         .catch(function(err) {
-            // do things with err e.g.
             grunt.log.writeln(err.stack);
             done();
         });
