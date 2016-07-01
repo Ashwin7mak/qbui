@@ -111,10 +111,6 @@ let reportModel = {
         return this.model;
     },
 
-    getRecords: function() {
-        return this.model.records;
-    },
-
     /**
      * Set everything related to report's meta data that's needed by components in state
      * @param reportMetaData
@@ -168,12 +164,6 @@ let reportModel = {
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
     },
-    findFieldById(fid) {
-        return this.model.fields.find(field => field.id === fid);
-    },
-    findFieldByName(name) {
-        return this.model.fields.find(field => field.name === name);
-    },
     findRecordById(records, recId) {
         return records.find(rec => rec[this.model.keyField.name].value === recId);
     },
@@ -201,15 +191,6 @@ let reportModel = {
 
     },
 
-/**
-     * Set just the filteredRecords. No change to fields. This has to be client side
-     * TODO: Is this being used anymore?
-     * @param records
-     */
-    setFilteredRecords: function(records) {
-        this.model.filteredRecords = records;
-        this.model.filteredRecordsCount = records.length;
-    },
     /**
      * Update the filtered Records from response.
      * @param recordData
@@ -290,9 +271,7 @@ let ReportDataStore = Fluxxor.createStore({
 
             actions.ADD_REPORT_RECORD, this.onAddReportRecord, // for empower demo
             actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord, // for empower demo
-            actions.SAVE_REPORT_RECORD, this.onSaveRecord,
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
-            actions.SAVE_REPORT_RECORD_FAILED, this.onSaveRecordFailed,
 
         );
     },
@@ -415,17 +394,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onSaveRecord(payload) {
-    },
-
     onSaveRecordSuccess(payload) {
         // update the  record values
         this.reportModel.updateARecord(payload.recId, payload.changes);
         this.emit("change");
     },
 
-    onSaveRecordFailed(payload) {
-    },
 
     getState() {
         return {

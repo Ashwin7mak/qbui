@@ -49,7 +49,6 @@ let ReportContent = React.createClass({
             keys.find((col) => {
                 if (col === keyField && rec[col].value === recid) {
                     orig.names = rec;
-                    //console.log("col =" + col + ":" +JSON.stringify(rec));
                     var fids = {};
                     var recKeys = Object.keys(rec);
                     // have fid lookup hash
@@ -102,7 +101,6 @@ let ReportContent = React.createClass({
         }
         //calls action to save the record changes
         // validate happen here or in action
-        //console.log(`record ${recId} changed` + JSON.stringify(changes) );
 
         let payload = [];
         // columns id and new values array

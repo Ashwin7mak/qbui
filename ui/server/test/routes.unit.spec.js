@@ -105,6 +105,37 @@ describe('Express Routes', function() {
 
     });
 
+    it('Validate post log client perf route', function(done) {
+
+        stubLog = sinon.stub(log, 'info').returns(true);
+
+        request(app).
+        post(routeConstants.LOG_CLIENT_PERF_MSG).
+        send({perf:'stat1', another:'stat2'}).
+        expect(200, 'OK').
+        end(function(err, res) {
+            if (err) {
+                stubLog.restore();
+                return done(err);
+            }
+            stubLog.restore();
+            done();
+        });
+    });
+
+    it('Validate get log client perf route is not supported', function(done) {
+
+        request(app).
+        get(routeConstants.LOG_CLIENT_PERF_MSG).
+        expect(405).
+        end(function(err, res) {
+            if (err) {
+                return done(err);
+            }
+            done();
+        });
+    });
+
     it('Validate unauthorized route', function(done) {
         request(app).
             get('/unauthorized').

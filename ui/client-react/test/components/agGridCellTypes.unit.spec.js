@@ -110,6 +110,89 @@ describe('AGGrid cell editor functions', () => {
         expect(inputs[0].checked).toBe(false);
     });
 
+    it('test DateCellRenderer edit', () => {
+        const params = {
+            value: {
+                value: "2015-11-03"
+            },
+            column: {
+                colDef: {
+                    datatypeAttributes: {
+                        dateFormat: "MM-dd-uuuu"
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<DateCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll(".cellData .dateCell");
+
+        const editInputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellEdit input");
+        expect(editInputs.length).toEqual(1);
+        expect(editInputs[0].value).toBe("11-03-2015");
+
+        TestUtils.Simulate.change(editInputs[0], {"target": {"value": "03-04-2097"}});
+        expect(editInputs[0].value).toBe("03-04-2097");
+
+    });
+
+    it('test DateTimeFormatter edit', () => {
+        const params = {
+            value: {
+                //YYYY-MM-DDTHH:mm:ss.SSSZ
+                //MM-DD-YYYY hh:mm:ss
+                value: "2015-11-03T12:33:03.777Z"
+            },
+            column: {
+                colDef: {
+                    datatypeAttributes: {
+                        dateFormat: "MM-DD-YYYY hh:mm:ss"
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<DateTimeCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const editInputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellEdit input");
+        expect(editInputs.length).toEqual(1);
+        expect(editInputs[0].value).toBe("11-03-2015 07:33:03 AM");
+
+        TestUtils.Simulate.change(editInputs[0], {"target": {"value":"11-03-2000 12:33:03"}});
+        expect(editInputs[0].value).toBe("11-03-2000 12:33:03");
+
+    });
+
+    it('test TimeFormatter edit', () => {
+        const params = {
+            value: {
+                value: "1970-01-01T19:53:42.531Z[UTC]"
+            },
+            column: {
+                colDef: {
+                    datatypeAttributes: {
+                        dateFormat: "MM-DD-YYYY",
+                        showTime: true
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<TimeCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const editInputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellEdit input");
+        expect(editInputs.length).toEqual(1);
+        expect(editInputs[0].value).toBe("7:53:42 PM");
+
+        TestUtils.Simulate.change(editInputs[0], {"target": {"value":"08:23:11 AM"}});
+        expect(editInputs[0].value).toBe("8:23:11 AM");
+
+    });
+
     it('test DateFormatter', () => {
         const params = {
             value: {

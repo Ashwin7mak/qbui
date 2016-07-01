@@ -337,3 +337,50 @@ describe('Report Data Actions -- ', () => {
 
 });
 
+describe('Report Data Actions Edit Report functions -- Negative', () => {
+    'use strict';
+
+    let changes = {};
+
+    class mockRecordService {
+        constructor() {}
+        saveRecord(a, t, r, c) {
+            return Promise.resolve({data:responseData});
+        }
+    }
+
+    beforeEach(() => {
+        spyOn(flux.dispatchBinder, 'dispatch');
+        spyOn(mockRecordService.prototype, 'saveRecord');
+        reportDataActions.__Rewire__('RecordService', mockRecordService);
+    });
+
+    afterEach(() => {
+        reportDataActions.__ResetDependency__('RecordService');
+    });
+    var dataProvider = [
+        {test:'test saveReportRecord with missing appId', appId:null, tblId:2, recId:3, changes:changes},
+        {test:'test saveReportRecord with missing tblId', appId:1, tblId:null, recId:3, changes:changes},
+        {test:'test saveReportRecord with missing recId', appId:1, tblId:2, recId:undefined, changes:changes},
+        {test:'test saveReportRecord with null recId', appId:1, tblId:2, recId:null, changes:changes},
+        {test:'test saveReportRecord with missing changes', appId:1, tblId:2, recId:3, changes:null},
+    ];
+
+    dataProvider.forEach(function(data) {
+
+        it(data.test, (done) => {
+
+            flux.actions.saveReportRecord(data.appId, data.tblId, data.recId, data.changes).then(
+                    () => {
+                        expect(true).toBe(false);
+                        done();
+                    },
+                    () => {
+                        expect(mockRecordService.prototype.saveRecord).not.toHaveBeenCalled();
+                        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SAVE_REPORT_RECORD_FAILED, jasmine.any(Object));
+                        done();
+                    }
+            );
+        });
+    });
+});

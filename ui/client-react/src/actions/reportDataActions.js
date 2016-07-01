@@ -188,8 +188,8 @@ let reportDataActions = {
      */
     saveReportRecord(appId, tblId, recId, changes) {
         // promise is returned in support of unit testing only
-        return new Promise(function(resolve, reject)  {
-            if (appId && tblId && changes) {
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && (!!(recId === 0 || recId)) && changes) {
                 this.dispatch(actions.SAVE_REPORT_RECORD, {appId, tblId, recId, changes});
                 let recordService = new RecordService();
 
@@ -199,6 +199,7 @@ let reportDataActions = {
                         logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.SAVE_REPORT_RECORD_SUCCESS, {appId, tblId, recId, changes});
                         NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+                        resolve();
                     },
                     error => {
                         logger.error('RecordService saveRecord call error:', JSON.stringify(error));
@@ -214,7 +215,7 @@ let reportDataActions = {
                 this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {error: errMessage});
                 reject();
             }
-        }.bind(this));
+        });
     },
 
 
