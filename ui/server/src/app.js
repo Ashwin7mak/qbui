@@ -44,10 +44,12 @@
      * We need to intercept every request/response and add the userId for logging purposes.
      */
     app.use(function(req, res, next) {
-        if (req.headers.cookie) {
-            var userId = ob32Utils.decoder(cookieUtils.breakTicketDown(req.headers.cookie, 2));
-            req.userId = userId;
-            res.setHeader('userId', userId);
+        if (req.headers) {
+            if (req.headers.cookie) {
+                var userId = ob32Utils.decoder(cookieUtils.breakTicketDown(req.headers.cookie, 2));
+                req.userId = userId;
+                res.setHeader('userId', userId);
+            }
         }
         next();
     });
