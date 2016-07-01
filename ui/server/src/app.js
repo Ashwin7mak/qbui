@@ -15,6 +15,7 @@
         _ = require('lodash');
     var fs = require('fs'),
         https = require('https');
+    var CookieConsts = require('./constants/cookie');
 
     //  Configure the Bunyan logger
     var log = require('./logger').getLogger();
@@ -39,21 +40,6 @@
         });
         next();
     });
-
-    /*
-     * We need to intercept every request/response and add the userId for logging purposes.
-     */
-    app.use(function(req, res, next) {
-        if (req.headers) {
-            if (req.headers.cookie) {
-                var userId = ob32Utils.decoder(cookieUtils.breakTicketDown(req.headers.cookie, 2));
-                req.userId = userId;
-                res.setHeader('userId', userId);
-            }
-        }
-        next();
-    });
-
 
     /**
      * Express middleware function to force to use secure requests
@@ -87,6 +73,24 @@
     };
 
     require('./config/expressConfig')(app);
+
+    /*
+     * We need to intercept every request/response and add the userId for logging purposes.
+     */
+    app.use(function(req, res, next) {
+        if (req.headers) {
+
+            let ticketCookie = req.cookies[CookieConsts.TICKET];
+            if (ticketCookie) {
+                var userId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 2));
+                req.userId = userId;
+                res.setHeader('userId', userId);
+            }
+        }
+        next();
+    });
+
+
     require('./routes')(app, config);
     //  log some server config info...but don't include the secrets configuration
     log.info('Express Server configuration:', JSON.stringify(_.omit(config, ['secrets', 'SESSION_SECRET'])));
