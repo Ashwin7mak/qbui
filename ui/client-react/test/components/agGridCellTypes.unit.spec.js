@@ -141,9 +141,7 @@ describe('AGGrid cell editor functions', () => {
     it('test DateTimeFormatter edit', () => {
         const params = {
             value: {
-                //YYYY-MM-DDTHH:mm:ss.SSSZ
-                //MM-DD-YYYY hh:mm:ss
-                value: "2015-11-03T12:33:03.777Z"
+                value: "2015-11-03T03:33:03.777Z"
             },
             column: {
                 colDef: {
@@ -159,7 +157,7 @@ describe('AGGrid cell editor functions', () => {
 
         const editInputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellEdit input");
         expect(editInputs.length).toEqual(1);
-        expect(editInputs[0].value).toBe("11-03-2015 07:33:03 AM");
+        expect(editInputs[0].value).toBe("11-02-2015 10:33:03 PM");
 
         TestUtils.Simulate.change(editInputs[0], {"target": {"value":"11-03-2000 12:33:03"}});
         expect(editInputs[0].value).toBe("11-03-2000 12:33:03");
