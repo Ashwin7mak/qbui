@@ -1,6 +1,6 @@
 import React from 'react';
 import './qbIcon.scss';
-import './style.css';
+import './style.scss';
 
 /**
  * # QuickBase Icon Font

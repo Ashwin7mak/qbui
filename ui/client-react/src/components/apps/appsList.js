@@ -1,5 +1,5 @@
 import React from 'react';
-import './apps.css';
+import './apps.scss';
 import sortBy from 'lodash/sortBy.js';
 
 var Content = React.createClass({

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Fluxxor from 'fluxxor';
 import AppsList from './appsList';
-import './apps.css';
+import './apps.scss';
 import {I18nMessage} from '../../utils/i18nMessage';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
