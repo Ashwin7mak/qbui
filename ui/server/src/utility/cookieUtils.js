@@ -1,7 +1,6 @@
 (function() {
     'use strict';
 
-    var cookie = require('../constants/cookie');
 
     module.exports = {
         /**  final String ticket = this.currentTicketVersion + "_" + ob32When + "_" + ob32UserID + "_" + ob32RealmID + "_" + ob32UserTicketVersion + "_" + digest;

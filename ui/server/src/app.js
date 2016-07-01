@@ -15,6 +15,7 @@
         _ = require('lodash');
     var fs = require('fs'),
         https = require('https');
+    var CookieConsts = require('./constants/cookie');
 
     //  Configure the Bunyan logger
     var log = require('./logger').getLogger();
@@ -79,7 +80,7 @@
     app.use(function(req, res, next) {
         if (req.headers) {
 
-            let ticketCookie = req.cookies.ticket;
+            let ticketCookie = req.cookies[CookieConsts.TICKET];
             if (ticketCookie) {
                 var userId = ob32Utils.decoder(cookieUtils.breakTicketDown(ticketCookie, 2));
                 req.userId = userId;
