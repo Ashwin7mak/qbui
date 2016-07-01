@@ -13,12 +13,11 @@
          * 4) ob32 encoded user Ticket Version
          * 5) sha256 digest value (refer to createTicket in QBTicket.java for more information)
          *
-         * @param fullTicket: the complete ticket as stored in the req.headers object
+         * @param ticket: the ticket cookie value 
          * @param section: the section of the ticket you want to return
          * @returns {*}
          */
-        breakTicketDown: function(fullTicket, section) {
-            var ticket = fullTicket.replace(cookie.TICKET + "=", "");
+        breakTicketDown: function(ticket, section) {
             var ticketSections = ticket.split("_");
             return ticketSections[section];
         }
