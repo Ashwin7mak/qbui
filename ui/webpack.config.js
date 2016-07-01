@@ -156,16 +156,15 @@ var config = {
         //  run-time environment for our application
         envPlugin
     ] :  [
-        // When there are compilation errors, this plugin skips the emitting (and recording) phase.
-        // This means there are no assets emitted that include errors.
-        new webpack.NoErrorsPlugin(),
         new styleLintPlugin({
             configFile: '.stylelintrc',
-            files: 'client-react/src/**/*.{scss,css}',
+            files: 'client-react/src/**/*.scss',
             failOnError: false,
             syntax: 'scss'
         }),
-
+        // When there are compilation errors, this plugin skips the emitting (and recording) phase.
+        // This means there are no assets emitted that include errors.
+        new webpack.NoErrorsPlugin(),
         //  run-time environment for our application
         envPlugin,
 
