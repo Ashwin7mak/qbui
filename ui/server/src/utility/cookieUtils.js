@@ -13,7 +13,7 @@
          * 4) ob32 encoded user Ticket Version
          * 5) sha256 digest value (refer to createTicket in QBTicket.java for more information)
          *
-         * @param ticket: the ticket cookie value 
+         * @param ticket: the ticket cookie value
          * @param section: the section of the ticket you want to return
          * @returns {*}
          */
