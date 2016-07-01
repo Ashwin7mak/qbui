@@ -5,8 +5,8 @@
 var assert = require('assert');
 var constants = require('../../../../../common/src/constants');
 var groupFormatter = require('../../../../src/api/quickbase/formatter/groupFormatter');
-var groupUtils = require('../../../../src/components/utility/groupUtils');
-var dateUtils = require('../../../../src/components/utility/dateUtils');
+var groupUtils = require('../../../../src/utility/groupUtils');
+var dateUtils = require('../../../../src/utility/dateUtils');
 
 describe('Validate GroupFormatter unit tests', function() {
 
