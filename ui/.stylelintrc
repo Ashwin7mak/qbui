@@ -106,7 +106,8 @@ module.exports = {
         "property-case": "lower",
         "property-no-vendor-prefix": [true, {"severity": "warning"}],
         "rule-non-nested-empty-line-before": ["always-multi-line", {
-            "ignore": ["after-comment"]
+            "ignore": ["after-comment"],
+            "severity": "warning"
         }],
         "selector-attribute-brackets-space-inside": "never",
         "selector-attribute-operator-space-after": "never",
@@ -134,7 +135,7 @@ module.exports = {
         "selector-type-no-unknown": true,
         "shorthand-property-no-redundant-values": true,
         "string-no-newline": true,
-        "string-quotes": "double",
+        "string-quotes": ["double", {"severity": "warning"}],
         "unit-case": "lower",
         "unit-no-unknown": true,
         "value-keyword-case": [
