@@ -11,7 +11,8 @@ class RecordService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_RECORD  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`
+            GET_RECORD  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
+            PATCH_RECORD : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`
         };
     }
 
@@ -54,6 +55,21 @@ class RecordService extends BaseService {
         let url = super.constructUrl(this.API.GET_RECORD, [appId, tableId]);
         return super.get(url, {params:params});
     }
+
+    /**
+     * Save changes to a record
+     *
+     * @param appId
+     * @param tableId
+     * @param recordId
+     * @param changes
+     * @returns promise
+     */
+    saveRecord(appId, tableId, recordId, changes) {
+        let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
+        return super.patch(url, changes);
+    }
+
 }
 
 export default RecordService;

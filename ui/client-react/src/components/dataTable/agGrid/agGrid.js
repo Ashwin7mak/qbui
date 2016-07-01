@@ -19,7 +19,6 @@ import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
 
 import * as GroupTypes from '../../../constants/groupTypes';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
@@ -27,6 +26,7 @@ import '../gridWrapper.scss';
 
 const serverTypeConsts = require('../../../../../common/src/constants');
 
+let FluxMixin = Fluxxor.FluxMixin(React);
 function buildIconElement(icon) {
     return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
 }
@@ -58,7 +58,11 @@ let AGGrid = React.createClass({
         records: React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
-        onRowClick: React.PropTypes.func
+        onRowClick: React.PropTypes.func,
+        onFieldChange: React.PropTypes.func,
+        onRecordChange: React.PropTypes.func,
+        onEditRecordStart: React.PropTypes.func,
+        onEditRecordCancel: React.PropTypes.func
     },
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -293,6 +297,14 @@ let AGGrid = React.createClass({
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
+        this.gridOptions.context.onRecordChange = this.props.onRecordChange;
+        this.gridOptions.context.onFieldChange = this.props.onFieldChange;
+        this.gridOptions.context.onEditRecordStart = this.props.onEditRecordStart;
+        this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel;
+        this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
+
+        this.gridOptions.context.keyField = this.props.keyField;
+
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
         this.gridOptions.getRowClass = this.getRowClass;
 
@@ -394,8 +406,8 @@ let AGGrid = React.createClass({
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
+            this.props.onEditRecordStart(params.data[this.props.keyField].value);
             this.editRow(params.node);
-
             return;
         }
         if (this.clickTimeout) {
@@ -442,7 +454,6 @@ let AGGrid = React.createClass({
      */
     onSelectionChanged() {
         let flux = this.getFlux();
-
         flux.actions.selectedRows(this.getSelectedRows());
     },
 
@@ -487,6 +498,11 @@ let AGGrid = React.createClass({
             });
         }
         return rows;
+    },
+
+    handleEditRecordCancel() {
+        this.props.onEditRecordCancel();
+        this.editRow(); // edit nothing
     },
 
     /**
@@ -697,6 +713,11 @@ let AGGrid = React.createClass({
                                     // binding to array properties
                                     columnDefs={columnDefs}
                                     rowData={this.props.records}
+                                    //handlers on col or row changes
+                                    onFieldChange={this.props.onFieldChange}
+                                    onRecordChange={this.props.onRecordChange}
+                                    onEditRecordStart={this.props.onEditRecordStart}
+                                    onEditRecordCancel={this.handleEditRecordCancel}
 
                                     //default behavior properties
                                     rowSelection="multiple"

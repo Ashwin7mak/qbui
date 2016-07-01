@@ -14,12 +14,12 @@ describe('FormService functions', () => {
         formService = new FormService();
     });
 
-    xit('test getFormAndRecord function', () => {
-        var appId = '123';
-        var tableId = '456';
-        var recordId = '10';
-        var url = formService.constructUrl(formService.API.GET_FORM_AND_RECORD, [appId, tableId, recordId]);
-        formService.getFormAndRecord(appId, tableId, recordId);
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
-    });
+    // it('test getFormAndRecord function', () => {
+    //     var appId = '123';
+    //     var tableId = '456';
+    //     var recordId = '10';
+    //     var url = formService.constructUrl(formService.API.GET_FORM_AND_RECORD, [appId, tableId, recordId]);
+    //     formService.getFormAndRecord(appId, tableId, recordId);
+    //     expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+    // });
 });

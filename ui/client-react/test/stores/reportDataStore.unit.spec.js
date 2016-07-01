@@ -45,6 +45,10 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).__actions__.FILTER_SELECTIONS_PENDING).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SHOW_FACET_MENU).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.HIDE_FACET_MENU).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.SELECTED_ROWS).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.ADD_REPORT_RECORD).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_REPORT_RECORD).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD_SUCCESS).toBeDefined();
     });
 
     it('test load reports action', () => {
@@ -360,7 +364,6 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
-
     it('test filtered load records success action with no data', () => {
 
         let payload = {
@@ -405,7 +408,6 @@ describe('Test ReportData Store', () => {
         expect(state.nonFacetClicksEnabled).toBeDefined(true);
     });
 
-
     it('test filter selection pending action', () => {
         let selections = new FacetSelections();
         selections.addSelection(1, 'Development');
@@ -422,4 +424,74 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
+
+    it('test selectedRows action', () => {
+
+        let selectedRowsAction = {
+            type: actions.SELECTED_ROWS,
+            payload: "rows"
+        };
+
+        flux.dispatcher.dispatch(selectedRowsAction);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test saveReportRecordSuccess action', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId:false,
+                    id:16,
+                    name: "loc",
+                    type: "SCALAR",
+                    keyField: false,
+                    datatypeAttributes : {
+                        type: "TEXT"
+                    }
+                },
+                    {
+                        builtId:false,
+                        id:8,
+                        name: "Score",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes : {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                records: [[
+                    {id: 16, value: "Boston", display: "Boston"},
+                    {id: 8, value: 1234, display: 1234},
+                ],
+                    [
+                    {id: 16, value: "NYC", display: "NYC"},
+                    {id: 8, value: 456, display: 456}
+                    ]],
+                groups: []
+            }
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let saveReportRecordSuccessAction = {
+            type: actions.SAVE_REPORT_RECORD_SUCCESS,
+            payload: {recId : 1234, changes: [{fieldName:"loc", value:"test", display:"test"}]}
+        };
+
+        flux.dispatcher.dispatch(saveReportRecordSuccessAction);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+
 });

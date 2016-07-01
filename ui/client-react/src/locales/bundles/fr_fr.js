@@ -65,6 +65,10 @@ export default {
             return: "Retour au rapport",
             next: "Prochain"
         },
+        recordNotifications: {
+            recordSaved : "Sauvegarder",
+            recordNotSaved :"Enregistrement non enregistré",
+        },
         header: {
             menu: {
                 locale: {
@@ -220,7 +224,8 @@ export default {
         cancel: "Annuler",
         cancelTip: "Quitter et ignorer les modifications",
         apply: "Aappliquer",
-        applyTip: "Sortez et appliquer les modifications"
-
+        applyTip: "Sortez et appliquer les modifications",
+        success: "Le succès",
+        failed: "Échoué",
     }
 };

@@ -11,7 +11,7 @@ var logger = new Logger();
  */
 let FieldsStore = Fluxxor.createStore({
 
-    initialize: function() {
+    initialize() {
         this.fields = [];
         this.currentTable = null;
         this.fieldsLoading = false;
@@ -26,30 +26,38 @@ let FieldsStore = Fluxxor.createStore({
 
         this.logger = new Logger();
     },
-    onLoadFields: function() {
+    onLoadFields() {
         this.fieldsLoading = true;
         this.emit("change");
     },
-    onLoadFieldsFailed: function() {
+    onLoadFieldsFailed() {
         this.fieldsLoading = false;
         this.fields = [];
         this.error = true;
         this.emit("change");
     },
-    onLoadFieldsSuccess: function(fields) {
+    onLoadFieldsSuccess(fields) {
         this.fieldsLoading = false;
         this.fields = fields;
         this.error = false;
         this.emit('change');
     },
-    onSelectTable: function(tblId) {
+    onSelectTable(tblId) {
         this.currentTable = tblId;
         this.fields = [];
         this.emit('change');
     },
-    getState: function() {
+    getKeyField() {
+        let answer;
+        if (typeof this.fields.data !== 'undefined') {
+            answer = this.fields.data.find(field => (field.keyField && field.keyField === true));
+        }
+        return answer;
+    },
+    getState() {
         return {
             fields: this.fields,
+            keyField: this.getKeyField(),
             currentTable: this.currentTable,
             fieldsLoading: this.fieldsLoading,
             error: this.error

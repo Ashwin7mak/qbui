@@ -50,6 +50,19 @@ class BaseService {
     }
 
     /**
+     * Http patch request
+     *
+     * @param url - request url.  Can be relative or set to explicit domain
+     * @param data - optional data properties
+     * @param conf - optional http header configuration
+     * @returns {*} - promise
+     */
+    patch(url, data, conf) {
+        let config = conf || {};
+        return axios.patch(url, data, config);
+    }
+
+    /**
      * Axiom interceptor for all http requests -- add a session tracking id and session ticket
      */
     setRequestInterceptor() {

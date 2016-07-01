@@ -14,3 +14,6 @@ export const  URL             = 'URL';
 export const  EMAIL_ADDRESS   = 'EMAIL_ADDRESS';
 export const  USER            = 'USER';
 export const  FILE_ATTACHMENT = 'FILE_ATTACHMENT';
+
+// Record key
+export const DEFAULT_RECORD_KEY = "Record ID#";

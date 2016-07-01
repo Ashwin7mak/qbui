@@ -167,7 +167,8 @@
   "scripts": {
     "webpack": "webpack --config webpack.config.js",
     "watch": "webpack --config webpack.config.js --watch",
-    "hotload": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server --watch common -e js,jsx,json server/app.js | node_modules/bunyan/bin/bunyan",
+    "hotload": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server --watch common -e js,jsx,json server/src/app.js",
+    "hotloadNonJson": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server --watch common -e js,jsx,json server/src/app.js | node_modules/bunyan/bin/bunyan",
     "clean": "rm -r client-react/dist",
     "start": "node server/src/app.js",
     "mockServer": "node_modules/grunt-nodemon/node_modules/.bin/nodemon --watch server/mockserver -e js,jxs,json server/src/mockserver/mocker.js",
