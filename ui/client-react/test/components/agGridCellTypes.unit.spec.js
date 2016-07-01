@@ -145,8 +145,8 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    datatypeAttributes: {
-                        dateFormat: "MM-DD-YYYY hh:mm:ss"
+                     datatypeAttributes: {
+                         dateFormat: "MM-DD-YYYY hh:mm:ss"
                     }
                 }
             }
@@ -157,10 +157,23 @@ describe('AGGrid cell editor functions', () => {
 
         const editInputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellEdit input");
         expect(editInputs.length).toEqual(1);
-        expect(editInputs[0].value).toBe("11-02-2015 10:33:03 PM");
 
-        TestUtils.Simulate.change(editInputs[0], {"target": {"value":"11-03-2000 12:33:03"}});
-        expect(editInputs[0].value).toBe("11-03-2000 12:33:03");
+        //UTC
+        if (((new Date()).getTimezoneOffset()/60) == 0) {
+            expect(editInputs[0].value).toBe(`11-03-2015 03:33:03 AM`);
+        }
+        //ET
+        if (((new Date()).getTimezoneOffset()/60) == 4) {
+            expect(editInputs[0].value).toBe(`11-02-2015 10:33:03 PM`);
+        }
+        //PT
+        if (((new Date()).getTimezoneOffset()/60) == 7) {
+            expect(editInputs[0].value).toBe(`11-02-2015 07:33:03 PM`);
+        }
+
+
+        TestUtils.Simulate.change(editInputs[0], {"target": {"value":"11-03-2000 12:33:03 AM"}});
+        expect(editInputs[0].value).toBe("11-03-2000 12:33:03 AM");
 
     });
 
