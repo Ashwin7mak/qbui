@@ -207,6 +207,12 @@ let reportDataActions = {
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
                         reject();
                     }
+                ).catch(
+                    function(ex) {
+                        logger.error('Unexpected Report service call exception:', ex);
+                        this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: ex});
+                        reject();
+                    }.bind(this)
                 );
             } else {
                 var errMessage = 'Missing one or more required input parameters to reportDataActions.saveReportRecord. AppId:' +
