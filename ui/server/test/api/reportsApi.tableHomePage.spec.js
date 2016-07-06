@@ -1,7 +1,7 @@
 (function() {
     'use strict';
     var assert = require('assert');
-    require('../../app');
+    require('../../src/app');
     var config = require('../../src/config/environment');
     var log = require('../../src/logger').getLogger();
     var recordBase = require('./recordApi.base')(config);

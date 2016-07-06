@@ -19,6 +19,7 @@ $grid-default-group-padding: 2px;
 $grid-default-cell-padding: 8px;
 
 $row-bg-color: #fff;
+$row-non-editable-bg-color: $color12;
 $row-border-color: #ddd;
 $row-box-shadow-color: #dcdcdc;
 $cell-edit-background-edit: #f3f8fe;
@@ -334,7 +335,7 @@ $cell-edit-background-edit: #f3f8fe;
                 .qbIcon {
                     position:absolute;
                     top: calc(50% - 10px);
-                    left: calc(50% - 10px);
+                    left: 12px;
                 }
             }
         }
@@ -356,7 +357,7 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 /* hide datepicker if it's been opened but we're not over that cell */
-.ag-row-selected .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget{
+.ag-row.editing .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget{
     display:none !important;
 }
 
@@ -374,7 +375,8 @@ $cell-edit-background-edit: #f3f8fe;
 .reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .iconActions {
     display:none;
 }
-.reportToolsAndContentContainer.singleSelection .ag-row.ag-row-selected {
+
+.reportToolsAndContentContainer .ag-row.editing {
 
     box-shadow: 0px 0px 14px $row-box-shadow-color;
 
@@ -410,6 +412,10 @@ $cell-edit-background-edit: #f3f8fe;
                 padding:0 0 0 2px;
                 margin-right:2px;
 
+                &.nonEditable {
+                    background-color: $row-non-editable-bg-color;
+                    cursor: not-allowed;
+                }
                 &.dateTimeField>* {
                     border:0;
                     .input-group.date input.form-control {
@@ -470,6 +476,7 @@ $cell-edit-background-edit: #f3f8fe;
     .gridCell {
 
         .editTools {
+            z-index:1;
             display:flex;
             flex-direction:column;
             flex: 0 0 auto;
@@ -477,7 +484,7 @@ $cell-edit-background-edit: #f3f8fe;
             box-shadow: -2px 2px 8px $row-box-shadow-color;
             position:absolute;
             top:-26px;
-            left:-31px;
+            left:18px;
 
             border-left: 1px solid $row-border-color;
             border-bottom:1px solid $row-border-color;
@@ -487,7 +494,6 @@ $cell-edit-background-edit: #f3f8fe;
                 background-color:$cell-edit-background-edit;
                 margin-right:2px;
                 padding:6px 4px;
-
 
                 .qbIcon:hover {
                     opacity:1;
@@ -520,6 +526,13 @@ $cell-edit-background-edit: #f3f8fe;
 
 .ag-pinned-left-cols-container {
     z-index:999;
+}
+
+.reportToolsAndContentContainer.singleSelection .ag-pinned-left-cols-container .ag-row.ag-row-selected.ag-row.ag-row-selected {
+    .ag-cell.gridCell > .ag-cell-wrapper {
+        border-left:0;
+    }
+    box-shadow:0;
 }
 
 .ag-group-cell-entire-row {

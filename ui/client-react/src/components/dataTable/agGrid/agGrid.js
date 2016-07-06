@@ -19,7 +19,6 @@ import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
 
 import * as GroupTypes from '../../../constants/groupTypes';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
@@ -27,6 +26,7 @@ import '../gridWrapper.scss';
 
 const serverTypeConsts = require('../../../../../common/src/constants');
 
+let FluxMixin = Fluxxor.FluxMixin(React);
 function buildIconElement(icon) {
     return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
 }
@@ -58,7 +58,11 @@ let AGGrid = React.createClass({
         records: React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
-        onRowClick: React.PropTypes.func
+        onRowClick: React.PropTypes.func,
+        onFieldChange: React.PropTypes.func,
+        onRecordChange: React.PropTypes.func,
+        onEditRecordStart: React.PropTypes.func,
+        onEditRecordCancel: React.PropTypes.func
     },
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -71,6 +75,12 @@ let AGGrid = React.createClass({
     // use this "context" object to pass down such pieces to the components.
     gridOptions: {
         context: {}
+    },
+
+    getInitialState() {
+        return {
+            editingRowNode: null // which ag-grid row node object is being edited
+        };
     },
 
     onGridReady(params) {
@@ -274,10 +284,29 @@ let AGGrid = React.createClass({
         groupCellText.textContent = params.data.group;
         return groupCellText;
     },
+
+    /**
+     * add editing class to the ag-row of the edited row node
+     * @param params ag row data
+     */
+    getRowClass(params) {
+
+        return (params.node === this.state.editingRowNode) ? "editing" : "";
+    },
+
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
+        this.gridOptions.context.onRecordChange = this.props.onRecordChange;
+        this.gridOptions.context.onFieldChange = this.props.onFieldChange;
+        this.gridOptions.context.onEditRecordStart = this.props.onEditRecordStart;
+        this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel;
+        this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
+
+        this.gridOptions.context.keyField = this.props.keyField;
+
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
+        this.gridOptions.getRowClass = this.getRowClass;
 
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
 
@@ -373,11 +402,12 @@ let AGGrid = React.createClass({
             return;
         }
 
-        // select row on doubleclick
+        // edit row on doubleclick
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            params.node.setSelected(true, true);
+            this.props.onEditRecordStart(params.data[this.props.keyField].value);
+            this.editRow(params.node);
             return;
         }
         if (this.clickTimeout) {
@@ -393,13 +423,37 @@ let AGGrid = React.createClass({
             }
         }, 500);
     },
+
+    /**
+     * put a node into editing mode
+     * @param node new row node to edit, or null if not editing
+     */
+    editRow(node = null) {
+
+        const currentRow = this.state.editingRowNode;
+        const rowsToRefresh = [];
+
+        if (currentRow) {
+            // force grid to rerender the previously edited row
+            rowsToRefresh.push(currentRow);
+        }
+        if (node) {
+            // force grid to edit the newly edited row
+            rowsToRefresh.push(node);
+        }
+
+        // the refresh needs the new state so refresh in the setState callback
+        this.setState({editingRowNode: node}, () => {
+            this.api.refreshRows(rowsToRefresh);
+        });
+    },
+
     /**
      * Capture the row-selection/deselection change events.
      * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
      */
     onSelectionChanged() {
         let flux = this.getFlux();
-
         flux.actions.selectedRows(this.getSelectedRows());
     },
 
@@ -444,6 +498,11 @@ let AGGrid = React.createClass({
             });
         }
         return rows;
+    },
+
+    handleEditRecordCancel() {
+        this.props.onEditRecordCancel();
+        this.editRow(); // edit nothing
     },
 
     /**
@@ -654,6 +713,11 @@ let AGGrid = React.createClass({
                                     // binding to array properties
                                     columnDefs={columnDefs}
                                     rowData={this.props.records}
+                                    //handlers on col or row changes
+                                    onFieldChange={this.props.onFieldChange}
+                                    onRecordChange={this.props.onRecordChange}
+                                    onEditRecordStart={this.props.onEditRecordStart}
+                                    onEditRecordCancel={this.handleEditRecordCancel}
 
                                     //default behavior properties
                                     rowSelection="multiple"

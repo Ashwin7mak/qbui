@@ -109,10 +109,12 @@
                 });
             }).then(function(filteredColumn) {
                 var scrollToElm1 = filteredColumn[0].scrollIntoView;
+                e2eBase.sleep(browser.params.smallSleep);
                 e2ePageBase.waitForElementToBeClickable(filteredColumn[0]).then(function() {
                     return filteredColumn[0].click();
                 }).then(function() {
                     var scrollToElm2 = filteredColumn[0].element(by.className('ag-header-cell-menu-button')).scrollIntoView;
+                    e2eBase.sleep(browser.params.smallSleep);
                     e2ePageBase.waitForElementToBeClickable(filteredColumn[0].element(by.className('ag-header-cell-menu-button'))).then(function() {
                         return filteredColumn[0].element(by.className('ag-header-cell-menu-button')).click();
                     });
@@ -184,7 +186,7 @@
          * Function to verify ascending of column Records
          */
         this.verifyAscending = function(columnName, actualColumnRecords, sortedColumnRecords) {
-            e2ePageBase.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //Finally verify both the arrays
                 if (columnName.includes("Numeric Field")) {
                     actualColumnRecords.sort(function(a, b) {return (a) - (b);});
@@ -225,7 +227,7 @@
          * Function to verify descending of column Records
          */
         this.verifyDescending = function(columnName, actualColumnRecords, sortedColumnRecords) {
-            e2ePageBase.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //Finally verify both the arrays
                 if (columnName.includes("Numeric Field")) {
                     actualColumnRecords.sort(function(a, b) {return (b) - (a);});

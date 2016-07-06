@@ -9,6 +9,8 @@ import Logger from '../utils/logger';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
+import Locale from '../locales/locales';
+import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
 import reportModel from '../models/reportModel';
@@ -179,6 +181,49 @@ let reportDataActions = {
     deleteReportRecord(id) {
         this.dispatch(actions.DELETE_REPORT_RECORD, id);
     },
+
+    /* the start of editing a record */
+    /**
+     * save a record
+     */
+    saveReportRecord(appId, tblId, recId, changes) {
+        // promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && (!!(recId === 0 || recId)) && changes) {
+                this.dispatch(actions.SAVE_REPORT_RECORD, {appId, tblId, recId, changes});
+                let recordService = new RecordService();
+
+                //  save the changes to the record
+                recordService.saveRecord(appId, tblId, recId, changes).then(
+                    response => {
+                        logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
+                        this.dispatch(actions.SAVE_REPORT_RECORD_SUCCESS, {appId, tblId, recId, changes});
+                        NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+                        resolve();
+                    },
+                    error => {
+                        logger.error('RecordService saveRecord call error:', JSON.stringify(error));
+                        this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
+                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
+                        reject();
+                    }
+                ).catch(
+                    function(ex) {
+                        logger.error('Unexpected Report service call exception:', ex);
+                        this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: ex});
+                        reject();
+                    }.bind(this)
+                );
+            } else {
+                var errMessage = 'Missing one or more required input parameters to reportDataActions.saveReportRecord. AppId:' +
+                    appId + '; TblId:' + tblId + '; recId:' + recId + '; changes:' + changes ;
+                logger.error(errMessage);
+                this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {error: errMessage});
+                reject();
+            }
+        });
+    },
+
 
     /* Action called to get a new set of records given a report.
      * Override params can override report's sortlist/query etc

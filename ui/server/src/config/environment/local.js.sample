@@ -9,7 +9,7 @@
     // The local.js should not be tracked by git.
 
     //var path = require('path');
-    var dateUtils = require('../../components/utility/dateUtils');
+    var dateUtils = require('../../utility/dateUtils');
     var envConsts = require('./environmentConstants');
     var routeGroups = require('../../routes/routeGroups');
     var clientConsts = require('./clientConsts');
@@ -49,14 +49,14 @@
         ip : 'localhost', // replace with your host or machine name user use (that is in your hosts file i.e.'CMBL13XXXXXX' for mobile testing)
 
         //Java REST endpoint (protocol,server,port)
-        //javaHost: 'https://localhost.intuit.com:8443',
-        javaHost: 'http://localhost.intuit.com:8080',
+        //javaHost: 'https://localhost.com:8443',
+        javaHost: 'http://localhost.com:8080',
         //javaHost: 'http://localhost:8080',
         isMockServer : false,
 
         //Express Server
-        //DOMAIN: 'https://localhost.intuit.com:9443',
-        DOMAIN: 'http://localhost.intuit.com:9000',
+        //DOMAIN: 'https://localhost.com:9443',
+        DOMAIN: 'http://localhost.com:9000',
         //DOMAIN  : 'http://localhost:9000',
 
         //Node understanding of RuntimeEnvironment

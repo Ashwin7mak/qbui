@@ -286,6 +286,20 @@
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
 
                 return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
+            },
+
+            /**
+             * Save a single record data to a table.
+             *
+             * @param req
+             * @returns Promise
+             */
+            saveSingleRecord: function(req) {
+                var opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                var responseObject;
+                //input expected in raw form for java
+                return requestHelper.executeRequest(req, opts);
             }
 
         };

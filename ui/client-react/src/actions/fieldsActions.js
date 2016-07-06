@@ -32,12 +32,12 @@ let fieldsActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.debug('FieldsService getFields error:' + JSON.stringify(error));
+                        logger.error('FieldsService getFields error:' + JSON.stringify(error), error);
                         this.dispatch(actions.LOAD_FIELDS_FAILED);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.debug('FieldsService getFields exception:' + JSON.stringify(ex));
+                    logger.error('FieldsService getFields exception:' + JSON.stringify(ex), ex);
                     this.dispatch(actions.LOAD_FIELDS_FAILED);
                     reject();
                 });

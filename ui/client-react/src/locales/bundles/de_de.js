@@ -65,6 +65,10 @@ export default {
             return: "Zurück zu berichten",
             next: "Nächster"
         },
+        recordNotifications: {
+            recordSaved : "Datensatz gespeichert",
+            recordNotSaved :"Nehmen Sie nicht gespeichert",
+        },
         header: {
             menu: {
                 locale: {
@@ -221,7 +225,8 @@ export default {
         cancel: "Stornieren",
         cancelTip: "Beenden und verwerfen alle Änderungen",
         apply: "Anwenden",
-        applyTip: "Beenden und gelten alle Änderungen"
-
+        applyTip: "Beenden und gelten alle Änderungen",
+        success: "Erfolg",
+        failed: "Gescheitert",
     }
 };

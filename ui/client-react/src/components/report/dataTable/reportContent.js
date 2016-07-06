@@ -5,9 +5,10 @@ import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import Logger from "../../../utils/logger";
 import ReportActions from "../../actions/reportActions";
 import Fluxxor from "fluxxor";
-import * as DataTypes from "../../../constants/schema";
+import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
+import _ from 'lodash';
 
 let logger = new Logger();
 
@@ -20,10 +21,9 @@ let ReportContent = React.createClass({
     contextTypes: {
         history: React.PropTypes.object
     },
-
     getInitialState: function() {
         return {
-            showSelectionColumn: false
+            showSelectionColumn: false,
         };
     },
 
@@ -38,6 +38,93 @@ let ReportContent = React.createClass({
 
         this.props.history.pushState(null, link);
     },
+
+
+    getOrigRec(recid) {
+        let orig = {names:{}, fids:{}};
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+        let keyField =  this.props.keyField;
+        recs.find(function(rec) {
+            var keys = Object.keys(rec);
+            keys.find((col) => {
+                if (col === keyField && rec[col].value === recid) {
+                    orig.names = rec;
+                    var fids = {};
+                    var recKeys = Object.keys(rec);
+                    // have fid lookup hash
+                    recKeys.forEach(function(item) {
+                        fids[rec[item].id] = rec[item];
+                    });
+                    orig.fids = fids;
+                    return true;
+                }
+            });
+        });
+        return _.cloneDeep(orig);
+    },
+
+    handleEditRecordStart(recId) {
+        const flux = this.getFlux();
+        let origRec = this.getOrigRec(recId);
+        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec);
+    },
+
+    handleEditRecordCancel(recId) {
+        const flux = this.getFlux();
+        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, recId);
+    },
+
+    handleFieldChange(change) {
+        // call action to hold the field value change
+        const flux = this.getFlux();
+        flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
+        let changes = {};
+        if (_.has(this.props, 'pendEdits.recordChanges')) {
+            changes = _.cloneDeep(this.props.pendEdits.recordChanges);
+        }
+        if (typeof (changes[change.fid]) === 'undefined') {
+            changes[change.fid] = {};
+        }
+        changes[change.fid].oldVal = _.has(change, 'values.oldVal') ? change.values.oldVal : null;
+        changes[change.fid].newVal = _.has(change, 'values.newVal') ? change.values.newVal : null;
+        changes[change.fid].fieldName = _.has(change, 'fieldName') ? change.fieldName : null;
+
+    },
+
+    handleRecordChange(recId) {
+        const flux = this.getFlux();
+
+        // get the current data
+        let changes = {};
+        if (_.has(this.props, 'pendEdits.recordChanges')) {
+            changes = _.cloneDeep(this.props.pendEdits.recordChanges);
+        }
+        //calls action to save the record changes
+        // validate happen here or in action
+
+        let payload = [];
+        // columns id and new values array
+        //[{"id":6, "value":"Claire"}]
+        Object.keys(changes).forEach((key) => {
+            let newValue = changes[key].newVal.value;
+            let newDisplay = changes[key].newVal.display;
+            if (_.has(this.props, 'pendEdits.originalRecord.fids')) {
+                if (newValue !== this.props.pendEdits.originalRecord.fids[key].value) {
+                    let colChange = {};
+                    colChange.fieldName = changes[key].fieldName;
+                    colChange.id = +key;
+                    colChange.value = _.cloneDeep(newValue);
+                    colChange.display = _.cloneDeep(newDisplay);
+                    payload.push(colChange);
+                }
+            }
+        });
+        //for (changes)
+        flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
+        flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);
+
+    },
+
 
     /**
      * when we scroll the grid wrapper, hide the add record
@@ -65,15 +152,15 @@ let ReportContent = React.createClass({
     },
 
     isNumericDataType(dataType) {
-        return dataType === DataTypes.NUMERIC ||
-            dataType === DataTypes.CURRENCY ||
-            dataType === DataTypes.PERCENT ||
-            dataType === DataTypes.RATING;
+        return dataType === SchemaConsts.NUMERIC ||
+            dataType === SchemaConsts.CURRENCY ||
+            dataType === SchemaConsts.PERCENT ||
+            dataType === SchemaConsts.RATING;
     },
 
     isDateDataType(dataType) {
-        return dataType === DataTypes.DATE_TIME ||
-               dataType === DataTypes.DATE;
+        return dataType === SchemaConsts.DATE_TIME ||
+               dataType === SchemaConsts.DATE;
     },
 
     parseTimeOfDay(timeOfDay) {
@@ -168,10 +255,10 @@ let ReportContent = React.createClass({
                             /*eslint no-lonely-if:0*/
                             if (groupType === GroupTypes.COMMON.equals) {
                                 //  Currency and percent symbols are added only when group type is equals.
-                                if (groupField.datatypeAttributes.type === DataTypes.CURRENCY) {
+                                if (groupField.datatypeAttributes.type === SchemaConsts.CURRENCY) {
                                     groupData.group = this.localizeNumber(range[0], {style: 'currency', currency: Locales.getCurrencyCode()});
                                 } else {
-                                    if (groupField.datatypeAttributes.type === DataTypes.PERCENT) {
+                                    if (groupField.datatypeAttributes.type === SchemaConsts.PERCENT) {
                                         groupData.group = this.localizeNumber(range[0], {style: 'percent'});
                                     } else {
                                         groupData.group = this.localizeNumber(range[0]);
@@ -219,7 +306,7 @@ let ReportContent = React.createClass({
                                 break;
                             case GroupTypes.GROUP_TYPE.date.equals:
                                 let opts = null;
-                                if (groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
+                                if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME) {
                                     opts = {
                                         year: 'numeric', month: 'numeric', day: 'numeric',
                                         hour: 'numeric', minute: 'numeric'
@@ -228,7 +315,7 @@ let ReportContent = React.createClass({
                                 groupData.group = this.localizeDate(datePart[0], opts);
 
                                 //  i18n-react appends a comma after the date for en-us --> 07/22/2015, 09:44 AM -- Replace with space
-                                if (groupField.datatypeAttributes.type === DataTypes.DATE_TIME && Locales.getLocale() === 'en-us') {
+                                if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME && Locales.getLocale() === 'en-us') {
                                     groupData.group = groupData.group.replace(',', ' ');
                                 }
 
@@ -240,7 +327,7 @@ let ReportContent = React.createClass({
                         continue;
                     }
 
-                    if (groupField.datatypeAttributes.type === DataTypes.TIME_OF_DAY) {
+                    if (groupField.datatypeAttributes.type === SchemaConsts.TIME_OF_DAY) {
 
                         let timeOfDay = null;
 
@@ -276,7 +363,7 @@ let ReportContent = React.createClass({
                         continue;
                     }
 
-                    if (groupField.datatypeAttributes.type === DataTypes.DURATION) {
+                    if (groupField.datatypeAttributes.type === SchemaConsts.DURATION) {
                         //  With duration of equals, the group value contains 2 pieces of information;
                         //  the 1st is the duration value; the 2nd is the group type.
                         if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
@@ -395,7 +482,6 @@ let ReportContent = React.createClass({
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
         let isTouch = this.context.touch;
-
         let recordCount = 0;
         if (this.props.reportData) {
             let reportData = this.props.reportData.data;
@@ -410,10 +496,17 @@ let ReportContent = React.createClass({
                     <div className="reportContent">
                         {!isTouch ?
                             <AGGrid loading={this.props.reportData.loading}
-                                    records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
+                                    records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                     columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                    uniqueIdentifier="Record ID#"
+                                    uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                    keyField={this.props.keyField}
                                     appId={this.props.reportData.appId}
+                                    onEditRecordStart={this.handleEditRecordStart}
+                                    onEditRecordCancel={this.handleEditRecordCancel}
+                                    onFieldChange={this.handleFieldChange}
+                                    onRecordChange={this.handleRecordChange}
+                                    getOrigRec={this.getOrigRec}
+                                    getPendingChanges={this.getPendingChanges}
                                     tblId={this.props.reportData.tblId}
                                     rptId={this.props.reportData.rptId}
                                     reportHeader={this.props.reportHeader}
@@ -430,7 +523,9 @@ let ReportContent = React.createClass({
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}} /> :
                             <CardViewListHolder reportData={this.props.reportData}
-                                uniqueIdentifier="Record ID#"
+                                uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                keyField={this.props.fields && this.props.fields.keyField ?
+                                    this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}
                                 onScroll={this.onScrollRecords}

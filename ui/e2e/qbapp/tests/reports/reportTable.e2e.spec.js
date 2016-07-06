@@ -96,7 +96,7 @@
             // Wait until the table has loaded
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 // Open the edit menu for the first record in the report
-                reportServicePage.openRecordEditMenu(reportServicePage.agGridRecordElList.first());
+                reportServicePage.openRecordEditMenu(0);
                 // Check that the edit menu is displayed
                 reportServicePage.waitForElement(reportServicePage.agGridEditRecordMenu).then(function() {
                     // Check the edit buttons
@@ -105,7 +105,7 @@
                     });
                     // Edit the Text Field
                     reportServicePage.getRecordRowInputCells(reportServicePage.agGridRecordElList.first()).then(function(inputCells) {
-                        var textFieldInput = inputCells[2];
+                        var textFieldInput = inputCells[1];
                         textFieldInput.clear().then(function() {
                             textFieldInput.sendKeys('My new text').then(function() {
                                 // Save the edit
@@ -117,8 +117,8 @@
                                     // Check that the edit persisted
                                     var firstRecord = reportServicePage.agGridRecordElList.first();
                                     reportServicePage.getRecordRowCells(firstRecord).then(function(cells) {
-                                        var textFieldCell = cells[2];
-                                        expect(textFieldCell.getAttribute('innerText')).toBe('My new text');
+                                        var textFieldCell = cells[1];
+                                        expect(textFieldCell.getText()).toBe('My new text');
                                         done();
                                     });
                                 });
@@ -138,8 +138,8 @@
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 // Check there is a scrollbar in the griddle table
                 var fetchRecordPromises = [];
-                fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('scrollWidth'));
-                fetchRecordPromises.push(reportServicePage.griddleWrapperEl.getAttribute('clientWidth'));
+                fetchRecordPromises.push(reportServicePage.agGridBodyViewportEl.getAttribute('scrollWidth'));
+                fetchRecordPromises.push(reportServicePage.agGridBodyViewportEl.getAttribute('clientWidth'));
                 //When all the dimensions have been fetched, assert the values match expectations
                 Promise.all(fetchRecordPromises).then(function(dimensions) {
                     expect(Number(dimensions[0])).toBeGreaterThan(Number(dimensions[1]));

@@ -12,7 +12,7 @@
     let jsonBigNum = require('json-bignum');
     let errorCodes = require('../errorCodes');
     let constants = require('../../../../common/src/constants');
-    let stringUtils = require('../../components/utility/stringUtils');
+    let stringUtils = require('../../utility/stringUtils');
 
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);

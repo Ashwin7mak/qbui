@@ -46,6 +46,11 @@ describe('Nav functions', () => {
             return [];
         }
     });
+    let recordPendingEditsStore = Fluxxor.createStore({
+        getState: function() {
+            return [];
+        }
+    });
     let fieldsStore = Fluxxor.createStore({
         getState: function() {
             return [];
@@ -61,6 +66,7 @@ describe('Nav functions', () => {
         AppsStore: new appStore(),
         ReportsStore: new reportsStore(),
         ReportDataStore: new reportDataStore(),
+        RecordPendingEditsStore: new recordPendingEditsStore(),
         FieldsStore : new fieldsStore(),
         FormStore : new formStore()
     };

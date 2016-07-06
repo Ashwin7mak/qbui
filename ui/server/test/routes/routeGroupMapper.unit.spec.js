@@ -52,9 +52,8 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.SWAGGER_IMAGES + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_IMAGES, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_DOCUMENTATION + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_DOCUMENTATION, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'delete', expectedOutput: false},
-
             {message: 'LH_V1, ' + routeConsts.FORM_COMPONENTS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_COMPONENTS, method: 'patch', expectedOutput: false},
-            {message: 'LH_V1, ' + routeConsts.RECORD + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORD, method: 'patch', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.RECORD + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORD, method: 'patch', expectedOutput: true},
             {message: 'LH_V1, ' + routeConsts.RECORDS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORDS, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.REPORT_COMPONENTS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.REPORT_COMPONENTS, method: 'patch', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.REPORT_RESULTS + ' PATCH', routeGroup: routeGroups.LH_V1, route: routeConsts.REPORT_RESULTS, method: 'patch', expectedOutput: false},

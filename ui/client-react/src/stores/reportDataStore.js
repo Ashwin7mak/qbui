@@ -3,6 +3,7 @@ import FacetSelections from '../components/facet/facetSelections';
 import ReportUtils from '../utils/reportUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
+import * as SchemaConsts from "../constants/schema";
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -15,6 +16,8 @@ let reportModel = {
         fids: [],
         filteredRecords: null,
         filteredRecordsCount: null,
+        fields: null,
+        keyField: null,
         groupFields: null,
         groupLevel: 0,
         hasGrouping: false,
@@ -99,16 +102,13 @@ let reportModel = {
      */
 
 
+
     /**
      * Returns the model object
      * @returns {reportModel.model|{columns, facets, filteredRecords, filteredRecordsCount, groupingFields, groupLevel, hasGrouping, name, records, recordsCount}}
      */
     get: function() {
         return this.model;
-    },
-
-    getRecords: function() {
-        return this.model.records;
     },
 
     /**
@@ -159,18 +159,38 @@ let reportModel = {
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.records ? recordData.records.length : null;
         }
+        this.model.fields = recordData.fields;
+        this.model.keyField =  recordData.fields.find(field => field.keyField);
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
     },
-    /**
-     * Set just the filteredRecords. No change to fields. This has to be client side
-     * TODO: Is this being used anymore?
-     * @param records
-     */
-    setFilteredRecords: function(records) {
-        this.model.filteredRecords = records;
-        this.model.filteredRecordsCount = records.length;
+    findRecordById(records, recId) {
+        return records.find(rec => rec[this.model.keyField.name].value === recId);
     },
+    updateARecord(recId, changes) {
+        // update the record value inplace, for inline edits
+        // per xd user will not get reload of sort/group/filtered effects of the
+        // edit until they reload
+
+
+        //get the record with the keyfield value of recid
+        let record = this.findRecordById(this.model.records, recId);
+        let filtRecord = this.findRecordById(this.model.filteredRecords, recId);
+
+        // change the data values
+        changes.forEach(change => {
+            if (record) {
+                record[change.fieldName].value = change.value;
+                record[change.fieldName].display = change.display;
+            }
+            if (filtRecord) {
+                filtRecord[change.fieldName].value = change.value;
+                filtRecord[change.fieldName].display = change.display;
+            }
+        });
+
+    },
+
     /**
      * Update the filtered Records from response.
      * @param recordData
@@ -234,6 +254,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.facetExpression = {};
         this.selections  = new FacetSelections();
         this.selectedRows = [];
+        this.lastSaveOk = null;
+        this.lastSaveRecordId = null;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -248,7 +270,9 @@ let ReportDataStore = Fluxxor.createStore({
             actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.ADD_REPORT_RECORD, this.onAddReportRecord, // for empower demo
-            actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord // for empower demo
+            actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord, // for empower demo
+            actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
+
         );
     },
 
@@ -339,7 +363,7 @@ let ReportDataStore = Fluxxor.createStore({
     onAddReportRecord() {
         const model = this.reportModel.get();
 
-        const recordKey = "Record ID#";
+        const recordKey = SchemaConsts.DEFAULT_RECORD_KEY;
 
         if (model.filteredRecords.length > 0) {
 
@@ -350,8 +374,8 @@ let ReportDataStore = Fluxxor.createStore({
 
             const newRecord = _.mapValues(maxRecord, (obj) => {return null;});
 
-            const id = parseInt(maxRecord["Record ID#"]) + 1;
-            newRecord["Record ID#"] = id;
+            const id = parseInt(maxRecord[SchemaConsts.DEFAULT_RECORD_KEY]) + 1;
+            newRecord[SchemaConsts.DEFAULT_RECORD_KEY] = id;
 
             const newRecords = model.filteredRecords.slice(0);
             newRecords.push(newRecord);
@@ -369,6 +393,13 @@ let ReportDataStore = Fluxxor.createStore({
         model.filteredRecords.splice(index, 1);
         this.emit('change');
     },
+
+    onSaveRecordSuccess(payload) {
+        // update the  record values
+        this.reportModel.updateARecord(payload.recId, payload.changes);
+        this.emit("change");
+    },
+
 
     getState() {
         return {
