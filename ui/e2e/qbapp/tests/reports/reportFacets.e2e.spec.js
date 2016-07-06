@@ -390,14 +390,11 @@
                                         // Sort each array before comparing
                                         expect(selections.sort()).toEqual(facetSelections.sort());
                                     }).then(function() {
-                                        // Flaky so retry on errors
-                                        e2eRetry.run(function() {
-                                            //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
-                                            reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                                                reportFacetsPage.clearFacetTokensFromContainer().then(function() {
-                                                    expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
-                                                    done();
-                                                });
+                                        //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
+                                        return reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                                            reportFacetsPage.clearFacetTokensFromContainer().then(function() {
+                                                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
+                                                done();
                                             });
                                         });
                                     });
