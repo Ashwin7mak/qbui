@@ -25,8 +25,8 @@
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '120',
             screenResolution : '1680x1050',
-            //shardTestFiles: true,
-            //maxInstances: 2,
+            shardTestFiles: true,
+            maxInstances: 2,
             maxDuration: 10800
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
@@ -87,7 +87,7 @@
 
             // Third party library that lets us retry webdriver commands
             global.e2eRetry = require('webdriverjs-retry');
-            e2eRetry.setDefaultTimeout(10000);
+            e2eRetry.setDefaultTimeout(25000);
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
