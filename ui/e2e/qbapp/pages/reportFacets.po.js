@@ -100,7 +100,7 @@
                     return facetGroupElement.element(by.className('panel-collapse')).getAttribute('offsetHeight').then(function(height) {
                         if (height === '0') {
                             return e2ePageBase.waitForElement(facetGroupElement).then(function() {
-                                return facetGroupElement.click().then(function() {
+                                return facetGroupElement.element(by.className('facetName')).click().then(function() {
                                     return facetGroupElement;
                                 });
                             });

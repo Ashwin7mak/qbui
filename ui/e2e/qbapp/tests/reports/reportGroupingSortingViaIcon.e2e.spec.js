@@ -311,29 +311,32 @@
             it('Verify you can add not more than 3 fields in GrpBy and not more than 5 in SortBy', function(done) {
                 var grpFields = ["Project Phase", "% Completed", "more fields...", "Date Created"];
                 var sortFields = ["Start Date", "Finish Date", "Duration Taken", "Task Name", "User Name"];
-                reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                    //click on sort/grp Icon
-                    reportSortingPage.clickSortAndGroupIcon();
-                }).then(function() {
-                    //Select group By items
-                    for (var i = 0; i < grpFields.length; i++) {
-                        reportSortingPage.selectGroupByItems(grpFields[i]);
-                    }
-                }).then(function() {
-                    //Select sort By items
-                    for (var i = 0; i < sortFields.length; i++) {
-                        reportSortingPage.selectSortByItems(sortFields[i]);
-                    }
-                }).then(function() {
-                    //Verify no more fields can be added after 3 fields in GrpBy
-                    reportSortingPage.reportGroupByContainer.all(by.className('empty')).then(function(grpItems) {
-                        expect(grpItems.length).toBe(0);
-                    });
-                }).then(function() {
-                    //Verify no more fields can be added after 3 fields in sortBy
-                    reportSortingPage.reportSortByContainer.all(by.className('empty')).then(function(sortItems) {
-                        expect(sortItems.length).toBe(0);
-                        done();
+
+                e2eRetry.run(function() {
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        //click on sort/grp Icon
+                        reportSortingPage.clickSortAndGroupIcon();
+                    }).then(function() {
+                        //Select group By items
+                        for (var i = 0; i < grpFields.length; i++) {
+                            reportSortingPage.selectGroupByItems(grpFields[i]);
+                        }
+                    }).then(function() {
+                        //Select sort By items
+                        for (var i = 0; i < sortFields.length; i++) {
+                            reportSortingPage.selectSortByItems(sortFields[i]);
+                        }
+                    }).then(function() {
+                        //Verify no more fields can be added after 3 fields in GrpBy
+                        reportSortingPage.reportGroupByContainer.all(by.className('empty')).then(function(grpItems) {
+                            expect(grpItems.length).toBe(0);
+                        });
+                    }).then(function() {
+                        //Verify no more fields can be added after 3 fields in sortBy
+                        reportSortingPage.reportSortByContainer.all(by.className('empty')).then(function(sortItems) {
+                            expect(sortItems.length).toBe(0);
+                            done();
+                        });
                     });
                 });
             });
@@ -446,7 +449,6 @@
                 });
             });
 
-
             it('Report Settings: with sortLists no Facets : Verify the Sort & Group popup respects the report settings', function(done) {
                 //go to report with sortLists page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '3'));
@@ -481,8 +483,6 @@
                     });
                 });
             });
-
-
         }); //large breakpoints describe block end
 
         /*

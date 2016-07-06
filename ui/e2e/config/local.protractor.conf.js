@@ -4,19 +4,31 @@
 (function() {
     'use strict';
     var baseE2EPath = '../../e2e/';
-
+    // Add a screenshot reporter for errors when testing locally
+    var HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
+    var reporter = new HtmlScreenshotReporter({
+        dest: './ui/e2e/screenshots',
+        filename: 'test-report.html',
+        ignoreSkippedSpecs: false,
+        reportOnlyFailedSpecs: false,
+        captureOnlyFailedSpecs: true
+    });
     exports.config = {
-        // A callback function called once configs are read but before any environment
-        // setup. This will only run once, and before onPrepare.
-        beforeLaunch: function() {
-            //Have the tests start an instance of node
-            require('../../server/src/app');
-        },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 120000,
         // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
         baseUrl: process.env.DOMAIN,
+        // A callback function called once configs are read but before any environment
+        // setup. This will only run once, and before onPrepare.
+        beforeLaunch: function() {
+            //Have the tests start an instance of node
+            require('../../server/src/app');
+            // Setup the results report before any tests start
+            return new Promise(function(resolve) {
+                reporter.beforeLaunch(resolve);
+            });
+        },
         // list of files / patterns to load in the browser
         specs: [
             baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
@@ -77,19 +89,33 @@
             global.consts = require('../../common/src/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
 
+            // Third party library that lets us retry webdriver commands
+            global.e2eRetry = require('webdriverjs-retry');
+            e2eRetry.setDefaultTimeout(10000);
+
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
 
             // Maximizes the browser window (known bug with Chrome)
             browser.driver.manage().window().maximize();
 
-            // Add jasmine spec reporter
-            var SpecReporter = require('jasmine-spec-reporter');
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true, displayFailuresSummary: false, displayFailedSpec: true}));
-
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
                 global.browserName = cap.get('browserName');
+            });
+
+            // Add jasmine-spec-reporter
+            var SpecReporter = require('jasmine-spec-reporter');
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true, displayFailuresSummary: false, displayFailedSpec: true}));
+
+            // Add protractor-jasmine2-screenshot-reporter
+            jasmine.getEnv().addReporter(reporter);
+        },
+        // A callback function called once all tests have finished running and the WebDriver instance has been shut down
+        afterLaunch: function(exitCode) {
+            // Close the reporter after all tests finish
+            return new Promise(function(resolve) {
+                reporter.afterLaunch(resolve.bind(this, exitCode));
             });
         }
     };

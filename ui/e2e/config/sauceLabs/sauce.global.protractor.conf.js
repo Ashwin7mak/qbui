@@ -29,7 +29,8 @@
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportGroupingSortingViaIcon.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
@@ -76,6 +77,10 @@
             global.e2eBase = requireCommon('common/e2eBase')();
             global.consts = require('../../../common/src/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
+
+            // Third party library that lets us retry webdriver commands
+            global.e2eRetry = require('webdriverjs-retry');
+            e2eRetry.setDefaultTimeout(10000);
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
