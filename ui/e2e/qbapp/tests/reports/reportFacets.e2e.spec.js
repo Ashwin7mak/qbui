@@ -116,8 +116,8 @@
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE3].id, "1"));
 
                     // Safari is being flaky waiting for this element so retry
-                    e2eRetry.run(function() {
-                        reportServicePage.waitForElement(reportServicePage.agGridContainerEl);
+                    e2eRetry.ignoring().run(function() {
+                        return reportServicePage.waitForElement(reportServicePage.agGridContainerEl);
                     }).then(function() {
                         done();
                     });
