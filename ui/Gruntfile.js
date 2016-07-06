@@ -92,7 +92,7 @@ module.exports = function(grunt) {
         },
         vendorDir : 'vendor',
         express  : {
-            root   : 'server/src',
+            root   : 'server',
             options: {
                 debug  : true,
                 port   : 9000,
