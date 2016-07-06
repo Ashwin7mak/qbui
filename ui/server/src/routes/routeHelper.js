@@ -11,14 +11,32 @@
     let REPORT_RESULTS = 'results';
     let DEFAULT_HOMEPAGE = 'defaulthomepage';
 
+    /**
+     * Private function to extract the root url for the given type.
+     *
+     * @param url - request url to parse
+     * @param type - parse the url to the specified root type.  Root type are APPS, TABLES, RECORDS, etc.
+     * @returns {*}
+     */
     function getUrlRoot(url, type) {
 
         if (typeof url === 'string') {
+            //  split up the url into pieces
             let elements = url.split('/');
             let path = '';
+
+            //  starting at the first element, construct a root url until the root type is found.
+            //  For example, if the url is /apps/123/tables/456/records and the request is build
+            //  the url for:
+            //        apps   --> the return root url will be /apps/123
+            //        tables --> the return root url will be /apps/123/tables/456
+            //
             for (let idx = 0; idx < elements.length; idx++) {
+                //  is this segment the root type
                 if (elements[idx].toLowerCase() === type) {
                     path += elements[idx];
+
+                    //  there has to be an id associated with the type
                     if (idx + 1 < elements.length) {
                         if (elements[idx + 1].length > 0) {
                             path += '/' + elements[idx + 1];
@@ -28,6 +46,8 @@
                     //  no id associated with the type, that's an invalid root..
                     break;
                 }
+
+                //  haven't reach the root type yet, so build out the url
                 path += elements[idx] + '/';
             }
             //  if fall out of loop, did not found type in url; return null
