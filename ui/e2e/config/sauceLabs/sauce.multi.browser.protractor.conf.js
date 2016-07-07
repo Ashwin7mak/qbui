@@ -25,7 +25,7 @@
             name            : 'aws_' + process.env.SAUCE_JOB_NAME + '_OSX_Chrome',
             screenResolution : '1600x1200',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '120',
+            idleTimeout: '180',
             maxDuration: 10800,
             shardTestFiles: true,
             maxInstances: 2
@@ -36,7 +36,7 @@
             name: 'aws_' + process.env.SAUCE_JOB_NAME + '_OSX_Safari',
             screenResolution : '1600x1200',
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-            idleTimeout: '120',
+            idleTimeout: '180',
             maxDuration: 10800,
             shardTestFiles: true,
             maxInstances: 2
