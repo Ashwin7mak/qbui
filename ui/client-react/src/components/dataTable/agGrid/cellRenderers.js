@@ -63,10 +63,12 @@ const CellRenderer = React.createClass({
     },
 
     /**
-     * inform the grid that we've tabbed out of an edito
+     * inform the grid that we've tabbed out of an editor
      */
     onTabColumn() {
-        this.props.context.cellTabCallback(this.props.colDef);
+        if (this.props.params) {
+            this.props.params.context.cellTabCallback(this.props.colDef);
+        }
     },
 
 
