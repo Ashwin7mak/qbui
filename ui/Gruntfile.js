@@ -305,7 +305,7 @@ module.exports = function(grunt) {
                         dest  : '<%= quickbase.distDir %>',
                         src   : [
                             'package.json',
-                            '<%= express.root %>/src/*'
+                            '<%= express.root %>/**/*'
                         ]
                     },
                     {
