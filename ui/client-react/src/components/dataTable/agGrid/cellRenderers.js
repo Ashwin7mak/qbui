@@ -48,7 +48,8 @@ const CellRenderer = React.createClass({
 
     /* setting state from props is an anti-pattern but we're doing it to avoid re-rendering */
     getInitialState() {
-        if (!_.isUndefined(this.props.initialValue)) {
+        if (this.props.initialValue) {
+
             return {
                 valueAndDisplay:  {
                     id: this.props.initialValue.id,
