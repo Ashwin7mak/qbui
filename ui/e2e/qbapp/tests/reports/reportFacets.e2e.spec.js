@@ -375,7 +375,7 @@
 
             //There wont be facet filter button displayed for small breakpoint
             e2eConsts.NavDimensionsDataProvider().forEach(function(testBreakpoints) {
-                it(testBreakpoints.breakpointSize + '- Verify clear all facets tokens from the container', function(done) {
+                xit(testBreakpoints.breakpointSize + '- Verify clear all facets tokens from the container', function(done) {
                     //resize the browser
                     e2eBase.resizeBrowser(testBreakpoints.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                         reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
