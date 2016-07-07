@@ -214,4 +214,41 @@ describe('Validate RequestHelper unit tests', function() {
         });
     });
 
+    describe('validate isRecordsRoute method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', expectation: false},
+            {name: 'test null url', url: null, expectation: false},
+            {name: 'test invalid url', url: '/apps/123/tables/456/reports/2', expectation: false},
+            {name: 'test valid url - mixed case', url: '/apps/123/tables/456/Records', expectation: true},
+            {name: 'test valid url - lower case', url: '/apps/123/tables/456/records/1', expectation: true},
+            {name: 'test valid url - upper case', url: '/APPS/123/TABLES/456/RECORDS', expectation: true}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.isRecordsRoute(testCase.url), testCase.expectation);
+                done();
+            });
+        });
+    });
+
+    describe('validate isFieldsRoute method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', expectation: false},
+            {name: 'test null url', url: null, expectation: false},
+            {name: 'test invalid url', url: '/apps/123/tables/456/reports/2', expectation: false},
+            {name: 'test valid url - mixed case', url: '/apps/123/tables/456/Fields', expectation: true},
+            {name: 'test valid url - lower case; no field id', url: '/apps/123/tables/456/fields', expectation: true},
+            {name: 'test valid url - lower case', url: '/apps/123/tables/456/fields/1', expectation: true},
+            {name: 'test valid url - upper case', url: '/APPS/123/TABLES/456/FIELDS', expectation: true}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.isFieldsRoute(testCase.url), testCase.expectation);
+                done();
+            });
+        });
+    });
+
 });

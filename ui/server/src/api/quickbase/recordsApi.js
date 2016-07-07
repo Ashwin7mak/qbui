@@ -255,17 +255,21 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
-                if (routeHelper.isReportComponentRoute(req.url)) {
-                    //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
-                    //  parameter list to retrieve the data; otherwise use the report/results endpoint.
-                    let search = url.parse(req.url.toLowerCase()).search;
-                    if (search && search.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url) + search;
+                //  if not a records route, check to see if it is a request for reportComponents
+                if (!routeHelper.isRecordsRoute(req.url)) {
+                    if (routeHelper.isReportComponentRoute(req.url)) {
+                        //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
+                        //  parameter list to retrieve the data; otherwise use the report/results endpoint.  This is
+                        //  necessary as the reports endpoint does not accept request parameters like sortlist.
+                        let search = url.parse(req.url.toLowerCase()).search;
+                        if (search && search.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
+                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url) + search;
+                        } else {
+                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
+                        }
                     } else {
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                     }
-                } else {
-                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                 }
 
                 return requestHelper.executeRequest(req, opts);
@@ -280,7 +284,11 @@
             fetchFields: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
+
+                //  if not a fields route, will return all fields for the given table
+                if (!routeHelper.isFieldsRoute(req.url)) {
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
+                }
 
                 return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
             },

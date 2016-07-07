@@ -271,10 +271,37 @@
          */
         isReportComponentRoute(url) {
             if (typeof url === 'string') {
-                return url.toLowerCase().indexOf('reportcomponents') !== -1;
+                return url.toLowerCase().indexOf(REPORT_COMPONENTS) !== -1;
+            }
+            return false;
+        },
+
+        /**
+         * Is the route a request for records
+         *
+         * @param url
+         * @returns {boolean}
+         */
+        isRecordsRoute(url) {
+            if (typeof url === 'string') {
+                return url.toLowerCase().indexOf(RECORDS) !== -1;
+            }
+            return false;
+        },
+
+        /**
+         * Is the route a request for fields
+         *
+         * @param url
+         * @returns {boolean}
+         */
+        isFieldsRoute(url) {
+            if (typeof url === 'string') {
+                return url.toLowerCase().indexOf(FIELDS) !== -1;
             }
             return false;
         }
+
     };
 
 }());
