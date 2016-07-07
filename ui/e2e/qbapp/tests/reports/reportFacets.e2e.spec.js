@@ -406,7 +406,7 @@
                                         //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
                                         return reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
                                             return e2eRetry.run(function() {
-                                                reportFacetsPage.clearFacetTokensFromContainer().then(function () {
+                                                reportFacetsPage.clearFacetTokensFromContainer().then(function() {
                                                     expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
                                                     done();
                                                 });
