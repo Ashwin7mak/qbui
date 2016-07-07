@@ -2,14 +2,15 @@
     'use strict';
 
     let APPS = 'apps';
+    let DEFAULT_HOMEPAGE = 'defaulthomepage';
     let FACET_RESULTS = 'facets/results';
     let FIELDS = 'fields';
     let FORMS = 'forms';
     let TABLES = 'tables';
     let RECORDS = 'records';
     let REPORTS = 'reports';
+    let REPORT_COUNT = 'count';
     let REPORT_RESULTS = 'results';
-    let DEFAULT_HOMEPAGE = 'defaulthomepage';
     let REPORT_COMPONENTS = 'reportcomponents';
 
     /**
@@ -188,26 +189,6 @@
         },
 
         /**
-         * For the given req.url, extract the APPS, TABLES and REPORTS identifiers/ids and
-         * append the FACETS RESULTS identifier.
-         *
-         * Example:  url: /apps/123/tables/456/reports/789/rest/of/url
-         *           return: /apps/123/tables/456/reports/789/facets/results
-         *
-         * @param url
-         * @returns {*}
-         */
-        getReportsFacetRoute: function(url) {
-            let root = getUrlRoot(url, REPORTS);
-            if (root) {
-                return root + "/" + FACET_RESULTS;
-            }
-
-            //  no url root for REPORTS found; return original url unchanged
-            return url;
-        },
-
-        /**
          * For the given req.url, extract the APPS and TABLES identifiers/ids and
          * append the REPORTS identifier and optional recordId.
          *
@@ -225,6 +206,46 @@
             }
 
             //  no url root for TABLES found; return original url unchanged
+            return url;
+        },
+
+        /**
+         * For the given req.url, extract the APPS, TABLES and REPORTS identifiers/ids and
+         * append the COUNT identifier.
+         *
+         * Example:  url: /apps/123/tables/456/reports/789/rest/of/url
+         *           return: /apps/123/tables/456/reports/789/count
+         *
+         * @param url
+         * @returns {*}
+         */
+        getReportsCountRoute: function(url) {
+            let root = getUrlRoot(url, REPORTS);
+            if (root) {
+                return root + "/" + REPORT_COUNT;
+            }
+
+            //  no url root for REPORTS found; return original url unchanged
+            return url;
+        },
+
+        /**
+         * For the given req.url, extract the APPS, TABLES and REPORTS identifiers/ids and
+         * append the FACETS RESULTS identifier.
+         *
+         * Example:  url: /apps/123/tables/456/reports/789/rest/of/url
+         *           return: /apps/123/tables/456/reports/789/facets/results
+         *
+         * @param url
+         * @returns {*}
+         */
+        getReportsFacetRoute: function(url) {
+            let root = getUrlRoot(url, REPORTS);
+            if (root) {
+                return root + "/" + FACET_RESULTS;
+            }
+
+            //  no url root for REPORTS found; return original url unchanged
             return url;
         },
 

@@ -136,6 +136,26 @@ describe('Validate RequestHelper unit tests', function() {
         });
     });
 
+    describe('validate getReportCountRoute method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', expectation: ''},
+            {name: 'test null url', url: null, expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table', url: '/apps/123', expectation: '/apps/123'},
+            {name: 'test invalid url - no table2', url: '/apps/123/', expectation: '/apps/123/'},
+            {name: 'test invalid url - no report id', url: '/apps/123/tables/345/reports', expectation: '/apps/123/tables/345/reports'},
+            {name: 'test valid url', url: '/apps/123/tables/456/reports/789', expectation: '/apps/123/tables/456/reports/789/count'},
+            {name: 'test valid url 2', url: '/apps/123/tables/456/reports/789/results', expectation: '/apps/123/tables/456/reports/789/count'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getReportsCountRoute(testCase.url), testCase.expectation);
+                done();
+            });
+        });
+    });
+
     describe('validate getReportFacetRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', expectation: ''},
