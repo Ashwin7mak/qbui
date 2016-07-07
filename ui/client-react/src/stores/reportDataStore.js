@@ -96,14 +96,6 @@ let reportModel = {
     },
 
     /**
-     * Check if we have facets at all or any errors returned by server.
-     * @param facets
-     * @returns {*}
-     */
-
-
-
-    /**
      * Returns the model object
      * @returns {reportModel.model|{columns, facets, filteredRecords, filteredRecordsCount, groupingFields, groupLevel, hasGrouping, name, records, recordsCount}}
      */
@@ -123,6 +115,7 @@ let reportModel = {
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
     },
+
     /**
      * Set the reports original meta data
      * @param reportOriginalMetaData
@@ -159,14 +152,18 @@ let reportModel = {
             //  TODO: with paging, this count is flawed...
             this.model.recordsCount = recordData.records ? recordData.records.length : null;
         }
-        this.model.fields = recordData.fields;
-        this.model.keyField =  recordData.fields.find(field => field.keyField);
+
+        this.model.fields = recordData.fields || [];
+        this.model.keyField =  this.model.fields.find(field => field.keyField);
+
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
     },
+
     findRecordById(records, recId) {
         return records.find(rec => rec[this.model.keyField.name].value === recId);
     },
+
     updateARecord(recId, changes) {
         // update the record value inplace, for inline edits
         // per xd user will not get reload of sort/group/filtered effects of the
@@ -209,6 +206,7 @@ let reportModel = {
         }
 
     },
+
     /**
      * Set facets data(if any) from response
      * @param recordData
@@ -271,8 +269,7 @@ let ReportDataStore = Fluxxor.createStore({
 
             actions.ADD_REPORT_RECORD, this.onAddReportRecord, // for empower demo
             actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord, // for empower demo
-            actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
-
+            actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess
         );
     },
 

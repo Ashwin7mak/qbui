@@ -198,6 +198,8 @@
              */
             fetchTableHomePageReport: function(req) {
 
+                //  report object returned to the client;  gets populated in the success workflow, otherwise
+                //  is returned uninitialized if no report home page is found.
                 var reportObj = {
                     reportMetaData: {
                         data: ''
