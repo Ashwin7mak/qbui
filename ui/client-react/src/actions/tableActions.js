@@ -32,12 +32,12 @@ let tableActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.debug('TableService getHomePage error:' + JSON.stringify(error));
+                        logger.error('TableService getHomePage error:' + JSON.stringify(error), error);
                         this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.debug('TableService getHomePage exception:' + JSON.stringify(ex));
+                    logger.error('TableService getHomePage exception:' + JSON.stringify(ex), ex);
                     this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
                     reject();
                 });

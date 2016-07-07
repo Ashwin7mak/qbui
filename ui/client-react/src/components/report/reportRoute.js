@@ -104,6 +104,7 @@ const ReportRoute = React.createClass({
                 <ReportToolsAndContent
                     params={this.props.params}
                     reportData={this.props.reportData}
+                    pendEdits={this.props.pendEdits}
                     routeParams={this.props.routeParams}
                     selectedAppId={this.props.selectedAppId}
                     fields={this.props.fields}

@@ -2,7 +2,7 @@
 
 var should = require('should');
 var assert = require('assert');
-var dateUtils = require('../../../src/components/utility/dateUtils.js');
+var dateUtils = require('../../src/utility/dateUtils.js');
 /**
  * Unit tests for User field formatting
  */

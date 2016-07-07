@@ -68,6 +68,10 @@ export default {
             return: "Return to report",
             next: "Next"
         },
+        recordNotifications: {
+            recordSaved : "Record saved",
+            recordNotSaved :"Record not saved",
+        },
         header: {
             menu: {
                 locale: {
@@ -223,6 +227,8 @@ export default {
         cancel: "Cancel",
         cancelTip: "Exit and discard any changes",
         apply: "Apply",
-        applyTip: "Exit and apply any changes"
+        applyTip: "Exit and apply any changes",
+        success: "Success",
+        failed: "Failed",
     }
 };

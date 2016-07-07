@@ -45,8 +45,10 @@
             if (requestHelper.isPost(req)) {
                 // serialize all the params for message output
                 let stats = req.body;
-                stats.browser = req.useragent.browser;
-                stats.browserVersion = req.useragent.version;
+                if (req.useragent) {
+                    stats.browser = req.useragent.browser ? req.useragent.browser : 'unspecified';
+                    stats.browserVersion = req.useragent.browser ? req.useragent.version : 'unspecified';
+                }
                 let msg = "Client Perf stats (ms): " +
                     JSON.stringify(_.sortKeysBy(stats, (val, key) => key.toLowerCase()));
                 sendOutLogMessage(req, res, 'info', 'CLIENT_PERF', msg);

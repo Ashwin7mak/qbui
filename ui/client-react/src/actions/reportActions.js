@@ -33,12 +33,12 @@ let reportActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.debug('ReportService getReports error:' + JSON.stringify(error));
+                        logger.error('ReportService getReports error:' + JSON.stringify(error), error);
                         this.dispatch(actions.LOAD_REPORTS_FAILED);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.debug('ReportService getReports exception:' + JSON.stringify(ex));
+                    logger.error('ReportService getReports exception:' + JSON.stringify(ex), ex);
                     this.dispatch(actions.LOAD_REPORTS_FAILED);
                     reject();
                 });

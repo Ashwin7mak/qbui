@@ -426,6 +426,11 @@ describe('AGGrid functions', () => {
 
     it('test edit cells by double clicking ', () => {
         AGGrid.__ResetDependency__('AgGridReact');
+        let callBacks = {
+            onEditRecordStart: function() {
+            },
+        };
+        spyOn(callBacks, 'onEditRecordStart');
 
         const TestParent = React.createFactory(React.createClass({
 
@@ -434,6 +439,8 @@ describe('AGGrid functions', () => {
                 return (<div className="reportToolsAndContentContainer singleSelection">
                         <AGGrid ref="grid"
                                 flux={flux}
+                                keyField="col_num"
+                                onEditRecordStart={callBacks.onEditRecordStart}
                                 actions={TableActionsMock}
                                 records={fakeReportData_before.data.records}
                                 columns={fakeReportData_before.data.columns}
@@ -461,6 +468,7 @@ describe('AGGrid functions', () => {
         // look for row with the editing class added
         const editRowsAfterDblClick = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing");
         expect(editRowsAfterDblClick.length).toBe(1);
+        expect(callBacks.onEditRecordStart).toHaveBeenCalled();
 
         // find the field cells in the last row
         const lastRowColumnCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row:last-child .gridCell");

@@ -12,20 +12,22 @@ const RowEditActions = React.createClass({
         api: React.PropTypes.object,
         flux: React.PropTypes.object,
     },
+
+
     onClickSave() {
+        //get the current record id
+        const id = this.props.data[this.props.params.context.keyField];
+        //signal record change action, will update the records values
+        this.props.params.context.onRecordChange(id);
         this.props.api.deselectAll();
 
-        // EMPOWER
-        setTimeout(()=> {
-            NotificationManager.success('Record saved', 'Success', 1500);
-        }, 1000);
     },
 
     /**
      * delete icon is not included but may come back shortly
      */
     onClickDelete() {
-        const id = this.props.data["Record ID#"];
+        const id = this.props.data[this.props.params.context.keyField];
         this.props.api.deselectAll();
 
         this.props.flux.actions.deleteReportRecord(id);
@@ -34,8 +36,11 @@ const RowEditActions = React.createClass({
         }, 1000);
     },
     onClickCancel() {
+        //get the original unchanged values in data to rerender
+        this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
         this.props.api.deselectAll();
         this.props.flux.actions.selectedRows([]);
+        this.props.params.context.onEditRecordCancel();
     },
 
     /**

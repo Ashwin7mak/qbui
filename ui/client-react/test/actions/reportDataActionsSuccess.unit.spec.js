@@ -277,3 +277,87 @@ describe('Report Data Actions Filter Report functions -- success', () => {
         );
     });
 });
+
+describe('Report Data Actions Edit Report functions -- success', () => {
+    'use strict';
+
+    let appId = '1';
+    let tblId = '2';
+    let recId = '3';
+    let changes = {};
+    let responseData = {appId, tblId, data: 'success'};
+
+    class mockRecordService {
+        constructor() {}
+        saveRecord(a, t, r, c) {
+            return Promise.resolve({data:responseData});
+        }
+    }
+    let stores = {};
+    let flux = new Fluxxor.Flux(stores);
+    flux.addActions(reportDataActions);
+
+    beforeEach(() => {
+        spyOn(flux.dispatchBinder, 'dispatch');
+        spyOn(mockRecordService.prototype, 'saveRecord').and.callThrough();
+        reportDataActions.__Rewire__('RecordService', mockRecordService);
+    });
+
+    afterEach(() => {
+        reportDataActions.__ResetDependency__('RecordService');
+    });
+
+    it('test selectedRows', () => {
+        let rows = "some info";
+        flux.actions.selectedRows({rows});
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SELECTED_ROWS, {rows}]);
+    });
+
+    it('test filterSelectionsPending', () => {
+        let selections = 'some info';
+        flux.actions.filterSelectionsPending(selections);
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.FILTER_SELECTIONS_PENDING, {selections}]);
+    });
+
+    it('test filterSearchPending', () => {
+        let string = 'some info';
+        flux.actions.filterSearchPending(string);
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.FILTER_SEARCH_PENDING, {string}]);
+    });
+
+    it('test addReportRecord', () => {
+        flux.actions.addReportRecord();
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD]);
+    });
+
+    it('test deleteReportRecord', () => {
+        let id = 4;
+        flux.actions.deleteReportRecord({id});
+        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.DELETE_REPORT_RECORD, {id}]);
+    });
+
+    it('test saveReportRecord', (done) => {
+
+        flux.actions.saveReportRecord(appId, tblId, recId, changes).then(
+                () => {
+                    expect(mockRecordService.prototype.saveRecord).toHaveBeenCalled();
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SAVE_REPORT_RECORD,
+                        {appId, tblId, recId, changes}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SAVE_REPORT_RECORD_SUCCESS,
+                        jasmine.any(Object)]);
+                    done();
+                },
+                () => {
+                    expect(true).toBe(false);
+                    done();
+                }
+            );
+    });
+
+});

@@ -6,6 +6,12 @@
     var baseE2EPath = '../../e2e/';
 
     exports.config = {
+        // A callback function called once configs are read but before any environment
+        // setup. This will only run once, and before onPrepare.
+        beforeLaunch: function() {
+            //Have the tests start an instance of node
+            require('../../server/src/app');
+        },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 120000,
@@ -16,7 +22,8 @@
             baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGrpAndSortViaIcon.e2e.spec.js'],
+        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'],
         // ----- Capabilities to be passed to the webdriver instance ----
         //
         // For a full list of available capabilities, see
@@ -26,7 +33,7 @@
         capabilities: {
             browserName: 'chrome'
             //shardTestFiles: true,
-            //maxInstances: 3
+            //maxInstances: 2
         },
         // ----- The test framework -----
         //
@@ -78,26 +85,12 @@
 
             // Add jasmine spec reporter
             var SpecReporter = require('jasmine-spec-reporter');
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'specs', displaySpecDuration: true, displayFailuresSummary: false, displayFailedSpec: false}));
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true, displayFailuresSummary: false, displayFailedSpec: true}));
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
-                browser.browserName = cap.caps_.browserName;
+                global.browserName = cap.get('browserName');
             });
-
-            //// Use this code if you want to slow down your Protractor tests (does not work in Protractor 3.0)
-            //var origFn = browser.driver.controlFlow().execute;
-            //
-            //browser.driver.controlFlow().execute = function() {
-            //    var args = arguments;
-            //
-            //    // Queue 10ms wait
-            //    origFn.call(browser.driver.controlFlow(), function() {
-            //        return protractor.promise.delayed(10);
-            //    });
-            //
-            //    return origFn.apply(browser.driver.controlFlow(), args);
-            //};
         }
     };
 }());

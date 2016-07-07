@@ -92,13 +92,13 @@ module.exports = function(grunt) {
         },
         vendorDir : 'vendor',
         express  : {
-            root   : 'server/src',
+            root   : 'server',
             options: {
                 debug  : true,
                 port   : 9000,
                 sslPort: 9443,
                 host   : process.env.HOST || 'localhost',
-                script : '<%= express.root %>/app.js',
+                script : '<%= express.root %>/src/app.js',
                 realm : process.env.REALM ? (process.env.REALM + '.') : ''
             },
             local  : {
@@ -109,13 +109,13 @@ module.exports = function(grunt) {
             prod   : {
                 options: {
                     debug   : false,
-                    script  : '<%= quickbase.distDir %>/<%= express.root %>/app.js',
+                    script  : '<%= quickbase.distDir %>/<%= express.root %>/src/app.js',
                     node_env: 'production'
                 }
             },
             test   : {
                 options: {
-                    script  : '<%= quickbase.distDir %>/<%= express.root %>/app.js',
+                    script  : '<%= quickbase.distDir %>/<%= express.root %>/src/app.js',
                     node_env: 'test'
                 }
             }
@@ -251,7 +251,7 @@ module.exports = function(grunt) {
         // Use nodemon to run server in debug mode with an initial breakpoint
         nodemon: {
             debug: {
-                script : '<%= express.root %>/app.js',
+                script : '<%= express.root %>/src/app.js',
                 options: {
                     nodeArgs: ['--debug-brk'],
                     env     : {
@@ -305,7 +305,7 @@ module.exports = function(grunt) {
                         dest  : '<%= quickbase.distDir %>',
                         src   : [
                             'package.json',
-                            '<%= express.root %>/**/*'
+                            '<%= express.root %>/src/**/*'
                         ]
                     },
                     {
@@ -712,9 +712,11 @@ module.exports = function(grunt) {
         if (target === 'AWSe2e') {
             return grunt.task.run([
                 'clean:server',
-                'build',
-                'env:e2e',
-                'express:test'
+                'shell:webpack',
+                'env:test',
+                'express:test',
+                'wait',
+                'express-keepalive'
             ]);
         }
         grunt.task.run([

@@ -20,6 +20,8 @@
         TABLE3 : 2,
         TABLE4 : 3,
 
+        invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
+
         /**
          * Data Provider for the different breakpoints. Also contains the state of the leftNav at each size for assertion
          */
@@ -42,13 +44,13 @@
                     breakpointSize: 'medium',
                     open: true,
                     offsetWidth: '200'
-                },
-                {
-                    browserWidth: e2eConsts.SMALL_BP_WIDTH,
-                    breakpointSize: 'small',
-                    open: true,
-                    offsetWidth: '300'
                 }
+                //{
+                //    browserWidth: e2eConsts.SMALL_BP_WIDTH,
+                //    breakpointSize: 'small',
+                //    open: true,
+                //    offsetWidth: '300'
+                //}
             ];
         }
     });

@@ -22,6 +22,11 @@ import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
 import './dateTimePicker.scss';
 
 import * as formats from '../../../constants/fieldFormats';
+import _ from 'lodash';
+import Logger from "../../../utils/logger";
+
+
+let logger = new Logger();
 
 /**
  * cell renderer
@@ -40,11 +45,21 @@ const CellRenderer = React.createClass({
             initialValue: null
         };
     },
-    /* setting state from props is an anti-pattern but we're doing it to avoid rerendering */
+
+    /* setting state from props is an anti-pattern but we're doing it to avoid re-rendering */
     getInitialState() {
-        return {
-            valueAndDisplay: this.props.initialValue
-        };
+        if (!_.isUndefined(this.props.initialValue)) {
+            return {
+                valueAndDisplay:  {
+                    id: this.props.initialValue.id,
+                    value : this.props.initialValue.value,
+                    display : this.props.initialValue.display,
+                }
+            };
+        } else {
+            logger.warn('"this.props.initialValue" in getInitialState is undefined');
+            return {};
+        }
     },
 
     /**
@@ -54,9 +69,10 @@ const CellRenderer = React.createClass({
         this.props.context.cellTabCallback(this.props.colDef);
     },
 
-    render: function() {
-        // render the cell value and editor (CSS will hide one or the other)
 
+    render() {
+        // render the cell value and editor (CSS will hide one or the other)
+        let isEditable = !this.props.colDef.builtIn;
         if (this.props.initialValue === null) {
             return (<span className="emptyCell" />);
         }
@@ -64,15 +80,17 @@ const CellRenderer = React.createClass({
             <span className="cellWrapper">
 
                 <CellValueRenderer type={this.props.type}
+                                   isEditable={isEditable}
                                    value={this.state.valueAndDisplay.value}
                                    display={this.state.valueAndDisplay.display}
                                    attributes={this.props.colDef.datatypeAttributes} />
 
-                <CellEditor type={this.props.type}
+                { isEditable ?  <CellEditor type={this.props.type}
                             value={this.state.valueAndDisplay.value}
                             colDef={this.props.colDef}
                             onChange={this.onChange}
-                            onTabColumn={this.onTabColumn} />
+                            onTabColumn={this.onTabColumn} /> :
+                    null}
             </span>);
     },
 
@@ -96,49 +114,71 @@ const CellRenderer = React.createClass({
 
         }
     },
+
+    cellChanges() {
+        if (this.props &&
+            _.has(this.props, 'params') &&
+            _.has(this.props.params, 'data') &&
+            _.has(this.props.params, 'column.colId') &&
+            _.has(this.props.params, 'context.keyField') &&
+            _.has(this.props.params, 'colDef.id')) {
+
+            let change = {
+                values: {
+                    oldVal: this.props.params.data[this.props.params.column.colId],
+                    newVal: this.state.valueAndDisplay
+                },
+                recId: this.props.params.data[this.props.params.context.keyField].value,
+                fid: +this.props.params.colDef.id,
+                fieldName: this.props.params.column.colId
+            };
+            this.props.params.context.onFieldChange(change);
+        }
+    },
     /**
      * cell was edited, update the r/w and r/o value
-     * @param newValue
+     * @param value
      */
     cellEdited(value) {
-        let newDisplay = value;
+        let theVals = {
+            value: value,
+            display: value
+        };
 
-        this.state.valueAndDisplay.value = value;
-        this.state.valueAndDisplay.display = newDisplay;
-
-        this.setState(this.state);
+        this.setState({valueAndDisplay : Object.assign({}, theVals)}, ()=>{this.cellChanges();});
     },
 
     /**
      * date, datetime, or time cell was edited
-     * @param value
+     * @param newValue
      */
-    dateTimeCellEdited(value) {
-        let newValue = value;
-        this.state.valueAndDisplay.value = value;
-
-        let newDisplay = value;
-
+    dateTimeCellEdited(newValue) {
+        let theVals = {
+            value: newValue,
+        };
         switch (this.props.type) {
         case formats.DATE_FORMAT: {
             // normalized form is YYYY-MM-DD
-            newDisplay = dateTimeFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
+            theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
             break;
         }
         case formats.TIME_FORMAT: {
             // normalized form is 1970-01-01THH:MM:SSZ
-            newDisplay = timeOfDayFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
+            theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
             break;
         }
         case formats.DATETIME_FORMAT: {
             // normalized form is YYYY-MM-DDTHH:MM:SSZ
-            newDisplay = dateTimeFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
+            theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+            break;
+        }
+        default: {
+            theVals.display = newValue;
             break;
         }
         }
 
-        this.state.valueAndDisplay.display = newDisplay;
-        this.setState(this.state);
+        this.setState({valueAndDisplay : Object.assign({}, theVals)}, ()=>{this.cellChanges();});
     },
 
     /**
@@ -146,79 +186,84 @@ const CellRenderer = React.createClass({
      * @param value
      */
     numericCellEdited(value) {
-        let newValue = Number(value);
+        let theVals = {
+            value: Number(value)
+        };
+        theVals.display = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
 
-        this.state.valueAndDisplay.value = newValue;
-
-        let newDisplay = numericFormatter.format(this.state.valueAndDisplay, this.props.colDef.datatypeAttributes);
-
-        this.state.valueAndDisplay.display = newDisplay;
-        this.setState(this.state);
+        this.setState({valueAndDisplay : Object.assign({}, theVals)}, ()=>{this.cellChanges();});
     }
 });
 
-// formatter classes (cell formatters render an editor and a display value)
+// formatter classes (cell formatters render an editor and a display value)'
+class CellRendererFactory  {
+    static makeCellRenderer(type, props) {
+        return <CellRenderer type={type}
+                             colDef={props.params.column.colDef}
+                             initialValue={props.params.value}
+                             params={props.params}/>;
+    }
+}
 
 export const TextCellRenderer = React.createClass({
     render() {
-        return  <CellRenderer type={formats.TEXT_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+        return CellRendererFactory.makeCellRenderer(formats.TEXT_FORMAT, this.props);
     }
 });
 
 export const DateCellRenderer = React.createClass({
-    render: function() {
+    render() {
         return  <CellRenderer type={formats.DATE_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
     }
 });
 
 export const DateTimeCellRenderer = React.createClass({
-    render: function() {
-        return  <CellRenderer type={formats.DATETIME_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+    render() {
+        return CellRendererFactory.makeCellRenderer(formats.DATETIME_FORMAT, this.props);
     }
 });
 
 export const TimeCellRenderer = React.createClass({
     render() {
-        return  <CellRenderer type={formats.TIME_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+        return CellRendererFactory.makeCellRenderer(formats.TIME_FORMAT, this.props);
     }
 });
 
 export const NumericCellRenderer = React.createClass({
     render() {
-        return  <CellRenderer type={formats.NUMBER_FORMAT} context={this.props.params.context}  colDef={this.props.params.column.colDef} initialValue={this.props.params.value}/>;
+        return CellRendererFactory.makeCellRenderer(formats.NUMBER_FORMAT, this.props);
     }
 });
 
 export const CurrencyCellRenderer = React.createClass({
-
-    render: function() {
-        return  <CellRenderer type={formats.CURRENCY_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+    render() {
+        return CellRendererFactory.makeCellRenderer(formats.CURRENCY_FORMAT, this.props);
     }
 });
 
 export const PercentCellRenderer = React.createClass({
 
     render() {
-        return  <CellRenderer type={formats.PERCENT_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+        return CellRendererFactory.makeCellRenderer(formats.PERCENT_FORMAT, this.props);
     }
 });
 
 export const RatingCellRenderer = React.createClass({
 
     render() {
-        return  <CellRenderer type={formats.RATING_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+        return CellRendererFactory.makeCellRenderer(formats.RATING_FORMAT, this.props);
     }
 });
 export const UserCellRenderer = React.createClass({
 
     render() {
-        return  <CellRenderer type={formats.USER_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+        return CellRendererFactory.makeCellRenderer(formats.USER_FORMAT, this.props);
     }
 });
 export const CheckBoxCellRenderer = React.createClass({
 
     render() {
-        return  <CellRenderer type={formats.CHECKBOX_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+        return CellRendererFactory.makeCellRenderer(formats.CHECKBOX_FORMAT, this.props);
     }
 });
 
@@ -243,7 +288,9 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
         return (<div>
             <RowEditActions flux={this.props.params.context.flux}
                             api={this.props.params.api}
-                            data={this.props.params.data} />
+                            data={this.props.params.data}
+                            params={this.props.params}
+            />
             <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
         </div>);
     }

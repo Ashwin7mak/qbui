@@ -9,7 +9,7 @@
     var groupTypes = require('../../groupTypes');
     var log = require('../../../logger').getLogger();
     var lodash = require('lodash');
-    var groupUtils = require('../../../components/utility/groupUtils');
+    var groupUtils = require('../../../utility/groupUtils');
     var dateFormatter = require('../../../../../common/src/formatter/dateTimeFormatter');
     var logger = require('../../../logger').getLogger();
     dateFormatter.setLogger(logger);
