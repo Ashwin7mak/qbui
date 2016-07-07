@@ -10,6 +10,7 @@
     let REPORTS = 'reports';
     let REPORT_RESULTS = 'results';
     let DEFAULT_HOMEPAGE = 'defaulthomepage';
+    let REPORT_COMPONENTS = 'reportcomponents';
 
     /**
      * Private function to extract the root url for the given type.
@@ -47,7 +48,8 @@
                     break;
                 }
 
-                //  haven't reach the root type yet, so build out the url
+                //  haven't reached the root type yet, so build out the url by appending the route
+                //  segements.  Will continue to do this until the type segment is found.
                 path += elements[idx] + '/';
             }
             //  if fall out of loop, did not found type in url; return null
@@ -259,8 +261,20 @@
 
             //  no url root found; return original url unchanged
             return url;
-        }
+        },
 
+        /**
+         * Is the route a request for report components
+         *
+         * @param url
+         * @returns {boolean}
+         */
+        isReportComponentRoute(url) {
+            if (typeof url === 'string') {
+                return url.toLowerCase().indexOf('reportcomponents') !== -1;
+            }
+            return false;
+        }
     };
 
 }());

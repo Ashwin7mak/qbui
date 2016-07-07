@@ -255,13 +255,10 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
-                let inputUrl = opts.url; //JAVA api is case sensitive so dont loose camel case here.
-                let inputUrl_toLower = opts.url.toLowerCase(); // but for convinience of string matches convert to lower case
-
-                if (inputUrl_toLower.indexOf('reportcomponents') !== -1) {
-                    //  For a reportComponents endpoing request, if sorting, use the records endpoint, with the
+                if (routeHelper.isReportComponentRoute(req.url)) {
+                    //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
                     //  parameter list to retrieve the data; otherwise use the report/results endpoint.
-                    let search = url.parse(inputUrl_toLower).search;
+                    let search = url.parse(req.url.toLowerCase()).search;
                     if (search && search.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url) + search;
                     } else {

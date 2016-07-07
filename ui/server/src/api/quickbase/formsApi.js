@@ -19,6 +19,22 @@
 
         let formsApi = {
 
+            /**
+             * Allows you to override the requestHelper object for unit tests.
+             * @param requestRequestOverride
+             */
+            setRequestHelperObject: function(obj) {
+                requestHelper = obj;
+            },
+
+            /**
+             * Allows you to override the recordsApi object for unit tests.
+             * @param requestRequestOverride
+             */
+            setRecordsApiObject: function(obj) {
+                recordsApi = obj;
+            },
+
             fetchFormMetaData: function(req) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
@@ -44,7 +60,7 @@
                     Promise.all(fetchRequests).then(
                         function(response) {
                             let obj = {
-                                fieldMeta: response[0],
+                                formMeta: response[0],
                                 record: response[1].record,
                                 fields: response[1].fields
                             };
