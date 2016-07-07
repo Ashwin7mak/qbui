@@ -170,7 +170,11 @@
             it('Verify reports toolbar', function(done) {
                 reportServicePage.waitForElement(reportServicePage.reportContainerEl).then(function() {
                     // Verify the records count
-                    expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
+                    if (browserName === 'firefox') {
+                        expect(reportServicePage.reportRecordsCount.getAttribute('innerHTML').getText()).toEqual('6 Records');
+                    } else {
+                        expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
+                    }
                     // Verify display of filter search box
                     expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
                     // Verify display of facets filter button
@@ -309,8 +313,13 @@
                     reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
                         if (txt === 'There is no data to display.') {
                             //Verify the toolbar still displays with filter button in it
-                            expect(reportServicePage.griddleWrapperEl.getAttribute('innerText')).toEqual('There is no data to display.');
-                            expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('0 of 6 Records');
+                            if (browserName === 'firefox') {
+                                expect(reportServicePage.griddleWrapperEl.getAttribute('innerHTML').getText()).toEqual('There is no data to display.');
+                                expect(reportServicePage.reportRecordsCount.getAttribute('innerHTML').getText()).toEqual('0 of 6 Records');
+                            } else {
+                                expect(reportServicePage.griddleWrapperEl.getAttribute('innerText')).toEqual('There is no data to display.');
+                                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('0 of 6 Records');
+                            }
                             expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
                             done();
                         } else if (txt !== 'There is no data to display.') {
@@ -348,7 +357,11 @@
                                     reportFacetsPage.clickClearAllFacetsIcon(facetGroupEl).then(function() {
                                         e2eBase.sleep(browser.params.smallSleep);
                                         reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                                            expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
+                                            if (browserName === 'firefox') {
+                                                expect(reportServicePage.reportRecordsCount.getAttribute('innerHTML').getText()).toEqual('6 Records');
+                                            } else {
+                                                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toEqual('6 Records');
+                                            }
                                             done();
                                         });
                                     });
