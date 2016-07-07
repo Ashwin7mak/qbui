@@ -315,7 +315,6 @@ let AGGrid = React.createClass({
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
-                                    console.log('setting');
         this.gridOptions.context.cellTabCallback = this.onCellTab;
         this.gridOptions.context.onRecordChange = this.props.onRecordChange;
         this.gridOptions.context.onFieldChange = this.props.onFieldChange;
