@@ -548,9 +548,9 @@ module.exports = function(grunt) {
                 options: {
                     username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
-                    proxy           : 'egressproxy.quickbaserocks.com:80',
+                    //proxy           : 'egressproxy.quickbaserocks.com:80',
                     tunnelIdentifier: tunnelIdentifier,
-                    proxyTunnel     : true,
+                    //proxyTunnel     : true,
                     verbose         : true,
                     logfile         : 'sauceConnect.log'
                 }
