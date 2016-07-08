@@ -47,7 +47,9 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-body-container {
         background-color: $color2;
     }
-
+    .ag-header {
+        z-index:9999; // don't allow row contents to bleed into header
+    }
     /* prevent clipping of actions and dropdowns in 1st column */
     .ag-pinned-left-cols-viewport {
         overflow:visible;
@@ -357,7 +359,7 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 /* hide datepicker if it's been opened but we're not over that cell */
-.ag-row.editing .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget{
+.ag-row.editing .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget {
     display:none !important;
 }
 
@@ -402,6 +404,10 @@ $cell-edit-background-edit: #f3f8fe;
 
             .cellData {
                 display:none;
+            }
+            .cellEditWrapper {
+                display:flex;
+                flex:1 1 auto;
             }
             .cellEdit {
                 display:inline-block;
@@ -484,7 +490,7 @@ $cell-edit-background-edit: #f3f8fe;
             box-shadow: -2px 2px 8px $row-box-shadow-color;
             position:absolute;
             top:-26px;
-            left:18px;
+            left:17px;
 
             border-left: 1px solid $row-border-color;
             border-bottom:1px solid $row-border-color;

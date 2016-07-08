@@ -18,8 +18,9 @@ let CardView = React.createClass({
         return {
             showMoreCards: false,
             showActions: false,
-            swipingSelection:false,
-            swipingActions:false
+            swipingSelection: false,
+            swipingActions: false,
+            resizeWidth: 0
         };
     },
 

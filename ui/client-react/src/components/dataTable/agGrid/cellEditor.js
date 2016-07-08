@@ -10,11 +10,12 @@ const CellEditor = React.createClass({
         type: React.PropTypes.number,
         value: React.PropTypes.any,
         colDef: React.PropTypes.object,
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        onTabColumn: React.PropTypes.func
     },
 
-    render() {
-        switch (this.props.type) {
+    getEditorForType(type) {
+        switch (type) {
         case formats.CHECKBOX_FORMAT:
             return <CheckBoxFieldEditor value={this.props.value} onChange={this.props.onChange} />;
 
@@ -48,14 +49,32 @@ const CellEditor = React.createClass({
         default: {
 
             if (this.props.colDef.choices) {
-                return <ComboBoxFieldEditor choices={this.props.colDef.choices} value={this.props.value}
-                                            onChange={this.props.onChange} />;
+                return (
+                    <ComboBoxFieldEditor choices={this.props.colDef.choices} value={this.props.value}
+                                     onChange={this.props.onChange} />
+                );
             } else {
                 return <DefaultFieldEditor value={this.props.value}
                                            onChange={this.props.onChange} />;
             }
         }
         }
+    },
+
+    /**
+     * inform parent component of tabbing
+     */
+    onKeyDown(ev) {
+        if (ev.key === "Tab" && !ev.shiftKey) {
+            this.props.onTabColumn();
+        }
+    },
+
+    render() {
+
+        return (<div className="cellEditWrapper" onKeyDown={this.onKeyDown}>
+            {this.getEditorForType(this.props.type)}
+            </div>);
     }
 });
 
