@@ -170,11 +170,46 @@ let reportDataActions = {
     },
 
     /**
-     * add a new record (EMPOWER)
+     * add a new record
      */
-    addReportRecord() {
-        this.dispatch(actions.ADD_REPORT_RECORD);
+    addReportRecord(appId, tblId, record) {
+            // promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && record) {
+                    this.dispatch(actions.ADD_REPORT_RECORD, {appId, tblId, record});
+                    let recordService = new RecordService();
+
+                    //  save the changes to the record
+                    recordService.createRecord(appId, tblId, record).then(
+                        response => {
+                            logger.debug('RecordService createRecord success:' + JSON.stringify(response));
+                            this.dispatch(actions.ADD_REPORT_RECORD_SUCCESS, {appId, tblId, record});
+                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                            resolve();
+                        },
+                        error => {
+                            logger.error('RecordService createRecord call error:', JSON.stringify(error));
+                            this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {appId, tblId, record, error: error});
+                            NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                            reject();
+                        }
+                    ).catch(
+                        function(ex) {
+                            logger.error('Unexpected Report service call exception:', ex);
+                            this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {appId, tblId, record, error: ex});
+                            reject();
+                        }.bind(this)
+                    );
+                } else {
+                    var errMessage = 'Missing one or more required input parameters to reportDataActions.addReportRecord. AppId:' +
+                        appId + '; TblId:' + tblId + '; record:' + record;
+                    logger.error(errMessage);
+                    this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {error: errMessage});
+                    reject();
+                }
+        });
     },
+
     /**
      * delete a record (EMPOWER)
      */

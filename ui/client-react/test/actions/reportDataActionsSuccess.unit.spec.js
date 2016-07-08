@@ -285,6 +285,7 @@ describe('Report Data Actions Edit Report functions -- success', () => {
     let tblId = '2';
     let recId = '3';
     let changes = {};
+    let newRecord = {data:'value'};
     let responseData = {appId, tblId, data: 'success'};
 
     class mockRecordService {
@@ -329,7 +330,7 @@ describe('Report Data Actions Edit Report functions -- success', () => {
     });
 
     it('test addReportRecord', () => {
-        flux.actions.addReportRecord();
+        flux.actions.addReportRecord(appId, tblId, newRecord);
         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD]);
     });

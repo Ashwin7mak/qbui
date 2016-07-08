@@ -11,8 +11,9 @@ class RecordService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_RECORD  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
-            PATCH_RECORD : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`
+            GET_RECORD    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
+            PATCH_RECORD  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
+            CREATE_RECORD : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`
         };
     }
 
@@ -68,6 +69,20 @@ class RecordService extends BaseService {
     saveRecord(appId, tableId, recordId, changes) {
         let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
         return super.patch(url, changes);
+    }
+
+
+    /**
+     * Create a record
+     *
+     * @param appId
+     * @param tableId
+     * @param record
+     * @returns promise
+     */
+    createRecord(appId, tableId, record) {
+        let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
+        return super.post(url, record);
     }
 
 }

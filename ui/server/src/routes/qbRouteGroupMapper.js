@@ -16,8 +16,8 @@
     var routeGroupDisabled = {};
     routeGroupDisabled[routeGroups.DEBUG] = [];
     routeGroupDisabled[routeGroups.LH_V1] = [
-        {route: routeConsts.RECORD, methods: [constants.POST, constants.DELETE, constants.PUT]},
-        {route: routeConsts.RECORDS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.RECORD, methods: [constants.DELETE, constants.PUT]},
+        {route: routeConsts.RECORDS, methods: [constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.REPORT_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_API, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_RESOURCES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},

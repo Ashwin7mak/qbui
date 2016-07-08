@@ -1,6 +1,9 @@
 import * as actions from "../constants/actions";
 import Fluxxor from "fluxxor";
 import _ from 'lodash';
+import Logger from '../utils/logger';
+var logger = new Logger();
+
 /**
     keeps track of inline edits in progress made on a record before
     they are committed to database
@@ -15,6 +18,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.RECORD_EDIT_CHANGE_FIELD, this.onRecordEditChangeField,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             actions.RECORD_EDIT_SAVE, this.onRecordEditSave,
+            actions.SAVE_REPORT_RECORD, this.onSaveRecord,
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_REPORT_RECORD_FAILED, this.onSaveRecordFailed,
         );
@@ -79,6 +83,13 @@ let RecordPendingEditsStore = Fluxxor.createStore({
 
             this.emit('change');
         }
+    },
+    onSaveRecord(payload) {
+        this.currentEditingAppId = payload.appId;
+        this.currentEditingTableId = payload.tblId;
+        this.currentEditingRecordId = payload.recId;
+        let changes = payload.changes;
+        logger.debug('saving changes: ' + JSON.stringify(payload));
     },
     onSaveRecordSuccess(payload) {
         this.currentEditingRecordId = payload.recId;
