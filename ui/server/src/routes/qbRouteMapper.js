@@ -306,7 +306,7 @@
     }
 
     /**
-     * Fetch form meta data and report data for a table.
+     * Fetch form meta data and record data for a record.
      *
      * @param req
      * @param res
@@ -323,7 +323,6 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Fetch Form Components');
-
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);

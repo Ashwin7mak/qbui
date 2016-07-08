@@ -23,8 +23,7 @@ class FormService extends BaseService {
      * @param appId
      * @param tableId
      * @param recordId
-     * @param optionalParams
-     *  formType
+     * @param formType
      */
     getFormAndRecord(appId, tableId, recordId, formType) {
         let params = {};
@@ -33,11 +32,11 @@ class FormService extends BaseService {
             params[query.FORM_TYPE] = formType;
         }
 
-        // TODO - remove once confirmed this all works..
-        //return Promise.resolve({data: sampleFormJSON});
+        return Promise.resolve({data: sampleFormJSON});
 
-        let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
-        return super.get(url, {params:params});
+        //  Until we get data to display to confirm it works okay...
+        //let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
+        //return super.get(url, {params:params});
     }
 }
 

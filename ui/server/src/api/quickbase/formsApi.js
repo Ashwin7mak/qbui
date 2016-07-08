@@ -67,7 +67,12 @@
                             resolve(obj);
                         },
                         function(error) {
-                            reject(error);
+                            let obj = {
+                                statusCode: error.statusCode,
+                                message: error.statusMessage,
+                                body: JSON.parse(error.body)
+                            };
+                            reject(obj);
                         }
                     ).catch(function(ex) {
                         requestHelper.logUnexpectedError('formsApi...fetchFormComponents', error, true);
