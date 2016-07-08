@@ -100,7 +100,7 @@
                     return facetGroupElement.element(by.className('panel-collapse')).getAttribute('offsetHeight').then(function(height) {
                         if (height === '0') {
                             return e2ePageBase.waitForElement(facetGroupElement).then(function() {
-                                return facetGroupElement.click().then(function() {
+                                return facetGroupElement.element(by.className('facetName')).click().then(function() {
                                     return facetGroupElement;
                                 });
                             });
@@ -177,18 +177,15 @@
          */
         this.clearFacetTokensFromContainer = function() {
             return e2ePageBase.waitForElement(element(by.className('facetSelections'))).then(function() {
-                element.all(by.className('selectedToken')).then(function(items) {
-                    for (var i = (items.length) - 1; i >= 0; --i) {
-                        e2eBase.sleep(browser.params.smallSleep);
-                        items[i].element(by.className('clearFacet')).click().then(function() {
-                            //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
-                            e2eBase.sleep(browser.params.smallSleep);
-                        });
-                    }
+                return e2eRetry.run(function() {
+                    return element.all(by.className('selectedToken')).then(function(items) {
+                        for (var i = (items.length) - 1; i >= 0; --i) {
+                            items[i].element(by.className('clearFacet')).click();
+                        }
+                    });
                 });
             });
         };
-
     };
     ReportFacetsPage.prototype = e2ePageBase;
     module.exports = ReportFacetsPage;

@@ -30,7 +30,7 @@
                     name: 'Viewer Report',
                     type: 'TABLE',
                     tableId: app.tables[0].id,
-                    query: null,
+                    query: null
                 };
                 //report endpoint
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
@@ -41,7 +41,7 @@
                     name: 'Participant Report',
                     type: 'TABLE',
                     tableId: app.tables[0].id,
-                    query: null,
+                    query: null
                 };
                 //report endpoint
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
@@ -52,7 +52,7 @@
                     name: 'Admin Report',
                     type: 'TABLE',
                     tableId: app.tables[0].id,
-                    query: null,
+                    query: null
                 };
                 //report endpoint
                 var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
@@ -172,7 +172,9 @@
                         }).then(function() {
                             return reportServicePage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                                 //Assert report stage heading
-                                expect(reportServicePage.stageHeadLine.getAttribute('innerText')).toEqual(testcase.reportTitle);
+                                e2eRetry.run(function() {
+                                    expect(reportServicePage.stageHeadLine.getAttribute('innerText')).toEqual(testcase.reportTitle);
+                                });
                             }).then(function() {
                                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                                     e2eBase.sleep(browser.params.smallSleep);

@@ -92,13 +92,13 @@ module.exports = function(grunt) {
         },
         vendorDir : 'vendor',
         express  : {
-            root   : 'server',
+            root   : 'server/src',
             options: {
                 debug  : true,
                 port   : 9000,
                 sslPort: 9443,
                 host   : process.env.HOST || 'localhost',
-                script : '<%= express.root %>/src/app.js',
+                script : '<%= express.root %>/app.js',
                 realm : process.env.REALM ? (process.env.REALM + '.') : ''
             },
             local  : {
@@ -548,9 +548,9 @@ module.exports = function(grunt) {
                 options: {
                     username        : 'QuickBaseNS',
                     accessKey       : sauceKey,
-                    proxy           : 'egressproxy.quickbaserocks.com:80',
+                    //proxy           : 'egressproxy.quickbaserocks.com:80',
                     tunnelIdentifier: tunnelIdentifier,
-                    proxyTunnel     : true,
+                    //proxyTunnel     : true,
                     verbose         : true,
                     logfile         : 'sauceConnect.log'
                 }
@@ -856,7 +856,7 @@ module.exports = function(grunt) {
             return grunt.task.run([
                 'env:e2e',
                 'sauce_connect:aws',
-                'protractor:sauce_osx_chrome'
+                'protractor:sauce_multi_browser'
             ]);
         }
 
