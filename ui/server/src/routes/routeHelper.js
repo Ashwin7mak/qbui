@@ -6,13 +6,11 @@
     let FACET_RESULTS = 'facets/results';
     let FIELDS = 'fields';
     let FORMS = 'forms';
-    let FORMS_COMPONENTS = 'formscomponents';
     let TABLES = 'tables';
     let RECORDS = 'records';
     let REPORTS = 'reports';
     let REPORT_COUNT = 'count';
     let REPORT_RESULTS = 'results';
-    let REPORT_COMPONENTS = 'reportcomponents';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
@@ -20,7 +18,7 @@
     //      .* - wildcard match any character(s)
     //      /i - case insensitive
     let REGEX_FIELDS_ROUTE = /apps\/.*\/tables\/.*\/fields(.*)?$/i;
-    let REGEX_FORMS_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/records\/.*\/formcomponents(.*)?$/i;
+    let REGEX_RECORDS_FORMS_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/records\/.*\/formcomponents(.*)?$/i;
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/reportcomponents(.*)?$/i;
 
@@ -316,7 +314,7 @@
          */
         isFormsComponentRoute(url) {
             if (typeof url === 'string') {
-                return REGEX_FORMS_COMPONENT_ROUTE.test(url);
+                return REGEX_RECORDS_FORMS_COMPONENT_ROUTE.test(url);
             }
             return false;
         },
