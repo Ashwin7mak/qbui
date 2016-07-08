@@ -256,7 +256,14 @@
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
                 //  if not a records route, check to see if it is a request for reportComponents
-                if (!routeHelper.isRecordsRoute(req.url)) {
+                if (routeHelper.isRecordsRoute(req.url)) {
+                    if (req.params.recordId) {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url, req.params.recordId);
+                    } else {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
+                    }
+                } else {
+                    /*eslint no-lonely-if:0 */
                     if (routeHelper.isReportComponentRoute(req.url)) {
                         //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
                         //  parameter list to retrieve the data; otherwise use the report/results endpoint.  This is
@@ -285,8 +292,14 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
-                //  if not a fields route, will return all fields for the given table
-                if (!routeHelper.isFieldsRoute(req.url)) {
+                if (routeHelper.isFieldsRoute(req.url)) {
+                    if (req.params.fieldId) {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url, req.params.fieldId);
+                    } else {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
+                    }
+                } else {
+                    //  not a fields route; will return all fields for the given table
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
                 }
 

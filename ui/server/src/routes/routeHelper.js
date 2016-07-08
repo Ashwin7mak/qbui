@@ -6,12 +6,23 @@
     let FACET_RESULTS = 'facets/results';
     let FIELDS = 'fields';
     let FORMS = 'forms';
+    let FORMS_COMPONENTS = 'formscomponents';
     let TABLES = 'tables';
     let RECORDS = 'records';
     let REPORTS = 'reports';
     let REPORT_COUNT = 'count';
     let REPORT_RESULTS = 'results';
     let REPORT_COMPONENTS = 'reportcomponents';
+
+    //  regular expressions to determine a url route. The expression is interpreted as:
+    //      (.*)? - optionally match any character(s)
+    //      \/ - escaped forward slash
+    //      .* - wildcard match any character(s)
+    //      /i - case insensitive
+    let REGEX_FIELDS_ROUTE = /apps\/.*\/tables\/.*\/fields(.*)?$/i;
+    let REGEX_FORMS_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/records\/.*\/formcomponents(.*)?$/i;
+    let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
+    let REGEX_REPORT_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/reportcomponents(.*)?$/i;
 
     /**
      * Private function to extract the root url for the given type.
@@ -292,7 +303,20 @@
          */
         isReportComponentRoute(url) {
             if (typeof url === 'string') {
-                return url.toLowerCase().indexOf(REPORT_COMPONENTS) !== -1;
+                return REGEX_REPORT_COMPONENT_ROUTE.test(url);
+            }
+            return false;
+        },
+
+        /**
+         * Is the route a request for form components
+         *
+         * @param url
+         * @returns {boolean}
+         */
+        isFormsComponentRoute(url) {
+            if (typeof url === 'string') {
+                return REGEX_FORMS_COMPONENT_ROUTE.test(url);
             }
             return false;
         },
@@ -305,7 +329,7 @@
          */
         isRecordsRoute(url) {
             if (typeof url === 'string') {
-                return url.toLowerCase().indexOf(RECORDS) !== -1;
+                return REGEX_RECORDS_ROUTE.test(url);
             }
             return false;
         },
@@ -318,7 +342,7 @@
          */
         isFieldsRoute(url) {
             if (typeof url === 'string') {
-                return url.toLowerCase().indexOf(FIELDS) !== -1;
+                return REGEX_FIELDS_ROUTE.test(url);
             }
             return false;
         }

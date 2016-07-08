@@ -36,7 +36,7 @@
         //  additional processing either pre/post the API call.
         //
         //  TABLE ENDPOINTS for FORM, RECORD and REPORT
-        FORM_COMPONENTS         : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',
+        FORM_COMPONENTS         : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
 
         RECORD                  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
         RECORDS                 : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
