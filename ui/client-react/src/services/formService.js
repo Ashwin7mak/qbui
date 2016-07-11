@@ -13,23 +13,17 @@ class FormService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_FORM_AND_RECORD  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMANDRECORD}`
+            GET_FORM_COMPONENTS  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}/${constants.FORMCOMPONENTS}`
         };
     }
 
     /**
-     * Get all records filtered optionally by query, clist, slist, offset, numRows.
+     * Get form meta and record data
      *
      * @param appId
      * @param tableId
-     * @param optionalParams may contain the any of the following -
-     *  formatted - is output formatted for UI display or raw data
-     *  query - unparsed expression to filter records by
-     *  clist - columns to query
-     *  slist - sortby columns
-     *  glist - groupBy columns
-     *  offset - zero based row offset
-     *  numRows - number of rows to return on the request
+     * @param recordId
+     * @param formType
      */
     getFormAndRecord(appId, tableId, recordId, formType) {
         let params = {};
@@ -39,8 +33,9 @@ class FormService extends BaseService {
         }
 
         return Promise.resolve({data: sampleFormJSON});
-        //TODO add a node end point.
-        //let url = super.constructUrl(this.API.GET_FORM_AND_RECORD, [appId, tableId]);
+
+        //  Until we get data to display to confirm it works okay...
+        //let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
         //return super.get(url, {params:params});
     }
 }

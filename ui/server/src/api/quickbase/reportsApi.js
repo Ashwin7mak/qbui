@@ -18,39 +18,12 @@
         let requestHelper = require('./requestHelper')(config);
         let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
         let recordsApi = require('./recordsApi')(config);
+        let routeHelper = require('../../routes/routeHelper');
 
         //Module constants:
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
-
         let FACETS = 'facets';
-
-        //  url components for facets, report components and table report home page
-        let CORE_REPORTS_ROUTE = 'reports';
-        let CORE_REPORTFACETS_ROUTE = FACETS + '/results';
-        let CORE_HOMEPAGE_ID_ROUTE = 'defaulthomepage';
-
-        let NODE_REPORTCOMPONENT_ROUTE = 'reportcomponents';
-        let NODE_HOMEPAGE_ROUTE = 'homepage';
-
-        /**
-         * Supporting method to transform a segment of a url route component
-         *
-         * @param url - url to examine
-         * @param curRoute - route to search
-         * @param newRoute - new route to replace
-         * @returns {*}
-         */
-        function transformUrlRoute(url, curRoute, newRoute) {
-            if (url) {
-                let offset = url.toLowerCase().indexOf(curRoute);
-                if (offset !== -1) {
-                    return url.substring(0, offset) + newRoute;
-                }
-            }
-            //  return requestUrl unchanged
-            return url;
-        }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
@@ -80,11 +53,7 @@
             fetchFacetResults: function(req) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-
-                // Node request is ../report/{reportId}/reportComponents  --> convert to
-                // ../report/{reportId}/facets/results to return the facet data from core
-                opts.url = transformUrlRoute(opts.url, NODE_REPORTCOMPONENT_ROUTE, CORE_REPORTFACETS_ROUTE);
-
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsFacetRoute(req.url);
                 return requestHelper.executeRequest(req, opts);
             },
 
@@ -136,7 +105,7 @@
                 //
                 //  NOTE:  if an error occurs while fetching the faceting information, we still want the promise to
                 //  resolve as we want to always display the report data if that promise returns w/o error.
-                var facetPromise = new Promise((resolve2, reject2) => {
+                var facetPromise = new Promise((resolve2) => {
                     this.fetchFacetResults(req).then(
                         (facetResponse) => {
                             resolve2(facetResponse);
@@ -202,15 +171,11 @@
              * @param opts
              * @returns {bluebird|exports|module.exports}
              */
-            fetchReportMetaData(req, reportId, referRoute) {
+            fetchReportMetaData(req, reportId) {
 
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + reportId;
-
-                if (referRoute) {
-                    opts.url = transformUrlRoute(opts.url, referRoute, REPORT_ROUTE);
-                }
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url, reportId);
 
                 //  promise to return report meta data
                 return new Promise((resolve1, reject1) => {
@@ -233,6 +198,8 @@
              */
             fetchTableHomePageReport: function(req) {
 
+                //  report object returned to the client;  gets populated in the success workflow, otherwise
+                //  is returned uninitialized if no report home page is found.
                 var reportObj = {
                     reportMetaData: {
                         data: ''
@@ -246,10 +213,7 @@
 
                     let opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-
-                    // Node request is ../tables/{tableId}/homepage  --> transform the url to
-                    // ../tables/{tableId}/homepagereportid to return the table report homepage id from core
-                    opts.url = transformUrlRoute(opts.url, NODE_HOMEPAGE_ROUTE, CORE_HOMEPAGE_ID_ROUTE);
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesDefaultReportHomepageRoute(req.url);
 
                     //  make the api request to get the table homepage report id
                     requestHelper.executeRequest(req, opts).then(
@@ -260,7 +224,7 @@
                                 let homepageReportId = JSON.parse(response.body);
 
                                 //  have a homepage id; first get the report meta data
-                                this.fetchReportMetaData(req, homepageReportId, NODE_HOMEPAGE_ROUTE).then(
+                                this.fetchReportMetaData(req, homepageReportId).then(
                                     (metaDataResult) => {
                                         //  parse the metadata and set the request parameters for the default sortList, fidList and query expression (if defined).
                                         //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
@@ -280,10 +244,6 @@
                                         //  TODO: initial page size
                                         //req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
                                         //req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = ?;
-
-                                        //  set to the fetch the report components url
-                                        let REPORT_ROUTE = CORE_REPORTS_ROUTE + '/' + homepageReportId;
-                                        req.url = transformUrlRoute(req.url, NODE_HOMEPAGE_ROUTE, REPORT_ROUTE + '/' + NODE_REPORTCOMPONENT_ROUTE);
 
                                         this.fetchReportComponents(req).then(
                                             (reportData) => {
