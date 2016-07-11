@@ -332,7 +332,7 @@ describe('Report Data Actions Edit Report functions -- success', () => {
     it('test addReportRecord', () => {
         flux.actions.addReportRecord(appId, tblId, newRecord);
         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD]);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD, {appId, tblId, record:newRecord}]);
     });
 
     it('test deleteReportRecord', () => {

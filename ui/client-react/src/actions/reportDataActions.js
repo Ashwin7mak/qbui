@@ -176,11 +176,11 @@ let reportDataActions = {
             // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && record) {
-                    this.dispatch(actions.ADD_REPORT_RECORD, {appId, tblId, record});
-                    let recordService = new RecordService();
+                this.dispatch(actions.ADD_REPORT_RECORD, {appId, tblId, record});
+                let recordService = new RecordService();
 
                     //  save the changes to the record
-                    recordService.createRecord(appId, tblId, record).then(
+                recordService.createRecord(appId, tblId, record).then(
                         response => {
                             logger.debug('RecordService createRecord success:' + JSON.stringify(response));
                             this.dispatch(actions.ADD_REPORT_RECORD_SUCCESS, {appId, tblId, record});
@@ -200,13 +200,13 @@ let reportDataActions = {
                             reject();
                         }.bind(this)
                     );
-                } else {
-                    var errMessage = 'Missing one or more required input parameters to reportDataActions.addReportRecord. AppId:' +
+            } else {
+                var errMessage = 'Missing one or more required input parameters to reportDataActions.addReportRecord. AppId:' +
                         appId + '; TblId:' + tblId + '; record:' + record;
-                    logger.error(errMessage);
-                    this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {error: errMessage});
-                    reject();
-                }
+                logger.error(errMessage);
+                this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {error: errMessage});
+                reject();
+            }
         });
     },
 
