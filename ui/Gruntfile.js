@@ -92,13 +92,13 @@ module.exports = function(grunt) {
         },
         vendorDir : 'vendor',
         express  : {
-            root   : 'server/src',
+            root   : 'server',
             options: {
                 debug  : true,
                 port   : 9000,
                 sslPort: 9443,
                 host   : process.env.HOST || 'localhost',
-                script : '<%= express.root %>/app.js',
+                script : '<%= express.root %>/src/app.js',
                 realm : process.env.REALM ? (process.env.REALM + '.') : ''
             },
             local  : {
