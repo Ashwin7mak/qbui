@@ -67,15 +67,16 @@
                             resolve(obj);
                         },
                         function(error) {
-                            let obj = {
-                                statusCode: error.statusCode,
-                                message: error.statusMessage,
-                                body: JSON.parse(error.body)
-                            };
+                            let obj = {};
+                            if (error) {
+                                obj.statusCode = error.statusCode;
+                                obj.message = error.statusMessage;
+                                obj.body = JSON.parse(error.body);
+                            }
                             reject(obj);
                         }
                     ).catch(function(ex) {
-                        requestHelper.logUnexpectedError('formsApi...fetchFormComponents', error, true);
+                        requestHelper.logUnexpectedError('formsApi...fetchFormComponents', ex, true);
                         reject(ex);
                     });
                 }.bind(this));
