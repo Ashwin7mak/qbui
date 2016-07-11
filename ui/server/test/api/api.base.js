@@ -35,6 +35,7 @@
         var TABLES_ENDPOINT = '/tables/';
         var TABLE_DEFAULT_HOME_PAGE = '/defaulthomepage';
         var FIELDS_ENDPOINT = '/fields/';
+        var FORMS_ENDPOINT = '/forms/';
         var REPORTS_ENDPOINT = '/reports/';
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
@@ -158,6 +159,13 @@
                     tableEndpoint = tableEndpoint + tableId;
                 }
                 return tableEndpoint;
+            },
+            resolveFormsEndpoint      : function(appId, tableId, formId) {
+                var formEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + FORMS_ENDPOINT;
+                if (formId) {
+                    formEndpoint = formEndpoint + formId;
+                }
+                return formEndpoint;
             },
             resolveReportsEndpoint      : function(appId, tableId, reportId) {
                 var reportEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
