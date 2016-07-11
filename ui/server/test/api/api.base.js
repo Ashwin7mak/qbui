@@ -377,15 +377,15 @@
                 });
             },
             //Update Default table home page , calls execute request and returns a promise
-            setDefaultTableHomePage       : function(appId, tableIdReportIdMap) {
+            setDefaultTableHomePage       : function(appId, tableId, reportId) {
                 var self = this;
                 return new promise(function(resolve, reject) {
-                    self.executeRequest(self.resolveTablesEndpoint(appId) + '/defaulthomepage', consts.POST, tableIdReportIdMap).then(function(defaultHPResponse) {
+                    self.executeRequest(self.resolveTablesEndpoint(appId, tableId) + '/defaulthomepage?reportId='+reportId, consts.POST).then(function(defaultHPResponse) {
                         log.debug('set default table home page response: ' + defaultHPResponse);
                         resolve(defaultHPResponse);
                     }).catch(function(error) {
                         reject(error);
-                        assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(tableIdReportIdMap));
+                        assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(reportId));
                     });
                 });
             },
