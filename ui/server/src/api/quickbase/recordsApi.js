@@ -252,29 +252,42 @@
              * @returns Promise
              */
             fetchRecords: function(req) {
-                var opts = requestHelper.setOptions(req);
+                let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
-                //  if not a records route, check to see if it is a request for reportComponents
+                //  get the request parameters
+                let search = url.parse(req.url).search;
+
                 if (routeHelper.isRecordsRoute(req.url)) {
                     if (req.params.recordId) {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url, req.params.recordId);
                     } else {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                     }
+
+                    //  any request parameters to append?
+                    if (search) {
+                        opts.url += search;
+                    }
                 } else {
+                    //  if not a records route, check to see if it is a request for reportComponents
                     /*eslint no-lonely-if:0 */
                     if (routeHelper.isReportComponentRoute(req.url)) {
                         //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
                         //  parameter list to retrieve the data; otherwise use the report/results endpoint.  This is
                         //  necessary as the reports endpoint does not accept request parameters like sortlist.
-                        let search = url.parse(req.url.toLowerCase()).search;
-                        if (search && search.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
-                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url) + search;
+                        if (search && search.toLowerCase().indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
+                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                         } else {
                             opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
                         }
+
+                        //  any request parameters to append?
+                        if (search) {
+                            opts.url += search;
+                        }
                     } else {
+                        //  not an expected route; set to return all records for the given table
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                     }
                 }
@@ -292,14 +305,22 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
+                //  get the request parameters
+                let search = url.parse(req.url).search;
+
                 if (routeHelper.isFieldsRoute(req.url)) {
                     if (req.params.fieldId) {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url, req.params.fieldId);
                     } else {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
                     }
+
+                    //  any request parameters to append?
+                    if (search) {
+                        opts.url += search;
+                    }
                 } else {
-                    //  not a fields route; will return all fields for the given table
+                    //  not a fields route; set to return all fields for the given table
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
                 }
 
