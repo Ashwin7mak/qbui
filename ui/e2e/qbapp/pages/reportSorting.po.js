@@ -22,7 +22,7 @@
         //resest button
         this.sortAndGrpDialogueResetBtn = this.reportSortAndGroupDialogue.all(by.className('reset')).first();
         //sorting/grouping popup title
-        this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.all(by.className('overlayTitle')).first();
+        this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.all(by.tagName('H5')).first();
         //sorting/grouping close button
         this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.all(by.className('overlayRight')).first();
         //Small breakpoint sorting/grouping close button
@@ -280,7 +280,7 @@
                     return self.reportGroupByIcon.click().then(function() {
                         return e2ePageBase.waitForElement(self.GroupByFieldPanel).then(function() {
                             //verify the title of groupBy list
-                            expect(self.GroupByFieldPanelHeader.getAttribute('innerText')).toEqual('Cancel\nChoose Field for grouping\n');
+                            expect(self.GroupByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for grouping');
                             //select the groupBy item
                             var items = self.GroupByFieldPanel.all(by.className('list-group-item'));
                             return items.filter(function(elm) {
@@ -296,7 +296,7 @@
                                             e2eBase.sleep(browser.params.smallSleep);
                                             //Click cancel button and verify the panel not displayed
                                             return self.GroupByCancelBtn.click().then(function() {
-                                                expect(self.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                                                expect(self.reportSortAndGroupTitle.getAttribute('textContent')).toEqual('Sort & Group');
                                             });
                                         });
                                     });
@@ -434,7 +434,7 @@
                     return self.reportSortByIcon.click().then(function() {
                         return e2ePageBase.waitForElement(self.SortByFieldPanel).then(function() {
                             //verify the title of groupBy list
-                            expect(self.SortByFieldPanelHeader.getAttribute('innerText')).toEqual('Cancel\nChoose Field for sorting\n');
+                            expect(self.SortByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for sorting');
                             //select the groupBy item
                             var items = self.SortByFieldPanel.all(by.className('list-group-item'));
                             return items.filter(function(elm) {

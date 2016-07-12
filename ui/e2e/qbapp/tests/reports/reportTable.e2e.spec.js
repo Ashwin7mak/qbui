@@ -74,7 +74,7 @@
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //TODO: Assert report icon has been highlighted to indicate which table you are on
                 // Assert the record count
-                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toBe('10 Records');
+                expect(reportServicePage.reportRecordsCount.getText()).toBe('10 Records');
                 // Assert column headers
                 reportServicePage.getReportColumnHeaders().then(function(resultArray) {
                     // UI is currently using upper case to display the field names in columns
@@ -93,7 +93,7 @@
          * Test Method.
          */
         it('Should allow you to edit records in the report', function(done) {
-            if (browserName !== 'safari') {
+            if (browserName === 'chrome') {
                 // Wait until the table has loaded
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     // Open the edit menu for the first record in the report

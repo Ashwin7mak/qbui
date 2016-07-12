@@ -97,7 +97,7 @@
         // Report toolbar
         this.reportsToolBar = element(by.className('reportToolbar'));
         // Report records count
-        this.reportRecordsCount = element(by.className('recordsCount'));
+        this.reportRecordsCount = element(by.className('recordsCount')).element(by.tagName('SPAN'));
         // Report filter search Box
         this.reportFilterSearchBox = this.reportsToolBar.element(by.className('searchInput'));
         // Table actions container
@@ -148,7 +148,7 @@
          * @param recordRowElement
          */
         this.openRecordEditMenu = function(recordRowIndex) {
-            //TODO: Doesn't work for Safari, need to find workaround
+            //TODO: Doesn't work for Safari and Firefox, need to find workaround
             return browser.actions().doubleClick(element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('ag-cell-no-focus')).first()).perform();
         };
 
@@ -256,11 +256,7 @@
                 var fetchTextPromises = [];
                 for (var i = 0; i < elements.length; i++) {
                     // Firefox has innerHTML instead of innerText so use that instead
-                    if (browserName === 'firefox') {
-                        fetchTextPromises.push(elements[i].getAttribute('innerHTML'));
-                    } else {
-                        fetchTextPromises.push(elements[i].getAttribute('innerText'));
-                    }
+                        fetchTextPromises.push(elements[i].getAttribute('colid'));
                 }
                 return Promise.all(fetchTextPromises);
             }).then(function(colHeaders) {
