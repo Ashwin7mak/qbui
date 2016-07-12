@@ -277,7 +277,7 @@
                                         req.params[constants.REQUEST_PARAMETER.COLUMNS] = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
                                         req.params[constants.REQUEST_PARAMETER.QUERY] = reportMetaData.query ? [reportMetaData.query] : '';
 
-                                        //  TODO: initial page size. 
+                                        //  TODO: initial page size.
                                         // req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
                                         // req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = 5;
 

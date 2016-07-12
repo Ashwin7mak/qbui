@@ -30,7 +30,6 @@ var RecordsCount = React.createClass({
     render() {
         let message = "report.recordCount";
         let placeHolderMessage = "report.recordCountPlaceHolder";
-        
         let dbl = null;
         if (this.props.isFiltered) {
             message = "report.filteredRecordCount";
