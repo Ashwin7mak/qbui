@@ -276,7 +276,7 @@
                         //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
                         //  parameter list to retrieve the data; otherwise use the report/results endpoint.  This is
                         //  necessary as the reports endpoint does not accept request parameters like sortlist.
-                        if (typeof search === 'string' && search.toLowerCase().indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
+                        if (search && search.toLowerCase().indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
                             opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                         } else {
                             opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
