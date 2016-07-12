@@ -14,7 +14,7 @@
         },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
-        allScriptsTimeout: 120000,
+        allScriptsTimeout: 9999999,
         // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
         baseUrl: process.env.DOMAIN,
         // list of files / patterns to load in the browser

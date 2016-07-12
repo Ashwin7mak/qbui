@@ -144,6 +144,7 @@ const ReportToolbar = React.createClass({
         let isLoading = false;
         let filteredRecordCount = null;
         let recordCount = null;
+        let isCountingRecords = false;
         let hasFacets = false;
 
         if (this.props.reportData) {
@@ -156,6 +157,8 @@ const ReportToolbar = React.createClass({
                 }
                 if (this.props.reportData.data.records) {
                     recordCount = this.props.reportData.data.recordsCount;
+                } else {
+                    isCountingRecords = true;
                 }
                 if (this.props.reportData.data.facets &&
                     (this.props.reportData.data.facets.length > 0)) {
@@ -204,7 +207,17 @@ const ReportToolbar = React.createClass({
                             null
                         }
                     </div>
-
+                    {
+                        (isLoading && isCountingRecords) ?
+                            (<RecordsCount recordCount={null}
+                                           isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
+                                           filteredRecordCount={filteredRecordCount}
+                                           nameForRecords={this.props.nameForRecords}
+                                           clearAllFilters={this.props.clearAllFilters}
+                                           isCounting={true}
+                            />) :
+                            null
+                    }
 
                     {(!isLoading && recordCount) ?
                         (<RecordsCount recordCount={recordCount}
@@ -212,6 +225,7 @@ const ReportToolbar = React.createClass({
                               filteredRecordCount={filteredRecordCount}
                               nameForRecords={this.props.nameForRecords}
                               clearAllFilters={this.props.clearAllFilters}
+                              isCounting={false}
                         />) :
                         null
                     }

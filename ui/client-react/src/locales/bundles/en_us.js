@@ -97,6 +97,7 @@ export default {
             newReport: "New",
             organizeReports: "Organize",
             recordCount : "{recordCount} {nameForRecords} ",
+            recordCountPlaceHolder : "Counting {nameForRecords}",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
                 addField: "Add a field",

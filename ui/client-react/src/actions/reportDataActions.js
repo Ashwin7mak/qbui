@@ -101,7 +101,8 @@ let reportDataActions = {
             if (appId && tblId && rptId) {
                 this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
                 let reportService = new ReportService();
-
+                const defaultPageSize = 10;
+                const defaultOffset = 0;
                 //  query for the report meta data
                 //  TODO: refactor by having just 1 network call to node to retrieve a report...
                 //  TODO: leverage how homepage report is loaded..
@@ -109,8 +110,8 @@ let reportDataActions = {
                     (reportMetaData) => {
                         let requiredParams = {};
                         requiredParams[query.FORMAT_PARAM] = format;
-                        requiredParams[query.OFFSET_PARAM] = offset;
-                        requiredParams[query.NUMROWS_PARAM] = rows;
+                        requiredParams[query.OFFSET_PARAM] = (offset === undefined) ? defaultOffset : offset;
+                        requiredParams[query.NUMROWS_PARAM] = (rows === undefined) ? defaultPageSize : rows;
                         let overrideQueryParams = {};
                         if (sortList !== undefined) {
                             overrideQueryParams[query.SORT_LIST_PARAM] = sortList;
