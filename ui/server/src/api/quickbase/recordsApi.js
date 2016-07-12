@@ -287,7 +287,7 @@
                             opts.url += search;
                         }
                     } else {
-                        //  not an expected route; get all records for the given table, though arguably could throw an exception
+                        //  not an expected route; set to return all records for the given table
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                     }
                 }
@@ -320,7 +320,7 @@
                         opts.url += search;
                     }
                 } else {
-                    //  not an expected route; get all fields for the given table, though arguably could throw an exception
+                    //  not a fields route; set to return all fields for the given table
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
                 }
 
