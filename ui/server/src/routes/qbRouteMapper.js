@@ -8,19 +8,26 @@
     var perfLogger = require('../perfLogger');
     var routeConsts = require('./routeConstants');
     var request = require('request');
+
     var requestHelper;
+
+    var formsApi;
     var recordsApi;
     var reportsApi;
+
     var routeGroupMapper = require('./qbRouteGroupMapper');
     var routeGroup;
+
     var simpleStringify = require('./../../../common/src/simpleStringify.js');
     var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
+        routeGroup = config.routeGroup;
+
+        formsApi = require('../api/quickbase/formsApi')(config);
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
-        routeGroup = config.routeGroup;
 
         /* internal data */
         /*
@@ -28,6 +35,8 @@
          */
         var routeToGetFunction = {};
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
+
+        routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
@@ -285,6 +294,35 @@
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Fetch Table HomePage Report Components');
 
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Fetch form meta data and record data for a record.
+     *
+     * @param req
+     * @param res
+     */
+    function fetchFormComponents(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            formsApi.fetchFormComponents(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Form Components');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Form Components');
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);

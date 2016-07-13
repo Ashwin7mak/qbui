@@ -60,9 +60,11 @@
 
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
+        let routeHelper = require('../../routes/routeHelper');
         var groupFormatter = require('./formatter/groupFormatter');
         var recordFormatter = require('./formatter/recordFormatter')();
         var constants = require('../../../../common/src/constants');
+        var url = require('url');
 
         //Module constants:
         var APPLICATION_JSON = 'application/json';
@@ -71,10 +73,7 @@
         var FIELDS = 'fields';
         var RECORD = 'record';
         var RECORDS = 'records';
-        var REPORTS = 'reports';
         var GROUPS = 'groups';
-        var REPORTCOMPONENTS = 'reportcomponents';
-        var RESULTS = 'results';
         var request = defaultRequest;
 
         //Given an array of records and array of fields, remove any fields
@@ -253,24 +252,43 @@
              * @returns Promise
              */
             fetchRecords: function(req) {
-                var opts = requestHelper.setOptions(req);
+                let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
-                let inputUrl = opts.url; //JAVA api is case sensitive so dont loose camel case here.
-                let inputUrl_toLower = opts.url.toLowerCase(); // but for convinience of string matches convert to lower case
+                //  get the request parameters
+                let search = url.parse(req.url).search;
 
-                //the request came in for report/{reportId}/results.
-                // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl_toLower.indexOf(REPORTCOMPONENTS) !== -1) {
-                    // this bypass is for grouping but in ag-grid
-                    // change url from .../reports/<id>/reportcomponents?sortList=..
-                    // to .../records?sortList=.. because /reports/results api does not support sortList param.
-                    if (inputUrl_toLower.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
-                        let reportIndex = inputUrl_toLower.indexOf(REPORTS);
-                        let paramsIndex = inputUrl_toLower.indexOf("?"); // get the index for url params starting after ?
-                        opts.url = inputUrl.substring(0, reportIndex) + RECORDS + inputUrl.substring(paramsIndex);
+                if (routeHelper.isRecordsRoute(req.url)) {
+                    if (req.params.recordId) {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url, req.params.recordId);
                     } else {
-                        opts.url = inputUrl.substring(0, inputUrl_toLower.indexOf(REPORTCOMPONENTS)) + RESULTS;
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
+                    }
+
+                    //  any request parameters to append?
+                    if (search) {
+                        opts.url += search;
+                    }
+                } else {
+                    //  if not a records route, check to see if it is a request for reportComponents
+                    /*eslint no-lonely-if:0 */
+                    if (routeHelper.isReportComponentRoute(req.url)) {
+                        //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
+                        //  parameter list to retrieve the data; otherwise use the report/results endpoint.  This is
+                        //  necessary as the reports endpoint does not accept request parameters like sortlist.
+                        if (search && search.toLowerCase().indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
+                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
+                        } else {
+                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
+                        }
+
+                        //  any request parameters to append?
+                        if (search) {
+                            opts.url += search;
+                        }
+                    } else {
+                        //  not an expected route; set to return all records for the given table
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                     }
                 }
 
@@ -286,21 +304,28 @@
             fetchFields: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                var inputUrl = opts.url.toLowerCase();
 
-                //If the endpoint provided is the records or report execution endpoint,
-                // replace records or reports with the /fields path
-                if (inputUrl.indexOf(RECORDS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(RECORDS)) + FIELDS;
-                } else if (inputUrl.indexOf(REPORTS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTS)) + FIELDS;
+                //  get the request parameters
+                let search = url.parse(req.url).search;
+
+                if (routeHelper.isFieldsRoute(req.url)) {
+                    if (req.params.fieldId) {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url, req.params.fieldId);
+                    } else {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
+                    }
+
+                    //  any request parameters to append?
+                    if (search) {
+                        opts.url += search;
+                    }
+                } else {
+                    //  not a fields route; set to return all fields for the given table
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
                 }
 
-                //TODO: why do we immediately resolve if the format is raw?
                 return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
             },
-
-
 
             /**
              * Save a single record data to a table.
@@ -314,7 +339,7 @@
                 var responseObject;
                 //input expected in raw form for java
                 return requestHelper.executeRequest(req, opts);
-            },
+            }
 
         };
         return recordsApi;

@@ -33,6 +33,9 @@
             isSecure       : function(req) {
                 return req.protocol ? req.protocol.toLowerCase() === 'https' : false;
             },
+            getRequestJavaHost: function() {
+                return config.javaHost;
+            },
             getRequestUrl  : function(req) {
                 return config.javaHost + req.url;
             },
@@ -193,7 +196,8 @@
                 } else {
                     log.error("Caught unexpected error in " + func + "\nError Message: Unknown error...no error object defined");
                 }
-            }
+            },
+
         };
 
         return helper;
