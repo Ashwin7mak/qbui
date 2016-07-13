@@ -181,11 +181,11 @@
             return e2ePageBase.waitForElement(element(by.className('facetSelections'))).then(function() {
                 //return e2eRetry.run(function() {
                 return element.all(by.className('selectedToken')).then(function(items) {
-                        for (var i = (items.length) - 1; i >= 0; --i) {
-                            items[i].element(by.className('clearFacet')).click();
-                            e2ePageBase.waitForElement(reportServicePage.loadedContentEl);
-                        }
-                    });
+                    for (var i = (items.length) - 1; i >= 0; --i) {
+                        items[i].element(by.className('clearFacet')).click();
+                        e2ePageBase.waitForElement(reportServicePage.loadedContentEl);
+                    }
+                });
                 //});
             });
         };
