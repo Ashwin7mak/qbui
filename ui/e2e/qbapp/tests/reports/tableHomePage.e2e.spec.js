@@ -104,7 +104,7 @@
                     //Assert report heading
                     expect(reportServicePage.stageHeadLine.getAttribute('innerText')).toEqual(reportTitle);
                     // Assert the record count
-                    expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toBe('10 Records');
+                    expect(reportServicePage.reportRecordsCount.getText()).toBe('10 Records');
 
                     //verify that the table report loaded by verifying the column headers
                     reportServicePage.getReportColumnHeaders().then(function(tableColHeaders) {
@@ -131,19 +131,19 @@
                     message: 'Viewer Role',
                     roleId: 10,
                     reportId: 2,
-                    reportTitle: 'Table 1\n|\nViewer Report\n'
+                    reportTitle: 'Table 1\n|\nViewer Report'
                 },
                 {
                     message: 'Participant Role',
                     roleId: 11,
                     reportId: 3,
-                    reportTitle: 'Table 1\n|\nParticipant Report\n'
+                    reportTitle: 'Table 1\n|\nParticipant Report'
                 },
                 {
                     message: 'Admin Role',
                     roleId: 12,
                     reportId: 4,
-                    reportTitle: 'Table 1\n|\nAdmin Report\n'
+                    reportTitle: 'Table 1\n|\nAdmin Report'
                 }
             ];
         }
@@ -173,13 +173,13 @@
                             return reportServicePage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                                 //Assert report stage heading
                                 e2eRetry.run(function() {
-                                    expect(reportServicePage.stageHeadLine.getAttribute('innerText')).toEqual(testcase.reportTitle);
+                                    expect(reportServicePage.stageHeadLine.getText()).toEqual(testcase.reportTitle);
                                 });
                             }).then(function() {
                                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                                     e2eBase.sleep(browser.params.smallSleep);
                                     // Assert the record count
-                                    expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toBe('10 Records');
+                                    expect(reportServicePage.reportRecordsCount.getText()).toBe('10 Records');
                                     //verify that the table report loaded by verifying the column headers
                                     reportServicePage.getReportColumnHeaders().then(function(tableColHeaders) {
                                         expect(tableColHeaders).toEqual(e2eConsts.reportFieldNames);

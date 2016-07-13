@@ -130,7 +130,7 @@
         });
 
         /*
-         * Funstion to get the sorted/grouped table results
+         * Function to get the sorted/grouped table results
          * @Param:groupArrayLength (no of group fields)
          */
         var verifyTableResults = function(sortedResults, expectedResults) {
@@ -147,7 +147,7 @@
                         if (elmClass.indexOf('ag-row-group') === -1) {
                             row.all(by.className('cellData')).then(function(cells) {
                                 cells.forEach(function(cell) {
-                                    cell.getAttribute('innerText').then(function(text) {
+                                    cell.getAttribute('textContent').then(function(text) {
                                         // innerText is adding a return character to the end of the text
                                         data.push(text.replace(/(\r\n|\n|\r)/gm, ''));
                                     });
@@ -272,7 +272,7 @@
                     reportSortingPage.clickSortAndGroupIcon();
                 }).then(function() {
                     //Verify the title
-                    expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                    expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('textContent')).toEqual('Sort & Group');
                     //Verify title of groupBy
                     expect(reportSortingPage.reportGroupByContainerTitle.getText()).toEqual('Group');
                 }).then(function() {
