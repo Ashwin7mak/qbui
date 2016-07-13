@@ -1,0 +1,339 @@
+@import '../../../../src/assets/css/qbVariables';
+
+$header-cell-border: $color5;
+$header-cell-border-bottom: $color6;
+$header-cell-background-color: $color7;
+$header-cell-color: $color8;
+
+$row-background-color-hover: $color1;
+$row-cell-border-color: $color4;
+
+$grid-font-size: $font-size - 2;
+
+$grid-group-row-header-bkgrd-color: $color1;
+$grid-group-row-header-border-top: $color7;
+$grid-group-row-header-divider: $color21;
+
+$grid-group-expand-icon-size: 20px;
+$grid-default-group-padding: 2px;
+$grid-default-cell-padding: 4px;
+
+$row-bg-color: #fff;
+$row-non-editable-bg-color: $color12;
+$row-border-color: #ddd;
+$row-box-shadow-color: #dcdcdc;
+$cell-edit-background-edit: #f3f8fe;
+
+.reportContent {
+    margin-left:10px;
+}
+
+.multiLineTextCell {
+    border:0;
+    background-color: $row-bg-color;
+    margin:0;
+    padding:0;
+    font-family: "Open Sans";
+    font-size: 12px;
+    border-radius:0;
+
+}
+.qbGrid >thead, .qbGrid>tbody{
+    table-layout:fixed;
+
+    >td { vertical-align:top;   }
+    >td:first-child { vertical-align:middle }
+}
+
+.qbGrid {
+    .dateFormat,.dateTimeFormat,.timeFormat,.durationFormat,.phoneFormat {
+        white-space: nowrap;
+    }
+}
+.qbGrid >thead>tr>th {
+    border-right: 1px solid #c0d0e4;
+    border-bottom: 2px solid #d2dce7;
+
+    padding: 4px;
+    color: #486c8f;
+    font-size: 12px;
+    font-weight: bold;
+    -webkit-font-smoothing: antialiased;
+    border-color: #c0d0e4;
+    background-color: #e3eaf3;
+}
+
+.qbGrid .actionsCol {
+    white-space:nowrap;
+    >* {
+        display:inline-block;
+    }
+
+    input[type=checkbox] {
+
+        margin-right:12px;
+    }
+    .iconActionButton {
+        width: auto;
+        margin-right: 4px;
+        height:30px;
+    }
+    .qbIcon {
+        font-size: 20px;
+        width: 20px;
+    }
+
+}
+.qbGrid >tbody>tr>td {
+    padding: 4px;
+    font-size: 12px;
+    border-right: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
+    vertical-align:top;
+
+}
+.qbGrid >tbody>tr>td:first-of-type {
+    left:0;
+    width:80px;
+    max-width:80px;
+    position:relative;
+    background: #fff;
+}
+
+.qbGrid td .cellWrapper > :not(.cellData) {
+    display: none;
+}
+
+.qbGrid {
+    .cellEdit.dateTimeField {
+        min-width:120px;
+    }
+}
+.qbGrid tr.editing {
+    >td {
+        box-shadow: 4px -4px 8px #dcdcdc;
+    }
+    >td:first-child {
+        border-left: 1px solid #ddd;
+        padding-left:4px;
+    }
+
+    >td {
+        background-color: $cell-edit-background-edit;
+        //box-shadow: 4px -4px 8px #dcdcdc;
+        .cellData {
+            display:none;
+        };
+        overflow:visible;
+        padding: 0;
+        margin: 0;
+
+        border-right: 1px solid $row-border-color;
+        > .cellWrapper {
+            display:inline-block;
+            padding:2px;
+
+            > :not(.cellData) {
+                display: inline-block;
+            }
+            //position: absolute;
+
+            top:0px;
+            left:0px;
+            right:0px;
+            bottom:0px;
+
+
+            z-index:1;
+            //display:flex;
+
+            .cellData {
+                visibility:hidden;
+                //display:none;
+            }
+            textarea.cellEdit {
+                resize:none;
+                overflow:hidden;
+                box-sizing:border-box;;
+            }
+            .cellEdit {
+                display:inline-block;
+                border:1px solid $row-border-color;
+
+
+                background: $row-bg-color;
+                flex:1 1 auto;
+                padding:0 0 0 2px;
+                margin-right:2px;
+
+                &.nonEditable {
+                    background-color: $row-non-editable-bg-color;
+                    cursor: not-allowed;
+                }
+                &.dateTimeField>* {
+                    border:0;
+                    .input-group.date input.form-control {
+                        border:0;
+                        padding:0;
+                        font-size: 12px;
+                        height: 25px;
+                        border-radius:0;
+                    }
+                    .input-group.date .input-group-addon {
+                        background: #fff;
+                        height:21px;
+                        padding:0;
+                        border:0;
+                        color: $icon-color;
+
+                    }
+                }
+                &.input-group {
+                    flex: 1 1 auto;
+                    display:flex;
+                    flex-direction: row;
+                    margin-right:0;
+                    padding-right:0;
+                    border-right:0;
+
+                    >input {
+                        flex:1 1 auto;
+                        border-radius:0;
+                        border:0;
+                        height:21px;
+                        margin-right:1px;
+                        font-size: 12px;
+                        padding-left:2px;
+                    }
+                    >span.dropdown {
+                        flex:0 0 auto;
+                        width: 20px;
+                        button {
+                            padding-left:4px;
+                            padding-top:0;
+                            height: 21px;
+                            width:20px;
+                            border-radius:0;
+                        }
+                    }
+                }
+            }
+
+
+        }
+        > td:first-child {
+            border-left:1px solid $row-border-color;
+            position:absolute;
+
+        }
+    }
+
+    >td {
+
+        .editTools {
+            z-index:1;
+            display:flex;
+            flex-direction:column;
+            flex: 0 0 auto;
+            background-color:$cell-edit-background-edit;
+            box-shadow: -2px 2px 8px $row-box-shadow-color;
+            position:absolute;
+            top:-26px;
+            left:48px;
+
+            border-left: 1px solid $row-border-color;
+            border-bottom:1px solid $row-border-color;
+            button {
+                flex: 0 0 auto;
+                border:0;
+                background-color:$cell-edit-background-edit;
+                margin-right:2px;
+                padding:6px 4px;
+
+                .qbIcon:hover {
+                    opacity:1;
+                }
+                .qbIcon {
+                    opacity:.7;
+                    width:20px;
+                    font-size: 16px;
+                    vertical-align:top;
+                }
+                .qbIcon.saveRecord {
+                    color:green;
+                    font-size:18px;
+                }
+                .qbIcon.cancelSelection {
+                    color:$icon-color;
+                }
+                .qbIcon.deleteRecord {
+                    color:red;
+                }
+                .qbIcon.addRecord {
+                    color:$icon-color;
+                }
+            }
+        }
+    }
+}
+
+.actionsCol .iconActions {
+
+    line-height: inherit;
+    .dropdown-menu a {
+
+        padding-left:4px;
+        .qbIcon {
+            margin-right:6px;
+            vertical-align:middle;
+            width:28px;
+            padding:4px;
+        }
+
+        &:hover {
+            .qbIcon {
+                color: #fff;
+            }
+            .qbIcon.print {
+                background-color: $icon-print-color;
+            }
+            .qbIcon.email {
+                background-color: $icon-mail-color;
+            }
+            .qbIcon.duplicate {
+                background-color: $icon-duplicate-color;
+            }
+            .qbIcon.delete {
+                background-color: $icon-delete-color;
+            }
+        }
+    }
+    .iconActionButton {
+        opacity: .2;
+        transition: opacity 200ms ease-in-out;
+
+        height: 30px;
+        width: auto;
+        background: inherit;
+        &:hover {
+            color: $topnav-icon-color;
+        }
+    }
+    .qbIcon.print {
+        color: $icon-print-color;
+    }
+    .qbIcon.email {
+        color: $icon-mail-color;
+    }
+    .qbIcon.duplicate {
+        color: $icon-duplicate-color;
+    }
+    .qbIcon.delete {
+        color: $icon-delete-color;
+    }
+}
+
+.actionsCol:hover .iconActions .iconActionButton {
+    transition: opacity 200ms ease-in-out;
+    opacity:1;
+}

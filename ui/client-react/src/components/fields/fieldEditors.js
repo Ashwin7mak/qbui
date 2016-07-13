@@ -35,6 +35,55 @@ export const DefaultFieldEditor = React.createClass({
     }
 });
 
+export const MultiLineTextFieldEditor = React.createClass({
+
+    propTypes: {
+        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]),
+        type: React.PropTypes.string,
+        onChange: React.PropTypes.func
+    },
+
+    getDefaultProps() {
+        return {
+            value: "",
+            type: "text"
+        };
+    },
+
+    getInitialState() {
+        return {
+            style: {
+                height: "auto"
+            }
+        };
+    },
+    onChange(ev) {
+        this.props.onChange(ev.target.value);
+    },
+
+    componentDidMount() {
+        this.resize();
+    },
+    resize() {
+        this.setState({style: {height: "auto"}}, () => {
+            this.setState({style: {height: this.refs.textarea.scrollHeight}});
+        });
+    },
+    onKeyUp(ev) {
+        this.resize();
+    },
+
+    render() {
+
+        return <textarea ref="textarea" style={this.state.style} onChange={this.onChange}
+                         tabIndex="0"
+                         onKeyUp={this.onKeyUp}
+                         className="cellEdit"
+                         rows="1"
+                         value={this.props.value}/>;
+    }
+});
+
 /**
  * placeholder for user picker
  */

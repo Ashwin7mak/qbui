@@ -1,15 +1,15 @@
 /* Defines custom formatters that can be used for customComponents for griddle columns*/
 /* TODO: define exclusion in case server has some conflicting attributes -
-*    for example for a numeric field server lets you select separator pattern - in that case should we ignore locale?
-*
-* */
+ *    for example for a numeric field server lets you select separator pattern - in that case should we ignore locale?
+ *
+ * */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
-import {CellValueRenderer, UserCellValueRenderer, NumberCellValueRenderer, DateCellValueRenderer, TextCellValueRenderer} from './cellValueRenderers';
+import {CellValueRenderer, UserCellValueRenderer, NumberCellValueRenderer, DateCellValueRenderer, TextCellValueRenderer, MultiLineTextCellValueRenderer} from './cellValueRenderers';
 import CellEditor from './cellEditor';
 
 import * as dateTimeFormatter from '../../../../../common/src/formatter/dateTimeFormatter';
@@ -37,7 +37,8 @@ const CellRenderer = React.createClass({
         type: React.PropTypes.number.isRequired,
         colDef: React.PropTypes.object,
         onTabColumn: React.PropTypes.func,
-        initialValue: React.PropTypes.object
+        initialValue: React.PropTypes.object,
+        editing: React.PropTypes.bool
     },
 
     getDefaultProps() {
@@ -72,28 +73,54 @@ const CellRenderer = React.createClass({
         }
     },
 
+    getClassNameForType() {
+        switch (this.props.type) {
+        case formats.DATE_FORMAT:
+            return "dateFormat";
+        case formats.DATETIME_FORMAT:
+            return "dateTimeFormat";
+        case formats.TIME_FORMAT:
+            return "timeFormat";
+        case formats.NUMBER_FORMAT:
+            return "numberFormat";
+        case formats.RATING_FORMAT:
+            return "ratingFormat";
+        case formats.CURRENCY_FORMAT:
+            return "currencyFormat";
+        case formats.PERCENT_FORMAT:
+            return "percentFormat";
+        case formats.DURATION_FORMAT:
+            return "durationFormat";
+        case formats.PHONE_FORMAT:
+            return "phoneFormat";
+        default:
+            return "textFormat";
+        }
+    },
 
     render() {
-        // render the cell value and editor (CSS will hide one or the other)
+
         let isEditable = !this.props.colDef.builtIn;
+
         if (this.props.initialValue === null) {
             return (<span className="emptyCell" />);
         }
         return (
-            <span className="cellWrapper">
+            <span className={"cellWrapper " + this.getClassNameForType()}>
 
-                <CellValueRenderer type={this.props.type}
-                                   isEditable={isEditable}
-                                   value={this.state.valueAndDisplay.value}
-                                   display={this.state.valueAndDisplay.display}
-                                   attributes={this.props.colDef.datatypeAttributes} />
+                { isEditable && this.props.editing ?
+                    <CellEditor type={this.props.type}
+                                value={this.state.valueAndDisplay.value}
+                                colDef={this.props.colDef}
+                                onChange={this.onChange}
+                                onTabColumn={this.onTabColumn}/> :
+                    <CellValueRenderer type={this.props.type}
+                                       isEditable={isEditable}
+                                       value={this.state.valueAndDisplay.value}
+                                       display={this.state.valueAndDisplay.display}
+                                       attributes={this.props.colDef.datatypeAttributes}/>
+                }
 
-                { isEditable ?  <CellEditor type={this.props.type}
-                            value={this.state.valueAndDisplay.value}
-                            colDef={this.props.colDef}
-                            onChange={this.onChange}
-                            onTabColumn={this.onTabColumn} /> :
-                    null}
             </span>);
     },
 
@@ -204,6 +231,7 @@ class CellRendererFactory  {
         return <CellRenderer type={type}
                              colDef={props.params.column.colDef}
                              initialValue={props.params.value}
+                             editing={props.editing}
                              params={props.params}/>;
     }
 }
@@ -216,7 +244,7 @@ export const TextCellRenderer = React.createClass({
 
 export const DateCellRenderer = React.createClass({
     render() {
-        return  <CellRenderer type={formats.DATE_FORMAT} context={this.props.params.context} colDef={this.props.params.column.colDef} initialValue={this.props.params.value} />;
+        return CellRendererFactory.makeCellRenderer(formats.DATE_FORMAT, this.props);
     }
 });
 
@@ -229,6 +257,18 @@ export const DateTimeCellRenderer = React.createClass({
 export const TimeCellRenderer = React.createClass({
     render() {
         return CellRendererFactory.makeCellRenderer(formats.TIME_FORMAT, this.props);
+    }
+});
+
+export const DurationCellRenderer = React.createClass({
+    render: function() {
+        return CellRendererFactory.makeCellRenderer(formats.DURATION_FORMAT, this.props);
+    }
+});
+
+export const PhoneCellRenderer = React.createClass({
+    render: function() {
+        return CellRendererFactory.makeCellRenderer(formats.PHONE_FORMAT, this.props);
     }
 });
 
