@@ -46,7 +46,7 @@
         before(function(done) {
             this.timeout(consts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             //create app, table with random fields and records
-            recordBase.createApp(appWithNoFlags).then(function (appResponse) {
+            recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
@@ -54,7 +54,7 @@
                 // Generate some record JSON objects to add to the app
                 var generatedRecords = recordBase.generateRecords(nonBuiltInFields, 10);
                 //Add records to the table
-                recordBase.addRecords(app, app.tables[0], generatedRecords).then(function (returnedRecords) {
+                recordBase.addRecords(app, app.tables[0], generatedRecords).then(function(returnedRecords) {
                     //create report
                     var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                     var reportToCreate = {
@@ -64,24 +64,24 @@
                         query: null,
                     };
                     //Create a report
-                    recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function (reportResults) {
+                    recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(reportResults) {
                         reportId = JSON.parse(reportResults.body).id;
-                    }).then(function () {
+                    }).then(function() {
                         //create report 2
-                        var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-                        var reportToCreate = {
+                        var reportEndpoint2 = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+                        var reportToCreate2 = {
                             name: 'testReport2',
                             type: 'TABLE',
                             tableId: app.tables[0].id,
                             query: null,
                         };
                         //Create a report
-                        recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function (reportResults) {
+                        recordBase.apiBase.executeRequest(reportEndpoint2, consts.POST, reportToCreate2).then(function(reportResults) {
                             reportId2 = JSON.parse(reportResults.body).id;
                             done();
                         });
                     });
-                }).catch(function (error) {
+                }).catch(function(error) {
                     log.error(JSON.stringify(error));
                     done();
                 });
@@ -112,7 +112,7 @@
             recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
                 assert.deepEqual(defaultHomePageResults.body, '');
                 //Execute a GET report homepage
-                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function (reportHomePageResults) {
+                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                     var results = JSON.parse(reportHomePageResults.body);
                     //verify report meta Data is empty
                     assert.deepEqual(results.reportMetaData.data, '');
@@ -212,7 +212,7 @@
          * Tests for API call for table POST custdefaulthomepage and GET report homepage which is intercepted by node and returns a report obj (metaData and data)
          */
         reportHomePageTestCases().forEach(function(testcase) {
-            it('Verify API calls POST custdefaulthomepage, and GET homepage for '+testcase.message, function(done) {
+            it('Verify API calls POST custdefaulthomepage, and GET homepage for ' + testcase.message, function(done) {
                 //create user
                 recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;

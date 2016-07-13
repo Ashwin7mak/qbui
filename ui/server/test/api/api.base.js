@@ -380,7 +380,7 @@
             setDefaultTableHomePage       : function(appId, tableId, reportId) {
                 var self = this;
                 return new promise(function(resolve, reject) {
-                    self.executeRequest(self.resolveTablesEndpoint(appId, tableId) + '/defaulthomepage?reportId='+reportId, consts.POST).then(function(defaultHPResponse) {
+                    self.executeRequest(self.resolveTablesEndpoint(appId, tableId) + '/defaulthomepage?reportId=' + reportId, consts.POST).then(function(defaultHPResponse) {
                         log.debug('set default table home page response: ' + defaultHPResponse);
                         resolve(defaultHPResponse);
                     }).catch(function(error) {
