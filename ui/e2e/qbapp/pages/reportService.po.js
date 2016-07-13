@@ -111,15 +111,21 @@
         // All column headers from agGrid including first checkbox and last hidden actions column
         this.agGridColHeaderElList = this.agGridHeaderEl.all(by.className('ag-header-cell'));
         this.agGridLastColHeaderEl = this.agGridColHeaderElList.last();
+
+        // agGrid is divided up into two columns, one is the actions column and the second is the record data
+        // this will get you every record in the record data column
         this.agGridRecordElList = this.agGridBodyEl.all(by.className('ag-row')).filter(function(elem) {
             // Return records that are being shown in the grid
             return elem.getCssValue('visibility').then(function(visible) {
                 return visible === 'visible';
             });
         });
+        // this will get you every row of the actions column
+        this.agGridRowActionsElList = element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-row'));
+
         // Edit Record Menu
         //TODO: We render an editTools element per row so create a element locator functions for that
-        this.agGridEditRecordMenu = element(by.className('ag-body')).all(by.className('editTools')).first();
+        this.agGridEditRecordMenu = element(by.className('ag-pinned-left-cols-container')).all(by.className('editTools')).first();
         this.agGridEditRecordButtons = this.agGridEditRecordMenu.all(by.tagName('button'));
         this.agGridSaveRecordButton = this.agGridEditRecordMenu.element(by.className('saveRecord'));
         this.agGridCancelSelectionButton = this.agGridEditRecordMenu.element(by.className('cancelSelection'));
@@ -142,15 +148,40 @@
          * @param recordRowElement
          */
         this.openRecordEditMenu = function(recordRowIndex) {
-            return element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-row')).get(recordRowIndex).element(by.className('ag-selection-checkbox')).click();
+            //TODO: Doesn't work for Safari, need to find workaround
+            return browser.actions().doubleClick(element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('ag-cell-no-focus')).first()).perform();
         };
 
         /**
-         * Given a record element that is being edited in agGrid, return the input cells for that row
-         * @param recordRowElement
+         * Given a list of record elements in agGrid, return the input cells for the record being edited
+         * @param recordRowElements
          */
-        this.getRecordRowInputCells = function(recordRowElement) {
-            return recordRowElement.all(by.tagName('input'));
+        this.getRecordRowInputCells = function(recordRowElements) {
+            return recordRowElements.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].all(by.tagName('input'));
+            });
+        };
+
+        /**
+         * Given a list of action rows in agGrid, find and click the save button for the record being edited
+         * @param recordRowElements
+         */
+        this.clickSaveButtonForEditMenu = function(recordRowElements) {
+            return recordRowElements.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(1).click();
+            });
         };
 
         /**

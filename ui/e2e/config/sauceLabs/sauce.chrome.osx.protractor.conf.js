@@ -11,7 +11,9 @@
         //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
         idleTimeout: '120',
         screenResolution : '1680x1050',
-        maxDuration: 10800
+        maxDuration: 10800,
+        shardTestFiles: true,
+        maxInstances: 2
     };
     exports.config = globalSauceConfig;
 }());

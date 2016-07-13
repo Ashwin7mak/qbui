@@ -12,6 +12,7 @@
 
         // Report sorting grouping Menu Container
         this.reportSortingGroupingContainer = element(by.className('sortAndGroupContainer'));
+        this.reportSortButton = element(by.className('sortButton'));
         // Report sorting grouping button
         this.reportSortAndGroupBtn = this.reportSortingGroupingContainer.element(by.className('sortAndGroupButton '));
         //sorting/grouping popup
@@ -279,7 +280,7 @@
                     return self.reportGroupByIcon.click().then(function() {
                         return e2ePageBase.waitForElement(self.GroupByFieldPanel).then(function() {
                             //verify the title of groupBy list
-                            expect(self.GroupByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for grouping');
+                            expect(self.GroupByFieldPanelHeader.getAttribute('innerText')).toEqual('Cancel\nChoose Field for grouping\n');
                             //select the groupBy item
                             var items = self.GroupByFieldPanel.all(by.className('list-group-item'));
                             return items.filter(function(elm) {
@@ -316,8 +317,8 @@
          */
         this.clickSortAndGroupIcon = function() {
             var self = this;
-            return self.reportSortAndGroupBtn.click().then(function() {
-               // Sleep needed for animation of drop down
+            return self.reportSortButton.click().then(function() {
+                // Sleep needed for animation of drop down
                 e2eBase.sleep(browser.params.smallSleep);
                 return e2ePageBase.waitForElement(self.sortAndGrpDialogueApplyBtn);
             });
@@ -433,7 +434,7 @@
                     return self.reportSortByIcon.click().then(function() {
                         return e2ePageBase.waitForElement(self.SortByFieldPanel).then(function() {
                             //verify the title of groupBy list
-                            expect(self.SortByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for sorting');
+                            expect(self.SortByFieldPanelHeader.getAttribute('innerText')).toEqual('Cancel\nChoose Field for sorting\n');
                             //select the groupBy item
                             var items = self.SortByFieldPanel.all(by.className('list-group-item'));
                             return items.filter(function(elm) {

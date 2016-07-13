@@ -35,6 +35,7 @@
         var TABLES_ENDPOINT = '/tables/';
         var TABLE_DEFAULT_HOME_PAGE = '/defaulthomepage';
         var FIELDS_ENDPOINT = '/fields/';
+        var FORMS_ENDPOINT = '/forms/';
         var REPORTS_ENDPOINT = '/reports/';
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
@@ -158,6 +159,13 @@
                     tableEndpoint = tableEndpoint + tableId;
                 }
                 return tableEndpoint;
+            },
+            resolveFormsEndpoint      : function(appId, tableId, formId) {
+                var formEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + FORMS_ENDPOINT;
+                if (formId) {
+                    formEndpoint = formEndpoint + formId;
+                }
+                return formEndpoint;
             },
             resolveReportsEndpoint      : function(appId, tableId, reportId) {
                 var reportEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
@@ -377,15 +385,15 @@
                 });
             },
             //Update Default table home page , calls execute request and returns a promise
-            setDefaultTableHomePage       : function(appId, tableIdReportIdMap) {
+            setDefaultTableHomePage       : function(appId, tableId, reportId) {
                 var self = this;
                 return new promise(function(resolve, reject) {
-                    self.executeRequest(self.resolveTablesEndpoint(appId) + '/defaulthomepage', consts.POST, tableIdReportIdMap).then(function(defaultHPResponse) {
+                    self.executeRequest(self.resolveTablesEndpoint(appId, tableId) + '/defaulthomepage?reportId=' + reportId, consts.POST).then(function(defaultHPResponse) {
                         log.debug('set default table home page response: ' + defaultHPResponse);
                         resolve(defaultHPResponse);
                     }).catch(function(error) {
                         reject(error);
-                        assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(tableIdReportIdMap));
+                        assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(reportId));
                     });
                 });
             },
