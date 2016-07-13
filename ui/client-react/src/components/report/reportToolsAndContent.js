@@ -156,6 +156,12 @@ let ReportToolsAndContent = React.createClass({
         this.getFlux().actions.filterSearchPending('');
         this.debouncedFilterReport('', noSelections);
     },
+    getNextReportPage() {
+        alert("Next");
+    },
+    getPreviousReportPage() {
+        alert("Previous");
+    },
     getReportToolbar() {
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
@@ -176,6 +182,8 @@ let ReportToolsAndContent = React.createClass({
                               filterOnSelections={this.filterOnSelections}
                               clearSearchString={this.clearSearchString}
                               clearAllFilters={this.clearAllFilters}
+                              getNextReportPage={this.getNextReportPage}
+                              getPreviousReportPage={this.getPreviousReportPage}
                               offset={this.offset}
                               numRows={this.numRows}/>;
     },
@@ -231,6 +239,8 @@ let ReportToolsAndContent = React.createClass({
                                          filterOnSelections={this.filterOnSelections}
                                          clearSearchString={this.clearSearchString}
                                          clearAllFilters={this.clearAllFilters}
+                                         getNextReportPage={this.getNextReportPage}
+                                         getPreviousReportPage={this.getPreviousReportPage}
                                          offset={this.props.params.offset}
                                          numRows={this.props.params.numRows}/>;
 

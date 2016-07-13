@@ -14,6 +14,8 @@ var ReportNavigation = React.createClass({
         offset: React.PropTypes.number,
         numRows: React.PropTypes.number,
         recordsCount: React.PropTypes.number,
+        getNextReportPage: React.PropTypes.func,
+        getPreviousReportPage: React.PropTypes.func,
     },
     /**
      * renders the report navigation toolbar
@@ -37,12 +39,9 @@ var ReportNavigation = React.createClass({
 });
 
 var PreviousLink = React.createClass({
-    onClick: function() {
-        alert('previous');
-    },
     render: function() {
         return (
-            <span style={{marginRight: 2 + 'em'}} id="previousReportPage" onClick={this.onClick}>
+            <span style={{marginRight: 2 + 'em'}} id="previousReportPage" onClick={this.props.getPreviousReportPage}>
                 Previous
             </span>
         );
@@ -50,12 +49,9 @@ var PreviousLink = React.createClass({
 });
 
 var NextLink = React.createClass({
-    onClick: function() {
-        alert('next');
-    },
     render: function() {
         return (
-            <span style={{marginLeft: 2 + 'em'}} id="nextReportPage" onClick={this.onClick}>
+            <span style={{marginLeft: 2 + 'em'}} id="nextReportPage" onClick={this.props.getNextReportPage}>
                 Next
             </span>
         );

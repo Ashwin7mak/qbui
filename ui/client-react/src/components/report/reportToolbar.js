@@ -239,6 +239,8 @@ const ReportToolbar = React.createClass({
                             (<ReportNavigation offset={this.props.offset}
                                                numRows={this.props.numRows}
                                                recordsCount={recordCount}
+                                               getNextReportPage={this.props.getNextReportPage}
+                                               getPreviousReportPage={this.props.getPreviousReportPage}
                             />) :
                             null
                     }
