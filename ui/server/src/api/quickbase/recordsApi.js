@@ -255,7 +255,7 @@
             fetchRecords: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                
+
                 let inputUrl = opts.url; //JAVA api is case sensitive so dont lose camel case here.
                 let inputUrl_toLower = opts.url.toLowerCase(); // but for convenience of string matches convert to lower case
 
