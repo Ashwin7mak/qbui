@@ -233,7 +233,7 @@ const ReportToolbar = React.createClass({
                         />) :
                         null
                     }
-                
+
                     {
                         (!isLoading) ?
                             (<ReportNavigation offset={this.props.offset}

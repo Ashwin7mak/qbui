@@ -322,7 +322,7 @@ let ReportDataStore = Fluxxor.createStore({
             reportModel.setGroupElements(response.sortList);
         }
         reportModel.setFacetData(response.recordData);
-        
+
         this.emit('change');
     },
 
