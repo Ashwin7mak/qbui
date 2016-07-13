@@ -26,7 +26,7 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000; //10 minutes max allows for adding ma
                 // Get the appropriate fields out of the third table
                 nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE3]);
                 // Generate the record JSON objects
-                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 150);
+                var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 5);
                 // Via the API create some records
                 return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedRecords);
             }).then(function() {
@@ -60,9 +60,9 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000; //10 minutes max allows for adding ma
                 'table1Id: ' + table1Id + '\n' +
                 'table2Id: ' + table2Id + '\n' +
                 'To generate a session ticket for your realm paste this into your browser: \n' +
-                    e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint) + '\n' +
+                e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint) + '\n' +
                 'Access your test app here (must have generated a ticket first): \n' +
-                    e2eBase.getRequestAppsPageEndpoint(realmName) + '\n'
+                e2eBase.getRequestAppsPageEndpoint(realmName) + '\n'
             );
         });
     });
