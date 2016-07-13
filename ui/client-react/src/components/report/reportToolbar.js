@@ -238,6 +238,7 @@ const ReportToolbar = React.createClass({
                         (!isLoading) ?
                             (<ReportNavigation offset={this.props.offset}
                                                numRows={this.props.numRows}
+                                               recordsCount={recordCount}
                             />) :
                             null
                     }
