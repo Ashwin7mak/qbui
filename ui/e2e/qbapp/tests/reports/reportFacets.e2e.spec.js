@@ -310,7 +310,7 @@
                         if (txt === 'There is no data to display.') {
                             //Verify the toolbar still displays with filter button in it
                             expect(reportServicePage.reportRecordsCount.getText()).toBe('There is no data to display.');
-                            expect(reportServicePage.reportRecordsCount.getText()).toBe('6 Records');
+                            expect(reportServicePage.reportRecordsCount.getText()).toBe('0 of 6 Records');
                             expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
                             done();
                         } else if (txt !== 'There is no data to display.') {
@@ -362,7 +362,7 @@
 
             //There wont be facet filter button displayed for small breakpoint
             e2eConsts.NavDimensionsDataProvider().forEach(function(testBreakpoints) {
-                xit(testBreakpoints.breakpointSize + '- Verify clear all facets tokens from the container', function(done) {
+                it(testBreakpoints.breakpointSize + '- Verify clear all facets tokens from the container', function(done) {
                     //resize the browser
                     e2eBase.resizeBrowser(testBreakpoints.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
                         reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
