@@ -255,7 +255,6 @@
             this.agGridColHeaderElList.then(function(elements) {
                 var fetchTextPromises = [];
                 for (var i = 0; i < elements.length; i++) {
-                    // Firefox has innerHTML instead of innerText so use that instead
                     fetchTextPromises.push(elements[i].getAttribute('colid'));
                 }
                 return Promise.all(fetchTextPromises);
