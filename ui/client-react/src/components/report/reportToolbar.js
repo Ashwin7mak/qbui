@@ -8,6 +8,7 @@ import FilterSearchBox from '../facet/filterSearchBox';
 import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
+import ReportNavigation from './reportNavigation';
 import SortAndGroup from '../sortGroup/sortAndGroup';
 import mockFacets from '../../mocks/facets';
 import _ from 'lodash';
@@ -42,13 +43,15 @@ const ReportToolbar = React.createClass({
         onFacetSelect: React.PropTypes.func,
         filterOnSelections: React.PropTypes.func,
         searchTheString: React.PropTypes.func,
+        offset: React.PropTypes.number,
+        numRows: React.PropTypes.number,
     },
 
     getDefaultProps() {
         return {
             fillinMockFacets : window.location.search.includes('mockFilter'),
             selections:new FacetSelections(),
-            searchStringForFiltering: ""
+            searchStringForFiltering: "",
         };
     },
 
@@ -157,6 +160,7 @@ const ReportToolbar = React.createClass({
                 }
                 if (this.props.reportData.data.records) {
                     recordCount = this.props.reportData.data.recordsCount;
+                    isCountingRecords = false;
                 } else {
                     isCountingRecords = true;
                 }
@@ -228,6 +232,14 @@ const ReportToolbar = React.createClass({
                               isCounting={false}
                         />) :
                         null
+                    }
+                
+                    {
+                        (!isLoading) ?
+                            (<ReportNavigation offset={this.props.offset}
+                                               numRows={this.props.numRows}
+                            />) :
+                            null
                     }
 
                 {this.props.pageActions}

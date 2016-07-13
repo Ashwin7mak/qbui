@@ -95,6 +95,7 @@ export default {
             organizeReports: "Organiser",
             recordCount : "{recordCount} {nameForRecords} ",
             recordCountPlaceHolder : "Compte {nameForRecords}",
+            reportNavigationBar : "{offset} - {numRows}",
             searchPlaceHolder:  "Rechercher ces",
             sortAndGroup : {
                 addField: "Ajouter le champ",

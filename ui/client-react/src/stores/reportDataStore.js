@@ -8,6 +8,9 @@ import * as SchemaConsts from "../constants/schema";
 let logger = new Logger();
 const groupDelimiter = ":";
 
+const DEFAULT_OFFSET = 0;
+const DEFAULT_NUM_ROWS = 10;
+
 let reportModel = {
     model: {
         columns: null,
@@ -26,7 +29,9 @@ let reportModel = {
         recordsCount: null,
         sortFids: [],
         groupEls: [],
-        originalMetaData: null
+        originalMetaData: null,
+        offset: DEFAULT_OFFSET,
+        numRows: DEFAULT_NUM_ROWS
     },
 
     /**
@@ -122,6 +127,8 @@ let reportModel = {
         // in report's meta data sortlist is returned as an array of sort elements
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
+        this.model.offset = reportMetaData.offset;
+        this.model.numRows = reportMetaData.numRows;
     },
     /**
      * Set the reports original meta data
@@ -256,6 +263,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.selectedRows = [];
         this.lastSaveOk = null;
         this.lastSaveRecordId = null;
+        this.offset = DEFAULT_OFFSET;
+        this.numRows = DEFAULT_NUM_ROWS;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -288,6 +297,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.appId = report.appId;
         this.tblId = report.tblId;
         this.rptId = report.rptId;
+        this.offset = report.offset ? report.offset : this.offset;
+        this.numRows = report.numRows ? report.numRows : this.numRows;
+
         this.searchStringForFiltering = '' ;
         this.selections  = new FacetSelections();
         this.selectedRows = [];
@@ -313,7 +325,7 @@ let ReportDataStore = Fluxxor.createStore({
             reportModel.setGroupElements(response.sortList);
         }
         reportModel.setFacetData(response.recordData);
-
+        
         this.emit('change');
     },
 
@@ -409,6 +421,8 @@ let ReportDataStore = Fluxxor.createStore({
             appId: this.appId,
             tblId: this.tblId,
             rptId: this.rptId,
+            offset: this.offset,
+            numRows: this.numRows,
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
             facetExpression: this.facetExpression,

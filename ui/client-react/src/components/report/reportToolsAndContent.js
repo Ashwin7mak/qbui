@@ -41,7 +41,9 @@ let ReportToolsAndContent = React.createClass({
         reportData: React.PropTypes.object,
         pageActions: React.PropTypes.element,
         callbacks :  React.PropTypes.object,
-        selectedRows: React.PropTypes.array
+        selectedRows: React.PropTypes.array,
+        offset: React.PropTypes.number,
+        numRows: React.PropTypes.number,
     },
     getDefaultProps() {
         return {
@@ -158,6 +160,9 @@ let ReportToolsAndContent = React.createClass({
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
 
+        this.offset = this.props.reportData.offset + 1;
+        this.numRows = this.props.reportData.numRows;
+
         return <ReportToolbar appId={this.props.params.appId}
                               tblId={this.props.params.tblId}
                               rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
@@ -170,7 +175,9 @@ let ReportToolsAndContent = React.createClass({
                               searchTheString={this.searchTheString}
                               filterOnSelections={this.filterOnSelections}
                               clearSearchString={this.clearSearchString}
-                              clearAllFilters={this.clearAllFilters}/>;
+                              clearAllFilters={this.clearAllFilters}
+                              offset={this.offset}
+                              numRows={this.numRows}/>;
     },
     getSelectionActions() {
         return (<ReportActions selection={this.props.selectedRows} />);
@@ -223,7 +230,9 @@ let ReportToolsAndContent = React.createClass({
                                          searchTheString={this.searchTheString}
                                          filterOnSelections={this.filterOnSelections}
                                          clearSearchString={this.clearSearchString}
-                                         clearAllFilters={this.clearAllFilters}/>;
+                                         clearAllFilters={this.clearAllFilters}
+                                         offset={this.props.params.offset}
+                                         numRows={this.props.params.numRows}/>;
 
             return (
                 <div className={classes}>
