@@ -36,15 +36,12 @@
          */
         function addQueryParameter(req, parameterName, parameterValue) {
             if (parameterName && parameterValue) {
-                //  search for any existing parameters
+                //  are there any existing parameters
                 let search = url.parse(req.url).search;
+                req.url += search ? '&' : '?';
 
-                //  append the query parameter to the request url
-                if (!search) {
-                    req.url += '?' + parameterName + '=' + parameterValue;
-                } else {
-                    req.url += '&' + parameterName + '=' + parameterValue;
-                }
+                //  append the query parameter to the url
+                req.url += parameterName + '=' + parameterValue;
 
                 //  add the parameter to the params array.
                 req.params[parameterName] = parameterValue;
@@ -246,6 +243,7 @@
                         (response) => {
                             // parse out the id and use to fetch the report meta data.  Process the meta data
                             // to fetch and return the report content.
+                            response.body = '1';
                             if (response.body) {
                                 let homepageReportId = JSON.parse(response.body);
 
