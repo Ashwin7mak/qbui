@@ -121,11 +121,11 @@
             },
 
             isDisplayFormat: function(req) {
-                return req.param(constants.REQUEST_PARAMETER.FORMAT) === 'display';
+                return req.param(constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.DISPLAY;
             },
 
             isRawFormat: function(req) {
-                return req.param(constants.REQUEST_PARAMETER.FORMAT) === 'raw';
+                return req.param(constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.RAW;
             },
 
             /**
@@ -264,11 +264,6 @@
                     } else {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                     }
-
-                    //  any request parameters to append?
-                    if (search) {
-                        opts.url += search;
-                    }
                 } else {
                     //  if not a records route, check to see if it is a request for reportComponents
                     /*eslint no-lonely-if:0 */
@@ -281,15 +276,15 @@
                         } else {
                             opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
                         }
-
-                        //  any request parameters to append?
-                        if (search) {
-                            opts.url += search;
-                        }
                     } else {
                         //  not an expected route; set to return all records for the given table
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                     }
+                }
+
+                //  any request parameters to append?
+                if (search) {
+                    opts.url += search;
                 }
 
                 return requestHelper.executeRequest(req, opts);
@@ -305,23 +300,21 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
-                //  get the request parameters
-                let search = url.parse(req.url).search;
-
                 if (routeHelper.isFieldsRoute(req.url)) {
                     if (req.params.fieldId) {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url, req.params.fieldId);
                     } else {
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
                     }
-
-                    //  any request parameters to append?
-                    if (search) {
-                        opts.url += search;
-                    }
                 } else {
                     //  not a fields route; set to return all fields for the given table
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
+                }
+
+                //  any request parameters to append?
+                let search = url.parse(req.url).search;
+                if (search) {
+                    opts.url += search;
                 }
 
                 return requestHelper.executeRequest(req, opts, this.isRawFormat(req));

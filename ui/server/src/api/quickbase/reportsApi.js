@@ -19,6 +19,7 @@
         let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
         let recordsApi = require('./recordsApi')(config);
         let routeHelper = require('../../routes/routeHelper');
+        let url = require('url');
 
         //Module constants:
         let APPLICATION_JSON = 'application/json';
@@ -230,16 +231,36 @@
                                         //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
                                         let reportMetaData = JSON.parse(metaDataResult.body);
 
-                                        //  make sure we have an empty object if one does not exist
+                                        //  look for any existing parameters on the url
                                         req.params = req.params || {};
 
-                                        // set format request parameter to display
-                                        req.params[constants.REQUEST_PARAMETER.FORMAT] = 'display';
+                                        // set the request parameters
+                                        req.params[constants.REQUEST_PARAMETER.FORMAT] = constants.FORMAT.DISPLAY;
 
-                                        // Use the sortList, fidsList and/or query expression defined in the metadata on the request.
-                                        req.params[constants.REQUEST_PARAMETER.SORT_LIST] = stringUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        req.params[constants.REQUEST_PARAMETER.COLUMNS] = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        req.params[constants.REQUEST_PARAMETER.QUERY] = reportMetaData.query ? [reportMetaData.query] : '';
+                                        let search = url.parse(req.url).search;
+                                        if (!search) {
+                                            req.url += '?' + constants.REQUEST_PARAMETER.FORMAT + '=' + constants.FORMAT.DISPLAY;
+                                        } else {
+                                            req.url += '&' + +constants.REQUEST_PARAMETER.FORMAT + '=' + constants.FORMAT.DISPLAY;
+                                        }
+
+                                        let sortList = stringUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                        if (sortList) {
+                                            req.params[constants.REQUEST_PARAMETER.SORT_LIST] = sortList;
+                                            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=' + req.params[constants.REQUEST_PARAMETER.SORT_LIST];
+                                        }
+
+                                        let columnList = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                        if (columnList) {
+                                            req.params[constants.REQUEST_PARAMETER.COLUMNS] = columnList;
+                                            req.url += '&' + constants.REQUEST_PARAMETER.COLUMNS + '=' + req.params[constants.REQUEST_PARAMETER.COLUMNS];
+                                        }
+
+                                        let query = reportMetaData.query ? [reportMetaData.query] : '';
+                                        if (query) {
+                                            req.params[constants.REQUEST_PARAMETER.QUERY] = query;
+                                            req.url += '&' + constants.REQUEST_PARAMETER.QUERY + '=' + req.params[constants.REQUEST_PARAMETER.QUERY];
+                                        }
 
                                         //  TODO: initial page size
                                         //req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
