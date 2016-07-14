@@ -26,6 +26,31 @@
         let CONTENT_TYPE = 'Content-Type';
         let FACETS = 'facets';
 
+        /**
+         * Method to take a parameter value and name and add to the request.
+         * A parameter is added only if both a parameter name and value are defined.
+         *
+         * @param req
+         * @param parameterName
+         * @param parameterValue
+         */
+        function addQueryParameter(req, parameterName, parameterValue) {
+            if (parameterName && parameterValue) {
+                //  search for any existing parameters
+                let search = url.parse(req.url).search;
+
+                //  append the query parameter to the request url
+                if (!search) {
+                    req.url += '?' + parameterName + '=' + parameterValue;
+                } else {
+                    req.url += '&' + parameterName + '=' + parameterValue;
+                }
+
+                //  add the parameter to the params array.
+                req.params[parameterName] = parameterValue;
+            }
+        }
+
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
 
@@ -234,33 +259,20 @@
                                         //  look for any existing parameters on the url
                                         req.params = req.params || {};
 
-                                        // set the request parameters
-                                        req.params[constants.REQUEST_PARAMETER.FORMAT] = constants.FORMAT.DISPLAY;
+                                        //  add display formatting
+                                        addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
 
-                                        let search = url.parse(req.url).search;
-                                        if (!search) {
-                                            req.url += '?' + constants.REQUEST_PARAMETER.FORMAT + '=' + constants.FORMAT.DISPLAY;
-                                        } else {
-                                            req.url += '&' + +constants.REQUEST_PARAMETER.FORMAT + '=' + constants.FORMAT.DISPLAY;
-                                        }
-
+                                        //  add any sortList requirements
                                         let sortList = stringUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        if (sortList) {
-                                            req.params[constants.REQUEST_PARAMETER.SORT_LIST] = sortList;
-                                            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=' + req.params[constants.REQUEST_PARAMETER.SORT_LIST];
-                                        }
+                                        addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
 
+                                        //  add any columnList requirements
                                         let columnList = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        if (columnList) {
-                                            req.params[constants.REQUEST_PARAMETER.COLUMNS] = columnList;
-                                            req.url += '&' + constants.REQUEST_PARAMETER.COLUMNS + '=' + req.params[constants.REQUEST_PARAMETER.COLUMNS];
-                                        }
+                                        addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
 
-                                        let query = reportMetaData.query ? [reportMetaData.query] : '';
-                                        if (query) {
-                                            req.params[constants.REQUEST_PARAMETER.QUERY] = query;
-                                            req.url += '&' + constants.REQUEST_PARAMETER.QUERY + '=' + req.params[constants.REQUEST_PARAMETER.QUERY];
-                                        }
+                                        //  add any query expression requirements
+                                        let query = reportMetaData.query ? reportMetaData.query : '';
+                                        addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
 
                                         //  TODO: initial page size
                                         //req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
