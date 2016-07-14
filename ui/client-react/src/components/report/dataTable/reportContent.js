@@ -495,7 +495,7 @@ let ReportContent = React.createClass({
         return (<div className="loadedContent">
                 <label>&nbsp;
                     <input type="checkbox"
-                           checked={this.state.reactabular}
+                           defaultChecked={this.state.reactabular}
                            onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Reactabular
                 </label>
                 {this.props.reportData.error ?

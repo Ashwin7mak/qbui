@@ -77,13 +77,13 @@ const QBGrid = React.createClass({
         // for compatibility with ag-grid, pass a params prop to the cell renderer
         // to provide a grid-level context object for callbacks etc.
 
-        return (data) => {
+        return (data, rowData, rowIndex) => {
 
             const id = data.value; // the record ID
             const params = {
                 context: this.getContext(),
                 api: this.api,
-                id
+                data: rowData[rowIndex]
             };
 
             return (
@@ -108,7 +108,14 @@ const QBGrid = React.createClass({
             onEditRecordCancel: () => {
                 this.setState({editRow: -1});
             },
-            cellTabCallback: this.onCellTab
+            cellTabCallback: this.onCellTab,
+            onRecordChange: (id) => {
+                this.setState({editRow: -1});
+                this.props.onRecordChange(id)
+            },
+            onFieldChange: this.props.onFieldChange,
+            onEditRecordStart: this.props.onEditRecordStart,
+            getPendingChanges: this.props.getPendingChanges
         };
     },
     /**
