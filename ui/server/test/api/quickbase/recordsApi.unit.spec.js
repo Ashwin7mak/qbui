@@ -20,6 +20,7 @@ describe("Validate recordsApi", function() {
         },
         'url': '',
         'method': 'get',
+        params: {},
         param : function(key) {
             if (key === 'format') {
                 return 'raw';
@@ -39,10 +40,11 @@ describe("Validate recordsApi", function() {
 
         afterEach(function() {
             executeReqStub.restore();
+            req.params = {};
         });
 
-        it('success return results ', function(done) {
-            req.url = '/reports/2/reportComponents';
+        it('success return results for all records', function(done) {
+            req.url = '/apps/123/tables/456/records';
 
             var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
             executeReqStub.returns(Promise.resolve(targetObject));
@@ -52,11 +54,79 @@ describe("Validate recordsApi", function() {
                 function(response) {
                     assert.deepEqual(response, targetObject);
                     done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'failure response returned when success expected');
+                    done();
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
             });
+        });
 
+        it('success return results for record 1', function(done) {
+            req.url = '/apps/123/tables/456/records/1?param=true';
+            req.params.recordId = 1;
+
+            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = recordsApi.fetchRecords(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'failure response returned when success expected');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('success return results for reportComponents', function(done) {
+            req.url = '/apps/123/tables/456/reports/2/reportComponents';
+
+            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = recordsApi.fetchRecords(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'failure response returned when success expected');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('success return results for reportComponents with sortList', function(done) {
+            req.url = '/apps/123/tables/456/reports/2/reportComponents?sortList=1';
+            req.params.sortList = '1';
+
+            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = recordsApi.fetchRecords(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'failure response returned when success expected');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
         });
 
         it('fail return results ', function(done) {
@@ -68,6 +138,8 @@ describe("Validate recordsApi", function() {
 
             promise.then(
                 function(error) {
+                    assert.fail('success', 'fail', 'success response returned when fail expected');
+                    done();
                 },
                 function(error) {
                     assert.equal(error, "Error: fail unit test case execution");
@@ -90,10 +162,13 @@ describe("Validate recordsApi", function() {
 
         afterEach(function() {
             executeReqStub.restore();
+            req.params = {};
         });
 
-        it('success return records array ', function(done) {
-            req.url = '/reports/2/records';
+        it('success return select field with parameter ', function(done) {
+            req.url = '/apps/123/tables/456/fields/789?show=tell';
+            req.params.fieldId = '789';
+
             var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
 
             executeReqStub.returns(Promise.resolve(targetObject));
@@ -102,7 +177,10 @@ describe("Validate recordsApi", function() {
             promise.then(
                 function(response) {
                     assert.deepEqual(response, targetObject);
-
+                    done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'failure response returned when success expected');
                     done();
                 }
             ).catch(function(errorMsg) {
@@ -110,7 +188,29 @@ describe("Validate recordsApi", function() {
             });
         });
 
-        it('fail return value ', function(done) {
+        it('success return fields array', function(done) {
+            req.url = '/apps/123/tables/456/fields';
+
+            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
+
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = recordsApi.fetchFields(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'failure response returned when success expected');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return fields with non-fields request url', function(done) {
             req.url = '/reports/2/records';
             var error_message = "fail unit test case execution";
 
@@ -118,7 +218,8 @@ describe("Validate recordsApi", function() {
             var promise = recordsApi.fetchFields(req);
 
             promise.then(
-                function(msg) {
+                function(error) {
+                    assert.fail('success', 'fail', 'success response returned when fail expected');
                     done();
                 },
                 function(error) {
@@ -128,7 +229,6 @@ describe("Validate recordsApi", function() {
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
             });
-
         });
     });
 

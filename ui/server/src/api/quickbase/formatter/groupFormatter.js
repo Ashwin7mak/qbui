@@ -330,6 +330,7 @@
                         if (typeof a[sortField].value === 'string') {
                             return a[sortField].value.toLowerCase();
                         }
+                        return a[sortField].value;
                     }
                 }
             );

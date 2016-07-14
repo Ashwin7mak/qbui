@@ -333,7 +333,7 @@
         /**
          * Negative Test to validate 400 error when calling the Records API endpoint with invalid sortList param
          */
-        it('Records API - Should return 400 error when calling the endpoint with an invalid sortList param', function(done) {
+        xit('Records API - Should return 400 error when calling the endpoint with an invalid sortList param', function(done) {
 
             var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
 
