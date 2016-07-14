@@ -25,7 +25,7 @@ let ReportContent = React.createClass({
     getInitialState: function() {
         return {
             showSelectionColumn: false,
-            reactabular: false
+            reactabular: true
         };
     },
 
@@ -506,7 +506,9 @@ let ReportContent = React.createClass({
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 uniqueIdentifier="Record ID#"
+                                keyField={this.props.keyField}
                                 selectedRows={this.props.selectedRows}
+                                onRowClick={this.openRow}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 onFieldChange={this.handleFieldChange}

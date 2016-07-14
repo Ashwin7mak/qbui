@@ -38,12 +38,14 @@ const CellRenderer = React.createClass({
         colDef: React.PropTypes.object,
         onTabColumn: React.PropTypes.func,
         initialValue: React.PropTypes.object,
-        editing: React.PropTypes.bool
+        editing: React.PropTypes.bool,
+        qbGrid: React.PropTypes.bool
     },
 
     getDefaultProps() {
         return {
-            initialValue: null
+            initialValue: null,
+            qbGrid: false
         };
     },
 
@@ -108,12 +110,15 @@ const CellRenderer = React.createClass({
         return (
             <span className={"cellWrapper " + this.getClassNameForType()}>
 
-                { isEditable && this.props.editing ?
+                { isEditable && (this.props.editing || !this.props.qbGrid) &&
                     <CellEditor type={this.props.type}
                                 value={this.state.valueAndDisplay.value}
                                 colDef={this.props.colDef}
                                 onChange={this.onChange}
-                                onTabColumn={this.onTabColumn}/> :
+                                onTabColumn={this.onTabColumn}/>
+                }
+
+                { !isEditable || (!this.props.editing || !this.props.qbGrid) &&
                     <CellValueRenderer type={this.props.type}
                                        isEditable={isEditable}
                                        value={this.state.valueAndDisplay.value}
@@ -232,7 +237,9 @@ class CellRendererFactory  {
                              colDef={props.params.column.colDef}
                              initialValue={props.params.value}
                              editing={props.editing}
-                             params={props.params}/>;
+                             params={props.params}
+                             qbGrid={props.qbGrid}
+        />;
     }
 }
 

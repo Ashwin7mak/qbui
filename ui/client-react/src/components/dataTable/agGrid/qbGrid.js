@@ -81,12 +81,7 @@ const QBGrid = React.createClass({
 
             const id = data.value; // the record ID
             const params = {
-                context: {
-                    flux: this.getFlux(),
-                    onEditRecordCancel: () => {
-                        this.setState({editRow: -1});
-                    }
-                },
+                context: this.getContext(),
                 api: this.api,
                 id
             };
@@ -100,6 +95,37 @@ const QBGrid = React.createClass({
                 </span>
             );
         };
+    },
+
+    /**
+     * get a context object to pass to the cells
+     * @returns {{keyField: (*|null|boolean), flux: *, onEditRecordCancel: onEditRecordCancel, cellTabCallback: cellTabCallback}}
+     */
+    getContext() {
+        return {
+            keyField: this.props.keyField,
+            flux: this.getFlux(),
+            onEditRecordCancel: () => {
+                this.setState({editRow: -1});
+            },
+            cellTabCallback: this.onCellTab
+        };
+    },
+    /**
+     * user has tabbed out of a cell, move the edit row if necessary
+     * @param colDef
+     */
+    onCellTab(colDef) {
+
+        const lastColumn = this.props.columns[this.props.columns.length - 1];
+        if (colDef.field === lastColumn.field) {
+            // tabbed out of last column
+            if (this.state.editRow !== this.props.records.length-1) {
+                this.setState({editRow: this.state.editRow + 1});
+            } else {
+                this.setState({editRow: -1});
+            }
+        }
     },
 
     /**
@@ -144,6 +170,8 @@ const QBGrid = React.createClass({
         return (data, rowData, rowIndex) => {
 
             const params = {
+                context: this.getContext(),
+                api: this.api,
                 column: {
                     colDef
                 },
@@ -153,19 +181,18 @@ const QBGrid = React.createClass({
             const editing = rowIndex === this.state.editRow;
 
             switch (colDef.datatypeAttributes.type) {
-            case serverTypeConsts.NUMERIC:      return <NumericCellRenderer  params={params} editing={editing} />;
-            case serverTypeConsts.DATE:         return <DateCellRenderer     params={params} editing={editing} />;
-            case serverTypeConsts.DATE_TIME:    return <DateTimeCellRenderer params={params} editing={editing} />;
-            case serverTypeConsts.TIME_OF_DAY:  return <TimeCellRenderer     params={params} editing={editing} />;
-            case serverTypeConsts.CHECKBOX:     return <CheckBoxCellRenderer params={params} editing={editing} />;
-            case serverTypeConsts.USER:         return <UserCellRenderer     params={params} editing={editing} />;
-            case serverTypeConsts.CURRENCY:     return <CurrencyCellRenderer params={params} editing={editing} />;
-            case serverTypeConsts.RATING:       return <RatingCellRenderer   params={params} editing={editing} />;
-            case serverTypeConsts.PERCENT:      return <PercentCellRenderer  params={params} editing={editing} />;
-            case serverTypeConsts.DURATION:     return <DurationCellRenderer params={params} editing={editing} />;
-            case serverTypeConsts.PHONE_NUMBER: return <PhoneCellRenderer    params={params} editing={editing} />;
-
-            default: return <TextCellRenderer params={params} editing={editing} />;
+            case serverTypeConsts.NUMERIC:      return <NumericCellRenderer  qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.DATE:         return <DateCellRenderer     qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.DATE_TIME:    return <DateTimeCellRenderer qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.TIME_OF_DAY:  return <TimeCellRenderer     qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.CHECKBOX:     return <CheckBoxCellRenderer qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.USER:         return <UserCellRenderer     qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.CURRENCY:     return <CurrencyCellRenderer qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.RATING:       return <RatingCellRenderer   qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.PERCENT:      return <PercentCellRenderer  qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.DURATION:     return <DurationCellRenderer qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.PHONE_NUMBER: return <PhoneCellRenderer    qbGrid={true} params={params} editing={editing} />;
+            default:                            return <TextCellRenderer     qbGrid={true} params={params} editing={editing} />;
             }
         };
     },
@@ -179,12 +206,59 @@ const QBGrid = React.createClass({
     getRow(data, rowIndex) {
         return {
             className: rowIndex === this.state.editRow ? "editing" : "",
-            onDoubleClick: () => {
-                this.setState({editRow: rowIndex});
+            onClick: (event) => {
+                this.onRowClicked(data, rowIndex, event);
             }
         };
     },
 
+    /**
+     * Capture the row-click event. Send to record view on row-click
+     * @param params
+     */
+    onRowClicked(data, rowIndex, event) {
+
+        const target = event.target;
+
+        // edit row on doubleclick
+        if (event.detail === 2) {
+            clearTimeout(this.clickTimeout);
+            this.clickTimeout = null;
+            this.props.onEditRecordStart(data[this.props.keyField].value);
+            this.setState({editRow: rowIndex});
+            return;
+        }
+        if (this.clickTimeout) {
+            // already waiting for 2nd click
+            return;
+        }
+
+        this.clickTimeout = setTimeout(() => {
+            // navigate to record if timeout wasn't canceled by 2nd click
+            this.clickTimeout = null;
+            if (this.props.onRowClick && (this.props.selectedRows.length === 0) && this.allowRowClick(target)) {
+                this.props.onRowClick(data);
+            }
+        }, 500);
+
+    },
+    /**
+     * should row click handling be allowed (i.e. not editing)
+     * @param elem
+     * @returns {boolean}
+     */
+    allowRowClick(node) {
+        while (node) {
+            if (node.classList.contains("editing") || node.classList.contains("actionsCol")) {
+                return false;
+            }
+            if (node.classList.contains("qbGrid")) {
+                return true;
+            }
+            node = node.parentNode; // traverse up the DOM
+        }
+        return false;
+    },
     /**
      * emulate current QuickBase fixed column behavior
      * @param ev
