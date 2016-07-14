@@ -71,12 +71,13 @@
              *  with an error code
              *
              * @param req
+             * @param reportId
              * @returns {*}
              */
-            fetchFacetResults: function(req) {
+            fetchFacetResults: function(req, reportId) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsFacetRoute(req.url);
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsFacetRoute(req.url, reportId);
                 return requestHelper.executeRequest(req, opts);
             },
 
@@ -106,7 +107,7 @@
             /** Returns a promise that is resolved with the records, fields meta data and facets
              *  or is rejected with a descriptive error code
              */
-            fetchReportComponents: function(req) {
+            fetchReportComponents: function(req, reportId) {
 
                 //  Fetch field meta data and grid data for a report
                 var reportPromise = new Promise((resolve1, reject1) => {
@@ -129,7 +130,7 @@
                 //  NOTE:  if an error occurs while fetching the faceting information, we still want the promise to
                 //  resolve as we want to always display the report data if that promise returns w/o error.
                 var facetPromise = new Promise((resolve2) => {
-                    this.fetchFacetResults(req).then(
+                    this.fetchFacetResults(req, reportId).then(
                         (facetResponse) => {
                             resolve2(facetResponse);
                         },
@@ -243,7 +244,6 @@
                         (response) => {
                             // parse out the id and use to fetch the report meta data.  Process the meta data
                             // to fetch and return the report content.
-                            response.body = '1';
                             if (response.body) {
                                 let homepageReportId = JSON.parse(response.body);
 
@@ -276,7 +276,7 @@
                                         //req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
                                         //req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = ?;
 
-                                        this.fetchReportComponents(req).then(
+                                        this.fetchReportComponents(req, homepageReportId).then(
                                             (reportData) => {
                                                 //  return the metadata and report content
                                                 reportObj.reportMetaData.data = reportMetaData;
