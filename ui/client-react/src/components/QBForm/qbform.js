@@ -30,18 +30,41 @@ let QBForm = React.createClass({
     },
 
     createFieldElement(element, sectionIndex, labelPosition) {
-        let fieldLabel = "";
+        let record = this.props.formData.record | [];
+        let fields = this.props.formData.fields | [];
 
-        if (element.useAlternateLabel) {
-            fieldLabel = element.displayText;
-        } else  {
-            fieldLabel = element.fieldLabel ? element.fieldLabel : "test label"; //TODO "test label" text is only for testing
+        //TODO relatedField is sometimes null right now because we are not pulling the correct columnlist
+        let relatedField = _.find(fields, function(field) {
+            if (field.id === element.fieldId) {
+                return true;
+            }
+        });
+
+        let fieldDatatypeAttributes = relatedField && relatedField.datatypeAttributes ? relatedField.datatypeAttributes : {};
+        let fieldType = fieldDatatypeAttributes.type;
+
+        let fieldDisplayValue = _.find(record, function(val) {
+            if (val.id === element.fieldId) {
+                return true;
+            }
+        });
+
+        //skip the user fields - these arent implemented.
+        //TODO: this should be removed once user fields are implemented
+        if (fieldType === "USER") {
+            fieldDisplayValue = "";
         }
 
-        let fieldRawValue = element.fieldRawValue ? element.fieldRawValue : "test raw value";
-        let fieldDisplayValue = element.fieldDisplayValue ? element.fieldDisplayValue : "test display value";
-        let fieldType = element.fieldType ? element.fieldType : serverTypeConsts.TEXT;
-        let fieldDatatypeAttributes = element.fieldDatatypeAttributes ? element.fieldDatatypeAttributes : {};
+        //catch the non-implemented pieces.
+        fieldDisplayValue = fieldDisplayValue ? fieldDisplayValue.value : "test display value";
+
+        let fieldLabel = "";
+        if (element.useAlternateLabel) {
+            fieldLabel = element.displayText;
+        } else {
+            fieldLabel = relatedField ? relatedField.name : "test display label";
+        }
+        let fieldRawValue = fieldDisplayValue; //todo raw value isnt being supplied right now
         let key = "field" + sectionIndex + "-" + element.orderIndex;
 
         let classes = "formElement field ";
@@ -113,8 +136,9 @@ let QBForm = React.createClass({
 
     render() {
         let tabs = [];
-        if (this.props.formData && this.props.formData.tabs) {
-            _.each(this.props.formData.tabs, (tab, index) => {
+
+        if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
+            _.each(this.props.formData.formMeta.tabs, (tab, index) => {
                 tabs.push(this.createTab(tab));
             });
         }
