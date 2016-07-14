@@ -19,11 +19,11 @@ const RowEditActions = React.createClass({
         //get the current record id
         const id = this.props.data[this.props.params.context.keyField];
         //validate values
-        let validationResult = this.props.params.context.validate(this.props.params.data);
+        let validationResult = this.props.params.context.validateRecord(this.props.params.data);
         if (validationResult.ok) {
             //signal record save action, will update an existing records with changed values
             // or add a new record
-            if (id !== SchemaConsts.UNSAVED_RECORD_ID) {
+            if (id === SchemaConsts.UNSAVED_RECORD_ID) {
                 this.props.params.context.onRecordAdd(this.props.params.data);
             } else {
                 this.props.params.context.onRecordChange(id);
