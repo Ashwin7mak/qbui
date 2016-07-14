@@ -16,7 +16,7 @@ describe('Report functions', () => {
     let component;
     let reportDataParams = {reportData: {data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
 
-    let reportParams = {appId:1, tblId:2, rptId:3};
+    let reportParams = {appId:1, tblId:2, rptId:3, format: true, offSet: null, numRows: null};
     let secondaryParams = {appId:4, tblId:5, rptId:6};
 
     let reportDataSearchStore = Fluxxor.createStore({
@@ -77,7 +77,7 @@ describe('Report functions', () => {
     it('test flux action loadReport is called with app data', () => {
         var div = document.createElement('div');
         ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} />, div);
-        expect(flux.actions.loadReport).toHaveBeenCalledWith(reportParams.appId, reportParams.tblId, reportParams.rptId, true);
+        expect(flux.actions.loadReport).toHaveBeenCalledWith(reportParams.appId, reportParams.tblId, reportParams.rptId, reportParams.format, reportParams.offSet, reportParams.numRows);
     });
 
     it('test flux action loadReport is not called on 2nd called with same app data', () => {
