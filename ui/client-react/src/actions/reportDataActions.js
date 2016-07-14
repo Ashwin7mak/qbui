@@ -99,7 +99,7 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, true, offset, rows});
                 let reportService = new ReportService();
 
                 //  query for the report meta data

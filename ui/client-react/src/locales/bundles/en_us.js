@@ -98,7 +98,7 @@ export default {
             organizeReports: "Organize",
             recordCount : "{recordCount} {nameForRecords} ",
             recordCountPlaceHolder : "Counting {nameForRecords}",
-            reportNavigationBar : "{offset} - {numRows}",
+            reportNavigationBar : "{pageStart} - {pageEnd}",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
                 addField: "Add a field",

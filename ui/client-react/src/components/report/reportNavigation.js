@@ -11,8 +11,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 var ReportNavigation = React.createClass({
     propTypes: {
-        offset: React.PropTypes.number,
-        numRows: React.PropTypes.number,
+        pageStart: React.PropTypes.number,
+        pageEnd: React.PropTypes.number,
         recordsCount: React.PropTypes.number,
         getNextReportPage: React.PropTypes.func,
         getPreviousReportPage: React.PropTypes.func,
@@ -25,20 +25,30 @@ var ReportNavigation = React.createClass({
 
         return (<div className="reportNavigation">
 
-                { this.props.offset != 1 ?  <PreviousLink/> : null }
+                { this.props.pageStart != 1 ?
+                    <PreviousLink getPreviousReportPage={this.props.getPreviousReportPage}/>
+                    : null
+                }
 
                 <I18nMessage message={navBar}
-                             offset={this.props.offset}
-                             numRows={this.props.numRows}
+                             pageStart={this.props.pageStart}
+                             pageEnd={this.props.pageEnd}
                 />
 
-                { this.props.recordsCount && this.props.numRows >= this.props.recordsCount ? <NextLink/> : null }
+                { this.props.recordsCount && this.props.pageEnd > (this.props.recordsCount + this.props.pageStart) ?
+                    <NextLink getNextReportPage={this.props.getNextReportPage} /> :
+                    null
+                }
         </div>);
 
     }
 });
 
 var PreviousLink = React.createClass({
+    propTypes: {
+        getPreviousReportPage : React.PropTypes.func,
+    },
+
     render: function() {
         return (
             <span style={{marginRight: 2 + 'em'}} id="previousReportPage" onClick={this.props.getPreviousReportPage}>
@@ -49,9 +59,13 @@ var PreviousLink = React.createClass({
 });
 
 var NextLink = React.createClass({
+    propTypes: {
+        getNextReportPage : React.PropTypes.func,
+    },
+
     render: function() {
         return (
-            <span style={{marginLeft: 2 + 'em'}} id="nextReportPage" onClick={this.props.getNextReportPage}>
+            <span style={{marginLeft: 2 + 'em'}} id="nextReportPage" onClick={this.props.getNextReportPage} onDoubleClick={this.props.getNextReportPage}>
                 Next
             </span>
         );

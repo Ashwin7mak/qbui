@@ -43,8 +43,8 @@ const ReportToolbar = React.createClass({
         onFacetSelect: React.PropTypes.func,
         filterOnSelections: React.PropTypes.func,
         searchTheString: React.PropTypes.func,
-        offset: React.PropTypes.number,
-        numRows: React.PropTypes.number,
+        pageStart: React.PropTypes.number,
+        pageEnd: React.PropTypes.number,
     },
 
     getDefaultProps() {
@@ -236,8 +236,8 @@ const ReportToolbar = React.createClass({
                 
                     {
                         (!isLoading) ?
-                            (<ReportNavigation offset={this.props.offset}
-                                               numRows={this.props.numRows}
+                            (<ReportNavigation pageStart={this.props.pageStart}
+                                               pageEnd={this.props.pageEnd}
                                                recordsCount={recordCount}
                                                getNextReportPage={this.props.getNextReportPage}
                                                getPreviousReportPage={this.props.getPreviousReportPage}

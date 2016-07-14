@@ -42,8 +42,8 @@ let ReportToolsAndContent = React.createClass({
         pageActions: React.PropTypes.element,
         callbacks :  React.PropTypes.object,
         selectedRows: React.PropTypes.array,
-        offset: React.PropTypes.number,
-        numRows: React.PropTypes.number,
+        pageStart: React.PropTypes.number,
+        pageEnd: React.PropTypes.number,
     },
     getDefaultProps() {
         return {
@@ -157,17 +157,36 @@ let ReportToolsAndContent = React.createClass({
         this.debouncedFilterReport('', noSelections);
     },
     getNextReportPage() {
-        alert("Next");
+        let appId = this.props.params.appId;
+        let tblId = this.props.params.tblId;
+        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
+        let format = true;
+        let numRows = this.props.reportData.numRows;
+        let newOffset = this.props.reportData.offset + numRows;
+        
+        this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
     },
     getPreviousReportPage() {
-        alert("Previous");
+        let appId = this.props.params.appId;
+        let tblId = this.props.params.tblId;
+        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
+        let format = true;
+        let numRows = this.props.reportData.numRows;
+        let newOffset = this.props.reportData.offset - numRows;
+
+        this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
     },
     getReportToolbar() {
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
 
-        this.offset = this.props.reportData.offset + 1;
-        this.numRows = this.props.reportData.numRows;
+
+        this.pageStart = this.props.reportData.offset + 1;
+        if (this.props.reportData.data && this.props.reportData.data.recordsCount) {
+            this.pageEnd = this.props.reportData.offset + this.props.reportData.data.recordsCount;
+        } else {
+            this.pageEnd = this.props.reportData.offset + this.props.reportData.numRows;
+        }
 
         return <ReportToolbar appId={this.props.params.appId}
                               tblId={this.props.params.tblId}
@@ -184,8 +203,8 @@ let ReportToolsAndContent = React.createClass({
                               clearAllFilters={this.clearAllFilters}
                               getNextReportPage={this.getNextReportPage}
                               getPreviousReportPage={this.getPreviousReportPage}
-                              offset={this.offset}
-                              numRows={this.numRows}/>;
+                              pageStart={this.pageStart}
+                              pageEnd={this.pageEnd}/>;
     },
     getSelectionActions() {
         return (<ReportActions selection={this.props.selectedRows} />);
@@ -241,9 +260,8 @@ let ReportToolsAndContent = React.createClass({
                                          clearAllFilters={this.clearAllFilters}
                                          getNextReportPage={this.getNextReportPage}
                                          getPreviousReportPage={this.getPreviousReportPage}
-                                         offset={this.props.params.offset}
-                                         numRows={this.props.params.numRows}/>;
-
+                                         pageStart={this.pageStart}
+                                         pageEnd={this.pageEnd}/>;
             return (
                 <div className={classes}>
                     {this.getTableActions()}
