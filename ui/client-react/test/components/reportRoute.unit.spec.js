@@ -19,7 +19,7 @@ describe('ReportRoute functions', () => {
         ReportDataSearchStore: new reportDataSearchStore()
     };
 
-    let routeParams = {appId:1, tblId:2, rptId:3};
+    let routeParams = {appId:1, tblId:2, rptId:3, format: true, offSet: null, numRows: null};
     let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
     let flux = new Fluxxor.Flux(stores);
 
@@ -49,7 +49,7 @@ describe('ReportRoute functions', () => {
 
     it('test flux action loadTableHomePage is called with app data', () => {
         component = TestUtils.renderIntoDocument(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></ReportRoute>);
-        expect(flux.actions.loadReport).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, routeParams.rptId, true);
+        expect(flux.actions.loadReport).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, routeParams.rptId, routeParams.format, routeParams.offSet, routeParams.numRows);
     });
 
     it('test flux action loadTableHomePage is not called on 2nd called with same app data', () => {
