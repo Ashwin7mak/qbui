@@ -329,10 +329,10 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.FILTER_SEARCH_PENDING, {string}]);
     });
 
-    it('test addReportRecord', () => {
-        flux.actions.addReportRecord(appId, tblId, newRecord);
+    it('test newBlankReportRecord', () => {
+        flux.actions.newBlankReportRecord(appId, tblId, 4);
         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD, {appId, tblId, record:newRecord}]);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId:4}]);
     });
 
     it('test deleteReportRecord', () => {

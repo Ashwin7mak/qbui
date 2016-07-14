@@ -15,6 +15,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     initialize() {
         this.bindActions(
             actions.RECORD_EDIT_START, this.onRecordEditStart,
+            actions.RECORD_ADD_NEW, this.onRecordAddNew,
             actions.RECORD_EDIT_CHANGE_FIELD, this.onRecordEditChangeField,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             actions.RECORD_EDIT_SAVE, this.onRecordEditSave,
@@ -49,6 +50,15 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.emit('change');
     },
+    onRecordAddNew(payload) {
+        this.currentEditingRecordId = payload.recId;
+        this.currentEditingAppId = payload.appId;
+        this.currentEditingTableId = payload.tblId;
+        this.recordChanges = {};
+        this.originalRecord = _.cloneDeep(payload.origRec);
+        this.emit('change');
+    },
+
     onRecordEditChangeField(payload) {
         if (typeof (this.recordChanges[payload.changes.fid]) === 'undefined') {
             this.recordChanges[payload.changes.fid] = {};

@@ -65,7 +65,10 @@ let ReportContent = React.createClass({
 
     handleEditRecordStart(recId) {
         const flux = this.getFlux();
-        let origRec = this.getOrigRec(recId);
+        let origRec = null;
+        if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
+            origRec = this.getOrigRec(recId);
+        }
         flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec);
     },
 
@@ -89,6 +92,30 @@ let ReportContent = React.createClass({
         changes[change.fid].newVal = _.has(change, 'values.newVal') ? change.values.newVal : null;
         changes[change.fid].fieldName = _.has(change, 'fieldName') ? change.fieldName : null;
 
+    },
+    handleNewBlankReportRecord(afterRecId) {
+        const flux = this.getFlux();
+        // if there are pending edits save instead of adding new one
+        if (this.props.pendEdits.recordChanges && this.props.pendEdits.recordChanges.length) {
+            this.handleRecordChange(afterRecId);
+        } else {
+            flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+        }
+    },
+
+    handleRecordAdd(record) {
+        const flux = this.getFlux();
+        //save filled in record
+        flux.actions.saveNewReportRecord(this.props.appId, this.props.tblId, record);
+    },
+
+    validateRecord(record) {
+        let results = {
+            ok : true,
+            errors: []
+        };
+        // TBD validate each value in record
+        return results;
     },
 
     handleRecordChange(recId) {
@@ -496,6 +523,8 @@ let ReportContent = React.createClass({
                     <div className="reportContent">
                         {!isTouch ?
                             <AGGrid loading={this.props.reportData.loading}
+                                    editingIndex={this.props.reportData.editingIndex}
+                                    editingId={this.props.reportData.editingId}
                                     records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                     columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                     uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
@@ -505,6 +534,9 @@ let ReportContent = React.createClass({
                                     onEditRecordCancel={this.handleEditRecordCancel}
                                     onFieldChange={this.handleFieldChange}
                                     onRecordChange={this.handleRecordChange}
+                                    onRecordAdd={this.handleRecordAdd}
+                                    onRecordNewBlank={this.handleNewBlankReportRecord}
+                                    validateRecord={this.validateRecord}
                                     getOrigRec={this.getOrigRec}
                                     getPendingChanges={this.getPendingChanges}
                                     tblId={this.props.reportData.tblId}

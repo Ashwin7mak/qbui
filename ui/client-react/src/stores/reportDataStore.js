@@ -53,6 +53,10 @@ let reportModel = {
                     column.field = field.name;
                     column.fieldType = field.type;
                     column.builtIn = field.builtIn;
+                    column.defaultValue = null;
+                    if (field.defaultValue && field.defaultValue.coercedValue) {
+                        column.defaultValue = {value: field.defaultValue.coercedValue.value, display: field.defaultValue.displayValue};
+                    }
 
                     if (field.multiChoiceSourceAllowed && field.multipleChoice) {
                         column.choices = field.multipleChoice.choices;
@@ -248,6 +252,8 @@ let ReportDataStore = Fluxxor.createStore({
     initialize() {
         this.reportModel = reportModel;
         this.loading = false;
+        this.editingIndex = null;
+        this.editingId = null;
         this.error = false;
         this.nonFacetClicksEnabled = true;
         this.searchStringForFiltering = '' ;
@@ -269,9 +275,11 @@ let ReportDataStore = Fluxxor.createStore({
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
             actions.SELECTED_ROWS, this.onSelectedRows,
 
-            actions.ADD_REPORT_RECORD, this.onAddReportRecord, // for empower demo
+            actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
             actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord, // for empower demo
+            actions.RECORD_EDIT_CANCEL, this.onClearEdit,
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
+            actions.SAVE_REPORT_RECORD_FAILED, this.onClearEdit,
 
         );
     },
@@ -284,6 +292,8 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadReport(report) {
         this.loading = true;
+        this.editingIndex = null;
+        this.editingId = null;
 
         this.appId = report.appId;
         this.tblId = report.tblId;
@@ -296,12 +306,18 @@ let ReportDataStore = Fluxxor.createStore({
     },
     onLoadReportFailed() {
         this.loading = false;
+        this.editingIndex = null;
+        this.editingId = null;
+
         this.error = true;
         this.emit('change');
     },
 
     onLoadReportSuccess(response) {
         this.loading = false;
+        this.editingIndex = null;
+        this.editingId = null;
+
         this.error = false;
 
         this.reportModel = reportModel;
@@ -319,6 +335,8 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadRecords(payload) {
         this.loading = true;
+        this.editingIndex = null;
+        this.editingId = null;
 
         this.appId = payload.appId;
         this.tblId = payload.tblId;
@@ -339,6 +357,9 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadRecordsSuccess(response) {
         this.loading = false;
+        this.editingIndex = null;
+        this.editingId = null;
+
         this.error = false;
         this.reportModel.updateFilteredRecords(response.recordData);
         this.emit('change');
@@ -346,6 +367,9 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadRecordsFailed() {
         this.loading = false;
+        this.editingIndex = null;
+        this.editingId = null;
+
         this.error = true;
         this.emit('change');
     },
@@ -360,25 +384,57 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onAddReportRecord() {
+    onAddReportRecord(payload) {
         const model = this.reportModel.get();
 
         const recordKey = SchemaConsts.DEFAULT_RECORD_KEY;
 
         if (model.filteredRecords.length > 0) {
+            //find record to add after
+            let afterRecId = payload.afterRecId;
 
-            // find record with greatest record ID (after converting to number) regardless of array order
-            const maxRecord = model.filteredRecords.reduce((last, record) => {
-                return (parseInt(last[recordKey]) > parseInt(record[recordKey])) ? last : record;
+            // find record with  record ID (after converting to number) regardless of array order
+            // const maxRecord = model.filteredRecords.reduce((last, record) => {
+            //     return (parseInt(last[recordKey]) > parseInt(record[recordKey])) ? last : record;
+            // });
+
+            let afterRecIndex = _.findIndex(model.filteredRecords, (rec) => rec[recordKey].value === afterRecId.value);
+
+            const newRecord = _.mapValues(model.filteredRecords[afterRecIndex], (obj) => {
+                //get the default value for the fid if any
+                let valueAnswer = null;
+                let theCorrespondingField = _.find(model.fields, (item) => item.id === obj.id);
+                //set the default values in the answer for each field
+                if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
+                    valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id} ;
+                } else {
+                    //TBD : type specific values
+                    valueAnswer = {value:"", id:obj.id} ;
+                }
+                return valueAnswer;
             });
 
-            const newRecord = _.mapValues(maxRecord, (obj) => {return null;});
+            // set id to unsaved
+            //
+            //const id = parseInt(maxRecord[SchemaConsts.DEFAULT_RECORD_KEY]) + 1;
+            newRecord[SchemaConsts.DEFAULT_RECORD_KEY] = {value: SchemaConsts.UNSAVED_RECORD_ID, displayValue: 'TBD'};
 
-            const id = parseInt(maxRecord[SchemaConsts.DEFAULT_RECORD_KEY]) + 1;
-            newRecord[SchemaConsts.DEFAULT_RECORD_KEY] = id;
-
+            //make a copy
             const newRecords = model.filteredRecords.slice(0);
-            newRecords.push(newRecord);
+            //insert after the index
+            this.editingIndex = null;
+            this.editingId = null;
+
+            if (afterRecIndex !== -1) {
+                newRecords.splice(afterRecIndex + 1, 0, newRecord);
+                this.editingIndex = afterRecIndex;
+                this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
+            } else {
+                this.editingIndex = newRecords.length;
+                this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
+                newRecords.push(newRecord);
+            }
+
             model.filteredRecords = newRecords;
             model.filteredRecordsCount++;
 
@@ -396,14 +452,21 @@ let ReportDataStore = Fluxxor.createStore({
 
     onSaveRecordSuccess(payload) {
         // update the  record values
+        this.editingIndex = null;
         this.reportModel.updateARecord(payload.recId, payload.changes);
         this.emit("change");
     },
 
-
+    onClearEdit() {
+        this.editingIndex = null;
+        this.editingId = null;
+        this.emit("change");
+    },
     getState() {
         return {
             loading: this.loading,
+            editingIndex: this.editingIndex,
+            editingId: this.editingId,
             error: this.error,
             data: this.reportModel.get(),
             appId: this.appId,

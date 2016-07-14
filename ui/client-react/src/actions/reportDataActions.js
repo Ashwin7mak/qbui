@@ -170,9 +170,16 @@ let reportDataActions = {
     },
 
     /**
-     * add a new record
+     * setup a a new record not yet saved to the database
      */
-    addReportRecord(appId, tblId, record) {
+    newBlankReportRecord(appId, tblId, afterRecId) {
+        this.dispatch(actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId});
+    },
+
+    /**
+     * save a new record
+     */
+    saveNewReportRecord(appId, tblId, record) {
             // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && record) {
