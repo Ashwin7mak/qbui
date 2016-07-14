@@ -11,6 +11,9 @@ describe('Report Data Actions success -- ', () => {
     let appId = '1';
     let tblId = '2';
     let rptId = '3';
+    let format = true;
+    let offset = 0;
+    let rows = 0;
     let filter = {
         facet: 'abc',
         search: ''
@@ -35,7 +38,10 @@ describe('Report Data Actions success -- ', () => {
     let loadReportInputs = {
         appId: appId,
         tblId: tblId,
-        rptId: rptId
+        rptId: rptId,
+        true: format,
+        offset: offset,
+        rows: rows
     };
     let filterReportInputs = {
         appId: appId,
@@ -74,7 +80,7 @@ describe('Report Data Actions success -- ', () => {
     });
 
     it('test load report action with report parameters', (done) => {
-        flux.actions.loadReport(appId, tblId, rptId, true).then(
+        flux.actions.loadReport(appId, tblId, rptId, format, offset, rows).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                 expect(mockReportService.prototype.getReportDataAndFacets).toHaveBeenCalled();
@@ -93,12 +99,12 @@ describe('Report Data Actions success -- ', () => {
     it('test load report action with sortlist', (done) => {
         let sortList = "6:V.-7";
         let queryParams = {};
-        queryParams[query.OFFSET_PARAM] = 0;
-        queryParams[query.NUMROWS_PARAM] = 0;
-        queryParams[query.FORMAT_PARAM] = true;
+        queryParams[query.OFFSET_PARAM] = offset;
+        queryParams[query.NUMROWS_PARAM] = rows;
+        queryParams[query.FORMAT_PARAM] = format;
         queryParams[query.SORT_LIST_PARAM] = sortList;
         queryParams[query.QUERY_PARAM] = '';
-        flux.actions.loadReport(appId, tblId, rptId, true, 0, 0, sortList).then(
+        flux.actions.loadReport(appId, tblId, rptId, format, offset, rows, sortList).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                 expect(mockReportService.prototype.getReportDataAndFacets).toHaveBeenCalledWith(appId, tblId, rptId, queryParams);
