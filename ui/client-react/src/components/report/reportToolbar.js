@@ -233,7 +233,7 @@ const ReportToolbar = React.createClass({
                         />) :
                         null
                     }
-                
+
                     {
                         (!isLoading) ?
                             (<ReportNavigation pageStart={this.props.pageStart}
