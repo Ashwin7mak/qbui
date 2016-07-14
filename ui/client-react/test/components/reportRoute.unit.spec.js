@@ -19,8 +19,11 @@ describe('ReportRoute functions', () => {
         ReportDataSearchStore: new reportDataSearchStore()
     };
 
-    let routeParams = {appId:1, tblId:2, rptId:3, format: true, offSet: null, numRows: null};
-    let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+    let offSet = 0;
+    let numRows = 10;
+
+    let routeParams = {appId:1, tblId:2, rptId:3, format: true, offSet: offSet, numRows: numRows};
+    let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}, offset: offSet, numRows: numRows}};
     let flux = new Fluxxor.Flux(stores);
 
     flux.actions = {
