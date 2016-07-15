@@ -51,9 +51,10 @@ describe('Test recordPendingEdits Store ', () => {
 
     it('test RecordEditStart recordPendingEdits action', () => {
         let original = {origRec : {rec:'info'}};
+        let changes = {};
         let recordEditStartAction = {
             type: actions.RECORD_EDIT_START,
-            payload : Object.assign({}, appTableRecPayload, original)
+            payload : Object.assign({}, appTableRecPayload, original, {changes})
         };
 
         flux.dispatcher.dispatch(recordEditStartAction);
@@ -62,7 +63,6 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).recordChanges).toEqual({});
         expect(flux.store(STORE_NAME).originalRecord).toEqual(original.origRec);
-
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });

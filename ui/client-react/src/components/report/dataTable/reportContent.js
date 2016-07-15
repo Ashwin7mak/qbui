@@ -90,13 +90,13 @@ let ReportContent = React.createClass({
                 Object.keys(newRec).forEach((key) => {
                     let field = newRec[key];
                     if (field.value !== null) {
-                       let change = {
-                           oldVal: {value: null, id: +field.id},
-                           newVal: {value: field.value},
-                           fieldName: key
-                       };
-                       changes[field.id] = change;
-                   }
+                        let change = {
+                            oldVal: {value: null, id: +field.id},
+                            newVal: {value: field.value},
+                            fieldName: key
+                        };
+                        changes[field.id] = change;
+                    }
                 });
             }
         }
@@ -161,23 +161,31 @@ let ReportContent = React.createClass({
             }
         });
         flux.actions.saveNewReportRecord(this.props.appId, this.props.tblId, payload);
+        return payload;
     },
 
     handleRecordSaveClicked(id) {
+        let allClear = false;
         //validate changed values
         //get pending changes
         let validationResult = this.validateRecord(this.props.pendEdits.recordChanges);
         if (validationResult.ok) {
             //signal record save action, will update an existing records with changed values
             // or add a new record
+            let changes = null;
             if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
-                this.handleRecordAdd(this.props.pendEdits.recordChanges);
+                changes = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
-                this.handleRecordChange(id);
+                changes = this.handleRecordChange(id);
+            }
+            if (changes && Object.keys(changes).length === 0) {
+                allClear = true;
             }
         } else {
             //TBD show errors
+            allClear = false;
         }
+        return allClear;
     },
 
     handleRecordChange(recId) {
@@ -211,7 +219,7 @@ let ReportContent = React.createClass({
         //for (changes)
         flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
         flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);
-
+        return payload;
     },
 
 

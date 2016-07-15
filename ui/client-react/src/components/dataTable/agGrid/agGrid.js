@@ -321,12 +321,12 @@ let AGGrid = React.createClass({
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
         this.gridOptions.context.cellTabCallback = this.onCellTab;
         this.gridOptions.context.onRecordChange = this.props.onRecordChange;
-        this.gridOptions.context.onRecordSaveClicked = this.props.onRecordSaveClicked;
+        this.gridOptions.context.onRecordSaveClicked = this.handleRecordSaveClicked; // does local method 1st
         this.gridOptions.context.onRecordAdd = this.props.onRecordAdd;
         this.gridOptions.context.onRecordNewBlank = this.props.onRecordNewBlank;
         this.gridOptions.context.onFieldChange = this.props.onFieldChange;
         this.gridOptions.context.onEditRecordStart = this.props.onEditRecordStart;
-        this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel;
+        this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel; // does local method 1st
         this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
         this.gridOptions.context.validateRecord = this.props.validateRecord;
 
@@ -571,6 +571,13 @@ let AGGrid = React.createClass({
         this.editRow(); // edit nothing
     },
 
+    handleRecordSaveClicked(id) {
+        let noEdit = this.props.onRecordSaveClicked(id);
+        if (noEdit) {
+            this.editRow(); // edit done
+        }
+    },
+
     /**
      * Callback - what to do when the master group expand/collapse is clicked
      * @param element
@@ -782,7 +789,7 @@ let AGGrid = React.createClass({
                                     //handlers on col or row changes
                                     onFieldChange={this.props.onFieldChange}
                                     onRecordChange={this.props.onRecordChange}
-                                    onRecordSaveClicked={this.props.onRecordSaveClicked}
+                                    onRecordSaveClicked={this.handleRecordSaveClicked}
                                     onRecordAdd={this.props.onRecordAdd}
                                     onRecordNewBlank={this.props.onRecordNewBlank}
                                     validateRecord={this.props.validateRecord}
