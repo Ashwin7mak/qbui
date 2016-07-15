@@ -185,8 +185,8 @@ let ReportToolsAndContent = React.createClass({
         if (this.props.reportData.data) {
             this.pageEnd = this.props.reportData.offset + this.props.reportData.numRows;
 
-            if (this.props.reportData.recordsCount && this.pageEnd > this.props.reportData.recordsCount) {
-                this.pageEnd = this.props.reportData.recordsCount;
+            if (this.props.reportData.data.recordsCount && this.pageEnd > this.props.reportData.data.recordsCount) {
+                this.pageEnd = this.props.reportData.data.recordsCount;
             }
         }
 

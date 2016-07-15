@@ -269,6 +269,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.lastSaveRecordId = null;
         this.offset = DEFAULT_OFFSET;
         this.numRows = DEFAULT_NUM_ROWS;
+        this.recordsCount = null;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -437,6 +438,7 @@ let ReportDataStore = Fluxxor.createStore({
             rptId: this.rptId,
             offset: this.offset,
             numRows: this.numRows,
+            recordsCount: this.recordsCount,
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
             facetExpression: this.facetExpression,
