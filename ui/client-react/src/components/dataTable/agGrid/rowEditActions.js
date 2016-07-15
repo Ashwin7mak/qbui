@@ -18,21 +18,8 @@ const RowEditActions = React.createClass({
     onClickSave() {
         //get the current record id
         const id = this.props.data[this.props.params.context.keyField];
-        //validate values
-        let validationResult = this.props.params.context.validateRecord(this.props.params.data);
-        if (validationResult.ok) {
-            //signal record save action, will update an existing records with changed values
-            // or add a new record
-            if (id === SchemaConsts.UNSAVED_RECORD_ID) {
-                this.props.params.context.onRecordAdd(this.props.params.data);
-            } else {
-                this.props.params.context.onRecordChange(id);
-            }
-            this.props.api.deselectAll();
-        } else {
-            //TBD show errors
-        }
-
+        this.props.params.context.onRecordSaveClicked(id);
+        this.props.api.deselectAll();
     },
 
     /**
@@ -49,16 +36,17 @@ const RowEditActions = React.createClass({
     },
     onClickCancel() {
         //get the original unchanged values in data to rerender
+        const id = this.props.data[this.props.params.context.keyField];
         this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
         this.props.api.deselectAll();
         this.props.flux.actions.selectedRows([]);
-        this.props.params.context.onEditRecordCancel();
+        this.props.params.context.onEditRecordCancel(id);
     },
 
     onClickAdd() {
         //get the current record id
         const id = this.props.data[this.props.params.context.keyField];
-        this.props.params.context.onRecordNewBlank(id);
+        this.props.params.context.onRecordNewBlank(id, this.props.params.data);
         this.props.api.deselectAll();
     },
 

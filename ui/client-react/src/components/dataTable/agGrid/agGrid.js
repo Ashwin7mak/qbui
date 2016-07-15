@@ -58,9 +58,11 @@ let AGGrid = React.createClass({
         records: React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
+        validateRecord: React.PropTypes.func,
         onRowClick: React.PropTypes.func,
         onFieldChange: React.PropTypes.func,
         onRecordChange: React.PropTypes.func,
+        onRecordSaveClicked: React.PropTypes.func,
         onRecordAdd: React.PropTypes.func,
         onRecordNewBlank: React.PropTypes.func,
         onEditRecordStart: React.PropTypes.func,
@@ -319,6 +321,7 @@ let AGGrid = React.createClass({
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
         this.gridOptions.context.cellTabCallback = this.onCellTab;
         this.gridOptions.context.onRecordChange = this.props.onRecordChange;
+        this.gridOptions.context.onRecordSaveClicked = this.props.onRecordSaveClicked;
         this.gridOptions.context.onRecordAdd = this.props.onRecordAdd;
         this.gridOptions.context.onRecordNewBlank = this.props.onRecordNewBlank;
         this.gridOptions.context.onFieldChange = this.props.onFieldChange;
@@ -350,13 +353,13 @@ let AGGrid = React.createClass({
             let flux = this.getFlux();
             flux.actions.measure('component-AgGrid', 'component-AgGrid start');
         }
-        if (typeof (this.props.editingIndex) !== 'undefined' &&
-            this.props.editingIndex !== null) {
-                //get the node at editingIndex
+        // we have a new inserted row put it in edit mode
+        if (typeof (this.props.editingIndex) !== 'undefined' && this.props.editingIndex !== null) {
+            //get the node at editingIndex
             let atIndex = 0;
             this.api.forEachNode((node) => {
                 if (atIndex === this.props.editingIndex + 1)  {
-                        //edit the record at specified index
+                    //edit the record at specified index
                     this.startEditRow(this.props.editingId, node);
                 }
                 atIndex++;
@@ -563,8 +566,8 @@ let AGGrid = React.createClass({
         return rows;
     },
 
-    handleEditRecordCancel() {
-        this.props.onEditRecordCancel();
+    handleEditRecordCancel(id) {
+        this.props.onEditRecordCancel(id);
         this.editRow(); // edit nothing
     },
 
@@ -779,6 +782,7 @@ let AGGrid = React.createClass({
                                     //handlers on col or row changes
                                     onFieldChange={this.props.onFieldChange}
                                     onRecordChange={this.props.onRecordChange}
+                                    onRecordSaveClicked={this.props.onRecordSaveClicked}
                                     onRecordAdd={this.props.onRecordAdd}
                                     onRecordNewBlank={this.props.onRecordNewBlank}
                                     validateRecord={this.props.validateRecord}

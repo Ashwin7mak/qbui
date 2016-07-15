@@ -63,13 +63,44 @@ let ReportContent = React.createClass({
         return _.cloneDeep(orig);
     },
 
+    validateRecord(record) {
+        let results = {
+            ok : true,
+            errors: []
+        };
+        // TBD validate each value in record
+        return results;
+    },
+
     handleEditRecordStart(recId) {
         const flux = this.getFlux();
         let origRec = null;
+        let changes = {};
         if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
             origRec = this.getOrigRec(recId);
+        } else {
+            //add each non null value as to the new record as a change
+            let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
+                return rec[this.props.keyField].value === recId;
+            });
+            if (newRec) {
+                changes = {};
+                // loop thru the values in the new rec add any non nulls to change set
+                // so it will be treated as dirty/not saved
+                Object.keys(newRec).forEach((key) => {
+                    let field = newRec[key];
+                    if (field.value !== null) {
+                       let change = {
+                           oldVal: {value: null, id: +field.id},
+                           newVal: {value: field.value},
+                           fieldName: key
+                       };
+                       changes[field.id] = change;
+                   }
+                });
+            }
         }
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec);
+        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes);
     },
 
     handleEditRecordCancel(recId) {
@@ -93,29 +124,60 @@ let ReportContent = React.createClass({
         changes[change.fid].fieldName = _.has(change, 'fieldName') ? change.fieldName : null;
 
     },
-    handleNewBlankReportRecord(afterRecId) {
+
+    handleRecordNewBlank(afterRecId) {
         const flux = this.getFlux();
         // if there are pending edits save instead of adding new one
-        if (this.props.pendEdits.recordChanges && this.props.pendEdits.recordChanges.length) {
-            this.handleRecordChange(afterRecId);
+        if (this.props.pendEdits.isPendingEdit) {
+            this.handleRecordSaveClicked(afterRecId);
         } else {
             flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
         }
     },
 
-    handleRecordAdd(record) {
+    handleRecordAdd(recordChanges) {
         const flux = this.getFlux();
-        //save filled in record
-        flux.actions.saveNewReportRecord(this.props.appId, this.props.tblId, record);
+
+        //save changes in record
+        let payload = [];
+        // columns id and new values array
+        //[{"id":6, "value":"Claire"}]
+        Object.keys(recordChanges).forEach((key) => {
+            //get each columns matching field description
+            let matchingField = _.find(this.props.fields.fields.data, (field) => {
+                return field.id === +key;
+            });
+            // only post the non built in fields values
+            if (matchingField && matchingField.builtIn === false) {
+                let newValue = recordChanges[key].newVal.value;
+                let newDisplay = recordChanges[key].newVal.display;
+
+                let colChange = {};
+                colChange.fieldName = recordChanges[key].fieldName;
+                colChange.id = +key;
+                colChange.value = _.cloneDeep(newValue);
+                colChange.display = _.cloneDeep(newDisplay);
+                payload.push(colChange);
+            }
+        });
+        flux.actions.saveNewReportRecord(this.props.appId, this.props.tblId, payload);
     },
 
-    validateRecord(record) {
-        let results = {
-            ok : true,
-            errors: []
-        };
-        // TBD validate each value in record
-        return results;
+    handleRecordSaveClicked(id) {
+        //validate changed values
+        //get pending changes
+        let validationResult = this.validateRecord(this.props.pendEdits.recordChanges);
+        if (validationResult.ok) {
+            //signal record save action, will update an existing records with changed values
+            // or add a new record
+            if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
+                this.handleRecordAdd(this.props.pendEdits.recordChanges);
+            } else {
+                this.handleRecordChange(id);
+            }
+        } else {
+            //TBD show errors
+        }
     },
 
     handleRecordChange(recId) {
@@ -535,7 +597,8 @@ let ReportContent = React.createClass({
                                     onFieldChange={this.handleFieldChange}
                                     onRecordChange={this.handleRecordChange}
                                     onRecordAdd={this.handleRecordAdd}
-                                    onRecordNewBlank={this.handleNewBlankReportRecord}
+                                    onRecordNewBlank={this.handleRecordNewBlank}
+                                    onRecordSaveClicked={this.handleRecordSaveClicked}
                                     validateRecord={this.validateRecord}
                                     getOrigRec={this.getOrigRec}
                                     getPendingChanges={this.getPendingChanges}

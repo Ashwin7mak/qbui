@@ -22,6 +22,10 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_REPORT_RECORD, this.onSaveRecord,
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_REPORT_RECORD_FAILED, this.onSaveRecordFailed,
+            actions.ADD_REPORT_RECORD, this.onSaveAddedRecord,
+            actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
+            actions.ADD_REPORT_RECORD_FAILED, this.onAddRecordFailed,
+
         );
         this._initData();
         this.commitChanges = [];
@@ -39,13 +43,13 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.currentEditingRecordId = payload.recId;
             this.currentEditingAppId = payload.appId;
             this.currentEditingTableId = payload.tblId;
-            this.recordChanges = {};
+            this.recordChanges =  _.cloneDeep(payload.changes);
             this.originalRecord = _.cloneDeep(payload.origRec);
         } else {
             this.currentEditingRecordId = undefined;
             this.currentEditingAppId = undefined;
             this.currentEditingTableId = undefined;
-            this.recordChanges = {};
+            this.recordChanges =  _.cloneDeep(payload.changes);
             this.originalRecord = undefined;
         }
         this.emit('change');
@@ -56,6 +60,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = payload.tblId;
         this.recordChanges = {};
         this.originalRecord = _.cloneDeep(payload.origRec);
+        this.isPendingEdit = true;
         this.emit('change');
     },
 
@@ -73,7 +78,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.emit('change');
     },
     onRecordEditCancel() {
-        // record wasn't saved
+        // record wasn't saved nothing pending
         this._initData();
         this.emit('change');
     },
@@ -107,6 +112,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
             this.commitChanges[entry].status = actions.SAVE_REPORT_RECORD_SUCCESS;
         }
+        this.isPendingEdit = false;
         this.emit('change');
 
     },
@@ -118,6 +124,33 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.emit('change');
     },
+
+    onSaveAddedRecord(payload) {
+        this.currentEditingAppId = payload.appId;
+        this.currentEditingTableId = payload.tblId;
+        this.currentEditingRecordId = null;
+        logger.debug('saving added record: ' + JSON.stringify(payload));
+    },
+    onAddRecordSuccess(payload) {
+        this.currentEditingRecordId = payload.recId;
+        let entry = this._getEntryKey();
+        if (typeof (this.commitChanges[entry]) !== 'undefined') {
+            this.commitChanges[entry].status = actions.ADD_REPORT_RECORD_SUCCESS;
+        }
+        this.isPendingEdit = false;
+        this.emit('change');
+
+    },
+    onAddRecordFailed(payload) {
+        this.currentEditingRecordId = payload.recId;
+        let entry = this._getEntryKey();
+        if (typeof (this.commitChanges[entry]) !== 'undefined') {
+            this.commitChanges[entry].status = actions.ADD_REPORT_RECORD_FAILED;
+        }
+        this.emit('change');
+    },
+
+
     _getEntryKey() {
         return '' + this.currentEditingAppId + '/' + this.currentEditingTableId + '/' + this.currentEditingRecordId;
     },

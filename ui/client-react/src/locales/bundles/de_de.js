@@ -66,8 +66,10 @@ export default {
             next: "Nächster"
         },
         recordNotifications: {
+            recordAdded: "Die Bilanz hinzugefügt",
+            recordNotAdded :"Nehmen Sie nicht hinzugefügt",
             recordSaved : "Datensatz gespeichert",
-            recordNotSaved :"Nehmen Sie nicht gespeichert",
+            recordNotSaved :"Nehmen Sie nicht gespeichert"
         },
         header: {
             menu: {

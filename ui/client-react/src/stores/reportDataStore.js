@@ -4,6 +4,12 @@ import ReportUtils from '../utils/reportUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 import * as SchemaConsts from "../constants/schema";
+import * as formats from '../constants/fieldFormats';
+const serverTypeConsts = require('../../../common/src/constants');
+import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormatter';
+import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
+import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
+
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -168,28 +174,44 @@ let reportModel = {
         return records.find(rec => rec[this.model.keyField.name].value === recId);
     },
 
-    updateARecord(recId, changes) {
+    findRecordIndexById(records, recId) {
+        return records.findIndex(rec => rec[this.model.keyField.name].value === recId);
+    },
+    updateARecord(oldRecId, newRecId, changes) {
         // update the record value inplace, for inline edits
         // per xd user will not get reload of sort/group/filtered effects of the
         // edit until they reload
+        let record = this.findRecordById(this.model.records, oldRecId);
+        let filtRecord = this.findRecordById(this.model.filteredRecords, oldRecId);
 
-
-        //get the record with the keyfield value of recid
-        let record = this.findRecordById(this.model.records, recId);
-        let filtRecord = this.findRecordById(this.model.filteredRecords, recId);
-
+        // update with new recid
+        if (newRecId !== null) {
+            if (record) {
+                record[this.model.keyField.name].value = newRecId;
+            }
+            if (filtRecord) {
+                filtRecord[this.model.keyField.name].value = newRecId;
+            }
+        }
         // change the data values
         changes.forEach(change => {
+            if (change.display === undefined) {
+                //format value for display
+                this.formatFieldValue(change);
+            }
             if (record) {
                 record[change.fieldName].value = change.value;
-                record[change.fieldName].display = change.display;
+                if (change.display !== undefined) {
+                    record[change.fieldName].display = change.display;
+                }
             }
             if (filtRecord) {
                 filtRecord[change.fieldName].value = change.value;
-                filtRecord[change.fieldName].display = change.display;
+                if (change.display !== undefined) {
+                    filtRecord[change.fieldName].display = change.display;
+                }
             }
         });
-
     },
 
     /**
@@ -241,6 +263,95 @@ let reportModel = {
     setGroupElements: function(sortList) {
         this.model.groupEls = ReportUtils.getGroupElements(sortList);
         this.model.groupLevel = this.model.groupEls.length;
+    },
+
+    //format data methods
+    getFormatType(fieldType) {
+        let formatType = formats.TEXT_FORMAT;
+
+        switch (fieldType) {
+        case serverTypeConsts.NUMERIC:
+            formatType = formats.NUMBER_FORMAT;
+            break;
+        case serverTypeConsts.DATE :
+            formatType = formats.DATE_FORMAT;
+            break;
+        case serverTypeConsts.DATE_TIME:
+            formatType = formats.DATETIME_FORMAT;
+            break;
+        case serverTypeConsts.TIME_OF_DAY :
+            formatType = formats.TIME_FORMAT;
+            break;
+        case serverTypeConsts.CHECKBOX :
+            formatType = formats.CHECKBOX_FORMAT;
+            break;
+        case serverTypeConsts.USER :
+            formatType = formats.USER_FORMAT;
+            break;
+        case serverTypeConsts.CURRENCY :
+            formatType = formats.CURRENCY_FORMAT;
+            break;
+        case serverTypeConsts.RATING :
+            formatType = formats.RATING_FORMAT;
+            break;
+        case serverTypeConsts.PERCENT :
+            formatType = formats.PERCENT_FORMAT;
+            break;
+        default:
+            formatType = formats.TEXT_FORMAT;
+            break;
+        }
+        return formatType;
+    },
+    getFormatter(formatType) {
+        let answer = null;
+        switch (formatType) {
+        case formats.DATETIME_FORMAT:
+        case formats.DATE_FORMAT:
+            answer = dateTimeFormatter;
+            break;
+        case formats.TIME_FORMAT:
+            answer = timeOfDayFormatter;
+            break;
+        case formats.NUMBER_FORMAT:
+        case formats.RATING_FORMAT:
+        case formats.CURRENCY_FORMAT:
+        case formats.PERCENT_FORMAT:
+            answer = numericFormatter;
+            break;
+        }
+        return answer;
+    },
+
+    formatFieldValue(recField) {
+        let answer = null;
+
+        if (recField && recField.value) {
+            // assume same raw and formatted
+            answer = recField.value;
+
+            //get the corresponding field meta data
+            let fieldMeta = _.find(this.fields, (item) => item.id === recField.id);
+
+            //format the value by field display type
+            if (fieldMeta && fieldMeta.datatypeAttributes && fieldMeta.datatypeAttributes.type) {
+                let formatType = this.getFormatType(fieldMeta.datatypeAttributes.type);
+                let formatter = this.getFormatter(formatType);
+
+                // if there's a formatter use it to format the display version
+                if (formatter !== null) {
+                    answer = formatter.format(recField, fieldMeta.datatypeAttributes);
+                }
+            }
+        }
+        return answer;
+    },
+
+    formatRecordValues(newRecord) {
+        Object.keys(newRecord).forEach((key) => {
+            let recField = newRecord[key];
+            recField.display = this.formatFieldValue(recField);
+        });
     }
 };
 
@@ -254,9 +365,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.editingId = null;
         this.error = false;
         this.nonFacetClicksEnabled = true;
-        this.searchStringForFiltering = '' ;
+        this.searchStringForFiltering = '';
         this.facetExpression = {};
-        this.selections  = new FacetSelections();
+        this.selections = new FacetSelections();
         this.selectedRows = [];
         this.lastSaveOk = null;
         this.lastSaveRecordId = null;
@@ -265,7 +376,7 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
             actions.LOAD_REPORT_FAILED, this.onLoadReportFailed,
-            actions.LOAD_RECORDS,  this.onLoadRecords,
+            actions.LOAD_RECORDS, this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
@@ -275,9 +386,11 @@ let ReportDataStore = Fluxxor.createStore({
 
             actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
             actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord, // for empower demo
-            actions.RECORD_EDIT_CANCEL, this.onClearEdit,
+            actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
-            actions.SAVE_REPORT_RECORD_FAILED, this.onClearEdit
+            actions.SAVE_REPORT_RECORD_FAILED, this.onClearEdit,
+            actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
+            actions.ADD_REPORT_RECORD_FAILED, this.onClearEdit
         );
     },
 
@@ -295,8 +408,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.appId = report.appId;
         this.tblId = report.tblId;
         this.rptId = report.rptId;
-        this.searchStringForFiltering = '' ;
-        this.selections  = new FacetSelections();
+        this.searchStringForFiltering = '';
+        this.selections = new FacetSelections();
         this.selectedRows = [];
 
         this.emit('change');
@@ -340,7 +453,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.rptId = payload.rptId;
         this.selections = payload.filter.selections;
         this.facetExpression = payload.filter.facet;
-        this.searchStringForFiltering =  payload.filter.search;
+        this.searchStringForFiltering = payload.filter.search;
 
         this.reportModel.setSortFids(payload.sortList);
         this.reportModel.setGroupElements(payload.sortList);
@@ -406,22 +519,40 @@ let ReportDataStore = Fluxxor.createStore({
                     valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id} ;
                 } else {
                     //TBD : type specific values
-                    valueAnswer = {value:"", id:obj.id} ;
+                    valueAnswer = {value:null, id:obj.id} ;
                 }
                 return valueAnswer;
             });
 
+            //format the values in the new record
+            this.reportModel.formatRecordValues(newRecord);
+
             // set id to unsaved
-            //
-            //const id = parseInt(maxRecord[SchemaConsts.DEFAULT_RECORD_KEY]) + 1;
-            newRecord[SchemaConsts.DEFAULT_RECORD_KEY] = {value: SchemaConsts.UNSAVED_RECORD_ID, displayValue: 'TBD'};
+            newRecord[SchemaConsts.DEFAULT_RECORD_KEY].value = SchemaConsts.UNSAVED_RECORD_ID;
 
             //make a copy
-            const newRecords = model.filteredRecords.slice(0);
+            const newFilteredRecords = model.filteredRecords.slice(0);
+
             //insert after the index
             this.editingIndex = null;
             this.editingId = null;
 
+            // add to filtered records
+            if (afterRecIndex !== -1) {
+                newFilteredRecords.splice(afterRecIndex + 1, 0, newRecord);
+                this.editingIndex = afterRecIndex;
+                this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
+            } else {
+                this.editingIndex = newFilteredRecords.length;
+                this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
+                newFilteredRecords.push(newRecord);
+            }
+
+            model.filteredRecords = newFilteredRecords;
+            model.filteredRecordsCount++;
+
+            // add to records
+            const newRecords = model.records.slice(0);
             if (afterRecIndex !== -1) {
                 newRecords.splice(afterRecIndex + 1, 0, newRecord);
                 this.editingIndex = afterRecIndex;
@@ -431,9 +562,8 @@ let ReportDataStore = Fluxxor.createStore({
                 this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
                 newRecords.push(newRecord);
             }
-
-            model.filteredRecords = newRecords;
-            model.filteredRecordsCount++;
+            model.records = newRecords;
+            model.recordsCount++;
 
             this.emit('change');
         }
@@ -450,10 +580,45 @@ let ReportDataStore = Fluxxor.createStore({
     onSaveRecordSuccess(payload) {
         // update the  record values
         this.editingIndex = null;
-        this.reportModel.updateARecord(payload.recId, payload.changes);
+        this.reportModel.updateARecord(payload.recId, null, payload.changes);
         this.emit("change");
     },
 
+    onAddRecordSuccess(payload) {
+        // update the  record values
+        this.editingIndex = null;
+        this.reportModel.updateARecord(SchemaConsts.UNSAVED_RECORD_ID, payload.recId, payload.record);
+        this.emit("change");
+    },
+
+    onRecordEditCancel(payload) {
+        //remove record if its new unsaved
+        if (payload.recId.value === SchemaConsts.UNSAVED_RECORD_ID) {
+            const model = this.reportModel.get();
+            //make a copy
+            const newFilteredRecords = model.filteredRecords.slice(0);
+            //find record
+            let cancelledFRecordIndex = this.reportModel.findRecordIndexById(newFilteredRecords, SchemaConsts.UNSAVED_RECORD_ID);
+            //remove it
+            if (cancelledFRecordIndex !== -1) {
+                newFilteredRecords.splice(cancelledFRecordIndex, 1);
+                model.filteredRecords = newFilteredRecords;
+                model.filteredRecordsCount--;
+            }
+
+            //make a copy
+            const newRecords = model.records.slice(0);
+            //find record
+            let cancelledRecordIndex = this.reportModel.findRecordIndexById(newRecords, SchemaConsts.UNSAVED_RECORD_ID);
+            //remove it
+            if (cancelledRecordIndex !== -1) {
+                newRecords.splice(cancelledRecordIndex, 1);
+                model.records = newRecords;
+                model.recordsCount--;
+            }
+        }
+        this.onClearEdit();
+    },
     onClearEdit() {
         this.editingIndex = null;
         this.editingId = null;

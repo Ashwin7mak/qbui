@@ -190,7 +190,7 @@ let reportDataActions = {
                 recordService.createRecord(appId, tblId, record).then(
                         response => {
                             logger.debug('RecordService createRecord success:' + JSON.stringify(response));
-                            this.dispatch(actions.ADD_REPORT_RECORD_SUCCESS, {appId, tblId, record});
+                            this.dispatch(actions.ADD_REPORT_RECORD_SUCCESS, {appId, tblId, record, recId:response.data.id});
                             NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
                             resolve();
                         },
