@@ -182,10 +182,12 @@ let ReportToolsAndContent = React.createClass({
 
 
         this.pageStart = this.props.reportData.offset + 1;
-        if (this.props.reportData.data && this.props.reportData.data.recordsCount) {
-            this.pageEnd = this.props.reportData.offset + this.props.reportData.data.recordsCount;
-        } else {
+        if (this.props.reportData.data) {
             this.pageEnd = this.props.reportData.offset + this.props.reportData.numRows;
+
+            if (this.props.reportData.recordsCount && this.pageEnd > this.props.reportData.recordsCount) {
+                this.pageEnd = this.props.reportData.recordsCount;
+            }
         }
 
         return <ReportToolbar appId={this.props.params.appId}

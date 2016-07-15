@@ -41,6 +41,7 @@ export default {
     FORMCOMPONENTS      : 'formComponents',
     HOMEPAGE            : 'homePage',
     REPORTCOMPONENTS    : 'reportComponents',
+    RECORDSCOUNT        : 'count',
     RESULTS             : 'results',
     PARSE               : 'parse'
 };

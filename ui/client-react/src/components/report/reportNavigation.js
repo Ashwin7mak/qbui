@@ -35,7 +35,7 @@ var ReportNavigation = React.createClass({
                              pageEnd={this.props.pageEnd}
                 />
 
-                { this.props.recordsCount && this.props.pageEnd <= (this.props.recordsCount + this.props.pageStart) ?
+                { (this.props.recordsCount != this.props.pageEnd) ?
                     <NextLink getNextReportPage={this.props.getNextReportPage} /> :
                     null
                 }

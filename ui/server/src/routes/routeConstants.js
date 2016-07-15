@@ -43,6 +43,7 @@
 
         REPORT_COMPONENTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/reportComponents',
         REPORT_RESULTS          : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
+        REPORT_RECORDS_COUNT    : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
         TABLE_HOMEPAGE_REPORT   : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
 
         // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper

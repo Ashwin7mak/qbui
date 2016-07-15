@@ -149,15 +149,15 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
             this.model.groupFields = recordData.groups.fields;
-                //  TODO: with paging, this count is flawed...
-            this.model.recordsCount = recordData.groups.totalRows;
+            //     //  TODO: with paging, this count is flawed...
+            // this.model.recordsCount = recordData.groups.totalRows;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.records = this.getReportData(recordData.fields, recordData.records);
             this.model.groupFields = null;
 
-            //  TODO: with paging, this count is flawed...
-            this.model.recordsCount = recordData.records ? recordData.records.length : null;
+            // //  TODO: with paging, this count is flawed...
+            // this.model.recordsCount = recordData.records ? recordData.records.length : null;
         }
 
         this.model.fields = recordData.fields || [];
@@ -193,6 +193,12 @@ let reportModel = {
             }
         });
 
+    },
+
+    updateRecordsCount: function(recordsCountData) {
+        if (recordsCountData) {
+            this.model.recordsCount = recordsCountData;
+        }
     },
 
     /**
@@ -271,6 +277,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_RECORDS,  this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
+            actions.LOAD_RECORDS_COUNT_SUCCESS, this.onLoadRecordsCountSuccess,
+            actions.LOAD_RECORDS_COUNT_FAILED, this.onLoadRecordsCountFailed,
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
@@ -355,6 +363,15 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadRecordsFailed() {
         this.loading = false;
+        this.error = true;
+        this.emit('change');
+    },
+
+    onLoadRecordsCountSuccess(response) {
+        this.reportModel.updateRecordsCount(response.data);
+    },
+
+    onLoadRecordsCountFailed() {
         this.error = true;
         this.emit('change');
     },

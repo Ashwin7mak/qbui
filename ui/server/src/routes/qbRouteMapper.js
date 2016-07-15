@@ -41,6 +41,7 @@
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
+        routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchRecordsCount;
         routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
@@ -366,6 +367,30 @@
         });
     }
 
+    function fetchRecordsCount(req,res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Report records count', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            reportsApi.fetchRecordsCount(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Report records count');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Report records count');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+
+    }
     /**
      * This is the function for fetching data records for a report from the reportsApi endpoint.
      * This endpoint is intended to be used primarily when a client needs to refresh the data for

@@ -105,6 +105,7 @@ let reportDataActions = {
                 //  query for the report meta data
                 //  TODO: refactor by having just 1 network call to node to retrieve a report...
                 //  TODO: leverage how homepage report is loaded..
+                
                 reportService.getReport(appId, tblId, rptId).then(
                     (reportMetaData) => {
                         let requiredParams = {};
@@ -117,7 +118,18 @@ let reportDataActions = {
                         }
 
                         var queryParams = buildRequestQuery(reportMetaData, requiredParams, overrideQueryParams);
-
+                        reportService.getReportRecordsCount(appId, tblId, rptId, queryParams).then(
+                            function(reportCount) {
+                                logger.debug('ReportRecordsCount service call successful');
+                                this.dispatch(actions.LOAD_RECORDS_COUNT_SUCCESS, reportCount);
+                                resolve();
+                            }.bind(this),
+                            function(error) {
+                                logger.error('ReportRecordsCount service call error: ' + JSON.stringify(error));
+                                this.dispatch(actions.LOAD_RECORDS_COUNT_FAILED, {error:error});
+                                reject();
+                            }.bind(this)
+                        );
                         reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
                             function(reportData) {
                                 logger.debug('ReportDataAndFacets service call successful');

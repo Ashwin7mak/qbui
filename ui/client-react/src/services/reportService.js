@@ -17,11 +17,12 @@ class ReportService extends BaseService {
 
         //  Report service API endpoints
         this.API = {
-            GET_REPORT              : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
-            GET_REPORTS             : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
-            GET_REPORT_COMPONENTS   : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.REPORTCOMPONENTS}`,
-            GET_REPORT_RESULTS      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
-            PARSE_FACET_EXPR        : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
+            GET_REPORT                  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            GET_REPORTS                 : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
+            GET_REPORT_COMPONENTS       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.REPORTCOMPONENTS}`,
+            GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
+            GET_REPORT_RESULTS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
+            PARSE_FACET_EXPR            : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
         };
     }
 
@@ -139,6 +140,32 @@ class ReportService extends BaseService {
         return this.getReportData(appId, tableId, reportId, queryParams, true);
     }
 
+    getReportRecordsCount(appId, tableId, reportId, optionalParams) {
+        let params = {};
+        //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
+        if (optionalParams) {
+            if (optionalParams[query.FORMAT_PARAM] === true) {
+                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+            }
+            if (StringUtils.isNonEmptyString(optionalParams[query.QUERY_PARAM])) {
+                params[query.QUERY_PARAM] = optionalParams[query.QUERY_PARAM];
+            }
+            if (StringUtils.isNonEmptyString(optionalParams[query.COLUMNS_PARAM])) {
+                params[query.COLUMNS_PARAM] = optionalParams[query.COLUMNS_PARAM];
+            }
+            if (StringUtils.isNonEmptyString(optionalParams[query.SORT_LIST_PARAM])) {
+                params[query.SORT_LIST_PARAM] = optionalParams[query.SORT_LIST_PARAM];
+            }
+            if (NumberUtils.isInt(optionalParams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalParams[query.NUMROWS_PARAM])) {
+                params[query.OFFSET_PARAM] = optionalParams[query.OFFSET_PARAM];
+                params[query.NUMROWS_PARAM] = optionalParams[query.NUMROWS_PARAM];
+            }
+        }
+        let url = super.constructUrl(this.API.GET_REPORT_RECORDS_COUNT, [appId, tableId, reportId]);
+        return super.get(url, {params:params});
+
+    }
+    
     /**
      * Return the data records for a given report.
      *
