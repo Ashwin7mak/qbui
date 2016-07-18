@@ -39,7 +39,7 @@ const CellRenderer = React.createClass({
         onTabColumn: React.PropTypes.func,
         initialValue: React.PropTypes.object,
         editing: React.PropTypes.bool,
-        qbGrid: React.PropTypes.bool
+        qbGrid: React.PropTypes.bool // temporary, used to determine if we need to render both a renderer and editor (for ag-grid)
     },
 
     getDefaultProps() {
@@ -319,10 +319,20 @@ export const CheckBoxCellRenderer = React.createClass({
 
 export const SelectionColumnCheckBoxCellRenderer = React.createClass({
 
+
     onClickEdit() {
         if (this.props.params.context.defaultActionCallback) {
             this.props.params.context.defaultActionCallback(this.props.params.data);
         }
+    },
+
+    /**
+     * placeholder for deleting a record
+     */
+    onClickDelete() {
+        const api = this.props.params.api;
+
+        api.deleteRecord(this.props.params.data); // delegate the delete to the grid api
     },
 
     render() {
@@ -332,7 +342,7 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
             {msg: Locale.getMessage('selection.print') + " " + record, rawMsg: true, className:'print', icon:'print'},
             {msg: Locale.getMessage('selection.email') + " " + record, rawMsg: true, className:'email', icon:'mail'},
             {msg: Locale.getMessage('selection.copy') + " " + record, rawMsg: true, className:'duplicate', icon:'duplicate'},
-            {msg: Locale.getMessage('selection.delete') + " " + record, rawMsg: true, className:'delete', icon:'delete'}
+            {msg: Locale.getMessage('selection.delete') + " " + record, rawMsg: true, className:'delete', icon:'delete', onClick: this.onClickDelete}
         ];
 
         return (<div>

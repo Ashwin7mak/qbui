@@ -215,30 +215,18 @@ const QBGrid = React.createClass({
             const editing = rowIndex === this.state.editRow;
 
             switch (colDef.datatypeAttributes.type) {
-            case serverTypeConsts.NUMERIC:
-                return <NumericCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.DATE:
-                return <DateCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.DATE_TIME:
-                return <DateTimeCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.TIME_OF_DAY:
-                return <TimeCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.CHECKBOX:
-                return <CheckBoxCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.USER:
-                return <UserCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.CURRENCY:
-                return <CurrencyCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.RATING:
-                return <RatingCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.PERCENT:
-                return <PercentCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.DURATION:
-                return <DurationCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            case serverTypeConsts.PHONE_NUMBER:
-                return <PhoneCellRenderer qbGrid={true} params={params} editing={editing}/>;
-            default:
-                return <TextCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.NUMERIC:      return <NumericCellRenderer  qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.DATE:         return <DateCellRenderer     qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.DATE_TIME:    return <DateTimeCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.TIME_OF_DAY:  return <TimeCellRenderer     qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.CHECKBOX:     return <CheckBoxCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.USER:         return <UserCellRenderer     qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.CURRENCY:     return <CurrencyCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.RATING:       return <RatingCellRenderer   qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.PERCENT:      return <PercentCellRenderer  qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.DURATION:     return <DurationCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.PHONE_NUMBER: return <PhoneCellRenderer    qbGrid={true} params={params} editing={editing}/>;
+            default:                            return <TextCellRenderer     qbGrid={true} params={params} editing={editing}/>;
             }
         };
     },
@@ -319,18 +307,33 @@ const QBGrid = React.createClass({
     },
 
     /**
-     * handle scroll events and init API
+     * init api property first
      */
-    componentDidMount() {
-        document.querySelector(".reportContent").addEventListener("scroll", this.handleScroll);
-
+    componentWillMount() {
         // ag-grid dependency, could be in context
         this.api = {
             deselectAll: () => {
             },
             onEditRecordCancel: () => {
-            }
+            },
+            deleteRecord: this.deleteRecord
         };
+    },
+
+    /**
+     * delete the record
+     * @param data
+     */
+    deleteRecord(data) {
+        alert("TODO: Delete a record");
+        //flux.actions.deleteReportRecord(...)  which should do the delete causing the grid to re-render
+    },
+
+    /**
+     * handle scroll events and init API
+     */
+    componentDidMount() {
+        document.querySelector(".reportContent").addEventListener("scroll", this.handleScroll);
     },
 
     /**
