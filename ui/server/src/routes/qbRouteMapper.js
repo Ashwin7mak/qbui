@@ -105,7 +105,7 @@
             },
 
             /**
-             * For a given route, return the POST function associated with this route or group of routes
+             * For a given route, return the PUT function associated with this route or group of routes
              * @param route
              */
             fetchPutFunctionForRoute: function(route) {

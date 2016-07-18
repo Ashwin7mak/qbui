@@ -106,7 +106,7 @@
                 init.then(function() {
                     apiBase.executeRequest(recordsEndpoint, consts.POST, record)
                             .then(function(recordIdResponse) {
-                                var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
+                                var getEndpoint = recordsEndpoint + JSON.parse(JSON.parse(recordIdResponse.body).body).id;
                                 if (params) {
                                     getEndpoint += params;
                                 }
@@ -117,8 +117,12 @@
                                               }).catch(function(error) {
                                                   fetchRecordDeferred.reject(error);
                                               });
-                            }).catch(function(currError) {log.error(JSON.stringify(currError));});
-                }).catch(function(err) {log.error(JSON.stringify(err));});
+                            }).catch(function(currError) {
+                                log.error(JSON.stringify(currError));
+                            });
+                }).catch(function(err) {
+                    log.error(JSON.stringify(err));
+                });
                 return fetchRecordDeferred.promise;
             },
             // Creates a record, returning a promise that is resolved or rejected on successful
