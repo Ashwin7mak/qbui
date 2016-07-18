@@ -184,10 +184,6 @@ const flux = {
         },
         saveNewReportRecord: ()=> {
         },
-        mark : ()=> {
-        },
-        measure : ()=> {
-        },
         logMeasurements : ()=> {
         },
     }
@@ -919,7 +915,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}/>);
         spyOn(flux.actions, 'mark');
-        component.startPerfTiming({reportdData: {
+        component.startPerfTiming({reportData: {
             loading : true
         }});
         expect(flux.actions.mark).toHaveBeenCalled();
@@ -931,10 +927,10 @@ describe('ReportContent functions', () => {
                                                                 reportHeader={header_empty}/>);
         spyOn(flux.actions, 'measure');
         spyOn(flux.actions, 'logMeasurements');
-        component.capturePerfTiming({reportdData: {
+        component.capturePerfTiming({reportData: {
             loading : true
         }});
-        expect(flux.actions.mark).toHaveBeenCalled();
+        expect(flux.actions.measure).toHaveBeenCalled();
         expect(flux.actions.logMeasurements).toHaveBeenCalled();
     });
 
