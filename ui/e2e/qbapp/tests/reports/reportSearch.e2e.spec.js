@@ -9,7 +9,7 @@
     var reportServicePage = new ReportServicePage();
     var reportFacetsPage = new ReportFacetsPage();
 
-    describe('Search Report', function() {
+    describe('Report Search Tests', function() {
         var realmName;
         var realmId;
         var app;

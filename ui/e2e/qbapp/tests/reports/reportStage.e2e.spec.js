@@ -15,7 +15,7 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
 
-    describe('Report Page Stage Tests', function() {
+    describe('Report Stage Tests', function() {
         var realmName;
         var realmId;
         var app;
@@ -63,10 +63,9 @@
         /**
         * Test methods. Test that the reportStage collapses and expands
         */
-        e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
-            it('Should expand/collapse the reports stage on breakpoint: ' + testcase.breakpointSize, function(done) {
-                if (testcase.breakpointSize !== 'small') {
-                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+            it('Should expand/collapse the reports stage', function(done) {
+                console.log("browser Size is : "+browserSize)
+                if (browserSize !== 'small') {
                         // Verify that the report Stage is expanded by default
                         reportServicePage.waitForElement(reportServicePage.reportStageBtn).then(function() {
                             // Click on report Stage button to collapse the stage
@@ -83,17 +82,13 @@
                                 });
                             });
                         });
-                    });
-                } else if (testcase.breakpointSize === 'small') {
-                    e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                } else if (browserSize === 'small') {
                         // Verify stage is present in the DOM but not displayed on small breakpoint
                         expect(reportServicePage.reportStageContentEl.isPresent()).toBeTruthy();
                         expect(reportServicePage.reportStageContentEl.isDisplayed()).toBeFalsy();
                         done();
-                    });
                 }
             });
-        });
 
         //TODO: Add tests for stage content (specifically email link and link hover)
 

@@ -30,23 +30,69 @@
             });
         },
         // list of files / patterns to load in the browser
-        specs: [
-            baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
-        ],
         // Patterns to exclude.
-        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'],
         // ----- Capabilities to be passed to the webdriver instance ----
         //
         // For a full list of available capabilities, see
         // https://code.google.com/p/selenium/wiki/DesiredCapabilities
         // and
         // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
-        capabilities: {
-            browserName: 'chrome'
-            //shardTestFiles: true,
-            //maxInstances: 2
-        },
+        //capabilities: {
+        //    browserName: 'chrome'
+        //    //shardTestFiles: true,
+        //    //maxInstances: 2
+        //},
+        multiCapabilities: [
+            {
+                browserName: 'firefox',
+                winWidth:'1441',
+                winHeight:'1440',
+                size: 'xlarge',
+                //offsetWidth: '300',
+                specs: [
+                    baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js',
+                ],
+                exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
+                    baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
+                    baseE2EPath + 'qbapp/tests/reports/reportGroupingSortingViaIcon.e2e.spec.js',
+                ],
+            },
+            {
+                browserName: 'firefox',
+                winWidth:'1025',
+                winHeight:'1440',
+                size: 'large',
+                //offsetWidth: '220',
+                specs: [
+                    baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js',
+                ],
+                exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
+                    baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
+                    baseE2EPath + 'qbapp/tests/reports/reportGroupingSortingViaIcon.e2e.spec.js',
+                ],
+            },
+            {
+                browserName: 'firefox',
+                winWidth:'641',
+                winHeight:'1440',
+                size: 'medium',
+               // offsetWidth: '200',
+                specs: [
+                    baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js',
+                ],
+                exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
+                    baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
+                    baseE2EPath + 'qbapp/tests/reports/reportGroupingSortingViaIcon.e2e.spec.js',
+                ],
+            },
+            //{
+            //    browserName: 'firefox',
+            //    winWidth:'500',
+            //    winHeight:'1440',
+            //    size: 'small',
+            //    offsetWidth: '300'
+            //}
+        ],
         // ----- The test framework -----
         //
         // Jasmine and Cucumber are fully supported as a test and assertion framework.
@@ -97,11 +143,19 @@
             browser.ignoreSynchronization = true;
 
             // Maximizes the browser window (known bug with Chrome)
-            browser.driver.manage().window().maximize();
+            //browser.driver.manage().window().maximize();
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
                 global.browserName = cap.get('browserName');
+            });
+
+            browser.getProcessedConfig().then(function(config) {
+                //global.height = config.capabilities.winHeight;
+                console.log("size to be set is:" +parseInt(config.capabilities.winWidth)+","+parseInt(config.capabilities.winHeight));
+                browser.driver.manage().window().setSize(parseInt(config.capabilities.winWidth),parseInt(config.capabilities.winHeight));
+                global.browserSize = config.capabilities.size;
+                //global.browserOffsetWidth = config.capabilities.offsetWidth
             });
 
             // Add jasmine-spec-reporter

@@ -156,10 +156,8 @@
 
             beforeAll(function(done) {
                 //go to report page directly
-                e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     done();
-                });
             });
 
             /**
@@ -228,10 +226,8 @@
 
             beforeAll(function(done) {
                 //go to report page directly
-                e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
                     done();
-                });
             });
 
             /**

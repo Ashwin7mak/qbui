@@ -361,10 +361,7 @@
             });
 
             //There wont be facet filter button displayed for small breakpoint
-            e2eConsts.NavDimensionsDataProvider().forEach(function(testBreakpoints) {
-                it(testBreakpoints.breakpointSize + '- Verify clear all facets tokens from the container', function(done) {
-                    //resize the browser
-                    e2eBase.resizeBrowser(testBreakpoints.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                it('Verify clear all facets tokens from the container', function(done) {
                         reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                             reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
                                 //Click on facet carat to show popup
@@ -376,7 +373,7 @@
                         }).then(function() {
                             //select the facet Items
                             reportFacetsPage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
-                                if (testBreakpoints.breakpointSize === 'small') {
+                                if (browserSize === 'small') {
                                     // Verify display of filter search box is false for small breakpoint
                                     expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeFalsy();
                                     //Verify there are no facet tokens displayed in the container
@@ -403,9 +400,7 @@
                                 }
                             });
                         });
-                    });
                 });
-            });
 
             it('Negative test to verify a facet dropdown not displayed with report without facetsFIDS', function(done) {
                 //go to report page directly

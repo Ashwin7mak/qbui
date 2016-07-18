@@ -181,12 +181,6 @@
          */
         describe('XLARGE: Report Settings: No-Facets No-Groups/Sorts Yes-Fids', function() {
 
-            beforeAll(function(done) {
-                e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    done();
-                });
-            });
-
             beforeEach(function(done) {
                 //go to report page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
@@ -346,12 +340,6 @@
          * LARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No-Facets No-Groups/Sorts Yes-Fids setup in reports
          */
         describe('LARGE : Report Settings : No-Facets No-Groups/Sorts Yes-Fids ', function() {
-            beforeAll(function(done) {
-                e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    done();
-                });
-            });
-
             beforeEach(function(done) {
                 //go to report page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
@@ -490,13 +478,6 @@
          */
 
         describe('MEDIUM: Report Settings: with Facets and sortLists: ', function() {
-
-            beforeAll(function(done) {
-                e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    done();
-                });
-            });
-
             beforeEach(function(done) {
                 //go to report with facets page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '4'));
@@ -626,11 +607,9 @@
         xdescribe('SMALL: Report Settings: No Facets No sortLists', function() {
 
             beforeAll(function(done) {
-                e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     //go to report page directly
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
                     done();
-                });
             });
 
             beforeEach(function(done) {

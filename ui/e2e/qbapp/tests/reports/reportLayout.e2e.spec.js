@@ -80,28 +80,22 @@
         /**
          * Layout test. Verify topNav is displayed above the report stage
          */
-        it('xtra large breakpoint: verify topNav is on top of report stage', function() {
-            e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                reportServicePage.isElementOnTop(reportServicePage.topNavDivEl, reportServicePage.reportStageContentEl);
-            });
+        it('verify topNav is on top of report stage', function() {
+            reportServicePage.isElementOnTop(reportServicePage.topNavDivEl, reportServicePage.reportStageContentEl);
         });
 
         /**
          * Layout test. Verify report actions are displayed above the report content
          */
-        it('large breakpoint: verify table actions Layout container is on top of report container', function() {
-            e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                reportServicePage.isElementOnTop(reportServicePage.reportToolbarContainerEl, reportServicePage.agGridContainerEl);
-            });
+        it('verify table actions Layout container is on top of report container', function() {
+            reportServicePage.isElementOnTop(reportServicePage.reportToolbarContainerEl, reportServicePage.agGridContainerEl);
         });
 
         /**
          * Layout test. Verify stage is displayed above the report actions container
          */
-        it('medium breakpoint: verify report Stage Layout container is on top of table actions container', function() {
-            e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                reportServicePage.isElementOnTop(reportServicePage.reportStageContentEl, reportServicePage.reportToolbarContainerEl);
-            });
+        it('verify report Stage Layout container is on top of table actions container', function() {
+            reportServicePage.isElementOnTop(reportServicePage.reportStageContentEl, reportServicePage.reportToolbarContainerEl);
         });
 
         //TODO: Tests for small breakpoint size
