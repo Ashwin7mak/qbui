@@ -72,9 +72,8 @@ const QBGrid = React.createClass({
 
     getCheckboxHeader() {
 
-
         const allSelected = this.props.selectedRows.length === this.props.records.length;
-        console.log(allSelected);
+
         return (
             <input type="checkbox"
                       checked={allSelected}
