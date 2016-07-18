@@ -104,6 +104,7 @@ $cell-edit-background-edit: $color1;
         padding: 0;
         margin: 0;
         border-right: 1px solid $row-border-color;
+        vertical-align: middle;
 
         .cellData {
             display:none;

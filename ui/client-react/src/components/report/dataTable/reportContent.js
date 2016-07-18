@@ -25,7 +25,7 @@ let ReportContent = React.createClass({
     getInitialState: function() {
         return {
             showSelectionColumn: false,
-            reactabular: true
+            reactabular: false
         };
     },
 

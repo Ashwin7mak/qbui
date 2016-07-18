@@ -54,7 +54,7 @@ const CellEditor = React.createClass({
                                      onChange={this.props.onChange} />
                 );
             } else {
-                return <MultiLineTextFieldEditor value={this.props.value}
+                return <DefaultFieldEditor value={this.props.value}
                                            onChange={this.props.onChange} />;
             }
         }

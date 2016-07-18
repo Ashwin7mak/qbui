@@ -48,11 +48,12 @@ export const CellValueRenderer = React.createClass({
                     <input type="checkbox" disabled checked={this.props.value} />
                 </span>);
 
-        case formats.TEXT_FORMAT:
-            return (<span className={className}>
-                <MultiLineTextCellValueRenderer value={this.props.display} />
-                </span>);
+        //case formats.MULTI_LINE_TEXT_FORMAT:
+        //    return (<span className={className}>
+        //        <MultiLineTextCellValueRenderer value={this.props.display} />
+        //        </span>);
 
+        case formats.TEXT_FORMAT:
         case formats.PERCENT_FORMAT:
         case formats.CURRENCY_FORMAT:
         default: {
