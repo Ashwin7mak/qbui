@@ -51,6 +51,8 @@ const QBGrid = React.createClass({
 
         rtCols.push({
             property: this.props.uniqueIdentifier,
+            headerClass: "gridHeaderCell",
+            header: this.getCheckboxHeader(),
             cell: this.getActionsCell()
         });
 
@@ -68,6 +70,32 @@ const QBGrid = React.createClass({
         return rtCols;
     },
 
+    getCheckboxHeader() {
+
+
+        const allSelected = this.props.selectedRows.length === this.props.records.length;
+        console.log(allSelected);
+        return (
+            <input type="checkbox"
+                      checked={allSelected}
+                      onChange={ (ev) => {
+                            if (ev.target.checked) {
+                                this.selectAllRows();
+                            } else {
+                                this.getFlux().actions.selectedRows([]);
+                            }
+                        }
+                      }
+               />);
+    },
+
+    selectAllRows() {
+        let selected = [];
+        this.props.records.forEach((rec) => {
+            selected.push(rec[this.props.keyField].value);
+        });
+        this.getFlux().actions.selectedRows(selected);
+    },
     /**
      * renderer for selection/actions cells (higher order function)
      * @returns function that renders an actions column cell
@@ -98,7 +126,7 @@ const QBGrid = React.createClass({
     },
 
     /**
-     * get a context object to pass to the cells
+     * get a context object to pass to the cells (could use react context if not for ag-grid)
      * @returns {{keyField: (*|null|boolean), flux: *, onEditRecordCancel: onEditRecordCancel, cellTabCallback: cellTabCallback}}
      */
     getContext() {
@@ -285,6 +313,7 @@ const QBGrid = React.createClass({
     componentDidMount() {
         document.querySelector(".reportContent").addEventListener("scroll", this.handleScroll);
 
+        // ag-grid dependency, could be in context
         this.api = {
             deselectAll: () => {},
             onEditRecordCancel: () => {}

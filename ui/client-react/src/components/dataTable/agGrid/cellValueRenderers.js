@@ -13,7 +13,8 @@ export const CellValueRenderer = React.createClass({
     },
 
     render() {
-        let className = "cellData" + (this.props.isEditable ? "" : " nonEditable cellEdit");
+
+        let className = "cellData" + (this.props.isEditable ? "" : " nonEditable");
         switch (this.props.type) {
         case formats.NUMBER_FORMAT:
         case formats.RATING_FORMAT:
