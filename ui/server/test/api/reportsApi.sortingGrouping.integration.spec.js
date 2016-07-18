@@ -46,7 +46,7 @@
      *
      * - klabak
      */
-    describe('API - Validate report sorting and grouping execution', function() {
+    xdescribe('API - Validate report sorting and grouping execution', function() {
         // Set timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
 
@@ -266,7 +266,7 @@
          * Java core does throw an exception when trying to parse the sortList
          * "message":"Invalid sList entry when parsing fid.  sList: adg!@s3.
          */
-        it('Reports API - Should return an empty sortList when creating a report with an invalid sortList', function(done) {
+        xit('Reports API - Should return an empty sortList when creating a report with an invalid sortList', function(done) {
 
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
@@ -302,7 +302,7 @@
         /**
          * Test to validate sorting by calling the Records API endpoint
          */
-        it('Records API - Should return sorted records when calling the endpoint with a sortList param', function(done) {
+        xit('Records API - Should return sorted records when calling the endpoint with a sortList param', function(done) {
 
             var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
 
