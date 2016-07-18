@@ -581,6 +581,14 @@ let ReportContent = React.createClass({
     render: function() {
         let isTouch = this.context.touch;
         let recordCount = 0;
+
+        let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
+        if (this.props.keyField) {
+            keyField = this.props.keyField;
+        } else if (this.props.fields && this.props.fields.keyField && this.props.fields.keyField.name) {
+            keyField = this.props.fields.keyField.name;
+        }
+
         if (this.props.reportData) {
             let reportData = this.props.reportData.data;
             if (reportData) {
@@ -599,7 +607,7 @@ let ReportContent = React.createClass({
                                     records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                     columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                     uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                    keyField={this.props.keyField}
+                                    keyField={keyField}
                                     appId={this.props.reportData.appId}
                                     onEditRecordStart={this.handleEditRecordStart}
                                     onEditRecordCancel={this.handleEditRecordCancel}
@@ -628,8 +636,7 @@ let ReportContent = React.createClass({
                                         search: this.props.reportData.searchStringForFiltering}} /> :
                             <CardViewListHolder reportData={this.props.reportData}
                                 uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                keyField={this.props.fields && this.props.fields.keyField ?
-                                    this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
+                                keyField={keyField}
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}
                                 onScroll={this.onScrollRecords}

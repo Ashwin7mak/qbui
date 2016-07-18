@@ -19,8 +19,8 @@
         {route: routeConsts.FORM_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.REPORT_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.REPORT_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.RECORD, methods: [constants.POST, constants.DELETE, constants.PUT]},
-        {route: routeConsts.RECORDS, methods: [constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.RECORD, methods: [constants.POST, constants.DELETE, constants.PUT]}, //get and patch allowed
+        {route: routeConsts.RECORDS, methods: [constants.DELETE, constants.PATCH, constants.PUT]}, //get and post allowed
         {route: routeConsts.SWAGGER_API, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_RESOURCES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_IMAGES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},

@@ -47,6 +47,9 @@ const fakeReportData_empty = {
         columns: []
     }
 };
+const fakeReportData_emptyData = {
+    loading: true,
+};
 
 const fakeReportData_simple = {
     loading: false,
@@ -575,6 +578,31 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
+    it('test render of error', () => {
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={{error:'ground control to major Tom'}}
+                                                                reportHeader={header_empty}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(0);
+    });
+
+    it('test render of empty data', () => {
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_emptyData}
+                                                                reportHeader={header_empty}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+    });
+
+
+    it('test render with keyField', () => {
+
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_emptyData}
+                                                                fields={{keyField : {name: 'testId'}}}
+                                                                reportHeader={header_empty}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+    });
+
+
     it('test getOrigRec', () => {
         let keyField = "id";
         let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
@@ -700,8 +728,6 @@ describe('ReportContent functions', () => {
                 ]
             }
         };
-
-
 
         spyOn(flux.actions, 'recordPendingEditsChangeField');
 
