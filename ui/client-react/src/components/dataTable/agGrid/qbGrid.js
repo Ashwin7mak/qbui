@@ -4,8 +4,8 @@ import {Table} from 'reactabular';
 import Fluxxor from 'fluxxor';
 
 import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, DurationCellRenderer,
-        PhoneCellRenderer, NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
-        CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer} from './cellRenderers';
+    PhoneCellRenderer, NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
+    CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer} from './cellRenderers';
 
 const serverTypeConsts = require('../../../../../common/src/constants');
 
@@ -27,7 +27,7 @@ const QBGrid = React.createClass({
      */
     render() {
 
-        let data = this.props.records ?  this.props.records : [];
+        let data = this.props.records ? this.props.records : [];
 
         return (this.props.columns &&
 
@@ -36,7 +36,7 @@ const QBGrid = React.createClass({
                    columns={this.getColumns()}
                    data={this.props.records}
                    rowKey="id"
-                   row={this.getRow} />
+                   row={this.getRow}/>
         );
     },
 
@@ -76,16 +76,16 @@ const QBGrid = React.createClass({
 
         return (
             <input type="checkbox"
-                      checked={allSelected}
-                      onChange={ (ev) => {
-                            if (ev.target.checked) {
-                                this.selectAllRows();
-                            } else {
-                                this.getFlux().actions.selectedRows([]);
-                            }
-                        }
-                      }
-               />);
+                   checked={allSelected}
+                   onChange={ (ev) => {
+                       if (ev.target.checked) {
+                           this.selectAllRows();
+                       } else {
+                           this.getFlux().actions.selectedRows([]);
+                       }
+                   }
+                   }
+            />);
     },
 
     selectAllRows() {
@@ -117,8 +117,8 @@ const QBGrid = React.createClass({
                 <span className="actionsCol">
                     <input type="checkbox"
                            checked={this.isRowSelected(id)}
-                           onChange={() => this.toggleSelectedRow(id)} />
-                        <SelectionColumnCheckBoxCellRenderer params={params} />
+                           onChange={() => this.toggleSelectedRow(id)}/>
+                        <SelectionColumnCheckBoxCellRenderer params={params}/>
                 </span>
             );
         };
@@ -138,7 +138,7 @@ const QBGrid = React.createClass({
             cellTabCallback: this.onCellTab,
             onRecordChange: (id) => {
                 this.setState({editRow: -1});
-                this.props.onRecordChange(id)
+                this.props.onRecordChange(id);
             },
             onFieldChange: this.props.onFieldChange,
             onEditRecordStart: this.props.onEditRecordStart,
@@ -154,7 +154,7 @@ const QBGrid = React.createClass({
         const lastColumn = this.props.columns[this.props.columns.length - 1];
         if (colDef.field === lastColumn.field) {
             // tabbed out of last column
-            if (this.state.editRow !== this.props.records.length-1) {
+            if (this.state.editRow !== this.props.records.length - 1) {
                 this.setState({editRow: this.state.editRow + 1});
             } else {
                 this.setState({editRow: -1});
@@ -215,18 +215,30 @@ const QBGrid = React.createClass({
             const editing = rowIndex === this.state.editRow;
 
             switch (colDef.datatypeAttributes.type) {
-            case serverTypeConsts.NUMERIC:      return <NumericCellRenderer  qbGrid={true} params={params} editing={editing} />;
-            case serverTypeConsts.DATE:         return <DateCellRenderer     qbGrid={true} params={params} editing={editing} />;
-            case serverTypeConsts.DATE_TIME:    return <DateTimeCellRenderer qbGrid={true} params={params} editing={editing} />;
-            case serverTypeConsts.TIME_OF_DAY:  return <TimeCellRenderer     qbGrid={true} params={params} editing={editing} />;
-            case serverTypeConsts.CHECKBOX:     return <CheckBoxCellRenderer qbGrid={true} params={params} editing={editing} />;
-            case serverTypeConsts.USER:         return <UserCellRenderer     qbGrid={true} params={params} editing={editing} />;
-            case serverTypeConsts.CURRENCY:     return <CurrencyCellRenderer qbGrid={true} params={params} editing={editing} />;
-            case serverTypeConsts.RATING:       return <RatingCellRenderer   qbGrid={true} params={params} editing={editing} />;
-            case serverTypeConsts.PERCENT:      return <PercentCellRenderer  qbGrid={true} params={params} editing={editing} />;
-            case serverTypeConsts.DURATION:     return <DurationCellRenderer qbGrid={true} params={params} editing={editing} />;
-            case serverTypeConsts.PHONE_NUMBER: return <PhoneCellRenderer    qbGrid={true} params={params} editing={editing} />;
-            default:                            return <TextCellRenderer     qbGrid={true} params={params} editing={editing} />;
+            case serverTypeConsts.NUMERIC:
+                return <NumericCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.DATE:
+                return <DateCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.DATE_TIME:
+                return <DateTimeCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.TIME_OF_DAY:
+                return <TimeCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.CHECKBOX:
+                return <CheckBoxCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.USER:
+                return <UserCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.CURRENCY:
+                return <CurrencyCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.RATING:
+                return <RatingCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.PERCENT:
+                return <PercentCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.DURATION:
+                return <DurationCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            case serverTypeConsts.PHONE_NUMBER:
+                return <PhoneCellRenderer qbGrid={true} params={params} editing={editing}/>;
+            default:
+                return <TextCellRenderer qbGrid={true} params={params} editing={editing}/>;
             }
         };
     },
@@ -314,8 +326,10 @@ const QBGrid = React.createClass({
 
         // ag-grid dependency, could be in context
         this.api = {
-            deselectAll: () => {},
-            onEditRecordCancel: () => {}
+            deselectAll: () => {
+            },
+            onEditRecordCancel: () => {
+            }
         };
     },
 
