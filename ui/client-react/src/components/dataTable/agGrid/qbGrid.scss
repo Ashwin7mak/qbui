@@ -1,48 +1,22 @@
 @import '../../../../src/assets/css/qbVariables';
 
-$header-cell-border: $color5;
-$header-cell-border-bottom: $color6;
-$header-cell-background-color: $color7;
-$header-cell-color: $color8;
-
 $row-background-color-hover: $color1;
 $row-cell-border-color: $color4;
-
-$grid-font-size: $font-size - 2;
-
-$grid-group-row-header-bkgrd-color: $color1;
-$grid-group-row-header-border-top: $color7;
-$grid-group-row-header-divider: $color21;
-
-$grid-group-expand-icon-size: 20px;
-$grid-default-group-padding: 2px;
-$grid-default-cell-padding: 4px;
-
-$row-bg-color: #fff;
+$row-bg-color: $color2;
 $row-non-editable-bg-color: $color12;
-$row-border-color: #ddd;
-$row-box-shadow-color: #dcdcdc;
-$cell-edit-background-edit: #f3f8fe;
+$row-border-color:$color4;
+$row-box-shadow-color:$color4;
+$cell-edit-background-edit: $color1;
 
 .reportContent {
     margin-left:10px;
 }
 
-.multiLineTextCell {
-    border:0;
-    background-color: $row-bg-color;
-    margin:0;
-    padding:0;
-    font-family: "Open Sans";
-    font-size: 12px;
-    border-radius:0;
-
-}
-.qbGrid >thead, .qbGrid>tbody{
+.qbGrid>thead, .qbGrid>tbody{
     table-layout:fixed;
-
-    >td { vertical-align:top;   }
-    >td:first-child { vertical-align:middle }
+    >td {
+        vertical-align:top;
+    }
 }
 
 .qbGrid {
@@ -50,10 +24,9 @@ $cell-edit-background-edit: #f3f8fe;
         white-space: nowrap;
     }
 }
-.qbGrid >thead>tr>th {
+.qbGrid>thead>tr>th {
     border-right: 1px solid #c0d0e4;
     border-bottom: 2px solid #d2dce7;
-
     padding: 4px;
     color: #486c8f;
     font-size: 12px;
@@ -84,23 +57,24 @@ $cell-edit-background-edit: #f3f8fe;
     }
 
 }
-.qbGrid >tbody>tr>td {
+.qbGrid>tbody>tr>td {
     padding: 4px;
     font-size: 12px;
     border-right: 1px solid #dcdcdc;
     border-bottom: 1px solid #dcdcdc;
     vertical-align:top;
-
 }
-.qbGrid >tbody>tr>td:first-of-type {
+
+.qbGrid>tbody>tr>td:first-of-type {
     left:0;
     width:80px;
     max-width:80px;
     position:relative;
     background: #fff;
+    vertical-align:middle;
 }
 
-.qbGrid td .cellWrapper > :not(.cellData) {
+.qbGrid td .cellWrapper>:not(.cellData) {
     display: none;
 }
 
@@ -109,48 +83,48 @@ $cell-edit-background-edit: #f3f8fe;
         min-width:120px;
     }
 }
-.qbGrid tr.editing {
-    >td {
-        box-shadow: 4px -4px 8px #dcdcdc;
-    }
+
+/* hide row editing tools by default */
+.editTools {
+    display:none;
+}
+
+.qbGrid>tbody>tr.editing {
+
     >td:first-child {
         border-left: 1px solid #ddd;
         padding-left:4px;
+        border-left:1px solid $row-border-color;
+        position:absolute;
     }
-
     >td {
+        box-shadow: 4px -4px 8px #dcdcdc;
         background-color: $cell-edit-background-edit;
-        //box-shadow: 4px -4px 8px #dcdcdc;
-        .cellData {
-            display:none;
-        };
         overflow:visible;
         padding: 0;
         margin: 0;
-
         border-right: 1px solid $row-border-color;
-        > .cellWrapper {
+
+        .cellData {
+            display:none;
+        }
+        .cellWrapper {
             display:inline-block;
             padding:2px;
-
-            > :not(.cellData) {
-                display: inline-block;
-            }
-            //position: absolute;
-
             top:0px;
             left:0px;
             right:0px;
             bottom:0px;
-
-
             z-index:1;
-            //display:flex;
+
+            >:not(.cellData) {
+                display: inline-block;
+            }
 
             .cellData {
                 visibility:hidden;
-                //display:none;
             }
+
             textarea.cellEdit {
                 resize:none;
                 overflow:hidden;
@@ -159,8 +133,6 @@ $cell-edit-background-edit: #f3f8fe;
             .cellEdit {
                 display:inline-block;
                 border:1px solid $row-border-color;
-
-
                 background: $row-bg-color;
                 flex:1 1 auto;
                 padding:0 0 0 2px;
@@ -185,7 +157,6 @@ $cell-edit-background-edit: #f3f8fe;
                         padding:0;
                         border:0;
                         color: $icon-color;
-
                     }
                 }
                 &.input-group {
@@ -218,60 +189,51 @@ $cell-edit-background-edit: #f3f8fe;
                     }
                 }
             }
-
-
-        }
-        > td:first-child {
-            border-left:1px solid $row-border-color;
-            position:absolute;
-
         }
     }
 
-    >td {
+    .editTools {
+        z-index:1;
+        display:flex;
+        flex-direction:column;
+        flex: 0 0 auto;
+        background-color:$cell-edit-background-edit;
+        box-shadow: -2px 2px 8px $row-box-shadow-color;
+        position:absolute;
+        top:-26px;
+        left:-1px;
+        width:80px;
+        border-left: 1px solid $row-border-color;
+        border-bottom:1px solid $row-border-color;
 
-        .editTools {
-            z-index:1;
-            display:flex;
-            flex-direction:column;
+        button {
             flex: 0 0 auto;
+            border:0;
             background-color:$cell-edit-background-edit;
-            box-shadow: -2px 2px 8px $row-box-shadow-color;
-            position:absolute;
-            top:-26px;
-            left:48px;
+            margin-right:2px;
+            padding:6px 4px;
 
-            border-left: 1px solid $row-border-color;
-            border-bottom:1px solid $row-border-color;
-            button {
-                flex: 0 0 auto;
-                border:0;
-                background-color:$cell-edit-background-edit;
-                margin-right:2px;
-                padding:6px 4px;
-
-                .qbIcon:hover {
-                    opacity:1;
-                }
-                .qbIcon {
-                    opacity:.7;
-                    width:20px;
-                    font-size: 16px;
-                    vertical-align:top;
-                }
-                .qbIcon.saveRecord {
-                    color:green;
-                    font-size:18px;
-                }
-                .qbIcon.cancelSelection {
-                    color:$icon-color;
-                }
-                .qbIcon.deleteRecord {
-                    color:red;
-                }
-                .qbIcon.addRecord {
-                    color:$icon-color;
-                }
+            .qbIcon:hover {
+                opacity:1;
+            }
+            .qbIcon {
+                opacity:.7;
+                width:20px;
+                font-size: 16px;
+                vertical-align:top;
+            }
+            .qbIcon.saveRecord {
+                color:green;
+                font-size:18px;
+            }
+            .qbIcon.cancelSelection {
+                color:$icon-color;
+            }
+            .qbIcon.deleteRecord {
+                color:red;
+            }
+            .qbIcon.addRecord {
+                color:$icon-color;
             }
         }
     }
@@ -336,4 +298,14 @@ $cell-edit-background-edit: #f3f8fe;
 .actionsCol:hover .iconActions .iconActionButton {
     transition: opacity 200ms ease-in-out;
     opacity:1;
+}
+
+.multiLineTextCell {
+    border:0;
+    background-color: $row-bg-color;
+    margin:0;
+    padding:0;
+    font-family: "Open Sans";
+    font-size: 12px;
+    border-radius:0;
 }

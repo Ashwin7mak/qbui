@@ -32,7 +32,7 @@ const QBGrid = React.createClass({
         return (this.props.columns &&
 
             <Table ref="qbGridTable"
-                   className="qbGrid agGrid"
+                   className="qbGrid"
                    columns={this.getColumns()}
                    data={this.props.records}
                    rowKey="id"
