@@ -95,7 +95,7 @@ $cell-edit-background-edit: $color1;
         border-left: 1px solid #ddd;
         padding-left:4px;
         border-left:1px solid $row-border-color;
-        position:absolute;
+        position:relative;
     }
     >td {
         box-shadow: 4px -4px 8px #dcdcdc;
