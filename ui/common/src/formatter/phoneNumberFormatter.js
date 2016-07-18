@@ -59,7 +59,7 @@
                         formattedPhoneVal = OPEN_PAREN + firstThree + formattedPhoneVal;
                         phoneWithOutExtension = phoneWithOutExtension.substring(0, phoneWithOutExtension.length - 3);
 
-                        formattedPhoneVal = phoneWithOutExtension + formattedPhoneVal;
+                        formattedPhoneVal = phoneWithOutExtension + " " + formattedPhoneVal;
                     }
                 }
             }

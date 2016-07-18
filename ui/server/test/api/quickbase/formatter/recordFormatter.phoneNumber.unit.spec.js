@@ -72,7 +72,7 @@ describe('Phone number record formatter unit test', function() {
                 [[{
                     id     : 7,
                     value  : '2225557779999x1234',
-                    display: '222(555) 777-9999'
+                    display: '222 (555) 777-9999'
                 }]];
 
         //Incomplete number
