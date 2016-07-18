@@ -15,6 +15,7 @@
         var app;
         var userId;
         var reportId;
+        var reportId2;
 
         var FORMAT = 'display';
         var ADMIN_USER_ID = "10000";
@@ -65,23 +66,35 @@
                     //Create a report
                     recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(reportResults) {
                         reportId = JSON.parse(reportResults.body).id;
-                        done();
+                    }).then(function() {
+                        //create report 2
+                        var reportEndpoint2 = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+                        var reportToCreate2 = {
+                            name: 'testReport2',
+                            type: 'TABLE',
+                            tableId: app.tables[0].id,
+                            query: null,
+                        };
+                        //Create a report
+                        recordBase.apiBase.executeRequest(reportEndpoint2, consts.POST, reportToCreate2).then(function(reportResults) {
+                            reportId2 = JSON.parse(reportResults.body).id;
+                            done();
+                        });
                     });
+                }).catch(function(error) {
+                    log.error(JSON.stringify(error));
+                    done();
                 });
-            }).catch(function(error) {
-                log.error(JSON.stringify(error));
-                done();
+                return app;
             });
-            return app;
         });
 
-        /**
-         * Function that creates JSON for tableId reportId map for defaulthomepage POST
-         */
-        function createTableReportMapJSON(tableId, reportId_Id) {
-            var jsonStr = '{"' + tableId + '":"' + reportId_Id + '"}';
-            return JSON.parse(jsonStr);
-        }
+        beforeEach(function(done) {
+            //set the authentication to Admin
+            recordBase.apiBase.createUserAuthentication(ADMIN_USER_ID).then(function() {
+                done();
+            });
+        });
 
         /**
          * Function that creates JSON for roleId reportId map for custdefaulthomepage POST
@@ -90,82 +103,6 @@
             var jsonStr = '{"' + roleId + '":"' + report_Id + '"}';
             return JSON.parse(jsonStr);
         }
-
-        /**
-         * Data Provider for report homepage for various user roles
-         */
-        function reportHomePageTestCases() {
-            return [
-                {
-                    message: 'Viewer Role',
-                    roleId: 10
-                },
-                {
-                    message: 'Participant Role',
-                    roleId: 11
-                },
-                {
-                    message: 'Admin Role',
-                    roleId: 12
-                }
-            ];
-        }
-
-        /**
-         * Tests for API call for table POST custdefaulthomepage and GET report homepage which is intercepted by node and returns a report obj (metaData and data)
-         */
-        reportHomePageTestCases().forEach(function(testcase) {
-            it('Verify API calls POST custdefaulthomepage, and GET homepage for ', function(done) {
-                //create user
-                recordBase.apiBase.createUser().then(function(userResponse) {
-                    userId = JSON.parse(userResponse.body).id;
-                    //add user to appRole
-                    recordBase.apiBase.assignUsersToAppRole(app.id, testcase.roleId, [userId]).then(function(userRoleResponse) {
-                        //POST custdefaulthomepage for a table
-                        recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, reportId)).then(function() {
-                            //get the user authentication
-                            recordBase.apiBase.createUserAuthentication(userId).then(function() {
-                                //Execute a GET report homepage which returns report object (metaData and data)
-                                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
-                                    var results = JSON.parse(reportHomePageResults.body);
-                                    //Verify returned results has right report Id and role info
-                                    //verify report meta Data
-                                    var reportMetaData = results.reportMetaData.data;
-                                    assert.deepEqual(reportMetaData.id, reportId);
-                                    assert.deepEqual(reportMetaData.name, 'testReport');
-
-                                    //verify report data
-                                    var reportData = results.reportData.data;
-                                    assert.deepEqual(reportData.groups, []);
-                                    assert.deepEqual(reportData.facets, []);
-                                    assert.deepEqual(reportData.records.length, 10);
-
-                                    //finally reset authentication back to Admin
-                                    recordBase.apiBase.createUserAuthentication(ADMIN_USER_ID).then(function() {
-                                        done();
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-
-        /**
-         * Tests for API call for table POST defaulthomepage and GET defaulthomepage which is a call to the core api from node (node is only forwarding the request)
-         * that returns the homepage report id(if any).
-         */
-        it('Verify API calls POST defaulthomepage and GET defaulthomepage ', function(done) {
-            //POST defaulthomepage for a table
-            recordBase.apiBase.setDefaultTableHomePage(app.id, createTableReportMapJSON(app.tables[0].id, reportId)).then(function() {
-                //Execute a GET table home Page
-                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
-                    assert.deepEqual(JSON.parse(defaultHomePageResults.body), "1");
-                    done();
-                });
-            });
-        });
 
         /**
          * Negative Test the API GET table defaulthomepage and GET homepage should return empty if table POST defaulthomepage not set
@@ -230,13 +167,91 @@
             });
         });
 
+        /**
+         * Tests for API call for table POST defaulthomepage and GET defaulthomepage which is a call to the core api from node (node is only forwarding the request)
+         * that returns the homepage report id(if any).
+         */
+        it('Verify API calls POST defaulthomepage and GET defaulthomepage ', function(done) {
+            //POST defaulthomepage for a table
+            recordBase.apiBase.setDefaultTableHomePage(app.id, app.tables[0].id, "1").then(function() {
+                //Execute a GET table home Page
+                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
+                    assert.deepEqual(JSON.parse(defaultHomePageResults.body), "1");
+                    done();
+                });
+            });
+        });
+
+        /**
+         * Data Provider for report homepage for various user roles
+         */
+        function reportHomePageTestCases() {
+            return [
+                {
+                    message: 'Viewer Role',
+                    roleId: 10,
+                    reportId: 1,
+                    reportName: 'testReport'
+                },
+                {
+                    message: 'Participant Role',
+                    roleId: 11,
+                    reportId: 2,
+                    reportName: 'testReport2'
+                },
+                {
+                    message: 'Admin Role',
+                    roleId: 12,
+                    reportId: 1,
+                    reportName: 'testReport'
+                }
+            ];
+        }
+
+        /**
+         * Tests for API call for table POST custdefaulthomepage and GET report homepage which is intercepted by node and returns a report obj (metaData and data)
+         */
+        reportHomePageTestCases().forEach(function(testcase) {
+            it('Verify API calls POST custdefaulthomepage, and GET homepage for ' + testcase.message, function(done) {
+                //create user
+                recordBase.apiBase.createUser().then(function(userResponse) {
+                    userId = JSON.parse(userResponse.body).id;
+                    //add user to appRole
+                    recordBase.apiBase.assignUsersToAppRole(app.id, testcase.roleId, [userId]).then(function(userRoleResponse) {
+                        //POST custdefaulthomepage for a table
+                        recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON(testcase.roleId, testcase.reportId)).then(function() {
+                            //get the user authentication
+                            recordBase.apiBase.createUserAuthentication(userId).then(function() {
+                                //Execute a GET report homepage which returns report object (metaData and data)
+                                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
+                                    var results = JSON.parse(reportHomePageResults.body);
+                                    //Verify returned results has right report Id and role info
+                                    //verify report meta Data
+                                    var reportMetaData = results.reportMetaData.data;
+                                    assert.deepEqual(reportMetaData.id, testcase.reportId);
+                                    assert.deepEqual(reportMetaData.name, testcase.reportName);
+
+                                    //verify report data
+                                    var reportData = results.reportData.data;
+                                    assert.deepEqual(reportData.groups, []);
+                                    assert.deepEqual(reportData.facets, []);
+                                    assert.deepEqual(reportData.records.length, 10);
+                                    done();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+
         //Cleanup the test realm after all tests in the block
         after(function(done) {
             //Realm deletion takes time, bump the timeout
             this.timeout(testConsts.INTEGRATION_TIMEOUT);
-            recordBase.apiBase.cleanup().then(function() {
-                done();
-            });
+            recordBase.apiBase.cleanup();
+            done();
         });
     });
 }());

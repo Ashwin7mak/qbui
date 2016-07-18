@@ -3,10 +3,6 @@
 (function() {
     'use strict';
     var baseE2EPath = '../../../e2e/';
-    // Needed for Protractor's DriverProvider to be able to run it's updateJob function
-    // to let Sauce Labs know when the tests have completed (for use in AWS pipeline job)
-    var HttpsProxyAgent = require('https-proxy-agent');
-    var agent = new HttpsProxyAgent('http://egressproxy.quickbaserocks.com:80');
     // Global properties file with params common to all Sauce lab config files
     module.exports = {
         // A callback function called once configs are read but before any environment
@@ -20,8 +16,6 @@
         allScriptsTimeout: 300000,
         // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
         baseUrl: process.env.DOMAIN,
-        // Pass the proxy agent down into Protractor's DriverProvider
-        sauceAgent: agent,
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
         sauceKey            : process.env.SAUCE_KEY,
