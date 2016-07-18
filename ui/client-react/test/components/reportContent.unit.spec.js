@@ -74,6 +74,22 @@ const fakeReportData_simple = {
     }
 };
 
+const fakeReportData_unsaved = {
+    loading: false,
+    data: {
+        name: "test unsaved",
+        groupFields: [],
+        filteredRecords: [{
+            col_text: {value: 'abc', id: 5},
+            id: {value: SchemaConsts.UNSAVED_RECORD_ID, id: 7},
+        }],
+        columns: [{
+            field: "col_text",
+            headerName: "col_text"
+        }]
+    }
+};
+
 const cols_with_numeric_field = [
     {
         "field": "col_num",
@@ -162,7 +178,17 @@ const flux = {
         },
         recordPendingEditsCommit: ()=> {
         },
+        newBlankReportRecord: ()=> {
+        },
         saveReportRecord: ()=> {
+        },
+        saveNewReportRecord: ()=> {
+        },
+        mark : ()=> {
+        },
+        measure : ()=> {
+        },
+        logMeasurements : ()=> {
         },
     }
 };
@@ -575,7 +601,7 @@ describe('ReportContent functions', () => {
         expect(result).toEqual(origRecExpect);
     });
 
-    it('test handleEditRecordStart', () => {
+    it('test handleEditRecordStart existing record', () => {
         let keyField = "id";
         let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
         spyOn(flux.actions, 'recordPendingEditsStart');
@@ -588,6 +614,26 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalled();
+    });
+
+
+    it('test handleEditRecordStart unsaved record', () => {
+        let keyField = 'id';
+        let appId = '123';
+        let tblId = '456';
+        let origRec = Object.assign({}, fakeReportData_unsaved.data.filteredRecords[0]);
+        spyOn(flux.actions, 'recordPendingEditsStart');
+
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                appId={appId}
+                                                                tblId={tblId}
+                                                                reportData={fakeReportData_unsaved}
+                                                                reportHeader={header_empty} keyField={keyField}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        component.handleEditRecordStart(origRec[keyField].value);
+        expect(flux.actions.recordPendingEditsStart).toHaveBeenCalledWith(
+            appId, tblId, null, null, {5: {oldVal: {value: null, id: 5}, newVal:{value: 'abc'}, fieldName: 'col_text'}}
+        );
     });
 
 
@@ -630,6 +676,171 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleFieldChange({recId: 100, fid:4});
         expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
+    });
+
+    it('test handleRecordSaveClicked', () => {
+        let keyField = "id";
+        let edits = {recordChanges:{
+            4:{
+                fieldName : 'col_num',
+                newVal: {value:"hi", display:"there"},
+            },
+        },
+            originalRecord: {fids:{
+                4: {value: 'older'}}
+            }
+        };
+        let fieldsData = {
+            fields : {
+                data: [
+                    {
+                        id: 4,
+                        builtIn: false
+                    },
+                    {
+                        id: 5,
+                        builtIn: true
+                    },
+                ]
+            }
+        };
+
+
+
+        spyOn(flux.actions, 'recordPendingEditsChangeField');
+
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                appId="123"
+                                                                tblId="456"
+                                                                pendEdits={edits}
+                                                                reportData={fakeReportData_simple}
+                                                                fields={fieldsData}
+                                                                reportHeader={header_empty} keyField={keyField}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        let result = component.handleRecordSaveClicked({value: SchemaConsts.UNSAVED_RECORD_ID});
+        expect(result).toEqual(false);
+    });
+
+
+    it('test handleFieldChange undefined fid', () => {
+        let keyField = "id";
+        let edits = {
+            recordChanges:{
+            },
+            originalRecord: {fids:{
+                4: {value: 'older'}}
+            }
+        };
+
+        spyOn(flux.actions, 'recordPendingEditsChangeField');
+
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                appId="123"
+                                                                tblId="456"
+                                                                pendEdits={edits}
+                                                                reportData={fakeReportData_simple}
+                                                                reportHeader={header_empty} keyField={keyField}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        component.handleFieldChange({recId: 100, fid:4});
+        expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
+    });
+
+    it('test handleRecordNewBlank on clean', () => {
+        let keyField = "id";
+        let edits = {
+            isPendingEdit: false,
+            recordChanges:{
+            },
+            originalRecord: {fids:{
+                4: {value: 'older'}}
+            }
+        };
+
+        spyOn(flux.actions, 'newBlankReportRecord');
+
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                appId="123"
+                                                                tblId="456"
+                                                                pendEdits={edits}
+                                                                reportData={fakeReportData_simple}
+                                                                reportHeader={header_empty} keyField={keyField}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        component.handleRecordNewBlank(101);
+        expect(flux.actions.newBlankReportRecord).toHaveBeenCalled();
+    });
+
+    it('test handleRecordNewBlank on dirty', () => {
+        let keyField = "id";
+        let edits = {
+            isPendingEdit: true,
+            recordChanges:{
+            },
+            originalRecord: {fids:{
+                4: {value: 'older'}}
+            }
+        };
+
+        spyOn(flux.actions, 'newBlankReportRecord');
+
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                appId="123"
+                                                                tblId="456"
+                                                                pendEdits={edits}
+                                                                reportData={fakeReportData_simple}
+                                                                reportHeader={header_empty} keyField={keyField}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        component.handleRecordNewBlank(101);
+        expect(flux.actions.newBlankReportRecord).not.toHaveBeenCalled();
+    });
+
+    it('test handleRecordAdd', () => {
+        let keyField = "id";
+        let edits = {
+            recordChanges:{
+                4:{
+                    fieldName : 'col_num',
+                    newVal: {value:"hi", display:"there"},
+                },
+                5:{
+                    fieldName : 'col_builtin',
+                    newVal: {value:"5", display:"no edit"},
+                },
+            }
+        };
+        let fieldsData = {
+            fields : {
+                data: [
+                    {
+                        id: 4,
+                        builtIn: false
+                    },
+                    {
+                        id: 5,
+                        builtIn: true
+                    },
+                ]
+            }
+        };
+
+        let newRec = [{
+            fieldName: 'col_num',
+            id: 4,
+            value: "hi",
+            display: "there"
+        }
+        ];
+        spyOn(flux.actions, 'saveNewReportRecord');
+
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                appId="123"
+                                                                tblId="456"
+                                                                pendEdits={edits}
+                                                                reportData={fakeReportData_simple}
+                                                                fields={fieldsData}
+                                                                reportHeader={header_empty} keyField={keyField}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        component.handleRecordAdd(edits.recordChanges);
+        expect(flux.actions.saveNewReportRecord).toHaveBeenCalledWith('123', '456', newRec);
     });
 
     it('test handleRecordChange', () => {
@@ -699,6 +910,32 @@ describe('ReportContent functions', () => {
         var cardViewListMock = TestUtils.scryRenderedComponentsWithType(parent.refs.refReportContent, CardViewListHolderMock);
         expect(cardViewListMock.length).toEqual(1);
         ReportContent.__ResetDependency__('CardViewListHolder');
+    });
+
+
+
+    it('test startPerfTiming', () => {
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_simple}
+                                                                reportHeader={header_empty}/>);
+        spyOn(flux.actions, 'mark');
+        component.startPerfTiming({reportdData: {
+            loading : true
+        }});
+        expect(flux.actions.mark).toHaveBeenCalled();
+    });
+
+    it('test capturePerfTiming', () => {
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_simple}
+                                                                reportHeader={header_empty}/>);
+        spyOn(flux.actions, 'measure');
+        spyOn(flux.actions, 'logMeasurements');
+        component.capturePerfTiming({reportdData: {
+            loading : true
+        }});
+        expect(flux.actions.mark).toHaveBeenCalled();
+        expect(flux.actions.logMeasurements).toHaveBeenCalled();
     });
 
 });

@@ -142,19 +142,20 @@ let ReportContent = React.createClass({
         let payload = [];
         // columns id and new values array
         //[{"id":6, "value":"Claire"}]
-        Object.keys(recordChanges).forEach((key) => {
+        Object.keys(recordChanges).forEach((recKey) => {
             //get each columns matching field description
             let matchingField = _.find(this.props.fields.fields.data, (field) => {
-                return field.id === +key;
+
+                return field.id === +recKey;
             });
             // only post the non built in fields values
             if (matchingField && matchingField.builtIn === false) {
-                let newValue = recordChanges[key].newVal.value;
-                let newDisplay = recordChanges[key].newVal.display;
+                let newValue = recordChanges[recKey].newVal.value;
+                let newDisplay = recordChanges[recKey].newVal.display;
 
                 let colChange = {};
-                colChange.fieldName = recordChanges[key].fieldName;
-                colChange.id = +key;
+                colChange.fieldName = recordChanges[recKey].fieldName;
+                colChange.id = +recKey;
                 colChange.value = _.cloneDeep(newValue);
                 colChange.display = _.cloneDeep(newDisplay);
                 payload.push(colChange);

@@ -53,7 +53,7 @@
          * routeToPostFunction maps each route to the proper function associated with that route for a POST request
          */
         var routeToPostFunction = {};
-        routeToPostFunction[routeConsts.RECORD] = createSingleRecord;
+        routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request

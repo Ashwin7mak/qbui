@@ -190,9 +190,17 @@ let reportDataActions = {
                 recordService.createRecord(appId, tblId, record).then(
                         response => {
                             logger.debug('RecordService createRecord success:' + JSON.stringify(response));
-                            this.dispatch(actions.ADD_REPORT_RECORD_SUCCESS, {appId, tblId, record, recId:response.data.id});
-                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
-                            resolve();
+                            if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
+                                let resJson = JSON.parse(response.data.body);
+                                this.dispatch(actions.ADD_REPORT_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
+                                NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                                resolve();
+                            } else {
+                                logger.error('RecordService createRecord call error: no response data value returned');
+                                this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
+                                NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                                reject();
+                            }
                         },
                         error => {
                             logger.error('RecordService createRecord call error:', JSON.stringify(error));
