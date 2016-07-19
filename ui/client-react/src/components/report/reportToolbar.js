@@ -51,7 +51,7 @@ const ReportToolbar = React.createClass({
         return {
             fillinMockFacets : window.location.search.includes('mockFilter'),
             selections:new FacetSelections(),
-            searchStringForFiltering: "",
+            searchStringForFiltering: ""
         };
     },
 
@@ -211,8 +211,8 @@ const ReportToolbar = React.createClass({
                             null
                         }
                     </div>
-                    {
-                        (isLoading && isCountingRecords) ?
+                    <div className="rightReportToolbar">
+                        {(isLoading && isCountingRecords) ?
                             (<RecordsCount recordCount={null}
                                            isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
                                            filteredRecordCount={filteredRecordCount}
@@ -221,21 +221,20 @@ const ReportToolbar = React.createClass({
                                            isCounting={true}
                             />) :
                             null
-                    }
+                        }
 
-                    {(!isLoading && recordCount) ?
-                        (<RecordsCount recordCount={recordCount}
-                              isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
-                              filteredRecordCount={filteredRecordCount}
-                              nameForRecords={this.props.nameForRecords}
-                              clearAllFilters={this.props.clearAllFilters}
-                              isCounting={false}
-                        />) :
-                        null
-                    }
+                        {(!isLoading && recordCount) ?
+                            (<RecordsCount recordCount={recordCount}
+                                  isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
+                                  filteredRecordCount={filteredRecordCount}
+                                  nameForRecords={this.props.nameForRecords}
+                                  clearAllFilters={this.props.clearAllFilters}
+                                  isCounting={false}
+                            />) :
+                            null
+                        }
 
-                    {
-                        (!isLoading) ?
+                        {(!isLoading) ?
                             (<ReportNavigation pageStart={this.props.pageStart}
                                                pageEnd={this.props.pageEnd}
                                                recordsCount={recordCount}
@@ -243,8 +242,8 @@ const ReportToolbar = React.createClass({
                                                getPreviousReportPage={this.props.getPreviousReportPage}
                             />) :
                             null
-                    }
-
+                        }
+                    </div>
                 {this.props.pageActions}
 
             </div>

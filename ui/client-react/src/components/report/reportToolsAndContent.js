@@ -2,6 +2,7 @@ import React from 'react';
 import Logger from '../../utils/logger';
 import ReportActions from '../actions/reportActions';
 import ReportToolbar from './reportToolbar';
+import ReportFooter from './reportFooter';
 import ReportContent from './dataTable/reportContent';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
@@ -208,6 +209,28 @@ let ReportToolsAndContent = React.createClass({
                               pageStart={this.pageStart}
                               pageEnd={this.pageEnd}/>;
     },
+    getReportFooter() {
+        let {appId, tblId, rptId,
+            reportData:{selections, ...otherReportData}} = this.props;
+
+
+        this.pageStart = this.props.reportData.offset + 1;
+        if (this.props.reportData.data) {
+            this.pageEnd = this.props.reportData.offset + this.props.reportData.numRows;
+
+            if (this.props.reportData.data.recordsCount && this.pageEnd > this.props.reportData.data.recordsCount) {
+                this.pageEnd = this.props.reportData.data.recordsCount;
+            }
+        }
+
+        return <ReportFooter
+            reportData={this.props.reportData}
+            getNextReportPage={this.getNextReportPage}
+            getPreviousReportPage={this.getPreviousReportPage}
+            pageStart={this.pageStart}
+            pageEnd={this.pageEnd}/>;
+
+    },
     getSelectionActions() {
         return (<ReportActions selection={this.props.selectedRows} />);
     },
@@ -264,6 +287,12 @@ let ReportToolsAndContent = React.createClass({
                                          getPreviousReportPage={this.getPreviousReportPage}
                                          pageStart={this.pageStart}
                                          pageEnd={this.pageEnd}/>;
+            let reportFooter = <ReportFooter
+                                        reportData={this.props.reportData}
+                                        getNextReportPage={this.getNextReportPage}
+                                        getPreviousReportPage={this.getPreviousReportPage}
+                                        pageStart={this.pageStart}
+                                        pageEnd={this.pageEnd}/>;
             return (
                 <div className={classes}>
                     {this.getTableActions()}
@@ -272,12 +301,13 @@ let ReportToolsAndContent = React.createClass({
                                     rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
                                     reportData={this.props.reportData}
                                     reportHeader={toolbar}
+                                    reportFooter={reportFooter}
                                     keyField={this.props.fields && this.props.fields.keyField ?
                                         this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
                                     uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                     flux={this.getFlux()}
                         {...this.props} />
-
+                    {this.getReportFooter()}
                     {!this.props.scrollingReport && <AddRecordButton />}
                 </div>
             );

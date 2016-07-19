@@ -67,18 +67,28 @@
         .leftReportToolbar {
             display: flex;
             flex-direction: row;
-            flex: 0 0 auto;
+            flex: 1 1 auto;
             align-items: center;
             margin-top: 10px;
             margin-bottom: 10px;
         }
-        .recordsCount{
+        .rightReportToolbar {
+            display: flex;
+            flex-direction: row;
             flex: 1 1 auto;
-            margin-left:5px;
-        }
-        .reportNavigation {
-            flex: 1 1 auto;
-            margin-left:5px;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            .recordsCount{
+                flex-wrap: nowrap;
+                margin-left:2em;
+            }
+            .reportNavigation {
+                flex-wrap: nowrap;
+                flex-grow: 1;
+                margin-left:2em;
+                margin-right:2rem;
+            }
         }
         .filterSearchBoxContainer {
             flex-shrink: 0;
@@ -102,6 +112,28 @@
 
         .recordsCount {
             margin-right: 1rem;
+        }
+
+        .reportNavigation {
+            flex: 1 1 auto;
+            margin-left: 2em;
+            margin-right: 2em;
+        }
+    }
+
+    .reportFooter {
+        display: flex;
+        flex-direction: row-reverse;
+        flex: 1 1 auto;
+        align-items: center;
+        color:$secondary-bar-fg;
+        justify-content:space-between;
+
+        .leftReportFooter {
+
+        }
+        .rightReportFooter {
+
         }
     }
 
@@ -184,6 +216,38 @@
         }
     }
 }
+
+.reportNavigation {
+    float: left;
+    color: $facetMenu-clearButtonColor;
+
+    .previousButton {
+        margin-left: 1em;
+        margin-right: 1em;
+        &.qbIcon {
+            display: inline;
+
+            &.disabled {
+                color: $pagination-disabled-border;
+            }
+        }
+    }
+    .pages {
+        display: inline;
+    }
+    .nextButton {
+        margin-left: 1em;
+        margin-right: 1em;
+        &.qbIcon {
+            display: inline;
+
+            &.disabled {
+                color: $pagination-disabled-border;
+            }
+        }
+    }
+}
+
 
 
 $add-record-fg: #fff;

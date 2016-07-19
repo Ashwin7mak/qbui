@@ -53,6 +53,7 @@ let AGGrid = React.createClass({
         uniqueIdentifier: React.PropTypes.string,
         selectionActions: React.PropTypes.element,
         reportHeader: React.PropTypes.element,
+        reportFooter: React.PropTypes.element,
         columns: React.PropTypes.array,
         loading: React.PropTypes.bool,
         records: React.PropTypes.array,

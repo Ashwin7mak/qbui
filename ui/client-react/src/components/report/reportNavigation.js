@@ -3,6 +3,8 @@ import React from 'react';
 import Logger from '../../utils/logger';
 let logger = new Logger();
 
+import QBicon from '../qbIcon/qbIcon';
+
 import Fluxxor from 'fluxxor';
 import './report.scss';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
@@ -24,21 +26,19 @@ var ReportNavigation = React.createClass({
         let navBar = "report.reportNavigationBar";
 
         return (<div className="reportNavigation">
-
-                { this.props.pageStart != 1 ?
-                    <PreviousLink getPreviousReportPage={this.props.getPreviousReportPage}/>
-                    : null
-                }
+                <PreviousLink pageStart={this.props.pageStart}
+                              getPreviousReportPage={this.props.getPreviousReportPage}
+                />
 
                 <I18nMessage message={navBar}
                              pageStart={this.props.pageStart}
                              pageEnd={this.props.pageEnd}
                 />
 
-                { (this.props.recordsCount != this.props.pageEnd) ?
-                    <NextLink getNextReportPage={this.props.getNextReportPage} /> :
-                    null
-                }
+                <NextLink recordsCount={this.props.recordsCount}
+                          pageEnd={this.props.pageEnd}
+                          getNextReportPage={this.props.getNextReportPage}
+                />
         </div>);
 
     }
@@ -46,13 +46,14 @@ var ReportNavigation = React.createClass({
 
 var PreviousLink = React.createClass({
     propTypes: {
+        pageStart : React.PropTypes.number,
         getPreviousReportPage : React.PropTypes.func,
     },
 
     render: function() {
         return (
-            <span style={{marginRight: 2 + 'em'}} id="previousReportPage" onClick={this.props.getPreviousReportPage}>
-                Previous
+            <span id="previousReportPage" tabIndex="0" onClick={this.props.getPreviousReportPage}>
+                <QBicon className={"previousButton " + (this.pageStart != 1 ? "" : "disabled") } icon="caret-left" />
             </span>
         );
     }
@@ -60,13 +61,15 @@ var PreviousLink = React.createClass({
 
 var NextLink = React.createClass({
     propTypes: {
+        recordsCount : React.PropTypes.number,
+        pageEnd : React.PropTypes.number,
         getNextReportPage : React.PropTypes.func,
     },
 
     render: function() {
         return (
-            <span style={{marginLeft: 2 + 'em'}} id="nextReportPage" onClick={this.props.getNextReportPage} onDoubleClick={this.props.getNextReportPage}>
-                Next
+            <span id="nextReportPage" tabIndex="0" onClick={this.props.getNextReportPage}>
+                <QBicon className={"nextButton " + ((this.props.recordsCount != this.props.pageEnd) ? "" : "disabled") } icon="caret-right" />
             </span>
         );
     }
