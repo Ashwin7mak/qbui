@@ -37,11 +37,6 @@
         // https://code.google.com/p/selenium/wiki/DesiredCapabilities
         // and
         // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
-        //capabilities: {
-        //    browserName: 'chrome'
-        //    //shardTestFiles: true,
-        //    //maxInstances: 2
-        //},
         multiCapabilities: [
             {
                 browserName: 'firefox',
