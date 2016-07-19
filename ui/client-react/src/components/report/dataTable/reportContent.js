@@ -2,7 +2,7 @@ import React from "react";
 import ReactIntl from "react-intl";
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
-import QBGrid from "../../../components/dataTable/agGrid/qbGrid";
+import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
 import Logger from "../../../utils/logger";
 import ReportActions from "../../actions/reportActions";
 import Fluxxor from "fluxxor";
@@ -495,7 +495,7 @@ let ReportContent = React.createClass({
             }
         }
         return (<div className="loadedContent">
-                <label>&nbsp;
+                <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
                     <input type="checkbox"
                            defaultChecked={this.state.reactabular}
                            onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Reactabular

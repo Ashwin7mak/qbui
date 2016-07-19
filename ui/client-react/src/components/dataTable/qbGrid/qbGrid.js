@@ -5,7 +5,7 @@ import Fluxxor from 'fluxxor';
 
 import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, DurationCellRenderer,
     PhoneCellRenderer, NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
-    CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer} from './cellRenderers';
+    CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer} from '../agGrid/cellRenderers';
 
 const serverTypeConsts = require('../../../../../common/src/constants');
 
