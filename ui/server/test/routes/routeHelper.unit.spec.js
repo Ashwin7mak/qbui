@@ -158,18 +158,25 @@ describe('Validate RequestHelper unit tests', function() {
 
     describe('validate getReportFacetRoute method', function() {
         var testCases = [
-            {name: 'test empty url', url: '', expectation: ''},
-            {name: 'test null url', url: null, expectation: null},
-            {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
-            {name: 'test invalid url - no table', url: '/apps/123', expectation: '/apps/123'},
-            {name: 'test invalid url - no table2', url: '/apps/123/', expectation: '/apps/123/'},
-            {name: 'test invalid url - no report id', url: '/apps/123/tables/345/reports', expectation: '/apps/123/tables/345/reports'},
-            {name: 'test valid url', url: '/apps/123/tables/456/reports/789', expectation: '/apps/123/tables/456/reports/789/facets/results'}
+            {name: 'test empty url with no reportId', url: '', reportId: null, expectation: ''},
+            {name: 'test null url with no reportId', url: null, reportId: null, expectation: null},
+            {name: 'test invalid url with no reportId', url: '/non/parsing/url', reportId: null, expectation: '/non/parsing/url'},
+            {name: 'test invalid url with no reportId - no table', url: '/apps/123', reportId: null, expectation: '/apps/123'},
+            {name: 'test invalid url with no reportId - no table2', url: '/apps/123/', reportId: null, expectation: '/apps/123/'},
+            {name: 'test invalid url with no reportId - no report id', url: '/apps/123/tables/345/reports', reportId: null, expectation: '/apps/123/tables/345/reports'},
+            {name: 'test valid url with no reportId', url: '/apps/123/tables/456/reports/789', reportId: null, expectation: '/apps/123/tables/456/reports/789/facets/results'},
+            {name: 'test empty url with reportId', url: '', reportId: '1', expectation: ''},
+            {name: 'test null url with reportId', url: null, reportId: '1', expectation: null},
+            {name: 'test invalid url with reportId', url: '/non/parsing/url', reportId: '1', expectation: '/non/parsing/url'},
+            {name: 'test invalid url with reportId - no table', url: '/apps/123', reportId: '1', expectation: '/apps/123'},
+            {name: 'test invalid url with reportId - no table2', url: '/apps/123/', reportId: '1', expectation: '/apps/123/'},
+            {name: 'test invalid url with reportId', url: '/apps/123/tables/345/reports/789', reportId: '1', expectation: '/apps/123/tables/345/reports/1/facets/results'},
+            {name: 'test valid url with reportId', url: '/apps/123/tables/456/homepage', reportId: '1', expectation: '/apps/123/tables/456/reports/1/facets/results'}
         ];
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.getReportsFacetRoute(testCase.url), testCase.expectation);
+                assert.equal(routeHelper.getReportsFacetRoute(testCase.url, testCase.reportId), testCase.expectation);
                 done();
             });
         });
