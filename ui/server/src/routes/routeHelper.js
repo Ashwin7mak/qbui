@@ -245,11 +245,32 @@
          * Example:  url: /apps/123/tables/456/reports/789/rest/of/url
          *           return: /apps/123/tables/456/reports/789/facets/results
          *
+         * For the given req.url:
+         *  a) if no reportID, extract the APPS, TABLES and REPORTS identifiers/ids and
+         *    append the REPORT FACETS identifier.
+         *    Example:  url: /apps/123/tables/456/reports/789/rest/of/url
+         *              return: /apps/123/tables/456/reports/789/facets/results
+         *
+         *  b) if reportId, extract the APPS and TABLES identifiers/ids and
+         *    append the REPORTS identifier and recordId before appending the FACETS identifier.
+
+         *    Example:  url: /apps/123/tables/456/rest/of/url
+         *               return: /apps/123/tables/456/reports/<reportId>/facets/results
          * @param url
+         * @param reportId
          * @returns {*}
          */
-        getReportsFacetRoute: function(url) {
-            let root = getUrlRoot(url, REPORTS);
+        getReportsFacetRoute: function(url, reportId) {
+            let root = '';
+            if (reportId) {
+                root = getUrlRoot(url, TABLES);
+                if (root) {
+                    root += '/' + REPORTS + '/' + reportId;
+                }
+            } else {
+                root = getUrlRoot(url, REPORTS);
+            }
+
             if (root) {
                 return root + "/" + FACET_RESULTS;
             }

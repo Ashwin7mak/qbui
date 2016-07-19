@@ -63,7 +63,20 @@
                 'T' + chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + ':' + chance.pad(seconds, 2) +
                 '.' + millis + 'Z[UTC]';
         },
+        apiFormattedTime: function(options) {
+            var date = chance.date(options);
 
+            // date.getHours() returns 1-12;
+            // Date time and Time of day fields both allow 0-23
+            var hour = chance.hour({twentyfour: true}) - 1;
+            var minute = date.getMinutes();
+            var seconds = date.getSeconds();
+            var millis = date.getMilliseconds();
+
+            // see comment for apiFormattedDate
+            return chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + ':' + chance.pad(seconds, 2) +
+                '.' + millis + 'Z';
+        },
         userId: function(options) {
             return options.userIds ? chance.pick(options.userIds) : 1000000;
         }
@@ -118,7 +131,7 @@
         //Generates and returns a time that can be sent to the api
         generateTime: function() {
             // month is 0-indexed
-            return chance.apiFormattedDateTime({year: 1970, month: 0, day: 1});
+            return chance.apiFormattedTime({year: 1970, month: 0, day: 1});
         },
 
         //Generates and returns a psuedo-random us phone number

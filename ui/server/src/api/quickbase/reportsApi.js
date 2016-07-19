@@ -19,11 +19,34 @@
         let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
         let recordsApi = require('./recordsApi')(config);
         let routeHelper = require('../../routes/routeHelper');
+        let url = require('url');
 
         //Module constants:
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
         let FACETS = 'facets';
+
+        /**
+         * Method to take a parameter value and name and add to the request.
+         * A parameter is added only if both a parameter name and value are defined.
+         *
+         * @param req
+         * @param parameterName
+         * @param parameterValue
+         */
+        function addQueryParameter(req, parameterName, parameterValue) {
+            if (parameterName && parameterValue) {
+                //  are there any existing parameters
+                let search = url.parse(req.url).search;
+                req.url += search ? '&' : '?';
+
+                //  append the query parameter to the url
+                req.url += parameterName + '=' + parameterValue;
+
+                //  add the parameter to the params array.
+                req.params[parameterName] = parameterValue;
+            }
+        }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
@@ -48,12 +71,13 @@
              *  with an error code
              *
              * @param req
+             * @param reportId
              * @returns {*}
              */
-            fetchFacetResults: function(req) {
+            fetchFacetResults: function(req, reportId) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsFacetRoute(req.url);
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsFacetRoute(req.url, reportId);
                 return requestHelper.executeRequest(req, opts);
             },
 
@@ -83,7 +107,7 @@
             /** Returns a promise that is resolved with the records, fields meta data and facets
              *  or is rejected with a descriptive error code
              */
-            fetchReportComponents: function(req) {
+            fetchReportComponents: function(req, reportId) {
 
                 //  Fetch field meta data and grid data for a report
                 var reportPromise = new Promise((resolve1, reject1) => {
@@ -106,7 +130,7 @@
                 //  NOTE:  if an error occurs while fetching the faceting information, we still want the promise to
                 //  resolve as we want to always display the report data if that promise returns w/o error.
                 var facetPromise = new Promise((resolve2) => {
-                    this.fetchFacetResults(req).then(
+                    this.fetchFacetResults(req, reportId).then(
                         (facetResponse) => {
                             resolve2(facetResponse);
                         },
@@ -230,22 +254,29 @@
                                         //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
                                         let reportMetaData = JSON.parse(metaDataResult.body);
 
-                                        //  make sure we have an empty object if one does not exist
+                                        //  look for any existing parameters on the url
                                         req.params = req.params || {};
 
-                                        // set format request parameter to display
-                                        req.params[constants.REQUEST_PARAMETER.FORMAT] = 'display';
+                                        //  add display formatting
+                                        addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
 
-                                        // Use the sortList, fidsList and/or query expression defined in the metadata on the request.
-                                        req.params[constants.REQUEST_PARAMETER.SORT_LIST] = stringUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        req.params[constants.REQUEST_PARAMETER.COLUMNS] = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        req.params[constants.REQUEST_PARAMETER.QUERY] = reportMetaData.query ? [reportMetaData.query] : '';
+                                        //  add any sortList requirements
+                                        let sortList = stringUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                        addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
+
+                                        //  add any columnList requirements
+                                        let columnList = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                        addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
+
+                                        //  add any query expression requirements
+                                        let query = reportMetaData.query ? reportMetaData.query : '';
+                                        addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
 
                                         //  TODO: initial page size
                                         //req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
                                         //req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = ?;
 
-                                        this.fetchReportComponents(req).then(
+                                        this.fetchReportComponents(req, homepageReportId).then(
                                             (reportData) => {
                                                 //  return the metadata and report content
                                                 reportObj.reportMetaData.data = reportMetaData;
