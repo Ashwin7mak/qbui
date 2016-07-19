@@ -106,9 +106,6 @@ $cell-edit-background-edit: $color1;
         border-right: 1px solid $row-border-color;
         vertical-align: middle;
 
-        .cellData {
-            display:none;
-        }
         .cellWrapper {
             display:inline-block;
             padding:2px;
@@ -122,8 +119,8 @@ $cell-edit-background-edit: $color1;
                 display: inline-block;
             }
 
-            .cellData {
-                visibility:hidden;
+            .cellData:not(.nonEditable) {
+                display:none;
             }
 
             textarea.cellEdit {

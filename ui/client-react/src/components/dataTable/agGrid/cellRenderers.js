@@ -118,7 +118,7 @@ const CellRenderer = React.createClass({
                                 onTabColumn={this.onTabColumn}/>
                 }
 
-                { !isEditable || (!this.props.editing || !this.props.qbGrid) &&
+                { (!isEditable || !this.props.editing || !this.props.qbGrid) &&
                     <CellValueRenderer type={this.props.type}
                                        isEditable={isEditable}
                                        value={this.state.valueAndDisplay.value}

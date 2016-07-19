@@ -268,9 +268,9 @@ const QBGrid = React.createClass({
         }
 
         this.clickTimeout = setTimeout(() => {
-            // navigate to record if timeout wasn't canceled by 2nd click
+            // handle row click callback if we're not editing
             this.clickTimeout = null;
-            if (this.props.onRowClick && (this.props.selectedRows.length === 0) && this.allowRowClick(target)) {
+            if (this.props.onRowClick && (this.state.editRow === -1) && this.allowRowClick(target)) {
                 this.props.onRowClick(data);
             }
         }, 500);
