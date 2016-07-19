@@ -9,7 +9,7 @@
     var testConsts = require('./api.test.constants');
     var errorCodes = require('../../src/api/errorCodes');
 
-    xdescribe('API - Validate report table home page execution', function() {
+    describe('API - Validate report table home page execution', function() {
         // Set timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
         var app;
@@ -107,7 +107,7 @@
         /**
          * Negative Test the API GET table defaulthomepage and GET homepage should return empty if table POST defaulthomepage not set
          */
-        xit('Negative Test - Verify GET defaulthomepage and GET report homepage returns empty meta data if defaulthomepage not set', function(done) {
+        it('Negative Test - Verify GET defaulthomepage and GET report homepage returns empty meta data if defaulthomepage not set', function(done) {
             //Execute a GET table home Page
             recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
                 assert.deepEqual(defaultHomePageResults.body, '');
@@ -128,7 +128,7 @@
         /**
          * Negative Test for roles.If POST custdefaulthomepage is set for participant and authenticate as viewer should return empty data for defaulthomepage and homepages GET'S.
          */
-        xit('Negative Test - Give custdefaulthomepage permission to participant verify GET defaulthomepage as viewer', function(done) {
+        it('Negative Test - Give custdefaulthomepage permission to participant verify GET defaulthomepage as viewer', function(done) {
             //create user 1
             recordBase.apiBase.createUser().then(function(userResponse1) {
                 var userId1 = JSON.parse(userResponse1.body).id;
@@ -171,7 +171,7 @@
          * Tests for API call for table POST defaulthomepage and GET defaulthomepage which is a call to the core api from node (node is only forwarding the request)
          * that returns the homepage report id(if any).
          */
-        xit('Verify API calls POST defaulthomepage and GET defaulthomepage ', function(done) {
+        it('Verify API calls POST defaulthomepage and GET defaulthomepage ', function(done) {
             //POST defaulthomepage for a table
             recordBase.apiBase.setDefaultTableHomePage(app.id, app.tables[0].id, "1").then(function() {
                 //Execute a GET table home Page
@@ -212,7 +212,7 @@
          * Tests for API call for table POST custdefaulthomepage and GET report homepage which is intercepted by node and returns a report obj (metaData and data)
          */
         reportHomePageTestCases().forEach(function(testcase) {
-            xit('Verify API calls POST custdefaulthomepage, and GET homepage for ' + testcase.message, function(done) {
+            it('Verify API calls POST custdefaulthomepage, and GET homepage for ' + testcase.message, function(done) {
                 //create user
                 recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
