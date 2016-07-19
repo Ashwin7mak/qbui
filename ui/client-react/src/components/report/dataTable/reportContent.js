@@ -77,6 +77,7 @@ let ReportContent = React.createClass({
     },
 
     handleFieldChange(change) {
+
         // call action to hold the field value change
         const flux = this.getFlux();
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
@@ -107,6 +108,7 @@ let ReportContent = React.createClass({
         let payload = [];
         // columns id and new values array
         //[{"id":6, "value":"Claire"}]
+
         Object.keys(changes).forEach((key) => {
             let newValue = changes[key].newVal.value;
             let newDisplay = changes[key].newVal.display;

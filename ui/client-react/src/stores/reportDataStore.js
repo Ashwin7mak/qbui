@@ -393,6 +393,7 @@ let ReportDataStore = Fluxxor.createStore({
 
     onSaveRecordSuccess(payload) {
         // update the  record values
+
         this.reportModel.updateARecord(payload.recId, payload.changes);
         this.emit("change");
     },

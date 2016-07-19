@@ -203,13 +203,18 @@ const QBGrid = React.createClass({
 
         return (data, rowData, rowIndex) => {
 
+            // todo: clean up dup column props when ag-grid no longer exists
+
             const params = {
                 context: this.getContext(),
                 api: this.api,
                 column: {
+                    colId: colDef.field,
                     colDef
                 },
-                value: data
+                colDef,
+                value: data,
+                data: rowData[rowIndex]
             };
 
             const editing = rowIndex === this.state.editRow;
