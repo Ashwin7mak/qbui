@@ -61,6 +61,10 @@
             OFFSET: 'offset',
             NUM_ROWS: 'numRows'
         },
+        FORMAT : {
+            DISPLAY: 'display',
+            RAW: 'raw'
+        },
         MILLI : {
             ONE_SECOND: 1000,
             ONE_MINUTE: 1000 * 60,
