@@ -31,7 +31,7 @@ let reportModel = {
         sortFids: [],
         groupEls: [],
         originalMetaData: null,
-        offset: DEFAULT_OFFSET,
+        pageOffset: DEFAULT_OFFSET,
         numRows: DEFAULT_NUM_ROWS
     },
 
@@ -120,7 +120,7 @@ let reportModel = {
         // in report's meta data sortlist is returned as an array of sort elements
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
-        this.model.offset = reportMetaData.offset;
+        this.model.pageOffset = reportMetaData.pageOffset;
         this.model.numRows = reportMetaData.numRows;
     },
 
@@ -268,7 +268,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.selectedRows = [];
         this.lastSaveOk = null;
         this.lastSaveRecordId = null;
-        this.offset = DEFAULT_OFFSET;
+        this.pageOffset = DEFAULT_OFFSET;
         this.numRows = DEFAULT_NUM_ROWS;
         this.recordsCount = null;
 
@@ -304,7 +304,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.appId = report.appId;
         this.tblId = report.tblId;
         this.rptId = report.rptId;
-        this.offset = report.offset ? report.offset : this.offset;
+        this.pageOffset = report.pageOffset ? report.pageOffset : this.pageOffset;
         this.numRows = report.numRows ? report.numRows : this.numRows;
 
         this.searchStringForFiltering = '' ;
@@ -437,7 +437,7 @@ let ReportDataStore = Fluxxor.createStore({
             appId: this.appId,
             tblId: this.tblId,
             rptId: this.rptId,
-            offset: this.offset,
+            pageOffset: this.pageOffset,
             numRows: this.numRows,
             recordsCount: this.recordsCount,
             searchStringForFiltering: this.searchStringForFiltering,
