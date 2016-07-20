@@ -332,4 +332,38 @@ describe('Validate RequestHelper unit tests', function() {
 
     });
 
+    describe('validate addQueryParameter function', function() {
+
+        var req = {
+            url: '',
+            params: {}
+        };
+        var testCases = [
+            {name: 'test valid use case with no query parameters', url: 'apps/123/tables/456', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?clist=1.2.3'},
+            {name: 'test missing parameter name', url: 'apps/123/tables/456', parameterName: '', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456'},
+            {name: 'test valid use case with 1 query parameter', url: 'apps/123/tables/456?param1=one', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?param1=one&clist=1.2.3'},
+            {name: 'test valid use case with multiple query parameters', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?param1=one&param2=two&clist=1.2.3'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                req.url = testCase.url;
+                requestHelper.addQueryParameter(req, testCase.parameterName, testCase.parameterValue);
+
+                //  test that the url has the parameters appended as a query parameter
+                assert.equal(req.url, testCase.urlExpectation);
+
+                if (testCase.parameterName) {
+                    //  test that the parameter is in the params list
+                    assert.equal(req.params[testCase.parameterName], testCase.parameterValue);
+                } else {
+                    //  if no parameter name, then that parameter is not defined
+                    assert.equal(req.params[testCase.parameterName], undefined);
+                }
+                done();
+            });
+        });
+
+    });
+
 });

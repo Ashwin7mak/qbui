@@ -32,11 +32,11 @@ class FormService extends BaseService {
             params[query.FORM_TYPE] = formType;
         }
 
-        return Promise.resolve({data: sampleFormJSON});
+        //return Promise.resolve({data: sampleFormJSON});
 
         //  Until we get data to display to confirm it works okay...
-        //let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
-        //return super.get(url, {params:params});
+        let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
+        return super.get(url, {params:params});
     }
 }
 

@@ -19,34 +19,11 @@
         let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
         let recordsApi = require('./recordsApi')(config);
         let routeHelper = require('../../routes/routeHelper');
-        let url = require('url');
 
         //Module constants:
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
         let FACETS = 'facets';
-
-        /**
-         * Method to take a parameter value and name and add to the request.
-         * A parameter is added only if both a parameter name and value are defined.
-         *
-         * @param req
-         * @param parameterName
-         * @param parameterValue
-         */
-        function addQueryParameter(req, parameterName, parameterValue) {
-            if (parameterName && parameterValue) {
-                //  are there any existing parameters
-                let search = url.parse(req.url).search;
-                req.url += search ? '&' : '?';
-
-                //  append the query parameter to the url
-                req.url += parameterName + '=' + parameterValue;
-
-                //  add the parameter to the params array.
-                req.params[parameterName] = parameterValue;
-            }
-        }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
@@ -258,19 +235,25 @@
                                         req.params = req.params || {};
 
                                         //  add display formatting
-                                        addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
+                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
 
                                         //  add any sortList requirements
                                         let sortList = stringUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
+                                        if (sortList) {
+                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
+                                        }
 
                                         //  add any columnList requirements
                                         let columnList = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
+                                        if (columnList) {
+                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
+                                        }
 
                                         //  add any query expression requirements
                                         let query = reportMetaData.query ? reportMetaData.query : '';
-                                        addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
+                                        if (query) {
+                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
+                                        }
 
                                         //  TODO: initial page size
                                         //req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
