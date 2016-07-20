@@ -23,13 +23,6 @@ let ReportContent = React.createClass({
         history: React.PropTypes.object
     },
 
-    getInitialState: function() {
-        return {
-            showSelectionColumn: false,
-            reactabular: false
-        };
-    },
-
     // row was clicked once, navigate to record
     openRow(data) {
 
@@ -664,15 +657,11 @@ let ReportContent = React.createClass({
             }
         }
         return (<div className="loadedContent">
-                <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
-                    <input type="checkbox"
-                           defaultChecked={this.state.reactabular}
-                           onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Reactabular
-                </label>
+
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className="reportContent">
-                        {!isTouch && this.state.reactabular &&
+                        {!isTouch && this.props.reactabular &&
 
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
@@ -686,7 +675,7 @@ let ReportContent = React.createClass({
                                 onRecordChange={this.handleRecordChange}
                         />}
 
-                        {!isTouch && !this.state.reactabular &&
+                        {!isTouch && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}

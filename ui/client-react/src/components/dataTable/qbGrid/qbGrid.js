@@ -144,7 +144,7 @@ const QBGrid = React.createClass({
                 this.setState({editRow: -1});
             },
             cellTabCallback: this.onCellTab,
-            onRecordChange: id => {
+            onRecordSaveClicked: id => {
                 this.setState({editRow: -1});
                 this.props.onRecordChange(id);
             },
