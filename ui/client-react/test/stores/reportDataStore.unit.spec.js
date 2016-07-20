@@ -3,6 +3,8 @@ import * as actions from '../../src/constants/actions';
 import Store from '../../src/stores/reportDataStore';
 import Fluxxor from 'fluxxor';
 import FacetSelections  from '../../src/components/facet/facetSelections';
+import * as SchemaConsts from '../../src/constants/schema';
+const serverTypeConsts = require('../../../common/src/constants');
 
 describe('Test ReportData Store', () => {
     'use strict';
@@ -491,6 +493,518 @@ describe('Test ReportData Store', () => {
         };
 
         flux.dispatcher.dispatch(saveReportRecordSuccessAction);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+
+    it('test onAddReportRecord action after a record', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId:false,
+                    id:16,
+                    name: "loc",
+                    type: "SCALAR",
+                    keyField: false,
+                    defaultValue: {
+                        coercedValue :"City",
+                        displayValue :"City"
+                    },
+                    datatypeAttributes : {
+                        type: "TEXT"
+                    }
+                },
+                    {
+                        builtId:false,
+                        id:8,
+                        name: "Score",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes : {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                records: [[
+                    {id: 16, value: "Boston", display: "Boston"},
+                    {id: 8, value: 1234, display: 1234},
+                ],
+                    [
+                        {id: 16, value: "NYC", display: "NYC"},
+                        {id: 8, value: 456, display: 456}
+                    ]],
+                groups: []
+            }
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let addReportRecordAction = {
+            type: actions.NEW_BLANK_REPORT_RECORD,
+            payload: {afterRecId : {value :1234}}
+        };
+
+        flux.dispatcher.dispatch(addReportRecordAction);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+    it('test onAddReportRecord action at end', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId:false,
+                    id:16,
+                    name: "loc",
+                    type: "SCALAR",
+                    keyField: false,
+                    defaultValue: {
+                        coercedValue :"City",
+                        displayValue :"City"
+                    },
+                    datatypeAttributes : {
+                        type: "TEXT"
+                    }
+                },
+                    {
+                        builtId:false,
+                        id:8,
+                        name: "Score",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes : {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                records: [[
+                    {id: 16, value: "Boston", display: "Boston"},
+                    {id: 8, value: 1234, display: 1234},
+                ],
+                    [
+                        {id: 16, value: "NYC", display: "NYC"},
+                        {id: 8, value: 456, display: 456}
+                    ]],
+                groups: []
+            }
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let addReportRecordAction = {
+            type: actions.NEW_BLANK_REPORT_RECORD,
+            payload: {}
+        };
+
+        flux.dispatcher.dispatch(addReportRecordAction);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+    it('test onAddRecordSuccess action', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId:false,
+                    id:16,
+                    name: "loc",
+                    type: "SCALAR",
+                    keyField: false,
+                    defaultValue: {
+                        coercedValue :"City",
+                        displayValue :"City"
+                    },
+                    datatypeAttributes : {
+                        type: "TEXT"
+                    },
+                    multiChoiceSourceAllowed : true,
+                    multipleChoice : {
+                        choices:['City', 'A', 'New York', 'Boston']
+                    }
+
+                },
+                    {
+                        builtId:false,
+                        id:8,
+                        name: "Score",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes : {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                records: [[
+                    {id: 16, value: "Boston", display: "Boston"},
+                    {id: 8, value: 1234, display: 1234},
+                ],
+                    [
+                        {id: 16, value: "NYC", display: "NYC"},
+                        {id: 8, value: 456, display: 456}
+                    ],
+                    [
+                        {id: 16, value: "Chicago", display: "Chicago"},
+                        {id: 8, value: null, display: null}
+                    ]],
+                groups: []
+            }
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let addReportRecordSuccessAction = {
+            type: actions.ADD_REPORT_RECORD_SUCCESS,
+            payload: {recId : 1234, record: [{fieldName:"loc", value:"test", display:"test"}]}
+        };
+
+        flux.dispatcher.dispatch(addReportRecordSuccessAction);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+    it('test onAddRecordSuccess action changes that need display formatting', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId:false,
+                    id:16,
+                    name: "loc",
+                    type: "SCALAR",
+                    keyField: false,
+                    datatypeAttributes : {
+                        type: "TEXT"
+                    },
+                    multiChoiceSourceAllowed : true,
+                    multipleChoice : {
+                        choices:['City', 'A', 'New York', 'Boston']
+                    }
+
+                },
+                    {
+                        builtId:false,
+                        id:8,
+                        name: "Score",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes : {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                records: [[
+                        {id: 16, value: "Boston", display: "Boston"},
+                        {id: 8, value: 1234, display: 1234},
+                ],
+                    [
+                        {id: 16, value: "NYC", display: "NYC"},
+                        {id: 8, value: 456, display: 456}
+                    ],
+                    [
+                        {id: 16, value: "Chicago", display: "Chicago"},
+                        {id: 8, value: null, display: null}
+                    ]],
+                groups: []
+            }
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let addReportRecordSuccessAction = {
+            type: actions.ADD_REPORT_RECORD_SUCCESS,
+            payload: {recId : 1234, record: [{fieldName:"loc", value:"test"}]}
+        };
+
+        flux.dispatcher.dispatch(addReportRecordSuccessAction);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+    describe('test onAddRecordSuccess action field types display formatting', () => {
+        'use strict';
+
+        beforeEach(() => {
+            spyOn(flux.dispatchBinder, 'dispatch');
+        });
+        afterEach(() => {
+            flux.store(STORE_NAME).emit.calls.reset();
+        });
+        var dataProvider = [
+            {test:'NUMERIC display ', datatypeAttributes :{
+                type:serverTypeConsts.NUMERIC,
+                decimalPlaces: 2
+            }, value: 5500},
+            {test:'DATE display ', datatypeAttributes :{
+                type: serverTypeConsts.DATE,
+                showMonthAsName: false,
+                showDayOfWeek  : false,
+                dateFormat     : 'MM-dd-uuuu',
+                timeZone       : 'America/New_York'
+            }, value:  '2017-04-12T18:51:19z'},
+            {test:'DATE_TIME display ', datatypeAttributes :{
+                type:serverTypeConsts.DATE_TIME,
+                showTime       : true,
+                showTimeZone   : false,
+                showMonthAsName: false,
+                showDayOfWeek  : false,
+                dateFormat     : 'MM-dd-uuuu',
+                timeZone       : 'America/New_York'
+            }, value:  '2017-04-12T18:51:19z'},
+            {test:'TIME_OF_DAY display ', datatypeAttributes :{
+                type:serverTypeConsts.TIME_OF_DAY,
+                scale         : 'HH:MM',
+                use24HourClock: false
+            }, value:  '1970-01-01T18:51:21Z'},
+            {test:'CHECKBOX display ', datatypeAttributes :{
+                type:serverTypeConsts.CHECKBOX,
+            }, value:  true},
+            {test:'USER display ', datatypeAttributes :{
+                type:serverTypeConsts.USER,
+                userDisplayFormat : 'FIRST_THEN_LAST'
+            }, value:  {userId: 'RYVP73_UB',
+                firstName: 'user',
+                lastName: 'name',
+                screenName: 'uname',
+                email: 'uname@intuit.com',
+                deactivated: false,
+                anonymous: false,
+                administrator: false,
+                intuitID: 'rc0isu4jlxqmjvqfhnp9',
+                userProps: null,
+                sysRights: null,
+                challengeQuestion: 'What\'s heavy forward and backward not?',
+                challengeAnswer: 'ton',
+                password: 'rxrr4z2ci1pvwhax2lr1',
+                placeHolderId: null,
+                ticketVersion: 0}
+            },
+            {test:'CURRENCY display ', datatypeAttributes :{
+                type:serverTypeConsts.CURRENCY,
+                decimalPlaces       : 2,
+            }, value:   0.74765432},
+            {test:'RATING display ', datatypeAttributes :{
+                type:serverTypeConsts.RATING,
+            }, value:   4},
+            {test:'PERCENT display ', datatypeAttributes :{
+                type:serverTypeConsts.PERCENT,
+                decimalPlaces       : 2,
+            }, value:    0.74765432},
+
+        ];
+
+        dataProvider.forEach(function(data) {
+            it(data.test, () => {
+
+                //populate the model
+                let reportPayload = {
+                    metaData: {},
+                    recordData: {
+                        fields: [{
+                            builtId: false,
+                            id: 16,
+                            name: "loc",
+                            type: "SCALAR",
+                            keyField: false,
+                            datatypeAttributes: data.datatypeAttributes
+                        }, {
+                            builtId: false,
+                            id: 8,
+                            name: "Score",
+                            type: "SCALAR",
+                            keyField: true,
+                            datatypeAttributes: {
+                                type: "NUMERIC",
+                                decimalPlaces: 3,
+                            }
+                        }
+                        ],
+                        records: [[
+                            {id: 16, value: data.value},
+                            {id: 8, value: 1234},
+                        ],
+                            [
+                                {id: 16, value: data.value},
+                                {id: 8, value: null}
+                            ]],
+                        groups: []
+                    }
+                };
+
+                let loadReportAction = {
+                    type: actions.LOAD_REPORT_SUCCESS,
+                    payload: reportPayload
+                };
+                flux.dispatcher.dispatch(loadReportAction);
+
+                let addReportRecordSuccessAction = {
+                    type: actions.ADD_REPORT_RECORD_SUCCESS,
+                    payload: {recId: 1234, record: [{fieldName: "loc", value: "test"}]}
+                };
+
+                flux.dispatcher.dispatch(addReportRecordSuccessAction);
+                expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+                expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+            });
+        });
+    });
+
+    it('test onAddRecordFailed action', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId:false,
+                    id:16,
+                    name: "loc",
+                    type: "SCALAR",
+                    keyField: false,
+                    defaultValue: {
+                        coercedValue :"City",
+                        displayValue :"City"
+                    },
+                    datatypeAttributes : {
+                        type: "TEXT"
+                    },
+                    multiChoiceSourceAllowed : true,
+                    multipleChoice : {
+                        choices:['City', 'A', 'New York', 'Boston']
+                    }
+
+                },
+                    {
+                        builtId:false,
+                        id:8,
+                        name: "Score",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes : {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                records: [[
+                    {id: 16, value: "Boston", display: "Boston"},
+                    {id: 8, value: 1234, display: 1234},
+                ],
+                    [
+                        {id: 16, value: "NYC", display: "NYC"},
+                        {id: 8, value: 456, display: 456}
+                    ]],
+                groups: []
+            }
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let addReportRecordSuccessAction = {
+            type: actions.ADD_REPORT_RECORD_FAILED,
+        };
+
+        flux.dispatcher.dispatch(addReportRecordSuccessAction);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+
+    it('test onRecordEditCancel action', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId:false,
+                    id:16,
+                    name: "loc",
+                    type: "SCALAR",
+                    keyField: false,
+                    defaultValue: {
+                        coercedValue :"City",
+                        displayValue :"City"
+                    },
+                    datatypeAttributes : {
+                        type: "TEXT"
+                    },
+                    multiChoiceSourceAllowed : true,
+                    multipleChoice : {
+                        choices:['City', 'A', 'New York', 'Boston']
+                    }
+
+                },
+                    {
+                        builtId:false,
+                        id:8,
+                        name: "Score",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes : {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                records: [[
+                    {id: 16, value: "Boston", display: "Boston"},
+                    {id: 8, value: 1234, display: 1234},
+                ],
+                    [
+                        {id: 16, value: "NYC", display: "NYC"},
+                        {id: 8, value: null, display: null}
+                    ]],
+                groups: []
+            }
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let onRecordEditCancelAction = {
+            type: actions.RECORD_EDIT_CANCEL,
+            payload: {recId: {value: SchemaConsts.UNSAVED_RECORD_ID}, record: [{fieldName: "loc", value: "test"}]}
+        };
+
+        flux.dispatcher.dispatch(onRecordEditCancelAction);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });

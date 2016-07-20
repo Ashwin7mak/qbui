@@ -9,6 +9,7 @@ const serverTypeConsts = require('../../../common/src/constants');
 import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormatter';
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
+import * as userFormatter from '../../../common/src/formatter/userFormatter';
 
 
 let logger = new Logger();
@@ -170,17 +171,36 @@ let reportModel = {
         this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
     },
 
+    /**
+     * finds in model records the record with matching the recId
+     * model records are in the form of array [{fieldName1 : {id:4,value:rec1}, fieldName2: {id:5,value:'test'}}, ...]
+     * @param records
+     * @param recId
+     * @returns the found record or undefined
+     */
     findRecordById(records, recId) {
         return records.find(rec => rec[this.model.keyField.name].value === recId);
     },
 
+    /**
+     *
+     * @param records
+     * @param recId
+     * @returns {number|*}
+     */
     findRecordIndexById(records, recId) {
         return records.findIndex(rec => rec[this.model.keyField.name].value === recId);
     },
+
+    /**
+     * updates a record in the model inplace, for inline edits with changes
+     * per xd user will not get reload of sort/group/filtered effects of the
+     *  edit until they reload
+     * @param oldRecId - the record with the id to be modified
+     * @param newRecId - optional if its a new record the record this is the new record id
+     * @param changes - the changes to make to the record form is [{id: fieldid, display: dispVal, value: raw, fieldName: name}, ...]
+     */
     updateARecord(oldRecId, newRecId, changes) {
-        // update the record value inplace, for inline edits
-        // per xd user will not get reload of sort/group/filtered effects of the
-        // edit until they reload
         let record = this.findRecordById(this.model.records, oldRecId);
         let filtRecord = this.findRecordById(this.model.filteredRecords, oldRecId);
 
@@ -256,16 +276,29 @@ let reportModel = {
         }
     },
 
+    /**
+     * set the fields to sort by
+     * @param sortList
+     */
     setSortFids: function(sortList) {
         this.model.sortFids = ReportUtils.getSortFidsOnly(sortList);
     },
 
+    /**
+     * The the fields to group by
+     * @param sortList
+     */
     setGroupElements: function(sortList) {
         this.model.groupEls = ReportUtils.getGroupElements(sortList);
         this.model.groupLevel = this.model.groupEls.length;
     },
 
-    //format data methods
+    /**
+     * get the formatter type given a field type
+     * if the field type is not found it defaults to format.TEXT_FORMAT
+     * @param fieldType
+     * @return formatType from formats
+     */
     getFormatType(fieldType) {
         let formatType = formats.TEXT_FORMAT;
 
@@ -303,6 +336,13 @@ let reportModel = {
         }
         return formatType;
     },
+
+    /**
+     * given a formatType returns with a formatter object that
+     * can be used to format raw values to display values by the type
+     * @param formatType
+     * @returns {*} - a object with a format method
+     */
     getFormatter(formatType) {
         let answer = null;
         switch (formatType) {
@@ -312,6 +352,9 @@ let reportModel = {
             break;
         case formats.TIME_FORMAT:
             answer = timeOfDayFormatter;
+            break;
+        case formats.USER_FORMAT:
+            answer = userFormatter;
             break;
         case formats.NUMBER_FORMAT:
         case formats.RATING_FORMAT:
@@ -323,6 +366,11 @@ let reportModel = {
         return answer;
     },
 
+    /**
+     * formats a fields value according to the fields type
+     * @param recField
+     * @returns {*} the formatted value
+     */
     formatFieldValue(recField) {
         let answer = null;
 
@@ -331,7 +379,10 @@ let reportModel = {
             answer = recField.value;
 
             //get the corresponding field meta data
-            let fieldMeta = _.find(this.fields, (item) => item.id === recField.id);
+            let fieldMeta = _.find(this.model.fields, (item) => {
+                return (((recField.id !== undefined) && (item.id === recField.id) ||
+                       ((recField.fieldName !== undefined) && (item.name === recField.fieldName))));
+            });
 
             //format the value by field display type
             if (fieldMeta && fieldMeta.datatypeAttributes && fieldMeta.datatypeAttributes.type) {
@@ -347,6 +398,12 @@ let reportModel = {
         return answer;
     },
 
+    /**
+     * formats all the values on the newRecord
+     * modifies the display property of the each field.
+     *
+     * @param newRecord
+     */
     formatRecordValues(newRecord) {
         Object.keys(newRecord).forEach((key) => {
             let recField = newRecord[key];
@@ -369,8 +426,6 @@ let ReportDataStore = Fluxxor.createStore({
         this.facetExpression = {};
         this.selections = new FacetSelections();
         this.selectedRows = [];
-        this.lastSaveOk = null;
-        this.lastSaveRecordId = null;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -414,6 +469,7 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.emit('change');
     },
+
     onLoadReportFailed() {
         this.loading = false;
         this.editingIndex = null;
@@ -494,23 +550,28 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    /**
+     * adds a new blank record to the list of records
+     *
+     * @param payload parameter contains
+     *  payload.afterRecId : {value:id} of record to add the new blank record after
+     *  (its not sorted/group till next reload from server)
+     *
+     */
     onAddReportRecord(payload) {
         const model = this.reportModel.get();
-
-        const recordKey = SchemaConsts.DEFAULT_RECORD_KEY;
 
         if (model.filteredRecords.length > 0) {
             //find record to add after
             let afterRecId = payload.afterRecId;
 
-            // find record with  record ID (after converting to number) regardless of array order
-            // const maxRecord = model.filteredRecords.reduce((last, record) => {
-            //     return (parseInt(last[recordKey]) > parseInt(record[recordKey])) ? last : record;
-            // });
+            let afterRecIndex = -1;
+            if (afterRecId && afterRecId.value !== undefined) {
+                afterRecIndex = this.reportModel.findRecordIndexById(model.filteredRecords, afterRecId.value);
+            }
 
-            let afterRecIndex = _.findIndex(model.filteredRecords, (rec) => rec[recordKey].value === afterRecId.value);
-
-            const newRecord = _.mapValues(model.filteredRecords[afterRecIndex], (obj) => {
+            // use 1st record to create newRecord
+            const newRecord = _.mapValues(model.filteredRecords[0], (obj) => {
                 //get the default value for the fid if any
                 let valueAnswer = null;
                 let theCorrespondingField = _.find(model.fields, (item) => item.id === obj.id);
@@ -528,7 +589,7 @@ let ReportDataStore = Fluxxor.createStore({
             this.reportModel.formatRecordValues(newRecord);
 
             // set id to unsaved
-            newRecord[SchemaConsts.DEFAULT_RECORD_KEY].value = SchemaConsts.UNSAVED_RECORD_ID;
+            newRecord[model.keyField.name].value = SchemaConsts.UNSAVED_RECORD_ID;
 
             //make a copy
             const newFilteredRecords = model.filteredRecords.slice(0);
@@ -568,6 +629,12 @@ let ReportDataStore = Fluxxor.createStore({
             this.emit('change');
         }
     },
+
+    /**
+     * removes the record with the matching id in Record ID field from the
+     * models filteredRecord list
+     * @param id
+     */
     onDeleteReportRecord(id) {
         const model = this.reportModel.get();
 
@@ -577,6 +644,11 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
+    /**
+     * updates the list of records at record at the specified record id
+     * with the specified field value changes
+     * @param payload paramater contains recId :number, changes :[]
+     */
     onSaveRecordSuccess(payload) {
         // update the  record values
         this.editingIndex = null;
@@ -584,6 +656,11 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit("change");
     },
 
+    /**
+     * updates the list of records at the specified record id or end of list if no recId specified
+     * with the new record
+     * @param payload paramater contains recId :number, record :[]
+     */
     onAddRecordSuccess(payload) {
         // update the  record values
         this.editingIndex = null;
@@ -591,6 +668,13 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit("change");
     },
 
+    /**
+     * Cancels an record edit
+     * if the record id specified is a new record (has an unsaved record id) the record is removed
+     * from the models list of records and filtered records.
+     * and the record to rendered as in inline edit is cleared
+     * @param payload
+     */
     onRecordEditCancel(payload) {
         //remove record if its new unsaved
         if (payload.recId.value === SchemaConsts.UNSAVED_RECORD_ID) {
@@ -619,11 +703,22 @@ let ReportDataStore = Fluxxor.createStore({
         }
         this.onClearEdit();
     },
+
+    /**
+     * Cancels an record edit
+     * the id and index of a record to render in inline edit id is cleared
+     * @param payload - none
+     */
     onClearEdit() {
         this.editingIndex = null;
         this.editingId = null;
         this.emit("change");
     },
+
+    /**
+     * gets the state of a reportData
+     * @returns report state
+     */
     getState() {
         return {
             loading: this.loading,

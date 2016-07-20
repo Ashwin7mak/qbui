@@ -21,6 +21,7 @@ let ReportContent = React.createClass({
     contextTypes: {
         history: React.PropTypes.object
     },
+
     getInitialState: function() {
         return {
             showSelectionColumn: false,
@@ -39,7 +40,11 @@ let ReportContent = React.createClass({
         this.props.history.pushState(null, link);
     },
 
-
+    /**
+     * Given a record id get the original values from the report.
+     * @param recid
+     * @returns {*}
+     */
     getOrigRec(recid) {
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
@@ -63,7 +68,13 @@ let ReportContent = React.createClass({
         return _.cloneDeep(orig);
     },
 
-    validateRecord(record) {
+    /**
+     * Client side validation of array of changes to a record
+     * placeholder method implementation TBD
+     * @param changes
+     * @returns validation result object {{ok: boolean, errors: Array}}
+     */
+    validateRecord(changes) {
         let results = {
             ok : true,
             errors: []
@@ -72,6 +83,15 @@ let ReportContent = React.createClass({
         return results;
     },
 
+    /**
+     * When entering inline edit on a record, if it's an existing (already stored) record keep note
+     * its originalRecord values (for later undo/audit?)
+     * if it's a new (unsaved) record note all it's non null values as changes to the new record
+     * to be saved.
+     * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
+     * was one or changes if it's a new record
+     * @param recId
+     */
     handleEditRecordStart(recId) {
         const flux = this.getFlux();
         let origRec = null;
@@ -103,13 +123,22 @@ let ReportContent = React.createClass({
         flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes);
     },
 
+    /**
+     * When an inline edit is canceled
+     * Initiate a recordPendingEditsCancel action the the app/table/recid
+     * @param recId
+     */
     handleEditRecordCancel(recId) {
         const flux = this.getFlux();
         flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, recId);
     },
 
+    /**
+     * Initiate recordPendingEditsChangeField action to hold the unsaved field value change
+     * @param change - {fid:fieldid, values : {oldVal :{}, newVal:{}, fieldName:name}
+     */
     handleFieldChange(change) {
-        // call action to hold the field value change
+        //
         const flux = this.getFlux();
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
         let changes = {};
@@ -125,16 +154,62 @@ let ReportContent = React.createClass({
 
     },
 
+    /**
+     *  When inline edit mode and user wants to add a new record
+     *  if there are pending edits or this record is not yet saved
+     *  try save instead of adding new one
+     *  otherwise if there are no unsaved changes add a blank new unsaved record after the
+     *  record specified
+     * @param afterRecId
+     */
     handleRecordNewBlank(afterRecId) {
         const flux = this.getFlux();
-        // if there are pending edits save instead of adding new one
-        if (this.props.pendEdits.isPendingEdit) {
+        // if there are pending edits or this record is not saved
+        // try save instead of adding new one
+        if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
             this.handleRecordSaveClicked(afterRecId);
         } else {
             flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
         }
     },
 
+
+    /**
+     * User wants to save changes to a record. First we do client side validation
+     * and if validation is successful we initiate the save action for the new or existing record
+     * if validation if not ok we stay in edit mode and show the errors (TBD)
+     * @param id
+     * @returns {boolean}
+     */
+    handleRecordSaveClicked(id) {
+        let allClear = false;
+        //validate changed values
+        //get pending changes
+        let validationResult = this.validateRecord(this.props.pendEdits.recordChanges);
+        if (validationResult.ok) {
+            //signal record save action, will update an existing records with changed values
+            // or add a new record
+            let changes = null;
+            if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
+                changes = this.handleRecordAdd(this.props.pendEdits.recordChanges);
+            } else {
+                changes = this.handleRecordChange(id);
+            }
+            if (changes && Object.keys(changes).length === 0) {
+                allClear = true;
+            }
+        } else {
+            //TBD show errors
+            allClear = false;
+        }
+        return allClear;
+    },
+
+    /**
+     * Save a new record
+     * @param recordChanges
+     * @returns {Array} of field values for the new record
+     */
     handleRecordAdd(recordChanges) {
         const flux = this.getFlux();
 
@@ -165,30 +240,12 @@ let ReportContent = React.createClass({
         return payload;
     },
 
-    handleRecordSaveClicked(id) {
-        let allClear = false;
-        //validate changed values
-        //get pending changes
-        let validationResult = this.validateRecord(this.props.pendEdits.recordChanges);
-        if (validationResult.ok) {
-            //signal record save action, will update an existing records with changed values
-            // or add a new record
-            let changes = null;
-            if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
-                changes = this.handleRecordAdd(this.props.pendEdits.recordChanges);
-            } else {
-                changes = this.handleRecordChange(id);
-            }
-            if (changes && Object.keys(changes).length === 0) {
-                allClear = true;
-            }
-        } else {
-            //TBD show errors
-            allClear = false;
-        }
-        return allClear;
-    },
 
+    /**
+     * Save changes to an existing record
+     * @param recId
+     * @returns {Array}
+     */
     handleRecordChange(recId) {
         const flux = this.getFlux();
 
@@ -222,7 +279,6 @@ let ReportContent = React.createClass({
         flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);
         return payload;
     },
-
 
     /**
      * when we scroll the grid wrapper, hide the add record
@@ -539,7 +595,10 @@ let ReportContent = React.createClass({
         }
     },
 
-    //when report changed from not loading to loading start measure of components performance
+    /**
+     * when report changed from not loading to loading start measure of components performance
+     *  @param nextProps
+     */
     startPerfTiming(nextProps) {
         if (_.has(this.props, 'reportData.loading') &&
                 !this.props.reportData.loading &&
@@ -549,7 +608,10 @@ let ReportContent = React.createClass({
         }
     },
 
-    //when report changed from loading to loaded finish measure of components performance
+    /**
+     * when report changed from loading to loaded finish measure of components performance
+     * @param prevProps
+     */
     capturePerfTiming(prevProps) {
         let timingContextData = {numReportCols:0, numReportRows:0};
         let flux = this.getFlux();
