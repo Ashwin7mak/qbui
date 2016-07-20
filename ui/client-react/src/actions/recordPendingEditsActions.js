@@ -22,10 +22,6 @@ let recordPendingEditsActions = {
     recordPendingEditsCommit(appId, tblId, recId) {
         this.dispatch(actions.RECORD_EDIT_SAVE, {appId, tblId, recId});
     },
-    /* setup a new record for editing */
-    recordAddNew(appId, tblId, recId) {
-        this.dispatch(actions.RECORD_ADD_NEW, {appId, tblId, recId});
-    },
 
 };
 
