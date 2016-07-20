@@ -22,6 +22,7 @@ let ReportContent = React.createClass({
     contextTypes: {
         history: React.PropTypes.object
     },
+
     getInitialState: function() {
         return {
             showSelectionColumn: false,
@@ -41,7 +42,11 @@ let ReportContent = React.createClass({
         this.props.history.pushState(null, link);
     },
 
-
+    /**
+     * Given a record id get the original values from the report.
+     * @param recid
+     * @returns {*}
+     */
     getOrigRec(recid) {
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
@@ -65,20 +70,79 @@ let ReportContent = React.createClass({
         return _.cloneDeep(orig);
     },
 
-    handleEditRecordStart(recId) {
-        const flux = this.getFlux();
-        let origRec = this.getOrigRec(recId);
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec);
+    /**
+     * Client side validation of array of changes to a record
+     * placeholder method implementation TBD
+     * @param changes
+     * @returns validation result object {{ok: boolean, errors: Array}}
+     */
+    validateRecord(changes) {
+        let results = {
+            ok : true,
+            errors: []
+        };
+        // TBD validate each value in record
+        return results;
     },
 
+    /**
+     * When entering inline edit on a record, if it's an existing (already stored) record keep note
+     * its originalRecord values (for later undo/audit?)
+     * if it's a new (unsaved) record note all it's non null values as changes to the new record
+     * to be saved.
+     * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
+     * was one or changes if it's a new record
+     * @param recId
+     */
+    handleEditRecordStart(recId) {
+        const flux = this.getFlux();
+        let origRec = null;
+        let changes = {};
+        if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
+            origRec = this.getOrigRec(recId);
+        } else {
+            //add each non null value as to the new record as a change
+            let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
+                return rec[this.props.keyField].value === recId;
+            });
+            if (newRec) {
+                changes = {};
+                // loop thru the values in the new rec add any non nulls to change set
+                // so it will be treated as dirty/not saved
+                Object.keys(newRec).forEach((key) => {
+                    let field = newRec[key];
+                    if (field.value !== null) {
+                        let change = {
+                            oldVal: {value: null, id: +field.id},
+                            newVal: {value: field.value},
+                            fieldName: key
+                        };
+                        changes[field.id] = change;
+                    }
+                });
+            }
+        }
+        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes);
+    },
+
+    /**
+     * When an inline edit is canceled
+     * Initiate a recordPendingEditsCancel action the the app/table/recid
+     * @param recId
+     */
     handleEditRecordCancel(recId) {
         const flux = this.getFlux();
         flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, recId);
     },
 
+    /**
+     * Initiate recordPendingEditsChangeField action to hold the unsaved field value change
+     * @param change - {fid:fieldid, values : {oldVal :{}, newVal:{}, fieldName:name}
+     */
     handleFieldChange(change) {
 
         // call action to hold the field value change
+
         const flux = this.getFlux();
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
         let changes = {};
@@ -94,6 +158,98 @@ let ReportContent = React.createClass({
 
     },
 
+    /**
+     *  When inline edit mode and user wants to add a new record
+     *  if there are pending edits or this record is not yet saved
+     *  try save instead of adding new one
+     *  otherwise if there are no unsaved changes add a blank new unsaved record after the
+     *  record specified
+     * @param afterRecId
+     */
+    handleRecordNewBlank(afterRecId) {
+        const flux = this.getFlux();
+        // if there are pending edits or this record is not saved
+        // try save instead of adding new one
+        if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
+            this.handleRecordSaveClicked(afterRecId);
+        } else {
+            flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+        }
+    },
+
+
+    /**
+     * User wants to save changes to a record. First we do client side validation
+     * and if validation is successful we initiate the save action for the new or existing record
+     * if validation if not ok we stay in edit mode and show the errors (TBD)
+     * @param id
+     * @returns {boolean}
+     */
+    handleRecordSaveClicked(id) {
+        let allClear = false;
+        //validate changed values
+        //get pending changes
+        let validationResult = this.validateRecord(this.props.pendEdits.recordChanges);
+        if (validationResult.ok) {
+            //signal record save action, will update an existing records with changed values
+            // or add a new record
+            let changes = null;
+            if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
+                changes = this.handleRecordAdd(this.props.pendEdits.recordChanges);
+            } else {
+                changes = this.handleRecordChange(id);
+            }
+            if (changes && Object.keys(changes).length === 0) {
+                allClear = true;
+            }
+        } else {
+            //TBD show errors
+            allClear = false;
+        }
+        return allClear;
+    },
+
+    /**
+     * Save a new record
+     * @param recordChanges
+     * @returns {Array} of field values for the new record
+     */
+    handleRecordAdd(recordChanges) {
+        const flux = this.getFlux();
+
+        //save changes in record
+        let payload = [];
+        // columns id and new values array
+        //[{"id":6, "value":"Claire"}]
+        Object.keys(recordChanges).forEach((recKey) => {
+            //get each columns matching field description
+            let matchingField = _.find(this.props.fields.fields.data, (field) => {
+
+                return field.id === +recKey;
+            });
+            // only post the non built in fields values
+            if (matchingField && matchingField.builtIn === false) {
+                let newValue = recordChanges[recKey].newVal.value;
+                let newDisplay = recordChanges[recKey].newVal.display;
+
+                let colChange = {};
+                colChange.fieldName = recordChanges[recKey].fieldName;
+                colChange.id = +recKey;
+                colChange.value = _.cloneDeep(newValue);
+                colChange.display = _.cloneDeep(newDisplay);
+                payload.push(colChange);
+            }
+        });
+        flux.actions.saveNewReportRecord(this.props.appId, this.props.tblId, payload);
+        return payload;
+    },
+
+
+    /**
+     * Save changes to an existing record
+     * @param recId
+     * @returns {Array}
+     */
     handleRecordChange(recId) {
         const flux = this.getFlux();
 
@@ -126,9 +282,8 @@ let ReportContent = React.createClass({
         //for (changes)
         flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
         flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);
-
+        return payload;
     },
-
 
     /**
      * when we scroll the grid wrapper, hide the add record
@@ -445,7 +600,10 @@ let ReportContent = React.createClass({
         }
     },
 
-    //when report changed from not loading to loading start measure of components performance
+    /**
+     * when report changed from not loading to loading start measure of components performance
+     *  @param nextProps
+     */
     startPerfTiming(nextProps) {
         if (_.has(this.props, 'reportData.loading') &&
                 !this.props.reportData.loading &&
@@ -455,7 +613,10 @@ let ReportContent = React.createClass({
         }
     },
 
-    //when report changed from loading to loaded finish measure of components performance
+    /**
+     * when report changed from loading to loaded finish measure of components performance
+     * @param prevProps
+     */
     capturePerfTiming(prevProps) {
         let timingContextData = {numReportCols:0, numReportRows:0};
         let flux = this.getFlux();
@@ -487,6 +648,14 @@ let ReportContent = React.createClass({
     render: function() {
         let isTouch = this.context.touch;
         let recordCount = 0;
+
+        let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
+        if (this.props.keyField) {
+            keyField = this.props.keyField;
+        } else if (this.props.fields && this.props.fields.keyField && this.props.fields.keyField.name) {
+            keyField = this.props.fields.keyField.name;
+        }
+
         if (this.props.reportData) {
             let reportData = this.props.reportData.data;
             if (reportData) {
@@ -503,8 +672,8 @@ let ReportContent = React.createClass({
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className="reportContent">
-
                         {!isTouch && this.state.reactabular &&
+
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 uniqueIdentifier="Record ID#"
@@ -519,15 +688,21 @@ let ReportContent = React.createClass({
 
                         {!isTouch && !this.state.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
+                                editingIndex={this.props.reportData.editingIndex}
+                                editingId={this.props.reportData.editingId}
                                 records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                keyField={this.props.keyField}
+                                keyField={keyField}
                                 appId={this.props.reportData.appId}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 onFieldChange={this.handleFieldChange}
                                 onRecordChange={this.handleRecordChange}
+                                onRecordAdd={this.handleRecordAdd}
+                                onRecordNewBlank={this.handleRecordNewBlank}
+                                onRecordSaveClicked={this.handleRecordSaveClicked}
+                                validateRecord={this.validateRecord}
                                 getOrigRec={this.getOrigRec}
                                 getPendingChanges={this.getPendingChanges}
                                 tblId={this.props.reportData.tblId}
@@ -549,8 +724,7 @@ let ReportContent = React.createClass({
                         {isTouch &&
                             <CardViewListHolder reportData={this.props.reportData}
                                 uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                keyField={this.props.fields && this.props.fields.keyField ?
-                                    this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
+                                keyField={keyField}
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}
                                 onScroll={this.onScrollRecords}

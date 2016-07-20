@@ -1,9 +1,11 @@
 import * as actions from "../constants/actions";
 import Fluxxor from "fluxxor";
 import _ from 'lodash';
+import Logger from '../utils/logger';
+var logger = new Logger();
+
 /**
-    keeps track of inline edits in progress made on a record before
-    they are committed to database
+   RecordPendingEditsStore keeps track of inline edits in progress made on a record    before they are committed to database
  **/
 
 
@@ -15,12 +17,24 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.RECORD_EDIT_CHANGE_FIELD, this.onRecordEditChangeField,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             actions.RECORD_EDIT_SAVE, this.onRecordEditSave,
+            actions.SAVE_REPORT_RECORD, this.onSaveRecord,
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_REPORT_RECORD_FAILED, this.onSaveRecordFailed,
+            actions.ADD_REPORT_RECORD, this.onSaveAddedRecord,
+            actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
+            actions.ADD_REPORT_RECORD_FAILED, this.onAddRecordFailed,
+
         );
         this._initData();
         this.commitChanges = [];
     },
+
+    /**
+     * internal reset of any pending edits
+     * in we have case of multiple reports with edits in progress
+     * will need to use map to report instances
+     * @private
+     */
     _initData() {
         this.isPendingEdit = false;
         this.currentEditingRecordId = null;
@@ -29,12 +43,23 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.originalRecord = null;
         this.recordChanges = {};
     },
+
+    /**
+     * On the beginning of an inline edit
+     * keeps note of the app/table/rec context and any original data
+     * or initial changes for the record
+     * @param payload -
+     *      app/tbl/recIds
+     *      origRec - if editing an existing record the original rec values
+     *      or
+     *      changes - if adding a new record the initial default new record values
+     */
     onRecordEditStart(payload) {
         if (typeof (payload.recId) !== 'undefined') {
             this.currentEditingRecordId = payload.recId;
             this.currentEditingAppId = payload.appId;
             this.currentEditingTableId = payload.tblId;
-            this.recordChanges = {};
+            this.recordChanges =  _.cloneDeep(payload.changes);
             this.originalRecord = _.cloneDeep(payload.origRec);
         } else {
             this.currentEditingRecordId = undefined;
@@ -45,6 +70,16 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.emit('change');
     },
+
+    /**
+     * On the change of a fields value not yet committed
+     * @param payload -
+     *      app/tbl/recIds
+     *      changes:
+     *          fid  - field id of the change
+     *          values - {oldVal : {}, newVal : {}
+     *          fieldName - name of the field that has a new value
+     */
     onRecordEditChangeField(payload) {
         if (typeof (this.recordChanges[payload.changes.fid]) === 'undefined') {
             this.recordChanges[payload.changes.fid] = {};
@@ -58,11 +93,21 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.isPendingEdit = true;
         this.emit('change');
     },
+
+    /**
+     * On the cancellation of pending edit
+     */
     onRecordEditCancel() {
-        // record wasn't saved
+        // record wasn't saved nothing pending
         this._initData();
         this.emit('change');
     },
+
+    /**
+     * On request to save pending changes to an existing record
+     * @param payload
+     *  - recId that has changed
+     */
     onRecordEditSave(payload) {
         if (this.isPendingEdit) {
             //keep list of changes made to records
@@ -80,15 +125,43 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.emit('change');
         }
     },
+
+    /**
+     * On saving changes debug log changes
+     * does not emit change
+     * @param payload
+     *      app/tbl/recIds
+     *      changes - array of changed rec values
+     */
+    onSaveRecord(payload) {
+        this.currentEditingAppId = payload.appId;
+        this.currentEditingTableId = payload.tblId;
+        this.currentEditingRecordId = payload.recId;
+        let changes = payload.changes;
+        logger.debug('saving changes: ' + JSON.stringify(payload));
+    },
+
+    /**
+     * On successful save of pending changes on an existing record
+     * note the committed success and set pendingEdits to false
+     * @param payload - the recid
+     */
     onSaveRecordSuccess(payload) {
         this.currentEditingRecordId = payload.recId;
         let entry = this._getEntryKey();
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
             this.commitChanges[entry].status = actions.SAVE_REPORT_RECORD_SUCCESS;
         }
+        this.isPendingEdit = false;
         this.emit('change');
 
     },
+
+    /**
+     * On failure to save pending changes for an existing record
+     * note the committed failure
+     * @param payload - recid
+     */
     onSaveRecordFailed(payload) {
         this.currentEditingRecordId = payload.recId;
         let entry = this._getEntryKey();
@@ -97,9 +170,76 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.emit('change');
     },
+
+    /**
+     * On request to save pending changes for a new record
+     * @param payload
+     *  - recId that has changed
+     */
+    onSaveAddedRecord(payload) {
+        this.currentEditingAppId = payload.appId;
+        this.currentEditingTableId = payload.tblId;
+        this.currentEditingRecordId = null;
+        this.recordChanges = payload.record;
+        logger.debug('saving added record: ' + JSON.stringify(payload));
+    },
+
+    /**
+     * On successful save of pending changes for a new record
+     * notes the committed success and sets pendingEdits to false
+     * @param payload - the recid
+     */
+    onAddRecordSuccess(payload) {
+        this.currentEditingRecordId = payload.recId;
+        let entry = this._getEntryKey();
+        if (typeof (this.commitChanges[entry]) === 'undefined') {
+            this.commitChanges[entry] = {};
+        }
+        if (typeof (this.commitChanges[entry].changes) === 'undefined') {
+            this.commitChanges[entry].changes = [];
+        }
+        this.commitChanges[entry].changes.push(this.recordChanges);
+        if (typeof (this.commitChanges[entry]) !== 'undefined') {
+            this.commitChanges[entry].status = actions.ADD_REPORT_RECORD_SUCCESS;
+        }
+        this.isPendingEdit = false;
+        this.emit('change');
+
+    },
+
+    /**
+     * On failure to save pending changes for a new record
+     * notes the failure
+     * @param payload - the recid
+     */
+    onAddRecordFailed(payload) {
+        this.currentEditingRecordId = payload.recId;
+        //TBD what if no recId for new rec on fail
+        let entry = this._getEntryKey();
+        if (typeof (this.commitChanges[entry]) === 'undefined') {
+            this.commitChanges[entry] = {};
+        }
+        if (typeof (this.commitChanges[entry]) !== 'undefined') {
+            this.commitChanges[entry].status = actions.ADD_REPORT_RECORD_FAILED;
+        }
+        this.emit('change');
+    },
+
+    /**
+     * create a key for pending edit commitChanges map from the current context
+     * of app/table/record
+     *
+     * @returns {string}
+     * @private
+     */
     _getEntryKey() {
         return '' + this.currentEditingAppId + '/' + this.currentEditingTableId + '/' + this.currentEditingRecordId;
     },
+
+    /**
+     * returns the pending record edit store object
+     * @returns state of pending edits
+     */
     getState() {
         return {
             isPendingEdit : this.isPendingEdit,

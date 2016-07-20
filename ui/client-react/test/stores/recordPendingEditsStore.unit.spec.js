@@ -44,16 +44,21 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_CHANGE_FIELD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_CANCEL).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_SAVE).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.ADD_REPORT_RECORD).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.ADD_REPORT_RECORD_SUCCESS).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.ADD_REPORT_RECORD_FAILED).toBeDefined();
 
     });
 
     it('test RecordEditStart recordPendingEdits action', () => {
         let original = {origRec : {rec:'info'}};
+        let changes = {};
         let recordEditStartAction = {
             type: actions.RECORD_EDIT_START,
-            payload : Object.assign({}, appTableRecPayload, original)
+            payload : Object.assign({}, appTableRecPayload, original, {changes})
         };
 
         flux.dispatcher.dispatch(recordEditStartAction);
@@ -62,7 +67,6 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).recordChanges).toEqual({});
         expect(flux.store(STORE_NAME).originalRecord).toEqual(original.origRec);
-
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
@@ -147,21 +151,41 @@ describe('Test recordPendingEdits Store ', () => {
             type: actions.RECORD_EDIT_CHANGE_FIELD,
             payload : Object.assign({}, appTableRecPayload, changes)
         };
+
+        flux.dispatcher.dispatch(recordEditChangeFieldAction);
         let recordEditSaveAction = {
             type: actions.RECORD_EDIT_SAVE,
             payload : Object.assign({}, appTableRecPayload)
+        };
+
+        flux.dispatcher.dispatch(recordEditSaveAction);
+        expect(flux.store(STORE_NAME).isPendingEdit).toBeTruthy();
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+
+    it('test onSaveRecord action', () => {
+        let changes = {changes : {
+            fid: 5,
+            fieldName: 'Company',
+            values: {
+                oldVal : "abc",
+                newVal : "xyz"
+            }
+        }};
+        let onSaveRecordAction = {
+            type: actions.SAVE_REPORT_RECORD,
+            payload : Object.assign({}, appTableRecPayload, changes)
 
         };
 
-        flux.dispatcher.dispatch(recordEditChangeFieldAction);
-
-        let commitKey = '' + appTableRecPayload.appId + '/' + appTableRecPayload.tblId + '/' + appTableRecPayload.recId;
-        flux.dispatcher.dispatch(recordEditSaveAction);
+        flux.dispatcher.dispatch(onSaveRecordAction);
+        expect(flux.store(STORE_NAME).currentEditingAppId).toEqual(appTableRecPayload.appId);
+        expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(appTableRecPayload.recId);
-        expect(flux.store(STORE_NAME).commitChanges[commitKey].changes).toBeDefined();
-        expect(flux.store(STORE_NAME).commitChanges[commitKey].status).toEqual('...');
-        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+        expect(flux.store(STORE_NAME).emit).not.toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
     });
 
     it('test SaveRecordSuccess recordPendingEdits action', () => {
@@ -174,15 +198,141 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
-    it('testnSaveRecordFailed recordPendingEdits action', () => {
+    it('test SaveRecordSuccess with changes recordPendingEdits action', () => {
+
+        let changes = {changes : {
+            fid: 5,
+            fieldName: 'Company',
+            values: {
+                oldVal : "abc",
+                newVal : "xyz"
+            }
+        }};
+        let recordEditChangeFieldAction = {
+            type: actions.RECORD_EDIT_CHANGE_FIELD,
+            payload : Object.assign({}, appTableRecPayload, changes)
+        };
+
+        flux.dispatcher.dispatch(recordEditChangeFieldAction);
+
+        let recordEditSaveAction = {
+            type: actions.RECORD_EDIT_SAVE,
+            payload : Object.assign({}, appTableRecPayload)
+        };
+        flux.dispatcher.dispatch(recordEditSaveAction);
+
+        let saveRecordSuccessAction = {
+            type: actions.SAVE_REPORT_RECORD_SUCCESS,
+            payload : Object.assign({}, appTableRecPayload)
+        };
+
+        flux.dispatcher.dispatch(saveRecordSuccessAction);
+        expect(flux.store(STORE_NAME).isPendingEdit).toBe(false);
+        expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(appTableRecPayload.recId);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
+    });
+
+    it('test SaveRecordFailed recordPendingEdits action', () => {
+        let changes = {changes : {
+            fid: 5,
+            fieldName: 'Company',
+            values: {
+                oldVal : "abc",
+                newVal : "xyz"
+            }
+        }};
+        let recordEditChangeFieldAction = {
+            type: actions.RECORD_EDIT_CHANGE_FIELD,
+            payload : Object.assign({}, appTableRecPayload, changes)
+        };
+
+        flux.dispatcher.dispatch(recordEditChangeFieldAction);
+        let recordEditSaveAction = {
+            type: actions.RECORD_EDIT_SAVE,
+            payload : Object.assign({}, appTableRecPayload)
+        };
+        flux.dispatcher.dispatch(recordEditSaveAction);
+
+
         let saveRecordFailedAction = {
             type: actions.SAVE_REPORT_RECORD_FAILED,
             payload : Object.assign({}, appTableRecPayload)
         };
 
         flux.dispatcher.dispatch(saveRecordFailedAction);
+        expect(flux.store(STORE_NAME).isPendingEdit).toBe(true);
+        expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(appTableRecPayload.recId);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
+    });
+
+    it('test onSaveAddedRecord action', () => {
+        let changes = {changes : {
+            fid: 5,
+            fieldName: 'Company',
+            values: {
+                oldVal : "abc",
+                newVal : "xyz"
+            }
+        }};
+        let onSaveAddedRecordAction = {
+            type: actions.ADD_REPORT_RECORD,
+            payload : Object.assign({}, appTableRecPayload, {recId: null}, changes)
+
+        };
+
+        flux.dispatcher.dispatch(onSaveAddedRecordAction);
+        expect(flux.store(STORE_NAME).currentEditingAppId).toEqual(appTableRecPayload.appId);
+        expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
+        expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(null);
+        expect(flux.store(STORE_NAME).emit).not.toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
+    });
+
+    it('test onAddRecordSuccess recordPendingEdits action', () => {
+        let changes = {changes : {
+            fid: 5,
+            fieldName: 'Company',
+            values: {
+                oldVal : "abc",
+                newVal : "xyz"
+            }
+        }};
+        let onSaveAddedRecordAction = {
+            type: actions.ADD_REPORT_RECORD,
+            payload : Object.assign({}, appTableRecPayload, {recId: null}, changes)
+
+        };
+
+        flux.dispatcher.dispatch(onSaveAddedRecordAction);
+
+        let recordEditSaveAction = {
+            type: actions.RECORD_EDIT_SAVE,
+            payload : Object.assign({}, appTableRecPayload)
+        };
+        flux.dispatcher.dispatch(recordEditSaveAction);
+
+
+        let onAddRecordSuccessAction = {
+            type: actions.ADD_REPORT_RECORD_SUCCESS,
+            payload : Object.assign({}, appTableRecPayload)
+        };
+
+        flux.dispatcher.dispatch(onAddRecordSuccessAction);
+        expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(appTableRecPayload.recId);
+        expect(flux.store(STORE_NAME).isPendingEdit).toBeFalsy();
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
+
+    it('test onAddRecordFailed recordPendingEdits action', () => {
+        let onAddRecordFailedAction = {
+            type: actions.ADD_REPORT_RECORD_FAILED,
+            payload : Object.assign({}, appTableRecPayload)
+        };
+
+        flux.dispatcher.dispatch(onAddRecordFailedAction);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
 
 
     it('test getState function', () => {

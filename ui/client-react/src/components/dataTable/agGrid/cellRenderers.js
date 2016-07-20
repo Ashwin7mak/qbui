@@ -100,6 +100,14 @@ const CellRenderer = React.createClass({
 
         let isEditable = !this.props.colDef.builtIn;
 
+        let key = ''; // for uniq key
+        if (this.props.params && this.props.params.data && this.props.params.context &&
+                this.props.params.rowIndex && this.props.initialValue && this.props.initialValue.id &&
+                this.props.params.context.keyField && this.props.params.data[this.props.params.context.keyField].value) {
+            let recId = this.props.params.data[this.props.params.context.keyField].value;
+            key = this.props.params.rowIndex + "-fid" + this.props.initialValue.id + '-recId' + recId ;
+        }
+
         if (this.props.initialValue === null) {
             return (<span className="emptyCell" />);
         }
@@ -114,6 +122,7 @@ const CellRenderer = React.createClass({
         }
 
         return (
+
             <span className={"cellWrapper " + this.getClassNameForType(this.props.type)}>
 
                 { isEditable && (this.props.editing || !this.props.qbGrid) &&
@@ -121,6 +130,7 @@ const CellRenderer = React.createClass({
                                 value={this.state.valueAndDisplay.value}
                                 colDef={this.props.colDef}
                                 onChange={this.onChange}
+                                key={key + '-edt'}
                                 onTabColumn={this.onTabColumn}/>
                 }
 
@@ -128,10 +138,10 @@ const CellRenderer = React.createClass({
                     <CellValueRenderer type={cellType}
                                        isEditable={isEditable}
                                        value={this.state.valueAndDisplay.value}
+                                       key={key + '-dsp'}
                                        display={this.state.valueAndDisplay.display}
                                        attributes={this.props.colDef.datatypeAttributes}/>
                 }
-
             </span>);
     },
 

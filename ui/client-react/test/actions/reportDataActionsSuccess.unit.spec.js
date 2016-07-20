@@ -285,6 +285,7 @@ describe('Report Data Actions Edit Report functions -- success', () => {
     let tblId = '2';
     let recId = '3';
     let changes = {};
+    let newRecord = {data:'value'};
     let responseData = {appId, tblId, data: 'success'};
 
     class mockRecordService {
@@ -328,10 +329,10 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.FILTER_SEARCH_PENDING, {string}]);
     });
 
-    it('test addReportRecord', () => {
-        flux.actions.addReportRecord();
+    it('test newBlankReportRecord', () => {
+        flux.actions.newBlankReportRecord(appId, tblId, 4);
         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD]);
+        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId:4}]);
     });
 
     it('test deleteReportRecord', () => {
