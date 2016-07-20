@@ -75,28 +75,24 @@ const CellRenderer = React.createClass({
         }
     },
 
-    getClassNameForType() {
-        switch (this.props.type) {
-        case formats.DATE_FORMAT:
-            return "dateFormat";
-        case formats.DATETIME_FORMAT:
-            return "dateTimeFormat";
-        case formats.TIME_FORMAT:
-            return "timeFormat";
-        case formats.NUMBER_FORMAT:
-            return "numberFormat";
-        case formats.RATING_FORMAT:
-            return "ratingFormat";
-        case formats.CURRENCY_FORMAT:
-            return "currencyFormat";
-        case formats.PERCENT_FORMAT:
-            return "percentFormat";
-        case formats.DURATION_FORMAT:
-            return "durationFormat";
-        case formats.PHONE_FORMAT:
-            return "phoneFormat";
-        default:
-            return "textFormat";
+    /**
+     *
+     * @returns {*}
+     */
+    getClassNameForType(cellType) {
+        switch (cellType) {
+        case formats.DATE_FORMAT:            return "dateFormat";
+        case formats.DATETIME_FORMAT:        return "dateTimeFormat";
+        case formats.TIME_FORMAT:            return "timeFormat";
+        case formats.NUMBER_FORMAT:          return "numberFormat";
+        case formats.RATING_FORMAT:          return "ratingFormat";
+        case formats.CURRENCY_FORMAT:        return "currencyFormat";
+        case formats.PERCENT_FORMAT:         return "percentFormat";
+        case formats.DURATION_FORMAT:        return "durationFormat";
+        case formats.PHONE_FORMAT:           return "phoneFormat";
+        case formats.TEXT_FORMAT:            return "textFormat";
+        case formats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
+        default:                             return "textFormat";
         }
     },
 
@@ -107,11 +103,21 @@ const CellRenderer = React.createClass({
         if (this.props.initialValue === null) {
             return (<span className="emptyCell" />);
         }
+
+        // the reactabular grid doesn't need to render an editor unless it's actually editing
+
+        let cellType = this.props.type;
+
+        // use multi-line text editor and renderer for qbGrid only to demonstrate auto resizing rows
+        if (this.props.qbGrid && (cellType === formats.TEXT_FORMAT)) {
+            cellType = formats.MULTI_LINE_TEXT_FORMAT;
+        }
+
         return (
-            <span className={"cellWrapper " + this.getClassNameForType()}>
+            <span className={"cellWrapper " + this.getClassNameForType(this.props.type)}>
 
                 { isEditable && (this.props.editing || !this.props.qbGrid) &&
-                    <CellEditor type={this.props.type}
+                    <CellEditor type={cellType}
                                 value={this.state.valueAndDisplay.value}
                                 colDef={this.props.colDef}
                                 onChange={this.onChange}
@@ -119,7 +125,7 @@ const CellRenderer = React.createClass({
                 }
 
                 { (!isEditable || !this.props.editing || !this.props.qbGrid) &&
-                    <CellValueRenderer type={this.props.type}
+                    <CellValueRenderer type={cellType}
                                        isEditable={isEditable}
                                        value={this.state.valueAndDisplay.value}
                                        display={this.state.valueAndDisplay.display}

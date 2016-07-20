@@ -57,7 +57,7 @@ const QBGrid = React.createClass({
         });
 
         // add the qb columns
-        this.props.columns.forEach((col) => {
+        this.props.columns.forEach(col => {
 
             const rtCol = {
                 property: col.field,
@@ -70,6 +70,10 @@ const QBGrid = React.createClass({
         return rtCols;
     },
 
+    /**
+     * get the 1st column header (select-all toggle)
+     * @returns {XML}
+     */
     getCheckboxHeader() {
 
         const allSelected = this.props.selectedRows.length === this.props.records.length;
@@ -77,7 +81,7 @@ const QBGrid = React.createClass({
         return (
             <input type="checkbox"
                    checked={allSelected}
-                   onChange={ (ev) => {
+                   onChange={ ev => {
                        if (ev.target.checked) {
                            this.selectAllRows();
                        } else {
@@ -88,13 +92,17 @@ const QBGrid = React.createClass({
             />);
     },
 
+    /**
+     * select all grid rows
+     */
     selectAllRows() {
-        let selected = [];
-        this.props.records.forEach((rec) => {
+        let selected = []; // array of record ids to select
+        this.props.records.forEach(rec => {
             selected.push(rec[this.props.keyField].value);
         });
         this.getFlux().actions.selectedRows(selected);
     },
+
     /**
      * renderer for selection/actions cells (higher order function)
      * @returns function that renders an actions column cell
@@ -136,7 +144,7 @@ const QBGrid = React.createClass({
                 this.setState({editRow: -1});
             },
             cellTabCallback: this.onCellTab,
-            onRecordChange: (id) => {
+            onRecordChange: id => {
                 this.setState({editRow: -1});
                 this.props.onRecordChange(id);
             },
@@ -245,7 +253,7 @@ const QBGrid = React.createClass({
     getRow(data, rowIndex) {
         return {
             className: rowIndex === this.state.editRow ? "editing" : "",
-            onClick: (event) => {
+            onClick: event => {
                 this.onRowClicked(data, rowIndex, event);
             }
         };
@@ -306,7 +314,7 @@ const QBGrid = React.createClass({
 
         const offset = ev.target.scrollLeft;
 
-        document.querySelectorAll("table.qbGrid>tbody>tr>td:first-child").forEach((td) => {
+        document.querySelectorAll("table.qbGrid>tbody>tr>td:first-child").forEach(td => {
             td.style.left = offset + "px";
         });
     },
@@ -317,10 +325,8 @@ const QBGrid = React.createClass({
     componentWillMount() {
         // ag-grid dependency, could be in context
         this.api = {
-            deselectAll: () => {
-            },
-            onEditRecordCancel: () => {
-            },
+            deselectAll: () => { },
+            onEditRecordCancel: () => {},
             deleteRecord: this.deleteRecord
         };
     },
@@ -330,7 +336,7 @@ const QBGrid = React.createClass({
      * @param data
      */
     deleteRecord(data) {
-        //flux.actions.deleteReportRecord(...)  which should do the delete causing the grid to re-render
+        //flux.actions.deleteReportRecord(...) which should do the delete causing the grid to re-render
     },
 
     /**

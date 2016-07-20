@@ -35,10 +35,13 @@ export const DefaultFieldEditor = React.createClass({
     }
 });
 
+/**
+ * a multi-line text editor that dynamically changes its height
+ */
 export const MultiLineTextFieldEditor = React.createClass({
 
     propTypes: {
-        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]),
+        value: React.PropTypes.string,
         type: React.PropTypes.string,
         onChange: React.PropTypes.func
     },
@@ -57,6 +60,11 @@ export const MultiLineTextFieldEditor = React.createClass({
             }
         };
     },
+
+    /**
+     * delegate text changes via callback
+     * @param ev
+     */
     onChange(ev) {
         this.props.onChange(ev.target.value);
     },
@@ -64,11 +72,20 @@ export const MultiLineTextFieldEditor = React.createClass({
     componentDidMount() {
         this.resize();
     },
+
+    /**
+     * reset height to the natural height with no scrollbar (using a common technique)
+     */
     resize() {
         this.setState({style: {height: "auto"}}, () => {
             this.setState({style: {height: this.refs.textarea.scrollHeight}});
         });
     },
+
+    /**
+     * force resizing during typing
+     * @param ev
+     */
     onKeyUp(ev) {
         this.resize();
     },
