@@ -329,7 +329,19 @@
             saveSingleRecord: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                var responseObject;
+                //input expected in raw form for java
+                return requestHelper.executeRequest(req, opts);
+            },
+
+            /**
+             * Create a single record data add to a table.
+             *
+             * @param req
+             * @returns Promise
+             */
+            createSingleRecord: function(req) {
+                var opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 //input expected in raw form for java
                 return requestHelper.executeRequest(req, opts);
             }

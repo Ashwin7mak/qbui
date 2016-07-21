@@ -15,13 +15,19 @@ describe('Record Pending Edits Actions functions ', () => {
         appId: appId,
         tblId: tblId,
         recId: recId,
-        origRec: origRec
+        origRec: origRec,
+        changes:{}
     };
     let changeRecInputs = {
         appId: appId,
         tblId: tblId,
         recId: recId,
         changes: changes,
+    };
+    let cancelRecInputs = {
+        appId: appId,
+        tblId: tblId,
+        recId: recId
     };
     let commitRecInputs = {
         appId: appId,
@@ -43,7 +49,7 @@ describe('Record Pending Edits Actions functions ', () => {
     });
 
     it('test recordPendingEditsStart parameters', () => {
-        flux.actions.recordPendingEditsStart(appId, tblId, recId, origRec);
+        flux.actions.recordPendingEditsStart(appId, tblId, recId, origRec, {});
         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.RECORD_EDIT_START, startInputs);
     });
@@ -55,9 +61,9 @@ describe('Record Pending Edits Actions functions ', () => {
     });
 
     it('test recordPendingEditsCancel', () => {
-        flux.actions.recordPendingEditsCancel();
+        flux.actions.recordPendingEditsCancel(appId, tblId, recId);
         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.RECORD_EDIT_CANCEL);
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.RECORD_EDIT_CANCEL, cancelRecInputs);
     });
 
     it('test recordPendingEditsCommit', () => {

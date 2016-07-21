@@ -1,4 +1,5 @@
 import React from 'react';
+import * as SchemaConsts from "../../../constants/schema";
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBIcon from '../../qbIcon/qbIcon';
 import {NotificationManager} from 'react-notifications';
@@ -17,10 +18,8 @@ const RowEditActions = React.createClass({
     onClickSave() {
         //get the current record id
         const id = this.props.data[this.props.params.context.keyField];
-        //signal record change action, will update the records values
-        this.props.params.context.onRecordChange(id);
+        this.props.params.context.onRecordSaveClicked(id);
         this.props.api.deselectAll();
-
     },
 
     /**
@@ -37,22 +36,18 @@ const RowEditActions = React.createClass({
     },
     onClickCancel() {
         //get the original unchanged values in data to rerender
+        const id = this.props.data[this.props.params.context.keyField];
         this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
         this.props.api.deselectAll();
         this.props.flux.actions.selectedRows([]);
-        this.props.params.context.onEditRecordCancel();
+        this.props.params.context.onEditRecordCancel(id);
     },
 
-    /**
-     * EMPOWER - add a new empty record to the store
-     */
     onClickAdd() {
+        //get the current record id
+        const id = this.props.data[this.props.params.context.keyField];
+        this.props.params.context.onRecordNewBlank(id, this.props.params.data);
         this.props.api.deselectAll();
-        this.props.flux.actions.addReportRecord();
-
-        setTimeout(()=> {
-            NotificationManager.success('Record created', 'Success', 1500);
-        }, 1000);
     },
 
     render: function() {

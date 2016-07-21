@@ -69,8 +69,10 @@ export default {
             next: "Next"
         },
         recordNotifications: {
+            recordAdded : "Record added",
+            recordNotAdded :"Record not added",
             recordSaved : "Record saved",
-            recordNotSaved :"Record not saved",
+            recordNotSaved :"Record not saved"
         },
         header: {
             menu: {

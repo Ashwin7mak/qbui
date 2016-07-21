@@ -59,9 +59,13 @@ let AGGrid = React.createClass({
         records: React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
+        validateRecord: React.PropTypes.func,
         onRowClick: React.PropTypes.func,
         onFieldChange: React.PropTypes.func,
         onRecordChange: React.PropTypes.func,
+        onRecordSaveClicked: React.PropTypes.func,
+        onRecordAdd: React.PropTypes.func,
+        onRecordNewBlank: React.PropTypes.func,
         onEditRecordStart: React.PropTypes.func,
         onEditRecordCancel: React.PropTypes.func
     },
@@ -318,10 +322,14 @@ let AGGrid = React.createClass({
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
         this.gridOptions.context.cellTabCallback = this.onCellTab;
         this.gridOptions.context.onRecordChange = this.props.onRecordChange;
+        this.gridOptions.context.onRecordSaveClicked = this.handleRecordSaveClicked; // does local method 1st
+        this.gridOptions.context.onRecordAdd = this.props.onRecordAdd;
+        this.gridOptions.context.onRecordNewBlank = this.props.onRecordNewBlank;
         this.gridOptions.context.onFieldChange = this.props.onFieldChange;
         this.gridOptions.context.onEditRecordStart = this.props.onEditRecordStart;
-        this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel;
+        this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel; // does local method 1st
         this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
+        this.gridOptions.context.validateRecord = this.props.validateRecord;
 
         this.gridOptions.context.keyField = this.props.keyField;
 
@@ -345,6 +353,18 @@ let AGGrid = React.createClass({
         if (!this.props.loading) {
             let flux = this.getFlux();
             flux.actions.measure('component-AgGrid', 'component-AgGrid start');
+        }
+        // we have a new inserted row put it in edit mode
+        if (typeof (this.props.editingIndex) !== 'undefined' && this.props.editingIndex !== null) {
+            //get the node at editingIndex
+            let atIndex = 0;
+            this.api.forEachNode((node) => {
+                if (atIndex === this.props.editingIndex + 1)  {
+                    //edit the record at specified index
+                    this.startEditRow(this.props.editingId, node);
+                }
+                atIndex++;
+            });
         }
     },
     // Performance improvement - only update the component when certain state/props change
@@ -411,6 +431,11 @@ let AGGrid = React.createClass({
         }
         return false;
     },
+
+    startEditRow(id, node) {
+        this.props.onEditRecordStart(id);
+        this.editRow(node);
+    },
     /**
      * Capture the row-click event. Send to record view on row-click
      * @param params
@@ -449,8 +474,7 @@ let AGGrid = React.createClass({
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            this.props.onEditRecordStart(params.data[this.props.keyField].value);
-            this.editRow(params.node);
+            this.startEditRow(params.data[this.props.keyField].value, params.node);
             return;
         }
         if (this.clickTimeout) {
@@ -543,9 +567,16 @@ let AGGrid = React.createClass({
         return rows;
     },
 
-    handleEditRecordCancel() {
-        this.props.onEditRecordCancel();
+    handleEditRecordCancel(id) {
+        this.props.onEditRecordCancel(id);
         this.editRow(); // edit nothing
+    },
+
+    handleRecordSaveClicked(id) {
+        let noEdit = this.props.onRecordSaveClicked(id);
+        if (noEdit) {
+            this.editRow(); // edit done
+        }
     },
 
     /**
@@ -759,6 +790,10 @@ let AGGrid = React.createClass({
                                     //handlers on col or row changes
                                     onFieldChange={this.props.onFieldChange}
                                     onRecordChange={this.props.onRecordChange}
+                                    onRecordSaveClicked={this.handleRecordSaveClicked}
+                                    onRecordAdd={this.props.onRecordAdd}
+                                    onRecordNewBlank={this.props.onRecordNewBlank}
+                                    validateRecord={this.props.validateRecord}
                                     onEditRecordStart={this.props.onEditRecordStart}
                                     onEditRecordCancel={this.handleEditRecordCancel}
 

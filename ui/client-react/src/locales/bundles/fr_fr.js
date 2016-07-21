@@ -66,8 +66,10 @@ export default {
             next: "Prochain"
         },
         recordNotifications: {
+            recordAdded : "Enregistrement ajouté",
+            recordNotAdded :"Enregistrement non ajouté",
             recordSaved : "Sauvegarder",
-            recordNotSaved :"Enregistrement non enregistré",
+            recordNotSaved :"Enregistrement non enregistré"
         },
         header: {
             menu: {

@@ -51,23 +51,24 @@
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
         /*
-         * routeToGetFunction maps each route to the proper function associated with that route for a POST request
+         * routeToPostFunction maps each route to the proper function associated with that route for a POST request
          */
         var routeToPostFunction = {};
+        routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
 
         /*
-         * routeToGetFunction maps each route to the proper function associated with that route for a PUT request
+         * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
          */
         var routeToPutFunction = {};
 
         /*
-         * routeToGetFunction maps each route to the proper function associated with that route for a PATCH request
+         * routeToPatchFunction maps each route to the proper function associated with that route for a PATCH request
          */
         var routeToPatchFunction = {};
         routeToPatchFunction[routeConsts.RECORD] = saveSingleRecord;
 
         /*
-         * routeToGetFunction maps each route to the proper function associated with that route for a DELETE request
+         * routeToDeleteFunction maps each route to the proper function associated with that route for a DELETE request
          */
         var routeToDeleteFunction = {};
 
@@ -105,7 +106,7 @@
             },
 
             /**
-             * For a given route, return the POST function associated with this route or group of routes
+             * For a given route, return the PUT function associated with this route or group of routes
              * @param route
              */
             fetchPutFunctionForRoute: function(route) {
@@ -443,6 +444,27 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init(activityName, {req:filterNodeReq(req)});
         recordsApi.saveSingleRecord(req).then(
+            function(response) {
+                res.send(response);
+                logApiSuccess(req, response, perfLog, activityName);
+            },
+            function(response) {
+                logApiFailure(req, response, perfLog, activityName);
+                //  client is waiting for a response..make sure one is always returned
+                if (response && response.statusCode) {
+                    res.status(response.statusCode).send(response);
+                } else {
+                    res.status(500).send(response);
+                }
+            }
+        );
+    }
+
+    function createSingleRecord(req, res) {
+        let activityName = 'Add Record';
+        let perfLog = perfLogger.getInstance();
+        perfLog.init(activityName, {req:filterNodeReq(req)});
+        recordsApi.createSingleRecord(req).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, activityName);
