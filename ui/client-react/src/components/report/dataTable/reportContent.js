@@ -31,11 +31,11 @@ let ReportContent = React.createClass({
     // row was clicked once, navigate to record
     openRow(data) {
 
-        const appId = this.props.appId;
-        const tblId = this.props.tblId;
+        const {appId,tblId,rptId} = this.props;
+
         var recId = data[this.props.uniqueIdentifier].value;
         //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
+        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
 
         this.props.history.pushState(null, link);
     },
@@ -641,6 +641,7 @@ let ReportContent = React.createClass({
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
+
         let isTouch = this.context.touch;
         let recordCount = 0;
 

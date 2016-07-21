@@ -33,7 +33,7 @@ let reportModel = {
         recordsCount: null,
         sortFids: [],
         groupEls: [],
-        originalMetaData: null
+        originalMetaData: null,
     },
 
     /**
@@ -427,6 +427,10 @@ let ReportDataStore = Fluxxor.createStore({
         this.selections = new FacetSelections();
         this.selectedRows = [];
 
+        this.currentRecord = null;
+        this.nextRecord = null;
+        this.previousRecord = null;
+
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
@@ -445,7 +449,10 @@ let ReportDataStore = Fluxxor.createStore({
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_REPORT_RECORD_FAILED, this.onClearEdit,
             actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
-            actions.ADD_REPORT_RECORD_FAILED, this.onClearEdit
+            actions.ADD_REPORT_RECORD_FAILED, this.onClearEdit,
+
+            actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
+            actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord
         );
     },
 
@@ -715,6 +722,15 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit("change");
     },
 
+    onShowPreviousRecord() {
+        console.log('PREV');
+        this.emit("change");
+    },
+    onShowNextRecord() {
+        console.log('NEXT');
+
+        this.emit("change");
+    },
     /**
      * gets the state of a reportData
      * @returns report state
@@ -733,7 +749,12 @@ let ReportDataStore = Fluxxor.createStore({
             selections: this.selections,
             facetExpression: this.facetExpression,
             nonFacetClicksEnabled : this.nonFacetClicksEnabled,
-            selectedRows: this.selectedRows
+            selectedRows: this.selectedRows,
+
+            currentRecord: this.currentRecord,
+            nextRecord: this.nextRecord,
+            previousRecord: this.previousRecord
+
         };
     }
 

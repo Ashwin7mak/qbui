@@ -358,6 +358,13 @@ let reportDataActions = {
             }
         }.bind(this));
     },
+
+    showPreviousRecord(rptId) {
+        this.dispatch(actions.SHOW_PREVIOUS_RECORD);
+    },
+    showNextRecord(rptId) {
+        this.dispatch(actions.SHOW_NEXT_RECORD);
+    }
 };
 
 export default reportDataActions;

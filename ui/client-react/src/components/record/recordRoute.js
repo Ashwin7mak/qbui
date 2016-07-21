@@ -17,15 +17,14 @@ var RecordRoute = React.createClass({
     contextTypes: {
         history: React.PropTypes.object
     },
+
     loadRecord(appId, tblId, recordId) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
         flux.actions.loadFormAndRecord(appId, tblId, recordId);
     },
     loadRecordFromParams(params) {
-        let appId = params.appId;
-        let tblId = params.tblId;
-        let recordId = params.recordId;
+        let {appId, tblId, recordId} = params;
 
         if (appId && tblId && recordId) {
             this.loadRecord(appId, tblId, recordId);
@@ -39,13 +38,12 @@ var RecordRoute = React.createClass({
     },
 
     getSecondaryBar() {
-
         const actions = [
-            {msg: 'recordActions.previous', icon:'caret-left'},
+            {msg: 'recordActions.previous', icon:'caret-left', onClick: this.previousRecord},
             {msg: 'recordActions.return', icon:'return', onClick:this.returnToReport},
-            {msg: 'recordActions.next', icon:'caret-right'}
-
+            {msg: 'recordActions.next', icon:'caret-right', onClick: this.nextRecord}
         ];
+
         return (<IconActions className="secondaryFormActions" actions={actions} />);
     },
 
@@ -53,6 +51,18 @@ var RecordRoute = React.createClass({
     // currently use any actual data from which to build a link
     returnToReport() {
         this.context.history.goBack();
+    },
+
+    previousRecord() {
+        let flux = this.getFlux();
+
+        flux.actions.showPreviousRecord(this.props.rptId);
+    },
+
+    nextRecord() {
+        let flux = this.getFlux();
+
+        flux.actions.showNextRecord(this.props.rptId);
     },
 
     getStageHeadline() {
@@ -84,19 +94,24 @@ var RecordRoute = React.createClass({
         }
 
     },
-    getPageActions(maxButtonsBeforeMenu = 0) {
+    getPageActions() {
         const actions = [
+            {msg: 'recordActions.previous',icon: 'caret-left', className: 'previousRecord', onClick: this.previousRecord},
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
             {msg: 'pageActions.edit', icon:'edit'},
             {msg: 'pageActions.email', icon:'mail'},
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.delete', icon:'delete'},
+            {msg: 'recordActions.next',icon: 'caret-right', className: 'nextRecord', onClick: this.nextRecord},
+            //menu items below
             {msg: 'pageActions.customizeForm', icon:'settings-hollow'},
         ];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu} {...this.props}/>);
+
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={actions.length - 1} {...this.props}/>);
     },
 
     render() {
+        console.log(this.props);
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
             _.isUndefined(this.props.params.tblId) ||
@@ -107,7 +122,7 @@ var RecordRoute = React.createClass({
         } else {
             return (<div className="recordContainer">
                 <Stage stageHeadline={this.getStageHeadline()}
-                       pageActions={this.getPageActions(6)}>
+                       pageActions={this.getPageActions()}>
 
                     <div className="record-content">
                     </div>
@@ -115,7 +130,7 @@ var RecordRoute = React.createClass({
 
                 <div className="recordActionsContainer secondaryBar">
                     {this.getSecondaryBar()}
-                    {this.getPageActions(4)}
+                    {this.getPageActions()}
                 </div>
                 <QBForm formData={this.props.form ? this.props.form.formData : null}></QBForm>
             </div>);
