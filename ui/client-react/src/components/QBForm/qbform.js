@@ -33,7 +33,6 @@ let QBForm = React.createClass({
         let record = this.props.formData.record || [];
         let fields = this.props.formData.fields || [];
 
-        //TODO relatedField is sometimes null right now because we are not pulling the correct columnlist
         let relatedField = _.find(fields, function(field) {
             if (field.id === element.fieldId) {
                 return true;
