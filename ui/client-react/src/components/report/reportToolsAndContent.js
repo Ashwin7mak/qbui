@@ -48,6 +48,11 @@ let ReportToolsAndContent = React.createClass({
             selections:null,
         };
     },
+    getInitialState: function() {
+        return {
+            reactabular: false
+        };
+    },
     componentWillMount() {
         // Create a debounced function that delays invoking filterReport func
         // until after debounceInputMillis milliseconds have elapsed since the
@@ -227,6 +232,11 @@ let ReportToolsAndContent = React.createClass({
 
             return (
                 <div className={classes}>
+                    <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
+                        <input type="checkbox"
+                               defaultChecked={this.state.reactabular}
+                               onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Use Reactabular Grid
+                    </label>
                     {this.getTableActions()}
                     <ReportContent  appId={this.props.params.appId}
                                     tblId={this.props.params.tblId}
@@ -237,6 +247,7 @@ let ReportToolsAndContent = React.createClass({
                                         this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
                                     uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                     flux={this.getFlux()}
+                                    reactabular={this.state.reactabular}
                         {...this.props} />
 
                     {!this.props.scrollingReport && <AddRecordButton />}

@@ -95,6 +95,7 @@ module.exports = function(config) {
                         ],
                         exclude: [
                             nodeModulesPath,
+                            path.resolve(__dirname, "client-react/src/components/dataTable/qbGrid"),
                             path.resolve(__dirname, "client-react/test"),
                             path.resolve(__dirname, "componentLibrary/test")
                         ],
