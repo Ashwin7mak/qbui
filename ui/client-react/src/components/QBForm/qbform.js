@@ -30,8 +30,8 @@ let QBForm = React.createClass({
     },
 
     createFieldElement(element, sectionIndex, labelPosition) {
-        let record = this.props.formData.record | [];
-        let fields = this.props.formData.fields | [];
+        let record = this.props.formData.record || [];
+        let fields = this.props.formData.fields || [];
 
         //TODO relatedField is sometimes null right now because we are not pulling the correct columnlist
         let relatedField = _.find(fields, function(field) {
@@ -64,7 +64,7 @@ let QBForm = React.createClass({
         } else {
             fieldLabel = relatedField ? relatedField.name : "test display label";
         }
-        let fieldRawValue = fieldDisplayValue; //todo raw value isnt being supplied right now
+        let fieldRawValue = fieldDisplayValue;
         let key = "field" + sectionIndex + "-" + element.orderIndex;
 
         let classes = "formElement field ";

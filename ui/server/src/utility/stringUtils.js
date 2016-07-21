@@ -16,6 +16,24 @@
                 return delimiter ? inList.join(delimiter) : inList.join();
             }
             return '';
+        },
+
+        /**
+         * Search the given array for the obj. Return true if found, otherwise false.
+         *
+         * @param inArr
+         * @param obj
+         * @returns {boolean}
+         */
+        contains: function(inArr, obj) {
+            if (Array.isArray(inArr)) {
+                for (let i = 0; i < inArr.length; i++) {
+                    if (inArr[i] === obj) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     };
 
