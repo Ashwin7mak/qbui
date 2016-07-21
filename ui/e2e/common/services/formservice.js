@@ -23,7 +23,6 @@
                     var id = JSON.parse(result.body);
                 });
             },
-
         };
         return formService;
     };
