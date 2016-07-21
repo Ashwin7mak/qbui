@@ -35,44 +35,44 @@ describe('Phone number record formatter unit test', function() {
         //Incomplete number
         var recordsInput = [[{
             id   : 7,
-            value: '(1) 234-5678'
+            value: '12345678'
         }]];
         var expectedRecords =
                 [[{
                     id     : 7,
-                    value  : '(1) 234-5678',
+                    value  : '12345678',
                     display: '(1) 234-5678'
                 }]];
 
         // 10 digit number
         var standardInput = [[{
             id   : 7,
-            value: '(555) 777-9999 x1234'
+            value: '5557779999x1234'
         }]];
         var expectedStandardExpected =
                 [[{
                     id     : 7,
-                    value  : '(555) 777-9999 x1234',
+                    value  : '5557779999x1234',
                     display: '(555) 777-9999 x1234'
                 }]];
         var expectedStandardExpectedNoExtension =
                 [[{
                     id     : 7,
-                    value  : '(555) 777-9999 x1234',
+                    value  : '5557779999x1234',
                     display: '(555) 777-9999'
                 }]];
 
         //More than 10 digit number
         var moreThan10Input = [[{
             id   : 7,
-            value: '222(555) 777-9999 x1234'
+            value: '2225557779999x1234'
         }]];
 
         var expectedMoreThan10 =
                 [[{
                     id     : 7,
-                    value  : '222(555) 777-9999 x1234',
-                    display: '222(555) 777-9999'
+                    value  : '2225557779999x1234',
+                    display: '222 (555) 777-9999'
                 }]];
 
         //Incomplete number
