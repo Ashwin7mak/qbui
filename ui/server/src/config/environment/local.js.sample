@@ -51,13 +51,11 @@
         //Java REST endpoint (protocol,server,port)
         //javaHost: 'https://localhost.com:8443',
         javaHost: 'http://localhost.com:8080',
-        //javaHost: 'http://localhost:8080',
         isMockServer : false,
 
         //Express Server
         //DOMAIN: 'https://localhost.com:9443',
         DOMAIN: 'http://localhost.com:9000',
-        //DOMAIN  : 'http://localhost:9000',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,

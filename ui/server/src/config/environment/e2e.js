@@ -1,5 +1,6 @@
 
-// Local configuration to use only when running Protractor E2E tests
+// Local configuration to use only when running Protractor E2E tests on your dev machine
+// Node needs to be run at a different node port than local.js since the tests start up their own instance
 // ===========================
 
 (function() {
@@ -48,16 +49,13 @@
 
         ip : 'localhost', // replace with your host or machine name user use (that is in your hosts file i.e.'CMBL13XXXXXX' for mobile testing)
 
-
         //Java REST endpoint (protocol,server,port)
-        //javaHost: 'https://localhost.intuit.com:8443',
+        //javaHost: 'https://localhost.intuit.com:8080',
         javaHost: 'http://localhost:8080',
-        //javaHost: 'http://localhost:8080',
 
         //Express Server
-        //DOMAIN: 'https://localhost.intuit.com:9443',
+        //DOMAIN: 'https://localhost:9001',
         DOMAIN: 'http://localhost:9001',
-        //DOMAIN  : 'http://localhost:9000',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,

@@ -10,9 +10,13 @@ module.exports = function(grunt) {
     var currentDateTime = new Date().getTime();
 
     var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
-    var e2eBaseUrl = grunt.option('e2eBaseUrl') || 'http://localhost:9001';
     var buildDir =  path.join(__dirname, '/build');
-    var localJsFile =  path.join(__dirname, '/server/src/config/environment/local.js');
+    var localJsFilePath =  path.join(__dirname, '/server/src/config/environment/local.js');
+
+    // For the Protractor tests we need to import the node config files (one for local, one for CI)
+    // This way when Protractor starts node it can read in what domain node is started at
+    var e2eJsConfig = require('./server/src/config/environment/e2e.js');
+    var testJsConfig = require('./server/src/config/environment/test.js');
 
     var serverReportDir = buildDir + '/reports/server';
     var clientReportDir = buildDir + '/reports/client';
@@ -27,7 +31,7 @@ module.exports = function(grunt) {
     //  NOTE: this needs to get checked/set prior to the sauce labs setup.
     //
     if (!process.env.NODE_ENV) {
-        if (grunt.file.exists(localJsFile)) {
+        if (grunt.file.exists(localJsFilePath)) {
             grunt.log.writeln('NODE_ENV not set...defaulting to LOCAL.');
             process.env.NODE_ENV = 'local';
         }
@@ -434,34 +438,49 @@ module.exports = function(grunt) {
         protractor: {
             sauce_osx_chrome : {
                 options: {
-                    configFile: './e2e/config/sauceLabs/sauce.chrome.osx.protractor.conf.js'
+                    configFile: './e2e/config/sauceLabs/sauce.chrome.osx.protractor.conf.js',
+                    args: {
+                        baseUrl   : testJsConfig.DOMAIN
+                    }
                 }
             },
             sauce_win7_chrome : {
                 options: {
-                    configFile: './e2e/config/sauceLabs/sauce.chrome.win7.protractor.conf.js'
+                    configFile: './e2e/config/sauceLabs/sauce.chrome.win7.protractor.conf.js',
+                    args: {
+                        baseUrl   : testJsConfig.DOMAIN
+                    }
                 }
             },
             sauce_linux_chrome : {
                 options: {
-                    configFile: './e2e/config/sauceLabs/sauce.chrome.linux.protractor.conf.js'
+                    configFile: './e2e/config/sauceLabs/sauce.chrome.linux.protractor.conf.js',
+                    args: {
+                        baseUrl   : testJsConfig.DOMAIN
+                    }
                 }
             },
             sauce_linux_firefox : {
                 options: {
-                    configFile: './e2e/config/sauceLabs/sauce.firefox.linux.protractor.conf.js'
+                    configFile: './e2e/config/sauceLabs/sauce.firefox.linux.protractor.conf.js',
+                    args: {
+                        baseUrl   : testJsConfig.DOMAIN
+                    }
                 }
             },
             sauce_multi_browser : {
                 options: {
-                    configFile: './e2e/config/sauceLabs/sauce.multi.browser.protractor.conf.js'
+                    configFile: './e2e/config/sauceLabs/sauce.multi.browser.protractor.conf.js',
+                    args: {
+                        baseUrl   : testJsConfig.DOMAIN
+                    }
                 }
             },
             local              : {
                 options: {
                     configFile: './e2e/config/local.protractor.conf.js',
                     args: {
-                        baseUrl   : e2eBaseUrl
+                        baseUrl   : e2eJsConfig.DOMAIN
                     }
                 }
             },
@@ -469,7 +488,7 @@ module.exports = function(grunt) {
                 options: {
                     configFile: './e2e/config/local.sauce.protractor.conf.js',
                     args: {
-                        baseUrl   : e2eBaseUrl
+                        baseUrl   : e2eJsConfig.DOMAIN
                     }
                 }
             },
@@ -477,7 +496,7 @@ module.exports = function(grunt) {
                 options: {
                     configFile: './e2e/config/local.dataGen.protractor.conf.js',
                     args: {
-                        baseUrl   : e2eBaseUrl
+                        baseUrl   : e2eJsConfig.DOMAIN
                     }
                 }
             }
@@ -489,7 +508,7 @@ module.exports = function(grunt) {
                 NODE_TLS_REJECT_UNAUTHORIZED: 0,
                 ENV_TUNNEL_NAME             : tunnelIdentifier,
                 SAUCE_JOB_NAME              : sauceJobName,
-                SAUCE_KEY                   : sauceKey,
+                SAUCE_KEY                   : sauceKey
                 //for the test env, we need to thwart the proxy
                 //http_proxy                  : '',
                 //https_proxy                 : ''
@@ -500,8 +519,7 @@ module.exports = function(grunt) {
                 ENV_TUNNEL_NAME             : tunnelIdentifier,
                 SAUCE_DNS                   : sauceDns,
                 SAUCE_JOB_NAME              : sauceJobName,
-                SAUCE_KEY                   : sauceKey,
-                DOMAIN                      : e2eBaseUrl
+                SAUCE_KEY                   : sauceKey
             },
             prod : {
                 NODE_ENV       : 'production',
