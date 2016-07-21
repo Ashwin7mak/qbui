@@ -309,7 +309,6 @@
                     reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
                         if (txt === 'There is no data to display.') {
                             //Verify the toolbar still displays with filter button in it
-                            expect(reportServicePage.reportRecordsCount.getText()).toBe('There is no data to display.');
                             expect(reportServicePage.reportRecordsCount.getText()).toBe('0 of 6 Records');
                             expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
                             done();
