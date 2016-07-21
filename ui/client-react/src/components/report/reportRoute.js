@@ -35,8 +35,8 @@ const ReportRoute = React.createClass({
         let offset = null;
         let numRows = null;
         if (this.props.reportData) {
-            if (this.props.reportData.offset !== undefined) {
-                offset = this.props.reportData.offset;
+            if (this.props.reportData.pageOffset !== undefined) {
+                offset = this.props.reportData.pageOffset;
             }
             if (this.props.reportData.numRows !== undefined) {
                 numRows = this.props.reportData.numRows;
