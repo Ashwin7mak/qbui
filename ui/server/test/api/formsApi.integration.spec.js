@@ -41,7 +41,7 @@
         };
 
         /**
-         * Setup method. Generates JSON for an app, a table with different fields, and 5 records with different field types and a form of type 'ADD'
+         * Setup method. Generates JSON for an app, a table with different fields, and 5 records with different field types
          */
         before(function(done) {
             this.timeout(consts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
@@ -61,7 +61,6 @@
                     var formToCreate = {
                         tableId: app.tables[0].id,
                         appId: app.id,
-                        type: 'ADD',
                         name: 'testForm',
                     };
                     //Create a form
@@ -96,7 +95,6 @@
                     assert.deepEqual(formMetaData.appId, app.id);
                     assert.deepEqual(formMetaData.tableId, app.tables[0].id);
                     assert.deepEqual(formMetaData.formId, formId);
-                    assert.deepEqual(formMetaData.type, 'ADD');
                     assert.deepEqual(formMetaData.name, 'testForm');
 
                     //verify record data
