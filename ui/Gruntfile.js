@@ -434,42 +434,27 @@ module.exports = function(grunt) {
         protractor: {
             sauce_osx_chrome : {
                 options: {
-                    configFile: './e2e/config/sauceLabs/sauce.chrome.osx.protractor.conf.js',
-                    args: {
-                        baseUrl   : baseUrl
-                    }
+                    configFile: './e2e/config/sauceLabs/sauce.chrome.osx.protractor.conf.js'
                 }
             },
             sauce_win7_chrome : {
                 options: {
-                    configFile: './e2e/config/sauceLabs/sauce.chrome.win7.protractor.conf.js',
-                    args: {
-                        baseUrl   : baseUrl
-                    }
+                    configFile: './e2e/config/sauceLabs/sauce.chrome.win7.protractor.conf.js'
                 }
             },
             sauce_linux_chrome : {
                 options: {
-                    configFile: './e2e/config/sauceLabs/sauce.chrome.linux.protractor.conf.js',
-                    args: {
-                        baseUrl   : baseUrl
-                    }
+                    configFile: './e2e/config/sauceLabs/sauce.chrome.linux.protractor.conf.js'
                 }
             },
             sauce_linux_firefox : {
                 options: {
-                    configFile: './e2e/config/sauceLabs/sauce.firefox.linux.protractor.conf.js',
-                    args: {
-                        baseUrl   : baseUrl
-                    }
+                    configFile: './e2e/config/sauceLabs/sauce.firefox.linux.protractor.conf.js'
                 }
             },
             sauce_multi_browser : {
                 options: {
-                    configFile: './e2e/config/sauceLabs/sauce.multi.browser.protractor.conf.js',
-                    args: {
-                        baseUrl   : baseUrl
-                    }
+                    configFile: './e2e/config/sauceLabs/sauce.multi.browser.protractor.conf.js'
                 }
             },
             local              : {
