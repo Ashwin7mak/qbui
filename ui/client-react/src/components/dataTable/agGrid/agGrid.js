@@ -557,9 +557,9 @@ let AGGrid = React.createClass({
     getSelectedRows() {
         let rows = [];
         if (this.api) {
-            this.api.getSelectedRows().forEach((row) => {
+            this.api.getSelectedRows().forEach(row => {
                 if (row[this.props.uniqueIdentifier]) {
-                    rows.push(row[this.props.uniqueIdentifier]);
+                    rows.push(row[this.props.uniqueIdentifier].value);
                 }
             });
         }
