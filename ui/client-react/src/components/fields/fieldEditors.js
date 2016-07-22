@@ -36,6 +36,72 @@ export const DefaultFieldEditor = React.createClass({
 });
 
 /**
+ * a multi-line text editor that dynamically changes its height
+ */
+export const MultiLineTextFieldEditor = React.createClass({
+
+    propTypes: {
+        value: React.PropTypes.string,
+        type: React.PropTypes.string,
+        onChange: React.PropTypes.func
+    },
+
+    getDefaultProps() {
+        return {
+            value: "",
+            type: "text"
+        };
+    },
+
+    getInitialState() {
+        return {
+            style: {
+                height: "auto"
+            }
+        };
+    },
+
+    /**
+     * delegate text changes via callback
+     * @param ev
+     */
+    onChange(ev) {
+        this.props.onChange(ev.target.value);
+    },
+
+    componentDidMount() {
+        this.resize();
+    },
+
+    /**
+     * reset height to the natural height with no scrollbar (using a common technique)
+     */
+    resize() {
+        this.setState({style: {height: "auto"}}, () => {
+            this.setState({style: {height: this.refs.textarea.scrollHeight}});
+        });
+    },
+
+    /**
+     * force resizing during typing
+     * @param ev
+     */
+    onKeyUp(ev) {
+        this.resize();
+    },
+
+    render() {
+
+        return <textarea ref="textarea" style={this.state.style} onChange={this.onChange}
+                         tabIndex="0"
+                         onKeyUp={this.onKeyUp}
+                         className="cellEdit"
+                         rows="1"
+                         value={this.props.value}/>;
+    }
+});
+
+/**
  * placeholder for user picker
  */
 export const UserFieldEditor = React.createClass({
