@@ -16,6 +16,7 @@
         var recordService = require('./services/recordService.js');
         var tableService = require('./services/tableService.js');
         var reportService = require('./services/reportService.js');
+        var formService = require('./services/formService.js');
         var e2eBase = {
             // Delegate to recordBase to initialize
             recordBase: recordBase,
@@ -38,6 +39,7 @@
             recordService: recordService(recordBase),
             tableService: tableService(),
             reportService: reportService(recordBase),
+            formService: formService(recordBase),
             // Initialize the utils class
             e2eUtils: e2eUtils(),
             // Common variables
@@ -122,6 +124,9 @@
                         e2eBase.recordService.addRecords(createdApp, createdApp.tables[1], table2GeneratedRecords);
                         e2eBase.reportService.createReport(createdApp.id, createdApp.tables[1].id);
                     }
+                }).then(function() {
+                    //Create a form
+                    return e2eBase.formService.createForm(createdApp.id, createdApp.tables[0].id);
                 }).then(function() {
                     //TODO: Creating / running a report can be run async so break it out of this chain into a separate function
                     return e2eBase.reportService.createReport(createdApp.id, createdApp.tables[0].id);
