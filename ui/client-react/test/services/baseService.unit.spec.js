@@ -27,10 +27,10 @@ describe('BaseService rewire tests', () => {
         replace: function(url) {
             return url;
         },
-        getHref: function () {
+        getHref: function() {
             return simpleSubdomain.href;
         },
-        getSubdomain: function () {
+        getSubdomain: function() {
             return simpleSubdomain.hostname.split(".")[0];
         }
     };
@@ -113,8 +113,8 @@ describe('BaseService rewire tests', () => {
     });
 
     it('test constructRedirectUrl method with complex subdomain', () => {
-        mockWindowUtils.getSubdomain = function () { return complexSubdomain.hostname.split(".")[0] };
-        mockWindowUtils.getHref = function () { return complexSubdomain.href };
+        mockWindowUtils.getSubdomain = function() {return complexSubdomain.hostname.split(".")[0];};
+        mockWindowUtils.getHref = function() {return complexSubdomain.href;};
         BaseService.__Rewire__('WindowLocationUtils', mockWindowUtils);
         baseService = new BaseService();
         var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
