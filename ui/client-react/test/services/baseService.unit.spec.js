@@ -1,6 +1,5 @@
 
 import BaseService from '../../src/services/baseService';
-import StringUtils from '../../src/utils/stringUtils';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils.js';
 
 describe('BaseService rewire tests', () => {
@@ -18,12 +17,22 @@ describe('BaseService rewire tests', () => {
         }
     };
 
+    var noSubdomain = {href: "https://quickbase.com", hostname: "quickbase.com", expectedUrl: 'https://quickbase.com/db/main?a=nsredirect&nsurl='};
+    var simpleSubdomain = {href: "https://team.newstack.quickbase.com", hostname: "team.newstack.quickbase.com", expectedUrl: 'https://team.quickbase.com/db/main?a=nsredirect&nsurl='};
+    var complexSubdomain = {href: "https://team.demo.newstack.quickbase.com", hostname: "team.demo.newstack.quickbase.com", expectedUrl: 'https://team.quickbase.com/db/main?a=nsredirect&nsurl='};
+
     var mockWindowUtils = {
         update: function(url) {
             return url;
         },
         replace: function(url) {
             return url;
+        },
+        getHref: function () {
+            return noSubdomain.href;
+        },
+        getHostname: function () {
+            return noSubdomain.hostname;
         }
     };
 
@@ -97,9 +106,29 @@ describe('BaseService rewire tests', () => {
         expect(output).toEqual(url);
     });
 
-    it('test constructRedirectUrl method', () => {
+    it('test constructRedirectUrl method with no subdomain', () => {
         baseService = new BaseService();
-        var expectedUrl = 'https://localhost/db/main?a=nsredirect&nsurl=' + window.location.href;
+        var expectedUrl = noSubdomain.expectedUrl + mockWindowUtils.getHref();
+        var url = baseService.constructRedirectUrl();
+        expect(expectedUrl).toEqual(url);
+    });
+
+    it('test constructRedirectUrl method with simple subdomain', () => {
+        mockWindowUtils.getHostname = function () { return simpleSubdomain.hostname };
+        mockWindowUtils.getHref = function () { return simpleSubdomain.href };
+        BaseService.__Rewire__('WindowLocationUtils', mockWindowUtils);
+        baseService = new BaseService();
+        var expectedUrl = simpleSubdomain.expectedUrl + mockWindowUtils.getHref();
+        var url = baseService.constructRedirectUrl();
+        expect(expectedUrl).toEqual(url);
+    });
+
+    it('test constructRedirectUrl method with complex subdomain', () => {
+        mockWindowUtils.getHostname = function () { return complexSubdomain.hostname };
+        mockWindowUtils.getHref = function () { return complexSubdomain.href };
+        BaseService.__Rewire__('WindowLocationUtils', mockWindowUtils);
+        baseService = new BaseService();
+        var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
         var url = baseService.constructRedirectUrl();
         expect(expectedUrl).toEqual(url);
     });

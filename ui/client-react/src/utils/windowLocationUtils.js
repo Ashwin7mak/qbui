@@ -34,6 +34,14 @@ class WindowLocationUtils {
     static update(url) {
         window.location.href = url;
     }
+
+    static getHref() {
+        return window.location.href;
+    }
+
+    static getHostname() {
+        return window.location.hostname;
+    }
 }
 
 export default WindowLocationUtils;
