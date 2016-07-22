@@ -1,10 +1,7 @@
 import constants from './constants';
 import BaseService from './baseService';
-import NumberUtils from '../utils/numberUtils';
-import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
 import Promise from 'bluebird';
-import {sampleFormJSON} from '../components/QBForm/fakeData.js';
 
 class FormService extends BaseService {
 
@@ -37,8 +34,6 @@ class FormService extends BaseService {
 
         //  always want formatted data
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-
-        //return Promise.resolve({data: sampleFormJSON});
 
         let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
         return super.get(url, {params:params});
