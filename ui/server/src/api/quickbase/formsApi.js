@@ -41,7 +41,7 @@
                     let tab = tabs[tabKey];
                     if (tab.sections) {
                         for (let sectionKey in tab.sections) {
-                            //  each section has elements (text, header, field, etc)
+                            //  each section may have elements (text, header, field, etc)
                             let section = tab.sections[sectionKey];
                             if (section.elements) {
                                 for (let elementKey in section.elements) {

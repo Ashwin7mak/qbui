@@ -119,10 +119,14 @@ describe('Validate FormsApi unit tests', function() {
             addQuerySpy.restore();
         });
 
-        it('success return results without fid', function(done) {
+        it('success return results without elements', function(done) {
             req.url = '/apps/123/tables/456';
 
-            var body = '{"formId":"1"}';
+            var body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
+                '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
+                '"sections": {"0": {"orderIndex": 0}}' +
+                '}}' +   // close tabs
+                '}';
             var expectedSuccessResponse = {
                 formMeta: JSON.parse(body),
                 record: [],
@@ -156,7 +160,8 @@ describe('Validate FormsApi unit tests', function() {
                        '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
                        '"sections": {"0": {"orderIndex": 0,' +
                        '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
-                                    '"2": {"FormTextElement": {"displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"}}}' +
+                                    '"2": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": ""}},' +
+                                    '"3": {"FormTextElement": {"displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"}}}' +
                        '}}' +   // close sections
                        '}}' +   // close tabs
                        '}';
@@ -260,11 +265,32 @@ describe('Validate FormsApi unit tests', function() {
         it('return results with both fetchSingleRecordAndFields and fetchFormMetaData failure', function(done) {
             req.url = '/apps/123/tables/456';
 
-            var error_message = "fail unit test case execution";
-            var body = '{"formId":"1"}';
+            fetchFormMetaStub.returns(Promise.reject());
+            fetchRecordStub.returns(Promise.reject());
 
-            fetchFormMetaStub.returns(Promise.reject(new Error(error_message + "meta")));
-            fetchRecordStub.returns(Promise.reject(new Error(error_message + "record")));
+            var promise = formsApi.fetchFormComponents(req);
+
+            promise.then(
+                function(response) {
+                    assert.fail('success', 'fail', 'success response returned when failure expected');
+                    done();
+                },
+                function(error) {
+                    //  just verify that the promise rejected; which error message is returned is insignificant
+                    assert.ok(error);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchFormComponents fail fetchFormMetaData test: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+
+        it('return results with fetchFormMetaData unexpected failure', function(done) {
+            req.url = '/apps/123/tables/456';
+
+            fetchFormMetaStub.returns(Promise.resolve('bad object'));
+            fetchRecordStub.returns(Promise.resolve({}));
 
             var promise = formsApi.fetchFormComponents(req);
 
