@@ -12,7 +12,7 @@
     let jsonBigNum = require('json-bignum');
     let errorCodes = require('../errorCodes');
     let constants = require('../../../../common/src/constants');
-    let stringUtils = require('../../utility/stringUtils');
+    let collectionUtils = require('../../utility/collectionUtils');
 
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
@@ -238,13 +238,13 @@
                                         requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
 
                                         //  add any sortList requirements
-                                        let sortList = stringUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                        let sortList = collectionUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
                                         if (sortList) {
                                             requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
                                         }
 
                                         //  add any columnList requirements
-                                        let columnList = stringUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                        let columnList = collectionUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
                                         if (columnList) {
                                             requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
                                         }

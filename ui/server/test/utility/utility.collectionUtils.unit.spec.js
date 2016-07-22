@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var stringUtils = require('../../src/utility/stringUtils.js');
+var collectionUtils = require('../../src/utility/collectionUtils.js');
 
 /**
  * Unit tests for String Utility Functions
@@ -19,7 +19,7 @@ describe('Validate String Utility Functions', function() {
         ];
         testCases.forEach(function(testCase) {
             it(testCase.name, function() {
-                assert.equal(stringUtils.convertListToDelimitedString(testCase.inList, testCase.delimiter), testCase.expectation);
+                assert.equal(collectionUtils.convertListToDelimitedString(testCase.inList, testCase.delimiter), testCase.expectation);
             });
         });
     });
@@ -35,7 +35,7 @@ describe('Validate String Utility Functions', function() {
         ];
         testCases.forEach(function(testCase) {
             it(testCase.name, function() {
-                assert.equal(stringUtils.convertListToDelimitedString(testCase.inList, testCase.delimiter), testCase.expectation);
+                assert.equal(collectionUtils.convertListToDelimitedString(testCase.inList, testCase.delimiter), testCase.expectation);
             });
         });
     });
@@ -53,7 +53,7 @@ describe('Validate String Utility Functions', function() {
         ];
         testCases.forEach(function(testCase) {
             it(testCase.name, function() {
-                assert.equal(stringUtils.contains(testCase.inList, testCase.obj), testCase.expectation);
+                assert.equal(collectionUtils.contains(testCase.inList, testCase.obj), testCase.expectation);
             });
         });
     });

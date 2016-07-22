@@ -29,6 +29,7 @@ class FormService extends BaseService {
         if (formType) {
             params[query.FORM_TYPE] = formType;
         } else {
+            // TODO: evaluate whether this should throw an error if not set
             params[query.FORM_TYPE] = query.VIEW_FORM_TYPE;
         }
 

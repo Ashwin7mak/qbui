@@ -7,13 +7,13 @@
          * delimiter, then the default of comma(,) is used to separate the entries. An empty string is returned
          * if the input list is not any array or has no content.
          *
-         * @param inList
+         * @param inArr
          * @param delimiter
          * @returns {*}
          */
-        convertListToDelimitedString: function(inList, delimiter) {
-            if (Array.isArray(inList)) {
-                return delimiter ? inList.join(delimiter) : inList.join();
+        convertListToDelimitedString: function(inArr, delimiter) {
+            if (Array.isArray(inArr)) {
+                return delimiter ? inArr.join(delimiter) : inArr.join();
             }
             return '';
         },
