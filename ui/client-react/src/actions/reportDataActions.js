@@ -360,10 +360,13 @@ let reportDataActions = {
     },
 
     showPreviousRecord(rptId) {
-        this.dispatch(actions.SHOW_PREVIOUS_RECORD);
+        this.dispatch(actions.SHOW_PREVIOUS_RECORD, {rptId});
     },
     showNextRecord(rptId) {
-        this.dispatch(actions.SHOW_NEXT_RECORD);
+        this.dispatch(actions.SHOW_NEXT_RECORD, {rptId});
+    },
+    openingReportRow(rptId, recId) {
+        this.dispatch(actions.OPEN_REPORT_RECORD, {rptId, recId});
     }
 };
 

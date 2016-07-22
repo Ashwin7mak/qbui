@@ -29,6 +29,11 @@ let ReportContent = React.createClass({
         const {appId,tblId,rptId} = this.props;
 
         var recId = data[this.props.uniqueIdentifier].value;
+
+        let flux = this.getFlux();
+
+        flux.actions.openingReportRow(rptId, recId);
+
         //create the link we want to send the user to and then send them on their way
         const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
 
