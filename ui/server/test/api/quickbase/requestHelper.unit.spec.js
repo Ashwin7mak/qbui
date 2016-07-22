@@ -341,6 +341,7 @@ describe('Validate RequestHelper unit tests', function() {
         var testCases = [
             {name: 'test valid use case with no query parameters', url: 'apps/123/tables/456', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?clist=1.2.3'},
             {name: 'test missing parameter name', url: 'apps/123/tables/456', parameterName: '', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456'},
+            {name: 'test valid use case with no query parameter value', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', parameterValue: '', urlExpectation: 'apps/123/tables/456?param1=one&param2=two&clist='},
             {name: 'test valid use case with 1 query parameter', url: 'apps/123/tables/456?param1=one', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?param1=one&clist=1.2.3'},
             {name: 'test valid use case with multiple query parameters', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?param1=one&param2=two&clist=1.2.3'}
         ];
