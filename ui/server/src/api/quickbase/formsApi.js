@@ -95,6 +95,8 @@
                 //  TODO: TEMPORARAY...JUST RETURN FORM ID 1 for now...
                 //  TODO: NEED NEW ENDPOINT THAT DOES NOT REQUIRE AN ID...
                 //
+                //  TODO: add type query parameter when using new endpoint
+                //
                 //  TODO: Think about what to do(if anything) if type query
                 //  TODO: parameter is not defined...error, set to view, nothing?
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsRoute(req.url, 1);
