@@ -3,10 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import QBGrid  from '../../src/components/dataTable/qbGrid/qbGrid';
 
-import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
 import CellValueRenderers from '../../src/components/dataTable/agGrid/cellValueRenderers';
-import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
-
 
 import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
@@ -123,7 +120,9 @@ describe('QbGrid functions', () => {
     });
 
     it('test render of component with record data', (done) => {
-        var TestParent = React.createFactory(React.createClass({
+
+        let didRowClick = false;
+        let TestParent = React.createFactory(React.createClass({
             getInitialState() {
                 return {records: fakeReportData_after.data.records, columns: fakeReportData_after.data.columns};
             },
@@ -134,7 +133,7 @@ describe('QbGrid functions', () => {
                                 actions={TableActionsMock}
                                 records={this.state.records}
                                 columns={this.state.columns}
-                                onRowClick={()=>{}}
+                                onRowClick={()=>{didRowClick = true;}}
                                 uniqueIdentifier="Record ID#"
                                 keyField="Record ID#"
                                 flux={flux} />;
@@ -142,11 +141,9 @@ describe('QbGrid functions', () => {
             }
         }));
 
-        var parent = TestUtils.renderIntoDocument(TestParent());
+        let parent = TestUtils.renderIntoDocument(TestParent());
 
         let gridElement = parent.refs.qbGrid;
-        //expect(gridElement.length).toEqual(1);
-        //
         let selectAllCheckbox = gridElement.getDOMNode().getElementsByClassName("selectAllCheckbox");
         expect(selectAllCheckbox.length).toEqual(1);
 
@@ -175,6 +172,7 @@ describe('QbGrid functions', () => {
         // single click to drill down
         TestUtils.Simulate.click(cells[0]);
         window.setTimeout(function() {
+            expect(didRowClick).toBe(true);
             done();
         }, 900);
     });
