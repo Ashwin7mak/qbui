@@ -160,36 +160,33 @@ class ReportService extends BaseService {
      * @param includeFacets - include facet data in result
      * @returns promise
      */
-    getReportData(appId, tableId, reportId, optionalParams, includeFacets) {
-        let params = this._setOptionalParams(optionalParams);
+    getReportData(appId, tableId, reportId, optionalparams, includeFacets) {
+        let params = {};
+        //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
+        if (optionalparams) {
+            if (optionalparams[query.FORMAT_PARAM] === true) {
+                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+            }
+            if (StringUtils.isNonEmptyString(optionalparams[query.QUERY_PARAM])) {
+                params[query.QUERY_PARAM] = optionalparams[query.QUERY_PARAM];
+            }
+            if (StringUtils.isNonEmptyString(optionalparams[query.COLUMNS_PARAM])) {
+                params[query.COLUMNS_PARAM] = optionalparams[query.COLUMNS_PARAM];
+            }
+            if (StringUtils.isNonEmptyString(optionalparams[query.SORT_LIST_PARAM])) {
+                params[query.SORT_LIST_PARAM] = optionalparams[query.SORT_LIST_PARAM];
+            }
+            if (NumberUtils.isInt(optionalparams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalparams[query.NUMROWS_PARAM])) {
+                params[query.OFFSET_PARAM] = optionalparams[query.OFFSET_PARAM];
+                params[query.NUMROWS_PARAM] = optionalparams[query.NUMROWS_PARAM];
+            }
+        }
 
         let url = super.constructUrl(includeFacets === true ? this.API.GET_REPORT_COMPONENTS : this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
         return super.get(url, {params:params});
     }
 
-    _setOptionalParams(optionalParams) {
-        let params = {};
-        //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
-        if (optionalParams) {
-            if (optionalParams[query.FORMAT_PARAM] === true) {
-                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-            }
-            if (StringUtils.isNonEmptyString(optionalParams[query.QUERY_PARAM])) {
-                params[query.QUERY_PARAM] = optionalParams[query.QUERY_PARAM];
-            }
-            if (StringUtils.isNonEmptyString(optionalParams[query.COLUMNS_PARAM])) {
-                params[query.COLUMNS_PARAM] = optionalParams[query.COLUMNS_PARAM];
-            }
-            if (StringUtils.isNonEmptyString(optionalParams[query.SORT_LIST_PARAM])) {
-                params[query.SORT_LIST_PARAM] = optionalParams[query.SORT_LIST_PARAM];
-            }
-            if (NumberUtils.isInt(optionalParams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalParams[query.NUMROWS_PARAM])) {
-                params[query.OFFSET_PARAM] = optionalParams[query.OFFSET_PARAM];
-                params[query.NUMROWS_PARAM] = optionalParams[query.NUMROWS_PARAM];
-            }
-        }
-        return params;
-    }
+
     /**
      * Parse a facet Expression to a queryString.
      *

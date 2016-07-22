@@ -154,14 +154,14 @@ const ReportToolbar = React.createClass({
             if (this.props.reportData.loading) {
                 isLoading = this.props.reportData.loading;
             }
+            if (this.props.reportData.countingTotalRecords) {
+                isCountingRecords = this.props.reportData.countingTotalRecords;
+            }
             if (this.props.reportData.data) {
                 if (this.props.reportData.data.filteredRecords) {
                     filteredRecordCount =  this.props.reportData.data.filteredRecordsCount;
                 }
-                if (this.props.reportData.countingTotalRecords) {
-                    isCountingRecords = this.props.reportData.countingTotalRecords;
-                }
-                if (this.props.reportData.data.records) {
+                if (this.props.reportData.data.recordsCount) {
                     recordCount = this.props.reportData.data.recordsCount;
                 }
                 if (this.props.reportData.data.facets &&
@@ -180,7 +180,7 @@ const ReportToolbar = React.createClass({
 
                         {/*TODO : check if searchBox is enabled for this report,
                          if has facets has search too, eg no facets without searchBox */}
-                        {recordCount ?
+                        {!isLoading ?
                             (<FilterSearchBox onChange={this.handleSearchChange}
                                              nameForRecords={this.props.nameForRecords}
                                              searchBoxKey="reportToolBar"
@@ -188,7 +188,7 @@ const ReportToolbar = React.createClass({
                             null
                         }
 
-                        {recordCount ?
+                        {!isLoading ?
                             (<SortAndGroup  {...this.props}
                                 filter={{selections: this.props.selections,
                                         facet: this.props.reportData.facetExpression,
@@ -199,7 +199,7 @@ const ReportToolbar = React.createClass({
 
                         {/* check if facets is enabled for this report,
                          also hide Facets Menu Button if facets disabled  */}
-                        {(recordCount && hasFacets) ?
+                        {(!isLoading && hasFacets) ?
                             (<FacetsMenu className="facetMenu"
                                 {...this.props}
                                          isLoading={isLoading}
@@ -212,7 +212,7 @@ const ReportToolbar = React.createClass({
                         }
                     </div>
                     <div className="rightReportToolbar">
-                        {(isLoading && isCountingRecords) ?
+                        {(isCountingRecords) ?
                             (<RecordsCount recordCount={null}
                                            isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
                                            filteredRecordCount={filteredRecordCount}
@@ -223,7 +223,7 @@ const ReportToolbar = React.createClass({
                             null
                         }
 
-                        {(!isLoading && recordCount) ?
+                        {(!isCountingRecords && recordCount) ?
                             (<RecordsCount recordCount={recordCount}
                                   isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
                                   filteredRecordCount={filteredRecordCount}
@@ -234,7 +234,7 @@ const ReportToolbar = React.createClass({
                             null
                         }
 
-                        {(!isLoading) ?
+                        {!isLoading && !isCountingRecords ?
                             (<ReportNavigation pageStart={this.props.pageStart}
                                                pageEnd={this.props.pageEnd}
                                                recordsCount={recordCount}
