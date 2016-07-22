@@ -158,7 +158,7 @@ class BaseService {
     constructRedirectUrl() {
         let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
         let newStackDestination = WindowLocationUtils.getHref();
-        let currentStackDomain = WindowLocationUtils.getHostname().replace(/.demo|.newstack/gi, "");
+        let currentStackDomain = WindowLocationUtils.getSubdomain() + ".quickbase.com";
         currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
         return currentStackSignInUrl;
     }

@@ -39,8 +39,8 @@ class WindowLocationUtils {
         return window.location.href;
     }
 
-    static getHostname() {
-        return window.location.hostname;
+    static getSubdomain() {
+        return window.location.hostname.split(".")[0];
     }
 }
 
