@@ -37,7 +37,12 @@ const RowEditActions = React.createClass({
     onClickCancel() {
         //get the original unchanged values in data to rerender
         const id = this.props.data[this.props.params.context.keyField];
-        this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
+
+        if (this.props.params.node) {
+            //ag-grid
+            this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
+        }
+
         this.props.api.deselectAll();
         this.props.flux.actions.selectedRows([]);
         this.props.params.context.onEditRecordCancel(id);

@@ -367,8 +367,14 @@ $cell-edit-background-edit: #f3f8fe;
 .ag-body-container {
     background-color:inherit !important;
 }
-.ag-row .gridCell .cellWrapper > :not(.cellData) {
-     display:none;
+.ag-row .gridCell .cellWrapper {
+
+    .cellData {
+        flex: 1 1 auto;
+    }
+    > :not(.cellData) {
+        display: none;
+    }
 }
 
 .reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .iconActions {
@@ -389,7 +395,7 @@ $cell-edit-background-edit: #f3f8fe;
         > .cellWrapper,.ag-cell-wrapper {
             padding:2px;
             position: absolute;
-
+            align-items:center;
             top:0px;
             left:0px;
             right:0px;
@@ -399,7 +405,7 @@ $cell-edit-background-edit: #f3f8fe;
             z-index:1;
             display:flex;
 
-            .cellData {
+            .cellData:not(.nonEditable) {
                 display:none;
             }
             .cellEditWrapper {
