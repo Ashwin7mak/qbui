@@ -99,56 +99,60 @@ let reportDataActions = {
         return new Promise(function(resolve, reject) {
 
             if (appId && tblId && rptId) {
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, true, offset, rows});
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
+                this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT, {});
                 let reportService = new ReportService();
 
-                //  query for the report meta data
-                //  TODO: refactor by having just 1 network call to node to retrieve a report...
-                //  TODO: leverage how homepage report is loaded..
-                
-                reportService.getReport(appId, tblId, rptId).then(
-                    (reportMetaData) => {
-                        let requiredParams = {};
-                        requiredParams[query.FORMAT_PARAM] = format;
-                        requiredParams[query.OFFSET_PARAM] = offset;
-                        requiredParams[query.NUMROWS_PARAM] = rows;
-                        let overrideQueryParams = {};
-                        if (sortList !== undefined) {
-                            overrideQueryParams[query.SORT_LIST_PARAM] = sortList;
-                        }
+                var promises = [];
+                promises.push(reportService.getReportRecordsCount(appId, tblId, rptId));
+                promises.push(reportService.getReport(appId, tblId, rptId));
 
-                        var queryParams = buildRequestQuery(reportMetaData, requiredParams, overrideQueryParams);
-                        reportService.getReportRecordsCount(appId, tblId, rptId, queryParams).then(
-                            function(reportCount) {
-                                logger.debug('ReportRecordsCount service call successful');
-                                this.dispatch(actions.LOAD_RECORDS_COUNT_SUCCESS, reportCount);
-                                resolve();
-                            }.bind(this),
-                            function(error) {
-                                logger.error('ReportRecordsCount service call error: ' + JSON.stringify(error));
-                                this.dispatch(actions.LOAD_RECORDS_COUNT_FAILED, {error:error});
-                                reject();
-                            }.bind(this)
-                        );
-                        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
-                            function(reportData) {
-                                logger.debug('ReportDataAndFacets service call successful');
-                                var model = reportModel.set(reportMetaData, reportData);
-                                _.extend(model, {sortList: sortList});
-                                this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                                resolve();
-                            }.bind(this),
-                            function(error) {
-                                logger.error('ReportDataAndFacets service call error:' + JSON.stringify(error));
-                                this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
-                                reject();
-                            }.bind(this)
-                        );
+                Promise.all(promises).then(
+                    (response) => {
+                        if (response[0]) {
+                            logger.debug('ReportRecordsCount service call successful');
+                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response[0]);
+                        }
+                        if (response[1]) {
+                            let reportMetaData = response[1];
+                            let requiredParams = {};
+                            requiredParams[query.FORMAT_PARAM] = format;
+                            requiredParams[query.OFFSET_PARAM] = offset;
+                            requiredParams[query.NUMROWS_PARAM] = rows;
+                            let overrideQueryParams = {};
+                            if (sortList !== undefined) {
+                                overrideQueryParams[query.SORT_LIST_PARAM] = sortList;
+                            }
+
+                            var queryParams = buildRequestQuery(reportMetaData, requiredParams, overrideQueryParams);
+
+                            reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
+                                function(reportData) {
+                                    logger.debug('ReportDataAndFacets service call successful');
+                                    var model = reportModel.set(reportMetaData, reportData);
+                                    _.extend(model, {sortList: sortList});
+                                    this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                                    resolve();
+                                }.bind(this),
+                                function(error) {
+                                    logger.error('ReportDataAndFacets service call error:' + JSON.stringify(error));
+                                    this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                                    reject();
+                                }.bind(this)
+                            );
+                        }
                     },
                     (error) => {
-                        logger.error('Report service call error when querying for report meta data:' + JSON.stringify(error));
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
-                        reject();
+                        if (error[0]) {
+                            logger.error('ReportRecordsCount service call error: ' + JSON.stringify(error));
+                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, {error:error});
+                            reject();
+                        }
+                        if (error[1]) {
+                            logger.error('Report service call error when querying for report meta data:' + JSON.stringify(error));
+                            this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                            reject();
+                        }
                     }
                 ).catch(
                     function(ex) {

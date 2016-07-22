@@ -37,9 +37,7 @@ let reportModel = {
         recordsCount: null,
         sortFids: [],
         groupEls: [],
-        originalMetaData: null,
-        pageOffset: DEFAULT_OFFSET,
-        numRows: DEFAULT_NUM_ROWS
+        originalMetaData: null
     },
 
     /**
@@ -131,8 +129,6 @@ let reportModel = {
         // in report's meta data sortlist is returned as an array of sort elements
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
-        this.model.pageOffset = reportMetaData.pageOffset;
-        this.model.numRows = reportMetaData.numRows;
     },
 
     /**
@@ -442,7 +438,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.selectedRows = [];
         this.pageOffset = DEFAULT_OFFSET;
         this.numRows = DEFAULT_NUM_ROWS;
-        this.recordsCount = null;
+        this.countingTotalRecords = false;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -451,8 +447,6 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_RECORDS, this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
-            actions.LOAD_RECORDS_COUNT_SUCCESS, this.onLoadRecordsCountSuccess,
-            actions.LOAD_RECORDS_COUNT_FAILED, this.onLoadRecordsCountFailed,
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
@@ -464,7 +458,11 @@ let ReportDataStore = Fluxxor.createStore({
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_REPORT_RECORD_FAILED, this.onClearEdit,
             actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
-            actions.ADD_REPORT_RECORD_FAILED, this.onClearEdit
+            actions.ADD_REPORT_RECORD_FAILED, this.onClearEdit,
+
+            actions.LOAD_REPORT_RECORDS_COUNT, this.onLoadReportRecordsCount,
+            actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, this.onLoadReportRecordsCountSuccess,
+            actions.LOAD_REPORT_RECORDS_COUNT_FAILED, this.onLoadReportRecordsCountFailed
         );
     },
 
@@ -563,11 +561,19 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onLoadRecordsCountSuccess(response) {
+    onLoadReportRecordsCount() {
+        this.countingTotalRecords = true;
+        this.emit('change');
+
+    },
+
+    onLoadReportRecordsCountSuccess(response) {
+        this.countingTotalRecords = false;
         this.reportModel.updateRecordsCount(response.data);
     },
 
-    onLoadRecordsCountFailed() {
+    onLoadReportRecordsCountFailed() {
+        this.countingTotalRecords = false;
         this.error = true;
         this.emit('change');
     },
@@ -764,6 +770,7 @@ let ReportDataStore = Fluxxor.createStore({
             pageOffset: this.pageOffset,
             numRows: this.numRows,
             recordsCount: this.recordsCount,
+            countingTotalRecords: this.countingTotalRecords,
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
             facetExpression: this.facetExpression,

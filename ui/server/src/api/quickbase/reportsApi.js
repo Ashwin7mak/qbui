@@ -84,7 +84,7 @@
              * Fetch count of all records for a report
              *
              */
-            fetchRecordsCount: function(req) {
+            fetchReportRecordsCount: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsCountRoute(req.url);

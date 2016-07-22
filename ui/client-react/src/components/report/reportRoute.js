@@ -22,11 +22,11 @@ const ReportRoute = React.createClass({
     mixins: [FluxMixin],
     nameForRecords: "Records",  // get from table meta data
 
-    loadReport(appId, tblId, rptId, format, offset, numRows) {
+    loadReport(appId, tblId, rptId, offset, numRows) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
         flux.actions.loadFields(appId, tblId);
-        flux.actions.loadReport(appId, tblId, rptId, format, offset, numRows);
+        flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
     },
     loadReportFromParams(params) {
         let appId = params.appId;
@@ -44,7 +44,7 @@ const ReportRoute = React.createClass({
         }
 
         if (appId && tblId && rptId) {
-            this.loadReport(appId, tblId, rptId, true, offset, numRows);
+            this.loadReport(appId, tblId, rptId, offset, numRows);
         }
     },
     componentDidMount() {

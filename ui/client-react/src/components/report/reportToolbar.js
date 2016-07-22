@@ -158,11 +158,11 @@ const ReportToolbar = React.createClass({
                 if (this.props.reportData.data.filteredRecords) {
                     filteredRecordCount =  this.props.reportData.data.filteredRecordsCount;
                 }
+                if (this.props.reportData.countingTotalRecords) {
+                    isCountingRecords = this.props.reportData.countingTotalRecords;
+                }
                 if (this.props.reportData.data.records) {
                     recordCount = this.props.reportData.data.recordsCount;
-                    isCountingRecords = false;
-                } else {
-                    isCountingRecords = true;
                 }
                 if (this.props.reportData.data.facets &&
                     (this.props.reportData.data.facets.length > 0)) {

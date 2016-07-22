@@ -41,7 +41,7 @@
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
-        routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchRecordsCount;
+        routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
         routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
@@ -368,12 +368,12 @@
         });
     }
 
-    function fetchRecordsCount(req,res) {
+    function fetchReportRecordsCount(req,res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report records count', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchRecordsCount(req).then(
+            reportsApi.fetchReportRecordsCount(req).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report records count');
