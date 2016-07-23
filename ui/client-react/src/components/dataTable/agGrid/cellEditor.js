@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {DefaultFieldEditor, MultiLineTextFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from '../../fields/fieldEditors';
+import TextFieldEditor from '../../fields/textFieldEditor';
 
 import * as formats from '../../../constants/fieldFormats';
 
@@ -58,8 +59,12 @@ const CellEditor = React.createClass({
                                      onChange={this.props.onChange} />
                 );
             } else {
-                return <DefaultFieldEditor value={this.props.value}
-                                           onChange={this.props.onChange} />;
+                return <TextFieldEditor value={this.props.value}
+                                        onChange={this.props.onChange}
+                                        classes="cellEdit"
+                                        tabIndex="0"
+                                        ref="cellInput"
+                                        />;
             }
         }
         }

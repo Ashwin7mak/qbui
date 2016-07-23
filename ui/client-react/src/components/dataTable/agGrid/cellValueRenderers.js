@@ -2,6 +2,7 @@ import React from 'react';
 
 import {I18nNumber} from '../../../utils/i18nMessage';
 import * as formats from '../../../constants/fieldFormats';
+import TextField from '../../fields/textField';
 
 export const CellValueRenderer = React.createClass({
 
@@ -107,7 +108,7 @@ export const TextCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <div className="textCell">{this.props.value}</div>;
+        return <TextField classes="textCell" {...this.props} />;
     }
 });
 
