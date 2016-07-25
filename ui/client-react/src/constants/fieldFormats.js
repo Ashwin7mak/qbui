@@ -8,3 +8,7 @@ export const USER_FORMAT = 7;
 export const CURRENCY_FORMAT = 8;
 export const PERCENT_FORMAT = 9;
 export const RATING_FORMAT = 10;
+export const DURATION_FORMAT = 11;
+export const PHONE_FORMAT = 12;
+export const MULTI_LINE_TEXT_FORMAT = 13;
+

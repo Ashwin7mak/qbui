@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {DefaultFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from '../../fields/fieldEditors';
+import {DefaultFieldEditor, MultiLineTextFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from '../../fields/fieldEditors';
 
 import * as formats from '../../../constants/fieldFormats';
 
@@ -45,6 +45,10 @@ const CellEditor = React.createClass({
                                     onChange={this.props.onChange} />;
         }
 
+        case formats.MULTI_LINE_TEXT_FORMAT: {
+            return <MultiLineTextFieldEditor value={this.props.value}
+                                    onChange={this.props.onChange} />;
+        }
         case formats.TEXT_FORMAT:
         default: {
 

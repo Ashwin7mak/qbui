@@ -651,6 +651,7 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onSaveRecordSuccess(payload) {
         // update the  record values
+
         this.editingIndex = null;
         this.reportModel.updateARecord(payload.recId, null, payload.changes);
         this.emit("change");
@@ -665,6 +666,7 @@ let ReportDataStore = Fluxxor.createStore({
         // update the  record values
         this.editingIndex = null;
         this.reportModel.updateARecord(SchemaConsts.UNSAVED_RECORD_ID, payload.recId, payload.record);
+
         this.emit("change");
     },
 
