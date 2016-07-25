@@ -7,6 +7,7 @@
     let defaultRequest = require('request');
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');
+    let url = require('url');
 
     module.exports = function(config) {
         let request = defaultRequest;
@@ -197,6 +198,28 @@
                     log.error("Caught unexpected error in " + func + "\nError Message: Unknown error...no error object defined");
                 }
             },
+
+            /**
+             * Method to take a parameter value and name and add to the request.
+             * A parameter is added only if both a parameter name and value are defined.
+             *
+             * @param req
+             * @param parameterName
+             * @param parameterValue
+             */
+            addQueryParameter: function(req, parameterName, parameterValue) {
+                if (parameterName) {
+                    //  are there any existing parameters
+                    let search = url.parse(req.url).search;
+                    req.url += search ? '&' : '?';
+
+                    //  append the query parameter to the url
+                    req.url += parameterName + '=' + parameterValue;
+
+                    //  add the parameter to the params array.
+                    req.params[parameterName] = parameterValue;
+                }
+            }
 
         };
 

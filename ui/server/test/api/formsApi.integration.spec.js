@@ -61,7 +61,7 @@
                     var formToCreate = {
                         tableId: app.tables[0].id,
                         appId: app.id,
-                        name: 'testForm',
+                        name: 'testForm'
                     };
                     //Create a form
                     recordBase.apiBase.executeRequest(formEndpoint, consts.POST, formToCreate).then(function(reportResults) {
@@ -76,6 +76,15 @@
             return app;
         });
 
+        // Cleanup the test realm after all tests in the block
+        after(function(done) {
+            //Realm deletion takes time, bump the timeout
+            this.timeout(testConsts.INTEGRATION_TIMEOUT);
+            recordBase.apiBase.cleanup().then(function() {
+                done();
+            });
+        });
+
         /**
          * Tests for API call for table GET FORMCOMPONENTS which is intercepted by node and returns a formMeta obj which contains (formData and recordData and fieldsData) information
          */
@@ -85,29 +94,21 @@
                 var actualRecord = JSON.parse(actualRecordsResults.body);
                 actualRecords.push(actualRecord.record);
 
-                //Execute a GET report homepage which returns report object (metaData and data)
+                //Execute a GET form components (metaData and data)
                 recordBase.apiBase.executeRequest(recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id) + 1 + '/FORMCOMPONENTS', consts.GET).then(function(formComponentsResults) {
                     var results = JSON.parse(formComponentsResults.body);
 
                     //Verify returned results has right form Id
                     //verify form meta Data
-                    var formMetaData = JSON.parse(results.formMeta.body);
+                    var formMetaData = results.formMeta;
                     assert.deepEqual(formMetaData.appId, app.id);
                     assert.deepEqual(formMetaData.tableId, app.tables[0].id);
                     assert.deepEqual(formMetaData.formId, formId);
                     assert.deepEqual(formMetaData.name, 'testForm');
 
-                    //verify record data
-                    var recordsData = results.record;
-                    expectedRecords.push(recordsData);
-                    //Verify it returns single record
-                    assert.deepEqual(expectedRecords.length, 1);
-                    //Verify the record retruned is same as the generated record with recordId 1.
-                    assert.deepEqual(actualRecords[0], expectedRecords[0]);
-
-                    //verify fields data
-                    var fieldsData = results.fields;
-                    assert.deepEqual(fieldsData.length, 9);
+                    //verify record data..should be empty as no fields are defined on the form
+                    assert.deepEqual(results.record, {});
+                    assert.deepEqual(results.fields, {});
                     done();
                 });
             });

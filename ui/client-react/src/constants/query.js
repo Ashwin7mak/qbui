@@ -14,6 +14,9 @@ export const NUMROWS_PARAM = "numRows";
 
 // FORM API PARAMETERS
 export const FORM_TYPE = "type";
+export const VIEW_FORM_TYPE = "view";
+export const ADD_FORM_TYPE = "add";
+export const EDIT_FORM_TYPE = "edit";
 
 //  NODE API PARAMETERS
 export const FORMAT_PARAM = "format";
