@@ -30,10 +30,9 @@ let QBForm = React.createClass({
     },
 
     createFieldElement(element, sectionIndex, labelPosition) {
-        let record = this.props.formData.record | [];
-        let fields = this.props.formData.fields | [];
+        let record = this.props.formData.record || [];
+        let fields = this.props.formData.fields || [];
 
-        //TODO relatedField is sometimes null right now because we are not pulling the correct columnlist
         let relatedField = _.find(fields, function(field) {
             if (field.id === element.fieldId) {
                 return true;
@@ -43,7 +42,7 @@ let QBForm = React.createClass({
         let fieldDatatypeAttributes = relatedField && relatedField.datatypeAttributes ? relatedField.datatypeAttributes : {};
         let fieldType = fieldDatatypeAttributes.type;
 
-        let fieldDisplayValue = _.find(record, function(val) {
+        let fieldRecord = _.find(record, function(val) {
             if (val.id === element.fieldId) {
                 return true;
             }
@@ -52,19 +51,20 @@ let QBForm = React.createClass({
         //skip the user fields - these arent implemented.
         //TODO: this should be removed once user fields are implemented
         if (fieldType === "USER") {
-            fieldDisplayValue = "";
+            fieldRecord = "";
         }
 
         //catch the non-implemented pieces.
-        fieldDisplayValue = fieldDisplayValue ? fieldDisplayValue.value : "test display value";
+        let fieldDisplayValue = fieldRecord ? fieldRecord.display : "display value";
+        let fieldRawValue = fieldRecord ? fieldRecord.value : "raw value";
 
         let fieldLabel = "";
         if (element.useAlternateLabel) {
             fieldLabel = element.displayText;
         } else {
-            fieldLabel = relatedField ? relatedField.name : "test display label";
+            fieldLabel = relatedField ? relatedField.name : "display label";
         }
-        let fieldRawValue = fieldDisplayValue; //todo raw value isnt being supplied right now
+
         let key = "field" + sectionIndex + "-" + element.orderIndex;
 
         let classes = "formElement field ";
