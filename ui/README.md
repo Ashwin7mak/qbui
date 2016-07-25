@@ -262,7 +262,10 @@ Note that this command will launch your Node express server if it's not running.
 
 To setup protractor e2e tests, you must first run
 
-`npm run update-webdriver`
+Create your own copy of e2e.js using the sample file (e2e.js.sample) located in qbui/ui/server/config/environment.
+Configure this file if needed.
+
+`npm run update-webdriver` from the qbui/ui directory
 
 Use `grunt test:e2eLocal` to have protractor go through tests located in the `e2e` folder. You will need to have both your local node server 
 and your java server running.

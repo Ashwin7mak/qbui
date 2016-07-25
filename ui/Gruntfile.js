@@ -509,9 +509,6 @@ module.exports = function(grunt) {
                 ENV_TUNNEL_NAME             : tunnelIdentifier,
                 SAUCE_JOB_NAME              : sauceJobName,
                 SAUCE_KEY                   : sauceKey
-                //for the test env, we need to thwart the proxy
-                //http_proxy                  : '',
-                //https_proxy                 : ''
             },
             e2e  : {
                 NODE_ENV                    : 'e2e',
