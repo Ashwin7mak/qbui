@@ -370,12 +370,17 @@ $cell-edit-background-edit: #f3f8fe;
 .ag-row .gridCell .cellWrapper {
 
     .cellData {
+        .textCell {
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
         flex: 1 1 auto;
     }
     > :not(.cellData) {
         display: none;
     }
 }
+
 
 .reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .iconActions {
     display:none;
