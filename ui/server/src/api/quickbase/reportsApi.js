@@ -134,21 +134,6 @@
                         reject1(ex);
                     });
                 });
-                //  Fetch count of records in a report
-                // var recordsCountPromise = new Promise((resolve2, reject2) => {
-                //     this.fetchRecordsCount(req).then(
-                //         (resultsResponse) => {
-                //             resolve2(resultsResponse);
-                //         },
-                //         (error) => {
-                //             // no need to generate an error message as it's logged in fetchReportResults
-                //             reject2(error);
-                //         }
-                //     ).catch((ex) => {
-                //         requestHelper.logUnexpectedError('reportsAPI..fetchReportComponents in fetchReportComponents', ex, true);
-                //         reject2(ex);
-                //     });
-                // });
 
                 //  Fetch report facet data (if any).
                 //
@@ -176,7 +161,7 @@
 
                     //  Now fetch the report data and report facet information asynchronously.  Return a
                     //  responseObject with field, record, grouping(if any) and facet(if any) information for client processing.
-                    var promises = [reportPromise, facetPromise]; //recordsCountPromise,
+                    var promises = [reportPromise, facetPromise];
                     Promise.all(promises).then(
                         (result) => {
                             //  populate the response object with the report with fields, groups and

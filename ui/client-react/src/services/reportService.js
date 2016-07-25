@@ -137,13 +137,13 @@ class ReportService extends BaseService {
      * @returns promise
      */
     getReportDataAndFacets(appId, tableId, reportId, queryParams) {
-        return this.getReportData(appId, tableId, reportId, queryParams, true);
+        var test = this.getReportData(appId, tableId, reportId, queryParams, true);
+        return test;
     }
 
     getReportRecordsCount(appId, tableId, reportId) {
         let url = super.constructUrl(this.API.GET_REPORT_RECORDS_COUNT, [appId, tableId, reportId]);
-        return super.get(url, {});
-
+        return super.get(url);
     }
     
     /**
@@ -162,6 +162,7 @@ class ReportService extends BaseService {
      */
     getReportData(appId, tableId, reportId, optionalparams, includeFacets) {
         let params = {};
+
         //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
         if (optionalparams) {
             if (optionalparams[query.FORMAT_PARAM] === true) {
@@ -185,7 +186,6 @@ class ReportService extends BaseService {
         let url = super.constructUrl(includeFacets === true ? this.API.GET_REPORT_COMPONENTS : this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
         return super.get(url, {params:params});
     }
-
 
     /**
      * Parse a facet Expression to a queryString.
