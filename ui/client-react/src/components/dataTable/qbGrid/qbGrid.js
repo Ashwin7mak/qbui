@@ -13,8 +13,25 @@ import './qbGrid.scss';
 
 const FluxMixin = Fluxxor.FluxMixin(React);
 
+
 const QBGrid = React.createClass({
     mixins: [FluxMixin],
+
+    propTypes: {
+        columns: React.PropTypes.array,
+        records: React.PropTypes.array,
+        scrollParentClass: React.PropTypes.string, // class of parent who may be scrolling this grid
+        selectedRows: React.PropTypes.array,
+        uniqueIdentifier: React.PropTypes.string
+    },
+
+    getDefaultProps() {
+        return {
+            selectedRows: [],
+            columns: [],
+            records: []
+        };
+    },
 
     getInitialState() {
         return {
@@ -79,7 +96,7 @@ const QBGrid = React.createClass({
         const allSelected = this.props.selectedRows.length === this.props.records.length;
 
         return (
-            <input type="checkbox"
+            <input type="checkbox" className="selectAllCheckbox"
                    checked={allSelected}
                    onChange={ ev => {
                        if (ev.target.checked) {
@@ -343,14 +360,22 @@ const QBGrid = React.createClass({
      * handle scroll events and init API
      */
     componentDidMount() {
-        document.querySelector(".reportContent").addEventListener("scroll", this.handleScroll);
+        let scrollParent = document.querySelector(".reportContent");
+
+        if (scrollParent) {
+            scrollParent.addEventListener("scroll", this.handleScroll);
+        }
     },
 
     /**
      * clean up scroll event handler
      */
     componentWillUnmount() {
-        document.querySelector(".reportContent").removeEventListener("scroll", this.handleScroll);
+        let scrollParent = document.querySelector(".reportContent");
+
+        if (scrollParent) {
+            scrollParent.removeEventListener("scroll", this.handleScroll);
+        }
     }
 });
 
