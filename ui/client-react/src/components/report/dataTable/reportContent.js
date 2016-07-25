@@ -2,6 +2,7 @@ import React from "react";
 import ReactIntl from "react-intl";
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
+import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
 import Logger from "../../../utils/logger";
 import ReportActions from "../../actions/reportActions";
 import Fluxxor from "fluxxor";
@@ -20,12 +21,6 @@ let ReportContent = React.createClass({
 
     contextTypes: {
         history: React.PropTypes.object
-    },
-
-    getInitialState: function() {
-        return {
-            showSelectionColumn: false,
-        };
     },
 
     // row was clicked once, navigate to record
@@ -138,7 +133,9 @@ let ReportContent = React.createClass({
      * @param change - {fid:fieldid, values : {oldVal :{}, newVal:{}, fieldName:name}
      */
     handleFieldChange(change) {
-        //
+
+        // call action to hold the field value change
+
         const flux = this.getFlux();
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
         let changes = {};
@@ -260,6 +257,7 @@ let ReportContent = React.createClass({
         let payload = [];
         // columns id and new values array
         //[{"id":6, "value":"Claire"}]
+
         Object.keys(changes).forEach((key) => {
             let newValue = changes[key].newVal.value;
             let newDisplay = changes[key].newVal.display;
@@ -659,43 +657,60 @@ let ReportContent = React.createClass({
             }
         }
         return (<div className="loadedContent">
+
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className="reportContent">
-                        {!isTouch ?
-                            <AGGrid loading={this.props.reportData.loading}
-                                    editingIndex={this.props.reportData.editingIndex}
-                                    editingId={this.props.reportData.editingId}
-                                    records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
-                                    columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                    uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                    keyField={keyField}
-                                    appId={this.props.reportData.appId}
-                                    onEditRecordStart={this.handleEditRecordStart}
-                                    onEditRecordCancel={this.handleEditRecordCancel}
-                                    onFieldChange={this.handleFieldChange}
-                                    onRecordChange={this.handleRecordChange}
-                                    onRecordAdd={this.handleRecordAdd}
-                                    onRecordNewBlank={this.handleRecordNewBlank}
-                                    onRecordSaveClicked={this.handleRecordSaveClicked}
-                                    validateRecord={this.validateRecord}
-                                    getOrigRec={this.getOrigRec}
-                                    getPendingChanges={this.getPendingChanges}
-                                    tblId={this.props.reportData.tblId}
-                                    rptId={this.props.reportData.rptId}
-                                    reportHeader={this.props.reportHeader}
-                                    pageActions={this.props.pageActions}
-                                    selectionActions={<ReportActions />}
-                                    onScroll={this.onScrollRecords}
-                                    onRowClick={this.openRow}
-                                    showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                                    recordCount={recordCount}
-                                    groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
-                                    groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
-                                    sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
-                                    filter={{selections: this.props.reportData.selections,
+                        {!isTouch && this.props.reactabular &&
+
+                        <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
+                                columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
+                                uniqueIdentifier="Record ID#"
+                                keyField={this.props.keyField}
+                                selectedRows={this.props.selectedRows}
+                                onRowClick={this.openRow}
+                                onEditRecordStart={this.handleEditRecordStart}
+                                onEditRecordCancel={this.handleEditRecordCancel}
+                                onFieldChange={this.handleFieldChange}
+                                onRecordChange={this.handleRecordChange}
+                        />}
+
+                        {!isTouch && !this.props.reactabular &&
+                        <AGGrid loading={this.props.reportData.loading}
+                                editingIndex={this.props.reportData.editingIndex}
+                                editingId={this.props.reportData.editingId}
+                                records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
+                                columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
+                                uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                keyField={keyField}
+                                appId={this.props.reportData.appId}
+                                onEditRecordStart={this.handleEditRecordStart}
+                                onEditRecordCancel={this.handleEditRecordCancel}
+                                onFieldChange={this.handleFieldChange}
+                                onRecordChange={this.handleRecordChange}
+                                onRecordAdd={this.handleRecordAdd}
+                                onRecordNewBlank={this.handleRecordNewBlank}
+                                onRecordSaveClicked={this.handleRecordSaveClicked}
+                                validateRecord={this.validateRecord}
+                                getOrigRec={this.getOrigRec}
+                                getPendingChanges={this.getPendingChanges}
+                                tblId={this.props.reportData.tblId}
+                                rptId={this.props.reportData.rptId}
+                                reportHeader={this.props.reportHeader}
+                                pageActions={this.props.pageActions}
+                                selectionActions={<ReportActions />}
+                                onScroll={this.onScrollRecords}
+                                onRowClick={this.openRow}
+                                showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
+                                recordCount={recordCount}
+                                groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
+                                groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
+                                sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+                                filter={{selections: this.props.reportData.selections,
                                         facet: this.props.reportData.facetExpression,
-                                        search: this.props.reportData.searchStringForFiltering}} /> :
+                                        search: this.props.reportData.searchStringForFiltering}}/>
+                        }
+                        {isTouch &&
                             <CardViewListHolder reportData={this.props.reportData}
                                 uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={keyField}
