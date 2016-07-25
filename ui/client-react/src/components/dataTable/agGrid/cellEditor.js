@@ -45,10 +45,7 @@ const CellEditor = React.createClass({
                                     onChange={this.props.onChange} />;
         }
 
-        case formats.MULTI_LINE_TEXT_FORMAT: {
-            return <MultiLineTextFieldEditor value={this.props.value}
-                                    onChange={this.props.onChange} />;
-        }
+        case formats.MULTI_LINE_TEXT_FORMAT:
         case formats.TEXT_FORMAT:
         default: {
 
@@ -58,8 +55,8 @@ const CellEditor = React.createClass({
                                      onChange={this.props.onChange} />
                 );
             } else {
-                return <DefaultFieldEditor value={this.props.value}
-                                           onChange={this.props.onChange} />;
+                return <MultiLineTextFieldEditor value={this.props.value}
+                                                 onChange={this.props.onChange} />;
             }
         }
         }
