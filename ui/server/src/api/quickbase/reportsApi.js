@@ -76,7 +76,7 @@
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('reportsAPI..fetchReportResults', ex, true);
-                        reject(ex);
+                        reject1(ex);
                     });
                 });
             },
