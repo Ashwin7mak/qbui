@@ -142,7 +142,8 @@
             } else {
                 phoneNumber = chance.phone();
             }
-            return phoneNumber;
+            //the phone number should not contain any braces, spaces or dashes.
+            return phoneNumber.replace(/[- )(]/g, '');
         },
 
         //Generates and returns a psuedo-random us phone number
