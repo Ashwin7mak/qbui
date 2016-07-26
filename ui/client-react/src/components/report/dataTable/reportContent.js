@@ -697,6 +697,7 @@ let ReportContent = React.createClass({
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
                                 reportHeader={this.props.reportHeader}
+                                reportFooter={this.props.reportFooter}
                                 pageActions={this.props.pageActions}
                                 selectionActions={<ReportActions />}
                                 onScroll={this.onScrollRecords}

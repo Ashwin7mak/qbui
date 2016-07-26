@@ -221,13 +221,14 @@
 .reportNavigation {
     float: left;
     color: $facetMenu-clearButtonColor;
-
+    a {
+        text-decoration: none;
+    }
     .previousButton {
         margin-left: 1em;
         margin-right: 1em;
         &.qbIcon {
             display: inline;
-
             &.disabled {
                 color: $pagination-disabled-border;
             }
@@ -241,7 +242,6 @@
         margin-right: 1em;
         &.qbIcon {
             display: inline;
-
             &.disabled {
                 color: $pagination-disabled-border;
             }

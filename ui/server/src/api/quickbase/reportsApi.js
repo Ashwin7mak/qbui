@@ -81,8 +81,9 @@
                 return requestHelper.executeRequest(req, opts);
             },
             /**
-             * Fetch count of all records for a report
-             *
+             * Returns a promise that resolves with the count of all records for a report,
+             * or rejects with an error code.
+             * @param req
              */
             fetchReportRecordsCount: function(req) {
                 var opts = requestHelper.setOptions(req);

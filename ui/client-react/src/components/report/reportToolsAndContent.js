@@ -168,7 +168,7 @@ let ReportToolsAndContent = React.createClass({
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
         let format = true;
         let numRows = this.props.reportData.numRows;
-        let newOffset = this.props.reportData.offset + numRows;
+        let newOffset = this.props.reportData.pageOffset + numRows;
         
         this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
     },
@@ -178,23 +178,13 @@ let ReportToolsAndContent = React.createClass({
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
         let format = true;
         let numRows = this.props.reportData.numRows;
-        let newOffset = this.props.reportData.offset - numRows;
+        let newOffset = this.props.reportData.pageOffset - numRows;
 
         this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
     },
     getReportToolbar() {
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
-
-
-        this.pageStart = this.props.reportData.offset + 1;
-        if (this.props.reportData.data) {
-            this.pageEnd = this.props.reportData.offset + this.props.reportData.numRows;
-
-            if (this.props.reportData.data.recordsCount && this.pageEnd > this.props.reportData.data.recordsCount) {
-                this.pageEnd = this.props.reportData.data.recordsCount;
-            }
-        }
 
         return <ReportToolbar appId={this.props.params.appId}
                               tblId={this.props.params.tblId}
@@ -214,28 +204,18 @@ let ReportToolsAndContent = React.createClass({
                               pageStart={this.pageStart}
                               pageEnd={this.pageEnd}/>;
     },
-    getReportFooter() {
-        let {appId, tblId, rptId,
-            reportData:{selections, ...otherReportData}} = this.props;
-
-
-        this.pageStart = this.props.reportData.offset + 1;
-        if (this.props.reportData.data) {
-            this.pageEnd = this.props.reportData.offset + this.props.reportData.numRows;
-
-            if (this.props.reportData.data.recordsCount && this.pageEnd > this.props.reportData.data.recordsCount) {
-                this.pageEnd = this.props.reportData.data.recordsCount;
-            }
-        }
-
-        return <ReportFooter
-            reportData={this.props.reportData}
-            getNextReportPage={this.getNextReportPage}
-            getPreviousReportPage={this.getPreviousReportPage}
-            pageStart={this.pageStart}
-            pageEnd={this.pageEnd}/>;
-
-    },
+    // getReportFooter() {
+    //     let {appId, tblId, rptId,
+    //         reportData:{selections, ...otherReportData}} = this.props;
+    //
+    //     return <ReportFooter
+    //         reportData={this.props.reportData}
+    //         getNextReportPage={this.getNextReportPage}
+    //         getPreviousReportPage={this.getPreviousReportPage}
+    //         pageStart={this.pageStart}
+    //         pageEnd={this.pageEnd}/>;
+    //
+    // },
     getSelectionActions() {
         return (<ReportActions selection={this.props.selectedRows} />);
     },
@@ -266,6 +246,15 @@ let ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
+
+        this.pageStart = this.props.reportData.pageOffset + 1;
+        if (this.props.reportData.data) {
+            this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
+
+            if (this.props.reportData.data.recordsCount && this.pageEnd > this.props.reportData.data.recordsCount) {
+                this.pageEnd = this.props.reportData.data.recordsCount;
+            }
+        }
 
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
@@ -318,7 +307,6 @@ let ReportToolsAndContent = React.createClass({
                                     flux={this.getFlux()}
                                     reactabular={this.state.reactabular}
                         {...this.props} />
-                    {this.getReportFooter()}
                     {!this.props.scrollingReport && <AddRecordButton />}
                 </div>
             );
