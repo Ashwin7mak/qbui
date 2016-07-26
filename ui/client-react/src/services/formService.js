@@ -1,10 +1,7 @@
 import constants from './constants';
 import BaseService from './baseService';
-import NumberUtils from '../utils/numberUtils';
-import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
 import Promise from 'bluebird';
-import {sampleFormJSON} from '../components/QBForm/fakeData.js';
 
 class FormService extends BaseService {
 
@@ -28,15 +25,19 @@ class FormService extends BaseService {
     getFormAndRecord(appId, tableId, recordId, formType) {
         let params = {};
 
+        //  if no form type specified, will default to VIEW
         if (formType) {
             params[query.FORM_TYPE] = formType;
+        } else {
+            // TODO: evaluate whether this should throw an error if not set
+            params[query.FORM_TYPE] = query.VIEW_FORM_TYPE;
         }
 
-        return Promise.resolve({data: sampleFormJSON});
+        //  always want formatted data
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
 
-        //  Until we get data to display to confirm it works okay...
-        //let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
-        //return super.get(url, {params:params});
+        let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
+        return super.get(url, {params:params});
     }
 }
 

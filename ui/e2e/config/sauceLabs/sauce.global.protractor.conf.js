@@ -14,8 +14,6 @@
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 300000,
-        // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
-        baseUrl: process.env.DOMAIN,
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
         sauceKey            : process.env.SAUCE_KEY,

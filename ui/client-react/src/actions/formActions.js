@@ -6,6 +6,8 @@ import Promise from 'bluebird';
 import Logger from '../utils/logger';
 let logger = new Logger();
 
+import {sampleFormJSON} from '../mocks/forms.js';
+
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
 //  because the core application code has no logic implemented to handle a rejected
@@ -27,6 +29,10 @@ let formActions = {
                 let formService = new FormService();
                 formService.getFormAndRecord(appId, tblId, recordId, formType).then(
                     (response) => {
+                        //  TODO: temporary until new endpoint is in place and forms data is always returned..
+                        if (!response) {
+                            response = {data:sampleFormJSON};
+                        }
                         this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS, response.data);
                         resolve();
                     },

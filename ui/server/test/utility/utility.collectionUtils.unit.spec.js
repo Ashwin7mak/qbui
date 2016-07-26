@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var stringUtils = require('../../src/utility/stringUtils.js');
+var collectionUtils = require('../../src/utility/collectionUtils.js');
 
 /**
  * Unit tests for String Utility Functions
@@ -19,7 +19,7 @@ describe('Validate String Utility Functions', function() {
         ];
         testCases.forEach(function(testCase) {
             it(testCase.name, function() {
-                assert.equal(stringUtils.convertListToDelimitedString(testCase.inList, testCase.delimiter), testCase.expectation);
+                assert.equal(collectionUtils.convertListToDelimitedString(testCase.inList, testCase.delimiter), testCase.expectation);
             });
         });
     });
@@ -35,7 +35,25 @@ describe('Validate String Utility Functions', function() {
         ];
         testCases.forEach(function(testCase) {
             it(testCase.name, function() {
-                assert.equal(stringUtils.convertListToDelimitedString(testCase.inList, testCase.delimiter), testCase.expectation);
+                assert.equal(collectionUtils.convertListToDelimitedString(testCase.inList, testCase.delimiter), testCase.expectation);
+            });
+        });
+    });
+
+    describe('verify contains function', function() {
+        var testCases = [
+            {name: 'invalid array - null', inList: null, obj:'test', expectation: false},
+            {name: 'invalid array - string', inList: 'bad array', obj:'test', expectation: false},
+            {name: 'array is empty', inList: [], obj:'test', expectation: false},
+            {name: 'object not found in list', inList: ['1', '2', '3'], obj:'5', expectation: false},
+            {name: 'object is found in list', inList: ['1', '2', '3'], obj:'1', expectation: true},
+            {name: 'object is found in list multiple times', inList: ['3', '1', '1'], obj:'1', expectation: true},
+            {name: 'null object is found in list', inList: ['3', null, '1'], obj:null, expectation: true},
+            {name: 'null object is not found in list', inList: ['3', '2', '1'], obj:null, expectation: false}
+        ];
+        testCases.forEach(function(testCase) {
+            it(testCase.name, function() {
+                assert.equal(collectionUtils.contains(testCase.inList, testCase.obj), testCase.expectation);
             });
         });
     });
