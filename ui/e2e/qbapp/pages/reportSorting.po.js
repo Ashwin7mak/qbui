@@ -280,7 +280,7 @@
                     return self.reportGroupByIcon.click().then(function() {
                         return e2ePageBase.waitForElement(self.GroupByFieldPanel).then(function() {
                             //verify the title of groupBy list
-                            expect(self.GroupByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for grouping');
+                            expect(self.GroupByFieldPanelHeader.getText()).toContain('Cancel');
                             //select the groupBy item
                             var items = self.GroupByFieldPanel.all(by.className('list-group-item'));
                             return items.filter(function(elm) {
@@ -434,7 +434,7 @@
                     return self.reportSortByIcon.click().then(function() {
                         return e2ePageBase.waitForElement(self.SortByFieldPanel).then(function() {
                             //verify the title of groupBy list
-                            expect(self.SortByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for sorting');
+                            expect(self.SortByFieldPanelHeader.getText()).toContain('Cancel');
                             //select the groupBy item
                             var items = self.SortByFieldPanel.all(by.className('list-group-item'));
                             return items.filter(function(elm) {
