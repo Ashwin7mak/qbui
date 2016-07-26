@@ -481,7 +481,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.tblId = report.tblId;
         this.rptId = report.rptId;
 
-        this.pageOffset = report.pageOffset ? report.pageOffset : this.pageOffset;
+        this.pageOffset = report.offset ? report.offset : this.pageOffset;
         this.numRows = report.numRows ? report.numRows : this.numRows;
 
         this.searchStringForFiltering = '' ;

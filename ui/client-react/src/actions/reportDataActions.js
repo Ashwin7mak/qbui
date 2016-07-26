@@ -145,36 +145,12 @@ let reportDataActions = {
                                     reject();
                                 }.bind(this)
                             );
-                            //
-                            // reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
-                            //     (reportData) => {
-                            //         logger.debug('ReportDataAndFacets service call successful');
-                            //         var model = reportModel.set(reportMetaData, reportData);
-                            //         _.extend(model, {sortList: sortList});
-                            //         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                            //     },
-                            //     (error) => {
-                            //         logger.error('ReportDataAndFacets service call error:' + JSON.stringify(error));
-                            //         this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
-                            //         reject();
-                            //     }
-                            // );
                         }
                     },
                     (error) => {
                             logger.error('Report service call error when querying for report meta data:' + JSON.stringify(error));
                             this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
                             reject();
-                        // if (error[0]) {
-                        //     logger.error('ReportRecordsCount service call error: ' + JSON.stringify(error));
-                        //     this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, {error:error});
-                        //     reject();
-                        // }
-                        // if (error[1]) {
-                        //     logger.error('Report service call error when querying for report meta data:' + JSON.stringify(error));
-                        //     this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
-                        //     reject();
-                        // }
                     }
                 ).catch(
                     function(ex) {

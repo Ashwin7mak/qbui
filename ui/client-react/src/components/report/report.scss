@@ -65,12 +65,14 @@
             align-self:stretch;
         }
         .leftReportToolbar {
+            width:50%;
             display: flex;
             flex-direction: row;
             flex: 1 1 auto;
             align-items: center;
         }
         .rightReportToolbar {
+            width:50%;
             display: flex;
             flex-direction: row;
             flex: 1 1 auto;
@@ -78,12 +80,12 @@
 
             .recordsCount{
                 flex-grow: 1;
+                width: 50%;
                 text-align: right;
             }
             .reportNavigation {
                 flex-grow: 1;
-                margin-left:2em;
-                margin-right:2rem;
+                width: 50%;
             }
         }
         .filterSearchBoxContainer {
@@ -105,10 +107,6 @@
             font-size: 16px;
             cursor: pointer;
         }
-
-        .reportNavigation {
-            margin-right: 2em;
-        }
     }
 
     .reportFooter {
@@ -124,12 +122,7 @@
         }
         .rightReportFooter {
             width: 50%;
-            //margin:auto;
-
-            .reportNavigation {
-                margin-left: 50%;
-                margin-right: 2em;
-            }
+            margin-left: 50%;
         }
     }
 
