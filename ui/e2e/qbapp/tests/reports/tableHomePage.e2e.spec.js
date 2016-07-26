@@ -69,13 +69,7 @@
             }).then(function() {
                 // Wait for the leftNav to load
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    // Select the app
-                    return reportServicePage.appLinksElList.get(0).click().then(function() {
-                        //wait for table lists
-                        reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
-                        //Done callback to let Jasmine know we are done with our promise chain
-                        done();
-                    });
+                    done();
                 });
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above

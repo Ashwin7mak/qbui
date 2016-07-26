@@ -50,23 +50,23 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
-                    reportServicePage.appLinksElList.get(0).click();
-                    // Open the reports list
-                    reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
-                        reportServicePage.reportHamburgersElList.get(0).click();
-                    });
-                    // Wait for the report list to load
-                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                        // Find and select the report
-                        reportServicePage.selectReport('My Reports', 'Test Report');
-                    });
-                    // Make sure the table report has loaded
-                    reportServicePage.waitForElement(reportServicePage.reportContainerEl).then(function() {
-                        //Done callback to let Jasmine know we are done with our promise chain
-                        done();
-                    });
+                    return reportServicePage.appLinksElList.get(0).click();
+                });
+            }).then(function() {
+                // Open the reports list
+                reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
+                    return reportServicePage.reportHamburgersElList.get(0).click();
+                });
+            }).then(function() {
+                // Wait for the report list to load
+                reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                    // Find and select the report
+                    return reportServicePage.selectReport('My Reports', 'Test Report');
+                }).then(function() {
+                    reportServicePage.waitForElement(reportServicePage.reportContainerEl);
+                    done();
                 });
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
@@ -80,67 +80,72 @@
              * Test method. The leftNav should shrink responsively across the 4 breakpoints as the browser is re-sized
              */
             it('LeftNav should shrink responsively from xlarge to small breakpoints.', function(done) {
-                e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function () {
+                if (browserSize === 'xlarge') {
                     // Assert leftNav properties
                     reportServicePage.assertNavProperties('xlarge', true, '300');
-                }).then(function () {
                     //reduce the browser size to large now
-                    e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function () {
+                    e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                         // Assert leftNav properties
                         reportServicePage.assertNavProperties('large', true, '220');
-                    });
-                }).then(function () {
-                    //resize the browser to medium
-                    e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function () {
-                        // Assert leftNav properties
-                        reportServicePage.assertNavProperties('medium', true, '200');
-                    });
-                }).then(function () {
-                    //resize the browser to small
-                    e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function () {
-                        reportServicePage.assertNavProperties(browserSize, false, '0');
-                        // Open the leftNav
-                        reportServicePage.openLeftNav().then(function () {
-                            reportServicePage.assertNavProperties('small', true, '300').then(function () {
-                                done();
+                    }).then(function() {
+                        //resize the browser to medium
+                        e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                            // Assert leftNav properties
+                            reportServicePage.assertNavProperties('medium', true, '200');
+                        });
+                    }).then(function() {
+                        //resize the browser to small
+                        e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                            reportServicePage.assertNavProperties(browserSize, false, '0');
+                            // Open the leftNav
+                            reportServicePage.openLeftNav().then(function() {
+                                reportServicePage.assertNavProperties('small', true, '300').then(function() {
+                                    //set the size back to xlarge
+                                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
+                                    done();
+                                });
                             });
                         });
                     });
-                });
+                } else {
+                    done();
+                }
             });
 
             /**
              * Test method. The leftNav should expand responsively across the 4 breakpoints as the browser is re-sized
              */
             it('LeftNav should expand responsively from small to xlarge breakpoints', function(done) {
-                e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function () {
+                if (browserSize === 'small') {
                     // Assert leftNav properties
                     reportServicePage.assertNavProperties(browserSize, false, '0');
                     // Open the leftNav
-                    reportServicePage.openLeftNav().then(function () {
-                        reportServicePage.assertNavProperties('small', true, '300').then(function () {
+                    reportServicePage.openLeftNav().then(function() {
+                        reportServicePage.assertNavProperties('small', true, '300');
+                    }).then(function() {
+                        //reduce the browser size to large now
+                        e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                            // Assert leftNav properties
+                            reportServicePage.assertNavProperties('medium', true, '200');
+                        });
+                    }).then(function() {
+                        //resize the browser to medium
+                        e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                            // Assert leftNav properties
+                            reportServicePage.assertNavProperties('large', true, '220');
+                        });
+                    }).then(function() {
+                        //resize the browser to small
+                        e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                            reportServicePage.assertNavProperties('xlarge', true, '300');
+                            //set the size back to small
+                            e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
                             done();
                         });
                     });
-                }).then(function () {
-                    //reduce the browser size to large now
-                    e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function () {
-                        // Assert leftNav properties
-                        reportServicePage.assertNavProperties('medium', true, '200');
-                    });
-                }).then(function () {
-                    //resize the browser to medium
-                    e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function () {
-                        // Assert leftNav properties
-                        reportServicePage.assertNavProperties('large', true, '220');
-                    });
-                }).then(function () {
-                    //resize the browser to small
-                    e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function () {
-                        reportServicePage.assertNavProperties('xlarge', true, '300');
-                        done();
-                    });
-                });
+                } else {
+                    done();
+                }
             });
         });
 
@@ -156,30 +161,35 @@
                             reportServicePage.clickReportHeaderHamburger();
                         }
                     });
+                } else {
+                    reportServicePage.tableLinksElList.then(function(tableLinks) {
+                        // Assert the home and user top links are present
+                        reportServicePage.topLinksElList.then(function(topLinks) {
+                            expect(topLinks.length).toBe(2);
+                        });
+                        // Check we have four table links present
+                        expect(tableLinks.length).toBe(4);
+                    }).then(function() {
+                        reportServicePage.clickAppToggle();
+                        // Check that the app search widget is hidden
+                        expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
+                    }).then(function() {
+                        // Open the search apps widget
+                        reportServicePage.clickAppSearchToggle();
+                        // Check that the app search widget is visible
+                        expect(reportServicePage.searchAppsDivEl.isPresent()).toBeTruthy();
+                    }).then(function() {
+                        // Close the search apps widget
+                        reportServicePage.clickAppSearchToggle();
+                        // Check that the app search widget is visible
+                        expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
+                    }).then(function() {
+                        // Go back to the table list
+                        reportServicePage.clickAppToggle().then(function() {
+                            done();
+                        });
+                    });
                 }
-                reportServicePage.tableLinksElList.then(function(tableLinks) {
-                    // Assert the home and user top links are present
-                    reportServicePage.topLinksElList.then(function(topLinks) {
-                        expect(topLinks.length).toBe(2);
-                    });
-                    // Check we have four table links present
-                    expect(tableLinks.length).toBe(4);
-                    reportServicePage.clickAppToggle();
-                    // Check that the app search widget is hidden
-                    expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
-                    // Open the search apps widget
-                    reportServicePage.clickAppSearchToggle();
-                    // Check that the app search widget is visible
-                    expect(reportServicePage.searchAppsDivEl.isPresent()).toBeTruthy();
-                    // Close the search apps widget
-                    reportServicePage.clickAppSearchToggle();
-                    // Check that the app search widget is visible
-                    expect(reportServicePage.searchAppsDivEl.isDisplayed()).toBeFalsy();
-                    // Go back to the table list
-                    reportServicePage.clickAppToggle().then(function() {
-                        done();
-                    });
-                });
             });
 
             /**

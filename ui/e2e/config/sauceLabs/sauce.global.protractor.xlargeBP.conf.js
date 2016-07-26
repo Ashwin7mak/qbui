@@ -92,6 +92,7 @@
 
             // Set the browser size to xlarge
             browser.driver.manage().window().setSize(1441, 1440);
+            global.browserSize = 'xlarge';
         }
     };
 }());

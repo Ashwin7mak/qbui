@@ -608,8 +608,8 @@
 
             beforeAll(function(done) {
                     //go to report page directly
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
-                    done();
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                done();
             });
 
             beforeEach(function(done) {

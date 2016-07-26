@@ -44,20 +44,10 @@
             }).then(function() {
                 // Wait for the leftNav to load
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    // Select the app
-                    reportServicePage.appLinksElList.get(0).click();
-                    // Open the reports list
-                    reportServicePage.waitForElement(reportServicePage.tablesListDivEl).then(function() {
-                        reportServicePage.reportHamburgersElList.get(0).click();
-                    });
-                    // Wait for the report list to load
-                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                        // Find and select the report
-                        reportServicePage.selectReport('My Reports', 'Test Report');
-                    });
+                    //go to report page directly.
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                     // Make sure the table report has loaded
-                    reportServicePage.waitForElement(reportServicePage.reportContainerEl).then(function() {
-                        //Done callback to let Jasmine know we are done with our promise chain
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         done();
                     });
                 });

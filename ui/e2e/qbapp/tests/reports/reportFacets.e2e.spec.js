@@ -361,46 +361,46 @@
             });
 
             //There wont be facet filter button displayed for small breakpoint
-                it('Verify clear all facets tokens from the container', function(done) {
-                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                            reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                                //Click on facet carat to show popup
-                                reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
-                                    //Verify the popup menu is displayed
-                                    expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
-                                });
-                            });
-                        }).then(function() {
-                            //select the facet Items
-                            reportFacetsPage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
-                                if (browserSize === 'small') {
-                                    // Verify display of filter search box is false for small breakpoint
-                                    expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeFalsy();
-                                    //Verify there are no facet tokens displayed in the container
-                                    expect(element(by.className('facetSelections')).isDisplayed()).toBeFalsy();
-                                    done();
-                                } else {
-                                    //Map all facet tokens from the facet container
-                                    reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
-                                        return tokenName.getText();
-                                    }).then(function(selections) {
-                                        // Sort each array before comparing
-                                        expect(selections.sort()).toEqual(facetSelections.sort());
-                                    }).then(function() {
-                                        //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
-                                        return reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                                            return e2eRetry.run(function() {
-                                                reportFacetsPage.clearFacetTokensFromContainer().then(function() {
-                                                    expect(reportServicePage.reportRecordsCount.getText()).toBe('6 Records');
-                                                    done();
-                                                });
-                                            });
+            it('Verify clear all facets tokens from the container', function(done) {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                        //Click on facet carat to show popup
+                        reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
+                            //Verify the popup menu is displayed
+                            expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                        });
+                    });
+                }).then(function() {
+                    //select the facet Items
+                    reportFacetsPage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
+                        if (browserSize === 'small') {
+                            // Verify display of filter search box is false for small breakpoint
+                            expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeFalsy();
+                            //Verify there are no facet tokens displayed in the container
+                            expect(element(by.className('facetSelections')).isDisplayed()).toBeFalsy();
+                            done();
+                        } else {
+                            //Map all facet tokens from the facet container
+                            reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
+                                return tokenName.getText();
+                            }).then(function(selections) {
+                                // Sort each array before comparing
+                                expect(selections.sort()).toEqual(facetSelections.sort());
+                            }).then(function() {
+                                //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
+                                return reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                                    return e2eRetry.run(function() {
+                                        reportFacetsPage.clearFacetTokensFromContainer().then(function() {
+                                            expect(reportServicePage.reportRecordsCount.getText()).toBe('6 Records');
+                                            done();
                                         });
                                     });
-                                }
+                                });
                             });
-                        });
+                        }
+                    });
                 });
+            });
 
             it('Negative test to verify a facet dropdown not displayed with report without facetsFIDS', function(done) {
                 //go to report page directly
