@@ -69,22 +69,18 @@
             flex-direction: row;
             flex: 1 1 auto;
             align-items: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
         }
         .rightReportToolbar {
             display: flex;
             flex-direction: row;
             flex: 1 1 auto;
-            align-items: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            justify-content: flex-end;
+
             .recordsCount{
-                flex-wrap: nowrap;
-                margin-left:2em;
+                flex-grow: 1;
+                text-align: right;
             }
             .reportNavigation {
-                flex-wrap: nowrap;
                 flex-grow: 1;
                 margin-left:2em;
                 margin-right:2rem;
@@ -110,36 +106,36 @@
             cursor: pointer;
         }
 
-        .recordsCount {
-            margin-right: 1rem;
-        }
-
         .reportNavigation {
-            flex: 1 1 auto;
-            margin-left: 2em;
             margin-right: 2em;
         }
     }
 
     .reportFooter {
         display: flex;
-        flex-direction: row-reverse;
-        flex: 1 1 auto;
+        flex-direction: row;
+        justify-content:flex-end;
         align-items: center;
-        color:$secondary-bar-fg;
-        justify-content:space-between;
+        flex: 1 1 auto;
+        max-height: 61px;
 
         .leftReportFooter {
-
+            width: 50%;
         }
         .rightReportFooter {
+            width: 50%;
+            //margin:auto;
 
+            .reportNavigation {
+                margin-left: 50%;
+                margin-right: 2em;
+            }
         }
     }
 
     .loadedContent {
         display:flex;
-        flex: 1 1 auto;
+        flex: 0 1 auto;
         width:100%;
         position:relative;
     }

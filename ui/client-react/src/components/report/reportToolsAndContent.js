@@ -204,18 +204,18 @@ let ReportToolsAndContent = React.createClass({
                               pageStart={this.pageStart}
                               pageEnd={this.pageEnd}/>;
     },
-    // getReportFooter() {
-    //     let {appId, tblId, rptId,
-    //         reportData:{selections, ...otherReportData}} = this.props;
-    //
-    //     return <ReportFooter
-    //         reportData={this.props.reportData}
-    //         getNextReportPage={this.getNextReportPage}
-    //         getPreviousReportPage={this.getPreviousReportPage}
-    //         pageStart={this.pageStart}
-    //         pageEnd={this.pageEnd}/>;
-    //
-    // },
+    getReportFooter() {
+        let {appId, tblId, rptId,
+            reportData:{selections, ...otherReportData}} = this.props;
+
+        return <ReportFooter
+            reportData={this.props.reportData}
+            getNextReportPage={this.getNextReportPage}
+            getPreviousReportPage={this.getPreviousReportPage}
+            pageStart={this.pageStart}
+            pageEnd={this.pageEnd}/>;
+
+    },
     getSelectionActions() {
         return (<ReportActions selection={this.props.selectedRows} />);
     },
@@ -307,6 +307,7 @@ let ReportToolsAndContent = React.createClass({
                                     flux={this.getFlux()}
                                     reactabular={this.state.reactabular}
                         {...this.props} />
+                    {this.getReportFooter()}
                     {!this.props.scrollingReport && <AddRecordButton />}
                 </div>
             );
