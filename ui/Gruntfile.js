@@ -882,13 +882,13 @@ module.exports = function(grunt) {
         grunt.task.run(['test:integration']);
     });
 
-    grunt.registerTask('testE2ELocal', function() {
-        grunt.task.run(['test:e2eLocal']);
-    });
-
-    grunt.registerTask('testE2E', function() {
-        grunt.task.run(['test:e2e']);
-    });
+    //grunt.registerTask('testE2ELocal', function() {
+    //    grunt.task.run(['test:e2eLocal']);
+    //});
+    //
+    //grunt.registerTask('testE2E', function() {
+    //    grunt.task.run(['test:e2e']);
+    //});
 
     grunt.registerTask('ciTest', [
         'env:test',
