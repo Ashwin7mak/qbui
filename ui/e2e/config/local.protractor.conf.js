@@ -17,8 +17,6 @@
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 120000,
-        // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
-        baseUrl: process.env.DOMAIN,
         // A callback function called once configs are read but before any environment
         // setup. This will only run once, and before onPrepare.
         beforeLaunch: function() {

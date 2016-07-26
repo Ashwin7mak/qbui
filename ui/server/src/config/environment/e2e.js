@@ -33,7 +33,7 @@
         },
 
         // to run using ssl, copy the private key and cert for
-        // your host(ie:localhost.intuit.com) to ../server/src/config/keys
+        // your host(ie:localhost.intuit.com) to ../server/config/keys
         // folder.. comment this out if don't want to offer ssl support.
 
         //SSL_KEY: {
@@ -43,40 +43,32 @@
         //},
 
         // allow for override of default ports
-        port: 9000,
+        port: 9001,
         sslPort: 9443,
 
         ip : 'localhost', // replace with your host or machine name user use (that is in your hosts file i.e.'CMBL13XXXXXX' for mobile testing)
 
         //Java REST endpoint (protocol,server,port)
-        //javaHost: 'https://localhost.com:8443',
-        javaHost: 'http://localhost.com:8080',
-        isMockServer : false,
+        //javaHost: 'https://localhost.intuit.com:8080',
+        javaHost: 'http://localhost:8080',
 
         //Express Server
-        //DOMAIN: 'https://localhost.com:9443',
-        DOMAIN: 'http://localhost.com:9000',
+        //DOMAIN  : 'http://localhost:9000',
+        DOMAIN: 'http://localhost:9001',
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
-
-        //enable to track performance stats to server/splunk
-        isClientPerfTrackingEnabled: true,
-
-        //set false if you don't want growl notifications on webpack / watch updates
-        growlNotify: true,
 
         //Node's understanding of a grouping of routes to be enabled/disabled
         routeGroup: routeGroups.DEBUG,
 
         //set notHotLoad true to disable hotloading
-        //noHotLoad : true,
+        noHotLoad : true,
 
         // the client to use
-        client : client,
+        client: clientConsts.REACT,
 
         // walkme java script
         walkmeJSSnippet : ''
-
     };
 }());
