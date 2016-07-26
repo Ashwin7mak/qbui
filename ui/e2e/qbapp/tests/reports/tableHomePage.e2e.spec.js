@@ -165,6 +165,7 @@
                             return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(e2eBase.recordBase.apiBase.realm.subdomain, app.id, app.tables[0].id));
                         }).then(function() {
                             return reportServicePage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
+                                e2eBase.sleep(browser.params.smallSleep);
                                 //Assert report stage heading
                                 e2eRetry.run(function() {
                                     expect(reportServicePage.stageHeadLine.getText()).toEqual(testcase.reportTitle);

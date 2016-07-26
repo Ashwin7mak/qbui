@@ -52,7 +52,9 @@
                 // Wait for the leftNav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     // Select the app
-                    return reportServicePage.appLinksElList.get(0).click();
+                    e2eRetry.run(function() {
+                        return reportServicePage.appLinksElList.get(0).click();
+                    });
                 });
             }).then(function() {
                 // Open the reports list
