@@ -10,8 +10,8 @@ module.exports = function(grunt) {
     var currentDateTime = new Date().getTime();
 
     var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
-    var buildDir =  path.join(__dirname, '/build');
-    var localJsFilePath =  path.join(__dirname, '/server/src/config/environment/local.js');
+    var buildDir = path.join(__dirname, '/build');
+    var localJsFilePath = path.join(__dirname, '/server/src/config/environment/local.js');
 
     // For the Protractor tests we need to import the node config files (one for local, one for CI)
     // This way when Protractor starts node it can read in what domain node is started at

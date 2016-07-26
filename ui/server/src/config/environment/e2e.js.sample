@@ -8,7 +8,7 @@
 
     // Import your local config for your env
     var localJsConfig = require('./local.js');
-
+    
     // Override the local.js config file to what we need to run e2e tests in parallel
     module.exports = Object.assign(localJsConfig, {
         // Set these node port values to something different than your local.js
