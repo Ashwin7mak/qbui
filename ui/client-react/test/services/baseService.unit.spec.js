@@ -14,6 +14,12 @@ describe('BaseService rewire tests', () => {
     var mockAxios = {
         get: function() {
             return {getMethodCalled:true};
+        },
+        patch: function() {
+            return {patchMethodCalled:true};
+        },
+        delete: function() {
+            return {deleteMethodCalled:true};
         }
     };
 
@@ -88,6 +94,18 @@ describe('BaseService rewire tests', () => {
         baseService = new BaseService();
         var axios = baseService.get('url', 'config');
         expect(axios.getMethodCalled).toBeTruthy();
+    });
+
+    it('test axios patch method', () => {
+        baseService = new BaseService();
+        var axios = baseService.patch('url', 'config');
+        expect(axios.patchMethodCalled).toBeTruthy();
+    });
+
+    it('test axios delete method', () => {
+        baseService = new BaseService();
+        var axios = baseService.delete('url', 'config');
+        expect(axios.deleteMethodCalled).toBeTruthy();
     });
 
     /**
