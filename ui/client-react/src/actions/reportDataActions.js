@@ -239,7 +239,7 @@ let reportDataActions = {
                 recordService.deleteRecord(appId, tblId, recId).then(
                     response => {
                         logger.debug('RecordService deleteRecord success:' + JSON.stringify(response));
-                        this.dispatch(actions.DELETE_REPORT_RECORD_SUCCESS, {appId, tblId, recId});
+                        this.dispatch(actions.DELETE_REPORT_RECORD_SUCCESS, recId);
                         NotificationManager.success(Locale.getMessage('recordNotifications.recordDeleted'), Locale.getMessage('success'), 1500);
                         resolve();
                     },
@@ -260,7 +260,7 @@ let reportDataActions = {
                 var errMessage = 'Missing one or more required input parameters to reportDataActions.deleteReportRecord. AppId:' +
                     appId + '; TblId:' + tblId + '; recId:' + recId ;
                 logger.error(errMessage);
-                this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {error: errMessage});
+                this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: errMessage});
                 reject();
             }
         });
