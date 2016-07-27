@@ -172,7 +172,7 @@ let ReportToolsAndContent = React.createClass({
         let format = true;
         let numRows = this.props.reportData.numRows;
         let newOffset = this.props.reportData.pageOffset + numRows;
-
+        
         this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
     },
     getPreviousReportPage() {
