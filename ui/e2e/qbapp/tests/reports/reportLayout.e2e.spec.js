@@ -70,22 +70,28 @@
         /**
          * Layout test. Verify topNav is displayed above the report stage
          */
-        it('verify topNav is on top of report stage', function() {
-            reportServicePage.isElementOnTop(reportServicePage.topNavDivEl, reportServicePage.reportStageContentEl);
+        it('verify topNav is on top of report stage', function(done) {
+            reportServicePage.isElementOnTop(reportServicePage.topNavDivEl, reportServicePage.reportStageContentEl).then(function() {
+                done();
+            });
         });
 
         /**
          * Layout test. Verify report actions are displayed above the report content
          */
-        it('verify table actions Layout container is on top of report container', function() {
-            reportServicePage.isElementOnTop(reportServicePage.reportToolbarContainerEl, reportServicePage.agGridContainerEl);
+        it('verify table actions Layout container is on top of report container', function(done) {
+            reportServicePage.isElementOnTop(reportServicePage.reportToolbarContainerEl, reportServicePage.agGridContainerEl).then(function() {
+                done();
+            });
         });
 
         /**
          * Layout test. Verify stage is displayed above the report actions container
          */
-        it('verify report Stage Layout container is on top of table actions container', function() {
-            reportServicePage.isElementOnTop(reportServicePage.reportStageContentEl, reportServicePage.reportToolbarContainerEl);
+        it('verify report Stage Layout container is on top of table actions container', function(done) {
+            reportServicePage.isElementOnTop(reportServicePage.reportStageContentEl, reportServicePage.reportToolbarContainerEl).then(function() {
+                done();
+            });
         });
 
         //TODO: Tests for small breakpoint size

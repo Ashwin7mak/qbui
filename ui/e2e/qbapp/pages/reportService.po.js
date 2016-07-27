@@ -84,7 +84,7 @@
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
 
         //stage heading
-        this.stageHeadLine = this.reportStageContentEl.element(by.className('breadCrumbs'));
+        this.stageHeadLine = this.reportStageContentEl.element(by.className('stageHeadline'));
 
         // Report tools and content container
         this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));

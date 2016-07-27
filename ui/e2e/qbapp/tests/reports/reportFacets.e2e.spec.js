@@ -47,7 +47,7 @@
                 return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
             }).then(function() {
                 // Get the appropriate fields out of the fourth table
-                var Fields = e2eBase.tableService.getNonBuiltInFields(app.tables[3]);
+                //var Fields = e2eBase.tableService.getNonBuiltInFields(app.tables[3]);
                 //TODO: Need to re-enable this once bulk records is fixed
                 // Generate greater than 201 text records in table 4 for negative testing
                 //var generated201Records = e2eBase.recordService.generateRecords(Fields, 300);
