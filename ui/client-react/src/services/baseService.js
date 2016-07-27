@@ -63,6 +63,18 @@ class BaseService {
     }
 
     /**
+     * Http delete request
+     *
+     * @param url - request url.  Can be relative or set to explicit domain
+     * @param conf - optional http header configuration
+     * @returns {*} - promise
+     */
+    delete(url, conf) {
+        let config = conf || {};
+        return axios.delete(url, config);
+    }
+
+    /**
      * Axiom interceptor for all http requests -- add a session tracking id and session ticket
      */
     setRequestInterceptor() {
