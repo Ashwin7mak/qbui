@@ -231,7 +231,7 @@ let reportDataActions = {
     deleteReportRecord(appId, tblId, recId) {
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
-            if(appId && tblId && (!!(recId === 0 || recId))) {
+            if (appId && tblId && (!!(recId === 0 || recId))) {
                 //this.dispatch(actions.DELETE_REPORT_RECORD, {appId, tblId, recId});
                 let recordService = new RecordService();
 
