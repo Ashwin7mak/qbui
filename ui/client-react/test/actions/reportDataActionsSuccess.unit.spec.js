@@ -293,7 +293,7 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         saveRecord(a, t, r, c) {
             return Promise.resolve({data:responseData});
         }
-        deleteRecord(a, b, c) {
+        deleteRecord(a, b, r) {
             return Promise.resolve({data:responseData});
         }
     }
