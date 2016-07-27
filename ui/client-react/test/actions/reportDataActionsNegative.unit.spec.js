@@ -407,7 +407,7 @@ describe('Report Data Actions Edit Report functions -- Negative', () => {
                     expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.DELETE_REPORT_RECORD_FAILED, jasmine.any(Object));
                     done();
                 }
-            )
+            );
         });
     });
 });
