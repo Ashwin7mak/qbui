@@ -111,7 +111,7 @@ class RecordService extends BaseService {
      */
     deleteRecordBulk(appId, tableId, recordIds) {
         let url = super.constructUrl(this.API.DELETE_RECORD_BULK, [appId, tableId]);
-        return super.delete(url, recordIds);
+        return super.deleteBulk(url, recordIds);
     }
 
 }
