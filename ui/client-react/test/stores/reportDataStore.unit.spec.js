@@ -49,7 +49,8 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).__actions__.HIDE_FACET_MENU).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SELECTED_ROWS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.NEW_BLANK_REPORT_RECORD).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.DELETE_REPORT_RECORD).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_REPORT_RECORD_SUCCESS).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_REPORT_RECORD_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_CANCEL).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD_FAILED).toBeDefined();
