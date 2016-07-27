@@ -344,6 +344,17 @@
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 //input expected in raw form for java
                 return requestHelper.executeRequest(req, opts);
+            },
+
+            /**
+             *
+             * @param req
+             * @returns Promise
+             */
+            deleteSingleRecord: function(req) {
+                var opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                return requestHelper.executeRequest(req, opts);
             }
 
         };
