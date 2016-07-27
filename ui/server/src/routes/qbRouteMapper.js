@@ -70,6 +70,7 @@
          * routeToDeleteFunction maps each route to the proper function associated with that route for a DELETE request
          */
         var routeToDeleteFunction = {};
+        routeToDeleteFunction[routeConsts.RECORD] = deleteSingleRecord;
 
         /*
          * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
@@ -440,6 +441,27 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init(activityName, {req:filterNodeReq(req)});
         recordsApi.createSingleRecord(req).then(
+            function(response) {
+                res.send(response);
+                logApiSuccess(req, response, perfLog, activityName);
+            },
+            function(response) {
+                logApiFailure(req, response, perfLog, activityName);
+                //  client is waiting for a response..make sure one is always returned
+                if (response && response.statusCode) {
+                    res.status(response.statusCode).send(response);
+                } else {
+                    res.status(500).send(response);
+                }
+            }
+        );
+    }
+
+    function deleteSingleRecord(req, res) {
+        let activityName = 'Delete a Record';
+        let perfLog = perfLogger.getInstance();
+        perfLog.init(activityName, {req:filterNodeReq(req)});
+        recordsApi.deleteSingleRecord(req).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, activityName);
