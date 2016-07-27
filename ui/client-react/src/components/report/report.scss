@@ -212,6 +212,10 @@
     color: $facetMenu-clearButtonColor;
     a {
         text-decoration: none;
+
+        .disabled {
+            pointer-events: none;
+        }
     }
     .previousButton {
         margin-left: 1em;

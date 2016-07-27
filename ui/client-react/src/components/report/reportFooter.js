@@ -11,10 +11,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 
 /**
- * a ReportToolbar for table reports with search field and a filter icon
- * does the heavy lifting and maintaining of search and facets selections
+ * a footer for a table report. This footer contains the report page navigation links.
  */
-
 const ReportToolbar = React.createClass({
     //interaction options
 
@@ -54,7 +52,7 @@ const ReportToolbar = React.createClass({
                     {(!isLoading) ?
                         (<ReportNavigation pageStart={this.props.pageStart}
                                            pageEnd={this.props.pageEnd}
-                                           recordsCount={this.props.recordCount}
+                                           recordsCount={recordsCount}
                                            getNextReportPage={this.props.getNextReportPage}
                                            getPreviousReportPage={this.props.getPreviousReportPage}
                         />) :

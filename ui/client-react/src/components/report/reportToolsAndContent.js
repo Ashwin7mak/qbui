@@ -163,16 +163,22 @@ let ReportToolsAndContent = React.createClass({
         this.debouncedFilterReport('', noSelections);
     },
     getNextReportPage() {
+        if (this.props.reportData.pageOffset + this.props.reportData.numRows >= this.props.reportData.data.recordsCount) {
+            return false;
+        }
         let appId = this.props.params.appId;
         let tblId = this.props.params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
         let format = true;
         let numRows = this.props.reportData.numRows;
         let newOffset = this.props.reportData.pageOffset + numRows;
-        
+
         this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
     },
     getPreviousReportPage() {
+        if (this.props.reportData.pageOffset == 0) {
+            return false;
+        }
         let appId = this.props.params.appId;
         let tblId = this.props.params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;

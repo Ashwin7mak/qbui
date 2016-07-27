@@ -53,7 +53,7 @@ var PreviousLink = React.createClass({
     render: function() {
         return (
             <a href="#" tabIndex="0" onClick={this.props.getPreviousReportPage}>
-                <QBicon className={"previousButton " + (this.pageStart != 1 ? "" : ".disabled") } icon="icon_caretfilledleft" />
+                <QBicon className={"previousButton " + (this.props.pageStart !== 1 ? "" : "disabled") } icon="icon_caretfilledleft" />
             </a>
         );
     }
@@ -69,7 +69,7 @@ var NextLink = React.createClass({
     render: function() {
         return (
             <a href="#" tabIndex="0" onClick={this.props.getNextReportPage}>
-                <QBicon className={"nextButton " + ((this.props.recordsCount != this.props.pageEnd) ? "" : ".disabled") } icon="icon_caretfilledright" />
+                <QBicon className={"nextButton " + ((this.props.recordsCount != this.props.pageEnd) ? "" : "disabled") } icon="icon_caretfilledright" />
             </a>
         );
     }
