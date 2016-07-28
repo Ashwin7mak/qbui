@@ -50,7 +50,7 @@ describe('AGGrid cell editor functions', () => {
         expect(value.innerHTML).toEqual(params.value.display);
 
         const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
-        expect(edit.type).toEqual("text");
+        expect(edit.type).toEqual("textarea");
         expect(edit.value).toEqual(params.value.display);
 
         edit.value = "newValue";
