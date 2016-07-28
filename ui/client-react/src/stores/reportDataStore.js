@@ -639,7 +639,7 @@ let ReportDataStore = Fluxxor.createStore({
     onDeleteReportRecordSuccess(recId) {
         const model = this.reportModel.get();
         const index = _.findIndex(model.filteredRecords, {"Record ID#": {value: recId}});
-        if (index != -1) {
+        if (index !== -1) {
             model.filteredRecords.splice(index, 1);
         } else {
             logger.error('the record to delete does not exist in the list of currently viewed records index: ${index}');
