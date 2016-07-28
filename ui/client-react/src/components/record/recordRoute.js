@@ -1,7 +1,7 @@
 import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
-import {ButtonGroup, Button} from 'react-bootstrap';
+import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -39,12 +39,13 @@ var RecordRoute = React.createClass({
     },
 
     getSecondaryBar() {
+        const showBack = this.props.reportData.previousRecordId != null;
+        const showNext = this.props.reportData.nextRecordId != null;
 
-        console.log('props', this.props);
         const actions = [
-            {msg: 'recordActions.previous', icon:'caret-left', onClick: this.previousRecord},
+            {msg: 'recordActions.previous', icon:'caret-left', disabled: !showBack, onClick: this.previousRecord},
             {msg: 'recordActions.return', icon:'return', onClick:this.returnToReport},
-            {msg: 'recordActions.next', icon:'caret-right', onClick: this.nextRecord}
+            {msg: 'recordActions.next', icon:'caret-right', disabled: !showNext, onClick: this.nextRecord}
         ];
 
         return (<IconActions className="secondaryFormActions" actions={actions} />);
@@ -90,15 +91,17 @@ var RecordRoute = React.createClass({
 
             return (<div className="recordStageHeadline">
 
+                <div className="navLinks">
+                    {(showBack || showNext) && <div className="iconActions">
+                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
+                            <Button className="iconActionButton" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-left"/></Button>
+                        </OverlayTrigger>
+                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
+                            <Button className="iconActionButton" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-right"/></Button>
+                        </OverlayTrigger>
+                    </div> }
 
-                <div className="linkBack">
-                    <a href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a>
-                    &nbsp;
-                    <ButtonGroup className="iconActions pageActions">
-                        {showBack && <Button className="iconActionButton" onClick={this.previousRecord}><QBicon icon="caret-left"/></Button>}
-                        {showNext && <Button className="iconActionButton" onClick={this.nextRecord}><QBicon icon="caret-right"/></Button>}
-                    </ButtonGroup>
-
+                    <QBicon icon="return"/><a href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a>
                 </div>
 
                 <div className="stageHeadline">
