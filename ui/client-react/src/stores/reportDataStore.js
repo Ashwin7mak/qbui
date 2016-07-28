@@ -731,10 +731,10 @@ let ReportDataStore = Fluxxor.createStore({
 
         const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
 
-        const index = filteredRecords.findIndex(rec => { return rec[keyField.name].value === recId;});
+        const index = filteredRecords.findIndex(rec => {return rec[keyField.name].value === recId;});
 
-        this.nextRecordId = (index < filteredRecordsCount-1) ? filteredRecords[index+1][keyField.name].value : null;
-        this.previousRecordId = index > 0 ? filteredRecords[index-1][keyField.name].value : null;
+        this.nextRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
+        this.previousRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
 
         this.emit("change");
     },

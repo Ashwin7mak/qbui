@@ -39,8 +39,8 @@ var RecordRoute = React.createClass({
     },
 
     getSecondaryBar() {
-        const showBack = this.props.reportData.previousRecordId != null;
-        const showNext = this.props.reportData.nextRecordId != null;
+        const showBack = this.props.reportData.previousRecordId !== null;
+        const showNext = this.props.reportData.nextRecordId !== null;
 
         const actions = [
             {msg: 'recordActions.previous', icon:'caret-left', disabled: !showBack, onClick: this.previousRecord},
@@ -51,10 +51,11 @@ var RecordRoute = React.createClass({
         return (<IconActions className="secondaryFormActions" actions={actions} />);
     },
 
-    // just navigate back for now since the record ui does not
-    // currently use any actual data from which to build a link
     returnToReport() {
-        this.context.history.goBack();
+        const {appId, tblId, rptId} = this.props.reportData;
+
+        const link = `/app/${appId}/table/${tblId}/report/${rptId}`;
+        this.props.history.pushState(null, link);
     },
 
     navigateToRecord(recId) {
@@ -86,8 +87,8 @@ var RecordRoute = React.createClass({
 
             const linkback = `/app/${appId}/table/${tblId}`;
 
-            const showBack = this.props.reportData.previousRecordId != null;
-            const showNext = this.props.reportData.nextRecordId != null;
+            const showBack = this.props.reportData.previousRecordId !== null;
+            const showNext = this.props.reportData.nextRecordId !== null;
 
             return (<div className="recordStageHeadline">
 
