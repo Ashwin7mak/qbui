@@ -1,6 +1,7 @@
 import React from 'react';
 import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
+import {ButtonGroup, Button} from 'react-bootstrap';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -38,6 +39,8 @@ var RecordRoute = React.createClass({
     },
 
     getSecondaryBar() {
+
+        console.log('props', this.props);
         const actions = [
             {msg: 'recordActions.previous', icon:'caret-left', onClick: this.previousRecord},
             {msg: 'recordActions.return', icon:'return', onClick:this.returnToReport},
@@ -53,16 +56,22 @@ var RecordRoute = React.createClass({
         this.context.history.goBack();
     },
 
-    previousRecord() {
-        let flux = this.getFlux();
+    navigateToRecord(recId) {
+        const {appId, tblId, rptId} = this.props.reportData;
 
-        flux.actions.showPreviousRecord(this.props.rptId);
+        let flux = this.getFlux();
+        flux.actions.openingReportRow(rptId, recId);
+
+        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        this.props.history.pushState(null, link);
+    },
+
+    previousRecord() {
+        this.navigateToRecord(this.props.reportData.previousRecordId);
     },
 
     nextRecord() {
-        let flux = this.getFlux();
-
-        flux.actions.showNextRecord(this.props.rptId);
+        this.navigateToRecord(this.props.reportData.nextRecordId);
     },
 
     getStageHeadline() {
@@ -76,9 +85,20 @@ var RecordRoute = React.createClass({
 
             const linkback = `/app/${appId}/table/${tblId}`;
 
+            const showBack = this.props.reportData.previousRecordId != null;
+            const showNext = this.props.reportData.nextRecordId != null;
+
             return (<div className="recordStageHeadline">
-                <div className="linkBack"><QBicon icon="caret-left"/>
+
+
+                <div className="linkBack">
                     <a href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a>
+                    &nbsp;
+                    <ButtonGroup className="iconActions pageActions">
+                        {showBack && <Button className="iconActionButton" onClick={this.previousRecord}><QBicon icon="caret-left"/></Button>}
+                        {showNext && <Button className="iconActionButton" onClick={this.nextRecord}><QBicon icon="caret-right"/></Button>}
+                    </ButtonGroup>
+
                 </div>
 
                 <div className="stageHeadline">
@@ -95,23 +115,20 @@ var RecordRoute = React.createClass({
 
     },
     getPageActions() {
+
         const actions = [
-            {msg: 'recordActions.previous',icon: 'caret-left', className: 'previousRecord', onClick: this.previousRecord},
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
             {msg: 'pageActions.edit', icon:'edit'},
             {msg: 'pageActions.email', icon:'mail'},
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.delete', icon:'delete'},
-            {msg: 'recordActions.next',icon: 'caret-right', className: 'nextRecord', onClick: this.nextRecord},
-            //menu items below
-            {msg: 'pageActions.customizeForm', icon:'settings-hollow'},
-        ];
+            {msg: 'pageActions.customizeForm', icon:'settings-hollow'}];
 
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={actions.length - 1} {...this.props}/>);
     },
 
     render() {
-        console.log(this.props);
+
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
             _.isUndefined(this.props.params.tblId) ||

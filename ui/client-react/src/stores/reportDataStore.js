@@ -110,7 +110,7 @@ let reportModel = {
      * Returns the model object
      * @returns {reportModel.model|{columns, facets, filteredRecords, filteredRecordsCount, groupingFields, groupLevel, hasGrouping, name, records, recordsCount}}
      */
-    get: function() {
+    get() {
         return this.model;
     },
 
@@ -118,7 +118,7 @@ let reportModel = {
      * Set everything related to report's meta data that's needed by components in state
      * @param reportMetaData
      */
-    setMetaData: function(reportMetaData) {
+    setMetaData(reportMetaData) {
         this.model.name = reportMetaData.name;
         this.model.description = reportMetaData.description;
         this.model.fids = reportMetaData.fids ? reportMetaData.fids : [];
@@ -143,7 +143,7 @@ let reportModel = {
      * Set all records related state
      * @param recordData
      */
-    setRecordData: function(recordData) {
+    setRecordData(recordData) {
         this.model.hasGrouping = false;
         if (recordData.groups) {
             this.model.hasGrouping = recordData.groups.hasGrouping;
@@ -238,7 +238,7 @@ let reportModel = {
      * Update the filtered Records from response.
      * @param recordData
      */
-    updateFilteredRecords: function(recordData) {
+    updateFilteredRecords(recordData) {
         if (recordData.groups && recordData.groups.hasGrouping) {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.filteredRecords = recordData.groups.gridData;
@@ -257,7 +257,7 @@ let reportModel = {
      * Set facets data(if any) from response
      * @param recordData
      */
-    setFacetData: function(recordData) {
+    setFacetData(recordData) {
         this.model.facets = [];
 
         if (recordData && recordData.facets) {
@@ -280,7 +280,7 @@ let reportModel = {
      * set the fields to sort by
      * @param sortList
      */
-    setSortFids: function(sortList) {
+    setSortFids(sortList) {
         this.model.sortFids = ReportUtils.getSortFidsOnly(sortList);
     },
 
@@ -288,7 +288,7 @@ let reportModel = {
      * The the fields to group by
      * @param sortList
      */
-    setGroupElements: function(sortList) {
+    setGroupElements(sortList) {
         this.model.groupEls = ReportUtils.getGroupElements(sortList);
         this.model.groupLevel = this.model.groupEls.length;
     },
@@ -451,6 +451,7 @@ let ReportDataStore = Fluxxor.createStore({
             actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_REPORT_RECORD_FAILED, this.onClearEdit,
 
+            actions.OPEN_REPORT_RECORD, this.onOpenRecord,
             actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
             actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord
         );
@@ -724,14 +725,28 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit("change");
     },
 
-    onShowPreviousRecord() {
-        console.log('PREV');
-        this.emit("change");
-    },
-    onShowNextRecord() {
-        console.log('NEXT');
+
+    updateRecordNavContext(recId) {
+        this.currentRecordId = recId;
+
+        const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
+
+        const index = filteredRecords.findIndex(rec => { return rec[keyField.name].value === recId;});
+
+        this.nextRecordId = (index < filteredRecordsCount-1) ? filteredRecords[index+1][keyField.name].value : null;
+        this.previousRecordId = index > 0 ? filteredRecords[index-1][keyField.name].value : null;
 
         this.emit("change");
+    },
+
+    onOpenRecord(payload) {
+        this.updateRecordNavContext(payload.recId);
+    },
+    onShowPreviousRecord() {
+        this.updateCurrentRecordIndex(this.previousRecordId);
+    },
+    onShowNextRecord() {
+        this.updateCurrentRecordIndex(this.nextRecordId);
     },
     /**
      * gets the state of a reportData
@@ -753,13 +768,10 @@ let ReportDataStore = Fluxxor.createStore({
             nonFacetClicksEnabled : this.nonFacetClicksEnabled,
             selectedRows: this.selectedRows,
 
-            currentRecord: this.currentRecord,
-            nextRecord: this.nextRecord,
-            previousRecord: this.previousRecord
-
+            nextRecordId: this.nextRecordId,
+            previousRecordId: this.previousRecordId,
         };
     }
-
 });
 
 export default ReportDataStore;
