@@ -725,26 +725,40 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit("change");
     },
 
-
+    /**
+     * the displayed record has changed, update the previous/next record IDs
+     * @param recId
+     */
     updateRecordNavContext(recId) {
-        this.currentRecordId = recId;
 
         const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
 
         const index = filteredRecords.findIndex(rec => {return rec[keyField.name].value === recId;});
 
+        // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
         this.nextRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
         this.previousRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
 
         this.emit("change");
     },
 
+    /**
+     * drilldown into record from report
+     *
+     * @param payload
+     */
     onOpenRecord(payload) {
         this.updateRecordNavContext(payload.recId);
     },
+    /**
+     * update prev/next props after displaying previous record
+     */
     onShowPreviousRecord() {
         this.updateCurrentRecordIndex(this.previousRecordId);
     },
+    /**
+     * update prev/next props after displaying next record
+     */
     onShowNextRecord() {
         this.updateCurrentRecordIndex(this.nextRecordId);
     },

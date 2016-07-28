@@ -359,12 +359,24 @@ let reportDataActions = {
         });
     },
 
+    /**
+     * navigate to previous record after opening record from report
+     * @param rptId
+     */
     showPreviousRecord(rptId) {
         this.dispatch(actions.SHOW_PREVIOUS_RECORD, {rptId});
     },
+    /**
+     * navigate to next record after opening record from report
+     * @param rptId
+     */
     showNextRecord(rptId) {
         this.dispatch(actions.SHOW_NEXT_RECORD, {rptId});
     },
+    /**
+     * open record from report (i.e. drill-down)
+     * @param rptId
+     */
     openingReportRow(rptId, recId) {
         this.dispatch(actions.OPEN_REPORT_RECORD, {rptId, recId});
     }

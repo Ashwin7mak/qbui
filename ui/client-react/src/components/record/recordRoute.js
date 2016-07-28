@@ -51,6 +51,9 @@ var RecordRoute = React.createClass({
         return (<IconActions className="secondaryFormActions" actions={actions} />);
     },
 
+    /**
+     * jump back to the report we navigated from
+     */
     returnToReport() {
         const {appId, tblId, rptId} = this.props.reportData;
 
@@ -58,9 +61,14 @@ var RecordRoute = React.createClass({
         this.props.history.pushState(null, link);
     },
 
+    /**
+     * navigate back/forth to a new record
+     * @param recId
+     */
     navigateToRecord(recId) {
         const {appId, tblId, rptId} = this.props.reportData;
 
+        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
         flux.actions.openingReportRow(rptId, recId);
 
@@ -68,10 +76,16 @@ var RecordRoute = React.createClass({
         this.props.history.pushState(null, link);
     },
 
+    /**
+     * go back to the previous report record
+     */
     previousRecord() {
         this.navigateToRecord(this.props.reportData.previousRecordId);
     },
 
+    /**
+     * go forward to the next report record
+     */
     nextRecord() {
         this.navigateToRecord(this.props.reportData.nextRecordId);
     },

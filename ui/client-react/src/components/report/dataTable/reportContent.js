@@ -30,6 +30,7 @@ let ReportContent = React.createClass({
 
         var recId = data[this.props.uniqueIdentifier].value;
 
+        // let flux know we've drilled-down into a record so we can navigate back and forth
         let flux = this.getFlux();
         flux.actions.openingReportRow(rptId, recId);
 
