@@ -463,11 +463,11 @@
         perfLog.init(activityName, {req:filterNodeReq(req)});
         processRequest(req, res, function(req, res) {
             recordsApi.deleteSingleRecord(req).then(
-                function (response) {
+                function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, activityName);
                 },
-                function (response) {
+                function(response) {
                     logApiFailure(req, response, perfLog, activityName);
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
