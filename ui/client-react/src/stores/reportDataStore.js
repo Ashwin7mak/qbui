@@ -638,7 +638,9 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onDeleteReportRecordSuccess(recId) {
         const model = this.reportModel.get();
-        const index = _.findIndex(model.filteredRecords, {"Record ID#": {value: recId}});
+        var recordValueToMatch = {};
+        recordValueToMatch[model.keyField.name] = {value: recId};
+        const index = _.findIndex(model.filteredRecords, recordValueToMatch);
         if (index !== -1) {
             model.filteredRecords.splice(index, 1);
         } else {

@@ -1021,7 +1021,7 @@ describe('Test ReportData Store', () => {
                     id:16,
                     name: "Record ID#",
                     type: "SCALAR",
-                    keyField: false,
+                    keyField: true,
                     defaultValue: {
                         coercedValue :"City",
                         displayValue :"City"
@@ -1035,7 +1035,7 @@ describe('Test ReportData Store', () => {
                         id:8,
                         name: "Score",
                         type: "SCALAR",
-                        keyField: true,
+                        keyField: false,
                         datatypeAttributes : {
                             type: "NUMERIC",
                             decimalPlaces: 3,
