@@ -179,7 +179,7 @@
         /*
          * XLARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No-Facets No-Groups/Sorts Yes-Fids setup in reports
          */
-        describe('XLARGE: Report Settings: No-Facets No-Groups/Sorts Yes-Fids', function() {
+        describe('Report Settings: No-Facets No-Groups/Sorts Yes-Fids', function() {
 
             beforeEach(function(done) {
                 //go to report page directly
@@ -339,7 +339,7 @@
         /*
          * LARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No-Facets No-Groups/Sorts Yes-Fids setup in reports
          */
-        describe('LARGE : Report Settings : No-Facets No-Groups/Sorts Yes-Fids ', function() {
+        describe('Report Settings : No-Facets No-Groups/Sorts Yes-Fids ', function() {
             beforeEach(function(done) {
                 //go to report page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
@@ -477,7 +477,7 @@
          * MEDIUM BREAKPOINT - Use Report with facets - deleteIcon Via PopUp Test Cases
          */
 
-        describe('MEDIUM: Report Settings: with Facets and sortLists: ', function() {
+        describe('Report Settings: with Facets and sortLists: ', function() {
             beforeEach(function(done) {
                 //go to report with facets page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '4'));
@@ -604,7 +604,7 @@
          * SMALL BREAKPOINT - Use Reports without facets or sortLists
          */
 
-        xdescribe('SMALL: Report Settings: No Facets No sortLists', function() {
+        xdescribe('Report Settings: No Facets No sortLists', function() {
 
             beforeAll(function(done) {
                     //go to report page directly
