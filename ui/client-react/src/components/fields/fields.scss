@@ -1,9 +1,47 @@
 @import '../../../src/assets/css/qbVariables';
 
-.editTextField {
-
+.data {
+  color : $data-color;
 }
 
-.bold {
-  font-weight: bold;
+.cellEdit {
+  border: solid 1px $input-text-normal-border-color;
+  box-shadow: none;
+  border-radius: 2px;
+}
+
+// visual style of input userdata on a form
+input[type="text"].input {
+  background-color: $input-bg-color;
+}
+
+// layout of input userdata on a form
+.formContainer input[type="text"].input {
+  margin: 10px 20px 10px 10px;
+  padding: 10px;
+  width: 280px;
+  height: 35px;
+}
+
+// layout of input userdata in an inline edit table
+.reportTable input[type="text"].input {
+  margin: 0 0 0 2px;
+  padding: 0 0 0 2px;
+  width: inherit;
+  height: 20px;
+}
+
+//focus input shadow
+input[type="text"]:focus.input  {
+  outline: none;
+  border: solid 1px $input-text-focus-border-color;
+  box-shadow: 0 0 5px 2px rgba(37, 68, 167, 0.25)
+}
+
+// input error
+input[type="text"]:focus.input.error,
+input[type="text"].input.error {
+  border: solid 1px $input-text-error-border-color;
+  border-left: 5px solid $input-text-error-border-color;
+  box-shadow: 0 0 5px 2px rgba(217,59,66, 0.25)
 }

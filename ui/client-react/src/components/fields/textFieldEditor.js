@@ -17,7 +17,7 @@ export const TextFieldEditor = React.createClass({
 
     render() {
         let classes = this.props.classes;
-        classes += ' editTextField';
+        classes += ' input textField';
 
         return <input ref={this.props.ref}
                       className={classes}

@@ -1,10 +1,12 @@
 /* This file should contain all shared variables for QuickBase styling. */
 @import 'customVariables';
 @import 'qbColorVariables';
+@import 'qbMixins';
 
-$font-family: 'Open Sans', sans-serif;  /* default font face */
+$font-family: Lato, 'Open Sans', Helvetica, Arial, sans-serif;  /* default font face stack */
 
 $font-size:               $font-size-base;          /* base/default body font size */
+
 $font-color:              $color11;                 /* default font color */
 
 $top-nav-height:40px;
@@ -40,3 +42,4 @@ $large-breakpoint-width: 1440px;
         @content;
     }
 }
+

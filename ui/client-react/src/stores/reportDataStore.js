@@ -60,6 +60,7 @@ let reportModel = {
                     column.field = field.name;
                     column.fieldType = field.type;
                     column.builtIn = field.builtIn;
+                    column.required = field.required;
                     column.defaultValue = null;
                     if (field.defaultValue && field.defaultValue.coercedValue) {
                         column.defaultValue = {value: field.defaultValue.coercedValue.value, display: field.defaultValue.displayValue};
