@@ -77,7 +77,7 @@
             });
         });
 
-        xdescribe('Responsiveness Test Cases- The browsers are already in respective sizes now. I think we need to rewrite these tests', function() {
+        xdescribe('Responsiveness Test Cases', function() {
             /**
              * Test method. The leftNav should shrink responsively across the 4 breakpoints as the browser is re-sized
              */
