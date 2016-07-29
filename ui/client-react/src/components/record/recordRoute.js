@@ -7,9 +7,12 @@ import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBForm from './../QBForm/qbform.js';
 import {Link} from 'react-router';
+import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
+import Logger from '../../utils/logger';
 import './record.scss';
 
+let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 var RecordRoute = React.createClass({
@@ -39,8 +42,8 @@ var RecordRoute = React.createClass({
     },
 
     getSecondaryBar() {
-        const showBack = this.props.reportData.previousRecordId !== null;
-        const showNext = this.props.reportData.nextRecordId !== null;
+        const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
+        const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
 
         const actions = [
             {msg: 'recordActions.previous', icon:'caret-left', disabled: !showBack, onClick: this.previousRecord},
@@ -98,22 +101,22 @@ var RecordRoute = React.createClass({
         if (this.props.params) {
             const {rptId} = this.props.params;
 
-            const showBack = this.props.reportData.previousRecordId !== null;
-            const showNext = this.props.reportData.nextRecordId !== null;
+            const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
+            const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
 
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
                     {(showBack || showNext) && <div className="iconActions">
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
-                            <Button className="iconActionButton" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-left"/></Button>
+                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-left"/></Button>
                         </OverlayTrigger>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
-                            <Button className="iconActionButton" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-right"/></Button>
+                            <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-right"/></Button>
                         </OverlayTrigger>
                     </div> }
 
-                    {rptId && <span><QBicon icon="return"/><a href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a></span>}
+                    {rptId && <span><QBicon icon="return"/><a className="backToReport" href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a></span>}
                 </div>
 
                 <div className="stageHeadline">
