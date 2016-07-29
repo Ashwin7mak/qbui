@@ -96,9 +96,7 @@ var RecordRoute = React.createClass({
     getStageHeadline() {
 
         if (this.props.params) {
-            const params = this.props.params;
-
-            const {appId, tblId} = params;
+            const {rptId} = this.props.params;
 
             const showBack = this.props.reportData.previousRecordId !== null;
             const showNext = this.props.reportData.nextRecordId !== null;
@@ -115,7 +113,7 @@ var RecordRoute = React.createClass({
                         </OverlayTrigger>
                     </div> }
 
-                    <QBicon icon="return"/><a href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a>
+                    {rptId && <span><QBicon icon="return"/><a href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a></span>}
                 </div>
 
                 <div className="stageHeadline">
