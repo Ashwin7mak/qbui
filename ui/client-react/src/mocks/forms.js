@@ -1161,193 +1161,422 @@ export const fakeFormEmpowerData = {
 
 export const sampleFormJSON = {
     formMeta: {
-
-        "formId": 2,
-        "tableId": "bk2hb9hyx",
-        "appId": "bk2hb9hyj",
-        "name": "Press Releases Main Form",
-        "description": null,
+        "formId": 1,
+        "tableId": "0wbfabsaaaaac",
+        "appId": "0wbfabsaaaaab",
+        "type": "EDIT",
+        "name": "nameU0xaL1464879524910",
+        "description": "LJFB7GPw0BWOIM1lXm50q32PMnJ7mOgdNvLuZYZ29iGZP2KUP3q6D6MdPTmfY11yseIJZE6baLJiqXO4GcCWBccYgUnj2sbRno7g",
         "wrapLabel": true,
         "includeBuiltIns": true,
         "wrapElements": false,
-        "newFieldAction": "ADD",
+        "newFieldAction": "ASK",
         "tabs": {
             "0": {
                 "orderIndex": 0,
-                "title": null,
+                "title": "nameMdhfp1464879524917",
                 "sections": {
                     "0": {
                         "orderIndex": 0,
-                        "headerElement": null,
+                        "headerElement": {
+                            "FormHeaderElement": {
+                                "displayText": "ZyLnRkgRh1hrz6UDqp2ekiTSK5bSMFDxKnjIT7cjfvolWlw2rs",
+                                "displayOptions": [
+                                    "VIEW"
+                                ],
+                                "position": "LEFT",
+                                "type": "HEADER"
+                            }
+                        },
+                        "elements": {
+                            "0": {
+                                "FormTextElement": {
+                                    "displayText": "nVKDmsHNglesDRcAE4QoGKj6cd5UdfESolSBpZ31zGBcFsFHTY",
+                                    "displayOptions": [
+                                        "ADD"
+                                    ],
+                                    "position": "ABOVE",
+                                    "type": "TEXT",
+                                    "orderIndex": 0,
+                                    "textType": "RAW"
+                                }
+                            }
+                        }
+                    },
+                    "1": {
+                        "orderIndex": 1,
+                        "headerElement": {
+                            "FormHeaderElement": {
+                                "displayText": "y0PJyN2isHoeynP4XnggiboW3ZmWJ3suFHOEYhOboRGOtMQUSD",
+                                "displayOptions": [
+                                    "ADD",
+                                    "EDIT",
+                                    "VIEW"
+                                ],
+                                "position": "ABOVE",
+                                "type": "HEADER"
+                            }
+                        },
                         "elements": {
                             "0": {
                                 "FormFieldElement": {
-                                    "displayText": "",
+                                    "displayText": "xIepCSrq8URUBZXa6ve6XP78JazogRQ0nFT5P8g7kFf176OzEj",
                                     "displayOptions": [
-                                        "VIEW",
-                                        "EDIT",
-                                        "ADD"
+                                        "ADD",
+                                        "EDIT"
                                     ],
-                                    "labelPosition": "LEFT",
+                                    "position": "ABOVE",
                                     "type": "FIELD",
                                     "orderIndex": 0,
-                                    "positionSameRow": false,
                                     "useAlternateLabel": false,
                                     "readOnly": false,
                                     "required": false,
-                                    "fieldId": 6
+                                    "fieldId": 2,
+                                    "fieldLabel": "testLabel2",
+                                    "fieldValue": 123,
+                                    "fieldType": "NUMERIC"
                                 }
                             },
                             "1": {
                                 "FormFieldElement": {
-                                    "displayText": "",
+                                    "displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz",
                                     "displayOptions": [
-                                        "VIEW",
-                                        "EDIT",
-                                        "ADD"
+                                        "EDIT"
                                     ],
-                                    "labelPosition": "LEFT",
+                                    "position": "ABOVE_AND_LEFT",
                                     "type": "FIELD",
                                     "orderIndex": 1,
-                                    "positionSameRow": false,
+                                    "useAlternateLabel": true,
+                                    "readOnly": true,
+                                    "required": false,
+                                    "fieldId": 3
+                                }
+                            },
+                            "2": {
+                                "FormTextElement": {
+                                    "displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE",
+                                    "displayOptions": [
+                                        "VIEW"
+                                    ],
+                                    "position": "ABOVE_AND_LEFT",
+                                    "type": "TEXT",
+                                    "orderIndex": 2,
+                                    "textType": "RAW"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "1": {
+                "orderIndex": 1,
+                "title": "name0ppDo1464879524917",
+                "sections": {
+                    "0": {
+                        "orderIndex": 0,
+                        "headerElement": {
+                            "FormHeaderElement": {
+                                "displayText": "JlSqUA189ja3ZTbYUq0KbepjpUX7QlNeMEepofeQEAi7dvPGxq",
+                                "displayOptions": [
+                                    "ADD",
+                                    "EDIT",
+                                    "VIEW"
+                                ],
+                                "position": "ABOVE",
+                                "type": "HEADER"
+                            }
+                        },
+                        "elements": {
+                            "0": {
+                                "FormTextElement": {
+                                    "displayText": "PCCpyq7xqk5GrCbkUuEfsBRKM2llLn5yzquVsZD8SjE3fMBhlZ",
+                                    "displayOptions": [
+                                        "EDIT"
+                                    ],
+                                    "position": "ABOVE",
+                                    "type": "TEXT",
+                                    "orderIndex": 0,
+                                    "textType": "HTML"
+                                }
+                            },
+                            "1": {
+                                "FormFieldElement": {
+                                    "displayText": "tPLX7UPCRBcbBBOZvVWs0RKSlQcCi7DzhIXJNrdl9LOkpyhMSJ",
+                                    "displayOptions": [
+                                        "ADD",
+                                        "EDIT",
+                                        "VIEW"
+                                    ],
+                                    "position": "ABOVE_AND_LEFT",
+                                    "type": "FIELD",
+                                    "orderIndex": 1,
                                     "useAlternateLabel": false,
                                     "readOnly": false,
-                                    "required": false,
-                                    "fieldId": 7
+                                    "required": true,
+                                    "fieldId": 1
                                 }
                             },
                             "2": {
                                 "FormFieldElement": {
-                                    "displayText": "",
+                                    "displayText": "9zTXdv9VFV7DzSlt72OUYzL5SCfTwFPyOVuHnkezWYiXiOHEwj",
                                     "displayOptions": [
-                                        "VIEW",
                                         "EDIT",
-                                        "ADD"
+                                        "VIEW"
                                     ],
-                                    "labelPosition": "LEFT",
+                                    "position": "LEFT",
                                     "type": "FIELD",
                                     "orderIndex": 2,
-                                    "positionSameRow": false,
-                                    "useAlternateLabel": false,
+                                    "useAlternateLabel": true,
                                     "readOnly": false,
                                     "required": false,
-                                    "fieldId": 8
+                                    "fieldId": 4
                                 }
                             },
                             "3": {
-                                "FormFieldElement": {
-                                    "displayText": "",
+                                "FormTextElement": {
+                                    "displayText": "RwtgnolEg1opdV1NTqEfqryErggPg2gBfgG0CaBoFj5Cbsf570",
                                     "displayOptions": [
-                                        "VIEW",
-                                        "EDIT",
-                                        "ADD"
+                                        "ADD",
+                                        "EDIT"
                                     ],
-                                    "labelPosition": "LEFT",
-                                    "type": "FIELD",
+                                    "position": "ABOVE",
+                                    "type": "TEXT",
                                     "orderIndex": 3,
-                                    "positionSameRow": false,
-                                    "useAlternateLabel": false,
-                                    "readOnly": false,
-                                    "required": false,
-                                    "fieldId": 9
+                                    "textType": "HTML"
                                 }
                             },
                             "4": {
-                                "FormFieldElement": {
-                                    "displayText": "",
+                                "FormTextElement": {
+                                    "displayText": "IG50bl9eGyPffIXY87nF235ymuo6tz4BZsQXgkbr9Y09hn8kas",
                                     "displayOptions": [
-                                        "VIEW",
-                                        "EDIT",
-                                        "ADD"
+                                        "ADD",
+                                        "VIEW"
                                     ],
-                                    "labelPosition": "LEFT",
-                                    "type": "FIELD",
+                                    "position": "LEFT",
+                                    "type": "TEXT",
                                     "orderIndex": 4,
-                                    "positionSameRow": false,
-                                    "useAlternateLabel": false,
-                                    "readOnly": false,
-                                    "required": false,
-                                    "fieldId": 10
-                                }
-                            },
-                            "5": {
-                                "FormFieldElement": {
-                                    "displayText": "",
-                                    "displayOptions": [
-                                        "VIEW",
-                                        "EDIT",
-                                        "ADD"
-                                    ],
-                                    "labelPosition": "LEFT",
-                                    "type": "FIELD",
-                                    "orderIndex": 5,
-                                    "positionSameRow": false,
-                                    "useAlternateLabel": false,
-                                    "readOnly": false,
-                                    "required": false,
-                                    "fieldId": 14
-                                }
-                            },
-                            "6": {
-                                "FormFieldElement": {
-                                    "displayText": "",
-                                    "displayOptions": [
-                                        "VIEW",
-                                        "EDIT",
-                                        "ADD"
-                                    ],
-                                    "labelPosition": "LEFT",
-                                    "type": "FIELD",
-                                    "orderIndex": 6,
-                                    "positionSameRow": false,
-                                    "useAlternateLabel": false,
-                                    "readOnly": false,
-                                    "required": false,
-                                    "fieldId": 11
-                                }
-                            },
-                            "7": {
-                                "FormFieldElement": {
-                                    "displayText": "",
-                                    "displayOptions": [
-                                        "VIEW",
-                                        "EDIT",
-                                        "ADD"
-                                    ],
-                                    "labelPosition": "LEFT",
-                                    "type": "FIELD",
-                                    "orderIndex": 7,
-                                    "positionSameRow": false,
-                                    "useAlternateLabel": false,
-                                    "readOnly": false,
-                                    "required": false,
-                                    "fieldId": 12
-                                }
-                            },
-                            "8": {
-                                "FormFieldElement": {
-                                    "displayText": "",
-                                    "displayOptions": [
-                                        "VIEW",
-                                        "EDIT",
-                                        "ADD"
-                                    ],
-                                    "labelPosition": "LEFT",
-                                    "type": "FIELD",
-                                    "orderIndex": 8,
-                                    "positionSameRow": false,
-                                    "useAlternateLabel": false,
-                                    "readOnly": false,
-                                    "required": false,
-                                    "fieldId": 13
+                                    "textType": "HTML"
                                 }
                             }
+                        }
+                    }
+                }
+            },
+            "2": {
+                "orderIndex": 2,
+                "title": "nameJ33bc1464879524917",
+                "sections": {
+                    "0": {
+                        "orderIndex": 0,
+                        "headerElement": {
+                            "FormHeaderElement": {
+                                "displayText": "FsJGYu6E0XHYYZ1TRiklLG5c6BfXO1xHx6Sf4un6asWHoH4cc1",
+                                "displayOptions": [
+                                    "EDIT"
+                                ],
+                                "position": "ABOVE",
+                                "type": "HEADER"
+                            }
                         },
-                        "pseudo": false
+                        "elements": {
+                            "0": {
+                                "FormTextElement": {
+                                    "displayText": "H6B1Z77CxNtB7utLRWV72OzICi4oCIuSEq93CmCID8uRkaKHxo",
+                                    "displayOptions": [
+                                        "ADD",
+                                        "VIEW"
+                                    ],
+                                    "position": "ABOVE_AND_LEFT",
+                                    "type": "TEXT",
+                                    "orderIndex": 0,
+                                    "textType": "RAW"
+                                }
+                            },
+                            "1": {
+                                "FormFieldElement": {
+                                    "displayText": "BlQP5z5ZafYIQ8h1DOU7eghOPEf9VFsvaEm7sPp9I5mBj4X1wc",
+                                    "displayOptions": [
+                                        "ADD",
+                                        "EDIT"
+                                    ],
+                                    "position": "ABOVE",
+                                    "type": "FIELD",
+                                    "orderIndex": 1,
+                                    "useAlternateLabel": false,
+                                    "readOnly": false,
+                                    "required": true,
+                                    "fieldId": 1
+                                }
+                            }
+                        }
+                    },
+                    "1": {
+                        "orderIndex": 1,
+                        "headerElement": {
+                            "FormHeaderElement": {
+                                "displayText": "6798Pl3alg4M6wvfI7m9W7bUFxnPAZ00qciItlr5lIVkmD9a5U",
+                                "displayOptions": [
+                                    "ADD"
+                                ],
+                                "position": "ABOVE",
+                                "type": "HEADER"
+                            }
+                        },
+                        "elements": {
+                            "0": {
+                                "FormFieldElement": {
+                                    "displayText": "9R52EaVaXO0OOrYbt21CiwLklQeSkB16K7kflzPz5nuj5bI70w",
+                                    "displayOptions": [
+                                        "ADD",
+                                        "EDIT"
+                                    ],
+                                    "position": "ABOVE_AND_LEFT",
+                                    "type": "FIELD",
+                                    "orderIndex": 0,
+                                    "useAlternateLabel": true,
+                                    "readOnly": false,
+                                    "required": true,
+                                    "fieldId": 3
+                                }
+                            },
+                            "1": {
+                                "FormFieldElement": {
+                                    "displayText": "zagmTsdjBYENmTFV6nFhR3NO9wOphouh2hbuIBJvWcVkpATFkD",
+                                    "displayOptions": [
+                                        "ADD",
+                                        "EDIT",
+                                        "VIEW"
+                                    ],
+                                    "position": "ABOVE_AND_LEFT",
+                                    "type": "FIELD",
+                                    "orderIndex": 1,
+                                    "useAlternateLabel": true,
+                                    "readOnly": false,
+                                    "required": true,
+                                    "fieldId": 0
+                                }
+                            }
+                        }
+                    },
+                    "2": {
+                        "orderIndex": 2,
+                        "headerElement": {
+                            "FormHeaderElement": {
+                                "displayText": "kDGeyukdE6JoqL1Kp9L0yNtJk6Xl42szH5RHzXsFqfZN23bjAk",
+                                "displayOptions": [
+                                    "ADD",
+                                    "EDIT",
+                                    "VIEW"
+                                ],
+                                "position": "ABOVE_AND_LEFT",
+                                "type": "HEADER"
+                            }
+                        },
+                        "elements": {
+                            "0": {
+                                "FormTextElement": {
+                                    "displayText": "mT0VsBJXCzH0mZdZQnZVgEpE2fiMVpMtp9qNL4mNNUTTj4lnxN",
+                                    "displayOptions": [
+                                        "VIEW"
+                                    ],
+                                    "position": "LEFT",
+                                    "type": "TEXT",
+                                    "orderIndex": 0,
+                                    "textType": "RAW"
+                                }
+                            },
+                            "1": {
+                                "FormTextElement": {
+                                    "displayText": "9ebAxaU5V3Zsuw1VoS0agPNpfRPKup9J72ejUlY9V1x4644z5d",
+                                    "displayOptions": [
+                                        "ADD"
+                                    ],
+                                    "position": "LEFT",
+                                    "type": "TEXT",
+                                    "orderIndex": 1,
+                                    "textType": "RAW"
+                                }
+                            },
+                            "2": {
+                                "FormFieldElement": {
+                                    "displayText": "pNYtoPkcXkKemJUPJL7q8mFfWEBdCkk6e9WCt0EZedNCJCIKMt",
+                                    "displayOptions": [
+                                        "VIEW"
+                                    ],
+                                    "position": "ABOVE",
+                                    "type": "FIELD",
+                                    "orderIndex": 2,
+                                    "useAlternateLabel": false,
+                                    "readOnly": false,
+                                    "required": true,
+                                    "fieldId": 3
+                                }
+                            },
+                            "3": {
+                                "FormTextElement": {
+                                    "displayText": "nNRO9RSH61zBEIHdmzeSH5hsbiptyuFUMYPQVUft9N2c4GHyq6",
+                                    "displayOptions": [
+                                        "VIEW"
+                                    ],
+                                    "position": "ABOVE",
+                                    "type": "TEXT",
+                                    "orderIndex": 3,
+                                    "textType": "HTML"
+                                }
+                            }
+                        }
+                    },
+                    "3": {
+                        "orderIndex": 3,
+                        "headerElement": {
+                            "FormHeaderElement": {
+                                "displayText": "KZaQHNH2nNr2X4CGtw3hESHwZr8QydfZYFfoT8ynFOAVT6Wesw",
+                                "displayOptions": [
+                                    "ADD",
+                                    "EDIT",
+                                    "VIEW"
+                                ],
+                                "position": "LEFT",
+                                "type": "HEADER"
+                            }
+                        },
+                        "elements": {
+                            "0": {
+                                "FormFieldElement": {
+                                    "displayText": "VBZUL5affN2slm3rc6HMXNk6WRtaeG4Ngcx1vEzYYb21GRChDQ",
+                                    "displayOptions": [
+                                        "EDIT"
+                                    ],
+                                    "position": "LEFT",
+                                    "type": "FIELD",
+                                    "orderIndex": 0,
+                                    "useAlternateLabel": true,
+                                    "readOnly": true,
+                                    "required": true,
+                                    "fieldId": 1
+                                }
+                            },
+                            "1": {
+                                "FormFieldElement": {
+                                    "displayText": "zug0TC5Qpo2xTZNFX67gSyL0RRPcmpMx5mcy8EBDrYat4MDFCc",
+                                    "displayOptions": [
+                                        "ADD",
+                                        "EDIT",
+                                        "VIEW"
+                                    ],
+                                    "position": "ABOVE",
+                                    "type": "FIELD",
+                                    "orderIndex": 1,
+                                    "useAlternateLabel": true,
+                                    "readOnly": true,
+                                    "required": true,
+                                    "fieldId": 4
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
-
 };
