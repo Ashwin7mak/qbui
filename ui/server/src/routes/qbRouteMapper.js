@@ -461,21 +461,23 @@
         let activityName = 'Delete a Record';
         let perfLog = perfLogger.getInstance();
         perfLog.init(activityName, {req:filterNodeReq(req)});
-        recordsApi.deleteSingleRecord(req).then(
-            function(response) {
-                res.send(response);
-                logApiSuccess(req, response, perfLog, activityName);
-            },
-            function(response) {
-                logApiFailure(req, response, perfLog, activityName);
-                //  client is waiting for a response..make sure one is always returned
-                if (response && response.statusCode) {
-                    res.status(response.statusCode).send(response);
-                } else {
-                    res.status(500).send(response);
+        processRequest(req, res, function(req, res) {
+            recordsApi.deleteSingleRecord(req).then(
+                function (response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, activityName);
+                },
+                function (response) {
+                    logApiFailure(req, response, perfLog, activityName);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
                 }
-            }
-        );
+            );
+        });
     }
 
     /**
