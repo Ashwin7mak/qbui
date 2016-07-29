@@ -64,8 +64,7 @@
          * Test methods. Test that the reportStage collapses and expands
          */
         it('Should expand/collapse the reports stage', function(done) {
-            console.log("browser Size is : " + browserSize);
-            if (browserSize !== 'small') {
+            if (breakpointSize !== 'small') {
                 // Verify that the report Stage is expanded by default
                 reportServicePage.waitForElement(reportServicePage.reportStageBtn).then(function() {
                     // Click on report Stage button to collapse the stage
@@ -82,7 +81,7 @@
                         });
                     });
                 });
-            } else if (browserSize === 'small') {
+            } else if (breakpointSize === 'small') {
                 // Verify stage is present in the DOM but not displayed on small breakpoint
                 expect(reportServicePage.reportStageContentEl.isPresent()).toBeTruthy();
                 expect(reportServicePage.reportStageContentEl.isDisplayed()).toBeFalsy();

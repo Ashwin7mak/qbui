@@ -372,7 +372,7 @@
                 }).then(function() {
                     //select the facet Items
                     reportFacetsPage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
-                        if (browserSize === 'small') {
+                        if (breakpointSize === 'small') {
                             // Verify display of filter search box is false for small breakpoint
                             expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeFalsy();
                             //Verify there are no facet tokens displayed in the container

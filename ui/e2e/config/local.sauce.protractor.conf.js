@@ -1,9 +1,9 @@
 // Protractor configuration
+// Use when running E2E tests in Sauce Labs against your local env (note tests are not stable when running from home)
 // https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 (function() {
     'use strict';
     var baseE2EPath = '../../e2e/';
-    // Global properties file with params common to all Sauce lab config files
     exports.config = {
         // A callback function called once configs are read but before any environment
         // setup. This will only run once, and before onPrepare.
@@ -25,7 +25,8 @@
             screenResolution : '1680x1050',
             shardTestFiles: true,
             maxInstances: 2,
-            maxDuration: 10800
+            maxDuration: 10800,
+            breakpointSize: 'xlarge'
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
@@ -83,24 +84,60 @@
             global.consts = require('../../common/src/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
 
-            // Third party library that lets us retry webdriver commands
-            global.e2eRetry = require('webdriverjs-retry');
-            e2eRetry.setDefaultTimeout(25000);
-
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
-
-            // Maximizes the browser window (known bug with Chrome)
-            browser.driver.manage().window().maximize();
-
-            // Add jasmine spec reporter
-            var SpecReporter = require('jasmine-spec-reporter');
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
                 global.browserName = cap.get('browserName');
             });
+
+            // Grab the browser settings from the processed config and set the browser size
+            browser.getProcessedConfig().then(function(config) {
+                var browserDimensions = getBrowserBreakpointDimensions(config.capabilities.breakpointSize);
+                global.breakpointSize = browserDimensions.breakpointSize;
+                global.browserWidth = browserDimensions.browserWidth;
+                global.browserHeight = browserDimensions.browserHeight;
+
+                console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+                browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
+            });
+
+            function getBrowserBreakpointDimensions(breakpointSize) {
+                if (breakpointSize === e2eConsts.XLARGE_SIZE) {
+                    return {
+                        breakpointSize: e2eConsts.XLARGE_SIZE,
+                        browserWidth: e2eConsts.XLARGE_BP_WIDTH,
+                        browserHeight: e2eConsts.DEFAULT_HEIGHT
+                    };
+                } else if (breakpointSize === e2eConsts.LARGE_SIZE) {
+                    return {
+                        breakpointSize: e2eConsts.LARGE_SIZE,
+                        browserWidth: e2eConsts.LARGE_BP_WIDTH,
+                        browserHeight: e2eConsts.DEFAULT_HEIGHT
+                    };
+                } else if (breakpointSize === e2eConsts.MEDIUM_SIZE) {
+                    return {
+                        breakpointSize: e2eConsts.MEDIUM_SIZE,
+                        browserWidth: e2eConsts.MEDIUM_BP_WIDTH,
+                        browserHeight: e2eConsts.DEFAULT_HEIGHT
+                    };
+                } else if (breakpointSize === e2eConsts.SMALL_SIZE) {
+                    return {
+                        breakpointSize: e2eConsts.SMALL_SIZE,
+                        browserWidth: e2eConsts.SMALL_BP_WIDTH,
+                        browserHeight: e2eConsts.DEFAULT_HEIGHT
+                    };
+                }
+            }
+
+            // Third party library that lets us retry webdriver commands
+            global.e2eRetry = require('webdriverjs-retry');
+            e2eRetry.setDefaultTimeout(25000);
+
+            // Add jasmine spec reporter
+            var SpecReporter = require('jasmine-spec-reporter');
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
         }
     };
 }());

@@ -92,7 +92,7 @@
             reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {
                 reportServicePage.topNavGlobalActionsListEl.then(function(navActions) {
                     expect(navActions.length).toBe(3);
-                    if (browserSize !== 'small') {
+                    if (breakpointSize !== 'small') {
                         // Verify global action icons is displayed in topNav
                         reportServicePage.assertGlobalActsDisplayedInTopNav();
                         expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavUserGlobActEl).getText()).toBe('User');
@@ -102,7 +102,7 @@
                             done();
                         });
                     }
-                    if (browserSize === 'small') {
+                    if (breakpointSize === 'small') {
                         // Open the leftNav since it's hidden by default on small
                         reportServicePage.clickTopNavHamburger();
                         // Assert actions have moved to leftNav

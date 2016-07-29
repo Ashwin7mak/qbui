@@ -82,7 +82,7 @@
              * Test method. The leftNav should shrink responsively across the 4 breakpoints as the browser is re-sized
              */
             it('LeftNav should shrink responsively from xlarge to small breakpoints.', function(done) {
-                if (browserSize === 'xlarge') {
+                if (breakpointSize === 'xlarge') {
                     // Assert leftNav properties
                     reportServicePage.assertNavProperties('xlarge', true, '300');
                     //reduce the browser size to large now
@@ -98,7 +98,7 @@
                     }).then(function() {
                         //resize the browser to small
                         e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                            reportServicePage.assertNavProperties(browserSize, false, '0');
+                            reportServicePage.assertNavProperties(breakpointSize, false, '0');
                             // Open the leftNav
                             reportServicePage.openLeftNav().then(function() {
                                 reportServicePage.assertNavProperties('small', true, '300').then(function() {
@@ -118,9 +118,9 @@
              * Test method. The leftNav should expand responsively across the 4 breakpoints as the browser is re-sized
              */
             it('LeftNav should expand responsively from small to xlarge breakpoints', function(done) {
-                if (browserSize === 'small') {
+                if (breakpointSize === 'small') {
                     // Assert leftNav properties
-                    reportServicePage.assertNavProperties(browserSize, false, '0');
+                    reportServicePage.assertNavProperties(breakpointSize, false, '0');
                     // Open the leftNav
                     reportServicePage.openLeftNav().then(function() {
                         reportServicePage.assertNavProperties('small', true, '300');
@@ -156,7 +156,7 @@
              * Test method. Tests the app toggle widget.
              */
             it('LeftNav Apps toggle should show / hide App Dashboard Links and Search widget', function(done) {
-                if (browserSize === 'small') {
+                if (breakpointSize === 'small') {
                     // Open the leftNav on small size
                     reportServicePage.navMenuEl.isDisplayed().then(function(displayed) {
                         if (!displayed) {
@@ -199,7 +199,7 @@
              */
             it('Verify leftNav has 2 base links and 4 table links', function(done) {
                 // On small the leftNav will be hidden on the app dashboard by default
-                if (browserSize === 'small') {
+                if (breakpointSize === 'small') {
                     // Open the leftNav on small size
                     reportServicePage.navMenuEl.isDisplayed().then(function(displayed) {
                         if (!displayed) {
@@ -228,7 +228,7 @@
              */
             it('Verify leftNav can load the reportsMenu when collapsed', function(done) {
                 //TODO: SafariDriver does not currently have an implementation for the mouseMove hover action (haven't found a workaround), need to skip this test if running Safari
-                if (browserName !== 'safari' && browserSize !== 'small') {
+                if (browserName !== 'safari' && breakpointSize !== 'small') {
                     try {
                         // Collapse the leftNav
                         reportServicePage.waitForElementToBeClickable(reportServicePage.topNavToggleHamburgerEl).then(function() {
