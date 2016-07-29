@@ -52,10 +52,13 @@ var RecordRoute = React.createClass({
     },
 
     /**
-     * jump back to the report we navigated from
+     * return to the report we navigated from
      */
     returnToReport() {
-        const {appId, tblId, rptId} = this.props.reportData;
+
+        // use the route parameters to build the URI
+
+        const {appId, tblId, rptId} = this.props.params;
 
         const link = `/app/${appId}/table/${tblId}/report/${rptId}`;
         this.props.history.pushState(null, link);
@@ -95,11 +98,7 @@ var RecordRoute = React.createClass({
         if (this.props.params) {
             const params = this.props.params;
 
-            const appId = params.appId;
-            const tblId = params.tblId;
-            const recordId = params.recordId;
-
-            const linkback = `/app/${appId}/table/${tblId}`;
+            const {appId, tblId} = params;
 
             const showBack = this.props.reportData.previousRecordId !== null;
             const showNext = this.props.reportData.nextRecordId !== null;

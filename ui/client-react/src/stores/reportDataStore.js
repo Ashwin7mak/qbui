@@ -427,9 +427,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.selections = new FacetSelections();
         this.selectedRows = [];
 
-        this.currentRecord = null;
-        this.nextRecord = null;
-        this.previousRecord = null;
+        this.currentRecordId = null;
+        this.nextRecordId = null;
+        this.previousRecordId = null;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -735,7 +735,9 @@ let ReportDataStore = Fluxxor.createStore({
 
         const index = filteredRecords.findIndex(rec => {return rec[keyField.name].value === recId;});
 
+
         // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
+        this.currentRecordId = recId;
         this.nextRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
         this.previousRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
 
@@ -782,6 +784,8 @@ let ReportDataStore = Fluxxor.createStore({
             nonFacetClicksEnabled : this.nonFacetClicksEnabled,
             selectedRows: this.selectedRows,
 
+
+            currentRecordId: this.currentRecordId,
             nextRecordId: this.nextRecordId,
             previousRecordId: this.previousRecordId,
         };
