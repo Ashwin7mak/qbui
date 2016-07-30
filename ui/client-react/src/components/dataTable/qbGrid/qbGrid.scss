@@ -7,8 +7,7 @@ $row-non-editable-bg-color: $color12;
 $row-border-color:$color4;
 $row-box-shadow-color:$color4;
 $cell-edit-background-edit: $color1;
-
-.reportContent {
+$grid-font-size: $font-size-p;.reportContent {
     margin-left:10px;
 }
 
@@ -59,7 +58,7 @@ $cell-edit-background-edit: $color1;
 }
 .qbGrid>tbody>tr>td {
     padding: 4px;
-    font-size: 12px;
+    font-size: $grid-font-size;
     border-right: 1px solid #dcdcdc;
     border-bottom: 1px solid #dcdcdc;
     vertical-align:top;
@@ -171,7 +170,7 @@ $cell-edit-background-edit: $color1;
                         border:0;
                         height:21px;
                         margin-right:1px;
-                        font-size: 12px;
+                        font-size: $grid-font-size;
                         padding-left:2px;
                     }
                     >span.dropdown {
@@ -303,7 +302,8 @@ $cell-edit-background-edit: $color1;
     background-color: $row-bg-color;
     margin:0;
     padding:0;
-    font-family: "Open Sans";
-    font-size: 12px;
+    font-family: $font-family;
+    font-size: $grid-font-size;
     border-radius:0;
+    color: $font-color;
 }

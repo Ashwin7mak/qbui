@@ -23,6 +23,7 @@ export const TextFieldEditor = React.createClass({
                       className={classes}
                       value={this.props.value}
                       type="text"
+                      placeholder={this.props.placeholder}
                       onChange={this.onChange}
         />;
     }

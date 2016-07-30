@@ -18,18 +18,22 @@ const CellEditor = React.createClass({
     getEditorForType(type) {
         switch (type) {
         case formats.CHECKBOX_FORMAT:
-            return <CheckBoxFieldEditor value={this.props.value} onChange={this.props.onChange} />;
+            return <CheckBoxFieldEditor value={this.props.value} onChange={this.props.onChange}
+                                        placeholder={this.props.colDef.placeholder}/>;
 
         case formats.DATE_FORMAT: {
-            return <DateFieldEditor value={this.props.value} onChange={this.props.onChange} />;
+            return <DateFieldEditor value={this.props.value} onChange={this.props.onChange}
+                                    placeholder={this.props.colDef.placeholder}/>;
         }
 
         case formats.DATETIME_FORMAT: {
-            return <DateTimeFieldEditor value={this.props.value} onChange={this.props.onChange} />;
+            return <DateTimeFieldEditor value={this.props.value} onChange={this.props.onChange}
+                                        placeholder={this.props.colDef.placeholder}/>;
         }
 
         case formats.TIME_FORMAT: {
-            return <TimeFieldEditor value={this.props.value} onChange={this.props.onChange} />;
+            return <TimeFieldEditor value={this.props.value} onChange={this.props.onChange}
+                                    placeholder={this.props.colDef.placeholder} />;
         }
 
         case formats.NUMBER_FORMAT:
@@ -38,16 +42,19 @@ const CellEditor = React.createClass({
         case formats.PERCENT_FORMAT: {
             return <DefaultFieldEditor value={this.props.value}
                                        type="number"
+                                       placeholder={this.props.colDef.placeholder}
                                        onChange={this.props.onChange} />;
         }
 
         case formats.USER_FORMAT: {
             return <UserFieldEditor value={this.props.value}
+                                    placeholder={this.props.colDef.placeholder}
                                     onChange={this.props.onChange} />;
         }
 
         case formats.MULTI_LINE_TEXT_FORMAT: {
             return <MultiLineTextFieldEditor value={this.props.value}
+                                             placeholder={this.props.colDef.placeholder}
                                     onChange={this.props.onChange} />;
         }
         case formats.TEXT_FORMAT:
@@ -56,11 +63,13 @@ const CellEditor = React.createClass({
             if (this.props.colDef.choices) {
                 return (
                     <ComboBoxFieldEditor choices={this.props.colDef.choices} value={this.props.value}
+                                         placeholder={this.props.colDef.placeholder}
                                      onChange={this.props.onChange} />
                 );
             } else {
                 return <TextFieldEditor value={this.props.value}
                                         onChange={this.props.onChange}
+                                        placeholder={this.props.colDef.placeholder}
                                         classes="cellEdit"
                                         tabIndex="0"
                                         ref="cellInput"
@@ -80,9 +89,9 @@ const CellEditor = React.createClass({
     },
 
     render() {
-        let requiredIndication = (this.props.colDef.required) ? '*' :'\u00a0'; // u00a0 = non-breaking space
+        let requiredIndication = (this.props.colDef.required) ? '*' : '\u00a0'; // u00a0 = non-breaking space
         return (<div className="cellEditWrapper" onKeyDown={this.onKeyDown}>
-                <div className="requiredInput">{requiredIndication}</div>
+                <div className="requiredFlag">{requiredIndication}</div>
             {this.getEditorForType(this.props.type)}
             </div>);
     }

@@ -1,14 +1,6 @@
 @import '../../assets/css/qbVariables';
 
-$font-path: '../../assets/fonts/';
 @import "../../assets/css/main.scss";
-@font-face {
-    font-family: 'Open Sans';
-    src: url('#{$font-path}Open_Sans/OpenSans-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 
 
 html, body {

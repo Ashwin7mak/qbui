@@ -1,16 +1,23 @@
 @import '../../../src/assets/css/qbVariables';
 
+$data-font-size: $font-size-p;
+
+// plain user data
 .data {
   color : $data-color;
+  font-family: $font-family;
+  font-size: $data-font-size;
+  -webkit-font-smoothing: antialiased;
 }
 
+// inline edit of a cell
 .cellEdit {
   border: solid 1px $input-text-normal-border-color;
   box-shadow: none;
   border-radius: 2px;
 }
 
-// visual style of input userdata on a form
+// visual style of input userdata
 input[type="text"].input {
   background-color: $input-bg-color;
 }
@@ -28,14 +35,14 @@ input[type="text"].input {
   margin: 0 0 0 2px;
   padding: 0 0 0 2px;
   width: inherit;
-  height: 20px;
+  height:  30px;
 }
 
 //focus input shadow
 input[type="text"]:focus.input  {
   outline: none;
   border: solid 1px $input-text-focus-border-color;
-  box-shadow: 0 0 5px 2px rgba(37, 68, 167, 0.25)
+  box-shadow: 0 0 5px 2px rgba($input-text-focus-border-color, 0.25);
 }
 
 // input error
@@ -43,5 +50,20 @@ input[type="text"]:focus.input.error,
 input[type="text"].input.error {
   border: solid 1px $input-text-error-border-color;
   border-left: 5px solid $input-text-error-border-color;
-  box-shadow: 0 0 5px 2px rgba(217,59,66, 0.25)
+}
+// focus input error shadow
+input[type="text"]:focus.input.error {
+  outline: none;
+  border: solid 1px $input-text-error-border-color;
+  border-left: 5px solid $input-text-error-border-color;
+  box-shadow: 0 0 5px 2px rgba($input-text-error-border-color, 0.25);
+}
+
+.requiredFlag {
+  color: $field-label-normal-color;
+  display: inline-block;
+  line-height: .3;
+  padding-left: 2px;
+  font-size: 17px;
+  margin-top: -3px;
 }

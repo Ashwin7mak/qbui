@@ -75,7 +75,7 @@ export const UserCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <div className="userCell">{this.props.value}</div>;
+        return <div className="userCell data">{this.props.value}</div>;
     }
 });
 
@@ -86,7 +86,7 @@ export const NumberCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <div className="numberCell"><I18nNumber value={this.props.value}></I18nNumber></div>;
+        return <div className="numberCell data"><I18nNumber value={this.props.value}></I18nNumber></div>;
     }
 });
 
@@ -97,7 +97,7 @@ export const DateCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <div className="dateCell">{this.props.value}</div>;
+        return <div className="dateCell data">{this.props.value}</div>;
     }
 });
 
@@ -108,7 +108,7 @@ export const TextCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <TextField classes="textCell" {...this.props} />;
+        return <TextField classes="textCell data" {...this.props} />;
     }
 });
 
@@ -120,6 +120,6 @@ export const MultiLineTextCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <pre className="multiLineTextCell">{this.props.value}</pre>;
+        return <pre className="multiLineTextCell data">{this.props.value}</pre>;
     }
 });

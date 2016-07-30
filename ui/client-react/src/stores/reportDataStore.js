@@ -3,6 +3,7 @@ import FacetSelections from '../components/facet/facetSelections';
 import ReportUtils from '../utils/reportUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
+import Locale from '../locales/locales';
 import * as SchemaConsts from "../constants/schema";
 import * as formats from '../constants/fieldFormats';
 const serverTypeConsts = require('../../../common/src/constants');
@@ -71,6 +72,8 @@ let reportModel = {
                     }
                     //  client side attributes..
                     column.datatypeAttributes = field.datatypeAttributes;
+                    column.placeholder = (field.datatypeAttributes && field.datatypeAttributes.type && field.datatypeAttributes.type === serverTypeConsts.EMAIL_ADDRESS) ?
+                        Locale.getMessage('placeholder.email') : '';
                     columns.push(column);
                 }
             });
