@@ -6,7 +6,7 @@ export const TextFieldEditor = React.createClass({
 //max input length = limitConstants. maxTextFieldValueLength
     propTypes: {
         ref: React.PropTypes.any,
-        value: React.PropTypes.string.isRequired,
+        value: React.PropTypes.any.isRequired, // should be string but duration is a number but rendered as text
         classes: React.PropTypes.string,
         onChange: React.PropTypes.func.isRequired
     },

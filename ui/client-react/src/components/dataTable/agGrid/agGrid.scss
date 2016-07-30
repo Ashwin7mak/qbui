@@ -110,6 +110,11 @@ $cell-edit-background-edit: #f3f8fe;
     .gridCell.Bold {
         font-weight: bold;
     }
+
+    .requiredFlag {
+        margin-top: -3px; // to allow for even space above and below the inputbox
+    }
+
     .NoWrap {
         white-space: nowrap;
     }
