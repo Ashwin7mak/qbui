@@ -26,12 +26,16 @@ let ReportContent = React.createClass({
     // row was clicked once, navigate to record
     openRow(data) {
 
-        const appId = this.props.appId;
-        const tblId = this.props.tblId;
-        var recId = data[this.props.uniqueIdentifier].value;
-        //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
+        const {appId, tblId, rptId} = this.props;
 
+        var recId = data[this.props.uniqueIdentifier].value;
+
+        // let flux know we've drilled-down into a record so we can navigate back and forth
+        let flux = this.getFlux();
+        flux.actions.openingReportRow(rptId, recId);
+
+        //create the link we want to send the user to and then send them on their way
+        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         this.props.history.pushState(null, link);
     },
 
@@ -639,6 +643,7 @@ let ReportContent = React.createClass({
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render: function() {
+
         let isTouch = this.context.touch;
         let recordCount = 0;
 

@@ -61,6 +61,10 @@ var lodash = require('lodash');
             renderIndex(req, res);
         });
 
+        app.route('/app/:appId/table/:tblId/report/:rptId/record/:recordId').get(function(req, res) {
+            renderIndex(req, res);
+        });
+
         app.route('/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
             renderIndex(req, res);
         });

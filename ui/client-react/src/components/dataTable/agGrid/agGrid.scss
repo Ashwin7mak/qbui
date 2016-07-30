@@ -159,10 +159,12 @@ $cell-edit-background-edit: #f3f8fe;
                 .iconActionButton {
                     opacity: .2;
                     transition: opacity 200ms ease-in-out;
-
+                    border:0;
                     height: 30px;
                     width: auto;
                     background: inherit;
+                    color: $topnav-icon-color;
+                    padding:0;
                     &:hover {
                         color: $topnav-icon-color;
                     }
