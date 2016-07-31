@@ -48,7 +48,7 @@ var config = {
     // devtool Makes sure errors in console map to the correct file
     // and line number
     // eval is faster than 'source-map' for dev but eval is not supported for prod
-    devtool: PROD ? 'source-map' : 'eval',
+    devtool: PROD ? 'eval' : 'eval',
     watchDelay: 50,
 
     entry: {
