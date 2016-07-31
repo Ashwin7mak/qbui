@@ -48,7 +48,7 @@ var config = {
     // devtool Makes sure errors in console map to the correct file
     // and line number
     // eval is faster than 'source-map' for dev but eval is not supported for prod
-    devtool: PROD ? 'eval' : 'eval',
+    devtool: PROD ? 'source-map' : 'eval',
     watchDelay: 50,
 
     entry: {
@@ -145,12 +145,15 @@ var config = {
 
         // for prod we also de-dupe, obfuscate and minimize
         new webpack.optimize.DedupePlugin(),
+        /*
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
+            sourceMap: false,
             compress: {
                 warnings: false
             }
         }),
+        */
 
         //  run-time environment for our application
         envPlugin
