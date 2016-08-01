@@ -63,6 +63,23 @@ class BaseService {
     }
 
     /**
+     * Http delete request
+     *
+     * @param url - request url.  Can be relative or set to explicit domain
+     * @param conf - optional http header configuration
+     * @returns {*} - promise
+     */
+    delete(url, conf) {
+        let config = conf || {};
+        return axios.delete(url, config);
+    }
+
+    deleteBulk(url, conf) {
+        let config = conf || {};
+        return axios.delete(url, config);
+    }
+
+    /**
      * Axiom interceptor for all http requests -- add a session tracking id and session ticket
      */
     setRequestInterceptor() {
@@ -153,12 +170,12 @@ class BaseService {
      * To find the hostname for current stack, we can do a string replace on the current window.location.hostname value and strip out ".newstack"
      * Now we combine these 3 values with an https to construct the full redirect url.
      *
-     * example prod output: intuitcorp.quickbase.com/db/main?a=nsredirect&nsurl=https://intuitcorp.newstack.quickbase.com/apps
+     * example prod output: team.quickbase.com/db/main?a=nsredirect&nsurl=https://team.newstack.quickbase.com/apps
      */
     constructRedirectUrl() {
         let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
-        let newStackDestination = window.location.href;
-        let currentStackDomain = window.location.hostname.replace(".newstack", "");
+        let newStackDestination = WindowLocationUtils.getHref();
+        let currentStackDomain = WindowLocationUtils.getSubdomain() + ".quickbase.com";
         currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
         return currentStackSignInUrl;
     }

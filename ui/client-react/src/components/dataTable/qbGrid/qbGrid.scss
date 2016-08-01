@@ -9,10 +9,6 @@ $row-box-shadow-color:$color4;
 $cell-edit-background-edit: $color1;
 $grid-font-size: $font-size-p;
 
-.reportContent {
-    margin-left:10px;
-}
-
 .qbGrid>thead, .qbGrid>tbody{
     table-layout:fixed;
     >td {

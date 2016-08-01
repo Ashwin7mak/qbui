@@ -1,6 +1,5 @@
 
 import BaseService from '../../src/services/baseService';
-import StringUtils from '../../src/utils/stringUtils';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils.js';
 
 describe('BaseService rewire tests', () => {
@@ -15,8 +14,17 @@ describe('BaseService rewire tests', () => {
     var mockAxios = {
         get: function() {
             return {getMethodCalled:true};
+        },
+        patch: function() {
+            return {patchMethodCalled:true};
+        },
+        delete: function() {
+            return {deleteMethodCalled:true};
         }
     };
+
+    var simpleSubdomain = {href: "https://team.newstack.quickbase.com", hostname: "team.newstack.quickbase.com", expectedUrl: 'https://team.quickbase.com/db/main?a=nsredirect&nsurl='};
+    var complexSubdomain = {href: "https://team.demo.newstack.quickbase.com", hostname: "team.demo.newstack.quickbase.com", expectedUrl: 'https://team.quickbase.com/db/main?a=nsredirect&nsurl='};
 
     var mockWindowUtils = {
         update: function(url) {
@@ -24,6 +32,12 @@ describe('BaseService rewire tests', () => {
         },
         replace: function(url) {
             return url;
+        },
+        getHref: function() {
+            return simpleSubdomain.href;
+        },
+        getSubdomain: function() {
+            return simpleSubdomain.hostname.split(".")[0];
         }
     };
 
@@ -82,6 +96,18 @@ describe('BaseService rewire tests', () => {
         expect(axios.getMethodCalled).toBeTruthy();
     });
 
+    it('test axios patch method', () => {
+        baseService = new BaseService();
+        var axios = baseService.patch('url', 'config');
+        expect(axios.patchMethodCalled).toBeTruthy();
+    });
+
+    it('test axios delete method', () => {
+        baseService = new BaseService();
+        var axios = baseService.delete('url', 'config');
+        expect(axios.deleteMethodCalled).toBeTruthy();
+    });
+
     /**
      * * Example2:
      *      constructUrl('/api/v1/apps/{0}/tables/{0}/reports/{1}',['123abc456', 'xyz123'])
@@ -97,9 +123,19 @@ describe('BaseService rewire tests', () => {
         expect(output).toEqual(url);
     });
 
-    it('test constructRedirectUrl method', () => {
+    it('test constructRedirectUrl method with simple subdomain', () => {
         baseService = new BaseService();
-        var expectedUrl = 'https://localhost/db/main?a=nsredirect&nsurl=' + window.location.href;
+        var expectedUrl = simpleSubdomain.expectedUrl + mockWindowUtils.getHref();
+        var url = baseService.constructRedirectUrl();
+        expect(expectedUrl).toEqual(url);
+    });
+
+    it('test constructRedirectUrl method with complex subdomain', () => {
+        mockWindowUtils.getSubdomain = function() {return complexSubdomain.hostname.split(".")[0];};
+        mockWindowUtils.getHref = function() {return complexSubdomain.href;};
+        BaseService.__Rewire__('WindowLocationUtils', mockWindowUtils);
+        baseService = new BaseService();
+        var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
         var url = baseService.constructRedirectUrl();
         expect(expectedUrl).toEqual(url);
     });

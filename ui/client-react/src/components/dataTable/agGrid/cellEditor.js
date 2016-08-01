@@ -74,6 +74,10 @@ const CellEditor = React.createClass({
                                         tabIndex="0"
                                         ref="cellInput"
                                         />;
+            //Drew's change
+            //  return <MultiLineTextFieldEditor value={this.props.value}
+            //       onChange={this.props.onChange} />;
+
             }
         }
         }

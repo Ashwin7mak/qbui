@@ -16,11 +16,28 @@
         display:flex;
         flex-direction:column;
         justify-content:center;
-        .linkBack {
-
+        .navLinks {
+            display:flex;
+            align-items:center;
             font-size: 12px;
             color: $text-link-color;
-            line-height:24px;
+
+            line-height:36px;
+            button {
+                height: 24px;
+                width: 24px;
+                .qbIcon {
+                    font-size: 18px;
+                }
+            }
+            .iconActions {
+                margin-right:20px;
+                font-size:20px;
+            }
+            .iconActionButton {
+                width:24px;
+                height:24px;
+            }
             .qbIcon {
                 width:auto;
                 color: $text-link-color;

@@ -34,6 +34,14 @@ class WindowLocationUtils {
     static update(url) {
         window.location.href = url;
     }
+
+    static getHref() {
+        return window.location.href;
+    }
+
+    static getSubdomain() {
+        return window.location.hostname.split(".")[0];
+    }
 }
 
 export default WindowLocationUtils;

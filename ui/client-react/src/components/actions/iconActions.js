@@ -75,7 +75,8 @@ let IconActions = React.createClass({
                     <Button key={action.msg}
                        tabIndex="0"
                        className={className}
-                       onClick={action.onClick}>
+                       onClick={action.onClick}
+                       disabled={action.disabled ? true : false} >
                             <QBicon icon={action.icon}/>
                     </Button>
                 </OverlayTrigger>);
