@@ -5,15 +5,8 @@
 (function() {
     'use strict';
     var baseE2EPath = '../../e2e/';
+    var e2eUtils = require('../common/e2eUtils')();
 
-    // Current timestamp
-    var currentDate = new Date();
-    var dateTime = (currentDate.getMonth() + 1)  + '/' +
-        currentDate.getDate() + '/' +
-        currentDate.getFullYear() + ' @ ' +
-        currentDate.getHours() + ':' +
-        currentDate.getMinutes() + ':' +
-        currentDate.getSeconds();
     // Add a screenshot reporter for errors when testing locally
     var HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
     var reporter = new HtmlScreenshotReporter({
@@ -23,7 +16,7 @@
         reportOnlyFailedSpecs: false,
         captureOnlyFailedSpecs: true,
         showSummary: true,
-        reportTitle: 'Protractor E2E Test Report: ' + dateTime
+        reportTitle: 'Protractor E2E Test Report: ' + e2eUtils.getCurrentTimestamp()
     });
     exports.config = {
         // The timeout for each script run on the browser. This should be longer
@@ -59,20 +52,24 @@
             maxInstances: 2
         },
         // Uncomment below if you want to run multiple breakpoints or multiple browsers
-        // Overwrites any capabilities you have set above
+        // Overrides any capabilities you have set above
         //multiCapabilities: [
         //    {
         //        browserName: 'chrome',
         //        breakpointSize: 'xlarge'
         //    },
         //    {
+        //        browserName: 'chrome',
+        //        breakpointSize: 'large'
+        //    },
+        //    {
         //        browserName: 'firefox',
-        //        breakpointSize: 'medium'
+        //        breakpointSize: 'large'
         //    },
         //    {
         //        browserName: 'safari',
-        //        breakpointSize: 'large'
-        //    }
+        //        breakpointSize: 'medium'
+        //    },
         //],
 
         // ----- The test framework -----
@@ -115,7 +112,7 @@
             // Read the base classes
             global.e2eBase = requireCommon('common/e2eBase')();
             global.e2eConsts = requireCommon('common/e2eConsts');
-            global.e2eUtils = requireCommon('common/e2eUtils');
+            global.e2eUtils = requireCommon('common/e2eUtils')();
             global.consts = require('../../common/src/constants');
 
             // Lets Protractor know there is no Angular code to wait for
@@ -128,7 +125,7 @@
 
             // Grab the browser settings from the processed config and set the browser size
             browser.getProcessedConfig().then(function(config) {
-                var browserDimensions = getBrowserBreakpointDimensions(config.capabilities.breakpointSize);
+                var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(config.capabilities.breakpointSize);
                 global.breakpointSize = browserDimensions.breakpointSize;
                 global.browserWidth = browserDimensions.browserWidth;
                 global.browserHeight = browserDimensions.browserHeight;
@@ -136,34 +133,6 @@
                 console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
                 browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
             });
-
-            function getBrowserBreakpointDimensions(breakpointSize) {
-                if (breakpointSize === e2eConsts.XLARGE_SIZE) {
-                    return {
-                        breakpointSize: e2eConsts.XLARGE_SIZE,
-                        browserWidth: e2eConsts.XLARGE_BP_WIDTH,
-                        browserHeight: e2eConsts.DEFAULT_HEIGHT
-                    };
-                } else if (breakpointSize === e2eConsts.LARGE_SIZE) {
-                    return {
-                        breakpointSize: e2eConsts.LARGE_SIZE,
-                        browserWidth: e2eConsts.LARGE_BP_WIDTH,
-                        browserHeight: e2eConsts.DEFAULT_HEIGHT
-                    };
-                } else if (breakpointSize === e2eConsts.MEDIUM_SIZE) {
-                    return {
-                        breakpointSize: e2eConsts.MEDIUM_SIZE,
-                        browserWidth: e2eConsts.MEDIUM_BP_WIDTH,
-                        browserHeight: e2eConsts.DEFAULT_HEIGHT
-                    };
-                } else if (breakpointSize === e2eConsts.SMALL_SIZE) {
-                    return {
-                        breakpointSize: e2eConsts.SMALL_SIZE,
-                        browserWidth: e2eConsts.SMALL_BP_WIDTH,
-                        browserHeight: e2eConsts.DEFAULT_HEIGHT
-                    };
-                }
-            }
 
             // Third party library that lets us retry webdriver commands
             global.e2eRetry = require('webdriverjs-retry');
