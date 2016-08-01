@@ -17,10 +17,9 @@ class ReportService extends BaseService {
 
         //  Report service API endpoints
         this.API = {
-            GET_REPORT                  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            GET_REPORT                  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}${constants.QUERYSTRING}format={3}${constants.PARAMSEPARATOR}offset={4}${constants.PARAMSEPARATOR}numrows={5}${constants.PARAMSEPARATOR}sortlist={6}`,
             GET_REPORTS                 : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
             GET_REPORT_COMPONENTS       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.REPORTCOMPONENTS}`,
-            GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
             GET_REPORT_RESULTS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
             PARSE_FACET_EXPR            : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
         };
@@ -86,7 +85,7 @@ class ReportService extends BaseService {
      * @param reportId
      * @returns promise
      */
-    getReport(appId, tableId, reportId) {
+    getReport(appId, tableId, reportId, format, offset, rows, sortList) {
         const existing = this._cached(arguments);
         if (existing) {
             // use result promise from prior request
@@ -94,7 +93,7 @@ class ReportService extends BaseService {
         }
 
         let args = arguments;
-        let url = super.constructUrl(this.API.GET_REPORT, [appId, tableId, reportId]);
+        let url = super.constructUrl(this.API.GET_REPORT, [appId, tableId, reportId, format, offset, rows, sortList]);
         const request = super.get(url);
         if (request) {
             request.then((response) => {
@@ -137,15 +136,9 @@ class ReportService extends BaseService {
      * @returns promise
      */
     getReportDataAndFacets(appId, tableId, reportId, queryParams) {
-        var test = this.getReportData(appId, tableId, reportId, queryParams, true);
-        return test;
+        return this.getReportData(appId, tableId, reportId, queryParams, true);
     }
 
-    getReportRecordsCount(appId, tableId, reportId) {
-        let url = super.constructUrl(this.API.GET_REPORT_RECORDS_COUNT, [appId, tableId, reportId]);
-        return super.get(url);
-    }
-    
     /**
      * Return the data records for a given report.
      *

@@ -199,16 +199,16 @@
 
         /**
          * For the given req.url, extract the APPS and TABLES identifiers/ids and
-         * append the REPORTS identifier and optional recordId.
+         * append the REPORTS identifier and optional reportId.
          *
          * Example:  url: /apps/123/tables/456/rest/of/url
-         *           return: /apps/123/tables/456/reports/<recordId>
+         *           return: /apps/123/tables/456/reports/<reportId>
          *
          * @param url
          * @param reportId
          * @returns {*}
          */
-        getReportsRoute: function(url, reportId) {
+        getReportsRoute: function(url, reportId) {//, offset, numRows) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
                 return root + '/' + REPORTS + (reportId ? '/' + reportId : '');

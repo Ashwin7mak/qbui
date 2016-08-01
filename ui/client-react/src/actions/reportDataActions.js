@@ -94,61 +94,29 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 let reportDataActions = {
 
     loadReport(appId, tblId, rptId, format, offset, rows, sortList) {
-
         //  promise is returned in support of unit testing only
         return new Promise(function(resolve, reject) {
-
             if (appId && tblId && rptId) {
                 this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
                 this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT, {});
                 let reportService = new ReportService();
 
-                var promises = [];
-                promises.push(reportService.getReportRecordsCount(appId, tblId, rptId));
-                promises.push(reportService.getReport(appId, tblId, rptId));
-
-                Promise.all(promises).then(
+                reportService.getReport(appId, tblId, rptId, format, offset, rows, sortList).then(
                     (response) => {
-                        if (response[0]) {
-                            logger.debug('ReportRecordsCount service call successful');
-                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response[0]);
+                        // We only need to check for reportData. The metadata will be fetched
+                        // and parsed in the node call.
+                        if (response.data.reportMetaData && response.data.reportData) {
+                            var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
+                            _.extend(model, {sortList: sortList});
+                            this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
                         }
-                        if (response[1]) {
-                            let reportMetaData = response[1];
-                            let requiredParams = {};
-                            requiredParams[query.FORMAT_PARAM] = format;
-                            requiredParams[query.OFFSET_PARAM] = offset;
-                            requiredParams[query.NUMROWS_PARAM] = rows;
-                            let overrideQueryParams = {};
-                            if (sortList !== undefined) {
-                                overrideQueryParams[query.SORT_LIST_PARAM] = sortList;
-                            }
-
-                            var queryParams = buildRequestQuery(reportMetaData, requiredParams, overrideQueryParams);
-                            reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
-                                function(reportData) {
-                                    logger.debug('ReportDataAndFacets service call successful');
-                                    var model = reportModel.set(reportMetaData, reportData);
-                                    _.extend(model, {sortList: sortList});
-                                    this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                                    resolve();
-                                }.bind(this),
-                                function(error) {
-                                    logger.error('ReportDataAndFacets service call error:' + JSON.stringify(error));
-                                    this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
-                                    reject();
-                                }.bind(this)
-                            ).catch(
-                                function(ex) {
-                                    logger.error('Unexpected Report service call exception:', ex);
-                                    this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
-                                    reject();
-                                }.bind(this)
-                            );
+                        if (response.data.reportTotalRecordsCount) {
+                            logger.debug('ReportRecordsCount service call successful');
+                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data.reportTotalRecordsCount);
                         }
                     },
                     (error) => {
-                            logger.error('Report service call error when querying for report meta data:' + JSON.stringify(error));
+                            logger.error('Report service call error when querying for report meta data, data or records count:' + JSON.stringify(error));
                             this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
                             reject();
                     }

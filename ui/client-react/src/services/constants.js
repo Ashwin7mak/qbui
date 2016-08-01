@@ -43,5 +43,9 @@ export default {
     REPORTCOMPONENTS    : 'reportComponents',
     RECORDSCOUNT        : 'count',
     RESULTS             : 'results',
-    PARSE               : 'parse'
+    PARSE               : 'parse',
+
+    // Query String and parameters constants
+    QUERYSTRING         : '?',
+    PARAMSEPARATOR      : '&'
 };

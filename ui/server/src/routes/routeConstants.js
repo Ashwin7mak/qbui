@@ -41,6 +41,7 @@
         RECORD                  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
         RECORDS                 : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
 
+        REPORT                  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId',
         REPORT_COMPONENTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/reportComponents',
         REPORT_RESULTS          : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
         REPORT_RECORDS_COUNT    : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',

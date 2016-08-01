@@ -39,6 +39,7 @@
         routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
+        routeToGetFunction[routeConsts.REPORT] = fetchReport;
         routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
         routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
@@ -337,6 +338,37 @@
     }
 
     /**
+     * Fetch report meta data, report data and facets (if any) and total count of records 
+     * for the report. 
+     * 
+     * @param req
+     * @param res
+     */
+    function fetchReport(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Report', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            reportsApi.fetchReport(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Report');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Report');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+    
+    /**
      * This is the function for fetching a completely hydrated report from the reportssApi endpoint.
      * Currently, a hydrated report means report data plus facet information.
      *
@@ -390,7 +422,6 @@
                 }
             );
         });
-
     }
     /**
      * This is the function for fetching data records for a report from the reportsApi endpoint.
