@@ -207,6 +207,17 @@ let ReportContent = React.createClass({
     },
 
     /**
+     * User wants to delete a record
+     *
+     * @param record
+     */
+    handleRecordDelete(record) {
+        const flux = this.getFlux();
+        var recId = record[this.props.uniqueIdentifier].value;
+        flux.actions.deleteReportRecord(this.props.appId, this.props.tblId, recId);
+    },
+
+    /**
      * Save a new record
      * @param recordChanges
      * @returns {Array} of field values for the new record
@@ -689,6 +700,7 @@ let ReportContent = React.createClass({
                                 uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={keyField}
                                 appId={this.props.reportData.appId}
+                                onRecordDelete={this.handleRecordDelete}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 onFieldChange={this.handleFieldChange}

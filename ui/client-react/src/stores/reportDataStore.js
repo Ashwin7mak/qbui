@@ -444,7 +444,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
-            actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord, // for empower demo
+            actions.DELETE_REPORT_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
+            actions.DELETE_REPORT_RECORD_FAILED, this.onDeleteReportRecordFailed,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_REPORT_RECORD_FAILED, this.onClearEdit,
@@ -643,12 +644,24 @@ let ReportDataStore = Fluxxor.createStore({
      * models filteredRecord list
      * @param id
      */
-    onDeleteReportRecord(id) {
+    onDeleteReportRecordSuccess(recId) {
         const model = this.reportModel.get();
+        var recordValueToMatch = {};
+        recordValueToMatch[model.keyField.name] = {value: recId};
+        const index = _.findIndex(model.filteredRecords, recordValueToMatch);
+        if (index !== -1) {
+            model.filteredRecords.splice(index, 1);
+        } else {
+            logger.error('the record to delete does not exist in the list of currently viewed records index: ${index}');
+        }
+        this.emit('change');
+    },
 
-        const index = _.findIndex(model.filteredRecords, {"Record ID#": id});
-
-        model.filteredRecords.splice(index, 1);
+    /**
+     * Does not do anything if it failed, just emits a change which wont cause an update (for agGrid)
+     * @param payload parameter contains {appId, tblId, recId, error: error}
+     */
+    onDeleteReportRecordFailed(payload) {
         this.emit('change');
     },
 
