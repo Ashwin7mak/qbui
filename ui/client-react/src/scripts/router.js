@@ -35,6 +35,8 @@ import FormStore from '../stores/formStore';
 import formActions from '../actions/formActions';
 import Logger from "../utils/logger";
 import FastClick from "fastclick";
+import _ from 'lodash';
+
 let logger = new Logger();
 PerfLogUtils.setLogger(logger);
 
@@ -112,18 +114,21 @@ let NavWrapper = React.createClass({
         touch: React.PropTypes.bool,
         locales: React.PropTypes.string
     },
-    getChildContext: function() {
+    getChildContext() {
         return {
             touch: this.state.touch,
             locales: this.state.locales
         };
     },
-    render: function() {
+    render() {
         return <Nav flux={flux} {...this.props} />;
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
         FastClick.attach(document.body);
+
+        // listen for resizes (nicely) in case we need to re-render for a new breakpoint
+        window.addEventListener('resize', _.debounce(this.handleResize, 250));
 
         if (this.isTouchDevice()) {
             document.body.className = "touch";
@@ -142,7 +147,19 @@ let NavWrapper = React.createClass({
             }
         }
     },
+    /**
+     * force rerender since breakpoint may have changed
+     */
+    handleResize: function() {
+        this.setState(this.state);
+    },
 
+    /**
+     * clean up listener
+     */
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize);
+    },
     componentWillReceiveProps(props) {
         if (props.params.appId) {
             if (this.props.params.appId !== props.params.appId) {
@@ -167,10 +184,10 @@ let NavWrapper = React.createClass({
 });
 
 let Apps = React.createClass({
-    render: function() {
+    render() {
         return <AppsHome flux={flux} />;
     },
-    componentDidMount: function() {
+    componentDidMount() {
         flux.actions.loadApps(true);
     }
 });

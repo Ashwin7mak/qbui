@@ -4,6 +4,7 @@ import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
+import Breakpoints from '../../utils/breakpoints';
 
 import './appHomePage.scss';
 
@@ -87,9 +88,9 @@ let AppHomePageRoute = React.createClass({
             </div>);
     },
     render: function() {
-        let isTouch = this.context.touch;
+        let isSmall = Breakpoints.isSmallBreakpoint();
         return (
-            isTouch ?
+            isSmall ?
                 <div className="appHomePageContainer">
                     <div className="appHomePageActionsContainer secondaryBar">
                         {this.getSecondaryBar()}
