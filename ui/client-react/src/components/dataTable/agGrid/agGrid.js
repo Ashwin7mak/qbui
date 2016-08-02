@@ -1,6 +1,6 @@
 import React from 'react';
 import {AgGridReact} from 'ag-grid-react';
-import {AgGridEnterprise} from 'ag-grid-enterprise';
+
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
@@ -670,6 +670,28 @@ let AGGrid = React.createClass({
             obj.headerClass += " " + classname;
         }
     },
+
+    getHeaderCellTemplate(obj) {
+        console.log(obj);
+        let {headerName} = obj;
+
+        var cell = document.createElement('div');
+        cell.className = "ag-header-cell";
+        cell.innerHTML = `<div>${headerName}<span class="menuTrigger">x</span></div>`
+        //cell.innerHTML = `
+        //    <div id="agResizeBar" class="ag-header-cell-resize"></div>
+        //    <span id="agMenu" class="ag-header-icon ag-header-cell-menu-button"></span>
+        //    <div id="agHeaderCellLabel" class="ag-header-cell-label">
+        //    <span id="agSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>
+        //    <span id="agSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>
+        //    <span id="agNoSort" class="ag-header-icon ag-sort-none-icon"></span>
+        //    <span id="agFilter" class="ag-header-icon ag-filter-icon"></span>
+        //    <span id="agText" class="ag-header-cell-text">drew</span>
+        //    </div>
+        //    `;
+
+        return cell;
+    },
     /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
     getColumnProps: function() {
         let columns = this.props.columns;
@@ -678,6 +700,7 @@ let AGGrid = React.createClass({
         if (columns) {
             let columnsData = columns.map((obj, index) => {
                 obj.headerClass = "gridHeaderCell";
+                obj.headerCellTemplate = this.getHeaderCellTemplate(obj);
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
