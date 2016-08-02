@@ -126,8 +126,18 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ["PhantomJS"],
-
+        browsers: ["PhantomJS_Desktop"],
+        customLaunchers: {
+            'PhantomJS_Desktop': {
+                base: 'PhantomJS',
+                options: {
+                    viewportSize: {
+                        width: 1440,
+                        height: 900
+                    }
+                }
+            }
+        },
         reporters: ["progress", "mocha", "coverage", "junit"],
 
         //  define where the coverage reports live for the client code
@@ -169,6 +179,7 @@ module.exports = function(config) {
         // allow for client console logging
         client: {
             captureConsole: true
-        }
+        },
+
     });
 };

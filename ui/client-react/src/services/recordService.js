@@ -11,9 +11,12 @@ class RecordService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_RECORD    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
-            PATCH_RECORD  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
-            CREATE_RECORD : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`
+            GET_RECORD         : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
+            PATCH_RECORD       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
+            CREATE_RECORD      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
+            DELETE_RECORD      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
+            DELETE_RECORD_BULK : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/bulk`
+
         };
     }
 
@@ -83,6 +86,32 @@ class RecordService extends BaseService {
     createRecord(appId, tableId, record) {
         let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
         return super.post(url, record);
+    }
+
+    /**
+     * Delete a record
+     *
+     * @param appId
+     * @param tableId
+     * @param recordId
+     * @returns promise
+     */
+    deleteRecord(appId, tableId, recordId) {
+        let url = super.constructUrl(this.API.DELETE_RECORD, [appId, tableId, recordId]);
+        return super.delete(url);
+    }
+
+    /**
+     * Delete records in bulk
+     *
+     * @param appId
+     * @param tableId
+     * @param recordIds
+     * @returns promise
+     */
+    deleteRecordBulk(appId, tableId, recordIds) {
+        let url = super.constructUrl(this.API.DELETE_RECORD_BULK, [appId, tableId]);
+        return super.deleteBulk(url, recordIds);
     }
 
 }

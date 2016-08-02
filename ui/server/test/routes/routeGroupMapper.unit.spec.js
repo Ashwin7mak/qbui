@@ -43,7 +43,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.TOMCAT_ALL + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.TOMCAT_ALL, method: 'post', expectedOutput: false},
 
             {message: 'LH_V1, ' + routeConsts.FORM_COMPONENTS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_COMPONENTS, method: 'delete', expectedOutput: false},
-            {message: 'LH_V1, ' + routeConsts.RECORD + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORD, method: 'delete', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.RECORD + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORD, method: 'delete', expectedOutput: true},
             {message: 'LH_V1, ' + routeConsts.RECORDS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORDS, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.REPORT_COMPONENTS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.REPORT_COMPONENTS, method: 'delete', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.REPORT_RESULTS + ' DELETE', routeGroup: routeGroups.LH_V1, route: routeConsts.REPORT_RESULTS, method: 'delete', expectedOutput: false},

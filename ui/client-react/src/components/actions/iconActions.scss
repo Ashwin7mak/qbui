@@ -27,7 +27,7 @@ $page-actions-background-color: #486c8f;
             }
         }
 
-        .iconActionButton:hover {
+        .iconActionButton:not([disabled]):hover {
             background: $nav-hover-bg;
             color: $nav-hover-fg;
             cursor: pointer;

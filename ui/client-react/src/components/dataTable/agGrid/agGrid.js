@@ -66,7 +66,8 @@ let AGGrid = React.createClass({
         onRecordAdd: React.PropTypes.func,
         onRecordNewBlank: React.PropTypes.func,
         onEditRecordStart: React.PropTypes.func,
-        onEditRecordCancel: React.PropTypes.func
+        onEditRecordCancel: React.PropTypes.func,
+        OnRecordDelete: React.PropTypes.func
     },
     contextTypes: {
         touch: React.PropTypes.bool,
@@ -329,6 +330,7 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel; // does local method 1st
         this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
         this.gridOptions.context.validateRecord = this.props.validateRecord;
+        this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
         this.gridOptions.context.keyField = this.props.keyField;
 
@@ -716,7 +718,9 @@ let AGGrid = React.createClass({
                             case serverTypeConsts.PERCENT :
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
-
+                            case serverTypeConsts.DURATION :
+                                obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
+                                break;
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
                                 break;
@@ -795,6 +799,7 @@ let AGGrid = React.createClass({
                                     validateRecord={this.props.validateRecord}
                                     onEditRecordStart={this.props.onEditRecordStart}
                                     onEditRecordCancel={this.handleEditRecordCancel}
+                                    onRecordDelete={this.props.onRecordDelete}
 
                                     //default behavior properties
                                     rowSelection="multiple"

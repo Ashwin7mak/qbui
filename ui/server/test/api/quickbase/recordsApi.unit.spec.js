@@ -470,4 +470,55 @@ describe("Validate recordsApi", function() {
         });
     });
 
+    describe("when deleteSingleRecord is called", function() {
+        var executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            recordsApi.setRequestHelperObject(requestHelper);
+        });
+
+        afterEach(function() {
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            req.url = '/record/';
+            req.body = {data:'here'};
+            var targetObject = "{}";
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = recordsApi.deleteSingleRecord(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve record: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+
+        it('fail return results ', function(done) {
+            req.url = '/record/';
+            var error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            var promise = recordsApi.deleteSingleRecord(req);
+
+            promise.then(
+                function(error) {
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all record: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+    });
+
 });

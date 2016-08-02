@@ -35,6 +35,7 @@ import FormStore from '../stores/formStore';
 import formActions from '../actions/formActions';
 import Logger from "../utils/logger";
 import FastClick from "fastclick";
+
 let logger = new Logger();
 PerfLogUtils.setLogger(logger);
 
@@ -112,18 +113,21 @@ let NavWrapper = React.createClass({
         touch: React.PropTypes.bool,
         locales: React.PropTypes.string
     },
-    getChildContext: function() {
+    getChildContext() {
         return {
             touch: this.state.touch,
             locales: this.state.locales
         };
     },
-    render: function() {
+    render() {
         return <Nav flux={flux} {...this.props} />;
     },
 
-    componentDidMount: function() {
+    componentDidMount() {
         FastClick.attach(document.body);
+
+        // listen for resizes (nicely) in case we need to re-render for a new breakpoint
+        window.addEventListener('resize', this.handleResize);
 
         if (this.isTouchDevice()) {
             document.body.className = "touch";
@@ -142,7 +146,19 @@ let NavWrapper = React.createClass({
             }
         }
     },
+    /**
+     * force rerender since breakpoint may have changed
+     */
+    handleResize: function() {
+        this.setState(this.state);
+    },
 
+    /**
+     * clean up listener
+     */
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize);
+    },
     componentWillReceiveProps(props) {
         if (props.params.appId) {
             if (this.props.params.appId !== props.params.appId) {
@@ -167,10 +183,10 @@ let NavWrapper = React.createClass({
 });
 
 let Apps = React.createClass({
-    render: function() {
+    render() {
         return <AppsHome flux={flux} />;
     },
-    componentDidMount: function() {
+    componentDidMount() {
         flux.actions.loadApps(true);
     }
 });
@@ -187,7 +203,9 @@ render((
             <IndexRoute component={AppHomePageRoute} />
             <Route path="table/:tblId" component={TableHomePageRoute} />
             <Route path="table/:tblId/report/:rptId" component={ReportRoute} />
+            <Route path="table/:tblId/report/:rptId/record/:recordId" component={RecordRoute} />
             <Route path="table/:tblId/record/:recordId" component={RecordRoute} />
+
         </Route>
 
     </Router>

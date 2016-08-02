@@ -4,6 +4,7 @@ import CardViewListHolder from "../../../components/dataTable/cardView/cardViewL
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
 import Logger from "../../../utils/logger";
+import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
 import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
@@ -26,12 +27,16 @@ let ReportContent = React.createClass({
     // row was clicked once, navigate to record
     openRow(data) {
 
-        const appId = this.props.appId;
-        const tblId = this.props.tblId;
-        var recId = data[this.props.uniqueIdentifier].value;
-        //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
+        const {appId, tblId, rptId} = this.props;
 
+        var recId = data[this.props.uniqueIdentifier].value;
+
+        // let flux know we've drilled-down into a record so we can navigate back and forth
+        let flux = this.getFlux();
+        flux.actions.openingReportRow(rptId, recId);
+
+        //create the link we want to send the user to and then send them on their way
+        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         this.props.history.pushState(null, link);
     },
 
@@ -200,6 +205,17 @@ let ReportContent = React.createClass({
             allClear = false;
         }
         return allClear;
+    },
+
+    /**
+     * User wants to delete a record
+     *
+     * @param record
+     */
+    handleRecordDelete(record) {
+        const flux = this.getFlux();
+        var recId = record[this.props.uniqueIdentifier].value;
+        flux.actions.deleteReportRecord(this.props.appId, this.props.tblId, recId);
     },
 
     /**
@@ -638,8 +654,8 @@ let ReportContent = React.createClass({
     },
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
-    render: function() {
-        let isTouch = this.context.touch;
+    render() {
+        let isSmall = Breakpoints.isSmallBreakpoint();
         let recordCount = 0;
 
         let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
@@ -661,7 +677,7 @@ let ReportContent = React.createClass({
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className="reportContent">
-                        {!isTouch && this.props.reactabular &&
+                        {!isSmall && this.props.reactabular &&
 
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
@@ -675,7 +691,7 @@ let ReportContent = React.createClass({
                                 onRecordChange={this.handleRecordChange}
                         />}
 
-                        {!isTouch && !this.props.reactabular &&
+                        {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}
@@ -684,6 +700,7 @@ let ReportContent = React.createClass({
                                 uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={keyField}
                                 appId={this.props.reportData.appId}
+                                onRecordDelete={this.handleRecordDelete}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 onFieldChange={this.handleFieldChange}
@@ -710,7 +727,7 @@ let ReportContent = React.createClass({
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}/>
                         }
-                        {isTouch &&
+                        {isSmall &&
                             <CardViewListHolder reportData={this.props.reportData}
                                 uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={keyField}

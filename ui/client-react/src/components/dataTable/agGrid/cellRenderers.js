@@ -346,9 +346,9 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
      * placeholder for deleting a record
      */
     onClickDelete() {
-        const api = this.props.params.api;
-
-        api.deleteRecord(this.props.params.data); // delegate the delete to the grid api
+        if (this.props.params.context.onRecordDelete) {
+            this.props.params.context.onRecordDelete(this.props.params.data);
+        }
     },
 
     render() {
