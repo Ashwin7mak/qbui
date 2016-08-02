@@ -719,7 +719,7 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
                             case serverTypeConsts.DURATION :
-                                obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
+                                obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
                                 break;
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
