@@ -78,11 +78,28 @@
             flex: 1 1 auto;
             justify-content: flex-end;
 
-            .recordsCount{
+            .recordsCountLoaderContainer {
                 flex-grow: 1;
+                display:flex;
+                justify-content: flex-end;
+                align-items: center;
                 width: 50%;
-                text-align: right;
+
+                .loadedContent {
+                    display:block;
+                    width:100%;
+                }
+
+                .loader {
+                    position: relative;
+                    width:8%;
+                }
+
+                .recordsCount{
+                    text-align: right;
+                }
             }
+
             .reportNavigation {
                 flex-grow: 1;
                 width: 50%;

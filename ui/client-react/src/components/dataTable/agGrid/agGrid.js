@@ -770,60 +770,61 @@ let AGGrid = React.createClass({
     render() {
         let columnDefs = this.getColumns();
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
+
         return (
             <div className="reportTable">
 
                 <div className={gridWrapperClasses} ref="gridWrapper">
-                    <Loader loaded={!this.props.loading}>
-                        {this.props.records && this.props.records.length > 0 ?
-                            <div className="agGrid">
-                                <AgGridReact
-                                    gridOptions={this.gridOptions}
-                                    // listening for events
-                                    onGridReady={this.onGridReady}
-                                    onRowClicked={this.onRowClicked}
-                                    onSelectionChanged={this.onSelectionChanged}
 
-                                    // binding to array properties
-                                    columnDefs={columnDefs}
-                                    rowData={this.props.records}
-                                    //handlers on col or row changes
-                                    onFieldChange={this.props.onFieldChange}
-                                    onRecordChange={this.props.onRecordChange}
-                                    onRecordSaveClicked={this.handleRecordSaveClicked}
-                                    onRecordAdd={this.props.onRecordAdd}
-                                    onRecordNewBlank={this.props.onRecordNewBlank}
-                                    validateRecord={this.props.validateRecord}
-                                    onEditRecordStart={this.props.onEditRecordStart}
-                                    onEditRecordCancel={this.handleEditRecordCancel}
+                    {this.props.records && this.props.records.length > 0 ?
+                        <div className="agGrid">
+                            <AgGridReact
+                                gridOptions={this.gridOptions}
+                                // listening for events
+                                onGridReady={this.onGridReady}
+                                onRowClicked={this.onRowClicked}
+                                onSelectionChanged={this.onSelectionChanged}
 
-                                    //default behavior properties
-                                    rowSelection="multiple"
-                                    enableColResize="true"
-                                    groupHeaders="true"
-                                    getRowHeight={this.getRowHeight}
+                                // binding to array properties
+                                columnDefs={columnDefs}
+                                rowData={this.props.records}
+                                //handlers on col or row changes
+                                onFieldChange={this.props.onFieldChange}
+                                onRecordChange={this.props.onRecordChange}
+                                onRecordSaveClicked={this.handleRecordSaveClicked}
+                                onRecordAdd={this.props.onRecordAdd}
+                                onRecordNewBlank={this.props.onRecordNewBlank}
+                                validateRecord={this.props.validateRecord}
+                                onEditRecordStart={this.props.onEditRecordStart}
+                                onEditRecordCancel={this.handleEditRecordCancel}
 
-                                    suppressRowClickSelection="true"
-                                    suppressCellSelection="true"
+                                //default behavior properties
+                                rowSelection="multiple"
+                                enableColResize="true"
+                                groupHeaders="true"
+                                getRowHeight={this.getRowHeight}
 
-                                    //column menus
-                                    getMainMenuItems={this.getMainMenuItems}
-                                    suppressMenuFilterPanel="true"
-                                    suppressMenuColumnPanel="true"
-                                    suppressContextMenu="true"
+                                suppressRowClickSelection="true"
+                                suppressCellSelection="true"
+
+                                //column menus
+                                getMainMenuItems={this.getMainMenuItems}
+                                suppressMenuFilterPanel="true"
+                                suppressMenuColumnPanel="true"
+                                suppressContextMenu="true"
 
 
-                                    //grouping behavior
-                                    groupSelectsChildren="true"
-                                    groupRowInnerRenderer={this.getGroupRowRenderer}
-                                    groupUseEntireRow={this.props.showGrouping}
+                                //grouping behavior
+                                groupSelectsChildren="true"
+                                groupRowInnerRenderer={this.getGroupRowRenderer}
+                                groupUseEntireRow={this.props.showGrouping}
 
-                                    icons={gridIcons}
-                                />
-                            </div> :
-                            <div><I18nMessage message={'grid.no_data'}/></div>
-                        }
-                    </Loader>
+                                icons={gridIcons}
+                            />
+                        </div> :
+                        !this.props.loading ? <div><I18nMessage message={'grid.no_data'}/></div> : null
+                    }
+
                     { //keep empty placeholder when loading to reduce reflow of space, scrollbar changes
                         this.props.loading ? <div className="loadedContent"></div> : null
                     }
