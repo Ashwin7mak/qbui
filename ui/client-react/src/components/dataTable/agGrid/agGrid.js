@@ -1,6 +1,9 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {AgGridReact} from 'ag-grid-react';
-
+import {Button, Dropdown, MenuItem} from 'react-bootstrap';
+import QBicon from '../../qbIcon/qbIcon';
+import IconActions from '../../actions/iconActions';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
@@ -92,6 +95,74 @@ let AGGrid = React.createClass({
         this.api = params.api;
         this.columnApi = params.columnApi;
         this.onMenuClose();
+        this.installHeaderMenus();
+    },
+//
+//    let menuItems = [
+//        {"name": this.getSortAscText(params.column.colDef, "sort"), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true, isFieldSorted && isSortedAsc)},
+//        {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}];
+//menuItems.push("separator");
+//menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
+//    {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, false)});
+//menuItems.push("separator");
+
+
+    createHeaderMenu(columnIndex, pullRight) {
+
+        let colDef = this.props.columns[columnIndex];
+
+        console.log(colDef);
+        let isSortedAsc = true;
+        let isFieldSorted = false;
+        //let isFieldSorted = _.find(this.props.sortFids, (fid) => {
+        //    if (Math.abs(fid) === params.column.colDef.id) {
+        //        isSortedAsc = fid > 0;
+        //        return true;
+        //    }
+        //});
+
+
+        let sortAscText = this.getSortAscText(colDef, "sort");
+        let sortDescText = this.getSortDescText(colDef, "sort");
+        let groupAscText = this.getSortAscText(colDef, "group");
+        let groupDescText = this.getSortDescText(colDef, "group");
+
+        return (<Dropdown bsStyle="default" noCaret id="dropdown-no-caret" pullRight={pullRight}>
+            <Button tabIndex="0"  bsRole="toggle" className={"dropdownToggle iconActionButton"}>
+                <QBicon icon="caret-filled-down"/>
+            </Button>
+
+            <Dropdown.Menu>
+                <MenuItem onSelect={() => this.sortReport(params.column.colDef, true, isFieldSorted && isSortedAsc)}>
+                    {isFieldSorted && <QBicon icon={isFieldSorted && isSortedAsc ? gridIcons.check : ""}/>}{sortAscText}
+                </MenuItem>
+                <MenuItem onSelect={() => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}>
+                    {isFieldSorted && <QBicon icon={isFieldSorted && !isSortedAsc ? gridIcons.check : ""}/>}{sortDescText}
+                </MenuItem>
+                <MenuItem divider/>
+                <MenuItem onSelect={() => this.groupReport(params.column.colDef, true)}>{groupAscText}</MenuItem>
+                <MenuItem onSelect={() => this.groupReport(params.column.colDef, false)}>{groupDescText}</MenuItem>
+                <MenuItem divider/>
+                <MenuItem><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
+                <MenuItem><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
+                <MenuItem><I18nMessage message="report.menu.hideColumn"/></MenuItem>
+                <MenuItem divider/>
+                <MenuItem><I18nMessage message="report.menu.newTable"/></MenuItem>
+                <MenuItem divider/>
+                <MenuItem><I18nMessage message="report.menu.columnProps"/></MenuItem>
+                <MenuItem><I18nMessage message="report.menu.fieldProps"/></MenuItem>
+            </Dropdown.Menu>
+        </Dropdown>);
+    },
+
+    installHeaderMenus() {
+        const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
+
+        Array.from(headers).map((header,index) => {
+            const pullRight = index === headers.length-1;
+            ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
+        });
+
     },
     /**
      * Build the menu items for sort/group
@@ -340,6 +411,7 @@ let AGGrid = React.createClass({
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
 
     },
+
     componentWillUnmount() {
         this.refs.gridWrapper.removeEventListener("scroll", this.props.onScroll);
     },
@@ -671,22 +743,28 @@ let AGGrid = React.createClass({
         }
     },
 
+    /**
+     *
+     * @param obj
+     * @returns {Element}
+     */
     getHeaderCellTemplate(obj) {
-        console.log(obj);
+
         let {headerName} = obj;
 
         var cell = document.createElement('div');
         cell.className = "ag-header-cell";
-        cell.innerHTML = `<div>${headerName}<span class="menuTrigger">x</span></div>`
+        cell.innerHTML = `<span class="ag-header-cell-text">Drew</span>
+            <span class="ag-header-icon ag-header-cell-menu-button "></span>`;
+
         //cell.innerHTML = `
-        //    <div id="agResizeBar" class="ag-header-cell-resize"></div>
+        //
         //    <span id="agMenu" class="ag-header-icon ag-header-cell-menu-button"></span>
         //    <div id="agHeaderCellLabel" class="ag-header-cell-label">
-        //    <span id="agSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>
-        //    <span id="agSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>
-        //    <span id="agNoSort" class="ag-header-icon ag-sort-none-icon"></span>
-        //    <span id="agFilter" class="ag-header-icon ag-filter-icon"></span>
-        //    <span id="agText" class="ag-header-cell-text">drew</span>
+        //        <span id="agSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>
+        //        <span id="agSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>
+        //
+        //        <span id="agText" class="ag-header-cell-text"></span>
         //    </div>
         //    `;
 

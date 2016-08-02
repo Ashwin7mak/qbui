@@ -59,7 +59,13 @@ $cell-edit-background-edit: #f3f8fe;
         border-color: $header-cell-border;
         background-color: $header-cell-background-color;
         text-align: left;
+        padding-top:4px;
 
+        .dropdownToggle {
+            padding:0;
+            border:0;
+            background-color:inherit;
+        }
         .collapser {
             position: absolute;
             left: 18px;
@@ -75,14 +81,22 @@ $cell-edit-background-edit: #f3f8fe;
             }
         }
     }
+    .ag-header {
+        overflow:visible;
+    }
+    .ag-header-viewport {
+        overflow:visible;
+    }
     .ag-header-cell-menu-button {
         display: none;
-        padding: 4px 0px 3px 0px;
     }
     .ag-header-cell:hover {
         .ag-header-cell-menu-button {
             display: block;
         }
+    }
+    .ag-header-cell-text {
+        padding-right:4px;
     }
 
     .gridCell {
