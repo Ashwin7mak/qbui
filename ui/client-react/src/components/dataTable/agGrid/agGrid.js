@@ -97,35 +97,25 @@ let AGGrid = React.createClass({
         this.onMenuClose();
         this.installHeaderMenus();
     },
-//
-//    let menuItems = [
-//        {"name": this.getSortAscText(params.column.colDef, "sort"), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true, isFieldSorted && isSortedAsc)},
-//        {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}];
-//menuItems.push("separator");
-//menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
-//    {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, false)});
-//menuItems.push("separator");
-
 
     createHeaderMenu(columnIndex, pullRight) {
 
-        let colDef = this.props.columns[columnIndex];
+        const colDef = this.props.columns[columnIndex];
 
-        console.log(colDef);
         let isSortedAsc = true;
-        let isFieldSorted = false;
-        //let isFieldSorted = _.find(this.props.sortFids, (fid) => {
-        //    if (Math.abs(fid) === params.column.colDef.id) {
-        //        isSortedAsc = fid > 0;
-        //        return true;
-        //    }
-        //});
+
+        const isFieldSorted = _.find(this.props.sortFids, (fid) => {
+            if (Math.abs(fid) === colDef.id) {
+                isSortedAsc = fid > 0;
+                return true;
+            }
+        });
 
 
-        let sortAscText = this.getSortAscText(colDef, "sort");
-        let sortDescText = this.getSortDescText(colDef, "sort");
-        let groupAscText = this.getSortAscText(colDef, "group");
-        let groupDescText = this.getSortDescText(colDef, "group");
+        const sortAscText = this.getSortAscText(colDef, "sort");
+        const sortDescText = this.getSortDescText(colDef, "sort");
+        const groupAscText = this.getSortAscText(colDef, "group");
+        const groupDescText = this.getSortDescText(colDef, "group");
 
         return (<Dropdown bsStyle="default" noCaret id="dropdown-no-caret" pullRight={pullRight}>
             <Button tabIndex="0"  bsRole="toggle" className={"dropdownToggle iconActionButton"}>
@@ -133,15 +123,15 @@ let AGGrid = React.createClass({
             </Button>
 
             <Dropdown.Menu>
-                <MenuItem onSelect={() => this.sortReport(params.column.colDef, true, isFieldSorted && isSortedAsc)}>
-                    {isFieldSorted && <QBicon icon={isFieldSorted && isSortedAsc ? gridIcons.check : ""}/>}{sortAscText}
+                <MenuItem onSelect={() => this.sortReport(colDef, true, isFieldSorted && isSortedAsc)}>
+                    {isFieldSorted && isSortedAsc && <QBicon icon="check"/>} {sortAscText}
                 </MenuItem>
-                <MenuItem onSelect={() => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}>
-                    {isFieldSorted && <QBicon icon={isFieldSorted && !isSortedAsc ? gridIcons.check : ""}/>}{sortDescText}
+                <MenuItem onSelect={() => this.sortReport(colDef, false, isFieldSorted && !isSortedAsc)}>
+                    {isFieldSorted && !isSortedAsc && <QBicon icon="check"/>} {sortDescText}
                 </MenuItem>
                 <MenuItem divider/>
-                <MenuItem onSelect={() => this.groupReport(params.column.colDef, true)}>{groupAscText}</MenuItem>
-                <MenuItem onSelect={() => this.groupReport(params.column.colDef, false)}>{groupDescText}</MenuItem>
+                <MenuItem onSelect={() => this.groupReport(colDef, true)}>{groupAscText}</MenuItem>
+                <MenuItem onSelect={() => this.groupReport(colDef, false)}>{groupDescText}</MenuItem>
                 <MenuItem divider/>
                 <MenuItem><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
                 <MenuItem><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
@@ -158,8 +148,8 @@ let AGGrid = React.createClass({
     installHeaderMenus() {
         const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
 
-        Array.from(headers).map((header,index) => {
-            const pullRight = index === headers.length-1;
+        Array.from(headers).map((header, index) => {
+            const pullRight = index === headers.length - 1;
             ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
         });
 
@@ -286,38 +276,6 @@ let AGGrid = React.createClass({
                 }
             }
         });
-    },
-    /**
-     * Build the column menu. This gets called every time menu is opened
-     * @param params
-     * @returns {*[]}
-     */
-    getMainMenuItems(params) {
-        this.selectColumnHeader(params.column.colDef);
-        let isSortedAsc = true;
-        let isFieldSorted = _.find(this.props.sortFids, (fid) => {
-            if (Math.abs(fid) === params.column.colDef.id) {
-                isSortedAsc = fid > 0;
-                return true;
-            }
-        });
-        let menuItems = [
-            {"name": this.getSortAscText(params.column.colDef, "sort"), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true, isFieldSorted && isSortedAsc)},
-            {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}];
-        menuItems.push("separator");
-        menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
-            {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, false)});
-        menuItems.push("separator");
-        menuItems.push({"name": Locale.getMessage("report.menu.addColumnBefore")},
-            {"name": Locale.getMessage("report.menu.addColumnAfter")},
-            {"name": Locale.getMessage("report.menu.hideColumn")}
-        );
-        menuItems.push("separator");
-        menuItems.push({"name": Locale.getMessage("report.menu.newTable")});
-        menuItems.push("separator");
-        menuItems.push({"name": Locale.getMessage("report.menu.columnProps")},
-            {"name": Locale.getMessage("report.menu.fieldProps")});
-        return menuItems;
     },
 
     /**
@@ -754,19 +712,8 @@ let AGGrid = React.createClass({
 
         var cell = document.createElement('div');
         cell.className = "ag-header-cell";
-        cell.innerHTML = `<span class="ag-header-cell-text">Drew</span>
+        cell.innerHTML = `<span class="ag-header-cell-text">${headerName}</span>
             <span class="ag-header-icon ag-header-cell-menu-button "></span>`;
-
-        //cell.innerHTML = `
-        //
-        //    <span id="agMenu" class="ag-header-icon ag-header-cell-menu-button"></span>
-        //    <div id="agHeaderCellLabel" class="ag-header-cell-label">
-        //        <span id="agSortAsc" class="ag-header-icon ag-sort-ascending-icon"></span>
-        //        <span id="agSortDesc" class="ag-header-icon ag-sort-descending-icon"></span>
-        //
-        //        <span id="agText" class="ag-header-cell-text"></span>
-        //    </div>
-        //    `;
 
         return cell;
     },
@@ -792,7 +739,6 @@ let AGGrid = React.createClass({
                             switch (datatypeAttributes[attr]) {
 
                             case serverTypeConsts.NUMERIC:
-                                this.setCSSClass_helper(obj, "AlignRight");
                                 obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
                                 break;
                             case serverTypeConsts.DATE :
@@ -910,7 +856,6 @@ let AGGrid = React.createClass({
                                     suppressCellSelection="true"
 
                                     //column menus
-                                    getMainMenuItems={this.getMainMenuItems}
                                     suppressMenuFilterPanel="true"
                                     suppressMenuColumnPanel="true"
                                     suppressContextMenu="true"

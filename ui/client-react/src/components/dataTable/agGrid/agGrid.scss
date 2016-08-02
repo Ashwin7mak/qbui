@@ -90,6 +90,10 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-header-cell-menu-button {
         display: none;
     }
+    .ag-header-cell-menu-button .dropdown-menu {
+        margin-top:0;
+        padding-top:0;
+    }
     .ag-header-cell:hover {
         .ag-header-cell-menu-button {
             display: block;
@@ -97,6 +101,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .ag-header-cell-text {
         padding-right:4px;
+        padding-left:4px;
     }
 
     .gridCell {
@@ -394,6 +399,9 @@ $cell-edit-background-edit: #f3f8fe;
     }
     > :not(.cellData) {
         display: none;
+    }
+    &.numberFormat {
+        text-align: right;
     }
 }
 
