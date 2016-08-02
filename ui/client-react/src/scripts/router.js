@@ -35,7 +35,6 @@ import FormStore from '../stores/formStore';
 import formActions from '../actions/formActions';
 import Logger from "../utils/logger";
 import FastClick from "fastclick";
-import _ from 'lodash';
 
 let logger = new Logger();
 PerfLogUtils.setLogger(logger);
@@ -128,7 +127,7 @@ let NavWrapper = React.createClass({
         FastClick.attach(document.body);
 
         // listen for resizes (nicely) in case we need to re-render for a new breakpoint
-        window.addEventListener('resize', _.debounce(this.handleResize, 250));
+        window.addEventListener('resize', this.handleResize);
 
         if (this.isTouchDevice()) {
             document.body.className = "touch";
