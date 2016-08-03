@@ -93,6 +93,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'DEBUG, ' + routeConsts.TOMCAT_ALL + ' POST', routeGroup: routeGroups.DEBUG, route: routeConsts.TOMCAT_ALL, method: 'post', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.RECORD + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORD, method: 'delete', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.RECORDS + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORDS, method: 'delete', expectedOutput: true},
+            {message: 'DEBUG, ' + routeConsts.RECORDS_BULK + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.RECORDS_BULK, method: 'delete', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.REPORT_RESULTS + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.REPORT_RESULTS, method: 'delete', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.SWAGGER_API + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_API, method: 'delete', expectedOutput: true},
             {message: 'DEBUG, ' + routeConsts.SWAGGER_RESOURCES + ' DELETE', routeGroup: routeGroups.DEBUG, route: routeConsts.SWAGGER_RESOURCES, method: 'delete', expectedOutput: true},
