@@ -4,6 +4,7 @@ import CardViewListHolder from "../../../components/dataTable/cardView/cardViewL
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
 import Logger from "../../../utils/logger";
+import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
 import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
@@ -653,9 +654,8 @@ let ReportContent = React.createClass({
     },
 
     /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
-    render: function() {
-
-        let isTouch = this.context.touch;
+    render() {
+        let isSmall = Breakpoints.isSmallBreakpoint();
         let recordCount = 0;
 
         let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
@@ -677,7 +677,7 @@ let ReportContent = React.createClass({
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className="reportContent">
-                        {!isTouch && this.props.reactabular &&
+                        {!isSmall && this.props.reactabular &&
 
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
@@ -691,7 +691,7 @@ let ReportContent = React.createClass({
                                 onRecordChange={this.handleRecordChange}
                         />}
 
-                        {!isTouch && !this.props.reactabular &&
+                        {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
                                 editingId={this.props.reportData.editingId}
@@ -727,7 +727,7 @@ let ReportContent = React.createClass({
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}/>
                         }
-                        {isTouch &&
+                        {isSmall &&
                             <CardViewListHolder reportData={this.props.reportData}
                                 uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={keyField}
