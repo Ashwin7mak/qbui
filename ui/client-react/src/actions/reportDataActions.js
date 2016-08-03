@@ -265,6 +265,46 @@ let reportDataActions = {
         });
     },
 
+    /**
+     * delete a record
+     */
+    deleteReportRecordBulk(appId, tblId, recIds) {
+        // promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && (!!(recIds === 0 || recIds))) {
+                let recordService = new RecordService();
+
+                //delete the record
+                recordService.deleteRecordBulk(appId, tblId, recIds).then(
+                    response => {
+                        logger.debug('RecordService deleteRecordBulk success:' + JSON.stringify(response));
+                        this.dispatch(actions.DELETE_REPORT_RECORD_BULK_SUCCESS, recIds);
+                        NotificationManager.success(Locale.getMessage('recordNotifications.recordDeletedBulk'), Locale.getMessage('success'), 1500);
+                        resolve();
+                    },
+                    error => {
+                        logger.error('RecordService deleteRecordBulk call error:', JSON.stringify(error));
+                        this.dispatch(actions.DELETE_REPORT_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error});
+                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotDeletedBulk'), Locale.getMessage('failed'), 1500);
+                        reject();
+                    }
+                ).catch(
+                    function(ex) {
+                        logger.error('Unexpected Report service call exception:', ex);
+                        this.dispatch(actions.DELETE_REPORT_RECORD_BULK_FAILED, {appId, tblId, recIds, error: ex});
+                        reject();
+                    }.bind(this)
+                );
+            } else {
+                var errMessage = 'Missing one or more required input parameters to reportDataActions.deleteReportRecordBulk. AppId:' +
+                    appId + '; TblId:' + tblId + '; recIds:' + recIds ;
+                logger.error(errMessage);
+                this.dispatch(actions.DELETE_REPORT_RECORD_BULK_FAILED, {appId, tblId, recIds, error: errMessage});
+                reject();
+            }
+        });
+    },
+
     /* the start of editing a record */
     /**
      * save a record

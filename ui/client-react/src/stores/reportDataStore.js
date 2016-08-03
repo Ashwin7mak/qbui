@@ -446,6 +446,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
             actions.DELETE_REPORT_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
             actions.DELETE_REPORT_RECORD_FAILED, this.onDeleteReportRecordFailed,
+            actions.DELETE_REPORT_RECORD_BULK_SUCCESS, this.onDeleteReportRecordBulkSuccess,
+            actions.DELETE_REPORT_RECORD_BULK_FAILED, this.onDeleteReportRecordBulkFailed,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_REPORT_RECORD_FAILED, this.onClearEdit,
@@ -640,7 +642,7 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     /**
-     * removes the record with the matching id in Record ID field from the
+     * removes the record with the matching value in the keyfield from the
      * models filteredRecord list
      * @param id
      */
@@ -662,6 +664,35 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload parameter contains {appId, tblId, recId, error: error}
      */
     onDeleteReportRecordFailed(payload) {
+        this.emit('change');
+    },
+
+    /**
+     * removes the records with the matching values in keyfield from the
+     * models filteredRecord list
+     * @param recIds
+     */
+    onDeleteReportRecordBulkSuccess(recIds) {
+        const model = this.reportModel.get();
+        var recordValueToMatch = {};
+        var index = -1;
+        for (var i = 0; i < recIds.length; i++) {
+            recordValueToMatch[model.keyField.name] = {value: recIds[i]};
+            index = _.findIndex(model.filteredRecords, recordValueToMatch);
+            if (index !== -1) {
+                model.filteredRecords.splice(index, 1);
+            } else {
+                logger.error('the record to delete does not exist in the list of currently viewed records. value: ${recId[i]} index: ${index}');
+            }
+        }
+        this.emit('change');
+    },
+
+    /**
+     * Does not do anything if it failed, just emits a change which wont cause an update (for agGrid)
+     * @param payload parameter contains {appId, tblId, recId, error: error}
+     */
+    onDeleteReportRecordBulkFailed(payload) {
         this.emit('change');
     },
 
