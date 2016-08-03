@@ -59,7 +59,6 @@ $cell-edit-background-edit: #f3f8fe;
         border-color: $header-cell-border;
         background-color: $header-cell-background-color;
         text-align: left;
-        padding-top:4px;
 
         .dropdownToggle {
             padding:0;
@@ -85,6 +84,9 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-header-viewport {
         overflow:visible;
     }
+    .ag-header-cell-menu-button>.dropdown {
+        padding-top:1px;
+    }
     .ag-header-cell-menu-button button {
         opacity: .2;
     }
@@ -101,6 +103,7 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-header-cell-text {
         padding-right:4px;
         padding-left:4px;
+        padding-top: 4px;
         display:inline-block;
     }
 
