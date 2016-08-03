@@ -22,7 +22,6 @@ import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
 
 import * as GroupTypes from '../../../constants/groupTypes';
 
-
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 import '../gridWrapper.scss';
@@ -417,7 +416,7 @@ let AGGrid = React.createClass({
      * Helper method to auto-resize all columns to the content's width. This is not called anywhere right now - more design is needed on sizing.
      */
     autoSizeAllColumns() {
-        var allColumnIds = [];
+        const allColumnIds = [];
         if (this.columnApi) {
             if (this.props.columns) {
                 this.props.columns.forEach(columnDef => {
@@ -638,26 +637,17 @@ let AGGrid = React.createClass({
             this.props.groupLevel * (consts.FONT_SIZE + consts.GROUP_ICON_PADDING) +
             checkbox_size + consts.DEFAULT_CELL_PADDING - 3;
     },
+
     /**
-     * Builder for "checkbox" column for the grid
-     * Also contains grouping expand/collpase icon if grouping is turned on
+     * checkbox column header element
+     * @returns {Element}
      */
-    getCheckBoxColumn() {
-        //Add checkbox column
-        let checkBoxCol = {};
-        checkBoxCol.field = "checkbox";
-        var checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.className = "selectAllCheckbox";
-        checkbox.checked = this.allRowsSelected();
-        checkbox.onclick = (event) => {
-            this.allCheckBoxSelected(event);
-        };
-        var headerCell = document.createElement("div");
+    getCheckBoxColumnHeader() {
+        let headerCell = document.createElement("div");
         headerCell.className = "checkboxHolder";
 
         if (this.props.showGrouping) {
-            var collapser = document.createElement("span");
+            let collapser = document.createElement("span");
             collapser.className = "collapser";
             collapser.setAttribute("state", "open");
             collapser.innerHTML = gridIcons.groupExpanded;
@@ -667,11 +657,28 @@ let AGGrid = React.createClass({
             headerCell.appendChild(collapser);
         }
 
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "selectAllCheckbox";
+        checkbox.checked = this.allRowsSelected();
+        checkbox.onclick = this.allCheckBoxSelected;
+
         headerCell.appendChild(checkbox);
+
+        return headerCell
+    },
+    /**
+     * Builder for "checkbox" column for the grid
+     * Also contains grouping expand/collpase icon if grouping is turned on
+     */
+    getCheckBoxColumn() {
+        //Add checkbox column
+        let checkBoxCol = {};
+        checkBoxCol.field = "checkbox";
+
         //ag-grid doesnt seem to allow react components sent into headerCellRender.
-        checkBoxCol.headerCellRenderer = () => {
-            return headerCell;
-        };
+        checkBoxCol.headerCellRenderer = this.getCheckBoxColumnHeader;
+
         checkBoxCol.checkboxSelection = true;
         checkBoxCol.headerClass = "gridHeaderCell";
         checkBoxCol.cellClass = "gridCell selectionCell";
@@ -683,12 +690,12 @@ let AGGrid = React.createClass({
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
         checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxCellRenderer);
-
         checkBoxCol.pinned = 'left';
+
         return checkBoxCol;
     },
 
-    setCSSClass_helper: function(obj, classname) {
+    setCSSClass_helper(obj, classname) {
         if (typeof (obj.cellClass) === 'undefined') {
             obj.cellClass = classname;
         } else {
@@ -710,7 +717,7 @@ let AGGrid = React.createClass({
 
         let {headerName} = obj;
 
-        var cell = document.createElement('div');
+        let cell = document.createElement('div');
         cell.className = "ag-header-cell";
         cell.innerHTML = `<span class="ag-header-cell-text">${headerName}</span>
             <span class="ag-header-icon ag-header-cell-menu-button "></span>`;
@@ -718,9 +725,8 @@ let AGGrid = React.createClass({
         return cell;
     },
     /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
-    getColumnProps: function() {
+    getColumnProps() {
         let columns = this.props.columns;
-
 
         if (columns) {
             let columnsData = columns.map((obj, index) => {
@@ -731,7 +737,7 @@ let AGGrid = React.createClass({
                 obj.minWidth = 100;
 
                 if (obj.datatypeAttributes) {
-                    var datatypeAttributes = obj.datatypeAttributes;
+                    let datatypeAttributes = obj.datatypeAttributes;
                     for (let attr in datatypeAttributes) {
                         switch (attr) {
 
@@ -775,8 +781,8 @@ let AGGrid = React.createClass({
                     }
 
                     if (datatypeAttributes.clientSideAttributes) {
-                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
-                        for (var cattr in clientSideAttributes) {
+                        let clientSideAttributes = datatypeAttributes.clientSideAttributes;
+                        for (let cattr in clientSideAttributes) {
                             switch (cattr) {
                             case 'bold':
                                 if (clientSideAttributes[cattr]) {
@@ -806,12 +812,12 @@ let AGGrid = React.createClass({
     getColumns() {
         let columnProps = this.getColumnProps();
 
-
         let columns = columnProps.slice(0);
 
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
         columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
 
+        console.log(columns);
         return columns;
     },
 

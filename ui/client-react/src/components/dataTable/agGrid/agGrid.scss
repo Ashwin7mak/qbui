@@ -70,9 +70,7 @@ $cell-edit-background-edit: #f3f8fe;
             position: absolute;
             left: 18px;
         }
-        .ag-header-cell-label {
-            padding: 4px $grid-default-cell-padding 3px $grid-default-cell-padding;
-        }
+
         &.selected {
             background-color: $color5;
             .ag-header-cell-menu-button {
@@ -102,6 +100,7 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-header-cell-text {
         padding-right:4px;
         padding-left:4px;
+        display:inline-block;
     }
 
     .gridCell {
@@ -261,10 +260,9 @@ $cell-edit-background-edit: #f3f8fe;
     .selectAllCheckbox {
         margin: 0px;
         height: 20px;
-    }
-    .selectAllCheckbox {
         position: absolute;
-        left: $grid-default-group-padding - $grid-default-group-padding;
+        left: 4px;
+        top: -2px;
     }
     .ag-selection-checkbox {
         position: absolute;
