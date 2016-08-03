@@ -95,7 +95,7 @@ const CellEditor = React.createClass({
     render() {
         let requiredIndication = (this.props.colDef.required) ? '*' : '\u00a0'; // u00a0 = non-breaking space
         return (<div className="cellEditWrapper" onKeyDown={this.onKeyDown}>
-                <div className="requiredFlag">{requiredIndication}</div>
+                <div className="requiredFlag requiredFlag-layout">{requiredIndication}</div>
             {this.getEditorForType(this.props.type)}
             </div>);
     }

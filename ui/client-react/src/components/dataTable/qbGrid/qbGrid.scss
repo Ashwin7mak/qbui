@@ -102,6 +102,7 @@ $grid-font-size: $font-size-p;
         margin: 0;
         border-right: 1px solid $row-border-color;
         vertical-align: middle;
+        padding-bottom: 14px;
 
         .cellWrapper {
             display:flex;
@@ -140,6 +141,7 @@ $grid-font-size: $font-size-p;
                 &.nonEditable {
                     background-color: $row-non-editable-bg-color;
                     cursor: not-allowed;
+                    padding-right: 4px;
                 }
                 &.dateTimeField>* {
                     border:0;

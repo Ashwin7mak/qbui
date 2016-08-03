@@ -2,6 +2,10 @@
 
 $data-font-size: $font-size-p;
 
+@mixin focus-shadow($color:$input-text-focus-border-color) {
+  box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
+}
+
 // plain user data
 .data {
   color : $data-color;
@@ -18,12 +22,12 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of input userdata
-input[type="text"].input {
+[type="text"].input {
   background-color: $input-bg-color;
 }
 
 // layout of input userdata on a form
-.formContainer input[type="text"].input {
+.formContainer [type="text"].input {
   margin: 10px 20px 10px 10px;
   padding: 10px;
   width: 280px;
@@ -31,39 +35,42 @@ input[type="text"].input {
 }
 
 // layout of input userdata in an inline edit table
-.reportTable input[type="text"].input {
-  margin: 0 0 0 2px;
+.reportTable [type="text"].input {
+  margin: 0 0 0 1px;
   padding: 0 0 0 2px;
   width: inherit;
   height:  30px;
 }
 
-//focus input shadow
-input[type="text"]:focus.input  {
+// visual style of focus input shadow
+[type="text"]:focus.input  {
   outline: none;
   border: solid 1px $input-text-focus-border-color;
-  box-shadow: 0 0 5px 2px rgba($input-text-focus-border-color, 0.25);
+  @include focus-shadow();
 }
 
-// input error
-input[type="text"]:focus.input.error,
-input[type="text"].input.error {
+// visual style of input error
+[type="text"]:focus.input.error,
+[type="text"].input.error {
   border: solid 1px $input-text-error-border-color;
-  border-left: 5px solid $input-text-error-border-color;
+  @include focus-shadow($input-text-error-border-color);
 }
-// focus input error shadow
-input[type="text"]:focus.input.error {
+// visual style of focus input error
+[type="text"]:focus.input.error {
   outline: none;
   border: solid 1px $input-text-error-border-color;
   border-left: 5px solid $input-text-error-border-color;
-  box-shadow: 0 0 5px 2px rgba($input-text-error-border-color, 0.25);
+  @include focus-shadow($input-text-error-border-color);
 }
 
+// visual style of required field indicator
 .requiredFlag {
   color: $field-label-normal-color;
-  display: block;
-  line-height: .3;
-  padding-left: 2px;
   font-size: 17px;
-  margin-top: 7px;
+}
+
+.requiredFlag-layout {
+  display: block;
+  padding-left: 2px;
+
 }

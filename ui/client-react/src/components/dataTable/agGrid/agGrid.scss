@@ -53,7 +53,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .gridHeaderCell {
         color: $header-cell-color;
-        font-size: 12px;
+        font-size: $grid-font-size;
         font-weight: bold;
         -webkit-font-smoothing: antialiased;
         border-color: $header-cell-border;
@@ -111,8 +111,11 @@ $cell-edit-background-edit: #f3f8fe;
         font-weight: bold;
     }
 
-    .requiredFlag {
-        margin-top: -3px; // to allow for even space above and below the inputbox
+    .requiredFlag-layout {
+        // to allow for even space above and below the inputbox
+        top: -2px;
+        position: absolute;
+        left: 3px;
     }
 
     .NoWrap {
@@ -402,7 +405,12 @@ $cell-edit-background-edit: #f3f8fe;
 
     box-shadow: 0px 0px 14px $row-box-shadow-color;
     height : 58px !important;
+    margin-top: -13px;
 
+    &[row='0'] { //top row in table would clip required star so move down and be shorter
+      margin-top: 0px;
+      height: 51px !important;
+    }
     .ag-cell.gridCell {
 
         overflow:visible;
@@ -419,7 +427,7 @@ $cell-edit-background-edit: #f3f8fe;
             }
         }
         > .cellWrapper,.ag-cell-wrapper {
-            padding:2px;
+            padding:3px;
             position: absolute;
             align-items:center;
             top:0px;
@@ -441,14 +449,17 @@ $cell-edit-background-edit: #f3f8fe;
             }
             .cellEditWrapper {
                 display:flex;
-                flex:1 1 auto;
-                flex-direction: column;
+                flex-direction: row;
+                position: relative;
+                height: 100%;
+                width: 100%;
+                align-items: center;
+                justify-content: center;
             }
             .cellEdit {
                 display:inline-block;
-                flex:1 1 auto;
-                padding:0 0 0 5px;
                 margin-right:2px;
+                margin-left: 2px;
                 height: 30px;
                 background-color: $input-bg-color;
 
@@ -559,7 +570,10 @@ $cell-edit-background-edit: #f3f8fe;
     }
 }
 
-/* ensure that group labels are visible with pinned left column */
+//.reportToolsAndContentContainer .ag-row.editing[row='0'] {
+//  margin-top: 16px;
+//}
+  /* ensure that group labels are visible with pinned left column */
 
 .ag-pinned-left-cols-container {
     z-index:999;
