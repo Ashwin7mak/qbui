@@ -129,8 +129,8 @@ let AGGrid = React.createClass({
                     {isFieldSorted && !isSortedAsc && <QBicon icon="check"/>} {sortDescText}
                 </MenuItem>
                 <MenuItem divider/>
-                <MenuItem onSelect={() => this.groupReport(colDef, true)}>{groupAscText}</MenuItem>
-                <MenuItem onSelect={() => this.groupReport(colDef, false)}>{groupDescText}</MenuItem>
+                <MenuItem onSelect={() => this.groupReport(colDef, true)}> {groupAscText}</MenuItem>
+                <MenuItem onSelect={() => this.groupReport(colDef, false)}> {groupDescText}</MenuItem>
                 <MenuItem divider/>
                 <MenuItem><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
                 <MenuItem><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>

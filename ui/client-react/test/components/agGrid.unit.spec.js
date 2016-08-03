@@ -321,6 +321,8 @@ describe('AGGrid functions', () => {
         let menuoptions = menu[numericcol.id - 1].querySelectorAll("span:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.lowToHigh"));
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.highToLow"));
+        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.lowToHigh"));
+        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.highToLow"));
     });
 
     it('menu options text field', () => {
@@ -344,8 +346,10 @@ describe('AGGrid functions', () => {
         let menuoptions = menu[0].querySelectorAll("span:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.aToZ"));
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.zToA"));
-
+        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.aToZ"));
+        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.zToA"));
     });
+
     it('menu options date field', () => {
         AGGrid.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
@@ -368,6 +372,8 @@ describe('AGGrid functions', () => {
         let menuoptions = menu[datecol.id - 1].querySelectorAll("span:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.oldToNew"));
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.newToOld"));
+        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.oldToNew"));
+        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.newToOld"));
     });
 
     it('menu options checkbox field', () => {
@@ -391,6 +397,8 @@ describe('AGGrid functions', () => {
         let menuoptions = menu[checkcol.id - 1].querySelectorAll("span:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.uncheckedToChecked"));
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.checkedToUnchecked"));
+        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.sort.uncheckedToChecked"));
+        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.sort.checkedToUnchecked"));
     });
 
     it('test row actions ', () => {
