@@ -97,19 +97,24 @@ let AGGrid = React.createClass({
         this.installHeaderMenus();
     },
 
+    /**
+     * create a column header menu
+     * @param columnIndex
+     * @param pullRight position from right side to avoid clipping
+     * @returns JSX columh header dropdown
+     */
     createHeaderMenu(columnIndex, pullRight) {
 
         const colDef = this.props.columns[columnIndex];
 
         let isSortedAsc = true;
 
-        const isFieldSorted = _.find(this.props.sortFids, (fid) => {
+        const isFieldSorted = _.find(this.props.sortFids, fid => {
             if (Math.abs(fid) === colDef.id) {
                 isSortedAsc = fid > 0;
                 return true;
             }
         });
-
 
         const sortAscText = this.getSortAscText(colDef, "sort");
         const sortDescText = this.getSortDescText(colDef, "sort");
@@ -144,14 +149,17 @@ let AGGrid = React.createClass({
         </Dropdown>);
     },
 
+    /**
+     * mount the react header menus into the dom placeholders (ag-header-cell-menu-button class)
+     */
     installHeaderMenus() {
         const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
 
+        // convert nodelist to array then iterate to render each menu
         Array.from(headers).map((header, index) => {
             const pullRight = index === headers.length - 1;
             ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
         });
-
     },
     /**
      * Build the menu items for sort/group
@@ -640,7 +648,8 @@ let AGGrid = React.createClass({
 
     /**
      * checkbox column header element
-     * @returns {Element}
+     * (also contains grouping expand/collpase icon if grouping is turned on)
+     * @returns {Element} the DOM checkbox header element
      */
     getCheckBoxColumnHeader() {
         let headerCell = document.createElement("div");
@@ -669,7 +678,6 @@ let AGGrid = React.createClass({
     },
     /**
      * Builder for "checkbox" column for the grid
-     * Also contains grouping expand/collpase icon if grouping is turned on
      */
     getCheckBoxColumn() {
         //Add checkbox column
@@ -709,13 +717,13 @@ let AGGrid = React.createClass({
     },
 
     /**
-     *
+     * ag-grid template for field column headers
      * @param obj
      * @returns {Element}
      */
-    getHeaderCellTemplate(obj) {
+    getHeaderCellTemplate(column) {
 
-        let {headerName} = obj;
+        let {headerName} = column;
 
         let cell = document.createElement('div');
         cell.className = "ag-header-cell";
@@ -730,14 +738,16 @@ let AGGrid = React.createClass({
 
         if (columns) {
             let columnsData = columns.map((obj, index) => {
+
+                let {datatypeAttributes} = obj;
+
                 obj.headerClass = "gridHeaderCell";
                 obj.headerCellTemplate = this.getHeaderCellTemplate(obj);
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
 
-                if (obj.datatypeAttributes) {
-                    let datatypeAttributes = obj.datatypeAttributes;
+                if (datatypeAttributes) {
                     for (let attr in datatypeAttributes) {
                         switch (attr) {
 

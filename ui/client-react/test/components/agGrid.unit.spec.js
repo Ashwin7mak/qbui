@@ -397,8 +397,8 @@ describe('AGGrid functions', () => {
         let menuoptions = menu[checkcol.id - 1].querySelectorAll("span:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.uncheckedToChecked"));
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.checkedToUnchecked"));
-        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.sort.uncheckedToChecked"));
-        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.sort.checkedToUnchecked"));
+        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.uncheckedToChecked"));
+        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.checkedToUnchecked"));
     });
 
     it('test row actions ', () => {
