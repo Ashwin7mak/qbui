@@ -18,6 +18,7 @@ class ReportService extends BaseService {
         //  Report service API endpoints
         this.API = {
             GET_REPORT                  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}${constants.QUERYSTRING}format={3}${constants.PARAMSEPARATOR}offset={4}${constants.PARAMSEPARATOR}numrows={5}${constants.PARAMSEPARATOR}sortlist={6}`,
+            GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
             GET_REPORTS                 : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
             GET_REPORT_COMPONENTS       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.REPORTCOMPONENTS}`,
             GET_REPORT_RESULTS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
@@ -104,6 +105,11 @@ class ReportService extends BaseService {
 
         // clear old and save a new so that report metadata gets loaded from server whenever app/table/reportId changes
         return this._cache(request, arguments);
+    }
+    
+    getReportRecordsCount(appId, tableId, reportId) {
+        let url = super.constructUrl(this.API.GET_REPORT_RECORDS_COUNT, [appId, tableId, reportId]);
+        return super.get(url);
     }
 
     /**

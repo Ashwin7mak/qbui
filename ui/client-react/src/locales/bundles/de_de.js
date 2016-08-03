@@ -69,7 +69,9 @@ export default {
             recordAdded: "Die Bilanz hinzugefügt",
             recordNotAdded :"Nehmen Sie nicht hinzugefügt",
             recordSaved : "Datensatz gespeichert",
-            recordNotSaved :"Nehmen Sie nicht gespeichert"
+            recordNotSaved :"Nehmen Sie nicht gespeichert",
+            recordDeleted : "Der Datensatz wurde gelöscht",
+            recordNotDeleted : "Nehmen Sie nicht gelöscht"
         },
         header: {
             menu: {

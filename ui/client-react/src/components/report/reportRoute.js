@@ -80,7 +80,7 @@ const ReportRoute = React.createClass({
 
         return (this.props.selectedTable &&
         <h3 className="breadCrumbs"><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}
-            <span className="breadCrumbsSeparator"> | </span>{reportName}</h3>);
+            <span className="breadCrumbsSeparator"> {reportName && "|"} </span>{reportName}</h3>);
 
     },
 

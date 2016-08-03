@@ -299,6 +299,9 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         saveRecord(a, t, r, c) {
             return Promise.resolve({data:responseData});
         }
+        deleteRecord(a, b, r) {
+            return Promise.resolve({data:responseData});
+        }
     }
     let stores = {};
     let flux = new Fluxxor.Flux(stores);
@@ -307,6 +310,7 @@ describe('Report Data Actions Edit Report functions -- success', () => {
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockRecordService.prototype, 'saveRecord').and.callThrough();
+        spyOn(mockRecordService.prototype, 'deleteRecord').and.callThrough();
         reportDataActions.__Rewire__('RecordService', mockRecordService);
     });
 
@@ -341,11 +345,19 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId:4}]);
     });
 
-    it('test deleteReportRecord', () => {
-        let id = 4;
-        flux.actions.deleteReportRecord({id});
-        expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-        expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.DELETE_REPORT_RECORD, {id}]);
+    it('test deleteReportRecord', (done) => {
+        flux.actions.deleteReportRecord(appId, tblId, recId).then(
+            () => {
+                expect(mockRecordService.prototype.deleteRecord).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.DELETE_REPORT_RECORD_SUCCESS, recId]);
+                done();
+            },
+            () => {
+                expect(true).toBe(false);
+                done();
+            }
+        );
     });
 
     it('test saveReportRecord', (done) => {

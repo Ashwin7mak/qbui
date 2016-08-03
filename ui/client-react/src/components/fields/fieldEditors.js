@@ -46,6 +46,9 @@ export const MultiLineTextFieldEditor = React.createClass({
         onChange: React.PropTypes.func
     },
 
+    statics: {
+        MAX_TEXTAREA_HEIGHT: 100
+    },
     getDefaultProps() {
         return {
             value: "",
@@ -74,11 +77,19 @@ export const MultiLineTextFieldEditor = React.createClass({
     },
 
     /**
-     * reset height to the natural height with no scrollbar (using a common technique)
+     * reset height to the natural value, unless it exceeds MAX_TEXTAREA_HEIGHT,
+     * in which case start using vertical scrolling
      */
     resize() {
         this.setState({style: {height: "auto"}}, () => {
-            this.setState({style: {height: this.refs.textarea.scrollHeight}});
+            // now we can query the actual (auto) height
+            let newHeight = this.refs.textarea.scrollHeight;
+
+            if (newHeight < MultiLineTextFieldEditor.MAX_TEXTAREA_HEIGHT) {
+                this.setState({style: {height: newHeight}});
+            } else {
+                this.setState({style: {height: MultiLineTextFieldEditor.MAX_TEXTAREA_HEIGHT, overflowY: "auto"}});
+            }
         });
     },
 

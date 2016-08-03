@@ -189,6 +189,8 @@ const flux = {
         },
         logMeasurements : ()=> {
         },
+        deleteReportRecord: ()=> {
+        }
     }
 };
 
@@ -700,6 +702,22 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleFieldChange({recId: 100, fid:4});
         expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
+    });
+
+    it('test handleRecordDelete', () => {
+        let keyField = "id";
+        let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
+        spyOn(flux.actions, 'deleteReportRecord');
+
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                appId="123"
+                                                                tblId="456"
+                                                                reportData={fakeReportData_simple}
+                                                                uniqueIdentifier="col_text"
+                                                                reportHeader={header_empty} keyField={keyField}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        component.handleRecordDelete(origRec);
+        expect(flux.actions.deleteReportRecord).toHaveBeenCalled();
     });
 
     it('test handleRecordSaveClicked', () => {

@@ -69,7 +69,9 @@ export default {
             recordAdded : "Enregistrement ajouté",
             recordNotAdded :"Enregistrement non ajouté",
             recordSaved : "Sauvegarder",
-            recordNotSaved :"Enregistrement non enregistré"
+            recordNotSaved :"Enregistrement non enregistré",
+            recordDeleted : "Enregistrement supprimé",
+            recordNotDeleted : "Enregistrement non supprimé"
         },
         header: {
             menu: {

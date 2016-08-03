@@ -95,7 +95,7 @@ let reportDataActions = {
 
     loadReport(appId, tblId, rptId, format, offset, rows, sortList) {
         //  promise is returned in support of unit testing only
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {
                 this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
                 this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT, {});
@@ -110,29 +110,39 @@ let reportDataActions = {
                             _.extend(model, {sortList: sortList});
                             this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
                         }
-                        if (response.data.reportTotalRecordsCount) {
+                    },
+                    (error) => {
+                        logger.error('Report service call error when querying for report meta data, data or records count:' + JSON.stringify(error));
+                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                        reject();
+                    }
+                ).catch(ex => {
+                    logger.error('Unexpected Report service call exception:', ex);
+                    this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
+                    reject();
+                });
+                
+                reportService.getReportRecordsCount(appId, tblId, rptId).then(
+                    (response) => {
+                        if (response.data) {
                             logger.debug('ReportRecordsCount service call successful');
-                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data.reportTotalRecordsCount);
+                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data);
                         }
                     },
                     (error) => {
-                            logger.error('Report service call error when querying for report meta data, data or records count:' + JSON.stringify(error));
-                            this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
-                            reject();
-                    }
-                ).catch(
-                    function(ex) {
-                        logger.error('Unexpected Report service call exception:', ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
+                        logger.error('Report service call error when querying for report meta data, data or records count:' + JSON.stringify(error));
+                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
                         reject();
-                    }.bind(this)
-                );
+                    }
+                ).catch(ex => {
+                    
+                });
             } else {
                 logger.error('Missing one or more required input parameters to reportDataActions.loadReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
                 this.dispatch(actions.LOAD_REPORT_FAILED);
                 reject();
             }
-        }.bind(this));
+        });
     },
 
     filterSelectionsPending(selections) {
@@ -191,11 +201,11 @@ let reportDataActions = {
                             reject();
                         }
                     ).catch(
-                        function(ex) {
+                        ex => {
                             logger.error('Unexpected Report service call exception:', ex);
                             this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {appId, tblId, record, error: ex});
                             reject();
-                        }.bind(this)
+                        }
                     );
             } else {
                 var errMessage = 'Missing one or more required input parameters to reportDataActions.addReportRecord. AppId:' +
@@ -208,10 +218,43 @@ let reportDataActions = {
     },
 
     /**
-     * delete a record (EMPOWER)
+     * delete a record
      */
-    deleteReportRecord(id) {
-        this.dispatch(actions.DELETE_REPORT_RECORD, id);
+    deleteReportRecord(appId, tblId, recId) {
+        // promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && (!!(recId === 0 || recId))) {
+                let recordService = new RecordService();
+
+                //delete the record
+                recordService.deleteRecord(appId, tblId, recId).then(
+                    response => {
+                        logger.debug('RecordService deleteRecord success:' + JSON.stringify(response));
+                        this.dispatch(actions.DELETE_REPORT_RECORD_SUCCESS, recId);
+                        NotificationManager.success(Locale.getMessage('recordNotifications.recordDeleted'), Locale.getMessage('success'), 1500);
+                        resolve();
+                    },
+                    error => {
+                        logger.error('RecordService deleteRecord call error:', JSON.stringify(error));
+                        this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: error});
+                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotDeleted'), Locale.getMessage('failed'), 1500);
+                        reject();
+                    }
+                ).catch(
+                    function(ex) {
+                        logger.error('Unexpected Report service call exception:', ex);
+                        this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: ex});
+                        reject();
+                    }.bind(this)
+                );
+            } else {
+                var errMessage = 'Missing one or more required input parameters to reportDataActions.deleteReportRecord. AppId:' +
+                    appId + '; TblId:' + tblId + '; recId:' + recId ;
+                logger.error(errMessage);
+                this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: errMessage});
+                reject();
+            }
+        });
     },
 
     /* the start of editing a record */
@@ -240,11 +283,11 @@ let reportDataActions = {
                         reject();
                     }
                 ).catch(
-                    function(ex) {
+                    ex => {
                         logger.error('Unexpected Report service call exception:', ex);
                         this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: ex});
                         reject();
-                    }.bind(this)
+                    }
                 );
             } else {
                 var errMessage = 'Missing one or more required input parameters to reportDataActions.saveReportRecord. AppId:' +
@@ -274,7 +317,7 @@ let reportDataActions = {
     getFilteredRecords(appId, tblId, rptId, requiredQueryParams, filter, overrideQueryParams) {
 
         //  promise is returned in support of unit testing only
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             if (appId && tblId && rptId) {
                 let sortList = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
@@ -295,41 +338,41 @@ let reportDataActions = {
                 }
 
                 Promise.all(promises).then(
-                    (response) => {
+                    response => {
                         var queryParams = buildRequestQuery(response[0], requiredQueryParams, overrideQueryParams, response[1], filter);
 
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, queryParams).then(
-                            (recordResponse) => {
+                            recordResponse => {
                                 logger.debug('Filter Report Records service call successful');
                                 var model = reportModel.set(null, recordResponse);
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
                                 resolve();
                             },
-                            (error) => {
+                            error => {
                                 logger.error('Filter Report Records service call error:', JSON.stringify(error));
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                                 reject();
                             }
                         ).catch(
-                            function(ex) {
+                            ex => {
                                 logger.error('Get Filtered Records- Records service call exception:', ex);
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, {error: ex});
                                 reject();
-                            }.bind(this)
+                            }
                         );
                     },
-                    (error) => {
+                    error => {
                         logger.error('Filter Report service call error:', error);
                         this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
                         reject();
                     }
                 ).catch(
-                    function(ex) {
+                    ex => {
                         logger.error('Get Filtered Records- service calls exception:', ex);
                         this.dispatch(actions.LOAD_RECORDS_FAILED, {exception: ex});
                         reject();
-                    }.bind(this)
+                    }
                 );
             } else {
                 var errMessage = 'Missing one or more required input parameters to reportDataActions.getFilteredRecords. AppId:' +
@@ -338,8 +381,30 @@ let reportDataActions = {
                 this.dispatch(actions.LOAD_RECORDS_FAILED, {error: errMessage});
                 reject();
             }
-        }.bind(this));
+        });
     },
+
+    /**
+     * navigate to previous record after opening record from report
+     * @param rptId
+     */
+    showPreviousRecord(rptId) {
+        this.dispatch(actions.SHOW_PREVIOUS_RECORD, {rptId});
+    },
+    /**
+     * navigate to next record after opening record from report
+     * @param rptId
+     */
+    showNextRecord(rptId) {
+        this.dispatch(actions.SHOW_NEXT_RECORD, {rptId});
+    },
+    /**
+     * open record from report (i.e. drill-down)
+     * @param rptId
+     */
+    openingReportRow(rptId, recId) {
+        this.dispatch(actions.OPEN_REPORT_RECORD, {rptId, recId});
+    }
 };
 
 export default reportDataActions;

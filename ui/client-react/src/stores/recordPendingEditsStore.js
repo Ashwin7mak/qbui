@@ -22,8 +22,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_REPORT_RECORD_FAILED, this.onSaveRecordFailed,
             actions.ADD_REPORT_RECORD, this.onSaveAddedRecord,
             actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
-            actions.ADD_REPORT_RECORD_FAILED, this.onAddRecordFailed,
-
+            actions.ADD_REPORT_RECORD_FAILED, this.onAddRecordFailed
         );
         this._initData();
         this.commitChanges = [];

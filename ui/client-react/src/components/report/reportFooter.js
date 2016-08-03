@@ -56,7 +56,7 @@ const ReportToolbar = React.createClass({
                                            getNextReportPage={this.props.getNextReportPage}
                                            getPreviousReportPage={this.props.getPreviousReportPage}
                         />) :
-                        null
+                        this.props.loading ? <div className="loadedContent"></div> : null
                     }
                 </div>
             </div>

@@ -205,27 +205,13 @@ const ReportToolbar = React.createClass({
                         }
                     </div>
                     <div className="rightReportToolbar">
-                        {(isCountingRecords) ?
-                            (<RecordsCount recordCount={null}
-                                           isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
-                                           filteredRecordCount={filteredRecordCount}
-                                           nameForRecords={this.props.nameForRecords}
-                                           clearAllFilters={this.props.clearAllFilters}
-                                           isCounting={true}
-                            />) :
-                            null
-                        }
-
-                        {(!isCountingRecords && recordCount) ?
-                            (<RecordsCount recordCount={recordCount}
-                                  isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
-                                  filteredRecordCount={filteredRecordCount}
-                                  nameForRecords={this.props.nameForRecords}
-                                  clearAllFilters={this.props.clearAllFilters}
-                                  isCounting={false}
-                            />) :
-                            null
-                        }
+                        <RecordsCount recordCount={recordCount}
+                              isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
+                              filteredRecordCount={filteredRecordCount}
+                              nameForRecords={this.props.nameForRecords}
+                              clearAllFilters={this.props.clearAllFilters}
+                              isCounting={false}
+                        />
 
                         {!isLoading ?
                             (<ReportNavigation pageStart={this.props.pageStart}
@@ -234,8 +220,9 @@ const ReportToolbar = React.createClass({
                                                getNextReportPage={this.props.getNextReportPage}
                                                getPreviousReportPage={this.props.getPreviousReportPage}
                             />) :
-                            null
+                            this.props.loading ? <div className="loadedContent"></div> : null
                         }
+
                     </div>
                 {this.props.pageActions}
 
