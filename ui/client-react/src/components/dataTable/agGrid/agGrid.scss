@@ -85,16 +85,17 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-header-viewport {
         overflow:visible;
     }
-    .ag-header-cell-menu-button {
-        display: none;
+    .ag-header-cell-menu-button button {
+        opacity: .2;
     }
     .ag-header-cell-menu-button .dropdown-menu {
+        font-size: 12px;
         margin-top:0;
         padding-top:0;
     }
     .ag-header-cell:hover {
-        .ag-header-cell-menu-button {
-            display: block;
+        .ag-header-cell-menu-button button {
+            opacity: 1;
         }
     }
     .ag-header-cell-text {

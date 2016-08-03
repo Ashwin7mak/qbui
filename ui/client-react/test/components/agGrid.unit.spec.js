@@ -3,11 +3,11 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
+import {Button} from 'react-bootstrap';
 
 import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
 import CellValueRenderers from '../../src/components/dataTable/agGrid/cellValueRenderers';
 import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
-
 
 import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
@@ -274,23 +274,30 @@ describe('AGGrid functions', () => {
         expect(rowsSelected).toEqual(fakeReportData_before.data.records.length);
         expect(selectAllCheckbox[0].checked).toEqual(true);
     });
-    it('renders column menu', (done) => {
+
+    it('renders column menu', () => {
         AGGrid.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
                                                          records={fakeReportData_before.data.records}
                                                          columns={fakeReportData_before.data.columns} flux={flux}
-                                                         loading={false}/>);
+                                                         loading={false} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
-        let menuButton = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
-        expect(menuButton.length).toBeGreaterThan(1);
-        mouseclick(menuButton[0]);
-        window.setTimeout(function() {
-            let menu = gridElement[0].getElementsByClassName("ag-menu");
-            expect(menu.length).toEqual(1);
-            done();
-        }, 100);
+        expect(gridElement.length).toBe(1);
+
+        let header = ReactDOM.findDOMNode(component).querySelectorAll(".ag-header");
+        expect(header.length).toBe(1);
+
+        let menuButtons = ReactDOM.findDOMNode(component).querySelectorAll(".ag-header button.dropdownToggle");
+        expect(menuButtons.length).toBe(fakeReportData_before.data.columns.length);
+
+        TestUtils.Simulate.click(menuButtons[0]);
+
+        let menu = ReactDOM.findDOMNode(component).querySelectorAll(".ag-header .dropdown.open");
+        expect(menu.length).toEqual(1);
+
     });
+
     it('menu options numeric field', () => {
         AGGrid.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
@@ -304,17 +311,18 @@ describe('AGGrid functions', () => {
         });
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
-        let menuButtons = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        let menuButtons = ReactDOM.findDOMNode(gridElement[0]).querySelectorAll(".ag-header button.dropdownToggle");
         expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
-        mouseclick(menuButtons[numericcol.id - 1]);
-        let menu = gridElement[0].getElementsByClassName("ag-menu");
-        expect(menu.length).toEqual(1);
-        let menuoptions = menu[0].getElementsByClassName("ag-menu-option-text");
+
+        TestUtils.Simulate.click(menuButtons[numericcol.id - 1]);
+
+        let menu = gridElement[0].getElementsByClassName("dropdown-menu");
+        expect(menu.length).toBeGreaterThan(0);
+        let menuoptions = menu[numericcol.id - 1].querySelectorAll("span:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.lowToHigh"));
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.highToLow"));
-        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.lowToHigh"));
-        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.highToLow"));
     });
+
     it('menu options text field', () => {
         AGGrid.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
@@ -328,16 +336,15 @@ describe('AGGrid functions', () => {
         });
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
-        let menuButtons = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        let menuButtons = ReactDOM.findDOMNode(gridElement[0]).querySelectorAll(".ag-header button.dropdownToggle");
         expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
-        mouseclick(menuButtons[textcol.id - 1]);
-        let menu = gridElement[0].getElementsByClassName("ag-menu");
-        expect(menu.length).toEqual(1);
-        let menuoptions = menu[0].getElementsByClassName("ag-menu-option-text");
+        TestUtils.Simulate.click(menuButtons[textcol.id - 1]);
+        let menu = gridElement[0].getElementsByClassName("dropdown-menu");
+        expect(menu.length).toBeGreaterThan(0);
+        let menuoptions = menu[0].querySelectorAll("span:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.aToZ"));
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.zToA"));
-        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.aToZ"));
-        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.zToA"));
+
     });
     it('menu options date field', () => {
         AGGrid.__ResetDependency__('AgGridReact');
@@ -353,17 +360,16 @@ describe('AGGrid functions', () => {
 
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
-        let menuButtons = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        let menuButtons = ReactDOM.findDOMNode(gridElement[0]).querySelectorAll(".ag-header button.dropdownToggle");
         expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
-        mouseclick(menuButtons[datecol.id - 1]);
-        let menu = gridElement[0].getElementsByClassName("ag-menu");
-        expect(menu.length).toEqual(1);
-        let menuoptions = menu[0].getElementsByClassName("ag-menu-option-text");
+        TestUtils.Simulate.click(menuButtons[datecol.id - 1]);
+        let menu = gridElement[0].getElementsByClassName("dropdown-menu");
+        expect(menu.length).toBeGreaterThan(1);
+        let menuoptions = menu[datecol.id - 1].querySelectorAll("span:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.oldToNew"));
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.newToOld"));
-        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.oldToNew"));
-        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.newToOld"));
     });
+
     it('menu options checkbox field', () => {
         AGGrid.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid appId="1" tblId="2" rptId="3" actions={TableActionsMock}
@@ -377,18 +383,15 @@ describe('AGGrid functions', () => {
         });
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
-        let menuButtons = gridElement[0].getElementsByClassName("ag-header-cell-menu-button");
+        let menuButtons = ReactDOM.findDOMNode(gridElement[0]).querySelectorAll(".ag-header button.dropdownToggle");
         expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
-        mouseclick(menuButtons[checkcol.id - 1]);
-        let menu = gridElement[0].getElementsByClassName("ag-menu");
-        expect(menu.length).toEqual(1);
-        let menuoptions = menu[0].getElementsByClassName("ag-menu-option-text");
+        TestUtils.Simulate.click(menuButtons[checkcol.id - 1]);
+        let menu = gridElement[0].getElementsByClassName("dropdown-menu");
+        expect(menu.length).toBeGreaterThan(1);
+        let menuoptions = menu[checkcol.id - 1].querySelectorAll("span:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.uncheckedToChecked"));
         expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.checkedToUnchecked"));
-        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.uncheckedToChecked"));
-        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.checkedToUnchecked"));
     });
-
 
     it('test row actions ', () => {
         AGGrid.__ResetDependency__('AgGridReact');

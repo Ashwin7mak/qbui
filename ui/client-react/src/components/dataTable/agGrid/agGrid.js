@@ -117,7 +117,7 @@ let AGGrid = React.createClass({
         const groupDescText = this.getSortDescText(colDef, "group");
 
         return (<Dropdown bsStyle="default" noCaret id="dropdown-no-caret" pullRight={pullRight}>
-            <Button tabIndex="0"  bsRole="toggle" className={"dropdownToggle iconActionButton"}>
+            <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
                 <QBicon icon="caret-filled-down"/>
             </Button>
 
@@ -665,7 +665,7 @@ let AGGrid = React.createClass({
 
         headerCell.appendChild(checkbox);
 
-        return headerCell
+        return headerCell;
     },
     /**
      * Builder for "checkbox" column for the grid
@@ -780,6 +780,7 @@ let AGGrid = React.createClass({
                         }
                     }
 
+                    // todo: this really be be done in the cell renderers instead
                     if (datatypeAttributes.clientSideAttributes) {
                         let clientSideAttributes = datatypeAttributes.clientSideAttributes;
                         for (let cattr in clientSideAttributes) {
@@ -817,7 +818,6 @@ let AGGrid = React.createClass({
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
         columns.unshift(this.getCheckBoxColumn(this.props.showGrouping));
 
-        console.log(columns);
         return columns;
     },
 
