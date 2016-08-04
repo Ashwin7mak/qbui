@@ -21,6 +21,7 @@ $cell-edit-background-edit: $color1;
     }
 }
 .qbGrid>thead>tr>th {
+    white-space:nowrap;
     border-right: 1px solid #c0d0e4;
     border-bottom: 2px solid #d2dce7;
     padding: 4px;
@@ -30,6 +31,26 @@ $cell-edit-background-edit: $color1;
     -webkit-font-smoothing: antialiased;
     border-color: #c0d0e4;
     background-color: #e3eaf3;
+    .headerCell {
+        display:flex;
+        justify-content:space-between;
+        .dropdown-menu {
+            font-size: 12px;
+        }
+        .qbIcon.iconssturdy-check {
+            color: $color22;
+        }
+        .dropdownToggle {
+            opacity: .2;
+            padding:0;
+            border:0;
+            background-color:inherit;
+        }
+        &:hover .dropdownToggle {
+            opacity:1;
+        }
+    }
+
 }
 
 .qbGrid .actionsCol {
