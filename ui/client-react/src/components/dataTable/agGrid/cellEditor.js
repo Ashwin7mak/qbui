@@ -74,10 +74,11 @@ const CellEditor = React.createClass({
                                         tabIndex="0"
                                         ref="cellInput"
                                         />;
-            //Drew's change
+            //Drew's change TBD by Andrew if users want text box that
+            // grows in height for single line text change TextFieldEditor to
             //  return <MultiLineTextFieldEditor value={this.props.value}
+            //       placeholder={this.props.colDef.placeholder}
             //       onChange={this.props.onChange} />;
-
             }
         }
         }
