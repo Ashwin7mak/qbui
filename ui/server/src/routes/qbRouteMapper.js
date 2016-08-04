@@ -70,8 +70,8 @@
          * routeToDeleteFunction maps each route to the proper function associated with that route for a DELETE request
          */
         var routeToDeleteFunction = {};
-        routeToDeleteFunction[routeConsts.RECORDS_BULK] = deleteRecordsBulk;
         routeToDeleteFunction[routeConsts.RECORD] = deleteSingleRecord;
+        routeToDeleteFunction[routeConsts.RECORDS_BULK] = deleteRecordsBulk;
 
         /*
          * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
