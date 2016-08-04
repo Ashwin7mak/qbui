@@ -38,6 +38,7 @@ const CellEditor = React.createClass({
 
         case formats.NUMBER_FORMAT:
         case formats.RATING_FORMAT:
+        case formats.DURATION_FORMAT:
         case formats.CURRENCY_FORMAT:
         case formats.PERCENT_FORMAT: {
             return <DefaultFieldEditor value={this.props.value}

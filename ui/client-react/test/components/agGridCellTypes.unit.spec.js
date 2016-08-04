@@ -59,6 +59,38 @@ describe('AGGrid cell editor functions', () => {
         expect(value.innerHTML).toEqual("newValue");
     });
 
+
+    it('test TextCellRenderer bold', () => {
+        const params = {
+            value: {
+                value: "Testing",
+                display: "Testing"
+            },
+            column: {
+                colDef: {
+                    clientSideAttributes: {
+                        num_lines: 1
+                    },
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} isBold={true}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        console.log('component.innerHTML:' + ReactDOM.findDOMNode(component).innerHTML);
+
+        const value = TestUtils.findRenderedDOMComponentWithClass(component, "textCell");
+        expect(value.innerHTML).toEqual(params.value.display);
+
+        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+        expect(edit.type).toEqual("text");
+        expect(edit.value).toEqual(params.value.display);
+
+        edit.value = "newValue";
+        TestUtils.Simulate.change(edit);
+        expect(value.innerHTML).toEqual("newValue");
+    });
+
     it('test TextCellRenderer multiline', () => {
         const params = {
             value: {
@@ -78,7 +110,6 @@ describe('AGGrid cell editor functions', () => {
 
         component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        console.log('component.innerHTML:' + ReactDOM.findDOMNode(component).innerHTML);
 
         const value = TestUtils.findRenderedDOMComponentWithClass(component, "multiLineTextCell");
         expect(value.innerHTML).toEqual(params.value.display);

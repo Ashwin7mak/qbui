@@ -10,7 +10,7 @@ export const CellValueRenderer = React.createClass({
         display: React.PropTypes.any,
         value: React.PropTypes.any,
         attributes: React.PropTypes.object,
-        isEditable : React.PropTypes.bool
+        isEditable: React.PropTypes.bool
     },
 
     render() {
@@ -20,48 +20,50 @@ export const CellValueRenderer = React.createClass({
         case formats.NUMBER_FORMAT:
         case formats.RATING_FORMAT:
             return (<span className={className}>
-                {this.props.value && <NumberCellValueRenderer value={this.props.value} attributes={this.props.attributes} />}
+                {this.props.value &&
+                <NumberCellValueRenderer value={this.props.value} attributes={this.props.attributes}/>}
                 </span>);
 
         case formats.USER_FORMAT:
             return (<span className={className}>
-                <UserCellValueRenderer value={this.props.display} />
+                <UserCellValueRenderer value={this.props.display}/>
                 </span>);
 
         case formats.DATE_FORMAT:
             return (<span className={className}>
-                <DateCellValueRenderer value={this.props.display} />
+                <DateCellValueRenderer value={this.props.display}/>
                 </span>);
 
         case formats.DATETIME_FORMAT: {
-            return (<span className={className}>
-                <DateCellValueRenderer value={this.props.display} />
+                return (<span className={className}>
+                <DateCellValueRenderer value={this.props.display}/>
                 </span>);
-        }
+            }
 
         case formats.TIME_FORMAT: {
-            return (<span className={className}>
-                <DateCellValueRenderer value={this.props.display} />
+                return (<span className={className}>
+                <DateCellValueRenderer value={this.props.display}/>
                 </span>);
-        }
+            }
         case formats.CHECKBOX_FORMAT:
             return (<span className={className}>
-                    <input type="checkbox" disabled checked={this.props.value} />
+                    <input type="checkbox" disabled checked={this.props.value}/>
                 </span>);
 
         case formats.MULTI_LINE_TEXT_FORMAT:
             return (<span className={className}>
-                <MultiLineTextCellValueRenderer value={this.props.display} />
+                <MultiLineTextCellValueRenderer value={this.props.display}/>
                 </span>);
 
         case formats.TEXT_FORMAT:
         case formats.PERCENT_FORMAT:
+        case formats.DURATION_FORMAT:
         case formats.CURRENCY_FORMAT:
         default: {
-            return (<span className={className}>
-                <TextCellValueRenderer value={this.props.display} />
+                return (<span className={className}>
+                <TextCellValueRenderer value={this.props.display}/>
                 </span>);
-        }
+            }
         }
     }
 });
@@ -89,6 +91,7 @@ export const NumberCellValueRenderer = React.createClass({
         return <div className="numberCell data"><I18nNumber value={this.props.value}></I18nNumber></div>;
     }
 });
+
 
 export const DateCellValueRenderer = React.createClass({
 
