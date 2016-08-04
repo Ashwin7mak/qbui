@@ -12,6 +12,7 @@ export const TextFieldEditor = React.createClass({
     },
 
     onChange(ev) {
+        //TODO: add debounce support for reduced rerendering
         this.props.onChange(ev.target.value);
     },
 
