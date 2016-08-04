@@ -689,6 +689,17 @@ let ReportContent = React.createClass({
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 onFieldChange={this.handleFieldChange}
                                 onRecordChange={this.handleRecordChange}
+                                appId={this.props.reportData.appId}
+                                tblId={this.props.reportData.tblId}
+                                rptId={this.props.reportData.rptId}
+                                showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
+                                recordCount={recordCount}
+                                groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
+                                groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
+                                sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+                                filter={{selections: this.props.reportData.selections,
+                                        facet: this.props.reportData.facetExpression,
+                                        search: this.props.reportData.searchStringForFiltering}}
                         />}
 
                         {!isSmall && !this.props.reactabular &&
