@@ -36,3 +36,12 @@ The react playground is built using CodeMirror and a few other tools. It needs t
 ```
 <ReactPlayground codeText={Examples.YourExample} />
 ```
+
+### Running the Playground
+The Component Library is part of the build process and is deployed whenever QBUI is deployed. During the build process a separate component library bundle is generated (you can see that in the webpack config file `../qbui/ui/webpack.config.js`). That bundle is then served via Express (you can see that route in the client routes file `../qbui/ui/server/src/routes/qbClientRoutes.js`).
+ 
+So once any changes that are merged into master they get pushed just like everything else. 
+
+To run the components use the /components route
+
+For example the latest master build is live at [https://team.newstack.quickbase.com/components](https://team.newstack.quickbase.com/components)

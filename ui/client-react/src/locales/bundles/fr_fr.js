@@ -231,5 +231,8 @@ export default {
         applyTip: "Sortez et appliquer les modifications",
         success: "Le succès",
         failed: "Échoué",
+        placeholder:  {
+            email: 'nom@domaine.com'
+        },
     }
 };

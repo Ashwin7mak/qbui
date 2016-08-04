@@ -17,7 +17,7 @@ import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 
 import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
-        NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
+        NumericCellRenderer, DurationCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
         CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer}  from './cellRenderers';
 
 import * as GroupTypes from '../../../constants/groupTypes';
@@ -782,7 +782,7 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
                             case serverTypeConsts.DURATION :
-                                obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
+                                obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
                                 break;
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
