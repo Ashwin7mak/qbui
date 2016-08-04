@@ -17,10 +17,12 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let QBForm = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
-        activeTab: React.PropTypes.string
-    },
-    contextTypes: {
-        touch: React.PropTypes.bool
+        activeTab: React.PropTypes.string,
+        formData: React.PropTypes.shape({
+            record: React.PropTypes.array,
+            fields: React.PropTypes.array,
+            formMeta: React.PropTypes.object
+        })
     },
 
     getDefaultProps: function() {
