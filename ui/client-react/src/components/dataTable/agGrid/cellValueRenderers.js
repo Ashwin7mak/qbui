@@ -35,16 +35,16 @@ export const CellValueRenderer = React.createClass({
                 </span>);
 
         case formats.DATETIME_FORMAT: {
-                return (<span className={className}>
+            return (<span className={className}>
                 <DateCellValueRenderer value={this.props.display}/>
                 </span>);
-            }
+        }
 
         case formats.TIME_FORMAT: {
-                return (<span className={className}>
+            return (<span className={className}>
                 <DateCellValueRenderer value={this.props.display}/>
                 </span>);
-            }
+        }
         case formats.CHECKBOX_FORMAT:
             return (<span className={className}>
                     <input type="checkbox" disabled checked={this.props.value}/>
@@ -60,10 +60,10 @@ export const CellValueRenderer = React.createClass({
         case formats.DURATION_FORMAT:
         case formats.CURRENCY_FORMAT:
         default: {
-                return (<span className={className}>
-                <TextCellValueRenderer value={this.props.display}/>
+            return (<span className={className}>
+                <TextCellValueRenderer value={this.props.display} attributes={this.props.attributes}/>
                 </span>);
-            }
+        }
         }
     }
 });
