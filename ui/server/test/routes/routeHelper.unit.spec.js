@@ -116,6 +116,27 @@ describe('Validate RequestHelper unit tests', function() {
         });
     });
 
+    describe('validate getFormsByTypeRoute method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', reportId: '', expectation: ''},
+            {name: 'test null url', url: null, formType:null, reportId: '',  expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', formType: 'VIEW', reportId: '', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table id', url: '/apps/123/tables', formType: 'VIEW', reportId: '', expectation: '/apps/123/tables'},
+            {name: 'test invalid url - no table id2', url: '/apps/123/tables/', formType: 'VIEW', reportId: '', expectation: '/apps/123/tables/'},
+            {name: 'test valid url', url: '/apps/123/tables/456', formType: null, reportId: '', expectation: '/apps/123/tables/456/forms?formType=view&'},
+            {name: 'test valid url - 1', url: '/apps/123/tables/456', formType: 'view', reportId: '', expectation: '/apps/123/tables/456/forms?formType=view&'},
+            {name: 'test valid url - 2', url: '/apps/123/tables/456/records/789', formType: 'view', reportId: '', expectation: '/apps/123/tables/456/forms?formType=view&'},
+            {name: 'test valid url with report', url: '/apps/123/tables/456', formType: 'view', reportId: '1234', expectation: '/apps/123/tables/456/forms?formType=view&reportId=1234'},
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getFormsByTypeRoute(testCase.url, testCase.formType, testCase.reportId), testCase.expectation);
+                done();
+            });
+        });
+    });
+
     describe('validate getRecordsRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', expectation: ''},

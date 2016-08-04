@@ -178,6 +178,27 @@
 
         /**
          * For the given req.url, extract the APPS and TABLES identifiers/ids and
+         * append the FORMS identifier, FORMS type and optional reportId.
+         *
+         * Example:  url: /apps/123/tables/456/rest/of/url
+         *           return: /apps/123/tables/456/forms?formType=VIEW&<formId>
+         *
+         * @param url
+         * @param formId
+         * @returns {*}
+         */
+        getFormsByTypeRoute: function(url, formType, reportId) {
+            let root = getUrlRoot(url, TABLES);
+            if (root) {
+                return root + '/' + FORMS + '?formType=' + (formType ? formType : 'view') + (reportId ? '&reportId=' + reportId : '&');
+            }
+
+            //  no url root for TABLES found; return original url unchanged
+            return url;
+        },
+
+        /**
+         * For the given req.url, extract the APPS and TABLES identifiers/ids and
          * append the RECORDS identifier and optional recordId.
          *
          * Example:  url: /apps/123/tables/456/rest/of/url
