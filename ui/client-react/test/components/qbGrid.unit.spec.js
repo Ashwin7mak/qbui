@@ -128,7 +128,7 @@ describe('QbGrid functions', () => {
                                 onRowClick={()=>{didRowClick = true;}}
                                 uniqueIdentifier="Record ID#"
                                 keyField="Record ID#"
-                                sortFids={1}
+                                sortFids={[1]}
                                 flux={flux}/>;
                     </div>);
             }
