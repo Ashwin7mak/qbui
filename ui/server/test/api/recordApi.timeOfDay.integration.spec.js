@@ -12,10 +12,9 @@
      * Integration test for TimeOfDay field formatting
      */
     describe('API - TimeOfDay record test cases - ', function() {
-        // The Java API is now only accepting time for Time of Day fields
+        // The Java API is only accepting time in/out for Time of Day fields
         var earlyTODIn = '09:00:00';
         var lateTODIn = '15:00:00';
-        // Java is still returning in this format to node
         var earlyTODOut = '09:00:00';
         var lateTODOut = '15:00:00';
 
