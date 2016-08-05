@@ -13,11 +13,11 @@
      */
     describe('API - TimeOfDay record test cases - ', function() {
         // The Java API is now only accepting time for Time of Day fields
-        var earlyTODIn = '09:00:00Z';
-        var lateTODIn = '15:00:00Z';
+        var earlyTODIn = '09:00:00';
+        var lateTODIn = '15:00:00';
         // Java is still returning in this format to node
-        var earlyTODOut = '1970-01-01T09:00:00Z[UTC]';
-        var lateTODOut = '1970-01-01T15:00:00Z[UTC]';
+        var earlyTODOut = '09:00:00';
+        var lateTODOut = '15:00:00';
 
         var appWithNoFlags = {
             name  : 'TimeOfDay App - no flags',
