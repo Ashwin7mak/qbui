@@ -9,7 +9,7 @@ import moment from 'moment';
 import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
-import {CellValueRenderer, UserCellValueRenderer, NumberCellValueRenderer, DateCellValueRenderer, TextCellValueRenderer, MultiLineTextCellValueRenderer} from './cellValueRenderers';
+import {CellValueRenderer} from './cellValueRenderers';
 import CellEditor from './cellEditor';
 
 import * as dateTimeFormatter from '../../../../../common/src/formatter/dateTimeFormatter';
@@ -261,7 +261,15 @@ class CellRendererFactory  {
 
 export const TextCellRenderer = React.createClass({
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.TEXT_FORMAT, this.props);
+        let format = formats.TEXT_FORMAT;
+        if (this.props.params && this.props.params.column && this.props.params.column.colDef &&
+            this.props.params.column.colDef.datatypeAttributes &&
+            this.props.params.column.colDef.datatypeAttributes.clientSideAttributes &&
+            this.props.params.column.colDef.datatypeAttributes.clientSideAttributes.num_lines &&
+            this.props.params.column.colDef.datatypeAttributes.clientSideAttributes.num_lines > 1) {
+            format = formats.MULTI_LINE_TEXT_FORMAT;
+        }
+        return CellRendererFactory.makeCellRenderer(format, this.props);
     }
 });
 

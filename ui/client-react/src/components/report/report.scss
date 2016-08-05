@@ -80,8 +80,6 @@
             flex-direction: row;
             flex: 1 1 auto;
             justify-content: flex-end;
-            font-family: "Lato", sans-serif;
-            font-size: 16px;
             color: $report-navigation-enabled-color;
 
             .recordsCountLoaderContainer {
@@ -103,6 +101,8 @@
 
                 .recordsCount{
                     text-align: right;
+                    font-family: "Lato", Sans-Serif;
+                    font-size: 14px;
                 }
             }
 
@@ -153,9 +153,7 @@
         flex: 1 1 auto;
         max-height: 61px;
 
-        font-family: "Lato", sans-serif;
-        font-size: 16px;
-        color:#7090ab;
+        color:$report-navigation-enabled-color;
 
         .leftReportFooter {
             width: 50%;
@@ -247,6 +245,8 @@
 .reportNavigation {
     float: left;
     color: $facetMenu-clearButtonColor;
+    font-family: "Lato", sans-serif;
+    font-size: 16px;
 
     .navigationButton {
         text-decoration: none;
@@ -258,7 +258,7 @@
     .previousButton {
         &.qbIcon {
             display: inline;
-            font-size: 32px;
+            font-size: 24px;
             color: $report-navigation-enabled-color;
             &.disabled {
                 color: $report-navigation-disabled-color;
@@ -275,7 +275,7 @@
     .nextButton {
         &.qbIcon {
             display: inline;
-            font-size: 32px;
+            font-size: 24px;
             color: $report-navigation-enabled-color;
             &.disabled {
                 color: $report-navigation-disabled-color;

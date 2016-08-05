@@ -325,20 +325,21 @@ let ReportToolsAndContent = React.createClass({
                     </label>
                     {this.getTableActions()}
 
-                        <ReportContent  appId={this.props.params.appId}
-                                        tblId={this.props.params.tblId}
-                                        rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
-                                        reportData={this.props.reportData}
-                                        reportHeader={toolbar}
-                                        reportFooter={reportFooter}
-                                        keyField={this.props.fields && this.props.fields.keyField ?
-                                            this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
-                                        uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                        flux={this.getFlux()}
-                                        reactabular={this.state.reactabular}
-                            {...this.props} />
+                    <ReportContent appId={this.props.params.appId}
+                                   tblId={this.props.params.tblId}
+                                   rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
+                                   reportData={this.props.reportData}
+                                   reportHeader={toolbar}
+                                   reportFooter={reportFooter}
+                                   keyField={this.props.fields && this.props.fields.keyField ?
+                                       this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
+                                   uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                   flux={this.getFlux()}
+                                   reactabular={this.state.reactabular}
+                                   {...this.props} />
 
                     {this.getReportFooter()}
+
                     {!this.props.scrollingReport && <AddRecordButton />}
                 </div>
             );

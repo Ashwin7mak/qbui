@@ -234,5 +234,9 @@ export default {
         applyTip: "Beenden und gelten alle Änderungen",
         success: "Erfolg",
         failed: "Gescheitert",
+        placeholder:  {
+            email: 'name@domain.com'
+        },
+
     }
 };
