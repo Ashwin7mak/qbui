@@ -65,7 +65,7 @@
             //Declare the date and moment formatter
             var currentDate = new Date();
             var dd = currentDate.getDate();
-            var mm = currentDate.getMonth()+1; //January is 0
+            var mm = currentDate.getMonth() + 1; //January is 0
             var yyyy = currentDate.getFullYear();
 
             var dateStr = mm + '-' + dd + '-' + yyyy + ' ' + fieldValue.value.replace(/(\[.*?\])/, '');
