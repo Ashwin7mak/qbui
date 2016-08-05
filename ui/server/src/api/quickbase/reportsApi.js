@@ -134,6 +134,7 @@
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url);
 
                     //  make the api request to get the table homepage report id
+                    log.info('fetchReportMetaDataAndContent before first call.');
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             // parse out the id and use to fetch the report meta data.  Process the meta data
@@ -171,7 +172,8 @@
                                     filterQueries.push(reportMetaData.query);
                                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, queryUtils.concatQueries(filterQueries));
                                 }
-
+                                log.info('fetchReportMetaDataAndContent before call to fetchReportComponents.');
+                                
                                 this.fetchReportComponents(req, req.params.reportId).then(
                                     (reportData) => {
                                         //  return the metadata and report content
@@ -212,20 +214,24 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsCountRoute(req.url);
-                return requestHelper.executeRequest(req, opts);
-                // return new Promise((resolve1, reject1) => {
-                //     requestHelper.executeRequest(req, opts).then(
-                //         (result) => {
-                //             resolve1(result);
-                //         },
-                //         (error) => {
-                //             reject1(error);
-                //         }
-                //     ).catch((ex) => {
-                //         requestHelper.logUnexpectedError('reportsAPI..fetchReport', ex, true);
-                //         reject1(ex);
-                //     });
-                // });
+                log.debug( 'fetchReportRecordsCount before promise.');
+
+                // var response = requestHelper.executeRequest(req, opts);
+                // return response;
+                return new Promise((resolve1, reject1) => {
+                    requestHelper.executeRequest(req, opts).then(
+                        (result) => {
+                            log.info( 'fetchReportRecordsCount resolving promise.');
+                            resolve1(result);
+                        },
+                        (error) => {
+                            reject1(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('reportsAPI..fetchReport', ex, true);
+                        reject1(ex);
+                    });
+                });
             },
 
             fetchReportResults: function(req) {

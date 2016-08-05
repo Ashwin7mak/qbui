@@ -324,7 +324,7 @@ let ReportToolsAndContent = React.createClass({
                                onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Use Reactabular Grid
                     </label>
                     {this.getTableActions()}
-                    <Loader loaded={!this.props.loading} options={loaderOptions}>
+
                         <ReportContent  appId={this.props.params.appId}
                                         tblId={this.props.params.tblId}
                                         rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
@@ -337,7 +337,7 @@ let ReportToolsAndContent = React.createClass({
                                         flux={this.getFlux()}
                                         reactabular={this.state.reactabular}
                             {...this.props} />
-                    </Loader>
+
                     {this.getReportFooter()}
                     {!this.props.scrollingReport && <AddRecordButton />}
                 </div>

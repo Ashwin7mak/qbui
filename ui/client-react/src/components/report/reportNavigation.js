@@ -29,12 +29,12 @@ var ReportNavigation = React.createClass({
                     <PreviousLink pageStart={this.props.pageStart}
                                   getPreviousReportPage={this.props.getPreviousReportPage}
                     />
-    
-                    <I18nMessage message={navBar}
-                                 pageStart={this.props.pageStart}
-                                 pageEnd={this.props.pageEnd}
-                    />
-    
+                    <div className="pageNumbers">
+                        <I18nMessage message={navBar}
+                                     pageStart={this.props.pageStart}
+                                     pageEnd={this.props.pageEnd}
+                        />
+                    </div>
                     <NextLink recordsCount={this.props.recordsCount}
                               pageEnd={this.props.pageEnd}
                               getNextReportPage={this.props.getNextReportPage}
@@ -52,9 +52,9 @@ var PreviousLink = React.createClass({
 
     render: function() {
         return (
-            <a href="#" tabIndex="0" onClick={this.props.getPreviousReportPage}>
+            <button className="navigationButton" onClick={this.props.getPreviousReportPage}>
                 <QBicon className={"previousButton " + (this.props.pageStart !== 1 ? "" : "disabled") } icon="icon_caretfilledleft" />
-            </a>
+            </button>
         );
     }
 });
@@ -68,9 +68,9 @@ var NextLink = React.createClass({
 
     render: function() {
         return (
-            <a href="#" tabIndex="0" onClick={this.props.getNextReportPage}>
+            <button className="navigationButton" onClick={this.props.getNextReportPage}>
                 <QBicon className={"nextButton " + ((this.props.recordsCount != this.props.pageEnd) ? "" : "disabled") } icon="icon_caretfilledright" />
-            </a>
+            </button>
         );
     }
 });

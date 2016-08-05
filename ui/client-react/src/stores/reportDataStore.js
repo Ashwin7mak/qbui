@@ -157,15 +157,10 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
             this.model.groupFields = recordData.groups.fields;
-            //     //  TODO: with paging, this count is flawed...
-            // this.model.recordsCount = recordData.groups.totalRows;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.records = this.getReportData(recordData.fields, recordData.records);
             this.model.groupFields = null;
-
-            // //  TODO: with paging, this count is flawed...
-            // this.model.recordsCount = recordData.records ? recordData.records.length : null;
         }
 
         this.model.fields = recordData.fields || [];
@@ -240,7 +235,7 @@ let reportModel = {
 
     updateRecordsCount: function(recordsCountData) {
         if (recordsCountData) {
-            this.model.recordsCount = recordsCountData;
+            this.model.recordsCount = parseInt(recordsCountData);
         }
     },
 
@@ -574,12 +569,12 @@ let ReportDataStore = Fluxxor.createStore({
     onLoadReportRecordsCount() {
         this.countingTotalRecords = true;
         this.emit('change');
-
     },
 
     onLoadReportRecordsCountSuccess(response) {
         this.countingTotalRecords = false;
         this.reportModel.updateRecordsCount(response.body);
+        this.emit('change');
     },
 
     onLoadReportRecordsCountFailed() {

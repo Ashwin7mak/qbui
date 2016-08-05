@@ -135,7 +135,9 @@ let reportDataActions = {
                         reject();
                     }
                 ).catch(ex => {
-                    
+                    logger.error('Unexpected Report service call exception:', ex);
+                    this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
+                    reject();
                 });
             } else {
                 logger.error('Missing one or more required input parameters to reportDataActions.loadReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
