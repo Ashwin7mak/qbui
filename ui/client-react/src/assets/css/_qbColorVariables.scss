@@ -1,12 +1,101 @@
 /* This file should contain ALL the colors used in QuickBase. This may be used to create themes in future. */
 /* per our discussion around color we will keep the 2 levels of indirection on color. So that if we change the value
- * of $colorx we are replacing every use of it with a new color(i.e colorblind can't see $colorx, or for theme usage).
+ * of $color-x we are replacing every use of it with a new color(i.e colorblind can't see $color-x, or for theme usage).
  * If we want to modify a category of colors use we will change the semantic category
- * ie from $icon_background: $colorx to $icon_background:$colory
+ * ie from $icon_background: $color-x to $icon_background:$color-y
  * and the scss for color will refer to the semantic category not the color number
 */
 /* see http://quickbase.design/colors/ */
 
+
+
+//== Blacks and Greys - for General UI & Backgrounds
+$color-black-800: #000000; //Semi-transparent overlays behind modals
+$color-black-700: #404040; //Text on light backgrounds
+$color-black-600: #969696; //Small tertiary type
+$color-black-500: #b8b8b8; //Placeholder / Ghost text in form fields
+$color-black-400: #c7c7c7; //Gray icons (disabled), Blackout dates, modals...
+$color-black-300: #dcdcdc; //Track of scrollbar, horizontal and vertical dividers
+$color-black-250: #edf0f3; //Global header, left navigation, token background
+$color-black-200: #f5f5f5; //Shadows, backgrounds and environmental accents
+$color-black-100: #ffffff; //Form fields, backgrounds, stage background
+
+
+//== Blues - for Nav background, and table elements, dividers
+$color-blue-800: #131f2b; //Tooltip background
+$color-blue-700: #193048; //Trowser footer
+$color-blue-600: #486c8f; //Numerical badges, Secondary buttons on Trowser Footer
+$color-blue-500: #7090ab; //All icons on deep-sea or white
+$color-blue-400: #c0d0e4; //Dividers in table headers, Sort by column, date picker hover
+$color-blue-300: #e3eaf3; //Table row inline edit selection state
+$color-blue-200: #f3f8fe; //Table row hover state, Bottom gradient color in stage background
+$color-blue-100: #fafbfc; //page background
+
+
+//== Teals - for Custom Theming, accents, insights
+$color-teal-800: #007e89;
+$color-teal-700: #009aad;
+$color-teal-600: #00b0c2; //Date picker header & selected/todays date or time
+$color-teal-500: #00c4d8;
+$color-teal-400: #13dbf1;
+$color-teal-300: #95edf6;
+$color-teal-200: #caf6fb;
+$color-teal-100: #effcfe;
+
+
+//== Indigo
+$color-indigo-800: #2544a7; //Hit states (checkmarks, buttons, radio buttons)
+$color-indigo-700: #365ebf; //QuickBase blue, Primary buttons, active state stroke on fields, link
+
+
+//== Cyan
+$color-cyan-800: #254a6d; //Table header labels, flyouts header background, disabled primary button
+$color-cyan-700: #007da9; //Page action icons, Field labels (view & edit mode)
+$color-cyan-600: #0098cd; //Hover states for nav & nav icon
+$color-cyan-500: #00abf4; //Selected state for nav, selected nav table icon
+$color-cyan-100: #e5f6fe; //Table header background
+
+
+//== Green — for confirmation, success, insights
+$color-green-800: #356a2e;
+$color-green-700: #2ca01c; //confirmation text, field validation success stroke
+$color-green-600: #56b349; //confirmation icon
+$color-green-500: #92ce85; //confirmation notification stroke
+$color-green-200: #e1eed3; //confirmation notification background, field validation success glow
+
+
+//== Orange — for warnings, alerts, insights
+$color-orange-800: #ece5500;
+$color-orange-700: #e77700;
+$color-orange-600: #e59200; //Base of 1 of 6 highlight themes
+$color-orange-500: #f2b835;
+$color-orange-200: #fbe0a3;
+
+
+//== Red - for errors, overdue, insights
+$color-red-800: #a9282d;
+$color-red-700: #d93b42; // error icon, field label if in error, validation error
+$color-red-600: #ec6466;
+$color-red-500: #f87878;
+$color-red-200: #fbbbbb; //glow of field level error validation (50%)
+
+
+//== Pink - for guidance, insights
+$color-pink-800: #871b45;
+$color-pink-700: #a32763; //WalkMe (guidance bar background, launcher)
+$color-pink-600: #c72f79;
+
+
+//----- semantic color usage
+$data-color: $color-black-700;
+$input-bg-color:$color-black-100;
+$input-text-focus-border-color:   $color-indigo-800;
+$input-text-normal-border-color:  $color-black-400;
+$input-text-error-border-color:   $color-red-700;
+$input-email-normal-text-color:   $color-cyan-500;
+$field-label-normal-color:        $color-blue-600;
+
+//-- TBD: update usages to reference colors above
 $color1:    #f3f8fe; // wispy-water
 $color2:    #ffffff; // white
 $color3:    #486c8f;
@@ -41,6 +130,10 @@ $color31:   #13dbf1;
 $color32:   #131f2b;
 $color33:   #365ebf; //big-leaf
 $color34:   #00b0c2; //waterpebble
+
+
+
+//================
 
 $left-nav-bg: $color30; // deep-sea
 $icon-color: $color23;
