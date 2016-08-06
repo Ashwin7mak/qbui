@@ -1,54 +1,57 @@
 //$icon-font-path: "../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
 //@import "node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import 'qbVariables';
-@include font-face(Lato, "/src/assets/fonts/Lato/Lato-Regular");
+@include font-face(Lato, "/src/assets/fonts/Lato/Lato-Regular", null, normal, woff2 woff ttf);
+@include font-face(Lato, "/src/assets/fonts/Lato/Lato-Italic", null, italic, woff2 woff ttf);
+@include font-face(Lato, "/src/assets/fonts/Lato/Lato-Bold", bold, normal, woff2 woff ttf);
+@include font-face(Lato, "/src/assets/fonts/Lato/Lato-BoldItalic", bold, italic, woff2 woff ttf);
 
 
-h1 {
+h1, .h1{
   font-size: $font-size-h1;
   font-weight: 400;
 }
 
-h2 {
+h2, .h2 {
   font-size: $font-size-h2;
   font-weight: 400;
 }
 
-h3 {
+h3, .h3 {
   font-size: $font-size-h3;
   font-weight: 400;
 }
 
-h4 {
+h4, .h4 {
   font-size: $font-size-h4;
   font-weight: 400;
 }
 
-h5 {
+h5, .h5 {
   font-size: $font-size-h5;
   font-weight: 900;
 }
 
-h6 {
+h6, .h6 {
   font-size: $font-size-h6;
   font-weight: 900;
 }
 
-p {
+p, .p {
   font-size: $font-size-p;
   font-weight: 400;
 }
+
 .button-text {
   font-size: $font-size-button;
   font-weight: 700;
 }
 
-
 .bold {
   font-weight: bold;
 }
 
-//ghost text
+//aka ghost text
 @include placeholder {
   font-style: italic;
   font-size: $font-size-placeholder;
