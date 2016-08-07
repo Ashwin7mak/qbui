@@ -93,7 +93,13 @@
                 let reportId;
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsByTypeRoute(req.url, 'VIEW', reportId);
+                let formType = req.query.type;
+                if (formType && formType._length > 0) {
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsByTypeRoute(req.url, formType, reportId);
+                } else {
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsByTypeRoute(req.url, constants.REQUEST_PARAMETER.FORMTYPE, reportId);
+                }
+
                 return requestHelper.executeRequest(req, opts);
             },
 

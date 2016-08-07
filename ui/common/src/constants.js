@@ -59,7 +59,8 @@
             QUERY: 'query',
             COLUMNS: 'columns',
             OFFSET: 'offset',
-            NUM_ROWS: 'numRows'
+            NUM_ROWS: 'numRows',
+            FORMTYPE: 'view'
         },
         FORMAT : {
             DISPLAY: 'display',
