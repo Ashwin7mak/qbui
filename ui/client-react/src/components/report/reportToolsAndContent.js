@@ -1,6 +1,5 @@
 import React from 'react';
 import Logger from '../../utils/logger';
-import Loader  from 'react-loader';
 import ReportActions from '../actions/reportActions';
 import ReportToolbar from './reportToolbar';
 import ReportFooter from './reportFooter';
@@ -173,7 +172,6 @@ let ReportToolsAndContent = React.createClass({
         let format = true;
         let numRows = this.props.reportData.numRows;
         let newOffset = this.props.reportData.pageOffset + numRows;
-        
         this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
     },
     getPreviousReportPage() {
@@ -186,7 +184,6 @@ let ReportToolsAndContent = React.createClass({
         let format = true;
         let numRows = this.props.reportData.numRows;
         let newOffset = this.props.reportData.pageOffset - numRows;
-
         this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
     },
     getReportToolbar() {
@@ -241,7 +238,6 @@ let ReportToolsAndContent = React.createClass({
         </div>);
     },
     render() {
-
         let classes = "reportToolsAndContentContainer";
         if (this.props.selectedRows) {
             if (this.props.selectedRows.length > 0) {
@@ -294,28 +290,7 @@ let ReportToolsAndContent = React.createClass({
                                         getPreviousReportPage={this.getPreviousReportPage}
                                         pageStart={this.pageStart}
                                         pageEnd={this.pageEnd}/>;
-            var loaderOptions = {
-                lines: 11 // The number of lines to draw
-                , length: 0 // The length of each line
-                , width: 16 // The line thickness
-                , radius: 27 // The radius of the inner circle
-                , scale: 1 // Scales overall size of the spinner
-                , corners: 1 // Corner roundness (0..1)
-                , color: '#000' // #rgb or #rrggbb or array of colors
-                , opacity: 0 // Opacity of the lines
-                , rotate: 0 // The rotation offset
-                , direction: 1 // 1: clockwise, -1: counterclockwise
-                , speed: 1.1 // Rounds per second
-                , trail: 60 // Afterglow percentage
-                , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
-                , zIndex: 2e9 // The z-index (defaults to 2000000000)
-                , className: 'spinner' // The CSS class to assign to the spinner
-                , top: '50%' // Top position relative to parent
-                , left: '50%' // Left position relative to parent
-                , shadow: false // Whether to render a shadow
-                , hwaccel: false // Whether to use hardware acceleration
-                , position: 'absolute' // Element positioning
-            }
+
             return (
                 <div className={classes}>
                     <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
@@ -336,6 +311,7 @@ let ReportToolsAndContent = React.createClass({
                                    uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
+                                   gridOptions={this.props.gridOptions}
                                    {...this.props} />
 
                     {this.getReportFooter()}

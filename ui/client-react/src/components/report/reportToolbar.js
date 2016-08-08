@@ -172,6 +172,7 @@ const ReportToolbar = React.createClass({
         }
 
         let reportToolbar = (
+
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
 
                     <div className="leftReportToolbar">

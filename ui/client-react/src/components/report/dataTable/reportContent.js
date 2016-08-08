@@ -10,6 +10,7 @@ import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
+import Loader  from 'react-loader';
 import _ from 'lodash';
 
 let logger = new Logger();
@@ -672,13 +673,35 @@ let ReportContent = React.createClass({
                 this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
             }
         }
-        return (<div className="loadedContent">
+        var loaderOptions = {
+            lines: 11 // The number of lines to draw
+            , length: 0 // The length of each line
+            , width: 16 // The line thickness
+            , radius: 27 // The radius of the inner circle
+            , scale: 1 // Scales overall size of the spinner
+            , corners: 1 // Corner roundness (0..1)
+            , opacity: 0 // Opacity of the lines
+            , rotate: 0 // The rotation offset
+            , direction: 1 // 1: clockwise, -1: counterclockwise
+            , speed: 1.1 // Rounds per second
+            , trail: 60 // Afterglow percentage
+            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+            , zIndex: 2e9 // The z-index (defaults to 2000000000)
+            , className: 'spinner' // The CSS class to assign to the spinner
+            , top: '50%' // Top position relative to parent
+            , left: '50%' // Left position relative to parent
+            , shadow: false // Whether to render a shadow
+            , hwaccel: false // Whether to use hardware acceleration
+            , position: 'absolute' // Element positioning
+        }
+        return (
 
+                <div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className="reportContent">
-                        {!isSmall && this.props.reactabular &&
 
+                        {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 uniqueIdentifier="Record ID#"
@@ -701,7 +724,6 @@ let ReportContent = React.createClass({
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}
                         />}
-
                         {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
@@ -737,7 +759,8 @@ let ReportContent = React.createClass({
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                                 filter={{selections: this.props.reportData.selections,
                                         facet: this.props.reportData.facetExpression,
-                                        search: this.props.reportData.searchStringForFiltering}}/>
+                                        search: this.props.reportData.searchStringForFiltering}}
+                                />
                         }
                         {isSmall &&
                             <CardViewListHolder reportData={this.props.reportData}

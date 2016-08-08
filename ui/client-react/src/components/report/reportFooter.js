@@ -49,6 +49,7 @@ const ReportToolbar = React.createClass({
                 <div className="leftReportFooter">
                 </div>
                 <div className="rightReportFooter">
+                    <div className="rightReportFooterSpacer"></div>
                     {(!isLoading) ?
                         (<ReportNavigation pageStart={this.props.pageStart}
                                            pageEnd={this.props.pageEnd}
