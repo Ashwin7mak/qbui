@@ -48,6 +48,7 @@
         capabilities: {
             browserName: 'chrome',
             breakpointSize: 'xlarge',
+            // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
             maxInstances: 2
         },
@@ -130,6 +131,7 @@
                 global.browserWidth = browserDimensions.browserWidth;
                 global.browserHeight = browserDimensions.browserHeight;
 
+                //TODO: MB-386 - Need to use the logger wrapper instead of console.log
                 console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
                 browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
             });

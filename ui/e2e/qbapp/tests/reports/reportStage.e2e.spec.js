@@ -81,7 +81,7 @@
                         });
                     });
                 });
-            } else if (breakpointSize === 'small') {
+            } else {
                 // Verify stage is present in the DOM but not displayed on small breakpoint
                 expect(reportServicePage.reportStageContentEl.isPresent()).toBeTruthy();
                 expect(reportServicePage.reportStageContentEl.isDisplayed()).toBeFalsy();

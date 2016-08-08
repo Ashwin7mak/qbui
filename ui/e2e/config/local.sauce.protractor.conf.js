@@ -23,10 +23,11 @@
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '120',
             screenResolution : '1680x1050',
-            shardTestFiles: true,
-            maxInstances: 2,
             maxDuration: 10800,
-            breakpointSize: 'xlarge'
+            breakpointSize: 'xlarge',
+            // These two values enable parallel testing which will run a spec file per instance
+            shardTestFiles: true,
+            maxInstances: 2
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
@@ -100,6 +101,7 @@
                 global.browserWidth = browserDimensions.browserWidth;
                 global.browserHeight = browserDimensions.browserHeight;
 
+                //TODO: MB-386 - Need to use the logger wrapper instead of console.log
                 console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
                 browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
             });

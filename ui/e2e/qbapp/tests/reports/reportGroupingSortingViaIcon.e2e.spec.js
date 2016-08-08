@@ -176,9 +176,6 @@
             });
         };
 
-        /*
-         * XLARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No-Facets No-Groups/Sorts Yes-Fids setup in reports
-         */
         describe('Report Settings: No-Facets No-Groups/Sorts Yes-Fids', function() {
 
             beforeEach(function(done) {
@@ -334,11 +331,8 @@
                     });
                 });
             });
-        }); //XLARGE describe block
+        });
 
-        /*
-         * LARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No-Facets No-Groups/Sorts Yes-Fids setup in reports
-         */
         describe('Report Settings : No-Facets No-Groups/Sorts Yes-Fids ', function() {
             beforeEach(function(done) {
                 //go to report page directly
@@ -471,11 +465,7 @@
                     });
                 });
             });
-        }); //large breakpoints describe block end
-
-        /*
-         * MEDIUM BREAKPOINT - Use Report with facets - deleteIcon Via PopUp Test Cases
-         */
+        });
 
         describe('Report Settings: with Facets and sortLists: ', function() {
             beforeEach(function(done) {
@@ -598,11 +588,7 @@
                     });
                 });
             });
-        }); //medium breakpoints describe block end
-
-        /*
-         * SMALL BREAKPOINT - Use Reports without facets or sortLists
-         */
+        });
 
         xdescribe('Report Settings: No Facets No sortLists', function() {
 
