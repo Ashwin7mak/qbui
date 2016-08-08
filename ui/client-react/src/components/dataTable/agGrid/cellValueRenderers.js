@@ -2,6 +2,7 @@ import React from 'react';
 
 import {I18nNumber} from '../../../utils/i18nMessage';
 import * as formats from '../../../constants/fieldFormats';
+import TextField from '../../fields/textField';
 
 export const CellValueRenderer = React.createClass({
 
@@ -9,7 +10,7 @@ export const CellValueRenderer = React.createClass({
         display: React.PropTypes.any,
         value: React.PropTypes.any,
         attributes: React.PropTypes.object,
-        isEditable : React.PropTypes.bool
+        isEditable: React.PropTypes.bool
     },
 
     render() {
@@ -19,46 +20,48 @@ export const CellValueRenderer = React.createClass({
         case formats.NUMBER_FORMAT:
         case formats.RATING_FORMAT:
             return (<span className={className}>
-                {this.props.value && <NumberCellValueRenderer value={this.props.value} attributes={this.props.attributes} />}
+                {this.props.value &&
+                <NumberCellValueRenderer value={this.props.value} attributes={this.props.attributes}/>}
                 </span>);
 
         case formats.USER_FORMAT:
             return (<span className={className}>
-                <UserCellValueRenderer value={this.props.display} />
+                <UserCellValueRenderer value={this.props.display}/>
                 </span>);
 
         case formats.DATE_FORMAT:
             return (<span className={className}>
-                <DateCellValueRenderer value={this.props.display} />
+                <DateCellValueRenderer value={this.props.display}/>
                 </span>);
 
         case formats.DATETIME_FORMAT: {
             return (<span className={className}>
-                <DateCellValueRenderer value={this.props.display} />
+                <DateCellValueRenderer value={this.props.display}/>
                 </span>);
         }
 
         case formats.TIME_FORMAT: {
             return (<span className={className}>
-                <DateCellValueRenderer value={this.props.display} />
+                <DateCellValueRenderer value={this.props.display}/>
                 </span>);
         }
         case formats.CHECKBOX_FORMAT:
             return (<span className={className}>
-                    <input type="checkbox" disabled checked={this.props.value} />
+                    <input type="checkbox" disabled checked={this.props.value}/>
                 </span>);
 
         case formats.MULTI_LINE_TEXT_FORMAT:
             return (<span className={className}>
-                <MultiLineTextCellValueRenderer value={this.props.display} />
+                <MultiLineTextCellValueRenderer value={this.props.display}/>
                 </span>);
 
         case formats.TEXT_FORMAT:
         case formats.PERCENT_FORMAT:
+        case formats.DURATION_FORMAT:
         case formats.CURRENCY_FORMAT:
         default: {
             return (<span className={className}>
-                <TextCellValueRenderer value={this.props.display} />
+                <TextCellValueRenderer value={this.props.display} attributes={this.props.attributes}/>
                 </span>);
         }
         }
@@ -74,7 +77,7 @@ export const UserCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <div className="userCell">{this.props.value}</div>;
+        return <div className="userCell data">{this.props.value}</div>;
     }
 });
 
@@ -85,9 +88,10 @@ export const NumberCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <div className="numberCell"><I18nNumber value={this.props.value}></I18nNumber></div>;
+        return <div className="numberCell data"><I18nNumber value={this.props.value}></I18nNumber></div>;
     }
 });
+
 
 export const DateCellValueRenderer = React.createClass({
 
@@ -96,7 +100,7 @@ export const DateCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <div className="dateCell">{this.props.value}</div>;
+        return <div className="dateCell data">{this.props.value}</div>;
     }
 });
 
@@ -107,7 +111,7 @@ export const TextCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <div className="textCell">{this.props.value}</div>;
+        return <TextField classes="textCell data" {...this.props} />;
     }
 });
 
@@ -119,6 +123,6 @@ export const MultiLineTextCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <pre className="multiLineTextCell">{this.props.value}</pre>;
+        return <pre className="multiLineTextCell data">{this.props.value}</pre>;
     }
 });
