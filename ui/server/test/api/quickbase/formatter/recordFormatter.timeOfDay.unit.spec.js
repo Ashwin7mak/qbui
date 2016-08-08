@@ -12,7 +12,7 @@ describe('Time of day record formatter unit test', function() {
      * DataProvider containing Records, FieldProperties and record display expectations TimeOfDay fields
      */
     function provider() {
-        var inputTod = '1970-01-01T18:51:21Z';
+        var inputTod = '18:51:21Z';
         //Incomplete number
         var recordsInput = [[{
             id   : 7,
