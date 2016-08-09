@@ -36,12 +36,12 @@ const ReportToolbar = React.createClass({
 
     render() {
         let isLoading = false;
-        let recordsCount = 0;
+        let recordCount = 0;
         if (this.props.reportData) {
             if (this.props.reportData.loading) {
                 isLoading = this.props.reportData.loading;
             }
-            recordsCount = this.props.reportData.data.recordsCount;
+            recordCount = this.props.reportData.data.recordsCount;
         }
 
         return (
@@ -50,10 +50,10 @@ const ReportToolbar = React.createClass({
                 </div>
                 <div className="rightReportFooter">
                     <div className="rightReportFooterSpacer"></div>
-                    {(!isLoading) ?
+                    {!isLoading && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) ?
                         (<ReportNavigation pageStart={this.props.pageStart}
                                            pageEnd={this.props.pageEnd}
-                                           recordsCount={recordsCount}
+                                           recordsCount={recordCount}
                                            getNextReportPage={this.props.getNextReportPage}
                                            getPreviousReportPage={this.props.getPreviousReportPage}
                         />) :

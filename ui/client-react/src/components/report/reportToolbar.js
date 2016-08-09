@@ -221,14 +221,14 @@ const ReportToolbar = React.createClass({
                             null
                         }
 
-                        {!isLoading ?
+                        {!isLoading && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) ?
                             (<ReportNavigation pageStart={this.props.pageStart}
                                                pageEnd={this.props.pageEnd}
                                                recordsCount={recordCount}
                                                getNextReportPage={this.props.getNextReportPage}
                                                getPreviousReportPage={this.props.getPreviousReportPage}
                             />) :
-                            isLoading ? <div className="loadedContent"></div> : null
+                            !(recordCount === this.props.pageEnd && this.props.pageStart === 1) ? <div className="loadedContent"></div> : <div className="spacer"></div>
                         }
 
                     </div>

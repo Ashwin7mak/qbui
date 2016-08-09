@@ -18,7 +18,7 @@ const groupDelimiter = ":";
 
 //if these two constants change, update unit test const values accordingly
 const DEFAULT_OFFSET = 0;
-const DEFAULT_NUM_ROWS = 10;
+const DEFAULT_NUM_ROWS = 50;
 
 let reportModel = {
     model: {

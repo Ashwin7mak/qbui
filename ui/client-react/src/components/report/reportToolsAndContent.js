@@ -8,6 +8,7 @@ import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import simpleStringify from '../../../../common/src/simpleStringify';
+import Loader  from 'react-loader';
 import _ from 'lodash';
 import FacetSelections from '../facet/facetSelections';
 import './report.scss';
@@ -290,7 +291,27 @@ let ReportToolsAndContent = React.createClass({
                                         getPreviousReportPage={this.getPreviousReportPage}
                                         pageStart={this.pageStart}
                                         pageEnd={this.pageEnd}/>;
-
+            var loaderOptions = {
+                lines: 11 // The number of lines to draw
+                , length: 0 // The length of each line
+                , width: 16 // The line thickness
+                , radius: 27 // The radius of the inner circle
+                , scale: 1 // Scales overall size of the spinner
+                , corners: 1 // Corner roundness (0..1)
+                , opacity: 0 // Opacity of the lines
+                , rotate: 0 // The rotation offset
+                , direction: 1 // 1: clockwise, -1: counterclockwise
+                , speed: 1.1 // Rounds per second
+                , trail: 60 // Afterglow percentage
+                , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+                , zIndex: 2e9 // The z-index (defaults to 2000000000)
+                , className: 'spinner' // The CSS class to assign to the spinner
+                , top: '50%' // Top position relative to parent
+                , left: '50%' // Left position relative to parent
+                , shadow: false // Whether to render a shadow
+                , hwaccel: false // Whether to use hardware acceleration
+                , position: 'absolute' // Element positioning
+            };
             return (
                 <div className={classes}>
                     <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
@@ -299,6 +320,7 @@ let ReportToolsAndContent = React.createClass({
                                onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Use Reactabular Grid
                     </label>
                     {this.getTableActions()}
+                    <Loader loaded={!this.props.reportData.loading} options={loaderOptions}/>
 
                     <ReportContent appId={this.props.params.appId}
                                    tblId={this.props.params.tblId}
