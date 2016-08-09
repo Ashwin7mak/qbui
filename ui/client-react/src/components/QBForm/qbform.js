@@ -127,7 +127,7 @@ let QBForm = React.createClass({
             sections.push(this.createSection(section));
         });
         return (
-            <TabPane key={tab.orderIndex} tab={tab.title}>
+            <TabPane key={tab.orderIndex} tab={tab.title || 'Tab ' + tab.orderIndex}>
                 <br/>
                 {sections}
             </TabPane>

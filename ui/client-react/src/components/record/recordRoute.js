@@ -22,16 +22,18 @@ var RecordRoute = React.createClass({
         history: React.PropTypes.object
     },
 
-    loadRecord(appId, tblId, recordId) {
+    loadRecord(appId, tblId, recordId, rptId, formType) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
-        flux.actions.loadFormAndRecord(appId, tblId, recordId);
+        flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, formType);
     },
     loadRecordFromParams(params) {
-        let {appId, tblId, recordId} = params;
+        const {appId, tblId, recordId, rptId} = params;
 
         if (appId && tblId && recordId) {
-            this.loadRecord(appId, tblId, recordId);
+            //  report id is optional
+            //  TODO: add form type as a parameter
+            this.loadRecord(appId, tblId, recordId, rptId);
         }
     },
     componentDidMount: function() {

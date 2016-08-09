@@ -20,14 +20,14 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let formActions = {
 
-    loadFormAndRecord: function(appId, tblId, recordId, formType) {
+    loadFormAndRecord: function(appId, tblId, recordId, rptId, formType) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && recordId) {
                 this.dispatch(actions.LOAD_FORM_AND_RECORD);
 
                 let formService = new FormService();
-                formService.getFormAndRecord(appId, tblId, recordId, formType).then(
+                formService.getFormAndRecord(appId, tblId, recordId, rptId, formType).then(
                     (response) => {
                         //  TODO: temporary until new endpoint is in place and forms data is always returned..
                         if (!response) {
