@@ -111,8 +111,13 @@
                     });
                 });
             },
-
+            /**
+             * Returns a promise that resolves with the report metadata and records for one
+             * page of a report.
+             * @param req
+             */
             fetchReportMetaDataAndContent: function(req) {
+                // Define response object
                 var reportObj = {
                     reportMetaData: {
                         data: ''
@@ -125,7 +130,7 @@
                     },
                 };
                 return new Promise((resolve2, reject2) => {
-                    // We need to make multiple calls to core to complete this request. First call is
+                    // We need to make two calls to core to complete this request. First call is
                     // to fetch the report metadata, and once the metadata is obtained, fetch report
                     // data and facets.
                     let opts = requestHelper.setOptions(req);
@@ -133,12 +138,10 @@
 
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url);
 
-                    //  make the api request to get the table homepage report id
-                    log.info('fetchReportMetaDataAndContent before first call.');
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            // parse out the id and use to fetch the report meta data.  Process the meta data
-                            // to fetch and return the report content.
+                            // parse out the id and use to fetch the report meta data.
+                            // Process the meta data to fetch and return the report content.
                             if (response.body) {
                                 let reportsData = JSON.parse(response.body);
                                 let reportMetaData = reportsData[0];
@@ -172,8 +175,7 @@
                                     filterQueries.push(reportMetaData.query);
                                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, queryUtils.concatQueries(filterQueries));
                                 }
-                                log.info('fetchReportMetaDataAndContent before call to fetchReportComponents.');
-                                
+
                                 this.fetchReportComponents(req, req.params.reportId).then(
                                     (reportData) => {
                                         //  return the metadata and report content
@@ -182,7 +184,7 @@
                                         resolve2(reportObj);
                                     },
                                     (reportError) => {
-                                        log.error({req:req}, 'Error fetching table homepage report content in fetchReportComponents.');
+                                        log.error({req:req}, 'Error fetching report content in fetchReportComponents.');
                                         reject2(reportError);
                                     }
                                 ).catch((ex) => {
@@ -205,6 +207,7 @@
                     });
                 });
             },
+
             /**
              * Returns a promise that resolves with the count of all records for a report,
              * or rejects with an error code.
@@ -214,21 +217,17 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsCountRoute(req.url);
-                log.debug( 'fetchReportRecordsCount before promise.');
 
-                // var response = requestHelper.executeRequest(req, opts);
-                // return response;
                 return new Promise((resolve1, reject1) => {
                     requestHelper.executeRequest(req, opts).then(
                         (result) => {
-                            log.info( 'fetchReportRecordsCount resolving promise.');
                             resolve1(result);
                         },
                         (error) => {
                             reject1(error);
                         }
                     ).catch((ex) => {
-                        requestHelper.logUnexpectedError('reportsAPI..fetchReport', ex, true);
+                        requestHelper.logUnexpectedError('reportsAPI..fetchReportRecordsCount', ex, true);
                         reject1(ex);
                     });
                 });
@@ -261,7 +260,6 @@
              *  or is rejected with a descriptive error code
              */
             fetchReportComponents: function(req, reportId) {
-
                 //  Fetch field meta data and grid data for a report
                 var reportPromise = new Promise((resolve1, reject1) => {
                     this.fetchReportResults(req).then(
@@ -301,7 +299,6 @@
                 });
 
                 return new Promise((resolve, reject) => {
-
                     //  Now fetch the report data and report facet information asynchronously.  Return a
                     //  responseObject with field, record, grouping(if any) and facet(if any) information for client processing.
                     var promises = [reportPromise, facetPromise];
@@ -349,7 +346,6 @@
              * @returns {bluebird|exports|module.exports}
              */
             fetchReportMetaData(req, reportId) {
-
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url, reportId);

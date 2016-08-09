@@ -30,25 +30,25 @@ var RecordsCount = React.createClass({
             dbl = this.props.clearAllFilters;
         }
         var loaderOptions = {
-            lines: 7 // The number of lines to draw
-            , length: 0 // The length of each line
-            , width: 5 // The line thickness
-            , radius: 5 // The radius of the inner circle
-            , scale: 1 // Scales overall size of the spinner
-            , corners: 1 // Corner roundness (0..1)
-            , opacity: 0 // Opacity of the lines
-            , rotate: 0 // The rotation offset
-            , direction: 1 // 1: clockwise, -1: counterclockwise
-            , speed: 1.1 // Rounds per second
-            , trail: 60 // Afterglow percentage
-            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
-            , zIndex: 2e9 // The z-index (defaults to 2000000000)
-            , className: 'spinner' // The CSS class to assign to the spinner
-            , top: '54%' // Top position relative to parent
-            , left: '33%' // Left position relative to parent
-            , shadow: false // Whether to render a shadow
-            , hwaccel: false // Whether to use hardware acceleration
-            , position: 'absolute' // Element positioning
+            lines: 7,
+            length: 0,
+            width: 5,
+            radius: 5,
+            scale: 1,
+            corners: 1,
+            opacity: 0,
+            rotate: 0,
+            direction: 1,
+            speed: 1.1,
+            trail: 60,
+            fps: 20,
+            zIndex: 2e9,
+            className: 'spinner',
+            top: '54%',
+            left: '33%',
+            shadow: false,
+            hwaccel: false,
+            position: 'absolute'
         };
         if ((this.props.isFiltered && (this.props.filteredRecordCount === null) || this.props.recordCount === null)) {
             // no records

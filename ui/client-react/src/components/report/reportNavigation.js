@@ -1,15 +1,9 @@
 import React from 'react';
 
-import Logger from '../../utils/logger';
-let logger = new Logger();
-
 import QBicon from '../qbIcon/qbIcon';
-
 import Fluxxor from 'fluxxor';
 import './report.scss';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
-
-let FluxMixin = Fluxxor.FluxMixin(React);
 
 var ReportNavigation = React.createClass({
     propTypes: {
@@ -19,6 +13,7 @@ var ReportNavigation = React.createClass({
         getNextReportPage: React.PropTypes.func,
         getPreviousReportPage: React.PropTypes.func,
     },
+    
     /**
      * renders the report navigation toolbar
      */
@@ -69,7 +64,7 @@ var NextLink = React.createClass({
     render: function() {
         return (
             <button className="navigationButton" onClick={this.props.getNextReportPage}>
-                <QBicon className={"nextButton " + ((this.props.recordsCount != this.props.pageEnd) ? "" : "disabled") } icon="icon_caretfilledright" />
+                <QBicon className={"nextButton " + ((this.props.recordsCount !== this.props.pageEnd) ? "" : "disabled") } icon="icon_caretfilledright" />
             </button>
         );
     }

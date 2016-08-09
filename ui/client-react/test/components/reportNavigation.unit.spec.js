@@ -62,7 +62,8 @@ describe('Report Navigation tests', () => {
                                                                    getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
                                                                    getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
         var previousPage = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";});
+            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
+        });
         expect(previousPage.length).toBe(1);
     });
 
@@ -73,7 +74,8 @@ describe('Report Navigation tests', () => {
                                                                    getPreviousReportPage={fakeReportNavigationData.noPrevious.getPreviousReportPage}
                                                                    getNextReportPage={fakeReportNavigationData.noPrevious.getNextReportPage}/>);
         var previousPage = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";});
+            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
+        });
         expect(previousPage.length).toBe(0);
     });
 
@@ -84,7 +86,8 @@ describe('Report Navigation tests', () => {
                                                                    getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
                                                                    getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
         var nextPage = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";});
+            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";
+        });
         expect(nextPage.length).toBe(1);
     });
 
@@ -95,7 +98,8 @@ describe('Report Navigation tests', () => {
                                                                    getPreviousReportPage={fakeReportNavigationData.noNext.getPreviousReportPage}
                                                                    getNextReportPage={fakeReportNavigationData.noNext.getNextReportPage}/>);
         var nextPage = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";});
+            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";
+        });
         expect(nextPage.length).toBe(0);
     });
 
@@ -106,10 +110,12 @@ describe('Report Navigation tests', () => {
                                                                    getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
                                                                    getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
         var pageButton = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";});
+            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
+        });
         expect(pageButton.length).toBe(1);
-        var pageButton = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";});
+        pageButton = TestUtils.findAllInRenderedTree(component, function(inst) {
+            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";
+        });
         expect(pageButton.length).toBe(1);
     });
 
@@ -120,10 +126,12 @@ describe('Report Navigation tests', () => {
                                                                    getPreviousReportPage={fakeReportNavigationData.noPrevAndNext.getPreviousReportPage}
                                                                    getNextReportPage={fakeReportNavigationData.noPrevAndNext.getNextReportPage}/>);
         var pageButton = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";});
+            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
+        });
         expect(pageButton.length).toBe(0);
         var nextPage = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";});
+            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";
+        });
         expect(nextPage.length).toBe(0);
     });
 });

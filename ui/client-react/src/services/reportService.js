@@ -78,6 +78,7 @@ class ReportService extends BaseService {
     _getCache() {
         return cachedReportRequest;
     }
+
     /**
      * Return the report meta data for a given table
      *
@@ -106,7 +107,14 @@ class ReportService extends BaseService {
         // clear old and save a new so that report metadata gets loaded from server whenever app/table/reportId changes
         return this._cache(request, arguments);
     }
-    
+
+    /**
+     * Get the count of total number of records for the given report
+     * @param appId
+     * @param tableId
+     * @param reportId
+     * @returns count of all records in the report
+     */
     getReportRecordsCount(appId, tableId, reportId) {
         let url = super.constructUrl(this.API.GET_REPORT_RECORDS_COUNT, [appId, tableId, reportId]);
         return super.get(url);

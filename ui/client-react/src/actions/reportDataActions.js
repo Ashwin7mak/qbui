@@ -121,7 +121,7 @@ let reportDataActions = {
                     this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
                     reject();
                 });
-                
+
                 reportService.getReportRecordsCount(appId, tblId, rptId).then(
                     (response) => {
                         if (response.data) {

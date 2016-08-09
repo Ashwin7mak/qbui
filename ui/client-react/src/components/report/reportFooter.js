@@ -3,15 +3,12 @@ import Fluxxor from 'fluxxor';
 
 import './report.scss';
 
-import {I18nMessage} from '../../../src/utils/i18nMessage';
 import ReportNavigation from './reportNavigation';
-import _ from 'lodash';
-
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 
 /**
- * a footer for a table report. This footer contains the report page navigation links.
+ * A footer for a table report. This footer contains the report page navigation links.
  */
 const ReportToolbar = React.createClass({
     //interaction options
@@ -50,14 +47,17 @@ const ReportToolbar = React.createClass({
                 </div>
                 <div className="rightReportFooter">
                     <div className="rightReportFooterSpacer"></div>
-                    {!isLoading && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) ?
+                    { !isLoading && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) ?
                         (<ReportNavigation pageStart={this.props.pageStart}
                                            pageEnd={this.props.pageEnd}
                                            recordsCount={recordCount}
                                            getNextReportPage={this.props.getNextReportPage}
                                            getPreviousReportPage={this.props.getPreviousReportPage}
                         />) :
-                        this.props.loading ? <div className="loadedContent"></div> : null
+                        null
+                    }
+                    { isLoading ? <div className="loadedContent"></div> :
+                        null
                     }
                 </div>
             </div>

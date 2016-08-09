@@ -185,7 +185,7 @@ const ReportToolbar = React.createClass({
                             <FilterSearchBox onChange={this.handleSearchChange}
                                              nameForRecords={this.props.nameForRecords}
                                              searchBoxKey="reportToolBar"
-                                {...this.props} />:
+                                {...this.props} /> :
                             null
                         }
                         {!isLoading ?
@@ -228,7 +228,7 @@ const ReportToolbar = React.createClass({
                                                getNextReportPage={this.props.getNextReportPage}
                                                getPreviousReportPage={this.props.getPreviousReportPage}
                             />) :
-                            !(recordCount === this.props.pageEnd && this.props.pageStart === 1) ? <div className="loadedContent"></div> : <div className="spacer"></div>
+                            <div className="loadedContent"></div>
                         }
 
                     </div>

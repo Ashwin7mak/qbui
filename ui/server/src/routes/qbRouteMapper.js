@@ -339,15 +339,14 @@
     }
 
     /**
-     * Fetch report meta data, report data and facets (if any) and total count of records 
-     * for the report. 
-     * 
+     * Fetch report meta data, report data and facets (if any) for the report.
+     *
      * @param req
      * @param res
      */
     function fetchReport(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Fetch Report', {req:filterNodeReq(req)});
+        perfLog.init('Fetch Report', {req: filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
             reportsApi.fetchReportMetaDataAndContent(req).then(
@@ -357,8 +356,6 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Fetch Report');
-
-                    //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
@@ -368,7 +365,7 @@
             );
         });
     }
-    
+
     /**
      * This is the function for fetching a completely hydrated report from the reportssApi endpoint.
      * Currently, a hydrated report means report data plus facet information.
@@ -401,7 +398,13 @@
         });
     }
 
-    function fetchReportRecordsCount(req,res) {
+    /**
+     * Fetch the count of total records in a report.
+     *
+     * @param req
+     * @param res
+     */
+    function fetchReportRecordsCount(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Report records count', {req:filterNodeReq(req)});
 
@@ -413,8 +416,6 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Fetch Report records count');
-
-                    //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
@@ -424,6 +425,7 @@
             );
         });
     }
+
     /**
      * This is the function for fetching data records for a report from the reportsApi endpoint.
      * This endpoint is intended to be used primarily when a client needs to refresh the data for
