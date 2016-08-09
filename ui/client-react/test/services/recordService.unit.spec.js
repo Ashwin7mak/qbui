@@ -187,6 +187,6 @@ describe('RecordService functions', () => {
         var url = recordService.constructUrl(recordService.API.DELETE_RECORD_BULK, [appId, tblId]);
         recordService.deleteRecordBulk(appId, tblId, recIds);
 
-        expect(BaseService.prototype.deleteBulk).toHaveBeenCalledWith(url, recIds);
+        expect(BaseService.prototype.deleteBulk).toHaveBeenCalledWith(url, {data: recIds});
     });
 });
