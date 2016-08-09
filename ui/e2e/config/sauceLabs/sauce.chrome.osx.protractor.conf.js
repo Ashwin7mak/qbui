@@ -12,6 +12,7 @@
         idleTimeout: '120',
         screenResolution : '1680x1050',
         maxDuration: 10800,
+        breakpointSize: 'large',
         shardTestFiles: true,
         maxInstances: 2
     };

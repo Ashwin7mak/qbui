@@ -2,7 +2,7 @@
 // https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 (function() {
     'use strict';
-    var globalSauceConfig = require('./sauce.global.protractor.conf.js');
+    var globalSauceConfig = require('./sauce.global.protractor.xlargeBP.conf.js');
     // ----- Capabilities to be passed to the webdriver instance ----
     //
     // For a full list of available capabilities, see
@@ -27,11 +27,10 @@
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
-            breakpointSize: 'large',
+            breakpointSize : 'xlarge',
             shardTestFiles: true,
             maxInstances: 2
-        },
-        {
+        }, {
             platform: 'OS X 10.11',
             browserName: 'safari',
             tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
@@ -40,7 +39,7 @@
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
-            breakpointSize: 'xlarge',
+            breakpointSize : 'xlarge',
             shardTestFiles: true,
             maxInstances: 2
         },
@@ -54,7 +53,7 @@
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '180',
             maxDuration: 10800,
-            breakpointSize: 'medium',
+            breakpointSize : 'xlarge',
             shardTestFiles: true,
             maxInstances: 2
         }

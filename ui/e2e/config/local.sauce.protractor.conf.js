@@ -1,9 +1,9 @@
 // Protractor configuration
+// Use when running E2E tests in Sauce Labs against your local env (note tests are not stable when running from home)
 // https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 (function() {
     'use strict';
     var baseE2EPath = '../../e2e/';
-    // Global properties file with params common to all Sauce lab config files
     exports.config = {
         // A callback function called once configs are read but before any environment
         // setup. This will only run once, and before onPrepare.
@@ -23,9 +23,11 @@
             //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
             idleTimeout: '120',
             screenResolution : '1680x1050',
+            maxDuration: 10800,
+            breakpointSize: 'xlarge',
+            // These two values enable parallel testing which will run a spec file per instance
             shardTestFiles: true,
-            maxInstances: 2,
-            maxDuration: 10800
+            maxInstances: 2
         },
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
@@ -81,26 +83,36 @@
             //read the base classes
             global.e2eBase = requireCommon('common/e2eBase')();
             global.consts = require('../../common/src/constants');
+            global.e2eUtils = requireCommon('common/e2eUtils')();
             global.e2eConsts = requireCommon('common/e2eConsts');
-
-            // Third party library that lets us retry webdriver commands
-            global.e2eRetry = require('webdriverjs-retry');
-            e2eRetry.setDefaultTimeout(25000);
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
-
-            // Maximizes the browser window (known bug with Chrome)
-            browser.driver.manage().window().maximize();
-
-            // Add jasmine spec reporter
-            var SpecReporter = require('jasmine-spec-reporter');
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
                 global.browserName = cap.get('browserName');
             });
+
+            // Grab the browser settings from the processed config and set the browser size
+            browser.getProcessedConfig().then(function(config) {
+                var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(config.capabilities.breakpointSize);
+                global.breakpointSize = browserDimensions.breakpointSize;
+                global.browserWidth = browserDimensions.browserWidth;
+                global.browserHeight = browserDimensions.browserHeight;
+
+                //TODO: MB-386 - Need to use the logger wrapper instead of console.log
+                console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+                browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
+            });
+
+            // Third party library that lets us retry webdriver commands
+            global.e2eRetry = require('webdriverjs-retry');
+            e2eRetry.setDefaultTimeout(25000);
+
+            // Add jasmine spec reporter
+            var SpecReporter = require('jasmine-spec-reporter');
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
         }
     };
 }());
