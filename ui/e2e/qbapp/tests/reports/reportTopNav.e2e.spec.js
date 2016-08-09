@@ -42,9 +42,10 @@
             }).then(function() {
                 // Wait for the leftNav to load
                 return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    // Select the app
-                    return reportServicePage.appLinksElList.get(0).click().then(function() {
-                        //Done callback to let Jasmine know we are done with our promise chain
+                    //go to report page directly.
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+                    // Make sure the table report has loaded
+                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         done();
                     });
                 });
@@ -58,77 +59,67 @@
         /**
          * Test methods to verify all elements present / hidden in topNav depending on breakpoint
          */
-        e2eConsts.NavDimensionsDataProvider().forEach(function(testcase) {
-            it('Verify topNav hamburger toggle displayed on breakpoint: ' + testcase.breakpointSize, function(done) {
-                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    // Verify hamburger toggle displayed in topNav and no text associated for that icon.
-                    reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {
-                        // Verify hamburger toggle is displayed in topNav
-                        reportServicePage.assertElementDisplayed(reportServicePage.topNavToggleHamburgerEl);
-                        // Verify no text displayed beside hamburger link in topNav
-                        expect(reportServicePage.topNavToggleHamburgerEl.getText()).toBeFalsy();
+        it('Verify topNav hamburger toggle displayed', function(done) {
+            // Verify hamburger toggle displayed in topNav and no text associated for that icon.
+            reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {
+                // Verify hamburger toggle is displayed in topNav
+                reportServicePage.assertElementDisplayed(reportServicePage.topNavToggleHamburgerEl);
+                // Verify no text displayed beside hamburger link in topNav
+                expect(reportServicePage.topNavToggleHamburgerEl.getText()).toBeFalsy();
+                done();
+            });
+        });
+
+        it('Verify topNav harmony icons displayed', function(done) {
+            // Verify harmony icons display in topNav and no text associated to them.
+            reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {
+                reportServicePage.topNavHarButtonsListEl.then(function(buttons) {
+                    // Verify only two Harmony icons are displayed
+                    expect(buttons.length).toBe(2);
+                    for (var i = 0; i < buttons.length; i++) {
+                        // Verify Harmony Icons displayed in topNav
+                        reportServicePage.assertElementDisplayed(buttons[i]);
+                        // Verify no text displayed beside Harmony Icons in topNav
+                        expect(buttons[i].getText()).toBeFalsy();
                         done();
-                    });
+                    }
                 });
             });
-
-            it('Verify topNav harmony icons displayed on breakpoint: ' + testcase.breakpointSize, function(done) {
-                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    // Verify harmony icons display in topNav and no text associated to them.
-                    reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {
-                        reportServicePage.topNavHarButtonsListEl.then(function(buttons) {
-                            // Verify only two Harmony icons are displayed
-                            expect(buttons.length).toBe(2);
-                            for (var i = 0; i < buttons.length; i++) {
-                                // Verify Harmony Icons displayed in topNav
-                                reportServicePage.assertElementDisplayed(buttons[i]);
-                                // Verify no text displayed beside Harmony Icons in topNav
-                                expect(buttons[i].getText()).toBeFalsy();
-                                done();
-                            }
-                        });
-                    });
-                });
-
-            });
-
-            it('Verify topNav global icons displayed/not displayed and verify text on breakpoint: ' + testcase.breakpointSize, function(done) {
-                e2eBase.resizeBrowser(testcase.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {
-                        reportServicePage.topNavGlobalActionsListEl.then(function(navActions) {
-                            expect(navActions.length).toBe(3);
-                            if (testcase.browserWidth === e2eConsts.XLARGE_BP_WIDTH ||
-                                testcase.browserWidth === e2eConsts.LARGE_BP_WIDTH ||
-                                testcase.browserWidth === e2eConsts.MEDIUM_BP_WIDTH) {
-                                // Verify global action icons is displayed in topNav
-                                reportServicePage.assertGlobalActsDisplayedInTopNav();
-                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavUserGlobActEl).getText()).toBe('User');
-                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
-                                // Assert actions are not in the leftNav
-                                reportServicePage.assertGlobalActsNotDisplayedInLeftNav().then(function() {
-                                    done();
-                                });
-                            }
-                            if (testcase.browserWidth === e2eConsts.SMALL_BP_WIDTH) {
-                                // Open the leftNav since it's hidden by default on small
-                                reportServicePage.clickTopNavHamburger();
-                                // Assert actions have moved to leftNav
-                                reportServicePage.assertGlobalActsDisplayedInLeftNav();
-                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavUserGlobActLabelEl).getText()).toBe('Help');
-                                expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavHelpGlobActEl).getText()).toBe('User');
-                                // Verify global action icons are not displayed in topNav
-                                reportServicePage.assertGlobalActsNotDisplayedInTopNav().then(function() {
-                                    done();
-                                });
-                            }
-                        });
-                    });
-                });
-            });
-
-            //TODO: Add test for loaded report on small size
 
         });
+
+        it('Verify topNav global icons displayed/not displayed and verify text', function(done) {
+            reportServicePage.waitForElement(reportServicePage.topNavDivEl).then(function() {
+                reportServicePage.topNavGlobalActionsListEl.then(function(navActions) {
+                    expect(navActions.length).toBe(3);
+                    if (breakpointSize !== 'small') {
+                        // Verify global action icons is displayed in topNav
+                        reportServicePage.assertGlobalActsDisplayedInTopNav();
+                        expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavUserGlobActEl).getText()).toBe('User');
+                        expect(reportServicePage.getGlobalNavTextEl(reportServicePage.topNavHelpGlobActEl).getText()).toBe('Help');
+                        // Assert actions are not in the leftNav
+                        reportServicePage.assertGlobalActsNotDisplayedInLeftNav().then(function() {
+                            done();
+                        });
+                    }
+                    if (breakpointSize === 'small') {
+                        // Open the leftNav since it's hidden by default on small
+                        reportServicePage.clickTopNavHamburger();
+                        // Assert actions have moved to leftNav
+                        reportServicePage.assertGlobalActsDisplayedInLeftNav();
+                        expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavUserGlobActLabelEl).getText()).toBe('Help');
+                        expect(reportServicePage.getGlobalNavTextEl(reportServicePage.leftNavHelpGlobActEl).getText()).toBe('User');
+                        // Verify global action icons are not displayed in topNav
+                        reportServicePage.assertGlobalActsNotDisplayedInTopNav().then(function() {
+                            done();
+                        });
+                    }
+                });
+            });
+        });
+
+        //TODO: Add test for loaded report on small size
+
 
         /**
          * After all tests are done, run the cleanup function in the base class

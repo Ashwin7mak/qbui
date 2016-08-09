@@ -63,7 +63,21 @@
             }
 
             //Declare the date and moment formatter
-            var d = new Date(fieldValue.value.replace(/(\[.*?\])/, ''));
+            var currentDate = new Date();
+            var dd = currentDate.getDate().toString();
+            var mm = (currentDate.getMonth() + 1).toString(); //January is 0
+            var yyyy = currentDate.getFullYear();
+
+            if (mm.length  < 2) {
+                mm = '0' + mm;
+            }
+
+            if (dd.length  < 2) {
+                dd = '0' + dd;
+            }
+
+            var dateStr = yyyy + '-' + mm + '-' + dd +  'T' + fieldValue.value.replace(/(\[.*?\])/, '');
+            var d = new Date(dateStr);
             //Resolve whether or not to shift based on timezone
             var timeZone = consts.UTC_TIMEZONE;
             if (fieldInfo.useTimezone) {

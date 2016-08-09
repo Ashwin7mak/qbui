@@ -234,5 +234,8 @@ export default {
         applyTip: "Exit and apply any changes",
         success: "Success",
         failed: "Failed",
+        placeholder:  {
+            email: 'name@domain.com'
+        },
     }
 };

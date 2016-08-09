@@ -55,39 +55,48 @@
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function() {
-            //Method to initialize all Page Objects
+            // Initialize all Page Objects
             global.requirePO = function(relativePath) {
                 return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
             };
 
-            //Method to initialize all Common Files
+            // Initialize all Common Files
             global.requireCommon = function(relativePath) {
                 return require(baseE2EPath + relativePath + '.js');
             };
 
             // Read the base classes
             global.e2eBase = requireCommon('common/e2eBase')();
-            global.consts = require('../../../common/src/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
-
-            // Third party library that lets us retry webdriver commands
-            global.e2eRetry = require('webdriverjs-retry');
-            e2eRetry.setDefaultTimeout(25000);
+            global.e2eUtils = requireCommon('common/e2eUtils')();
+            global.consts = require('../../../common/src/constants');
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
-
-            // Maximizes the browser window (known bug with Chrome)
-            browser.driver.manage().window().maximize();
-
-            // Add jasmine spec reporter
-            var SpecReporter = require('jasmine-spec-reporter');
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
                 global.browserName = cap.get('browserName');
             });
+
+            // Grab the browser settings from the processed config and set the browser size
+            browser.getProcessedConfig().then(function(config) {
+                var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(config.capabilities.breakpointSize);
+                global.breakpointSize = browserDimensions.breakpointSize;
+                global.browserWidth = browserDimensions.browserWidth;
+                global.browserHeight = browserDimensions.browserHeight;
+
+                console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+                browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
+            });
+
+            // Third party library that lets us retry webdriver commands
+            global.e2eRetry = require('webdriverjs-retry');
+            e2eRetry.setDefaultTimeout(25000);
+
+            // Add jasmine spec reporter
+            var SpecReporter = require('jasmine-spec-reporter');
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
         }
     };
 }());

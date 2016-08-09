@@ -8,7 +8,7 @@ $header-cell-color: $color8;
 $row-background-color-hover: $color1;
 $row-cell-border-color: $color4;
 
-$grid-font-size: $font-size - 2;
+$grid-font-size: $font-size-p;
 
 $grid-group-row-header-bkgrd-color: $color1;
 $grid-group-row-header-border-top: $color7;
@@ -19,7 +19,7 @@ $grid-default-group-padding: 2px;
 $grid-default-cell-padding: 8px;
 
 $row-bg-color: #fff;
-$row-non-editable-bg-color: $color12;
+$row-non-editable-bg-color: $color-black-200;
 $row-border-color: #ddd;
 $row-box-shadow-color: #dcdcdc;
 $cell-edit-background-edit: #f3f8fe;
@@ -53,7 +53,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .gridHeaderCell {
         color: $header-cell-color;
-        font-size: 12px;
+        font-size: $grid-font-size;
         font-weight: bold;
         -webkit-font-smoothing: antialiased;
         border-color: $header-cell-border;
@@ -132,6 +132,14 @@ $cell-edit-background-edit: #f3f8fe;
     .gridCell.Bold {
         font-weight: bold;
     }
+
+    .requiredFlag-layout {
+        // to allow for even space above and below the inputbox
+        top: -2px;
+        position: absolute;
+        left: 3px;
+    }
+
     .NoWrap {
         white-space: nowrap;
     }
@@ -412,10 +420,21 @@ $cell-edit-background-edit: #f3f8fe;
     display:none;
 }
 
+
+.reportToolsAndContentContainer .ag-pinned-left-cols-container .ag-row.editing {
+    box-shadow: none;
+}
+
 .reportToolsAndContentContainer .ag-row.editing {
 
     box-shadow: 0px 0px 14px $row-box-shadow-color;
+    height : 58px !important;
+    margin-top: -13px;
 
+    &[row='0'] { //top row in table would clip required star so move down and be shorter
+      margin-top: 0px;
+      height: 51px !important;
+    }
     .ag-cell.gridCell {
 
         overflow:visible;
@@ -432,7 +451,7 @@ $cell-edit-background-edit: #f3f8fe;
             }
         }
         > .cellWrapper,.ag-cell-wrapper {
-            padding:2px;
+            padding:3px;
             position: absolute;
             align-items:center;
             top:0px;
@@ -447,23 +466,27 @@ $cell-edit-background-edit: #f3f8fe;
             .cellData:not(.nonEditable) {
                 display:none;
             }
+            .cellData.nonEditable {
+                display: block;
+                padding-top: 5.5px;
+                cursor: not-allowed;
+            }
             .cellEditWrapper {
                 display:flex;
-                flex:1 1 auto;
+                flex-direction: row;
+                position: relative;
+                height: 100%;
+                width: 100%;
+                align-items: center;
+                justify-content: center;
             }
             .cellEdit {
                 display:inline-block;
-                border:1px solid $row-border-color;
-
-                background: $row-bg-color;
-                flex:1 1 auto;
-                padding:0 0 0 2px;
                 margin-right:2px;
+                margin-left: 2px;
+                height: 30px;
+                background-color: $input-bg-color;
 
-                &.nonEditable {
-                    background-color: $row-non-editable-bg-color;
-                    cursor: not-allowed;
-                }
                 &.dateTimeField>* {
                     border:0;
                     .input-group.date input.form-control {
@@ -529,13 +552,14 @@ $cell-edit-background-edit: #f3f8fe;
             flex-direction:column;
             flex: 0 0 auto;
             background-color:$cell-edit-background-edit;
-            box-shadow: -2px 2px 8px $row-box-shadow-color;
-            position:absolute;
-            top:-26px;
-            left:17px;
+            box-shadow: -6px 0px 14px $row-box-shadow-color;
 
-            border-left: 1px solid $row-border-color;
-            border-bottom:1px solid $row-border-color;
+            position:absolute;
+            top:-21px;
+            left:-29px;
+            padding: 0 24px;
+
+            border: 1px solid $row-border-color;
             button {
                 flex: 0 0 auto;
                 border:0;
@@ -570,7 +594,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
 }
 
-/* ensure that group labels are visible with pinned left column */
+  /* ensure that group labels are visible with pinned left column */
 
 .ag-pinned-left-cols-container {
     z-index:999;

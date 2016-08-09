@@ -1,17 +1,22 @@
 // Protractor configuration
+// Use when running E2E tests on your local dev environment
 // https://github.com/angular/protractor/blob/master/docs/referenceConf.js
 
 (function() {
     'use strict';
     var baseE2EPath = '../../e2e/';
+    var e2eUtils = require('../common/e2eUtils')();
+
     // Add a screenshot reporter for errors when testing locally
     var HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
     var reporter = new HtmlScreenshotReporter({
-        dest: './ui/e2e/screenshots',
-        filename: 'test-report.html',
+        dest: './ui/build/reports/e2e/',
+        filename: 'e2e-test-report.html',
         ignoreSkippedSpecs: false,
         reportOnlyFailedSpecs: false,
-        captureOnlyFailedSpecs: true
+        captureOnlyFailedSpecs: true,
+        showSummary: true,
+        reportTitle: 'Protractor E2E Test Report: ' + e2eUtils.getCurrentTimestamp()
     });
     exports.config = {
         // The timeout for each script run on the browser. This should be longer
@@ -34,17 +39,40 @@
         // Patterns to exclude.
         exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'],
+
         // ----- Capabilities to be passed to the webdriver instance ----
         //
         // For a full list of available capabilities, see
-        // https://code.google.com/p/selenium/wiki/DesiredCapabilities
-        // and
-        // https://code.google.com/p/selenium/source/browse/javascript/webdriver/capabilities.js
+        // https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities and
+        // https://github.com/SeleniumHQ/selenium/blob/master/javascript/webdriver/capabilities.js
         capabilities: {
-            browserName: 'chrome'
-            //shardTestFiles: true,
-            //maxInstances: 2
+            browserName: 'chrome',
+            breakpointSize: 'xlarge',
+            // These two values enable parallel testing which will run a spec file per instance
+            shardTestFiles: true,
+            maxInstances: 2
         },
+        // Uncomment below if you want to run multiple breakpoints or multiple browsers
+        // Overrides any capabilities you have set above
+        //multiCapabilities: [
+        //    {
+        //        browserName: 'chrome',
+        //        breakpointSize: 'xlarge'
+        //    },
+        //    {
+        //        browserName: 'chrome',
+        //        breakpointSize: 'large'
+        //    },
+        //    {
+        //        browserName: 'firefox',
+        //        breakpointSize: 'large'
+        //    },
+        //    {
+        //        browserName: 'safari',
+        //        breakpointSize: 'medium'
+        //    },
+        //],
+
         // ----- The test framework -----
         //
         // Jasmine and Cucumber are fully supported as a test and assertion framework.
@@ -84,23 +112,33 @@
 
             // Read the base classes
             global.e2eBase = requireCommon('common/e2eBase')();
-            global.consts = require('../../common/src/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
-
-            // Third party library that lets us retry webdriver commands
-            global.e2eRetry = require('webdriverjs-retry');
-            e2eRetry.setDefaultTimeout(10000);
+            global.e2eUtils = requireCommon('common/e2eUtils')();
+            global.consts = require('../../common/src/constants');
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
-
-            // Maximizes the browser window (known bug with Chrome)
-            browser.driver.manage().window().maximize();
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
                 global.browserName = cap.get('browserName');
             });
+
+            // Grab the browser settings from the processed config and set the browser size
+            browser.getProcessedConfig().then(function(config) {
+                var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(config.capabilities.breakpointSize);
+                global.breakpointSize = browserDimensions.breakpointSize;
+                global.browserWidth = browserDimensions.browserWidth;
+                global.browserHeight = browserDimensions.browserHeight;
+
+                //TODO: MB-386 - Need to use the logger wrapper instead of console.log
+                console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+                browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
+            });
+
+            // Third party library that lets us retry webdriver commands
+            global.e2eRetry = require('webdriverjs-retry');
+            e2eRetry.setDefaultTimeout(10000);
 
             // Add jasmine-spec-reporter
             var SpecReporter = require('jasmine-spec-reporter');
