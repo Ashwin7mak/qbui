@@ -41,6 +41,8 @@
     .tableActionsContainer {
         position: relative;
         padding-left: 10px;
+        min-height: 52px;
+
         @include small-breakpoint {
             padding-top: 0px; // no stage so to need add space after
             &:not(.selectionActionsOpen) {
@@ -81,7 +83,7 @@
             flex-direction: row;
             flex: 1 1 auto;
             justify-content: flex-end;
-            color: $report-navigation-enabled-color;
+            color: $pagination-iconfont-normal-color;
 
             .recordsCountLoaderContainer {
                 flex-grow: 1;
@@ -159,7 +161,7 @@
         flex: 1 1 auto;
         min-height: 61px;
 
-        color:$report-navigation-enabled-color;
+        color:$pagination-iconfont-normal-color;
 
         .leftReportFooter {
             width: 50%;
@@ -250,7 +252,7 @@
 
 .reportNavigation {
     float: left;
-    color: $report-navigation-enabled-color;
+    color: $pagination-iconfont-normal-color;
     font-family: "Lato", sans-serif;
     font-size: 14px;
     display:flex;
@@ -268,10 +270,13 @@
         &.qbIcon {
             display: inline;
             font-size: 24px;
-            color: $report-navigation-enabled-color;
+            color: $pagination-iconfont-normal-color;
             &.disabled {
-                color: $report-navigation-disabled-color;
+                color: $pagination-iconfont-disabled-color;
             }
+        }
+        &:hover {
+            color: $pagination-iconfont-hover-color;
         }
     }
 
@@ -285,10 +290,13 @@
         &.qbIcon {
             display: inline;
             font-size: 24px;
-            color: $report-navigation-enabled-color;
+            color: $pagination-iconfont-normal-color;
             &.disabled {
-                color: $report-navigation-disabled-color;
+                color: $pagination-iconfont-disabled-color;
             }
+        }
+        &:hover {
+            color: $pagination-iconfont-hover-color;
         }
     }
 }

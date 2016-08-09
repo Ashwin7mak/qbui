@@ -833,69 +833,68 @@ let AGGrid = React.createClass({
 
         return columns;
     },
-
     render() {
         let columnDefs = this.getColumns();
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
-
         return (
             <div className="reportTable">
-
                 <div className={gridWrapperClasses} ref="gridWrapper">
-                    { !this.props.loading && this.props.records && this.props.records.length > 0 ?
-                            <div className="agGrid">
-                                <AgGridReact
-                                    gridOptions={this.gridOptions}
-                                    // listening for events
-                                    onGridReady={this.onGridReady}
-                                    onRowClicked={this.onRowClicked}
-                                    onSelectionChanged={this.onSelectionChanged}
+                    {this.props.records && this.props.records.length > 0 ?
+                        <div className="agGrid">
+                            <AgGridReact
+                                gridOptions={this.gridOptions}
+                                // listening for events
+                                onGridReady={this.onGridReady}
+                                onRowClicked={this.onRowClicked}
+                                onSelectionChanged={this.onSelectionChanged}
 
-                                    // binding to array properties
-                                    columnDefs={columnDefs}
-                                    rowData={this.props.records}
-                                    //handlers on col or row changes
-                                    onFieldChange={this.props.onFieldChange}
-                                    onRecordChange={this.props.onRecordChange}
-                                    onRecordSaveClicked={this.handleRecordSaveClicked}
-                                    onRecordAdd={this.props.onRecordAdd}
-                                    onRecordNewBlank={this.props.onRecordNewBlank}
-                                    validateRecord={this.props.validateRecord}
-                                    onEditRecordStart={this.props.onEditRecordStart}
-                                    onEditRecordCancel={this.handleEditRecordCancel}
-                                    onRecordDelete={this.props.onRecordDelete}
+                                // binding to array properties
+                                columnDefs={columnDefs}
+                                rowData={this.props.records}
+                                //handlers on col or row changes
+                                onFieldChange={this.props.onFieldChange}
+                                onRecordChange={this.props.onRecordChange}
+                                onRecordSaveClicked={this.handleRecordSaveClicked}
+                                onRecordAdd={this.props.onRecordAdd}
+                                onRecordNewBlank={this.props.onRecordNewBlank}
+                                validateRecord={this.props.validateRecord}
+                                onEditRecordStart={this.props.onEditRecordStart}
+                                onEditRecordCancel={this.handleEditRecordCancel}
+                                onRecordDelete={this.props.onRecordDelete}
 
-                                    //default behavior properties
-                                    rowSelection="multiple"
-                                    enableColResize="true"
-                                    groupHeaders="true"
-                                    getRowHeight={this.getRowHeight}
+                                //default behavior properties
+                                rowSelection="multiple"
+                                enableColResize="true"
+                                groupHeaders="true"
+                                getRowHeight={this.getRowHeight}
 
-                                    suppressRowClickSelection="true"
-                                    suppressCellSelection="true"
+                                suppressRowClickSelection="true"
+                                suppressCellSelection="true"
 
-                                    //column menus
-                                    suppressMenuFilterPanel="true"
-                                    suppressMenuColumnPanel="true"
-                                    suppressContextMenu="true"
+                                //column menus
+                                suppressMenuFilterPanel="true"
+                                suppressMenuColumnPanel="true"
+                                suppressContextMenu="true"
 
-                                    overlayLoadingTemplate='<div classname="reportSpinner> </div>'
+                                overlayLoadingTemplate='<div classname="reportSpinner> </div>'
 
-                                    //grouping behavior
-                                    groupSelectsChildren="true"
-                                    groupRowInnerRenderer={this.getGroupRowRenderer}
-                                    groupUseEntireRow={this.props.showGrouping}
+                                //grouping behavior
+                                groupSelectsChildren="true"
+                                groupRowInnerRenderer={this.getGroupRowRenderer}
+                                groupUseEntireRow={this.props.showGrouping}
 
-                                    icons={gridIcons}
-                                />
-                            </div> :
+                                icons={gridIcons}
+                            />
+                        </div> :
                         null
                     }
-
-                    { this.props.loading ? <div className="loadedContent"></div> :
-                        <div><I18nMessage message={'grid.no_data'}/></div>
+                    { !(this.props.records && this.props.records.length > 0) && !this.props.loading ?
+                        <div><I18nMessage message={'grid.no_data'}/></div> :
+                        null
                     }
-
+                    { this.props.loading ? <div className="loadedContent"></div> :
+                        null
+                    }
                 </div>
             </div>
         );

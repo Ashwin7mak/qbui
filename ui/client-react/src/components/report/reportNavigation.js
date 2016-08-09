@@ -1,7 +1,7 @@
 import React from 'react';
 
 import QBicon from '../qbIcon/qbIcon';
-import Fluxxor from 'fluxxor';
+import QBToolTip from '../qbToolTip/qbToolTip';
 import './report.scss';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
 
@@ -13,7 +13,7 @@ var ReportNavigation = React.createClass({
         getNextReportPage: React.PropTypes.func,
         getPreviousReportPage: React.PropTypes.func,
     },
-    
+
     /**
      * renders the report navigation toolbar
      */
@@ -46,10 +46,13 @@ var PreviousLink = React.createClass({
     },
 
     render: function() {
+        const previousButtonClassName = "previousButton " + (this.props.pageStart !== 1 ? "" : "disabled");
         return (
-            <button className="navigationButton" onClick={this.props.getPreviousReportPage}>
-                <QBicon className={"previousButton " + (this.props.pageStart !== 1 ? "" : "disabled") } icon="icon_caretfilledleft" />
-            </button>
+            <QBToolTip tipId="fieldName" i18nMessageKey="report.previousToolTip">
+                <button className="navigationButton" onClick={this.props.getPreviousReportPage}>
+                    <QBicon className={previousButtonClassName} icon="icon_caretfilledleft" />
+                </button>
+            </QBToolTip>
         );
     }
 });
@@ -62,10 +65,14 @@ var NextLink = React.createClass({
     },
 
     render: function() {
+        const nextButtonClassName = "nextButton " + (this.props.recordsCount !== this.props.pageEnd ? "" : "disabled");
+
         return (
-            <button className="navigationButton" onClick={this.props.getNextReportPage}>
-                <QBicon className={"nextButton " + ((this.props.recordsCount !== this.props.pageEnd) ? "" : "disabled") } icon="icon_caretfilledright" />
-            </button>
+            <QBToolTip tipId="fieldName" i18nMessageKey="report.nextToolTip">
+                <button className="navigationButton" onClick={this.props.getNextReportPage}>
+                    <QBicon className={nextButtonClassName} icon="icon_caretfilledright" />
+                </button>
+            </QBToolTip>
         );
     }
 });

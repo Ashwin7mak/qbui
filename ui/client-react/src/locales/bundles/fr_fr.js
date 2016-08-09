@@ -100,6 +100,8 @@ export default {
             recordCount : "{recordCount} {nameForRecords} ",
             recordCountPlaceHolder : "Compte {nameForRecords}",
             reportNavigationBar : "{pageStart} - {pageEnd}",
+            previousToolTip: "Arrière",
+            nextToolTip: "Prochain",
             searchPlaceHolder:  "Rechercher ces",
             sortAndGroup : {
                 addField: "Ajouter le champ",
