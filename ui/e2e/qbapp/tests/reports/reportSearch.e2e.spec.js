@@ -9,7 +9,7 @@
     var reportServicePage = new ReportServicePage();
     var reportFacetsPage = new ReportFacetsPage();
 
-    describe('Search Report', function() {
+    describe('Report Search Tests', function() {
         var realmName;
         var realmId;
         var app;
@@ -28,7 +28,7 @@
             tableToFieldToFieldTypeMap['table 1']['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
             tableToFieldToFieldTypeMap['table 1']['Date Field'] = {fieldType: consts.SCALAR, dataType: consts.DATE};
             tableToFieldToFieldTypeMap['table 1']['Date Time Field'] = {fieldType: consts.SCALAR, dataType: consts.DATE_TIME};
-            tableToFieldToFieldTypeMap['table 1']['Email'] = {fieldType: consts.SCALAR, dataType: consts.EMAIL_ADDRESS};
+            tableToFieldToFieldTypeMap['table 1']['Email Field'] = {fieldType: consts.SCALAR, dataType: consts.EMAIL_ADDRESS};
             tableToFieldToFieldTypeMap['table 1']['Checkbox Field'] = {fieldType: consts.SCALAR, dataType: consts.CHECKBOX};
             tableToFieldToFieldTypeMap['table 1']['Numeric Field'] = {fieldType: consts.SCALAR, dataType: consts.NUMERIC};
 
@@ -76,16 +76,14 @@
                 e2eBase.sleep(browser.params.smallSleep);
                 reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
                     reportServicePage.agGridRecordElList.map(function(row) {
-                        var cells = row.all(by.className('ag-cell-no-focus'));
+                        var cells = row.all(by.className('cellData'));
                         return [
-                            cells.get(1).all(by.tagName('input')).first().getAttribute('value'),
-                            cells.get(2).all(by.tagName('input')).first().getAttribute('value'),
-                            // Selenium returns 'Invalid date' when trying to get the value of a Date/Time field, getText works however
-                            cells.get(3).getText(),
-                            cells.get(4).all(by.tagName('input')).first().getAttribute('value'),
-                            // Checkbox field no longer a text field with value
+                            cells.get(1).getAttribute('textContent'),
+                            cells.get(2).getAttribute('textContent'),
+                            cells.get(3).getAttribute('textContent'),
+                            cells.get(4).getAttribute('textContent'),
                             cells.get(5).all(by.tagName('input')).first().isSelected(),
-                            cells.get(6).all(by.tagName('input')).first().getAttribute('value')
+                            cells.get(6).getAttribute('textContent')
                         ];
                     }).then(function(results) {
                         for (var i = 0; i < results.length; i++) {
@@ -180,13 +178,15 @@
 
         it('Special characters Test', function(done) {
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
-            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
-                reportServicePage.reportFilterSearchBox.clear().sendKeys('@#^&*!!', protractor.Key.ENTER);
-                //sleep for loading of table to finish
-                e2eBase.sleep(browser.params.mediumSleep);
-                expect(reportServicePage.griddleWrapperEl.getText()).toEqual('There is no data to display.');
-                expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
-                done();
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
+                    reportServicePage.reportFilterSearchBox.clear().sendKeys('@#^&*!!', protractor.Key.ENTER);
+                    //sleep for loading of table to finish
+                    e2eBase.sleep(browser.params.mediumSleep);
+                    expect(reportServicePage.griddleWrapperEl.getText()).toEqual('There is no data to display.');
+                    expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
+                    done();
+                });
             });
         });
 
