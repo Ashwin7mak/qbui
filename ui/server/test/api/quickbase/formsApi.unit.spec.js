@@ -112,7 +112,7 @@ describe('Validate FormsApi unit tests', function() {
         });
 
         it('success return results ', function(done) {
-            req.url = '/apps/123/tables/456?format=display';
+            req.url = '/apps/123/tables/456';
 
             var targetObject = '[{"id":1}]';
             executeReqStub.returns(Promise.resolve(targetObject));
