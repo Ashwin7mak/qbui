@@ -271,7 +271,7 @@ let reportDataActions = {
     deleteReportRecordBulk(appId, tblId, recIds) {
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
-            if (appId && tblId && (!!(recIds === 0 || recIds))) {
+            if (appId && tblId && recIds && recIds.length >= 1) {
                 let recordService = new RecordService();
 
                 //delete the record
