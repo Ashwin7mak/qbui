@@ -91,7 +91,6 @@
              */
             fetchFormMetaData: function(req) {
                 let opts = requestHelper.setOptions(req);
-                let reportId;
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsRoute(req.url);
 
