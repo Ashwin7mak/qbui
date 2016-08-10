@@ -8,17 +8,13 @@
     display: block;
 
     .fieldRow {
-        display: flex;
-        flex-direction: row;
-        align-items: stretch;
-        flex-wrap: wrap;
+
         padding: 5px 0;
 
         .formElement {
             margin: 0 35px 20px 0;
             word-wrap: break-word;
             max-width: 100%;
-            display: flex;
             .fieldLabel {
                 display: block;
                 color: $fieldLabel-color;

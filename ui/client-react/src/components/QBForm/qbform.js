@@ -2,12 +2,14 @@ import React from 'react';
 import QBPanel from '../QBPanel/qbpanel.js';
 import Tabs, {TabPane} from 'rc-tabs';
 import Fluxxor from 'fluxxor';
-import _ from 'lodash';
-import './qbform.scss';
-import './tabs.scss';
-const serverTypeConsts = require('../../../../common/src/constants');
+import FieldElement from './fieldElement';
+import Breakpoints from '../../utils/breakpoints';
 import {CellValueRenderer} from '../dataTable/agGrid/cellValueRenderers';
 
+import './qbform.scss';
+import './tabs.scss';
+
+const serverTypeConsts = require('../../../../common/src/constants');
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 /*
@@ -17,6 +19,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let QBForm = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
+
         activeTab: React.PropTypes.string,
         formData: React.PropTypes.shape({
             record: React.PropTypes.array,
@@ -25,47 +28,50 @@ let QBForm = React.createClass({
         })
     },
 
-    getDefaultProps: function() {
+
+    getDefaultProps() {
         return {
             activeTab: '0'
         };
     },
 
-    createFieldElement(element, sectionIndex, labelPosition) {
+    getElementProps(element) {
+
+        if (element.FormTextElement) {
+            return element.FormTextElement;
+        } else if (element.FormFieldElement) {
+            return element.FormFieldElement;
+        } else {
+            return {};
+        }
+    },
+
+    getUIElement(element, colSpan, orderIndex, labelPosition) {
+
+        //build each of the elements, stuff them into one row for now
+        if (element.FormTextElement) {
+            return this.createTextElement(element.FormTextElement, colSpan, orderIndex);
+        } else if (element.FormFieldElement) {
+            return this.createFieldElement(element.FormFieldElement, colSpan, orderIndex, labelPosition);
+        }
+        return "";
+    },
+
+    createFieldElement(element, colSpan, sectionIndex, labelPosition) {
         let record = this.props.formData.record || [];
         let fields = this.props.formData.fields || [];
 
-        let relatedField = _.find(fields, function(field) {
+        let relatedField = _.find(fields, field => {
             if (field.id === element.fieldId) {
                 return true;
             }
         });
 
-        let fieldDatatypeAttributes = relatedField && relatedField.datatypeAttributes ? relatedField.datatypeAttributes : {};
-        let fieldType = fieldDatatypeAttributes.type;
-
-        let fieldRecord = _.find(record, function(val) {
+        let fieldRecord = _.find(record, val => {
             if (val.id === element.fieldId) {
                 return true;
             }
         });
-
-        //skip the user fields - these arent implemented.
-        //TODO: this should be removed once user fields are implemented
-        if (fieldType === "USER") {
-            fieldRecord = "";
-        }
-
-        //catch the non-implemented pieces.
-        let fieldDisplayValue = fieldRecord ? fieldRecord.display : "display value";
-        let fieldRawValue = fieldRecord ? fieldRecord.value : "raw value";
-
-        let fieldLabel = "";
-        if (element.useAlternateLabel) {
-            fieldLabel = element.displayText;
-        } else {
-            fieldLabel = relatedField ? relatedField.name : "display label";
-        }
 
         let key = "field" + sectionIndex + "-" + element.orderIndex;
 
@@ -73,61 +79,104 @@ let QBForm = React.createClass({
         classes += labelPosition === "ABOVE" ? "labelAbove" : "labelLeft";
 
         return (
-            <div key={key} className={classes}>
-                <span className={"fieldLabel"}>{fieldLabel}</span>
-                <span className="cellWrapper">
-                    {fieldDisplayValue !== null &&
-                    <CellValueRenderer type={fieldType}
-                               value={fieldRawValue}
-                               display={fieldDisplayValue}
-                               attributes={fieldDatatypeAttributes}
-                    />  }
-                </span>
-            </div>
+            <td key={key} colSpan={colSpan} className={classes}>
+              <FieldElement element={element} relatedField={relatedField} fieldRecord={fieldRecord}/>
+            </td>
         );
     },
-    createTextElement(element, sectionIndex) {
+
+    createTextElement(element, colSpan, sectionIndex) {
         let key = "field" + sectionIndex + "-" + element.orderIndex;
-        return <div key={key} className="formElement text">{element.displayText}</div>;
-    },
-    createRow(fields) {
-        return <div className="fieldRow">{fields}</div>;
+        return <td key={key} colSpan={colSpan}><div className="formElement text">{element.displayText}</div></td>;
     },
 
-    createSection(section) {
+    createSectionRows(section, singleColumn) {
+
+        const rows = this.getSectionRowData(section, singleColumn);
+
+        // find max # columns in any row
+        const maxColumns = rows.reduce((prev, current) => current.length > prev ? current.length : prev, 0);
+
+        // now that we have the columns to compute colspan we can create the UI
+        const uiRows = [];
+        let key = 0;
+        rows.forEach(row => {
+            const uiRow = [];
+            row.forEach((sectionElement, index) => {
+                const sectionProps = this.getElementProps(sectionElement);
+                let colSpan = 1;
+                if (index === row.length - 1) {
+                    colSpan = maxColumns - row.length;
+                }
+                uiRow.push(this.getUIElement(sectionElement, colSpan, section.orderIndex, sectionProps.labelPosition));
+            });
+            uiRows.push(this.createRow(uiRow, key++));
+        });
+        return uiRows;
+    },
+
+    getSectionRowData(section, singleColumn) {
+        let rows = [];
+        let currentRowElements = [];
+
+        // store the section elements in an array of rows containing an array of columns
+
+        Object.keys(section.elements).forEach((key, index, arr) => {
+
+            let props = this.getElementProps(section.elements[key]);
+
+            // single column
+
+            if (singleColumn) {
+                rows.push([section.elements[key]]);
+                return;
+            }
+
+            if (index === arr.length - 1) {
+                currentRowElements.push(section.elements[key]);
+                rows.push(currentRowElements);
+            } else {
+                if (currentRowElements.length > 0 && !props.positionSameRow) {
+                    rows.push(currentRowElements);
+                    currentRowElements = [];
+                }
+                currentRowElements.push(section.elements[key]);
+            }
+        });
+        return rows;
+    },
+
+    createRow(fields, key) {
+        return (
+            <tr key={key} className="fieldRow">
+                {fields}
+            </tr>);
+    },
+
+    createSection(section, singleColumn) {
         let sectionTitle = "";
-        let fieldLabelPosition = "";
 
         //build the section header.
         if (section.headerElement && section.headerElement.FormHeaderElement && section.headerElement.FormHeaderElement) {
             sectionTitle = section.headerElement.FormHeaderElement.displayText ? section.headerElement.FormHeaderElement.displayText : "";
-            fieldLabelPosition = section.headerElement.FormHeaderElement.position;
         }
-
-        //build each of the elements, stuff them into one row for now
-        let elements = [];
-        _.each(section.elements, (element) => {
-            if (element.FormTextElement) {
-                elements.push(this.createTextElement(element.FormTextElement, section.orderIndex));
-            } else if (element.FormFieldElement) {
-                elements.push(this.createFieldElement(element.FormFieldElement, section.orderIndex, fieldLabelPosition));
-            }  else {
-                //unknown element type.. not sure how to render.
-            }
-        });
 
         return (
             <QBPanel className="formSection" title={sectionTitle} key={"section" + section.orderIndex} isOpen={true} panelNum={section.orderIndex}>
-                {this.createRow(elements)}
+                <table className="formTable"><tbody>{this.createSectionRows(section, singleColumn)}</tbody></table>
             </QBPanel>
         );
     },
 
-    createTab(tab) {
+    createTab(tab, singleColumn) {
         let sections = [];
-        _.each(tab.sections, (section, idx) => {
-            sections.push(this.createSection(section));
-        });
+
+        if (tab.sections) {
+            Object.keys(tab.sections).forEach(key => {
+                sections.push(this.createSection(tab.sections[key], singleColumn));
+            });
+        }
+
         return (
             <TabPane key={tab.orderIndex} tab={tab.title}>
                 <br/>
@@ -137,19 +186,25 @@ let QBForm = React.createClass({
     },
 
     render() {
-        let tabs = [];
+        const tabChildren = [];
+        const singleColumn = Breakpoints.isSmallBreakpoint();
 
         if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
-            _.each(this.props.formData.formMeta.tabs, (tab, index) => {
-                tabs.push(this.createTab(tab));
+            let tabs = this.props.formData.formMeta.tabs;
+
+            Object.keys(tabs).forEach(key => {
+                tabChildren.push(this.createTab(tabs[key], singleColumn));
             });
         }
         return (
             <div className="formContainer">
                 <form>
-                    <Tabs activeKey={this.props.activeTab}>
-                        {tabs}
-                    </Tabs>
+                    {tabChildren.length < 2 ?
+                        tabChildren :
+                        <Tabs activeKey={this.props.activeTab}>
+                            {tabChildren}
+                        </Tabs>
+                    }
                 </form>
             </div>
         );
