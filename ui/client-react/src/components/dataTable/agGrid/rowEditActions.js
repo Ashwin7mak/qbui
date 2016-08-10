@@ -57,7 +57,7 @@ const RowEditActions = React.createClass({
 
     render: function() {
         let errorMessage = '';
-        if (this.props.params.context.invalidEdit){
+        if (this.props.params.context.invalidEdit) {
             //todo localize
             errorMessage = 'Please fix these' + this.props.params.context.invalidCount +  'fields';
         }

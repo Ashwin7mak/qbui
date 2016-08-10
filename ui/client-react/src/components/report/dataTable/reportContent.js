@@ -107,7 +107,7 @@ let ReportContent = React.createClass({
         } else if (def && def.datatypeAttributes && def.datatypeAttributes.clientSideAttributes &&
             def.datatypeAttributes.clientSideAttributes.max_chars &&
             (value && value.length > def.datatypeAttributes.clientSideAttributes.max_chars)) {
-            let msg = Locales.getMessage('invalidMsg.maxChars', {num: def.datatypeAttributes.clientSideAttributes.max_chars})
+            let msg = Locales.getMessage('invalidMsg.maxChars', {num: def.datatypeAttributes.clientSideAttributes.max_chars});
             results = {
                 isInvalid: true,
                 invalidMessage: msg

@@ -30,13 +30,13 @@ export const TextFieldEditor = React.createClass({
                           onBlur={this.props.onBlur} />;
 
 
-        return  (  this.props.isInvalid ?
+        return  (this.props.isInvalid ?
                 (<QBToolTip location="top" tipId="invalidInput" kdelayHide={9914000}
                             plainMessage={this.props.invalidMessage}>
                     {inputBox}
                 </QBToolTip>) :
                 inputBox
-        )
+        );
     }
 });
 
