@@ -274,7 +274,7 @@ const CellRenderer = React.createClass({
 class CellRendererFactory  {
     static makeCellRenderer(type, props) {
         return <CellRenderer type={type}
-                             validateFieldValue={props.params.context.validateFieldValue}
+                             validateFieldValue={props.params && props.params.context ? props.params.context.validateFieldValue : null}
                              invalidMessage={props.invalidMessage}
                              isInvalid={props.isInvalid}
                              colDef={props.params.column.colDef}

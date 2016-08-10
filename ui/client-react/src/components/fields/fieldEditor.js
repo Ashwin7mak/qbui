@@ -116,10 +116,12 @@ const FieldEditor = React.createClass({
     },
 
     onExitField(ev) {
-        let results = this.props.validateFieldValue(this.props.fieldDef, ev.target.value);
-        this.props.onValidated(results);
         // need to rerender this field with invalid state
-        //on aggrid redraw on qbgrid set state in
+        //on aggrid redraw, and on qbgrid set state
+        if (this.props.validateFieldValue) {
+            let results = this.props.validateFieldValue(this.props.fieldDef, ev.target.value);
+            this.props.onValidated(results);
+        }
     },
 
     render() {
