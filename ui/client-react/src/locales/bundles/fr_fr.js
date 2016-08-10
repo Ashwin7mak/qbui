@@ -84,6 +84,9 @@ export default {
                 sign_out: "Se déconnecter"
             }
         },
+        form : {
+            tab : 'Onglet'
+        },
         report : {
             blank : "blanc",
             facets :{

@@ -8,6 +8,7 @@
     let log = require('../../logger').getLogger();
     let constants = require('../../../../common/src/constants');
     let collectionUtils = require('../../utility/collectionUtils');
+    var url = require('url');
 
     module.exports = function(config) {
 
@@ -91,15 +92,14 @@
             fetchFormMetaData: function(req) {
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsRoute(req.url);
 
-                //  TODO: TEMPORARAY...JUST RETURN FORM ID 1 for now...
-                //  TODO: NEED NEW ENDPOINT THAT DOES NOT REQUIRE AN ID...
-                //
-                //  TODO: add type query parameter when using new endpoint
-                //
-                //  TODO: Think about what to do(if anything) if type query
-                //  TODO: parameter is not defined...error, set to view, nothing?
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFormsRoute(req.url, 1);
+                //  ensure any request parameters are appended..
+                let search = url.parse(req.url).search;
+                if (search) {
+                    opts.url += search;
+                }
+
                 return requestHelper.executeRequest(req, opts);
             },
 
@@ -127,8 +127,11 @@
                             //  object for records and fields.
                             let fidList = extractFidsListFromForm(obj.formMeta);
                             if (fidList && fidList.length > 0) {
+
                                 //  ensure the fid list is ordered
-                                fidList.sort();
+                                fidList.sort(function(a, b) {
+                                    return a - b;
+                                });
 
                                 //  convert the fid array into a delimited string that will get added to the request as a query parameter
                                 let columnList = collectionUtils.convertListToDelimitedString(fidList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
