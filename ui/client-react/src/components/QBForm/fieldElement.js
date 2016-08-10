@@ -7,7 +7,8 @@ const FieldElement = React.createClass({
     propTypes: {
         element: React.PropTypes.object,
         relatedField: React.PropTypes.object,
-        fieldRecord: React.PropTypes.object
+        fieldRecord: React.PropTypes.object,
+        labelPosition: React.PropTypes.string
     },
 
     render() {
@@ -26,8 +27,11 @@ const FieldElement = React.createClass({
             fieldLabel = this.props.relatedField ? this.props.relatedField.name : "display label";
         }
 
+        let classes = "formElement field ";
+        classes += this.props.labelPosition === "ABOVE" ? "labelAbove" : "labelLeft";
+
         return (
-            <div className="fieldElement">
+            <div className={classes}>
                 <span className="fieldLabel">{fieldLabel}</span>
                 <span className="cellWrapper">
                     {fieldDisplayValue !== null &&

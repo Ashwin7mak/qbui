@@ -75,13 +75,9 @@ let QBForm = React.createClass({
         });
 
         let key = "field" + sectionIndex + "-" + element.orderIndex;
-
-        let classes = "formElement field ";
-        classes += labelPosition === "ABOVE" ? "labelAbove" : "labelLeft";
-
         return (
-            <td key={key} colSpan={colSpan} className={classes}>
-              <FieldElement element={element} relatedField={relatedField} fieldRecord={fieldRecord}/>
+            <td key={key} colSpan={colSpan}>
+              <FieldElement element={element} relatedField={relatedField} fieldRecord={fieldRecord} labelPosition={labelPosition}/>
             </td>
         );
     },
@@ -92,6 +88,8 @@ let QBForm = React.createClass({
     },
 
     createSectionTableRows(section, singleColumn) {
+
+        const labelPosition = section.headerElement.FormHeaderElement.labelPosition;
 
         const rows = this.getSectionRowData(section, singleColumn);
 
@@ -104,12 +102,12 @@ let QBForm = React.createClass({
         rows.forEach(row => {
             const cells = [];
             row.forEach((sectionElement, index) => {
-                const sectionProps = this.getElementProps(sectionElement);
+
                 let colSpan = 1;
                 if (index === row.length - 1) {
-                    colSpan = maxColumns - row.length;
+                    colSpan = 100; //same as legacy QB, could possibly use (maxColumns - row.length);
                 }
-                cells.push(this.getTableCell(sectionElement, colSpan, section.orderIndex, sectionProps.labelPosition));
+                cells.push(this.getTableCell(sectionElement, colSpan, section.orderIndex, labelPosition));
             });
 
             tableRows.push(
