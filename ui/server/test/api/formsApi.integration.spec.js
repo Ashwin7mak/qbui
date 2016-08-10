@@ -9,7 +9,8 @@
     var testConsts = require('./api.test.constants');
     var errorCodes = require('../../src/api/errorCodes');
 
-    describe('Validate FormsApi integration tests', function() {
+    //  TODO: disabled until individual tests can be run..
+    xdescribe('Validate FormsApi integration tests', function() {
         // Set timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
         var app;
