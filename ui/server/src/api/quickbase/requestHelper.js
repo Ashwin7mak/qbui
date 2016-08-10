@@ -79,8 +79,8 @@
              * @returns {*}
              */
             setBodyOption: function(req, opts) {
-                //  body header option only valid for put and post
-                if (this.isPut(req) || this.isPatch(req) || this.isPost(req) || this.isDelete(req)) {
+                //  body header option valid for all verbs EXCEPT 'get'.
+                if (!this.isGet(req)) {
                     opts.body = req.rawBody;
                 }
                 return opts;

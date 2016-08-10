@@ -159,6 +159,15 @@ describe('Validate RequestHelper unit tests', function() {
             done();
         });
 
+        it('Test setOptions with DELETE method', function(done) {
+            req.method = 'DELETE';
+            var request = requestHelper.setOptions(req);
+            should(request.url).be.exactly(config.javaHost + req.url);
+            should(request.body).be.exactly(req.rawBody);
+            should(request.method).be.exactly(req.method);
+            done();
+        });
+
     });
 
     describe('validate setting the TID on the header with other headers', function() {
