@@ -39,6 +39,7 @@ const CellRenderer = React.createClass({
         onTabColumn: React.PropTypes.func,
         initialValue: React.PropTypes.object,
         editing: React.PropTypes.bool,
+        validateFieldValue: React.PropTypes.func,
         qbGrid: React.PropTypes.bool // temporary, used to determine if we need to render both a renderer and editor (for ag-grid)
     },
 
@@ -58,6 +59,8 @@ const CellRenderer = React.createClass({
                     id: this.props.initialValue.id,
                     value : this.props.initialValue.value,
                     display : this.props.initialValue.display,
+                    isInvalid: false,
+                    invalidMessage: ''
                 }
             };
         } else {
@@ -130,8 +133,13 @@ const CellRenderer = React.createClass({
                                 value={this.state.valueAndDisplay.value}
                                 colDef={this.props.colDef}
                                 onChange={this.onChange}
+                                onValidated={this.onValidated}
                                 key={key + '-edt'}
-                                onTabColumn={this.onTabColumn}/>
+                                onTabColumn={this.onTabColumn}
+                                validateFieldValue={this.props.validateFieldValue}
+                                isInvalid={this.state.valueAndDisplay.isInvalid}
+                                invalidMessage={this.state.valueAndDisplay.invalidMessage}
+                    />
                 }
 
                 { (!isEditable || !this.props.editing || !this.props.qbGrid) &&
@@ -143,6 +151,10 @@ const CellRenderer = React.createClass({
                                        attributes={this.props.colDef.datatypeAttributes}/>
                 }
             </span>);
+    },
+
+    onValidated(results) {
+        this.cellValidated(results);
     },
 
     onChange(value) {
@@ -200,6 +212,18 @@ const CellRenderer = React.createClass({
     },
 
     /**
+     * cell validate change update
+     * @param result of validation
+     */
+    cellValidated(result) {
+        let current =  Object.assign({}, this.state.valueAndDisplay);
+        current.isInvalid = result.isInvalid;
+        current.invalidMessage = result.invalidMessage;
+        this.setState({valueAndDisplay : current}, ()=>{this.cellChanges();});
+    },
+
+
+    /**
      * date, datetime, or time cell was edited
      * @param newValue
      */
@@ -250,6 +274,9 @@ const CellRenderer = React.createClass({
 class CellRendererFactory  {
     static makeCellRenderer(type, props) {
         return <CellRenderer type={type}
+                             validateFieldValue={props.params.context.validateFieldValue}
+                             invalidMessage={props.invalidMessage}
+                             isInvalid={props.isInvalid}
                              colDef={props.params.column.colDef}
                              initialValue={props.params.value}
                              editing={props.editing}

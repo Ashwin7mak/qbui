@@ -8,7 +8,8 @@ export const TextFieldEditor = React.createClass({
         ref: React.PropTypes.any,
         value: React.PropTypes.any.isRequired, // should be string but duration is a number but rendered as text
         classes: React.PropTypes.string,
-        onChange: React.PropTypes.func.isRequired
+        onChange: React.PropTypes.func.isRequired,
+        onBlur: React.PropTypes.func.isRequired
     },
 
     onChange(ev) {
@@ -26,6 +27,7 @@ export const TextFieldEditor = React.createClass({
                       type="text"
                       placeholder={this.props.placeholder}
                       onChange={this.onChange}
+                      onBlur={this.props.onBlur}
         />;
     }
 });

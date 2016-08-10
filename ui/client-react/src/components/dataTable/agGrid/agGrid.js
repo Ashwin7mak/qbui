@@ -61,6 +61,7 @@ let AGGrid = React.createClass({
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
         validateRecord: React.PropTypes.func,
+        validateFieldValue: React.PropTypes.func,
         onRowClick: React.PropTypes.func,
         onFieldChange: React.PropTypes.func,
         onRecordChange: React.PropTypes.func,
@@ -366,6 +367,7 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel; // does local method 1st
         this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
         this.gridOptions.context.validateRecord = this.props.validateRecord;
+        this.gridOptions.context.validateFieldValue = this.props.validateFieldValue;
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
         this.gridOptions.context.keyField = this.props.keyField;
@@ -860,6 +862,7 @@ let AGGrid = React.createClass({
                                     onRecordAdd={this.props.onRecordAdd}
                                     onRecordNewBlank={this.props.onRecordNewBlank}
                                     validateRecord={this.props.validateRecord}
+                                    validateFieldValue={this.props.validateFieldValue}
                                     onEditRecordStart={this.props.onEditRecordStart}
                                     onEditRecordCancel={this.handleEditRecordCancel}
                                     onRecordDelete={this.props.onRecordDelete}

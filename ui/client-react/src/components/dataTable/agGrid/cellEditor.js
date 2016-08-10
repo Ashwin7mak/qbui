@@ -15,7 +15,10 @@ const CellEditor = React.createClass({
         value: React.PropTypes.any,
         colDef: React.PropTypes.object,
         onChange: React.PropTypes.func,
-        onTabColumn: React.PropTypes.func
+        onTabColumn: React.PropTypes.func,
+        validateFieldValue: React.PropTypes.func,
+        isInvalid: React.PropTypes.bool,
+        invalidMessage: React.PropTypes.string
     },
 
 
@@ -32,11 +35,16 @@ const CellEditor = React.createClass({
         return (<FieldEditor  classes="cellEditWrapper"
                               type={this.props.type}
                               value={this.props.value}
-                              indicateRequired={true}
                               fieldDef={this.props.colDef}
                               onChange={this.props.onChange}
+                              indicateRequired={true}
                               onKeyDown={this.onKeyDown}
-        />);
+                              onValidated={this.props.onValidated}
+                              validateFieldValue={this.props.validateFieldValue}
+                              isInvalid={this.props.isInvalid}
+                              invalidMessage={this.props.invalidMessage}
+
+    />);
     }
 });
 

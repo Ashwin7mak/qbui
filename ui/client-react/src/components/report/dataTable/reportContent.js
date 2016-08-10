@@ -83,6 +83,22 @@ let ReportContent = React.createClass({
         return results;
     },
 
+
+    /**
+     * Client side validation of a field value
+     * placeholder method implementation TBD
+     * @param fieldDef, value
+     * @returns validation result object {{ok: boolean, isInvalid: bool, invalidMessage}}
+     */
+    validateFieldValue(def, value) {
+        let results = {
+            isInvalid : false,
+            invalidMessage: 'error ovah heeya'
+        };
+        // TBD validate
+        return results;
+    },
+
     /**
      * When entering inline edit on a record, if it's an existing (already stored) record keep note
      * its originalRecord values (for later undo/audit?)
@@ -720,6 +736,7 @@ let ReportContent = React.createClass({
                                 onRecordNewBlank={this.handleRecordNewBlank}
                                 onRecordSaveClicked={this.handleRecordSaveClicked}
                                 validateRecord={this.validateRecord}
+                                validateFieldValue={this.validateFieldValue}
                                 getOrigRec={this.getOrigRec}
                                 getPendingChanges={this.getPendingChanges}
                                 tblId={this.props.reportData.tblId}

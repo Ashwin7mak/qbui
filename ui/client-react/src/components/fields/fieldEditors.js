@@ -11,7 +11,8 @@ export const DefaultFieldEditor = React.createClass({
     propTypes: {
         value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]),
         type: React.PropTypes.string,
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        onBlur: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -28,6 +29,7 @@ export const DefaultFieldEditor = React.createClass({
     render() {
         return <input ref="cellInput"
                       onChange={this.onChange}
+                      onBlur={this.props.onBlur}
                       tabIndex="0"
                       className="cellEdit"
                       type={this.props.type}
@@ -44,7 +46,8 @@ export const MultiLineTextFieldEditor = React.createClass({
     propTypes: {
         value: React.PropTypes.string,
         type: React.PropTypes.string,
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        onBlur: React.PropTypes.func
     },
 
     statics: {
@@ -104,7 +107,9 @@ export const MultiLineTextFieldEditor = React.createClass({
 
     render() {
 
-        return <textarea ref="textarea" style={this.state.style} onChange={this.onChange}
+        return <textarea ref="textarea" style={this.state.style}
+                         onChange={this.onChange}
+                         onBlur={this.props.onBlur}
                          tabIndex="0"
                          onKeyUp={this.onKeyUp}
                          className="cellEdit"
@@ -121,6 +126,7 @@ export const UserFieldEditor = React.createClass({
     render() {
         return <input ref="cellInput"
                       tabIndex="0"
+                      onBlur={this.props.onBlur}
                       className="cellEdit"/>;
     }
 });
@@ -131,7 +137,8 @@ export const ComboBoxFieldEditor = React.createClass({
 
     propTypes: {
         choices: React.PropTypes.array, // array of choices with display value props
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        onBlur: React.PropTypes.func
     },
 
     // handle text input
@@ -151,6 +158,7 @@ export const ComboBoxFieldEditor = React.createClass({
                 <FormControl type="text"
                              value={this.props.value}
                              onChange={this.onChange}
+                             onBlur={this.props.onBlur}
                              />
                 <DropdownButton pullRight={true}
                                 componentClass={InputGroup.Button}
@@ -158,6 +166,7 @@ export const ComboBoxFieldEditor = React.createClass({
                                 title="">
 
                     {this.props.choices.map((choice, i) => (<MenuItem key={i}
+                                                                      onBlur={this.props.onBlur}
                                                                       onSelect={() => {this.onSelect(choice.displayValue);}}>
                                                                 {choice.displayValue}
                                                             </MenuItem>))
@@ -176,7 +185,8 @@ export const DateFieldEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DD
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        onBlur: React.PropTypes.func
     },
 
     onChange(newValue) {
@@ -190,6 +200,7 @@ export const DateFieldEditor = React.createClass({
             <DateTimeField dateTime={fixedDate}
                            format={format}
                            inputFormat="MM-DD-YYYY"
+                           onBlur={this.props.onBlur}
                            onChange={this.onChange}
                            mode="date"/>
         </div>;
@@ -217,7 +228,8 @@ export const DateTimeFieldEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        onBlur: React.PropTypes.func
     },
 
     onChange(newValue) {
@@ -234,6 +246,7 @@ export const DateTimeFieldEditor = React.createClass({
             <DateTimeField dateTime={dateTime}
                            format={format}
                            inputFormat="MM-DD-YYYY hh:mm:ss A"
+                           onBlur={this.props.onBlur}
                            onChange={this.onChange}
                            mode="datetime"/>
         </div>;
@@ -247,7 +260,8 @@ export const TimeFieldEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss.SSS (Epoch date)
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        onBlur: React.PropTypes.func
     },
     onChange(newValue) {
         this.props.onChange(newValue);
@@ -261,6 +275,7 @@ export const TimeFieldEditor = React.createClass({
             <DateTimeField dateTime={localTime}
                            format={format}
                            inputFormat="h:mm:ss A"
+                           onBlur={this.props.onBlur}
                            onChange={this.onChange}
                            mode="time"/>
         </div>;
@@ -274,7 +289,8 @@ export const CheckBoxFieldEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.bool,
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        onBlur: React.PropTypes.func
     },
 
     getDefaultProps() {
@@ -292,6 +308,7 @@ export const CheckBoxFieldEditor = React.createClass({
 
         return <input ref="cellInput"
                       onChange={this.onChange}
+                      onBlur={this.props.onBlur}
                       tabIndex="0"
                       className="cellEdit"
                       defaultChecked={this.props.value} // react requirement
