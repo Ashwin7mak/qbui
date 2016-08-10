@@ -32,106 +32,85 @@
             //Field types
             FORMULA: {
                 name: 'FORMULA',
-                otherInfo: ''
             },
             SCALAR: {
                 name: 'SCALAR',
-                otherInfo: ''
             },
             CONCRETE: {
                 name: 'CONCRETE',
-                otherInfo: ''
             },
             REPORT_LINK: {
                 name: 'REPORT_LINK',
-                otherInfo: ''
             },
             SUMMARY: {
                 name: 'SUMMARY',
-                otherInfo: ''
             },
             LOOKUP: {
                 name: 'LOOKUP',
-                otherInfo: ''
             }
         },
 
         dataType : {
             //Data types
-            CHECKBOX        : {
+            CHECKBOX: {
                 name:'CHECKBOX',
                 columnName:'Checkbox',
-                otherInfo:'',
             },
-            TEXT            : {
+            TEXT: {
                 name:'TEXT',
                 columnName:'Text',
-                otherInfo:'',
             },
-            PHONE_NUMBER    : {
+            PHONE_NUMBER: {
                 name:'PHONE_NUMBER',
                 columnName:'Phone Number',
-                otherInfo:'',
             },
-            DATE_TIME       : {
+            DATE_TIME: {
                 name:'DATE_TIME',
                 columnName:'Date Time',
-                otherInfo:'',
             },
-            DATE            : {
+            DATE: {
                 name:'DATE',
                 columnName:'Date',
-                otherInfo:'',
             },
-            DURATION        : {
+            DURATION: {
                 name:'DURATION',
                 columnName:'Duration',
-                otherInfo:'',
             },
-            TIME_OF_DAY     : {
+            TIME_OF_DAY: {
                 name:'TIME_OF_DAY',
                 columnName:'Time Of Day',
-                otherInfo:'',
             },
-            NUMERIC         : {
+            NUMERIC: {
                 name:'NUMERIC',
                 columnName:'Numeric',
-                otherInfo:'',
             },
-            CURRENCY        : {
+            CURRENCY: {
                 name:'CURRENCY',
                 columnName:'Currency',
-                otherInfo:'',
             },
-            RATING          : {
+            RATING: {
                 name:'RATING',
                 columnName:'Rating',
-                otherInfo:'',
             },
-            PERCENT         : {
+            PERCENT: {
                 name:'PERCENT',
                 columnName:'Percent',
-                otherInfo:'',
             },
-            URL             : {
+            URL: {
                 name:'URL',
                 columnName:'URL',
-                otherInfo:'',
             },
-            EMAIL_ADDRESS   : {
+            EMAIL_ADDRESS: {
                 name:'EMAIL_ADDRESS',
                 columnName:'Email Address',
-                otherInfo:'',
             },
-            USER            : {
+            USER: {
                 name:'USER',
                 columnName:'User',
-                otherInfo:'',
             },
             FILE_ATTACHMENT : {
                 name:'FILE_ATTACHMENT',
                 columnName:'File Attachment',
-                otherInfo:'',
             },
         },
 

@@ -36,7 +36,7 @@ consts = require('../../common/src/constants.js');
     e2eBase.setBaseUrl(config.DOMAIN);
     e2eBase.initialize();
 
-    generateNewData( () => {
+    generateNewData(() => {
         createdRecs();
     });
 
@@ -85,7 +85,7 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT);
 
         return tableToFieldToFieldTypeMap;
-    };
+    }
 
     function generateNewData(done) {
         var nonBuiltInFields;
@@ -127,9 +127,9 @@ consts = require('../../common/src/constants.js');
         var appEndpointRequest = e2eBase.getRequestAppsPageEndpoint(realmName).replace('9001', '9000');
 
         var tableNames = '';
-        app.tables.forEach( (table, index) => {
-            tableNames += 'table'+ index+1 +'Id:' + table.id + '\n';
-            tableNames += 'table'+ index+1 +'Name:' + table.name + '\n';
+        app.tables.forEach((table, index) => {
+            tableNames += 'table' + index + 1 + 'Id:' + table.id + '\n';
+            tableNames += 'table' + index + 1 + 'Name:' + table.name + '\n';
         });
         console.log('\nHere is your generated test data: \n' +
             'realmName: ' + realmName + '\n' +

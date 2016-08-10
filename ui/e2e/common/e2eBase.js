@@ -22,7 +22,8 @@
             recordBase: recordBase,
             // Create a realm
             setUp: function() {
-                this.setBaseUrl(typeof browser !== 'undefined' ? browser.baseUrl : (config ? config.DOMAIN: 'http://localhost:9000'));
+                let defaultBase = config ? config.DOMAIN : 'http://localhost:9000';
+                this.setBaseUrl(typeof browser !== 'undefined' ? browser.baseUrl : defaultBase);
                 this.initialize();
             },
             initialize: function() {
@@ -82,15 +83,15 @@
                 var deferred = Promise.pending();
                 // Define the window size if there is a browser object
                 if (typeof browser !== 'undefined') {
-                    browser.driver.manage().window().getSize().then(function (dimension) {
+                    browser.driver.manage().window().getSize().then(function(dimension) {
                         // Currently our breakpoints only change when browser width is changed so don't need to check height (yet)
                         if (dimension.width === width) {
                             // Do nothing because we are already at the current width
                             deferred.resolve();
                         } else {
                             // Resize browser if not at same width
-                            browser.driver.manage().window().setSize(width, height).then(function () {
-                                e2eBase.sleep(browser.params.mediumSleep).then(function () {
+                            browser.driver.manage().window().setSize(width, height).then(function() {
+                                e2eBase.sleep(browser.params.mediumSleep).then(function() {
                                     deferred.resolve();
                                 });
                             });
