@@ -97,6 +97,68 @@ describe('Validate FormsApi unit tests', function() {
     });
 
     /**
+     * Unit test fetch table fields api
+     */
+    describe('validate fetchTableFields api', function() {
+
+        var executeReqStub;
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            formsApi.setRequestHelperObject(requestHelper);
+        });
+
+        afterEach(function() {
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            req.url = '/apps/123/tables/456?format=display';
+
+            var targetObject = '[{"id":1}]';
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = formsApi.fetchTableFields(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'fail response returned when success expected');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchTableFields success test: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+
+        it('fail return results ', function(done) {
+            req.url = '/apps/123/tables/456';
+            var error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            var promise = formsApi.fetchTableFields(req);
+
+            promise.then(
+                function(error) {
+                    assert.fail('success', 'fail', 'success response returned when failure expected');
+                    done();
+                },
+                function(error) {
+                    //  just verify that the promise rejected; which error message is returned is insignificant
+                    assert.ok(error);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchTableFields failure test: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+
+    });
+
+    /**
      * Unit test fetch form components api
      */
     describe('validate fetchFormComponents api', function() {
