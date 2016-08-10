@@ -68,6 +68,8 @@
                                         //  add the field if defined on the table
                                         if (tableField) {
                                             fidList.push(fieldId);
+                                        } else {
+                                            log.warn("Fid " + fieldId + " defined on form " + form.formId + " but not found in table (app:" + form.appId + ";table:" + form.tableId + "). Skipping..");
                                         }
                                     }
                                 }
