@@ -66,15 +66,13 @@
             //be awesome
             if (requestHelper.isDelete(req)) {
                 var recordBulkDelete = routeMapper.fetchDeleteFunctionForRoute(routeConstants.RECORDS_BULK);
-                if(recordBulkDelete !== null) {
+                if (recordBulkDelete !== null) {
                     recordBulkDelete(req, res);
-                }
-                else {
+                } else {
                     //the method doesn't exist, we can't execute this request, log an error!
                     res.status(501).send('Method not implemented!');
                 }
-            }
-            else {
+            } else {
                 //the verb requested for this rest endpoint is not implemented yet, log an error!
                 res.status(405).send('Method not supported');
             }
