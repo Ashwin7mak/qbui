@@ -1069,6 +1069,7 @@ describe('Test ReportData Store', () => {
 
         flux.dispatcher.dispatch(onDeleteReportRecordSuccess);
         expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(1);
+        expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(1);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });
@@ -1130,6 +1131,7 @@ describe('Test ReportData Store', () => {
 
         flux.dispatcher.dispatch(onDeleteReportRecordSuccess);
         expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(2);
+        expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(2);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });
