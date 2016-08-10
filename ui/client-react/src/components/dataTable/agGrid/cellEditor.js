@@ -1,10 +1,13 @@
 import React from 'react';
 
-import {DefaultFieldEditor, MultiLineTextFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from '../../fields/fieldEditors';
-import TextFieldEditor from '../../fields/textFieldEditor';
+//import {DefaultFieldEditor, MultiLineTextFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from '../../fields/fieldEditors';
+import FieldEditor from '../../fields/fieldEditor';
 
-import * as formats from '../../../constants/fieldFormats';
+//import * as formats from '../../../constants/fieldFormats';
 
+/**
+ * Table cell inline edit specific editor
+ */
 const CellEditor = React.createClass({
 
     propTypes: {
@@ -15,78 +18,9 @@ const CellEditor = React.createClass({
         onTabColumn: React.PropTypes.func
     },
 
-    getEditorForType(type) {
-        switch (type) {
-        case formats.CHECKBOX_FORMAT:
-            return <CheckBoxFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                        placeholder={this.props.colDef.placeholder}/>;
-
-        case formats.DATE_FORMAT: {
-            return <DateFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                    placeholder={this.props.colDef.placeholder}/>;
-        }
-
-        case formats.DATETIME_FORMAT: {
-            return <DateTimeFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                        placeholder={this.props.colDef.placeholder}/>;
-        }
-
-        case formats.TIME_FORMAT: {
-            return <TimeFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                    placeholder={this.props.colDef.placeholder} />;
-        }
-
-        case formats.NUMBER_FORMAT:
-        case formats.RATING_FORMAT:
-        case formats.DURATION_FORMAT:
-        case formats.CURRENCY_FORMAT:
-        case formats.PERCENT_FORMAT: {
-            return <DefaultFieldEditor value={this.props.value}
-                                       type="number"
-                                       placeholder={this.props.colDef.placeholder}
-                                       onChange={this.props.onChange} />;
-        }
-
-        case formats.USER_FORMAT: {
-            return <UserFieldEditor value={this.props.value}
-                                    placeholder={this.props.colDef.placeholder}
-                                    onChange={this.props.onChange} />;
-        }
-
-        case formats.MULTI_LINE_TEXT_FORMAT: {
-            return <MultiLineTextFieldEditor value={this.props.value}
-                                             placeholder={this.props.colDef.placeholder}
-                                    onChange={this.props.onChange} />;
-        }
-        case formats.TEXT_FORMAT:
-        default: {
-
-            if (this.props.colDef.choices) {
-                return (
-                    <ComboBoxFieldEditor choices={this.props.colDef.choices} value={this.props.value}
-                                         placeholder={this.props.colDef.placeholder}
-                                     onChange={this.props.onChange} />
-                );
-            } else {
-                return <TextFieldEditor value={this.props.value}
-                                        onChange={this.props.onChange}
-                                        placeholder={this.props.colDef.placeholder}
-                                        classes="cellEdit"
-                                        tabIndex="0"
-                                        ref="cellInput"
-                                        />;
-            //Drew's change TBD by Andrew if users want text box that
-            // grows in height for single line text change TextFieldEditor to
-            //  return <MultiLineTextFieldEditor value={this.props.value}
-            //       placeholder={this.props.colDef.placeholder}
-            //       onChange={this.props.onChange} />;
-            }
-        }
-        }
-    },
 
     /**
-     * inform parent component of tabbing
+     * inform parent component of tabbing so it can navigate to next row if necessary
      */
     onKeyDown(ev) {
         if (ev.key === "Tab" && !ev.shiftKey) {
@@ -95,11 +29,14 @@ const CellEditor = React.createClass({
     },
 
     render() {
-        let requiredIndication = (this.props.colDef.required) ? '*' : '\u00a0'; // u00a0 = non-breaking space
-        return (<div className="cellEditWrapper" onKeyDown={this.onKeyDown}>
-                <div className="requiredFlag requiredFlag-layout">{requiredIndication}</div>
-            {this.getEditorForType(this.props.type)}
-            </div>);
+        return (<FieldEditor  classes="cellEditWrapper"
+                              type={this.props.type}
+                              value={this.props.value}
+                              indicateRequired={true}
+                              fieldDef={this.props.colDef}
+                              onChange={this.props.onChange}
+                              onKeyDown={this.onKeyDown}
+        />);
     }
 });
 
