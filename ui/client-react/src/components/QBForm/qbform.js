@@ -39,19 +39,20 @@ let QBForm = React.createClass({
 
         if (element.FormTextElement) {
             return element.FormTextElement;
-        } else if (element.FormFieldElement) {
-            return element.FormFieldElement;
-        } else {
-            return {};
         }
+        if (element.FormFieldElement) {
+            return element.FormFieldElement;
+        }
+        return {};
     },
 
-    getUIElement(element, colSpan, orderIndex, labelPosition) {
+    getTableCell(element, colSpan, orderIndex, labelPosition) {
 
         //build each of the elements, stuff them into one row for now
         if (element.FormTextElement) {
             return this.createTextElement(element.FormTextElement, colSpan, orderIndex);
-        } else if (element.FormFieldElement) {
+        }
+        if (element.FormFieldElement) {
             return this.createFieldElement(element.FormFieldElement, colSpan, orderIndex, labelPosition);
         }
         return "";
@@ -90,7 +91,7 @@ let QBForm = React.createClass({
         return <td key={key} colSpan={colSpan}><div className="formElement text">{element.displayText}</div></td>;
     },
 
-    createSectionRows(section, singleColumn) {
+    createSectionTableRows(section, singleColumn) {
 
         const rows = this.getSectionRowData(section, singleColumn);
 
@@ -98,21 +99,25 @@ let QBForm = React.createClass({
         const maxColumns = rows.reduce((prev, current) => current.length > prev ? current.length : prev, 0);
 
         // now that we have the columns to compute colspan we can create the UI
-        const uiRows = [];
+        const tableRows = [];
         let key = 0;
         rows.forEach(row => {
-            const uiRow = [];
+            const cells = [];
             row.forEach((sectionElement, index) => {
                 const sectionProps = this.getElementProps(sectionElement);
                 let colSpan = 1;
                 if (index === row.length - 1) {
                     colSpan = maxColumns - row.length;
                 }
-                uiRow.push(this.getUIElement(sectionElement, colSpan, section.orderIndex, sectionProps.labelPosition));
+                cells.push(this.getTableCell(sectionElement, colSpan, section.orderIndex, sectionProps.labelPosition));
             });
-            uiRows.push(this.createRow(uiRow, key++));
+
+            tableRows.push(
+                <tr key={key++} className="fieldRow">
+                    {cells}
+                </tr>);
         });
-        return uiRows;
+        return tableRows;
     },
 
     getSectionRowData(section, singleColumn) {
@@ -146,24 +151,25 @@ let QBForm = React.createClass({
         return rows;
     },
 
-    createRow(fields, key) {
-        return (
-            <tr key={key} className="fieldRow">
-                {fields}
-            </tr>);
-    },
-
     createSection(section, singleColumn) {
         let sectionTitle = "";
 
         //build the section header.
-        if (section.headerElement && section.headerElement.FormHeaderElement && section.headerElement.FormHeaderElement) {
-            sectionTitle = section.headerElement.FormHeaderElement.displayText ? section.headerElement.FormHeaderElement.displayText : "";
+        if (section.headerElement && section.headerElement.FormHeaderElement && section.headerElement.FormHeaderElement.displayText) {
+            sectionTitle = section.headerElement.FormHeaderElement.displayText;
         }
 
         return (
-            <QBPanel className="formSection" title={sectionTitle} key={"section" + section.orderIndex} isOpen={true} panelNum={section.orderIndex}>
-                <table className="formTable"><tbody>{this.createSectionRows(section, singleColumn)}</tbody></table>
+            <QBPanel className="formSection"
+                     title={sectionTitle}
+                     key={"section" + section.orderIndex}
+                     isOpen={true}
+                     panelNum={section.orderIndex}>
+                <table className="formTable">
+                    <tbody>
+                        {this.createSectionTableRows(section, singleColumn)}
+                    </tbody>
+                </table>
             </QBPanel>
         );
     },
