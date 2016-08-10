@@ -8,7 +8,11 @@
         tunnelIdentifier: process.env.ENV_TUNNEL_NAME,
         name            : process.env.SAUCE_JOB_NAME + '_Linux_Firefox',
         //Timeout in seconds for Sauce Labs to wait for another command (bumped this for sleeps in tests)
-        idleTimeout: '120'
+        idleTimeout: '120',
+        maxDuration: 10800,
+        breakpointSize: 'large',
+        shardTestFiles: true,
+        maxInstances: 2
     };
     exports.config = globalSauceConfig;
 }());

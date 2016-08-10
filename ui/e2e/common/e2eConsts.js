@@ -5,6 +5,12 @@
 (function() {
     'use strict';
     module.exports = Object.freeze({
+
+        XLARGE_SIZE : 'xlarge',
+        LARGE_SIZE  : 'large',
+        MEDIUM_SIZE : 'medium',
+        SMALL_SIZE  : 'small',
+
         XLARGE_BP_WIDTH : 1441,
         LARGE_BP_WIDTH : 1025,
         MEDIUM_BP_WIDTH : 641,
@@ -16,7 +22,7 @@
             'Email Address Field', 'URL Field'],
 
         TABLE1 : 0,
-        TABLE2: 1,
+        TABLE2 : 1,
         TABLE3 : 2,
         TABLE4 : 3,
 

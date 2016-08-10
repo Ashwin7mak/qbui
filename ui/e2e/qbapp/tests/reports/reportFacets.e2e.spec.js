@@ -47,7 +47,7 @@
                 return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
             }).then(function() {
                 // Get the appropriate fields out of the fourth table
-                var Fields = e2eBase.tableService.getNonBuiltInFields(app.tables[3]);
+                //var Fields = e2eBase.tableService.getNonBuiltInFields(app.tables[3]);
                 //TODO: Need to re-enable this once bulk records is fixed
                 // Generate greater than 201 text records in table 4 for negative testing
                 //var generated201Records = e2eBase.recordService.generateRecords(Fields, 300);
@@ -360,48 +360,43 @@
             });
 
             //There wont be facet filter button displayed for small breakpoint
-            e2eConsts.NavDimensionsDataProvider().forEach(function(testBreakpoints) {
-                it(testBreakpoints.breakpointSize + '- Verify clear all facets tokens from the container', function(done) {
-                    //resize the browser
-                    e2eBase.resizeBrowser(testBreakpoints.browserWidth, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                        reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                            reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                                //Click on facet carat to show popup
-                                reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
-                                    //Verify the popup menu is displayed
-                                    expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
-                                });
-                            });
-                        }).then(function() {
-                            //select the facet Items
-                            reportFacetsPage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
-                                if (testBreakpoints.breakpointSize === 'small') {
-                                    // Verify display of filter search box is false for small breakpoint
-                                    expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeFalsy();
-                                    //Verify there are no facet tokens displayed in the container
-                                    expect(element(by.className('facetSelections')).isDisplayed()).toBeFalsy();
-                                    done();
-                                } else {
-                                    //Map all facet tokens from the facet container
-                                    reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
-                                        return tokenName.getText();
-                                    }).then(function(selections) {
-                                        // Sort each array before comparing
-                                        expect(selections.sort()).toEqual(facetSelections.sort());
-                                    }).then(function() {
-                                        //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
-                                        return reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                                            return e2eRetry.run(function() {
-                                                reportFacetsPage.clearFacetTokensFromContainer().then(function() {
-                                                    expect(reportServicePage.reportRecordsCount.getText()).toBe('6 Records');
-                                                    done();
-                                                });
-                                            });
+            it('Verify clear all facets tokens from the container', function(done) {
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                        //Click on facet carat to show popup
+                        reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
+                            //Verify the popup menu is displayed
+                            expect(reportFacetsPage.reportFacetPopUpMenu.isDisplayed()).toBeTruthy();
+                        });
+                    });
+                }).then(function() {
+                    //select the facet Items
+                    reportFacetsPage.selectGroupAndFacetItems("Text Field", [1, 2, 3, 4]).then(function(facetSelections) {
+                        if (breakpointSize === 'small') {
+                            // Verify display of filter search box is false for small breakpoint
+                            expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeFalsy();
+                            //Verify there are no facet tokens displayed in the container
+                            expect(element(by.className('facetSelections')).isDisplayed()).toBeFalsy();
+                            done();
+                        } else {
+                            //Map all facet tokens from the facet container
+                            reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
+                                return tokenName.getText();
+                            }).then(function(selections) {
+                                // Sort each array before comparing
+                                expect(selections.sort()).toEqual(facetSelections.sort());
+                            }).then(function() {
+                                //remove facets by clicking on clear (X) in popup beside Text Field and verify all tokens removed
+                                return reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                                    return e2eRetry.run(function() {
+                                        reportFacetsPage.clearFacetTokensFromContainer().then(function() {
+                                            expect(reportServicePage.reportRecordsCount.getText()).toBe('6 Records');
+                                            done();
                                         });
                                     });
-                                }
+                                });
                             });
-                        });
+                        }
                     });
                 });
             });
