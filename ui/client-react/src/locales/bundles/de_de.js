@@ -235,6 +235,10 @@ export default {
         placeholder:  {
             email: 'name@domain.com'
         },
+        invalidMsg : {
+            required: 'Füllen Sie das {fieldName}',
+            maxChars: 'Verwenden Sie bis zu {num} Zeichen',
+        },
 
     }
 };

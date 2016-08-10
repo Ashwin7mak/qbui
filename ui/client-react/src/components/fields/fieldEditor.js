@@ -2,7 +2,6 @@ import React from 'react';
 
 import {DefaultFieldEditor, MultiLineTextFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from './fieldEditors';
 import TextFieldEditor from './textFieldEditor';
-import QBToolTip from '../qbToolTip/qbToolTip';
 
 import * as formats from '../../constants/fieldFormats';
 
@@ -98,6 +97,8 @@ const FieldEditor = React.createClass({
                 return <TextFieldEditor value={this.props.value}
                                             onChange={this.props.onChange}
                                             onBlur={this.onExitField}
+                                            isInvalid={this.props.isInvalid}
+                                            invalidMessage={this.props.invalidMessage}
                                             onValidated={this.props.onValidated}
                                             placeholder={this.props.fieldDef.placeholder}
                                             classes="cellEdit"
@@ -135,18 +136,9 @@ const FieldEditor = React.createClass({
                     null
                 }
 
-                {/* render error tooltip if isInvalid */}
-                {this.props.isInvalid ?
-                    (<QBToolTip location="top" tipId="error" delayShow={500}
-                                plainMessage={this.props.invalidMessage}>
-                        {/* render type specific editor */
-                            this.getEditorForType(this.props.type)
-                        }
-                    </QBToolTip>) :
-                    /* render type specific editor */
+                {/* render type specific editor */
                     this.getEditorForType(this.props.type)
                 }
-
             </div>
         );
     }

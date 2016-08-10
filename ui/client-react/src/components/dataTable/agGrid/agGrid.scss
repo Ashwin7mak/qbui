@@ -580,6 +580,10 @@ $cell-edit-background-edit: #f3f8fe;
                     color:green;
                     font-size:18px;
                 }
+                .qbIcon.invalidRecord {
+                    color:$tootip-error-color;
+                    font-size:18px;
+                }
                 .qbIcon.cancelSelection {
                     color:$icon-color;
                 }

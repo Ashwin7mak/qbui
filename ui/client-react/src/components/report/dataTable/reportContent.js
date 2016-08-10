@@ -11,6 +11,7 @@ import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
 import _ from 'lodash';
+import LimitConstants from '../../../../../common/src/limitConstants';
 
 let logger = new Logger();
 
@@ -93,9 +94,29 @@ let ReportContent = React.createClass({
     validateFieldValue(def, value) {
         let results = {
             isInvalid : false,
-            invalidMessage: 'error ovah heeya'
+            invalidMessage : null,
         };
-        // TBD validate
+
+        // check require field is not empty
+        if (def && def.required && (!value || value.length === 0)) {
+            results = {
+                isInvalid : true,
+                invalidMessage: Locales.getMessage('invalidMsg.required', {fieldName: def.headerName})
+            };
+        //check max chars not exceeded
+        } else if (def && def.datatypeAttributes && def.datatypeAttributes.clientSideAttributes &&
+            def.datatypeAttributes.clientSideAttributes.max_chars &&
+            (value && value.length > def.datatypeAttributes.clientSideAttributes.max_chars)) {
+            let msg = Locales.getMessage('invalidMsg.maxChars', {num: def.datatypeAttributes.clientSideAttributes.max_chars})
+            results = {
+                isInvalid: true,
+                invalidMessage: msg
+            };
+        } else {
+            // check system limit text chars
+            //max input length = limitConstants. maxTextFieldValueLength
+        }
+        // TBD other type validate
         return results;
     },
 

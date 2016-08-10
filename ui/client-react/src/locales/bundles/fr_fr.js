@@ -234,5 +234,10 @@ export default {
         placeholder:  {
             email: 'nom@domaine.com'
         },
+        invalidMsg : {
+            required: 'Remplissez {fieldName}',
+            maxChars: "Utilisez jusqu'à caractères {num}",
+        },
+
     }
 };

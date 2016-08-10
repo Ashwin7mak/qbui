@@ -56,6 +56,11 @@ const RowEditActions = React.createClass({
     },
 
     render: function() {
+        let errorMessage = '';
+        if (this.props.params.context.invalidEdit){
+            //todo localize
+            errorMessage = 'Please fix these' + this.props.params.context.invalidCount +  'fields';
+        }
         return (
             <span className="editTools">
 
@@ -63,9 +68,15 @@ const RowEditActions = React.createClass({
                      <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
                  </OverlayTrigger>
 
-                <OverlayTrigger  placement="bottom" overlay={<Tooltip id="saveRecord">Save changes</Tooltip>}>
-                    <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
-                </OverlayTrigger>
+                {!this.props.params.context.invalidEdit ?
+                     <OverlayTrigger  placement="bottom" overlay={<Tooltip id="saveRecord">Save changes</Tooltip>}>
+                        <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
+                    </OverlayTrigger> :
+
+                    <OverlayTrigger  placement="bottom" overlay={<Tooltip id="invalidRecord">{errorMessage}</Tooltip>}>
+                        <Button><QBIcon icon="alert" className="invalidRecord"/></Button>
+                    </OverlayTrigger>
+                }
 
                 <OverlayTrigger placement="bottom" overlay={<Tooltip id="addRecord" >Add new record</Tooltip>}>
                     <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>

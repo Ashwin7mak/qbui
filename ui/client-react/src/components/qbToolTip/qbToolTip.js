@@ -31,7 +31,7 @@ const QBToolTip = React.createClass({
         let itemTip = this.toolTipIt(this.props.tipId, this.props.plainMessage, this.props.i18nMessageKey);
         let startDelay = this.props.delayShow ? this.props.delayShow : this.defaultDelayShow;
         return (
-            <OverlayTrigger placement={this.props.location ? this.props.location : "top"} overlay={itemTip} delayShow={startDelay}>
+            <OverlayTrigger placement={this.props.location ? this.props.location : "top"} overlay={itemTip} delayShow={startDelay} {...this.props}>
                     {this.props.children}
             </OverlayTrigger>
         );

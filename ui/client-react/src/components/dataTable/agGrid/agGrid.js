@@ -36,7 +36,8 @@ let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),
     groupContracted: buildIconElement("icon_caretfilledright"),
     menu: buildIconElement("caret-filled-down"),
-    check: buildIconElement("check")
+    check: buildIconElement("check"),
+    error: buildIconElement("alert")
 };
 let consts = {
     GROUP_HEADER_HEIGHT: 24,

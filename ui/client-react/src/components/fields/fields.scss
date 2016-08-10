@@ -50,21 +50,38 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of input error
-[type="text"]:focus.input.error,
 .fieldEditor.error [type="text"].input,
 [type="text"].input.error {
-  border: solid 1px $input-text-error-border-color;
-  @include focus-shadow($input-text-error-border-color);
+  border-top: 1px solid $input-text-error-border-color;
+  border-right: 1px solid  $input-text-error-border-color;
+  border-bottom: 1px solid $input-text-error-border-color;
+  border-left: 5px solid $input-text-error-border-color;
+  box-shadow: none;
 }
+
 // visual style of focus input error
 .fieldEditor.error [type="text"]:focus.input,
 [type="text"]:focus.input.error {
   outline: none;
-  border: solid 1px $input-text-error-border-color;
+  border-top: 1px solid $input-text-error-border-color;
+  border-right: 1px solid  $input-text-error-border-color;
+  border-bottom: 1px solid $input-text-error-border-color;
   border-left: 5px solid $input-text-error-border-color;
   @include focus-shadow($input-text-error-border-color);
 }
 
+.invalidInput.tooltip >.tooltip-arrow {
+  border-bottom-color: $tootip-error-color;
+  border-top-color: $tootip-error-color;
+}
+.invalidInput.tooltip,
+.invalidInput.tooltip .tooltip-inner {
+  background-color:  $tootip-error-color;
+}
+
+.invalidInput.tooltip.top .tooltip-arrow {
+  bottom: -4px;
+}
 // visual style of required field indicator
 .requiredFlag {
   color: $field-label-normal-color;
