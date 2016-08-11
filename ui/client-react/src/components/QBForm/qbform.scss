@@ -25,12 +25,19 @@
                 padding-bottom: 2px;
             }
             &.labelAbove {
+                .fieldLabel {
+                    max-width: 20em;
+                }
                 flex-direction: column;
             }
             &.labelLeft {
                 .fieldLabel {
+                    max-width: 10em;
                     padding-right: 5px;
                 }
+            }
+            &.text {
+
             }
         }
     }

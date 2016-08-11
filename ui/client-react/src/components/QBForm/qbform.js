@@ -3,8 +3,9 @@ import QBPanel from '../QBPanel/qbpanel.js';
 import Tabs, {TabPane} from 'rc-tabs';
 import Fluxxor from 'fluxxor';
 import FieldElement from './fieldElement';
+import FieldLabelElement from './fieldLabelElement'
 import Breakpoints from '../../utils/breakpoints';
-import {CellValueRenderer} from '../dataTable/agGrid/cellValueRenderers';
+import Locale from '../../locales/locales';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -17,7 +18,15 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
  */
 let QBForm = React.createClass({
+
+    statics: {
+        LABEL_ABOVE: "ABOVE",
+        LABEL_LEFT: "LEFT"
+
+    },
+
     mixins: [FluxMixin],
+
     propTypes: {
 
         activeTab: React.PropTypes.string,
@@ -27,7 +36,6 @@ let QBForm = React.createClass({
             formMeta: React.PropTypes.object
         })
     },
-
 
     getDefaultProps() {
         return {
@@ -58,28 +66,48 @@ let QBForm = React.createClass({
         return "";
     },
 
-    createFieldElement(element, colSpan, sectionIndex, labelPosition) {
-        let record = this.props.formData.record || [];
+    getRelatedField(fieldId) {
         let fields = this.props.formData.fields || [];
 
-        let relatedField = _.find(fields, field => {
-            if (field.id === element.fieldId) {
+        return _.find(fields, field => {
+            if (field.id === fieldId) {
                 return true;
             }
         });
+    },
 
-        let fieldRecord = _.find(record, val => {
-            if (val.id === element.fieldId) {
+    getFieldRecord(fieldId) {
+        let record = this.props.formData.record || [];
+
+        return _.find(record, val => {
+            if (val.id === fieldId) {
                 return true;
             }
         });
+    },
+
+    createFieldLabel(element, colSpan, sectionIndex) {
+
+        let relatedField = this.getRelatedField(element.fieldId);
+
+        let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
+        return (
+            <td key={key} colSpan={colSpan}>
+                <FieldLabelElement element={element} relatedField={relatedField} />
+            </td>);
+    },
+
+    createFieldElement(element, colSpan, sectionIndex, labelPosition) {
+
+        let relatedField = this.getRelatedField(element.fieldId);
+
+        let fieldRecord = this.getFieldRecord(element.fieldId);
 
         let key = "field" + sectionIndex + "-" + element.orderIndex;
         return (
             <td key={key} colSpan={colSpan}>
               <FieldElement element={element} relatedField={relatedField} fieldRecord={fieldRecord} labelPosition={labelPosition}/>
-            </td>
-        );
+            </td>);
     },
 
     createTextElement(element, colSpan, sectionIndex) {
@@ -89,7 +117,7 @@ let QBForm = React.createClass({
 
     createSectionTableRows(section, singleColumn) {
 
-        const labelPosition = section.headerElement.FormHeaderElement.labelPosition;
+        const labelPosition = singleColumn ? QBForm.LABEL_ABOVE : QBForm.LABEL_LEFT; //section.headerElement.FormHeaderElement.labelPosition;
 
         const rows = this.getSectionRowData(section, singleColumn);
 
@@ -182,7 +210,7 @@ let QBForm = React.createClass({
         }
 
         return (
-            <TabPane key={tab.orderIndex} tab={tab.title}>
+            <TabPane key={tab.orderIndex} tab={tab.title || Locale.getMessage("form.tab") + ' ' + tab.orderIndex}>
                 <br/>
                 {sections}
             </TabPane>

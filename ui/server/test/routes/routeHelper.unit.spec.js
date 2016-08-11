@@ -8,7 +8,7 @@ var log = require('../../src/logger').getLogger();
 /**
  * Unit tests for User field formatting
  */
-describe('Validate RequestHelper unit tests', function() {
+describe('Validate RouteHelper unit tests', function() {
 
     var stubLog;
 

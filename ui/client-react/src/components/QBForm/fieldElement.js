@@ -1,7 +1,10 @@
 import React from 'react';
-import './qbform.scss';
-const serverTypeConsts = require('../../../../common/src/constants');
+
+import FieldLabelElement from './fieldLabelElement';
 import {CellValueRenderer} from '../dataTable/agGrid/cellValueRenderers';
+import './qbform.scss';
+
+const serverTypeConsts = require('../../../../common/src/constants');
 
 const FieldElement = React.createClass({
     propTypes: {
@@ -20,19 +23,13 @@ const FieldElement = React.createClass({
         let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "display value";
         let fieldRawValue = this.props.fieldRecord ? this.props.fieldRecord.value : "raw value";
 
-        let fieldLabel = "";
-        if (this.props.element.useAlternateLabel) {
-            fieldLabel = this.props.element.displayText;
-        } else {
-            fieldLabel = this.props.relatedField ? this.props.relatedField.name : "display label";
-        }
-
         let classes = "formElement field ";
         classes += this.props.labelPosition === "ABOVE" ? "labelAbove" : "labelLeft";
 
         return (
             <div className={classes}>
-                <span className="fieldLabel">{fieldLabel}</span>
+                <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} />
+
                 <span className="cellWrapper">
                     {fieldDisplayValue !== null &&
                     <CellValueRenderer type={fieldType}

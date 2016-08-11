@@ -87,6 +87,9 @@ export default {
                 sign_out: "Sign out"
             }
         },
+        form : {
+            tab : 'Tab'
+        },
         report : {
             blank : "blank",
             facets :{

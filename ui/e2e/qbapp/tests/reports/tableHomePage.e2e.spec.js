@@ -59,24 +59,7 @@
                 //Create a viewer report
                 return e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, report3);
             }).then(function() {
-                // Get a session ticket for that subdomain and realmId (stores it in the browser)
-                realmName = e2eBase.recordBase.apiBase.realm.subdomain;
-                realmId = e2eBase.recordBase.apiBase.realm.id;
-                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
-            }).then(function() {
-                // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(e2eBase.recordBase.apiBase.realm.subdomain));
-            }).then(function() {
-                // Wait for the leftNav to load
-                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    // Select the app
-                    return reportServicePage.appLinksElList.get(0).click().then(function() {
-                        //wait for table lists
-                        reportServicePage.waitForElement(reportServicePage.tablesListDivEl);
-                        //Done callback to let Jasmine know we are done with our promise chain
-                        done();
-                    });
-                });
+                done();
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
@@ -91,6 +74,9 @@
             realmId = e2eBase.recordBase.apiBase.realm.id;
             //get the Admin authentication
             RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
+            RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(e2eBase.recordBase.apiBase.realm.subdomain));
+            reportServicePage.waitForElement(reportServicePage.appsListDivEl);
             done();
         });
 
@@ -131,19 +117,19 @@
                     message: 'Viewer Role',
                     roleId: 10,
                     reportId: 2,
-                    reportTitle: 'Table 1\n|\nViewer Report'
+                    reportTitle: 'Table 1 | Viewer Report'
                 },
                 {
                     message: 'Participant Role',
                     roleId: 11,
                     reportId: 3,
-                    reportTitle: 'Table 1\n|\nParticipant Report'
+                    reportTitle: 'Table 1 | Participant Report'
                 },
                 {
                     message: 'Admin Role',
                     roleId: 12,
                     reportId: 4,
-                    reportTitle: 'Table 1\n|\nAdmin Report'
+                    reportTitle: 'Table 1 | Admin Report'
                 }
             ];
         }
@@ -171,10 +157,11 @@
                             return RequestAppsPage.get(e2eBase.getRequestTableEndpoint(e2eBase.recordBase.apiBase.realm.subdomain, app.id, app.tables[0].id));
                         }).then(function() {
                             return reportServicePage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
+                                e2eBase.sleep(browser.params.smallSleep);
                                 //Assert report stage heading
-                                e2eRetry.run(function() {
-                                    expect(reportServicePage.stageHeadLine.getText()).toEqual(testcase.reportTitle);
-                                });
+                                //e2eRetry.run(function() {
+                                expect(reportServicePage.stageHeadLine.getAttribute('textContent')).toEqual(testcase.reportTitle);
+                                //});
                             }).then(function() {
                                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                                     e2eBase.sleep(browser.params.smallSleep);
