@@ -71,9 +71,9 @@ let CardViewListHolder = React.createClass({
 
         //check to see if props exist, if they do we need to get recId from row.props.data (this is for non-custom row component clicks)
         if (row.props) {
-            recId = row.props.data[this.props.uniqueIdentifier];
+            recId = row.props.data[this.props.uniqueIdentifier].value;
         } else {
-            recId = row[this.props.uniqueIdentifier];
+            recId = row[this.props.uniqueIdentifier].value;
         }
         //create the link we want to send the user to and then send them on their way
         const link = `/app/${appId}/table/${tblId}/record/${recId}`;
