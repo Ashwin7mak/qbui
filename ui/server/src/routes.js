@@ -72,14 +72,6 @@
                     //the method doesn't exist, we can't execute this request, log an error!
                     res.status(501).send('Method not implemented!');
                 }
-            } else if (requestHelper.isPost(req)) {
-                var createRecordsBulk = routeMapper.fetchPostFunctionForRoute(routeConstants.RECORDS_BULK);
-                if (createRecordsBulk !== null) {
-                    createRecordsBulk(req, res);
-                } else {
-                    //the method doesn't exist, we can't execute this request, log an error!
-                    res.status(501).send('Method not implemented!');
-                }
             } else {
                 //the verb requested for this rest endpoint is not implemented yet, log an error!
                 res.status(405).send('Method not supported');

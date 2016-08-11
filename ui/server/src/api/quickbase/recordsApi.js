@@ -347,20 +347,6 @@
             },
 
             /**
-             * Create records data in bulk.
-             *
-             * @param req
-             * @returns Promise
-             */
-            createRecordsBulk: function(req) {
-                var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                //input expected in raw form for java
-                return requestHelper.executeRequest(req, opts);
-            },
-
-            /**
-             * Delete a single record
              *
              * @param req
              * @returns Promise
@@ -372,7 +358,6 @@
             },
 
             /**
-             * Delete records in bulk
              *
              * @param req
              * @returns Promise
