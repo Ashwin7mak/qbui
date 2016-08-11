@@ -9,6 +9,7 @@
     let constants = require('../../../../common/src/constants');
     let collectionUtils = require('../../utility/collectionUtils');
     var url = require('url');
+    var lodash = require('lodash');
 
     module.exports = function(config) {
 
@@ -22,12 +23,12 @@
 
         /**
          * Scan through the forms response object and return a list of fids that are
-         * defined on the form.
+         * defined on the form and have not been deleted from the table.
          *
          * @param form
          * @returns {Array}
          */
-        function extractFidsListFromForm(form) {
+        function extractFidsListFromForm(form, tableFields) {
             if (!form) {
                 return null;
             }
@@ -36,23 +37,39 @@
 
             //  every form should have at least 1 tab
             let tabs = form.tabs;
-            if (tabs) {
-                for (let tabKey in tabs) {
-                    //  each tab should have at least 1 section
-                    let tab = tabs[tabKey];
-                    if (tab.sections) {
-                        for (let sectionKey in tab.sections) {
-                            //  each section may have elements (text, header, field, etc)
-                            let section = tab.sections[sectionKey];
-                            if (section.elements) {
-                                for (let elementKey in section.elements) {
-                                    //  is this a form field element
-                                    let element = section.elements[elementKey];
-                                    if (element.FormFieldElement) {
-                                        //  examine the fieldId and push to the array if not already added
-                                        let fieldId = element.FormFieldElement.fieldId;
-                                        if (fieldId && !collectionUtils.contains(fidList, fieldId)) {
+            if (!tabs) {
+                return fidList;
+            }
+
+            for (let tabKey in tabs) {
+                //  each tab should have at least 1 section
+                let tab = tabs[tabKey];
+                if (tab.sections) {
+                    for (let sectionKey in tab.sections) {
+                        //  each section may have elements (text, header, field, etc)
+                        let section = tab.sections[sectionKey];
+                        if (section.elements) {
+                            for (let elementKey in section.elements) {
+                                //  is this a form field element
+                                let element = section.elements[elementKey];
+                                if (element.FormFieldElement) {
+                                    //  examine the fieldId
+                                    let fieldId = element.FormFieldElement.fieldId;
+
+                                    //  has the field already been added to the list
+                                    if (fieldId && !collectionUtils.contains(fidList, fieldId)) {
+                                        //  is this field on the table...possible (in current stack)
+                                        //  a field has been deleted from a table but reference is
+                                        //  still defined on the form.
+                                        let tableField = lodash.find(tableFields, function(field) {
+                                            return fieldId === field.id;
+                                        });
+
+                                        //  add the field if defined on the table
+                                        if (tableField) {
                                             fidList.push(fieldId);
+                                        } else {
+                                            log.warn("Fid " + fieldId + " defined on form " + form.formId + " but not found in table (app:" + form.appId + ";table:" + form.tableId + "). Skipping..");
                                         }
                                     }
                                 }
@@ -103,6 +120,14 @@
                 return requestHelper.executeRequest(req, opts);
             },
 
+            fetchTableFields: function(req) {
+                let opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
+                // no query parameters to append to this route
+                return requestHelper.executeRequest(req, opts);
+            },
+
             /**
              * Fetch form meta data, a single record and associated fields meta data from a table.
              *
@@ -112,12 +137,14 @@
             fetchFormComponents: function(req) {
 
                 return new Promise(function(resolve, reject) {
-                    //  fetch the form meta data
-                    this.fetchFormMetaData(req).then(
+                    //  fetch the form meta data and fields on the table
+                    var fetchRequests = [this.fetchFormMetaData(req), this.fetchTableFields(req)];
+                    Promise.all(fetchRequests).then(
                         function(response) {
                             //  create return object with the form meta data
                             let obj = {
-                                formMeta: JSON.parse(response.body),
+                                formMeta: JSON.parse(response[0].body),
+                                tableFields: JSON.parse(response[1].body),
                                 record: {},
                                 fields: {}
                             };
@@ -125,7 +152,7 @@
                             //  extract into list all the fields defined on the form.  If any fields, will query
                             //  for record and fields; otherwise will return just the form meta data and empty
                             //  object for records and fields.
-                            let fidList = extractFidsListFromForm(obj.formMeta);
+                            let fidList = extractFidsListFromForm(obj.formMeta, obj.tableFields);
                             if (fidList && fidList.length > 0) {
 
                                 //  ensure the fid list is ordered
