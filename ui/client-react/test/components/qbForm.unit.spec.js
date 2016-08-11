@@ -131,7 +131,5 @@ describe('QBForm functions', () => {
         expect(fieldElements.length).toEqual(1);
         let fieldValue = fieldElements[0].querySelector(".textCell");
         expect(fieldValue.innerText, "field value");
-        let fieldLabel = fieldElements[0].querySelector(".fieldLabel");
-        expect(fieldLabel.innerText, "field value");
     });
 });

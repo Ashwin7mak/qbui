@@ -3,7 +3,7 @@ import QBPanel from '../QBPanel/qbpanel.js';
 import Tabs, {TabPane} from 'rc-tabs';
 import Fluxxor from 'fluxxor';
 import FieldElement from './fieldElement';
-import FieldLabelElement from './fieldLabelElement'
+import FieldLabelElement from './fieldLabelElement';
 import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
 
@@ -54,16 +54,22 @@ let QBForm = React.createClass({
         return {};
     },
 
-    getTableCell(element, colSpan, orderIndex, labelPosition) {
+    getTableCells(element, orderIndex, labelPosition, isLast) {
 
+        const colSpan = isLast ? 100 : 1;
+
+        const cells = [];
         //build each of the elements, stuff them into one row for now
         if (element.FormTextElement) {
-            return this.createTextElement(element.FormTextElement, colSpan, orderIndex);
+            cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
         }
         if (element.FormFieldElement) {
-            return this.createFieldElement(element.FormFieldElement, colSpan, orderIndex, labelPosition);
+            if (labelPosition === QBForm.LABEL_LEFT) {
+                cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, colSpan));
+            }
+            cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, labelPosition === QBForm.LABEL_ABOVE, colSpan));
         }
-        return "";
+        return cells;
     },
 
     getRelatedField(fieldId) {
@@ -86,18 +92,18 @@ let QBForm = React.createClass({
         });
     },
 
-    createFieldLabel(element, colSpan, sectionIndex) {
+    createFieldLabelCell(element, sectionIndex) {
 
         let relatedField = this.getRelatedField(element.fieldId);
 
         let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
         return (
-            <td key={key} colSpan={colSpan}>
+            <td key={key}>
                 <FieldLabelElement element={element} relatedField={relatedField} />
             </td>);
     },
 
-    createFieldElement(element, colSpan, sectionIndex, labelPosition) {
+    createFieldElementCell(element, sectionIndex, includeLabel, colSpan) {
 
         let relatedField = this.getRelatedField(element.fieldId);
 
@@ -106,72 +112,43 @@ let QBForm = React.createClass({
         let key = "field" + sectionIndex + "-" + element.orderIndex;
         return (
             <td key={key} colSpan={colSpan}>
-              <FieldElement element={element} relatedField={relatedField} fieldRecord={fieldRecord} labelPosition={labelPosition}/>
+              <FieldElement element={element} relatedField={relatedField} fieldRecord={fieldRecord} includeLabel={includeLabel}/>
             </td>);
     },
 
-    createTextElement(element, colSpan, sectionIndex) {
+    createTextElementCell(element, sectionIndex, colSpan) {
         let key = "field" + sectionIndex + "-" + element.orderIndex;
         return <td key={key} colSpan={colSpan}><div className="formElement text">{element.displayText}</div></td>;
     },
 
     createSectionTableRows(section, singleColumn) {
-
-        const labelPosition = singleColumn ? QBForm.LABEL_ABOVE : QBForm.LABEL_LEFT; //section.headerElement.FormHeaderElement.labelPosition;
-
-        const rows = this.getSectionRowData(section, singleColumn);
-
-        // find max # columns in any row
-        const maxColumns = rows.reduce((prev, current) => current.length > prev ? current.length : prev, 0);
-
-        // now that we have the columns to compute colspan we can create the UI
-        const tableRows = [];
-        let key = 0;
-        rows.forEach(row => {
-            const cells = [];
-            row.forEach((sectionElement, index) => {
-
-                let colSpan = 1;
-                if (index === row.length - 1) {
-                    colSpan = 100; //same as legacy QB, could possibly use (maxColumns - row.length);
-                }
-                cells.push(this.getTableCell(sectionElement, colSpan, section.orderIndex, labelPosition));
-            });
-
-            tableRows.push(
-                <tr key={key++} className="fieldRow">
-                    {cells}
-                </tr>);
-        });
-        return tableRows;
-    },
-
-    getSectionRowData(section, singleColumn) {
         let rows = [];
         let currentRowElements = [];
 
-        // store the section elements in an array of rows containing an array of columns
+        const labelPosition = singleColumn ? QBForm.LABEL_ABOVE : section.headerElement.FormHeaderElement.labelPosition;
 
         Object.keys(section.elements).forEach((key, index, arr) => {
 
-            let props = this.getElementProps(section.elements[key]);
+            let sectionElement = section.elements[key];
 
-            // single column
+            let props = this.getElementProps(sectionElement);
 
             if (singleColumn) {
-                rows.push([section.elements[key]]);
+                rows.push(<tr key={key++} className="fieldRow">{this.getTableCells(sectionElement, section.orderIndex, labelPosition, true)}</tr>);
                 return;
             }
 
             if (index === arr.length - 1) {
-                currentRowElements.push(section.elements[key]);
-                rows.push(currentRowElements);
+                currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, true));
+                rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
             } else {
+                const nextSectionElement = section.elements[arr[index + 1]];
+                const isLast = !this.getElementProps(nextSectionElement).positionSameRow;
                 if (currentRowElements.length > 0 && !props.positionSameRow) {
-                    rows.push(currentRowElements);
+                    rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
                     currentRowElements = [];
                 }
-                currentRowElements.push(section.elements[key]);
+                currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, isLast));
             }
         });
         return rows;

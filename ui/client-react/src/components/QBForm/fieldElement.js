@@ -11,7 +11,7 @@ const FieldElement = React.createClass({
         element: React.PropTypes.object,
         relatedField: React.PropTypes.object,
         fieldRecord: React.PropTypes.object,
-        labelPosition: React.PropTypes.string
+        includeLabel: React.PropTypes.bool
     },
 
     render() {
@@ -23,12 +23,9 @@ const FieldElement = React.createClass({
         let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "display value";
         let fieldRawValue = this.props.fieldRecord ? this.props.fieldRecord.value : "raw value";
 
-        let classes = "formElement field ";
-        classes += this.props.labelPosition === "ABOVE" ? "labelAbove" : "labelLeft";
-
         return (
-            <div className={classes}>
-                <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} />
+            <div className="formElement field">
+                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} /> }
 
                 <span className="cellWrapper">
                     {fieldDisplayValue !== null &&
