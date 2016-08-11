@@ -170,6 +170,10 @@
             width: 50%;
             margin-left: 50%;
         }
+
+        .hidden {
+            display:none;
+        }
     }
 
     .loadedContent {
@@ -212,7 +216,6 @@
 .reportContent {
     width:100%;
     flex:1 1 auto;
-    display:flex;
     position:relative;
     overflow:auto;
 }

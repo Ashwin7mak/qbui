@@ -10,7 +10,7 @@ import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
-import Loader  from 'react-loader';
+import ReportFooter from '../reportFooter';
 import _ from 'lodash';
 
 let logger = new Logger();
@@ -675,7 +675,6 @@ let ReportContent = React.createClass({
         }
 
         return (
-
                 <div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
@@ -740,6 +739,14 @@ let ReportContent = React.createClass({
                                 filter={{selections: this.props.reportData.selections,
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}/>
+                        }
+                        {!isSmall && !this.props.reactabular &&
+                        <ReportFooter
+                            reportData={this.props.reportData}
+                            getNextReportPage={this.props.reportFooter.props.getNextReportPage}
+                            getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}
+                            pageStart={this.props.reportFooter.props.pageStart}
+                            pageEnd={this.props.reportFooter.props.pageEnd}/>
                         }
                         {isSmall &&
                             <CardViewListHolder reportData={this.props.reportData}

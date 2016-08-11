@@ -2,8 +2,8 @@ import React from 'react';
 import Logger from '../../utils/logger';
 import ReportActions from '../actions/reportActions';
 import ReportToolbar from './reportToolbar';
-import ReportFooter from './reportFooter';
 import ReportContent from './dataTable/reportContent';
+import ReportFooter from './reportFooter';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
@@ -163,6 +163,45 @@ let ReportToolsAndContent = React.createClass({
         this.getFlux().actions.filterSearchPending('');
         this.debouncedFilterReport('', noSelections);
     },
+    getReportToolbar() {
+        let {appId, tblId, rptId,
+            reportData:{selections, ...otherReportData}} = this.props;
+
+        return <ReportToolbar appId={this.props.params.appId}
+                              tblId={this.props.params.tblId}
+                              rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
+                              reportData={this.props.reportData}
+                              selections={this.props.reportData.selections}
+                              searchStringForFiltering={this.props.reportData.searchStringForFiltering}
+                              pageActions={this.getPageActions(0)}
+                              nameForRecords={this.nameForRecords}
+                              fields={this.props.fields}
+                              searchTheString={this.searchTheString}
+                              filterOnSelections={this.filterOnSelections}
+                              clearSearchString={this.clearSearchString}
+                              clearAllFilters={this.clearAllFilters}
+                              getNextReportPage={this.getNextReportPage}
+                              getPreviousReportPage={this.getPreviousReportPage}
+                              pageStart={this.pageStart}
+                              pageEnd={this.pageEnd}/>;
+    },
+    getSelectionActions() {
+        return (<ReportActions selection={this.props.selectedRows} />);
+    },
+    getTableActions() {
+        const selectedRows = this.props.selectedRows;
+        const hasSelection = !!(selectedRows && selectedRows.length > 0);
+
+        let classes = "tableActionsContainer secondaryBar";
+
+        if (hasSelection) {
+            classes += " selectionActionsOpen";
+        }
+
+        return (<div className={classes}>
+            {hasSelection ? this.getSelectionActions() : this.getReportToolbar()}
+        </div>);
+    },
     getNextReportPage() {
         if (this.props.reportData.pageOffset + this.props.reportData.numRows >= this.props.reportData.data.recordsCount) {
             return false;
@@ -187,57 +226,6 @@ let ReportToolsAndContent = React.createClass({
         let newOffset = this.props.reportData.pageOffset - numRows;
         this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
     },
-    getReportToolbar() {
-        let {appId, tblId, rptId,
-            reportData:{selections, ...otherReportData}} = this.props;
-
-        return <ReportToolbar appId={this.props.params.appId}
-                              tblId={this.props.params.tblId}
-                              rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
-                              reportData={this.props.reportData}
-                              selections={this.props.reportData.selections}
-                              searchStringForFiltering={this.props.reportData.searchStringForFiltering}
-                              pageActions={this.getPageActions(0)}
-                              nameForRecords={this.nameForRecords}
-                              fields={this.props.fields}
-                              searchTheString={this.searchTheString}
-                              filterOnSelections={this.filterOnSelections}
-                              clearSearchString={this.clearSearchString}
-                              clearAllFilters={this.clearAllFilters}
-                              getNextReportPage={this.getNextReportPage}
-                              getPreviousReportPage={this.getPreviousReportPage}
-                              pageStart={this.pageStart}
-                              pageEnd={this.pageEnd}/>;
-    },
-    getReportFooter() {
-        let {appId, tblId, rptId,
-            reportData:{selections, ...otherReportData}} = this.props;
-
-        return <ReportFooter
-            reportData={this.props.reportData}
-            getNextReportPage={this.getNextReportPage}
-            getPreviousReportPage={this.getPreviousReportPage}
-            pageStart={this.pageStart}
-            pageEnd={this.pageEnd}/>;
-
-    },
-    getSelectionActions() {
-        return (<ReportActions selection={this.props.selectedRows} />);
-    },
-    getTableActions() {
-        const selectedRows = this.props.selectedRows;
-        const hasSelection = !!(selectedRows && selectedRows.length > 0);
-
-        let classes = "tableActionsContainer secondaryBar";
-
-        if (hasSelection) {
-            classes += " selectionActionsOpen";
-        }
-
-        return (<div className={classes}>
-            {hasSelection ? this.getSelectionActions() : this.getReportToolbar()}
-        </div>);
-    },
     render() {
         let classes = "reportToolsAndContentContainer";
         if (this.props.selectedRows) {
@@ -251,10 +239,21 @@ let ReportToolsAndContent = React.createClass({
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
 
+        // Define the page start
         this.pageStart = this.props.reportData.pageOffset + 1;
-        if (this.props.reportData.data) {
-            this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
 
+        if (this.props.reportData.data) {
+            // Identify the page end. For paginated reports, we fetch a page of records at a time. Therefore, the size
+            // of the records array will indicate the page end. If a search filter has been entered, the page end is either
+            // size of the page if the number of filtered records exceeds page size, or the number of filtered records.
+            let numRows = this.props.reportData.numRows;
+            if (this.props.reportData.data.records && this.props.reportData.data.records.length) {
+                numRows = this.props.reportData.data.records.length;
+            }
+            if (this.props.reportData.data.filteredRecordsCount !== undefined) {
+                numRows = this.props.reportData.data.filteredRecordsCount;
+            }
+            this.pageEnd = numRows;
             if (this.props.reportData.data.recordsCount && this.pageEnd > this.props.reportData.data.recordsCount) {
                 this.pageEnd = this.props.reportData.data.recordsCount;
             }
@@ -285,12 +284,14 @@ let ReportToolsAndContent = React.createClass({
                                          getPreviousReportPage={this.getPreviousReportPage}
                                          pageStart={this.pageStart}
                                          pageEnd={this.pageEnd}/>;
+
             let reportFooter = <ReportFooter
-                                        reportData={this.props.reportData}
-                                        getNextReportPage={this.getNextReportPage}
-                                        getPreviousReportPage={this.getPreviousReportPage}
-                                        pageStart={this.pageStart}
-                                        pageEnd={this.pageEnd}/>;
+                reportData={this.props.reportData}
+                getNextReportPage={this.getNextReportPage}
+                getPreviousReportPage={this.getPreviousReportPage}
+                pageStart={this.pageStart}
+                pageEnd={this.pageEnd}/>;
+
             var loaderOptions = {
                 lines: 11,
                 length: 0,
@@ -335,8 +336,6 @@ let ReportToolsAndContent = React.createClass({
                                    reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}
                                    {...this.props} />
-
-                    {this.getReportFooter()}
 
                     {!this.props.scrollingReport && <AddRecordButton />}
                 </div>

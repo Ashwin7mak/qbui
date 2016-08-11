@@ -39,8 +39,11 @@ const ReportToolbar = React.createClass({
                 isLoading = this.props.reportData.loading;
             }
             recordCount = this.props.reportData.data.recordsCount;
+            // If search filter exists, set count to number of filtered records
+            if (this.props.reportData.searchStringForFiltering !== "") {
+                recordCount = parseInt(this.props.reportData.data.filteredRecordsCount);
+            }
         }
-
         return (
             <div className="reportFooter">
                 <div className="leftReportFooter">

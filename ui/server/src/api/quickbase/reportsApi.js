@@ -148,11 +148,11 @@
 
                                 req.params = req.params || {};
 
-                                if (req.query.format === "true") {
+                                if (req.query.format !== "undefined" && req.query.format === "true") {
                                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
                                 }
 
-                                if (parseInt(req.query.offset) >= 0 && parseInt(req.query.numrows)) {
+                                if (req.query.offset !== "undefined" && parseInt(req.query.offset) >= 0 && req.query.numrows !== "undefined" && parseInt(req.query.numrows)) {
                                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, req.query.offset);
                                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, req.query.numrows);
                                 }

@@ -48,7 +48,7 @@ var PreviousLink = React.createClass({
     render: function() {
         const previousButtonClassName = "previousButton " + (this.props.pageStart !== 1 ? "" : "disabled");
         return (
-            <QBToolTip tipId="fieldName" i18nMessageKey="report.previousToolTip">
+            <QBToolTip tipId="fieldName" id="" i18nMessageKey="report.previousToolTip">
                 <button className="navigationButton" onClick={this.props.getPreviousReportPage}>
                     <QBicon className={previousButtonClassName} icon="icon_caretfilledleft" />
                 </button>
