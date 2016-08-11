@@ -72,6 +72,13 @@
                     //the method doesn't exist, we can't execute this request, log an error!
                     res.status(501).send('Method not implemented!');
                 }
+            } else if (requestHelper.isPost(req)) {
+                /*
+                 * TODO: this is a stop gap for integration tests.
+                 * UI Integration tests use the Bulk Create currently, but through the node layer
+                 * UI Integration tests need to be updated to use the Java end point when creating data
+                 */
+                next();
             } else {
                 //the verb requested for this rest endpoint is not implemented yet, log an error!
                 res.status(405).send('Method not supported');
