@@ -78,7 +78,7 @@
                  * UI Integration tests use the Bulk Create currently, but through the node layer
                  * UI Integration tests need to be updated to use the Java end point when creating data
                  */
-                next();
+                return next();
             } else {
                 //the verb requested for this rest endpoint is not implemented yet, log an error!
                 res.status(405).send('Method not supported');
