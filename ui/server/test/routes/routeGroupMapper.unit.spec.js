@@ -35,7 +35,7 @@ describe('Group Route Mapper Unit Test', function() {
             {message: 'LH_V1, ' + routeConsts.FORM_COMPONENTS + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.FORM_COMPONENTS, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.RECORD + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORD, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.RECORDS + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORDS, method: 'post', expectedOutput: true},
-            {message: 'LH_V1, ' + routeConsts.RECORDS_BULK + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORDS_BULK, method: 'post', expectedOutput: false},
+            {message: 'LH_V1, ' + routeConsts.RECORDS_BULK + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.RECORDS_BULK, method: 'post', expectedOutput: true},
             {message: 'LH_V1, ' + routeConsts.REPORT_COMPONENTS + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.REPORT_COMPONENTS, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.REPORT_RESULTS + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.REPORT_RESULTS, method: 'post', expectedOutput: false},
             {message: 'LH_V1, ' + routeConsts.SWAGGER_API + ' POST', routeGroup: routeGroups.LH_V1, route: routeConsts.SWAGGER_API, method: 'post', expectedOutput: false},

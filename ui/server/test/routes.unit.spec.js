@@ -219,13 +219,18 @@ describe('Express Routes', function() {
 
     it('Validate post bulk records route is not supported', function(done) {
 
+        stubLog = sinon.stub(log, 'info').returns(true);
+
         request(app).
         post(routeConstants.RECORDS_BULK).
-        expect(405).
+        send({level:'debug', msg:'test'}).
+        expect({}).
         end(function(err, res) {
             if (err) {
+                stubLog.restore();
                 return done(err);
             }
+            stubLog.restore();
             done();
         });
     });

@@ -54,6 +54,7 @@
          */
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
+        routeToPostFunction[routeConsts.RECORDS_BULK] = createRecordsBulk;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -442,6 +443,27 @@
         let perfLog = perfLogger.getInstance();
         perfLog.init(activityName, {req:filterNodeReq(req)});
         recordsApi.createSingleRecord(req).then(
+            function(response) {
+                res.send(response);
+                logApiSuccess(req, response, perfLog, activityName);
+            },
+            function(response) {
+                logApiFailure(req, response, perfLog, activityName);
+                //  client is waiting for a response..make sure one is always returned
+                if (response && response.statusCode) {
+                    res.status(response.statusCode).send(response);
+                } else {
+                    res.status(500).send(response);
+                }
+            }
+        );
+    }
+
+    function createRecordsBulk(req, res) {
+        let activityName = 'Add Records Bulk';
+        let perfLog = perfLogger.getInstance();
+        perfLog.init(activityName, {req:filterNodeReq(req)});
+        recordsApi.createRecordsBulk(req).then(
             function(response) {
                 res.send(response);
                 logApiSuccess(req, response, perfLog, activityName);
