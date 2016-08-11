@@ -39,7 +39,8 @@ describe('AGGrid cell editor functions', () => {
                 display: "Testing"
             },
             column: {
-                colDef: {}
+                colDef: {
+                }
             }
         };
 
@@ -47,6 +48,39 @@ describe('AGGrid cell editor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const value = TestUtils.findRenderedDOMComponentWithClass(component, "textCell");
+        expect(value.innerHTML).toEqual(params.value.display);
+
+        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+        expect(edit.type).toEqual("text");
+        expect(edit.value).toEqual(params.value.display);
+
+        edit.value = "newValue";
+        TestUtils.Simulate.change(edit);
+        expect(value.innerHTML).toEqual("newValue");
+    });
+
+
+    it('test TextCellRenderer multiline', () => {
+        const params = {
+            value: {
+                value: "Testing",
+                display: "Testing"
+            },
+            column: {
+                colDef: {
+                    datatypeAttributes: {
+                        clientSideAttributes: {
+                            num_lines: 4
+                        },
+                    },
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const value = TestUtils.findRenderedDOMComponentWithClass(component, "multiLineTextCell");
         expect(value.innerHTML).toEqual(params.value.display);
 
         const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");

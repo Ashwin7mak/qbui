@@ -2,6 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Table} from 'reactabular';
 import Fluxxor from 'fluxxor';
+import Locale from '../../../locales/locales';
+import {Button, Dropdown, MenuItem} from 'react-bootstrap';
+import QBicon from '../../qbIcon/qbIcon';
+import {I18nMessage} from '../../../utils/i18nMessage';
+import ReportUtils from '../../../utils/reportUtils';
+import * as query from '../../../constants/query';
 
 import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, DurationCellRenderer,
     PhoneCellRenderer, NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
@@ -45,13 +51,16 @@ const QBGrid = React.createClass({
     render() {
 
         let data = this.props.records ? this.props.records : [];
+        data.forEach((record, index) => {
+            record.id = record[this.props.uniqueIdentifier].value;
+        });
 
         return (this.props.columns &&
 
             <Table ref="qbGridTable"
                    className="qbGrid"
                    columns={this.getColumns()}
-                   data={this.props.records}
+                   data={data}
                    rowKey="id"
                    row={this.getRow}/>
         );
@@ -79,7 +88,7 @@ const QBGrid = React.createClass({
             const rtCol = {
                 property: col.field,
                 headerClass: "gridHeaderCell",
-                header: col.headerName, // just a string for now
+                header: this.getFieldColumnHeader(col), // just a string for now
                 cell: this.getColumnDataCell(col)
             };
             rtCols.push(rtCol);
@@ -149,6 +158,122 @@ const QBGrid = React.createClass({
         };
     },
 
+    /**
+     * create a column header menu
+     * @param columnIndex
+     * @param pullRight position from right side to avoid clipping
+     * @returns JSX columh header dropdown
+     */
+    getFieldColumnHeader(colDef) {
+
+        let isSortedAsc = true;
+
+        const isFieldSorted = _.find(this.props.sortFids, fid => {
+            if (Math.abs(fid) === colDef.id) {
+                isSortedAsc = fid > 0;
+                return true;
+            }
+        });
+
+        const sortAscText = this.getSortAscText(colDef, "sort");
+        const sortDescText = this.getSortDescText(colDef, "sort");
+        const groupAscText = this.getSortAscText(colDef, "group");
+        const groupDescText = this.getSortDescText(colDef, "group");
+
+        return (
+            <div className="headerCell">
+                <span className="headerName">{colDef.headerName}</span>
+                <Dropdown bsStyle="default" noCaret id="dropdown-no-caret">
+                    <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
+                        <QBicon icon="caret-filled-down"/>
+                    </Button>
+
+                    <Dropdown.Menu>
+                        <MenuItem onSelect={() => this.sortReport(colDef, true, isFieldSorted && isSortedAsc)}>
+                            {isFieldSorted && isSortedAsc && <QBicon icon="check"/>} {sortAscText}
+                        </MenuItem>
+                        <MenuItem onSelect={() => this.sortReport(colDef, false, isFieldSorted && !isSortedAsc)}>
+                            {isFieldSorted && !isSortedAsc && <QBicon icon="check"/>} {sortDescText}
+                        </MenuItem>
+                        <MenuItem divider/>
+                        <MenuItem onSelect={() => this.groupReport(colDef, true)}> {groupAscText}</MenuItem>
+                        <MenuItem onSelect={() => this.groupReport(colDef, false)}> {groupDescText}</MenuItem>
+                        <MenuItem divider/>
+                        <MenuItem><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
+                        <MenuItem><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
+                        <MenuItem><I18nMessage message="report.menu.hideColumn"/></MenuItem>
+                        <MenuItem divider/>
+                        <MenuItem><I18nMessage message="report.menu.newTable"/></MenuItem>
+                        <MenuItem divider/>
+                        <MenuItem><I18nMessage message="report.menu.columnProps"/></MenuItem>
+                        <MenuItem><I18nMessage message="report.menu.fieldProps"/></MenuItem>
+                    </Dropdown.Menu>
+                </Dropdown>
+            </div>);
+
+    },
+    /**
+     * On selection of sort option from menu fire off the action to sort the data
+     * @param column
+     * @param asc
+     */
+    sortReport(column, asc, alreadySorted) {
+
+        if (alreadySorted) {
+            return;
+        }
+        let flux = this.getFlux();
+
+        let queryParams = {};
+        // for on-the-fly sort selection, this selection will result in removal of old sort order
+        // BUT since out grouped fields are also sorted we still need to keep those in the sort list.
+        let sortFid = asc ? column.id.toString() : "-" + column.id.toString();
+
+        let sortList = ReportUtils.getSortListString(this.props.groupEls);
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
+
+        flux.actions.getFilteredRecords(this.props.appId,
+            this.props.tblId,
+            this.props.rptId, {format:true}, this.props.filter, queryParams);
+    },
+    /**
+     * Build the menu items for sort/group
+     * @param column
+     * @param prependText
+     * @returns {*}
+     */
+    getSortAscText(column, prependText) {
+        let message = " ";
+        switch (column.datatypeAttributes.type) {
+        case "CHECKBOX": message =  "uncheckedToChecked"; break;
+        case "TEXT":
+        case "URL":
+        case "USER":
+        case "EMAIL_ADDRESS": message =  "aToZ"; break;
+        case "DATE":
+        case "DATE_TIME": message =  "oldToNew"; break;
+        case "NUMERIC":
+        case "RATING":
+        default: message = "lowToHigh"; break;
+        }
+        return Locale.getMessage("report.menu." + prependText + "." + message);
+    },
+    getSortDescText(column, prependText) {
+        let message = " ";
+        switch (column.datatypeAttributes.type) {
+        case "CHECKBOX": message =  "checkedToUnchecked"; break;
+        case "TEXT":
+        case "URL":
+        case "USER":
+        case "EMAIL_ADDRESS": message =  "zToA"; break;
+        case "DATE":
+        case "DATE_TIME": message =  "newToOld"; break;
+        case "NUMERIC":
+        case "RATING":
+        default: message =  "highToLow"; break;
+        }
+        return Locale.getMessage("report.menu." + prependText + "." + message);
+    },
     /**
      * get a context object to pass to the cells (could use react context if not for ag-grid)
      * @returns {{keyField: (*|null|boolean), flux: *, onEditRecordCancel: onEditRecordCancel, cellTabCallback: cellTabCallback}}

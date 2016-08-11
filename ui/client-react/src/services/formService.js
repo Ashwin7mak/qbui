@@ -22,15 +22,19 @@ class FormService extends BaseService {
      * @param recordId
      * @param formType
      */
-    getFormAndRecord(appId, tableId, recordId, formType) {
+    getFormAndRecord(appId, tableId, recordId, rptId, formType) {
         let params = {};
+
+        //  report id is optional
+        if (rptId) {
+            params[query.REPORT_ID_PARAM] = rptId;
+        }
 
         //  if no form type specified, will default to VIEW
         if (formType) {
-            params[query.FORM_TYPE] = formType;
+            params[query.FORM_TYPE_PARAM] = formType;
         } else {
-            // TODO: evaluate whether this should throw an error if not set
-            params[query.FORM_TYPE] = query.VIEW_FORM_TYPE;
+            params[query.FORM_TYPE_PARAM] = query.VIEW_FORM_TYPE;
         }
 
         //  always want formatted data

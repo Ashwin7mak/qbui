@@ -87,6 +87,9 @@ export default {
             }
 
         },
+        form : {
+            tab : 'Tab'
+        },
         report : {
             blank : "leer",
             facets :{
@@ -234,5 +237,9 @@ export default {
         applyTip: "Beenden und gelten alle Änderungen",
         success: "Erfolg",
         failed: "Gescheitert",
+        placeholder:  {
+            email: 'name@domain.com'
+        },
+
     }
 };

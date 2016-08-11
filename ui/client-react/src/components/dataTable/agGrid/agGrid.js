@@ -1,6 +1,9 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {AgGridReact} from 'ag-grid-react';
-import {AgGridEnterprise} from 'ag-grid-enterprise';
+import {Button, Dropdown, MenuItem} from 'react-bootstrap';
+import QBicon from '../../qbIcon/qbIcon';
+import IconActions from '../../actions/iconActions';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
@@ -14,11 +17,10 @@ import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 
 import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
-        NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
+        NumericCellRenderer, DurationCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
         CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer}  from './cellRenderers';
 
 import * as GroupTypes from '../../../constants/groupTypes';
-
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
@@ -92,6 +94,72 @@ let AGGrid = React.createClass({
         this.api = params.api;
         this.columnApi = params.columnApi;
         this.onMenuClose();
+        this.installHeaderMenus();
+    },
+
+    /**
+     * create a column header menu
+     * @param columnIndex
+     * @param pullRight position from right side to avoid clipping
+     * @returns JSX columh header dropdown
+     */
+    createHeaderMenu(columnIndex, pullRight) {
+
+        const colDef = this.props.columns[columnIndex];
+
+        let isSortedAsc = true;
+
+        const isFieldSorted = _.find(this.props.sortFids, fid => {
+            if (Math.abs(fid) === colDef.id) {
+                isSortedAsc = fid > 0;
+                return true;
+            }
+        });
+
+        const sortAscText = this.getSortAscText(colDef, "sort");
+        const sortDescText = this.getSortDescText(colDef, "sort");
+        const groupAscText = this.getSortAscText(colDef, "group");
+        const groupDescText = this.getSortDescText(colDef, "group");
+
+        return (<Dropdown bsStyle="default" noCaret id="dropdown-no-caret" pullRight={pullRight}>
+            <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
+                <QBicon icon="caret-filled-down"/>
+            </Button>
+
+            <Dropdown.Menu>
+                <MenuItem onSelect={() => this.sortReport(colDef, true, isFieldSorted && isSortedAsc)}>
+                    {isFieldSorted && isSortedAsc && <QBicon icon="check"/>} {sortAscText}
+                </MenuItem>
+                <MenuItem onSelect={() => this.sortReport(colDef, false, isFieldSorted && !isSortedAsc)}>
+                    {isFieldSorted && !isSortedAsc && <QBicon icon="check"/>} {sortDescText}
+                </MenuItem>
+                <MenuItem divider/>
+                <MenuItem onSelect={() => this.groupReport(colDef, true)}> {groupAscText}</MenuItem>
+                <MenuItem onSelect={() => this.groupReport(colDef, false)}> {groupDescText}</MenuItem>
+                <MenuItem divider/>
+                <MenuItem><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
+                <MenuItem><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
+                <MenuItem><I18nMessage message="report.menu.hideColumn"/></MenuItem>
+                <MenuItem divider/>
+                <MenuItem><I18nMessage message="report.menu.newTable"/></MenuItem>
+                <MenuItem divider/>
+                <MenuItem><I18nMessage message="report.menu.columnProps"/></MenuItem>
+                <MenuItem><I18nMessage message="report.menu.fieldProps"/></MenuItem>
+            </Dropdown.Menu>
+        </Dropdown>);
+    },
+
+    /**
+     * mount the react header menus into the dom placeholders (ag-header-cell-menu-button class)
+     */
+    installHeaderMenus() {
+        const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
+
+        // convert nodelist to array then iterate to render each menu
+        Array.from(headers).map((header, index) => {
+            const pullRight = index === headers.length - 1;
+            ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
+        });
     },
     /**
      * Build the menu items for sort/group
@@ -216,38 +284,6 @@ let AGGrid = React.createClass({
             }
         });
     },
-    /**
-     * Build the column menu. This gets called every time menu is opened
-     * @param params
-     * @returns {*[]}
-     */
-    getMainMenuItems(params) {
-        this.selectColumnHeader(params.column.colDef);
-        let isSortedAsc = true;
-        let isFieldSorted = _.find(this.props.sortFids, (fid) => {
-            if (Math.abs(fid) === params.column.colDef.id) {
-                isSortedAsc = fid > 0;
-                return true;
-            }
-        });
-        let menuItems = [
-            {"name": this.getSortAscText(params.column.colDef, "sort"), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true, isFieldSorted && isSortedAsc)},
-            {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}];
-        menuItems.push("separator");
-        menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
-            {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, false)});
-        menuItems.push("separator");
-        menuItems.push({"name": Locale.getMessage("report.menu.addColumnBefore")},
-            {"name": Locale.getMessage("report.menu.addColumnAfter")},
-            {"name": Locale.getMessage("report.menu.hideColumn")}
-        );
-        menuItems.push("separator");
-        menuItems.push({"name": Locale.getMessage("report.menu.newTable")});
-        menuItems.push("separator");
-        menuItems.push({"name": Locale.getMessage("report.menu.columnProps")},
-            {"name": Locale.getMessage("report.menu.fieldProps")});
-        return menuItems;
-    },
 
     /**
      * Callback that the grid uses to figure out whether to show grouped data or not.
@@ -340,6 +376,7 @@ let AGGrid = React.createClass({
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
 
     },
+
     componentWillUnmount() {
         this.refs.gridWrapper.removeEventListener("scroll", this.props.onScroll);
     },
@@ -387,7 +424,7 @@ let AGGrid = React.createClass({
      * Helper method to auto-resize all columns to the content's width. This is not called anywhere right now - more design is needed on sizing.
      */
     autoSizeAllColumns() {
-        var allColumnIds = [];
+        const allColumnIds = [];
         if (this.columnApi) {
             if (this.props.columns) {
                 this.props.columns.forEach(columnDef => {
@@ -608,26 +645,18 @@ let AGGrid = React.createClass({
             this.props.groupLevel * (consts.FONT_SIZE + consts.GROUP_ICON_PADDING) +
             checkbox_size + consts.DEFAULT_CELL_PADDING - 3;
     },
+
     /**
-     * Builder for "checkbox" column for the grid
-     * Also contains grouping expand/collpase icon if grouping is turned on
+     * checkbox column header element
+     * (also contains grouping expand/collpase icon if grouping is turned on)
+     * @returns {Element} the DOM checkbox header element
      */
-    getCheckBoxColumn() {
-        //Add checkbox column
-        let checkBoxCol = {};
-        checkBoxCol.field = "checkbox";
-        var checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.className = "selectAllCheckbox";
-        checkbox.checked = this.allRowsSelected();
-        checkbox.onclick = (event) => {
-            this.allCheckBoxSelected(event);
-        };
-        var headerCell = document.createElement("div");
+    getCheckBoxColumnHeader() {
+        let headerCell = document.createElement("div");
         headerCell.className = "checkboxHolder";
 
         if (this.props.showGrouping) {
-            var collapser = document.createElement("span");
+            let collapser = document.createElement("span");
             collapser.className = "collapser";
             collapser.setAttribute("state", "open");
             collapser.innerHTML = gridIcons.groupExpanded;
@@ -637,11 +666,27 @@ let AGGrid = React.createClass({
             headerCell.appendChild(collapser);
         }
 
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "selectAllCheckbox";
+        checkbox.checked = this.allRowsSelected();
+        checkbox.onclick = this.allCheckBoxSelected;
+
         headerCell.appendChild(checkbox);
+
+        return headerCell;
+    },
+    /**
+     * Builder for "checkbox" column for the grid
+     */
+    getCheckBoxColumn() {
+        //Add checkbox column
+        let checkBoxCol = {};
+        checkBoxCol.field = "checkbox";
+
         //ag-grid doesnt seem to allow react components sent into headerCellRender.
-        checkBoxCol.headerCellRenderer = () => {
-            return headerCell;
-        };
+        checkBoxCol.headerCellRenderer = this.getCheckBoxColumnHeader;
+
         checkBoxCol.checkboxSelection = true;
         checkBoxCol.headerClass = "gridHeaderCell";
         checkBoxCol.cellClass = "gridCell selectionCell";
@@ -653,12 +698,12 @@ let AGGrid = React.createClass({
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
         checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxCellRenderer);
-
         checkBoxCol.pinned = 'left';
+
         return checkBoxCol;
     },
 
-    setCSSClass_helper: function(obj, classname) {
+    setCSSClass_helper(obj, classname) {
         if (typeof (obj.cellClass) === 'undefined') {
             obj.cellClass = classname;
         } else {
@@ -670,20 +715,39 @@ let AGGrid = React.createClass({
             obj.headerClass += " " + classname;
         }
     },
-    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
-    getColumnProps: function() {
-        let columns = this.props.columns;
 
+    /**
+     * ag-grid template for field column headers
+     * @param obj
+     * @returns {Element}
+     */
+    getHeaderCellTemplate(column) {
+
+        let {headerName} = column;
+
+        let cell = document.createElement('div');
+        cell.className = "ag-header-cell";
+        cell.innerHTML = `<span class="ag-header-cell-text">${headerName}</span>
+            <span class="ag-header-icon ag-header-cell-menu-button "></span>`;
+
+        return cell;
+    },
+    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
+    getColumnProps() {
+        let columns = this.props.columns;
 
         if (columns) {
             let columnsData = columns.map((obj, index) => {
+
+                let {datatypeAttributes} = obj;
+
                 obj.headerClass = "gridHeaderCell";
+                obj.headerCellTemplate = this.getHeaderCellTemplate(obj);
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
 
-                if (obj.datatypeAttributes) {
-                    var datatypeAttributes = obj.datatypeAttributes;
+                if (datatypeAttributes) {
                     for (let attr in datatypeAttributes) {
                         switch (attr) {
 
@@ -691,7 +755,6 @@ let AGGrid = React.createClass({
                             switch (datatypeAttributes[attr]) {
 
                             case serverTypeConsts.NUMERIC:
-                                this.setCSSClass_helper(obj, "AlignRight");
                                 obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
                                 break;
                             case serverTypeConsts.DATE :
@@ -718,7 +781,9 @@ let AGGrid = React.createClass({
                             case serverTypeConsts.PERCENT :
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
-
+                            case serverTypeConsts.DURATION :
+                                obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
+                                break;
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
                                 break;
@@ -727,9 +792,10 @@ let AGGrid = React.createClass({
                         }
                     }
 
+                    // todo: this really be be done in the cell renderers instead
                     if (datatypeAttributes.clientSideAttributes) {
-                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
-                        for (var cattr in clientSideAttributes) {
+                        let clientSideAttributes = datatypeAttributes.clientSideAttributes;
+                        for (let cattr in clientSideAttributes) {
                             switch (cattr) {
                             case 'bold':
                                 if (clientSideAttributes[cattr]) {
@@ -758,7 +824,6 @@ let AGGrid = React.createClass({
      */
     getColumns() {
         let columnProps = this.getColumnProps();
-
 
         let columns = columnProps.slice(0);
 
@@ -809,7 +874,6 @@ let AGGrid = React.createClass({
                                     suppressCellSelection="true"
 
                                     //column menus
-                                    getMainMenuItems={this.getMainMenuItems}
                                     suppressMenuFilterPanel="true"
                                     suppressMenuColumnPanel="true"
                                     suppressContextMenu="true"

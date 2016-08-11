@@ -86,6 +86,9 @@ export default {
                 sign_out: "Se déconnecter"
             }
         },
+        form : {
+            tab : 'Onglet'
+        },
         report : {
             blank : "blanc",
             facets :{
@@ -233,5 +236,8 @@ export default {
         applyTip: "Sortez et appliquer les modifications",
         success: "Le succès",
         failed: "Échoué",
+        placeholder:  {
+            email: 'nom@domaine.com'
+        },
     }
 };

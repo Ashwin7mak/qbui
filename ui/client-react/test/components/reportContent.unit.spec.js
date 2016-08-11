@@ -10,6 +10,8 @@ import Locales from '../../src/locales/locales';
 import * as SchemaConsts from '../../src/constants/schema';
 import * as GroupTypes from '../../src/constants/groupTypes';
 
+import Breakpoints from '../../src/utils/breakpoints';
+
 var LocalesMock = {
     getLocale: function() {
         return 'en-us';
@@ -920,39 +922,6 @@ describe('ReportContent functions', () => {
         expect(agGrid.props.records.length).toEqual(fakeReportData_simple.data.filteredRecords.length);
         expect(_.intersection(agGrid.props.columns, fakeReportData_simple.data.columns).length).toEqual(fakeReportData_simple.data.columns.length);
     });
-
-    it('test render of CardViewListHolder for touch context', () => {
-        ReportContent.__Rewire__('CardViewListHolder', CardViewListHolderMock);
-
-        var TestParent = React.createFactory(React.createClass({
-
-            childContextTypes: {
-                touch: React.PropTypes.bool
-            },
-            getChildContext: function() {
-                return {touch: true};
-            },
-            getInitialState() {
-                return {reportData: fakeReportData_simple, reportHeader: header_empty};
-            },
-            render() {
-                return <ReportContent ref="refReportContent" flux={flux} reportData={this.state.reportData}
-                                      reportHeader={this.state.reportHeader}/>;
-            }
-        }));
-        var parent = TestUtils.renderIntoDocument(TestParent());
-
-        parent.setState({
-            reportData: fakeReportData_simple,
-            reportHeader: header_empty
-        });
-
-        var cardViewListMock = TestUtils.scryRenderedComponentsWithType(parent.refs.refReportContent, CardViewListHolderMock);
-        expect(cardViewListMock.length).toEqual(1);
-        ReportContent.__ResetDependency__('CardViewListHolder');
-    });
-
-
 
     it('test startPerfTiming', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}

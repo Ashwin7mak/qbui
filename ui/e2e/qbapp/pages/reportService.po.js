@@ -84,7 +84,7 @@
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
 
         //stage heading
-        this.stageHeadLine = this.reportStageContentEl.element(by.className('breadCrumbs'));
+        this.stageHeadLine = this.reportStageContentEl.element(by.className('stageHeadline'));
 
         // Report tools and content container
         this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));
@@ -149,7 +149,9 @@
          */
         this.openRecordEditMenu = function(recordRowIndex) {
             //TODO: Doesn't work for Safari and Firefox, need to find workaround
-            return browser.actions().doubleClick(element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('ag-cell-no-focus')).first()).perform();
+            var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
+            browser.actions().doubleClick(rowElement).perform();
+            return e2ePageBase.waitForElementToBePresent(this.agGridEditRecordMenu);
         };
 
         /**
