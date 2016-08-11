@@ -14,24 +14,24 @@
     overflow: hidden;
     .qbPanelHeaderIcon {
         position: absolute;
-        top: 14px;
+        top: 0;
     }
     .iconLeft {
         left: 4px;
     }
     .iconRight {
-        right: 4px;
+        right: 20px;
     }
     .qbPanelHeader {
-        padding: 5px 10px 5px 10px;
+        padding: 20px 0 30px 20px;
         cursor: pointer;
         min-width: 30%;
         background-color: $panel-background-color;
 
         .qbPanelHeaderTitle {
             position: relative;
-            padding: 10px 0 10px 0;
-            margin: 0;
+
+            margin:0;
             .qbPanelHeaderTitleText {
                 margin-right: 30px;
                 word-wrap: break-word;
