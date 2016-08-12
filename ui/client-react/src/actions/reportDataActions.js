@@ -249,11 +249,11 @@ let reportDataActions = {
                         reject();
                     }
                 ).catch(
-                    function(ex) {
+                    ex => {
                         logger.error('Unexpected Report service call exception:', ex);
                         this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: ex});
                         reject();
-                    }.bind(this)
+                    }
                 );
             } else {
                 var errMessage = 'Missing one or more required input parameters to reportDataActions.deleteReportRecord. AppId:' +
@@ -266,7 +266,7 @@ let reportDataActions = {
     },
 
     /**
-     * delete a record
+     * delete records in bulk
      */
     deleteReportRecordBulk(appId, tblId, recIds) {
         // promise is returned in support of unit testing only
@@ -274,7 +274,7 @@ let reportDataActions = {
             if (appId && tblId && recIds && recIds.length >= 1) {
                 let recordService = new RecordService();
 
-                //delete the record
+                //delete the records
                 recordService.deleteRecordBulk(appId, tblId, recIds).then(
                     response => {
                         logger.debug('RecordService deleteRecordBulk success:' + JSON.stringify(response));
@@ -289,11 +289,11 @@ let reportDataActions = {
                         reject();
                     }
                 ).catch(
-                    function(ex) {
+                    ex => {
                         logger.error('Unexpected Report service call exception:', ex);
                         this.dispatch(actions.DELETE_REPORT_RECORD_BULK_FAILED, {appId, tblId, recIds, error: ex});
                         reject();
-                    }.bind(this)
+                    }
                 );
             } else {
                 var errMessage = 'Missing one or more required input parameters to reportDataActions.deleteReportRecordBulk. AppId:' +
