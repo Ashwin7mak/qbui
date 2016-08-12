@@ -6,7 +6,9 @@ import TextFieldEditor from './textFieldEditor';
 import * as formats from '../../constants/fieldFormats';
 
 /**
- * creates a editor for a field defined my type and fieldDef with the value supplied
+ * creates a editor for a field defined by type and fieldDef with the value supplied
+ * and whether the value is isInvalid
+ * calls validateFieldValue to check the field onBlur
  * optional to include indicator that the field is required
  */
 const FieldEditor = React.createClass({
@@ -25,6 +27,11 @@ const FieldEditor = React.createClass({
         invalidMessage: React.PropTypes.string,
     },
 
+    /**
+     *  gets the markup for editing a field of the type specified
+     *  adds placeholder text if supplied
+     *  adds tabindex
+     */
     getEditorForType(type) {
         let placeholder = undefined;
         if (_.has(this.props, 'fieldDef.placeholder')) {
@@ -100,6 +107,9 @@ const FieldEditor = React.createClass({
         }
     },
 
+    /**
+     * onExitField called on Blur to check if the field is valid and send the validation results to onValidated
+     */
     onExitField(ev) {
         // need to rerender this field with invalid state
         //on aggrid redraw, and on qbgrid set state

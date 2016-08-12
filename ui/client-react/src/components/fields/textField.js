@@ -1,6 +1,11 @@
 import React from 'react';
 import './fields.scss';
 
+/**
+ * a TextField read only rendering of the field that is a single line text field
+ * the value can be rendered as bold or not and classes can be added to it for
+ * custom styling
+ */
 export const TextField = React.createClass({
 
     propTypes: {

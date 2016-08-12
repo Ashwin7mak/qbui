@@ -2,8 +2,6 @@ import React from 'react';
 
 import FieldEditor from '../../fields/fieldEditor';
 
-//import * as formats from '../../../constants/fieldFormats';
-
 /**
  * Table cell inline edit specific editor
  */
@@ -14,6 +12,8 @@ const CellEditor = React.createClass({
         value: React.PropTypes.any,
         colDef: React.PropTypes.object,
         onChange: React.PropTypes.func,
+        onBlur: React.PropTypes.func,
+        onValidated: React.PropTypes.func,
         onTabColumn: React.PropTypes.func,
         validateFieldValue: React.PropTypes.func,
         isInvalid: React.PropTypes.bool,

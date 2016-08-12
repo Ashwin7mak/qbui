@@ -103,7 +103,7 @@ const CellRenderer = React.createClass({
 
         let isEditable = !this.props.colDef.builtIn;
 
-        let key = ''; // for uniq key
+        let key = ''; // for uniq key rec+fid
         if (this.props.params && this.props.params.data && this.props.params.context &&
                 this.props.params.rowIndex && this.props.initialValue && this.props.initialValue.id &&
                 this.props.params.context.keyField && this.props.params.data[this.props.params.context.keyField].value) {

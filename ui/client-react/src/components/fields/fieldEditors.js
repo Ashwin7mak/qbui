@@ -4,6 +4,10 @@ import DateTimeField from 'react-bootstrap-datetimepicker';
 import moment from 'moment';
 
 /**
+ * Initial field component implementations for demo, these will become separate component files
+ * and added to component lib when there stories are implemented
+ */
+/**
  * simple non-validating cell editor for text
  */
 export const DefaultFieldEditor = React.createClass({

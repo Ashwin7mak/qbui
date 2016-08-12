@@ -2,6 +2,14 @@ import React from 'react';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 
+/**
+ * a TextFieldEditor editable rendering of the field that is a single line text field
+ * the value can be rendered as invalid or not and classes can be added to it for
+ * custom styling.
+ * an optional placeholder will be shown when the value is empty
+ * onBlur will be called when the editor is exited
+ * onChange will be called when a change is made to the value
+ */
 export const TextFieldEditor = React.createClass({
     propTypes: {
         ref: React.PropTypes.any,
