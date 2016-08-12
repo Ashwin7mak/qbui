@@ -10,8 +10,8 @@ import {Link} from 'react-router';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
-import './record.scss';
 import {withRouter} from 'react-router';
+import './record.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);

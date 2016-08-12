@@ -10,10 +10,10 @@ import TableIcon from "../qbTableIcon/qbTableIcon";
 import GlobalActions from "../actions/globalActions";
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
+import {withRouter} from 'react-router';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
-import {withRouter} from 'react-router';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
