@@ -2,7 +2,7 @@
 import React from "react";
 import ReactDOM, {render} from "react-dom";
 import {Router, Route, IndexRoute} from "react-router";
-import createBrowserHistory from "history/lib/createBrowserHistory";
+import {browserHistory} from 'react-router';
 import Nav from "../components/nav/nav";
 import Fluxxor from "fluxxor";
 import ReportsStore from "../stores/reportsStore";
@@ -91,12 +91,6 @@ function hookHistory(theHistory) {
         });
         return true;
     }
-}
-
-function setupHistory() {
-    history = createBrowserHistory();
-    hookHistory(history);
-    return history;
 }
 let NavWrapper = React.createClass({
 
@@ -192,7 +186,7 @@ let Apps = React.createClass({
 });
 
 render((
-    <Router history={setupHistory()}>
+    <Router history={browserHistory}>
         <Route path="/" component={Apps} />
 
         <Route path="apps" component={NavWrapper} >

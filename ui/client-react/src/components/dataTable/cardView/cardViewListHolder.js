@@ -4,6 +4,7 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import CardViewList from './cardViewList';
 import './cardViewList.scss';
+import {withRouter} from 'react-router';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 /**
@@ -13,9 +14,6 @@ const CHECKBOX_COL_WIDTH = 40; // 40px checkbox column can be toggled
 
 let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
-    contextTypes: {
-        history: React.PropTypes.object
-    },
     propTypes: {
         reportData: React.PropTypes.object.isRequired,
         uniqueIdentifier: React.PropTypes.string,
@@ -66,7 +64,7 @@ let CardViewListHolder = React.createClass({
      */
     onRowClicked(row) {
 
-        const {appId, tblId} = this.props.reportData;
+        const {appId, tblId, rptId} = this.props.reportData;
         let recId;
 
         //check to see if props exist, if they do we need to get recId from row.props.data (this is for non-custom row component clicks)
@@ -76,8 +74,8 @@ let CardViewListHolder = React.createClass({
             recId = row[this.props.uniqueIdentifier];
         }
         //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
-        this.context.history.push(link);
+        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        this.props.router.push(link);
     },
 
     /**
@@ -193,4 +191,4 @@ let CardViewListHolder = React.createClass({
     }
 });
 
-export default CardViewListHolder;
+export default withRouter(CardViewListHolder);
