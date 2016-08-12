@@ -10,8 +10,6 @@ import Locale from '../../locales/locales';
 import './qbform.scss';
 import './tabs.scss';
 
-const serverTypeConsts = require('../../../../common/src/constants');
-
 let FluxMixin = Fluxxor.FluxMixin(React);
 /*
  Custom QuickBase Form component that has 1 property.
@@ -20,9 +18,8 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 let QBForm = React.createClass({
 
     statics: {
-        LABEL_ABOVE: "ABOVE",
-        LABEL_LEFT: "LEFT"
-
+        LABEL_ABOVE: "ABOVE", // label is in same cell as field value, above it
+        LABEL_LEFT: "LEFT"    // label is in a separate cell as the fielv value, to its left
     },
 
     mixins: [FluxMixin],
@@ -43,6 +40,11 @@ let QBForm = React.createClass({
         };
     },
 
+    /**
+     * helper function to get object props from this craptastical JSON we get from the server
+     * @param element
+     * @returns the FormTextElement or FormFieldElement object properties (whichever is present)
+     */
     getElementProps(element) {
 
         if (element.FormTextElement) {
@@ -54,16 +56,25 @@ let QBForm = React.createClass({
         return {};
     },
 
+    /**
+     * get table cell (or 2 table cells) for the section element
+     * @param element section element
+     * @param orderIndex
+     * @param labelPosition above or left
+     * @param isLast is this the last cell in the row?
+     * @returns {Array}
+     */
     getTableCells(element, orderIndex, labelPosition, isLast) {
 
         const colSpan = isLast ? 100 : 1;
 
         const cells = [];
-        //build each of the elements, stuff them into one row for now
+
         if (element.FormTextElement) {
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
         }
         if (element.FormFieldElement) {
+            // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
             if (labelPosition === QBForm.LABEL_LEFT) {
                 cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, colSpan));
             }
@@ -72,6 +83,11 @@ let QBForm = React.createClass({
         return cells;
     },
 
+    /**
+     * get the form data field
+     * @param fieldId
+     * @returns the field from formdata fields with the field ID
+     */
     getRelatedField(fieldId) {
         let fields = this.props.formData.fields || [];
 
@@ -82,6 +98,11 @@ let QBForm = React.createClass({
         });
     },
 
+    /**
+     * get the form record
+     * @param fieldId
+     * @returns the record entry from formdata record array with the field ID
+     */
     getFieldRecord(fieldId) {
         let record = this.props.formData.record || [];
 
@@ -92,6 +113,12 @@ let QBForm = React.createClass({
         });
     },
 
+    /**
+     * create a TD with a field label
+     * @param element
+     * @param sectionIndex
+     * @returns {XML}
+     */
     createFieldLabelCell(element, sectionIndex) {
 
         let relatedField = this.getRelatedField(element.fieldId);
@@ -103,6 +130,14 @@ let QBForm = React.createClass({
             </td>);
     },
 
+    /**
+     * create a TD with a fielv value
+     * @param element
+     * @param sectionIndex
+     * @param includeLabel
+     * @param colSpan
+     * @returns {XML}
+     */
     createFieldElementCell(element, sectionIndex, includeLabel, colSpan) {
 
         let relatedField = this.getRelatedField(element.fieldId);
@@ -116,48 +151,74 @@ let QBForm = React.createClass({
             </td>);
     },
 
+    /**
+     * create TD for a text element
+     * @param element section element
+     * @param sectionIndex
+     * @param colSpan
+     * @returns {XML}
+     */
     createTextElementCell(element, sectionIndex, colSpan) {
         let key = "field" + sectionIndex + "-" + element.orderIndex;
         return <td key={key} colSpan={colSpan}><div className="formElement text">{element.displayText}</div></td>;
     },
 
+    /**
+     * create the <TR> elements
+     * @param section section data
+     * @param singleColumn force single column
+     * @returns {Array} of TR elements
+     */
     createSectionTableRows(section, singleColumn) {
-        let rows = [];
-        let currentRowElements = [];
+        let rows = [];                  // the TR components
+        let currentRowElements = [];    // the TD elements for the current row
 
+        // label position is determined by the section settings unless we're in single column mode
         const labelPosition = singleColumn ? QBForm.LABEL_ABOVE : section.headerElement.FormHeaderElement.labelPosition;
 
         Object.keys(section.elements).forEach((key, index, arr) => {
 
+            // get the next section element
             let sectionElement = section.elements[key];
 
             let props = this.getElementProps(sectionElement);
 
             if (singleColumn) {
+                // just one TR containing the current element (a single TD)
                 rows.push(<tr key={key++} className="fieldRow">{this.getTableCells(sectionElement, section.orderIndex, labelPosition, true)}</tr>);
                 return;
             }
 
             if (index === arr.length - 1) {
+                // the last element - add the final cell(s) to the row
                 currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, true));
                 rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
             } else {
+                // look at the next element to see if it's on the same row - if not the current element is the last one on the row
                 const nextSectionElement = section.elements[arr[index + 1]];
                 const isLast = !this.getElementProps(nextSectionElement).positionSameRow;
                 if (currentRowElements.length > 0 && !props.positionSameRow) {
+                    // current element is not on the same row so save the current row and start a new one
                     rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
                     currentRowElements = [];
                 }
+                // append the table cell(s) for the current element to the current row
                 currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, isLast));
             }
         });
         return rows;
     },
 
+    /**
+     * create a section
+     * @param section data
+     * @param singleColumn force single column
+     *
+     */
     createSection(section, singleColumn) {
         let sectionTitle = "";
 
-        //build the section header.
+        // build the section header.
         if (section.headerElement && section.headerElement.FormHeaderElement && section.headerElement.FormHeaderElement.displayText) {
             sectionTitle = section.headerElement.FormHeaderElement.displayText;
         }
@@ -177,6 +238,12 @@ let QBForm = React.createClass({
         );
     },
 
+    /**
+     * create a tab pane
+     * @param tab tab data (sections)
+     * @param singleColumn force single column (small screens)
+     *
+     */
     createTab(tab, singleColumn) {
         let sections = [];
 
@@ -194,6 +261,9 @@ let QBForm = React.createClass({
         );
     },
 
+    /**
+     * render a form as an set of tabs containing HTML tables (a la legacy QuickBase)
+     */
     render() {
         const tabChildren = [];
         const singleColumn = Breakpoints.isSmallBreakpoint();
@@ -205,6 +275,7 @@ let QBForm = React.createClass({
                 tabChildren.push(this.createTab(tabs[key], singleColumn));
             });
         }
+        // for a single tab, don't wrap it in <Tabs> container
         return (
             <div className="formContainer">
                 <form>

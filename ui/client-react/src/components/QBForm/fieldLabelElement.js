@@ -1,10 +1,13 @@
 import React from 'react';
 import './qbform.scss';
 
+/**
+ * render a form field's label
+ */
 const FieldLabelElement = React.createClass({
     propTypes: {
-        element: React.PropTypes.object,
-        relatedField: React.PropTypes.object,
+        element: React.PropTypes.object, // FormFieldElement from form API
+        relatedField: React.PropTypes.object, // field from Form data
     },
 
     render() {
