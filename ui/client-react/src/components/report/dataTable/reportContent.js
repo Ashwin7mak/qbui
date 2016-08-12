@@ -26,7 +26,6 @@ let ReportContent = React.createClass({
 
     // row was clicked once, navigate to record
     openRow(data) {
-
         const {appId, tblId, rptId} = this.props;
 
         var recId = data[this.props.uniqueIdentifier].value;
@@ -745,6 +744,7 @@ let ReportContent = React.createClass({
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}
                                 onScroll={this.onScrollRecords}
+                                onRowClicked={this.openRow}
                                 selectedRows={this.props.selectedRows}/>
                         }
                     </div>
