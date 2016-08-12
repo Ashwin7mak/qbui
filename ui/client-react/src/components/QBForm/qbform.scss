@@ -14,7 +14,6 @@
 
         padding: 5px 0;
 
-        margin-bottom:30px;
         td {
             vertical-align:top;
             padding-bottom: 30px;
@@ -24,7 +23,6 @@
         }
 
         .formElement {
-            //margin: 0 35px 20px 0;
             word-wrap: break-word;
             max-width: 100%;
             display: flex;
@@ -59,14 +57,25 @@
 
 /* For mobile phones: */
 @include small-breakpoint {
-    .qbPanelBody {
-        .field {
-            max-width: 100%;
-            .fieldLabel {
-                font-size: $font-size-small;
+    .formSection {
+        display: block;
+
+        .formTable {
+            margin-left: 0px;
+        }
+
+        .fieldRow {
+            td {
+                padding-bottom: 20px;
             }
-            .fieldValue {
-                font-size: $font-size-small;
+            .field {
+                max-width: 100%;
+                .fieldLabel {
+                    font-size: $font-size-small;
+                }
+                .fieldValue {
+                    font-size: $font-size-small;
+                }
             }
         }
     }
