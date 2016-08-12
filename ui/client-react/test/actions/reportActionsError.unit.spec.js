@@ -46,7 +46,7 @@ describe('Report Actions error functions --', () => {
                 expect(mockReportService.prototype.getReports).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORTS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORTS_FAILED], errorStatus);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORTS_FAILED, errorStatus]);
                 done();
             }
         );

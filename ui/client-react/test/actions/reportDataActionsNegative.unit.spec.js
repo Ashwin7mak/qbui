@@ -315,8 +315,8 @@ describe('Report Data Actions -- ', () => {
     });
 
     var dataProvider = [
-        {test:'test throwing exception when loading a report', func:flux.actions.loadReport, act: actions.LOAD_REPORT_FAILED},
-        {test:'test throwing exception when filtering a report', func:flux.actions.getFilteredRecords, act:actions.LOAD_RECORDS_FAILED}
+        {test:'test throwing exception when loading a report', func:flux.actions.loadReport, loadAct: actions.LOAD_REPORT, errAct: actions.LOAD_REPORT_FAILED},
+        {test:'test throwing exception when filtering a report', func:flux.actions.getFilteredRecords, loadAct: actions.LOAD_RECORDS, errAct:actions.LOAD_RECORDS_FAILED}
     ];
     var filter = {facet: 'abc', search: ''};
 
@@ -329,7 +329,9 @@ describe('Report Data Actions -- ', () => {
                 },
                 () => {
                     expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(data.act, exStatus);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([data.loadAct, jasmine.any(Object)]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.errAct, errorStatus]);
                     done();
                 }
             );

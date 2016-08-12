@@ -8,6 +8,8 @@ describe('Table Actions loadFormAndRecord negative tests -- ', () => {
 
     let appId = 'appId';
     let tblId = 'tblId';
+    let errorStatus = 404;
+    let exStatus = 500;
 
     let stores = {};
     let flux = new Fluxxor.Flux(stores);
@@ -17,7 +19,7 @@ describe('Table Actions loadFormAndRecord negative tests -- ', () => {
         constructor() { }
         getHomePage() {
             var p = Promise.defer();
-            p.reject({message:'someError'});
+            p.reject({message:'someError', status:errorStatus});
             return p.promise;
         }
     }
@@ -40,7 +42,7 @@ describe('Table Actions loadFormAndRecord negative tests -- ', () => {
             () => {
                 expect(mockTableService.prototype.getHomePage).not.toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED, exStatus]);
 
                 done();
             }
@@ -55,7 +57,7 @@ describe('Table Actions loadFormAndRecord negative tests -- ', () => {
             () => {
                 expect(mockTableService.prototype.getHomePage).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED, {error: {message:'someError'}}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED, errorStatus]);
                 done();
             }
         );

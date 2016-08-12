@@ -51,7 +51,7 @@ describe('Fields Actions getFields missing params -- ', () => {
                 expect(mockFieldsService.prototype.getFields).not.toHaveBeenCalled();
                 expect(mockFieldsService.prototype.getField).not.toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FIELDS_FAILED, errorStatus]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FIELDS_FAILED, exStatus]);
 
                 done();
             }
