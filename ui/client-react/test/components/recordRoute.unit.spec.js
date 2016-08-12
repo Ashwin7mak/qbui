@@ -51,14 +51,14 @@ describe('RecordRoute functions', () => {
 
     });
 
-    it('test render of component with url params', () => {
+    it('test render of component without report param', () => {
         let routeParams = {appId:1, tblId:2, recordId: 4};
 
         component = TestUtils.renderIntoDocument(<RecordRoute params={routeParams} flux={flux}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         expect(flux.actions.selectTableId).toHaveBeenCalledWith(routeParams.tblId);
-        expect(flux.actions.loadFormAndRecord).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, routeParams.recordId);
+        expect(flux.actions.loadFormAndRecord).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, routeParams.recordId, routeParams.rptId, routeParams.formType);
 
         let qbForm = TestUtils.scryRenderedComponentsWithType(component, QBForm);
         expect(qbForm.length).toBe(1);
@@ -74,10 +74,12 @@ describe('RecordRoute functions', () => {
     });
 
     it('test render of component with report param', () => {
-        let routeParams = {appId:1, tblId:2, rptId: 3, recordId: 4};
+        let routeParams = {appId:1, tblId:2, recordId: 3, rptId: 4};
 
         component = TestUtils.renderIntoDocument(<RecordRoute params={routeParams} flux={flux}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        expect(flux.actions.loadFormAndRecord).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, routeParams.recordId, routeParams.rptId, routeParams.formType);
 
         let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
         let nextRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "nextRecord");
@@ -107,7 +109,7 @@ describe('RecordRoute functions', () => {
                 records: [
                     {"Record ID#": {id:1, value:1, display: "1"}},
                     {"Record ID#": {id:2, value:2, display: "2"}},
-                    {"Record ID#": {id:3, value:3, display: "3"}},
+                    {"Record ID#": {id:3, value:3, display: "3"}}
                 ],
                 columns: [
                     {

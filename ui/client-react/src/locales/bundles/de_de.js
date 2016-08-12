@@ -85,6 +85,9 @@ export default {
             }
 
         },
+        form : {
+            tab : 'Tab'
+        },
         report : {
             blank : "leer",
             facets :{

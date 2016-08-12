@@ -7,7 +7,7 @@ import './qbform.scss';
 import './tabs.scss';
 const serverTypeConsts = require('../../../../common/src/constants');
 import {CellValueRenderer} from '../dataTable/agGrid/cellValueRenderers';
-
+import Locale from '../../locales/locales';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 /*
@@ -127,7 +127,7 @@ let QBForm = React.createClass({
             sections.push(this.createSection(section));
         });
         return (
-            <TabPane key={tab.orderIndex} tab={tab.title}>
+            <TabPane key={tab.orderIndex} tab={tab.title || Locale.getMessage("form.tab") + ' ' + tab.orderIndex}>
                 <br/>
                 {sections}
             </TabPane>

@@ -11,7 +11,7 @@ var express = require('express');
 var app = express();
 
 var mockConfig = {
-    routeGroup: routeGroups.DEBUG,
+    routeGroup: routeGroups.DEBUG
 };
 var assert = require('assert');
 
@@ -77,6 +77,24 @@ describe('Express Client Routes', function() {
         request(app).
             get('/app/1/table/2/report/3').
             expect(200, done);
+    });
+
+    it('Validate get table record route', function(done) {
+        request(app).
+        get('/app/1/table/2/report/3/record/4').
+        expect(200, done);
+    });
+
+    it('Validate get component route', function(done) {
+        request(app).
+        get('/components').
+        expect(200, done);
+    });
+
+    it('Validate get component route with name', function(done) {
+        request(app).
+        get('/components/testComponentName').
+        expect(200, done);
     });
 
     //TODO: Should this test be removed and/or moved to a diff location
