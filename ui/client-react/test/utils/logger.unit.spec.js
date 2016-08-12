@@ -154,7 +154,7 @@ describe('Logger', () => {
         let ex = {
             stack: 'stack',
             name: 'name'
-        }
+        };
         logger.logException(ex);
         expect(logger.error).toHaveBeenCalled();
 
