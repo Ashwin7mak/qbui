@@ -45,6 +45,40 @@ class Logger {
     }
 
     /**
+     * Helper method to examine the error object, extract
+     * the message from the response body and consistently
+     * log an error message.
+     *
+     * @param error
+     * @param prefixTxt
+     */
+    parseAndLogError(error, prefixTxt) {
+        let msg = '';
+        try {
+            if (error && error.data) {
+                msg = JSON.parse(error.data.body);
+                if (!msg) {
+                    msg = 'Status:' + error.status + ';Msg:' + error.statusText;
+                }
+            }
+        } catch (e) {
+            this.warn(e);
+            msg = error;
+        }
+        this.error(prefixTxt + JSON.stringify(msg));
+    }
+
+    /**
+     * Helper method to consistently log an unexpected exception.
+     *
+     * @param ex
+     * @param prefix
+     */
+    logException(ex, prefix) {
+        this.error(prefix + JSON.stringify(ex), ex);
+    }
+
+    /**
      * Log a message to the console and/or server
      *
      * @param logging level

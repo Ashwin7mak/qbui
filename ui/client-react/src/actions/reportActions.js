@@ -33,18 +33,18 @@ let reportActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.error('ReportService getReports error:' + JSON.stringify(error), error);
-                        this.dispatch(actions.LOAD_REPORTS_FAILED);
+                        logger.parseAndLogError(error, 'reportService.getReports:');
+                        this.dispatch(actions.LOAD_REPORTS_FAILED, error.status);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.error('ReportService getReports exception:' + JSON.stringify(ex), ex);
-                    this.dispatch(actions.LOAD_REPORTS_FAILED);
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORTS_FAILED, 500);
                     reject();
                 });
             } else {
-                logger.error('Missing required input parameters for reportService.getReports.');
-                this.dispatch(actions.LOAD_REPORTS_FAILED);
+                logger.error('reportService.getReports: Missing required input parameters.');
+                this.dispatch(actions.LOAD_REPORTS_FAILED, 500);
                 reject();
             }
         });

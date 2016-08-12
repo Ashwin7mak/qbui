@@ -32,18 +32,18 @@ let fieldsActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.error('FieldsService getFields error:' + JSON.stringify(error), error);
-                        this.dispatch(actions.LOAD_FIELDS_FAILED);
+                        logger.parseAndLogError(error, 'fieldsService.getFields:');
+                        this.dispatch(actions.LOAD_FIELDS_FAILED, error.status);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.error('FieldsService getFields exception:' + JSON.stringify(ex), ex);
-                    this.dispatch(actions.LOAD_FIELDS_FAILED);
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_FIELDS_FAILED, 500);
                     reject();
                 });
             } else {
-                logger.error('Missing required input parameters for fieldsService.getFields.');
-                this.dispatch(actions.LOAD_FIELDS_FAILED);
+                logger.error('fieldsService.getFields: Missing required input parameters.');
+                this.dispatch(actions.LOAD_FIELDS_FAILED, 500);
                 reject();
             }
         });

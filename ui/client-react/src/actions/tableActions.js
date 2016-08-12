@@ -32,18 +32,18 @@ let tableActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.error('TableService getHomePage error:' + JSON.stringify(error), error);
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                        logger.parseAndLogError(error, 'tableService.getHomePage:');
+                        this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.error('TableService getHomePage exception:' + JSON.stringify(ex), ex);
-                    this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                     reject();
                 });
             } else {
-                logger.error('Missing required input parameters for tableService.getHomePage.');
-                this.dispatch(actions.LOAD_REPORT_FAILED);
+                logger.error('tableService.getHomePage: Missing required input parameters');
+                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                 reject();
             }
         });

@@ -68,13 +68,13 @@ let appsActions = {
                                 resolve();
                             },
                             (error) => {
-                                logger.error('AppService getApp error:', error);
-                                this.dispatch(actions.LOAD_APPS_FAILED);
+                                logger.parseAndLogError(error, 'appService.getApp:');
+                                this.dispatch(actions.LOAD_APPS_FAILED, error.status);
                                 reject();
                             }
                         ).catch((ex) => {
-                            logger.error('AppService getApp exception:', ex);
-                            this.dispatch(actions.LOAD_APPS_FAILED);
+                            logger.logException(ex);
+                            this.dispatch(actions.LOAD_APPS_FAILED, 500);
                             reject();
                         });
 
@@ -85,13 +85,13 @@ let appsActions = {
                     }
                 },
                 error => {
-                    logger.error('AppService getApps error:', error);
-                    this.dispatch(actions.LOAD_APPS_FAILED);
+                    logger.parseAndLogError(error, 'appService.getApps:');
+                    this.dispatch(actions.LOAD_APPS_FAILED, error.status);
                     reject();
                 }
             ).catch(ex => {
-                logger.error('AppService getApps exception:', ex);
-                this.dispatch(actions.LOAD_APPS_FAILED);
+                logger.logException(ex);
+                this.dispatch(actions.LOAD_APPS_FAILED, 500);
                 reject();
             });
         });
