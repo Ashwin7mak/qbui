@@ -53,6 +53,114 @@ describe('Logger', () => {
         Logger.__ResetDependency__('Configuration');
     });
 
+    it('test parseAndLogError function with error object', () => {
+        let mockConfig = {
+            logger: {
+                logToConsole: true,
+                logToServer: true,
+                logLevel: LogLevel.DEBUG
+            }
+        };
+
+        Logger.__Rewire__('Configuration', mockConfig);
+        let logger = new Logger();
+
+        spyOn(logger, 'error');
+
+        let error = {
+            status: 500,
+            statusText: 'error message text',
+            data: {
+                body: 'error body'
+            }
+        };
+
+        logger.parseAndLogError(error, 'prefix');
+        expect(logger.error).toHaveBeenCalled();
+
+        Logger.__ResetDependency__('Configuration');
+    });
+
+    it('test parseAndLogError function with no body in error object', () => {
+        let mockConfig = {
+            logger: {
+                logToConsole: true,
+                logToServer: true,
+                logLevel: LogLevel.DEBUG
+            }
+        };
+
+        Logger.__Rewire__('Configuration', mockConfig);
+        let logger = new Logger();
+
+        spyOn(logger, 'error');
+
+        let error = {
+            status: 500,
+            statusText: 'error message text',
+            data: {
+                noBody: ''
+            }
+        };
+
+        logger.parseAndLogError(error, 'prefix');
+        expect(logger.error).toHaveBeenCalled();
+
+        Logger.__ResetDependency__('Configuration');
+    });
+
+    it('test parseAndLogError function with parsing exception', () => {
+        let mockConfig = {
+            logger: {
+                logToConsole: true,
+                logToServer: true,
+                logLevel: LogLevel.DEBUG
+            }
+        };
+
+        Logger.__Rewire__('Configuration', mockConfig);
+        let logger = new Logger();
+
+        spyOn(logger, 'error');
+
+        let error = {
+            status: 500,
+            statusText: 'error message text',
+            data: {
+                body: function() {}
+            }
+        };
+
+        logger.parseAndLogError(error, 'prefix');
+        expect(logger.error).toHaveBeenCalled();
+
+        Logger.__ResetDependency__('Configuration');
+    });
+
+    it('test logException function', () => {
+        let mockConfig = {
+            logger: {
+                logToConsole: true,
+                logToServer: true,
+                logLevel: LogLevel.DEBUG
+            }
+        };
+
+        Logger.__Rewire__('Configuration', mockConfig);
+        let logger = new Logger();
+
+        spyOn(logger, 'error');
+
+        let ex = {
+            stack: 'stack',
+            name: 'name'
+        }
+        logger.logException(ex);
+        expect(logger.error).toHaveBeenCalled();
+
+        Logger.__ResetDependency__('Configuration');
+    });
+
     it('test Logger with console and server logging', () => {
         let mockConfig = {
             logger: {

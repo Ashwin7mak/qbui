@@ -3,6 +3,9 @@ import reportDataActions from '../../src/actions/reportDataActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
+let errorStatus = 404;
+let exStatus = 500;
+
 let inputs = {
     appId: '1',
     tblId: '2',
@@ -53,7 +56,7 @@ let mockPromiseSuccess = function(expectedResult) {
 };
 let mockPromiseError = function() {
     var p = Promise.defer();
-    p.reject({message:'someError'});
+    p.reject({message:'someError', status: errorStatus});
     return p.promise;
 };
 let mockPromiseException = function() {
@@ -103,7 +106,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
             },
             () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, jasmine.any(Object)]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, jasmine.any(Object)]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, errorStatus]);
                 done();
             }
         );
@@ -135,8 +138,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
             },
             () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED,
-                                jasmine.objectContaining({error : jasmine.any(Object)})]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, errorStatus]);
                 done();
             }
         );
@@ -168,8 +170,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
             },
             () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED,
-                    jasmine.objectContaining({exception : jasmine.any(Object)})]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, exStatus]);
                 done();
             }
         );
@@ -226,7 +227,7 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
                 () => {
                     expect(mockReportService.prototype.getReport).not.toHaveBeenCalled();
                     expect(mockRecordService.prototype.getRecords).not.toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_FAILED, jasmine.any(Object));
+                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_FAILED, exStatus);
                     done();
                 }
             );
@@ -271,7 +272,7 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
                 },
                 () => {
                     expect(mockReportService.prototype.getReport).not.toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED);
+                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED, exStatus);
                     done();
                 }
             );
@@ -328,7 +329,7 @@ describe('Report Data Actions -- ', () => {
                 },
                 () => {
                     expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(data.act, jasmine.any(Object));
+                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(data.act, exStatus);
                     done();
                 }
             );
