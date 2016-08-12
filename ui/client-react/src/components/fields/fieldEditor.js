@@ -13,7 +13,7 @@ const FieldEditor = React.createClass({
 
     propTypes: {
         classes: React.PropTypes.string,
-        type: React.PropTypes.number,
+        type: React.PropTypes.number,   //field types see ../../constants/fieldFormats
         value: React.PropTypes.any,
         fieldDef: React.PropTypes.object,
         onChange: React.PropTypes.func,
@@ -26,32 +26,36 @@ const FieldEditor = React.createClass({
     },
 
     getEditorForType(type) {
+        let placeholder = undefined;
+        if (_.has(this.props, 'fieldDef.placeholder')) {
+            placeholder = this.props.fieldDef.placeholder;
+        }
+
+        let commonProps = {
+            value: this.props.value,
+            onChange: this.props.onChange,
+            onBlur: this.onExitField,
+            onValidated: this.props.onValidated,
+            placeholder : placeholder,
+            tabIndex: "0",
+            ref:"cellInput"
+        };
+
         switch (type) {
         case formats.CHECKBOX_FORMAT:
-            return <CheckBoxFieldEditor value={this.props.value}
-                                            onChange={this.props.onChange}
-                                            onValidated={this.props.onValidated}
-                                            onBlur={this.onExitField}
+            return <CheckBoxFieldEditor {...commonProps}
                 />;
 
         case formats.DATE_FORMAT: {
-            return <DateFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                        onBlur={this.onExitField}
-                                        placeholder={this.props.fieldDef.placeholder}/>;
+            return <DateFieldEditor  {...commonProps}/>;
         }
 
         case formats.DATETIME_FORMAT: {
-            return <DateTimeFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                            onBlur={this.onExitField}
-                                            onValidated={this.props.onValidated}
-                                            placeholder={this.props.fieldDef.placeholder}/>;
+            return <DateTimeFieldEditor  {...commonProps}/>;
         }
 
         case formats.TIME_FORMAT: {
-            return <TimeFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                        onBlur={this.onExitField}
-                                        onValidated={this.props.onValidated}
-                                        placeholder={this.props.fieldDef.placeholder} />;
+            return <TimeFieldEditor  {...commonProps} />;
         }
 
         case formats.NUMBER_FORMAT:
@@ -59,51 +63,32 @@ const FieldEditor = React.createClass({
         case formats.DURATION_FORMAT:
         case formats.CURRENCY_FORMAT:
         case formats.PERCENT_FORMAT: {
-            return <DefaultFieldEditor value={this.props.value}
-                                           type="number"
-                                           placeholder={this.props.fieldDef.placeholder}
-                                           onBlur={this.onExitField}
-                                           onValidated={this.props.onValidated}
-                                           onChange={this.props.onChange} />;
+            return <DefaultFieldEditor type="number"
+                                       {...commonProps} />;
         }
 
         case formats.USER_FORMAT: {
-            return <UserFieldEditor value={this.props.value}
-                                        placeholder={this.props.fieldDef.placeholder}
-                                        onBlur={this.onExitField}
-                                        onValidated={this.props.onValidated}
-                                        onChange={this.props.onChange} />;
+            return <UserFieldEditor  {...commonProps}/>;
         }
 
         case formats.MULTI_LINE_TEXT_FORMAT: {
-            return <MultiLineTextFieldEditor value={this.props.value}
-                                                 placeholder={this.props.fieldDef.placeholder}
-                                                 onBlur={this.onExitField}
-                                                 onValidated={this.props.onValidated}
-                                                 onChange={this.props.onChange} />;
+            return <MultiLineTextFieldEditor {...commonProps} />;
         }
         case formats.TEXT_FORMAT:
         default: {
 
-            if (this.props.fieldDef.choices) {
+            if (_.has(this.props, 'fieldDef.choices')) {
                 return (
-                        <ComboBoxFieldEditor choices={this.props.fieldDef.choices} value={this.props.value}
-                                             placeholder={this.props.fieldDef.placeholder}
-                                             onBlur={this.onExitField}
-                                             onValidated={this.props.onValidated}
-                                             onChange={this.props.onChange} />
+                        <ComboBoxFieldEditor choices={this.props.fieldDef.choices}
+                                             {...commonProps} />
                     );
             } else {
-                return <TextFieldEditor value={this.props.value}
-                                            onChange={this.props.onChange}
-                                            onBlur={this.onExitField}
+                return <TextFieldEditor {...commonProps}
+                                            onChange={this.props.onChange ? this.props.onChange : ()=>{}}
                                             isInvalid={this.props.isInvalid}
                                             invalidMessage={this.props.invalidMessage}
                                             onValidated={this.props.onValidated}
-                                            placeholder={this.props.fieldDef.placeholder}
                                             classes="cellEdit"
-                                            tabIndex="0"
-                                            ref="cellInput"
                     />;
                     //Drew's change TBD by Andrew if users want text box that
                     // grows in height for single line text change TextFieldEditor to
@@ -118,7 +103,7 @@ const FieldEditor = React.createClass({
     onExitField(ev) {
         // need to rerender this field with invalid state
         //on aggrid redraw, and on qbgrid set state
-        if (this.props.validateFieldValue) {
+        if (this.props.validateFieldValue && this.props.onValidated) {
             let results = this.props.validateFieldValue(this.props.fieldDef, ev.target.value);
             this.props.onValidated(results);
         }
@@ -126,21 +111,40 @@ const FieldEditor = React.createClass({
 
     render() {
 
-        let classes = this.props.classes + " fieldEditor" + (this.props.isInvalid ? ' error' : '');
-        let requiredIndication = (this.props.indicateRequired &&
-                                    this.props.fieldDef.required) ? '*' : '\u00a0'; // u00a0 = non-breaking space
+        // the css classes
+        let classes = 'fieldEditor';
+        if (this.props.classes) {
+            classes += ' ' + this.props.classes;
+        }
+        // error state css class
+        if (this.props.isInvalid) {
+            classes += ' error';
+        }
+
+        // symbol that a value required
+        let requiredIndication = '\u00a0'; // u00a0 = non-breaking space
+        if (this.props.fieldDef && this.props.fieldDef.required) {
+            requiredIndication = '*';
+        }
+
+        //show required symbol
+        let requiredDiv = null;
+        if (this.props.indicateRequired) {
+            requiredDiv = <div className="requiredFlag requiredFlag-layout">{requiredIndication}</div>;
+        }
+
+        let renderedType = null;
+        if (this.props.type) {
+            renderedType =  this.getEditorForType(this.props.type);
+        }
 
         return (
             <div className={classes}  >
-                {/* show required symbol optionally */}
-                {this.props.indicateRequired  ?
-                    (<div className="requiredFlag requiredFlag-layout">{requiredIndication}</div>) :
-                    null
-                }
+                {/* optionally show required symbol */}
+                {requiredDiv}
 
-                {/* render type specific editor */
-                    this.getEditorForType(this.props.type)
-                }
+                {/* render type specific editor */}
+                {renderedType}
             </div>
         );
     }

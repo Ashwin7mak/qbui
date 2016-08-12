@@ -293,6 +293,9 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         saveRecord(a, t, r, c) {
             return Promise.resolve({data:responseData});
         }
+        createRecord(a, t, r) {
+            return Promise.resolve({data: {body: '{"id" : 34}'}});
+        }
         deleteRecord(a, b, r) {
             return Promise.resolve({data:responseData});
         }
@@ -304,6 +307,7 @@ describe('Report Data Actions Edit Report functions -- success', () => {
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockRecordService.prototype, 'saveRecord').and.callThrough();
+        spyOn(mockRecordService.prototype, 'createRecord').and.callThrough();
         spyOn(mockRecordService.prototype, 'deleteRecord').and.callThrough();
         reportDataActions.__Rewire__('RecordService', mockRecordService);
     });
@@ -363,6 +367,25 @@ describe('Report Data Actions Edit Report functions -- success', () => {
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SAVE_REPORT_RECORD,
                         {appId, tblId, recId, changes}]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SAVE_REPORT_RECORD_SUCCESS,
+                        jasmine.any(Object)]);
+                    done();
+                },
+                () => {
+                    expect(true).toBe(false);
+                    done();
+                }
+            );
+    });
+
+    it('test saveNewReportRecord', (done) => {
+
+        flux.actions.saveNewReportRecord(appId, tblId, newRecord).then(
+                () => {
+                    expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD,
+                        {appId, tblId, record:newRecord}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_REPORT_RECORD_SUCCESS,
                         jasmine.any(Object)]);
                     done();
                 },

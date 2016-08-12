@@ -97,24 +97,34 @@ let ReportContent = React.createClass({
             invalidMessage : null,
         };
 
+        if (def === undefined) {
+            return results;
+        }
+
         // check require field is not empty
-        if (def && def.required && (!value || value.length === 0)) {
+        if (_.has(def, 'required') && def.required &&
+            (value === undefined || value === null || (value.length !== undefined && value.length === 0))) {
             results = {
                 isInvalid : true,
                 invalidMessage: Locales.getMessage('invalidMsg.required', {fieldName: def.headerName})
             };
-        //check max chars not exceeded
-        } else if (def && def.datatypeAttributes && def.datatypeAttributes.clientSideAttributes &&
-            def.datatypeAttributes.clientSideAttributes.max_chars &&
-            (value && value.length > def.datatypeAttributes.clientSideAttributes.max_chars)) {
+
+        //check fields max chars not exceeded
+        } else if (_.has(def, 'datatypeAttributes.clientSideAttributes.max_chars') &&
+                value !== undefined && _.has(value, 'length') && value.length > def.datatypeAttributes.clientSideAttributes.max_chars) {
             let msg = Locales.getMessage('invalidMsg.maxChars', {num: def.datatypeAttributes.clientSideAttributes.max_chars});
             results = {
                 isInvalid: true,
                 invalidMessage: msg
             };
-        } else {
-            // check system limit text chars
-            //max input length = limitConstants. maxTextFieldValueLength
+        // check system limit text chars
+        } else if (value !== undefined && _.has(value, 'length') && value.length > LimitConstants.maxTextFieldValueLength) {
+            //max input length = LimitConstants. maxTextFieldValueLength
+            let msg = Locales.getMessage('invalidMsg.maxChars', {num: LimitConstants.maxTextFieldValueLength});
+            results = {
+                isInvalid: true,
+                invalidMessage: msg
+            };
         }
         // TBD other type validate
         return results;

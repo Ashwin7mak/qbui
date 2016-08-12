@@ -16,8 +16,10 @@ export const TextField = React.createClass({
     },
 
     render() {
-        let classes = this.props.classes;
-        classes += ' textField';
+        let classes = 'textField';
+        if (this.props.classes) {
+            classes += ' ' + this.props.classes;
+        }
 
         if (this.props.isBold) {
             classes += " bold";
