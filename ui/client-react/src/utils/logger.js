@@ -54,17 +54,27 @@ class Logger {
      */
     parseAndLogError(error, prefixTxt) {
         let msg = '';
-        try {
-            if (error && error.data) {
-                msg = JSON.parse(error.data.body);
-                if (!msg) {
-                    msg = 'Status:' + error.status + ';Msg:' + error.statusText;
+
+        if (error) {
+            try {
+                if (error.data) {
+                    if (error.data.body) {
+                        //  if their is a body object, it's coming from node as json so parse it..
+                        msg = JSON.parse(error.data.body);
+                    } else if (Array.isArray(error.data)) {
+                        msg = error.data[0];
+                    } else {
+                        msg = error.data;
+                    }
                 }
+            } catch (e) {
+                this.warn(e);
             }
-        } catch (e) {
-            this.warn(e);
-            msg = error;
+            if (!msg) {
+                msg = 'Status:' + error.status + ';Msg:' + error.statusText;
+            }
         }
+
         this.error(prefixTxt + JSON.stringify(msg));
     }
 
