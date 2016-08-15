@@ -4,6 +4,8 @@ import AppService from '../services/appService';
 import Promise from 'bluebird';
 
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+
 var logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -68,7 +70,7 @@ let appsActions = {
                                 resolve();
                             },
                             (error) => {
-                                logger.parseAndLogError(error, 'appService.getApp:');
+                                logger.parseAndLog(LogLevel.ERROR, error, 'appService.getApp:');
                                 this.dispatch(actions.LOAD_APPS_FAILED, error.status);
                                 reject();
                             }
@@ -85,7 +87,7 @@ let appsActions = {
                     }
                 },
                 error => {
-                    logger.parseAndLogError(error, 'appService.getApps:');
+                    logger.parseAndLog(LogLevel.ERROR, error, 'appService.getApps:');
                     this.dispatch(actions.LOAD_APPS_FAILED, error.status);
                     reject();
                 }

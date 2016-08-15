@@ -6,6 +6,7 @@ import * as query from '../constants/query';
 import ReportService from '../services/reportService';
 import RecordService from '../services/recordService';
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
@@ -13,6 +14,7 @@ import Locale from '../locales/locales';
 import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
+
 import reportModel from '../models/reportModel';
 
 //  Build the request query parameters needed to properly filter the report request based on the report
@@ -127,14 +129,14 @@ let reportDataActions = {
                                 resolve();
                             },
                             error => {
-                                logger.parseAndLogError(error, 'reportService.getReportDataAndFacets:');
+                                logger.parseAndLog(LogLevel.ERROR, error, 'reportService.getReportDataAndFacets:');
                                 this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
                                 reject();
                             }
                         );
                     },
                     error => {
-                        logger.parseAndLogError(error, 'reportService.getReport:');
+                        logger.parseAndLog(LogLevel.ERROR, error, 'reportService.getReport:');
                         this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
                         reject();
                     }
@@ -203,7 +205,7 @@ let reportDataActions = {
                             }
                         },
                         error => {
-                            logger.parseAndLogError(error, 'recordService.createRecord:');
+                            logger.parseAndLog(LogLevel.ERROR, error, 'recordService.createRecord:');
                             this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {appId, tblId, record, error: error});
                             NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
                             reject();
@@ -243,7 +245,7 @@ let reportDataActions = {
                         resolve();
                     },
                     error => {
-                        logger.parseAndLogError(error, 'recordService.deleteRecord:');
+                        logger.parseAndLog(LogLevel.ERROR, error, 'recordService.deleteRecord:');
                         this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotDeleted'), Locale.getMessage('failed'), 1500);
                         reject();
@@ -285,7 +287,7 @@ let reportDataActions = {
                         resolve();
                     },
                     error => {
-                        logger.parseAndLogError(error, 'recordService.saveRecord:');
+                        logger.parseAndLog(LogLevel.ERROR, error, 'recordService.saveRecord:');
                         this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
                         reject();
@@ -358,7 +360,7 @@ let reportDataActions = {
                                 resolve();
                             },
                             error => {
-                                logger.parseAndLogError(error, 'recordService.getRecords:');
+                                logger.parseAndLog(LogLevel.ERROR, error, 'recordService.getRecords:');
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, error.status);
                                 reject();
                             }
@@ -371,7 +373,7 @@ let reportDataActions = {
                         );
                     },
                     error => {
-                        logger.parseAndLogError(error, 'recordService.getRecords');
+                        logger.parseAndLog(LogLevel.ERROR, error, 'recordService.getRecords');
                         this.dispatch(actions.LOAD_RECORDS_FAILED, error.status);
                         reject();
                     }

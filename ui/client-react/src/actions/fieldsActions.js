@@ -4,6 +4,8 @@ import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
 
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+
 let logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -32,7 +34,7 @@ let fieldsActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.parseAndLogError(error, 'fieldsService.getFields:');
+                        logger.parseAndLog(LogLevel.ERROR, error, 'fieldsService.getFields:');
                         this.dispatch(actions.LOAD_FIELDS_FAILED, error.status);
                         reject();
                     }

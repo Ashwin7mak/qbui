@@ -4,6 +4,8 @@ import FormService from '../services/formService';
 import Promise from 'bluebird';
 
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+
 let logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -31,7 +33,11 @@ let formActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.parseAndLogError(error, 'formService.loadFormAndRecord:');
+                        if (error.status === 403) {
+                            logger.parseAndLog(LogLevel.WARN, error, 'formService.loadFormAndRecord:');
+                        } else {
+                            logger.parseAndLog(LogLevel.ERROR, error, 'formService.loadFormAndRecord:');
+                        }
                         this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, error.status);
                         reject();
                     }

@@ -53,7 +53,7 @@ describe('Logger', () => {
         Logger.__ResetDependency__('Configuration');
     });
 
-    it('test parseAndLogError function with error object', () => {
+    it('test parseAndLog function with error object', () => {
         let mockConfig = {
             logger: {
                 logToConsole: true,
@@ -75,13 +75,13 @@ describe('Logger', () => {
             }
         };
 
-        logger.parseAndLogError(error, 'prefix');
+        logger.parseAndLog(LogLevel.ERROR, error, 'prefix');
         expect(logger.error).toHaveBeenCalled();
 
         Logger.__ResetDependency__('Configuration');
     });
 
-    it('test parseAndLogError function with no body in error object', () => {
+    it('test parseAndLog function with no body in error object', () => {
         let mockConfig = {
             logger: {
                 logToConsole: true,
@@ -103,13 +103,13 @@ describe('Logger', () => {
             }
         };
 
-        logger.parseAndLogError(error, 'prefix');
+        logger.parseAndLog(LogLevel.ERROR, error, 'prefix');
         expect(logger.error).toHaveBeenCalled();
 
         Logger.__ResetDependency__('Configuration');
     });
 
-    it('test parseAndLogError function with parsing exception', () => {
+    it('test parseAndLog function with parsing exception', () => {
         let mockConfig = {
             logger: {
                 logToConsole: true,
@@ -131,7 +131,7 @@ describe('Logger', () => {
             }
         };
 
-        logger.parseAndLogError(error, 'prefix');
+        logger.parseAndLog(LogLevel.ERROR, error, 'prefix');
         expect(logger.error).toHaveBeenCalled();
 
         Logger.__ResetDependency__('Configuration');

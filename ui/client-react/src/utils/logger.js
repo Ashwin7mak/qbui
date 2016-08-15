@@ -46,13 +46,14 @@ class Logger {
 
     /**
      * Helper method to examine the error object, extract
-     * the message from the response body and consistently
-     * log an error message.
+     * a consistently formated message from the response
+     * body and log a message at the request log level.
      *
+     * @param logLevel
      * @param error
      * @param prefixTxt
      */
-    parseAndLogError(error, prefixTxt) {
+    parseAndLog(logLevel, error, prefixTxt) {
         let msg = '';
 
         if (error) {
@@ -75,7 +76,21 @@ class Logger {
             }
         }
 
-        this.error(prefixTxt + JSON.stringify(msg));
+        //  log at requested level; if invalid or none defined, will log as error
+        if (logLevel) {
+            if (LogLevel.DEBUG.id === logLevel.id) {
+                this.debug(msg);
+            } else if (LogLevel.INFO.id === logLevel.id) {
+                this.info(msg);
+            } else if (LogLevel.WARN.id === logLevel.id) {
+                this.warn(msg);
+            } else {
+                this.error(msg);
+            }
+        } else {
+            this.error(msg);
+        }
+
     }
 
     /**

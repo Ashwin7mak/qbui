@@ -5,6 +5,8 @@ import Promise from 'bluebird';
 import reportModel from '../models/reportModel';
 
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+
 let logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -32,7 +34,7 @@ let tableActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.parseAndLogError(error, 'tableService.getHomePage:');
+                        logger.parseAndLog(LogLevel.ERROR, error, 'tableService.getHomePage:');
                         this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
                         reject();
                     }

@@ -4,6 +4,8 @@ import ReportService from '../services/reportService';
 import Promise from 'bluebird';
 
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+
 let logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -33,7 +35,7 @@ let reportActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.parseAndLogError(error, 'reportService.getReports:');
+                        logger.parseAndLog(LogLevel.ERROR, error, 'reportService.getReports:');
                         this.dispatch(actions.LOAD_REPORTS_FAILED, error.status);
                         reject();
                     }
