@@ -348,8 +348,8 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         flux.actions.deleteReportRecord(appId, tblId, recId).then(
             () => {
                 expect(mockRecordService.prototype.deleteRecord).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.DELETE_REPORT_RECORD_SUCCESS, recId]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_REPORT_RECORD_SUCCESS, recId]);
                 done();
             },
             () => {
@@ -363,8 +363,8 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         flux.actions.deleteReportRecordBulk(appId, tblId, recIds).then(
             () => {
                 expect(mockRecordService.prototype.deleteRecordBulk).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.DELETE_REPORT_RECORD_BULK_SUCCESS, recIds]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_REPORT_RECORD_BULK_SUCCESS, recIds]);
                 done();
             },
             () => {

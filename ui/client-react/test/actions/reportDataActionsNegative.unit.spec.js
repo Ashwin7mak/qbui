@@ -481,7 +481,7 @@ describe('Report Data Actions Edit Report functions -- Error', () => {
             },
             () => {
                 expect(mockRecordService.prototype.deleteRecord).toHaveBeenCalled();
-                expect(errorFlux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                expect(errorFlux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(errorFlux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.DELETE_REPORT_RECORD_FAILED, jasmine.any(Object));
                 done();
             }
@@ -496,8 +496,8 @@ describe('Report Data Actions Edit Report functions -- Error', () => {
             },
             () => {
                 expect(mockRecordService.prototype.deleteRecordBulk).toHaveBeenCalled();
-                expect(errorFlux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(errorFlux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.DELETE_REPORT_RECORD_BULK_FAILED, jasmine.any(Object)]);
+                expect(errorFlux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(errorFlux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_REPORT_RECORD_BULK_FAILED, jasmine.any(Object)]);
                 done();
             }
         );

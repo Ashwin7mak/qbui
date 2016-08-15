@@ -232,6 +232,7 @@ let reportDataActions = {
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && (!!(recId === 0 || recId))) {
+                this.dispatch(actions.DELETE_REPORT_RECORD, {appId, tblId, recId});
                 let recordService = new RecordService();
 
                 //delete the record
@@ -272,6 +273,7 @@ let reportDataActions = {
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && recIds && recIds.length >= 1) {
+                this.dispatch(actions.DELETE_REPORT_RECORD_BULK, {appId, tblId, recIds});
                 let recordService = new RecordService();
 
                 //delete the records

@@ -448,8 +448,10 @@ let ReportDataStore = Fluxxor.createStore({
             actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
+            actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord,
             actions.DELETE_REPORT_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
             actions.DELETE_REPORT_RECORD_FAILED, this.onDeleteReportRecordFailed,
+            actions.DELETE_REPORT_RECORD_BULK, this.onDeleteReportRecordBulk,
             actions.DELETE_REPORT_RECORD_BULK_SUCCESS, this.onDeleteReportRecordBulkSuccess,
             actions.DELETE_REPORT_RECORD_BULK_FAILED, this.onDeleteReportRecordBulkFailed,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
@@ -646,6 +648,14 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     /**
+     * if anyone is listening this is me telling you we are deleting a record
+     * @param payload {appId, tblId, recId}
+     */
+    onDeleteReportRecord(payload) {
+        //add code here when we want to do something with this action
+    },
+
+    /**
      * removes the record with the matching value in the keyfield from the
      * models filteredRecord list
      * @param id
@@ -670,6 +680,14 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onDeleteReportRecordFailed(payload) {
         this.emit('change');
+    },
+
+    /**
+     * if anyone is listening this is me telling you we are deleting records in bulk
+     * @param payload {appId, tblId, recIds}
+     */
+    onDeleteReportRecordBulk(payload) {
+        //add code here when we want to do something with this action
     },
 
     /**
