@@ -1308,6 +1308,7 @@ describe('Test ReportData Store', () => {
         };
         flux.dispatcher.dispatch(loadReportAction);
 
+        //bulk delete endpoint doesn't care if the recordId doesn't exist, it still returns 200 for a success
         let onDeleteReportRecordBulkSuccess = {
             type: actions.DELETE_REPORT_RECORD_BULK_SUCCESS,
             payload: [999999]

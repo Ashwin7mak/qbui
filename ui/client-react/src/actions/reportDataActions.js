@@ -281,13 +281,15 @@ let reportDataActions = {
                     response => {
                         logger.debug('RecordService deleteRecordBulk success:' + JSON.stringify(response));
                         this.dispatch(actions.DELETE_REPORT_RECORD_BULK_SUCCESS, recIds);
-                        NotificationManager.success(Locale.getMessage('recordNotifications.recordDeletedBulk'), Locale.getMessage('success'), 1500);
+                        let message = recIds.length === 1 ? Locale.getMessage('recordNotifications.recordDeleted') : Locale.getMessage('recordNotifications.recordDeletedBulk');
+                        NotificationManager.success(message, Locale.getMessage('success'), 1500);
                         resolve();
                     },
                     error => {
                         logger.error('RecordService deleteRecordBulk call error:', JSON.stringify(error));
                         this.dispatch(actions.DELETE_REPORT_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error});
-                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotDeletedBulk'), Locale.getMessage('failed'), 1500);
+                        let message = recIds.length === 1 ? Locale.getMessage('recordNotifications.recordNotDeleted') : Locale.getMessage('recordNotifications.recordNotDeletedBulk');
+                        NotificationManager.error(message, Locale.getMessage('failed'), 1500);
                         reject();
                     }
                 ).catch(
