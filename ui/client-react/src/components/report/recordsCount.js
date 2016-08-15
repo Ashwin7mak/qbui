@@ -60,7 +60,7 @@ var RecordsCount = React.createClass({
                         <div className="recordsCount" onDoubleClick={dbl}>
                             <I18nMessage message={message}
                                          filteredRecordCount={this.props.filteredRecordCount + ''}
-                                         recordCount={this.props.recordCount}
+                                         recordCount={this.props.recordCount + ''}
                                          nameForRecords={this.props.nameForRecords}
                             />
                         </div>

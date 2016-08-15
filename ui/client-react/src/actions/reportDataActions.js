@@ -314,10 +314,7 @@ let reportDataActions = {
      * @param filter: {facet, search}
      * @param overrideQueryParams: {columns, sortlist, query}
      */
-
-
     getFilteredRecords(appId, tblId, rptId, requiredQueryParams, filter, overrideQueryParams) {
-
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
 

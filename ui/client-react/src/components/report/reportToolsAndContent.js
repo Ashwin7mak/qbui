@@ -143,7 +143,7 @@ let ReportToolsAndContent = React.createClass({
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
         flux.actions.getFilteredRecords(this.props.selectedAppId,
             this.props.routeParams.tblId,
-            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true}, filter, queryParams);
+            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true, offset: pageOffset, numRows:numRows}, filter, queryParams);
     },
     searchTheString(searchTxt) {
         this.getFlux().actions.filterSearchPending(searchTxt);
@@ -243,17 +243,8 @@ let ReportToolsAndContent = React.createClass({
         this.pageStart = this.props.reportData.pageOffset + 1;
 
         if (this.props.reportData.data) {
-            // Identify the page end. For paginated reports, we fetch a page of records at a time. Therefore, the size
-            // of the records array will indicate the page end. If a search filter has been entered, the page end is either
-            // size of the page if the number of filtered records exceeds page size, or the number of filtered records.
-            let numRows = this.props.reportData.numRows;
-            if (this.props.reportData.data.records && this.props.reportData.data.records.length) {
-                numRows = this.props.reportData.data.records.length;
-            }
-            if (this.props.reportData.data.filteredRecordsCount !== undefined) {
-                numRows = this.props.reportData.data.filteredRecordsCount;
-            }
-            this.pageEnd = numRows;
+            this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
+
             if (this.props.reportData.data.recordsCount && this.pageEnd > this.props.reportData.data.recordsCount) {
                 this.pageEnd = this.props.reportData.data.recordsCount;
             }

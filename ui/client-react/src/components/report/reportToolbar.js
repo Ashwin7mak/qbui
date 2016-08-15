@@ -164,10 +164,6 @@ const ReportToolbar = React.createClass({
                 if (this.props.reportData.data.recordsCount) {
                     recordCount = parseInt(this.props.reportData.data.recordsCount);
                 }
-                // If search filter exists, set count to number of filtered records
-                if (this.props.reportData.searchStringForFiltering !== "") {
-                    recordCount = parseInt(this.props.reportData.data.filteredRecordsCount);
-                }
                 if (this.props.reportData.data.facets &&
                     (this.props.reportData.data.facets.length > 0)) {
                     hasFacets =  this.props.reportData.data.facets[0].values;

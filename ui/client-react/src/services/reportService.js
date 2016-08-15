@@ -118,6 +118,7 @@ class ReportService extends BaseService {
      * @param appId
      * @param tableId
      * @param reportId
+     * @param filter
      * @returns count of all records in the report
      */
     getReportRecordsCount(appId, tableId, reportId) {
