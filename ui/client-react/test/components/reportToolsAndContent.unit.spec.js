@@ -54,6 +54,12 @@ describe('ReportToolsAndContent functions', () => {
         flux.actions.filterSelectionsPending.calls.reset();
     });
 
+    // it('test render of loader', () => {
+    //     component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock} loading={fakeReportData_loading.loading} flux={flux}/>);
+    //     expect(TestUtils.scryRenderedComponentsWithType(component, Loader).length).toEqual(1);
+    //     expect(TestUtils.scryRenderedComponentsWithType(component, AGGridReact).length).toEqual(0);
+    // });
+
     it('test render of report widget', () => {
         var div = document.createElement('div');
         component = ReactDOM.render(<ReportToolsAndContent flux={flux} params={reportParams} {...reportDataParams} />, div);

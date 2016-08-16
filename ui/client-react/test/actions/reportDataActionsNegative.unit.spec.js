@@ -284,13 +284,16 @@ describe('Report Data Actions -- ', () => {
     class mockReportService {
         constructor() { }
         getReport() {
-            return mockPromiseSuccess(responseReportData);
+            return mockPromiseError();
         }
         getReportDataAndFacets() {
             return mockPromiseError();
         }
         parseFacetExpression() {
             return mockPromiseSuccess(responseResultQuery);
+        }
+        getReportRecordsCount() {
+            return mockPromiseSuccess(responseReportData);
         }
     }
 
@@ -306,6 +309,7 @@ describe('Report Data Actions -- ', () => {
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
         spyOn(mockReportService.prototype, 'getReport').and.callThrough();
+        spyOn(mockReportService.prototype, 'getReportRecordsCount').and.callThrough();
     });
 
     afterEach(() => {
@@ -410,4 +414,4 @@ describe('Report Data Actions Edit Report functions -- Negative', () => {
             );
         });
     });
-});
+}).only;

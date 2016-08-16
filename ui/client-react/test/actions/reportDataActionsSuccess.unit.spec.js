@@ -28,6 +28,11 @@ describe('Report Data Actions success -- ', () => {
             test: 'test'
         }
     };
+    let responseResultCountData = {
+        data: {
+            body: 10
+        }
+    };
     let response = {
         metaData: {
             name: responseReportData.data.name,
@@ -59,8 +64,8 @@ describe('Report Data Actions success -- ', () => {
         getReport() {
             return Promise.resolve(responseReportData);
         }
-        getReportDataAndFacets() {
-            return Promise.resolve(responseResultData);
+        getReportRecordsCount() {
+            return Promise.resolve(responseResultCountData);
         }
     }
 
@@ -71,7 +76,7 @@ describe('Report Data Actions success -- ', () => {
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockReportService.prototype, 'getReport').and.callThrough();
-        spyOn(mockReportService.prototype, 'getReportDataAndFacets').and.callThrough();
+        spyOn(mockReportService.prototype, 'getReportRecordsCount').and.callThrough();
         reportDataActions.__Rewire__('ReportService', mockReportService);
     });
 
@@ -83,10 +88,12 @@ describe('Report Data Actions success -- ', () => {
         flux.actions.loadReport(appId, tblId, rptId, format, offset, rows).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                expect(mockReportService.prototype.getReportDataAndFacets).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(mockReportService.prototype.getReportRecordsCount).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(4);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT, loadReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(3)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, jasmine.any(Object)]);
                 done();
             },
             () => {
@@ -107,10 +114,12 @@ describe('Report Data Actions success -- ', () => {
         flux.actions.loadReport(appId, tblId, rptId, format, offset, rows, sortList).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                expect(mockReportService.prototype.getReportDataAndFacets).toHaveBeenCalledWith(appId, tblId, rptId, queryParams);
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(mockReportService.prototype.getReportRecordsCount).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(4);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT, loadReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(3)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, jasmine.any(Object)]);
                 done();
             },
             () => {

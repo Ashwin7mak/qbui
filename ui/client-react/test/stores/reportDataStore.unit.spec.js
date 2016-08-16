@@ -17,8 +17,8 @@ describe('Test ReportData Store', () => {
     const appId = 'appId';
     const tblId = 'tblId';
     const rptId = 'rptId';
-    const offset = 0;
-    const numRows = 10;
+    const pageOffset = 0;
+    const numRows = 50;
 
     beforeEach(() => {
         store = new Store();
@@ -66,7 +66,7 @@ describe('Test ReportData Store', () => {
                 appId: appId,
                 tblId: tblId,
                 rptId: rptId,
-                offset: offset,
+                pageOffset: pageOffset,
                 numRows: numRows
             }
         };
@@ -77,7 +77,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).appId).toBe(appId);
         expect(flux.store(STORE_NAME).tblId).toBe(tblId);
         expect(flux.store(STORE_NAME).rptId).toBe(rptId);
-        expect(flux.store(STORE_NAME).offset).toBe(offset);
+        expect(flux.store(STORE_NAME).pageOffset).toBe(pageOffset);
         expect(flux.store(STORE_NAME).numRows).toBe(numRows);
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
@@ -253,7 +253,7 @@ describe('Test ReportData Store', () => {
         expect(state.nonFacetClicksEnabled).toBeDefined();
         expect(state.facetExpression).toBeDefined();
         expect(state.selectedRows).toBeDefined();
-        expect(state.offset).toBeDefined();
+        expect(state.pageOffset).toBeDefined();
         expect(state.numRows).toBeDefined();
     });
 
@@ -264,7 +264,7 @@ describe('Test ReportData Store', () => {
                 appId: appId,
                 tblId: tblId,
                 rptId: rptId,
-                offset: offset,
+                pageOffset: pageOffset,
                 numRows: numRows
             }
         };
@@ -273,7 +273,7 @@ describe('Test ReportData Store', () => {
         expect(state.appId).toBeDefined(appId);
         expect(state.tblId).toBeDefined(tblId);
         expect(state.rptId).toBeDefined(rptId);
-        expect(state.offset).toBeDefined(offset);
+        expect(state.pageOffset).toBeDefined(pageOffset);
         expect(state.numRows).toBeDefined(numRows);
     });
 
@@ -300,7 +300,7 @@ describe('Test ReportData Store', () => {
                 appId: appId,
                 tblId: tblId,
                 rptId: rptId,
-                offset: offset,
+                pageOffset: pageOffset,
                 numRows: numRows,
                 filter : {selections : {}, facet: "", search: "abc"}
             }
@@ -312,7 +312,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).appId).toBe(appId);
         expect(flux.store(STORE_NAME).tblId).toBe(tblId);
         expect(flux.store(STORE_NAME).rptId).toBe(rptId);
-        expect(flux.store(STORE_NAME).offset).toBe(offset);
+        expect(flux.store(STORE_NAME).pageOffset).toBe(pageOffset);
         expect(flux.store(STORE_NAME).numRows).toBe(numRows);
         expect(flux.store(STORE_NAME).selections).toEqual({});
         expect(flux.store(STORE_NAME).facetExpression).toEqual('');
