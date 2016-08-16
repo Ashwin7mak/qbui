@@ -136,18 +136,33 @@ let QBForm = React.createClass({
 
     render() {
         let tabs = [];
+        let errorMsg = '';
 
-        if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
+        //  If there is an errorStatus, display the appropriate message based on the error code; otherwise
+        //  render the form with the supplied data(if any).
+        //  TODO: when error handling is implemented beyond forms, the thinking is that an error component
+        //  TODO: should be created to replace the below and handle the locale messaging and rendering of
+        //  TODO: a common error page.
+        if (this.props.errorStatus) {
+            if (this.props.errorStatus === 403) {
+                errorMsg = Locale.getMessage("form.error.403");
+            } else {
+                errorMsg = Locale.getMessage("form.error.500");
+            }
+        } else if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
             _.each(this.props.formData.formMeta.tabs, (tab, index) => {
                 tabs.push(this.createTab(tab));
             });
         }
+
         return (
             <div className="formContainer">
                 <form>
-                    <Tabs activeKey={this.props.activeTab}>
-                        {tabs}
-                    </Tabs>
+                    {errorMsg ? errorMsg :
+                        <Tabs activeKey={this.props.activeTab}>
+                            {tabs}
+                        </Tabs>
+                    }
                 </form>
             </div>
         );

@@ -87,7 +87,11 @@ export default {
             }
         },
         form : {
-            tab : 'Onglet'
+            tab : 'Onglet',
+            error: {
+                403: "Vous n'êtes pas autorisé à accéder à ce formulaire",
+                500: "Erreur inattendue rendant ce formulaire"
+            }
         },
         report : {
             blank : "blanc",

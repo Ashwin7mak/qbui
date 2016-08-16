@@ -90,7 +90,11 @@ export default {
             }
         },
         form : {
-            tab : 'Tab'
+            tab : 'Tab',
+            error: {
+                403: "You are not authorized to access this form",
+                500: "Unexpected error rendering this form"
+            },
         },
         report : {
             blank : "blank",
