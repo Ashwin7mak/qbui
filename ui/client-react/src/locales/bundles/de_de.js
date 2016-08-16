@@ -86,7 +86,11 @@ export default {
 
         },
         form : {
-            tab : 'Tab'
+            tab : 'Tab',
+            error: {
+                403: "Sie sind nicht dieses Formular für den Zugriff auf autorisierte",
+                500: "Unerwarteter Fehler macht dieses Formular"
+            }
         },
         report : {
             blank : "leer",

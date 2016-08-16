@@ -172,13 +172,7 @@
                                         resolve(obj);
                                     },
                                     function(err) {
-                                        let errObj = {};
-                                        if (err) {
-                                            errObj.statusCode = err.statusCode;
-                                            errObj.message = err.statusMessage;
-                                            errObj.body = JSON.parse(err.body);
-                                        }
-                                        reject(errObj);
+                                        reject(err);
                                     }
                                 );
                             } else {
@@ -187,13 +181,7 @@
                             }
                         },
                         function(error) {
-                            let errObj = {};
-                            if (error) {
-                                errObj.statusCode = error.statusCode;
-                                errObj.message = error.statusMessage;
-                                errObj.body = JSON.parse(error.body);
-                            }
-                            reject(errObj);
+                            reject(error);
                         }
                     ).catch(function(ex) {
                         requestHelper.logUnexpectedError('formsApi...fetchFormComponents', ex, true);

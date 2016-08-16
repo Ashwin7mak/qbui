@@ -13,7 +13,7 @@ let FormStore = Fluxxor.createStore({
     initialize: function() {
         this.formData = {};
         this.formLoading = false;
-        this.error = false;
+        this.errorStatus = null;
 
         this.bindActions(
             actions.LOAD_FORM_AND_RECORD, this.onLoadFormAndRecord,
@@ -25,25 +25,26 @@ let FormStore = Fluxxor.createStore({
     },
     onLoadFormAndRecord: function() {
         this.formLoading = true;
+        this.errorStatus = null;
         this.emit("change");
     },
-    onLoadFormAndRecordFailed: function() {
+    onLoadFormAndRecordFailed: function(errorStatus) {
         this.formLoading = false;
         this.formData = {};
-        this.error = true;
+        this.errorStatus = errorStatus;
         this.emit("change");
     },
     onLoadFormAndRecordSuccess: function(formData) {
         this.formLoading = false;
         this.formData = formData;
-        this.error = false;
+        this.errorStatus = null;
         this.emit('change');
     },
     getState: function() {
         return {
             formData: this.formData,
             formLoading: this.formLoading,
-            error: this.error
+            errorStatus: this.errorStatus
         };
     },
 });

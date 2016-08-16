@@ -6,6 +6,7 @@ import * as query from '../constants/query';
 import ReportService from '../services/reportService';
 import RecordService from '../services/recordService';
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
@@ -13,6 +14,7 @@ import Locale from '../locales/locales';
 import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
+
 import reportModel from '../models/reportModel';
 
 //  Build the request query parameters needed to properly filter the report request based on the report
@@ -127,27 +129,27 @@ let reportDataActions = {
                                 resolve();
                             },
                             error => {
-                                logger.error('ReportDataAndFacets service call error:' + JSON.stringify(error));
-                                this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                                logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReportDataAndFacets:');
+                                this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
                                 reject();
                             }
                         );
                     },
                     error => {
-                        logger.error('Report service call error when querying for report meta data:' + JSON.stringify(error));
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReport:');
+                        this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
                         reject();
                     }
                 ).catch(
                     ex => {
-                        logger.error('Unexpected Report service call exception:', ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
+                        logger.logException(ex);
+                        this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                         reject();
                     }
                 );
             } else {
-                logger.error('Missing one or more required input parameters to reportDataActions.loadReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                this.dispatch(actions.LOAD_REPORT_FAILED);
+                logger.error('reportDataActions.loadReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                 reject();
             }
         });
@@ -203,14 +205,14 @@ let reportDataActions = {
                             }
                         },
                         error => {
-                            logger.error('RecordService createRecord call error:', JSON.stringify(error));
+                            logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.createRecord:');
                             this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {appId, tblId, record, error: error});
                             NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
                             reject();
                         }
                     ).catch(
                         ex => {
-                            logger.error('Unexpected Report service call exception:', ex);
+                            logger.logException(ex);
                             this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {appId, tblId, record, error: ex});
                             reject();
                         }
@@ -243,14 +245,14 @@ let reportDataActions = {
                         resolve();
                     },
                     error => {
-                        logger.error('RecordService deleteRecord call error:', JSON.stringify(error));
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.deleteRecord:');
                         this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotDeleted'), Locale.getMessage('failed'), 1500);
                         reject();
                     }
                 ).catch(
                     function(ex) {
-                        logger.error('Unexpected Report service call exception:', ex);
+                        logger.logException(ex);
                         this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: ex});
                         reject();
                     }.bind(this)
@@ -285,14 +287,14 @@ let reportDataActions = {
                         resolve();
                     },
                     error => {
-                        logger.error('RecordService saveRecord call error:', JSON.stringify(error));
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.saveRecord:');
                         this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
                         reject();
                     }
                 ).catch(
                     ex => {
-                        logger.error('Unexpected Report service call exception:', ex);
+                        logger.logException(ex);
                         this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: ex});
                         reject();
                     }
@@ -358,35 +360,33 @@ let reportDataActions = {
                                 resolve();
                             },
                             error => {
-                                logger.error('Filter Report Records service call error:', JSON.stringify(error));
-                                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
+                                logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.getRecords:');
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, error.status);
                                 reject();
                             }
                         ).catch(
                             ex => {
-                                logger.error('Get Filtered Records- Records service call exception:', ex);
-                                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: ex});
+                                logger.logException(ex);
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
                                 reject();
                             }
                         );
                     },
                     error => {
-                        logger.error('Filter Report service call error:', error);
-                        this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.getRecords');
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, error.status);
                         reject();
                     }
                 ).catch(
                     ex => {
-                        logger.error('Get Filtered Records- service calls exception:', ex);
-                        this.dispatch(actions.LOAD_RECORDS_FAILED, {exception: ex});
+                        logger.logException(ex);
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
                         reject();
                     }
                 );
             } else {
-                var errMessage = 'Missing one or more required input parameters to reportDataActions.getFilteredRecords. AppId:' +
-                    appId + '; TblId:' + tblId + '; RptId:' + rptId;
-                logger.error(errMessage);
-                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: errMessage});
+                logger.error('reportDataActions.getFilteredRecords: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
                 reject();
             }
         });

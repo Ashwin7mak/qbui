@@ -175,7 +175,7 @@ var RecordRoute = React.createClass({
                     {this.getSecondaryBar()}
                     {this.getPageActions()}
                 </div>
-                <QBForm formData={this.props.form ? this.props.form.formData : null}></QBForm>
+                <QBForm errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null} formData={this.props.form ? this.props.form.formData : null}></QBForm>
             </div>);
         }
     }
