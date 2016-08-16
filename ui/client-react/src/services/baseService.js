@@ -101,42 +101,35 @@ class BaseService {
      * Axiom interceptor for all http responses
      */
     setResponseInterceptor() {
-        var self = this;
-        axios.interceptors.response.use(self.responseInterceptorSuccess, error => {self.responseInterceptorError(error);});
+        let self = this;
+        axios.interceptors.response.use(
+            response => {
+                return response;
+            },
+            error => {
+                self.checkResponseStatus(error);
+                return Promise.reject(error);
+            }
+        );
     }
 
     /**
-     * If we have a successful response, we want to automatically just return the response
+     * Check the response status
      *
-     * @param response - the response object
-     * @returns {response}
+     * @param error
      */
-    responseInterceptorSuccess(response) {
-        return response;
-    }
-
-    /**
-     * certain rest endpoint errors get redirected immediately
-     * if the unauthorizedRedirect config value is setup for the current runtime environment in app.config.js
-     * use that first, other wise try and create one
-     *
-     * @param error - the error object
-     * @returns {*} - promise
-     */
-    responseInterceptorError(error) {
-        var self = this;
-        let currentStackSignInUrl = "";
+    checkResponseStatus(error) {
+        //  A 401 exception (no ticket) is immediately redirected to a login page so that the
+        //  user can enter in their credentials.
+        //
+        //  All other errors are handled on a case by case basis at the action or service layer
+        //  as how the error is communicated back to the user is predicated on the context..
         switch (error.status) {
-        case 401:
-            currentStackSignInUrl = Configuration.unauthorizedRedirect || self.constructRedirectUrl();
+        case 401:   // invalid/no ticket
+            let currentStackSignInUrl = Configuration.unauthorizedRedirect || this.constructRedirectUrl();
             WindowLocationUtils.update(currentStackSignInUrl);
             break;
-        case 403:
-            WindowLocationUtils.replace('/forbidden');
-            break;
         }
-        //  let the service layer handle the error
-        return Promise.reject(error);
     }
 
     /**

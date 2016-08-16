@@ -4,9 +4,9 @@ import FormService from '../services/formService';
 import Promise from 'bluebird';
 
 import Logger from '../utils/logger';
-let logger = new Logger();
+import LogLevel from '../utils/logLevels';
 
-import {sampleFormJSON} from '../mocks/forms.js';
+let logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
@@ -29,26 +29,26 @@ let formActions = {
                 let formService = new FormService();
                 formService.getFormAndRecord(appId, tblId, recordId, rptId, formType).then(
                     (response) => {
-                        //  TODO: temporary until new endpoint is in place and forms data is always returned..
-                        if (!response) {
-                            response = {data:sampleFormJSON};
-                        }
                         this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS, response.data);
                         resolve();
                     },
                     (error) => {
-                        logger.error('FormService getFormAndRecord error:' + JSON.stringify(error), error);
-                        this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED);
+                        if (error.status === 403) {
+                            logger.parseAndLogError(LogLevel.WARN, error, 'formService.loadFormAndRecord:');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error, 'formService.loadFormAndRecord:');
+                        }
+                        this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, error.status);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.error('FormService getFormAndRecord exception:' + JSON.stringify(ex), ex);
-                    this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED);
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, 500);
                     reject();
                 });
             } else {
-                logger.error('Missing required input parameters for formService.getFormAndRecord.');
-                this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED);
+                logger.error('formService.loadFormAndRecord: Missing required input parameters.');
+                this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, 500);
                 reject();
             }
         });
