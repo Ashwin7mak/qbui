@@ -214,7 +214,7 @@ let ReportContent = React.createClass({
      */
     handleRecordDelete(record) {
         const flux = this.getFlux();
-        var recId = record[this.props.uniqueIdentifier].value;
+        var recId = record[SchemaConsts.DEFAULT_RECORD_KEY].value;
         flux.actions.deleteReportRecord(this.props.appId, this.props.tblId, recId);
     },
 
