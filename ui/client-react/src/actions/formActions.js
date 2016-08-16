@@ -33,12 +33,13 @@ let formActions = {
                         resolve();
                     },
                     (error) => {
-                        if (error.status === 403) {
-                            logger.parseAndLogError(LogLevel.WARN, error, 'formService.loadFormAndRecord:');
+                        //  axios upgraded to an error.response object in 0.13.x
+                        if (error.response.status === 403) {
+                            logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadFormAndRecord:');
                         } else {
-                            logger.parseAndLogError(LogLevel.ERROR, error, 'formService.loadFormAndRecord:');
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadFormAndRecord:');
                         }
-                        this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, error.status);
+                        this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, error.response.status);
                         reject();
                     }
                 ).catch((ex) => {
