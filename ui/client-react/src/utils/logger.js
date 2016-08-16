@@ -49,11 +49,11 @@ class Logger {
      * a consistently formated message from the response
      * body and log a message at the request log level.
      *
-     * @param logLevel
+     * @param level
      * @param error
      * @param prefixTxt
      */
-    parseAndLog(logLevel, error, prefixTxt) {
+    parseAndLog(level, error, prefixTxt) {
         let msg = '';
 
         if (error) {
@@ -77,12 +77,12 @@ class Logger {
         }
 
         //  log at requested level; if invalid or none defined, will log as error
-        if (logLevel) {
-            if (LogLevel.DEBUG.id === logLevel.id) {
+        if (level) {
+            if (level.id === LogLevel.DEBUG.id) {
                 this.debug(msg);
-            } else if (LogLevel.INFO.id === logLevel.id) {
+            } else if (level.id === LogLevel.INFO.id) {
                 this.info(msg);
-            } else if (LogLevel.WARN.id === logLevel.id) {
+            } else if (level.id === LogLevel.WARN.id) {
                 this.warn(msg);
             } else {
                 this.error(msg);
