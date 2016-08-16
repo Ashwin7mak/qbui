@@ -124,11 +124,14 @@ class BaseService {
         //
         //  All other errors are handled on a case by case basis at the action or service layer
         //  as how the error is communicated back to the user is predicated on the context..
-        switch (error.status) {
-        case 401:   // invalid/no ticket
-            let currentStackSignInUrl = Configuration.unauthorizedRedirect || this.constructRedirectUrl();
-            WindowLocationUtils.update(currentStackSignInUrl);
-            break;
+        if (error && error.response) {
+            //  axios upgraded to an error.response object in 0.13.x
+            switch (error.response.status) {
+            case 401:   // invalid/no ticket
+                let currentStackSignInUrl = Configuration.unauthorizedRedirect || this.constructRedirectUrl();
+                WindowLocationUtils.update(currentStackSignInUrl);
+                break;
+            }
         }
     }
 

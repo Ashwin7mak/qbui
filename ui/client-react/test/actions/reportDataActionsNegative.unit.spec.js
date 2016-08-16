@@ -56,7 +56,7 @@ let mockPromiseSuccess = function(expectedResult) {
 };
 let mockPromiseError = function() {
     var p = Promise.defer();
-    p.reject({message:'someError', status: errorStatus});
+    p.reject({response:{message:'someError', status:errorStatus}});
     return p.promise;
 };
 let mockPromiseException = function() {

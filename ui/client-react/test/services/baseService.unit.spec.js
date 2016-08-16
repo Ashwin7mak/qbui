@@ -67,7 +67,7 @@ describe('BaseService rewire tests', () => {
 
     it('test checkResponseStatus with 401 status', () => {
         baseService = new BaseService();
-        baseService.checkResponseStatus({status: 401});
+        baseService.checkResponseStatus({response: {status: 401}});
         expect(mockWindowUtils.update).toHaveBeenCalled();
         expect(mockWindowUtils.replace).not.toHaveBeenCalled();
     });
