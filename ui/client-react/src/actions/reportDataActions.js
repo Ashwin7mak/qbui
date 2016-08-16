@@ -129,6 +129,7 @@ let reportDataActions = {
                                 resolve();
                             },
                             error => {
+                                //  axios upgraded to an error.response object in 0.13.x
                                 let errorResponse = error.response || error;
                                 logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'reportService.getReportDataAndFacets:');
                                 this.dispatch(actions.LOAD_REPORT_FAILED, errorResponse.status);
@@ -137,6 +138,7 @@ let reportDataActions = {
                         );
                     },
                     error => {
+                        //  axios upgraded to an error.response object in 0.13.x
                         let errorResponse = error.response || error;
                         logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'reportService.getReport:');
                         this.dispatch(actions.LOAD_REPORT_FAILED, errorResponse.status);
@@ -207,9 +209,10 @@ let reportDataActions = {
                             }
                         },
                         error => {
+                            //  axios upgraded to an error.response object in 0.13.x
                             let errorResponse = error.response || error;
                             logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'recordService.createRecord:');
-                            this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {appId, tblId, record, error: error});
+                            this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {appId, tblId, record, error: errorResponse});
                             NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
                             reject();
                         }
@@ -248,9 +251,10 @@ let reportDataActions = {
                         resolve();
                     },
                     error => {
+                        //  axios upgraded to an error.response object in 0.13.x
                         let errorResponse = error.response || error;
                         logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'recordService.deleteRecord:');
-                        this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: error});
+                        this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: errorResponse});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotDeleted'), Locale.getMessage('failed'), 1500);
                         reject();
                     }
@@ -291,9 +295,10 @@ let reportDataActions = {
                         resolve();
                     },
                     error => {
+                        //  axios upgraded to an error.response object in 0.13.x
                         let errorResponse = error.response || error;
                         logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'recordService.saveRecord:');
-                        this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
+                        this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: errorResponse});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
                         reject();
                     }
@@ -365,6 +370,7 @@ let reportDataActions = {
                                 resolve();
                             },
                             error => {
+                                //  axios upgraded to an error.response object in 0.13.x
                                 let errorResponse = error.response || error;
                                 logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'recordService.getRecords:');
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, errorResponse.status);
@@ -379,6 +385,7 @@ let reportDataActions = {
                         );
                     },
                     error => {
+                        //  axios upgraded to an error.response object in 0.13.x
                         let errorResponse = error.response || error;
                         logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'recordService.getRecords');
                         this.dispatch(actions.LOAD_RECORDS_FAILED, errorResponse.status);
