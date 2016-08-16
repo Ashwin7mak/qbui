@@ -35,8 +35,9 @@ let reportActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReports:');
-                        this.dispatch(actions.LOAD_REPORTS_FAILED, error.status);
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReports:');
+                        this.dispatch(actions.LOAD_REPORTS_FAILED, error.response.status);
                         reject();
                     }
                 ).catch((ex) => {

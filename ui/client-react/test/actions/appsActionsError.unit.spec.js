@@ -14,7 +14,7 @@ describe('Apps Actions getApps -- ', () => {
         constructor() { }
         getApps() {
             var p = Promise.defer();
-            p.reject({message:'someError', status:errorStatus});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
         getApp(id) {
@@ -65,7 +65,7 @@ describe('Apps Actions getApp -- ', () => {
         }
         getApp(id) {
             var p = Promise.defer();
-            p.reject({message:'someError', status:errorStatus});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
     }
