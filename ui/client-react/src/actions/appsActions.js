@@ -71,9 +71,8 @@ let appsActions = {
                             },
                             (error) => {
                                 //  axios upgraded to error.response object in 0.13.x
-                                let errorResponse = error.response || error;
-                                logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'appService.getApp:');
-                                this.dispatch(actions.LOAD_APPS_FAILED, errorResponse.status);
+                                logger.parseAndLogError(LogLevel.ERROR, error.response, 'appService.getApp:');
+                                this.dispatch(actions.LOAD_APPS_FAILED, error.response.status);
                                 reject();
                             }
                         ).catch((ex) => {
@@ -90,9 +89,8 @@ let appsActions = {
                 },
                 error => {
                     //  axios upgraded to error.response object in 0.13.x
-                    let errorResponse = error.response || error;
-                    logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'appService.getApps:');
-                    this.dispatch(actions.LOAD_APPS_FAILED, errorResponse.status);
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appService.getApps:');
+                    this.dispatch(actions.LOAD_APPS_FAILED, error.response.status);
                     reject();
                 }
             ).catch(ex => {

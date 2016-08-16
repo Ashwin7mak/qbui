@@ -35,9 +35,8 @@ let tableActions = {
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
-                        let errorResponse = error.response || error;
-                        logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'tableService.getHomePage:');
-                        this.dispatch(actions.LOAD_REPORT_FAILED, errorResponse.status);
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.getHomePage:');
+                        this.dispatch(actions.LOAD_REPORT_FAILED, error.response.status);
                         reject();
                     }
                 ).catch((ex) => {

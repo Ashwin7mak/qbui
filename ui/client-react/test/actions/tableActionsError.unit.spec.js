@@ -20,7 +20,7 @@ describe('Table Actions table negative tests(1) -- ', () => {
         constructor() { }
         getHomePage() {
             var p = Promise.defer();
-            p.reject({message:'someError', status:errorStatus});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
     }
