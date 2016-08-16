@@ -45,7 +45,7 @@ class Logger {
     }
 
     /**
-     * Helper method to examine the error object, extract
+     * Helper method to examine an error object, extract
      * a consistently formated message from the response
      * body and log a message at the request log level.
      *
@@ -53,20 +53,22 @@ class Logger {
      * @param error
      * @param prefixTxt
      */
-    parseAndLog(level, error, prefixTxt) {
+    parseAndLogError(level, error, prefixTxt) {
         let msg = '';
 
         if (error) {
             try {
                 if (error.data) {
                     if (error.data.body) {
-                        //  if their is a body object, it's coming from node as json so parse it..
+                        //  if their is a body object, it's coming from node..
                         msg = JSON.parse(error.data.body);
                     } else if (Array.isArray(error.data)) {
                         msg = error.data[0];
                     } else {
                         msg = error.data;
                     }
+                    //  make sure the outputted msg is a json string
+                    msg = JSON.stringify(msg);
                 }
             } catch (e) {
                 this.warn(e);

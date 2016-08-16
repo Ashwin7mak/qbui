@@ -35,7 +35,7 @@ let reportActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.parseAndLog(LogLevel.ERROR, error, 'reportService.getReports:');
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReports:');
                         this.dispatch(actions.LOAD_REPORTS_FAILED, error.status);
                         reject();
                     }

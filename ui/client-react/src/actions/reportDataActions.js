@@ -129,14 +129,14 @@ let reportDataActions = {
                                 resolve();
                             },
                             error => {
-                                logger.parseAndLog(LogLevel.ERROR, error, 'reportService.getReportDataAndFacets:');
+                                logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReportDataAndFacets:');
                                 this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
                                 reject();
                             }
                         );
                     },
                     error => {
-                        logger.parseAndLog(LogLevel.ERROR, error, 'reportService.getReport:');
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReport:');
                         this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
                         reject();
                     }
@@ -205,7 +205,7 @@ let reportDataActions = {
                             }
                         },
                         error => {
-                            logger.parseAndLog(LogLevel.ERROR, error, 'recordService.createRecord:');
+                            logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.createRecord:');
                             this.dispatch(actions.ADD_REPORT_RECORD_FAILED, {appId, tblId, record, error: error});
                             NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
                             reject();
@@ -245,7 +245,7 @@ let reportDataActions = {
                         resolve();
                     },
                     error => {
-                        logger.parseAndLog(LogLevel.ERROR, error, 'recordService.deleteRecord:');
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.deleteRecord:');
                         this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotDeleted'), Locale.getMessage('failed'), 1500);
                         reject();
@@ -287,7 +287,7 @@ let reportDataActions = {
                         resolve();
                     },
                     error => {
-                        logger.parseAndLog(LogLevel.ERROR, error, 'recordService.saveRecord:');
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.saveRecord:');
                         this.dispatch(actions.SAVE_REPORT_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
                         reject();
@@ -360,7 +360,7 @@ let reportDataActions = {
                                 resolve();
                             },
                             error => {
-                                logger.parseAndLog(LogLevel.ERROR, error, 'recordService.getRecords:');
+                                logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.getRecords:');
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, error.status);
                                 reject();
                             }
@@ -373,7 +373,7 @@ let reportDataActions = {
                         );
                     },
                     error => {
-                        logger.parseAndLog(LogLevel.ERROR, error, 'recordService.getRecords');
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'recordService.getRecords');
                         this.dispatch(actions.LOAD_RECORDS_FAILED, error.status);
                         reject();
                     }

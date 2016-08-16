@@ -34,9 +34,9 @@ let formActions = {
                     },
                     (error) => {
                         if (error.status === 403) {
-                            logger.parseAndLog(LogLevel.WARN, error, 'formService.loadFormAndRecord:');
+                            logger.parseAndLogError(LogLevel.WARN, error, 'formService.loadFormAndRecord:');
                         } else {
-                            logger.parseAndLog(LogLevel.ERROR, error, 'formService.loadFormAndRecord:');
+                            logger.parseAndLogError(LogLevel.ERROR, error, 'formService.loadFormAndRecord:');
                         }
                         this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, error.status);
                         reject();

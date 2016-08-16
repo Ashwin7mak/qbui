@@ -34,7 +34,7 @@ let fieldsActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.parseAndLog(LogLevel.ERROR, error, 'fieldsService.getFields:');
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.getFields:');
                         this.dispatch(actions.LOAD_FIELDS_FAILED, error.status);
                         reject();
                     }

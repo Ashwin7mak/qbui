@@ -53,7 +53,7 @@ describe('Logger', () => {
         Logger.__ResetDependency__('Configuration');
     });
 
-    it('test parseAndLog function with error object', () => {
+    it('test parseAndLogError function with error object', () => {
         let mockConfig = {
             logger: {
                 logToConsole: true,
@@ -75,13 +75,13 @@ describe('Logger', () => {
             }
         };
 
-        logger.parseAndLog(LogLevel.ERROR, error, 'prefix');
+        logger.parseAndLogError(LogLevel.ERROR, error, 'prefix');
         expect(logger.error).toHaveBeenCalled();
 
         Logger.__ResetDependency__('Configuration');
     });
 
-    it('test parseAndLog function with no body in error object', () => {
+    it('test parseAndLogError function with no body in error object', () => {
         let mockConfig = {
             logger: {
                 logToConsole: true,
@@ -103,13 +103,13 @@ describe('Logger', () => {
             }
         };
 
-        logger.parseAndLog(LogLevel.ERROR, error, 'prefix');
+        logger.parseAndLogError(LogLevel.ERROR, error, 'prefix');
         expect(logger.error).toHaveBeenCalled();
 
         Logger.__ResetDependency__('Configuration');
     });
 
-    it('test parseAndLog function with parsing exception', () => {
+    it('test parseAndLogError function with parsing exception', () => {
         let mockConfig = {
             logger: {
                 logToConsole: true,
@@ -131,7 +131,7 @@ describe('Logger', () => {
             }
         };
 
-        logger.parseAndLog(LogLevel.ERROR, error, 'prefix');
+        logger.parseAndLogError(LogLevel.ERROR, error, 'prefix');
         expect(logger.error).toHaveBeenCalled();
 
         Logger.__ResetDependency__('Configuration');
@@ -443,5 +443,79 @@ describe('Logger', () => {
         Logger.__ResetDependency__('Configuration');
 
     });
+
+    it('test parseAndLogError method', () => {
+        let mockConfig = {
+            logger: {
+                logToConsole: false,
+                logToServer: true,
+                logLevel: LogLevel.DEBUG
+            }
+        };
+        Logger.__Rewire__('Configuration', mockConfig);
+
+        let logger = new Logger();
+
+        spyOn(logger, 'warn');
+        spyOn(logger, 'error');
+        spyOn(logger, 'info');
+        spyOn(logger, 'debug');
+
+        let msg = {
+            data: {
+                person: 'person',
+                place: 'place',
+                thing: 'thing'
+            }
+        };
+
+        logger.parseAndLogError(LogLevel.DEBUG, msg);
+        expect(logger.debug).toHaveBeenCalledWith(JSON.stringify(msg.data));
+        expect(logger.info).not.toHaveBeenCalled();
+        expect(logger.warn).not.toHaveBeenCalled();
+        expect(logger.error).not.toHaveBeenCalled();
+
+        resetSpyCounter(logger);
+
+        logger.parseAndLogError(LogLevel.INFO, msg);
+        expect(logger.debug).not.toHaveBeenCalled();
+        expect(logger.info).toHaveBeenCalledWith(JSON.stringify(msg.data));
+        expect(logger.warn).not.toHaveBeenCalledWith();
+        expect(logger.error).not.toHaveBeenCalled();
+
+        resetSpyCounter(logger);
+
+        logger.parseAndLogError(LogLevel.WARN, msg);
+        expect(logger.debug).not.toHaveBeenCalled();
+        expect(logger.info).not.toHaveBeenCalled();
+        expect(logger.warn).toHaveBeenCalledWith(JSON.stringify(msg.data));
+        expect(logger.error).not.toHaveBeenCalled();
+
+        resetSpyCounter(logger);
+
+        logger.parseAndLogError(LogLevel.ERROR, msg);
+        expect(logger.debug).not.toHaveBeenCalled();
+        expect(logger.info).not.toHaveBeenCalled();
+        expect(logger.warn).not.toHaveBeenCalled();
+        expect(logger.error).toHaveBeenCalledWith(JSON.stringify(msg.data));
+
+        resetSpyCounter(logger);
+
+        logger.parseAndLogError(null, msg);
+        expect(logger.debug).not.toHaveBeenCalled();
+        expect(logger.info).not.toHaveBeenCalled();
+        expect(logger.warn).not.toHaveBeenCalled();
+        expect(logger.error).toHaveBeenCalledWith(JSON.stringify(msg.data));
+
+        Logger.__ResetDependency__('Configuration');
+
+    });
+
+    function resetSpyCounter(logger) {
+        logger.warn.calls.reset();
+        logger.error.calls.reset();
+        logger.info.calls.reset();
+        logger.debug.calls.reset();
+    }
 
 });

@@ -70,7 +70,7 @@ let appsActions = {
                                 resolve();
                             },
                             (error) => {
-                                logger.parseAndLog(LogLevel.ERROR, error, 'appService.getApp:');
+                                logger.parseAndLogError(LogLevel.ERROR, error, 'appService.getApp:');
                                 this.dispatch(actions.LOAD_APPS_FAILED, error.status);
                                 reject();
                             }
@@ -87,7 +87,7 @@ let appsActions = {
                     }
                 },
                 error => {
-                    logger.parseAndLog(LogLevel.ERROR, error, 'appService.getApps:');
+                    logger.parseAndLogError(LogLevel.ERROR, error, 'appService.getApps:');
                     this.dispatch(actions.LOAD_APPS_FAILED, error.status);
                     reject();
                 }

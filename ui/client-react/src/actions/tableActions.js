@@ -34,7 +34,7 @@ let tableActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.parseAndLog(LogLevel.ERROR, error, 'tableService.getHomePage:');
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'tableService.getHomePage:');
                         this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
                         reject();
                     }
