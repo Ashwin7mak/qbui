@@ -40,6 +40,7 @@
 
         RECORD                  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
         RECORDS                 : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
+        RECORDS_BULK            : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/bulk',
 
         REPORT_COMPONENTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/reportComponents',
         REPORT_RESULTS          : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/results',

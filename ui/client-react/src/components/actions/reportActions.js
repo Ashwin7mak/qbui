@@ -1,32 +1,24 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
-import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-
-import {MenuItem, Dropdown} from 'react-bootstrap';
-
+import Fluxxor from "fluxxor";
 import ActionIcon from './actionIcon';
 import EmailReportLink from './emailReportLink';
 
 import './reportActions.scss';
 
+let FluxMixin = Fluxxor.FluxMixin(React);
+
 /**
  * report-level actions
  */
 let ReportActions = React.createClass({
+    mixins: [FluxMixin],
 
     propTypes: {
         selection: React.PropTypes.array,
-        report: React.PropTypes.object,
-        app: React.PropTypes.object,
-        table: React.PropTypes.object
-    },
-    getDefaultProps() {
-        return {
-            report: {name: 'report name'},
-            table: {name: 'table name'},
-            app: {name: 'app name'},
-        };
+        rptId: React.PropTypes.string,
+        appId: React.PropTypes.string,
+        tblId: React.PropTypes.string
     },
 
     getEmailSubject() {
@@ -49,6 +41,14 @@ let ReportActions = React.createClass({
     },
 
     /**
+     * this.props.selection has the current selected rows with the unique identifier as the value in the array
+     */
+    handleBulkDelete() {
+        const flux = this.getFlux();
+        flux.actions.deleteReportRecordBulk(this.props.appId, this.props.tblId, this.props.selection);
+    },
+
+    /**
      * render the actions, omitting 'edit' if we have multiple selections
      */
     render() {
@@ -67,7 +67,7 @@ let ReportActions = React.createClass({
                                          body={this.getEmailBody()}/>
 
                         <ActionIcon icon="duplicate" tip={this.getSelectionTip("selection.copy")}/>
-                        <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")}/>
+                        <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")} onClick={this.handleBulkDelete}/>
 
                         {/* custom actions later
                          {this.props.customActions &&
