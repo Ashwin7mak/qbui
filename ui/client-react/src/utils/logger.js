@@ -78,6 +78,11 @@ class Logger {
             }
         }
 
+        //  prepend the prefix test...if any
+        if (prefixTxt) {
+            msg = '' + prefixTxt + msg;
+        }
+
         //  log at requested level; if invalid or none defined, will log as error
         if (level) {
             if (level.id === LogLevel.DEBUG.id) {

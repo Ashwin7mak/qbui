@@ -501,11 +501,11 @@ describe('Logger', () => {
 
         resetSpyCounter(logger);
 
-        logger.parseAndLogError(null, msg);
+        logger.parseAndLogError(null, msg, 'prefix:');
         expect(logger.debug).not.toHaveBeenCalled();
         expect(logger.info).not.toHaveBeenCalled();
         expect(logger.warn).not.toHaveBeenCalled();
-        expect(logger.error).toHaveBeenCalledWith(JSON.stringify(msg.data));
+        expect(logger.error).toHaveBeenCalledWith('prefix:' + JSON.stringify(msg.data));
 
         Logger.__ResetDependency__('Configuration');
 
