@@ -15,6 +15,7 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
+import * as SchemaConsts from '../../../constants/schema';
 
 import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
         NumericCellRenderer, DurationCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
@@ -597,8 +598,8 @@ let AGGrid = React.createClass({
         let rows = [];
         if (this.api) {
             this.api.getSelectedRows().forEach(row => {
-                if (row[this.props.uniqueIdentifier]) {
-                    rows.push(row[this.props.uniqueIdentifier].value);
+                if (row[SchemaConsts.DEFAULT_RECORD_KEY]) {
+                    rows.push(row[SchemaConsts.DEFAULT_RECORD_KEY].value);
                 }
             });
         }
