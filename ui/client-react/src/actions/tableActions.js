@@ -34,8 +34,9 @@ let tableActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.parseAndLogError(LogLevel.ERROR, error, 'tableService.getHomePage:');
-                        this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
+                        let errorResponse = error.response || error;
+                        logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'tableService.getHomePage:');
+                        this.dispatch(actions.LOAD_REPORT_FAILED, errorResponse.status);
                         reject();
                     }
                 ).catch((ex) => {

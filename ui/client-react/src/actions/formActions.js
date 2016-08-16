@@ -33,12 +33,13 @@ let formActions = {
                         resolve();
                     },
                     (error) => {
-                        if (error.status === 403) {
-                            logger.parseAndLogError(LogLevel.WARN, error, 'formService.loadFormAndRecord:');
+                        let errorResponse = error.response || error;
+                        if (errorResponse.status === 403) {
+                            logger.parseAndLogError(LogLevel.WARN, errorResponse, 'formService.loadFormAndRecord:');
                         } else {
-                            logger.parseAndLogError(LogLevel.ERROR, error, 'formService.loadFormAndRecord:');
+                            logger.parseAndLogError(LogLevel.ERROR, errorResponse, 'formService.loadFormAndRecord:');
                         }
-                        this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, error.status);
+                        this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, errorResponse.status);
                         reject();
                     }
                 ).catch((ex) => {
