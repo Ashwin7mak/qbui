@@ -413,6 +413,30 @@ let reportModel = {
             let recField = newRecord[key];
             recField.display = this.formatFieldValue(recField);
         });
+    },
+
+    /**
+     * Deletes the record from filteredRecords and records arrays so that display can update
+     *
+     * @param recId to delete
+     */
+    deleteRecordsFromLists(recId) {
+        var recordValueToMatch = {};
+        recordValueToMatch[this.model.keyField.name] = {value: recId};
+        var index = _.findIndex(this.model.filteredRecords, recordValueToMatch);
+        if (index !== -1) {
+            this.model.filteredRecords.splice(index, 1);
+            this.model.recordsCount--;
+        } else {
+            logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
+        }
+        index = _.findIndex(this.model.records, recordValueToMatch);
+        if (index !== -1) {
+            this.model.records.splice(index, 1);
+            this.model.recordsCount--;
+        } else {
+            logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
+        }
     }
 };
 
@@ -662,15 +686,7 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onDeleteReportRecordSuccess(recId) {
         const model = this.reportModel.get();
-        var recordValueToMatch = {};
-        recordValueToMatch[model.keyField.name] = {value: recId};
-        const index = _.findIndex(model.filteredRecords, recordValueToMatch);
-        if (index !== -1) {
-            model.filteredRecords.splice(index, 1);
-            model.recordsCount--;
-        } else {
-            logger.error('the record to delete does not exist in the list of currently viewed records index: ${index}');
-        }
+        this.reportModel.deleteRecordsFromLists(recId);
         this.emit('change');
     },
 
@@ -697,25 +713,8 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onDeleteReportRecordBulkSuccess(recIds) {
         const model = this.reportModel.get();
-        var recordValueToMatch = {};
-        var index = -1;
         for (var i = 0; i < recIds.length; i++) {
-            recordValueToMatch[model.keyField.name] = {value: recIds[i]};
-            index = _.findIndex(model.filteredRecords, recordValueToMatch);
-            if (index !== -1) {
-                model.filteredRecords.splice(index, 1);
-                model.recordsCount--;
-            } else {
-                logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
-            }
-            index = -1;
-            index = _.findIndex(model.records, recordValueToMatch);
-            if (index !== -1) {
-                model.records.splice(index, 1);
-                model.recordsCount--;
-            } else {
-                logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
-            }
+            this.reportModel.deleteRecordsFromLists(recIds[i]);
         }
         this.selectedRows = [];
         this.emit('change');
