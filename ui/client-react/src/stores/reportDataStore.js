@@ -706,7 +706,15 @@ let ReportDataStore = Fluxxor.createStore({
                 model.filteredRecords.splice(index, 1);
                 model.recordsCount--;
             } else {
-                logger.error('the record to delete does not exist in the list of currently viewed records. value: ${recId[i]} index: ${index}');
+                logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
+            }
+            index = -1;
+            index = _.findIndex(model.records, recordValueToMatch);
+            if (index !== -1) {
+                model.records.splice(index, 1);
+                model.recordsCount--;
+            } else {
+                logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
             }
         }
         this.selectedRows = [];
