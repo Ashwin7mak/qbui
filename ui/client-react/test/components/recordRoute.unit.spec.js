@@ -93,59 +93,59 @@ describe('RecordRoute functions', () => {
         expect(returnToReport.length).toBe(1);
     });
 
-    it('test render of component with report data', () => {
-        let routeParams = {appId:1, tblId:2, rptId:3, recordId: 2};
-
-        let reportData = {
-            appId:1,
-            tblId:2,
-            rptId:3,
-
-            previousRecordId:1,
-            currentRecordId:2,
-            nextRecordId:3,
-
-            data: {
-                records: [
-                    {"Record ID#": {id:1, value:1, display: "1"}},
-                    {"Record ID#": {id:2, value:2, display: "2"}},
-                    {"Record ID#": {id:3, value:3, display: "3"}}
-                ],
-                columns: [
-                    {
-                        id:1,
-                        field:"Record ID#",
-                        headerName:"Record ID#",
-                        datatypeAttributes: {type:"NUMERIC"}
-                    }
-                ]
-            }
-        };
-
-        component = TestUtils.renderIntoDocument(<RecordRoute params={routeParams} reportData={reportData} history={history} flux={flux}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
-        let nextRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "nextRecord");
-        let returnToReport = TestUtils.scryRenderedDOMComponentsWithClass(component, "backToReport");
-
-        // should have all 3 nav links
-        expect(prevRecord.length).toBe(1);
-        expect(nextRecord.length).toBe(1);
-        expect(returnToReport.length).toBe(1);
-
-        // previous record
-        TestUtils.Simulate.click(prevRecord[0]);
-        expect(flux.actions.openingReportRow).toHaveBeenCalledWith(3, 1);
-        flux.actions.openingReportRow.calls.reset();
-
-        // next record
-        TestUtils.Simulate.click(nextRecord[0]);
-        expect(flux.actions.openingReportRow).toHaveBeenCalledWith(3, 3);
-        flux.actions.openingReportRow.calls.reset();
-
-        // return to report
-        TestUtils.Simulate.click(returnToReport[0]);
-        expect(history.pushState).toHaveBeenCalledWith(null, "/app/1/table/2/report/3");
-    });
+    //it('test render of component with report data', () => {
+    //    let routeParams = {appId:1, tblId:2, rptId:3, recordId: 2};
+    //
+    //    let reportData = {
+    //        appId:1,
+    //        tblId:2,
+    //        rptId:3,
+    //
+    //        previousRecordId:1,
+    //        currentRecordId:2,
+    //        nextRecordId:3,
+    //
+    //        data: {
+    //            records: [
+    //                {"Record ID#": {id:1, value:1, display: "1"}},
+    //                {"Record ID#": {id:2, value:2, display: "2"}},
+    //                {"Record ID#": {id:3, value:3, display: "3"}}
+    //            ],
+    //            columns: [
+    //                {
+    //                    id:1,
+    //                    field:"Record ID#",
+    //                    headerName:"Record ID#",
+    //                    datatypeAttributes: {type:"NUMERIC"}
+    //                }
+    //            ]
+    //        }
+    //    };
+    //
+    //    component = TestUtils.renderIntoDocument(<RecordRoute params={routeParams} reportData={reportData} history={history} flux={flux}/>);
+    //    expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    //
+    //    let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
+    //    let nextRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "nextRecord");
+    //    let returnToReport = TestUtils.scryRenderedDOMComponentsWithClass(component, "backToReport");
+    //
+    //    // should have all 3 nav links
+    //    expect(prevRecord.length).toBe(1);
+    //    expect(nextRecord.length).toBe(1);
+    //    expect(returnToReport.length).toBe(1);
+    //
+    //    // previous record
+    //    TestUtils.Simulate.click(prevRecord[0]);
+    //    expect(flux.actions.openingReportRow).toHaveBeenCalledWith(3, 1);
+    //    flux.actions.openingReportRow.calls.reset();
+    //
+    //    // next record
+    //    TestUtils.Simulate.click(nextRecord[0]);
+    //    expect(flux.actions.openingReportRow).toHaveBeenCalledWith(3, 3);
+    //    flux.actions.openingReportRow.calls.reset();
+    //
+    //    // return to report
+    //    TestUtils.Simulate.click(returnToReport[0]);
+    //    expect(history.pushState).toHaveBeenCalledWith(null, "/app/1/table/2/report/3");
+    //});
 });

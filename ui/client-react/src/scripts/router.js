@@ -75,23 +75,6 @@ flux.setDispatchInterceptor(function(action, dispatch) {
 });
 
 
-var history;
-/**
- * Instrumentation code of SPA history route change perf timing
- */
-function hookHistory(theHistory) {
-    flux.actions.newRoute("initialFullPageLoad");
-
-    if (PerfLogUtils.isEnabled()) {
-        theHistory.listen(function(ev) {
-            // mark start of new route
-            if (ev.action === "PUSH" || ev.action === "REPLACE") {
-                flux.actions.newRoute("newroute:" + ev.pathname);
-            }
-        });
-        return true;
-    }
-}
 let NavWrapper = React.createClass({
 
     /* touch detection */

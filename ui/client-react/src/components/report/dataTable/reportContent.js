@@ -11,7 +11,6 @@ import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
 import _ from 'lodash';
-import {withRouter} from 'react-router';
 
 let logger = new Logger();
 
@@ -34,7 +33,9 @@ let ReportContent = React.createClass({
 
         //create the link we want to send the user to and then send them on their way
         const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        this.props.router.push(link);
+        if (this.props.router) {
+            this.props.router.push(link);
+        }
     },
 
     /**
@@ -756,4 +757,4 @@ ReportContent.contextTypes = {
     touch: React.PropTypes.bool
 };
 
-export default withRouter(ReportContent);
+export default ReportContent;
