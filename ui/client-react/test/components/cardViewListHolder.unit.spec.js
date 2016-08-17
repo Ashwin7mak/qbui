@@ -22,6 +22,9 @@ const singleNodeTreeData = [{
                 col_date: "01-01-2015"}]
 }];
 const fakeReportData_valid = {
+    appId: "1",
+    tblId: "2",
+    rptId: "3",
     loading:false,
     data: {
         filteredRecords: singleNodeTreeData
@@ -48,7 +51,8 @@ const CardViewListMock = React.createClass({
     simulateSwipeLeftInSelection() {
         this.props.onToggleCardSelection(false);
     },
-    simulateClick() {
+    simulateClick(props) {
+        this.props.node.props = props;
         this.props.onRowClicked(this.props.node);
     }
 });
@@ -149,28 +153,12 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test rowClick callback', () => {
+        let router = [];
+
         var TestParent = React.createFactory(React.createClass({
-            getInitialState() {
-                return {
-                    history: ""
-                };
-            },
-            childContextTypes: {
-                history: React.PropTypes.object
-            },
-            getChildContext: function() {
-                let self = this;
-                return {
-                    history: {
-                        push(a) {
-                            self.setState({history: "history"});
-                        }
-                    }
-                };
-            },
             render() {
                 return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
-                                           uniqueId="col_num"/>;
+                                           uniqueIdentifier="RecId" router={router}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -178,7 +166,7 @@ describe('CardViewListHolder functions', () => {
         let cardlist = TestUtils.findRenderedComponentWithType(component, CardViewListMock);
         expect(TestUtils.isCompositeComponent(cardlist)).toBeTruthy();
 
-    //    cardlist.simulateClick();
-    //    expect(parent.state.history).toEqual("history");
+        cardlist.simulateClick({data: {RecId: 2}});
+        expect(component.props.router).toContain('/app/1/table/2/report/3/record/2');
     });
 });

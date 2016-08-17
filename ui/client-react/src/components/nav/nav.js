@@ -124,7 +124,9 @@ export let Nav = React.createClass({
             this.hideTrowser();
             setTimeout(() => {
                 // give UI transition a moment to execute
-                this.props.router.push(report.link);
+                if (this.props.router) {
+                    this.props.router.push(report.link);
+                }
             });
         };
 

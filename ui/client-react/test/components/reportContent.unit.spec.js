@@ -46,6 +46,9 @@ const fakeReportData_emptyData = {
 };
 
 const fakeReportData_simple = {
+    appId: "1",
+    tblId: "2",
+    rptId: "3",
     loading: false,
     data: {
         name: "test",
@@ -87,78 +90,6 @@ const fakeReportData_unsaved = {
     }
 };
 
-const cols_with_numeric_field = [
-    {
-        "field": "col_num",
-        "datatypeAttributes": {
-            type: "NUMERIC"
-        }
-    },
-    {
-        "field": "col_text"
-    },
-    {
-        "field": "col_date"
-    }
-];
-
-const cols_with_date_field = [
-    {
-        "field": "col_num"
-    },
-    {
-        "field": "col_text"
-    },
-    {
-        "field": "col_date",
-        "datatypeAttributes": {
-            type: "DATE"
-        }
-    }
-];
-
-const cols_with_bold_attrs = [
-    {
-        "field": "col_num",
-        "datatypeAttributes": {
-            clientSideAttributes: {"bold": true}
-        }
-    },
-    {
-        "field": "col_text"
-    },
-    {
-        "field": "col_date"
-    }
-];
-const cols_with_nowrap_attrs = [
-    {
-        "columnName": "col_num",
-        "datatypeAttributes": {
-            clientSideAttributes: {"word-wrap": true}
-        }
-    },
-    {
-        "field": "col_text"
-    },
-    {
-        "field": "col_date"
-    }
-];
-
-const fakeReportData_attributes = {
-    loading: false,
-    data: {
-        name: "test",
-        filteredRecords: [{
-            col_num: {value: 1, id: 4},
-            col_text: {value: 'abc', id: 5},
-            col_date: {value: '01-01-2015', id: 6},
-            id: {value: 100, id: 7},
-        }],
-    }
-};
-
 const flux = {
     actions: {
         scrollingReport(scrolling) {
@@ -184,6 +115,8 @@ const flux = {
         logMeasurements : ()=> {
         },
         deleteReportRecord: ()=> {
+        },
+        openingReportRow: ()=> {
         }
     }
 };
@@ -937,6 +870,17 @@ describe('ReportContent functions', () => {
         }});
         expect(flux.actions.measure).toHaveBeenCalled();
         expect(flux.actions.logMeasurements).toHaveBeenCalled();
+    });
+    it('test openRow callback to push state to router', () => {
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                appId="123"
+                                                                tblId="456"
+                                                                rptId="2"
+                                                                reportData={fakeReportData_simple}
+                                                                uniqueIdentifier="RecId"
+                                                                reportHeader={header_empty} router={[]} />);
+        component.openRow({RecId: {value: 2}});
+        expect(component.props.router).toContain('/app/123/table/456/report/2/record/2');
     });
 
 });
