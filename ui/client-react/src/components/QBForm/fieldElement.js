@@ -29,7 +29,7 @@ const FieldElement = React.createClass({
                 {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} /> }
 
                 <span className="cellWrapper">
-                    {fieldDisplayValue !== null &&
+                    { (fieldDisplayValue !== null || fieldRawValue !== null) &&
                     <CellValueRenderer type={fieldType}
                                        value={fieldRawValue}
                                        display={fieldDisplayValue}

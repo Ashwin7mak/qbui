@@ -293,7 +293,7 @@ let QBForm = React.createClass({
         return (
             <div className="formContainer">
                 <form>
-                    {errorMsg ? errorMsg : formContent}
+                    {errorMsg ? <div className="errorSection">{errorMsg}</div> : formContent}
                 </form>
             </div>
         );
