@@ -413,6 +413,30 @@ let reportModel = {
             let recField = newRecord[key];
             recField.display = this.formatFieldValue(recField);
         });
+    },
+
+    /**
+     * Deletes the record from filteredRecords and records arrays so that display can update
+     *
+     * @param recId to delete
+     */
+    deleteRecordsFromLists(recId) {
+        var recordValueToMatch = {};
+        recordValueToMatch[this.model.keyField.name] = {value: recId};
+        var index = _.findIndex(this.model.filteredRecords, recordValueToMatch);
+        if (index !== -1) {
+            this.model.filteredRecords.splice(index, 1);
+            this.model.recordsCount--;
+        } else {
+            logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
+        }
+        index = _.findIndex(this.model.records, recordValueToMatch);
+        if (index !== -1) {
+            this.model.records.splice(index, 1);
+            this.model.recordsCount--;
+        } else {
+            logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
+        }
     }
 };
 
@@ -448,8 +472,12 @@ let ReportDataStore = Fluxxor.createStore({
             actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
+            actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord,
             actions.DELETE_REPORT_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
             actions.DELETE_REPORT_RECORD_FAILED, this.onDeleteReportRecordFailed,
+            actions.DELETE_REPORT_RECORD_BULK, this.onDeleteReportRecordBulk,
+            actions.DELETE_REPORT_RECORD_BULK_SUCCESS, this.onDeleteReportRecordBulkSuccess,
+            actions.DELETE_REPORT_RECORD_BULK_FAILED, this.onDeleteReportRecordBulkFailed,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_REPORT_RECORD_FAILED, this.onClearEdit,
@@ -644,20 +672,21 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     /**
-     * removes the record with the matching id in Record ID field from the
+     * if anyone is listening this is me telling you we are deleting a record
+     * @param payload {appId, tblId, recId}
+     */
+    onDeleteReportRecord(payload) {
+        //add code here when we want to do something with this action
+    },
+
+    /**
+     * removes the record with the matching value in the keyfield from the
      * models filteredRecord list
      * @param id
      */
     onDeleteReportRecordSuccess(recId) {
         const model = this.reportModel.get();
-        var recordValueToMatch = {};
-        recordValueToMatch[model.keyField.name] = {value: recId};
-        const index = _.findIndex(model.filteredRecords, recordValueToMatch);
-        if (index !== -1) {
-            model.filteredRecords.splice(index, 1);
-        } else {
-            logger.error('the record to delete does not exist in the list of currently viewed records index: ${index}');
-        }
+        this.reportModel.deleteRecordsFromLists(recId);
         this.emit('change');
     },
 
@@ -666,6 +695,36 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload parameter contains {appId, tblId, recId, error: error}
      */
     onDeleteReportRecordFailed(payload) {
+        this.emit('change');
+    },
+
+    /**
+     * if anyone is listening this is me telling you we are deleting records in bulk
+     * @param payload {appId, tblId, recIds}
+     */
+    onDeleteReportRecordBulk(payload) {
+        //add code here when we want to do something with this action
+    },
+
+    /**
+     * removes the records with the matching values in keyfield from the
+     * models filteredRecord list
+     * @param recIds
+     */
+    onDeleteReportRecordBulkSuccess(recIds) {
+        const model = this.reportModel.get();
+        for (var i = 0; i < recIds.length; i++) {
+            this.reportModel.deleteRecordsFromLists(recIds[i]);
+        }
+        this.selectedRows = [];
+        this.emit('change');
+    },
+
+    /**
+     * Does not do anything if it failed, just emits a change which wont cause an update (for agGrid)
+     * @param payload parameter contains {appId, tblId, recId, error: error}
+     */
+    onDeleteReportRecordBulkFailed(payload) {
         this.emit('change');
     },
 

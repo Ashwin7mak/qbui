@@ -411,12 +411,16 @@ describe('Report Data Actions Edit Report functions -- Negative', () => {
         deleteRecord(a, t, r) {
             return Promise.resolve({data:responseData});
         }
+        deleteRecordBulk(a, t, r) {
+            return Promise.resolve({data:responseData});
+        }
     }
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockRecordService.prototype, 'saveRecord');
         spyOn(mockRecordService.prototype, 'deleteRecord');
+        spyOn(mockRecordService.prototype, 'deleteRecordBulk');
         reportDataActions.__Rewire__('RecordService', mockRecordService);
     });
 
@@ -435,6 +439,13 @@ describe('Report Data Actions Edit Report functions -- Negative', () => {
         {test:'test deleteReportRecord with missing appId', appId:null, tblId:2, recId:3},
         {test:'test deleteReportRecord with missing tblId', appId:1, tblId:null, recId:3},
         {test:'test deleteReportRecord with missing recId', appId:1, tblId:2, recId:undefined}
+    ];
+
+    var deleteBulkDataProvider = [
+        {test:'test deleteReportRecordBulk with missing appId', appId:null, tblId:2, recId:3},
+        {test:'test deleteReportRecordBulk with missing tblId', appId:1, tblId:null, recId:3},
+        {test:'test deleteReportRecordBulk with missing recIds', appId:1, tblId:2, recIds:undefined},
+        {test:'test deleteReportRecordBulk with recIds length == 0', appId:1, tblId:2, recIds:[]}
     ];
 
     dataProvider.forEach(function(data) {
@@ -470,5 +481,86 @@ describe('Report Data Actions Edit Report functions -- Negative', () => {
                 }
             );
         });
+    });
+
+    deleteBulkDataProvider.forEach(function(data) {
+
+        it(data.test, (done) => {
+            flux.actions.deleteReportRecordBulk(data.appId, data.tblId, data.recId).then(
+                () => {
+                    expect(true).toBe(false);
+                    done();
+                },
+                () => {
+                    expect(mockRecordService.prototype.deleteRecordBulk).not.toHaveBeenCalled();
+                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.DELETE_REPORT_RECORD_BULK_FAILED, jasmine.any(Object));
+                    done();
+                }
+            );
+        });
+    });
+});
+
+describe('Report Data Actions Edit Report functions -- Error', () => {
+    'use strict';
+
+    let appId = '1';
+    let tblId = '2';
+    let recId = '3';
+    let recIds = [1, 2, 3];
+
+    class mockRecordService {
+        constructor() {}
+        deleteRecord(a, t, r) {
+            return Promise.reject({message: "EXPLOSIONS!!!"});
+        }
+        deleteRecordBulk(a, t, r) {
+            return Promise.reject({message: "EXPLOSIONS!!!"});
+        }
+    }
+
+    let errorStores = {};
+    let errorFlux = new Fluxxor.Flux(errorStores);
+    errorFlux.addActions(reportDataActions);
+
+    beforeEach(() => {
+        spyOn(errorFlux.dispatchBinder, 'dispatch');
+        spyOn(mockRecordService.prototype, 'deleteRecord').and.callThrough();
+        spyOn(mockRecordService.prototype, 'deleteRecordBulk').and.callThrough();
+        reportDataActions.__Rewire__('RecordService', mockRecordService);
+    });
+
+    afterEach(() => {
+        reportDataActions.__ResetDependency__('RecordService');
+    });
+
+    it('test deleteReportRecord error', (done) => {
+        errorFlux.actions.deleteReportRecord(appId, tblId, recId).then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(mockRecordService.prototype.deleteRecord).toHaveBeenCalled();
+                expect(errorFlux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(errorFlux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.DELETE_REPORT_RECORD_FAILED, jasmine.any(Object));
+                done();
+            }
+        );
+    });
+
+    it('test deleteReportRecordBulk error', (done) => {
+        errorFlux.actions.deleteReportRecordBulk(appId, tblId, recIds).then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(mockRecordService.prototype.deleteRecordBulk).toHaveBeenCalled();
+                expect(errorFlux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(errorFlux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_REPORT_RECORD_BULK_FAILED, jasmine.any(Object)]);
+                done();
+            }
+        );
     });
 });
