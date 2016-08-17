@@ -11,13 +11,14 @@ import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
 import _ from 'lodash';
+import {withRouter} from 'react-router';
 
 let logger = new Logger();
 
 let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-let ReportContent = React.createClass({
+export let ReportContent = React.createClass({
     mixins: [FluxMixin, IntlMixin],
 
     // row was clicked once, navigate to record
@@ -757,4 +758,6 @@ ReportContent.contextTypes = {
     touch: React.PropTypes.bool
 };
 
-export default ReportContent;
+export let ReportContentWithRouter = withRouter(ReportContent);
+export default ReportContentWithRouter;
+

@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import CardViewListHolder from '../../src/components/dataTable/cardView/cardViewListHolder';
+import {CardViewListHolder, __RewireAPI__ as CardViewListHolderRewireAPI} from '../../src/components/dataTable/cardView/cardViewListHolder';
 
 const fakeReportData_loading = {
     loading: true
@@ -60,11 +60,11 @@ describe('CardViewListHolder functions', () => {
     let component;
 
     beforeEach(() => {
-        CardViewListHolder.__Rewire__('CardViewList', CardViewListMock);
+        CardViewListHolderRewireAPI.__Rewire__('CardViewList', CardViewListMock);
     });
 
     afterEach(() => {
-        CardViewListHolder.__ResetDependency__('CardViewList');
+        CardViewListHolderRewireAPI.__ResetDependency__('CardViewList');
     });
 
     it('test render of loading component', () => {

@@ -12,7 +12,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  */
 const CHECKBOX_COL_WIDTH = 40; // 40px checkbox column can be toggled
 
-let CardViewListHolder = React.createClass({
+export let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
         reportData: React.PropTypes.object.isRequired,
@@ -75,7 +75,9 @@ let CardViewListHolder = React.createClass({
         }
         //create the link we want to send the user to and then send them on their way
         const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        this.props.router.push(link);
+        if (this.props.router) {
+            this.props.router.push(link);
+        }
     },
 
     /**
@@ -191,4 +193,5 @@ let CardViewListHolder = React.createClass({
     }
 });
 
-export default withRouter(CardViewListHolder);
+export let CardViewListHolderWithRouter = withRouter(CardViewListHolder);
+export default CardViewListHolderWithRouter;

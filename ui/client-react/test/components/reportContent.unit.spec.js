@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReportContent from '../../src/components/report/dataTable/reportContent';
-import CardViewListHolder from '../../src/components/dataTable/cardView/cardViewListHolder';
+import {ReportContent, __RewireAPI__ as ReportContentRewireAPI} from '../../src/components/report/dataTable/reportContent';
+import {CardViewListHolder} from '../../src/components/dataTable/cardView/cardViewListHolder';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {NumericCellRenderer, DateCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
@@ -27,14 +27,6 @@ var LocalesMock = {
 var AGGridMock = React.createClass({
     render: function() {
         return <div>mock aggrid</div>;
-    }
-});
-
-var CardViewListHolderMock = React.createClass({
-    render() {
-        return (
-            <div>mock CardViewListHolderMock</div>
-        );
     }
 });
 
@@ -254,8 +246,8 @@ describe('ReportContent grouping functions', () => {
     let localeGetMessageSpy;
 
     beforeEach(() => {
-        ReportContent.__Rewire__('AGGrid', AGGridMock);
-        ReportContent.__Rewire__('Locales', LocalesMock);
+        ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
+        ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
         localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatNumber').and.callFake(function(val) {
             return val;
         });
@@ -266,8 +258,8 @@ describe('ReportContent grouping functions', () => {
     });
 
     afterEach(() => {
-        ReportContent.__ResetDependency__('AGGrid');
-        ReportContent.__ResetDependency__('Locales');
+        ReportContentRewireAPI.__ResetDependency__('AGGrid');
+        ReportContentRewireAPI.__ResetDependency__('Locales');
         localizeNumberSpy.calls.reset();
         localizeDateSpy.calls.reset();
         localeGetMessageSpy.calls.reset();
@@ -510,16 +502,16 @@ describe('ReportContent grouping functions exception handling', () => {
     let localeGetMessageSpy;
 
     beforeEach(() => {
-        ReportContent.__Rewire__('AGGrid', AGGridMock);
-        ReportContent.__Rewire__('Locales', LocalesMock);
+        ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
+        ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
         localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatNumber').and.throwError();
         localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatDate').and.throwError();
         localeGetMessageSpy = spyOn(LocalesMock, 'getMessage').and.callThrough();
     });
 
     afterEach(() => {
-        ReportContent.__ResetDependency__('AGGrid');
-        ReportContent.__ResetDependency__('Locales');
+        ReportContentRewireAPI.__ResetDependency__('AGGrid');
+        ReportContentRewireAPI.__ResetDependency__('Locales');
         localizeNumberSpy.calls.reset();
         localizeDateSpy.calls.reset();
         localeGetMessageSpy.calls.reset();
@@ -559,13 +551,13 @@ describe('ReportContent functions', () => {
     var component;
 
     beforeEach(() => {
-        ReportContent.__Rewire__('AGGrid', AGGridMock);
-        ReportContent.__Rewire__('Locales', LocalesMock);
+        ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
+        ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
     });
 
     afterEach(() => {
-        ReportContent.__ResetDependency__('AGGrid');
-        ReportContent.__ResetDependency__('Locales');
+        ReportContentRewireAPI.__ResetDependency__('AGGrid');
+        ReportContentRewireAPI.__ResetDependency__('Locales');
     });
 
     it('test render of component', () => {

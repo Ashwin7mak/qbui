@@ -18,7 +18,7 @@ import "../../assets/css/animate.min.css";
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
-var Nav = React.createClass({
+export let Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore', 'FormStore')],
 
     contextTypes: {
@@ -215,4 +215,7 @@ var Nav = React.createClass({
     }
 });
 
-export default withRouter(Nav);
+
+export let NavWithRouter = withRouter(Nav);
+export default NavWithRouter;
+

@@ -16,7 +16,7 @@ import './record.scss';
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-var RecordRoute = React.createClass({
+export let RecordRoute = React.createClass({
     mixins: [FluxMixin],
 
     loadRecord(appId, tblId, recordId, rptId, formType) {
@@ -172,4 +172,5 @@ var RecordRoute = React.createClass({
     }
 });
 
-export default withRouter(RecordRoute);
+export let RecordRouteWithRouter = withRouter(RecordRoute);
+export default RecordRouteWithRouter;

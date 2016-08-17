@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
-import Nav from '../../src/components/nav/nav';
+import {Nav, __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
 
 var LeftNavMock = React.createClass({
     render: function() {
@@ -79,15 +79,15 @@ describe('Nav functions', () => {
 
 
     beforeEach(() => {
-        Nav.__Rewire__('LeftNav', LeftNavMock);
-        Nav.__Rewire__('Trowser', TrowserMock);
-        Nav.__Rewire__('TopNav', TopNavMock);
+        NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
+        NavRewireAPI.__Rewire__('Trowser', TrowserMock);
+        NavRewireAPI.__Rewire__('TopNav', TopNavMock);
     });
 
     afterEach(() => {
-        Nav.__ResetDependency__('LeftNav');
-        Nav.__ResetDependency__('Trowser');
-        Nav.__ResetDependency__('TopNav');
+        NavRewireAPI.__ResetDependency__('LeftNav');
+        NavRewireAPI.__ResetDependency__('Trowser');
+        NavRewireAPI.__ResetDependency__('TopNav');
     });
 
     it('test render of component', () => {

@@ -14,8 +14,6 @@ import FilterUtils from '../../utils/filterUtils';
 import * as query from '../../constants/query';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
-import {withRouter} from 'react-router';
-
 
 let logger = new Logger();
 
@@ -209,8 +207,6 @@ let ReportToolsAndContent = React.createClass({
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
 
-        let ReportContentWithRouter = withRouter(ReportContent);
-
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
             _.isUndefined(this.props.params.tblId) ||
@@ -241,7 +237,7 @@ let ReportToolsAndContent = React.createClass({
                                onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Use Reactabular Grid
                     </label>
                     {this.getTableActions()}
-                    <ReportContentWithRouter  appId={this.props.params.appId}
+                    <ReportContent  appId={this.props.params.appId}
                                     tblId={this.props.params.tblId}
                                     rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
                                     reportData={this.props.reportData}
