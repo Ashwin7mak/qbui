@@ -178,7 +178,7 @@ let ReportToolsAndContent = React.createClass({
                               clearAllFilters={this.clearAllFilters}/>;
     },
     getSelectionActions() {
-        return (<ReportActions selection={this.props.selectedRows} appId={this.props.params.appId} tblId={this.props.params.tblId} rptId={this.props.params.rptId}/>);
+        return (<ReportActions selection={this.props.selectedRows} appId={this.props.params.appId} tblId={this.props.params.tblId} rptId={this.props.params.rptId} nameForRecords={this.props.nameForRecords}/>);
     },
     getTableActions() {
         const selectedRows = this.props.selectedRows;

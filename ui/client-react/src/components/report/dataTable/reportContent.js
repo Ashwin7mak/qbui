@@ -215,7 +215,8 @@ let ReportContent = React.createClass({
     handleRecordDelete(record) {
         const flux = this.getFlux();
         var recId = record[SchemaConsts.DEFAULT_RECORD_KEY].value;
-        flux.actions.deleteReportRecord(this.props.appId, this.props.tblId, recId);
+        //this.props.nameForRecords
+        flux.actions.deleteReportRecord(this.props.appId, this.props.tblId, recId, this.props.nameForRecords);
     },
 
     /**
@@ -726,7 +727,7 @@ let ReportContent = React.createClass({
                                 rptId={this.props.reportData.rptId}
                                 reportHeader={this.props.reportHeader}
                                 pageActions={this.props.pageActions}
-                                selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} />}
+                                selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}
                                 onScroll={this.onScrollRecords}
                                 onRowClick={this.openRow}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}

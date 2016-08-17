@@ -233,7 +233,7 @@ let reportDataActions = {
     /**
      * delete a record
      */
-    deleteReportRecord(appId, tblId, recId) {
+    deleteReportRecord(appId, tblId, recId, nameForRecords) {
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && (!!(recId === 0 || recId))) {
@@ -245,13 +245,13 @@ let reportDataActions = {
                     response => {
                         logger.debug('RecordService deleteRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.DELETE_REPORT_RECORD_SUCCESS, recId);
-                        NotificationManager.success(Locale.getMessage('recordNotifications.recordDeleted'), Locale.getMessage('success'), 1500);
+                        NotificationManager.success("1 " + nameForRecords + " " + Locale.getMessage('recordNotifications.deleted'), Locale.getMessage('success'), 2000);
                         resolve();
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
                         this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: error.response});
-                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotDeleted'), Locale.getMessage('failed'), 1500);
+                        NotificationManager.error("1 " + nameForRecords + " " + Locale.getMessage('recordNotifications.notDeleted'), Locale.getMessage('failed'), 3000);
                         reject();
                     }
                 ).catch(
@@ -274,7 +274,7 @@ let reportDataActions = {
     /**
      * delete records in bulk
      */
-    deleteReportRecordBulk(appId, tblId, recIds) {
+    deleteReportRecordBulk(appId, tblId, recIds, nameForRecords) {
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && recIds && recIds.length >= 1) {
@@ -286,15 +286,15 @@ let reportDataActions = {
                     response => {
                         logger.debug('RecordService deleteRecordBulk success:' + JSON.stringify(response));
                         this.dispatch(actions.DELETE_REPORT_RECORD_BULK_SUCCESS, recIds);
-                        let message = recIds.length === 1 ? Locale.getMessage('recordNotifications.recordDeleted') : Locale.getMessage('recordNotifications.recordDeletedBulk');
-                        NotificationManager.success(message, Locale.getMessage('success'), 1500);
+                        let message = recIds.length === 1 ? ("1 " + nameForRecords + " " + Locale.getMessage('recordNotifications.deleted')) : (recIds.length + " " + nameForRecords + " " + Locale.getMessage('recordNotifications.deleted'));
+                        NotificationManager.success(message, Locale.getMessage('success'), 2000);
                         resolve();
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecordBulk:');
                         this.dispatch(actions.DELETE_REPORT_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error.response});
-                        let message = recIds.length === 1 ? Locale.getMessage('recordNotifications.recordNotDeleted') : Locale.getMessage('recordNotifications.recordNotDeletedBulk');
-                        NotificationManager.error(message, Locale.getMessage('failed'), 1500);
+                        let message = recIds.length === 1 ? ("1 " + nameForRecords + " " + Locale.getMessage('recordNotifications.notDeleted')) : (recIds.length + " " + nameForRecords + " " + Locale.getMessage('recordNotifications.notDeleted'));
+                        NotificationManager.error(message, Locale.getMessage('failed'), 3000);
                         reject();
                     }
                 ).catch(
