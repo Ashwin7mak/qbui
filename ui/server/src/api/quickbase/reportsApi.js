@@ -60,58 +60,6 @@
             },
 
             /**
-             * Returns a promise that resolves with report data, report meta data as well
-             * as count of all records in the report.
-             *
-             * @param req
-             */
-            fetchReport: function(req) {
-                // Initialize a report object that is to be returned to client;
-                var reportObj = {
-                    reportMetaData: {
-                        data: ''
-                    },
-                    reportData: {
-                        data: ''
-                    },
-                    reportTotalRecordsCount: {
-                        data: ''
-                    },
-                };
-                // Strip the parameters from the url
-                req.url = req.url.split('?')[0];
-                return new Promise((resolve, reject) => {
-                    // Fetch report meta data, facets and content
-                    this.fetchReportMetaDataAndContent(req).then(
-                        (resultResponse) => {
-                            reportObj.reportMetaData.data = resultResponse.reportMetaData.data ;
-                            reportObj.reportData.data = resultResponse.reportData.data;
-                            resolve(reportObj);
-                        },
-                        (error) => {
-                            reject(error);
-                        }
-                    ).catch((ex) => {
-                        requestHelper.logUnexpectedError('reportsAPI..fetchReportRecordsCount in fetchReport', ex, true);
-                        reject(ex);
-                    });
-
-                    //  Fetch the count of total number of records for the report
-                    this.fetchReportRecordsCount(req).then(
-                        (resultsResponse) => {
-                            reportObj.reportTotalRecordsCount.data = JSON.parse(resultsResponse.body);
-                            resolve(reportObj);
-                        },
-                        (error) => {
-                            reject(error);
-                        }
-                    ).catch((ex) => {
-                        requestHelper.logUnexpectedError('reportsAPI..fetchReportRecordsCount in fetchReport', ex, true);
-                        reject(ex);
-                    });
-                });
-            },
-            /**
              * Returns a promise that resolves with the report metadata and records for one
              * page of a report.
              * @param req

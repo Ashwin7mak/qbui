@@ -3,11 +3,6 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import ReportNavigation from '../../src/components/report/reportNavigation';
 
-/*
- getNextReportPage: func,
- getPreviousReportPage: func
- */
-
 const fakeReportNavigationData = {
     valid: {
         pageStart: 2,
@@ -61,10 +56,9 @@ describe('Report Navigation tests', () => {
                                                                    pageEnd={fakeReportNavigationData.valid.pageEnd}
                                                                    getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
                                                                    getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
-        var previousPage = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
-        });
-        expect(previousPage.length).toBe(1);
+        var node = ReactDOM.findDOMNode(component);
+        var previousButton = node.getElementsByClassName("previousButton");
+        expect(previousButton).toBeDefined();
     });
 
     it('test previous link is NOT generated', () => {
@@ -85,10 +79,9 @@ describe('Report Navigation tests', () => {
                                                                    pageEnd={fakeReportNavigationData.valid.pageEnd}
                                                                    getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
                                                                    getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
-        var nextPage = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";
-        });
-        expect(nextPage.length).toBe(1);
+        var node = ReactDOM.findDOMNode(component);
+        var nextButton = node.getElementsByClassName("nextButton");
+        expect(nextButton).toBeDefined();
     });
 
     it('test next link is NOT generated', () => {
@@ -109,14 +102,13 @@ describe('Report Navigation tests', () => {
                                                                    pageEnd={fakeReportNavigationData.valid.pageEnd}
                                                                    getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
                                                                    getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
-        var pageButton = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
-        });
-        expect(pageButton.length).toBe(1);
-        pageButton = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";
-        });
-        expect(pageButton.length).toBe(1);
+        var node = ReactDOM.findDOMNode(component);
+        var previousButton = node.getElementsByClassName("previousButton");
+        expect(previousButton).toBeDefined();
+
+        node = ReactDOM.findDOMNode(component);
+        var nextButton = node.getElementsByClassName("nextButton");
+        expect(nextButton).toBeDefined();
     });
 
     it('test next link and previous link are NOT generated', () => {

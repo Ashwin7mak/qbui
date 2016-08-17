@@ -113,14 +113,14 @@ let reportDataActions = {
                             this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
                         }
                     },
-                    (error) => {
-                        logger.error('Report service call error when querying for report meta data, data or records count:' + JSON.stringify(error));
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                    error => {
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReport:');
+                        this.dispatch(actions.LOAD_REPORT_FAILED, error.status);
                         reject();
                     }
                 ).catch(ex => {
-                    logger.error('Unexpected Report service call exception:', ex);
-                    this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                     reject();
                 });
 
@@ -131,14 +131,14 @@ let reportDataActions = {
                             this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data);
                         }
                     },
-                    (error) => {
-                        logger.error('Report service call error when querying for report meta data, data or records count:' + JSON.stringify(error));
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                    error => {
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReportRecordsCount:');
+                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error.status);
                         reject();
                     }
                 ).catch(ex => {
-                    logger.error('Unexpected Report service call exception:', ex);
-                    this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, 500);
                     reject();
                 });
             } else {

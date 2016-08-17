@@ -18,7 +18,6 @@ class ReportService extends BaseService {
         //  Report service API endpoints
         this.API = {
             GET_REPORT                  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
-            GET_REPORT_PAGE             : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}${constants.QUERYSTRING}format={3}${constants.PARAMSEPARATOR}offset={4}${constants.PARAMSEPARATOR}numrows={5}${constants.PARAMSEPARATOR}sortlist={6}`,
             GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
             GET_REPORTS                 : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
             GET_REPORT_COMPONENTS       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.REPORTCOMPONENTS}`,
@@ -97,11 +96,26 @@ class ReportService extends BaseService {
 
         let args = arguments;
         let url = super.constructUrl(this.API.GET_REPORT, [appId, tableId, reportId]);
+        var request;
+
+        // For report pagination, if format, offset, rows are defined, set parameters.
         if (format !== undefined && offset !== undefined && rows !== undefined) {
-            url = super.constructUrl(this.API.GET_REPORT_PAGE, [appId, tableId, reportId, format, offset, rows, sortList]);
+            let params = {};
+            if (format === true) {
+                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+            }
+            if (StringUtils.isNonEmptyString(sortList)) {
+                params[query.SORT_LIST_PARAM] = sortList;
+            }
+            if (NumberUtils.isInt(offset) && NumberUtils.isInt(rows)) {
+                params[query.OFFSET_PARAM] = offset;
+                params[query.NUMROWS_PARAM] = rows;
+            }
+            request = super.get(url, {params:params});
+        } else {
+            request = super.get(url);
         }
 
-        const request = super.get(url);
         if (request) {
             request.then((response) => {
                 cachedReportRequest[this._key(args)].resp = response;
