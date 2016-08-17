@@ -72,15 +72,15 @@
             },
 
             /**
-             * Add rawBody data to the submitted options object for put and post requests
+             * Add rawBody data to the submitted options object for put, post, patch and delete requests
              *
              * @param req
              * @param opts
              * @returns {*}
              */
             setBodyOption: function(req, opts) {
-                //  body header option only valid for put and post
-                if (this.isPut(req) || this.isPatch(req) || this.isPost(req)) {
+                //  body header option valid for all verbs EXCEPT 'get'.
+                if (!this.isGet(req)) {
                     opts.body = req.rawBody;
                 }
                 return opts;

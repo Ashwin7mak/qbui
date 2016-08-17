@@ -58,7 +58,7 @@ describe('Test Form Store', () => {
         flux.dispatcher.dispatch(loadFormAndRecordAction);
         expect(flux.store(STORE_NAME).formLoading).toBeFalsy();
         expect(flux.store(STORE_NAME).formData).toEqual({});
-        expect(flux.store(STORE_NAME).error).toBeTruthy();
+        expect(flux.store(STORE_NAME).errorStatus).toBeUndefined();
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
@@ -90,7 +90,7 @@ describe('Test Form Store', () => {
         let state = flux.store(STORE_NAME).getState();
 
         //  expect the following to be returned when 'getting state'
-        expect(state.error).toBeDefined();
+        expect(state.errorStatus).toBeDefined();
         expect(state.formLoading).toBeDefined();
         expect(state.formData).toBeDefined();
     });

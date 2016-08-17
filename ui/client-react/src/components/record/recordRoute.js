@@ -43,12 +43,18 @@ export let RecordRoute = React.createClass({
     getSecondaryBar() {
         const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
         const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
+        const rptId = this.props.params ? this.props.params.rptId : null;
 
-        const actions = [
-            {msg: 'recordActions.previous', icon:'caret-left', disabled: !showBack, onClick: this.previousRecord},
-            {msg: 'recordActions.return', icon:'return', onClick:this.returnToReport},
-            {msg: 'recordActions.next', icon:'caret-right', disabled: !showNext, onClick: this.nextRecord}
-        ];
+        const actions = [];
+        if (showBack || showNext) {
+            actions.push({msg: 'recordActions.previous', icon:'caret-left', disabled: !showBack, onClick: this.previousRecord});
+        }
+        if (rptId) {
+            actions.push({msg: 'recordActions.return', icon: 'return', onClick: this.returnToReport});
+        }
+        if (showBack || showNext) {
+            actions.push({msg: 'recordActions.next', icon:'caret-right', disabled: !showNext, onClick: this.nextRecord});
+        }
 
         return (<IconActions className="secondaryFormActions" actions={actions} />);
     },
@@ -166,7 +172,7 @@ export let RecordRoute = React.createClass({
                     {this.getSecondaryBar()}
                     {this.getPageActions()}
                 </div>
-                <QBForm formData={this.props.form ? this.props.form.formData : null}></QBForm>
+                <QBForm errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null} formData={this.props.form ? this.props.form.formData : null}></QBForm>
             </div>);
         }
     }

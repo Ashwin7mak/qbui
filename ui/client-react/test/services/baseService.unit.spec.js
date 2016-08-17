@@ -65,21 +65,16 @@ describe('BaseService rewire tests', () => {
     });
 
 
-    it('test setResponseInterceptor with 401 status', () => {
+    it('test checkResponseStatus with 401 status', () => {
         baseService = new BaseService();
-        baseService.responseInterceptorError({status: 401});
+        baseService.checkResponseStatus({response: {status: 401}});
         expect(mockWindowUtils.update).toHaveBeenCalled();
+        expect(mockWindowUtils.replace).not.toHaveBeenCalled();
     });
 
-    it('test setResponseInterceptor with 403 status', () => {
+    it('test checkResponseStatus with 200 status', () => {
         baseService = new BaseService();
-        baseService.responseInterceptorError({status: 403});
-        expect(mockWindowUtils.replace).toHaveBeenCalled();
-    });
-
-    it('test setResponseInterceptor with 200 status', () => {
-        baseService = new BaseService();
-        baseService.responseInterceptorError({status: 200});
+        baseService.checkResponseStatus({status: 200});
         expect(mockWindowUtils.replace).not.toHaveBeenCalled();
         expect(mockWindowUtils.update).not.toHaveBeenCalled();
     });

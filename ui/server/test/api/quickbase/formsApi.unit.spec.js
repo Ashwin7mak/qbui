@@ -14,6 +14,8 @@ var requestHelper = require('./../../../src/api/quickbase/requestHelper')(config
 var formsApi = require('../../../src/api/quickbase/formsApi')(config);
 var recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
 let errorCodes = require('../../../src/api/errorCodes');
+let errorStatus = 403;
+
 /**
  * Unit tests for report apis
  */
@@ -225,15 +227,15 @@ describe('Validate FormsApi unit tests', function() {
             req.url = '/apps/123/tables/456';
 
             var body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
-                       '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
-                       '"sections": {"0": {"orderIndex": 0,' +
-                       '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
-                                    '"2": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": 2}},' +
-                                    '"3": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": ""}},' +
-                                    '"4": {"FormTextElement": {"displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"}}}' +
-                       '}}' +   // close sections
-                       '}}' +   // close tabs
-                       '}';
+                '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
+                '"sections": {"0": {"orderIndex": 0,' +
+                '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
+                '"2": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": 2}},' +
+                '"3": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": ""}},' +
+                '"4": {"FormTextElement": {"displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"}}}' +
+                '}}' +   // close sections
+                '}}' +   // close tabs
+                '}';
             var bodyFields = '[{"id":3},{"id":2}]';
             var expectedSuccessResponse = {
                 formMeta: JSON.parse(body),
@@ -307,7 +309,11 @@ describe('Validate FormsApi unit tests', function() {
         it('return results with fetchFormMetaData failure', function(done) {
             req.url = '/apps/123/tables/456';
 
-            var error_message = "fail unit test case execution";
+            var error_message = {
+                status:errorStatus,
+                message: 'error',
+                body: '{"msg":"fail unit test case execution"}'
+            };
             var body = '{"formId":"1"}';
             var bodyFields = '[{"id":1}]';
             var expectedSuccessResponse = {
@@ -343,7 +349,7 @@ describe('Validate FormsApi unit tests', function() {
             req.url = '/apps/123/tables/456';
 
             var error_message = {
-                statusCode: 500,
+                status:errorStatus,
                 message: 'error',
                 body: '{"msg":"NOT_CONNECTED"}'
             };
@@ -382,9 +388,9 @@ describe('Validate FormsApi unit tests', function() {
         it('return results with both fetchSingleRecordAndFields and fetchFormMetaData failure', function(done) {
             req.url = '/apps/123/tables/456';
 
-            fetchFormMetaStub.returns(Promise.reject());
-            fetchTableFieldsStub.returns(Promise.reject());
-            fetchRecordStub.returns(Promise.reject());
+            fetchFormMetaStub.returns(Promise.reject({message:'someError', status:errorStatus}));
+            fetchTableFieldsStub.returns(Promise.reject({message:'someError', status:errorStatus}));
+            fetchRecordStub.returns(Promise.reject({message:'someError', status:errorStatus}));
 
             var promise = formsApi.fetchFormComponents(req);
 

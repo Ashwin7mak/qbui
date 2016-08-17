@@ -71,7 +71,9 @@ export default {
             recordSaved : "Datensatz gespeichert",
             recordNotSaved :"Nehmen Sie nicht gespeichert",
             recordDeleted : "Der Datensatz wurde gelöscht",
-            recordNotDeleted : "Nehmen Sie nicht gelöscht"
+            recordNotDeleted : "Nehmen Sie nicht gelöscht",
+            recordDeletedBulk: "Mehrere Datensätze gelöscht",
+            recordNotDeletedBulk: "Mehrere Datensätze nicht gelöscht"
         },
         header: {
             menu: {
@@ -86,7 +88,11 @@ export default {
 
         },
         form : {
-            tab : 'Tab'
+            tab : 'Tab',
+            error: {
+                403: "Sie sind nicht dieses Formular für den Zugriff auf autorisierte",
+                500: "Unerwarteter Fehler macht dieses Formular"
+            }
         },
         report : {
             blank : "leer",

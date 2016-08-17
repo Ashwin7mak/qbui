@@ -186,4 +186,61 @@ describe('Express Routes', function() {
             });
     });
 
+    it('Validate delete bulk records route', function(done) {
+
+        stubLog = sinon.stub(log, 'info').returns(true);
+
+        request(app).
+            delete(routeConstants.RECORDS_BULK).
+            send({level:'debug', msg:'test'}).
+            expect({}).
+            end(function(err, res) {
+                if (err) {
+                    stubLog.restore();
+                    return done(err);
+                }
+                stubLog.restore();
+                done();
+            });
+    });
+
+    it('Validate get bulk records route is not supported', function(done) {
+
+        request(app).
+            get(routeConstants.RECORDS_BULK).
+            expect(405).
+            end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+    });
+
+    it('Validate put bulk records route is not supported', function(done) {
+
+        request(app).
+            put(routeConstants.RECORDS_BULK).
+            expect(405).
+            end(function(err, res) {
+                if (err) {
+                    return done(err);
+                }
+                done();
+            });
+    });
+
+    it('Validate patch bulk records route is not supported', function(done) {
+
+        request(app).
+        patch(routeConstants.RECORDS_BULK).
+        expect(405).
+        end(function(err, res) {
+            if (err) {
+                return done(err);
+            }
+            done();
+        });
+    });
+
 });

@@ -3,18 +3,21 @@ import fieldsActions from '../../src/actions/fieldsActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
+let errorStatus = 404;
+let exStatus = 500;
+let responseData = [{data: [1, 2, 3]}];
+
 describe('Fields Actions getFields missing params -- ', () => {
     'use strict';
 
     let appId = 'appId';
     let tblId = 'tblId';
-    let responseData = [{data: [1, 2, 3]}];
 
     class mockFieldsService {
         constructor() { }
         getFields() {
             var p = Promise.defer();
-            p.reject({message:'someError'});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
         getField(id) {
@@ -48,7 +51,7 @@ describe('Fields Actions getFields missing params -- ', () => {
                 expect(mockFieldsService.prototype.getFields).not.toHaveBeenCalled();
                 expect(mockFieldsService.prototype.getField).not.toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FIELDS_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FIELDS_FAILED, exStatus]);
 
                 done();
             }
@@ -60,13 +63,12 @@ describe('Fields Actions getFields -- ', () => {
 
     let appId = 'appId';
     let tblId = 'tblId';
-    let responseData = [{data: [1, 2, 3]}];
 
     class mockFieldsService {
         constructor() { }
         getFields() {
             var p = Promise.defer();
-            p.reject({message:'someError'});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
         getField(id) {
@@ -101,7 +103,7 @@ describe('Fields Actions getFields -- ', () => {
                 expect(mockFieldsService.prototype.getField).not.toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FIELDS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FIELDS_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FIELDS_FAILED, errorStatus]);
                 done();
             }
         );
@@ -113,7 +115,6 @@ describe('Fields Actions getFields -- ', () => {
 
     let appId = 'appId';
     let tblId = 'tblId';
-    let responseData = [{data: [1, 2, 3]}];
 
     class mockFieldsService {
         constructor() { }
@@ -151,7 +152,7 @@ describe('Fields Actions getFields -- ', () => {
                 expect(mockFieldsService.prototype.getField).not.toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FIELDS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FIELDS_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FIELDS_FAILED, exStatus]);
                 done();
             }
         );

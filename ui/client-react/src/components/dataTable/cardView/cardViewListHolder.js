@@ -19,7 +19,8 @@ export let CardViewListHolder = React.createClass({
         uniqueIdentifier: React.PropTypes.string,
         reportHeader: React.PropTypes.element,
         selectionActions: React.PropTypes.element,
-        onScroll: React.PropTypes.func
+        onScroll: React.PropTypes.func,
+        onRowClicked: React.PropTypes.func
     },
 
     getInitialState() {
@@ -56,28 +57,6 @@ export let CardViewListHolder = React.createClass({
      */
     isRowSelected(row) {
         return this.props.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
-    },
-
-    /**
-     * report row was clicked
-     * @param row data
-     */
-    onRowClicked(row) {
-
-        const {appId, tblId, rptId} = this.props.reportData;
-        let recId;
-
-        //check to see if props exist, if they do we need to get recId from row.props.data (this is for non-custom row component clicks)
-        if (row.props) {
-            recId = row.props.data[this.props.uniqueIdentifier];
-        } else {
-            recId = row[this.props.uniqueIdentifier];
-        }
-        //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        if (this.props.router) {
-            this.props.router.push(link);
-        }
     },
 
     /**
@@ -151,7 +130,7 @@ export let CardViewListHolder = React.createClass({
                               allowCardSelection={this.allowCardSelection}
                               onToggleCardSelection={this.onToggleCardSelection}
                               onRowSelected={this.onCardRowSelected}
-                              onRowClicked={this.onRowClicked}
+                              onRowClicked={this.props.onRowClicked}
                               isRowSelected={this.isRowSelected}
                               onSwipe={this.onSwipe}/>
             </div>);

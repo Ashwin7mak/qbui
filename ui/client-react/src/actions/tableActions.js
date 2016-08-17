@@ -5,6 +5,8 @@ import Promise from 'bluebird';
 import reportModel from '../models/reportModel';
 
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+
 let logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -32,18 +34,19 @@ let tableActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.error('TableService getHomePage error:' + JSON.stringify(error), error);
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.getHomePage:');
+                        this.dispatch(actions.LOAD_REPORT_FAILED, error.response.status);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.error('TableService getHomePage exception:' + JSON.stringify(ex), ex);
-                    this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                     reject();
                 });
             } else {
-                logger.error('Missing required input parameters for tableService.getHomePage.');
-                this.dispatch(actions.LOAD_REPORT_FAILED);
+                logger.error('tableService.getHomePage: Missing required input parameters');
+                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                 reject();
             }
         });
