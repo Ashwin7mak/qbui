@@ -11,7 +11,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  */
 const CHECKBOX_COL_WIDTH = 40; // 40px checkbox column can be toggled
 
-export let CardViewListHolder = React.createClass({
+let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
         reportData: React.PropTypes.object.isRequired,

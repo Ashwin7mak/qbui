@@ -64,11 +64,11 @@ describe('CardViewListHolder functions', () => {
     let component;
 
     beforeEach(() => {
-        CardViewListHolderRewireAPI.__Rewire__('CardViewList', CardViewListMock);
+        CardViewListHolder.__Rewire__('CardViewList', CardViewListMock);
     });
 
     afterEach(() => {
-        CardViewListHolderRewireAPI.__ResetDependency__('CardViewList');
+        CardViewListHolder.__ResetDependency__('CardViewList');
     });
 
     it('test render of loading component', () => {
