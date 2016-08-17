@@ -288,18 +288,12 @@ let QBForm = React.createClass({
             });
         }
 
+        const formContent = tabChildren.length < 2 ? tabChildren : <Tabs activeKey={this.props.activeTab}>{tabChildren}</Tabs>;
 
         return (
             <div className="formContainer">
                 <form>
-                    {errorMsg && errorMsg}
-                    {!errorMsg && (
-                        tabChildren.length < 2 ?
-                            tabChildren :
-                        <Tabs activeKey={this.props.activeTab}>
-                            {tabChildren}
-                        </Tabs>)
-                    }
+                    {errorMsg ? errorMsg : formContent}
                 </form>
             </div>
         );
