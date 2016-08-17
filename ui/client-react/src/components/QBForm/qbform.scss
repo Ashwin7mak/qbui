@@ -7,45 +7,75 @@
 .formSection {
     display: block;
 
+    .formTable {
+        margin-left: 20px;
+    }
     .fieldRow {
-        display: flex;
-        flex-direction: row;
-        align-items: stretch;
-        flex-wrap: wrap;
+
         padding: 5px 0;
 
+        td {
+            vertical-align:top;
+            padding-bottom: 30px;
+        }
+        tr:last-child td {
+            padding-bottom:0;
+        }
+
         .formElement {
-            margin: 0 35px 20px 0;
             word-wrap: break-word;
             max-width: 100%;
             display: flex;
-            .fieldLabel {
-                display: block;
-                color: $fieldLabel-color;
-                padding-bottom: 2px;
-            }
-            &.labelAbove {
-                flex-direction: column;
-            }
-            &.labelLeft {
-                .fieldLabel {
-                    padding-right: 5px;
-                }
-            }
+            flex-direction: column;
+        }
+
+        /* separate field label td left of field */
+        .fieldLabel {
+            text-align:right;
+            display: block;
+            color: $fieldLabel-color;
+            max-width: 10em;
+            margin-right:20px;
+        }
+
+        /* field label in field td */
+        .field .fieldLabel {
+            max-width: 20em;
+            text-align:left;
+            margin-bottom: 10px;
+        }
+
+        .field {
+            margin-right: 40px;
+        }
+
+        td:last-child .field {
+            margin-right: 0;
         }
     }
 }
 
 /* For mobile phones: */
 @include small-breakpoint {
-    .qbPanelBody {
-        .field {
-            max-width: 100%;
-            .fieldLabel {
-                font-size: $font-size-small;
+    .formSection {
+        display: block;
+
+        .formTable {
+            margin-left: 0px;
+        }
+
+        .fieldRow {
+            td {
+                padding-bottom: 20px;
             }
-            .fieldValue {
-                font-size: $font-size-small;
+            .field {
+                max-width: 100%;
+                .fieldLabel {
+                    font-size: $font-size-small;
+                }
+                .fieldValue {
+                    font-size: $font-size-small;
+                }
             }
         }
     }
