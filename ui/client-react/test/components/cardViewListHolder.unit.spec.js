@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
-import {CardViewListHolder, __RewireAPI__ as CardViewListHolderRewireAPI} from '../../src/components/dataTable/cardView/cardViewListHolder';
+import CardViewListHolder from '../../src/components/dataTable/cardView/cardViewListHolder';
 
 const fakeReportData_loading = {
     loading: true
@@ -188,22 +188,5 @@ describe('CardViewListHolder functions', () => {
 
         cardlist.simulateClick();
         expect(onRowClicked).toBe(true);
-    });
-it('test rowClick callback', () => {
-        let router = [];
-
-        var TestParent = React.createFactory(React.createClass({
-            render() {
-                return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
-                                           uniqueIdentifier="RecId" router={router}/>;
-            }
-        }));
-        var parent = TestUtils.renderIntoDocument(TestParent());
-        component = parent.refs.cardViewListholder;
-        let cardlist = TestUtils.findRenderedComponentWithType(component, CardViewListMock);
-        expect(TestUtils.isCompositeComponent(cardlist)).toBeTruthy();
-
-        cardlist.simulateClick({data: {RecId: 2}});
-        expect(component.props.router).toContain('/app/1/table/2/report/3/record/2');
     });
 });

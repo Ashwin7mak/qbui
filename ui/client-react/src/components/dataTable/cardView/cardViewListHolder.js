@@ -2,7 +2,6 @@ import React from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
-import {withRouter} from 'react-router';
 import CardViewList from './cardViewList';
 import './cardViewList.scss';
 
@@ -172,5 +171,4 @@ export let CardViewListHolder = React.createClass({
     }
 });
 
-export let CardViewListHolderWithRouter = withRouter(CardViewListHolder);
-export default CardViewListHolderWithRouter;
+export default CardViewListHolder;
