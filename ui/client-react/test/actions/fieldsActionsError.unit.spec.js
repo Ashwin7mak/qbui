@@ -17,7 +17,7 @@ describe('Fields Actions getFields missing params -- ', () => {
         constructor() { }
         getFields() {
             var p = Promise.defer();
-            p.reject({message:'someError', status:errorStatus});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
         getField(id) {
@@ -68,7 +68,7 @@ describe('Fields Actions getFields -- ', () => {
         constructor() { }
         getFields() {
             var p = Promise.defer();
-            p.reject({message:'someError', status:errorStatus});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
         getField(id) {

@@ -227,15 +227,15 @@ describe('Validate FormsApi unit tests', function() {
             req.url = '/apps/123/tables/456';
 
             var body = '{"formId": 1,"tableId": "0wbfabsaaaaac","appId": "0wbfabsaaaaab",' +
-                       '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
-                       '"sections": {"0": {"orderIndex": 0,' +
-                       '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
-                                    '"2": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": 2}},' +
-                                    '"3": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": ""}},' +
-                                    '"4": {"FormTextElement": {"displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"}}}' +
-                       '}}' +   // close sections
-                       '}}' +   // close tabs
-                       '}';
+                '"tabs": {"0": {"orderIndex": 0,"title": "nameMdhfp1464879524917",' +
+                '"sections": {"0": {"orderIndex": 0,' +
+                '"elements": {"1": {"FormFieldElement": {"displayText": "g6e5k9ySac7EhVscoc5pHKhAJ1skg7F8zIZlHW8hFuZqq486fz","fieldId": 3}},' +
+                '"2": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": 2}},' +
+                '"3": {"FormFieldElement": {"displayText": "FFWJ4RpUxV5HioEb1G5pHKhAJ1skg7F8zIZlHW8hFuZqhVCqvE","fieldId": ""}},' +
+                '"4": {"FormTextElement": {"displayText": "FFWJ4RpUxV5HioEb1GeipR3EGbmGC6fycKb1kMHlJAvWhVCqvE"}}}' +
+                '}}' +   // close sections
+                '}}' +   // close tabs
+                '}';
             var bodyFields = '[{"id":3},{"id":2}]';
             var expectedSuccessResponse = {
                 formMeta: JSON.parse(body),

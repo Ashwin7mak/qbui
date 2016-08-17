@@ -53,6 +53,8 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).__actions__.NEW_BLANK_REPORT_RECORD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.DELETE_REPORT_RECORD_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.DELETE_REPORT_RECORD_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_REPORT_RECORD_BULK_SUCCESS).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DELETE_REPORT_RECORD_BULK_FAILED).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_CANCEL).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD_FAILED).toBeDefined();
@@ -1086,6 +1088,7 @@ describe('Test ReportData Store', () => {
 
         flux.dispatcher.dispatch(onDeleteReportRecordSuccess);
         expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(1);
+        expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(1);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });
@@ -1147,6 +1150,7 @@ describe('Test ReportData Store', () => {
 
         flux.dispatcher.dispatch(onDeleteReportRecordSuccess);
         expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(2);
+        expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(2);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });
@@ -1207,6 +1211,191 @@ describe('Test ReportData Store', () => {
         };
 
         flux.dispatcher.dispatch(onDeleteReportRecordFailed);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+    it('test onDeleteReportRecordBulkSuccess with valid recIds', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId:false,
+                    id:16,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    keyField: true,
+                    defaultValue: {
+                        coercedValue :"City",
+                        displayValue :"City"
+                    },
+                    datatypeAttributes : {
+                        type: "TEXT"
+                    }
+                },
+                    {
+                        builtId:false,
+                        id:8,
+                        name: "Score",
+                        type: "SCALAR",
+                        keyField: false,
+                        datatypeAttributes : {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                records: [[
+                    {id: 16, value: 16, display: 16},
+                    {id: 8, value: 1234, display: 1234},
+                ],
+                    [
+                        {id: 16, value: "NYC", display: "NYC"},
+                        {id: 8, value: 456, display: 456}
+                    ]],
+                groups: []
+            }
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let onDeleteReportRecordBulkSuccess = {
+            type: actions.DELETE_REPORT_RECORD_BULK_SUCCESS,
+            payload: [16]
+        };
+
+        flux.dispatcher.dispatch(onDeleteReportRecordBulkSuccess);
+        expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(1);
+        expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(1);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+    it('test onDeleteReportRecordBulkSuccess with invalid recIds', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId:false,
+                    id:16,
+                    name: "Record ID#",
+                    type: "SCALAR",
+                    keyField: false,
+                    defaultValue: {
+                        coercedValue :"City",
+                        displayValue :"City"
+                    },
+                    datatypeAttributes : {
+                        type: "TEXT"
+                    }
+                },
+                    {
+                        builtId:false,
+                        id:8,
+                        name: "Score",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes : {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                records: [[
+                    {id: 16, value: 16, display: 16},
+                    {id: 8, value: 1234, display: 1234},
+                ],
+                    [
+                        {id: 16, value: "NYC", display: "NYC"},
+                        {id: 8, value: 456, display: 456}
+                    ]],
+                groups: []
+            }
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        //bulk delete endpoint doesn't care if the recordId doesn't exist, it still returns 200 for a success
+        let onDeleteReportRecordBulkSuccess = {
+            type: actions.DELETE_REPORT_RECORD_BULK_SUCCESS,
+            payload: [999999]
+        };
+
+        flux.dispatcher.dispatch(onDeleteReportRecordBulkSuccess);
+        expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(2);
+        expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(2);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+    it('test onDeleteReportRecordBulkFailed', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId:false,
+                    id:16,
+                    name: "loc",
+                    type: "SCALAR",
+                    keyField: false,
+                    defaultValue: {
+                        coercedValue :"City",
+                        displayValue :"City"
+                    },
+                    datatypeAttributes : {
+                        type: "TEXT"
+                    }
+                },
+                    {
+                        builtId:false,
+                        id:8,
+                        name: "Score",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes : {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                records: [[
+                    {id: 16, value: "Boston", display: "Boston"},
+                    {id: 8, value: 1234, display: 1234},
+                ],
+                    [
+                        {id: 16, value: "NYC", display: "NYC"},
+                        {id: 8, value: 456, display: 456}
+                    ]],
+                groups: []
+            }
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let onDeleteReportRecordBulkFailed = {
+            type: actions.DELETE_REPORT_RECORD_BULK_FAILED,
+            payload: {}
+        };
+
+        flux.dispatcher.dispatch(onDeleteReportRecordBulkFailed);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });

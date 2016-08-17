@@ -186,7 +186,7 @@ let ReportToolsAndContent = React.createClass({
                               pageEnd={this.pageEnd}/>;
     },
     getSelectionActions() {
-        return (<ReportActions selection={this.props.selectedRows} />);
+        return (<ReportActions selection={this.props.selectedRows} appId={this.props.params.appId} tblId={this.props.params.tblId} rptId={this.props.params.rptId}/>);
     },
     getTableActions() {
         const selectedRows = this.props.selectedRows;

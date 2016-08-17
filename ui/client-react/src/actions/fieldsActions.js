@@ -34,8 +34,9 @@ let fieldsActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.parseAndLogError(LogLevel.ERROR, error, 'fieldsService.getFields:');
-                        this.dispatch(actions.LOAD_FIELDS_FAILED, error.status);
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
+                        this.dispatch(actions.LOAD_FIELDS_FAILED, error.response.status);
                         reject();
                     }
                 ).catch((ex) => {

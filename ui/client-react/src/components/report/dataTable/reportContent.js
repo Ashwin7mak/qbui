@@ -728,7 +728,7 @@ let ReportContent = React.createClass({
                                 reportHeader={this.props.reportHeader}
                                 reportFooter={this.props.reportFooter}
                                 pageActions={this.props.pageActions}
-                                selectionActions={<ReportActions />}
+                                selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} />}
                                 onScroll={this.onScrollRecords}
                                 onRowClick={this.openRow}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}

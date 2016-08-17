@@ -355,6 +355,17 @@
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 return requestHelper.executeRequest(req, opts);
+            },
+
+            /**
+             *
+             * @param req
+             * @returns Promise
+             */
+            deleteRecordsBulk: function(req) {
+                var opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                return requestHelper.executeRequest(req, opts);
             }
 
         };

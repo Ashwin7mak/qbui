@@ -521,4 +521,55 @@ describe("Validate recordsApi", function() {
         });
     });
 
+    describe("when deleteRecordsBulk is called", function() {
+        var executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            recordsApi.setRequestHelperObject(requestHelper);
+        });
+
+        afterEach(function() {
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            req.url = '/records/bulk/';
+            req.body = {data:'here'};
+            var targetObject = "{}";
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = recordsApi.deleteRecordsBulk(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve record: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+
+        it('fail return results ', function(done) {
+            req.url = '/records/bulk/';
+            var error_message = "fail unit test case execution";
+
+            executeReqStub.returns(Promise.reject(new Error(error_message)));
+            var promise = recordsApi.deleteRecordsBulk(req);
+
+            promise.then(
+                function(error) {
+                },
+                function(error) {
+                    assert.equal(error, "Error: fail unit test case execution");
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all record: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+    });
+
 });

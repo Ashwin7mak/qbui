@@ -17,7 +17,7 @@ describe('Report Actions error functions --', () => {
         constructor() { }
         getReports() {
             var p = Promise.defer();
-            p.reject({message:'someError', status:errorStatus});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
     }

@@ -17,6 +17,7 @@
 
         var requestHelper = require('./api/quickbase/requestHelper')();
         var routeConstants = require('./routes/routeConstants');
+        var routeMapper = require('./routes/qbRouteMapper')(config);
 
         /*
          *  Route to log a message. Only a post request is supported.
@@ -58,6 +59,32 @@
             // ...route terminates...logging a client side message only
         });
 
+        /*
+         * intercept all record bulk requests because express can't route them properly. We need to handle them manually
+         */
+        app.all(routeConstants.RECORDS_BULK, function(req, res, next) {
+            //be awesome
+            if (requestHelper.isDelete(req)) {
+                var recordBulkDelete = routeMapper.fetchDeleteFunctionForRoute(routeConstants.RECORDS_BULK);
+                if (recordBulkDelete !== null) {
+                    recordBulkDelete(req, res);
+                } else {
+                    //the method doesn't exist, we can't execute this request, log an error!
+                    res.status(501).send('Method not implemented!');
+                }
+            } else if (requestHelper.isPost(req)) {
+                /*
+                 * TODO: MB-421 (https://quickbase.atlassian.net/browse/MB-421) this is a stop gap for integration tests.
+                 * UI Integration tests use the Bulk Create currently, but through the node layer
+                 * UI Integration tests need to be updated to use the Java end point when creating data
+                 */
+                return next();
+            } else {
+                //the verb requested for this rest endpoint is not implemented yet, log an error!
+                res.status(405).send('Method not supported');
+            }
+        });
+
 
         //  For all requests:
         //     -- log the request route.
@@ -66,8 +93,6 @@
             log.info({req: req}, 'Router');
             next();
         });
-
-        var routeMapper = require('./routes/qbRouteMapper')(config);
 
         require('./routes/qbClientRoutes')(app, config);
         require('./routes/qbApiRoutes')(app, config, routeMapper);
