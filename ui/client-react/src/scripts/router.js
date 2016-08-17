@@ -1,8 +1,7 @@
 //these two imports are needed for safari and iOS to work with internationalization
 import React from "react";
 import ReactDOM, {render} from "react-dom";
-import {Router, Route, IndexRoute} from "react-router";
-import {browserHistory} from 'react-router';
+import {Router, Route, IndexRoute, browserHistory} from "react-router";
 import Nav from "../components/nav/nav";
 import Fluxxor from "fluxxor";
 import ReportsStore from "../stores/reportsStore";

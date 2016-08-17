@@ -4,8 +4,7 @@ import en from 'intl/locale-data/jsonp/en.js';
 
 import React from 'react';
 import {render} from 'react-dom';
-import {Router, Route, IndexRoute, IndexRedirect} from 'react-router';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+import {Router, Route, IndexRoute, IndexRedirect, browserHistory} from 'react-router';
 
 import Nav from '../../client-react/src/components/nav/nav';
 
@@ -25,7 +24,7 @@ import QBIconDoc from './docs/qbicon';
 import './assets/componentLibrary.scss';
 
 render((
-    <Router history={createBrowserHistory()}>
+    <Router history={browserHistory()}>
         <Route path="components" component={ComponentLibraryWrapper}>
             <IndexRedirect to="qbpanel" />
             <Route path="qbpanel" component={QBPanelDoc} />
