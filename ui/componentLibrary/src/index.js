@@ -24,7 +24,7 @@ import QBIconDoc from './docs/qbicon';
 import './assets/componentLibrary.scss';
 
 render((
-    <Router history={browserHistory()}>
+    <Router history={browserHistory}>
         <Route path="components" component={ComponentLibraryWrapper}>
             <IndexRedirect to="qbpanel" />
             <Route path="qbpanel" component={QBPanelDoc} />
