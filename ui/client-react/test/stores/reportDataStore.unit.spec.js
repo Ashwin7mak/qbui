@@ -1193,7 +1193,7 @@ describe('Test ReportData Store', () => {
 
         flux.dispatcher.dispatch(onDeleteReportRecordFailed);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
     it('test onDeleteReportRecordBulkSuccess with valid recIds', () => {
@@ -1378,7 +1378,7 @@ describe('Test ReportData Store', () => {
 
         flux.dispatcher.dispatch(onDeleteReportRecordBulkFailed);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
 

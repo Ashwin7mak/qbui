@@ -695,7 +695,7 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload parameter contains {appId, tblId, recId, error: error}
      */
     onDeleteReportRecordFailed(payload) {
-        this.emit('change');
+        //add code here when we want to do something with this action
     },
 
     /**
@@ -725,7 +725,7 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload parameter contains {appId, tblId, recId, error: error}
      */
     onDeleteReportRecordBulkFailed(payload) {
-        this.emit('change');
+        //add code here when we want to do something with this action
     },
 
     /**
