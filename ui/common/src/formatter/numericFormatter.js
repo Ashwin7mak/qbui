@@ -18,12 +18,12 @@
      */
     var bigDecimal = require('bigdecimal');
     var consts = require('../constants');
+
     //Module constants:
     var COMMA = ',';
     var DASH = '-';
     var ZERO_CHAR = '0';
     var PERIOD = '.';
-    var EXPONENT_CHAR = 'E';
     var PATTERN_EVERY_THREE = 'EVERY_THREE';
     var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
     var CURRENCY_LEFT = 'LEFT';
@@ -111,6 +111,11 @@
      * @returns {*}
      */
     function toFormattedMantissaString(mantissaString, opts) {
+
+        if (mantissaString === null) {
+            return '';
+        }
+
         var formattedMantissa = mantissaString;
         //Format the mantissa, if its long enough to need formatting
         if (opts.separatorMark && mantissaString.length > opts.separatorStart) {
@@ -125,7 +130,62 @@
                 formattedMantissa = ret.join(opts.separatorMark);
             }
         }
+
         return formattedMantissa;
+    }
+
+    /**
+     * Is the numeric value in scientific notation format.
+     *
+     *
+     * @param numeric
+     * @returns {boolean}
+     */
+    function isScientificNotation(numeric) {
+        return String(numeric).split(/[eE]/).length === 2;
+    }
+
+
+    /**
+     * Need to manually build function to convert scientific notation number as
+     * using the build-in javascript functions like parse of Number will not work
+     * for large numbers like 1.34E+25
+     *
+     * @param numeric
+     * @returns {*}
+     */
+    function convertScientificNotation(numeric) {
+        //  split the number where have the coefficient and base 10 exponent
+        var data = String(numeric).split(/[eE]/);
+        if (data.length === 1) {
+            return data[0];
+        }
+
+        var coefficient = data[0].replace(PERIOD, ''),
+            exponent = Number(data[1]) + 1;
+
+        //  is the exponent negative IE: 1.2345e-20
+        if (exponent < 0) {
+            //  format fraction as 0.xxxx or -0.xxx
+            var leadingZeros = (numeric < 0 ? DASH : '') + ZERO_CHAR + PERIOD;
+
+            //  append the number of base 10 zeros
+            while (exponent++) {
+                leadingZeros += ZERO_CHAR;
+            }
+
+            //  return the converted number
+            return leadingZeros + coefficient.replace(/^\-/, '');
+        }
+
+        //  have a positive exponent IE: 1.2345e+20
+        exponent -= (numeric < 0 ? coefficient.length - 1 : coefficient.length);
+        while (exponent--) {
+            coefficient += ZERO_CHAR;    // append a zero for each base 10 exponent
+        }
+
+        //  return the converted number
+        return coefficient;
     }
 
     /**
@@ -136,29 +196,26 @@
      * @returns the numeric value formatted as a string
      */
     function formatNumericValue(numeric, opts) {
+
+        var mantissaString = null, characteristicString = null;
+
         //Resolve the number value as a string with the proper decimal places
-        var numString = numeric.toString();
-        var mantissaString, characteristicString;
-        //Parse either scientific notation string or a raw numeric string
-        if (numString.indexOf(EXPONENT_CHAR) !== -1) {
-            var parts = numString.split(EXPONENT_CHAR);
-            var exponent = Number(parts[1]);
-            var decimalSplits = parts[0].split(PERIOD);
-            if (decimalSplits[1].length >= exponent) {
-                mantissaString = decimalSplits[0] + decimalSplits[1].substring(0, exponent);
-                if (decimalSplits[1].length > exponent) {
-                    characteristicString = decimalSplits[1].substring(exponent);
-                }
-            }
-        } else {
-            //Split the string on the decimal point, if there is one
-            var numParts = numString.toString().split(PERIOD);
-            mantissaString = numParts[0];
-            characteristicString = null;
-            if (numParts.length > 1) {
-                characteristicString = numParts[1];
-            }
+        var numString = Number(numeric).toString();
+
+        // If numString is in scientific notation format, this means the number is too
+        // large to convert using the javascript built-in function.  We'll need to
+        // manually perform the conversion.
+        if (isScientificNotation(numString)) {
+            numString = convertScientificNotation(numString);
         }
+
+        //Split the string on the decimal point, if there is one
+        var numParts = numString.split(PERIOD);
+        mantissaString = numParts[0];
+        if (numParts.length > 1) {
+            characteristicString = numParts[1];
+        }
+
         characteristicString = toRoundedDisplayDecimal(characteristicString, opts.decimalPlaces);
         mantissaString = toFormattedMantissaString(mantissaString, opts);
         //Construct the return string
@@ -242,9 +299,15 @@
          */
         format: function(fieldValue, fieldInfo) {
 
-            if (!fieldValue || !fieldValue.value) {
+            if (!fieldValue) {
                 return '';
             }
+
+            //  is the field value a valid number
+            if (fieldValue.value === null || fieldValue.value === undefined) {
+                return '';
+            }
+
             var opts = fieldInfo.jsFormat;
             if (!opts) {
                 opts = this.generateFormat(fieldInfo);
