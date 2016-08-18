@@ -25,7 +25,6 @@ const FieldElement = React.createClass({
         let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "display value";
         let fieldRawValue = this.props.fieldRecord ? this.props.fieldRecord.value : "raw value";
 
-        //console.log(this.props,fieldType);
         return (
             <div className="formElement field">
                 {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} /> }
