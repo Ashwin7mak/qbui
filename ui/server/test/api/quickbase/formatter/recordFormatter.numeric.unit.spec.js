@@ -17,6 +17,7 @@ describe('Numeric record formatter unit test', function() {
         var numberDouble = 98765432100.74765;
         var numberNoSeparator = 99;
         var numberMultipleSeparators = 98765432100;
+        var numberZero = 0;
 
         //  test various scientific notation formats.
         //  NOTE: because QuickBase has few rules, tests include
@@ -50,6 +51,15 @@ describe('Numeric record formatter unit test', function() {
         recordInputNoSeparator[0][0].value = numberNoSeparator;
         var recordInputMultipleSeparators = JSON.parse(JSON.stringify(defaultRecordInput));
         recordInputMultipleSeparators[0][0].value = numberMultipleSeparators;
+
+        var recordInputZero = JSON.parse(JSON.stringify(defaultRecordInput));
+        recordInputZero[0][0].value = numberZero;
+
+        var recordInputNull = JSON.parse(JSON.stringify(defaultRecordInput));
+        recordInputNull[0][0].value = null;
+
+        var recordInputUndefined = JSON.parse(JSON.stringify(defaultRecordInput));
+        recordInputUndefined[0][0].value = undefined;
 
         var recordInputExDouble = JSON.parse(JSON.stringify(defaultRecordInput));
         recordInputExDouble[0][0].value = numberExponentNoSeparator;
@@ -87,6 +97,18 @@ describe('Numeric record formatter unit test', function() {
             },
             type              : 'SCALAR'
         }];
+
+        var expectedDecimal_undefined = JSON.parse(JSON.stringify(defaultRecordExp));
+        expectedDecimal_undefined[0][0].value = undefined;
+        expectedDecimal_undefined[0][0].display = '';
+
+        var expectedDecimal_null = JSON.parse(JSON.stringify(defaultRecordExp));
+        expectedDecimal_null[0][0].value = null;
+        expectedDecimal_null[0][0].display = '';
+
+        var expectedDecimal_zero = JSON.parse(JSON.stringify(defaultRecordExp));
+        expectedDecimal_zero[0][0].value = numberZero;
+        expectedDecimal_zero[0][0].display = '0';
 
         var expectedDecimal_NoFlags = JSON.parse(JSON.stringify(defaultRecordExp));
         expectedDecimal_NoFlags[0][0].value = numberDecimalOnly;
@@ -866,6 +888,10 @@ describe('Numeric record formatter unit test', function() {
         expectedMultiSeparators_InvalidFlags[0][0].display = numberMultipleSeparators;
 
         var cases = [
+            {message: 'Numeric - zero with no format', records: recordInputZero, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_zero},
+            {message: 'Numeric - null', records: recordInputNull, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_null},
+            {message: 'Numeric - undefined', records: recordInputUndefined, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_undefined},
+
             {message: 'Numeric - decimal with no format', records: recordInputDecimalOnly, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_NoFlags},
             {message: 'Numeric - double with no format', records: recordInputDouble, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDouble_NoFlags},
             {message: 'Numeric - no separator with no format', records: recordInputNoSeparator, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedNoSeparator_NoFlags},

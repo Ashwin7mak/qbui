@@ -299,9 +299,15 @@
          */
         format: function(fieldValue, fieldInfo) {
 
-            if (!fieldValue || !fieldValue.value) {
+            if (!fieldValue) {
                 return '';
             }
+
+            //  is the field value a valid number
+            if (fieldValue.value === null || fieldValue.value === undefined) {
+                return '';
+            }
+
             var opts = fieldInfo.jsFormat;
             if (!opts) {
                 opts = this.generateFormat(fieldInfo);
