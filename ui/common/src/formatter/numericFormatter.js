@@ -24,8 +24,6 @@
     var DASH = '-';
     var ZERO_CHAR = '0';
     var PERIOD = '.';
-    var EXPONENT_CHAR = 'E';
-    var EXPONENT_CHAR_LOWER = 'e';
     var PATTERN_EVERY_THREE = 'EVERY_THREE';
     var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
     var CURRENCY_LEFT = 'LEFT';
@@ -137,7 +135,8 @@
     }
 
     /**
-     * Is the numeric value in scientific notation format
+     * Is the numeric value in scientific notation format.
+     *
      *
      * @param numeric
      * @returns {boolean}
@@ -197,21 +196,17 @@
      * @returns the numeric value formatted as a string
      */
     function formatNumericValue(numeric, opts) {
+
+        var mantissaString = null, characteristicString = null;
+
         //Resolve the number value as a string with the proper decimal places
-        var numString = null, mantissaString = null, characteristicString = null;
+        var numString = Number(numeric).toString();
 
-        //If scientific notation, convert to a number before parsing..
-        if (isScientificNotation(numeric)) {
-            //  attempt to convert using javascript built-in function
-            numString = Number(numeric).toString();
-
-            //  if the number is too large for the javascript built-in function to convert the scientic
-            //  notation number, then will have to manually perform the conversion.
-            if (isScientificNotation(numString)) {
-                numString = convertScientificNotation(numString);
-            }
-        } else {
-            numString = numeric.toString();
+        // If numString is in scientific notation format, this means the number is too
+        // large to convert using the javascript built-in function.  We'll need to
+        // manually perform the conversion.
+        if (isScientificNotation(numString)) {
+            numString = convertScientificNotation(numString);
         }
 
         //Split the string on the decimal point, if there is one

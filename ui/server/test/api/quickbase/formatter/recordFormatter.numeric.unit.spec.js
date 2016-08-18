@@ -23,9 +23,9 @@ describe('Numeric record formatter unit test', function() {
         //  values outside of the universally accepted rules on format..
         var numberExponentNoSeparator = '10E4';
         var numberExponent = '4.874915326E7';
-        var numberExponentLarge = '1.23456789E50';
+        var numberExponentLarge = '1.23456789e50';
         var numberExponentLarge2 = '10E50';
-        var numberExponentNegative = '-4.241461458786777E21';
+        var numberExponentNegative = '-4.241461458786777E+21';
         var numberExponentNegative2 = '-42414.61458786777E-2';
         var numberExponentFraction = '4.874915326E-2';
         var numberExponentFractionLarge = '487.4915326e-20';
