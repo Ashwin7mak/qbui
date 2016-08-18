@@ -40,13 +40,15 @@ var CardViewListHolderMock = React.createClass({
 
 
 const header_empty = <div>nothing</div>;
+const footer_empty = <div>nothing</div>;
 
 const fakeReportData_empty = {
     loading: false,
     data: {
         name: "",
         filteredRecords: [],
-        columns: []
+        columns: [],
+        recordsCount: 0
     }
 };
 const fakeReportData_emptyData = {
@@ -55,9 +57,11 @@ const fakeReportData_emptyData = {
 
 const fakeReportData_simple = {
     loading: false,
+    countingTotalRecords: false,
     data: {
         name: "test",
         groupFields: [],
+        recordsCount:10,
         filteredRecords: [{
             col_num: {value: 1, id: 4},
             col_text: {value: 'abc', id: 5},
@@ -81,6 +85,8 @@ const fakeReportData_simple = {
 
 const fakeReportData_unsaved = {
     loading: false,
+    countingTotalRecords: false,
+    recordsCount:10,
     data: {
         name: "test unsaved",
         groupFields: [],
@@ -166,6 +172,19 @@ const fakeReportData_attributes = {
         }],
     }
 };
+
+const fakeReportFooter = {
+    props: {
+        getNextReportPage: function() {
+
+        },
+        getPreviousReportPage: function() {
+
+        },
+        pageStart:0,
+        pageEnd:10
+    }
+}
 
 const flux = {
     actions: {
@@ -311,7 +330,8 @@ describe('ReportContent grouping functions', () => {
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}/>);
+                                                                    reportHeader={header_empty}
+                                                                    reportFooter={fakeReportFooter}/>);
 
             //  validate the returned grouped header
             expect(reportData.data.filteredRecords[0].group).toEqual(test.expected);
@@ -350,7 +370,8 @@ describe('ReportContent grouping functions', () => {
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}/>);
+                                                                    reportHeader={header_empty}
+                                                                    reportFooter={fakeReportFooter}/>);
 
             //  validate the returned grouped header
             expect(reportData.data.filteredRecords[0].group).toEqual(test.expected);
@@ -381,7 +402,8 @@ describe('ReportContent grouping functions', () => {
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}/>);
+                                                                    reportHeader={header_empty}
+                                                                    reportFooter={fakeReportFooter}/>);
 
             //  validate the returned grouped header
             expect(reportData.data.filteredRecords[0].group).toEqual(test.expected);
@@ -431,7 +453,9 @@ describe('ReportContent grouping functions', () => {
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}/>);
+                                                                    reportHeader={header_empty}
+                                                                    reportFooter={fakeReportFooter}/>);
+
 
             //  validate the returned grouped header
             expect(reportData.data.filteredRecords[0].group).toEqual(test.expected);
@@ -477,7 +501,9 @@ describe('ReportContent grouping functions', () => {
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}/>);
+                                                                    reportHeader={header_empty}
+                                                                    reportFooter={fakeReportFooter}/>);
+
 
             //  validate the returned grouped header
             expect(reportData.data.filteredRecords[0].group).toEqual(test.expected);
@@ -496,7 +522,9 @@ describe('ReportContent grouping functions', () => {
         let reportData = fakeReportGroupData_recursiveTemplate;
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                reportData={reportData} reportHeader={header_empty}/>);
+                                                                reportData={reportData}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
 
         expect(localizeGroupingSpy.calls.count()).toEqual(2);
     });
@@ -541,7 +569,8 @@ describe('ReportContent grouping functions exception handling', () => {
 
             component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                     reportData={reportData}
-                                                                    reportHeader={header_empty}/>);
+                                                                    reportHeader={header_empty}
+                                                                    reportFooter={fakeReportFooter}/>);
 
             //  validate the returned grouped header matches the input
             expect(reportData.data.filteredRecords[0].group).toEqual(test.expected);
@@ -571,28 +600,32 @@ describe('ReportContent functions', () => {
     it('test render of component', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test render of empty component', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_empty}
-                                                                reportHeader={header_empty}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
     it('test render of error', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={{error:'ground control to major Tom'}}
-                                                                reportHeader={header_empty}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(0);
     });
 
     it('test render of empty data', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_emptyData}
-                                                                reportHeader={header_empty}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
@@ -602,7 +635,8 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_emptyData}
                                                                 fields={{keyField : {name: 'testId'}}}
-                                                                reportHeader={header_empty}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
@@ -638,7 +672,9 @@ describe('ReportContent functions', () => {
                                                                 appId="123"
                                                                 tblId="456"
                                                                 reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalled();
@@ -656,7 +692,9 @@ describe('ReportContent functions', () => {
                                                                 appId={appId}
                                                                 tblId={tblId}
                                                                 reportData={fakeReportData_unsaved}
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalledWith(
@@ -674,7 +712,9 @@ describe('ReportContent functions', () => {
                                                                 appId="123"
                                                                 tblId="456"
                                                                 reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordCancel(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsCancel).toHaveBeenCalled();
@@ -700,7 +740,9 @@ describe('ReportContent functions', () => {
                                                                 tblId="456"
                                                                 pendEdits={edits}
                                                                 reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleFieldChange({recId: 100, fid:4});
         expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
@@ -716,7 +758,9 @@ describe('ReportContent functions', () => {
                                                                 tblId="456"
                                                                 reportData={fakeReportData_simple}
                                                                 uniqueIdentifier="col_text"
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordDelete(origRec);
         expect(flux.actions.deleteReportRecord).toHaveBeenCalled();
@@ -757,7 +801,9 @@ describe('ReportContent functions', () => {
                                                                 pendEdits={edits}
                                                                 reportData={fakeReportData_simple}
                                                                 fields={fieldsData}
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let result = component.handleRecordSaveClicked({value: SchemaConsts.UNSAVED_RECORD_ID});
         expect(result).toEqual(false);
@@ -781,7 +827,9 @@ describe('ReportContent functions', () => {
                                                                 tblId="456"
                                                                 pendEdits={edits}
                                                                 reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleFieldChange({recId: 100, fid:4});
         expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
@@ -805,7 +853,9 @@ describe('ReportContent functions', () => {
                                                                 tblId="456"
                                                                 pendEdits={edits}
                                                                 reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordNewBlank(101);
         expect(flux.actions.newBlankReportRecord).toHaveBeenCalled();
@@ -829,7 +879,9 @@ describe('ReportContent functions', () => {
                                                                 tblId="456"
                                                                 pendEdits={edits}
                                                                 reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordNewBlank(101);
         expect(flux.actions.newBlankReportRecord).not.toHaveBeenCalled();
@@ -879,7 +931,9 @@ describe('ReportContent functions', () => {
                                                                 pendEdits={edits}
                                                                 reportData={fakeReportData_simple}
                                                                 fields={fieldsData}
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordAdd(edits.recordChanges);
         expect(flux.actions.saveNewReportRecord).toHaveBeenCalledWith('123', '456', newRec);
@@ -915,7 +969,8 @@ describe('ReportContent functions', () => {
     it('test render of data without attributes', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
         var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
         expect(agGrid.length).toEqual(1);
         agGrid = agGrid[0];
@@ -926,7 +981,8 @@ describe('ReportContent functions', () => {
     it('test startPerfTiming', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
         spyOn(flux.actions, 'mark');
         component.startPerfTiming({reportData: {
             loading : true
@@ -937,7 +993,8 @@ describe('ReportContent functions', () => {
     it('test capturePerfTiming', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
         spyOn(flux.actions, 'measure');
         spyOn(flux.actions, 'logMeasurements');
         component.capturePerfTiming({reportData: {

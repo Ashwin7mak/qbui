@@ -13,6 +13,8 @@ describe('Report Data Actions success -- ', () => {
     let format = true;
     let offset = 1;
     let rows = 10;
+    let sortList = null;
+
     let filter = {
         facet: 'abc',
         search: ''
@@ -47,7 +49,6 @@ describe('Report Data Actions success -- ', () => {
         appId: appId,
         tblId: tblId,
         rptId: rptId,
-        format: format,
         offset: offset,
         rows: rows
     };
@@ -62,14 +63,17 @@ describe('Report Data Actions success -- ', () => {
         sortList: '6.-7'
     };
     let errorStatus = 404;
+
     let mockPromiseSuccess = function(expectedResult) {
         return Promise.resolve(expectedResult);
     };
+
     let mockPromiseError = function() {
         var p = Promise.defer();
         p.reject({message:'someError', status: errorStatus});
         return p.promise;
     };
+
     let mockPromiseException = function() {
         throw new Error("error");
     };
@@ -104,11 +108,10 @@ describe('Report Data Actions success -- ', () => {
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                 expect(mockReportService.prototype.getReportRecordsCount).toHaveBeenCalled();
-                // expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                // expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, jasmine.any(Object)]);
-                // expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT, jasmine.any(Object)]);
-                // expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
-                // expect(flux.dispatchBinder.dispatch.calls.argsFor(3)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, jasmine.any(Object)]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT, {}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
                 done();
             },
             () => {
@@ -130,11 +133,10 @@ describe('Report Data Actions success -- ', () => {
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                 expect(mockReportService.prototype.getReportRecordsCount).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(4);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT, loadReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT, jasmine.any(Object)]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(3)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, jasmine.any(Object)]);
                 done();
             },
             () => {

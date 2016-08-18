@@ -18,7 +18,7 @@ describe('Test ReportData Store', () => {
     const tblId = 'tblId';
     const rptId = 'rptId';
     const pageOffset = 0;
-    const numRows = 50;
+    const numRows = 20;
 
     beforeEach(() => {
         store = new Store();
@@ -295,7 +295,6 @@ describe('Test ReportData Store', () => {
     });
 
     it('test load records action', () => {
-
         let loadRecordsAction = {
             type: actions.LOAD_RECORDS,
             payload: {
@@ -1032,7 +1031,6 @@ describe('Test ReportData Store', () => {
     });
 
     it('test onDeleteReportRecordSuccess with valid recId', () => {
-
         //populate the model
         let reportPayload = {
             metaData: {},
@@ -1278,7 +1276,6 @@ describe('Test ReportData Store', () => {
     });
 
     it('test onDeleteReportRecordBulkSuccess with invalid recIds', () => {
-
         //populate the model
         let reportPayload = {
             metaData: {},

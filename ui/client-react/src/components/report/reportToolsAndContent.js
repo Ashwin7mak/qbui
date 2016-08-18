@@ -8,7 +8,6 @@ import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import simpleStringify from '../../../../common/src/simpleStringify';
-import Loader  from 'react-loader';
 import _ from 'lodash';
 import FacetSelections from '../facet/facetSelections';
 import './report.scss';
@@ -212,7 +211,8 @@ let ReportToolsAndContent = React.createClass({
         let format = true;
         let numRows = this.props.reportData.numRows;
         let newOffset = this.props.reportData.pageOffset + numRows;
-        this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
+        let sortList = this.props.reportData.sortList;
+        this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows, sortList);
     },
     getPreviousReportPage() {
         if (this.props.reportData.pageOffset === 0) {
@@ -224,6 +224,7 @@ let ReportToolsAndContent = React.createClass({
         let format = true;
         let numRows = this.props.reportData.numRows;
         let newOffset = this.props.reportData.pageOffset - numRows;
+
         this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
     },
     render() {
@@ -283,27 +284,7 @@ let ReportToolsAndContent = React.createClass({
                 pageStart={this.pageStart}
                 pageEnd={this.pageEnd}/>;
 
-            var loaderOptions = {
-                lines: 11,
-                length: 0,
-                width: 16,
-                radius: 27,
-                scale: 1,
-                corners: 1,
-                opacity: 0,
-                rotate: 0,
-                direction: 1,
-                speed: 1.1,
-                trail: 60,
-                fps: 20,
-                zIndex: 2e9,
-                className: 'spinner',
-                top: '50%',
-                left: '50%',
-                shadow: false,
-                hwaccel: false,
-                position: 'absolute'
-            };
+
             return (
                 <div className={classes}>
                     <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
@@ -312,7 +293,6 @@ let ReportToolsAndContent = React.createClass({
                                onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Use Reactabular Grid
                     </label>
                     {this.getTableActions()}
-                    <Loader loaded={!this.props.reportData.loading} options={loaderOptions}/>
 
                     <ReportContent appId={this.props.params.appId}
                                    tblId={this.props.params.tblId}

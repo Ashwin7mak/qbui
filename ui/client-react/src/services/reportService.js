@@ -137,7 +137,9 @@ class ReportService extends BaseService {
      */
     getReportRecordsCount(appId, tableId, reportId) {
         let url = super.constructUrl(this.API.GET_REPORT_RECORDS_COUNT, [appId, tableId, reportId]);
-        return super.get(url);
+
+        const req= super.get(url);
+        return req;
     }
 
     /**

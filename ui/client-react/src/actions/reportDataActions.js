@@ -111,6 +111,7 @@ let reportDataActions = {
                             var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
                             _.extend(model, {sortList: sortList});
                             this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                            resolve();
                         }
                     },
                     error => {
@@ -126,15 +127,16 @@ let reportDataActions = {
                 });
 
                 reportService.getReportRecordsCount(appId, tblId, rptId).then(
-                    (response) => {
+                    response => {
                         if (response.data) {
                             logger.debug('ReportRecordsCount service call successful');
                             this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data);
+                            resolve();
                         }
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReportRecordsCount:');
-                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error.status);
+                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error.response.status);
                         reject();
                     }
                 ).catch(ex => {

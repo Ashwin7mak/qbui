@@ -654,10 +654,9 @@ let ReportContent = React.createClass({
         this.capturePerfTiming(prevProps);
     },
 
-    /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
-        let recordCount = 0;
+        let recordsCount = 0;
 
         let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
         if (this.props.keyField) {
@@ -669,7 +668,7 @@ let ReportContent = React.createClass({
         if (this.props.reportData) {
             let reportData = this.props.reportData.data;
             if (reportData) {
-                recordCount = reportData.filteredRecordsCount ? reportData.filteredRecordsCount : reportData.recordsCount;
+                recordsCount = reportData.filteredRecordsCount ? reportData.filteredRecordsCount : reportData.recordsCount;
                 this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
             }
         }
@@ -695,7 +694,7 @@ let ReportContent = React.createClass({
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                                recordCount={recordCount}
+                                recordsCount={recordsCount}
                                 groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
                                 groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
@@ -732,7 +731,7 @@ let ReportContent = React.createClass({
                                 onScroll={this.onScrollRecords}
                                 onRowClick={this.openRow}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                                recordCount={recordCount}
+                                recordsCount={recordsCount}
                                 groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
                                 groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
@@ -740,7 +739,7 @@ let ReportContent = React.createClass({
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}/>
                         }
-                        {!isSmall && !this.props.reactabular &&
+                        {!isSmall && !this.props.reactabular && !this.props.reportData.error &&
                         <ReportFooter
                             reportData={this.props.reportData}
                             getNextReportPage={this.props.reportFooter.props.getNextReportPage}
