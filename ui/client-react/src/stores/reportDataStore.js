@@ -297,49 +297,6 @@ let reportModel = {
         this.model.groupLevel = this.model.groupEls.length;
     },
 
-    /**
-     * get the formatter type given a field type
-     * if the field type is not found it defaults to format.TEXT_FORMAT
-     * @param fieldType
-     * @return formatType from formats
-     */
-    getFormatType(fieldType) {
-        let formatType = FieldFormats.TEXT_FORMAT;
-
-        switch (fieldType) {
-        case serverTypeConsts.NUMERIC:
-            formatType = FieldFormats.NUMBER_FORMAT;
-            break;
-        case serverTypeConsts.DATE :
-            formatType = FieldFormats.DATE_FORMAT;
-            break;
-        case serverTypeConsts.DATE_TIME:
-            formatType = FieldFormats.DATETIME_FORMAT;
-            break;
-        case serverTypeConsts.TIME_OF_DAY :
-            formatType = FieldFormats.TIME_FORMAT;
-            break;
-        case serverTypeConsts.CHECKBOX :
-            formatType = FieldFormats.CHECKBOX_FORMAT;
-            break;
-        case serverTypeConsts.USER :
-            formatType = FieldFormats.USER_FORMAT;
-            break;
-        case serverTypeConsts.CURRENCY :
-            formatType = FieldFormats.CURRENCY_FORMAT;
-            break;
-        case serverTypeConsts.RATING :
-            formatType = FieldFormats.RATING_FORMAT;
-            break;
-        case serverTypeConsts.PERCENT :
-            formatType = FieldFormats.PERCENT_FORMAT;
-            break;
-        default:
-            formatType = FieldFormats.TEXT_FORMAT;
-            break;
-        }
-        return formatType;
-    },
 
     /**
      * given a formatType returns with a formatter object that
@@ -390,7 +347,7 @@ let reportModel = {
 
             //format the value by field display type
             if (fieldMeta && fieldMeta.datatypeAttributes && fieldMeta.datatypeAttributes.type) {
-                let formatType = this.getFormatType(fieldMeta.datatypeAttributes.type);
+                let formatType = FieldFormats.getFormatType(fieldMeta.datatypeAttributes.type);
                 let formatter = this.getFormatter(formatType);
 
                 // if there's a formatter use it to format the display version
