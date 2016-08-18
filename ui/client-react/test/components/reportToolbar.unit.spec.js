@@ -126,8 +126,20 @@ describe('ReportToolbar functions', () => {
         callBacks.filterOnSelections.calls.reset();
     });
 
+    const fakeReportData_no_records = {
+        loading: false,
+        countingTotalRecords: false,
+        data: {
+            recordsCount: 0,
+            pageEnd:0,
+            pageStart:1,
+            numRows:20
+        }
+    };
+
     const fakeReportData_simple = {
         loading: false,
+        countingTotalRecords: false,
         data: {
             name: "testReportToolbar",
             records: [
@@ -165,6 +177,9 @@ describe('ReportToolbar functions', () => {
                 }],
             facets: fakefacets,
             recordsCount: 3,
+            pageEnd:3,
+            pageStart:1,
+            numRows:20,
             filteredRecordsCount: 1
         }
     };
@@ -173,6 +188,7 @@ describe('ReportToolbar functions', () => {
 
     it('test render reportToolbar no records', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+                                                                reportData={fakeReportData_no_records}
                                                                 pageActions={pageActions}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
@@ -186,6 +202,8 @@ describe('ReportToolbar functions', () => {
         expect(facetButtons.length).toEqual(0);
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
         expect(recordsCount.length).toEqual(0);
+        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
+        expect(reportNavigation.length).toEqual(0);
     });
 
 
@@ -206,7 +224,8 @@ describe('ReportToolbar functions', () => {
         expect(facetButtons.length).toEqual(1);
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
         expect(recordsCount.length).toEqual(1);
-
+        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
+        expect(reportNavigation.length).toEqual(0);
     });
 
     it('test render reportToolbar with no facets', () => {

@@ -665,16 +665,15 @@ let ReportContent = React.createClass({
             keyField = this.props.fields.keyField.name;
         }
 
-        if (this.props.reportData) {
+        if (this.props.reportData && this.props.reportData.data) {
             let reportData = this.props.reportData.data;
-            if (reportData) {
-                if (reportData.filteredRecordsCount) {
-                    recordsCount = reportData.filteredRecordsCount;
-                } else if (reportData.recordsCount) {
-                    recordsCount = reportData.recordsCount;
-                }
-                this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
+
+            if (reportData.filteredRecordsCount) {
+                recordsCount = reportData.filteredRecordsCount;
+            } else if (reportData.recordsCount) {
+                recordsCount = reportData.recordsCount;
             }
+            this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
         }
 
         return (

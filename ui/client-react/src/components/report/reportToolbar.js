@@ -161,7 +161,7 @@ const ReportToolbar = React.createClass({
                 if (this.props.reportData.data.filteredRecords) {
                     filteredRecordCount =  this.props.reportData.data.filteredRecordsCount;
                 }
-                if (this.props.reportData.data.recordsCount) {
+                if (!isCountingRecords && this.props.reportData.data.recordsCount) {
                     recordCount = this.props.reportData.data.recordsCount;
                 }
                 if (this.props.reportData.data.facets &&
@@ -170,7 +170,9 @@ const ReportToolbar = React.createClass({
                 }
             }
         }
-
+        let showFilterSearchBox = isCountingRecords ? !isLoading : (!isLoading && recordCount > 0);
+        let showNavigation = isCountingRecords ? !isLoading : (!isLoading && (recordCount > this.props.reportData.numRows) &&!(recordCount === this.props.pageEnd && this.props.pageStart === 1));
+        let showRecordsCount = !isLoading;
         let reportToolbar = (
 
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
@@ -181,7 +183,7 @@ const ReportToolbar = React.createClass({
 
                         {/*TODO : check if searchBox is enabled for this report,
                          if has facets has search too, eg no facets without searchBox */}
-                        {!isLoading ?
+                        {showFilterSearchBox ?
                             <FilterSearchBox onChange={this.handleSearchChange}
                                              nameForRecords={this.props.nameForRecords}
                                              searchBoxKey="reportToolBar"
@@ -210,7 +212,7 @@ const ReportToolbar = React.createClass({
                         }
                     </div>
                     <div className="rightReportToolbar">
-                        {!isLoading ?
+                        {showRecordsCount ?
                             <RecordsCount recordCount={recordCount}
                                           isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
                                           filteredRecordCount={filteredRecordCount}
@@ -221,7 +223,7 @@ const ReportToolbar = React.createClass({
                             null
                         }
 
-                        {!isLoading && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) ?
+                        {showNavigation ?
                             (<ReportNavigation pageStart={this.props.pageStart}
                                                pageEnd={this.props.pageEnd}
                                                recordsCount={recordCount}

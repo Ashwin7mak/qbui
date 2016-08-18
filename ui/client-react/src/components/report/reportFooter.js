@@ -38,7 +38,9 @@ const ReportToolbar = React.createClass({
             if (this.props.reportData.loading) {
                 isLoading = this.props.reportData.loading;
             }
-            recordCount = this.props.reportData.data.recordsCount;
+            if (this.props.reportData.data) {
+                recordCount = this.props.reportData.data.recordsCount;
+            }
         }
         return (
             <div className="reportFooter">
