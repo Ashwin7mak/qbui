@@ -156,18 +156,18 @@
      */
     function convertScientificNotation(numeric) {
         //  split the number where have the coefficient and base 10 exponent
-        let data = String(numeric).split(/[eE]/);
+        var data = String(numeric).split(/[eE]/);
         if (data.length === 1) {
             return data[0];
         }
 
-        let coefficient = data[0].replace(PERIOD, ''),
+        var coefficient = data[0].replace(PERIOD, ''),
             exponent = Number(data[1]) + 1;
 
         //  is the exponent negative IE: 1.2345e-20
         if (exponent < 0) {
             //  format fraction as 0.xxxx or -0.xxx
-            let leadingZeros = (numeric < 0 ? DASH : '') + ZERO_CHAR + PERIOD;
+            var leadingZeros = (numeric < 0 ? DASH : '') + ZERO_CHAR + PERIOD;
 
             //  append the number of base 10 zeros
             while (exponent++) {
