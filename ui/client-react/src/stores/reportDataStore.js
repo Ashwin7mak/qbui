@@ -5,13 +5,13 @@ import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 import Locale from '../locales/locales';
 import * as SchemaConsts from "../constants/schema";
-import * as formats from '../constants/fieldFormats';
-const serverTypeConsts = require('../../../common/src/constants');
+import FieldFormats from '../utils/fieldFormats';
 import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormatter';
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
 import * as userFormatter from '../../../common/src/formatter/userFormatter';
 
+const serverTypeConsts = require('../../../common/src/constants');
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -304,38 +304,38 @@ let reportModel = {
      * @return formatType from formats
      */
     getFormatType(fieldType) {
-        let formatType = formats.TEXT_FORMAT;
+        let formatType = FieldFormats.TEXT_FORMAT;
 
         switch (fieldType) {
         case serverTypeConsts.NUMERIC:
-            formatType = formats.NUMBER_FORMAT;
+            formatType = FieldFormats.NUMBER_FORMAT;
             break;
         case serverTypeConsts.DATE :
-            formatType = formats.DATE_FORMAT;
+            formatType = FieldFormats.DATE_FORMAT;
             break;
         case serverTypeConsts.DATE_TIME:
-            formatType = formats.DATETIME_FORMAT;
+            formatType = FieldFormats.DATETIME_FORMAT;
             break;
         case serverTypeConsts.TIME_OF_DAY :
-            formatType = formats.TIME_FORMAT;
+            formatType = FieldFormats.TIME_FORMAT;
             break;
         case serverTypeConsts.CHECKBOX :
-            formatType = formats.CHECKBOX_FORMAT;
+            formatType = FieldFormats.CHECKBOX_FORMAT;
             break;
         case serverTypeConsts.USER :
-            formatType = formats.USER_FORMAT;
+            formatType = FieldFormats.USER_FORMAT;
             break;
         case serverTypeConsts.CURRENCY :
-            formatType = formats.CURRENCY_FORMAT;
+            formatType = FieldFormats.CURRENCY_FORMAT;
             break;
         case serverTypeConsts.RATING :
-            formatType = formats.RATING_FORMAT;
+            formatType = FieldFormats.RATING_FORMAT;
             break;
         case serverTypeConsts.PERCENT :
-            formatType = formats.PERCENT_FORMAT;
+            formatType = FieldFormats.PERCENT_FORMAT;
             break;
         default:
-            formatType = formats.TEXT_FORMAT;
+            formatType = FieldFormats.TEXT_FORMAT;
             break;
         }
         return formatType;
@@ -350,20 +350,20 @@ let reportModel = {
     getFormatter(formatType) {
         let answer = null;
         switch (formatType) {
-        case formats.DATETIME_FORMAT:
-        case formats.DATE_FORMAT:
+        case FieldFormats.DATETIME_FORMAT:
+        case FieldFormats.DATE_FORMAT:
             answer = dateTimeFormatter;
             break;
-        case formats.TIME_FORMAT:
+        case FieldFormats.TIME_FORMAT:
             answer = timeOfDayFormatter;
             break;
-        case formats.USER_FORMAT:
+        case FieldFormats.USER_FORMAT:
             answer = userFormatter;
             break;
-        case formats.NUMBER_FORMAT:
-        case formats.RATING_FORMAT:
-        case formats.CURRENCY_FORMAT:
-        case formats.PERCENT_FORMAT:
+        case FieldFormats.NUMBER_FORMAT:
+        case FieldFormats.RATING_FORMAT:
+        case FieldFormats.CURRENCY_FORMAT:
+        case FieldFormats.PERCENT_FORMAT:
             answer = numericFormatter;
             break;
         }

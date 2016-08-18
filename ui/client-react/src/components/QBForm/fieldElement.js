@@ -2,6 +2,7 @@ import React from 'react';
 
 import FieldLabelElement from './fieldLabelElement';
 import {CellValueRenderer} from '../dataTable/agGrid/cellValueRenderers';
+import FieldFormats from '../../utils/fieldFormats';
 import './qbform.scss';
 
 /**
@@ -18,12 +19,13 @@ const FieldElement = React.createClass({
     render() {
         let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
             this.props.relatedField.datatypeAttributes : {};
-        let fieldType = fieldDatatypeAttributes.type;
+        let fieldType = FieldFormats.getFormatType(fieldDatatypeAttributes.type);
 
         //catch the non-implemented pieces.
         let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "display value";
         let fieldRawValue = this.props.fieldRecord ? this.props.fieldRecord.value : "raw value";
 
+        //console.log(this.props,fieldType);
         return (
             <div className="formElement field">
                 {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} /> }
