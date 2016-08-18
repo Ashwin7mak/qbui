@@ -162,7 +162,7 @@
             return data[0];
         }
 
-        let value = data[0].replace(PERIOD, ''),
+        let coefficient = data[0].replace(PERIOD, ''),
             exponent = Number(data[1]) + 1;
 
         //  is the exponent negative IE: 1.2345e-20
@@ -176,15 +176,17 @@
             }
 
             //  return the converted number
-            return leadingZeros + value.replace(/^\-/, '');
+            return leadingZeros + coefficient.replace(/^\-/, '');
         }
 
-        //  append a zero for each base 10 exponent
-        exponent -= (numeric < 0 ? value.length - 1 : value.length);
+        //  have a positive exponent IE: 1.2345e+20
+        exponent -= (numeric < 0 ? coefficient.length - 1 : coefficient.length);
         while (exponent--) {
-            value += ZERO_CHAR;
+            coefficient += ZERO_CHAR;    // append a zero for each base 10 exponent
         }
-        return value;
+
+        //  return the converted number
+        return coefficient;
     }
 
     /**
