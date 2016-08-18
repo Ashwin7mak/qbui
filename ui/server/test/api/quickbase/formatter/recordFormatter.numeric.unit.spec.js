@@ -17,13 +17,18 @@ describe('Numeric record formatter unit test', function() {
         var numberDouble = 98765432100.74765;
         var numberNoSeparator = 99;
         var numberMultipleSeparators = 98765432100;
+
+        //  test various scientific notation formats.
+        //  NOTE: because QuickBase has few rules, tests include
+        //  values outside of the universally accepted rules on format..
         var numberExponentNoSeparator = '10E4';
         var numberExponent = '4.874915326E7';
         var numberExponentLarge = '1.23456789E50';
-        var numberExponentLarge2 = '1E50';
+        var numberExponentLarge2 = '10E50';
         var numberExponentNegative = '-4.241461458786777E21';
+        var numberExponentNegative2 = '-42414.61458786777E-2';
         var numberExponentFraction = '4.874915326E-2';
-        var numberExponentFractionLarge = '4.874915326e-20';
+        var numberExponentFractionLarge = '487.4915326e-20';
 
         //Incomplete number
         var defaultRecordInput = [[{
@@ -57,6 +62,9 @@ describe('Numeric record formatter unit test', function() {
 
         var recordInputExDoubleFractionLarge = JSON.parse(JSON.stringify(defaultRecordInput));
         recordInputExDoubleFractionLarge[0][0].value = numberExponentFractionLarge;
+
+        var recordInputExDoubleNegative2 = JSON.parse(JSON.stringify(defaultRecordInput));
+        recordInputExDoubleNegative2[0][0].value = numberExponentNegative2;
 
         var recordInputExDoubleNegative = JSON.parse(JSON.stringify(defaultRecordInput));
         recordInputExDoubleNegative[0][0].value = numberExponentNegative;
@@ -98,11 +106,15 @@ describe('Numeric record formatter unit test', function() {
 
         var expectedDecimal_ScientificNotation_fractionLarge = JSON.parse(JSON.stringify(defaultRecordExp));
         expectedDecimal_ScientificNotation_fractionLarge[0][0].value = numberExponentFractionLarge;
-        expectedDecimal_ScientificNotation_fractionLarge[0][0].display = '0.00000000000000000004874915326';
+        expectedDecimal_ScientificNotation_fractionLarge[0][0].display = '0.000000000000000004874915326';
 
         var expectedDecimal_ScientificNotation_negative = JSON.parse(JSON.stringify(defaultRecordExp));
         expectedDecimal_ScientificNotation_negative[0][0].value = numberExponentNegative;
         expectedDecimal_ScientificNotation_negative[0][0].display = '-4241461458786777000000';
+
+        var expectedDecimal_ScientificNotation_negative2 = JSON.parse(JSON.stringify(defaultRecordExp));
+        expectedDecimal_ScientificNotation_negative2[0][0].value = numberExponentNegative2;
+        expectedDecimal_ScientificNotation_negative2[0][0].display = '-424.1461458786777';
 
         var expectedDecimal_ScientificNotation_large = JSON.parse(JSON.stringify(defaultRecordExp));
         expectedDecimal_ScientificNotation_large[0][0].value = numberExponentLarge;
@@ -110,7 +122,7 @@ describe('Numeric record formatter unit test', function() {
 
         var expectedDecimal_ScientificNotation_large2 = JSON.parse(JSON.stringify(defaultRecordExp));
         expectedDecimal_ScientificNotation_large2[0][0].value = numberExponentLarge2;
-        expectedDecimal_ScientificNotation_large2[0][0].display = '100000000000000000000000000000000000000000000000000';
+        expectedDecimal_ScientificNotation_large2[0][0].display = '1000000000000000000000000000000000000000000000000000';
 
         // No flags - double number
         var expectedDouble_NoFlags = JSON.parse(JSON.stringify(defaultRecordExp));
@@ -1029,6 +1041,7 @@ describe('Numeric record formatter unit test', function() {
             {message: 'Numeric - negative exponent separator', records: recordInputExDoubleFraction, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_ScientificNotation_fraction},
             {message: 'Numeric - negative exponent separator', records: recordInputExDoubleFractionLarge, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_ScientificNotation_fractionLarge},
             {message: 'Numeric - negative exponent separator', records: recordInputExDoubleNegative, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_ScientificNotation_negative},
+            {message: 'Numeric - negative exponent separator', records: recordInputExDoubleNegative2, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_ScientificNotation_negative2},
             {message: 'Numeric - negative exponent separator', records: recordInputExLarge, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_ScientificNotation_large},
             {message: 'Numeric - negative exponent separator', records: recordInputExLarge2, fieldInfo: noFlagsFieldInfo, expectedRecords: expectedDecimal_ScientificNotation_large2}
         ];

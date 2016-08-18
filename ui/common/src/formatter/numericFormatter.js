@@ -137,37 +137,54 @@
     }
 
     /**
+     * Is the numeric value in scientific notation format
+     *
+     * @param numeric
+     * @returns {boolean}
+     */
+    function isScientificNotation(numeric) {
+        return String(numeric).split(/[eE]/).length === 2;
+    }
+
+
+    /**
      * Need to manually build function to convert scientific notation number as
      * using the build-in javascript functions like parse of Number will not work
-     * for large numbers like 1.34E-15
+     * for large numbers like 1.34E+25
      *
      * @param numeric
      * @returns {*}
      */
     function convertScientificNotation(numeric) {
-        var data = String(numeric).split(/[eE]/);
+        //  split the number where have the coefficient and base 10 exponent
+        let data = String(numeric).split(/[eE]/);
         if (data.length === 1) {
             return data[0];
         }
 
-        var z = '',
-            sign = numeric < 0 ? DASH : '',
-            str = data[0].replace(PERIOD, ''),
-            mag = Number(data[1]) + 1;
+        let value = data[0].replace(PERIOD, ''),
+            exponent = Number(data[1]) + 1;
 
-        if (mag < 0) {
-            z = sign + ZERO_CHAR + PERIOD;
-            while (mag++) {
-                z += ZERO_CHAR;
+        //  is the exponent negative IE: 1.2345e-20
+        if (exponent < 0) {
+            //  format fraction as 0.xxxx or -0.xxx
+            let leadingZeros = (numeric < 0 ? DASH : '') + ZERO_CHAR + PERIOD;
+
+            //  append the number of base 10 zeros
+            while (exponent++) {
+                leadingZeros += ZERO_CHAR;
             }
-            return z + str.replace(/^\-/, '');
-        }
-        mag -= (numeric < 0 ? str.length - 1 : str.length);
 
-        while (mag--) {
-            z += ZERO_CHAR;
+            //  return the converted number
+            return leadingZeros + value.replace(/^\-/, '');
         }
-        return str + z;
+
+        //  append a zero for each base 10 exponent
+        exponent -= (numeric < 0 ? value.length - 1 : value.length);
+        while (exponent--) {
+            value += ZERO_CHAR;
+        }
+        return value;
     }
 
     /**
@@ -179,17 +196,20 @@
      */
     function formatNumericValue(numeric, opts) {
         //Resolve the number value as a string with the proper decimal places
-        var numString = numeric.toString();
-        var mantissaString = null, characteristicString = null;
+        var numString = null, mantissaString = null, characteristicString = null;
 
         //If scientific notation, convert to a number before parsing..
-        if (numString.indexOf(EXPONENT_CHAR) !== -1 || numString.indexOf(EXPONENT_CHAR_LOWER) !== -1) {
-            numString = Number(numString).toString();
+        if (isScientificNotation(numeric)) {
+            //  attempt to convert using javascript built-in function
+            numString = Number(numeric).toString();
+
             //  if the number is too large for the javascript built-in function to convert the scientic
             //  notation number, then will have to manually perform the conversion.
-            if (numString.indexOf(EXPONENT_CHAR) !== -1 || numString.indexOf(EXPONENT_CHAR_LOWER) !== -1) {
+            if (isScientificNotation(numString)) {
                 numString = convertScientificNotation(numString);
             }
+        } else {
+            numString = numeric.toString();
         }
 
         //Split the string on the decimal point, if there is one
