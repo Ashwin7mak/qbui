@@ -13,9 +13,6 @@ const CHECKBOX_COL_WIDTH = 40; // 40px checkbox column can be toggled
 
 let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
-    contextTypes: {
-        history: React.PropTypes.object
-    },
     propTypes: {
         reportData: React.PropTypes.object.isRequired,
         uniqueIdentifier: React.PropTypes.string,

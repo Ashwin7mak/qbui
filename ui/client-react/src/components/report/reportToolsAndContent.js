@@ -15,7 +15,6 @@ import * as query from '../../constants/query';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
 
-
 let logger = new Logger();
 
 let FluxMixin = Fluxxor.FluxMixin(React);

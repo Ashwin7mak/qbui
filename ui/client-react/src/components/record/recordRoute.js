@@ -10,17 +10,14 @@ import {Link} from 'react-router';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
+import {withRouter} from 'react-router';
 import './record.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-var RecordRoute = React.createClass({
+export let RecordRoute = React.createClass({
     mixins: [FluxMixin],
-
-    contextTypes: {
-        history: React.PropTypes.object
-    },
 
     loadRecord(appId, tblId, recordId, rptId, formType) {
         const flux = this.getFlux();
@@ -72,7 +69,7 @@ var RecordRoute = React.createClass({
         const {appId, tblId, rptId} = this.props.params;
 
         const link = `/app/${appId}/table/${tblId}/report/${rptId}`;
-        this.props.history.pushState(null, link);
+        this.props.router.push(link);
     },
 
     /**
@@ -87,7 +84,7 @@ var RecordRoute = React.createClass({
         flux.actions.openingReportRow(rptId, recId);
 
         const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        this.props.history.pushState(null, link);
+        this.props.router.push(link);
     },
 
     /**
@@ -181,4 +178,5 @@ var RecordRoute = React.createClass({
     }
 });
 
-export default RecordRoute;
+export let RecordRouteWithRouter = withRouter(RecordRoute);
+export default RecordRouteWithRouter;

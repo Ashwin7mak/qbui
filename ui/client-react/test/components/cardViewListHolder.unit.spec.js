@@ -22,6 +22,9 @@ const singleNodeTreeData = [{
                 col_date: "01-01-2015"}]
 }];
 const fakeReportData_valid = {
+    appId: "1",
+    tblId: "2",
+    rptId: "3",
     loading:false,
     data: {
         filteredRecords: singleNodeTreeData
@@ -48,8 +51,9 @@ const CardViewListMock = React.createClass({
     simulateSwipeLeftInSelection() {
         this.props.onToggleCardSelection(false);
     },
-    simulateClick() {
-        this.props.onRowClicked();
+    simulateClick(props) {
+        this.props.node.props = props;
+        this.props.onRowClicked(this.props.node);
     }
 });
 
