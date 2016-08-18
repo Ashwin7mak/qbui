@@ -79,7 +79,7 @@ let ReportToolsAndContent = React.createClass({
         }
     },
 
-    //when report changed from loading to `d finish measure of components performance
+    //when report changed from loading to loaded finish measure of components performance
     capturePerfTiming(prevProps) {
         let timingContextData = {numReportCols:0, numReportRows:0};
         let flux = this.getFlux();

@@ -40,7 +40,6 @@ var CardViewListHolderMock = React.createClass({
 
 
 const header_empty = <div>nothing</div>;
-const footer_empty = <div>nothing</div>;
 
 const fakeReportData_empty = {
     loading: false,
@@ -52,7 +51,7 @@ const fakeReportData_empty = {
     }
 };
 const fakeReportData_emptyData = {
-    loading: true,
+    loading: true
 };
 
 const fakeReportData_simple = {
@@ -657,7 +656,9 @@ describe('ReportContent functions', () => {
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_simple}
-                                                                reportHeader={header_empty} keyField={keyField}/>);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let result = component.getOrigRec(modifiedRec[keyField].value);
         expect(result).toEqual(origRecExpect);
@@ -959,7 +960,9 @@ describe('ReportContent functions', () => {
                             tblId="456"
                             reportData={fakeReportData_simple}
                             pendEdits={edits}
-                            reportHeader={header_empty} keyField={keyField}/>);
+                            reportHeader={header_empty}
+                            reportFooter={fakeReportFooter}
+                            keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordChange({value:100});
         expect(flux.actions.recordPendingEditsCommit).toHaveBeenCalled();

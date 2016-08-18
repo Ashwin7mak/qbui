@@ -27,7 +27,7 @@ describe('ReportToolsAndContent functions', () => {
     };
 
     let reportParams = {appId:1, tblId:2, rptId:3, format:true, offset:1, numRows: 10};
-    let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+    let reportDataParams = {reportData: {loading:true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
 
     let ReportContentMock = React.createClass({
         render() {
@@ -60,12 +60,6 @@ describe('ReportToolsAndContent functions', () => {
         flux.actions.getNextReportPage.calls.reset();
         flux.actions.getPreviousReportPage.calls.reset();
     });
-
-    // it('test render of loader', () => {
-    //     component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock} loading={fakeReportData_loading.loading} flux={flux}/>);
-    //     expect(TestUtils.scryRenderedComponentsWithType(component, Loader).length).toEqual(1);
-    //     expect(TestUtils.scryRenderedComponentsWithType(component, AGGridReact).length).toEqual(0);
-    // });
 
     it('test render of report widget', () => {
         var div = document.createElement('div');

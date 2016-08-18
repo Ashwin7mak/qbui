@@ -156,6 +156,12 @@ describe('AGGrid functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
+    it('test render of loader', () => {
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock} loading={fakeReportData_loading.loading} flux={flux}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, Loader).length).toEqual(1);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridReact).length).toEqual(0);
+    });
+
     it('test render with empty data', () => {
         component = TestUtils.renderIntoDocument(<AGGrid columns={fakeReportData_empty.data.columns} records={fakeReportData_empty.data.records} loading={false} flux={flux}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridReact).length).toEqual(0);

@@ -668,7 +668,11 @@ let ReportContent = React.createClass({
         if (this.props.reportData) {
             let reportData = this.props.reportData.data;
             if (reportData) {
-                recordsCount = reportData.filteredRecordsCount ? reportData.filteredRecordsCount : reportData.recordsCount;
+                if (reportData.filteredRecordsCount) {
+                    recordsCount = reportData.filteredRecordsCount;
+                } else if (reportData.recordsCount) {
+                    recordsCount = reportData.recordsCount;
+                }
                 this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
             }
         }

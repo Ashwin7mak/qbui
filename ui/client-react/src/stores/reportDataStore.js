@@ -172,6 +172,7 @@ let reportModel = {
 
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
+        this.model.recordsCount = recordData.recordsCount ? recordData.recordsCount : null;
     },
 
     /**

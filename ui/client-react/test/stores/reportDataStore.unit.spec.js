@@ -1064,12 +1064,13 @@ describe('Test ReportData Store', () => {
                 records: [[
                     {id: 16, value: 16, display: 16},
                     {id: 8, value: 1234, display: 1234},
-                ],
+                    ],
                     [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: []
+                groups: [],
+                recordsCount:2
             }
         };
 
@@ -1126,12 +1127,13 @@ describe('Test ReportData Store', () => {
                 records: [[
                     {id: 16, value: 16, display: 16},
                     {id: 8, value: 1234, display: 1234},
-                ],
+                    ],
                     [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: []
+                groups: [],
+                recordsCount:2
             }
         };
 
@@ -1188,12 +1190,13 @@ describe('Test ReportData Store', () => {
                 records: [[
                     {id: 16, value: "Boston", display: "Boston"},
                     {id: 8, value: 1234, display: 1234},
-                ],
+                    ],
                     [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: []
+                groups: [],
+                recordsCount: 2
             }
         };
 
@@ -1253,7 +1256,8 @@ describe('Test ReportData Store', () => {
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: []
+                groups: [],
+                recordsCount: 2
             }
         };
 
@@ -1309,12 +1313,13 @@ describe('Test ReportData Store', () => {
                 records: [[
                     {id: 16, value: 16, display: 16},
                     {id: 8, value: 1234, display: 1234},
-                ],
+                    ],
                     [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: []
+                groups: [],
+                recordsCount: 2
             }
         };
 

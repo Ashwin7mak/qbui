@@ -839,8 +839,8 @@ let AGGrid = React.createClass({
         var loaderOptions = {
             lines: 9,
             length: 0,
-            width: 16,
-            radius: 25,
+            width: 11,
+            radius: 18,
             scale: 1,
             corners: 1,
             color: '#000',
@@ -861,7 +861,7 @@ let AGGrid = React.createClass({
         return (
             <div className="reportTable">
                 <div className={gridWrapperClasses} ref="gridWrapper">
-                    <Loader loaded={this.props.loading} options={loaderOptions}>
+                    <Loader loaded={!this.props.loading} options={loaderOptions}>
                         {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
                                 <AgGridReact
