@@ -50,7 +50,7 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of input error
-.fieldEditor.error [type="text"].input,
+.textField.error [type="text"].input,
 [type="text"].input.error {
   border-top: 1px solid $input-text-error-border-color;
   border-right: 1px solid  $input-text-error-border-color;
@@ -60,7 +60,7 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of focus input error
-.fieldEditor.error [type="text"]:focus.input,
+.textField.error [type="text"]:focus.input,
 [type="text"]:focus.input.error {
   outline: none;
   border-top: 1px solid $input-text-error-border-color;
@@ -70,17 +70,25 @@ $data-font-size: $font-size-p;
   @include focus-shadow($input-text-error-border-color);
 }
 
+
+
+.invalidRecord.tooltip >.tooltip-arrow,
 .invalidInput.tooltip >.tooltip-arrow {
   border-bottom-color: $tootip-error-color;
   border-top-color: $tootip-error-color;
 }
+.invalidRecord.tooltip,
+.invalidRecord.tooltip .tooltip-inner,
 .invalidInput.tooltip,
 .invalidInput.tooltip .tooltip-inner {
   background-color:  $tootip-error-color;
 }
 
+.invalidRecord.tooltip .tooltip-arrow {
+  top: -5px;
+}
 .invalidInput.tooltip.top .tooltip-arrow {
-  bottom: -4px;
+  bottom: -5px;
 }
 // visual style of required field indicator
 .requiredFlag {

@@ -43,8 +43,24 @@ const CellEditor = React.createClass({
                               validateFieldValue={this.props.validateFieldValue}
                               isInvalid={this.props.isInvalid}
                               invalidMessage={this.props.invalidMessage}
+                              ref={(c) => {
+                                  //get reference to the component for this field
+                                  if (this.props.params.data && this.props.params.context.uniqueIdentifier &&
+                                      this.props.params.data[this.props.params.context.uniqueIdentifier]) {
+                                      let rid = this.props.params.data[this.props.params.context.uniqueIdentifier].value;
 
-    />);
+                                      if (!this.props.params.context.cells) {
+                                          this.props.params.context.cells = {};
+                                      }
+                                      if (!this.props.params.context.cells[rid]) {
+                                          this.props.params.context.cells[rid] = {};
+                                      }
+                                      this.props.params.context.cells[rid][this.props.params.column.colDef.id] = c;
+                                  }
+                              }}
+
+
+        />);
     }
 });
 

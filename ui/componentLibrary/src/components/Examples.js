@@ -1,7 +1,11 @@
 import QBPanelExample from 'raw!../examples/QBPanelExample.js';
 import QBIconExample from 'raw!../examples/QBIconExample.js';
+import TextFieldExample from 'raw!../examples/TextFieldExample.js';
+import TextFieldEditorExample from 'raw!../examples/TextFieldEditorExample.js';
 
 export default {
     QBPanel: QBPanelExample,
-    QBIcon: QBIconExample
+    QBIcon: QBIconExample,
+    TextField: TextFieldExample,
+    TextFieldEditor: TextFieldEditorExample
 };

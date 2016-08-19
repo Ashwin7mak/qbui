@@ -3,31 +3,65 @@ import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 
 /**
- * a TextFieldEditor editable rendering of the field that is a single line text field
- * the value can be rendered as invalid or not and classes can be added to it for
- * custom styling.
- * an optional placeholder will be shown when the value is empty
- * onBlur will be called when the editor is exited
- * onChange will be called when a change is made to the value
+ * # TextFieldEditor
+ *
+ * An editable rendering of a single line text field as an input box. The component can be supplied a value or not. Used within a FieldEditor
+ *
  */
-export const TextFieldEditor = React.createClass({
+
+const TextFieldEditor = React.createClass({
     propTypes: {
-        ref: React.PropTypes.any,
-        isInvalid: React.PropTypes.bool,
-        invalidMessage: React.PropTypes.string,
+        /**
+         * the value to fill in the input box */
         value: React.PropTypes.any, // should be string but duration is a number but rendered as text
+
+        /**
+         * optional string to display when input is empty aka ghost text */
+        placeholder: React.PropTypes.string,
+
+        /**
+         * renders with red border if true */
+        isInvalid: React.PropTypes.bool,
+
+        /**
+         * message to display in the tool tip when isInvalid */
+        invalidMessage: React.PropTypes.string,
+
+        /**
+         * optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
-        onChange: React.PropTypes.func.isRequired,
-        onBlur: React.PropTypes.func.isRequired
+
+        /**
+         * listen for changes by setting a callback to the onChange prop.  */
+        onChange: React.PropTypes.func,
+
+        /**
+         * listen for losing focus by setting a callback to the onBlur prop. */
+        onBlur: React.PropTypes.func,
+        
+        /**
+         * attach a ref to reference the backing instance of the component. */
+        ref: React.PropTypes.any
     },
 
+    getDefaultProps() {
+    return {
+        isInvalid: false
+    };
+},
     onChange(ev) {
         //TODO: add debounce support for reduced re-rendering
-        this.props.onChange(ev.target.value);
+        if (this.props.onChange) {
+            this.props.onChange(ev.target.value);
+        }
     },
 
     render() {
         let classes = 'input textField';
+        // error state css class
+        if (this.props.isInvalid) {
+            classes += ' error';
+        }
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }

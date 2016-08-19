@@ -25,6 +25,10 @@ import * as GroupTypes from '../../../constants/groupTypes';
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 import '../gridWrapper.scss';
+import Logger from "../../../utils/logger";
+
+
+let logger = new Logger();
 
 const serverTypeConsts = require('../../../../../common/src/constants');
 
@@ -46,7 +50,7 @@ let consts = {
     GROUP_ICON_PADDING: 4,
     DEFAULT_CELL_PADDING: 8,
     FONT_SIZE: 20,
-    HIDDEN_LAST_ROW_HEIGHT:270 // tall enough to accomodate date pickers etc.
+    HIDDEN_LAST_ROW_HEIGHT:270 // tall enough to accommodate date pickers etc.
 };
 
 let AGGrid = React.createClass({
@@ -88,7 +92,8 @@ let AGGrid = React.createClass({
 
     getInitialState() {
         return {
-            editingRowNode: null // which ag-grid row node object is being edited
+            editingRowNode: null, // which ag-grid row node object is being edited
+            rowEditErrors: null // the current edit row errors found
         };
     },
 
@@ -103,7 +108,7 @@ let AGGrid = React.createClass({
      * create a column header menu
      * @param columnIndex
      * @param pullRight position from right side to avoid clipping
-     * @returns JSX columh header dropdown
+     * @returns JSX column header dropdown
      */
     createHeaderMenu(columnIndex, pullRight) {
 
@@ -205,6 +210,7 @@ let AGGrid = React.createClass({
      * On selection of sort option from menu fire off the action to sort the data
      * @param column
      * @param asc
+     * @param alreadySorted
      */
     sortReport(column, asc, alreadySorted) {
         if (alreadySorted) {
@@ -236,26 +242,26 @@ let AGGrid = React.createClass({
         let sortFid = column.id.toString();
         let groupString = ReportUtils.getGroupString(sortFid, asc, GroupTypes.GROUP_TYPE.text.equals);
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
-        let sortList_param = ReportUtils.prependSortFidToList(sortList, groupString);
+        let sortListParam = ReportUtils.prependSortFidToList(sortList, groupString);
 
-        /** AG-grid has a bug where on re-render it doesnt call groupRenderer
-         And hence doesnt render group headers.
+        /** AG-grid has a bug where on re-render it doesn't call groupRenderer
+         And hence doesn't render group headers.
          To get around that, on grouping rebuild the whole report
          If the report was grouped on the previous render then groupRender was already called so no need to re-load everything.
          So optimize for that case..
         */
         if (this.props.groupEls.length) {
             let queryParams = {};
-            queryParams[query.SORT_LIST_PARAM] = sortList_param;
+            queryParams[query.SORT_LIST_PARAM] = sortListParam;
             flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, queryParams);
         } else {
             flux.actions.loadReport(this.props.appId,
                 this.props.tblId,
-                this.props.rptId, true, null, null, sortList_param);
+                this.props.rptId, true, null, null, sortListParam);
         }
     },
     /**
-     * AG-grid doesnt fire any events or add any classes to the column for which menu has been opened
+     * AG-grid doesn't fire any events or add any classes to the column for which menu has been opened
      * This makes the menu look like its detached from the header. The following is a hack to handle this.
      * When a menu opens store the selectedColumn and then on DonNodeRemoved event if menu has been closed then
      * remove the class from selectedColumn
@@ -274,12 +280,12 @@ let AGGrid = React.createClass({
             if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
                 if (this.selectedColumnId.length) {
                     let toRemove = this.selectedColumnId[0];
-                    let occurences = _.filter(this.selectedColumnId, (column) => {
+                    let occurrences = _.filter(this.selectedColumnId, (column) => {
                         return column === toRemove;
                     });
                     this.selectedColumnId = this.selectedColumnId.splice(1, this.selectedColumnId.length);
                     let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + toRemove + '"]');
-                    if (occurences.length <= 1) {
+                    if (occurrences.length <= 1) {
                         columnHeader[0].classList.remove("selected");
                     }
                 }
@@ -308,7 +314,7 @@ let AGGrid = React.createClass({
     },
     getRowHeight(rowItem) {
         if (rowItem.data.isHiddenLastRow) {
-            // in in selection mode set the height of the hidden last row to make space for datepickers etc.
+            // in in selection mode set the height of the hidden last row to make space for date-pickers etc.
             return consts.HIDDEN_LAST_ROW_HEIGHT;
         } else if (rowItem.node.field === "group") {
             return consts.GROUP_HEADER_HEIGHT;
@@ -360,18 +366,20 @@ let AGGrid = React.createClass({
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
         this.gridOptions.context.cellTabCallback = this.onCellTab;
         this.gridOptions.context.onRecordChange = this.props.onRecordChange;
-        this.gridOptions.context.onRecordSaveClicked = this.handleRecordSaveClicked; // does local method 1st
         this.gridOptions.context.onRecordAdd = this.props.onRecordAdd;
-        this.gridOptions.context.onRecordNewBlank = this.props.onRecordNewBlank;
-        this.gridOptions.context.onFieldChange = this.props.onFieldChange;
         this.gridOptions.context.onEditRecordStart = this.props.onEditRecordStart;
-        this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel; // does local method 1st
+        this.gridOptions.context.onRecordSaveClicked = this.handleRecordSaveClicked; // does local method, then calls prop method
+        this.gridOptions.context.onRecordNewBlank = this.handleRecordNewBlank; // does local method, then calls prop method
+        this.gridOptions.context.onFieldChange = this.handleFieldChange;// does local method, then calls prop method
+        this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel; // does local method, then calls prop method
         this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
-        this.gridOptions.context.validateRecord = this.props.validateRecord;
-        this.gridOptions.context.validateFieldValue = this.props.validateFieldValue;
+        this.gridOptions.context.validateRecord = this.handleValidateRecord;
+        this.gridOptions.context.validateFieldValue = this.handleValidateFieldValue;
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
         this.gridOptions.context.keyField = this.props.keyField;
+        this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
+        this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
         this.gridOptions.getRowClass = this.getRowClass;
@@ -515,7 +523,7 @@ let AGGrid = React.createClass({
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            this.startEditRow(params.data[this.props.keyField].value, params.node);
+            this.startEditRow(params.data[this.props.uniqueIdentifier].value, params.node);
             return;
         }
         if (this.clickTimeout) {
@@ -542,7 +550,7 @@ let AGGrid = React.createClass({
         const rowsToRefresh = [];
 
         if (currentRow) {
-            // force grid to rerender the previously edited row
+            // force grid to re-render the previously edited row
             rowsToRefresh.push(currentRow);
         }
         if (node) {
@@ -551,14 +559,15 @@ let AGGrid = React.createClass({
         }
 
         // the refresh needs the new state so refresh in the setState callback
-        this.setState({editingRowNode: node}, () => {
+        this.setState({editingRowNode: node, rowEditErrors: null}, () => {
+            this.gridOptions.context.rowEditErrors = null;
             this.api.refreshRows(rowsToRefresh);
         });
     },
 
     /**
      * Capture the row-selection/deselection change events.
-     * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
+     * For some reason this doesn't seem to fire on deselectAll but doesn't matter for us.
      */
     onSelectionChanged() {
         let flux = this.getFlux();
@@ -575,7 +584,7 @@ let AGGrid = React.createClass({
     },
     /**
      * Capture the event if all-select checkbox is clicked.
-     * We want to make sure if all-checkbox is clicked then the event doesnt propagate to all rows in turn.
+     * We want to make sure if all-checkbox is clicked then the event doesn't propagate to all rows in turn.
      * Use selectAllClicked state variable to keep track of this.
      */
     allCheckBoxSelected() {
@@ -609,16 +618,136 @@ let AGGrid = React.createClass({
     },
 
     handleEditRecordCancel(id) {
+        if (!this.props.onEditRecordCancel) {
+            return;
+        }
         this.props.onEditRecordCancel(id);
         this.editRow(); // edit nothing
     },
 
+
+    handleFieldChange(change) {
+        if (!this.props.onFieldChange) {
+            return;
+        }
+
+        // if field was in error remove error
+        if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
+            // is the field being changed currently in error state if so remove error
+            // and it will get re-validated on blur or save
+            let found = this.state.rowEditErrors.errors.findIndex((err) => err.id === change.fid);
+            if (found !== -1) {
+                let newErrors = _.cloneDeep(this.state.rowEditErrors);
+
+                // remove the error from the array of errors
+                newErrors.errors.splice(found, 1);
+                // was it last error? whole row is ok now
+                if (newErrors.errors.length === 0) {
+                    newErrors.errors = [];
+                    newErrors.ok = true;
+                }
+
+                //update state, edit tool column
+                this.setState({rowEditErrors: newErrors}, () => {
+                    this.gridOptions.context.rowEditErrors = newErrors;
+                    this.props.onFieldChange(change);
+                    this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
+                });
+            }
+        }
+        this.props.onFieldChange(change);
+    },
+
     handleRecordSaveClicked(id) {
-        let noEdit = this.props.onRecordSaveClicked(id);
-        if (noEdit) {
+        if (!this.props.onRecordSaveClicked) {
+            return;
+        }
+        let validation = this.props.onRecordSaveClicked(id);
+        if (validation && validation.ok) {
             this.editRow(); // edit done
+        } else {
+            //keep in edit and show error
+            this.setState({rowEditErrors: validation}, () => {
+                this.gridOptions.context.rowEditErrors = validation;
+                this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
+            });
         }
     },
+
+
+    handleValidateFieldValue(def, value, checkRequired) {
+        let status = this.props.validateFieldValue(def, value, checkRequired);
+        let origErrors = this.state.rowEditErrors;
+        let newErrors;
+        let found = -1;
+
+        // find any existing error on the field
+        if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
+            found = this.state.rowEditErrors.errors.findIndex((err) => err.id === status.id);
+        }
+
+        // if field was in error
+        if (status.isInvalid) {
+            // has exiting error update it
+            if (found !== -1) {
+                newErrors = _.cloneDeep(this.state.rowEditErrors);
+                newErrors.errors[found] = status;
+            } else {
+                // add into to list of errors in the row
+                newErrors = {
+                    ok : false,
+                    errors: []
+                };
+                if (this.state.rowEditErrors) {
+                    _.cloneDeep(this.state.rowEditErrors);
+                }
+                newErrors.errors.push(status);
+            }
+            newErrors.ok = false;
+        } else if (found !== -1) {
+            // not invalid error, remove from list if its there.
+            // remove the error from the array of errors
+            newErrors = _.cloneDeep(this.state.rowEditErrors);
+            newErrors.errors.splice(found, 1);
+
+            // was it last one? row is ok now
+            if (newErrors.errors.length === 0) {
+                newErrors.errors = [];
+                newErrors.ok = true;
+            }
+        }
+        //update state
+        if (newErrors !== undefined && !_.isEqual(origErrors, newErrors)) {
+            this.setState({rowEditErrors: newErrors}, () => {
+                this.gridOptions.context.rowEditErrors = newErrors;
+                this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
+                //this.api.refreshRows([this.state.editingRowNode]);
+            });
+        }
+        return status;
+    },
+
+    handleValidateRecord() {
+        if (!this.props.validateRecord) {
+            return;
+        }
+        // in the aggrid record validate so we have
+        // the current state and its node/row
+        // we can just loop thru the cells and validate each
+        this.props.validateRecord(arguments);
+    },
+
+    handleRecordNewBlank(id) {
+        let validation = this.props.onRecordNewBlank(id);
+        if (validation && !validation.ok) {
+            //keep in edit and show error
+            this.setState({rowEditErrors: validation}, () => {
+                this.gridOptions.context.rowEditErrors = validation;
+                this.api.refreshRows([this.state.editingRowNode]);
+            });
+        }
+    },
+
 
     /**
      * Callback - what to do when the master group expand/collapse is clicked
@@ -641,17 +770,17 @@ let AGGrid = React.createClass({
 
     getCheckBoxColumnGroupedHeaderWidth() {
         // this is a weird calculation but this is because we want the checkbox to always show based on number of grouping levels
-        // for now this is being calulated as num_groups*(font size + padding) + num_checkboxes*(size of checkbox + padding)
+        // for now this is being calculated as num_groups*(font size + padding) + num_checkboxes*(size of checkbox + padding)
         // 3px error is because icons need to be fixed, so that'll be removed.
-        const checkbox_size = 12;
+        const checkboxSize = 12;
         return consts.DEFAULT_CELL_PADDING +
             this.props.groupLevel * (consts.FONT_SIZE + consts.GROUP_ICON_PADDING) +
-            checkbox_size + consts.DEFAULT_CELL_PADDING - 3;
+            checkboxSize + consts.DEFAULT_CELL_PADDING - 3;
     },
 
     /**
      * checkbox column header element
-     * (also contains grouping expand/collpase icon if grouping is turned on)
+     * (also contains grouping expand/collapse icon if grouping is turned on)
      * @returns {Element} the DOM checkbox header element
      */
     getCheckBoxColumnHeader() {
@@ -687,7 +816,7 @@ let AGGrid = React.createClass({
         let checkBoxCol = {};
         checkBoxCol.field = "checkbox";
 
-        //ag-grid doesnt seem to allow react components sent into headerCellRender.
+        //ag-grid doesn't seem to allow react components sent into headerCellRender.
         checkBoxCol.headerCellRenderer = this.getCheckBoxColumnHeader;
 
         checkBoxCol.checkboxSelection = true;
@@ -721,7 +850,7 @@ let AGGrid = React.createClass({
 
     /**
      * ag-grid template for field column headers
-     * @param obj
+     * @param column
      * @returns {Element}
      */
     getHeaderCellTemplate(column) {
@@ -857,13 +986,13 @@ let AGGrid = React.createClass({
                                     columnDefs={columnDefs}
                                     rowData={this.props.records}
                                     //handlers on col or row changes
-                                    onFieldChange={this.props.onFieldChange}
+                                    onFieldChange={this.handleFieldChange}
                                     onRecordChange={this.props.onRecordChange}
                                     onRecordSaveClicked={this.handleRecordSaveClicked}
                                     onRecordAdd={this.props.onRecordAdd}
                                     onRecordNewBlank={this.props.onRecordNewBlank}
                                     validateRecord={this.props.validateRecord}
-                                    validateFieldValue={this.props.validateFieldValue}
+                                    validateFieldValue={this.handleValidateFieldValue}
                                     onEditRecordStart={this.props.onEditRecordStart}
                                     onEditRecordCancel={this.handleEditRecordCancel}
                                     onRecordDelete={this.props.onRecordDelete}

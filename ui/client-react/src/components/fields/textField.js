@@ -2,15 +2,25 @@ import React from 'react';
 import './fields.scss';
 
 /**
- * a TextField read only rendering of the field that is a single line text field
- * the value can be rendered as bold or not and classes can be added to it for
- * custom styling
+ * # TextField
+ *
+ * A TextField is a read only rendering of the field containing a single line text.
+ *
+ * The value can be rendered as bold or not and classes can be optionally pass in for custom styling.
  */
-export const TextField = React.createClass({
+const TextField = React.createClass({
 
     propTypes: {
+        /**
+         * the value to render */
         value: React.PropTypes.any,
+
+        /**
+         * optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
+
+        /**
+         * renders bold if true */
         isBold: React.PropTypes.bool
     },
 
@@ -29,6 +39,7 @@ export const TextField = React.createClass({
         if (this.props.isBold) {
             classes += " bold";
         }
+
         return <div className={classes}>{this.props.value}</div>;
     }
 });

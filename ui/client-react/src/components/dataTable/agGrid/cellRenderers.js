@@ -27,6 +27,39 @@ import Logger from "../../../utils/logger";
 
 
 let logger = new Logger();
+// formatter classes (cell formatters render an editor and a display value)'
+class CellRendererFactory  {
+    static getCellKey(props) {
+        let key = ''; // for uniq key rec+fid
+        let recId;
+        if (props &&
+            _.has(props, 'params') &&
+            _.has(props.params, 'value.id') &&
+            _.has(props.params, 'data') &&
+            _.has(props.params, 'context.uniqueIdentifier') &&
+            _.has(props.params, 'rowIndex')) {
+            recId = props.params.data[props.params.context.uniqueIdentifier].value;
+            key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId ;
+        }
+        return key;
+    }
+
+    static makeCellRenderer(type, props) {
+        return <CellRenderer type={type}
+                             validateFieldValue={props.params &&  props.params.context ?
+                                 props.params.context.validateFieldValue : null}
+                             invalidMessage={props.invalidMessage}
+                             isInvalid={props.isInvalid}
+                             colDef={props.params.column.colDef}
+                             initialValue={props.params.value}
+                             editing={props.editing}
+                             params={props.params}
+                             qbGrid={props.qbGrid}
+                             key={CellRendererFactory.getCellKey(props)}
+        />;
+    }
+}
+
 
 /**
  * cell renderer
@@ -55,13 +88,12 @@ const CellRenderer = React.createClass({
         if (this.props.initialValue) {
 
             return {
-                valueAndDisplay:  {
+                valueAndDisplay: {
                     id: this.props.initialValue.id,
-                    value : this.props.initialValue.value,
-                    display : this.props.initialValue.display,
-                    isInvalid: false,
-                    invalidMessage: ''
-                }
+                    value: this.props.initialValue.value,
+                    display: this.props.initialValue.display,
+                },
+                validationStatus : null
             };
         } else {
             logger.warn('"this.props.initialValue" in getInitialState is undefined');
@@ -103,13 +135,7 @@ const CellRenderer = React.createClass({
 
         let isEditable = !this.props.colDef.builtIn;
 
-        let key = ''; // for uniq key rec+fid
-        if (this.props.params && this.props.params.data && this.props.params.context &&
-                this.props.params.rowIndex && this.props.initialValue && this.props.initialValue.id &&
-                this.props.params.context.keyField && this.props.params.data[this.props.params.context.keyField].value) {
-            let recId = this.props.params.data[this.props.params.context.keyField].value;
-            key = this.props.params.rowIndex + "-fid" + this.props.initialValue.id + '-recId' + recId ;
-        }
+        let key = CellRendererFactory.getCellKey(this.props);
 
         if (this.props.initialValue === null) {
             return (<span className="emptyCell" />);
@@ -124,8 +150,14 @@ const CellRenderer = React.createClass({
             cellType = formats.MULTI_LINE_TEXT_FORMAT;
         }
 
-        return (
+        let invalidStatus = {isInvalid: false, invalidMessage: null};
+        let errs = this.props.params.context.rowEditErrors;
+        // did the validation on blur report an error
+        if (this.state.validationStatus && this.state.validationStatus.isInvalid) {
+            invalidStatus = this.state.validationStatus;
+        }
 
+        return (
             <span className={"cellWrapper " + this.getClassNameForType(this.props.type)}>
 
                 { isEditable && (this.props.editing || !this.props.qbGrid) &&
@@ -135,10 +167,11 @@ const CellRenderer = React.createClass({
                                 onChange={this.onChange}
                                 onValidated={this.onValidated}
                                 key={key + '-edt'}
+                                params={this.props.params}
                                 onTabColumn={this.onTabColumn}
                                 validateFieldValue={this.props.validateFieldValue}
-                                isInvalid={this.state.valueAndDisplay.isInvalid}
-                                invalidMessage={this.state.valueAndDisplay.invalidMessage}
+                                isInvalid={invalidStatus.isInvalid}
+                                invalidMessage={invalidStatus.invalidMessage}
                     />
                 }
 
@@ -183,7 +216,7 @@ const CellRenderer = React.createClass({
             _.has(this.props, 'params') &&
             _.has(this.props.params, 'data') &&
             _.has(this.props.params, 'column.colId') &&
-            _.has(this.props.params, 'context.keyField') &&
+            _.has(this.props.params, 'context.uniqueIdentifier') &&
             _.has(this.props.params, 'colDef.id')) {
 
             let change = {
@@ -191,7 +224,7 @@ const CellRenderer = React.createClass({
                     oldVal: this.props.params.data[this.props.params.column.colId],
                     newVal: this.state.valueAndDisplay
                 },
-                recId: this.props.params.data[this.props.params.context.keyField].value,
+                recId: this.props.params.data[this.props.params.context.uniqueIdentifier].value,
                 fid: +this.props.params.colDef.id,
                 fieldName: this.props.params.column.colId
             };
@@ -207,8 +240,7 @@ const CellRenderer = React.createClass({
             value: value,
             display: value
         };
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals)}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
     },
 
     /**
@@ -216,10 +248,10 @@ const CellRenderer = React.createClass({
      * @param result of validation
      */
     cellValidated(result) {
-        let current =  Object.assign({}, this.state.valueAndDisplay);
-        current.isInvalid = result.isInvalid;
-        current.invalidMessage = result.invalidMessage;
-        this.setState({valueAndDisplay : current}, ()=>{this.cellChanges();});
+        let current = Object.assign({}, this.state.validationStatus);
+        current.isInvalid = result ? result.isInvalid : false;
+        current.invalidMessage = result ? result.invalidMessage : null;
+        this.setState({validationStatus : current});
     },
 
 
@@ -253,7 +285,7 @@ const CellRenderer = React.createClass({
         }
         }
 
-        this.setState({valueAndDisplay : Object.assign({}, theVals)}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
     },
 
     /**
@@ -266,25 +298,9 @@ const CellRenderer = React.createClass({
         };
         theVals.display = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
 
-        this.setState({valueAndDisplay : Object.assign({}, theVals)}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
     }
 });
-
-// formatter classes (cell formatters render an editor and a display value)'
-class CellRendererFactory  {
-    static makeCellRenderer(type, props) {
-        return <CellRenderer type={type}
-                             validateFieldValue={props.params && props.params.context ? props.params.context.validateFieldValue : null}
-                             invalidMessage={props.invalidMessage}
-                             isInvalid={props.isInvalid}
-                             colDef={props.params.column.colDef}
-                             initialValue={props.params.value}
-                             editing={props.editing}
-                             params={props.params}
-                             qbGrid={props.qbGrid}
-        />;
-    }
-}
 
 export const TextCellRenderer = React.createClass({
     render() {
@@ -319,13 +335,13 @@ export const TimeCellRenderer = React.createClass({
 });
 
 export const DurationCellRenderer = React.createClass({
-    render: function() {
+    render() {
         return CellRendererFactory.makeCellRenderer(formats.DURATION_FORMAT, this.props);
     }
 });
 
 export const PhoneCellRenderer = React.createClass({
-    render: function() {
+    render() {
         return CellRendererFactory.makeCellRenderer(formats.PHONE_FORMAT, this.props);
     }
 });

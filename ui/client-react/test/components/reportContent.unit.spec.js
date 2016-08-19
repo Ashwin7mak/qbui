@@ -762,7 +762,7 @@ describe('ReportContent functions', () => {
                                                                 reportHeader={header_empty} keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let result = component.handleRecordSaveClicked({value: SchemaConsts.UNSAVED_RECORD_ID});
-        expect(result).toEqual(false);
+        expect(result.ok).toEqual(false);
     });
 
 

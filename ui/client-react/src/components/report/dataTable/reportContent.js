@@ -49,11 +49,11 @@ let ReportContent = React.createClass({
     getOrigRec(recid) {
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
-        let keyField =  this.props.keyField;
+        let uniqueIdentifier =  this.props.uniqueIdentifier;
         recs.find(function(rec) {
             var keys = Object.keys(rec);
             keys.find((col) => {
-                if (col === keyField && rec[col].value === recid) {
+                if (col === uniqueIdentifier && rec[col].value === recid) {
                     orig.names = rec;
                     var fids = {};
                     var recKeys = Object.keys(rec);
@@ -73,60 +73,85 @@ let ReportContent = React.createClass({
      * Client side validation of array of changes to a record
      * placeholder method implementation TBD
      * @param changes
-     * @returns validation result object {{ok: boolean, errors: Array}}
+     * @returns {ok: boolean, errors: Array} result object {{ok: boolean, errors: Array}}
      */
     validateRecord(changes) {
-        let results = {
-            ok : true,
-            errors: []
+        let statuses = [];
+        let ok = true;
+        // FOR M7 we will validate the record on server side
+        //validate each change
+        // Object.keys(changes).forEach((fieldId) => {
+        //     let def = this.props.reportData.data.fieldsMap.get(+fieldId);
+        //     let status = this.validateFieldValue(def, changes[fieldId].value, true);
+        //     if (status.isInvalid) {
+        //         ok = false;
+        //         statuses.push(status);
+        //     }
+        // });
+        //we will let the server validate these unchanged items not the client
+        // //validate constrained fields that haven't changed, there constraints might have
+        // let constrainedFieldValues = [];
+        // this.getConstrainedUnchangedValues(changes, constrainedFieldValues);
+        // constrainedFieldValues.forEach((data) => {
+        //     let def = this.props.reportData.data.fieldsMap.get(data.id);
+        //     let status = this.validateFieldValue(def, data.value, true);
+        //     if (status.isInvalid) {
+        //         ok = false;
+        //         statuses.push(status);
+        //     }
+        // });
+
+        // return validation errors changed or constrained values in record
+        return {
+            ok : ok,
+            errors: statuses
         };
-        // TBD validate each value in record
-        return results;
     },
 
 
     /**
      * Client side validation of a field value
      * placeholder method implementation TBD
-     * @param fieldDef, value
      * @returns validation result object {{ok: boolean, isInvalid: bool, invalidMessage}}
+     * @param def - field definition
+     * @param value - value to update to
+     * @param checkRequired - if required fields should be tested, default false, true on save
      */
-    validateFieldValue(def, value) {
+    validateFieldValue(def, value, checkRequired = false) {
         let results = {
             isInvalid : false,
-            invalidMessage : null,
+            value: value,
+            invalidMessage : null
         };
 
         if (def === undefined) {
             return results;
         }
 
-        // check require field is not empty
-        if (_.has(def, 'required') && def.required &&
-            (value === undefined || value === null || (value.length !== undefined && value.length === 0))) {
-            results = {
-                isInvalid : true,
-                invalidMessage: Locales.getMessage('invalidMsg.required', {fieldName: def.headerName})
-            };
+        results.id = def.id;
+
+        // check require field is not empty, checkRequired before saving not on change
+        if (checkRequired && _.has(def, 'required') && def.required &&
+                  (value === undefined || value === null || (value.length !== undefined && value.length === 0))) {
+            let msg = Locales.getMessage('invalidMsg.required', {fieldName: def.headerName || def.name});
+            results.isInvalid = true;
+            results.invalidMessage = msg;
 
         //check fields max chars not exceeded
         } else if (_.has(def, 'datatypeAttributes.clientSideAttributes.max_chars') &&
-                value !== undefined && _.has(value, 'length') && value.length > def.datatypeAttributes.clientSideAttributes.max_chars) {
+                 value !== undefined && _.has(value, 'length') && value.length > def.datatypeAttributes.clientSideAttributes.max_chars) {
             let msg = Locales.getMessage('invalidMsg.maxChars', {num: def.datatypeAttributes.clientSideAttributes.max_chars});
-            results = {
-                isInvalid: true,
-                invalidMessage: msg
-            };
+            results.isInvalid = true;
+            results.invalidMessage = msg;
+
         // check system limit text chars
         } else if (value !== undefined && _.has(value, 'length') && value.length > LimitConstants.maxTextFieldValueLength) {
-            //max input length = LimitConstants. maxTextFieldValueLength
+            //max input length is LimitConstants. maxTextFieldValueLength
             let msg = Locales.getMessage('invalidMsg.maxChars', {num: LimitConstants.maxTextFieldValueLength});
-            results = {
-                isInvalid: true,
-                invalidMessage: msg
-            };
+            results.isInvalid = true;
+            results.invalidMessage = msg;
         }
-        // TBD other type validate
+
         return results;
     },
 
@@ -148,7 +173,7 @@ let ReportContent = React.createClass({
         } else {
             //add each non null value as to the new record as a change
             let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
-                return rec[this.props.keyField].value === recId;
+                return rec[this.props.uniqueIdentifier].value === recId;
             });
             if (newRec) {
                 changes = {};
@@ -216,10 +241,11 @@ let ReportContent = React.createClass({
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
         if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            this.handleRecordSaveClicked(afterRecId);
+            return this.handleRecordSaveClicked(afterRecId);
         } else {
             flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
         }
+        return null;
     },
 
 
@@ -231,7 +257,6 @@ let ReportContent = React.createClass({
      * @returns {boolean}
      */
     handleRecordSaveClicked(id) {
-        let allClear = false;
         //validate changed values
         //get pending changes
         let validationResult = this.validateRecord(this.props.pendEdits.recordChanges);
@@ -244,14 +269,8 @@ let ReportContent = React.createClass({
             } else {
                 changes = this.handleRecordChange(id);
             }
-            if (changes && Object.keys(changes).length === 0) {
-                allClear = true;
-            }
-        } else {
-            //TBD show errors
-            allClear = false;
         }
-        return allClear;
+        return validationResult;
     },
 
     /**
@@ -280,7 +299,6 @@ let ReportContent = React.createClass({
         Object.keys(recordChanges).forEach((recKey) => {
             //get each columns matching field description
             let matchingField = _.find(this.props.fields.fields.data, (field) => {
-
                 return field.id === +recKey;
             });
             // only post the non built in fields values
@@ -300,6 +318,34 @@ let ReportContent = React.createClass({
         return payload;
     },
 
+    createColChange(value, display, key, name, payload) {
+        let colChange = {};
+        colChange.fieldName = name;
+        colChange.id = +key;
+        colChange.value = _.cloneDeep(value);
+        colChange.display = _.cloneDeep(display);
+        payload.push(colChange);
+    },
+
+    getConstrainedUnchangedValues(changes, list) {
+        // add in any editable fields values that are required or unique
+        // so that server can validate them if they were created before
+        // the field's constraint was made. so modifying a record
+        // via patch will check those fields for validity even if the user
+        // didn't edit the value
+        this.props.fields.fields.data.forEach((field) => {
+            if (changes[field.id] === undefined) {
+                if (!field.builtIn && (field.required || field.unique)) {
+                    let newValue  = this.props.pendEdits.originalRecord.fids[field.id].value;
+                    if (newValue === null) {
+                        newValue = "";
+                    }
+                    let newDisplay  = this.props.pendEdits.originalRecord.fids[field.id].display;
+                    this.createColChange(newValue, newDisplay, field.id, field.name, list);
+                }
+            }
+        });
+    },
 
     /**
      * Save changes to an existing record
@@ -309,11 +355,13 @@ let ReportContent = React.createClass({
     handleRecordChange(recId) {
         const flux = this.getFlux();
 
-        // get the current data
+        // get the current edited data
         let changes = {};
         if (_.has(this.props, 'pendEdits.recordChanges')) {
             changes = _.cloneDeep(this.props.pendEdits.recordChanges);
         }
+
+
         //calls action to save the record changes
         // validate happen here or in action
 
@@ -321,20 +369,18 @@ let ReportContent = React.createClass({
         // columns id and new values array
         //[{"id":6, "value":"Claire"}]
 
+
         Object.keys(changes).forEach((key) => {
             let newValue = changes[key].newVal.value;
             let newDisplay = changes[key].newVal.display;
             if (_.has(this.props, 'pendEdits.originalRecord.fids')) {
                 if (newValue !== this.props.pendEdits.originalRecord.fids[key].value) {
-                    let colChange = {};
-                    colChange.fieldName = changes[key].fieldName;
-                    colChange.id = +key;
-                    colChange.value = _.cloneDeep(newValue);
-                    colChange.display = _.cloneDeep(newDisplay);
-                    payload.push(colChange);
+                    this.createColChange(newValue, newDisplay, key, changes[key].fieldName, payload);
                 }
             }
         });
+
+        this.getConstrainedUnchangedValues(changes, payload);
         //for (changes)
         flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
         flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);

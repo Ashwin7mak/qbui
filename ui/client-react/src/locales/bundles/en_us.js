@@ -240,6 +240,7 @@ export default {
         placeholder:  {
             email: 'name@domain.com'
         },
+        editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Fix this field}\n other {Fix these # fields}\n} ",
         invalidMsg : {
             required: 'Fill in the {fieldName}',
             maxChars: 'Use up to {num} characters',

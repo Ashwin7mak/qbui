@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import {DefaultFieldEditor, MultiLineTextFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from './fieldEditors';
 import TextFieldEditor from './textFieldEditor';
@@ -97,8 +98,8 @@ const FieldEditor = React.createClass({
                                             onValidated={this.props.onValidated}
                                             classes="cellEdit"
                     />;
-                    //Drew's change TBD by Andrew if users want text box that
-                    // grows in height for single line text change TextFieldEditor to
+                    //Drew's change per Andrew if users want text box that
+                    // grows in height use a multiline not single line text
                     //  return <MultiLineTextFieldEditor value={this.props.value}
                     //       placeholder={this.props.fieldDef.placeholder}
                     //       onChange={this.props.onChange} />;
@@ -114,7 +115,8 @@ const FieldEditor = React.createClass({
         // need to rerender this field with invalid state
         //on aggrid redraw, and on qbgrid set state
         if (this.props.validateFieldValue && this.props.onValidated) {
-            let results = this.props.validateFieldValue(this.props.fieldDef, ev.target.value);
+            let fldValue = ev ? ev.target.value : ReactDOM.findDOMNode(this.refs.cellInput).value;
+            let results = this.props.validateFieldValue(this.props.fieldDef, fldValue);
             this.props.onValidated(results);
         }
     },

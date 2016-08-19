@@ -17,9 +17,9 @@ const QBToolTip = React.createClass({
     defaultDelayShow: 300,
 
     toolTipIt(tooltipId, plainMessage, i18nMessageKey) {
-        let label = plainMessage ? plainMessage : '...';
+        let label = plainMessage ? plainMessage : '';
         if (i18nMessageKey) {
-            label = (<I18nMessage message={i18nMessageKey}/>);
+            label = (<I18nMessage message={i18nMessageKey} {...this.props}/>);
         }
         let tipClassName = tooltipId ? "qbtooltip " + tooltipId : " qbtooltip";
         return (
