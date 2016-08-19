@@ -15,7 +15,6 @@ import * as query from '../../constants/query';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
 
-
 let logger = new Logger();
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -178,7 +177,7 @@ let ReportToolsAndContent = React.createClass({
                               clearAllFilters={this.clearAllFilters}/>;
     },
     getSelectionActions() {
-        return (<ReportActions selection={this.props.selectedRows} />);
+        return (<ReportActions selection={this.props.selectedRows} appId={this.props.params.appId} tblId={this.props.params.tblId} rptId={this.props.params.rptId}/>);
     },
     getTableActions() {
         const selectedRows = this.props.selectedRows;

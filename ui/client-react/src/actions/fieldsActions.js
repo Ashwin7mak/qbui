@@ -4,6 +4,8 @@ import FieldsService from '../services/fieldsService';
 import Promise from 'bluebird';
 
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+
 let logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -32,18 +34,19 @@ let fieldsActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.error('FieldsService getFields error:' + JSON.stringify(error), error);
-                        this.dispatch(actions.LOAD_FIELDS_FAILED);
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'fieldsService.getFields:');
+                        this.dispatch(actions.LOAD_FIELDS_FAILED, error.response.status);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.error('FieldsService getFields exception:' + JSON.stringify(ex), ex);
-                    this.dispatch(actions.LOAD_FIELDS_FAILED);
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_FIELDS_FAILED, 500);
                     reject();
                 });
             } else {
-                logger.error('Missing required input parameters for fieldsService.getFields.');
-                this.dispatch(actions.LOAD_FIELDS_FAILED);
+                logger.error('fieldsService.getFields: Missing required input parameters.');
+                this.dispatch(actions.LOAD_FIELDS_FAILED, 500);
                 reject();
             }
         });

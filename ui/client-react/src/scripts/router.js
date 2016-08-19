@@ -1,8 +1,7 @@
 //these two imports are needed for safari and iOS to work with internationalization
 import React from "react";
 import ReactDOM, {render} from "react-dom";
-import {Router, Route, IndexRoute} from "react-router";
-import createBrowserHistory from "history/lib/createBrowserHistory";
+import {Router, Route, IndexRoute, browserHistory} from "react-router";
 import Nav from "../components/nav/nav";
 import Fluxxor from "fluxxor";
 import ReportsStore from "../stores/reportsStore";
@@ -75,29 +74,6 @@ flux.setDispatchInterceptor(function(action, dispatch) {
 });
 
 
-var history;
-/**
- * Instrumentation code of SPA history route change perf timing
- */
-function hookHistory(theHistory) {
-    flux.actions.newRoute("initialFullPageLoad");
-
-    if (PerfLogUtils.isEnabled()) {
-        theHistory.listen(function(ev) {
-            // mark start of new route
-            if (ev.action === "PUSH" || ev.action === "REPLACE") {
-                flux.actions.newRoute("newroute:" + ev.pathname);
-            }
-        });
-        return true;
-    }
-}
-
-function setupHistory() {
-    history = createBrowserHistory();
-    hookHistory(history);
-    return history;
-}
 let NavWrapper = React.createClass({
 
     /* touch detection */
@@ -192,7 +168,7 @@ let Apps = React.createClass({
 });
 
 render((
-    <Router history={setupHistory()}>
+    <Router history={browserHistory}>
         <Route path="/" component={Apps} />
 
         <Route path="apps" component={NavWrapper} >

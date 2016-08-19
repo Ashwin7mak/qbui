@@ -22,9 +22,10 @@ var mockConfig = {
 require('../src/routes')(app, mockConfig);
 
 /**
- * Unit tests for app generator
+ * Unit test routes defined with are NODE only routes...meaning the request
+ * is handled completely on the express server.
  */
-describe('Express Routes', function() {
+describe('Test Express Node Routes', function() {
 
     var stubLog;
     var server;

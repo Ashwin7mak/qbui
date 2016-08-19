@@ -70,7 +70,7 @@ export const CellValueRenderer = React.createClass({
 
         case formats.MULTI_LINE_TEXT_FORMAT:
             return (<span className={className}>
-                <MultiLineTextCellValueRenderer value={this.props.display}
+                <MultiLineTextCellValueRenderer value={this.props.display ? this.props.display : this.props.value}
                                                 {...commonProperties}/>
                 </span>);
 
@@ -80,7 +80,7 @@ export const CellValueRenderer = React.createClass({
         case formats.CURRENCY_FORMAT:
         default: {
             return (<span className={className}>
-                <TextCellValueRenderer value={this.props.display}
+                <TextCellValueRenderer value={this.props.display ? this.props.display : this.props.value}
                                        attributes={this.props.attributes}
                                        {...commonProperties}/>
             </span>);

@@ -71,7 +71,9 @@ export default {
             recordSaved : "Sauvegarder",
             recordNotSaved :"Enregistrement non enregistré",
             recordDeleted : "Enregistrement supprimé",
-            recordNotDeleted : "Enregistrement non supprimé"
+            recordNotDeleted : "Enregistrement non supprimé",
+            recordDeletedBulk: "Plusieurs enregistrements supprimés",
+            recordNotDeletedBulk: "Plusieurs enregistrements pas supprimés"
         },
         header: {
             menu: {
@@ -85,7 +87,11 @@ export default {
             }
         },
         form : {
-            tab : 'Onglet'
+            tab : 'Onglet',
+            error: {
+                403: "Vous n'êtes pas autorisé à accéder à ce formulaire",
+                500: "Erreur inattendue rendant ce formulaire"
+            }
         },
         report : {
             blank : "blanc",

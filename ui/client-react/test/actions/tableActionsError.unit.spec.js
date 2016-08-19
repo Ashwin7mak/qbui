@@ -3,7 +3,10 @@ import tableActions from '../../src/actions/tableActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
-describe('Table Actions loadFormAndRecord negative tests -- ', () => {
+let errorStatus = 404;
+let exStatus = 500;
+
+describe('Table Actions table negative tests(1) -- ', () => {
     'use strict';
 
     let appId = 'appId';
@@ -17,7 +20,7 @@ describe('Table Actions loadFormAndRecord negative tests -- ', () => {
         constructor() { }
         getHomePage() {
             var p = Promise.defer();
-            p.reject({message:'someError'});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
     }
@@ -40,7 +43,7 @@ describe('Table Actions loadFormAndRecord negative tests -- ', () => {
             () => {
                 expect(mockTableService.prototype.getHomePage).not.toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED, exStatus]);
 
                 done();
             }
@@ -55,7 +58,50 @@ describe('Table Actions loadFormAndRecord negative tests -- ', () => {
             () => {
                 expect(mockTableService.prototype.getHomePage).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED, {error: {message:'someError'}}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED, errorStatus]);
+                done();
+            }
+        );
+    });
+});
+
+describe('Table Actions table negative tests(2) -- ', () => {
+    let appId = 'appId';
+    let tblId = 'tblId';
+
+    let stores = {};
+    let flux = new Fluxxor.Flux(stores);
+    flux.addActions(tableActions);
+
+    class mockTableService {
+        constructor() { }
+        getHomePage() {
+            var p = Promise.defer();
+            p.resolve(null);
+            return p.promise;
+        }
+    }
+    beforeEach(() => {
+        spyOn(flux.dispatchBinder, 'dispatch');
+        spyOn(mockTableService.prototype, 'getHomePage').and.callThrough();
+        tableActions.__Rewire__('TableService', mockTableService);
+    });
+
+    afterEach(() => {
+        tableActions.__ResetDependency__('TableService');
+    });
+
+
+    it('test exception handling', (done) => {
+        flux.actions.loadTableHomePage(appId, tblId).then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(mockTableService.prototype.getHomePage).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED, exStatus]);
                 done();
             }
         );

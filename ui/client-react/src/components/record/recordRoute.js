@@ -10,17 +10,14 @@ import {Link} from 'react-router';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
+import {withRouter} from 'react-router';
 import './record.scss';
 
 let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-var RecordRoute = React.createClass({
+export let RecordRoute = React.createClass({
     mixins: [FluxMixin],
-
-    contextTypes: {
-        history: React.PropTypes.object
-    },
 
     loadRecord(appId, tblId, recordId, rptId, formType) {
         const flux = this.getFlux();
@@ -46,12 +43,18 @@ var RecordRoute = React.createClass({
     getSecondaryBar() {
         const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
         const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
+        const rptId = this.props.params ? this.props.params.rptId : null;
 
-        const actions = [
-            {msg: 'recordActions.previous', icon:'caret-left', disabled: !showBack, onClick: this.previousRecord},
-            {msg: 'recordActions.return', icon:'return', onClick:this.returnToReport},
-            {msg: 'recordActions.next', icon:'caret-right', disabled: !showNext, onClick: this.nextRecord}
-        ];
+        const actions = [];
+        if (showBack || showNext) {
+            actions.push({msg: 'recordActions.previous', icon:'caret-left', disabled: !showBack, onClick: this.previousRecord});
+        }
+        if (rptId) {
+            actions.push({msg: 'recordActions.return', icon: 'return', onClick: this.returnToReport});
+        }
+        if (showBack || showNext) {
+            actions.push({msg: 'recordActions.next', icon:'caret-right', disabled: !showNext, onClick: this.nextRecord});
+        }
 
         return (<IconActions className="secondaryFormActions" actions={actions} />);
     },
@@ -66,7 +69,7 @@ var RecordRoute = React.createClass({
         const {appId, tblId, rptId} = this.props.params;
 
         const link = `/app/${appId}/table/${tblId}/report/${rptId}`;
-        this.props.history.pushState(null, link);
+        this.props.router.push(link);
     },
 
     /**
@@ -81,7 +84,7 @@ var RecordRoute = React.createClass({
         flux.actions.openingReportRow(rptId, recId);
 
         const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        this.props.history.pushState(null, link);
+        this.props.router.push(link);
     },
 
     /**
@@ -169,10 +172,11 @@ var RecordRoute = React.createClass({
                     {this.getSecondaryBar()}
                     {this.getPageActions()}
                 </div>
-                <QBForm formData={this.props.form ? this.props.form.formData : null}></QBForm>
+                <QBForm errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null} formData={this.props.form ? this.props.form.formData : null}></QBForm>
             </div>);
         }
     }
 });
 
-export default RecordRoute;
+export let RecordRouteWithRouter = withRouter(RecordRoute);
+export default RecordRouteWithRouter;

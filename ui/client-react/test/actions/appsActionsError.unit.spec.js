@@ -3,15 +3,18 @@ import appsActions from '../../src/actions/appsActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
+let errorStatus = 404;
+let exStatus = 500;
+let responseData = [{id:'tableId', link:'/app/tableId'}];
+
 describe('Apps Actions getApps -- ', () => {
     'use strict';
 
-    let responseData = [{id:'tableId', link:'/app/tableId'}];
     class mockAppService {
         constructor() { }
         getApps() {
             var p = Promise.defer();
-            p.reject({message:'someError'});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
         getApp(id) {
@@ -45,7 +48,7 @@ describe('Apps Actions getApps -- ', () => {
                 expect(mockAppService.prototype.getApp).not.toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED, errorStatus]);
                 done();
             }
         );
@@ -55,7 +58,6 @@ describe('Apps Actions getApps -- ', () => {
 describe('Apps Actions getApp -- ', () => {
     'use strict';
 
-    let responseData = [{id:'tableId', link:'/app/tableId'}];
     class mockAppService {
         constructor() { }
         getApps() {
@@ -63,7 +65,7 @@ describe('Apps Actions getApp -- ', () => {
         }
         getApp(id) {
             var p = Promise.defer();
-            p.reject({message:'someError'});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
     }
@@ -94,7 +96,7 @@ describe('Apps Actions getApp -- ', () => {
                 expect(mockAppService.prototype.getApp).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED, errorStatus]);
                 done();
             }
         );
@@ -104,7 +106,6 @@ describe('Apps Actions getApp -- ', () => {
 describe('Apps Actions getApps -- ', () => {
     'use strict';
 
-    let responseData = [{id:'tableId', link:'/app/tableId'}];
     class mockAppService {
         constructor() { }
         getApps() {
@@ -141,7 +142,7 @@ describe('Apps Actions getApps -- ', () => {
                 expect(mockAppService.prototype.getApp).not.toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED, exStatus]);
                 done();
             }
         );
@@ -151,7 +152,6 @@ describe('Apps Actions getApps -- ', () => {
 describe('Apps Actions getApp -- ', () => {
     'use strict';
 
-    let responseData = [{id:'tableId', link:'/app/tableId'}];
     class mockAppService {
         constructor() { }
         getApps() {
@@ -188,7 +188,7 @@ describe('Apps Actions getApp -- ', () => {
                 expect(mockAppService.prototype.getApp).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_APPS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_APPS_FAILED, exStatus]);
                 done();
             }
         );

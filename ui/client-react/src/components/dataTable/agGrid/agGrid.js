@@ -79,7 +79,6 @@ let AGGrid = React.createClass({
     },
     contextTypes: {
         touch: React.PropTypes.bool,
-        history: React.PropTypes.object,
         flux: React.PropTypes.object
     },
 

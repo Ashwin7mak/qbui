@@ -12,22 +12,18 @@ import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
 import ValidationUtils from "../../../utils/ValidationUtils";
 import _ from 'lodash';
+import {withRouter} from 'react-router';
 
 let logger = new Logger();
 
 let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-let ReportContent = React.createClass({
+export let ReportContent = React.createClass({
     mixins: [FluxMixin, IntlMixin],
-
-    contextTypes: {
-        history: React.PropTypes.object
-    },
 
     // row was clicked once, navigate to record
     openRow(data) {
-
         const {appId, tblId, rptId} = this.props;
 
         var recId = data[this.props.uniqueIdentifier].value;
@@ -38,7 +34,9 @@ let ReportContent = React.createClass({
 
         //create the link we want to send the user to and then send them on their way
         const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
-        this.props.history.pushState(null, link);
+        if (this.props.router) {
+            this.props.router.push(link);
+        }
     },
 
     /**
@@ -773,7 +771,7 @@ let ReportContent = React.createClass({
                                 rptId={this.props.reportData.rptId}
                                 reportHeader={this.props.reportHeader}
                                 pageActions={this.props.pageActions}
-                                selectionActions={<ReportActions />}
+                                selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} />}
                                 onScroll={this.onScrollRecords}
                                 onRowClick={this.openRow}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
@@ -792,6 +790,7 @@ let ReportContent = React.createClass({
                                 reportHeader={this.props.reportHeader}
                                 selectionActions={<ReportActions />}
                                 onScroll={this.onScrollRecords}
+                                onRowClicked={this.openRow}
                                 selectedRows={this.props.selectedRows}/>
                         }
                     </div>
@@ -806,4 +805,6 @@ ReportContent.contextTypes = {
     touch: React.PropTypes.bool
 };
 
-export default ReportContent;
+export let ReportContentWithRouter = withRouter(ReportContent);
+export default ReportContentWithRouter;
+

@@ -74,7 +74,9 @@ export default {
             recordSaved : "Record saved",
             recordNotSaved :"Record not saved",
             recordDeleted : "Record deleted",
-            recordNotDeleted : "Record not deleted"
+            recordNotDeleted : "Record not deleted",
+            recordDeletedBulk: "Multiple records deleted",
+            recordNotDeletedBulk: "Multiple records not deleted"
         },
         header: {
             menu: {
@@ -88,7 +90,11 @@ export default {
             }
         },
         form : {
-            tab : 'Tab'
+            tab : 'Tab',
+            error: {
+                403: "You are not authorized to access this form",
+                500: "Unexpected error rendering this form"
+            },
         },
         report : {
             blank : "blank",

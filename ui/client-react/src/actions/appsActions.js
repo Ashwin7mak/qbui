@@ -4,6 +4,8 @@ import AppService from '../services/appService';
 import Promise from 'bluebird';
 
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+
 var logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -68,13 +70,14 @@ let appsActions = {
                                 resolve();
                             },
                             (error) => {
-                                logger.error('AppService getApp error:', error);
-                                this.dispatch(actions.LOAD_APPS_FAILED);
+                                //  axios upgraded to error.response object in 0.13.x
+                                logger.parseAndLogError(LogLevel.ERROR, error.response, 'appService.getApp:');
+                                this.dispatch(actions.LOAD_APPS_FAILED, error.response.status);
                                 reject();
                             }
                         ).catch((ex) => {
-                            logger.error('AppService getApp exception:', ex);
-                            this.dispatch(actions.LOAD_APPS_FAILED);
+                            logger.logException(ex);
+                            this.dispatch(actions.LOAD_APPS_FAILED, 500);
                             reject();
                         });
 
@@ -85,13 +88,14 @@ let appsActions = {
                     }
                 },
                 error => {
-                    logger.error('AppService getApps error:', error);
-                    this.dispatch(actions.LOAD_APPS_FAILED);
+                    //  axios upgraded to error.response object in 0.13.x
+                    logger.parseAndLogError(LogLevel.ERROR, error.response, 'appService.getApps:');
+                    this.dispatch(actions.LOAD_APPS_FAILED, error.response.status);
                     reject();
                 }
             ).catch(ex => {
-                logger.error('AppService getApps exception:', ex);
-                this.dispatch(actions.LOAD_APPS_FAILED);
+                logger.logException(ex);
+                this.dispatch(actions.LOAD_APPS_FAILED, 500);
                 reject();
             });
         });

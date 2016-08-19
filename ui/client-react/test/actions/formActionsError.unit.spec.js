@@ -9,6 +9,8 @@ describe('Form Actions loadFormAndRecord negative tests -- ', () => {
     let appId = 'appId';
     let tblId = 'tblId';
     let recordId = '2';
+    let errorStatus = 404;
+    let exStatus = 500;
 
     let stores = {};
     let flux = new Fluxxor.Flux(stores);
@@ -18,7 +20,7 @@ describe('Form Actions loadFormAndRecord negative tests -- ', () => {
         constructor() { }
         getFormAndRecord() {
             var p = Promise.defer();
-            p.reject({message:'someError'});
+            p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
     }
@@ -41,7 +43,7 @@ describe('Form Actions loadFormAndRecord negative tests -- ', () => {
             () => {
                 expect(mockFormService.prototype.getFormAndRecord).not.toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FORM_AND_RECORD_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FORM_AND_RECORD_FAILED, exStatus]);
 
                 done();
             }
@@ -57,7 +59,7 @@ describe('Form Actions loadFormAndRecord negative tests -- ', () => {
                 expect(mockFormService.prototype.getFormAndRecord).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FORM_AND_RECORD]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FORM_AND_RECORD_FAILED]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FORM_AND_RECORD_FAILED, errorStatus]);
                 done();
             }
         );
