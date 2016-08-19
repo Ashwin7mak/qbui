@@ -9,6 +9,7 @@ const QBicon = require('../../../client-react/src/components/qbIcon/qbIcon');
 const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel');
 const TextField = require('../../../client-react/src/components/fields/textField');
 const TextFieldEditor = require('../../../client-react/src/components/fields/textFieldEditor');
+const FieldEditor = require('../../../client-react/src/components/fields/fieldEditor');
 /* eslint-enable */
 import {SafeAnchor, Alert} from 'react-bootstrap';
 

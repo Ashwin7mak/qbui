@@ -16,6 +16,7 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/components/qbicon" activeClassName="active">QBIcon</Link></li>
                             <li><Link to="/components/textField" activeClassName="active">TextField</Link></li>
                             <li><Link to="/components/textFieldEditor" activeClassName="active">TextFieldEditor</Link></li>
+                            <li><Link to="/components/fieldEditor" activeClassName="active">FieldEditor</Link></li>
                         </ul>
                     </nav>
                 </div>

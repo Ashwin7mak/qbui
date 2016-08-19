@@ -49,6 +49,7 @@ const TextFieldEditor = React.createClass({
             isInvalid: false
         };
     },
+
     onChange(ev) {
         //TODO: add debounce support for reduced re-rendering
         if (this.props.onChange) {
