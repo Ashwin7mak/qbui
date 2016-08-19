@@ -669,6 +669,11 @@ export let ReportContent = React.createClass({
             this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
         }
 
+        // Hide the footer if any rows are selected. 
+        const selectedRows = this.props.selectedRows;
+        let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
+        let showFooter = !isSmall && !this.props.reactabular && !this.props.reportData.error && !areRowsSelected;
+
         return (
                 <div className="loadedContent">
                 {this.props.reportData.error ?
@@ -735,7 +740,7 @@ export let ReportContent = React.createClass({
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}/>
                         }
-                        {!isSmall && !this.props.reactabular && !this.props.reportData.error &&
+                        {showFooter &&
                         <ReportFooter
                             reportData={this.props.reportData}
                             getNextReportPage={this.props.reportFooter.props.getNextReportPage}
