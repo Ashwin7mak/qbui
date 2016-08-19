@@ -16,33 +16,51 @@ export const CellValueRenderer = React.createClass({
     render() {
 
         let className = "cellData" + (this.props.isEditable ? "" : " nonEditable");
+        let commonProperties = {};
+        if (_.has(this.props, 'this.props.attributes.clientSideAttributes.bold') &&
+                this.props.attributes.clientSideAttributes.bold) {
+            commonProperties.isBold = true;
+            className += ' bold';
+        }
+        if (_.has(this.props, 'this.props.attributes.clientSideAttributes.word-wrap') &&
+            !this.props.attributes.clientSideAttributes.word_wrap) {
+            commonProperties.NoWrap = true;
+            className += ' NoWrap';
+        }
+
         switch (this.props.type) {
         case formats.NUMBER_FORMAT:
         case formats.RATING_FORMAT:
             return (<span className={className}>
                 {this.props.value &&
-                <NumberCellValueRenderer value={this.props.value} attributes={this.props.attributes}/>}
+                <NumberCellValueRenderer value={this.props.value}
+                                         attributes={this.props.attributes}
+                                         {...commonProperties}/>}
                 </span>);
 
         case formats.USER_FORMAT:
             return (<span className={className}>
-                <UserCellValueRenderer value={this.props.display}/>
+                <UserCellValueRenderer value={this.props.display}
+                                       {...commonProperties}/>
                 </span>);
 
         case formats.DATE_FORMAT:
             return (<span className={className}>
-                <DateCellValueRenderer value={this.props.display}/>
+                <DateCellValueRenderer value={this.props.display}
+                                       {...commonProperties}/>
                 </span>);
 
         case formats.DATETIME_FORMAT: {
             return (<span className={className}>
-                <DateCellValueRenderer value={this.props.display}/>
+                <DateCellValueRenderer value={this.props.display}
+                                       {...commonProperties}/>
                 </span>);
         }
 
         case formats.TIME_FORMAT: {
             return (<span className={className}>
-                <DateCellValueRenderer value={this.props.display}/>
+                <DateCellValueRenderer value={this.props.display}
+                                       {...commonProperties}/>
                 </span>);
         }
         case formats.CHECKBOX_FORMAT:
@@ -52,7 +70,8 @@ export const CellValueRenderer = React.createClass({
 
         case formats.MULTI_LINE_TEXT_FORMAT:
             return (<span className={className}>
-                <MultiLineTextCellValueRenderer value={this.props.display}/>
+                <MultiLineTextCellValueRenderer value={this.props.display}
+                                                {...commonProperties}/>
                 </span>);
 
         case formats.TEXT_FORMAT:
@@ -61,8 +80,10 @@ export const CellValueRenderer = React.createClass({
         case formats.CURRENCY_FORMAT:
         default: {
             return (<span className={className}>
-                <TextCellValueRenderer value={this.props.display} attributes={this.props.attributes}/>
-                </span>);
+                <TextCellValueRenderer value={this.props.display}
+                                       attributes={this.props.attributes}
+                                       {...commonProperties}/>
+            </span>);
         }
         }
     }
@@ -111,7 +132,9 @@ export const TextCellValueRenderer = React.createClass({
     },
 
     render() {
-        return <TextField classes="textCell data" {...this.props} />;
+        return <TextField classes="textCell data"
+                          isBold={this.props.attributes.clientSideAttributes.bold}
+                          {...this.props} />;
     }
 });
 

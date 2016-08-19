@@ -458,6 +458,7 @@ describe('AGGrid functions', () => {
                         <AGGrid ref="grid"
                                 flux={flux}
                                 keyField="col_num"
+                                uniqueIdentifier="col_num"
                                 onEditRecordStart={callBacks.onEditRecordStart}
                                 actions={TableActionsMock}
                                 records={fakeReportData_before.data.records}

@@ -10,8 +10,8 @@ import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
+import ValidationUtils from "../../../utils/ValidationUtils";
 import _ from 'lodash';
-import LimitConstants from '../../../../../common/src/limitConstants';
 
 let logger = new Logger();
 
@@ -82,7 +82,7 @@ let ReportContent = React.createClass({
         //validate each change
         // Object.keys(changes).forEach((fieldId) => {
         //     let def = this.props.reportData.data.fieldsMap.get(+fieldId);
-        //     let status = this.validateFieldValue(def, changes[fieldId].value, true);
+        //     let status = ValidationUtils.checkFieldValue(def, changes[fieldId].value, true);
         //     if (status.isInvalid) {
         //         ok = false;
         //         statuses.push(status);
@@ -94,7 +94,7 @@ let ReportContent = React.createClass({
         // this.getConstrainedUnchangedValues(changes, constrainedFieldValues);
         // constrainedFieldValues.forEach((data) => {
         //     let def = this.props.reportData.data.fieldsMap.get(data.id);
-        //     let status = this.validateFieldValue(def, data.value, true);
+        //     let status = ValidationUtils.checkFieldValue(def, data.value, true);
         //     if (status.isInvalid) {
         //         ok = false;
         //         statuses.push(status);
@@ -106,53 +106,6 @@ let ReportContent = React.createClass({
             ok : ok,
             errors: statuses
         };
-    },
-
-
-    /**
-     * Client side validation of a field value
-     * placeholder method implementation TBD
-     * @returns validation result object {{ok: boolean, isInvalid: bool, invalidMessage}}
-     * @param def - field definition
-     * @param value - value to update to
-     * @param checkRequired - if required fields should be tested, default false, true on save
-     */
-    validateFieldValue(def, value, checkRequired = false) {
-        let results = {
-            isInvalid : false,
-            value: value,
-            invalidMessage : null
-        };
-
-        if (def === undefined) {
-            return results;
-        }
-
-        results.id = def.id;
-
-        // check require field is not empty, checkRequired before saving not on change
-        if (checkRequired && _.has(def, 'required') && def.required &&
-                  (value === undefined || value === null || (value.length !== undefined && value.length === 0))) {
-            let msg = Locales.getMessage('invalidMsg.required', {fieldName: def.headerName || def.name});
-            results.isInvalid = true;
-            results.invalidMessage = msg;
-
-        //check fields max chars not exceeded
-        } else if (_.has(def, 'datatypeAttributes.clientSideAttributes.max_chars') &&
-                 value !== undefined && _.has(value, 'length') && value.length > def.datatypeAttributes.clientSideAttributes.max_chars) {
-            let msg = Locales.getMessage('invalidMsg.maxChars', {num: def.datatypeAttributes.clientSideAttributes.max_chars});
-            results.isInvalid = true;
-            results.invalidMessage = msg;
-
-        // check system limit text chars
-        } else if (value !== undefined && _.has(value, 'length') && value.length > LimitConstants.maxTextFieldValueLength) {
-            //max input length is LimitConstants. maxTextFieldValueLength
-            let msg = Locales.getMessage('invalidMsg.maxChars', {num: LimitConstants.maxTextFieldValueLength});
-            results.isInvalid = true;
-            results.invalidMessage = msg;
-        }
-
-        return results;
     },
 
     /**
@@ -774,7 +727,7 @@ let ReportContent = React.createClass({
 
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                uniqueIdentifier="Record ID#"
+                                uniqueIdentifier={this.props.uniqueIdentifier ||  SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={this.props.keyField}
                                 selectedRows={this.props.selectedRows}
                                 onRowClick={this.openRow}
@@ -801,7 +754,7 @@ let ReportContent = React.createClass({
                                 editingId={this.props.reportData.editingId}
                                 records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                uniqueIdentifier={this.props.uniqueIdentifier || SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={keyField}
                                 appId={this.props.reportData.appId}
                                 onRecordDelete={this.handleRecordDelete}
@@ -813,7 +766,7 @@ let ReportContent = React.createClass({
                                 onRecordNewBlank={this.handleRecordNewBlank}
                                 onRecordSaveClicked={this.handleRecordSaveClicked}
                                 validateRecord={this.validateRecord}
-                                validateFieldValue={this.validateFieldValue}
+                                validateFieldValue={ValidationUtils.checkFieldValue}
                                 getOrigRec={this.getOrigRec}
                                 getPendingChanges={this.getPendingChanges}
                                 tblId={this.props.reportData.tblId}

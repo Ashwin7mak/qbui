@@ -721,7 +721,6 @@ let AGGrid = React.createClass({
             this.setState({rowEditErrors: newErrors}, () => {
                 this.gridOptions.context.rowEditErrors = newErrors;
                 this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
-                //this.api.refreshRows([this.state.editingRowNode]);
             });
         }
         return status;
@@ -929,11 +928,6 @@ let AGGrid = React.createClass({
                         let clientSideAttributes = datatypeAttributes.clientSideAttributes;
                         for (let cattr in clientSideAttributes) {
                             switch (cattr) {
-                            case 'bold':
-                                if (clientSideAttributes[cattr]) {
-                                    this.setCSSClass_helper(obj, "Bold");
-                                }
-                                break;
                             case 'word-wrap':
                                 if (clientSideAttributes[cattr]) {
                                     this.setCSSClass_helper(obj, "NoWrap");

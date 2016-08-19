@@ -152,7 +152,6 @@ const CellRenderer = React.createClass({
         }
 
         let invalidStatus = {isInvalid: false, invalidMessage: null};
-        let errs = this.props.params.context.rowEditErrors;
         // did the validation on blur report an error
         if (this.state.validationStatus && this.state.validationStatus.isInvalid) {
             invalidStatus = this.state.validationStatus;
