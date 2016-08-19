@@ -4,7 +4,6 @@ var request = require('supertest');
 var should = require('should');
 
 var log = require('../../src/logger').getLogger();
-var errors = require('../../src/components/errors');
 var routeGroups = require('../../src/routes/routeGroups');
 
 var express = require('express');
