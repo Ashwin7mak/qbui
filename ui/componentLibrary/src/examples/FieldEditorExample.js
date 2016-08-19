@@ -46,7 +46,7 @@ const basicFieldEditor = (
                              isInvalid={editValue2Invalid} invalidMessage="Use up to 15 characters"/>
             </dd>
 
-
+`   
 
         <dt>Empty Numeric Field Editor:</dt>
             <dd>
