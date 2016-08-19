@@ -131,7 +131,6 @@ let reportDataActions = {
                         if (response.data) {
                             logger.debug('ReportRecordsCount service call successful');
                             this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data);
-                            resolve();
                         }
                     },
                     error => {

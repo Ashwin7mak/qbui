@@ -57,17 +57,13 @@ var RecordsCount = React.createClass({
             return (
                 <div className="recordsCountLoaderContainer">
                     <Loader loaded={!this.props.isCounting} options={loaderOptions}>
-                        {
-                            this.props.recordCount !== 0 ?
-                                <div className="recordsCount" onDoubleClick={dbl}>
-                                    <I18nMessage message={message}
-                                                 filteredRecordCount={this.props.filteredRecordCount + ''}
-                                                 recordCount={this.props.recordCount + ''}
-                                                 nameForRecords={this.props.nameForRecords}
-                                    />
-                                </div> :
-                                null
-                        }
+                            <div className="recordsCount" onDoubleClick={dbl}>
+                                <I18nMessage message={message}
+                                             filteredRecordCount={this.props.filteredRecordCount + ''}
+                                             recordCount={this.props.recordCount + ''}
+                                             nameForRecords={this.props.nameForRecords}
+                                />
+                            </div>
                     </Loader>
                     {   this.props.isCounting ?
                         <div className="recordsCount">

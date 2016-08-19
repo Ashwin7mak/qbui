@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import QBForm from  '../../src/components/QBForm/qbform';
-import RecordRoute from '../../src/components/record/recordRoute';
+import {RecordRoute} from '../../src/components/record/recordRoute';
 
 describe('RecordRoute functions', () => {
     'use strict';
@@ -20,24 +20,16 @@ describe('RecordRoute functions', () => {
         openingReportRow() {return;}
     };
 
-    let history = {
-        pushState() {return;}
-    };
-
     beforeEach(() => {
         spyOn(flux.actions, 'selectTableId');
         spyOn(flux.actions, 'loadFormAndRecord');
         spyOn(flux.actions, 'openingReportRow');
-
-        spyOn(history, 'pushState');
     });
 
     afterEach(() => {
         flux.actions.selectTableId.calls.reset();
         flux.actions.loadFormAndRecord.calls.reset();
         flux.actions.openingReportRow.calls.reset();
-
-        history.pushState.calls.reset();
     });
 
     it('test render of component with missing url params', () => {
@@ -93,7 +85,7 @@ describe('RecordRoute functions', () => {
         expect(returnToReport.length).toBe(1);
     });
 
-    it('test render of component with report data', () => {
+    it('test correct state is pushed to history', () => {
         let routeParams = {appId:1, tblId:2, rptId:3, recordId: 2};
 
         let reportData = {
@@ -122,7 +114,10 @@ describe('RecordRoute functions', () => {
             }
         };
 
-        component = TestUtils.renderIntoDocument(<RecordRoute params={routeParams} reportData={reportData} history={history} flux={flux}/>);
+        let router = [];
+        let expectedRouter = [];
+
+        component = TestUtils.renderIntoDocument(<RecordRoute params={routeParams} reportData={reportData} flux={flux} router={router}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let prevRecord = TestUtils.scryRenderedDOMComponentsWithClass(component, "prevRecord");
@@ -138,14 +133,17 @@ describe('RecordRoute functions', () => {
         TestUtils.Simulate.click(prevRecord[0]);
         expect(flux.actions.openingReportRow).toHaveBeenCalledWith(3, 1);
         flux.actions.openingReportRow.calls.reset();
+        expectedRouter.push('/app/1/table/2/report/3/record/1');
 
         // next record
         TestUtils.Simulate.click(nextRecord[0]);
         expect(flux.actions.openingReportRow).toHaveBeenCalledWith(3, 3);
         flux.actions.openingReportRow.calls.reset();
+        expectedRouter.push('/app/1/table/2/report/3/record/3');
 
         // return to report
         TestUtils.Simulate.click(returnToReport[0]);
-        expect(history.pushState).toHaveBeenCalledWith(null, "/app/1/table/2/report/3");
+        expectedRouter.push('/app/1/table/2/report/3');
+        expect(component.props.router).toEqual(expectedRouter);
     });
 });

@@ -22,6 +22,9 @@ const singleNodeTreeData = [{
                 col_date: "01-01-2015"}]
 }];
 const fakeReportData_valid = {
+    appId: "1",
+    tblId: "2",
+    rptId: "3",
     loading:false,
     data: {
         filteredRecords: singleNodeTreeData
@@ -48,7 +51,8 @@ const CardViewListMock = React.createClass({
     simulateSwipeLeftInSelection() {
         this.props.onToggleCardSelection(false);
     },
-    simulateClick() {
+    simulateClick(props) {
+        this.props.node.props = props;
         this.props.onRowClicked(this.props.node);
     }
 });
@@ -96,7 +100,7 @@ describe('CardViewListHolder functions', () => {
             },
             render() {
                 return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
-                                     uniqueId="col_num"/>;
+                                           uniqueIdentifier="col_num"/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -117,7 +121,7 @@ describe('CardViewListHolder functions', () => {
         var TestParent = React.createFactory(React.createClass({
             render() {
                 return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
-                                           uniqueId="col_num"/>;
+                                           uniqueIdentifier="col_num"/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -135,7 +139,7 @@ describe('CardViewListHolder functions', () => {
         var TestParent = React.createFactory(React.createClass({
             render() {
                 return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
-                                           uniqueId="col_num"/>;
+                                           uniqueIdentifier="col_num"/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -149,7 +153,8 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test rowClick callback', () => {
-        var TestParent = React.createFactory(React.createClass({
+        let onRowClicked = false;
+        let TestParent = React.createFactory(React.createClass({
             getInitialState() {
                 return {
                     history: ""
@@ -168,9 +173,12 @@ describe('CardViewListHolder functions', () => {
                     }
                 };
             },
+            onRowClicked() {
+                onRowClicked = true;
+            },
             render() {
                 return <CardViewListHolder flux={flux} selectedRows={[]} ref="cardViewListholder" reportData={fakeReportData_valid}
-                                           uniqueId="col_num"/>;
+                                           uniqueIdentifier="col_num" onRowClicked={this.onRowClicked}/>;
             }
         }));
         var parent = TestUtils.renderIntoDocument(TestParent());
@@ -179,6 +187,6 @@ describe('CardViewListHolder functions', () => {
         expect(TestUtils.isCompositeComponent(cardlist)).toBeTruthy();
 
         cardlist.simulateClick();
-        expect(parent.state.history).toEqual("history");
+        expect(onRowClicked).toBe(true);
     });
 });

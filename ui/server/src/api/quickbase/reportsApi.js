@@ -72,10 +72,7 @@
                     },
                     reportData: {
                         data: ''
-                    },
-                    reportTotalRecordsCount: {
-                        data: ''
-                    },
+                    }
                 };
                 return new Promise((resolve2, reject2) => {
                     // We need to make two calls to core to complete this request. First call is

@@ -121,8 +121,7 @@ const ReportRoute = React.createClass({
                     pageActions={this.getPageActions(0)}
                     nameForRecords={this.nameForRecords}
                     selectedRows={this.props.reportData.selectedRows}
-                    scrollingReport={this.props.scrollingReport}
-                    history={this.props.history}/>
+                    scrollingReport={this.props.scrollingReport} />
             </div>);
         }
     }

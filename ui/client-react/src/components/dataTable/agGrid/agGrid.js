@@ -74,7 +74,6 @@ let AGGrid = React.createClass({
     },
     contextTypes: {
         touch: React.PropTypes.bool,
-        history: React.PropTypes.object,
         flux: React.PropTypes.object
     },
 
@@ -857,7 +856,7 @@ let AGGrid = React.createClass({
             shadow: false,
             hwaccel: false,
             position: 'absolute'
-        }
+        };
         return (
             <div className="reportTable">
                 <div className={gridWrapperClasses} ref="gridWrapper">

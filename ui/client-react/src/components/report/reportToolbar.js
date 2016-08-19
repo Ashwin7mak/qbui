@@ -144,10 +144,16 @@ const ReportToolbar = React.createClass({
         }
 
         this.appendBlanks();
+
         let isLoading = false;
-        let filteredRecordCount = null;
-        let recordCount = 0;
         let isCountingRecords = false;
+
+        let filteredRecordCount = null;
+        // This is the count of all records that apply to this report
+        let recordCount = 0;
+        // This indicates a page load
+        let isPageLoaded = false;
+
         let hasFacets = false;
 
         if (this.props.reportData) {
@@ -164,15 +170,25 @@ const ReportToolbar = React.createClass({
                 if (!isCountingRecords && this.props.reportData.data.recordsCount) {
                     recordCount = this.props.reportData.data.recordsCount;
                 }
+                if (this.props.reportData.data.records) {
+                    isPageLoaded = true;
+                }
                 if (this.props.reportData.data.facets &&
                     (this.props.reportData.data.facets.length > 0)) {
                     hasFacets =  this.props.reportData.data.facets[0].values;
                 }
             }
         }
-        let showFilterSearchBox = isCountingRecords ? !isLoading : (!isLoading && recordCount > 0);
-        let showNavigation = isCountingRecords ? !isLoading : (!isLoading && (recordCount > this.props.reportData.numRows) &&!(recordCount === this.props.pageEnd && this.props.pageStart === 1));
-        let showRecordsCount = !isLoading;
+        // Conditional marking display of filter box. Show when records have been loaded. This box does not depend on the record counting call
+        let showFilterSearchBox = !isLoading && isPageLoaded;
+        // Conditional indicating display of record navigation arrows. Show when
+        // - records/page have been loaded and
+        // - if the total count of records is available, total number of records in report is greater than page size. In the parent
+        //   component container, to display the correct page end, we set the page end to the total records count if records count
+        //   is less than page size for the last page. Hence, the conditions to check for here, are that we are on the first page
+        //   (page start is 1) and the number of records is equal to page end
+        let showNavigation = !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
+
         let reportToolbar = (
 
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
@@ -212,7 +228,7 @@ const ReportToolbar = React.createClass({
                         }
                     </div>
                     <div className="rightReportToolbar">
-                        {showRecordsCount ?
+                        {!isLoading ?
                             <RecordsCount recordCount={recordCount}
                                           isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
                                           filteredRecordCount={filteredRecordCount}

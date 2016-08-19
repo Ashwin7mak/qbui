@@ -13,7 +13,6 @@ describe('Report Data Actions success -- ', () => {
     let format = true;
     let offset = 1;
     let rows = 10;
-    let sortList = null;
 
     let filter = {
         facet: 'abc',

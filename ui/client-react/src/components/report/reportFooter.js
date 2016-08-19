@@ -6,13 +6,12 @@ import './report.scss';
 import ReportNavigation from './reportNavigation';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-
 /**
  * A footer for a table report. This footer contains the report page navigation links.
+ * We render this footer only for the large and medium breakpoint, and when the total number
+ * of records in the report exceeds the set page size.
  */
 const ReportToolbar = React.createClass({
-    //interaction options
-
     mixins: [FluxMixin],
 
     propTypes: {
@@ -33,22 +32,36 @@ const ReportToolbar = React.createClass({
 
     render() {
         let isLoading = false;
+        // Indicates that the total count of records is still being calculated
+        let isCountingRecords = false;
+        // Total number of records in report
         let recordCount = 0;
+
         if (this.props.reportData) {
             if (this.props.reportData.loading) {
                 isLoading = this.props.reportData.loading;
             }
-            if (this.props.reportData.data) {
+            if (this.props.reportData.countingTotalRecords) {
+                isCountingRecords = this.props.reportData.countingTotalRecords;
+            }
+            if (!isCountingRecords && this.props.reportData.data) {
                 recordCount = this.props.reportData.data.recordsCount;
             }
         }
+        // Conditional indicating display of record navigation arrows. Show when
+        // - records/page have been loaded and
+        // - if the total count of records is available, total number of records in report is greater than page size. In the parent
+        //   component container, to display the correct page end, we set the page end to the total records count if records count
+        //   is less than page size for the last page. Hence, the conditions to check for here, are that we are on the first page
+        //   (page start is 1) and the number of records is equal to page end
+        let showFooterNavigation = !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
         return (
             <div className="reportFooter">
                 <div className="leftReportFooter">
                 </div>
                 <div className="rightReportFooter">
                     <div className="rightReportFooterSpacer"></div>
-                    { !isLoading && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) ?
+                    { showFooterNavigation ?
                         (<ReportNavigation pageStart={this.props.pageStart}
                                            pageEnd={this.props.pageEnd}
                                            recordsCount={recordCount}

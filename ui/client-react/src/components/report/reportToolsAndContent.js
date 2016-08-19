@@ -16,7 +16,6 @@ import * as query from '../../constants/query';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
 
-
 let logger = new Logger();
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -240,12 +239,14 @@ let ReportToolsAndContent = React.createClass({
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
 
-        // Define the page start
+        // Define the page start. Page offset is zero indexed. For display purposes, add one.
         this.pageStart = this.props.reportData.pageOffset + 1;
-
-        if (this.props.reportData.data) {
-            this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
-
+        // Define page end. This is page offset added to page size or number of rows.
+        this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
+        // If we have the count of records for the report, and the total count is less than offset + pagesize, set the
+        // page end to total number of records. Ex. if the total number of records is 13 with page size of 10, set the
+        // page end for the last page to 13, instead of 20.
+        if (this.props.reportData.data && this.props.reportData.data.recordsCount) {
             if (this.props.reportData.data.recordsCount && this.pageEnd > this.props.reportData.data.recordsCount) {
                 this.pageEnd = this.props.reportData.data.recordsCount;
             }
@@ -278,12 +279,11 @@ let ReportToolsAndContent = React.createClass({
                                          pageEnd={this.pageEnd}/>;
 
             let reportFooter = <ReportFooter
-                reportData={this.props.reportData}
-                getNextReportPage={this.getNextReportPage}
-                getPreviousReportPage={this.getPreviousReportPage}
-                pageStart={this.pageStart}
-                pageEnd={this.pageEnd}/>;
-
+                                reportData={this.props.reportData}
+                                getNextReportPage={this.getNextReportPage}
+                                getPreviousReportPage={this.getPreviousReportPage}
+                                pageStart={this.pageStart}
+                                pageEnd={this.pageEnd}/>;
 
             return (
                 <div className={classes}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReportContent from '../../src/components/report/dataTable/reportContent';
-import CardViewListHolder from '../../src/components/dataTable/cardView/cardViewListHolder';
+import {ReportContent, __RewireAPI__ as ReportContentRewireAPI} from '../../src/components/report/dataTable/reportContent';
+import {CardViewListHolder} from '../../src/components/dataTable/cardView/cardViewListHolder';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {NumericCellRenderer, DateCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
@@ -30,14 +30,6 @@ var AGGridMock = React.createClass({
     }
 });
 
-var CardViewListHolderMock = React.createClass({
-    render() {
-        return (
-            <div>mock CardViewListHolderMock</div>
-        );
-    }
-});
-
 
 const header_empty = <div>nothing</div>;
 
@@ -55,6 +47,9 @@ const fakeReportData_emptyData = {
 };
 
 const fakeReportData_simple = {
+    appId: "1",
+    tblId: "2",
+    rptId: "3",
     loading: false,
     countingTotalRecords: false,
     data: {
@@ -183,7 +178,7 @@ const fakeReportFooter = {
         pageStart:0,
         pageEnd:10
     }
-}
+};
 
 const flux = {
     actions: {
@@ -210,6 +205,8 @@ const flux = {
         logMeasurements : ()=> {
         },
         deleteReportRecord: ()=> {
+        },
+        openingReportRow: ()=> {
         }
     }
 };
@@ -272,8 +269,8 @@ describe('ReportContent grouping functions', () => {
     let localeGetMessageSpy;
 
     beforeEach(() => {
-        ReportContent.__Rewire__('AGGrid', AGGridMock);
-        ReportContent.__Rewire__('Locales', LocalesMock);
+        ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
+        ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
         localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatNumber').and.callFake(function(val) {
             return val;
         });
@@ -284,8 +281,8 @@ describe('ReportContent grouping functions', () => {
     });
 
     afterEach(() => {
-        ReportContent.__ResetDependency__('AGGrid');
-        ReportContent.__ResetDependency__('Locales');
+        ReportContentRewireAPI.__ResetDependency__('AGGrid');
+        ReportContentRewireAPI.__ResetDependency__('Locales');
         localizeNumberSpy.calls.reset();
         localizeDateSpy.calls.reset();
         localeGetMessageSpy.calls.reset();
@@ -537,16 +534,16 @@ describe('ReportContent grouping functions exception handling', () => {
     let localeGetMessageSpy;
 
     beforeEach(() => {
-        ReportContent.__Rewire__('AGGrid', AGGridMock);
-        ReportContent.__Rewire__('Locales', LocalesMock);
+        ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
+        ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
         localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatNumber').and.throwError();
         localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatDate').and.throwError();
         localeGetMessageSpy = spyOn(LocalesMock, 'getMessage').and.callThrough();
     });
 
     afterEach(() => {
-        ReportContent.__ResetDependency__('AGGrid');
-        ReportContent.__ResetDependency__('Locales');
+        ReportContentRewireAPI.__ResetDependency__('AGGrid');
+        ReportContentRewireAPI.__ResetDependency__('Locales');
         localizeNumberSpy.calls.reset();
         localizeDateSpy.calls.reset();
         localeGetMessageSpy.calls.reset();
@@ -587,13 +584,13 @@ describe('ReportContent functions', () => {
     var component;
 
     beforeEach(() => {
-        ReportContent.__Rewire__('AGGrid', AGGridMock);
-        ReportContent.__Rewire__('Locales', LocalesMock);
+        ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
+        ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
     });
 
     afterEach(() => {
-        ReportContent.__ResetDependency__('AGGrid');
-        ReportContent.__ResetDependency__('Locales');
+        ReportContentRewireAPI.__ResetDependency__('AGGrid');
+        ReportContentRewireAPI.__ResetDependency__('Locales');
     });
 
     it('test render of component', () => {
@@ -1005,6 +1002,17 @@ describe('ReportContent functions', () => {
         }});
         expect(flux.actions.measure).toHaveBeenCalled();
         expect(flux.actions.logMeasurements).toHaveBeenCalled();
+    });
+    it('test openRow callback to push state to router', () => {
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                appId="123"
+                                                                tblId="456"
+                                                                rptId="2"
+                                                                reportData={fakeReportData_simple}
+                                                                uniqueIdentifier="RecId"
+                                                                reportHeader={header_empty} router={[]} />);
+        component.openRow({RecId: {value: 2}});
+        expect(component.props.router).toContain('/app/123/table/456/report/2/record/2');
     });
 
 });
