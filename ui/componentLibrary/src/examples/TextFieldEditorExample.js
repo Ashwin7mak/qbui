@@ -5,7 +5,7 @@ let editValue2Invalid = true;
 
 const basicTextFieldEditor = (
     <div>
-        <dt>Plain Text Field Editor:</dt>
+        <dt>Empty Text Field Editor:</dt>
             <dd>
               <TextFieldEditor />
             </dd>
@@ -23,7 +23,7 @@ const basicTextFieldEditor = (
             </dd>
 
 
-        <dt>Text Field Editor with an error:</dt>
+        <dt>Text Field Editor with a value and an error:</dt>
             <dd>
                 <TextFieldEditor isInvalid={editValue2Invalid} invalidMessage="Use up to 15 characters" value={editValue2} />
             </dd>

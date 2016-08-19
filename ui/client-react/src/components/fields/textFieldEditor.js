@@ -38,17 +38,17 @@ const TextFieldEditor = React.createClass({
         /**
          * listen for losing focus by setting a callback to the onBlur prop. */
         onBlur: React.PropTypes.func,
-        
+
         /**
          * attach a ref to reference the backing instance of the component. */
         ref: React.PropTypes.any
     },
 
     getDefaultProps() {
-    return {
+        return {
         isInvalid: false
     };
-},
+    },
     onChange(ev) {
         //TODO: add debounce support for reduced re-rendering
         if (this.props.onChange) {

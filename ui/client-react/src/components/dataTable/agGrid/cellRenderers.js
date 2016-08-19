@@ -37,6 +37,7 @@ class CellRendererFactory  {
             _.has(props.params, 'value.id') &&
             _.has(props.params, 'data') &&
             _.has(props.params, 'context.uniqueIdentifier') &&
+            _.has(props.params.data[props.params.context.uniqueIdentifier], 'value') &&
             _.has(props.params, 'rowIndex')) {
             recId = props.params.data[props.params.context.uniqueIdentifier].value;
             key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId ;
