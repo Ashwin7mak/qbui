@@ -141,7 +141,8 @@ let ReportToolsAndContent = React.createClass({
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
         flux.actions.getFilteredRecords(this.props.selectedAppId,
             this.props.routeParams.tblId,
-            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true, offset: pageOffset, numRows:numRows}, filter, queryParams);
+            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
+            {format:true, offset: this.props.reportData.pageOffset, numRows: this.props.reportData.numRows}, filter, queryParams);
     },
     searchTheString(searchTxt) {
         this.getFlux().actions.filterSearchPending(searchTxt);
