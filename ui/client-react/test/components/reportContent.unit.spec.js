@@ -1010,7 +1010,9 @@ describe('ReportContent functions', () => {
                                                                 rptId="2"
                                                                 reportData={fakeReportData_simple}
                                                                 uniqueIdentifier="RecId"
-                                                                reportHeader={header_empty} router={[]} />);
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                router={[]} />);
         component.openRow({RecId: {value: 2}});
         expect(component.props.router).toContain('/app/123/table/456/report/2/record/2');
     });

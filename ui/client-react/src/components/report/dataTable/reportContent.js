@@ -669,7 +669,7 @@ export let ReportContent = React.createClass({
             this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
         }
 
-        // Hide the footer if any rows are selected. 
+        // Hide the footer if any rows are selected.
         const selectedRows = this.props.selectedRows;
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
         let showFooter = !isSmall && !this.props.reactabular && !this.props.reportData.error && !areRowsSelected;

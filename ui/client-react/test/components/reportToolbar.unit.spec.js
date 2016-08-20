@@ -177,9 +177,6 @@ describe('ReportToolbar functions', () => {
                 }],
             facets: fakefacets,
             recordsCount: 3,
-            pageEnd:3,
-            pageStart:1,
-            numRows:20,
             filteredRecordsCount: 1
         }
     };
@@ -190,6 +187,8 @@ describe('ReportToolbar functions', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportData_no_records}
                                                                 pageActions={pageActions}
+                                                                pageStart={1}
+                                                                pageEnd={0}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
@@ -201,7 +200,7 @@ describe('ReportToolbar functions', () => {
         let facetButtons = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetButtons");
         expect(facetButtons.length).toEqual(0);
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
-        expect(recordsCount.length).toEqual(0);
+        expect(recordsCount.length).toEqual(1);
         let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
         expect(reportNavigation.length).toEqual(0);
     });
@@ -211,10 +210,11 @@ describe('ReportToolbar functions', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportData_simple}
                                                                 pageActions={pageActions}
+                                                                pageStart={1}
+                                                                pageEnd={3}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
-
         expect(filterSearchBox.length).toEqual(1);
         let facetsMenuContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetsMenuContainer");
         expect(facetsMenuContainer.length).toEqual(1);
