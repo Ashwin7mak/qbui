@@ -336,7 +336,6 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
-
     it('test load records success action with error data', () => {
 
         let payload = {
@@ -1452,6 +1451,48 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(onDeleteReportRecordBulkFailed);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
+    });
+
+    it('test load report records count  action', () => {
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT,
+            payload: {
+            }
+        };
+
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
+        expect(flux.store(STORE_NAME).countingTotalRecords).toBeTruthy();
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load report records count  failed action', () => {
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_FAILED
+        };
+
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
+        expect(flux.store(STORE_NAME).countingTotalRecords).toBeFalsy();
+        expect(flux.store(STORE_NAME).error).toBeTruthy();
+
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load report records count success action', () => {
+        let payload = {
+            body: 10
+        };
+
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS,
+            payload: payload
+        };
+
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
+        expect(flux.store(STORE_NAME).countingTotalRecords).toBeFalsy();
+        expect(flux.store(STORE_NAME).error).toBeFalsy();
+        expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(payload.body);
     });
 
 

@@ -77,6 +77,80 @@ const fakeReportData_simple = {
     }
 };
 
+const fakeReportData_pagedData  = {
+    loading: false,
+    countingTotalRecords: false,
+    numRows:5,
+    offset:0,
+    pageOffset:1,
+    data: {
+        name: "testingPageRender",
+        records: [
+            {
+                col_num: 1,
+                col_text: "Design",
+                col_date: "01-01-2015"
+            },
+            {
+                col_num: 2,
+                col_text: "Development",
+                col_date: "02-02-2015"
+            }, {
+                col_num: 3,
+                col_text: "Planning",
+                col_date: "03-03-2015"
+            },
+            {
+                col_num: 4,
+                col_text: "Design",
+                col_date: "01-01-2015"
+            },
+            {
+                col_num: 5,
+                col_text: "Development",
+                col_date: "02-02-2015"
+            }, {
+                col_num: 6,
+                col_text: "Planning",
+                col_date: "03-03-2015"
+            },            {
+                col_num: 7,
+                col_text: "Design",
+                col_date: "01-01-2015"
+            },
+            {
+                col_num: 8,
+                col_text: "Development",
+                col_date: "02-02-2015"
+            }, {
+                col_num: 9,
+                col_text: "Planning",
+                col_date: "03-03-2015"
+            },            {
+                col_num: 10,
+                col_text: "Design",
+                col_date: "01-01-2015"
+            }
+        ],
+        filteredRecords: [],
+        columns: [
+            {
+                field: "col_num",
+                headerName: "col_num"
+            },
+            {
+                field: "col_text",
+                headerName: "col_text"
+            },
+            {
+                field: "col_date",
+                headerName: "col_date"
+            }],
+        recordsCount: 10,
+        filteredRecordsCount: 0
+    }
+};
+
 const fakeReportData_unsaved = {
     loading: false,
     countingTotalRecords: false,
@@ -179,6 +253,10 @@ const fakeReportFooter = {
         pageEnd:10
     }
 };
+const selectedRowIds = [
+    1,
+    2
+];
 
 const flux = {
     actions: {
@@ -617,6 +695,27 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(0);
     });
 
+    it('test show of navigation arrows in footer with paginated report', () => {
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_pagedData}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportFooter");
+        expect(reportNavigation.length).toEqual(1);
+    });
+
+    it('test hide of footer on row selection', () => {
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_emptyData}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                selectedRows={selectedRowIds}/>);
+        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
+        expect(reportNavigation.length).toEqual(0);
+    });
+
     it('test render of empty data', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_emptyData}
@@ -624,7 +723,6 @@ describe('ReportContent functions', () => {
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
-
 
     it('test render with keyField', () => {
 
