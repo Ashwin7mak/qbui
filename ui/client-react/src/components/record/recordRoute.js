@@ -11,6 +11,7 @@ import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import {withRouter} from 'react-router';
+import Locale from '../../locales/locales';
 import './record.scss';
 
 let logger = new Logger();
@@ -109,27 +110,30 @@ export let RecordRoute = React.createClass({
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
             const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
 
+            const formName = this.props.form && this.props.form.formData && this.props.form.formData.formMeta && this.props.form.formData.formMeta.name;
+            const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
+
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {(showBack || showNext) && <div className="iconActions">
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
-                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-left"/></Button>
-                        </OverlayTrigger>
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
-                            <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-right"/></Button>
-                        </OverlayTrigger>
-                    </div> }
-
-                    {rptId && <span><QBicon icon="return"/><a className="backToReport" href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a></span>}
+                    {this.props.selectedTable && <TableIcon
+                        icon={this.props.selectedTable.icon}/> }
+                    {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
 
                 <div className="stageHeadline">
-                    {this.props.selectedTable &&
-                    <h3 className="breadCrumbs"><TableIcon
-                        icon={this.props.selectedTable.icon}/>
-                        Eric Wright at Union University</h3>
-                    }
+
+                    {(showBack || showNext) && <div className="iconActions">
+                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
+                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon className="rotate180" icon="icon_caretfilledright"/></Button>
+                        </OverlayTrigger>
+                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
+                            <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="icon_caretfilledright"/></Button>
+                        </OverlayTrigger>
+                    </div> }
+
+                    <h3 className="formName">{formName}</h3>
+
                 </div>
             </div>);
         } else {
