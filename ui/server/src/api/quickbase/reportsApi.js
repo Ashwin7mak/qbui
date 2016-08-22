@@ -84,6 +84,8 @@
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url);
 
                     requestHelper.executeRequest(req, opts).then(
+                        // TODO code hygiene, code below is shared by fetchTableHomepageReport. move to a private function and
+                        // share between the two api calls. https://quickbase.atlassian.net/browse/MB-505
                         (response) => {
                             // parse out the id and use to fetch the report meta data.
                             // Process the meta data to fetch and return the report content.
@@ -327,7 +329,8 @@
                 };
 
                 return new Promise((resolve, reject) => {
-
+                    // TODO code hygiene, code below is shared by fetchTableHomepageReport. move to a private function and
+                    // share between the two api calls. https://quickbase.atlassian.net/browse/MB-505
                     let opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesDefaultReportHomepageRoute(req.url);
