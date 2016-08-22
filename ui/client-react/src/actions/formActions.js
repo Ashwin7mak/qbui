@@ -29,8 +29,8 @@ let formActions = {
                 let formService = new FormService();
                 formService.getFormAndRecord(appId, tblId, recordId, rptId, formType).then(
                     (response) => {
-                        this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS, response.data);
                         resolve();
+                        this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS, response.data);
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
@@ -42,14 +42,9 @@ let formActions = {
                         this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, error.response.status);
                         reject();
                     }
-                ).catch((ex) => {
-                    logger.logException(ex);
-                    this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, 500);
-                    reject();
-                });
+                );
             } else {
                 logger.error('formService.loadFormAndRecord: Missing required input parameters.');
-                this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, 500);
                 reject();
             }
         });
