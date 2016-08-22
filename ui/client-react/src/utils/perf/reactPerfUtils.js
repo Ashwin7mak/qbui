@@ -68,7 +68,7 @@ class ReactPerfUtils {
      * @returns {any|*}
      */
     static requireReactDefaultPerf() {
-        return require('react-addons/lib/ReactDefaultPerf');
+        return require('react/lib/ReactDefaultPerf');
     }
 }
 export default ReactPerfUtils;
