@@ -66,21 +66,27 @@ const ReportRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
 
-    getBreadcrumbs() {
-        let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
-
-        return (this.props.selectedTable &&
-        <h3 className="breadCrumbs"><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}
-            <span className="breadCrumbsSeparator"> {reportName && "|"} </span>{reportName}</h3>);
-
-    },
 
     getStageHeadline() {
+        let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
+
         return (
-            <div className="stageHeadline">
-                {this.getBreadcrumbs()}
-            </div>
-        );
+            <div className="reportStageHeadline">
+
+                <div className="navLinks">
+                    <TableIcon icon={this.props.selectedTable.icon}/>
+                </div>
+
+                <div className="stageHeadline">
+                    <h3 className="formName">{reportName}</h3>
+                </div>
+
+                <div className="stageHeadline">
+                    <h3 className="breadCrumbs">{this.props.selectedTable.name}
+                        <span className="breadCrumbsSeparator"> {reportName && "|"} </span>{reportName}
+                    </h3>
+                </div>
+            </div>);
     },
 
     render() {
