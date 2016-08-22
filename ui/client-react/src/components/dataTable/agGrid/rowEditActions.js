@@ -82,7 +82,7 @@ const RowEditActions = React.createClass({
                         <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
                     </OverlayTrigger> :
 
-                    <QBToolTip location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
+                    <QBToolTip  rootClose={true} location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
                         <Button><QBIcon icon="alert" className="invalidRecord"/></Button>
                     </QBToolTip>
                 }

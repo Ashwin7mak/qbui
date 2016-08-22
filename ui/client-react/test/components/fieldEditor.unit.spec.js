@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import FieldEditor  from '../../src/components/fields/fieldEditor';
-import FieldFormats from '../../../utils/fieldFormats';
+import FieldFormats from '../../src/utils/fieldFormats';
 var simpleStringify = require('../../../common/src/simpleStringify.js');
 
 describe('FieldEditor functions', () => {

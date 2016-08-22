@@ -3,6 +3,7 @@ import React from 'react';
 import {I18nNumber} from '../../../utils/i18nMessage';
 import FieldFormats from '../../../utils/fieldFormats';
 import TextField from '../../fields/textField';
+import _ from 'lodash';
 
 export const CellValueRenderer = React.createClass({
 
@@ -134,7 +135,7 @@ export const TextCellValueRenderer = React.createClass({
 
     render() {
         return <TextField classes="textCell data"
-                          isBold={this.props.attributes.clientSideAttributes.bold}
+                          isBold={_.has(this.props, 'attributes.clientSideAttributes.bold') && this.props.attributes.clientSideAttributes.bold}
                           {...this.props} />;
     }
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {DefaultFieldEditor, MultiLineTextFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from './fieldEditors';
 import TextFieldEditor from './textFieldEditor';
-import FieldFormats from '../../../utils/fieldFormats';
+import FieldFormats from '../../utils/fieldFormats' ;
 
 /**
  * # FieldEditor
@@ -28,7 +28,7 @@ const FieldEditor = React.createClass({
         classes: React.PropTypes.string,
 
         /**
-         * a field data type see ../../constants/fieldFormats defaults to text
+         * a field data type see ../../utils/fieldFormats defaults to text
          * - TEXT_FORMAT = 1;
          * - NUMBER_FORMAT = 2;
          * - DATE_FORMAT = 3;

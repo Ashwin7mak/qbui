@@ -284,18 +284,20 @@ export let ReportContent = React.createClass({
         // the field's constraint was made. so modifying a record
         // via patch will check those fields for validity even if the user
         // didn't edit the value
-        this.props.fields.fields.data.forEach((field) => {
-            if (changes[field.id] === undefined) {
-                if (!field.builtIn && (field.required || field.unique)) {
-                    let newValue  = this.props.pendEdits.originalRecord.fids[field.id].value;
-                    if (newValue === null) {
-                        newValue = "";
+        if ( _.has(this.props, 'fields.fields.data')) {
+            this.props.fields.fields.data.forEach((field) => {
+                if (changes[field.id] === undefined) {
+                    if (!field.builtIn && (field.required || field.unique)) {
+                        let newValue = this.props.pendEdits.originalRecord.fids[field.id].value;
+                        if (newValue === null) {
+                            newValue = "";
+                        }
+                        let newDisplay = this.props.pendEdits.originalRecord.fids[field.id].display;
+                        this.createColChange(newValue, newDisplay, field.id, field.name, list);
                     }
-                    let newDisplay  = this.props.pendEdits.originalRecord.fids[field.id].display;
-                    this.createColChange(newValue, newDisplay, field.id, field.name, list);
                 }
-            }
-        });
+            });
+        }
     },
 
     /**
