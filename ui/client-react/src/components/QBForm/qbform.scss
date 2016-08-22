@@ -27,6 +27,7 @@
             max-width: 100%;
             display: flex;
             flex-direction: column;
+            margin-right:20px;
         }
 
         /* separate field label td left of field */
@@ -35,7 +36,6 @@
             display: block;
             color: $fieldLabel-color;
             max-width: 10em;
-            margin-right:20px;
         }
 
         /* field label in field td */
@@ -47,6 +47,10 @@
 
         .field {
             margin-right: 40px;
+
+            .dateCell {
+                white-space:nowrap;
+            }
         }
 
         td:last-child .field {

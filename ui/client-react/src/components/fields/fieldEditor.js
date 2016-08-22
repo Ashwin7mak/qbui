@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {DefaultFieldEditor, MultiLineTextFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from './fieldEditors';
 import TextFieldEditor from './textFieldEditor';
-import * as formats from '../../constants/fieldFormats';
+import FieldFormats from '../../../utils/fieldFormats';
 
 /**
  * # FieldEditor
@@ -81,7 +81,7 @@ const FieldEditor = React.createClass({
     getDefaultProps() {
         return {
             isInvalid: false,
-            type : formats.TEXT_FORMAT
+            type : FieldFormats.TEXT_FORMAT
         };
     },
 
@@ -107,39 +107,39 @@ const FieldEditor = React.createClass({
         };
 
         switch (type) {
-        case formats.CHECKBOX_FORMAT:
+        case FieldFormats.CHECKBOX_FORMAT:
             return <CheckBoxFieldEditor {...commonProps}
                 />;
 
-        case formats.DATE_FORMAT: {
+        case FieldFormats.DATE_FORMAT: {
             return <DateFieldEditor  {...commonProps}/>;
         }
 
-        case formats.DATETIME_FORMAT: {
+        case FieldFormats.DATETIME_FORMAT: {
             return <DateTimeFieldEditor  {...commonProps}/>;
         }
 
-        case formats.TIME_FORMAT: {
+        case FieldFormats.TIME_FORMAT: {
             return <TimeFieldEditor  {...commonProps} />;
         }
 
-        case formats.NUMBER_FORMAT:
-        case formats.RATING_FORMAT:
-        case formats.DURATION_FORMAT:
-        case formats.CURRENCY_FORMAT:
-        case formats.PERCENT_FORMAT: {
+        case FieldFormats.NUMBER_FORMAT:
+        case FieldFormats.RATING_FORMAT:
+        case FieldFormats.DURATION_FORMAT:
+        case FieldFormats.CURRENCY_FORMAT:
+        case FieldFormats.PERCENT_FORMAT: {
             return <DefaultFieldEditor type="number"
                                        {...commonProps} />;
         }
 
-        case formats.USER_FORMAT: {
+        case FieldFormats.USER_FORMAT: {
             return <UserFieldEditor  {...commonProps}/>;
         }
 
-        case formats.MULTI_LINE_TEXT_FORMAT: {
+        case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
             return <MultiLineTextFieldEditor {...commonProps} />;
         }
-        case formats.TEXT_FORMAT:
+        case FieldFormats.TEXT_FORMAT:
         default: {
 
             if (_.has(this.props, 'fieldDef.choices')) {

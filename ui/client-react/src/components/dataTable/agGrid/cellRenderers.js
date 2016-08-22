@@ -21,7 +21,7 @@ import IconActions from '../../actions/iconActions';
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
 import './dateTimePicker.scss';
 
-import * as formats from '../../../constants/fieldFormats';
+import FieldFormats from '../../../utils/fieldFormats';
 import _ from 'lodash';
 import Logger from "../../../utils/logger";
 
@@ -117,18 +117,18 @@ const CellRenderer = React.createClass({
      */
     getClassNameForType(cellType) {
         switch (cellType) {
-        case formats.DATE_FORMAT:            return "dateFormat";
-        case formats.DATETIME_FORMAT:        return "dateTimeFormat";
-        case formats.TIME_FORMAT:            return "timeFormat";
-        case formats.NUMBER_FORMAT:          return "numberFormat";
-        case formats.RATING_FORMAT:          return "ratingFormat";
-        case formats.CURRENCY_FORMAT:        return "currencyFormat";
-        case formats.PERCENT_FORMAT:         return "percentFormat";
-        case formats.DURATION_FORMAT:        return "durationFormat";
-        case formats.PHONE_FORMAT:           return "phoneFormat";
-        case formats.TEXT_FORMAT:            return "textFormat";
-        case formats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
-        default:                             return "textFormat";
+        case FieldFormats.DATE_FORMAT:            return "dateFormat";
+        case FieldFormats.DATETIME_FORMAT:        return "dateTimeFormat";
+        case FieldFormats.TIME_FORMAT:            return "timeFormat";
+        case FieldFormats.NUMBER_FORMAT:          return "numberFormat";
+        case FieldFormats.RATING_FORMAT:          return "ratingFormat";
+        case FieldFormats.CURRENCY_FORMAT:        return "currencyFormat";
+        case FieldFormats.PERCENT_FORMAT:         return "percentFormat";
+        case FieldFormats.DURATION_FORMAT:        return "durationFormat";
+        case FieldFormats.PHONE_FORMAT:           return "phoneFormat";
+        case FieldFormats.TEXT_FORMAT:            return "textFormat";
+        case FieldFormats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
+        default:                                  return "textFormat";
         }
     },
 
@@ -147,8 +147,8 @@ const CellRenderer = React.createClass({
         let cellType = this.props.type;
 
         // use multi-line text editor and renderer for qbGrid only to demonstrate auto resizing rows
-        if (this.props.qbGrid && (cellType === formats.TEXT_FORMAT)) {
-            cellType = formats.MULTI_LINE_TEXT_FORMAT;
+        if (this.props.qbGrid && (cellType === FieldFormats.TEXT_FORMAT)) {
+            cellType = FieldFormats.MULTI_LINE_TEXT_FORMAT;
         }
 
         let invalidStatus = {isInvalid: false, invalidMessage: null};
@@ -192,16 +192,16 @@ const CellRenderer = React.createClass({
 
     onChange(value) {
         switch (this.props.type) {
-        case formats.DATE_FORMAT:
-        case formats.DATETIME_FORMAT:
-        case formats.TIME_FORMAT:
+        case FieldFormats.DATE_FORMAT:
+        case FieldFormats.DATETIME_FORMAT:
+        case FieldFormats.TIME_FORMAT:
             this.dateTimeCellEdited(value);
             break;
 
-        case formats.NUMBER_FORMAT:
-        case formats.RATING_FORMAT:
-        case formats.CURRENCY_FORMAT:
-        case formats.PERCENT_FORMAT:
+        case FieldFormats.NUMBER_FORMAT:
+        case FieldFormats.RATING_FORMAT:
+        case FieldFormats.CURRENCY_FORMAT:
+        case FieldFormats.PERCENT_FORMAT:
             this.numericCellEdited(value);
             break;
 
@@ -264,17 +264,17 @@ const CellRenderer = React.createClass({
             value: newValue,
         };
         switch (this.props.type) {
-        case formats.DATE_FORMAT: {
+        case FieldFormats.DATE_FORMAT: {
             // normalized form is YYYY-MM-DD
             theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
             break;
         }
-        case formats.TIME_FORMAT: {
+        case FieldFormats.TIME_FORMAT: {
             // normalized form is 1970-01-01THH:MM:SSZ
             theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
             break;
         }
-        case formats.DATETIME_FORMAT: {
+        case FieldFormats.DATETIME_FORMAT: {
             // normalized form is YYYY-MM-DDTHH:MM:SSZ
             theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
             break;
@@ -304,13 +304,13 @@ const CellRenderer = React.createClass({
 
 export const TextCellRenderer = React.createClass({
     render() {
-        let format = formats.TEXT_FORMAT;
+        let format = FieldFormats.TEXT_FORMAT;
         if (this.props.params && this.props.params.column && this.props.params.column.colDef &&
             this.props.params.column.colDef.datatypeAttributes &&
             this.props.params.column.colDef.datatypeAttributes.clientSideAttributes &&
             this.props.params.column.colDef.datatypeAttributes.clientSideAttributes.num_lines &&
             this.props.params.column.colDef.datatypeAttributes.clientSideAttributes.num_lines > 1) {
-            format = formats.MULTI_LINE_TEXT_FORMAT;
+            format = FieldFormats.MULTI_LINE_TEXT_FORMAT;
         }
         return CellRendererFactory.makeCellRenderer(format, this.props);
     }
@@ -318,69 +318,69 @@ export const TextCellRenderer = React.createClass({
 
 export const DateCellRenderer = React.createClass({
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.DATE_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.DATE_FORMAT, this.props);
     }
 });
 
 export const DateTimeCellRenderer = React.createClass({
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.DATETIME_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.DATETIME_FORMAT, this.props);
     }
 });
 
 export const TimeCellRenderer = React.createClass({
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.TIME_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.TIME_FORMAT, this.props);
     }
 });
 
 export const DurationCellRenderer = React.createClass({
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.DURATION_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.DURATION_FORMAT, this.props);
     }
 });
 
 export const PhoneCellRenderer = React.createClass({
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.PHONE_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.PHONE_FORMAT, this.props);
     }
 });
 
 export const NumericCellRenderer = React.createClass({
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.NUMBER_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.NUMBER_FORMAT, this.props);
     }
 });
 
 export const CurrencyCellRenderer = React.createClass({
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.CURRENCY_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.CURRENCY_FORMAT, this.props);
     }
 });
 
 export const PercentCellRenderer = React.createClass({
 
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.PERCENT_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.PERCENT_FORMAT, this.props);
     }
 });
 
 export const RatingCellRenderer = React.createClass({
 
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.RATING_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.RATING_FORMAT, this.props);
     }
 });
 export const UserCellRenderer = React.createClass({
 
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.USER_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.USER_FORMAT, this.props);
     }
 });
 export const CheckBoxCellRenderer = React.createClass({
 
     render() {
-        return CellRendererFactory.makeCellRenderer(formats.CHECKBOX_FORMAT, this.props);
+        return CellRendererFactory.makeCellRenderer(FieldFormats.CHECKBOX_FORMAT, this.props);
     }
 });
 
