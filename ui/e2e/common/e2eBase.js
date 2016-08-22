@@ -106,11 +106,10 @@
             basicSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
                 e2eBase.setUp();
-                var deferred = Promise.pending();
                 // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
-                e2eBase.appService.createApp(generatedApp).then(function(app) {
+                return e2eBase.appService.createApp(generatedApp).then(function(app) {
                     createdApp = app;
                     // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                     var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
@@ -139,13 +138,10 @@
                 }).then(function(reportRecords) {
                     // Return back the created app and records
                     // Pass it back in an array as promise.resolve can only send back one object
-                    var appAndRecords = [createdApp, reportRecords];
-                    deferred.resolve(appAndRecords);
+                    return  [createdApp, reportRecords];
                 }).catch(function(error) {
                     console.error(JSON.stringify(error));
-                    deferred.reject(error);
                 });
-                return deferred.promise;
             },
 
             makeBasicMap() {
