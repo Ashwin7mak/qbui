@@ -181,10 +181,10 @@ xdescribe('ReportContent grouping functions', () => {
     beforeEach(() => {
         ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
         ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
-        localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindPairs, 'formatNumber').and.callFake(function(val) {
+        localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatNumber').and.callFake(function(val) {
             return val;
         });
-        localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindPairs, 'formatDate').and.callFake(function(date, opts) {
+        localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatDate').and.callFake(function(date, opts) {
             return date;
         });
         localeGetMessageSpy = spyOn(LocalesMock, 'getMessage').and.callThrough();
@@ -417,7 +417,7 @@ xdescribe('ReportContent grouping functions', () => {
     });
 
     it('Test case: Recursive test', function() {
-        let localizeGroupingSpy = spyOn(ReportContent.prototype.__reactAutoBindPairs, 'localizeGroupingHeaders').and.callThrough();
+        let localizeGroupingSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'localizeGroupingHeaders').and.callThrough();
         let reportData = fakeReportGroupData_recursiveTemplate;
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
@@ -437,8 +437,8 @@ xdescribe('ReportContent grouping functions exception handling', () => {
     beforeEach(() => {
         ReportContentRewireAPI.__Rewire__('AGGrid', AGGridMock);
         ReportContentRewireAPI.__Rewire__('Locales', LocalesMock);
-        localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindPairs, 'formatNumber').and.throwError();
-        localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindPairs, 'formatDate').and.throwError();
+        localizeNumberSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatNumber').and.throwError();
+        localizeDateSpy = spyOn(ReportContent.prototype.__reactAutoBindMap, 'formatDate').and.throwError();
         localeGetMessageSpy = spyOn(LocalesMock, 'getMessage').and.callThrough();
     });
 
