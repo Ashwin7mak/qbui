@@ -245,13 +245,13 @@ let reportDataActions = {
                     response => {
                         logger.debug('RecordService deleteRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.DELETE_REPORT_RECORD_SUCCESS, recId);
-                        NotificationManager.success("1 " + nameForRecords + " " + Locale.getMessage('recordNotifications.deleted'), Locale.getMessage('success'), 2000);
+                        NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'), 2000);
                         resolve();
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
                         this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: error.response});
-                        NotificationManager.error("1 " + nameForRecords + " " + Locale.getMessage('recordNotifications.notDeleted'), Locale.getMessage('failed'), 3000);
+                        NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'), 3000);
                         reject();
                     }
                 ).catch(
@@ -286,14 +286,14 @@ let reportDataActions = {
                     response => {
                         logger.debug('RecordService deleteRecordBulk success:' + JSON.stringify(response));
                         this.dispatch(actions.DELETE_REPORT_RECORD_BULK_SUCCESS, recIds);
-                        let message = recIds.length === 1 ? ("1 " + nameForRecords + " " + Locale.getMessage('recordNotifications.deleted')) : (recIds.length + " " + nameForRecords + " " + Locale.getMessage('recordNotifications.deleted'));
+                        let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`);
                         NotificationManager.success(message, Locale.getMessage('success'), 2000);
                         resolve();
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecordBulk:');
                         this.dispatch(actions.DELETE_REPORT_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error.response});
-                        let message = recIds.length === 1 ? ("1 " + nameForRecords + " " + Locale.getMessage('recordNotifications.notDeleted')) : (recIds.length + " " + nameForRecords + " " + Locale.getMessage('recordNotifications.notDeleted'));
+                        let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`);
                         NotificationManager.error(message, Locale.getMessage('failed'), 3000);
                         reject();
                     }
