@@ -202,30 +202,34 @@ let ReportToolsAndContent = React.createClass({
         </div>);
     },
     getNextReportPage() {
-        if (this.props.reportData.pageOffset + this.props.reportData.numRows >= this.props.reportData.data.recordsCount) {
-            return false;
+        if (this.props.reportData) {
+            if (this.props.reportData.pageOffset + this.props.reportData.numRows >= this.props.reportData.data.recordsCount) {
+                return false;
+            }
+            let appId = this.props.params.appId;
+            let tblId = this.props.params.tblId;
+            let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
+            let format = true;
+            let numRows = this.props.reportData.numRows;
+            let newOffset = this.props.reportData.pageOffset + numRows;
+            let sortList = this.props.reportData.sortList;
+            this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows, sortList);
         }
-        let appId = this.props.params.appId;
-        let tblId = this.props.params.tblId;
-        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
-        let format = true;
-        let numRows = this.props.reportData.numRows;
-        let newOffset = this.props.reportData.pageOffset + numRows;
-        let sortList = this.props.reportData.sortList;
-        this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows, sortList);
     },
     getPreviousReportPage() {
-        if (this.props.reportData.pageOffset === 0) {
-            return false;
-        }
-        let appId = this.props.params.appId;
-        let tblId = this.props.params.tblId;
-        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
-        let format = true;
-        let numRows = this.props.reportData.numRows;
-        let newOffset = this.props.reportData.pageOffset - numRows;
+        if (this.props.reportData) {
+            if (this.props.reportData.pageOffset === 0) {
+                return false;
+            }
+            let appId = this.props.params.appId;
+            let tblId = this.props.params.tblId;
+            let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
+            let format = true;
+            let numRows = this.props.reportData.numRows;
+            let newOffset = this.props.reportData.pageOffset - numRows;
 
-        this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
+            this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
+        }
     },
     render() {
         let classes = "reportToolsAndContentContainer";

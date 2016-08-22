@@ -835,6 +835,8 @@ let AGGrid = React.createClass({
     render() {
         let columnDefs = this.getColumns();
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
+
+        // TODO Code hygiene, set up loader options as an external constant. https://quickbase.atlassian.net/browse/MB-503
         var loaderOptions = {
             lines: 9,
             length: 0,

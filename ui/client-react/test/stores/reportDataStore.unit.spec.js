@@ -17,8 +17,8 @@ describe('Test ReportData Store', () => {
     const appId = 'appId';
     const tblId = 'tblId';
     const rptId = 'rptId';
-    const pageOffset = 0;
-    const numRows = 20;
+    const pageOffset = serverTypeConsts.PAGE.DEFAULT_OFFSET;
+    const numRows = serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
     beforeEach(() => {
         store = new Store();

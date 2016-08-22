@@ -96,10 +96,10 @@ class ReportService extends BaseService {
 
         let args = arguments;
         let url = super.constructUrl(this.API.GET_REPORT, [appId, tableId, reportId]);
-        var request;
+        let request;
 
         // For report pagination, if format, offset, rows are defined, set parameters.
-        if (format !== undefined && offset !== undefined && rows !== undefined) {
+        if (format && format !== undefined && offset && offset !== undefined && rows && rows !== undefined) {
             let params = {};
             if (format === true) {
                 params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;

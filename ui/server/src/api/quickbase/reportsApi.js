@@ -93,7 +93,7 @@
 
                                 req.params = req.params || {};
 
-                                if (req.query.format !== "undefined" && req.query.format === "true") {
+                                if (req.query.format !== "undefined" && req.query.format === constants.FORMAT.DISPLAY) {
                                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
                                 }
 

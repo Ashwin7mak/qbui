@@ -208,7 +208,7 @@
          * @param reportId
          * @returns {*}
          */
-        getReportsRoute: function(url, reportId) {//, offset, numRows) {
+        getReportsRoute: function(url, reportId) {
             let root = getUrlRoot(url, TABLES);
             if (root) {
                 return root + '/' + REPORTS + (reportId ? '/' + reportId : '');

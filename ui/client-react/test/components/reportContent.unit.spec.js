@@ -12,6 +12,7 @@ import * as GroupTypes from '../../src/constants/groupTypes';
 
 import Breakpoints from '../../src/utils/breakpoints';
 
+//TODO Code hygiene: Clean up names with underscores, replace with camelcase. Tracked at https://quickbase.atlassian.net/browse/MB-501
 var LocalesMock = {
     getLocale: function() {
         return 'en-us';

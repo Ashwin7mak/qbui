@@ -16,10 +16,6 @@ import * as userFormatter from '../../../common/src/formatter/userFormatter';
 let logger = new Logger();
 const groupDelimiter = ":";
 
-//if these two constants change, update unit test const values accordingly
-const DEFAULT_OFFSET = 0;
-const DEFAULT_NUM_ROWS = 20;
-
 let reportModel = {
     model: {
         columns: null,
@@ -238,7 +234,7 @@ let reportModel = {
     },
 
     updateRecordsCount: function(recordsCountData) {
-        if (recordsCountData) {
+        if (recordsCountData && !isNaN(recordsCountData)) {
             this.model.recordsCount = parseInt(recordsCountData);
         }
     },
@@ -459,8 +455,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.facetExpression = {};
         this.selections = new FacetSelections();
         this.selectedRows = [];
-        this.pageOffset = DEFAULT_OFFSET;
-        this.numRows = DEFAULT_NUM_ROWS;
+        this.pageOffset = serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        this.numRows = serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
         this.countingTotalRecords = false;
 
         this.currentRecordId = null;

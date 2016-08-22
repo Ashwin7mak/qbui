@@ -281,7 +281,7 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
 });
 
 
-describe('Report Data Actions -- ', () => {
+describe('Report Data Actions -- Fetch a report negative', () => {
     'use strict';
     class mockReportService {
         constructor() { }
@@ -338,7 +338,7 @@ describe('Report Data Actions -- ', () => {
     });
 });
 
-describe('Report Data Actions -- ', () => {
+describe('Report Data Actions -- Fetch a report with reports count fetch failure', () => {
     'use strict';
     class mockReportService {
         constructor() { }

@@ -11,7 +11,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * We render this footer only for the large and medium breakpoint, and when the total number
  * of records in the report exceeds the set page size.
  */
-const ReportToolbar = React.createClass({
+const ReportFooter = React.createClass({
     mixins: [FluxMixin],
 
     propTypes: {
@@ -43,8 +43,7 @@ const ReportToolbar = React.createClass({
             }
             if (this.props.reportData.countingTotalRecords) {
                 isCountingRecords = this.props.reportData.countingTotalRecords;
-            }
-            if (!isCountingRecords && this.props.reportData.data) {
+            } else if (this.props.reportData.data) {
                 recordCount = this.props.reportData.data.recordsCount;
             }
         }
@@ -79,5 +78,5 @@ const ReportToolbar = React.createClass({
     }
 });
 
-export default ReportToolbar;
+export default ReportFooter;
 

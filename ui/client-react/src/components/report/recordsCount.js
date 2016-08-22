@@ -29,6 +29,7 @@ var RecordsCount = React.createClass({
             message = "report.filteredRecordCount";
             dbl = this.props.clearAllFilters;
         }
+        // TODO Code hygiene, set up loader options as an external constant. https://quickbase.atlassian.net/browse/MB-503
         var loaderOptions = {
             lines: 7,
             length: 0,

@@ -44,8 +44,4 @@ export default {
     RECORDSCOUNT        : 'recordsCount',
     RESULTS             : 'results',
     PARSE               : 'parse',
-
-    // Query String and parameters constants
-    QUERYSTRING         : '?',
-    PARAMSEPARATOR      : '&'
 };
