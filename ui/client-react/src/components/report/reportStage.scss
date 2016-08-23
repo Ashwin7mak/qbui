@@ -1,5 +1,14 @@
 @import '../../../src/assets/css/qbVariables';
 
+
+.pageActions .iconActionButton.addRecord {
+
+    border-radius:20px;
+    -webkit-border-radius:20px;
+    background-color: $color-green-600;
+    color: $color2;
+}
+
 .report-content {
     display: flex;
     margin-bottom: 35px;

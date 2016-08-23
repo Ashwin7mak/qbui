@@ -14,6 +14,7 @@ $breadCrumbsSeparatorColor: #c7c7c7;
         align-items:center;
         margin-bottom:10px;
         .qbIcon {
+            font-size:22px;
             margin-right:10px;
         }
 
@@ -24,6 +25,7 @@ $breadCrumbsSeparatorColor: #c7c7c7;
         padding-top:20px;
         white-space: nowrap;
         overflow:hidden;
+        color: $stage-headline-icon-color;
         .stageHeadline {
             display:flex;
             align-items:center;
@@ -32,6 +34,10 @@ $breadCrumbsSeparatorColor: #c7c7c7;
                 margin:0;
                 text-overflow:ellipsis;
                 overflow:hidden;
+            }
+            .qbIcon {
+                font-size: 22px;
+                color:$stage-headline-color;
             }
 
         }
@@ -55,11 +61,8 @@ $breadCrumbsSeparatorColor: #c7c7c7;
                 color: $breadCrumbsSeparatorColor;
             }
         }
-        .qbIcon {
-            font-size: 24px;
-            color:$stage-headline-icon-color
-        }
-        .iconActionButton:hover {
+
+        .iconActionButton:not([disabled]):hover {
             .qbIcon {
                 color: $nav-hover-fg;
             }
@@ -67,7 +70,7 @@ $breadCrumbsSeparatorColor: #c7c7c7;
     }
 
     .stageRight {
-        padding-top:10px;
+        padding-top:20px;
         flex:0 0 auto;
     }
 }
@@ -85,6 +88,7 @@ $breadCrumbsSeparatorColor: #c7c7c7;
         right: 4px;
         height: 24px;
         border: 1px solid $header-bg;
+        border-top:0;
         border-radius: 0 0 2px 2px;
         background-color: $color2;
         color: $icon-color;

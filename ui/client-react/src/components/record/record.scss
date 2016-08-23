@@ -29,13 +29,6 @@
             .iconActionButton {
                 height: 24px;
                 width: 24px;
-
-                .qbIcon {
-                    &.rotate180 {
-                        transform: translateY(-3px) rotate(180deg);
-
-                    }
-                }
             }
 
         }

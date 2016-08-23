@@ -65,7 +65,7 @@ const ReportRoute = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add'},
+            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
             {msg: 'pageActions.favorite', icon:'star'},
             {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
             {msg: 'pageActions.email', icon:'mail'},

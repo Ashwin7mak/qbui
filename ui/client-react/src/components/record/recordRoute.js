@@ -103,7 +103,7 @@ export let RecordRoute = React.createClass({
     },
 
     getStageHeadline() {
-
+        console.log(this.props.selectedTable);
         if (this.props.params) {
             const {rptId} = this.props.params;
 
@@ -116,8 +116,8 @@ export let RecordRoute = React.createClass({
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <TableIcon
-                        icon={this.props.selectedTable.icon}/> }
+                    {this.props.selectedTable && <TableIcon icon={this.props.selectedTable.icon}/> }
+                    {this.props.selectedTable && this.props.selectedTable.name && <span>{this.props.selectedTable.name}&nbsp;&gt;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
 
@@ -125,7 +125,7 @@ export let RecordRoute = React.createClass({
 
                     {(showBack || showNext) && <div className="iconActions">
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
-                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon className="rotate180" icon="icon_caretfilledright"/></Button>
+                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="icon_caretfilledleft"/></Button>
                         </OverlayTrigger>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
                             <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="icon_caretfilledright"/></Button>
