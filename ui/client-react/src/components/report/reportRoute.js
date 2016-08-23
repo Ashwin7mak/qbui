@@ -74,17 +74,12 @@ const ReportRoute = React.createClass({
             <div className="reportStageHeadline">
 
                 <div className="navLinks">
-                    <TableIcon icon={this.props.selectedTable.icon}/>
+                    {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
+                    {this.props.selectedTable && this.props.selectedTable.name}
                 </div>
 
                 <div className="stageHeadline">
-                    <h3 className="formName">{reportName}</h3>
-                </div>
-
-                <div className="stageHeadline">
-                    <h3 className="breadCrumbs">{this.props.selectedTable.name}
-                        <span className="breadCrumbsSeparator"> {reportName && "|"} </span>{reportName}
-                    </h3>
+                    <h3 className="reportName">{reportName}</h3>
                 </div>
             </div>);
     },

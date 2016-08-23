@@ -12,7 +12,7 @@
 
 
     .recordStageHeadline {
-        height:70px;
+
         display:flex;
         flex-direction:column;
         justify-content:center;
@@ -31,11 +31,8 @@
                 width: 24px;
 
                 .qbIcon {
-                    color: $stage-headline-color;
-                    font-size: 24px;
-                    height: auto;
                     &.rotate180 {
-                        transform: translateY(-2px) rotate(180deg);
+                        transform: translateY(-3px) rotate(180deg);
 
                     }
                 }

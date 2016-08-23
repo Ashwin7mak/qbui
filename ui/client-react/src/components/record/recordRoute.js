@@ -121,7 +121,7 @@ export let RecordRoute = React.createClass({
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
 
-                <div className="stageHeadline">
+                <div className="stageHeadline iconActions">
 
                     {(showBack || showNext) && <div className="iconActions">
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
