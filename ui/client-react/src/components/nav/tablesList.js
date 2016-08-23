@@ -46,7 +46,10 @@ let TablesList = React.createClass({
      * check for table name matching search text
      */
     searchMatches(name) {
-        return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
+        if (name !== undefined) {
+            return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
+        }
+        return true;
     },
     /**
      * toggle search tables list

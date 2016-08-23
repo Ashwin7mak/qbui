@@ -1,9 +1,9 @@
 @font-face {
     font-family: 'QuickBase-Sturdy';
     src:
-        url('fonts/QuickBase-Sturdy.ttf?5aptom') format('truetype'),
-        url('fonts/QuickBase-Sturdy.woff?5aptom') format('woff'),
-        url('fonts/QuickBase-Sturdy.svg?5aptom#QuickBase-Sturdy') format('svg');
+            url('fonts/QuickBase-Sturdy.ttf?5aptom') format('truetype'),
+            url('fonts/QuickBase-Sturdy.woff?5aptom') format('woff'),
+            url('fonts/QuickBase-Sturdy.svg?5aptom#QuickBase-Sturdy') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -86,8 +86,20 @@
 .iconssturdy-caret-filled-up:before {
     content: "\e920";
 }
-.iconssturdy-icon_caretfilledright:before {
+.iconssturdy-icon_caretfilledleft:before {
     content: "\e90b";
+}
+.iconssturdy-icon_caretfilledright:before {
+    content: "\e947";
+}
+.iconssturdy-first:before {
+    content: "\e948";
+}
+.iconssturdy-last:before {
+    content: "\e950";
+}
+.iconssturdy-pause:before {
+    content: "\e951";
 }
 .iconssturdy-close:before {
     content: "\1234";
@@ -254,12 +266,6 @@
 .iconssturdy-bell:before {
     content: "\e942";
 }
-.iconssturdy-moon:before {
-    content: "\e947";
-}
-.iconssturdy-trophy:before {
-    content: "\e948";
-}
 .iconssturdy-cart:before {
     content: "\e949";
 }
@@ -268,5 +274,11 @@
 }
 .iconssturdy-thumbs-up:before {
     content: "\e94d";
+}
+.iconssturdy-iconUiSturdy_descending:before {
+    content: "\e94e";
+}
+.iconssturdy-iconUiSturdy_ascending:before {
+    content: "\e94f";
 }
 

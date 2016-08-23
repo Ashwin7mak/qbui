@@ -3,6 +3,7 @@ import Logger from '../../utils/logger';
 import ReportActions from '../actions/reportActions';
 import ReportToolbar from './reportToolbar';
 import ReportContent from './dataTable/reportContent';
+import ReportFooter from './reportFooter';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
@@ -40,7 +41,9 @@ let ReportToolsAndContent = React.createClass({
         reportData: React.PropTypes.object,
         pageActions: React.PropTypes.element,
         callbacks :  React.PropTypes.object,
-        selectedRows: React.PropTypes.array
+        selectedRows: React.PropTypes.array,
+        pageStart: React.PropTypes.number,
+        pageEnd: React.PropTypes.number,
     },
     getDefaultProps() {
         return {
@@ -138,7 +141,8 @@ let ReportToolsAndContent = React.createClass({
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
         flux.actions.getFilteredRecords(this.props.selectedAppId,
             this.props.routeParams.tblId,
-            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true}, filter, queryParams);
+            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
+            {format:true, offset: this.props.reportData.pageOffset, numRows: this.props.reportData.numRows}, filter, queryParams);
     },
     searchTheString(searchTxt) {
         this.getFlux().actions.filterSearchPending(searchTxt);
@@ -174,7 +178,11 @@ let ReportToolsAndContent = React.createClass({
                               searchTheString={this.searchTheString}
                               filterOnSelections={this.filterOnSelections}
                               clearSearchString={this.clearSearchString}
-                              clearAllFilters={this.clearAllFilters}/>;
+                              clearAllFilters={this.clearAllFilters}
+                              getNextReportPage={this.getNextReportPage}
+                              getPreviousReportPage={this.getPreviousReportPage}
+                              pageStart={this.pageStart}
+                              pageEnd={this.pageEnd}/>;
     },
     getSelectionActions() {
         return (<ReportActions selection={this.props.selectedRows} appId={this.props.params.appId} tblId={this.props.params.tblId} rptId={this.props.params.rptId}/>);
@@ -193,8 +201,37 @@ let ReportToolsAndContent = React.createClass({
             {hasSelection ? this.getSelectionActions() : this.getReportToolbar()}
         </div>);
     },
-    render() {
+    getNextReportPage() {
+        if (this.props.reportData) {
+            if (this.props.reportData.pageOffset + this.props.reportData.numRows >= this.props.reportData.data.recordsCount) {
+                return false;
+            }
+            let appId = this.props.params.appId;
+            let tblId = this.props.params.tblId;
+            let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
+            let format = true;
+            let numRows = this.props.reportData.numRows;
+            let newOffset = this.props.reportData.pageOffset + numRows;
+            let sortList = this.props.reportData.sortList;
+            this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows, sortList);
+        }
+    },
+    getPreviousReportPage() {
+        if (this.props.reportData) {
+            if (this.props.reportData.pageOffset === 0) {
+                return false;
+            }
+            let appId = this.props.params.appId;
+            let tblId = this.props.params.tblId;
+            let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
+            let format = true;
+            let numRows = this.props.reportData.numRows;
+            let newOffset = this.props.reportData.pageOffset - numRows;
 
+            this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
+        }
+    },
+    render() {
         let classes = "reportToolsAndContentContainer";
         if (this.props.selectedRows) {
             if (this.props.selectedRows.length > 0) {
@@ -206,6 +243,19 @@ let ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
+
+        // Define the page start. Page offset is zero indexed. For display purposes, add one.
+        this.pageStart = this.props.reportData.pageOffset + 1;
+        // Define page end. This is page offset added to page size or number of rows.
+        this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
+        // If we have the count of records for the report, and the total count is less than offset + pagesize, set the
+        // page end to total number of records. Ex. if the total number of records is 13 with page size of 10, set the
+        // page end for the last page to 13, instead of 20.
+        if (this.props.reportData.data && this.props.reportData.data.recordsCount) {
+            if (this.props.reportData.data.recordsCount && this.pageEnd > this.props.reportData.data.recordsCount) {
+                this.pageEnd = this.props.reportData.data.recordsCount;
+            }
+        }
 
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
@@ -227,7 +277,18 @@ let ReportToolsAndContent = React.createClass({
                                          searchTheString={this.searchTheString}
                                          filterOnSelections={this.filterOnSelections}
                                          clearSearchString={this.clearSearchString}
-                                         clearAllFilters={this.clearAllFilters}/>;
+                                         clearAllFilters={this.clearAllFilters}
+                                         getNextReportPage={this.getNextReportPage}
+                                         getPreviousReportPage={this.getPreviousReportPage}
+                                         pageStart={this.pageStart}
+                                         pageEnd={this.pageEnd}/>;
+
+            let reportFooter = <ReportFooter
+                                reportData={this.props.reportData}
+                                getNextReportPage={this.getNextReportPage}
+                                getPreviousReportPage={this.getPreviousReportPage}
+                                pageStart={this.pageStart}
+                                pageEnd={this.pageEnd}/>;
 
             return (
                 <div className={classes}>
@@ -237,17 +298,20 @@ let ReportToolsAndContent = React.createClass({
                                onClick={(e) => {this.setState({reactabular: e.target.checked});}}/>&nbsp;Use Reactabular Grid
                     </label>
                     {this.getTableActions()}
-                    <ReportContent  appId={this.props.params.appId}
-                                    tblId={this.props.params.tblId}
-                                    rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
-                                    reportData={this.props.reportData}
-                                    reportHeader={toolbar}
-                                    keyField={this.props.fields && this.props.fields.keyField ?
-                                        this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
-                                    uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                    flux={this.getFlux()}
-                                    reactabular={this.state.reactabular}
-                        {...this.props} />
+
+                    <ReportContent appId={this.props.params.appId}
+                                   tblId={this.props.params.tblId}
+                                   rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
+                                   reportData={this.props.reportData}
+                                   reportHeader={toolbar}
+                                   reportFooter={reportFooter}
+                                   keyField={this.props.fields && this.props.fields.keyField ?
+                                       this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
+                                   uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                   flux={this.getFlux()}
+                                   reactabular={this.state.reactabular}
+                                   gridOptions={this.props.gridOptions}
+                                   {...this.props} />
 
                     {!this.props.scrollingReport && <AddRecordButton />}
                 </div>

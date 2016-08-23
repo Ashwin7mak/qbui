@@ -16,11 +16,13 @@ class ValidationUtils {
             invalidMessage : null
         };
 
-        if (def === undefined) {
+        if (def === undefined || def === null) {
             return results;
         }
 
-        results.id = def.id;
+        if (typeof def.id !== 'undefined') {
+            results.id = def.id;
+        }
 
         // check require field is not empty, checkRequired before saving not on change
         if (checkRequired && _.has(def, 'required') && def.required &&

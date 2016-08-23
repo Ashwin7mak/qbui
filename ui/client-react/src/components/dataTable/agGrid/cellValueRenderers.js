@@ -12,7 +12,7 @@ export const CellValueRenderer = React.createClass({
         value: React.PropTypes.any,
         attributes: React.PropTypes.object,
         isEditable: React.PropTypes.bool,
-        type: React.PropTypes.string
+        type: React.PropTypes.number
     },
 
     render() {

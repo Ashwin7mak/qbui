@@ -10,6 +10,7 @@ import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
+import ReportFooter from '../reportFooter';
 import ValidationUtils from "../../../utils/ValidationUtils";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
@@ -699,10 +700,9 @@ export let ReportContent = React.createClass({
         this.capturePerfTiming(prevProps);
     },
 
-    /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
-        let recordCount = 0;
+        let recordsCount = 0;
 
         let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
         if (this.props.keyField) {
@@ -711,20 +711,24 @@ export let ReportContent = React.createClass({
             keyField = this.props.fields.keyField.name;
         }
 
-        if (this.props.reportData) {
+        if (this.props.reportData && this.props.reportData.data) {
             let reportData = this.props.reportData.data;
-            if (reportData) {
-                recordCount = reportData.filteredRecordsCount ? reportData.filteredRecordsCount : reportData.recordsCount;
-                this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
-            }
+            recordsCount = reportData.filteredRecordsCount ? reportData.filteredRecordsCount : reportData.recordsCount;
+            this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
         }
-        return (<div className="loadedContent">
 
+        // Hide the footer if any rows are selected.
+        const selectedRows = this.props.selectedRows;
+        let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
+        let showFooter = !isSmall && !this.props.reactabular && !this.props.reportData.error && !areRowsSelected;
+
+        return (
+                <div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className="reportContent">
-                        {!isSmall && this.props.reactabular &&
 
+                        {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
                                 uniqueIdentifier={this.props.uniqueIdentifier ||  SchemaConsts.DEFAULT_RECORD_KEY}
@@ -739,7 +743,7 @@ export let ReportContent = React.createClass({
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                                recordCount={recordCount}
+                                recordsCount={recordsCount}
                                 groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
                                 groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
@@ -747,7 +751,6 @@ export let ReportContent = React.createClass({
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}
                         />}
-
                         {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
@@ -772,18 +775,27 @@ export let ReportContent = React.createClass({
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
                                 reportHeader={this.props.reportHeader}
+                                reportFooter={this.props.reportFooter}
                                 pageActions={this.props.pageActions}
                                 selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} />}
                                 onScroll={this.onScrollRecords}
                                 onRowClick={this.openRow}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                                recordCount={recordCount}
+                                recordsCount={recordsCount}
                                 groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
                                 groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                                 filter={{selections: this.props.reportData.selections,
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}/>
+                        }
+                        {showFooter &&
+                        <ReportFooter
+                            reportData={this.props.reportData}
+                            getNextReportPage={this.props.reportFooter.props.getNextReportPage}
+                            getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}
+                            pageStart={this.props.reportFooter.props.pageStart}
+                            pageEnd={this.props.reportFooter.props.pageEnd}/>
                         }
                         {isSmall &&
                             <CardViewListHolder reportData={this.props.reportData}

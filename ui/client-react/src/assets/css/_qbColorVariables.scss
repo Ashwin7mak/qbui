@@ -53,6 +53,7 @@ $color-cyan-800: #254a6d; //Table header labels, flyouts header background, disa
 $color-cyan-700: #007da9; //Page action icons, Field labels (view & edit mode)
 $color-cyan-600: #0098cd; //Hover states for nav & nav icon
 $color-cyan-500: #00abf4; //Selected state for nav, selected nav table icon
+$color-cyan-300: #b2e6fc;
 $color-cyan-100: #e5f6fe; //Table header background
 
 
@@ -170,6 +171,10 @@ $stage-headline-icon-color: #009aad;
 
 //== Report
 $report-backgroundColor:          $color13;
+$pagination-iconfont-normal-color: $color-black-700;
+$pagination-iconfont-disabled-color: $color-black-400;
+$pagination-iconfont-hover-color: $color-black-600;
+$pagination-text-normal-color: $color-black-700;
 
 //== Report grouped headers
 $grid-group-row-header-bkgrd-color: $color1;

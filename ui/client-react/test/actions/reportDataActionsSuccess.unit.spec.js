@@ -3,7 +3,6 @@ import reportDataActions from '../../src/actions/reportDataActions';
 import * as actions from '../../src/constants/actions';
 import * as query from '../../src/constants/query';
 import Promise from 'bluebird';
-import ReportUtils from '../../src/utils/reportUtils';
 
 describe('Report Data Actions success -- ', () => {
     'use strict';
@@ -11,18 +10,31 @@ describe('Report Data Actions success -- ', () => {
     let appId = '1';
     let tblId = '2';
     let rptId = '3';
+    let format = true;
+    let offset = 1;
+    let rows = 10;
+
     let filter = {
         facet: 'abc',
         search: ''
     };
     let responseReportData = {
         data: {
-            name: 'name'
+            name: 'name',
+            reportMetaData: 'metaData',
+            reportData: 'data'
         }
     };
     let responseResultData = {
         data: {
             test: 'test'
+        }
+    };
+    let responseReportCountData = {
+        response: {
+            data: {
+                body: 10
+            }
         }
     };
     let response = {
@@ -35,7 +47,9 @@ describe('Report Data Actions success -- ', () => {
     let loadReportInputs = {
         appId: appId,
         tblId: tblId,
-        rptId: rptId
+        rptId: rptId,
+        offset: offset,
+        rows: rows
     };
     let filterReportInputs = {
         appId: appId,
@@ -47,14 +61,29 @@ describe('Report Data Actions success -- ', () => {
         },
         sortList: '6.-7'
     };
+    let errorStatus = 404;
+
+    let mockPromiseSuccess = function(expectedResult) {
+        return Promise.resolve(expectedResult);
+    };
+
+    let mockPromiseError = function() {
+        var p = Promise.defer();
+        p.reject({message:'someError', status: errorStatus});
+        return p.promise;
+    };
+
+    let mockPromiseException = function() {
+        throw new Error("error");
+    };
 
     class mockReportService {
         constructor() { }
         getReport() {
-            return Promise.resolve(responseReportData);
+            return mockPromiseSuccess(responseReportData);
         }
-        getReportDataAndFacets() {
-            return Promise.resolve(responseResultData);
+        getReportRecordsCount() {
+            return mockPromiseSuccess(responseReportCountData);
         }
     }
 
@@ -64,9 +93,9 @@ describe('Report Data Actions success -- ', () => {
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockReportService.prototype, 'getReport').and.callThrough();
-        spyOn(mockReportService.prototype, 'getReportDataAndFacets').and.callThrough();
         reportDataActions.__Rewire__('ReportService', mockReportService);
+        spyOn(mockReportService.prototype, 'getReport').and.callThrough();
+        spyOn(mockReportService.prototype, 'getReportRecordsCount').and.callThrough();
     });
 
     afterEach(() => {
@@ -74,13 +103,14 @@ describe('Report Data Actions success -- ', () => {
     });
 
     it('test load report action with report parameters', (done) => {
-        flux.actions.loadReport(appId, tblId, rptId, true).then(
+        flux.actions.loadReport(appId, tblId, rptId, format, offset, rows).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                expect(mockReportService.prototype.getReportDataAndFacets).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(mockReportService.prototype.getReportRecordsCount).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT, {}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
                 done();
             },
             () => {
@@ -93,18 +123,19 @@ describe('Report Data Actions success -- ', () => {
     it('test load report action with sortlist', (done) => {
         let sortList = "6:V.-7";
         let queryParams = {};
-        queryParams[query.OFFSET_PARAM] = 0;
-        queryParams[query.NUMROWS_PARAM] = 0;
-        queryParams[query.FORMAT_PARAM] = true;
+        queryParams[query.OFFSET_PARAM] = offset;
+        queryParams[query.NUMROWS_PARAM] = rows;
+        queryParams[query.FORMAT_PARAM] = format;
         queryParams[query.SORT_LIST_PARAM] = sortList;
         queryParams[query.QUERY_PARAM] = '';
-        flux.actions.loadReport(appId, tblId, rptId, true, 0, 0, sortList).then(
+        flux.actions.loadReport(appId, tblId, rptId, format, offset, rows, sortList).then(
             () => {
                 expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                expect(mockReportService.prototype.getReportDataAndFacets).toHaveBeenCalledWith(appId, tblId, rptId, queryParams);
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(mockReportService.prototype.getReportRecordsCount).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, loadReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT, jasmine.any(Object)]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_SUCCESS, jasmine.any(Object)]);
                 done();
             },
             () => {
