@@ -26,6 +26,24 @@ describe('ReportService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
     });
 
+    it('test getReport function with pagination parameters', ()=> {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 3;
+        var format = 'display';
+        var offset = 1;
+        var rows = 10;
+
+        var url = reportService.constructUrl(reportService.API.GET_REPORT, [appId, tblId, rptId]);
+        var params = {};
+        params[query.FORMAT_PARAM] = format;
+        params[query.OFFSET_PARAM] = offset;
+        params[query.NUMROWS_PARAM] = rows;
+
+        reportService.getReport(appId, tblId, rptId, true, offset, rows);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
     it('test getReport where it finds it in cache', (done) => {
         var appId = 1;
         var tblId = 2;

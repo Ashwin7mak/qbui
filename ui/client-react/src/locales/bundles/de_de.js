@@ -70,10 +70,8 @@ export default {
             recordNotAdded :"Nehmen Sie nicht hinzugefügt",
             recordSaved : "Datensatz gespeichert",
             recordNotSaved :"Nehmen Sie nicht gespeichert",
-            recordDeleted : "Der Datensatz wurde gelöscht",
-            recordNotDeleted : "Nehmen Sie nicht gelöscht",
-            recordDeletedBulk: "Mehrere Datensätze gelöscht",
-            recordNotDeletedBulk: "Mehrere Datensätze nicht gelöscht"
+            deleted : "gelöscht",
+            notDeleted : "nicht gelöscht"
         },
         header: {
             menu: {
@@ -108,7 +106,11 @@ export default {
             newReport: "Neu",
             organizeReports: "Organisieren",
             recordCount : "{recordCount} {nameForRecords} ",
+            recordCountPlaceHolder : "Zählen {nameForRecords}",
+            reportNavigationBar : "{pageStart} - {pageEnd}",
             searchPlaceHolder:  "Suchen Sie diese",
+            previousToolTip: "Zurück",
+            nextToolTip: "Nächster",
             sortAndGroup : {
                 addField: "Feld hinzufügen",
                 by: "nach",

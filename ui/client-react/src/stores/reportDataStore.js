@@ -157,15 +157,10 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
             this.model.groupFields = recordData.groups.fields;
-                //  TODO: with paging, this count is flawed...
-            this.model.recordsCount = recordData.groups.totalRows;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.records = this.getReportData(recordData.fields, recordData.records);
             this.model.groupFields = null;
-
-            //  TODO: with paging, this count is flawed...
-            this.model.recordsCount = recordData.records ? recordData.records.length : null;
         }
 
         this.model.fields = recordData.fields || [];
@@ -236,6 +231,12 @@ let reportModel = {
                 }
             }
         });
+    },
+
+    updateRecordsCount: function(recordsCountData) {
+        if (recordsCountData && !isNaN(recordsCountData)) {
+            this.model.recordsCount = parseInt(recordsCountData);
+        }
     },
 
     /**
@@ -379,20 +380,20 @@ let reportModel = {
      */
     deleteRecordsFromLists(recId) {
         var recordValueToMatch = {};
-        recordValueToMatch[this.model.keyField.name] = {value: recId};
+        recordValueToMatch[SchemaConsts.DEFAULT_RECORD_KEY] = {value: recId};
         var index = _.findIndex(this.model.filteredRecords, recordValueToMatch);
         if (index !== -1) {
             this.model.filteredRecords.splice(index, 1);
             this.model.recordsCount--;
         } else {
-            logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
+            logger.error(`the record to delete does not exist in the filteredRecords list. value: ${recId} index: ${index}`);
         }
         index = _.findIndex(this.model.records, recordValueToMatch);
         if (index !== -1) {
             this.model.records.splice(index, 1);
             this.model.recordsCount--;
         } else {
-            logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
+            logger.error(`the record to delete does not exist in the filteredRecords list. value: ${recId} index: ${index}`);
         }
     }
 };
@@ -411,6 +412,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.facetExpression = {};
         this.selections = new FacetSelections();
         this.selectedRows = [];
+        this.pageOffset = serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        this.numRows = serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
+        this.countingTotalRecords = false;
 
         this.currentRecordId = null;
         this.nextRecordId = null;
@@ -441,9 +445,14 @@ let ReportDataStore = Fluxxor.createStore({
             actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_REPORT_RECORD_FAILED, this.onClearEdit,
 
+            actions.LOAD_REPORT_RECORDS_COUNT, this.onLoadReportRecordsCount,
+            actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, this.onLoadReportRecordsCountSuccess,
+            actions.LOAD_REPORT_RECORDS_COUNT_FAILED, this.onLoadReportRecordsCountFailed,
+
             actions.OPEN_REPORT_RECORD, this.onOpenRecord,
             actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
             actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord
+
         );
     },
 
@@ -461,8 +470,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.appId = report.appId;
         this.tblId = report.tblId;
         this.rptId = report.rptId;
-        this.searchStringForFiltering = '';
-        this.selections = new FacetSelections();
+
+        this.pageOffset = (report.offset >= 0) ? report.offset : this.pageOffset;
+        this.numRows = report.numRows ? report.numRows : this.numRows;
+
+        this.searchStringForFiltering = '' ;
+        this.selections  = new FacetSelections();
         this.selectedRows = [];
 
         this.emit('change');
@@ -526,6 +539,7 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.error = false;
         this.reportModel.updateFilteredRecords(response.recordData);
+
         this.emit('change');
     },
 
@@ -534,6 +548,23 @@ let ReportDataStore = Fluxxor.createStore({
         this.editingIndex = null;
         this.editingId = null;
 
+        this.error = true;
+        this.emit('change');
+    },
+
+    onLoadReportRecordsCount() {
+        this.countingTotalRecords = true;
+        this.emit('change');
+    },
+
+    onLoadReportRecordsCountSuccess(response) {
+        this.countingTotalRecords = false;
+        this.reportModel.updateRecordsCount(response.body);
+        this.emit('change');
+    },
+
+    onLoadReportRecordsCountFailed() {
+        this.countingTotalRecords = false;
         this.error = true;
         this.emit('change');
     },
@@ -652,7 +683,7 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload parameter contains {appId, tblId, recId, error: error}
      */
     onDeleteReportRecordFailed(payload) {
-        this.emit('change');
+        logger.error(`the record failed to delete: recId ${payload.recId}`);
     },
 
     /**
@@ -682,7 +713,7 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload parameter contains {appId, tblId, recId, error: error}
      */
     onDeleteReportRecordBulkFailed(payload) {
-        this.emit('change');
+        logger.error(`the records failed to delete: recIds ${payload.recIds}`);
     },
 
     /**
@@ -811,6 +842,9 @@ let ReportDataStore = Fluxxor.createStore({
             appId: this.appId,
             tblId: this.tblId,
             rptId: this.rptId,
+            pageOffset: this.pageOffset,
+            numRows: this.numRows,
+            countingTotalRecords: this.countingTotalRecords,
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
             facetExpression: this.facetExpression,

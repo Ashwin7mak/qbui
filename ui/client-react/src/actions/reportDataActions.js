@@ -96,45 +96,23 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 let reportDataActions = {
 
     loadReport(appId, tblId, rptId, format, offset, rows, sortList) {
-
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
-
             if (appId && tblId && rptId) {
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
+                this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT, {});
                 let reportService = new ReportService();
 
-                //  query for the report meta data
-                //  TODO: refactor by having just 1 network call to node to retrieve a report...
-                //  TODO: leverage how homepage report is loaded..
-                reportService.getReport(appId, tblId, rptId).then(
-                    reportMetaData => {
-                        let requiredParams = {};
-                        requiredParams[query.FORMAT_PARAM] = format;
-                        requiredParams[query.OFFSET_PARAM] = offset;
-                        requiredParams[query.NUMROWS_PARAM] = rows;
-                        let overrideQueryParams = {};
-                        if (sortList !== undefined) {
-                            overrideQueryParams[query.SORT_LIST_PARAM] = sortList;
+                reportService.getReport(appId, tblId, rptId, format, offset, rows, sortList).then(
+                    (response) => {
+                        // We only need to check for reportData. The metadata will be fetched
+                        // and parsed in the node call.
+                        if (response.data.reportMetaData && response.data.reportData) {
+                            var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
+                            _.extend(model, {sortList: sortList});
+                            this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                            resolve();
                         }
-
-                        var queryParams = buildRequestQuery(reportMetaData, requiredParams, overrideQueryParams);
-
-                        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
-                            reportData => {
-                                logger.debug('ReportDataAndFacets service call successful');
-                                var model = reportModel.set(reportMetaData, reportData);
-                                _.extend(model, {sortList: sortList});
-                                this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                                resolve();
-                            },
-                            error => {
-                                //  axios upgraded to an error.response object in 0.13.x
-                                logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReportDataAndFacets:');
-                                this.dispatch(actions.LOAD_REPORT_FAILED, error.response.status);
-                                reject();
-                            }
-                        );
                     },
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x
@@ -142,13 +120,29 @@ let reportDataActions = {
                         this.dispatch(actions.LOAD_REPORT_FAILED, error.response.status);
                         reject();
                     }
-                ).catch(
-                    ex => {
-                        logger.logException(ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED, 500);
+                ).catch(ex => {
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
+                    reject();
+                });
+
+                reportService.getReportRecordsCount(appId, tblId, rptId).then(
+                    response => {
+                        if (response.data) {
+                            logger.debug('ReportRecordsCount service call successful');
+                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data);
+                        }
+                    },
+                    error => {
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReportRecordsCount:');
+                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error.response.status);
                         reject();
                     }
-                );
+                ).catch(ex => {
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, 500);
+                    reject();
+                });
             } else {
                 logger.error('reportDataActions.loadReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
                 this.dispatch(actions.LOAD_REPORT_FAILED, 500);
@@ -233,7 +227,7 @@ let reportDataActions = {
     /**
      * delete a record
      */
-    deleteReportRecord(appId, tblId, recId) {
+    deleteReportRecord(appId, tblId, recId, nameForRecords) {
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && (!!(recId === 0 || recId))) {
@@ -245,13 +239,13 @@ let reportDataActions = {
                     response => {
                         logger.debug('RecordService deleteRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.DELETE_REPORT_RECORD_SUCCESS, recId);
-                        NotificationManager.success(Locale.getMessage('recordNotifications.recordDeleted'), Locale.getMessage('success'), 1500);
+                        NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'), 2000);
                         resolve();
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
                         this.dispatch(actions.DELETE_REPORT_RECORD_FAILED, {appId, tblId, recId, error: error.response});
-                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotDeleted'), Locale.getMessage('failed'), 1500);
+                        NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'), 3000);
                         reject();
                     }
                 ).catch(
@@ -274,7 +268,7 @@ let reportDataActions = {
     /**
      * delete records in bulk
      */
-    deleteReportRecordBulk(appId, tblId, recIds) {
+    deleteReportRecordBulk(appId, tblId, recIds, nameForRecords) {
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && recIds && recIds.length >= 1) {
@@ -286,15 +280,15 @@ let reportDataActions = {
                     response => {
                         logger.debug('RecordService deleteRecordBulk success:' + JSON.stringify(response));
                         this.dispatch(actions.DELETE_REPORT_RECORD_BULK_SUCCESS, recIds);
-                        let message = recIds.length === 1 ? Locale.getMessage('recordNotifications.recordDeleted') : Locale.getMessage('recordNotifications.recordDeletedBulk');
-                        NotificationManager.success(message, Locale.getMessage('success'), 1500);
+                        let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`);
+                        NotificationManager.success(message, Locale.getMessage('success'), 2000);
                         resolve();
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecordBulk:');
                         this.dispatch(actions.DELETE_REPORT_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error.response});
-                        let message = recIds.length === 1 ? Locale.getMessage('recordNotifications.recordNotDeleted') : Locale.getMessage('recordNotifications.recordNotDeletedBulk');
-                        NotificationManager.error(message, Locale.getMessage('failed'), 1500);
+                        let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`);
+                        NotificationManager.error(message, Locale.getMessage('failed'), 3000);
                         reject();
                     }
                 ).catch(
@@ -370,10 +364,7 @@ let reportDataActions = {
      * @param filter: {facet, search}
      * @param overrideQueryParams: {columns, sortlist, query}
      */
-
-
     getFilteredRecords(appId, tblId, rptId, requiredQueryParams, filter, overrideQueryParams) {
-
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
 

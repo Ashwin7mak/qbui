@@ -22,20 +22,29 @@ const ReportRoute = React.createClass({
     mixins: [FluxMixin],
     nameForRecords: "Records",  // get from table meta data
 
-    loadReport(appId, tblId, rptId) {
+    loadReport(appId, tblId, rptId, offset, numRows) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
         flux.actions.loadFields(appId, tblId);
-        flux.actions.loadReport(appId, tblId, rptId, true);
+        flux.actions.loadReport(appId, tblId, rptId, true, offset, numRows);
     },
     loadReportFromParams(params) {
         let appId = params.appId;
         let tblId = params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
+        let offset = null;
+        let numRows = null;
+        if (this.props.reportData) {
+            if (this.props.reportData.pageOffset !== undefined) {
+                offset = this.props.reportData.pageOffset;
+            }
+            if (this.props.reportData.numRows !== undefined) {
+                numRows = this.props.reportData.numRows;
+            }
+        }
 
         if (appId && tblId && rptId) {
-            //logger.debug('Loading report. AppId:' + appId + ' ;tblId:' + tblId + ' ;rptId:' + rptId);
-            this.loadReport(appId, tblId, rptId);
+            this.loadReport(appId, tblId, rptId, offset, numRows);
         }
     },
     componentDidMount() {

@@ -70,10 +70,8 @@ export default {
             recordNotAdded :"Enregistrement non ajouté",
             recordSaved : "Sauvegarder",
             recordNotSaved :"Enregistrement non enregistré",
-            recordDeleted : "Enregistrement supprimé",
-            recordNotDeleted : "Enregistrement non supprimé",
-            recordDeletedBulk: "Plusieurs enregistrements supprimés",
-            recordNotDeletedBulk: "Plusieurs enregistrements pas supprimés"
+            deleted : "supprimé",
+            notDeleted : "non supprimés",
         },
         header: {
             menu: {
@@ -107,6 +105,10 @@ export default {
             newReport: "Nouveau",
             organizeReports: "Organiser",
             recordCount : "{recordCount} {nameForRecords} ",
+            recordCountPlaceHolder : "Compte {nameForRecords}",
+            reportNavigationBar : "{pageStart} - {pageEnd}",
+            previousToolTip: "Arrière",
+            nextToolTip: "Prochain",
             searchPlaceHolder:  "Rechercher ces",
             sortAndGroup : {
                 addField: "Ajouter le champ",
