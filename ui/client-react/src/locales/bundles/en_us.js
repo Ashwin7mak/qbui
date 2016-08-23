@@ -73,10 +73,8 @@ export default {
             recordNotAdded :"Record not added",
             recordSaved : "Record saved",
             recordNotSaved :"Record not saved",
-            recordDeleted : "Record deleted",
-            recordNotDeleted : "Record not deleted",
-            recordDeletedBulk: "Multiple records deleted",
-            recordNotDeletedBulk: "Multiple records not deleted"
+            deleted : "deleted",
+            notDeleted : "not deleted",
         },
         header: {
             menu: {

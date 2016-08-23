@@ -61,7 +61,13 @@ const fakeReportData_simple = {
             col_num: {value: 1, id: 4},
             col_text: {value: 'abc', id: 5},
             col_date: {value: '01-01-2015', id: 6},
-            id: {value: 100, id: 7},
+            id: {value: 100, id: 7}
+        }],
+        records: [{
+            col_num: {value: 1, id: 4},
+            col_text: {value: 'abc', id: 5},
+            col_date: {value: '01-01-2015', id: 6},
+            "Record ID#": {value: 100, id: 7}
         }],
         columns: [{
             field: "col_num",
@@ -847,7 +853,7 @@ describe('ReportContent functions', () => {
 
     it('test handleRecordDelete', () => {
         let keyField = "id";
-        let origRec = Object.assign({}, fakeReportData_simple.data.filteredRecords[0]);
+        let origRec = Object.assign({}, fakeReportData_simple.data.records[0]);
         spyOn(flux.actions, 'deleteReportRecord');
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}

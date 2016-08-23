@@ -380,20 +380,20 @@ let reportModel = {
      */
     deleteRecordsFromLists(recId) {
         var recordValueToMatch = {};
-        recordValueToMatch[this.model.keyField.name] = {value: recId};
+        recordValueToMatch[SchemaConsts.DEFAULT_RECORD_KEY] = {value: recId};
         var index = _.findIndex(this.model.filteredRecords, recordValueToMatch);
         if (index !== -1) {
             this.model.filteredRecords.splice(index, 1);
             this.model.recordsCount--;
         } else {
-            logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
+            logger.error(`the record to delete does not exist in the filteredRecords list. value: ${recId} index: ${index}`);
         }
         index = _.findIndex(this.model.records, recordValueToMatch);
         if (index !== -1) {
             this.model.records.splice(index, 1);
             this.model.recordsCount--;
         } else {
-            logger.error('the record to delete does not exist in the filteredRecords list. value: ${recId[i]} index: ${index}');
+            logger.error(`the record to delete does not exist in the filteredRecords list. value: ${recId} index: ${index}`);
         }
     }
 };
@@ -683,7 +683,7 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload parameter contains {appId, tblId, recId, error: error}
      */
     onDeleteReportRecordFailed(payload) {
-        this.emit('change');
+        logger.error(`the record failed to delete: recId ${payload.recId}`);
     },
 
     /**
@@ -713,7 +713,7 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload parameter contains {appId, tblId, recId, error: error}
      */
     onDeleteReportRecordBulkFailed(payload) {
-        this.emit('change');
+        logger.error(`the records failed to delete: recIds ${payload.recIds}`);
     },
 
     /**
