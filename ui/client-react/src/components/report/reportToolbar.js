@@ -8,6 +8,7 @@ import FilterSearchBox from '../facet/filterSearchBox';
 import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
+import ReportNavigation from './reportNavigation';
 import SortAndGroup from '../sortGroup/sortAndGroup';
 import mockFacets from '../../mocks/facets';
 import _ from 'lodash';
@@ -42,6 +43,8 @@ const ReportToolbar = React.createClass({
         onFacetSelect: React.PropTypes.func,
         filterOnSelections: React.PropTypes.func,
         searchTheString: React.PropTypes.func,
+        pageStart: React.PropTypes.number,
+        pageEnd: React.PropTypes.number,
     },
 
     getDefaultProps() {
@@ -141,21 +144,38 @@ const ReportToolbar = React.createClass({
         }
 
         this.appendBlanks();
+
         let isLoading = false;
+        let isCountingRecords = false;
+        let isError = false;
+
         let filteredRecordCount = null;
-        let recordCount = null;
+        // This is the count of all records that apply to this report
+        let recordCount = 0;
+        // This indicates a page load
+        let isPageLoaded = false;
+
         let hasFacets = false;
 
         if (this.props.reportData) {
             if (this.props.reportData.loading) {
                 isLoading = this.props.reportData.loading;
             }
+            if (this.props.reportData.countingTotalRecords) {
+                isCountingRecords = this.props.reportData.countingTotalRecords;
+            }
+            if (this.props.reportData.error) {
+                isError = true;
+            }
             if (this.props.reportData.data) {
                 if (this.props.reportData.data.filteredRecords) {
                     filteredRecordCount =  this.props.reportData.data.filteredRecordsCount;
                 }
-                if (this.props.reportData.data.records) {
+                if (!isCountingRecords && this.props.reportData.data.recordsCount) {
                     recordCount = this.props.reportData.data.recordsCount;
+                }
+                if (this.props.reportData.data.records) {
+                    isPageLoaded = true;
                 }
                 if (this.props.reportData.data.facets &&
                     (this.props.reportData.data.facets.length > 0)) {
@@ -163,8 +183,18 @@ const ReportToolbar = React.createClass({
                 }
             }
         }
+        // Conditional marking display of filter box. Show when records have been loaded. This box does not depend on the record counting call
+        let showFilterSearchBox = !isLoading && isPageLoaded && !isError;
+        // Conditional indicating display of record navigation arrows. Show when
+        // - records/page have been loaded and
+        // - if the total count of records is available, total number of records in report is greater than page size. In the parent
+        //   component container, to display the correct page end, we set the page end to the total records count if records count
+        //   is less than page size for the last page. Hence, the conditions to check for here, are that we are on the first page
+        //   (page start is 1) and the number of records is equal to page end
+        let showNavigation = !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && !isError;
 
         let reportToolbar = (
+
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
 
                     <div className="leftReportToolbar">
@@ -173,26 +203,23 @@ const ReportToolbar = React.createClass({
 
                         {/*TODO : check if searchBox is enabled for this report,
                          if has facets has search too, eg no facets without searchBox */}
-                        {recordCount ?
-                            (<FilterSearchBox onChange={this.handleSearchChange}
+                        {showFilterSearchBox ?
+                            <FilterSearchBox onChange={this.handleSearchChange}
                                              nameForRecords={this.props.nameForRecords}
                                              searchBoxKey="reportToolBar"
-                                {...this.props} />) :
+                                {...this.props} /> :
                             null
                         }
-
-                        {recordCount ?
-                            (<SortAndGroup  {...this.props}
+                        {!isLoading && !isError ?
+                            <SortAndGroup  {...this.props}
                                 filter={{selections: this.props.selections,
                                         facet: this.props.reportData.facetExpression,
-                                        search: this.props.searchStringForFiltering}}
-                            />) :
+                                        search: this.props.searchStringForFiltering}}/> :
                             null
                         }
-
                         {/* check if facets is enabled for this report,
                          also hide Facets Menu Button if facets disabled  */}
-                        {(recordCount && hasFacets) ?
+                        {!isLoading && hasFacets && !isError ?
                             (<FacetsMenu className="facetMenu"
                                 {...this.props}
                                          isLoading={isLoading}
@@ -204,18 +231,29 @@ const ReportToolbar = React.createClass({
                             null
                         }
                     </div>
+                    <div className="rightReportToolbar">
+                        {!isLoading && !isError ?
+                            <RecordsCount recordCount={recordCount}
+                                          isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
+                                          filteredRecordCount={filteredRecordCount}
+                                          nameForRecords={this.props.nameForRecords}
+                                          clearAllFilters={this.props.clearAllFilters}
+                                          isCounting={this.props.reportData.countingTotalRecords}
+                            /> :
+                            null
+                        }
 
+                        {showNavigation ?
+                            (<ReportNavigation pageStart={this.props.pageStart}
+                                               pageEnd={this.props.pageEnd}
+                                               recordsCount={recordCount}
+                                               getNextReportPage={this.props.getNextReportPage}
+                                               getPreviousReportPage={this.props.getPreviousReportPage}
+                            />) :
+                            <div className="spacer"></div>
+                        }
 
-                    {(!isLoading && recordCount) ?
-                        (<RecordsCount recordCount={recordCount}
-                              isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
-                              filteredRecordCount={filteredRecordCount}
-                              nameForRecords={this.props.nameForRecords}
-                              clearAllFilters={this.props.clearAllFilters}
-                        />) :
-                        null
-                    }
-
+                    </div>
                 {this.props.pageActions}
 
             </div>

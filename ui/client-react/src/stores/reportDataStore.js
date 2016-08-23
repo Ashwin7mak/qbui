@@ -5,13 +5,13 @@ import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 import Locale from '../locales/locales';
 import * as SchemaConsts from "../constants/schema";
-import * as formats from '../constants/fieldFormats';
-const serverTypeConsts = require('../../../common/src/constants');
+import FieldFormats from '../utils/fieldFormats';
 import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormatter';
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
 import * as userFormatter from '../../../common/src/formatter/userFormatter';
 
+const serverTypeConsts = require('../../../common/src/constants');
 
 let logger = new Logger();
 const groupDelimiter = ":";
@@ -157,15 +157,10 @@ let reportModel = {
             this.model.columns = this.getReportColumns(recordData.groups.gridColumns);
             this.model.records = recordData.groups.gridData;
             this.model.groupFields = recordData.groups.fields;
-                //  TODO: with paging, this count is flawed...
-            this.model.recordsCount = recordData.groups.totalRows;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.records = this.getReportData(recordData.fields, recordData.records);
             this.model.groupFields = null;
-
-            //  TODO: with paging, this count is flawed...
-            this.model.recordsCount = recordData.records ? recordData.records.length : null;
         }
 
         this.model.fields = recordData.fields || [];
@@ -238,6 +233,12 @@ let reportModel = {
         });
     },
 
+    updateRecordsCount: function(recordsCountData) {
+        if (recordsCountData && !isNaN(recordsCountData)) {
+            this.model.recordsCount = parseInt(recordsCountData);
+        }
+    },
+
     /**
      * Update the filtered Records from response.
      * @param recordData
@@ -297,49 +298,6 @@ let reportModel = {
         this.model.groupLevel = this.model.groupEls.length;
     },
 
-    /**
-     * get the formatter type given a field type
-     * if the field type is not found it defaults to format.TEXT_FORMAT
-     * @param fieldType
-     * @return formatType from formats
-     */
-    getFormatType(fieldType) {
-        let formatType = formats.TEXT_FORMAT;
-
-        switch (fieldType) {
-        case serverTypeConsts.NUMERIC:
-            formatType = formats.NUMBER_FORMAT;
-            break;
-        case serverTypeConsts.DATE :
-            formatType = formats.DATE_FORMAT;
-            break;
-        case serverTypeConsts.DATE_TIME:
-            formatType = formats.DATETIME_FORMAT;
-            break;
-        case serverTypeConsts.TIME_OF_DAY :
-            formatType = formats.TIME_FORMAT;
-            break;
-        case serverTypeConsts.CHECKBOX :
-            formatType = formats.CHECKBOX_FORMAT;
-            break;
-        case serverTypeConsts.USER :
-            formatType = formats.USER_FORMAT;
-            break;
-        case serverTypeConsts.CURRENCY :
-            formatType = formats.CURRENCY_FORMAT;
-            break;
-        case serverTypeConsts.RATING :
-            formatType = formats.RATING_FORMAT;
-            break;
-        case serverTypeConsts.PERCENT :
-            formatType = formats.PERCENT_FORMAT;
-            break;
-        default:
-            formatType = formats.TEXT_FORMAT;
-            break;
-        }
-        return formatType;
-    },
 
     /**
      * given a formatType returns with a formatter object that
@@ -350,20 +308,20 @@ let reportModel = {
     getFormatter(formatType) {
         let answer = null;
         switch (formatType) {
-        case formats.DATETIME_FORMAT:
-        case formats.DATE_FORMAT:
+        case FieldFormats.DATETIME_FORMAT:
+        case FieldFormats.DATE_FORMAT:
             answer = dateTimeFormatter;
             break;
-        case formats.TIME_FORMAT:
+        case FieldFormats.TIME_FORMAT:
             answer = timeOfDayFormatter;
             break;
-        case formats.USER_FORMAT:
+        case FieldFormats.USER_FORMAT:
             answer = userFormatter;
             break;
-        case formats.NUMBER_FORMAT:
-        case formats.RATING_FORMAT:
-        case formats.CURRENCY_FORMAT:
-        case formats.PERCENT_FORMAT:
+        case FieldFormats.NUMBER_FORMAT:
+        case FieldFormats.RATING_FORMAT:
+        case FieldFormats.CURRENCY_FORMAT:
+        case FieldFormats.PERCENT_FORMAT:
             answer = numericFormatter;
             break;
         }
@@ -390,7 +348,7 @@ let reportModel = {
 
             //format the value by field display type
             if (fieldMeta && fieldMeta.datatypeAttributes && fieldMeta.datatypeAttributes.type) {
-                let formatType = this.getFormatType(fieldMeta.datatypeAttributes.type);
+                let formatType = FieldFormats.getFormatType(fieldMeta.datatypeAttributes.type);
                 let formatter = this.getFormatter(formatType);
 
                 // if there's a formatter use it to format the display version
@@ -454,6 +412,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.facetExpression = {};
         this.selections = new FacetSelections();
         this.selectedRows = [];
+        this.pageOffset = serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        this.numRows = serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
+        this.countingTotalRecords = false;
 
         this.currentRecordId = null;
         this.nextRecordId = null;
@@ -484,9 +445,14 @@ let ReportDataStore = Fluxxor.createStore({
             actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_REPORT_RECORD_FAILED, this.onClearEdit,
 
+            actions.LOAD_REPORT_RECORDS_COUNT, this.onLoadReportRecordsCount,
+            actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, this.onLoadReportRecordsCountSuccess,
+            actions.LOAD_REPORT_RECORDS_COUNT_FAILED, this.onLoadReportRecordsCountFailed,
+
             actions.OPEN_REPORT_RECORD, this.onOpenRecord,
             actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
             actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord
+
         );
     },
 
@@ -504,8 +470,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.appId = report.appId;
         this.tblId = report.tblId;
         this.rptId = report.rptId;
-        this.searchStringForFiltering = '';
-        this.selections = new FacetSelections();
+
+        this.pageOffset = (report.offset >= 0) ? report.offset : this.pageOffset;
+        this.numRows = report.numRows ? report.numRows : this.numRows;
+
+        this.searchStringForFiltering = '' ;
+        this.selections  = new FacetSelections();
         this.selectedRows = [];
 
         this.emit('change');
@@ -569,6 +539,7 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.error = false;
         this.reportModel.updateFilteredRecords(response.recordData);
+
         this.emit('change');
     },
 
@@ -577,6 +548,23 @@ let ReportDataStore = Fluxxor.createStore({
         this.editingIndex = null;
         this.editingId = null;
 
+        this.error = true;
+        this.emit('change');
+    },
+
+    onLoadReportRecordsCount() {
+        this.countingTotalRecords = true;
+        this.emit('change');
+    },
+
+    onLoadReportRecordsCountSuccess(response) {
+        this.countingTotalRecords = false;
+        this.reportModel.updateRecordsCount(response.body);
+        this.emit('change');
+    },
+
+    onLoadReportRecordsCountFailed() {
+        this.countingTotalRecords = false;
         this.error = true;
         this.emit('change');
     },
@@ -809,10 +797,11 @@ let ReportDataStore = Fluxxor.createStore({
 
         const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
 
-        const index = filteredRecords.findIndex(rec => {return rec[keyField.name].value === recId;});
+        const index = filteredRecords.findIndex(rec => {return rec[keyField.name] && rec[keyField.name].value === recId;});
 
         // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
         this.currentRecordId = recId;
+
         this.nextRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
         this.previousRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
 
@@ -853,6 +842,9 @@ let ReportDataStore = Fluxxor.createStore({
             appId: this.appId,
             tblId: this.tblId,
             rptId: this.rptId,
+            pageOffset: this.pageOffset,
+            numRows: this.numRows,
+            countingTotalRecords: this.countingTotalRecords,
             searchStringForFiltering: this.searchStringForFiltering,
             selections: this.selections,
             facetExpression: this.facetExpression,

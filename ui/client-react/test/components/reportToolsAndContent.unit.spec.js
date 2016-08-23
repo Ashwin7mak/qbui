@@ -20,12 +20,15 @@ describe('ReportToolsAndContent functions', () => {
             hideTopNav() {return;},
             getFilteredRecords() {return;},
             filterSearchPending() {return;},
-            filterSelectionsPending() {return;}
+            filterSelectionsPending() {return;},
+            getNextReportPage() {return;},
+            getPreviousReportPage() {return;},
         }
     };
 
-    let reportParams = {appId:1, tblId:2, rptId:3};
-    let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+    let reportParams = {appId:1, tblId:2, rptId:3, format:true, offset:1, numRows: 10};
+    let reportDataParams = {reportData: {loading:true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+
     let ReportContentMock = React.createClass({
         render() {
             return <div className="report-content-mock" />;
@@ -41,6 +44,8 @@ describe('ReportToolsAndContent functions', () => {
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'filterSearchPending');
         spyOn(flux.actions, 'filterSelectionsPending');
+        spyOn(flux.actions, 'getNextReportPage');
+        spyOn(flux.actions, 'getPreviousReportPage');
     });
 
     afterEach(() => {
@@ -52,6 +57,8 @@ describe('ReportToolsAndContent functions', () => {
         flux.actions.getFilteredRecords.calls.reset();
         flux.actions.filterSearchPending.calls.reset();
         flux.actions.filterSelectionsPending.calls.reset();
+        flux.actions.getNextReportPage.calls.reset();
+        flux.actions.getPreviousReportPage.calls.reset();
     });
 
     it('test render of report widget', () => {

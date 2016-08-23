@@ -10,6 +10,7 @@ import TableIcon from "../qbTableIcon/qbTableIcon";
 import GlobalActions from "../actions/globalActions";
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
+import {withRouter} from 'react-router';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
@@ -17,12 +18,11 @@ import "../../assets/css/animate.min.css";
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
-var Nav = React.createClass({
+export let Nav = React.createClass({
     mixins: [FluxMixin, StoreWatchMixin('NavStore', 'AppsStore', 'ReportsStore', 'ReportDataStore', 'RecordPendingEditsStore', 'FieldsStore', 'FormStore')],
 
     contextTypes: {
-        touch: React.PropTypes.bool,
-        history: React.PropTypes.object
+        touch: React.PropTypes.bool
     },
     // todo: maybe we should move this up another level into the router...
     getStateFromFlux() {
@@ -124,7 +124,9 @@ var Nav = React.createClass({
             this.hideTrowser();
             setTimeout(() => {
                 // give UI transition a moment to execute
-                this.context.history.pushState(null, report.link);
+                if (this.props.router) {
+                    this.props.router.push(report.link);
+                }
             });
         };
 
@@ -215,4 +217,7 @@ var Nav = React.createClass({
     }
 });
 
-export default Nav;
+
+export let NavWithRouter = withRouter(Nav);
+export default NavWithRouter;
+
