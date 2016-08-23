@@ -39,8 +39,10 @@
         routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
+        routeToGetFunction[routeConsts.REPORT] = fetchReport;
         routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
+        routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
         routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
@@ -338,6 +340,34 @@
     }
 
     /**
+     * Fetch report meta data, report data and facets (if any) for the report.
+     *
+     * @param req
+     * @param res
+     */
+    function fetchReport(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Report', {req: filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            reportsApi.fetchReportMetaDataAndContent(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Report');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Report');
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
      * This is the function for fetching a completely hydrated report from the reportssApi endpoint.
      * Currently, a hydrated report means report data plus facet information.
      *
@@ -359,6 +389,34 @@
                     logApiFailure(req, response, perfLog, 'Fetch Report Components');
 
                     //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Fetch the count of total records in a report.
+     *
+     * @param req
+     * @param res
+     */
+    function fetchReportRecordsCount(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Report records count', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            reportsApi.fetchReportRecordsCount(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Report records count');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Report records count');
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {

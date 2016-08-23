@@ -55,6 +55,7 @@ let AGGrid = React.createClass({
         uniqueIdentifier: React.PropTypes.string,
         selectionActions: React.PropTypes.element,
         reportHeader: React.PropTypes.element,
+        reportFooter: React.PropTypes.element,
         columns: React.PropTypes.array,
         loading: React.PropTypes.bool,
         records: React.PropTypes.array,
@@ -831,15 +832,37 @@ let AGGrid = React.createClass({
 
         return columns;
     },
-
     render() {
         let columnDefs = this.getColumns();
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
+
+        // TODO Code hygiene, set up loader options as an external constant. https://quickbase.atlassian.net/browse/MB-503
+        var loaderOptions = {
+            lines: 9,
+            length: 0,
+            width: 11,
+            radius: 18,
+            scale: 1,
+            corners: 1,
+            color: '#000',
+            opacity: 0,
+            rotate: 0,
+            direction: 1,
+            speed: 1,
+            trail: 60,
+            fps: 20,
+            zIndex: 2e9,
+            className: 'spinner',
+            top: '50%',
+            left: '50%',
+            shadow: false,
+            hwaccel: false,
+            position: 'absolute'
+        };
         return (
             <div className="reportTable">
-
                 <div className={gridWrapperClasses} ref="gridWrapper">
-                    <Loader loaded={!this.props.loading}>
+                    <Loader loaded={!this.props.loading} options={loaderOptions}>
                         {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
                                 <AgGridReact
@@ -893,6 +916,7 @@ let AGGrid = React.createClass({
                         this.props.loading ? <div className="loadedContent"></div> : null
                     }
                 </div>
+
             </div>
         );
     }

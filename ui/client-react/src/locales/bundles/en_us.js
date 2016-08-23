@@ -110,6 +110,10 @@ export default {
             newReport: "New",
             organizeReports: "Organize",
             recordCount : "{recordCount} {nameForRecords} ",
+            recordCountPlaceHolder : "Counting {nameForRecords}",
+            reportNavigationBar : "{pageStart} - {pageEnd}",
+            previousToolTip: "Back",
+            nextToolTip: "Next",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
                 addField: "Add a field",

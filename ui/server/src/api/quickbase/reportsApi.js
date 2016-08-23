@@ -13,6 +13,7 @@
     let errorCodes = require('../errorCodes');
     let constants = require('../../../../common/src/constants');
     let collectionUtils = require('../../utility/collectionUtils');
+    let queryUtils = require('../../utility/queryUtils');
 
     module.exports = function(config) {
         let requestHelper = require('./requestHelper')(config);
@@ -58,6 +59,127 @@
                 return requestHelper.executeRequest(req, opts);
             },
 
+            /**
+             * Returns a promise that resolves with the report metadata and records for one
+             * page of a report.
+             * @param req
+             */
+            fetchReportMetaDataAndContent: function(req) {
+                // Define response object
+                var reportObj = {
+                    reportMetaData: {
+                        data: ''
+                    },
+                    reportData: {
+                        data: ''
+                    }
+                };
+                return new Promise((resolve2, reject2) => {
+                    // We need to make two calls to core to complete this request. First call is
+                    // to fetch the report metadata, and once the metadata is obtained, fetch report
+                    // data and facets.
+                    let opts = requestHelper.setOptions(req);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url);
+
+                    requestHelper.executeRequest(req, opts).then(
+                        // TODO code hygiene, code below is shared by fetchTableHomepageReport. move to a private function and
+                        // share between the two api calls. https://quickbase.atlassian.net/browse/MB-505
+                        (response) => {
+                            // parse out the id and use to fetch the report meta data.
+                            // Process the meta data to fetch and return the report content.
+                            if (response.body) {
+                                let reportsData = JSON.parse(response.body);
+                                let reportMetaData = reportsData[0];
+
+                                req.params = req.params || {};
+
+                                if (req.query.format !== "undefined" && req.query.format === constants.FORMAT.DISPLAY) {
+                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
+                                }
+
+                                if (req.query.offset !== "undefined" && parseInt(req.query.offset) >= 0 && req.query.numrows !== "undefined" && parseInt(req.query.numrows)) {
+                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, req.query.offset);
+                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, req.query.numrows);
+                                }
+
+                                if (req.query.sortlist !== "undefined") {
+                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, req.query.sortlist);
+                                } else {
+                                    /*eslint no-lonely-if:0*/
+                                    if (reportMetaData.sortList && reportMetaData.sortList.length) {
+                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, reportMetaData.data.sortList.join(constants.REQUEST_PARAMETER.LIST_DELIMITER));
+                                    }
+                                }
+
+                                if (reportMetaData && reportMetaData.fids && reportMetaData.fids.length) {
+                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, reportMetaData.fids.join(constants.REQUEST_PARAMETER.LIST_DELIMITER));
+                                }
+
+                                let filterQueries = [];
+                                if (reportMetaData.query) {
+                                    filterQueries.push(reportMetaData.query);
+                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, queryUtils.concatQueries(filterQueries));
+                                }
+
+                                this.fetchReportComponents(req, req.params.reportId).then(
+                                    (reportData) => {
+                                        //  return the metadata and report content
+                                        reportObj.reportMetaData.data = reportMetaData;
+                                        reportObj.reportData.data = reportData;
+                                        resolve2(reportObj);
+                                    },
+                                    (reportError) => {
+                                        log.error({req:req}, 'Error fetching report content in fetchReportComponents.');
+                                        reject2(reportError);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching report content in fetchReport', ex, true);
+                                    reject2(ex);
+                                });
+                            } else {
+                                //  no report id returned (because one is not defined); return empty report object
+                                log.warn({req:req}, 'Requested report not found.');
+                                resolve2(reportObj);
+                            }
+                        },
+                        (error) => {
+                            log.error({req: req}, "Error getting report in fetchReport.");
+                            reject2(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('reportsAPI..fetch report in fetchReport', ex, true);
+                        reject2(ex);
+                    });
+                });
+            },
+
+            /**
+             * Returns a promise that resolves with the count of all records for a report,
+             * or rejects with an error code.
+             * @param req
+             */
+            fetchReportRecordsCount: function(req) {
+                var opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsCountRoute(req.url);
+
+                return new Promise((resolve1, reject1) => {
+                    requestHelper.executeRequest(req, opts).then(
+                        (result) => {
+                            resolve1(result);
+                        },
+                        (error) => {
+                            reject1(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('reportsAPI..fetchReportRecordsCount', ex, true);
+                        reject1(ex);
+                    });
+                });
+            },
+
             fetchReportResults: function(req) {
                 return new Promise((resolve, reject) => {
                     recordsApi.fetchRecordsAndFields(req).then(
@@ -85,7 +207,6 @@
              *  or is rejected with a descriptive error code
              */
             fetchReportComponents: function(req, reportId) {
-
                 //  Fetch field meta data and grid data for a report
                 var reportPromise = new Promise((resolve1, reject1) => {
                     this.fetchReportResults(req).then(
@@ -125,7 +246,6 @@
                 });
 
                 return new Promise((resolve, reject) => {
-
                     //  Now fetch the report data and report facet information asynchronously.  Return a
                     //  responseObject with field, record, grouping(if any) and facet(if any) information for client processing.
                     var promises = [reportPromise, facetPromise];
@@ -173,7 +293,6 @@
              * @returns {bluebird|exports|module.exports}
              */
             fetchReportMetaData(req, reportId) {
-
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url, reportId);
@@ -198,7 +317,6 @@
              * @returns {bluebird|exports|module.exports}
              */
             fetchTableHomePageReport: function(req) {
-
                 //  report object returned to the client;  gets populated in the success workflow, otherwise
                 //  is returned uninitialized if no report home page is found.
                 var reportObj = {
@@ -211,7 +329,8 @@
                 };
 
                 return new Promise((resolve, reject) => {
-
+                    // TODO code hygiene, code below is shared by fetchTableHomepageReport. move to a private function and
+                    // share between the two api calls. https://quickbase.atlassian.net/browse/MB-505
                     let opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesDefaultReportHomepageRoute(req.url);
@@ -255,9 +374,9 @@
                                             requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
                                         }
 
-                                        //  TODO: initial page size
-                                        //req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
-                                        //req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = ?;
+                                        //  TODO: initial page size.
+                                        // req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
+                                        // req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = 5;
 
                                         this.fetchReportComponents(req, homepageReportId).then(
                                             (reportData) => {
@@ -298,7 +417,6 @@
                         reject(ex);
                     });
                 });
-
             }
         };
         return reportsApi;
