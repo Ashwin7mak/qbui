@@ -70,10 +70,8 @@ export default {
             recordNotAdded :"Nehmen Sie nicht hinzugefügt",
             recordSaved : "Datensatz gespeichert",
             recordNotSaved :"Nehmen Sie nicht gespeichert",
-            recordDeleted : "Der Datensatz wurde gelöscht",
-            recordNotDeleted : "Nehmen Sie nicht gelöscht",
-            recordDeletedBulk: "Mehrere Datensätze gelöscht",
-            recordNotDeletedBulk: "Mehrere Datensätze nicht gelöscht"
+            deleted : "gelöscht",
+            notDeleted : "nicht gelöscht"
         },
         header: {
             menu: {

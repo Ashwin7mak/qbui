@@ -18,7 +18,8 @@ let ReportActions = React.createClass({
         selection: React.PropTypes.array,
         rptId: React.PropTypes.string,
         appId: React.PropTypes.string,
-        tblId: React.PropTypes.string
+        tblId: React.PropTypes.string,
+        nameForRecords: React.PropTypes.string
     },
 
     getEmailSubject() {
@@ -45,7 +46,7 @@ let ReportActions = React.createClass({
      */
     handleBulkDelete() {
         const flux = this.getFlux();
-        flux.actions.deleteReportRecordBulk(this.props.appId, this.props.tblId, this.props.selection);
+        flux.actions.deleteReportRecordBulk(this.props.appId, this.props.tblId, this.props.selection, this.props.nameForRecords);
     },
 
     /**
