@@ -147,6 +147,7 @@ const ReportToolbar = React.createClass({
 
         let isLoading = false;
         let isCountingRecords = false;
+        let isError = false;
 
         let filteredRecordCount = null;
         // This is the count of all records that apply to this report
@@ -162,6 +163,9 @@ const ReportToolbar = React.createClass({
             }
             if (this.props.reportData.countingTotalRecords) {
                 isCountingRecords = this.props.reportData.countingTotalRecords;
+            }
+            if (this.props.reportData.error) {
+                isError = true;
             }
             if (this.props.reportData.data) {
                 if (this.props.reportData.data.filteredRecords) {
@@ -180,14 +184,14 @@ const ReportToolbar = React.createClass({
             }
         }
         // Conditional marking display of filter box. Show when records have been loaded. This box does not depend on the record counting call
-        let showFilterSearchBox = !isLoading && isPageLoaded;
+        let showFilterSearchBox = !isLoading && isPageLoaded && !isError;
         // Conditional indicating display of record navigation arrows. Show when
         // - records/page have been loaded and
         // - if the total count of records is available, total number of records in report is greater than page size. In the parent
         //   component container, to display the correct page end, we set the page end to the total records count if records count
         //   is less than page size for the last page. Hence, the conditions to check for here, are that we are on the first page
         //   (page start is 1) and the number of records is equal to page end
-        let showNavigation = !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
+        let showNavigation = !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && !isError;
 
         let reportToolbar = (
 
@@ -206,7 +210,7 @@ const ReportToolbar = React.createClass({
                                 {...this.props} /> :
                             null
                         }
-                        {!isLoading ?
+                        {!isLoading && !isError ?
                             <SortAndGroup  {...this.props}
                                 filter={{selections: this.props.selections,
                                         facet: this.props.reportData.facetExpression,
@@ -215,7 +219,7 @@ const ReportToolbar = React.createClass({
                         }
                         {/* check if facets is enabled for this report,
                          also hide Facets Menu Button if facets disabled  */}
-                        {!isLoading && hasFacets ?
+                        {!isLoading && hasFacets && !isError ?
                             (<FacetsMenu className="facetMenu"
                                 {...this.props}
                                          isLoading={isLoading}
@@ -228,7 +232,7 @@ const ReportToolbar = React.createClass({
                         }
                     </div>
                     <div className="rightReportToolbar">
-                        {!isLoading ?
+                        {!isLoading && !isError ?
                             <RecordsCount recordCount={recordCount}
                                           isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
                                           filteredRecordCount={filteredRecordCount}
