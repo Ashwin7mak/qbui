@@ -11,7 +11,7 @@ import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
 import ReportFooter from '../reportFooter';
-import ValidationUtils from "../../../utils/ValidationUtils";
+import ValidationUtils from "../../../utils/validationUtils";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 
