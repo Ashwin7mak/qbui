@@ -8,13 +8,15 @@ const fakeRecordCountData = {
         recordCount: 10,
         isFiltered: true,
         filteredRecordCount: 5,
-        nameForRecords: "Duder"
+        nameForRecords: "Duder",
+        isCounting: true
     },
     invalid: {
         recordCount: null,
         isFiltered: false,
         filteredRecordCount: null,
-        nameForRecords: "duder"
+        nameForRecords: "Duder",
+        isCounting: false
     }
 };
 
@@ -24,7 +26,7 @@ describe('Record Count tests', () => {
     var component;
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<RecordCount recordCount={fakeRecordCountData.valid.recordCount} isFiltered={fakeRecordCountData.valid.isFiltered}
+        component = TestUtils.renderIntoDocument(<RecordCount recordCount={fakeRecordCountData.valid.recordCount} isFiltered={fakeRecordCountData.valid.isFiltered} isCounting={fakeRecordCountData.valid.isCounting}
                                                               filteredRecordCount={fakeRecordCountData.valid.filteredRecordCount} nameForRecords={fakeRecordCountData.valid.nameForRecords}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         var recordsCount = ReactDOM.findDOMNode(component);
@@ -32,7 +34,7 @@ describe('Record Count tests', () => {
     });
 
     it('test has records', () => {
-        component = TestUtils.renderIntoDocument(<RecordCount recordCount={fakeRecordCountData.valid.recordCount} isFiltered={fakeRecordCountData.valid.isFiltered}
+        component = TestUtils.renderIntoDocument(<RecordCount recordCount={fakeRecordCountData.valid.recordCount} isFiltered={fakeRecordCountData.valid.isFiltered} isCounting={fakeRecordCountData.valid.isCounting}
                                                               filteredRecordCount={fakeRecordCountData.valid.filteredRecordCount} nameForRecords={fakeRecordCountData.valid.nameForRecords}/>);
         var node = ReactDOM.findDOMNode(component);
         var recordsCount = node.getElementsByClassName("recordsCount");
@@ -40,7 +42,7 @@ describe('Record Count tests', () => {
     });
 
     it('test no records', () => {
-        component = TestUtils.renderIntoDocument(<RecordCount recordCount={fakeRecordCountData.invalid.recordCount} isFiltered={fakeRecordCountData.invalid.isFiltered}
+        component = TestUtils.renderIntoDocument(<RecordCount recordCount={fakeRecordCountData.invalid.recordCount} isFiltered={fakeRecordCountData.invalid.isFiltered} isCounting={fakeRecordCountData.invalid.isCounting}
                                                                      filteredRecordCount={fakeRecordCountData.invalid.filteredRecordCount} nameForRecords={fakeRecordCountData.invalid.nameForRecords}/>);
         var node = ReactDOM.findDOMNode(component);
         expect(node).toBe(null);

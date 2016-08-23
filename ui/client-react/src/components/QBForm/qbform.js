@@ -174,7 +174,12 @@ let QBForm = React.createClass({
         let currentRowElements = [];    // the TD elements for the current row
 
         // label position is determined by the section settings unless we're in single column mode
-        const labelPosition = singleColumn ? QBForm.LABEL_ABOVE : section.headerElement.FormHeaderElement.labelPosition;
+
+        let labelPosition = singleColumn ? QBForm.LABEL_ABOVE : QBForm.LABEL_LEFT;
+
+        if (!singleColumn && section.headerElement && section.headerElement.FormHeaderElement) {
+            labelPosition = section.headerElement.FormHeaderElement.labelPosition;
+        }
 
         Object.keys(section.elements).forEach((key, index, arr) => {
 

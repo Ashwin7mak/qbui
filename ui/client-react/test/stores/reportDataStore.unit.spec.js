@@ -17,6 +17,8 @@ describe('Test ReportData Store', () => {
     const appId = 'appId';
     const tblId = 'tblId';
     const rptId = 'rptId';
+    const pageOffset = serverTypeConsts.PAGE.DEFAULT_OFFSET;
+    const numRows = serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
     beforeEach(() => {
         store = new Store();
@@ -65,7 +67,9 @@ describe('Test ReportData Store', () => {
             payload: {
                 appId: appId,
                 tblId: tblId,
-                rptId: rptId
+                rptId: rptId,
+                pageOffset: pageOffset,
+                numRows: numRows
             }
         };
 
@@ -75,6 +79,8 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).appId).toBe(appId);
         expect(flux.store(STORE_NAME).tblId).toBe(tblId);
         expect(flux.store(STORE_NAME).rptId).toBe(rptId);
+        expect(flux.store(STORE_NAME).pageOffset).toBe(pageOffset);
+        expect(flux.store(STORE_NAME).numRows).toBe(numRows);
 
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
@@ -243,8 +249,14 @@ describe('Test ReportData Store', () => {
         expect(state.data).toBeDefined();
         expect(state.appId).not.toBeDefined();
         expect(state.tblId).not.toBeDefined();
+        expect(state.rptId).not.toBeDefined();
         expect(state.searchStringForFiltering).toBe('');
         expect(state.selections).toEqual(new FacetSelections());
+        expect(state.nonFacetClicksEnabled).toBeDefined();
+        expect(state.facetExpression).toBeDefined();
+        expect(state.selectedRows).toBeDefined();
+        expect(state.pageOffset).toBeDefined();
+        expect(state.numRows).toBeDefined();
     });
 
     it('test getState function after report is loaded', () => {
@@ -253,15 +265,18 @@ describe('Test ReportData Store', () => {
             payload: {
                 appId: appId,
                 tblId: tblId,
-                rptId: rptId
+                rptId: rptId,
+                pageOffset: pageOffset,
+                numRows: numRows
             }
         };
         flux.dispatcher.dispatch(loadReportAction);
         let state = flux.store(STORE_NAME).getState();
-
         expect(state.appId).toBeDefined(appId);
         expect(state.tblId).toBeDefined(tblId);
         expect(state.rptId).toBeDefined(rptId);
+        expect(state.pageOffset).toBeDefined(pageOffset);
+        expect(state.numRows).toBeDefined(numRows);
     });
 
     it('test getReportData function', () => {
@@ -280,13 +295,14 @@ describe('Test ReportData Store', () => {
     });
 
     it('test load records action', () => {
-
         let loadRecordsAction = {
             type: actions.LOAD_RECORDS,
             payload: {
                 appId: appId,
                 tblId: tblId,
                 rptId: rptId,
+                pageOffset: pageOffset,
+                numRows: numRows,
                 filter : {selections : {}, facet: "", search: "abc"}
             }
         };
@@ -297,6 +313,8 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).appId).toBe(appId);
         expect(flux.store(STORE_NAME).tblId).toBe(tblId);
         expect(flux.store(STORE_NAME).rptId).toBe(rptId);
+        expect(flux.store(STORE_NAME).pageOffset).toBe(pageOffset);
+        expect(flux.store(STORE_NAME).numRows).toBe(numRows);
         expect(flux.store(STORE_NAME).selections).toEqual({});
         expect(flux.store(STORE_NAME).facetExpression).toEqual('');
         expect(flux.store(STORE_NAME).searchStringForFiltering).toEqual('abc');
@@ -317,7 +335,6 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
-
 
     it('test load records success action with error data', () => {
 
@@ -1013,7 +1030,6 @@ describe('Test ReportData Store', () => {
     });
 
     it('test onDeleteReportRecordSuccess with valid recId', () => {
-
         //populate the model
         let reportPayload = {
             metaData: {},
@@ -1055,12 +1071,21 @@ describe('Test ReportData Store', () => {
                 groups: []
             }
         };
+        let reportRecordsCountPayload = {
+            body:2
+        };
 
         let loadReportAction = {
             type: actions.LOAD_REPORT_SUCCESS,
             payload: reportPayload
         };
         flux.dispatcher.dispatch(loadReportAction);
+
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS,
+            payload: reportRecordsCountPayload
+        };
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         let onDeleteReportRecordSuccess = {
             type: actions.DELETE_REPORT_RECORD_SUCCESS,
@@ -1071,7 +1096,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(1);
         expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(1);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
     });
 
     it('test onDeleteReportRecordSuccess with invalid recId', () => {
@@ -1117,12 +1142,21 @@ describe('Test ReportData Store', () => {
                 groups: []
             }
         };
+        let reportRecordsCountPayload = {
+            body:2
+        };
 
         let loadReportAction = {
             type: actions.LOAD_REPORT_SUCCESS,
             payload: reportPayload
         };
         flux.dispatcher.dispatch(loadReportAction);
+
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS,
+            payload: reportRecordsCountPayload
+        };
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         let onDeleteReportRecordSuccess = {
             type: actions.DELETE_REPORT_RECORD_SUCCESS,
@@ -1133,7 +1167,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(2);
         expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(2);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
     });
 
     it('test onDeleteReportRecordFailed', () => {
@@ -1176,8 +1210,12 @@ describe('Test ReportData Store', () => {
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: []
+                groups: [],
+                recordsCount: 2
             }
+        };
+        let reportRecordsCountPayload = {
+            body:2
         };
 
         let loadReportAction = {
@@ -1185,6 +1223,12 @@ describe('Test ReportData Store', () => {
             payload: reportPayload
         };
         flux.dispatcher.dispatch(loadReportAction);
+
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS,
+            payload: reportRecordsCountPayload
+        };
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         let onDeleteReportRecordFailed = {
             type: actions.DELETE_REPORT_RECORD_FAILED,
@@ -1236,8 +1280,12 @@ describe('Test ReportData Store', () => {
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: []
+                groups: [],
+                recordsCount: 2
             }
+        };
+        let reportRecordsCountPayload = {
+            body:2
         };
 
         let loadReportAction = {
@@ -1245,6 +1293,12 @@ describe('Test ReportData Store', () => {
             payload: reportPayload
         };
         flux.dispatcher.dispatch(loadReportAction);
+
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS,
+            payload: reportRecordsCountPayload
+        };
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         let onDeleteReportRecordBulkSuccess = {
             type: actions.DELETE_REPORT_RECORD_BULK_SUCCESS,
@@ -1255,11 +1309,10 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(1);
         expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(1);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
     });
 
     it('test onDeleteReportRecordBulkSuccess with invalid recIds', () => {
-
         //populate the model
         let reportPayload = {
             metaData: {},
@@ -1298,8 +1351,12 @@ describe('Test ReportData Store', () => {
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: []
+                groups: [],
+                recordsCount: 2
             }
+        };
+        let reportRecordsCountPayload = {
+            body:2
         };
 
         let loadReportAction = {
@@ -1307,6 +1364,12 @@ describe('Test ReportData Store', () => {
             payload: reportPayload
         };
         flux.dispatcher.dispatch(loadReportAction);
+
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS,
+            payload: reportRecordsCountPayload
+        };
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         //bulk delete endpoint doesn't care if the recordId doesn't exist, it still returns 200 for a success
         let onDeleteReportRecordBulkSuccess = {
@@ -1318,7 +1381,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(2);
         expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(2);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
     });
 
     it('test onDeleteReportRecordBulkFailed', () => {
@@ -1364,12 +1427,21 @@ describe('Test ReportData Store', () => {
                 groups: []
             }
         };
+        let reportRecordsCountPayload = {
+            body:2
+        };
 
         let loadReportAction = {
             type: actions.LOAD_REPORT_SUCCESS,
             payload: reportPayload
         };
         flux.dispatcher.dispatch(loadReportAction);
+
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS,
+            payload: reportRecordsCountPayload
+        };
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         let onDeleteReportRecordBulkFailed = {
             type: actions.DELETE_REPORT_RECORD_BULK_FAILED,
@@ -1379,6 +1451,48 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(onDeleteReportRecordBulkFailed);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+    });
+
+    it('test load report records count  action', () => {
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT,
+            payload: {
+            }
+        };
+
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
+        expect(flux.store(STORE_NAME).countingTotalRecords).toBeTruthy();
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load report records count  failed action', () => {
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_FAILED
+        };
+
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
+        expect(flux.store(STORE_NAME).countingTotalRecords).toBeFalsy();
+        expect(flux.store(STORE_NAME).error).toBeTruthy();
+
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+    });
+
+    it('test load report records count success action', () => {
+        let payload = {
+            body: 10
+        };
+
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS,
+            payload: payload
+        };
+
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
+        expect(flux.store(STORE_NAME).countingTotalRecords).toBeFalsy();
+        expect(flux.store(STORE_NAME).error).toBeFalsy();
+        expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(payload.body);
     });
 
 

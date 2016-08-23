@@ -17,11 +17,12 @@ class ReportService extends BaseService {
 
         //  Report service API endpoints
         this.API = {
-            GET_REPORT              : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
-            GET_REPORTS             : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
-            GET_REPORT_COMPONENTS   : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.REPORTCOMPONENTS}`,
-            GET_REPORT_RESULTS      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
-            PARSE_FACET_EXPR        : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
+            GET_REPORT                  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
+            GET_REPORTS                 : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
+            GET_REPORT_COMPONENTS       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.REPORTCOMPONENTS}`,
+            GET_REPORT_RESULTS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RESULTS}`,
+            PARSE_FACET_EXPR            : `${constants.BASE_URL.NODE}/${constants.FACETS}/${constants.PARSE}`
         };
     }
 
@@ -77,6 +78,7 @@ class ReportService extends BaseService {
     _getCache() {
         return cachedReportRequest;
     }
+
     /**
      * Return the report meta data for a given table
      *
@@ -85,7 +87,7 @@ class ReportService extends BaseService {
      * @param reportId
      * @returns promise
      */
-    getReport(appId, tableId, reportId) {
+    getReport(appId, tableId, reportId, format, offset, rows, sortList) {
         const existing = this._cached(arguments);
         if (existing) {
             // use result promise from prior request
@@ -94,7 +96,26 @@ class ReportService extends BaseService {
 
         let args = arguments;
         let url = super.constructUrl(this.API.GET_REPORT, [appId, tableId, reportId]);
-        const request = super.get(url);
+        let request;
+
+        // For report pagination, if format, offset, rows are defined, set parameters.
+        if (format && format !== undefined && offset && offset !== undefined && rows && rows !== undefined) {
+            let params = {};
+            if (format === true) {
+                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+            }
+            if (StringUtils.isNonEmptyString(sortList)) {
+                params[query.SORT_LIST_PARAM] = sortList;
+            }
+            if (NumberUtils.isInt(offset) && NumberUtils.isInt(rows)) {
+                params[query.OFFSET_PARAM] = offset;
+                params[query.NUMROWS_PARAM] = rows;
+            }
+            request = super.get(url, {params:params});
+        } else {
+            request = super.get(url);
+        }
+
         if (request) {
             request.then((response) => {
                 cachedReportRequest[this._key(args)].resp = response;
@@ -104,6 +125,19 @@ class ReportService extends BaseService {
 
         // clear old and save a new so that report metadata gets loaded from server whenever app/table/reportId changes
         return this._cache(request, arguments);
+    }
+
+    /**
+     * Get the count of total number of records for the given report
+     * @param appId
+     * @param tableId
+     * @param reportId
+     * @param filter
+     * @returns count of all records in the report
+     */
+    getReportRecordsCount(appId, tableId, reportId) {
+        let url = super.constructUrl(this.API.GET_REPORT_RECORDS_COUNT, [appId, tableId, reportId]);
+        return super.get(url);
     }
 
     /**
