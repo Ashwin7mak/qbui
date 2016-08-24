@@ -29,17 +29,28 @@ $breadCrumbsSeparatorColor: #c7c7c7;
         .stageHeadline {
             display:flex;
             align-items:center;
-            h3 {
-                height:26px;
-                margin:0;
-                text-overflow:ellipsis;
-                overflow:hidden;
+            font-size: 12px;
+            color: $stage-headline-color;
+
+            .iconActions {
+                margin-right:0px;
+                font-size:20px;
+            }
+            .iconActionButton {
+                height: 24px;
+                width: 24px;
             }
             .qbIcon {
                 font-size: 22px;
                 color:$stage-headline-color;
             }
 
+            h3 {
+                height:26px;
+                margin:0;
+                text-overflow:ellipsis;
+                overflow:hidden;
+            }
         }
         .breadCrumbs {
             line-height:40px;
@@ -72,6 +83,9 @@ $breadCrumbsSeparatorColor: #c7c7c7;
     .stageRight {
         padding-top:20px;
         flex:0 0 auto;
+        .iconActionButton {
+            color:$page-actions-icon-color
+        }
     }
 }
 .layout-stage {

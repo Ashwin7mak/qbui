@@ -48,7 +48,7 @@ let TableHomePageRoute = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add'},
+            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
             {msg: 'pageActions.favorite', icon:'star'},
             {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
             {msg: 'pageActions.email', icon:'mail'},
@@ -58,21 +58,21 @@ let TableHomePageRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
 
-    getBreadcrumbs() {
+    getStageHeadline() {
         let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
 
-        return (this.props.selectedTable &&
-        <h3 className="breadCrumbs"><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}
-            <span className="breadCrumbsSeparator"> | </span>{reportName}</h3>);
-
-    },
-
-    getStageHeadline() {
         return (
-            <div className="stageHeadline">
-                {this.getBreadcrumbs()}
-            </div>
-        );
+            <div className="tableHomepageStageHeadline">
+
+                <div className="navLinks">
+                    {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
+                    {this.props.selectedTable && this.props.selectedTable.name}
+                </div>
+
+                <div className="stageHeadline">
+                    <h3 className="reportName">{reportName}</h3>
+                </div>
+            </div>);
     },
 
     render() {
