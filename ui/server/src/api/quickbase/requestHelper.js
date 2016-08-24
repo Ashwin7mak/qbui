@@ -211,13 +211,22 @@
                 if (parameterName) {
                     //  are there any existing parameters
                     let search = url.parse(req.url).search;
-                    req.url += search ? '&' : '?';
 
+                    if (req.url.indexOf(parameterName) !== -1) { //update the param, dont add it again
+                        let startingIndex = req.url.indexOf(parameterName);
+                        let endingIndex = req.url.indexOf('&', startingIndex);
+                        if (endingIndex === -1) {
+                            req.url = req.url.substr(0, startingIndex);
+                        } else {
+                            req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
+                        }
+                    }
+                    req.url += search ? '&' : '?';
                     //  append the query parameter to the url
                     req.url += parameterName + '=' + parameterValue;
-
                     //  add the parameter to the params array.
                     req.params[parameterName] = parameterValue;
+
                 }
             }
 

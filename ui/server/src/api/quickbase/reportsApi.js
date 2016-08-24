@@ -104,12 +104,16 @@
                                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, req.query.numRows);
                                 }
 
-                                if (req.query.sortlist !== undefined) {
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, req.query.sortlist);
+                                if (req.query.sortList !== undefined) {
+                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, req.query.sortList);
                                 } else {
                                     /*eslint no-lonely-if:0*/
                                     if (reportMetaData && reportMetaData.sortList && reportMetaData.sortList.length) {
-                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, reportMetaData.sortList.join(constants.REQUEST_PARAMETER.LIST_DELIMITER));
+                                        let sortList = "";
+                                        for (var i = 0; i < reportMetaData.sortList.length; i++) {
+                                            sortList += reportMetaData.sortList[i].sortOrder === constants.SORT_ORDER.DESC ? "-" +  reportMetaData.sortList[i].fieldId : "";
+                                        }
+                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
                                     }
                                 }
 

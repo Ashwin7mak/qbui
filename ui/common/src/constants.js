@@ -75,6 +75,10 @@
         PAGE : {
             DEFAULT_OFFSET : 0,
             DEFAULT_NUM_ROWS: 20
+        },
+        SORT_ORDER: {
+            ASC: "asc",
+            DESC: "desc"
         }
     });
 

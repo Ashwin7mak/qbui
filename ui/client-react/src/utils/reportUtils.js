@@ -115,13 +115,9 @@ class ReportUtils {
         let sortFids = [];
         if (sortListParts) {
             sortListParts.forEach((sort) => {
-                if (sort) {
-                    //  format is fid:groupType..split by delimiter(':') to allow us
-                    // to pass in the fid for server side sorting.
-                    var sortEl = sort.split(groupDelimiter);
-                    if (sortEl.length === 1) {
-                        sortFids.push(sortEl[0]);
-                    }
+                // sort is of type object {fieldId, sortOrder, groupType}
+                if (sort && sort.groupType === null) {
+                    sort.sortOrder === "desc" ? sortFids.push(-sort.fieldId) : sortFids.push(sort.fieldId);
                 }
             });
         }
@@ -137,13 +133,9 @@ class ReportUtils {
         let groupFids = [];
         if (sortListParts) {
             sortListParts.forEach((sort) => {
-                if (sort) {
-                    //  format is fid:groupType..split by delimiter(':') to allow us
-                    // to pass in the fid for server side sorting.
-                    var sortEl = sort.split(groupDelimiter);
-                    if (sortEl.length > 1) {
-                        groupFids.push(sort);
-                    }
+                // sort is of type object {fieldId, sortOrder, groupType}
+                if (sort && sort.groupType) {
+                    sortFids.push(sort.fieldId);
                 }
             });
         }
