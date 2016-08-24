@@ -95,16 +95,16 @@
 
                                 req.params = req.params || {};
 
-                                if (req.query.format !== "undefined" && req.query.format === constants.FORMAT.DISPLAY) {
+                                if (req.query.format !== undefined && req.query.format === constants.FORMAT.DISPLAY) {
                                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
                                 }
 
-                                if (req.query.offset !== "undefined" && parseInt(req.query.offset) >= 0 && req.query.numrows !== "undefined" && parseInt(req.query.numrows)) {
+                                if (req.query.offset !== undefined && parseInt(req.query.offset) >= 0 && req.query.numRows !== undefined && parseInt(req.query.numRows)) {
                                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, req.query.offset);
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, req.query.numrows);
+                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, req.query.numRows);
                                 }
 
-                                if (req.query.sortlist !== "undefined") {
+                                if (req.query.sortlist !== undefined) {
                                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, req.query.sortlist);
                                 } else {
                                     /*eslint no-lonely-if:0*/
