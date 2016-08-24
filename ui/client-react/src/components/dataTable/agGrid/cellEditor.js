@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FieldEditor from '../../fields/fieldEditor';
+import FieldValueEditor from '../../fields/fieldValueEditor';
 
 /**
  * Table cell inline edit specific editor
@@ -31,7 +31,7 @@ const CellEditor = React.createClass({
     },
 
     render() {
-        return (<FieldEditor  classes="cellEditWrapper"
+        return (<FieldValueEditor  classes="cellEditWrapper"
                               type={this.props.type}
                               value={this.props.value}
                               fieldDef={this.props.colDef}

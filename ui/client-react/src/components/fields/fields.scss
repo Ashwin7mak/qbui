@@ -70,8 +70,6 @@ $data-font-size: $font-size-p;
   @include focus-shadow($input-text-error-border-color);
 }
 
-
-
 .invalidRecord.tooltip >.tooltip-arrow,
 .invalidInput.tooltip >.tooltip-arrow {
   border-bottom-color: $tootip-error-color;
@@ -100,4 +98,8 @@ $data-font-size: $font-size-p;
   display: block;
   padding-left: 2px;
 
+}
+
+.NoWrap {
+  white-space: nowrap;
 }

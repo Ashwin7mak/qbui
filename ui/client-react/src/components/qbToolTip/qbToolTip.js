@@ -1,6 +1,7 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import _ from 'lodash';
 
 const QBToolTip = React.createClass({
     propTypes: {
@@ -23,7 +24,7 @@ const QBToolTip = React.createClass({
         }
         let tipClassName = tooltipId ? "qbtooltip " + tooltipId : " qbtooltip";
         return (
-            <Tooltip className={tipClassName}>{label}</Tooltip>
+            <Tooltip className={tipClassName} id={_.uniqueId("qbtooltip_")} >{label}</Tooltip>
         );
     },
 

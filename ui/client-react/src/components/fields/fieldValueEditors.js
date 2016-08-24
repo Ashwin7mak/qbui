@@ -10,7 +10,7 @@ import moment from 'moment';
 /**
  * simple non-validating cell editor for text
  */
-export const DefaultFieldEditor = React.createClass({
+export const DefaultFieldValueEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]),
@@ -31,7 +31,7 @@ export const DefaultFieldEditor = React.createClass({
     },
 
     render() {
-        return <input ref="cellInput"
+        return <input ref="fieldInput"
                       onChange={this.onChange}
                       onBlur={this.props.onBlur}
                       tabIndex="0"
@@ -45,7 +45,7 @@ export const DefaultFieldEditor = React.createClass({
 /**
  * a multi-line text editor that dynamically changes its height
  */
-export const MultiLineTextFieldEditor = React.createClass({
+export const MultiLineTextFieldValueEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.string,
@@ -93,10 +93,10 @@ export const MultiLineTextFieldEditor = React.createClass({
             // now we can query the actual (auto) height
             let newHeight = this.refs.textarea.scrollHeight;
 
-            if (newHeight < MultiLineTextFieldEditor.MAX_TEXTAREA_HEIGHT) {
+            if (newHeight < MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT) {
                 this.setState({style: {height: newHeight}});
             } else {
-                this.setState({style: {height: MultiLineTextFieldEditor.MAX_TEXTAREA_HEIGHT, overflowY: "auto"}});
+                this.setState({style: {height: MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT, overflowY: "auto"}});
             }
         });
     },
@@ -125,10 +125,10 @@ export const MultiLineTextFieldEditor = React.createClass({
 /**
  * placeholder for user picker
  */
-export const UserFieldEditor = React.createClass({
+export const UserFieldValueEditor = React.createClass({
 
     render() {
-        return <input ref="cellInput"
+        return <input ref="fieldInput"
                       tabIndex="0"
                       onBlur={this.props.onBlur}
                       className="cellEdit"/>;
@@ -137,7 +137,7 @@ export const UserFieldEditor = React.createClass({
 /**
  * combo box cell editor
  */
-export const ComboBoxFieldEditor = React.createClass({
+export const ComboBoxFieldValueEditor = React.createClass({
 
     propTypes: {
         choices: React.PropTypes.array, // array of choices with display value props
@@ -185,7 +185,7 @@ export const ComboBoxFieldEditor = React.createClass({
 /**
  * date-only cell editor
  */
-export const DateFieldEditor = React.createClass({
+export const DateFieldValueEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DD
@@ -228,7 +228,7 @@ function dateTimeStringWithFixedMillisSuffix(dateTimeStr, places) {
 /**
  * date + time cell editor
  */
-export const DateTimeFieldEditor = React.createClass({
+export const DateTimeFieldValueEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss
@@ -260,7 +260,7 @@ export const DateTimeFieldEditor = React.createClass({
 /**
  * time of day cell editor
  */
-export const TimeFieldEditor = React.createClass({
+export const TimeFieldValueEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss.SSS (Epoch date)
@@ -289,7 +289,7 @@ export const TimeFieldEditor = React.createClass({
 /**
  * checkbox cell editor
  */
-export const CheckBoxFieldEditor = React.createClass({
+export const CheckBoxFieldValueEditor = React.createClass({
 
     propTypes: {
         value: React.PropTypes.bool,
@@ -310,7 +310,7 @@ export const CheckBoxFieldEditor = React.createClass({
 
     render() {
 
-        return <input ref="cellInput"
+        return <input ref="fieldInput"
                       onChange={this.onChange}
                       onBlur={this.props.onBlur}
                       tabIndex="0"

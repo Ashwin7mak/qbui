@@ -1,23 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {DefaultFieldEditor, MultiLineTextFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from './fieldEditors';
-import TextFieldEditor from './textFieldEditor';
 import FieldFormats from '../../utils/fieldFormats' ;
+import {DefaultFieldValueEditor, MultiLineTextFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor, DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
+import TextFieldValueEditor from './textFieldValueEditor';
+import _ from 'lodash';
 
 /**
- * # FieldEditor
+ * # FieldValueEditor
  *
- * This wraps the various field editor components. It contains a editor for a field defined by type and fieldDef and
- * the value supplied. It passed on whether the value is isInvalid.
+ * This wraps the various field editor components.
  *
- * This wrapper handles the external common field editor rendering
- * It calls supplied callback validateFieldValue to check if the field is valid onBlur
- *
- * if the fieldDef has required:true and the indicateRequired prop is true the wrap
- * will show that field is required
  */
-const FieldEditor = React.createClass({
 
+const FieldValueEditor = React.createClass({
     propTypes: {
         /**
          * the value to render */
@@ -75,7 +70,7 @@ const FieldEditor = React.createClass({
 
         /**
          * message to display in the tool tip when isInvalid */
-        invalidMessage: React.PropTypes.string,
+        invalidMessage: React.PropTypes.string
     },
 
     getDefaultProps() {
@@ -103,24 +98,24 @@ const FieldEditor = React.createClass({
             onValidated: this.props.onValidated,
             placeholder : placeholder,
             tabIndex: "0",
-            ref:"cellInput"
+            ref:"fieldInput"
         };
 
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT:
-            return <CheckBoxFieldEditor {...commonProps}
+            return <CheckBoxFieldValueEditor {...commonProps}
                 />;
 
         case FieldFormats.DATE_FORMAT: {
-            return <DateFieldEditor  {...commonProps}/>;
+            return <DateFieldValueEditor  {...commonProps}/>;
         }
 
         case FieldFormats.DATETIME_FORMAT: {
-            return <DateTimeFieldEditor  {...commonProps}/>;
+            return <DateTimeFieldValueEditor  {...commonProps}/>;
         }
 
         case FieldFormats.TIME_FORMAT: {
-            return <TimeFieldEditor  {...commonProps} />;
+            return <TimeFieldValueEditor  {...commonProps} />;
         }
 
         case FieldFormats.NUMBER_FORMAT:
@@ -128,27 +123,27 @@ const FieldEditor = React.createClass({
         case FieldFormats.DURATION_FORMAT:
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.PERCENT_FORMAT: {
-            return <DefaultFieldEditor type="number"
+            return <DefaultFieldValueEditor type="number"
                                        {...commonProps} />;
         }
 
         case FieldFormats.USER_FORMAT: {
-            return <UserFieldEditor  {...commonProps}/>;
+            return <UserFieldValueEditor  {...commonProps}/>;
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
-            return <MultiLineTextFieldEditor {...commonProps} />;
+            return <MultiLineTextFieldValueEditor {...commonProps} />;
         }
         case FieldFormats.TEXT_FORMAT:
         default: {
 
             if (_.has(this.props, 'fieldDef.choices')) {
                 return (
-                        <ComboBoxFieldEditor choices={this.props.fieldDef.choices}
+                        <ComboBoxFieldValueEditor choices={this.props.fieldDef.choices}
                                              {...commonProps} />
                     );
             } else {
-                return <TextFieldEditor {...commonProps}
+                return <TextFieldValueEditor {...commonProps}
                                             onChange={this.props.onChange ? this.props.onChange : ()=>{}}
                                             isInvalid={this.props.isInvalid}
                                             invalidMessage={this.props.invalidMessage}
@@ -157,7 +152,7 @@ const FieldEditor = React.createClass({
                     />;
                     //Drew's change per Andrew if users want text box that
                     // grows in height use a multiline not single line text
-                    //  return <MultiLineTextFieldEditor value={this.props.value}
+                    //  return <MultiLineTextFieldValueEditor value={this.props.value}
                     //       placeholder={this.props.fieldDef.placeholder}
                     //       onChange={this.props.onChange} />;
             }
@@ -172,7 +167,7 @@ const FieldEditor = React.createClass({
         // need to rerender this field with invalid state
         //on aggrid redraw, and on qbgrid set state
         if (this.props.validateFieldValue && this.props.onValidated) {
-            let fldValue = ev ? ev.target.value : ReactDOM.findDOMNode(this.refs.cellInput).value;
+            let fldValue = ev ? ev.target.value : ReactDOM.findDOMNode(this.refs.fieldInput).value;
             let results = this.props.validateFieldValue(this.props.fieldDef, fldValue);
             this.props.onValidated(results);
         }
@@ -181,7 +176,7 @@ const FieldEditor = React.createClass({
     render() {
 
         // the css classes
-        let classes = 'fieldEditor';
+        let classes = 'fieldValueEditor';
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
@@ -219,5 +214,5 @@ const FieldEditor = React.createClass({
     }
 });
 
-export default FieldEditor;
+export default FieldValueEditor;
 

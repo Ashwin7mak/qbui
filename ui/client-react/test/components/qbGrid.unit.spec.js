@@ -3,7 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import QBGrid  from '../../src/components/dataTable/qbGrid/qbGrid';
 
-import CellValueRenderers from '../../src/components/dataTable/agGrid/cellValueRenderers';
+import CellValueRenderer from '../../src/components/dataTable/agGrid/cellValueRenderer';
 
 import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
@@ -85,14 +85,14 @@ describe('QbGrid functions', () => {
     };
 
     beforeEach(() => {
-        CellValueRenderers.__Rewire__('I18nNumber', I18nMessageMock);
+        CellValueRenderer.__Rewire__('I18nNumber', I18nMessageMock);
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'rowClicked');
 
     });
 
     afterEach(() => {
-        CellValueRenderers.__ResetDependency__('I18nNumber');
+        CellValueRenderer.__ResetDependency__('I18nNumber');
         flux.actions.getFilteredRecords.calls.reset();
         flux.actions.rowClicked.calls.reset();
     });

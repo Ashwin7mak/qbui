@@ -10,53 +10,53 @@ let fieldDefWithRequired = {
     required : true
 };
 
-const basicFieldEditor = (
+const basicFieldValueEditor = (
     <div>
         <dt>Field Editor (default text):</dt>
         <dd>
-            <FieldEditor/>
+            <FieldValueEditor/>
         </dd>
 
         <dt>Empty Text Field Editor:</dt>
             <dd>
-              <FieldEditor type={1}/>
+              <FieldValueEditor type={1}/>
             </dd>
 
         <dt>Empty Text Field Editor with placeholder text:</dt>
             <dd>
-                <FieldEditor type={1} fieldDef={fieldDefWithPlaceholder} />
+                <FieldValueEditor type={1} fieldDef={fieldDefWithPlaceholder} />
             </dd>
 
 
         <dt>Text Field Editor with a value:</dt>
             <dd>
-                <FieldEditor type={1} value={editValue1} />
+                <FieldValueEditor type={1} value={editValue1} />
             </dd>
 
         <dt>Text Field Editor field is required and show required indicator:</dt>
             <dd>
-                <FieldEditor type={1} value={editValue1}
+                <FieldValueEditor type={1} value={editValue1}
                              fieldDef={fieldDefWithRequired} indicateRequired={true}/>
             </dd>
 
 
         <dt>Text Field Editor with a value and an error:</dt>
             <dd>
-                <FieldEditor type={1}   value={editValue2}
+                <FieldValueEditor type={1}   value={editValue2}
                              isInvalid={editValue2Invalid} invalidMessage="Use up to 15 characters"/>
             </dd>
 
 
         <dt>Empty Numeric Field Editor:</dt>
             <dd>
-                <FieldEditor type={2}/>
+                <FieldValueEditor type={2}/>
             </dd>
 
         <dt>Numeric Field Editor with a value:</dt>
             <dd>
-                <FieldEditor type={2} value={editValue3} />
+                <FieldValueEditor type={2} value={editValue3} />
             </dd>
 
     </div>
 );
-ReactDOM.render(basicFieldEditor, mountNode);
+ReactDOM.render(basicFieldValueEditor, mountNode);

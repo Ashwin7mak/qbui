@@ -5,15 +5,15 @@ import ReactPlayground from '../components/ReactPlayground';
 import Examples from '../components/Examples';
 import PropTable from '../components/PropTable';
 
-export default function FieldEditorDoc() {
+export default function TextFieldValueRendererDoc() {
     return (
         <div>
-            <div dangerouslySetInnerHTML={{__html: Metadata.FieldEditor.descHtml}} />
+            <div dangerouslySetInnerHTML={{__html: Metadata.TextFieldValueRenderer.descHtml}} />
 
-            <ReactPlayground codeText={Examples.FieldEditor} />
+            <ReactPlayground codeText={Examples.TextFieldValueRenderer} />
 
             <h2>Props</h2>
-            <PropTable component="FieldEditor" metadata={Metadata} />
+            <PropTable component="TextFieldValueRenderer" metadata={Metadata} />
         </div>
     );
 }

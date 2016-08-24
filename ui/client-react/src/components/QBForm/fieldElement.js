@@ -1,7 +1,7 @@
 import React from 'react';
 
 import FieldLabelElement from './fieldLabelElement';
-import {CellValueRenderer} from '../dataTable/agGrid/cellValueRenderers';
+import {CellValueRenderer} from '../dataTable/agGrid/cellValueRenderer';
 import FieldFormats from '../../utils/fieldFormats';
 import './qbform.scss';
 

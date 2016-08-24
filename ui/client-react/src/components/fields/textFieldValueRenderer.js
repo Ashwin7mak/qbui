@@ -2,13 +2,13 @@ import React from 'react';
 import './fields.scss';
 
 /**
- * # TextField
+ * # TextFieldValueRenderer
  *
- * A TextField is a read only rendering of the field containing a single line text.
+ * A TextFieldValueRenderer is a read only rendering of the field containing a single line text.
  *
  * The value can be rendered as bold or not and classes can be optionally pass in for custom styling.
  */
-const TextField = React.createClass({
+const TextFieldValueRenderer = React.createClass({
 
     propTypes: {
         /**
@@ -45,4 +45,4 @@ const TextField = React.createClass({
 });
 
 
-export default TextField;
+export default TextFieldValueRenderer;

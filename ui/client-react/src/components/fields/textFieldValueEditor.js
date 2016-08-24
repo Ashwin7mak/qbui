@@ -3,17 +3,17 @@ import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 
 /**
- * # TextFieldEditor
+ * # TextFieldValueEditor
  *
- * An editable rendering of a single line text field as an input box. The component can be supplied a value or not. Used within a FieldEditor
+ * An editable rendering of a single line text field as an input box. The component can be supplied a value or not. Used within a FieldValueEditor
  *
  */
 
-const TextFieldEditor = React.createClass({
+const TextFieldValueEditor = React.createClass({
     propTypes: {
         /**
          * the value to fill in the input box */
-        value: React.PropTypes.any, // should be string but duration is a number but rendered as text
+        value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),  // should be string but duration is a number for edit but rendered as text
 
         /**
          * optional string to display when input is empty aka ghost text */
@@ -37,11 +37,8 @@ const TextFieldEditor = React.createClass({
 
         /**
          * listen for losing focus by setting a callback to the onBlur prop. */
-        onBlur: React.PropTypes.func,
+        onBlur: React.PropTypes.func
 
-        /**
-         * attach a ref to reference the backing instance of the component. */
-        ref: React.PropTypes.any
     },
 
     getDefaultProps() {
@@ -66,9 +63,9 @@ const TextFieldEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
-        let inputBox = <input ref={this.props.ref}
+        let inputBox = <input ref="textInput"
                           className={classes}
-                          value={this.props.value}
+                          value={this.props.value === null ? '' : this.props.value}
                           type="text"
                           placeholder={this.props.placeholder}
                           onChange={this.onChange}
@@ -85,4 +82,4 @@ const TextFieldEditor = React.createClass({
     }
 });
 
-export default TextFieldEditor;
+export default TextFieldValueEditor;

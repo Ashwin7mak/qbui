@@ -3,32 +3,32 @@ let editValue1 = 'QuickBase';
 let editValue2 = 'Lorem ipsum dolor sit amet';
 let editValue2Invalid = true;
 
-const basicTextFieldEditor = (
+const basicTextFieldValueEditor = (
     <div>
         <dt>Empty Text Field Editor:</dt>
             <dd>
-              <TextFieldEditor />
+              <TextFieldValueEditor />
             </dd>
 
 
         <dt>Empty Text Field Editor with placeholder text:</dt>
             <dd>
-                <TextFieldEditor placeholder="test@example.com" />
+                <TextFieldValueEditor placeholder="test@example.com" />
             </dd>
 
 
         <dt>Text Field Editor with a value:</dt>
             <dd>
-                <TextFieldEditor value={editValue1} />
+                <TextFieldValueEditor value={editValue1} />
             </dd>
 
 
         <dt>Text Field Editor with a value and an error:</dt>
             <dd>
-                <TextFieldEditor isInvalid={editValue2Invalid} invalidMessage="Use up to 15 characters" value={editValue2} />
+                <TextFieldValueEditor isInvalid={editValue2Invalid} invalidMessage="Use up to 15 characters" value={editValue2} />
             </dd>
 
 
     </div>
 );
-ReactDOM.render(basicTextFieldEditor, mountNode);
+ReactDOM.render(basicTextFieldValueEditor, mountNode);

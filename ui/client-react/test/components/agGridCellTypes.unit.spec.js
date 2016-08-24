@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
 import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
-import CellValueRenderers from '../../src/components/dataTable/agGrid/cellValueRenderers';
+import CellValueRenderer from '../../src/components/dataTable/agGrid/cellValueRenderer';
 
 import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
+import { __RewireAPI__ as NumberFieldValueRendererRewire }  from '../../src/components/fields/fieldValueRenderers';
 
 describe('AGGrid cell editor functions', () => {
     'use strict';
@@ -22,14 +23,14 @@ describe('AGGrid cell editor functions', () => {
 
         CellRenderers.__Rewire__('I18nDate', I18nMessageMock);
         CellRenderers.__Rewire__('I18nNumber', I18nMessageMock);
-        CellValueRenderers.__Rewire__('I18nNumber', I18nMessageMock);
+        NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
     });
 
     afterEach(() => {
 
         CellRenderers.__ResetDependency__('I18nDate');
         CellRenderers.__ResetDependency__('I18nNumber');
-        CellValueRenderers.__ResetDependency__('I18nNumber');
+        NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
     });
 
     it('test TextCellRenderer', () => {
@@ -46,6 +47,7 @@ describe('AGGrid cell editor functions', () => {
 
         component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        console.log('component.innerHTML:' + ReactDOM.findDOMNode(component).innerHTML);
 
         const value = TestUtils.findRenderedDOMComponentWithClass(component, "textCell");
         expect(value.innerHTML).toEqual(params.value.display);

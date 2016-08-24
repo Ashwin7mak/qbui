@@ -134,7 +134,7 @@ let TablesList = React.createClass({
                              secondaryIcon={"search"}
                              onClick={this.onClickTables} open={true} />
                     <li className={this.state.searching ? "search open" : "search"}>
-                        <SearchBox ref="tablesSearchBox" key="tablesSearchBox"
+                        <SearchBox ref="tablesSearchBox" searchBoxKey="tablesSearchBox"
                                    value={this.state.searchText}
                                    onChange={this.onChangeSearch}
                                    onClearSearch={this.onClearSearch}
