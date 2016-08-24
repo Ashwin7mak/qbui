@@ -349,7 +349,7 @@ const fakeReportGroupData_recursiveTemplate = {
     }
 };
 
-describe('ReportContent grouping functions', () => {
+xdescribe('ReportContent grouping functions', () => {
     let component;
     let localizeNumberSpy;
     let localizeDateSpy;
@@ -614,7 +614,7 @@ describe('ReportContent grouping functions', () => {
 
 });
 
-describe('ReportContent grouping functions exception handling', () => {
+xdescribe('ReportContent grouping functions exception handling', () => {
     let component;
     let localizeNumberSpy;
     let localizeDateSpy;

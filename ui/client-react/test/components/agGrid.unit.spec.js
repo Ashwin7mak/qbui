@@ -316,11 +316,11 @@ describe('AGGrid functions', () => {
 
         let menu = gridElement[0].getElementsByClassName("dropdown-menu");
         expect(menu.length).toBeGreaterThan(0);
-        let menuoptions = menu[numericcol.id - 1].querySelectorAll("span:last-child"); // find the menu item text
-        expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.lowToHigh"));
-        expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.highToLow"));
-        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.lowToHigh"));
-        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.highToLow"));
+        let menuoptions = menu[numericcol.id - 1].querySelectorAll("a:last-child"); // find the menu item text
+        expect(menuoptions[0].innerHTML.includes(Locale.getMessage("report.menu.sort.lowToHigh"))).toBe(true);
+        expect(menuoptions[1].innerHTML.includes(Locale.getMessage("report.menu.sort.highToLow"))).toBe(true);
+        expect(menuoptions[2].innerHTML.includes(Locale.getMessage("report.menu.group.lowToHigh"))).toBe(true);
+        expect(menuoptions[3].innerHTML.includes(Locale.getMessage("report.menu.group.highToLow"))).toBe(true);
     });
 
     it('menu options text field', () => {
@@ -341,11 +341,11 @@ describe('AGGrid functions', () => {
         TestUtils.Simulate.click(menuButtons[textcol.id - 1]);
         let menu = gridElement[0].getElementsByClassName("dropdown-menu");
         expect(menu.length).toBeGreaterThan(0);
-        let menuoptions = menu[0].querySelectorAll("span:last-child"); // find the menu item text
-        expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.aToZ"));
-        expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.zToA"));
-        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.aToZ"));
-        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.zToA"));
+        let menuoptions = menu[0].querySelectorAll("a:last-child"); // find the menu item text
+        expect(menuoptions[0].innerHTML.includes(Locale.getMessage("report.menu.sort.aToZ"))).toBe(true);
+        expect(menuoptions[1].innerHTML.includes(Locale.getMessage("report.menu.sort.zToA"))).toBe(true);
+        expect(menuoptions[2].innerHTML.includes(Locale.getMessage("report.menu.group.aToZ"))).toBe(true);
+        expect(menuoptions[3].innerHTML.includes(Locale.getMessage("report.menu.group.zToA"))).toBe(true);
     });
 
     it('menu options date field', () => {
@@ -367,11 +367,11 @@ describe('AGGrid functions', () => {
         TestUtils.Simulate.click(menuButtons[datecol.id - 1]);
         let menu = gridElement[0].getElementsByClassName("dropdown-menu");
         expect(menu.length).toBeGreaterThan(1);
-        let menuoptions = menu[datecol.id - 1].querySelectorAll("span:last-child"); // find the menu item text
-        expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.oldToNew"));
-        expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.newToOld"));
-        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.oldToNew"));
-        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.newToOld"));
+        let menuoptions = menu[datecol.id - 1].querySelectorAll("a:last-child"); // find the menu item text
+        expect(menuoptions[0].innerHTML.includes(Locale.getMessage("report.menu.sort.oldToNew"))).toBe(true);
+        expect(menuoptions[1].innerHTML.includes(Locale.getMessage("report.menu.sort.newToOld"))).toBe(true);
+        expect(menuoptions[2].innerHTML.includes(Locale.getMessage("report.menu.group.oldToNew"))).toBe(true);
+        expect(menuoptions[3].innerHTML.includes(Locale.getMessage("report.menu.group.newToOld"))).toBe(true);
     });
 
     it('menu options checkbox field', () => {
@@ -392,11 +392,11 @@ describe('AGGrid functions', () => {
         TestUtils.Simulate.click(menuButtons[checkcol.id - 1]);
         let menu = gridElement[0].getElementsByClassName("dropdown-menu");
         expect(menu.length).toBeGreaterThan(1);
-        let menuoptions = menu[checkcol.id - 1].querySelectorAll("span:last-child"); // find the menu item text
-        expect(menuoptions[0].innerHTML).toEqual(Locale.getMessage("report.menu.sort.uncheckedToChecked"));
-        expect(menuoptions[1].innerHTML).toEqual(Locale.getMessage("report.menu.sort.checkedToUnchecked"));
-        expect(menuoptions[2].innerHTML).toEqual(Locale.getMessage("report.menu.group.uncheckedToChecked"));
-        expect(menuoptions[3].innerHTML).toEqual(Locale.getMessage("report.menu.group.checkedToUnchecked"));
+        let menuoptions = menu[checkcol.id - 1].querySelectorAll("a:last-child"); // find the menu item text
+        expect(menuoptions[0].innerHTML.includes(Locale.getMessage("report.menu.sort.uncheckedToChecked"))).toBe(true);
+        expect(menuoptions[1].innerHTML.includes(Locale.getMessage("report.menu.sort.checkedToUnchecked"))).toBe(true);
+        expect(menuoptions[2].innerHTML.includes(Locale.getMessage("report.menu.group.uncheckedToChecked"))).toBe(true);
+        expect(menuoptions[3].innerHTML.includes(Locale.getMessage("report.menu.group.checkedToUnchecked"))).toBe(true);
     });
 
     it('test row actions ', () => {
