@@ -29,7 +29,7 @@ const ReportStage = React.createClass({
             <div className="report-content">
                 <div className="left">
                     <div className="content">
-                        <div className="stage-showHide-content">{reportDesc}xxx</div>
+                        <div className="stage-showHide-content">{reportDesc}</div>
                     </div>
                 </div>
             </div> : null);
