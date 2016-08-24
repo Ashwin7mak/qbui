@@ -109,7 +109,7 @@
                                 } else {
                                     /*eslint no-lonely-if:0*/
                                     if (reportMetaData && reportMetaData.sortList && reportMetaData.sortList.length) {
-                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, reportMetaData.data.sortList.join(constants.REQUEST_PARAMETER.LIST_DELIMITER));
+                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, reportMetaData.sortList.join(constants.REQUEST_PARAMETER.LIST_DELIMITER));
                                     }
                                 }
 
