@@ -103,7 +103,6 @@ export let RecordRoute = React.createClass({
     },
 
     getStageHeadline() {
-        console.log(this.props.selectedTable);
         if (this.props.params) {
             const {rptId} = this.props.params;
 
