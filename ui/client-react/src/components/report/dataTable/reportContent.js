@@ -750,14 +750,18 @@ export let ReportContent = React.createClass({
                             pageEnd={this.props.reportFooter.props.pageEnd}/>
                         }
                         {isSmall &&
-                            <CardViewListHolder reportData={this.props.reportData}
-                                uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                keyField={keyField}
-                                reportHeader={this.props.reportHeader}
-                                selectionActions={<ReportActions />}
-                                onScroll={this.onScrollRecords}
-                                onRowClicked={this.openRow}
-                                selectedRows={this.props.selectedRows}/>
+                        <CardViewListHolder reportData={this.props.reportData}
+                                            uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                            keyField={keyField}
+                                            reportHeader={this.props.reportHeader}
+                                            selectionActions={<ReportActions />}
+                                            onScroll={this.onScrollRecords}
+                                            onRowClicked={this.openRow}
+                                            selectedRows={this.props.selectedRows}
+                                            pageStart={this.props.reportFooter.props.pageStart}
+                                            pageEnd={this.props.reportFooter.props.pageEnd}
+                                            getNextReportPage={this.props.reportFooter.props.getNextReportPage}
+                                            getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}/>
                         }
                     </div>
                 }
