@@ -28,6 +28,92 @@
 
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
 
+        fieldType : {
+            //Field types
+            FORMULA: {
+                name: 'FORMULA',
+            },
+            SCALAR: {
+                name: 'SCALAR',
+            },
+            CONCRETE: {
+                name: 'CONCRETE',
+            },
+            REPORT_LINK: {
+                name: 'REPORT_LINK',
+            },
+            SUMMARY: {
+                name: 'SUMMARY',
+            },
+            LOOKUP: {
+                name: 'LOOKUP',
+            }
+        },
+
+        dataType : {
+            //Data types
+            CHECKBOX: {
+                name:'CHECKBOX',
+                columnName:'Checkbox',
+            },
+            TEXT: {
+                name:'TEXT',
+                columnName:'Text',
+            },
+            PHONE_NUMBER: {
+                name:'PHONE_NUMBER',
+                columnName:'Phone Number',
+            },
+            DATE_TIME: {
+                name:'DATE_TIME',
+                columnName:'Date Time',
+            },
+            DATE: {
+                name:'DATE',
+                columnName:'Date',
+            },
+            DURATION: {
+                name:'DURATION',
+                columnName:'Duration',
+            },
+            TIME_OF_DAY: {
+                name:'TIME_OF_DAY',
+                columnName:'Time Of Day',
+            },
+            NUMERIC: {
+                name:'NUMERIC',
+                columnName:'Numeric',
+            },
+            CURRENCY: {
+                name:'CURRENCY',
+                columnName:'Currency',
+            },
+            RATING: {
+                name:'RATING',
+                columnName:'Rating',
+            },
+            PERCENT: {
+                name:'PERCENT',
+                columnName:'Percent',
+            },
+            URL: {
+                name:'URL',
+                columnName:'URL',
+            },
+            EMAIL_ADDRESS: {
+                name:'EMAIL_ADDRESS',
+                columnName:'Email Address',
+            },
+            USER: {
+                name:'USER',
+                columnName:'User',
+            },
+            FILE_ATTACHMENT : {
+                name:'FILE_ATTACHMENT',
+                columnName:'File Attachment',
+            },
+        },
+
         /**
          * Data Provider for the different breakpoints. Also contains the state of the leftNav at each size for assertion
          */
