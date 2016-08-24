@@ -99,7 +99,7 @@ class ReportService extends BaseService {
         let request;
 
         // For report pagination, if format, offset, rows are defined, set parameters.
-        if (format && format !== undefined && offset && offset !== undefined && rows && rows !== undefined) {
+        if (format !== undefined && offset !== undefined && rows !== undefined) {
             let params = {};
             if (format === true) {
                 params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
