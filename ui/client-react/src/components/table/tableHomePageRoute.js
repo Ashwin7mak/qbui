@@ -7,6 +7,7 @@ import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
+import {I18nMessage} from "../../utils/i18nMessage";
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
 import '../report/report.scss';
@@ -66,11 +67,7 @@ let TableHomePageRoute = React.createClass({
 
                 <div className="navLinks">
                     {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
-                    {this.props.selectedTable && this.props.selectedTable.name}
-                </div>
-
-                <div className="stageHeadline">
-                    <h3 className="reportName">{reportName}</h3>
+                    {this.props.selectedTable && this.props.selectedTable.name}&nbsp;<I18nMessage message={'nav.home'}/>
                 </div>
             </div>);
     },
