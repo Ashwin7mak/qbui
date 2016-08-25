@@ -210,23 +210,25 @@
             addQueryParameter: function(req, parameterName, parameterValue) {
 
                 if (parameterName) {
-                    //  are there any existing parameters
-                    let search = url.parse(req.url).search;
-
-                    if (req.url.indexOf(parameterName) !== -1) { //update the param, dont add it again
-                        let startingIndex = req.url.indexOf(parameterName);
-                        let endingIndex = req.url.indexOf('&', startingIndex);
-                        if (endingIndex === -1) {
-                            req.url = req.url.substr(0, startingIndex);
+                    //  does the parameter already exist
+                    if (this.hasQueryParameter(req, parameterName)) {
+                        // nothing to do if the parameter is already on the request
+                        if (this.getQueryParameterValue(req, parameterName) === parameterValue) {
+                            return;
                         } else {
-                            req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
+                            // have a different value to use; remove the one on the request
+                            let startingIndex = req.url.indexOf(parameterName);
+                            let endingIndex = req.url.indexOf('&', startingIndex);
+                            if (endingIndex === -1) {
+                                req.url = req.url.substr(0, startingIndex);
+                            } else {
+                                req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
+                            }
                         }
-                        //  update the search variable
-                        search = url.parse(req.url).search;
                     }
 
-                    //  any existing request parameters...if so remove
-                    //  if 'parameterName' is found in list.
+                    //  add the parameter
+                    let search = url.parse(req.url).search;
                     if (search) {
                         req.url += '&';
                     } else {
@@ -237,8 +239,7 @@
                     req.url += parameterName + '=' + parameterValue;
 
                     //  add/replace the parameter to the params array.
-                    req.params[parameterName] = parameterValue;
-
+                    //req.params[parameterName] = parameterValue;
                 }
             },
 
@@ -246,13 +247,16 @@
                 if (!req || !parameterName) {
                     return false;
                 }
+                let query = url.parse(req.url, true).query;
+                return (query && query.hasOwnProperty(parameterName));
+            },
 
-                let search = url.parse(req.url).search;
-                if (!search) {
-                    return false;
+            getQueryParameterValue: function(req, parameterName) {
+                if (!req || !parameterName) {
+                    return null;
                 }
-
-                return search.indexOf(parameterName) !== -1;
+                let query = url.parse(req.url, true).query;
+                return query[parameterName];
             }
 
         };

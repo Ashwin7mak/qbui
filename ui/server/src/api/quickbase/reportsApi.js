@@ -84,18 +84,6 @@
                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
                 }
             }
-
-            //  set page offset and number of rows to return to defaults if invalid or none supplied
-            //  NOTE: both have to be valid to not use the defaults
-            //let reqOffset = req.params[constants.REQUEST_PARAMETER.OFFSET];
-            //let reqNumRows = req.params[constants.REQUEST_PARAMETER.NUM_ROWS];
-            //if (typeof reqOffset !== 'number' || (reqOffset % 1) !== 0 ||
-            //    typeof reqNumRows !== 'number' || (reqNumRows % 1) !== 0) {
-            if (!requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET) ||
-                !requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS)) {
-                requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, constants.PAGE.DEFAULT_OFFSET);
-                requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, constants.PAGE.DEFAULT_NUM_ROWS);
-            }
         }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
@@ -158,8 +146,6 @@
                             // Process the meta data to fetch and return the report content.
                             if (response.body) {
                                 let reportMetaData = JSON.parse(response.body);
-                                //let reportMetaData = reportsData[0];
-
                                 addReportMetaQueryParameters(req, reportMetaData, true);
 
                                 this.fetchReportComponents(req, reportId).then(
