@@ -115,8 +115,13 @@ describe('Validate ReportsApi unit tests', function() {
             headers: {
                 'tid': 'tid'
             },
+            'params': {
+                appId: 1,
+                tableId: 2,
+                reportId: 3
+            },
             'Content-Type': 'content-type',
-            'url': 'apps/1/table/1/reports/1',
+            'url': 'apps/1/table/2/reports/3',
             'method': 'get',
             'query':''
         };
