@@ -241,7 +241,7 @@ const CellRenderer = React.createClass({
             value: value,
             display: value
         };
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : theVals, validationStatus: {}}, ()=>{this.cellChanges();});
     },
 
     /**
