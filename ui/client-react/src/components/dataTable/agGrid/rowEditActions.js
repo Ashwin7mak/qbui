@@ -69,7 +69,9 @@ const RowEditActions = React.createClass({
 
     render: function() {
         let errorMessage = "editErrors";
-        let validRow = !this.props.params.context.rowEditErrors || this.props.params.context.rowEditErrors.ok;
+        // defer this disabling of save button til server validation story
+        //let validRow = !this.props.params.context.rowEditErrors || this.props.params.context.rowEditErrors.ok;
+        let validRow = true;
 
         return (
             <span className="editTools">
