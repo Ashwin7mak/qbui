@@ -208,26 +208,55 @@
              * @param parameterValue
              */
             addQueryParameter: function(req, parameterName, parameterValue) {
-                if (parameterName) {
-                    //  are there any existing parameters
-                    let search = url.parse(req.url).search;
 
-                    if (req.url.indexOf(parameterName) !== -1) { //update the param, dont add it again
-                        let startingIndex = req.url.indexOf(parameterName);
-                        let endingIndex = req.url.indexOf('&', startingIndex);
-                        if (endingIndex === -1) {
-                            req.url = req.url.substr(0, startingIndex);
+                if (parameterName) {
+                    //  does the parameter already exist
+                    if (this.hasQueryParameter(req, parameterName)) {
+                        // nothing to do if the parameter is already on the request
+                        if (this.getQueryParameterValue(req, parameterName) === parameterValue) {
+                            return;
                         } else {
-                            req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
+                            // have a different value to use; remove the one on the request
+                            let startingIndex = req.url.indexOf(parameterName);
+                            let endingIndex = req.url.indexOf('&', startingIndex);
+                            if (endingIndex === -1) {
+                                req.url = req.url.substr(0, startingIndex);
+                            } else {
+                                req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
+                            }
                         }
                     }
-                    req.url += search ? '&' : '?';
+
+                    //  add the parameter
+                    let search = url.parse(req.url).search;
+                    if (search) {
+                        req.url += '&';
+                    } else {
+                        req.url += '?';
+                    }
+
                     //  append the query parameter to the url
                     req.url += parameterName + '=' + parameterValue;
-                    //  add the parameter to the params array.
-                    req.params[parameterName] = parameterValue;
 
+                    //  add/replace the parameter to the params array.
+                    //req.params[parameterName] = parameterValue;
                 }
+            },
+
+            hasQueryParameter: function(req, parameterName) {
+                if (!req || !parameterName) {
+                    return false;
+                }
+                let query = url.parse(req.url, true).query;
+                return (query && query.hasOwnProperty(parameterName));
+            },
+
+            getQueryParameterValue: function(req, parameterName) {
+                if (!req || !parameterName) {
+                    return null;
+                }
+                let query = url.parse(req.url, true).query;
+                return query[parameterName];
             }
 
         };

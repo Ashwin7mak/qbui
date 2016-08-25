@@ -74,11 +74,12 @@
         },
         PAGE : {
             DEFAULT_OFFSET : 0,
-            DEFAULT_NUM_ROWS: 20
+            DEFAULT_NUM_ROWS: 20,
+            MAX_NUM_ROWS: 1000
         },
         SORT_ORDER: {
-            ASC: "asc",
-            DESC: "desc"
+            ASC: 'asc',
+            DESC: 'desc'
         }
     });
 
