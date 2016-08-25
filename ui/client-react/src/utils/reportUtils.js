@@ -55,19 +55,19 @@ class ReportUtils {
     }
 
     /**
-     * Given a sortList string, does it have grouping info included.  No
+     * Given a sortEl does it have grouping info included.  No
      * validation is performed; just whether grouping is included.
      *
-     * @param sort list
+     * @param sort element
      * @returns boolean
      */
-    static hasGroupingFids(sortList) {
-        if (sortList && typeof sortList === "string") {
-            let el = sortList.split(groupDelimiter, 2);
+    static hasGroupingFids(sortEl) {
+        if (sortEl && typeof sortEl === "string") {
+            let el = sortEl.split(groupDelimiter, 2);
             if (el.length === 2) {
                 return true;
             }
-        } else if (sortList && sortList.groupType) {
+        } else if (sortEl && sortEl.groupType) {
             return true;
         }
         return false;
@@ -99,7 +99,7 @@ class ReportUtils {
                     var sortEl = sort.split(groupDelimiter);
                     sortFids.push(sortEl[0]);
                 } else {
-                    sortFids.push(sort.fieldId);
+                    sortFids.push(sort.sortOrder === constants.SORT_ORDER.DESC ? '-' + sort.fieldId : sort.fieldId);
                 }
             });
         }
@@ -123,7 +123,7 @@ class ReportUtils {
                         sortFids.push(sortEl[0]);
                     }
                 } else if (sort && sort.groupType === null) {
-                    sortFids.push(sort.sortOrder === constants.SORT_ORDER.DESC ? -sort.fieldId : sort.fieldId);
+                    sortFids.push(sort.sortOrder === constants.SORT_ORDER.DESC ? '-' + sort.fieldId : sort.fieldId);
                 }
             });
         }
@@ -147,7 +147,7 @@ class ReportUtils {
                         groupFids.push(sort);
                     }
                 } else if (sort && sort.groupType) { // sort is of type object
-                    groupFids.push(sort.fieldId);
+                    groupFids.push(sort.fieldId + groupDelimiter + sort.groupType);
                 }
             });
         }
