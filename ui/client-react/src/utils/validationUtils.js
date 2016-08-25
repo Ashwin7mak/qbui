@@ -32,7 +32,7 @@ class ValidationUtils {
             results.invalidMessage = msg;
 
             //check fields max chars not exceeded
-        } else if (_.has(def, 'datatypeAttributes.clientSideAttributes.max_chars') &&
+        } else if (_.has(def, 'datatypeAttributes.clientSideAttributes.max_chars') && def.datatypeAttributes.clientSideAttributes.max_chars !== 0 &&
             value !== undefined && _.has(value, 'length') && value.length > def.datatypeAttributes.clientSideAttributes.max_chars) {
             let msg = Locales.getMessage('invalidMsg.maxChars', {num: def.datatypeAttributes.clientSideAttributes.max_chars});
             results.isInvalid = true;
