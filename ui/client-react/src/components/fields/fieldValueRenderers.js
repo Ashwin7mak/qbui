@@ -6,6 +6,7 @@ import {I18nNumber} from '../../utils/i18nMessage';
  * placeholder for rendering users
  */
 export const UserFieldValueRenderer = React.createClass({
+    displayName: 'UserFieldValueRenderer',
 
     propTypes: {
         value: React.PropTypes.string
@@ -17,6 +18,7 @@ export const UserFieldValueRenderer = React.createClass({
 });
 
 export const NumberFieldValueRenderer = React.createClass({
+    displayName: 'NumberFieldValueRenderer',
 
     propTypes: {
         value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number])
@@ -29,6 +31,7 @@ export const NumberFieldValueRenderer = React.createClass({
 
 
 export const DateFieldValueRenderer = React.createClass({
+    displayName: 'DateFieldValueRenderer',
 
     propTypes: {
         value: React.PropTypes.string
@@ -40,6 +43,7 @@ export const DateFieldValueRenderer = React.createClass({
 });
 
 export const TextFieldValueRenderer = React.createClass({
+    displayName: 'TextFieldValueRenderer',
 
     propTypes: {
         value: React.PropTypes.any
@@ -54,6 +58,7 @@ export const TextFieldValueRenderer = React.createClass({
 
 // like a text cell but use a PRE tag to preserve whitespace
 export const MultiLineTextFieldValueRenderer = React.createClass({
+    displayName: 'MultiLineTextFieldValueRenderer',
 
     propTypes: {
         value: React.PropTypes.any

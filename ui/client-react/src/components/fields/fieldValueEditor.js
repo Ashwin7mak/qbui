@@ -13,6 +13,7 @@ import _ from 'lodash';
  */
 
 const FieldValueEditor = React.createClass({
+    displayName: 'FieldValueEditor',
     propTypes: {
         /**
          * the value to render */

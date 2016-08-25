@@ -9,6 +9,7 @@ import FieldValueRenderer from '../../fields/fieldValueRenderer';
  *
  */
 const CellValueRenderer = React.createClass({
+    displayName: 'CellValueRenderer',
 
     propTypes: {
         display: React.PropTypes.any,

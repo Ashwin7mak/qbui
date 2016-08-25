@@ -9,7 +9,7 @@ import './fields.scss';
  * The value can be rendered as bold or not and classes can be optionally pass in for custom styling.
  */
 const TextFieldValueRenderer = React.createClass({
-
+    displayName: 'TextFieldValueRenderer',
     propTypes: {
         /**
          * the value to render */

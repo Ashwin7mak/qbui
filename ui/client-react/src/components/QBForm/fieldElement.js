@@ -9,6 +9,7 @@ import './qbform.scss';
  * render a field value, optionally with its label
  */
 const FieldElement = React.createClass({
+    displayName: 'FieldElement',
     propTypes: {
         element: React.PropTypes.object, // FormFieldElement from form API
         relatedField: React.PropTypes.object, // field from Form data

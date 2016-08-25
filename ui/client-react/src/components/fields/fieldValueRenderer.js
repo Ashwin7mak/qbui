@@ -6,6 +6,7 @@ import TextFieldValueRenderer from './textFieldValueRenderer';
 import _ from 'lodash';
 
 const FieldValueRenderer = React.createClass({
+    displayName: 'FieldValueRenderer',
 
     propTypes: {
         display: React.PropTypes.any,

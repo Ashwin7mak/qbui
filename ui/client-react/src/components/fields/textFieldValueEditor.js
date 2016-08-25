@@ -10,6 +10,8 @@ import QBToolTip from '../qbToolTip/qbToolTip';
  */
 
 const TextFieldValueEditor = React.createClass({
+    displayName: 'TextFieldValueEditor',
+
     propTypes: {
         /**
          * the value to fill in the input box */

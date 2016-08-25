@@ -10,6 +10,7 @@ import QBToolTip from '../../qbToolTip/qbToolTip';
  * editing tools for the currently edited row
  */
 const RowEditActions = React.createClass({
+    displayName: 'RowEditActions',
 
     propTypes: {
         api: React.PropTypes.object,

@@ -16,6 +16,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
  */
 let QBForm = React.createClass({
+    displayName: 'QBForm',
 
     statics: {
         LABEL_ABOVE: "ABOVE", // label is in same cell as field value, above it

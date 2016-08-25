@@ -6,6 +6,7 @@ import FieldValueEditor from '../../fields/fieldValueEditor';
  * Table cell inline edit specific editor
  */
 const CellEditor = React.createClass({
+    displayName: 'CellEditor',
 
     propTypes: {
         type: React.PropTypes.number,

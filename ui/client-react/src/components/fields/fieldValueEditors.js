@@ -11,6 +11,7 @@ import moment from 'moment';
  * simple non-validating cell editor for text
  */
 export const DefaultFieldValueEditor = React.createClass({
+    displayName: 'DefaultFieldValueEditor',
 
     propTypes: {
         value: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number, React.PropTypes.object, React.PropTypes.bool]),
@@ -46,6 +47,7 @@ export const DefaultFieldValueEditor = React.createClass({
  * a multi-line text editor that dynamically changes its height
  */
 export const MultiLineTextFieldValueEditor = React.createClass({
+    displayName: 'MultiLineTextFieldValueEditor',
 
     propTypes: {
         value: React.PropTypes.string,
@@ -126,6 +128,7 @@ export const MultiLineTextFieldValueEditor = React.createClass({
  * placeholder for user picker
  */
 export const UserFieldValueEditor = React.createClass({
+    displayName: 'UserFieldValueEditor',
 
     render() {
         return <input ref="fieldInput"
@@ -186,6 +189,7 @@ export const ComboBoxFieldValueEditor = React.createClass({
  * date-only cell editor
  */
 export const DateFieldValueEditor = React.createClass({
+    displayName: 'DateFieldValueEditor',
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DD
@@ -229,6 +233,7 @@ function dateTimeStringWithFixedMillisSuffix(dateTimeStr, places) {
  * date + time cell editor
  */
 export const DateTimeFieldValueEditor = React.createClass({
+    displayName: 'DateTimeFieldValueEditor',
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss
@@ -261,6 +266,7 @@ export const DateTimeFieldValueEditor = React.createClass({
  * time of day cell editor
  */
 export const TimeFieldValueEditor = React.createClass({
+    displayName: 'TimeFieldValueEditor',
 
     propTypes: {
         value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss.SSS (Epoch date)
@@ -290,6 +296,7 @@ export const TimeFieldValueEditor = React.createClass({
  * checkbox cell editor
  */
 export const CheckBoxFieldValueEditor = React.createClass({
+    displayName: 'CheckBoxFieldValueEditor',
 
     propTypes: {
         value: React.PropTypes.bool,

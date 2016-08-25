@@ -66,6 +66,7 @@ class CellRendererFactory  {
  * cell renderer
  */
 const CellRenderer = React.createClass({
+    displayName: 'CellRenderer',
 
     propTypes: {
         type: React.PropTypes.number.isRequired,
@@ -317,74 +318,82 @@ export const TextCellRenderer = React.createClass({
 });
 
 export const DateCellRenderer = React.createClass({
+    displayName: 'DateCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.DATE_FORMAT, this.props);
     }
 });
 
 export const DateTimeCellRenderer = React.createClass({
+    displayName: 'DateTimeCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.DATETIME_FORMAT, this.props);
     }
 });
 
 export const TimeCellRenderer = React.createClass({
+    displayName: 'TimeCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.TIME_FORMAT, this.props);
     }
 });
 
 export const DurationCellRenderer = React.createClass({
+    displayName: 'DurationCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.DURATION_FORMAT, this.props);
     }
 });
 
 export const PhoneCellRenderer = React.createClass({
+    displayName: 'PhoneCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.PHONE_FORMAT, this.props);
     }
 });
 
 export const NumericCellRenderer = React.createClass({
+    displayName: 'NumericCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.NUMBER_FORMAT, this.props);
     }
 });
 
 export const CurrencyCellRenderer = React.createClass({
+    displayName: 'CurrencyCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.CURRENCY_FORMAT, this.props);
     }
 });
 
 export const PercentCellRenderer = React.createClass({
-
+    displayName: 'PercentCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.PERCENT_FORMAT, this.props);
     }
 });
 
 export const RatingCellRenderer = React.createClass({
-
+    displayName: 'RatingCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.RATING_FORMAT, this.props);
     }
 });
 export const UserCellRenderer = React.createClass({
-
+    displayName: 'UserCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.USER_FORMAT, this.props);
     }
 });
 export const CheckBoxCellRenderer = React.createClass({
-
+    displayName: 'PhoneCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.CHECKBOX_FORMAT, this.props);
     }
 });
 
 export const SelectionColumnCheckBoxCellRenderer = React.createClass({
+    displayName: 'SelectionColumnCheckBoxCellRenderer',
 
 
     onClickEdit() {
