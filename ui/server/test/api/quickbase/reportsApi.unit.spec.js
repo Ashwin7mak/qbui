@@ -108,6 +108,82 @@ describe('Validate ReportsApi unit tests', function() {
     });
 
     /**
+     * Unit tests for fetchReportMetaDataAndContentStub api
+     */
+    describe('validate fetchReportMetaDataAndContent api', function() {
+        var req = {
+            headers: {
+                'tid': 'tid'
+            },
+            'Content-Type': 'content-type',
+            'url': 'apps/1/table/1/reports/1',
+            'method': 'get',
+            'query':''
+        };
+
+        var reportMetaData = '[{"name":"Report With Facets","description":null,"type":"TABLE","ownerId":"10000","tableId":"0fynnxaaaaae","id":1,"showDescriptionOnReport":false,"hideReport":false,"showSearchBox":true,"fids":[],"sortList":[],"facetFids":[6,7,8,9],"facetBehavior":"default","query":null,"allowEdit":true,"allowView":true,"displayNewlyChangedRecords":false,"reportFormat":"","calculatedColumns":null,"rolesWithGrantedAccess":[],"summary":"hide"}]';
+        var fetchReportComponentsStub;
+        var reportsData = JSON.parse(reportMetaData);
+
+        beforeEach(function() {
+            reportsApi.setRequestHelper(requestHelper);
+            fetchReportComponentsStub = sinon.stub(reportsApi, "fetchReportComponents");
+        });
+
+        afterEach(function() {
+            fetchReportComponentsStub.restore();
+        });
+
+        it('Test success ', function(done) {
+            var requestStub = sinon.stub();
+            requestHelper.setRequestObject(requestStub);
+            requestStub.yields(null, {statusCode: 200, body: reportMetaData});
+            requestHelper.setRequestObject(requestStub);
+
+            fetchReportComponentsStub.returns(Promise.resolve(''));
+            var promise = reportsApi.fetchReportMetaDataAndContent(req);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, {
+                        reportData: {
+                            data: ''
+                        },
+                        reportMetaData: {
+                            data: reportsData[0]
+                        },
+                    });
+                    done();
+                },
+                function(error) {
+                    done(new Error('Failure promise unexpectedly returned testing fetchReportMetaDataAndContent success'));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportMetaDataAndContent success: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('Test failure when fetching report components', function(done) {
+            var requestStub = sinon.stub();
+            requestStub.yields(null, {statusCode: 200, body: reportMetaData});
+            requestHelper.setRequestObject(requestStub);
+
+            fetchReportComponentsStub.returns(Promise.reject(new Error("error")));
+
+            var promise = reportsApi.fetchReportMetaDataAndContent(req);
+            promise.then(
+                function(response) {
+                    done(new Error('Success promise unexpectedly returned testing fetchReportMetaDataAndContent failure'));
+                },
+                function(error) {
+                    done();
+                    assert.deepEqual(error, new Error("error"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportMetaDataAndContent failure: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    /**
      * Unit test fetchReportResults api
      */
     describe('validate fetchReportResults api', function() {
