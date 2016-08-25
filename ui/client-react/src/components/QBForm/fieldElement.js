@@ -1,11 +1,11 @@
 import React from 'react';
 
 import FieldLabelElement from './fieldLabelElement';
-import {CellValueRenderer} from '../dataTable/agGrid/cellValueRenderer';
+import FieldValueRenderer from '../fields/fieldValueRenderer';
 import FieldFormats from '../../utils/fieldFormats';
 import './qbform.scss';
 
-/**
+/**s
  * render a field value, optionally with its label
  */
 const FieldElement = React.createClass({
@@ -31,7 +31,7 @@ const FieldElement = React.createClass({
 
                 <span className="cellWrapper">
                     { (fieldDisplayValue !== null || fieldRawValue !== null) &&
-                    <CellValueRenderer type={fieldType}
+                    <FieldValueRenderer type={fieldType}
                                        value={fieldRawValue}
                                        display={fieldDisplayValue}
                                        attributes={fieldDatatypeAttributes}

@@ -36,8 +36,8 @@ describe('AGGrid cell editor functions', () => {
     it('test TextCellRenderer', () => {
         const params = {
             value: {
-                value: "Testing",
-                display: "Testing"
+                value: "TestingTextCell",
+                display: "TestingTextCell"
             },
             column: {
                 colDef: {
@@ -47,10 +47,11 @@ describe('AGGrid cell editor functions', () => {
 
         component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        console.log('component.innerHTML:' + ReactDOM.findDOMNode(component).innerHTML);
 
-        const value = TestUtils.findRenderedDOMComponentWithClass(component, "textCell");
-        expect(value.innerHTML).toEqual(params.value.display);
+        const value = TestUtils.findRenderedDOMComponentWithClass(component, "cellData");
+        expect(value.innerText).toEqual(params.value.display);
+        expect(value.querySelectorAll('.textField').length).toEqual(1);
+
 
         const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
         expect(edit.type).toEqual("text");
@@ -58,7 +59,7 @@ describe('AGGrid cell editor functions', () => {
 
         edit.value = "newValue";
         TestUtils.Simulate.change(edit);
-        expect(value.innerHTML).toEqual("newValue");
+        expect(value.innerText).toEqual("newValue");
     });
 
 
