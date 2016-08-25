@@ -121,11 +121,11 @@
             },
 
             isDisplayFormat: function(req) {
-                return req.param(constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.DISPLAY;
+                return req.params[constants.REQUEST_PARAMETER.FORMAT] === constants.FORMAT.DISPLAY;
             },
 
             isRawFormat: function(req) {
-                return req.param(constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.RAW;
+                return req.params[constants.REQUEST_PARAMETER.FORMAT] === constants.FORMAT.RAW;
             },
 
             /**

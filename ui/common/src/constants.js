@@ -77,8 +77,8 @@
             DEFAULT_NUM_ROWS: 20
         },
         SORT_ORDER: {
-            ASC: "asc",
-            DESC: "desc"
+            ASC: 'asc',
+            DESC: 'desc'
         }
     });
 

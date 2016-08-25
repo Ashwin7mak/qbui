@@ -15,16 +15,88 @@
     let collectionUtils = require('../../utility/collectionUtils');
     let queryUtils = require('../../utility/queryUtils');
 
+
     module.exports = function(config) {
-        let requestHelper = require('./requestHelper')(config);
+
         let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
         let recordsApi = require('./recordsApi')(config);
+        let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
 
         //Module constants:
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
         let FACETS = 'facets';
+
+        /**
+         * Function to add query parameters to the request from the report meta data
+         *
+         * @param req
+         * @param reportMetaData
+         * @param allowOverride
+         */
+        function addReportMetaQueryParameters(req, reportMetaData, allowOverride) {
+
+            if (!req) {
+                return;
+            }
+
+            //  look for any existing parameters on the url
+            req.params = req.params || {};
+
+            //  add display formatting
+            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
+
+            if (reportMetaData) {
+                //  Sort list is returned as an object.  Need to convert into a string
+                if (Array.isArray(reportMetaData.sortList)) {
+                    //  convert the object in a list of strings of format <+/-|fid|:groupType>
+                    let sortListArray = [];
+                    reportMetaData.sortList.forEach(function(sortObj) {
+                        if (sortObj.fieldId) {
+                            let result = '';
+                            result += (sortObj.sortOrder === constants.SORT_ORDER.DESC ? '-' : '') + sortObj.fieldId;
+                            if (sortObj.groupType) {
+                                result += constants.REQUEST_PARAMETER.GROUP_DELIMITER + sortObj.groupType;
+                            }
+                            sortListArray.push(result);
+                        }
+                    });
+
+                    //  any entries to convert
+                    if (sortListArray.length > 0) {
+                        let sortList = collectionUtils.convertListToDelimitedString(sortListArray, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                        if (sortList) {
+                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
+                        }
+                    }
+                }
+
+                //  add any columnList requirements
+                let columnList = collectionUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                if (columnList) {
+                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
+                }
+
+                //  add any query expression requirements
+                let query = reportMetaData.query ? reportMetaData.query : '';
+                if (query) {
+                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
+                }
+            }
+
+            //  set page offset and number of rows to return to defaults if invalid or none supplied
+            //  NOTE: both have to be valid to not use the defaults
+            //let reqOffset = req.params[constants.REQUEST_PARAMETER.OFFSET];
+            //let reqNumRows = req.params[constants.REQUEST_PARAMETER.NUM_ROWS];
+            //if (typeof reqOffset !== 'number' || (reqOffset % 1) !== 0 ||
+            //    typeof reqNumRows !== 'number' || (reqNumRows % 1) !== 0) {
+            if (!requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET) ||
+                !requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS)) {
+                requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, constants.PAGE.DEFAULT_OFFSET);
+                requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, constants.PAGE.DEFAULT_NUM_ROWS);
+            }
+        }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
@@ -85,10 +157,10 @@
                             // parse out the id and use to fetch the report meta data.
                             // Process the meta data to fetch and return the report content.
                             if (response.body) {
-                                let reportsData = JSON.parse(response.body);
-                                let reportMetaData = reportsData[0];
+                                let reportMetaData = JSON.parse(response.body);
+                                //let reportMetaData = reportsData[0];
 
-                                //TODO: need to add the default max number of rows and offset here if none are supplied
+                                addReportMetaQueryParameters(req, reportMetaData, true);
 
                                 this.fetchReportComponents(req, reportId).then(
                                     (reportData) => {
@@ -317,33 +389,7 @@
                                         //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
                                         let reportMetaData = JSON.parse(metaDataResult.body);
 
-                                        //  look for any existing parameters on the url
-                                        req.params = req.params || {};
-
-                                        //  add display formatting
-                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
-
-                                        //  add any sortList requirements
-                                        let sortList = collectionUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        if (sortList) {
-                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
-                                        }
-
-                                        //  add any columnList requirements
-                                        let columnList = collectionUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        if (columnList) {
-                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
-                                        }
-
-                                        //  add any query expression requirements
-                                        let query = reportMetaData.query ? reportMetaData.query : '';
-                                        if (query) {
-                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
-                                        }
-
-                                        //  Initial page size to defaults
-                                        // req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
-                                        // req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = 5;
+                                        addReportMetaQueryParameters(req, reportMetaData, false);
 
                                         this.fetchReportComponents(req, homepageReportId).then(
                                             (reportData) => {

@@ -208,6 +208,7 @@
              * @param parameterValue
              */
             addQueryParameter: function(req, parameterName, parameterValue) {
+
                 if (parameterName) {
                     //  are there any existing parameters
                     let search = url.parse(req.url).search;
@@ -220,14 +221,38 @@
                         } else {
                             req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
                         }
+                        //  update the search variable
+                        search = url.parse(req.url).search;
                     }
-                    req.url += search ? '&' : '?';
+
+                    //  any existing request parameters...if so remove
+                    //  if 'parameterName' is found in list.
+                    if (search) {
+                        req.url += '&';
+                    } else {
+                        req.url += '?';
+                    }
+
                     //  append the query parameter to the url
                     req.url += parameterName + '=' + parameterValue;
-                    //  add the parameter to the params array.
+
+                    //  add/replace the parameter to the params array.
                     req.params[parameterName] = parameterValue;
 
                 }
+            },
+
+            hasQueryParameter: function(req, parameterName) {
+                if (!req || !parameterName) {
+                    return false;
+                }
+
+                let search = url.parse(req.url).search;
+                if (!search) {
+                    return false;
+                }
+
+                return search.indexOf(parameterName) !== -1;
             }
 
         };
