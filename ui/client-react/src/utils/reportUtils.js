@@ -62,16 +62,13 @@ class ReportUtils {
      * @returns boolean
      */
     static hasGroupingFids(sortList) {
-        if (sortList) {
-            if (typeof sortList === 'string') {
-                let elements = sortList.split(listDelimiter);
-                for (let idx = 0; idx < elements.length; idx++) {
-                    let el = elements[idx].split(groupDelimiter, 2);
-                    if (el.length === 2) {
-                        return true;
-                    }
-                }
+        if (sortList && typeof sortList === "string") {
+            let el = sortList.split(groupDelimiter, 2);
+            if (el.length === 2) {
+                return true;
             }
+        } else if (sortList && sortList.groupType) {
+            return true;
         }
         return false;
     }
@@ -97,10 +94,12 @@ class ReportUtils {
         let sortFids = [];
         if (sortListParts) {
             sortListParts.forEach((sort) => {
-                if (sort) {
+                if (typeof sort === "string") {
                     //  each element is formatted as fid:groupType
                     var sortEl = sort.split(groupDelimiter);
                     sortFids.push(sortEl[0]);
+                } else {
+                    sortFids.push(sort.fieldId);
                 }
             });
         }
@@ -116,8 +115,14 @@ class ReportUtils {
         let sortFids = [];
         if (sortListParts) {
             sortListParts.forEach((sort) => {
-                // sort is of type object {fieldId, sortOrder, groupType}
-                if (sort && sort.groupType === null) {
+                if (typeof sort === "string") {
+                    //  format is fid:groupType..split by delimiter(':') to allow us
+                    // to pass in the fid for server side sorting.
+                    var sortEl = sort.split(groupDelimiter);
+                    if (sortEl.length === 1) {
+                        sortFids.push(sortEl[0]);
+                    }
+                } else if (sort && sort.groupType === null) {
                     sortFids.push(sort.sortOrder === constants.SORT_ORDER.DESC ? -sort.fieldId : sort.fieldId);
                 }
             });
@@ -126,7 +131,7 @@ class ReportUtils {
     }
     /**
      * Given a sortList string or array pull out group fids
-     * @param sortList -- sortList could be a string like 6.7:V.-10 or an array ["6", "7:V", "-10"]
+     * @param sortList -- sortList could be a string like 6.7:V.-10 or an array ["6", "7:V", "-10"] or an array of sort objects like [{fieldId: 7, sortOrder: "asc", groupType:"V"}]
      * @returns array of group elements ( ignores all sort fids)
      */
     static getGroupElements(sortList) {
@@ -134,9 +139,15 @@ class ReportUtils {
         let groupFids = [];
         if (sortListParts) {
             sortListParts.forEach((sort) => {
-                // sort is of type object {fieldId, sortOrder, groupType}
-                if (sort && sort.groupType) {
-                    sortFids.push(sort.fieldId);
+                if (typeof sort === "string") {
+                    //  format is fid:groupType..split by delimiter(':') to allow us
+                    // to pass in the fid for server side sorting.
+                    var sortEl = sort.split(groupDelimiter);
+                    if (sortEl.length > 1) {
+                        groupFids.push(sort);
+                    }
+                } else if (sort && sort.groupType) { // sort is of type object
+                    groupFids.push(sort.fieldId);
                 }
             });
         }
