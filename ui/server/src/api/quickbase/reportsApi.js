@@ -65,69 +65,32 @@
              * @param req
              */
             fetchReportMetaDataAndContent: function(req) {
-                // Define response object
-                var reportObj = {
-                    reportMetaData: {
-                        data: ''
-                    },
-                    reportData: {
-                        data: ''
-                    }
-                };
                 return new Promise((resolve2, reject2) => {
-                    // We need to make two calls to core to complete this request. First call is
-                    // to fetch the report metadata, and once the metadata is obtained, fetch report
-                    // data and facets.
-                    let opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    // Make two calls to core to complete this request. First is to fetch
+                    // the report metadata; second is to fetch report data and facets.
+                    let reportId = req.params.reportId;
 
-                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url);
-
-                    requestHelper.executeRequest(req, opts).then(
-                        // TODO code hygiene, code below is shared by fetchTableHomepageReport. move to a private function and
-                        // share between the two api calls. https://quickbase.atlassian.net/browse/MB-505
+                    this.fetchReportMetaData(req, reportId).then(
                         (response) => {
+                            // Define response object
+                            var reportObj = {
+                                reportMetaData: {
+                                    data: ''
+                                },
+                                reportData: {
+                                    data: ''
+                                }
+                            };
+
                             // parse out the id and use to fetch the report meta data.
                             // Process the meta data to fetch and return the report content.
                             if (response.body) {
                                 let reportsData = JSON.parse(response.body);
                                 let reportMetaData = reportsData[0];
 
-                                req.params = req.params || {};
+                                //TODO: need to add the default max number of rows and offset here if none are supplied
 
-                                if (req.query.format !== undefined && req.query.format === constants.FORMAT.DISPLAY) {
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
-                                }
-
-                                if (req.query.offset !== undefined && parseInt(req.query.offset) >= 0 && req.query.numRows !== undefined && parseInt(req.query.numRows)) {
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, req.query.offset);
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, req.query.numRows);
-                                }
-
-                                if (req.query.sortList !== undefined) {
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, req.query.sortList);
-                                } else {
-                                    /*eslint no-lonely-if:0*/
-                                    if (reportMetaData && reportMetaData.sortList && reportMetaData.sortList.length) {
-                                        let sortList = "";
-                                        for (var i = 0; i < reportMetaData.sortList.length; i++) {
-                                            sortList += reportMetaData.sortList[i].sortOrder === constants.SORT_ORDER.DESC ? "-" +  reportMetaData.sortList[i].fieldId : "";
-                                        }
-                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
-                                    }
-                                }
-
-                                if (reportMetaData && reportMetaData.fids && reportMetaData.fids.length) {
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, reportMetaData.fids.join(constants.REQUEST_PARAMETER.LIST_DELIMITER));
-                                }
-
-                                let filterQueries = [];
-                                if (reportMetaData && reportMetaData.query) {
-                                    filterQueries.push(reportMetaData.query);
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, queryUtils.concatQueries(filterQueries));
-                                }
-
-                                this.fetchReportComponents(req, req.params.reportId).then(
+                                this.fetchReportComponents(req, reportId).then(
                                     (reportData) => {
                                         //  return the metadata and report content
                                         reportObj.reportMetaData.data = reportMetaData;
@@ -378,7 +341,7 @@
                                             requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
                                         }
 
-                                        //  TODO: initial page size.
+                                        //  Initial page size to defaults
                                         // req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
                                         // req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = 5;
 
