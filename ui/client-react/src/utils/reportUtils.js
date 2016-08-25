@@ -3,6 +3,7 @@
  */
 const listDelimiter = ".";
 const groupDelimiter = ":";
+import constants from '../../../common/src/constants';
 
 class ReportUtils {
 
@@ -117,7 +118,7 @@ class ReportUtils {
             sortListParts.forEach((sort) => {
                 // sort is of type object {fieldId, sortOrder, groupType}
                 if (sort && sort.groupType === null) {
-                    sort.sortOrder === "desc" ? sortFids.push(-sort.fieldId) : sortFids.push(sort.fieldId);
+                    sortFids.push(sort.sortOrder === constants.SORT_ORDER.DESC ? -sort.fieldId : sort.fieldId);
                 }
             });
         }
