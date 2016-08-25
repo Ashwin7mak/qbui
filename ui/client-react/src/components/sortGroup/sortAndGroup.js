@@ -14,7 +14,7 @@ import * as GroupTypes from '../../constants/groupTypes';
 import MockData from '../../mocks/sortGroup';
 import * as query from '../../constants/query';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
-
+import constants from '../../../../common/src/constants';
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';
 
@@ -351,20 +351,15 @@ const SortAndGroup = React.createClass({
         if (ReportUtils.hasGroupingFids(originalVal)) {
             let groupItem = {unparsedVal : originalVal};
 
-            //strip off fid part
-            let groupInfo = originalVal.split(ReportUtils.groupDelimiter);
-
-            var justFid = groupInfo[0];
-            let fid = Number(justFid);
-            groupItem.id = Math.abs(fid);
+            groupItem.id = groupItem.unparsedVal.fieldId;
             groupItem.type = KIND.GROUP;
 
             // ascending or descending
-            groupItem.descendOrder = fid < 0;
+            groupItem.descendOrder = groupItem.unparsedVal.sortOrder === constants.SORT_ORDER.DESC;
 
             groupItem.howToGroup = GroupTypes.COMMON.equals; //for default group by equal values
-            if (groupInfo.length > 1) {
-                groupItem.howToGroup = groupInfo[1];
+            if (groupItem.unparsedVal.groupType) {
+                groupItem.howToGroup = groupItem.unparsedVal.groupType;
             }
 
             //get field name from fields list

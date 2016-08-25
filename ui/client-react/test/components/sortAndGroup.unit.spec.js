@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import SortAndGroup  from '../../src/components/sortGroup/sortAndGroup';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import MockData from '../../src/mocks/sortGroup';
+import constants from '../../../common/src/constants';
 
 import TestUtils from 'react-addons-test-utils';
 
@@ -115,7 +116,9 @@ describe('SortAndGroup functions', () => {
     let reportData = {
         data: {
             originalMetaData: {
-                sortList: ['5', '4', '3:V']
+                sortList: [{fieldId: 5, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
+                    {fieldId: 4, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
+                    {fieldId: 3, sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}]
             },
         }
     };
@@ -123,10 +126,12 @@ describe('SortAndGroup functions', () => {
     let reportDataWithEdits = {
         data: {
             originalMetaData: {
-                sortList: ['5', '4', '3:V']
+                sortList: [{fieldId: 5, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
+                    {fieldId: 4, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
+                    {fieldId: 3, sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}]
             },
-            sortList: ['-3'],
-            groupEls: ['6:V', '-4:V']
+            sortList: [{fieldId: 5, sortOrder: constants.SORT_ORDER.DESC, groupType: null}],
+            groupEls: [{fieldId: 6, sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}, {fieldId: 4, sortOrder: constants.SORT_ORDER.DESC, groupType: "V"}]
         }
     };
 
