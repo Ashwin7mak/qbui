@@ -8,7 +8,12 @@ import _ from 'lodash';
 /**
  * # FieldValueEditor
  *
- * This wraps the various field editor components.
+ *
+ * This wraps the various field editor components. It contains a editor for a field defined by type and fieldDef and the value supplied. It passed on whether the value is isInvalid.
+ *
+ * This wrapper handles the external common field editor rendering. It calls supplied callback validateFieldValue to check if the field is valid onBlur
+ *
+ * If the fieldDef has required:true and the indicateRequired prop is true the wrap will show that field is required
  *
  */
 
