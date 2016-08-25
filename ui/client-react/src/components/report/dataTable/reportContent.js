@@ -758,10 +758,10 @@ export let ReportContent = React.createClass({
                                             onScroll={this.onScrollRecords}
                                             onRowClicked={this.openRow}
                                             selectedRows={this.props.selectedRows}
-                                            pageStart={this.props.reportFooter.props.pageStart}
-                                            pageEnd={this.props.reportFooter.props.pageEnd}
-                                            getNextReportPage={this.props.reportFooter.props.getNextReportPage}
-                                            getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}/>
+                                            pageStart={this.props.cardViewPagination .props.pageStart}
+                                            pageEnd={this.props.cardViewPagination .props.pageEnd}
+                                            getNextReportPage={this.props.cardViewPagination .props.getNextReportPage}
+                                            getPreviousReportPage={this.props.cardViewPagination .props.getPreviousReportPage}/>
                         }
                     </div>
                 }

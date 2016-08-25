@@ -4,6 +4,7 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import CardViewList from './cardViewList';
 import './cardViewList.scss';
+import CardViewFooterNav from './cardViewFooterNav'
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 /**
@@ -180,10 +181,10 @@ let CardViewListHolder = React.createClass({
                               isRowSelected={this.isRowSelected}
                               onSwipe={this.onSwipe}/>
 
-                {showNextButton ? (<button className="top-card-row field" style = { {width:'400px' } } onClick={this.props.getNextReportPage}> Next page</button>)
-                : <div className="spacer"></div>
-                }
-
+                {showNextButton ?
+                    (<CardViewFooterNav getNextReportPage={this.props.getNextReportPage}
+                    />) :
+                    <div className="spacer"></div>
             </div>);
     },
 
