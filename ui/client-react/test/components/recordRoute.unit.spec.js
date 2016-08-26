@@ -17,19 +17,25 @@ describe('RecordRoute functions', () => {
         setTopTitle() {return;},
         selectTableId() {return;},
         loadFormAndRecord() {return;},
-        openingReportRow() {return;}
+        openingReportRow() {return;},
+        showPreviousRecord() {return;},
+        showNextRecord() {return;}
     };
 
     beforeEach(() => {
         spyOn(flux.actions, 'selectTableId');
         spyOn(flux.actions, 'loadFormAndRecord');
         spyOn(flux.actions, 'openingReportRow');
+        spyOn(flux.actions, 'showPreviousRecord');
+        spyOn(flux.actions, 'showNextRecord');
     });
 
     afterEach(() => {
         flux.actions.selectTableId.calls.reset();
         flux.actions.loadFormAndRecord.calls.reset();
         flux.actions.openingReportRow.calls.reset();
+        flux.actions.showPreviousRecord.calls.reset();
+        flux.actions.showNextRecord.calls.reset();
     });
 
     it('test render of component with missing url params', () => {
@@ -131,14 +137,12 @@ describe('RecordRoute functions', () => {
 
         // previous record
         TestUtils.Simulate.click(prevRecord[0]);
-        expect(flux.actions.openingReportRow).toHaveBeenCalledWith(3, 1);
-        flux.actions.openingReportRow.calls.reset();
+        expect(flux.actions.showPreviousRecord).toHaveBeenCalled();
         expectedRouter.push('/app/1/table/2/report/3/record/1');
 
         // next record
         TestUtils.Simulate.click(nextRecord[0]);
-        expect(flux.actions.openingReportRow).toHaveBeenCalledWith(3, 3);
-        flux.actions.openingReportRow.calls.reset();
+        expect(flux.actions.showNextRecord).toHaveBeenCalled();
         expectedRouter.push('/app/1/table/2/report/3/record/3');
 
         // return to report

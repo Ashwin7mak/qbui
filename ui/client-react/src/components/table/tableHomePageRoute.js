@@ -65,9 +65,9 @@ let TableHomePageRoute = React.createClass({
         return (
             <div className="tableHomepageStageHeadline">
 
-                <div className="navLinks">
+                <div className="navLinks stageHeadline">
                     {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
-                    {this.props.selectedTable && this.props.selectedTable.name}&nbsp;<I18nMessage message={'nav.home'}/>
+                    <h3>{this.props.selectedTable && this.props.selectedTable.name}&nbsp;<I18nMessage message={'nav.home'}/></h3>
                 </div>
             </div>);
     },

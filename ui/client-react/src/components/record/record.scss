@@ -30,10 +30,19 @@
             flex: 0 0 auto;
         }
     }
+    .qbFormContainer {
+        flex:1 1 auto;
+        position:relative;
+        overflow:hidden;
+
+    }
     .formContainer {
         overflow: auto;
+        position:absolute;
+        width:100%;
     }
 }
+
 
 @include small-breakpoint {
     .secondaryBar .iconActions.pageActions .iconActionButton.addRecord {
@@ -41,3 +50,40 @@
     }
 }
 
+.next-enter {
+    left:100%;
+}
+
+.next-enter.next-enter-active {
+    left: 0;
+    transition: all 200ms linear;
+}
+
+.next-leave {
+    left: 0;
+    opacity:1;
+}
+
+.next-leave.next-leave-active {
+    left: -100%;
+    opacity:.1;
+    transition: all 200ms linear;
+}
+
+.previous-enter {
+    left:-100%;
+}
+
+.previous-enter.previous-enter-active {
+    left: 0;
+    transition: all 200ms linear;
+}
+
+.previous-leave {
+    left: 0;
+}
+
+.previous-leave.previous-leave-active {
+    left: 100%;
+    transition: all 200ms linear;
+}

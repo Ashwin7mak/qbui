@@ -30,7 +30,7 @@ export let ReportContent = React.createClass({
 
         // let flux know we've drilled-down into a record so we can navigate back and forth
         let flux = this.getFlux();
-        flux.actions.openingReportRow(rptId, recId);
+        flux.actions.openingReportRow(recId);
 
         //create the link we want to send the user to and then send them on their way
         const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
