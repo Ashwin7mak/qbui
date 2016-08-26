@@ -154,7 +154,7 @@ describe('Validate ReportsApi unit tests', function() {
                             data: ''
                         },
                         reportMetaData: {
-                            data: reportsData[0]
+                            data: reportsData
                         },
                     });
                     done();
