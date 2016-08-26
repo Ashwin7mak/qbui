@@ -245,7 +245,7 @@ describe("Validate recordsApi", function() {
         });
 
         it('success return records array with raw parameter type', function(done) {
-            req.url = '/reports/2/records/2/fields';
+            req.url = '/reports/2/records/2/fields?format=raw';
             var expectedID = '12345.22';
             executeReqStub.returns(Promise.resolve({'body': expectedID}));
             var promise = recordsApi.fetchSingleRecordAndFields(req);
@@ -261,11 +261,7 @@ describe("Validate recordsApi", function() {
         });
 
         it('success return records array with display parameter type', function(done) {
-            req.url = '/reports/2/records/2/fields';
-            req.param = function(key) {
-                return 'display';
-            };
-            var expectedID = "7777";
+            req.url = '/reports/2/records/2/fields?format=display';
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[{ "id":2, "value": 1234525}, { "id":2, "value": 1234525}]'}));
             executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
             var promise = recordsApi.fetchSingleRecordAndFields(req);
@@ -294,14 +290,9 @@ describe("Validate recordsApi", function() {
         });
 
         it('success return records array with display parameter type and no grouping', function(done) {
-            req.url = '/reports/2/records/2/fields';
-            req.param = function(key) {
-                if (key === constants.REQUEST_PARAMETER.SORT_LIST) {
-                    return '1:V';  // field id is not defined, so there is no grouping
-                }
-                return 'display';
-            };
-            var expectedID = "7777";
+            req.url = '/reports/2/records/2/fields?format=display';
+            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:V';
+
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
             executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
             var promise = recordsApi.fetchRecordsAndFields(req);
@@ -318,11 +309,7 @@ describe("Validate recordsApi", function() {
         });
 
         it('success return records array with raw parameter type', function(done) {
-            req.url = '/reports/2/records/2/fields';
-            req.param = function(key) {
-                return 'raw';
-            };
-            var expectedID = "7777";
+            req.url = '/reports/2/records/2/fields?format=raw';
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
             executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
             var promise = recordsApi.fetchRecordsAndFields(req);
@@ -342,14 +329,8 @@ describe("Validate recordsApi", function() {
         });
 
         it('success return records array with display parameter type with grouping', function(done) {
-            req.url = '/reports/2/records/2/fields';
-            req.param = function(key) {
-                if (key === constants.REQUEST_PARAMETER.SORT_LIST) {
-                    return '2:V';
-                }
-                return 'display';
-            };
-            var expectedID = "7777";
+            req.url = '/reports/2/records/2/fields?format=display';
+            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=2:V';
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
             executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
             var promise = recordsApi.fetchRecordsAndFields(req);

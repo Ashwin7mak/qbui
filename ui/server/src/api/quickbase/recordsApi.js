@@ -315,9 +315,10 @@
                 }
 
                 //  any request parameters to append?
-                if (search) {
-                    opts.url += search;
-                }
+                //TODO - do we really need this? its adding the params twice.
+                //if (search) {
+                //    opts.url += search;
+                //}
 
                 // TEMPORARY to get grouping to work with core changes...this removes the grouping
                 // tags from the opts.url rest request so that core doesn't group.  Grouping is still done
