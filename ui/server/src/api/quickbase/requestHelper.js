@@ -221,13 +221,7 @@
                             return;
                         } else {
                             // have a different value to use; remove the one on the request
-                            let startingIndex = req.url.indexOf(parameterName);
-                            let endingIndex = req.url.indexOf('&', startingIndex);
-                            if (endingIndex === -1) {
-                                req.url = req.url.substr(0, startingIndex);
-                            } else {
-                                req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
-                            }
+                            this.removeRequestParameter(req, parameterName);
                         }
                     }
 
@@ -258,6 +252,18 @@
                 }
                 let query = url.parse(req.url, true).query;
                 return (query && query.hasOwnProperty(parameterName)) ? query[parameterName] : null;
+            },
+
+            removeRequestParameter: function(req, parameterName) {
+                if (this.hasQueryParameter(req, parameterName)) {
+                    let startingIndex = req.url.indexOf(parameterName);
+                    let endingIndex = req.url.indexOf('&', startingIndex);
+                    if (endingIndex === -1) {
+                        req.url = req.url.substr(0, startingIndex);
+                    } else {
+                        req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
+                    }
+                }
             }
 
         };
