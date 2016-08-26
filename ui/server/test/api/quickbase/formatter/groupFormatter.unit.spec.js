@@ -33,7 +33,7 @@ describe('Validate GroupFormatter unit tests', function() {
         var setup = {
             fields: [],
             records: [],
-            req: ''
+            req: {}
         };
 
         var field;
@@ -69,11 +69,7 @@ describe('Validate GroupFormatter unit tests', function() {
             setup.records.push(record);
         }
 
-        setup.req = {
-            param: function(param) {
-                return gList;
-            }
-        };
+        setup.req.url = "?sortList=" + gList;
 
         return setup;
     }

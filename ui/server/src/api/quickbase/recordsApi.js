@@ -264,7 +264,7 @@
                 if (rowLimitsValid) {
                     //  we have row limit parameters..now ensure they are integers
                     let reqOffset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
-                    let reqNumRows = requestHelper.getQueryParameterValue(req,constants.REQUEST_PARAMETER.NUM_ROWS);
+                    let reqNumRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
                     rowLimitsValid = isInteger(reqOffset) && isInteger(reqNumRows);
 
                     //  if the max number of records to query exceeds limit, throw exception
