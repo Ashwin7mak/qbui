@@ -114,7 +114,6 @@ export let RecordRoute = React.createClass({
         if (this.props.params) {
             const {rptId, recordId} = this.props.params;
 
-            console.log(this.props.form.formData);
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
             const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
 
