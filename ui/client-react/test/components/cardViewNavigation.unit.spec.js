@@ -20,7 +20,7 @@ const fakeReportNavigationData = {
     }
 };
 
-fdescribe('CardViewNavigation tests', () => {
+describe('CardViewNavigation tests', () => {
     'use strict';
 
     var component;
