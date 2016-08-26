@@ -140,6 +140,7 @@ $left-nav-bg: $color30; // deep-sea
 $icon-color: $color23;
 $icon-color-hover: #0098cd; // caribbean
 $topnav-icon-color: $icon-color;
+$page-actions-icon-color: $color-cyan-700;
 
 $header-bg: $color7;
 $nav-hover-bg: #0097CD;
@@ -166,7 +167,8 @@ $selected-check-color:  $color16;
 
 //== Stage
 $stage-backgroundColor:           $color2;
-$stage-headline-icon-color: #009aad;
+$stage-headline-icon-color: $color-cyan-500;
+$stage-headline-color: $color-black-700;
 
 //== Report
 $report-backgroundColor:          $color13;

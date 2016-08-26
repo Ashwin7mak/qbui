@@ -419,6 +419,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.currentRecordId = null;
         this.nextRecordId = null;
         this.previousRecordId = null;
+        this.nextOrPrevious = "";
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -793,17 +794,19 @@ let ReportDataStore = Fluxxor.createStore({
      * the displayed record has changed, update the previous/next record IDs
      * @param recId
      */
-    updateRecordNavContext(recId) {
+    updateRecordNavContext(recId, nextOrPrevious = "") {
 
         const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
 
-        const index = filteredRecords.findIndex(rec => {return rec[keyField.name] && rec[keyField.name].value === recId;});
+        const index = filteredRecords.findIndex(rec => rec[keyField.name] && rec[keyField.name].value === recId);
 
         // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
         this.currentRecordId = recId;
 
         this.nextRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
         this.previousRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
+
+        this.nextOrPrevious = nextOrPrevious;
 
         this.emit("change");
     },
@@ -819,14 +822,14 @@ let ReportDataStore = Fluxxor.createStore({
     /**
      * update prev/next props after displaying previous record
      */
-    onShowPreviousRecord() {
-        this.updateCurrentRecordIndex(this.previousRecordId);
+    onShowPreviousRecord(payload) {
+        this.updateRecordNavContext(payload.recId, "previous");
     },
     /**
      * update prev/next props after displaying next record
      */
-    onShowNextRecord() {
-        this.updateCurrentRecordIndex(this.nextRecordId);
+    onShowNextRecord(payload) {
+        this.updateRecordNavContext(payload.recId, "next");
     },
     /**
      * gets the state of a reportData
@@ -853,6 +856,7 @@ let ReportDataStore = Fluxxor.createStore({
             currentRecordId: this.currentRecordId,
             nextRecordId: this.nextRecordId,
             previousRecordId: this.previousRecordId,
+            nextOrPrevious: this.nextOrPrevious
         };
     }
 });

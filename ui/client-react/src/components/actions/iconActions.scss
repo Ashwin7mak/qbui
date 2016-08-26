@@ -11,9 +11,9 @@ $page-actions-background-color: #486c8f;
     .iconActions {
 
         .iconActionButton {
-            border:0;
-            margin-right:2px;
-            border-radius:0;
+            border: 0;
+            margin-right: 2px;
+            border-radius: 0;
             display: inline-block;
             vertical-align: middle;
             text-align: center;
@@ -21,16 +21,22 @@ $page-actions-background-color: #486c8f;
             height: 40px;
             font-size: 20px;
             color: $topnav-icon-color;
-            padding:0;
+            padding: 0;
             &.dropdownToggle {
                 width: 20px;
             }
-        }
 
-        .iconActionButton:not([disabled]):hover {
-            background: $nav-hover-bg;
-            color: $nav-hover-fg;
-            cursor: pointer;
+            .iconActionButton:not([disabled]):hover {
+                background: $nav-hover-bg;
+                color: $nav-hover-fg;
+                cursor: pointer;
+            }
+        }
+        &.pageActions .addRecord {
+            border-radius:20px;
+            -webkit-border-radius:20px;
+            background-color: $color-green-600;
+            color: $color2;
         }
     }
 }
@@ -64,6 +70,8 @@ $page-actions-background-color: #486c8f;
                 color: $icon-action-icon-color;
                 background-color: inherit;
             }
+
+
             &.pageActions .iconActionButton {
                 background-color: $page-actions-background-color;
             }

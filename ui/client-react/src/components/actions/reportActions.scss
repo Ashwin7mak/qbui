@@ -117,16 +117,14 @@
     }
 }
 
-/* The table should not move when report Actions are shown/hidden. Because the height of actions is smaller than search bar - set a min height on bar
- TODO: what happens when no table actions bar is present. */
-$tableActionsContainerMinHeight: 61px;
-
+$tableActionsContainerMinHeight: 52px;
+$reportActionsMinHeight: 61px;
 @include not-small-breakpoint {
     .tableActionsContainer {
         min-height: $tableActionsContainerMinHeight;
     }
     .reportActions {
-        line-height: $tableActionsContainerMinHeight;
+        line-height: $reportActionsMinHeight;
         align-items:center;
     }
 

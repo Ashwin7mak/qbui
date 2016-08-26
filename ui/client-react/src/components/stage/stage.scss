@@ -6,16 +6,51 @@ $breadCrumbsSeparatorColor: #c7c7c7;
     display:flex;
     flex-direction:row;
     justify-content: space-between;
-    height:70px;
-    align-items:center;
+    min-height:100px;
+
+
+    .navLinks {
+        display:flex;
+        align-items:center;
+        margin-bottom:10px;
+        .qbIcon {
+            font-size:22px;
+            margin-right:10px;
+        }
+
+    }
     .stageLeft {
         flex:1 1 auto;
-        padding-left:10px;
+        padding-left:15px;
+        padding-top:20px;
         white-space: nowrap;
         overflow:hidden;
+        color: $stage-headline-icon-color;
         .stageHeadline {
             display:flex;
             align-items:center;
+            font-size: 12px;
+            color: $stage-headline-color;
+
+            .iconActions {
+                margin-right:0px;
+                font-size:20px;
+            }
+            .iconActionButton {
+                height: 24px;
+                width: 24px;
+            }
+            .qbIcon {
+                font-size: 22px;
+                color:$stage-headline-color;
+            }
+
+            h3 {
+                height:26px;
+                margin:0;
+                text-overflow:ellipsis;
+                overflow:hidden;
+            }
         }
         .breadCrumbs {
             line-height:40px;
@@ -37,14 +72,20 @@ $breadCrumbsSeparatorColor: #c7c7c7;
                 color: $breadCrumbsSeparatorColor;
             }
         }
-        .qbIcon {
-            font-size: 24px;
-            color:$stage-headline-icon-color
+
+        .iconActionButton:not([disabled]):hover {
+            .qbIcon {
+                color: $nav-hover-fg;
+            }
         }
     }
 
     .stageRight {
+        padding-top:20px;
         flex:0 0 auto;
+        .iconActionButton {
+            color:$page-actions-icon-color
+        }
     }
 }
 .layout-stage {
@@ -61,6 +102,7 @@ $breadCrumbsSeparatorColor: #c7c7c7;
         right: 4px;
         height: 24px;
         border: 1px solid $header-bg;
+        border-top:0;
         border-radius: 0 0 2px 2px;
         background-color: $color2;
         color: $icon-color;
