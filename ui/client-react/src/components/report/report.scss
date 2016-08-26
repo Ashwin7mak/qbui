@@ -41,7 +41,6 @@
     .tableActionsContainer {
         position: relative;
         padding-left: 10px;
-        min-height: 52px;
 
         @include small-breakpoint {
             padding-top: 0px; // no stage so to need add space after
@@ -287,6 +286,7 @@
         display:inline;
         padding-left:3px;
         padding-right:3px;
+        white-space:nowrap;
     }
 
     .nextButton {
