@@ -124,8 +124,8 @@ let CardViewListHolder = React.createClass({
             }
         }
 
-        let showNextButton = !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && !isError;
-        let showPreviousButton = showNextButton && this.props.pageStart !== 1;
+        let showNextButton = !isLoading && !isCountingRecords && !isError && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && (recordCount !== this.props.pageEnd);
+        let showPreviousButton = !isLoading && !isCountingRecords && !isError && (this.props.pageStart !== 1);
 
         let cardViewListClasses = "cardViewList cardViewListHolder";
         if (this.props.selectedRows.length) {
