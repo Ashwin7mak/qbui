@@ -319,6 +319,33 @@
                     opts.url += search;
                 }
 
+                // TEMPORARY to get grouping to work with core changes...NOTE: this will still
+                // not solve grouping if defined in the report meta data...
+                let query = url.parse(opts.url, true).query;
+                if (query && query.hasOwnProperty(constants.REQUEST_PARAMETER.SORT_LIST)) {
+                    let sList = query[constants.REQUEST_PARAMETER.SORT_LIST];
+                    if (sList) {
+                        let sListArr = sList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+
+                        let sortList = [];
+                        sListArr.forEach((sort) => {
+                            var sortEl = sort.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
+                            sortList.push(sortEl[0]);
+                        });
+                        if (sortList.length > 0) {
+                            let startingIndex = opts.url.indexOf(constants.REQUEST_PARAMETER.SORT_LIST);
+                            let endingIndex = opts.url.indexOf('&', startingIndex);
+                            if (endingIndex === -1) {
+                                opts.url = opts.url.substr(0, startingIndex);
+                            } else {
+                                opts.url = opts.url.substr(0, startingIndex) + opts.url.substr(endingIndex + 1);
+                            }
+                            let sortListStr = sortList.join(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                            opts.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=' + sortListStr;
+                        }
+                    }
+                }
+
                 return requestHelper.executeRequest(req, opts);
             },
 
