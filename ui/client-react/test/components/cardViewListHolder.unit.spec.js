@@ -172,14 +172,13 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test next link and previous link are generated', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
-                                                                     selectedRows={[]}
+        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]}
                                                                      reportData={fakeReportData_loading}
-                                                                   recordsCount={fakeReportNavigationData.valid.recordsCount}
-                                                                   pageStart={fakeReportNavigationData.valid.pageStart}
-                                                                   pageEnd={fakeReportNavigationData.valid.pageEnd}
-                                                                   getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
-                                                                   getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
+                                                                     recordsCount={fakeReportNavigationData.valid.recordsCount}
+                                                                     pageStart={fakeReportNavigationData.valid.pageStart}
+                                                                     pageEnd={fakeReportNavigationData.valid.pageEnd}
+                                                                     getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
+                                                                     getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
         var node = ReactDOM.findDOMNode(component);
         var previousButton = node.getElementsByClassName("cardViewFooter");
         expect(previousButton).toBeDefined();
@@ -194,10 +193,10 @@ describe('CardViewListHolder functions', () => {
                                                                      selectedRows={[]}
                                                                      reportData={fakeReportData_loading}
                                                                      recordsCount={fakeReportNavigationData.noPrevAndNext.recordsCount}
-                                                                   pageStart={fakeReportNavigationData.noPrevAndNext.pageStart}
-                                                                   pageEnd={fakeReportNavigationData.noPrevAndNext.pageEnd}
-                                                                   getPreviousReportPage={fakeReportNavigationData.noPrevAndNext.getPreviousReportPage}
-                                                                   getNextReportPage={fakeReportNavigationData.noPrevAndNext.getNextReportPage}/>);
+                                                                     pageStart={fakeReportNavigationData.noPrevAndNext.pageStart}
+                                                                     pageEnd={fakeReportNavigationData.noPrevAndNext.pageEnd}
+                                                                     getPreviousReportPage={fakeReportNavigationData.noPrevAndNext.getPreviousReportPage}
+                                                                     getNextReportPage={fakeReportNavigationData.noPrevAndNext.getNextReportPage}/>);
         var pageButton = TestUtils.findAllInRenderedTree(component, function(inst) {
             return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
         });
