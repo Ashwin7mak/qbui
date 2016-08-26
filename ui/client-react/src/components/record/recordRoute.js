@@ -112,8 +112,9 @@ export let RecordRoute = React.createClass({
 
     getStageHeadline() {
         if (this.props.params) {
-            const {rptId} = this.props.params;
+            const {rptId, recordId} = this.props.params;
 
+            console.log(this.props.form.formData);
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
             const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
 
@@ -139,7 +140,7 @@ export let RecordRoute = React.createClass({
                         </OverlayTrigger>
                     </div> }
 
-                    <h3 className="formName">{formName}</h3>
+                    <h3 className="formName">{formName} #{recordId}</h3>
 
                 </div>
             </div>);
