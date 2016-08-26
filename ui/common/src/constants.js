@@ -74,7 +74,7 @@
         },
         PAGE : {
             DEFAULT_OFFSET : 0,
-            DEFAULT_NUM_ROWS: 210
+            DEFAULT_NUM_ROWS: 50
         }
     });
 
