@@ -161,10 +161,18 @@ export let RecordRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={actions.length - 1} {...this.props}/>);
     },
 
+    /**
+     * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
         return !_.isEqual(this.props.form.formData, nextProps.form.formData);
     },
 
+    /**
+     * render the stage, actions, and form
+     *
+     * the QBForm gets a unique to allow ReactCSSTransitionGroup animation to work across route transitions (i.e. diffferent record IDs)
+     * we implement shouldComponentUpdate() to prevent triggering animations unless the record has changed
+     */
     render() {
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
@@ -174,7 +182,10 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            let nextOrPreviousTransitionName = this.props.reportData && this.props.reportData.nextOrPrevious ? this.props.reportData.nextOrPrevious : "";
+
+            // we store "next", "previous" in flux store and pass it down so we know what CSS classes to apply for the animation based on the direction
+
+            const nextOrPreviousTransitionName = this.props.reportData && this.props.reportData.nextOrPrevious ? this.props.reportData.nextOrPrevious : "";
 
             return (<div id={this.props.params.recordId} className="recordContainer">
                 <Stage stageHeadline={this.getStageHeadline()}
