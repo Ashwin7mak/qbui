@@ -365,10 +365,10 @@ describe('Validate RequestHelper unit tests', function() {
 
                 if (testCase.parameterName) {
                     //  test that the parameter is in the params list
-                    assert.equal(req.params[testCase.parameterName], testCase.parameterValue);
+                    assert.equal(requestHelper.getQueryParameterValue(req, testCase.parameterName), testCase.parameterValue);
                 } else {
                     //  if no parameter name, then that parameter is not defined
-                    assert.equal(req.params[testCase.parameterName], undefined);
+                    assert.equal(requestHelper.getQueryParameterValue(req, testCase.parameterName), undefined);
                 }
                 done();
             });
