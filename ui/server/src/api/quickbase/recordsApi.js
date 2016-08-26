@@ -336,17 +336,15 @@
                             sortList.push(sortEl[0]);
                         });
                         if (sortList.length > 0) {
-                            let startingIndex = opts.url.indexOf(constants.REQUEST_PARAMETER.SORT_LIST);
-                            let endingIndex = opts.url.indexOf('&', startingIndex);
-                            if (endingIndex === -1) {
-                                opts.url = opts.url.substr(0, startingIndex);
-                            } else {
-                                opts.url = opts.url.substr(0, startingIndex) + opts.url.substr(endingIndex + 1);
-                            }
+                            requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.SORT_LIST);
                             let sortListStr = sortList.join(constants.REQUEST_PARAMETER.LIST_DELIMITER);
                             opts.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=' + sortListStr;
                         }
                     }
+
+                    //  remove any page limits..
+                    requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.OFFSET);
+                    requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
                 }
 
                 return requestHelper.executeRequest(req, opts);

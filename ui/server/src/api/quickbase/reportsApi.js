@@ -236,6 +236,8 @@
                             if (error) {
                                 if (error.body) {
                                     errorMsg = error.body ? error.body.replace(/"/g, "'") : error.statusMessage;
+                                } else {
+                                    errorMsg = error;
                                 }
                             }
                             log.error("Error getting report results in fetchReportResults: " + errorMsg);
