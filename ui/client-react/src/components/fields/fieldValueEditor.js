@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import FieldFormats from '../../utils/fieldFormats' ;
-import {DefaultFieldValueEditor, MultiLineTextFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor, DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
+import {DefaultFieldValueEditor, MultiLineTextFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
+    DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import TextFieldValueEditor from './textFieldValueEditor';
 import _ from 'lodash';
 
@@ -14,9 +16,7 @@ import _ from 'lodash';
  * This wrapper handles the external common field editor rendering. It calls supplied callback validateFieldValue to check if the field is valid onBlur
  *
  * If the fieldDef has required:true and the indicateRequired prop is true the wrap will show that field is required
- *
- */
-
+ *  */
 const FieldValueEditor = React.createClass({
     displayName: 'FieldValueEditor',
     propTypes: {

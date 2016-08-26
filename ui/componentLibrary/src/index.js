@@ -22,6 +22,7 @@ import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
 import TextFieldDoc from './docs/textFieldValueRenderer';
 import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
+import FieldValueRendererDoc from './docs/fieldValueRenderer';
 import FieldValueEditorDoc from './docs/fieldValueEditor';
 
 import './assets/componentLibrary.scss';
@@ -34,6 +35,7 @@ render((
             <Route path="qbicon" component={QBIconDoc} />
             <Route path="textFieldValueRenderer" component={TextFieldDoc} />
             <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
+            <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
         </Route>
     </Router>
