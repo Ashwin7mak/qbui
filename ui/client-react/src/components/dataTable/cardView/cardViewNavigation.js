@@ -14,13 +14,11 @@ var CardViewNavigation = React.createClass({
      */
     render() {
         return (
-            <button className="top-card-row field" style = { {width:'400px' } } onClick={this.props.getPreviousReportPage}> Next page</button>
+            <button className="top-card-row field" style = { {width:'400px' } } onClick={this.props.getPreviousReportPage}> Previous page</button>
         );
 
     }
 });
 
 export default CardViewNavigation;
-/**
- * Created by bstookey on 8/25/16.
- */
+
