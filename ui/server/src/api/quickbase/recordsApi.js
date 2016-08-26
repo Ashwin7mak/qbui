@@ -319,8 +319,11 @@
                     opts.url += search;
                 }
 
-                // TEMPORARY to get grouping to work with core changes...NOTE: this will still
-                // not solve grouping if defined in the report meta data...
+                // TEMPORARY to get grouping to work with core changes...this removes the grouping
+                // tags from the opts.url rest request so that core doesn't group.  Grouping is still done
+                // in the node layer but since paging is in place, complex grouping will fail.  Given the
+                // report meta data doesn't have default grouping on prod/pre-prod, and the UI only groups
+                // using equals, this should be fine for the interim until a complete solution is implemented.
                 let query = url.parse(opts.url, true).query;
                 if (query && query.hasOwnProperty(constants.REQUEST_PARAMETER.SORT_LIST)) {
                     let sList = query[constants.REQUEST_PARAMETER.SORT_LIST];
