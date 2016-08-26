@@ -35,17 +35,17 @@
                 return req.protocol ? req.protocol.toLowerCase() === 'https' : false;
             },
             getRequestJavaHost: function() {
-                return config.javaHost;
+                return config ? config.javaHost : '';
             },
             getRequestUrl  : function(req) {
-                return config.javaHost + req.url;
+                return config ? config.javaHost + req.url : '';
             },
             getAgentOptions: function(req) {
                 var agentOptions = {
                     rejectUnauthorized: false
                 };
 
-                if (this.isSecure(req)) {
+                if (this.isSecure(req) && config) {
                     //  we're on https..include the certs
                     agentOptions = {
                         strictSSL         : true,
@@ -103,14 +103,16 @@
                     headers     : req.headers
                 };
 
-                if (config.isMockServer) {
-                    opts.gzip = false;
-                    opts.headers["accept-encoding"] = "";
-                }
-                if (config.proxyHost) {
-                    opts.host = config.proxyHost;
-                    if (config.proxyPort) {
-                        opts.port  = config.proxyPort;
+                if (config) {
+                    if (config.isMockServer) {
+                        opts.gzip = false;
+                        opts.headers["accept-encoding"] = "";
+                    }
+                    if (config.proxyHost) {
+                        opts.host = config.proxyHost;
+                        if (config.proxyPort) {
+                            opts.port = config.proxyPort;
+                        }
                     }
                 }
 
@@ -201,7 +203,9 @@
 
             /**
              * Method to take a parameter value and name and add to the request.
-             * A parameter is added only if both a parameter name and value are defined.
+             *
+             * A parameter is appended only if both a parameter name and value are defined
+             * and it is not already on the request with the exact value.
              *
              * @param req
              * @param parameterName
@@ -237,9 +241,6 @@
 
                     //  append the query parameter to the url
                     req.url += parameterName + '=' + parameterValue;
-
-                    //  add/replace the parameter to the params array.
-                    //req.params[parameterName] = parameterValue;
                 }
             },
 
@@ -256,7 +257,7 @@
                     return null;
                 }
                 let query = url.parse(req.url, true).query;
-                return query[parameterName];
+                return (query && query.hasOwnProperty(parameterName)) ? query[parameterName] : null;
             }
 
         };

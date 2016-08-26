@@ -30,25 +30,42 @@
 
         /**
          * Function to add query parameters to the request from the report meta data
+         * If overrideMetaDataAllowed === true, then allow for the override of the report
+         * metaData value if the parameter is defined on the request.
          *
          * @param req
          * @param reportMetaData
-         * @param allowOverride
+         * @param overrideMetaDataAllowed
          */
-        function addReportMetaQueryParameters(req, reportMetaData, allowOverride) {
+        function addReportMetaQueryParameters(req, reportMetaData, overrideMetaDataAllowed) {
+
+            function usingRequestParameterValue(parameter) {
+                if (overrideMetaDataAllowed === true) {
+                    let parameterValue = requestHelper.getQueryParameterValue(req, parameter);
+                    if (parameterValue !== null) {
+                        requestHelper.addQueryParameter(req, parameter, parameterValue);
+                        return true;
+                    }
+                }
+                return false;
+            }
 
             if (!req) {
                 return;
             }
 
-            //  look for any existing parameters on the url
-            req.params = req.params || {};
+            if (!reportMetaData) {
+                reportMetaData = {};
+            }
 
-            //  add display formatting
-            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
+            //  format display requirements
+            if (!usingRequestParameterValue(constants.REQUEST_PARAMETER.FORMAT)) {
+                requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
+            }
 
-            if (reportMetaData) {
-                //  Sort list is returned as an object.  Need to convert into a string
+            // add any sort list requirements
+            if (!usingRequestParameterValue(constants.REQUEST_PARAMETER.SORT_LIST)) {
+                //  ReportMetaDat sort list is returned as an object.  Need to convert into a string
                 if (Array.isArray(reportMetaData.sortList)) {
                     //  convert the object in a list of strings of format <+/-|fid|:groupType>
                     let sortListArray = [];
@@ -71,14 +88,18 @@
                         }
                     }
                 }
+            }
 
-                //  add any columnList requirements
+            //  add any columnList requirements
+            if (!usingRequestParameterValue(constants.REQUEST_PARAMETER.COLUMNS)) {
                 let columnList = collectionUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
                 if (columnList) {
                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
                 }
+            }
 
-                //  add any query expression requirements
+            //  add any query expression requirements
+            if (!usingRequestParameterValue(constants.REQUEST_PARAMETER.QUERY)) {
                 let query = reportMetaData.query ? reportMetaData.query : '';
                 if (query) {
                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
@@ -86,7 +107,6 @@
             }
         }
 
-        //TODO: only application/json is supported for content type.  Need a plan to support XML
         let reportsApi = {
 
             /**

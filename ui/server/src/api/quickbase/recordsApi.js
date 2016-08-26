@@ -126,11 +126,11 @@
             },
 
             isDisplayFormat: function(req) {
-                return req.params[constants.REQUEST_PARAMETER.FORMAT] === constants.FORMAT.DISPLAY;
+                return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.DISPLAY;
             },
 
             isRawFormat: function(req) {
-                return req.params[constants.REQUEST_PARAMETER.FORMAT] === constants.FORMAT.RAW;
+                return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.RAW;
             },
 
             /**
