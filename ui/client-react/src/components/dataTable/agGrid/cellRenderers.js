@@ -147,11 +147,6 @@ const CellRenderer = React.createClass({
 
         let cellType = this.props.type;
 
-        // use multi-line text editor and renderer for qbGrid only to demonstrate auto resizing rows
-        if (this.props.qbGrid && (cellType === FieldFormats.TEXT_FORMAT)) {
-            cellType = FieldFormats.MULTI_LINE_TEXT_FORMAT;
-        }
-
         let invalidStatus = {isInvalid: false, invalidMessage: null};
         // did the validation on blur report an error
         if (this.state.validationStatus && this.state.validationStatus.isInvalid) {

@@ -929,7 +929,7 @@ let AGGrid = React.createClass({
                         let clientSideAttributes = datatypeAttributes.clientSideAttributes;
                         for (let cattr in clientSideAttributes) {
                             switch (cattr) {
-                            case 'word-wrap':
+                            case 'word_wrap':
                                 if (clientSideAttributes[cattr]) {
                                     this.setCSSClass_helper(obj, "NoWrap");
                                 }

@@ -226,7 +226,7 @@ const cols_with_nowrap_attrs = [
     {
         "columnName": "col_num",
         "datatypeAttributes": {
-            clientSideAttributes: {"word-wrap": true}
+            clientSideAttributes: {"word_wrap": true}
         }
     },
     {

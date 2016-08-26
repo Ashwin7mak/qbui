@@ -25,7 +25,7 @@ const CellValueRenderer = React.createClass({
         // the wrap property effects table cell rendered values only
         // that is, nowrap doesn't apply on forms so we set it when rendering the
         // value for a cell
-        if (_.has(this.props, 'this.props.attributes.clientSideAttributes.word-wrap') &&
+        if (_.has(this.props, 'attributes.clientSideAttributes.word_wrap') &&
             !this.props.attributes.clientSideAttributes.word_wrap) {
             classes += ' NoWrap';
         }
