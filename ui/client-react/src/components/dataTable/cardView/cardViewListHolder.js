@@ -104,14 +104,8 @@ let CardViewListHolder = React.createClass({
         let isLoading = false;
         let isCountingRecords = false;
         let isError = false;
-
-        let filteredRecordCount = null;
         // This is the count of all records that apply to this report
         let recordCount = 0;
-        // This indicates a page load
-        let isPageLoaded = false;
-
-        let hasFacets = false;
 
         if (this.props.reportData) {
             if (this.props.reportData.loading) {
@@ -124,18 +118,8 @@ let CardViewListHolder = React.createClass({
                 isError = true;
             }
             if (this.props.reportData.data) {
-                if (this.props.reportData.data.filteredRecords) {
-                    filteredRecordCount =  this.props.reportData.data.filteredRecordsCount;
-                }
                 if (!isCountingRecords && this.props.reportData.data.recordsCount) {
                     recordCount = this.props.reportData.data.recordsCount;
-                }
-                if (this.props.reportData.data.records) {
-                    isPageLoaded = true;
-                }
-                if (this.props.reportData.data.facets &&
-                    (this.props.reportData.data.facets.length > 0)) {
-                    hasFacets =  this.props.reportData.data.facets[0].values;
                 }
             }
         }
@@ -167,7 +151,6 @@ let CardViewListHolder = React.createClass({
 
         return (
             <div className={cardViewListClasses} style={cardViewListStyle}>
-
                 {showPreviousButton ?
                     (<CardViewNavigation getPreviousReportPage={this.props.getPreviousReportPage}
                     />) :
@@ -182,7 +165,7 @@ let CardViewListHolder = React.createClass({
                               onRowSelected={this.onCardRowSelected}
                               onRowClicked={this.props.onRowClicked}
                               isRowSelected={this.isRowSelected}
-                              onSwipe={this.onSwipe}/>
+                              onSwipe={this.onSwipe} />
 
                 {showNextButton ?
                     (<CardViewFooter getNextReportPage={this.props.getNextReportPage}
