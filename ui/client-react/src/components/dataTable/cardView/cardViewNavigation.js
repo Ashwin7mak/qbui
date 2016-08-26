@@ -1,26 +1,30 @@
-/**
- * Created by bstookey on 8/25/16.
- */
 import React from 'react';
 import './cardViewList.scss';
+import QBicon from '../../qbIcon/qbIcon';
+import {I18nMessage} from '../../../utils/i18nMessage';
 
+
+/**
+ * Navigation component for the small breakpoint. This will generate the fetch previous page button
+ */
 var CardViewNavigation = React.createClass({
     propTypes: {
-        getNextReportPage: React.PropTypes.func,
+        getPreviousReportPage: React.PropTypes.func,
     },
 
     /**
-     * renders the report footer next button
+     * renders the report fetch previous button
      */
     render() {
         return (
-            <button className="top-card-row field" style = { {width:'400px' } } onClick={this.props.getPreviousReportPage}> Next page</button>
+            <div className="cardViewHeader">
+                <button className="fetchPreviousButton" onClick={this.props.getPreviousReportPage}>
+                    <QBicon className="fetchPreviousArrow" icon="iconUiSturdy_ascending" />
+                    <I18nMessage message="report.previousPage"/>
+                </button>
+            </div>
         );
-
     }
 });
 
 export default CardViewNavigation;
-/**
- * Created by bstookey on 8/25/16.
- */

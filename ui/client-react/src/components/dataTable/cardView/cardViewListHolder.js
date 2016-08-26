@@ -4,7 +4,7 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import CardViewList from './cardViewList';
 import './cardViewList.scss';
-import CardViewFooterNav from './cardViewFooterNav'
+import CardViewFooter from './cardViewFooter'
 import CardViewNavigation from './cardViewNavigation'
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -168,10 +168,11 @@ let CardViewListHolder = React.createClass({
         return (
             <div className={cardViewListClasses} style={cardViewListStyle}>
 
-                {showNextButton ?
-                    (<CardViewNavigation getNextReportPage={this.props.getPreviousReportPage}
+                {showPreviousButton ?
+                    (<CardViewNavigation getPreviousReportPage={this.props.getPreviousReportPage}
                     />) :
                     <div className="spacer"></div>
+                }
 
                 <CardViewList ref="cardViewList" node={recordNodes}
                               groupId=""
@@ -184,9 +185,10 @@ let CardViewListHolder = React.createClass({
                               onSwipe={this.onSwipe}/>
 
                 {showNextButton ?
-                    (<CardViewFooterNav getNextReportPage={this.props.getNextReportPage}
+                    (<CardViewFooter getNextReportPage={this.props.getNextReportPage}
                     />) :
                     <div className="spacer"></div>
+                }
             </div>);
     },
 

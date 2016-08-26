@@ -109,6 +109,8 @@ export default {
             reportNavigationBar : "{pageStart} - {pageEnd}",
             previousToolTip: "Arrière",
             nextToolTip: "Prochain",
+            previousPage: "Précédent",
+            nextPage: "Prochain",
             searchPlaceHolder:  "Rechercher ces",
             sortAndGroup : {
                 addField: "Ajouter le champ",
