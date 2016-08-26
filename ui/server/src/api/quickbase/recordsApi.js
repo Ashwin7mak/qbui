@@ -341,11 +341,11 @@
                             opts.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=' + sortListStr;
                         }
                     }
-
-                    //  remove any page limits..
-                    requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.OFFSET);
-                    requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
                 }
+
+                //  remove any page limits..
+                requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.OFFSET);
+                requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
 
                 return requestHelper.executeRequest(req, opts);
             },
