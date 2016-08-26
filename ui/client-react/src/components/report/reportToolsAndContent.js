@@ -290,6 +290,13 @@ let ReportToolsAndContent = React.createClass({
                                 pageStart={this.pageStart}
                                 pageEnd={this.pageEnd}/>;
 
+            let cardViewPagination = <ReportFooter
+                                reportData={this.props.reportData}
+                                getNextReportPage={this.getNextReportPage}
+                                getPreviousReportPage={this.getPreviousReportPage}
+                                pageStart={this.pageStart}
+                                pageEnd={this.pageEnd}/>;
+
             return (
                 <div className={classes}>
                     <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
@@ -305,6 +312,7 @@ let ReportToolsAndContent = React.createClass({
                                    reportData={this.props.reportData}
                                    reportHeader={toolbar}
                                    reportFooter={reportFooter}
+                                   cardViewPagination={cardViewPagination }
                                    keyField={this.props.fields && this.props.fields.keyField ?
                                        this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
                                    uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}

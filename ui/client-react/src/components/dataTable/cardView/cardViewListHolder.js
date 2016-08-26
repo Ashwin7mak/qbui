@@ -4,6 +4,8 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import CardViewList from './cardViewList';
 import './cardViewList.scss';
+import CardViewFooterNav from './cardViewFooterNav'
+import CardViewNavigation from './cardViewNavigation'
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 /**
@@ -99,6 +101,47 @@ let CardViewListHolder = React.createClass({
     },
 
     getRows(results) {
+        let isLoading = false;
+        let isCountingRecords = false;
+        let isError = false;
+
+        let filteredRecordCount = null;
+        // This is the count of all records that apply to this report
+        let recordCount = 0;
+        // This indicates a page load
+        let isPageLoaded = false;
+
+        let hasFacets = false;
+
+        if (this.props.reportData) {
+            if (this.props.reportData.loading) {
+                isLoading = this.props.reportData.loading;
+            }
+            if (this.props.reportData.countingTotalRecords) {
+                isCountingRecords = this.props.reportData.countingTotalRecords;
+            }
+            if (this.props.reportData.error) {
+                isError = true;
+            }
+            if (this.props.reportData.data) {
+                if (this.props.reportData.data.filteredRecords) {
+                    filteredRecordCount =  this.props.reportData.data.filteredRecordsCount;
+                }
+                if (!isCountingRecords && this.props.reportData.data.recordsCount) {
+                    recordCount = this.props.reportData.data.recordsCount;
+                }
+                if (this.props.reportData.data.records) {
+                    isPageLoaded = true;
+                }
+                if (this.props.reportData.data.facets &&
+                    (this.props.reportData.data.facets.length > 0)) {
+                    hasFacets =  this.props.reportData.data.facets[0].values;
+                }
+            }
+        }
+
+        let showNextButton = !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && !isError;
+        let showPreviousButton = showNextButton && this.props.pageStart !== 1;
 
         let cardViewListClasses = "cardViewList cardViewListHolder";
         if (this.props.selectedRows.length) {
@@ -121,8 +164,15 @@ let CardViewListHolder = React.createClass({
             };
         }
 
+
         return (
             <div className={cardViewListClasses} style={cardViewListStyle}>
+
+                {showNextButton ?
+                    (<CardViewNavigation getNextReportPage={this.props.getPreviousReportPage}
+                    />) :
+                    <div className="spacer"></div>
+
                 <CardViewList ref="cardViewList" node={recordNodes}
                               groupId=""
                               groupLevel={-1}
@@ -132,6 +182,11 @@ let CardViewListHolder = React.createClass({
                               onRowClicked={this.props.onRowClicked}
                               isRowSelected={this.isRowSelected}
                               onSwipe={this.onSwipe}/>
+
+                {showNextButton ?
+                    (<CardViewFooterNav getNextReportPage={this.props.getNextReportPage}
+                    />) :
+                    <div className="spacer"></div>
             </div>);
     },
 
