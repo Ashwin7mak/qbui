@@ -5,8 +5,8 @@ import Swipeable from 'react-swipeable';
 import Fluxxor from 'fluxxor';
 import CardViewList from './cardViewList';
 import './cardViewList.scss';
-import CardViewFooter from './cardViewFooter'
-import CardViewNavigation from './cardViewNavigation'
+import CardViewFooter from './cardViewFooter';
+import CardViewNavigation from './cardViewNavigation';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 
