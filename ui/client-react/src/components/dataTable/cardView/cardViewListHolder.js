@@ -1,6 +1,7 @@
 import React from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Loader  from 'react-loader';
+import Swipeable from 'react-swipeable';
 import Fluxxor from 'fluxxor';
 import CardViewList from './cardViewList';
 import './cardViewList.scss';
@@ -8,10 +9,12 @@ import CardViewFooter from './cardViewFooter'
 import CardViewNavigation from './cardViewNavigation'
 
 let FluxMixin = Fluxxor.FluxMixin(React);
+
 /**
  * A list of CardView items used to render a report at the small breakpoint
  */
 const CHECKBOX_COL_WIDTH = 40; // 40px checkbox column can be toggled
+const MAX_SWIPE_DISTANCE = 150; // Drag distance when swiping up or down. Applies to report pagination.
 
 let CardViewListHolder = React.createClass({
     mixins: [FluxMixin],
@@ -99,6 +102,104 @@ let CardViewListHolder = React.createClass({
         });
 
     },
+    /**
+     * Fetch next report page
+     */
+    swipedUp(e) {
+        // Complete swipe action only if footer is visible
+        if (this.isElementVisible("cardViewFooter")) {
+            this.props.getNextReportPage();
+        }
+    },
+
+    /**
+     * Fetch previous report page
+     */
+    swipedDown(e) {
+        // Complete swipe action only if header is visible
+        if (this.isElementVisible("cardViewHeader")) {
+            this.props.getPreviousReportPage();
+        }
+    },
+
+    /**
+     * Handles up or down swiping action for report pagination
+     *
+     * @param delta - delta from touch starting position
+     * @param isUpSwipe - (swiped up relative to starting point)
+     */
+    swiping(delta, isUpSwipe) {
+        if (isUpSwipe) {
+            // If up swipe, check for visibility of the 'Fetch More' button. If it is visible, display loading indicator,
+            // move the table (including button and spinner) up proportional to the swipe distance. If the swipe exceeds
+            // drag distance, snap the table, button and spinner to the bottom of screen.
+            this.handleVerticalSwipingMovement("cardViewFooter", "footerLoadingIndicator", delta, true);
+        } else {
+            // Down swipe. Check for visibility of 'Fetch Previous' button. If it is visible, display loading indicator,
+            // move table, button and indicator down proportional to swipe distance. If swipe exceeds drag distance,
+            // snap table, button and spinner to the top.
+            this.handleVerticalSwipingMovement("cardViewHeader", "headerLoadingIndicator", delta, false);
+        }
+    },
+
+    /**
+     * Handles vertical swiping for report pagination.
+     * When swiping, check for visibility of element with the supplied classname. If said element is visible on screen,
+     * display corresponding loading indicator, move the table (including visible element and loading spinner) up or down
+     * proportional to the swipe distance. If the swipe exceeds drag distance, snap the table, visible element (header
+     * or footer) and spinner to the top/bottom of screen.
+     *
+     * @param visibleElementName - Class name of the header or the footer element.
+     * @param loadingIndicatorElementName - Class name of the loading indicator container
+     * @param delta - movement distance per swipe event
+     * @param isNegative - indicates upward or downward motion. Negative is for upward motion.
+     */
+    handleVerticalSwipingMovement(visibleElementName, loadingIndicatorElementName, delta, isNegative) {
+        // If the element that has to be checked for visibility (fetch more or fetch previous button depending on drag direction)
+        // is visible, process swipe
+        if (this.isElementVisible(visibleElementName)) {
+            // Fetch more or Fetch Previous element is visible, fetch corresponding loading spinner.
+            let loadingIndicatorElem = document.getElementsByClassName(loadingIndicatorElementName);
+            if (loadingIndicatorElem) {
+                loadingIndicatorElem = loadingIndicatorElem[0];
+            }
+            // Fetch card view table
+            var tableElem = document.getElementsByClassName("cardViewList cardViewListHolder");
+            if (tableElem && tableElem.length) {
+                tableElem = tableElem[0];
+            }
+            // Safety check on table element and loading indicator element
+            if (tableElem && loadingIndicatorElem) {
+                // Smoothen the animation
+                tableElem.style.transition = 'transform 300ms';
+                // Display the loading indicator
+                loadingIndicatorElem.style.display = "flex";
+                // As long as the swipe is less than drag distance, move the table, header/footer button and spinner
+                if (delta < MAX_SWIPE_DISTANCE) {
+                    tableElem.style.transform = 'translate(0px, ' + (isNegative? '-' : '') + (delta) + 'px)';
+                } else {
+                    // If the swipe exceeds drag distance, snap the table, footer and indicator to the top or bottom
+                    tableElem.style.transform = 'translate(0px, ' + (isNegative? '-' : '') + '45px)';
+                }
+            }
+        }
+    },
+
+    /**
+     * Returns true if the element with the supplied classname is visible on the screen.
+     * @param elementClassName Class name of the element for the visibility check.
+     */
+    isElementVisible(elementClassName) {
+        let isVisible = false;
+        let elem = document.getElementsByClassName(elementClassName);
+        if (elem && elem.length) {
+            elem = elem[0];
+            let elemTop = elem.getBoundingClientRect().top;
+            let elemBottom = elem.getBoundingClientRect().bottom;
+            isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+        }
+        return isVisible;
+    },
 
     getRows(results) {
         let isLoading = false;
@@ -149,30 +250,36 @@ let CardViewListHolder = React.createClass({
         }
 
 
-        return (
-            <div className={cardViewListClasses} style={cardViewListStyle}>
-                {showPreviousButton ?
-                    (<CardViewNavigation getPreviousReportPage={this.props.getPreviousReportPage}
-                    />) :
-                    <div className="spacer"></div>
-                }
+        return (<Swipeable className="swipeable"
+                       onSwipingUp={(ev, delta) => {this.swiping(delta, true);}}
+                       onSwipingDown={(ev, delta) => {this.swiping(delta, false);}}
+                       onSwipedUp={this.swipedUp}
+                       onSwipedDown={this.swipedDown}>
 
-                <CardViewList ref="cardViewList" node={recordNodes}
-                              groupId=""
-                              groupLevel={-1}
-                              allowCardSelection={this.allowCardSelection}
-                              onToggleCardSelection={this.onToggleCardSelection}
-                              onRowSelected={this.onCardRowSelected}
-                              onRowClicked={this.props.onRowClicked}
-                              isRowSelected={this.isRowSelected}
-                              onSwipe={this.onSwipe} />
+                    <div className={cardViewListClasses} style={cardViewListStyle}>
+                        {showPreviousButton ?
+                            (<CardViewNavigation getPreviousReportPage={this.props.getPreviousReportPage}
+                            />) :
+                            <div className="spacer"></div>
+                        }
 
-                {showNextButton ?
-                    (<CardViewFooter getNextReportPage={this.props.getNextReportPage}
-                    />) :
-                    <div className="spacer"></div>
-                }
-            </div>);
+                        <CardViewList ref="cardViewList" node={recordNodes}
+                                      groupId=""
+                                      groupLevel={-1}
+                                      allowCardSelection={this.allowCardSelection}
+                                      onToggleCardSelection={this.onToggleCardSelection}
+                                      onRowSelected={this.onCardRowSelected}
+                                      onRowClicked={this.props.onRowClicked}
+                                      isRowSelected={this.isRowSelected}
+                                      onSwipe={this.onSwipe} />
+
+                        {showNextButton ?
+                            (<CardViewFooter getNextReportPage={this.props.getNextReportPage}
+                            />) :
+                            <div className="spacer"></div>
+                        }
+                    </div>
+                </Swipeable>);
     },
 
     /**

@@ -114,6 +114,8 @@ export default {
             nextToolTip: "Next",
             previousPage: "Previous",
             nextPage: "Next",
+            previousPageLoadingOnSwipe: "Getting previous...",
+            nextPageLoadingOnSwipe: "Getting more...",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
                 addField: "Add a field",

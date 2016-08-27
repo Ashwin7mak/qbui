@@ -111,6 +111,8 @@ export default {
             nextToolTip: "Prochain",
             previousPage: "Précédent",
             nextPage: "Prochain",
+            previousPageLoadingOnSwipe: "Obtenir précédent...",
+            nextPageLoadingOnSwipe: "Obtenir plus...",
             searchPlaceHolder:  "Rechercher ces",
             sortAndGroup : {
                 addField: "Ajouter le champ",

@@ -34,7 +34,7 @@ $pagination-mobile-topbar-text-color: $color-black-100;
 .cardViewList {
     display: block !important;
     width: inherit !important;
-    margin-bottom: $margin-spacer;
+    margin-bottom: 0px;
 
     .group-header {
         line-height: 30px;
@@ -63,7 +63,7 @@ $pagination-mobile-topbar-text-color: $color-black-100;
         }
     }
 
-    >.cardViewHeader {
+    .cardViewHeader {
         width: 100%;
 
         display:flex;
@@ -113,6 +113,21 @@ $pagination-mobile-topbar-text-color: $color-black-100;
                 padding-right:10px;
             }
         }
+    }
+
+    .headerLoadingIndicator, .footerLoadingIndicator {
+        width: 100%;
+        min-height: 45px;
+
+        font-family: "Lato", sans-serif;
+        font-size: 14px;
+        color: $pagination-mobile-panel-text-color;
+
+        display: none;
+        position:relative;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
     }
 
     @for $i from 0 through 5 {

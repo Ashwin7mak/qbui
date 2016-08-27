@@ -113,6 +113,8 @@ export default {
             nextToolTip: "Nächster",
             previousPage: "Früher",
             nextPage: "Nächster",
+            previousPageLoadingOnSwipe: "Erste vorherige...",
+            nextPageLoadingOnSwipe: "immer Mehr...",
             sortAndGroup : {
                 addField: "Feld hinzufügen",
                 by: "nach",
