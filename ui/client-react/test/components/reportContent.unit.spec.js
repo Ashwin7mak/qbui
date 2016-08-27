@@ -9,6 +9,8 @@ import _ from 'lodash';
 import Locales from '../../src/locales/locales';
 import * as SchemaConsts from '../../src/constants/schema';
 import * as GroupTypes from '../../src/constants/groupTypes';
+import LimitConstants from '../../../common/src/limitConstants';
+
 
 import Breakpoints from '../../src/utils/breakpoints';
 
@@ -224,7 +226,7 @@ const cols_with_nowrap_attrs = [
     {
         "columnName": "col_num",
         "datatypeAttributes": {
-            clientSideAttributes: {"word-wrap": true}
+            clientSideAttributes: {"word_wrap": true}
         }
     },
     {
@@ -760,6 +762,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
+                                                                uniqueIdentifier={keyField}
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let result = component.getOrigRec(modifiedRec[keyField].value);
@@ -797,6 +800,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_unsaved}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
+                                                                uniqueIdentifier={keyField}
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
@@ -906,10 +910,11 @@ describe('ReportContent functions', () => {
                                                                 fields={fieldsData}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
+                                                                uniqueIdentifier={keyField}
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let result = component.handleRecordSaveClicked({value: SchemaConsts.UNSAVED_RECORD_ID});
-        expect(result).toEqual(false);
+        expect(result.ok).toEqual(true);
     });
 
 
@@ -984,6 +989,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
+                                                                uniqueIdentifier={keyField}
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordNewBlank(101);
@@ -1064,12 +1070,15 @@ describe('ReportContent functions', () => {
                             pendEdits={edits}
                             reportHeader={header_empty}
                             reportFooter={fakeReportFooter}
-                            keyField={keyField}/>);
+                           uniqueIdentifier={keyField}
+                           keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordChange({value:100});
         expect(flux.actions.recordPendingEditsCommit).toHaveBeenCalled();
         expect(flux.actions.saveReportRecord).toHaveBeenCalled();
     });
+
+
 
     it('test render of data without attributes', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}

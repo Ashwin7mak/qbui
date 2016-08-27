@@ -1,92 +1,29 @@
 import React from 'react';
 
-import {DefaultFieldEditor, MultiLineTextFieldEditor, ComboBoxFieldEditor, DateFieldEditor, DateTimeFieldEditor, TimeFieldEditor, UserFieldEditor, CheckBoxFieldEditor} from '../../fields/fieldEditors';
-import TextFieldEditor from '../../fields/textFieldEditor';
+import FieldValueEditor from '../../fields/fieldValueEditor';
 
-import FieldFormats from '../../../utils/fieldFormats';
-
+/**
+ * Table cell inline edit specific editor
+ */
 const CellEditor = React.createClass({
+    displayName: 'CellEditor',
 
     propTypes: {
         type: React.PropTypes.number,
         value: React.PropTypes.any,
         colDef: React.PropTypes.object,
         onChange: React.PropTypes.func,
-        onTabColumn: React.PropTypes.func
+        onBlur: React.PropTypes.func,
+        onValidated: React.PropTypes.func,
+        onTabColumn: React.PropTypes.func,
+        validateFieldValue: React.PropTypes.func,
+        isInvalid: React.PropTypes.bool,
+        invalidMessage: React.PropTypes.string
     },
 
-    getEditorForType(type) {
-        switch (type) {
-        case FieldFormats.CHECKBOX_FORMAT:
-            return <CheckBoxFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                        placeholder={this.props.colDef.placeholder}/>;
-
-        case FieldFormats.DATE_FORMAT: {
-            return <DateFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                    placeholder={this.props.colDef.placeholder}/>;
-        }
-
-        case FieldFormats.DATETIME_FORMAT: {
-            return <DateTimeFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                        placeholder={this.props.colDef.placeholder}/>;
-        }
-
-        case FieldFormats.TIME_FORMAT: {
-            return <TimeFieldEditor value={this.props.value} onChange={this.props.onChange}
-                                    placeholder={this.props.colDef.placeholder} />;
-        }
-
-        case FieldFormats.NUMBER_FORMAT:
-        case FieldFormats.RATING_FORMAT:
-        case FieldFormats.DURATION_FORMAT:
-        case FieldFormats.CURRENCY_FORMAT:
-        case FieldFormats.PERCENT_FORMAT: {
-            return <DefaultFieldEditor value={this.props.value}
-                                       type="number"
-                                       placeholder={this.props.colDef.placeholder}
-                                       onChange={this.props.onChange} />;
-        }
-
-        case FieldFormats.USER_FORMAT: {
-            return <UserFieldEditor value={this.props.value}
-                                    placeholder={this.props.colDef.placeholder}
-                                    onChange={this.props.onChange} />;
-        }
-
-        case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
-            return <MultiLineTextFieldEditor value={this.props.value}
-                                             placeholder={this.props.colDef.placeholder}
-                                    onChange={this.props.onChange} />;
-        }
-        case FieldFormats.TEXT_FORMAT:
-        default: {
-
-            if (this.props.colDef.choices) {
-                return (
-                    <ComboBoxFieldEditor choices={this.props.colDef.choices} value={this.props.value}
-                                         placeholder={this.props.colDef.placeholder}
-                                     onChange={this.props.onChange} />
-                );
-            } else {
-                return <TextFieldEditor value={this.props.value}
-                                        onChange={this.props.onChange}
-                                        placeholder={this.props.colDef.placeholder}
-                                        classes="cellEdit"
-                                        tabIndex="0"
-                                        ref="cellInput"
-                                        />;
-            //Drew's change TBD by Andrew if users want text box that
-            // grows in height for single line text change TextFieldEditor to
-            //  return <MultiLineTextFieldEditor value={this.props.value}
-            //       placeholder={this.props.colDef.placeholder}
-            //       onChange={this.props.onChange} />;
-            }
-        }
-        }
-    },
 
     /**
-     * inform parent component of tabbing
+     * inform parent component of tabbing so it can navigate to next row if necessary
      */
     onKeyDown(ev) {
         if (ev.key === "Tab" && !ev.shiftKey) {
@@ -95,11 +32,36 @@ const CellEditor = React.createClass({
     },
 
     render() {
-        let requiredIndication = (this.props.colDef.required) ? '*' : '\u00a0'; // u00a0 = non-breaking space
-        return (<div className="cellEditWrapper" onKeyDown={this.onKeyDown}>
-                <div className="requiredFlag requiredFlag-layout">{requiredIndication}</div>
-            {this.getEditorForType(this.props.type)}
-            </div>);
+        return (<FieldValueEditor  classes="cellEditWrapper"
+                              type={this.props.type}
+                              value={this.props.value}
+                              fieldDef={this.props.colDef}
+                              indicateRequired={true}
+                              onChange={this.props.onChange}
+                              onBlur={this.props.onBlur}
+                              onKeyDown={this.onKeyDown}
+                              onValidated={this.props.onValidated}
+                              validateFieldValue={this.props.validateFieldValue}
+                              isInvalid={this.props.isInvalid}
+                              invalidMessage={this.props.invalidMessage}
+                              ref={(c) => {
+                                  //get reference to the component for this field
+                                  if (this.props.params.data && this.props.params.context.uniqueIdentifier &&
+                                      this.props.params.data[this.props.params.context.uniqueIdentifier]) {
+                                      let rid = this.props.params.data[this.props.params.context.uniqueIdentifier].value;
+
+                                      if (!this.props.params.context.cells) {
+                                          this.props.params.context.cells = {};
+                                      }
+                                      if (!this.props.params.context.cells[rid]) {
+                                          this.props.params.context.cells[rid] = {};
+                                      }
+                                      this.props.params.context.cells[rid][this.props.params.column.colDef.id] = c;
+                                  }
+                              }}
+
+
+        />);
     }
 });
 

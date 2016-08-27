@@ -51,18 +51,18 @@ describe('SortAndGroupDialog functions', () => {
     });
 
     it('test render with show=true', () => {
-        component = TestUtils.renderIntoDocument(<SortAndGroupDialog show="true"/>);
+        component = TestUtils.renderIntoDocument(<SortAndGroupDialog show={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test contains FieldsPanel', () => {
-        component = TestUtils.renderIntoDocument(< SortAndGroupDialog show="true"/>);
+        component = TestUtils.renderIntoDocument(< SortAndGroupDialog show={true}/>);
         var _FieldsPanel = TestUtils.scryRenderedComponentsWithType(component, FieldsPanelMock);
         expect(_FieldsPanel.length).toEqual(1);
     });
 
     it('test contains FieldSettings', () => {
-        component = TestUtils.renderIntoDocument(< SortAndGroupDialog show="true"/>);
+        component = TestUtils.renderIntoDocument(< SortAndGroupDialog show={true}/>);
         var _FieldSettings = TestUtils.scryRenderedComponentsWithType(component, FieldSettingsMock);
         expect(_FieldSettings.length).toEqual(2);
     });

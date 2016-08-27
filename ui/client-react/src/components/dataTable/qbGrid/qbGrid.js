@@ -22,6 +22,7 @@ const FluxMixin = Fluxxor.FluxMixin(React);
 
 const QBGrid = React.createClass({
     mixins: [FluxMixin],
+    displayName: 'QBGrid',
 
     propTypes: {
         columns: React.PropTypes.array,

@@ -20,6 +20,10 @@ import ComponentLibraryWrapper from './components/componentLibrary';
 
 import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
+import TextFieldDoc from './docs/textFieldValueRenderer';
+import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
+import FieldValueRendererDoc from './docs/fieldValueRenderer';
+import FieldValueEditorDoc from './docs/fieldValueEditor';
 
 import './assets/componentLibrary.scss';
 
@@ -29,6 +33,10 @@ render((
             <IndexRedirect to="qbpanel" />
             <Route path="qbpanel" component={QBPanelDoc} />
             <Route path="qbicon" component={QBIconDoc} />
+            <Route path="textFieldValueRenderer" component={TextFieldDoc} />
+            <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
+            <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
+            <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

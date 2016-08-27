@@ -26,6 +26,7 @@ let reportModel = {
         filteredRecordsCount: null,
         fields: null,
         keyField: null,
+        fieldsMap: null,
         groupFields: null,
         groupLevel: 0,
         hasGrouping: false,
@@ -164,6 +165,14 @@ let reportModel = {
         }
 
         this.model.fields = recordData.fields || [];
+        // map of fields by field id for fast lookup
+        let map = new Map();
+        if (recordData.fields) {
+            recordData.fields.forEach((field) => {
+                map.set(field.id, field);
+            });
+        }
+        this.model.fieldsMap = map;
         this.model.keyField =  this.model.fields.find(field => field.keyField);
 
         this.model.filteredRecords = this.model.records;
