@@ -232,8 +232,9 @@ describe('QBForm functions', () => {
     it('test render of field form elements', () => {
         component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
         const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
+
         expect(fieldElements.length).toEqual(1);
-        const fieldValue = fieldElements[0].querySelector(".textCell");
+        const fieldValue = fieldElements[0].querySelector(".textField");
         expect(fieldValue.innerText, "field value");
     });
 

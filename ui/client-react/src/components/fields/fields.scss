@@ -50,19 +50,44 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of input error
-[type="text"]:focus.input.error,
+.textField.error [type="text"].input,
 [type="text"].input.error {
-  border: solid 1px $input-text-error-border-color;
-  @include focus-shadow($input-text-error-border-color);
+  border-top: 1px solid $input-text-error-border-color;
+  border-right: 1px solid  $input-text-error-border-color;
+  border-bottom: 1px solid $input-text-error-border-color;
+  border-left: 5px solid $input-text-error-border-color;
+  box-shadow: none;
 }
+
 // visual style of focus input error
+.textField.error [type="text"]:focus.input,
 [type="text"]:focus.input.error {
   outline: none;
-  border: solid 1px $input-text-error-border-color;
+  border-top: 1px solid $input-text-error-border-color;
+  border-right: 1px solid  $input-text-error-border-color;
+  border-bottom: 1px solid $input-text-error-border-color;
   border-left: 5px solid $input-text-error-border-color;
   @include focus-shadow($input-text-error-border-color);
 }
 
+.invalidRecord.tooltip >.tooltip-arrow,
+.invalidInput.tooltip >.tooltip-arrow {
+  border-bottom-color: $tootip-error-color;
+  border-top-color: $tootip-error-color;
+}
+.invalidRecord.tooltip,
+.invalidRecord.tooltip .tooltip-inner,
+.invalidInput.tooltip,
+.invalidInput.tooltip .tooltip-inner {
+  background-color:  $tootip-error-color;
+}
+
+.invalidRecord.tooltip .tooltip-arrow {
+  top: -5px;
+}
+.invalidInput.tooltip.top .tooltip-arrow {
+  bottom: -5px;
+}
 // visual style of required field indicator
 .requiredFlag {
   color: $field-label-normal-color;
@@ -73,4 +98,17 @@ $data-font-size: $font-size-p;
   display: block;
   padding-left: 2px;
 
+}
+
+.textFormat .cellData .textField {
+  word-break: break-word;
+  white-space: normal;
+}
+.textFormat .cellData.NoWrap .textField {
+  white-space: nowrap;
+}
+
+
+.cellData.NoWrap {
+  white-space: nowrap;
 }

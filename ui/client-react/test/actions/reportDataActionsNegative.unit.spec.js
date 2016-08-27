@@ -499,6 +499,7 @@ describe('Report Data Actions Edit Report functions -- Negative', () => {
     'use strict';
 
     let changes = {};
+    let newRecord = {};
 
     class mockRecordService {
         constructor() {}
@@ -532,6 +533,12 @@ describe('Report Data Actions Edit Report functions -- Negative', () => {
         {test:'test saveReportRecord with missing changes', appId:1, tblId:2, recId:3, changes:null}
     ];
 
+    var saveNewDataProvider = [
+        {test:'test saveNewDataProvider with missing appId', appId:null, tblId:2, record:newRecord},
+        {test:'test saveNewDataProvider with missing tblId', appId:1, tblId:null, record:newRecord},
+        {test:'test saveNewDataProvider with missing record', appId:1, tblId:2, record:null}
+    ];
+
     var deleteDataProvider = [
         {test:'test deleteReportRecord with missing appId', appId:null, tblId:2, recId:3},
         {test:'test deleteReportRecord with missing tblId', appId:1, tblId:null, recId:3},
@@ -557,6 +564,23 @@ describe('Report Data Actions Edit Report functions -- Negative', () => {
                 () => {
                     expect(mockRecordService.prototype.saveRecord).not.toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SAVE_REPORT_RECORD_FAILED, jasmine.any(Object));
+                    done();
+                }
+            );
+        });
+    });
+
+    saveNewDataProvider.forEach(function(data) {
+
+        it(data.test, (done) => {
+            flux.actions.saveNewReportRecord(data.appId, data.tblId, data.record).then(
+                () => {
+                    expect(true).toBe(false);
+                    done();
+                },
+                () => {
+                    expect(mockRecordService.prototype.deleteRecord).not.toHaveBeenCalled();
+                    expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.ADD_REPORT_RECORD_FAILED, jasmine.any(Object));
                     done();
                 }
             );
@@ -661,3 +685,69 @@ describe('Report Data Actions Edit Report functions -- Error', () => {
         );
     });
 });
+
+describe('Report Data record edit Actions -- errors / exceptions Negative', () => {
+    'use strict';
+
+    beforeEach(() => {
+        spyOn(flux.dispatchBinder, 'dispatch');
+
+    });
+    afterEach(() => {
+        reportDataActions.__ResetDependency__('RecordService');
+    });
+
+
+    it('test saveNewDataProvider fail on create record', (done) => {
+        class mockRecordService {
+            constructor() {
+            }
+
+            createRecord() {
+                return mockPromiseError();
+            }
+        }
+        reportDataActions.__Rewire__('RecordService', mockRecordService);
+        flux.actions.saveNewReportRecord(inputs.appId, inputs.tblId, {}).then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD, {appId: inputs.appId, tblId:inputs.tblId, record: {}}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_REPORT_RECORD_FAILED,
+                    jasmine.objectContaining({error: jasmine.any(Object)})]);
+                done();
+            }
+        );
+    });
+
+
+    it('test saveNewReportRecord no returned record id', (done) => {
+        class mockRecordService {
+            constructor() {
+            }
+
+            createRecord() {
+                return Promise.resolve({data: {}});
+            }
+        }
+        flux.actions.saveNewReportRecord(inputs.appId, inputs.tblId, {}).then(
+            () => {
+                expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD,
+                    {appId, tblId, record:newRecord}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_REPORT_RECORD_FAILED,
+                    jasmine.objectContaining({error : jasmine.any(Object)})]);
+                done();
+            },
+            () => {
+                expect(true).toBe(true);
+                done();
+            }
+        );
+    });
+
+});
+

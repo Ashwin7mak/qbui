@@ -7,7 +7,7 @@ import QBicon from '../qbIcon/qbIcon';
 const SearchBox = React.createClass({
     propTypes: {
         className: React.PropTypes.string,
-        key: React.PropTypes.string,
+        searchBoxKey: React.PropTypes.string,
         placeholder: React.PropTypes.string,
         hideClearIcon: React.PropTypes.bool, //if the box chooses to not render clear icon
         onChange: React.PropTypes.func,
@@ -25,7 +25,7 @@ const SearchBox = React.createClass({
         return (
             <div className={className}>
                 <input className="searchInput" type="text"
-                   key={this.props.key}
+                   key={this.props.searchBoxKey}
                    value={this.props.value}
                    onChange={this.props.onChange}
                    placeholder={this.props.placeholder}>

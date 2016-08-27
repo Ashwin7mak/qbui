@@ -11,6 +11,8 @@ $font-path: '../../../client-react/src/assets/fonts/';
     }
 }
 
+
+
 .comp-library {
     width: 100%;
     overflow-x: scroll;
@@ -86,134 +88,150 @@ $font-path: '../../../client-react/src/assets/fonts/';
 }
 
 .comp-library-content {
-    flex: 0 1 100%;
-    flex-basis: auto; // Safari bug that causes container to collapse
-    overflow-x: scroll;
-    padding: 20px;
+  flex: 0 1 100%;
+  flex-basis: auto; // Safari bug that causes container to collapse
+  overflow-x: scroll;
+  padding: 20px;
 
-    @media (min-width: 768px) {
-        overflow: auto;
+  ul {
+    list-style: none;
+  }
+  li {
+    padding-bottom: 20px;
+  }
 
-        > div {
-            width: 100%;
-            max-width: 700px;
-        }
+  @media (min-width: 768px) {
+    overflow: auto;
+
+    > div {
+      width: 100%;
+      max-width: 700px;
     }
+  }
 
-    .playground {
-        margin-bottom: 60px;
-    }
+  .playground {
+    margin-bottom: 60px;
+  }
 
-    .code-toggle {
-        padding: 4px 8px;
-        top: -1px;
-        margin-left: 1px;
-        border-radius: 0 0 4px 4px;
-        float: right;
-        display: inline-block;
-        position: relative;
-        border: 1px solid #ddd;
-        border-top: none;
-        background: #fff;
-    }
+  .code-toggle {
+    padding: 4px 8px;
+    top: -1px;
+    margin-left: 1px;
+    border-radius: 0 0 4px 4px;
+    float: right;
+    display: inline-block;
+    position: relative;
+    border: 1px solid #ddd;
+    border-top: none;
+    background: #fff;
+  }
 
-    .highlight, .code-toggle.open {
-      background-color: #272822;
-    }
+  .highlight, .code-toggle.open {
+    background-color: #272822;
+  }
 
-    .code-toggle.open {
-        color: #fff;
-    }
+  .code-toggle.open {
+    color: #fff;
+  }
 
-    .highlight {
-      padding: 20px 10px;
-      margin-bottom: 14px;
-      background-color: #272822;
-      border: 1px solid #e1e1e8;
-      border-radius: 4px 4px 0 4px;
-    }
+  .highlight {
+    padding: 20px 10px;
+    margin-bottom: 14px;
+    background-color: #272822;
+    border: 1px solid #e1e1e8;
+    border-radius: 4px 4px 0 4px;
+  }
 
-    .highlight pre {
-      padding: 0;
-      margin-top: 0;
-      margin-bottom: 0;
-      word-break: normal;
-      word-wrap: nowrap;
-      white-space: nowrap;
-      background-color: transparent;
-      border: 0;
-    }
+  .highlight pre {
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    word-break: normal;
+    word-wrap: nowrap;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+  }
 
-    .highlight pre code {
-      font-size: inherit;
-      color: #fff; /* Effectively the base text color */
-    }
+  .highlight pre code {
+    font-size: inherit;
+    color: #fff; /* Effectively the base text color */
+  }
 
-    .highlight pre code:first-child {
-      display: inline-block;
-      padding-right: 45px;
-    }
+  .highlight pre code:first-child {
+    display: inline-block;
+    padding-right: 45px;
+  }
 
-    /*
-     * Examples
-     *
-     * Isolated sections of example content for each component or feature. Usually
-     * followed by a code snippet.
-     */
+  /*
+   * Examples
+   *
+   * Isolated sections of example content for each component or feature. Usually
+   * followed by a code snippet.
+   */
 
+  .bs-example {
+    position: relative;
+    padding: 45px 15px 15px;
+    margin: 0 -15px 0;
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-width: 1px 0;
+    -webkit-box-shadow: inset 0 3px 6px rgba(0, 0, 0, .05);
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, .05);
+  }
+
+  /* Echo out a label for the example */
+  .bs-example:after {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #959595;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    content: "Example";
+  }
+
+  /* Tweak display of the code snippets when following an example */
+  .bs-example + .highlight {
+    margin: -15px -15px 0;
+    border-width: 0 0 1px;
+    border-radius: 0;
+  }
+
+  /* Make the examples and snippets not full-width */
+  @media (min-width: 768px) {
     .bs-example {
-      position: relative;
-      padding: 45px 15px 15px;
-      margin: 0 -15px 0;
-      border-color: #e5e5e5 #eee #eee;
-      border-style: solid;
-      border-width: 1px 0;
-      -webkit-box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
-              box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
+      margin-right: 0;
+      margin-left: 0;
+      background-color: #fff;
+      border-color: #ddd;
+      border-width: 1px;
+      border-radius: 4px 4px 0 0;
+      -webkit-box-shadow: none;
+      box-shadow: none;
     }
-
-    /* Echo out a label for the example */
-    .bs-example:after {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      font-size: 12px;
-      font-weight: bold;
-      color: #959595;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      content: "Example";
-    }
-
-    /* Tweak display of the code snippets when following an example */
     .bs-example + .highlight {
-      margin: -15px -15px 0;
-      border-width: 0 0 1px;
-      border-radius: 0;
+      margin-top: -10px;
+      margin-right: 0;
+      margin-left: 0;
+      border-width: 1px;
     }
+  }
 
-    /* Make the examples and snippets not full-width */
-    @media (min-width: 768px) {
-      .bs-example {
-        margin-right: 0;
-        margin-left: 0;
-        background-color: #fff;
-        border-color: #ddd;
-        border-width: 1px;
-        border-radius: 4px 4px 0 0;
-        -webkit-box-shadow: none;
-                box-shadow: none;
-      }
-      .bs-example + .highlight {
-        margin-top: -10px;
-        margin-right: 0;
-        margin-left: 0;
-        border-width: 1px;
-      }
-    }
+  /* Undo width of container */
+  .bs-example .container {
+    width: auto;
+  }
 
-    /* Undo width of container */
-    .bs-example .container {
-      width: auto;
-    }
+  .bs-example dt {
+    color: $color-cyan-800;
+  }
+
+  .bs-example dd {
+    margin-bottom:2rem;
+    margin-left: 0;
+  }
 }
