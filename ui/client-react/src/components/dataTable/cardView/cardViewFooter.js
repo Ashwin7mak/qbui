@@ -7,7 +7,7 @@ import Loader  from 'react-loader';
 /**
  * Footer component for report pagination small breakpoint. This adds the 'fetch next' text.
  */
-var CardViewFooterNav = React.createClass({
+var CardViewFooter = React.createClass({
     propTypes: {
         getNextReportPage: React.PropTypes.func,
     },
@@ -56,4 +56,4 @@ var CardViewFooterNav = React.createClass({
     }
 });
 
-export default CardViewFooterNav;
+export default CardViewFooter;

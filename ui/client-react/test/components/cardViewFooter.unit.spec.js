@@ -3,60 +3,38 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import CardViewFooter from '../../src/components/dataTable/cardView/cardViewFooter';
 
-const fakeReportNavigationData = {
+const fakeData = {
     valid: {
-        pageStart: 2,
-        pageEnd: 10,
-        recordsCount: 1000,
-        getPreviousReportPage: null,
-        getNextReportPage: null
-    },
-    noNext: {
-        pageStart: 2,
-        pageEnd: 1000,
-        recordsCount: 20,
-        getPreviousReportPage: null,
-        getNextReportPage: null
+        getPreviousReportPage: null
     }
 };
 
-describe('CardViewFooter Navigation tests', () => {
+describe('CardViewFooter element render tests', () => {
     'use strict';
 
     var component;
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<CardViewFooter recordsCount={fakeReportNavigationData.valid.recordsCount}
-                                                                   pageStart={fakeReportNavigationData.valid.pageStart}
-                                                                   pageEnd={fakeReportNavigationData.valid.pageEnd}
-                                                                   getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
-                                                                   getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
+        component = TestUtils.renderIntoDocument(<CardViewFooter getPreviousReportPage={fakeData.valid.getPreviousReportPage}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        var reportNavigation = ReactDOM.findDOMNode(component);
-        expect(reportNavigation).toBeDefined();
-    });
 
-    it('test next button is generated', () => {
-        component = TestUtils.renderIntoDocument(<CardViewFooter recordsCount={fakeReportNavigationData.valid.recordsCount}
-                                                                   pageStart={fakeReportNavigationData.valid.pageStart}
-                                                                   pageEnd={fakeReportNavigationData.valid.pageEnd}
-                                                                   getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
-                                                                   getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
-        var node = ReactDOM.findDOMNode(component);
-        var nextPage = node.getElementsByClassName("cardViewFooter");
-        expect(nextPage).toBeDefined();
-    });
+        var parentDiv = ReactDOM.findDOMNode(component);
 
-    it('test next button is NOT generated', () => {
-        component = TestUtils.renderIntoDocument(<CardViewFooter  recordsCount={fakeReportNavigationData.noNext.recordsCount}
-                                                                   pageStart={fakeReportNavigationData.noNext.pageStart}
-                                                                   pageEnd={fakeReportNavigationData.noNext.pageEnd}
-                                                                   getPreviousReportPage={fakeReportNavigationData.noNext.getPreviousReportPage}
-                                                                   getNextReportPage={fakeReportNavigationData.noNext.getNextReportPage}/>);
-        var nextPage = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";
-        });
-        expect(nextPage.length).toBe(0);
+        // Test render of footer div
+        var footerDiv  = parentDiv.getElementsByClassName("cardViewFooter");
+        expect(footerDiv).toBeDefined();
+
+        // Test render of fetch next button
+        var buttonDiv = parentDiv.getElementsByClassName("fetchNextButton");
+        expect(buttonDiv).toBeDefined();
+
+        // Test render of fetch next arrow
+        var fetchNextArrow = parentDiv.getElementsByClassName("fetchNextArrow");
+        expect(fetchNextArrow).toBeDefined();
+
+        // Test render of loading indicator
+        var loadingIndicator = parentDiv.getElementsByClassName("footerLoadingIndicator");
+        expect(loadingIndicator).toBeDefined();
     });
 });
 

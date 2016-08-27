@@ -3,60 +3,37 @@ import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import CardViewNavigation from '../../src/components/dataTable/cardView/cardViewNavigation';
 
-const fakeReportNavigationData = {
+const fakeData = {
     valid: {
-        pageStart: 2,
-        pageEnd: 10,
-        recordsCount: 1000,
-        getPreviousReportPage: null,
-        getNextReportPage: null
-    },
-    noPrevious: {
-        pageStart: 1,
-        pageEnd: 20,
-        recordsCount: 1000,
-        getPreviousReportPage: null,
         getNextReportPage: null
     }
 };
 
-describe('CardViewNavigation tests', () => {
+describe('CardViewHeader component render tests', () => {
     'use strict';
 
     var component;
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<CardViewNavigation recordsCount={fakeReportNavigationData.valid.recordsCount}
-                                                                     pageStart={fakeReportNavigationData.valid.pageStart}
-                                                                     pageEnd={fakeReportNavigationData.valid.pageEnd}
-                                                                     getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
-                                                                     getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
+        component = TestUtils.renderIntoDocument(<CardViewNavigation getNextReportPage={fakeData.valid.getNextReportPage}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        var reportNavigation = ReactDOM.findDOMNode(component);
-        expect(reportNavigation).toBeDefined();
-    });
 
-    it('test previous link is generated', () => {
-        component = TestUtils.renderIntoDocument(<CardViewNavigation recordsCount={fakeReportNavigationData.valid.recordsCount}
-                                                                   pageStart={fakeReportNavigationData.valid.pageStart}
-                                                                   pageEnd={fakeReportNavigationData.valid.pageEnd}
-                                                                   getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
-                                                                   getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
-        var node = ReactDOM.findDOMNode(component);
-        var previousButton = node.getElementsByClassName("cardViewHeader");
-        expect(previousButton).toBeDefined();
-    });
+        var parentDiv = ReactDOM.findDOMNode(component);
 
-    it('test previous link is NOT generated', () => {
-        component = TestUtils.renderIntoDocument(<CardViewNavigation recordsCount={fakeReportNavigationData.noPrevious.recordsCount}
-                                                                   pageStart={fakeReportNavigationData.noPrevious.pageStart}
-                                                                   pageEnd={fakeReportNavigationData.noPrevious.pageEnd}
-                                                                   getPreviousReportPage={fakeReportNavigationData.noPrevious.getPreviousReportPage}
-                                                                   getNextReportPage={fakeReportNavigationData.noPrevious.getNextReportPage}/>);
-        var previousPage = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
-        });
-        expect(previousPage.length).toBe(0);
+        // Test render of footer div
+        var footerDiv  = parentDiv.getElementsByClassName("cardViewHeader");
+        expect(footerDiv).toBeDefined();
+
+        // Test render of fetch next button
+        var buttonDiv = parentDiv.getElementsByClassName("fetchPreviousButton");
+        expect(buttonDiv).toBeDefined();
+
+        // Test render of fetch next arrow
+        var fetchNextArrow = parentDiv.getElementsByClassName("fetchPreviousArrow");
+        expect(fetchNextArrow).toBeDefined();
+
+        // Test render of loading indicator
+        var loadingIndicator = parentDiv.getElementsByClassName("headerLoadingIndicator");
+        expect(loadingIndicator).toBeDefined();
     });
 });
-

@@ -5,37 +5,6 @@ import CardViewListHolder from '../../src/components/dataTable/cardView/cardView
 import CardViewNavigation from '../../src/components/dataTable/cardView/cardViewNavigation';
 import CardViewFooter from '../../src/components/dataTable/cardView/cardViewFooter';
 
-const fakeReportNavigationData = {
-    valid: {
-        pageStart: 2,
-        pageEnd: 10,
-        recordsCount: 1000,
-        getPreviousReportPage: null,
-        getNextReportPage: null
-    },
-    noPrevious: {
-        pageStart: 1,
-        pageEnd: 20,
-        recordsCount: 1000,
-        getPreviousReportPage: null,
-        getNextReportPage: null
-    },
-    noNext: {
-        pageStart: 2,
-        pageEnd: 1000,
-        recordsCount: 20,
-        getPreviousReportPage: null,
-        getNextReportPage: null
-    },
-    noPrevAndNext: {
-        pageStart: 1,
-        pageEnd: 1000,
-        recordsCount: 20,
-        getPreviousReportPage: null,
-        getNextReportPage: null
-    }
-};
-
 const fakeReportData_loading = {
     loading: true
 };
@@ -47,6 +16,42 @@ const fakeReportData_empty = {
         columnMetadata: []
     }
 };
+
+const fakeReportData_fetchMoreOnly = {
+    reportData: {
+        loading: false,
+        countingTotalRecords: false,
+        data: {
+            recordsCount: 100
+        }
+    },
+    pageEnd: 50,
+    pageStart: 1
+};
+
+const fakeReportData_fetchMoreAndPrevious = {
+    reportData: {
+        loading: false,
+        countingTotalRecords: false,
+        data: {
+            recordsCount: 1000
+        }
+    },
+    pageEnd: 100,
+    pageStart: 51
+};
+
+const fakeReportData_noNagivationButtons = {
+    reportData: {
+        loading: false,
+        countingTotalRecords: false,
+        data: {
+            recordsCount: 10
+        }
+    },
+    pageEnd: 10,
+    pageStart: 1
+}
 
 const singleNodeTreeData = [{
     group:"group1",
@@ -149,62 +154,48 @@ describe('CardViewListHolder functions', () => {
         expect(TestUtils.isCompositeComponent(cardlist)).toBeTruthy();
     });
 
-    it('test render of CardViewNavigation component', () => {
-        component = TestUtils.renderIntoDocument(<CardViewNavigation recordsCount={fakeReportNavigationData.valid.recordsCount}
-                                                                     pageStart={fakeReportNavigationData.valid.pageStart}
-                                                                     pageEnd={fakeReportNavigationData.valid.pageEnd}
-                                                                     getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
-                                                                     getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        var reportNavigation = ReactDOM.findDOMNode(component);
-        expect(reportNavigation).toBeDefined();
-    });
-
-    it('test render of CardViewFooter navigation component', () => {
-        component = TestUtils.renderIntoDocument(<CardViewFooter recordsCount={fakeReportNavigationData.valid.recordsCount}
-                                                                 pageStart={fakeReportNavigationData.valid.pageStart}
-                                                                 pageEnd={fakeReportNavigationData.valid.pageEnd}
-                                                                 getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
-                                                                 getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        var reportNavigation = ReactDOM.findDOMNode(component);
-        expect(reportNavigation).toBeDefined();
-    });
-
-    it('test next link and previous link are generated', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]}
-                                                                     reportData={fakeReportData_loading}
-                                                                     recordsCount={fakeReportNavigationData.valid.recordsCount}
-                                                                     pageStart={fakeReportNavigationData.valid.pageStart}
-                                                                     pageEnd={fakeReportNavigationData.valid.pageEnd}
-                                                                     getPreviousReportPage={fakeReportNavigationData.valid.getPreviousReportPage}
-                                                                     getNextReportPage={fakeReportNavigationData.valid.getNextReportPage}/>);
+    it('test render of first paginated page, fetch more button only', () => {
+        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
+                                                                     selectedRows={[]}
+                                                                     reportData={fakeReportData_fetchMoreOnly.reportData}
+                                                                     pageEnd={fakeReportData_fetchMoreOnly.pageEnd}
+                                                                     pageStart={fakeReportData_fetchMoreOnly.pageStart}/>);
         var node = ReactDOM.findDOMNode(component);
         var previousButton = node.getElementsByClassName("cardViewFooter");
         expect(previousButton).toBeDefined();
-
-        node = ReactDOM.findDOMNode(component);
-        var nextButton = node.getElementsByClassName("cardViewHeader");
-        expect(nextButton).toBeDefined();
     });
 
-    it('test next link and previous link are NOT generated', () => {
+    it('test render of second paginated page, next and previous button to be rendered', () => {
         component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
                                                                      selectedRows={[]}
-                                                                     reportData={fakeReportData_loading}
-                                                                     recordsCount={fakeReportNavigationData.noPrevAndNext.recordsCount}
-                                                                     pageStart={fakeReportNavigationData.noPrevAndNext.pageStart}
-                                                                     pageEnd={fakeReportNavigationData.noPrevAndNext.pageEnd}
-                                                                     getPreviousReportPage={fakeReportNavigationData.noPrevAndNext.getPreviousReportPage}
-                                                                     getNextReportPage={fakeReportNavigationData.noPrevAndNext.getNextReportPage}/>);
-        var pageButton = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
+                                                                     reportData={fakeReportData_fetchMoreAndPrevious.reportData}
+                                                                     pageEnd={fakeReportData_fetchMoreAndPrevious.pageEnd}
+                                                                     pageStart={fakeReportData_fetchMoreAndPrevious.pageStart}/>);
+        var node = ReactDOM.findDOMNode(component);
+        var moreButton = node.getElementsByClassName("cardViewFooter");
+        expect(moreButton).toBeDefined();
+
+        var previousButton = TestUtils.findAllInRenderedTree(component, function(inst) {
+            return TestUtils.isDOMComponent(inst) && inst.id === "cardViewHeader";
         });
-        expect(pageButton.length).toBe(0);
-        var nextPage = TestUtils.findAllInRenderedTree(component, function(inst) {
-            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";
+        expect(previousButton.length).toBe(0);
+    });
+
+
+    it('test fetch more and fetch previous buttons are NOT generated', () => {
+        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
+                                                                     selectedRows={[]}
+                                                                     reportData={fakeReportData_noNagivationButtons.reportData}
+                                                                     pageStart={fakeReportData_noNagivationButtons.pageStart}
+                                                                     pageEnd={fakeReportData_noNagivationButtons.pageEnd}/>);
+        var previousButton = TestUtils.findAllInRenderedTree(component, function(inst) {
+            return TestUtils.isDOMComponent(inst) && inst.id === "cardViewHeader";
         });
-        expect(nextPage.length).toBe(0);
+        expect(previousButton.length).toBe(0);
+        var moreButton = TestUtils.findAllInRenderedTree(component, function(inst) {
+            return TestUtils.isDOMComponent(inst) && inst.id === "cardViewFooter";
+        });
+        expect(moreButton.length).toBe(0);
     });
 
     it('test selectrow callback', () => {
