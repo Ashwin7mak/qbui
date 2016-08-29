@@ -152,9 +152,9 @@ let CardViewListHolder = React.createClass({
      * @param visibleElementName - Class name of the header or the footer element.
      * @param loadingIndicatorElementName - Class name of the loading indicator container
      * @param delta - movement distance per swipe event
-     * @param isNegative - indicates upward or downward motion. Negative is for upward motion.
+     * @param isUpward - indicates upward or downward motion. Negative is for upward motion.
      */
-    handleVerticalSwipingMovement(visibleElementName, loadingIndicatorElementName, delta, isNegative) {
+    handleVerticalSwipingMovement(visibleElementName, loadingIndicatorElementName, delta, isUpward) {
         // If the element that has to be checked for visibility (fetch more or fetch previous button depending on drag direction)
         // is visible, process swipe
         if (this.isElementVisible(visibleElementName)) {
@@ -176,10 +176,10 @@ let CardViewListHolder = React.createClass({
                 loadingIndicatorElem.style.display = "flex";
                 // As long as the swipe is less than drag distance, move the table, header/footer button and spinner
                 if (delta < MAX_SWIPE_DISTANCE) {
-                    tableElem.style.transform = 'translate(0px, ' + (isNegative ? '-' : '') + (delta) + 'px)';
+                    tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + (delta) + 'px)';
                 } else {
                     // If the swipe exceeds drag distance, snap the table, footer and indicator to the top or bottom
-                    tableElem.style.transform = 'translate(0px, ' + (isNegative ? '-' : '') + '45px)';
+                    tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + '45px)';
                 }
             }
         }
