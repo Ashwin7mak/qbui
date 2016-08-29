@@ -238,6 +238,14 @@
                 }
             },
 
+            /**
+             * Does the request query have the supplied query parameter.  Return
+             * true if found; otherwise false.
+             *
+             * @param req
+             * @param parameterName
+             * @returns {*}
+             */
             hasQueryParameter: function(req, parameterName) {
                 if (!req || !parameterName) {
                     return false;
@@ -246,6 +254,14 @@
                 return (query && query.hasOwnProperty(parameterName));
             },
 
+            /**
+             * Examine the request url for the supplied query parameter name and
+             * return the value if found.  If not found, null is returned.
+             *
+             * @param req
+             * @param parameterName
+             * @returns {*}
+             */
             getQueryParameterValue: function(req, parameterName) {
                 if (!req || !parameterName) {
                     return null;
@@ -255,8 +271,8 @@
             },
 
             /**
-             * Remove the parameter from the request.  This function will also remove the preceeding ?
-             * or & in the request url.
+             * Remove the parameter from the request.  If the parameter is not found, the
+             * url is unchanged.
              *
              * @param req
              * @param parameterName
