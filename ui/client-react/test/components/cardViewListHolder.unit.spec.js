@@ -51,7 +51,7 @@ const fakeReportData_noNagivationButtons = {
     },
     pageEnd: 10,
     pageStart: 1
-}
+};
 
 const singleNodeTreeData = [{
     group:"group1",

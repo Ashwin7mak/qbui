@@ -176,10 +176,10 @@ let CardViewListHolder = React.createClass({
                 loadingIndicatorElem.style.display = "flex";
                 // As long as the swipe is less than drag distance, move the table, header/footer button and spinner
                 if (delta < MAX_SWIPE_DISTANCE) {
-                    tableElem.style.transform = 'translate(0px, ' + (isNegative? '-' : '') + (delta) + 'px)';
+                    tableElem.style.transform = 'translate(0px, ' + (isNegative ? '-' : '') + (delta) + 'px)';
                 } else {
                     // If the swipe exceeds drag distance, snap the table, footer and indicator to the top or bottom
-                    tableElem.style.transform = 'translate(0px, ' + (isNegative? '-' : '') + '45px)';
+                    tableElem.style.transform = 'translate(0px, ' + (isNegative ? '-' : '') + '45px)';
                 }
             }
         }
