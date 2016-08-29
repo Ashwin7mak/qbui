@@ -29,6 +29,18 @@ const fakeReportData_fetchMoreOnly = {
     pageStart: 1
 };
 
+const fakeReportData_fetchPreviousOnly = {
+    reportData: {
+        loading: false,
+        countingTotalRecords: false,
+        data: {
+            recordsCount: 100
+        }
+    },
+    pageEnd: 100,
+    pageStart: 50
+};
+
 const fakeReportData_fetchMoreAndPrevious = {
     reportData: {
         loading: false,
@@ -161,9 +173,21 @@ describe('CardViewListHolder functions', () => {
                                                                      pageEnd={fakeReportData_fetchMoreOnly.pageEnd}
                                                                      pageStart={fakeReportData_fetchMoreOnly.pageStart}/>);
         var node = ReactDOM.findDOMNode(component);
-        var previousButton = node.getElementsByClassName("cardViewFooter");
+        var nextButton = node.getElementsByClassName("cardViewFooter");
+        expect(nextButton).toBeDefined();
+    });
+
+    it('test render of last paginated page, fetch previous button only', () => {
+        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
+                                                                     selectedRows={[]}
+                                                                     reportData={fakeReportData_fetchPreviousOnly.reportData}
+                                                                     pageEnd={fakeReportData_fetchPreviousOnly.pageEnd}
+                                                                     pageStart={fakeReportData_fetchPreviousOnly.pageStart}/>);
+        var node = ReactDOM.findDOMNode(component);
+        var previousButton = node.getElementsByClassName("cardViewHeader");
         expect(previousButton).toBeDefined();
     });
+
 
     it('test render of second paginated page, next and previous button to be rendered', () => {
         component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
