@@ -259,30 +259,30 @@
             fetchRecords: function(req) {
                 // ENFORCE a row limit on all requests.  Check for offset and numOfRows query parameters and if both
                 // are not supplied OR invalid, will set to default values.
-                let rowLimitsValid = requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET) &&
-                    requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS);
-
-                if (rowLimitsValid) {
-                    //  we have row limit parameters..now ensure they are integers
-                    let reqOffset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
-                    let reqNumRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
-                    rowLimitsValid = isInteger(reqOffset) && isInteger(reqNumRows);
-
-                    //  if the max number of records to query exceeds limit, throw exception
-                    if (rowLimitsValid) {
-                        // TODO: look at getting smarter about max row limit...the number of columns on the report should also be considered..
-                        if (parseInt(reqNumRows) > constants.PAGE.MAX_NUM_ROWS) {
-                            let errorMsg = constants.REQUEST_PARAMETER.NUM_ROWS + '=' + reqNumRows + ' request parameter is greater than maximum request limit of ' + constants.PAGE.MAX_NUM_ROWS;
-                            throw errorMsg;
-                        }
-                    }
-                }
-
-                //  if we don't have valid row limits, then add the default offset and max number of rows.
-                if (!rowLimitsValid) {
-                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, constants.PAGE.DEFAULT_OFFSET);
-                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, constants.PAGE.DEFAULT_NUM_ROWS);
-                }
+                //let rowLimitsValid = requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET) &&
+                //    requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                //
+                //if (rowLimitsValid) {
+                //    //  we have row limit parameters..now ensure they are integers
+                //    let reqOffset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
+                //    let reqNumRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                //    rowLimitsValid = isInteger(reqOffset) && isInteger(reqNumRows);
+                //
+                //    //  if the max number of records to query exceeds limit, throw exception
+                //    if (rowLimitsValid) {
+                //        // TODO: look at getting smarter about max row limit...the number of columns on the report should also be considered..
+                //        if (parseInt(reqNumRows) > constants.PAGE.MAX_NUM_ROWS) {
+                //            let errorMsg = constants.REQUEST_PARAMETER.NUM_ROWS + '=' + reqNumRows + ' request parameter is greater than maximum request limit of ' + constants.PAGE.MAX_NUM_ROWS;
+                //            throw errorMsg;
+                //        }
+                //    }
+                //}
+                //
+                ////  if we don't have valid row limits, then add the default offset and max number of rows.
+                //if (!rowLimitsValid) {
+                //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, constants.PAGE.DEFAULT_OFFSET);
+                //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, constants.PAGE.DEFAULT_NUM_ROWS);
+                //}
 
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
