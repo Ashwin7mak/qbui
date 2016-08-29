@@ -412,8 +412,6 @@ describe('Validate RequestHelper unit tests', function() {
             it('Test case: ' + testCase.name, function(done) {
                 req.url = testCase.url;
                 let result = requestHelper.getQueryParameterValue(req, testCase.parameterName);
-
-                //  test that the url has the parameters appended as a query parameter
                 assert.equal(result, testCase.expectation);
 
                 done();
@@ -439,8 +437,6 @@ describe('Validate RequestHelper unit tests', function() {
             it('Test case: ' + testCase.name, function(done) {
                 req.url = testCase.url;
                 requestHelper.removeRequestParameter(req, testCase.parameterName);
-
-                //  test that the url has the parameters appended as a query parameter
                 assert.equal(req.url, testCase.expectation);
 
                 done();
