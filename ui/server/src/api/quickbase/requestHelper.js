@@ -254,12 +254,19 @@
                 return (query && query.hasOwnProperty(parameterName)) ? query[parameterName] : null;
             },
 
+            /**
+             * Remove the parameter from the request.  This function will also remove the preceeding ?
+             * or & in the request url.
+             *
+             * @param req
+             * @param parameterName
+             */
             removeRequestParameter: function(req, parameterName) {
                 if (this.hasQueryParameter(req, parameterName)) {
                     let startingIndex = req.url.indexOf(parameterName);
                     let endingIndex = req.url.indexOf('&', startingIndex);
                     if (endingIndex === -1) {
-                        req.url = req.url.substr(0, startingIndex);
+                        req.url = req.url.substr(0, startingIndex - 1);
                     } else {
                         req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
                     }
