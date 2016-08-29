@@ -7,6 +7,7 @@ import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
+import {I18nMessage} from "../../utils/i18nMessage";
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
 import '../report/report.scss';
@@ -48,7 +49,7 @@ let TableHomePageRoute = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add'},
+            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
             {msg: 'pageActions.favorite', icon:'star'},
             {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
             {msg: 'pageActions.email', icon:'mail'},
@@ -58,21 +59,17 @@ let TableHomePageRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
 
-    getBreadcrumbs() {
+    getStageHeadline() {
         let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
 
-        return (this.props.selectedTable &&
-        <h3 className="breadCrumbs"><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}
-            <span className="breadCrumbsSeparator"> | </span>{reportName}</h3>);
-
-    },
-
-    getStageHeadline() {
         return (
-            <div className="stageHeadline">
-                {this.getBreadcrumbs()}
-            </div>
-        );
+            <div className="tableHomepageStageHeadline">
+
+                <div className="navLinks stageHeadline">
+                    {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
+                    <h3>{this.props.selectedTable && this.props.selectedTable.name}&nbsp;<I18nMessage message={'nav.home'}/></h3>
+                </div>
+            </div>);
     },
 
     render() {

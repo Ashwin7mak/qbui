@@ -4,9 +4,8 @@ import ReactDOM from 'react-dom';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
 
-import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
-import CellValueRenderers from '../../src/components/dataTable/agGrid/cellValueRenderers';
-import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
+//import CellValueRenderer from '../../src/components/dataTable/agGrid/cellValueRenderer';
+import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
 
 import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
@@ -138,7 +137,7 @@ describe('AGGrid functions', () => {
 
     beforeEach(() => {
         AGGrid.__Rewire__('I18nMessage', I18nMessageMock);
-        CellValueRenderers.__Rewire__('I18nNumber', I18nMessageMock);
+        NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'rowClicked');
 
@@ -146,7 +145,7 @@ describe('AGGrid functions', () => {
 
     afterEach(() => {
         AGGrid.__ResetDependency__('I18nMessage');
-        CellValueRenderers.__ResetDependency__('I18nNumber');
+        NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
         flux.actions.getFilteredRecords.calls.reset();
         flux.actions.rowClicked.calls.reset();
     });
@@ -457,6 +456,7 @@ describe('AGGrid functions', () => {
                         <AGGrid ref="grid"
                                 flux={flux}
                                 keyField="col_num"
+                                uniqueIdentifier="col_num"
                                 onEditRecordStart={callBacks.onEditRecordStart}
                                 actions={TableActionsMock}
                                 records={fakeReportData_before.data.records}

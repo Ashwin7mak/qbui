@@ -1,6 +1,7 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import _ from 'lodash';
 
 const QBToolTip = React.createClass({
     propTypes: {
@@ -17,13 +18,13 @@ const QBToolTip = React.createClass({
     defaultDelayShow: 300,
 
     toolTipIt(tooltipId, plainMessage, i18nMessageKey) {
-        let label = plainMessage ? plainMessage : '...';
+        let label = plainMessage ? plainMessage : '';
         if (i18nMessageKey) {
-            label = (<I18nMessage message={i18nMessageKey}/>);
+            label = (<I18nMessage message={i18nMessageKey} {...this.props}/>);
         }
         let tipClassName = tooltipId ? "qbtooltip " + tooltipId : " qbtooltip";
         return (
-            <Tooltip className={tipClassName}>{label}</Tooltip>
+            <Tooltip className={tipClassName} id={_.uniqueId("qbtooltip_")} >{label}</Tooltip>
         );
     },
 
@@ -31,7 +32,7 @@ const QBToolTip = React.createClass({
         let itemTip = this.toolTipIt(this.props.tipId, this.props.plainMessage, this.props.i18nMessageKey);
         let startDelay = this.props.delayShow ? this.props.delayShow : this.defaultDelayShow;
         return (
-            <OverlayTrigger placement={this.props.location ? this.props.location : "top"} overlay={itemTip} delayShow={startDelay}>
+            <OverlayTrigger placement={this.props.location ? this.props.location : "top"} overlay={itemTip} delayShow={startDelay} {...this.props}>
                     {this.props.children}
             </OverlayTrigger>
         );

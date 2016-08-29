@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
 import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
-import CellValueRenderers from '../../src/components/dataTable/agGrid/cellValueRenderers';
+import CellValueRenderer from '../../src/components/dataTable/agGrid/cellValueRenderer';
 
 import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
+import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
 
 describe('AGGrid cell editor functions', () => {
     'use strict';
@@ -22,21 +23,21 @@ describe('AGGrid cell editor functions', () => {
 
         CellRenderers.__Rewire__('I18nDate', I18nMessageMock);
         CellRenderers.__Rewire__('I18nNumber', I18nMessageMock);
-        CellValueRenderers.__Rewire__('I18nNumber', I18nMessageMock);
+        NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
     });
 
     afterEach(() => {
 
         CellRenderers.__ResetDependency__('I18nDate');
         CellRenderers.__ResetDependency__('I18nNumber');
-        CellValueRenderers.__ResetDependency__('I18nNumber');
+        NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
     });
 
     it('test TextCellRenderer', () => {
         const params = {
             value: {
-                value: "Testing",
-                display: "Testing"
+                value: "TestingTextCell",
+                display: "TestingTextCell"
             },
             column: {
                 colDef: {
@@ -47,8 +48,10 @@ describe('AGGrid cell editor functions', () => {
         component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const value = TestUtils.findRenderedDOMComponentWithClass(component, "textCell");
-        expect(value.innerHTML).toEqual(params.value.display);
+        const value = TestUtils.findRenderedDOMComponentWithClass(component, "cellData");
+        expect(value.innerText).toEqual(params.value.display);
+        expect(value.querySelectorAll('.textField').length).toEqual(1);
+
 
         const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
         expect(edit.type).toEqual("text");
@@ -56,7 +59,7 @@ describe('AGGrid cell editor functions', () => {
 
         edit.value = "newValue";
         TestUtils.Simulate.change(edit);
-        expect(value.innerHTML).toEqual("newValue");
+        expect(value.innerText).toEqual("newValue");
     });
 
 

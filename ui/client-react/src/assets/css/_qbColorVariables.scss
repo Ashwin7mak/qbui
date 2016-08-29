@@ -93,6 +93,7 @@ $input-bg-color:$color-black-100;
 $input-text-focus-border-color:   $color-indigo-800;
 $input-text-normal-border-color:  $color-black-400;
 $input-text-error-border-color:   $color-red-700;
+$tootip-error-color:              $color-red-700;
 $input-email-normal-text-color:   $color-cyan-500;
 $field-label-normal-color:        $color-blue-600;
 
@@ -140,6 +141,7 @@ $left-nav-bg: $color30; // deep-sea
 $icon-color: $color23;
 $icon-color-hover: #0098cd; // caribbean
 $topnav-icon-color: $icon-color;
+$page-actions-icon-color: $color-cyan-700;
 
 $header-bg: $color7;
 $nav-hover-bg: #0097CD;
@@ -166,7 +168,8 @@ $selected-check-color:  $color16;
 
 //== Stage
 $stage-backgroundColor:           $color2;
-$stage-headline-icon-color: #009aad;
+$stage-headline-icon-color: $color-cyan-500;
+$stage-headline-color: $color-black-700;
 
 //== Report
 $report-backgroundColor:          $color13;

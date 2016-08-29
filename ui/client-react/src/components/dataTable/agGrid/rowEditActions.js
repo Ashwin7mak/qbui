@@ -3,11 +3,14 @@ import * as SchemaConsts from "../../../constants/schema";
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBIcon from '../../qbIcon/qbIcon';
 import {NotificationManager} from 'react-notifications';
+import {I18nMessage} from '../../../utils/i18nMessage';
+import QBToolTip from '../../qbToolTip/qbToolTip';
 
 /**
  * editing tools for the currently edited row
  */
 const RowEditActions = React.createClass({
+    displayName: 'RowEditActions',
 
     propTypes: {
         api: React.PropTypes.object,
@@ -17,8 +20,17 @@ const RowEditActions = React.createClass({
 
     onClickSave() {
         //get the current record id
-        const id = this.props.data[this.props.params.context.keyField];
+        const id = this.props.data[this.props.params.context.uniqueIdentifier];
         this.props.params.context.onRecordSaveClicked(id);
+        // commented code below deferred client side validation before save
+        // till reactabular implemented
+        /*
+        // validate each cell
+        Object.keys(this.props.params.context.cells[id.value]).forEach((cellId) => {
+             //let currentValue = this.props.params.context.cells[id.value][cellId].refs.cellInput.getDOMNode().value;
+            this.props.params.context.cells[id.value][cellId].onExitField();
+        })
+        ;*/
         this.props.api.deselectAll();
     },
 
@@ -26,7 +38,7 @@ const RowEditActions = React.createClass({
      * delete icon is not included but may come back shortly
      */
     onClickDelete() {
-        const id = this.props.data[this.props.params.context.keyField];
+        const id = this.props.data[this.props.params.context.uniqueIdentifier];
         this.props.api.deselectAll();
 
         this.props.flux.actions.deleteReportRecord(id);
@@ -36,7 +48,7 @@ const RowEditActions = React.createClass({
     },
     onClickCancel() {
         //get the original unchanged values in data to rerender
-        const id = this.props.data[this.props.params.context.keyField];
+        const id = this.props.data[this.props.params.context.uniqueIdentifier];
 
         if (this.props.params.node) {
             //ag-grid
@@ -50,12 +62,17 @@ const RowEditActions = React.createClass({
 
     onClickAdd() {
         //get the current record id
-        const id = this.props.data[this.props.params.context.keyField];
-        this.props.params.context.onRecordNewBlank(id, this.props.params.data);
+        const id = this.props.data[this.props.params.context.uniqueIdentifier];
+        this.props.params.context.onRecordNewBlank(id);
         this.props.api.deselectAll();
     },
 
     render: function() {
+        let errorMessage = "editErrors";
+        // defer this disabling of save button til server validation story
+        //let validRow = !this.props.params.context.rowEditErrors || this.props.params.context.rowEditErrors.ok;
+        let validRow = true;
+
         return (
             <span className="editTools">
 
@@ -63,9 +80,15 @@ const RowEditActions = React.createClass({
                      <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
                  </OverlayTrigger>
 
-                <OverlayTrigger  placement="bottom" overlay={<Tooltip id="saveRecord">Save changes</Tooltip>}>
-                    <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
-                </OverlayTrigger>
+                {validRow ?
+                     <OverlayTrigger  placement="bottom" overlay={<Tooltip id="saveRecord">Save changes</Tooltip>}>
+                        <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
+                    </OverlayTrigger> :
+
+                    <QBToolTip  rootClose={true} location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
+                        <Button><QBIcon icon="alert" className="invalidRecord"/></Button>
+                    </QBToolTip>
+                }
 
                 <OverlayTrigger placement="bottom" overlay={<Tooltip id="addRecord" >Add new record</Tooltip>}>
                     <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
