@@ -208,7 +208,7 @@ const FacetsMenu = React.createClass({
                     return (<span key={'token.' + facet.name + '.' + value}
                                   className="selectedToken" onClick={(e) => self.clearSelect(e, facet, value)}>
                                  <span className="selectedTokenName">
-                                      {value}
+                                      <span>{value}</span>
                                     <QBicon className="clearFacet" icon="clear-mini"/>
                                  </span>
 

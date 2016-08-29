@@ -22,18 +22,17 @@ const ReportStage = React.createClass({
         return window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/app/" + this.props.reportData.appId + "/table/" + this.props.reportData.tblId + "/report/" + this.props.reportData.rptId;
     },
 
-    render: function() {
-        const reportDesc = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.description : "";
+    render() {
+        const reportDesc = this.props.reportData && this.props.reportData.data && this.props.reportData.data.description;
 
-        return (this.props.reportData && this.props.reportData.data ? (
+        return (reportDesc && reportDesc !== "" ?
             <div className="report-content">
-            <div className="left">
-                <div className="content">
-                    <div className="stage-showHide-content">{reportDesc}</div>
+                <div className="left">
+                    <div className="content">
+                        <div className="stage-showHide-content">{reportDesc}</div>
+                    </div>
                 </div>
-            </div>
-         </div>) :
-         null);
+            </div> : null);
 
     }
 });

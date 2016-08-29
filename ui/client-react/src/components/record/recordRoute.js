@@ -11,6 +11,9 @@ import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import {withRouter} from 'react-router';
+import Locale from '../../locales/locales';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import _ from 'lodash';
 import './record.scss';
 
 let logger = new Logger();
@@ -76,13 +79,7 @@ export let RecordRoute = React.createClass({
      * navigate back/forth to a new record
      * @param recId
      */
-    navigateToRecord(recId) {
-        const {appId, tblId, rptId} = this.props.reportData;
-
-        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
-        let flux = this.getFlux();
-        flux.actions.openingReportRow(rptId, recId);
-
+    navigateToRecord(appId, tblId, rptId, recId) {
         const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         this.props.router.push(link);
     },
@@ -91,45 +88,59 @@ export let RecordRoute = React.createClass({
      * go back to the previous report record
      */
     previousRecord() {
-        this.navigateToRecord(this.props.reportData.previousRecordId);
+        const {appId, tblId, rptId, previousRecordId} = this.props.reportData;
+
+        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
+        let flux = this.getFlux();
+        flux.actions.showPreviousRecord(previousRecordId);
+
+        this.navigateToRecord(appId, tblId, rptId, previousRecordId);
     },
 
     /**
      * go forward to the next report record
      */
     nextRecord() {
-        this.navigateToRecord(this.props.reportData.nextRecordId);
+        const {appId, tblId, rptId, nextRecordId} = this.props.reportData;
+
+        // let flux now we're tranversing records so it can pass down updated previous/next record IDs
+        let flux = this.getFlux();
+        flux.actions.showNextRecord(nextRecordId);
+
+        this.navigateToRecord(appId, tblId, rptId, nextRecordId);
     },
 
     getStageHeadline() {
-
         if (this.props.params) {
-            const {rptId} = this.props.params;
+            const {rptId, recordId} = this.props.params;
 
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
             const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
 
+            const formName = this.props.form && this.props.form.formData && this.props.form.formData.formMeta && this.props.form.formData.formMeta.name;
+            const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
+
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
+                    {this.props.selectedTable && <TableIcon icon={this.props.selectedTable.icon}/> }
+                    {this.props.selectedTable && this.props.selectedTable.name && <span>{this.props.selectedTable.name}&nbsp;&gt;&nbsp;</span>}
+                    {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
+                </div>
+
+                <div className="stageHeadline iconActions">
+
                     {(showBack || showNext) && <div className="iconActions">
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
-                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-left"/></Button>
+                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="icon_caretfilledleft"/></Button>
                         </OverlayTrigger>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
-                            <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-right"/></Button>
+                            <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="icon_caretfilledright"/></Button>
                         </OverlayTrigger>
                     </div> }
 
-                    {rptId && <span><QBicon icon="return"/><a className="backToReport" href="#" onClick={this.returnToReport}><I18nMessage message={'nav.backToReport'}/></a></span>}
-                </div>
+                    <h3 className="formName">{formName} #{recordId}</h3>
 
-                <div className="stageHeadline">
-                    {this.props.selectedTable &&
-                    <h3 className="breadCrumbs"><TableIcon
-                        icon={this.props.selectedTable.icon}/>
-                        Eric Wright at Union University</h3>
-                    }
                 </div>
             </div>);
         } else {
@@ -150,8 +161,19 @@ export let RecordRoute = React.createClass({
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={actions.length - 1} {...this.props}/>);
     },
 
-    render() {
+    /**
+     * only re-render when our form data has changed */
+    shouldComponentUpdate(nextProps) {
+        return !_.isEqual(this.props.form.formData, nextProps.form.formData);
+    },
 
+    /**
+     * render the stage, actions, and form
+     *
+     * the QBForm gets a unique to allow ReactCSSTransitionGroup animation to work across route transitions (i.e. diffferent record IDs)
+     * we implement shouldComponentUpdate() to prevent triggering animations unless the record has changed
+     */
+    render() {
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
             _.isUndefined(this.props.params.tblId) ||
@@ -160,7 +182,12 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
-            return (<div className="recordContainer">
+
+            // we store "next", "previous" in flux store and pass it down so we know what CSS classes to apply for the animation based on the direction
+
+            const nextOrPreviousTransitionName = this.props.reportData && this.props.reportData.nextOrPrevious ? this.props.reportData.nextOrPrevious : "";
+
+            return (<div id={this.props.params.recordId} className="recordContainer">
                 <Stage stageHeadline={this.getStageHeadline()}
                        pageActions={this.getPageActions()}>
 
@@ -172,7 +199,15 @@ export let RecordRoute = React.createClass({
                     {this.getSecondaryBar()}
                     {this.getPageActions()}
                 </div>
-                <QBForm errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null} formData={this.props.form ? this.props.form.formData : null}></QBForm>
+                <div className="qbFormContainer">
+                    <ReactCSSTransitionGroup transitionName={nextOrPreviousTransitionName}
+                                             transitionEnterTimeout={200}
+                                             transitionLeaveTimeout={200}>
+
+                        <QBForm key={_.uniqueId()} errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null} formData={this.props.form ? this.props.form.formData : null}></QBForm>
+
+                    </ReactCSSTransitionGroup>
+                </div>
             </div>);
         }
     }
