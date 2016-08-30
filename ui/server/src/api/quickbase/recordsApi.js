@@ -345,8 +345,8 @@
                 }
 
                 //  remove any page limits..
-                requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.OFFSET);
-                requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
+                //requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.OFFSET);
+                //requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
 
                 return requestHelper.executeRequest(req, opts);
             },

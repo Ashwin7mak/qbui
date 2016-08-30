@@ -19,23 +19,22 @@ var ReportNavigation = React.createClass({
      */
     render() {
         let navBar = "report.reportNavigationBar";
-        return null;
 
-        //return (<div className="reportNavigation">
-        //            <PreviousLink pageStart={this.props.pageStart}
-        //                          getPreviousReportPage={this.props.getPreviousReportPage}
-        //            />
-        //            <div className="pageNumbers">
-        //                <I18nMessage message={navBar}
-        //                             pageStart={this.props.pageStart}
-        //                             pageEnd={this.props.pageEnd}
-        //                />
-        //            </div>
-        //            <NextLink recordsCount={this.props.recordsCount}
-        //                      pageEnd={this.props.pageEnd}
-        //                      getNextReportPage={this.props.getNextReportPage}
-        //            />
-        //        </div>);
+        return (<div className="reportNavigation">
+                    <PreviousLink pageStart={this.props.pageStart}
+                                  getPreviousReportPage={this.props.getPreviousReportPage}
+                    />
+                    <div className="pageNumbers">
+                        <I18nMessage message={navBar}
+                                     pageStart={this.props.pageStart}
+                                     pageEnd={this.props.pageEnd}
+                        />
+                    </div>
+                    <NextLink recordsCount={this.props.recordsCount}
+                              pageEnd={this.props.pageEnd}
+                              getNextReportPage={this.props.getNextReportPage}
+                    />
+                </div>);
 
     }
 });
