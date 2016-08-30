@@ -257,8 +257,11 @@
              * @returns Promise
              */
             fetchRecords: function(req) {
-                // ENFORCE a row limit on all requests.  Check for offset and numOfRows query parameters and if both
+                // TODO: ENFORCE a row limit on all requests.  Check for offset and numOfRows query parameters and if both
                 // are not supplied OR invalid, will set to default values.
+                //
+                // TODO: if invalid parameters, consider throwing an exception vs setting to defaults
+                //
                 //let rowLimitsValid = requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET) &&
                 //    requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS);
                 //
@@ -343,10 +346,6 @@
                         }
                     }
                 }
-
-                //  remove any page limits..
-                //requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.OFFSET);
-                //requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
 
                 return requestHelper.executeRequest(req, opts);
             },

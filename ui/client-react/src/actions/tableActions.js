@@ -51,9 +51,9 @@ let tableActions = {
                             reject();
                         });
 
+                        //  not waiting for the records count..fire off the load report events
                         this.dispatch(actions.LOAD_REPORT, {appId, tblId, "rptId": model.rptId});
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                        //resolve();
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
