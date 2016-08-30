@@ -11,6 +11,7 @@ import RecordsCount from './recordsCount';
 import ReportNavigation from './reportNavigation';
 import SortAndGroup from '../sortGroup/sortAndGroup';
 import mockFacets from '../../mocks/facets';
+import Breakpoints from "../../utils/breakpoints";
 import _ from 'lodash';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -139,6 +140,8 @@ const ReportToolbar = React.createClass({
     },
 
     render() {
+        let isSmall = Breakpoints.isSmallBreakpoint();
+
         if (this.props.fillinMockFacets) {
             this.populateDummyFacets();
         }
@@ -191,69 +194,69 @@ const ReportToolbar = React.createClass({
         //   component container, to display the correct page end, we set the page end to the total records count if records count
         //   is less than page size for the last page. Hence, the conditions to check for here, are that we are on the first page
         //   (page start is 1) and the number of records is equal to page end
-        let showNavigation = !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && !isError;
+        let showNavigation = !isSmall && !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && !isError;
 
         let reportToolbar = (
 
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
 
-                    <div className="leftReportToolbar">
+                <div className="leftReportToolbar">
 
-                        {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */}
+                    {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */}
 
-                        {/*TODO : check if searchBox is enabled for this report,
-                         if has facets has search too, eg no facets without searchBox */}
-                        {showFilterSearchBox ?
-                            <FilterSearchBox onChange={this.handleSearchChange}
-                                             nameForRecords={this.props.nameForRecords}
-                                             searchBoxKey="reportToolBar"
-                                {...this.props} /> :
-                            null
-                        }
-                        {!isLoading && !isError ?
-                            <SortAndGroup  {...this.props}
-                                filter={{selections: this.props.selections,
-                                        facet: this.props.reportData.facetExpression,
-                                        search: this.props.searchStringForFiltering}}/> :
-                            null
-                        }
-                        {/* check if facets is enabled for this report,
-                         also hide Facets Menu Button if facets disabled  */}
-                        {!isLoading && hasFacets && !isError ?
-                            (<FacetsMenu className="facetMenu"
-                                {...this.props}
-                                         isLoading={isLoading}
-                                         selectedValues={this.props.selections}
-                                         onFacetSelect={this.handleFacetSelect}
-                                         onFacetDeselect={this.handleFacetDeselect}
-                                         onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
-                            />) :
-                            null
-                        }
-                    </div>
-                    <div className="rightReportToolbar">
-                        {!isLoading && !isError ?
-                            <RecordsCount recordCount={recordCount}
-                                          isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
-                                          filteredRecordCount={filteredRecordCount}
-                                          nameForRecords={this.props.nameForRecords}
-                                          clearAllFilters={this.props.clearAllFilters}
-                                          isCounting={this.props.reportData.countingTotalRecords}
-                            /> :
-                            null
-                        }
+                    {/*TODO : check if searchBox is enabled for this report,
+                     if has facets has search too, eg no facets without searchBox */}
+                    {showFilterSearchBox ?
+                        <FilterSearchBox onChange={this.handleSearchChange}
+                                         nameForRecords={this.props.nameForRecords}
+                                         searchBoxKey="reportToolBar"
+                                         {...this.props} /> :
+                        null
+                    }
+                    {!isLoading && !isError ?
+                        <SortAndGroup  {...this.props}
+                                       filter={{selections: this.props.selections,
+                                           facet: this.props.reportData.facetExpression,
+                                           search: this.props.searchStringForFiltering}}/> :
+                        null
+                    }
+                    {/* check if facets is enabled for this report,
+                     also hide Facets Menu Button if facets disabled  */}
+                    {!isLoading && hasFacets && !isError ?
+                        (<FacetsMenu className="facetMenu"
+                                     {...this.props}
+                                     isLoading={isLoading}
+                                     selectedValues={this.props.selections}
+                                     onFacetSelect={this.handleFacetSelect}
+                                     onFacetDeselect={this.handleFacetDeselect}
+                                     onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
+                        />) :
+                        null
+                    }
+                </div>
+                <div className="rightReportToolbar">
+                    {!isLoading && !isError ?
+                        <RecordsCount recordCount={recordCount}
+                                      isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
+                                      filteredRecordCount={filteredRecordCount}
+                                      nameForRecords={this.props.nameForRecords}
+                                      clearAllFilters={this.props.clearAllFilters}
+                                      isCounting={this.props.reportData.countingTotalRecords}
+                        /> :
+                        null
+                    }
 
-                        {showNavigation ?
-                            (<ReportNavigation pageStart={this.props.pageStart}
-                                               pageEnd={this.props.pageEnd}
-                                               recordsCount={recordCount}
-                                               getNextReportPage={this.props.getNextReportPage}
-                                               getPreviousReportPage={this.props.getPreviousReportPage}
-                            />) :
-                            <div className="spacer"></div>
-                        }
+                    {showNavigation ?
+                        (<ReportNavigation pageStart={this.props.pageStart}
+                                           pageEnd={this.props.pageEnd}
+                                           recordsCount={recordCount}
+                                           getNextReportPage={this.props.getNextReportPage}
+                                           getPreviousReportPage={this.props.getPreviousReportPage}
+                        />) :
+                        <div className="spacer"></div>
+                    }
 
-                    </div>
+                </div>
                 {this.props.pageActions}
 
             </div>

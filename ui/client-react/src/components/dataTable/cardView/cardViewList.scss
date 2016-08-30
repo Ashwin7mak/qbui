@@ -6,17 +6,22 @@ $grid-group-expand-icon-size: 18px;
 $grid-default-group-padding: 0px;
 $table-actions-container-bg: #fff;
 
+$pagination-mobile-panel-background-color: $color-black-200;
+$pagination-mobile-panel-border-color: $color-black-400;
+$pagination-mobile-panel-text-color: $color-blue-500;
+$pagination-mobile-topbar-text-color: $color-black-100;
+
 .tableLoaderContainer {
     flex: 1 1 auto;
     overflow-y:auto;
 }
 
 .reportTable .cardViewListHolder {
-    position:absolute;
     transform: translate3d(-40px,0,0);
     -webkit-transform: translate3d(-40px,0,0);
     //transition: transform 2000ms;
     width: calc(100% + 40px) !important;
+    position: relative;
 
     &.allowCardSelection {
         transform: translate3d(0,0,0);
@@ -29,7 +34,7 @@ $table-actions-container-bg: #fff;
 .cardViewList {
     display: block !important;
     width: inherit !important;
-    margin-bottom: $margin-spacer;
+    margin-bottom: 0px;
 
     .group-header {
         line-height: 30px;
@@ -56,6 +61,73 @@ $table-actions-container-bg: #fff;
         >.group-header{
             background-color: $color5;
         }
+    }
+
+    .cardViewHeader {
+        width: 100%;
+
+        display:flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        min-height: 45px;
+
+        font-family: "Lato", sans-serif;
+        font-size: 14px;
+        color: $pagination-mobile-panel-text-color;
+
+        .fetchPreviousButton {
+            text-decoration: none;
+            border: 1px solid $pagination-mobile-panel-border-color;
+            background: $pagination-mobile-panel-background-color;
+            width:100%;
+            height:45px;
+
+            .fetchPreviousArrow {
+                padding-right:10px;
+            }
+        }
+    }
+
+    .cardViewFooter {
+        width: 100%;
+
+        display:flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        min-height: 45px;
+
+        font-family: "Lato", sans-serif;
+        font-size: 14px;
+        color: $pagination-mobile-panel-text-color;
+
+        .fetchNextButton {
+            text-decoration: none;
+            width:100%;
+            height:45px;
+            border: 1px solid $pagination-mobile-panel-border-color;
+            background: $pagination-mobile-panel-background-color;
+
+            .fetchNextArrow {
+                padding-right:10px;
+            }
+        }
+    }
+
+    .headerLoadingIndicator, .footerLoadingIndicator {
+        width: 100%;
+        min-height: 45px;
+
+        font-family: "Lato", sans-serif;
+        font-size: 14px;
+        color: $pagination-mobile-panel-text-color;
+
+        display: none;
+        position:relative;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
     }
 
     @for $i from 0 through 5 {
