@@ -406,6 +406,7 @@ describe('Validate RequestHelper unit tests', function() {
         var testCases = [
             {name: 'test valid use case with no query parameters', url: 'apps/123/tables/456', parameterName: '', expectation: null},
             {name: 'test parameter name in url', url: 'apps/123/tables/456?clist=9', parameterName: 'clist', expectation: '9'},
+            {name: 'test parameter name in url that is empty', url: 'apps/123/tables/456?clist=9&param1=&param2=blah', parameterName: 'param1', expectation: ''},
             {name: 'test parameter name not found in url', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', expectation: null}];
 
         testCases.forEach(function(testCase) {
