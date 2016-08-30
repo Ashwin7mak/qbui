@@ -111,6 +111,10 @@ export default {
             searchPlaceHolder:  "Suchen Sie diese",
             previousToolTip: "Zurück",
             nextToolTip: "Nächster",
+            previousPage: "Früher",
+            nextPage: "Nächster",
+            previousPageLoadingOnSwipe: "Erste vorherige...",
+            nextPageLoadingOnSwipe: "immer Mehr...",
             sortAndGroup : {
                 addField: "Feld hinzufügen",
                 by: "nach",
