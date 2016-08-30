@@ -58,10 +58,10 @@
      */
     var jsonBigNum = require('json-bignum');
 
-    function isInteger(value) {
-        let int = parseInt(value);
-        return (typeof int === 'number' && (int % 1) === 0);
-    }
+    //function isInteger(value) {
+    //    let int = parseInt(value);
+    //    return (typeof int === 'number' && (int % 1) === 0);
+    //}
 
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);

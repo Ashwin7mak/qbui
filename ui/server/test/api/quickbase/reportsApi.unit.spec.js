@@ -126,7 +126,7 @@ describe('Validate ReportsApi unit tests', function() {
             'query':''
         };
 
-        var reportMetaData = '[{"name":"Report With Facets","description":null,"type":"TABLE","ownerId":"10000","tableId":"0fynnxaaaaae","id":1,"showDescriptionOnReport":false,"hideReport":false,"showSearchBox":true,"fids":[],"sortList":[],"facetFids":[6,7,8,9],"facetBehavior":"default","query":null,"allowEdit":true,"allowView":true,"displayNewlyChangedRecords":false,"reportFormat":"","calculatedColumns":null,"rolesWithGrantedAccess":[],"summary":"hide"}]';
+        var reportMetaData = '[{"name":"Report With Facets","description":null,"type":"TABLE","ownerId":"10000","tableId":"0fynnxaaaaae","id":1,"showDescriptionOnReport":false,"hideReport":false,"showSearchBox":true,"fids":[],"sortList":[{"fieldId":6,"sortOrder":"asc","groupType":"V"}],"facetFids":[6,7,8,9],"facetBehavior":"default","query":null,"allowEdit":true,"allowView":true,"displayNewlyChangedRecords":false,"reportFormat":"","calculatedColumns":null,"rolesWithGrantedAccess":[],"summary":"hide"}]';
         var fetchReportComponentsStub;
         var reportsData = JSON.parse(reportMetaData);
 
