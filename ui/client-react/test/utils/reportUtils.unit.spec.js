@@ -72,9 +72,10 @@ describe('ReportUtils - test getGroupElements', () => {
         {test:'valid input with sort', input:'3.-4', output: []},
         {test:'valid input with group', input:'3:V.-4', output: ['3:V']},
         {test:'valid input with sort- integer array input', input:['3', '-4'], output: []},
-        {test:'valid input with group- integer array input', input:['3:V', '-4'], output: ['3:V']},
+        {test:'valid input with group- negative integer array input', input:['-3:V', '-4'], output: ['-3:V']},
         {test:'valid input with sort- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: null}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: []},
-        {test:'valid input with group- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['3:V']}
+        {test:'valid input with group- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['3:V']},
+        {test:'valid input with desc sort- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.DESC, groupType: "V"}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['-3:V']}
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {

@@ -147,7 +147,8 @@ class ReportUtils {
                         groupFids.push(sort);
                     }
                 } else if (sort && sort.groupType) { // sort is of type object
-                    groupFids.push(sort.fieldId + groupDelimiter + sort.groupType);
+                    let prefix = sort.sortOrder === constants.SORT_ORDER.DESC ? '-' : '';
+                    groupFids.push(prefix + sort.fieldId + groupDelimiter + sort.groupType);
                 }
             });
         }
