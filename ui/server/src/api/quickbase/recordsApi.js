@@ -257,32 +257,32 @@
              * @returns Promise
              */
             fetchRecords: function(req) {
-                // check for offset and numOfRows query parameters..
-                let rowLimitsValid = requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET) &&
-                    requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS);
-
-                if (rowLimitsValid) {
-                    //  we have row limit parameters..now ensure they are integers
-                    let reqOffset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
-                    let reqNumRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
-                    rowLimitsValid = isInteger(reqOffset) && isInteger(reqNumRows);
-
-                    //  if the max number of records to query exceeds limit, throw exception
-                    if (rowLimitsValid) {
-                        // TODO: could set to defaults if the limit is exceeded..
-                        // TODO: look at getting smarter about max row limit...the number of columns on the report should also be considered..
-                        if (parseInt(reqNumRows) > constants.PAGE.MAX_NUM_ROWS) {
-                            let errorMsg = constants.REQUEST_PARAMETER.NUM_ROWS + '=' + reqNumRows + ' request parameter is greater than maximum request limit of ' + constants.PAGE.MAX_NUM_ROWS;
-                            throw errorMsg;
-                        }
-                    }
-                }
-
-                //  if we don't have valid row limits, then add the default offset and max number of rows.
-                if (!rowLimitsValid) {
-                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, constants.PAGE.DEFAULT_OFFSET);
-                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, constants.PAGE.DEFAULT_NUM_ROWS);
-                }
+                // ENFORCE a row limit on all requests.  Check for offset and numOfRows query parameters and if both
+                // are not supplied OR invalid, will set to default values.
+                //let rowLimitsValid = requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET) &&
+                //    requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                //
+                //if (rowLimitsValid) {
+                //    //  we have row limit parameters..now ensure they are integers
+                //    let reqOffset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
+                //    let reqNumRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                //    rowLimitsValid = isInteger(reqOffset) && isInteger(reqNumRows);
+                //
+                //    //  if the max number of records to query exceeds limit, throw exception
+                //    if (rowLimitsValid) {
+                //        // TODO: look at getting smarter about max row limit...the number of columns on the report should also be considered..
+                //        if (parseInt(reqNumRows) > constants.PAGE.MAX_NUM_ROWS) {
+                //            let errorMsg = constants.REQUEST_PARAMETER.NUM_ROWS + '=' + reqNumRows + ' request parameter is greater than maximum request limit of ' + constants.PAGE.MAX_NUM_ROWS;
+                //            throw errorMsg;
+                //        }
+                //    }
+                //}
+                //
+                ////  if we don't have valid row limits, then add the default offset and max number of rows.
+                //if (!rowLimitsValid) {
+                //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, constants.PAGE.DEFAULT_OFFSET);
+                //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, constants.PAGE.DEFAULT_NUM_ROWS);
+                //}
 
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
@@ -315,16 +315,16 @@
                 }
 
                 //  any request parameters to append?
-                //TODO - do we really need this? its adding the params twice.
-                //if (search) {
-                //    opts.url += search;
-                //}
+                if (search) {
+                    opts.url += search;
+                }
 
-                // TEMPORARY to get grouping to work with core changes...this removes the grouping
-                // tags from the opts.url rest request so that core doesn't group.  Grouping is still done
-                // in the node layer but since paging is in place, complex grouping will fail.  Given the
-                // report meta data doesn't have default grouping on prod/pre-prod, and the UI only groups
-                // using equals, this should be fine for the interim until a complete solution is implemented.
+                // TEMPORARY to get grouping to work with core changes...this removes the grouping tags
+                // AND paging tags from the opts.url rest request so that core doesn't group.  Grouping
+                // is still done in the node layer but since paging is in place, complex grouping will fail.
+                // Given the report meta data doesn't have default grouping on prod/pre-prod, and the UI
+                // only groups using equals, this should be fine for the interim until a complete solution
+                // is implemented.
                 let query = url.parse(opts.url, true).query;
                 if (query && query.hasOwnProperty(constants.REQUEST_PARAMETER.SORT_LIST)) {
                     let sList = query[constants.REQUEST_PARAMETER.SORT_LIST];
@@ -345,8 +345,8 @@
                 }
 
                 //  remove any page limits..
-                requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.OFFSET);
-                requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
+                //requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.OFFSET);
+                //requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
 
                 return requestHelper.executeRequest(req, opts);
             },
