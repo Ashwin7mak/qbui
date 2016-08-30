@@ -12,6 +12,7 @@
     var groupUtils = require('../../../utility/groupUtils');
     var dateFormatter = require('../../../../../common/src/formatter/dateTimeFormatter');
     var logger = require('../../../logger').getLogger();
+    var requestHelper = require('../requestHelper')();
     dateFormatter.setLogger(logger);
 
     /**
@@ -469,7 +470,7 @@
                 // Is there a grouping parameter included on the request.  The format of the parameter
                 // is 'fid1:groupType1.fid2:groupType2...fidN:groupTypeN'.
                 //
-                let groupList = req.param(constants.REQUEST_PARAMETER.SORT_LIST);
+                let groupList = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.SORT_LIST);
                 if (groupList) {
                     //  build a fields map for quick field access when looping through the groups list.
                     let map = new Map();

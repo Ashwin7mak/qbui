@@ -15,10 +15,12 @@
     let collectionUtils = require('../../utility/collectionUtils');
     let queryUtils = require('../../utility/queryUtils');
 
+
     module.exports = function(config) {
-        let requestHelper = require('./requestHelper')(config);
+
         let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
         let recordsApi = require('./recordsApi')(config);
+        let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
 
         //Module constants:
@@ -26,7 +28,85 @@
         let CONTENT_TYPE = 'Content-Type';
         let FACETS = 'facets';
 
-        //TODO: only application/json is supported for content type.  Need a plan to support XML
+        /**
+         * Function to add query parameters to the request from the report meta data
+         * If overrideMetaDataAllowed === true, then allow for the override of the report
+         * metaData value if the parameter is defined on the request.
+         *
+         * @param req
+         * @param reportMetaData
+         * @param overrideMetaDataAllowed
+         */
+        function addReportMetaQueryParameters(req, reportMetaData, overrideMetaDataAllowed) {
+
+            function usingRequestParameterValue(parameter) {
+                if (overrideMetaDataAllowed === true) {
+                    let parameterValue = requestHelper.getQueryParameterValue(req, parameter);
+                    if (parameterValue !== null) {
+                        requestHelper.addQueryParameter(req, parameter, parameterValue);
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            if (!req) {
+                return;
+            }
+
+            if (!reportMetaData) {
+                reportMetaData = {};
+            }
+
+            //  format display requirements
+            if (!usingRequestParameterValue(constants.REQUEST_PARAMETER.FORMAT)) {
+                requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
+            }
+
+            // add any sort list requirements
+            if (!usingRequestParameterValue(constants.REQUEST_PARAMETER.SORT_LIST)) {
+                //  ReportMetaData sort list is returned as an object.  Need to convert into a string
+                if (Array.isArray(reportMetaData.sortList)) {
+                    //  convert the object in a list of strings of format <+/-|fid|:groupType>
+                    let sortListArray = [];
+                    reportMetaData.sortList.forEach(function(sortObj) {
+                        if (sortObj.fieldId) {
+                            let result = '';
+                            result += (sortObj.sortOrder === constants.SORT_ORDER.DESC ? '-' : '') + sortObj.fieldId;
+                            if (sortObj.groupType) {
+                                result += constants.REQUEST_PARAMETER.GROUP_DELIMITER + sortObj.groupType;
+                            }
+                            sortListArray.push(result);
+                        }
+                    });
+
+                    //  any entries to convert
+                    if (sortListArray.length > 0) {
+                        let sortList = collectionUtils.convertListToDelimitedString(sortListArray, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                        if (sortList) {
+                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
+                        }
+                    }
+                }
+            }
+
+            //  add any columnList requirements
+            if (!usingRequestParameterValue(constants.REQUEST_PARAMETER.COLUMNS)) {
+                let columnList = collectionUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                if (columnList) {
+                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
+                }
+            }
+
+            //  add any query expression requirements
+            if (!usingRequestParameterValue(constants.REQUEST_PARAMETER.QUERY)) {
+                let query = reportMetaData.query ? reportMetaData.query : '';
+                if (query) {
+                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
+                }
+            }
+        }
+
         let reportsApi = {
 
             /**
@@ -65,65 +145,30 @@
              * @param req
              */
             fetchReportMetaDataAndContent: function(req) {
-                // Define response object
-                var reportObj = {
-                    reportMetaData: {
-                        data: ''
-                    },
-                    reportData: {
-                        data: ''
-                    }
-                };
                 return new Promise((resolve2, reject2) => {
-                    // We need to make two calls to core to complete this request. First call is
-                    // to fetch the report metadata, and once the metadata is obtained, fetch report
-                    // data and facets.
-                    let opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    // Make two calls to core to complete this request. First is to fetch
+                    // the report metadata; second is to fetch report data and facets.
+                    let reportId = req.params.reportId;
 
-                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url);
-
-                    requestHelper.executeRequest(req, opts).then(
-                        // TODO code hygiene, code below is shared by fetchTableHomepageReport. move to a private function and
-                        // share between the two api calls. https://quickbase.atlassian.net/browse/MB-505
+                    this.fetchReportMetaData(req, reportId).then(
                         (response) => {
+                            // Define response object
+                            var reportObj = {
+                                reportMetaData: {
+                                    data: ''
+                                },
+                                reportData: {
+                                    data: ''
+                                }
+                            };
+
                             // parse out the id and use to fetch the report meta data.
                             // Process the meta data to fetch and return the report content.
                             if (response.body) {
-                                let reportsData = JSON.parse(response.body);
-                                let reportMetaData = reportsData[0];
+                                let reportMetaData = JSON.parse(response.body);
+                                addReportMetaQueryParameters(req, reportMetaData, true);
 
-                                req.params = req.params || {};
-
-                                if (req.query.format !== undefined && req.query.format === constants.FORMAT.DISPLAY) {
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
-                                }
-
-                                if (req.query.offset !== undefined && parseInt(req.query.offset) >= 0 && req.query.numRows !== undefined && parseInt(req.query.numRows)) {
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, req.query.offset);
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, req.query.numRows);
-                                }
-
-                                if (req.query.sortlist !== undefined) {
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, req.query.sortlist);
-                                } else {
-                                    /*eslint no-lonely-if:0*/
-                                    if (reportMetaData && reportMetaData.sortList && reportMetaData.sortList.length) {
-                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, reportMetaData.sortList.join(constants.REQUEST_PARAMETER.LIST_DELIMITER));
-                                    }
-                                }
-
-                                if (reportMetaData && reportMetaData.fids && reportMetaData.fids.length) {
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, reportMetaData.fids.join(constants.REQUEST_PARAMETER.LIST_DELIMITER));
-                                }
-
-                                let filterQueries = [];
-                                if (reportMetaData && reportMetaData.query) {
-                                    filterQueries.push(reportMetaData.query);
-                                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, queryUtils.concatQueries(filterQueries));
-                                }
-
-                                this.fetchReportComponents(req, req.params.reportId).then(
+                                this.fetchReportComponents(req, reportId).then(
                                     (reportData) => {
                                         //  return the metadata and report content
                                         reportObj.reportMetaData.data = reportMetaData;
@@ -191,6 +236,8 @@
                             if (error) {
                                 if (error.body) {
                                     errorMsg = error.body ? error.body.replace(/"/g, "'") : error.statusMessage;
+                                } else {
+                                    errorMsg = error;
                                 }
                             }
                             log.error("Error getting report results in fetchReportResults: " + errorMsg);
@@ -350,33 +397,7 @@
                                         //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
                                         let reportMetaData = JSON.parse(metaDataResult.body);
 
-                                        //  look for any existing parameters on the url
-                                        req.params = req.params || {};
-
-                                        //  add display formatting
-                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.FORMAT, constants.FORMAT.DISPLAY);
-
-                                        //  add any sortList requirements
-                                        let sortList = collectionUtils.convertListToDelimitedString(reportMetaData.sortList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        if (sortList) {
-                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
-                                        }
-
-                                        //  add any columnList requirements
-                                        let columnList = collectionUtils.convertListToDelimitedString(reportMetaData.fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                                        if (columnList) {
-                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
-                                        }
-
-                                        //  add any query expression requirements
-                                        let query = reportMetaData.query ? reportMetaData.query : '';
-                                        if (query) {
-                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, query);
-                                        }
-
-                                        //  TODO: initial page size.
-                                        // req.params[constants.REQUEST_PARAMETER.OFFSET] = 0;
-                                        // req.params[constants.REQUEST_PARAMETER.NUM_ROWS] = 5;
+                                        addReportMetaQueryParameters(req, reportMetaData, false);
 
                                         this.fetchReportComponents(req, homepageReportId).then(
                                             (reportData) => {

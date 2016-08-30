@@ -342,7 +342,6 @@ describe('Validate RequestHelper unit tests', function() {
     });
 
     describe('validate addQueryParameter function', function() {
-
         var req = {
             url: '',
             params: {}
@@ -352,7 +351,8 @@ describe('Validate RequestHelper unit tests', function() {
             {name: 'test missing parameter name', url: 'apps/123/tables/456', parameterName: '', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456'},
             {name: 'test valid use case with no query parameter value', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', parameterValue: '', urlExpectation: 'apps/123/tables/456?param1=one&param2=two&clist='},
             {name: 'test valid use case with 1 query parameter', url: 'apps/123/tables/456?param1=one', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?param1=one&clist=1.2.3'},
-            {name: 'test valid use case with multiple query parameters', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?param1=one&param2=two&clist=1.2.3'}
+            {name: 'test valid use case with multiple query parameters', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?param1=one&param2=two&clist=1.2.3'},
+            {name: 'test valid use case with multiple query parameters and duplicate cList', url: 'apps/123/tables/456?param1=one&clist=1.2.4', parameterName: 'clist', parameterValue: '1.2.3', urlExpectation: 'apps/123/tables/456?param1=one&clist=1.2.3'}
         ];
 
         testCases.forEach(function(testCase) {
@@ -365,15 +365,84 @@ describe('Validate RequestHelper unit tests', function() {
 
                 if (testCase.parameterName) {
                     //  test that the parameter is in the params list
-                    assert.equal(req.params[testCase.parameterName], testCase.parameterValue);
+                    assert.equal(requestHelper.getQueryParameterValue(req, testCase.parameterName), testCase.parameterValue);
                 } else {
                     //  if no parameter name, then that parameter is not defined
-                    assert.equal(req.params[testCase.parameterName], undefined);
+                    assert.equal(requestHelper.getQueryParameterValue(req, testCase.parameterName), undefined);
                 }
                 done();
             });
         });
+    });
 
+    describe('validate addQueryParameter function', function() {
+        var req = {
+            url: '',
+            params: {}
+        };
+        var testCases = [
+            {name: 'test valid use case with no query parameters', url: 'apps/123/tables/456', parameterName: '', expectation: false},
+            {name: 'test parameter name in url', url: 'apps/123/tables/456?clist=9', parameterName: 'clist', expectation: true},
+            {name: 'test parameter name not found in url', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', expectation: false}];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                req.url = testCase.url;
+                let result = requestHelper.hasQueryParameter(req, testCase.parameterName);
+
+                //  test that the url has the parameters appended as a query parameter
+                assert.equal(result, testCase.expectation);
+
+                done();
+            });
+        });
+    });
+
+    describe('validate getQueryParameter function', function() {
+        var req = {
+            url: '',
+            params: {}
+        };
+        var testCases = [
+            {name: 'test valid use case with no query parameters', url: 'apps/123/tables/456', parameterName: '', expectation: null},
+            {name: 'test parameter name in url', url: 'apps/123/tables/456?clist=9', parameterName: 'clist', expectation: '9'},
+            {name: 'test parameter name in url that is empty', url: 'apps/123/tables/456?clist=9&param1=&param2=blah', parameterName: 'param1', expectation: ''},
+            {name: 'test parameter name not found in url', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', expectation: null}];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                req.url = testCase.url;
+                let result = requestHelper.getQueryParameterValue(req, testCase.parameterName);
+                assert.equal(result, testCase.expectation);
+
+                done();
+            });
+        });
+    });
+
+    describe('validate removeRequestParameter function', function() {
+        var req = {
+            url: '',
+            params: {}
+        };
+        var testCases = [
+            {name: 'test valid use case with no query parameters', url: 'apps/123/tables/456', parameterName: '', expectation: 'apps/123/tables/456'},
+            {name: 'test parameter name in url - test 0', url: 'apps/123/tables/456?clist=9', parameterName: 'clist', expectation: 'apps/123/tables/456'},
+            {name: 'test parameter name in url - test 1', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'param2', expectation: 'apps/123/tables/456?param1=one'},
+            {name: 'test parameter name in url - test 1a', url: 'apps/123/tables/456?param1=one&param2=two&&', parameterName: 'param2', expectation: 'apps/123/tables/456?param1=one&&'},
+            {name: 'test parameter name in url - test 2', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'param1', expectation: 'apps/123/tables/456?param2=two'},
+            {name: 'test parameter name in url - test 2a', url: 'apps/123/tables/456?param1=one&param2=two&', parameterName: 'param1', expectation: 'apps/123/tables/456?param2=two&'},
+            {name: 'test parameter name not found in url', url: 'apps/123/tables/456?param1=one&param2=two', parameterName: 'clist', expectation: 'apps/123/tables/456?param1=one&param2=two'}];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                req.url = testCase.url;
+                requestHelper.removeRequestParameter(req, testCase.parameterName);
+                assert.equal(req.url, testCase.expectation);
+
+                done();
+            });
+        });
     });
 
 });

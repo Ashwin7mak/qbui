@@ -58,6 +58,11 @@
      */
     var jsonBigNum = require('json-bignum');
 
+    //function isInteger(value) {
+    //    let int = parseInt(value);
+    //    return (typeof int === 'number' && (int % 1) === 0);
+    //}
+
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
@@ -121,11 +126,11 @@
             },
 
             isDisplayFormat: function(req) {
-                return req.param(constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.DISPLAY;
+                return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.DISPLAY;
             },
 
             isRawFormat: function(req) {
-                return req.param(constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.RAW;
+                return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.RAW;
             },
 
             /**
@@ -252,6 +257,36 @@
              * @returns Promise
              */
             fetchRecords: function(req) {
+                // TODO: ENFORCE a row limit on all requests.  Check for offset and numOfRows query parameters and if both
+                // are not supplied OR invalid, will set to default values.
+                //
+                // TODO: if invalid parameters, consider throwing an exception vs setting to defaults
+                //
+                //let rowLimitsValid = requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET) &&
+                //    requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                //
+                //if (rowLimitsValid) {
+                //    //  we have row limit parameters..now ensure they are integers
+                //    let reqOffset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
+                //    let reqNumRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                //    rowLimitsValid = isInteger(reqOffset) && isInteger(reqNumRows);
+                //
+                //    //  if the max number of records to query exceeds limit, throw exception
+                //    if (rowLimitsValid) {
+                //        // TODO: look at getting smarter about max row limit...the number of columns on the report should also be considered..
+                //        if (parseInt(reqNumRows) > constants.PAGE.MAX_NUM_ROWS) {
+                //            let errorMsg = constants.REQUEST_PARAMETER.NUM_ROWS + '=' + reqNumRows + ' request parameter is greater than maximum request limit of ' + constants.PAGE.MAX_NUM_ROWS;
+                //            throw errorMsg;
+                //        }
+                //    }
+                //}
+                //
+                ////  if we don't have valid row limits, then add the default offset and max number of rows.
+                //if (!rowLimitsValid) {
+                //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, constants.PAGE.DEFAULT_OFFSET);
+                //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, constants.PAGE.DEFAULT_NUM_ROWS);
+                //}
+
                 let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
@@ -285,6 +320,31 @@
                 //  any request parameters to append?
                 if (search) {
                     opts.url += search;
+                }
+
+                // TEMPORARY to get grouping to work with core changes...this removes the grouping tags
+                // AND paging tags from the opts.url rest request so that core doesn't group.  Grouping
+                // is still done in the node layer but since paging is in place, complex grouping will fail.
+                // Given the report meta data doesn't have default grouping on prod/pre-prod, and the UI
+                // only groups using equals, this should be fine for the interim until a complete solution
+                // is implemented.
+                let query = url.parse(opts.url, true).query;
+                if (query && query.hasOwnProperty(constants.REQUEST_PARAMETER.SORT_LIST)) {
+                    let sList = query[constants.REQUEST_PARAMETER.SORT_LIST];
+                    if (sList) {
+                        let sListArr = sList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+
+                        let sortList = [];
+                        sListArr.forEach((sort) => {
+                            var sortEl = sort.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
+                            sortList.push(sortEl[0]);
+                        });
+                        if (sortList.length > 0) {
+                            requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.SORT_LIST);
+                            let sortListStr = sortList.join(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                            opts.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=' + sortListStr;
+                        }
+                    }
                 }
 
                 return requestHelper.executeRequest(req, opts);
