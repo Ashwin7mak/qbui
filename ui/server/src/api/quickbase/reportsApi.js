@@ -65,7 +65,7 @@
 
             // add any sort list requirements
             if (!usingRequestParameterValue(constants.REQUEST_PARAMETER.SORT_LIST)) {
-                //  ReportMetaDat sort list is returned as an object.  Need to convert into a string
+                //  ReportMetaData sort list is returned as an object.  Need to convert into a string
                 if (Array.isArray(reportMetaData.sortList)) {
                     //  convert the object in a list of strings of format <+/-|fid|:groupType>
                     let sortListArray = [];

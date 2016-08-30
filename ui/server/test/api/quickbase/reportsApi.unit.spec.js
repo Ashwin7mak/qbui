@@ -126,7 +126,7 @@ describe('Validate ReportsApi unit tests', function() {
             'query':''
         };
 
-        var reportMetaData = '[{"name":"Report With Facets","description":null,"type":"TABLE","ownerId":"10000","tableId":"0fynnxaaaaae","id":1,"showDescriptionOnReport":false,"hideReport":false,"showSearchBox":true,"fids":[],"sortList":[{"fieldId":6,"sortOrder":"asc","groupType":"V"}],"facetFids":[6,7,8,9],"facetBehavior":"default","query":null,"allowEdit":true,"allowView":true,"displayNewlyChangedRecords":false,"reportFormat":"","calculatedColumns":null,"rolesWithGrantedAccess":[],"summary":"hide"}]';
+        var reportMetaData = '{"name":"Report With Facets","description":null,"type":"TABLE","ownerId":"10000","tableId":"0fynnxaaaaae","id":1,"showDescriptionOnReport":false,"hideReport":false,"showSearchBox":true,"fids":[],"sortList":[{"fieldId":6,"sortOrder":"asc","groupType":"V"}],"facetFids":[6,7,8,9],"facetBehavior":"default","query":null,"allowEdit":true,"allowView":true,"displayNewlyChangedRecords":false,"reportFormat":"","calculatedColumns":null,"rolesWithGrantedAccess":[],"summary":"hide"}';
         var fetchReportComponentsStub;
         var reportsData = JSON.parse(reportMetaData);
 
@@ -242,6 +242,58 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve fetchReportResults failure: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    /**
+     * Unit test fetchReportRecordsCount api
+     */
+    describe('validate fetchReportRecordsCount api', function() {
+        var req = {
+            headers: {
+                'tid': 'tid'
+            },
+            'Content-Type': 'content-type',
+            'url': '/testurl.com',
+            'method': 'get'
+        };
+        var countResult = {count:1};
+        var getExecuteRequestStub;
+        beforeEach(function() {
+            getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
+        });
+        afterEach(function() {
+            getExecuteRequestStub.restore();
+        });
+        it('Test success ', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve(countResult));
+            var promise = reportsApi.fetchReportRecordsCount(req);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, countResult);
+                    done();
+                },
+                function(error) {
+                    done(new Error('Failure promise unexpectedly returned testing fetchReportRecordsCount success'));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportRecordsCount success: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('Test failure ', function(done) {
+            getExecuteRequestStub.returns(Promise.reject(new Error("error")));
+            var promise = reportsApi.fetchReportRecordsCount(req);
+            promise.then(
+                function(response) {
+                    done(new Error('Success promise unexpectedly return testing fetchReportRecordsCount failure'));
+                },
+                function(error) {
+                    done();
+                    assert.deepEqual(error, new Error("error"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportRecordsCount failure: ' + JSON.stringify(errorMsg)));
             });
         });
     });
