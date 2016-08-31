@@ -159,6 +159,7 @@ const CellRenderer = React.createClass({
                 { isEditable && (this.props.editing || !this.props.qbGrid) &&
                     <CellEditor type={cellType}
                                 value={this.state.valueAndDisplay.value}
+                                display={this.state.valueAndDisplay.display}
                                 colDef={this.props.colDef}
                                 onChange={this.onChange}
                                 onValidated={this.onValidated}
@@ -289,9 +290,14 @@ const CellRenderer = React.createClass({
      * @param value
      */
     numericCellEdited(value) {
-        let theVals = {
-            value: Number(value)
-        };
+        //look at the separator, if its a comma for decimal place then strip out other chars other than comma then run through formatter.
+        let decimal_mark = this.props.colDef.datatypeAttributes.clientSideAttributes.decimal_mark;
+        let theVals = {};
+        if (decimal_mark === '.') {
+            theVals.value = Number(value.replace(/[^0-9.]/g, ""));
+        } else {
+            theVals.value = Number(value.replace(/[^0-9,]/g, ""));
+        }
         theVals.display = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
 
         this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});

@@ -5,6 +5,7 @@ import FieldFormats from '../../utils/fieldFormats' ;
 import {DefaultFieldValueEditor, MultiLineTextFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
     DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import TextFieldValueEditor from './textFieldValueEditor';
+import NumericFieldValueEditor from './numericFieldValueEditor';
 import _ from 'lodash';
 
 /**
@@ -99,6 +100,7 @@ const FieldValueEditor = React.createClass({
 
         let commonProps = {
             value: this.props.value,
+            display: this.props.display,
             onChange: this.props.onChange,
             onBlur: this.onExitField,
             onValidated: this.props.onValidated,
@@ -129,8 +131,20 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.DURATION_FORMAT:
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.PERCENT_FORMAT: {
-            return <DefaultFieldValueEditor type="number"
-                                       {...commonProps} />;
+            if (_.has(this.props, 'fieldDef.choices')) {
+                return (
+                    <ComboBoxFieldValueEditor choices={this.props.fieldDef.choices}
+                        {...commonProps} />
+                );
+            } else {
+                return <NumericFieldValueEditor {...commonProps}
+                    onChange={this.props.onChange ? this.props.onChange : ()=>{}}
+                    isInvalid={this.props.isInvalid}
+                    invalidMessage={this.props.invalidMessage}
+                    onValidated={this.props.onValidated}
+                    classes="cellEdit"
+                />;
+            }
         }
 
         case FieldFormats.USER_FORMAT: {

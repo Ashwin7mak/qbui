@@ -56,6 +56,7 @@ let consts = {
 
 let AGGrid = React.createClass({
     mixins: [FluxMixin],
+    rowHeight: 25,
 
     propTypes: {
         uniqueIdentifier: React.PropTypes.string,
@@ -103,6 +104,7 @@ let AGGrid = React.createClass({
         this.columnApi = params.columnApi;
         this.onMenuClose();
         this.installHeaderMenus();
+        this.api.setHeaderHeight(this.rowHeight);
     },
 
     /**
@@ -856,10 +858,15 @@ let AGGrid = React.createClass({
     getHeaderCellTemplate(column) {
 
         let {headerName} = column;
+        let headerSubscript = column.datatypeAttributes && column.datatypeAttributes.unitsDescription ? '(' + column.datatypeAttributes.unitsDescription + ')' : null;
 
+        if (headerSubscript) {
+            this.rowHeight = 42;
+        }
         let cell = document.createElement('div');
         cell.className = "ag-header-cell";
-        cell.innerHTML = `<span class="ag-header-cell-text">${headerName}</span>
+        let headerSubscriptHTML = headerSubscript ? `<span class="subHeader">${headerSubscript}</span>` : "";
+        cell.innerHTML = `<div class="ag-header-cell-text">${headerName}${headerSubscriptHTML}</div>
             <span class="ag-header-icon ag-header-cell-menu-button "></span>`;
 
         return cell;
