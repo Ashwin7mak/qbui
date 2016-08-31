@@ -291,13 +291,17 @@ const CellRenderer = React.createClass({
      */
     numericCellEdited(value) {
         //look at the separator, if its a comma for decimal place then strip out other chars other than comma then run through formatter.
-        let decimal_mark = this.props.colDef.datatypeAttributes.clientSideAttributes.decimal_mark;
+        let decimal_mark = this.props.colDef.datatypeAttributes.decimalPlaces ? this.props.colDef.datatypeAttributes.clientSideAttributes.decimal_mark : null;
         let theVals = {};
         if (decimal_mark === '.') {
             theVals.value = Number(value.replace(/[^0-9.]/g, ""));
         } else {
             theVals.value = Number(value.replace(/[^0-9,]/g, ""));
         }
+        if (this.props.colDef.datatypeAttributes.type === "PERCENT") {
+            theVals.value = theVals.value ? theVals.value / 100 : 0;
+        }
+
         theVals.display = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
 
         this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});

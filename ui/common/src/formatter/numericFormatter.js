@@ -196,11 +196,19 @@
      * @returns the numeric value formatted as a string
      */
     function formatNumericValue(numeric, opts) {
-
         var mantissaString = null, characteristicString = null;
+
+        if (opts.type === consts.PERCENT || opts.type === consts.FORMULA_PERCENT) {
+            numeric = numeric ? numeric * 100 : 0;
+        }
+
+        if (opts.decimalPlaces === 14) {
+            opts.decimalPlaces = null;
+        }
 
         //Resolve the number value as a string with the proper decimal places
         var numString = Number(numeric).toString();
+
 
         // If numString is in scientific notation format, this means the number is too
         // large to convert using the javascript built-in function.  We'll need to
@@ -208,7 +216,6 @@
         if (isScientificNotation(numString)) {
             numString = convertScientificNotation(numString);
         }
-
         //Split the string on the decimal point, if there is one
         var numParts = numString.split(PERIOD);
         mantissaString = numParts[0];
@@ -223,6 +230,7 @@
         if (characteristicString) {
             returnValue = returnValue + opts.decimalMark + characteristicString;
         }
+
         //Handle percent and currency subtypes
         if (opts.type === consts.FORMULA_CURRENCY || opts.type === consts.CURRENCY) {
             if (opts.position === CURRENCY_RIGHT) {
