@@ -143,6 +143,8 @@ body.touch {
             -webkit-overflow-scrolling: touch;
             // Enable hardware acceleration for scrolling through content.
             transform: translate3d(0,0,0);
+            //min-height is required in order for the scrollbar to work in firefox
+            min-height: 0;
         }
 
         .footer {

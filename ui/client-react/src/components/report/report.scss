@@ -37,6 +37,8 @@
     flex: 1 1 auto;
     flex-direction:column;
     position:relative;
+    //min-height is required in order for the scrollbar to work in firefox
+    min-height: 0;
 
     .tableActionsContainer {
         position: relative;
@@ -180,6 +182,8 @@
         flex: 0 1 auto;
         width:100%;
         position:relative;
+        //min-height is required in order for the scrollbar to work in firefox
+        min-height: 0;
     }
 }
 
