@@ -100,10 +100,10 @@ export let Nav = React.createClass({
         const table = this.getSelectedTable();
 
         return (
-            <h3>
+            <h4>
                 <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""} <QBicon icon="caret-right"/>
                 <I18nMessage message={'nav.reportsHeading'}/>
-            </h3>);
+            </h4>);
 
     },
     /**
