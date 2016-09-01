@@ -295,15 +295,16 @@ const CellRenderer = React.createClass({
         let decimal_mark = this.props.colDef.datatypeAttributes.decimalPlaces ? this.props.colDef.datatypeAttributes.clientSideAttributes.decimal_mark : null;
         let theVals = {};
         if (decimal_mark === '.') {
-            theVals.value = Number(value.replace(/[^0-9.]/g, ""));
+            theVals.value = value ? Number(value.replace(/[^0-9.]/g, "")) : value;
         } else {
-            theVals.value = Number(value.replace(/[^0-9,]/g, ""));
+            theVals.value = value ? Number(value.replace(/[^0-9,]/g, "")) : value;
         }
         if (this.props.colDef.datatypeAttributes.type === "PERCENT") {
             theVals.value = theVals.value ? theVals.value / 100 : 0;
         }
 
-        theVals.display = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+        theVals.value = theVals.value ? theVals.value : null;
+        theVals.display = theVals.value ? numericFormatter.format(theVals, this.props.colDef.datatypeAttributes) : "";
 
         this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
     }
