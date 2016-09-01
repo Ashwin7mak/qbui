@@ -4,7 +4,7 @@ import TestUtils from 'react-addons-test-utils';
 
 import RowEditActions from '../../src/components/dataTable/agGrid/rowEditActions';
 
-fdescribe('RowEditActions', () => {
+describe('RowEditActions', () => {
     let component;
     let renderedComponent;
 
