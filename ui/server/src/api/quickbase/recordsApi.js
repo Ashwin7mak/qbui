@@ -390,9 +390,8 @@
                         if (change && change.field) {
                             let field = change.field;
 
-                            //text field limit or strip the html
+                            //text field length limit
                             if (field.type === "TEXT") {
-
                                 // within max chars?
                                 if (field.clientSideAttributes && field.clientSideAttributes.max_chars &&
                                     field.clientSideAttributes.max_chars > 0 &&
