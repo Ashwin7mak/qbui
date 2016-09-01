@@ -106,7 +106,7 @@ export default {
             newReport: "Neu",
             organizeReports: "Organisieren",
             recordCount : "{recordCount} {nameForRecords} ",
-            recordCountPlaceHolder : "Zählen {nameForRecords}",
+            recordCountPlaceHolder : "Zählen {nameForRecords}...",
             cardViewCountPlaceHolder : "Zählen ...",
             reportNavigationBar : "{pageStart} - {pageEnd}",
             searchPlaceHolder:  "Suchen Sie diese",
