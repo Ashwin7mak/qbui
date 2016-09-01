@@ -161,7 +161,8 @@ const CellRenderer = React.createClass({
                                 value={this.state.valueAndDisplay.value}
                                 display={this.state.valueAndDisplay.display}
                                 colDef={this.props.colDef}
-                                onChange={this.onChange}
+                                onChange={this.cellEdited}
+                                onBlur={this.onBlur}
                                 onValidated={this.onValidated}
                                 key={key + '-edt'}
                                 params={this.props.params}
@@ -187,7 +188,7 @@ const CellRenderer = React.createClass({
         this.cellValidated(results);
     },
 
-    onChange(value) {
+    onBlur(value) {
         switch (this.props.type) {
         case FieldFormats.DATE_FORMAT:
         case FieldFormats.DATETIME_FORMAT:

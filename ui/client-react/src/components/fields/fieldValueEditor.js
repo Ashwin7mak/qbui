@@ -102,7 +102,7 @@ const FieldValueEditor = React.createClass({
             value: this.props.value,
             display: this.props.display,
             onChange: this.props.onChange,
-            onBlur: this.onExitField,
+            onBlur: this.onBlur,
             onValidated: this.props.onValidated,
             placeholder : placeholder,
             tabIndex: "0",
@@ -180,6 +180,10 @@ const FieldValueEditor = React.createClass({
         }
     },
 
+    onBlur(ev) {
+        this.props.onBlur(ev.target.value);
+        this.onExitField(ev);
+    },
     /**
      * onExitField called on Blur to check if the field is valid and send the validation results to onValidated
      */

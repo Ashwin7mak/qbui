@@ -50,10 +50,15 @@ const NumericFieldValueEditor = React.createClass({
             isInvalid: false
         };
     },
-
     onChange(ev) {
         if (this.props.onChange) {
             this.props.onChange(ev.target.value);
+        }
+    },
+
+    onBlur(ev) {
+        if (this.props.onBlur) {
+            this.props.onBlur(ev);
         }
     },
 
@@ -72,7 +77,7 @@ const NumericFieldValueEditor = React.createClass({
                           type="text"
                           placeholder={this.props.placeholder}
                           onChange={this.onChange}
-                          onBlur={this.props.onBlur} />;
+                          onBlur={this.onBlur}/>;
 
 
         return  (this.props.isInvalid ?
