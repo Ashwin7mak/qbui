@@ -1,4 +1,3 @@
-
 /*
  * This module contains the error codes shared between server/node and node/client when changing/setting
  * data in an application database

@@ -4,10 +4,10 @@
  */
 (function() {
     'use strict';
-    let _ = require('lodash');
+    var _ = require('lodash');
 
     //Module constants:
-    const ALLOWED_HTML_ELEMENTS = ["a", "abbr", "acronym", "address", "area", "b", "big", "blockquote", "br", "caption", "cite",
+    var ALLOWED_HTML_ELEMENTS = ["a", "abbr", "acronym", "address", "area", "b", "big", "blockquote", "br", "caption", "cite",
         "code", "dd", "del", "dfn", "div", "dl", "dt", "em", "fieldset", "font", "h1", "h2", "h3", "h4", "h5",
         "h6", "hr", "i", "img", "ins", "kbd", "legend", "li", "map", "ol", "p", "pre", "q", "samp", "small",
         "span", "strong", "sub", "sup", "tt", "u", "ul", "var"];
@@ -27,9 +27,9 @@
          * @param start - offset into inString to start looking
          * @returns {number}
          */
-        findFirstOf(inStr, chars, start) {
+        findFirstOf: function(inStr, chars, start) {
             var idx = -1;
-            [].some.call(inStr.slice(start || 0), (c, i) => {
+            [].some.call(inStr.slice(start || 0), function(c, i)  {
                 if (chars.indexOf(c) >= 0) {
                     idx = i;
                     return true;
@@ -46,8 +46,8 @@
          * @param forAttribute - true if the string is used in an attribute
          * @return escaped html
          */
-        escapeHTML(s, forAttribute) {
-            return s.replace(forAttribute ? /[&<>'"]/g : /[&<>]/g, (c) => {
+        escapeHTML: function(s, forAttribute) {
+            return s.replace(forAttribute ? /[&<>'"]/g : /[&<>]/g, function(c)  {
                 return {
                     '&': "&amp;",
                     '"': "&quot;",
@@ -65,7 +65,7 @@
          * @param  {String} html
          * @return {String}
          */
-        unescape(html) {
+        unescape: function(html) {
             return String(html)
                 .replace(/&amp;/g, '&')
                 .replace(/&quot;/g, '"')
@@ -79,22 +79,22 @@
          * encodeForbiddenTags
          * Checks an HTML string for tags not in allow array and encodes those tags and text contained within those tags.
          */
-        encodeForbiddenTags(s) {
+        encodeForbiddenTags: function(s) {
             // if the string contains no element start char we're done
             if (!s || s.indexOf('<') === -1) {
                 return s;
             }
-            let result = '';
-            let copyPos = 0;
+            var result = '';
+            var copyPos = 0;
             //loop thru each character
-            let sLen = s.length;
-            for (let pos = 0; pos < sLen; pos++) {
-                let c = s[pos];
+            var sLen = s.length;
+            for (var pos = 0; pos < sLen; pos++) {
+                var c = s[pos];
 
                 //on a start tag?
                 if (c === '<') {
                     //not the location of the < less than char
-                    let ltPos = pos;
+                    var ltPos = pos;
 
                     //go past the found <
                     ++pos;
@@ -105,10 +105,10 @@
                     }
 
                     // get the tag and check it
-                    let endTagPos = this.findFirstOf(s, ' >', pos);
+                    var endTagPos = this.findFirstOf(s, ' >', pos);
 
                     //note the location of the > greater than char
-                    let gtPos = (endTagPos === -1) ? -1 : s.indexOf('>', endTagPos);
+                    var gtPos = (endTagPos === -1) ? -1 : s.indexOf('>', endTagPos);
 
                     // reach the end of the string without finding the >
                     if (gtPos === -1) {
@@ -118,10 +118,10 @@
                         copyPos = sLen;
                         break;
                     } else {
-                        let tag = s.substr(pos, endTagPos - pos);
+                        var tag = s.substr(pos, endTagPos - pos);
                         tag = tag.toLowerCase(tag);
-                        let isAllowed  = false;
-                        for (let i in ALLOWED_HTML_ELEMENTS) {
+                        var isAllowed  = false;
+                        for (var i in ALLOWED_HTML_ELEMENTS) {
                             if (ALLOWED_HTML_ELEMENTS[i] === tag) {
                                 isAllowed = true;
                                 break;
@@ -150,7 +150,7 @@
          * @param s
          * @returns {string}
          */
-        encHTML(s) {
+        encHTML: function(s) {
             //encode all html tags
             return _.escape(s);
         },
@@ -160,10 +160,10 @@
          * @param s
          * @returns {*}
          */
-        limitHTML(s) {
+        limitHTML: function(s) {
             //encode just not allowed tags
             s = this.encodeForbiddenTags(s);
             return s;
-        },
+        }
     };
 }());
