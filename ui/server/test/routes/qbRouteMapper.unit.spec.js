@@ -12,6 +12,7 @@ var routeConsts = require('../../src/routes/routeConstants');
 var assert = require('assert');
 var sinon = require('sinon');
 var recordsApi = require('../../src/api/quickbase/recordsApi')(config);
+var constants = require('../../../common/src/constants');
 var requestStub;
 
 /**
@@ -28,15 +29,21 @@ describe('Qb Route Mapper Unit Test', function() {
     });
 
     function pathModificationProvider() {
+        var defaultPagingQueryParams = '?' + constants.REQUEST_PARAMETER.OFFSET + '=' + constants.PAGE.DEFAULT_OFFSET;
+        defaultPagingQueryParams += '&' + constants.REQUEST_PARAMETER.NUM_ROWS + '=' + constants.PAGE.DEFAULT_NUM_ROWS;
+        var testPagingQueryParams = '?' + constants.REQUEST_PARAMETER.OFFSET + '=20';
+        testPagingQueryParams += '&' + constants.REQUEST_PARAMETER.NUM_ROWS + '=40';
         return [
             {message: 'GET request to record endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/1', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/1', route: routeConsts.RECORD, method: routeMapper.fetchGetFunctionForRoute(routeConsts.RECORD), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to records endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records', route: routeConsts.RECORDS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.RECORDS), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to records bulk endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/bulk', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/bulk', route: routeConsts.RECORDS_BULK, method: routeMapper.fetchGetFunctionForRoute(routeConsts.RECORDS_BULK), expectedDefined: false, httpVerb: 'GET'},
+            {message: 'GET request to paged report record endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/1' + testPagingQueryParams, expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/1' + testPagingQueryParams, route: routeConsts.RECORD, method: routeMapper.fetchGetFunctionForRoute(routeConsts.RECORD), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to table homepage id endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/homepage', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/homepage', route: routeConsts.TABLE_HOMEPAGE_REPORT, method: routeMapper.fetchGetFunctionForRoute(routeConsts.TABLE_HOMEPAGE_REPORT), expectedDefined: true, httpVerb: 'GET'},
 
             {message: 'GET request to form components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/records/fakeRecord', route: routeConsts.FORM_COMPONENTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FORM_COMPONENTS), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to report results endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2', route: routeConsts.REPORT_RESULTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REPORT_RESULTS), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to report components endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2', expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2', route: routeConsts.REPORT_COMPONENTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REPORT_COMPONENTS), expectedDefined: true, httpVerb: 'GET'},
+            {message: 'GET request to paged report results endpoint', request: '/api/v1/apps/fakeApp/tables/fakeTable/reports/2' + testPagingQueryParams, expectedPath: '/api/api/v1/apps/fakeApp/tables/fakeTable/reports/2' + testPagingQueryParams, route: routeConsts.REPORT_RESULTS, method: routeMapper.fetchGetFunctionForRoute(routeConsts.REPORT_RESULTS), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to health via tomcat all', request: '/api/v1/health', expectedPath: '/api/api/v1/health', route: routeConsts.TOMCAT_ALL, method: routeMapper.fetchAllFunctionForRoute(routeConsts.TOMCAT_ALL), expectedDefined: true, httpVerb: 'GET'},
             {message: 'GET request to resolve facets', request: '/api/n/v1/facets/parse', expectedPath: '/api/api/n/v1/facets/parse', route: routeConsts.FACET_EXPRESSION_PARSE, method: routeMapper.fetchGetFunctionForRoute(routeConsts.FACET_EXPRESSION_PARSE), expectedDefined: true, httpVerb: 'GET'},
 

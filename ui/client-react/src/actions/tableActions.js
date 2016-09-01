@@ -1,6 +1,7 @@
 // action creators
 import * as actions from '../constants/actions';
 import TableService from '../services/tableService';
+import ReportService from '../services/reportService';
 import Promise from 'bluebird';
 import reportModel from '../models/reportModel';
 
@@ -26,12 +27,33 @@ let tableActions = {
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
                 let tableService = new TableService();
+                let reportService = new ReportService();
+
                 tableService.getHomePage(appId, tblId).then(
                     (response) => {
                         var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
+                        reportService.getReportRecordsCount(appId, tblId, model.rptId).then(
+                            response1 => {
+                                if (response1.data) {
+                                    logger.debug('ReportRecordsCount service call successful');
+                                    this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response1.data);
+                                    resolve();
+                                }
+                            },
+                            error1 => {
+                                logger.parseAndLogError(LogLevel.ERROR, error1, 'reportService.getReportRecordsCount:');
+                                this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error1.response.status);
+                                reject();
+                            }
+                        ).catch(ex => {
+                            logger.logException(ex);
+                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, 500);
+                            reject();
+                        });
+
+                        //  not waiting for the records count..fire off the load report events
                         this.dispatch(actions.LOAD_REPORT, {appId, tblId, "rptId": model.rptId});
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                        resolve();
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
