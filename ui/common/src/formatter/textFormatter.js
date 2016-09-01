@@ -8,6 +8,8 @@
     var _ = require('lodash');
 
     //Module constants:
+    // from SBfieldText : kAllowedTagsInit
+    // see help list https://www.quickbase.com/user-assistance/what_tags_can_i_use_in_quickbase_.html
     var ALLOWED_HTML_ELEMENTS = ["a", "abbr", "acronym", "address", "area", "b", "big", "blockquote", "br", "caption", "cite",
         "code", "dd", "del", "dfn", "div", "dl", "dt", "em", "fieldset", "font", "h1", "h2", "h3", "h4", "h5",
         "h6", "hr", "i", "img", "ins", "kbd", "legend", "li", "map", "ol", "p", "pre", "q", "samp", "small",
