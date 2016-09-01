@@ -219,8 +219,8 @@
                     //  add the parameter to the params array.
                     req.params[parameterName] = parameterValue;
                 }
-            }
-
+            },
+            INVALID_INPUT : 422
         };
 
         return helper;

@@ -15,6 +15,7 @@
     var durationFormatter = require('../../../../../common/src/formatter/durationFormatter');
     var userFormatter = require('../../../../../common/src/formatter/userFormatter');
     var dateFormatter = require('../../../../../common/src/formatter/dateTimeFormatter');
+    var textFormatter = require('../../../../../common/src/formatter/textFormatter');
     var logger = require('../../../logger').getLogger();
     dateFormatter.setLogger(logger);
     /**
@@ -107,7 +108,7 @@
                 break;
             default:
                     //TODO: handle LOOKUP fields, need to return rootFieldType in the fieldInfo in order to display format properly
-                fieldValue.display = fieldValue.value;
+                fieldValue.display = textFormatter.format(fieldValue, tempFieldInfo);
                 if (!fieldValue.display) {
                     fieldValue.display = '';
                 }

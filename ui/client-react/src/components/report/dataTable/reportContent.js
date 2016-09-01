@@ -251,9 +251,12 @@ export let ReportContent = React.createClass({
         //[{"id":6, "value":"Claire"}]
         Object.keys(recordChanges).forEach((recKey) => {
             //get each columns matching field description
-            let matchingField = _.find(this.props.fields.fields.data, (field) => {
-                return field.id === +recKey;
-            });
+            let matchingField = null;
+            if (_.has(this.props, 'fields.fields.data')) {
+                matchingField = _.find(this.props.fields.fields.data, (field) => {
+                    return field.id === +recKey;
+                });
+            }
             // only post the non built in fields values
             if (matchingField && matchingField.builtIn === false) {
                 let newValue = recordChanges[recKey].newVal.value;
@@ -264,6 +267,7 @@ export let ReportContent = React.createClass({
                 colChange.id = +recKey;
                 colChange.value = _.cloneDeep(newValue);
                 colChange.display = _.cloneDeep(newDisplay);
+                colChange.field = matchingField.datatypeAttributes;
                 payload.push(colChange);
             }
         });
@@ -271,12 +275,13 @@ export let ReportContent = React.createClass({
         return payload;
     },
 
-    createColChange(value, display, key, name, payload) {
+    createColChange(value, display, field, payload) {
         let colChange = {};
-        colChange.fieldName = name;
-        colChange.id = +key;
+        colChange.fieldName = field.name;
+        colChange.id = +field.id;
         colChange.value = _.cloneDeep(value);
         colChange.display = _.cloneDeep(display);
+        colChange.field = field.datatypeAttributes;
         payload.push(colChange);
     },
 
@@ -290,12 +295,14 @@ export let ReportContent = React.createClass({
             this.props.fields.fields.data.forEach((field) => {
                 if (changes[field.id] === undefined) {
                     if (!field.builtIn && (field.required || field.unique)) {
-                        let newValue = this.props.pendEdits.originalRecord.fids[field.id].value;
-                        if (newValue === null) {
-                            newValue = "";
+                        if (this.props.pendEdits.originalRecord.fids[field.id]) {
+                            let newValue = this.props.pendEdits.originalRecord.fids[field.id].value;
+                            if (newValue === null) {
+                                newValue = "";
+                            }
+                            let newDisplay = this.props.pendEdits.originalRecord.fids[field.id].display;
+                            this.createColChange(newValue, newDisplay, field, list);
                         }
-                        let newDisplay = this.props.pendEdits.originalRecord.fids[field.id].display;
-                        this.createColChange(newValue, newDisplay, field.id, field.name, list);
                     }
                 }
             });
@@ -330,7 +337,13 @@ export let ReportContent = React.createClass({
             let newDisplay = changes[key].newVal.display;
             if (_.has(this.props, 'pendEdits.originalRecord.fids')) {
                 if (newValue !== this.props.pendEdits.originalRecord.fids[key].value) {
-                    this.createColChange(newValue, newDisplay, key, changes[key].fieldName, payload);
+                    //get each columns matching field description
+                    if (_.has(this.props, 'fields.fields.data')) {
+                        let matchingField = _.find(this.props.fields.fields.data, (field) => {
+                            return field.id === +key;
+                        });
+                        this.createColChange(newValue, newDisplay, matchingField, payload);
+                    }
                 }
             }
         });
@@ -743,6 +756,7 @@ export let ReportContent = React.createClass({
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
+                                isInlineEditOpen={this.props.pendEdits && this.props.pendEdits.isInlineEditOpen ? this.props.pendEdits.isInlineEditOpen : false}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
                                 recordsCount={recordsCount}
                                 groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
@@ -761,6 +775,7 @@ export let ReportContent = React.createClass({
                                 uniqueIdentifier={this.props.uniqueIdentifier || SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={keyField}
                                 appId={this.props.reportData.appId}
+                                isInlineEditOpen={this.props.pendEdits && this.props.pendEdits.isInlineEditOpen ? this.props.pendEdits.isInlineEditOpen : false}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}

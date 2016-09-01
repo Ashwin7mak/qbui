@@ -24,6 +24,7 @@
         //Module constants:
         let APPLICATION_JSON = 'application/json';
         let CONTENT_TYPE = 'Content-Type';
+        let ACCEPT = 'Accept';
         let FACETS = 'facets';
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
@@ -80,6 +81,7 @@
                     // data and facets.
                     let opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.headers[ACCEPT] = APPLICATION_JSON;
 
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url);
 

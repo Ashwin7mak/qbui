@@ -1,6 +1,6 @@
 import React from 'react';
 import './fields.scss';
-
+import _ from 'lodash';
 /**
  * # TextFieldValueRenderer
  *
@@ -21,12 +21,20 @@ const TextFieldValueRenderer = React.createClass({
 
         /**
          * renders bold if true */
-        isBold: React.PropTypes.bool
+        isBold: React.PropTypes.bool,
+
+        /**
+         * text field attributes
+         */
+        attributes: React.PropTypes.object
+
     },
 
     getDefaultProps() {
         return {
-            isBold: false
+            isBold: false,
+            classes: null,
+            attributes: null
         };
     },
 
@@ -40,7 +48,12 @@ const TextFieldValueRenderer = React.createClass({
             classes += " bold";
         }
 
-        return <div className={classes}>{this.props.value}</div>;
+        if (this.props.attributes && this.props.attributes.htmlAllowed) {
+            return <div className={classes} dangerouslySetInnerHTML={{__html: this.props.value}} />;
+        } else {
+             //react will encode
+            return <div className={classes}>{_.unescape(this.props.value)}</div>;
+        }
     }
 });
 

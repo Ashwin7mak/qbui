@@ -36,6 +36,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     _initData() {
         this.isPendingEdit = false;
+        this.isInlineEditOpen = false;
         this.currentEditingRecordId = null;
         this.currentEditingAppId = null;
         this.currentEditingTableId = null;
@@ -67,6 +68,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.recordChanges = {};
             this.originalRecord = undefined;
         }
+        this.isInlineEditOpen = true;
         this.emit('change');
     },
 
@@ -98,6 +100,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     onRecordEditCancel() {
         // record wasn't saved nothing pending
+        this.isInlineEditOpen = false;
         this._initData();
         this.emit('change');
     },
@@ -152,6 +155,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.commitChanges[entry].status = actions.SAVE_REPORT_RECORD_SUCCESS;
         }
         this.isPendingEdit = false;
+        this.isInlineEditOpen = false;
         this.emit('change');
 
     },
@@ -167,6 +171,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
             this.commitChanges[entry].status = actions.SAVE_REPORT_RECORD_FAILED;
         }
+        this.isInlineEditOpen = true;
         this.emit('change');
     },
 
@@ -202,6 +207,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.commitChanges[entry].status = actions.ADD_REPORT_RECORD_SUCCESS;
         }
         this.isPendingEdit = false;
+        this.isInlineEditOpen = false;
         this.emit('change');
 
     },
@@ -242,6 +248,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     getState() {
         return {
             isPendingEdit : this.isPendingEdit,
+            isInlineEditOpen : this.isInlineEditOpen,
             currentEditingAppId : this.currentEditingAppId,
             currentEditingTableId : this.currentEditingTableId,
             currentEditingRecordId : this.currentEditingRecordId,

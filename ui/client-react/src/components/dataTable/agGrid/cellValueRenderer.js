@@ -16,7 +16,8 @@ const CellValueRenderer = React.createClass({
         value: React.PropTypes.any,
         attributes: React.PropTypes.object,
         isEditable: React.PropTypes.bool,
-        type: React.PropTypes.number
+        type: React.PropTypes.number,
+        idKey:  React.PropTypes.any,
     },
 
     render() {
@@ -40,6 +41,7 @@ const CellValueRenderer = React.createClass({
                             attributes={this.props.attributes}
                             isEditable={this.props.isEditable}
                             type={this.props.type}
+                            key={"fvr=-" + this.props.idKey}
                     />);
     }
 });

@@ -51,8 +51,11 @@ const FieldValueRenderer = React.createClass({
 
         /**
          * the datatypeAttributes for the field see  https://github.com/QuickBase/QuickBase/tree/master/apiModels/src/main/java/com/quickbase/api/models/field/attributes*/
-        attributes: React.PropTypes.object
+        attributes: React.PropTypes.object,
 
+        /**
+         * identifier suffix for key */
+        idKey : React.PropTypes.any
     },
 
     getDefaultProps() {
@@ -61,13 +64,14 @@ const FieldValueRenderer = React.createClass({
         };
     },
 
-    getRendererForType(type, commonProperties) {
-        switch (type) {
+    getRendererForType(commonProperties) {
+        switch (this.props.type) {
         case FieldFormats.NUMBER_FORMAT:
         case FieldFormats.RATING_FORMAT: {
             let rendered = this.props.value ?
                     <NumberFieldValueRenderer value={this.props.value}
                                               attributes={this.props.attributes}
+                                              key={'nfvr-' + this.props.idKey}
                                               {...commonProperties}/> :
                          null;
             return (rendered);
@@ -75,18 +79,21 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.USER_FORMAT:
             return (
                     <UserFieldValueRenderer value={this.props.display}
+                                            key={'ufvr-' + this.props.idKey}
                                             {...commonProperties}/>
                 );
 
         case FieldFormats.DATE_FORMAT:
             return (
                     <DateFieldValueRenderer value={this.props.display}
+                                            key={'dfvr-' + this.props.idKey}
                                         {...commonProperties}/>
                 );
 
         case FieldFormats.DATETIME_FORMAT: {
             return (
                     <DateFieldValueRenderer value={this.props.display}
+                                            key={'dfvr-' + this.props.idKey}
                                             {...commonProperties}/>
                 );
         }
@@ -94,17 +101,19 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.TIME_FORMAT: {
             return (
                     <DateFieldValueRenderer value={this.props.display}
+                                            key={'dfvr-' + this.props.idKey}
                                             {...commonProperties}/>
                 );
         }
         case FieldFormats.CHECKBOX_FORMAT:
             return (
-                    <input type="checkbox" disabled checked={this.props.value}/>
+                    <input type="checkbox" disabled checked={this.props.value} key={'inp-' + this.props.idKey}/>
                 );
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT:
             return (
                     <MultiLineTextFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
+                                                     key={'mltfvr-' + this.props.idKey}
                                                  {...commonProperties}/>
                 );
 
@@ -116,6 +125,7 @@ const FieldValueRenderer = React.createClass({
             return (
                     <TextFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
                                             attributes={this.props.attributes}
+                                            key={'tfvr-' + this.props.idKey}
                                             {...commonProperties}/>
                 );
         }
@@ -131,9 +141,11 @@ const FieldValueRenderer = React.createClass({
             commonProperties.isBold = true;
             className += ' bold';
         }
+        commonProperties.idKey = this.props.idKey;
+        commonProperties.idKey = this.props.idKey;
         className += this.props.classes ? ' ' + this.props.classes : '';
 
-        let renderedType =  this.getRendererForType(this.props.type, commonProperties, className);
+        let renderedType =  this.getRendererForType(commonProperties);
 
         /* render type  */
         return <span className={className}>{renderedType}</span>;

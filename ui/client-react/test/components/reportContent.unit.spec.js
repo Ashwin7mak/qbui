@@ -1010,12 +1010,14 @@ describe('ReportContent functions', () => {
                 },
             }
         };
+        let attrs = {setting: true};
         let fieldsData = {
             fields : {
                 data: [
                     {
                         id: 4,
-                        builtIn: false
+                        builtIn: false,
+                        datatypeAttributes :attrs
                     },
                     {
                         id: 5,
@@ -1029,7 +1031,8 @@ describe('ReportContent functions', () => {
             fieldName: 'col_num',
             id: 4,
             value: "hi",
-            display: "there"
+            display: "there",
+            field: attrs
         }
         ];
         spyOn(flux.actions, 'saveNewReportRecord');
