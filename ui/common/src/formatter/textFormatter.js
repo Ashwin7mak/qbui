@@ -1,6 +1,7 @@
 /*
- Given a raw email field value and field meta data from the Java capabilities API, this module is capable of
- display formatting the email.
+ Given a raw text field value and field meta data from the Java capabilities API, this module is capable of
+ display formatting the text encoding the html is html is not allowed and encoding only non allowed elements it html is
+ allowed.
  */
 (function() {
     'use strict';
