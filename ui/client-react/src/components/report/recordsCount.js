@@ -3,7 +3,7 @@ import './report.scss';
 
 import Loader  from 'react-loader';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
-
+import Breakpoints from "../../utils/breakpoints";
 
 var RecordsCount = React.createClass({
     propTypes: {
@@ -20,11 +20,20 @@ var RecordsCount = React.createClass({
      * renders the record count
      * if we have some dynamic filtering in effect include the number of filtered records out of the total
      * otherwise just show the reports total records
+     *
+     * If it isSmall then we change the color fo the loader to match the color of the text for small breakpoints
      */
     render() {
         let message = "report.recordCount";
         let placeHolderMessage = "report.recordCountPlaceHolder";
         let dbl = null;
+        let isSmall = Breakpoints.isSmallBreakpoint();
+        let loaderColor = '#404040';
+
+        if (isSmall) {
+            loaderColor = '#ffffff';
+        }
+
         if (this.props.isFiltered) {
             message = "report.filteredRecordCount";
             dbl = this.props.clearAllFilters;
@@ -44,6 +53,7 @@ var RecordsCount = React.createClass({
             trail: 60,
             fps: 20,
             zIndex: 2e9,
+            color: loaderColor,
             className: 'spinner',
             top: '54%',
             left: '33%',
