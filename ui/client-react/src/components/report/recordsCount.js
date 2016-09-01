@@ -22,6 +22,7 @@ var RecordsCount = React.createClass({
      * otherwise just show the reports total records
      *
      * If it isSmall then we change the color fo the loader to match the color of the text for small breakpoints
+     * and it changes the text header from 'Counting {records}' to 'Counting...'
      */
     render() {
         let message = "report.recordCount";
@@ -32,6 +33,7 @@ var RecordsCount = React.createClass({
 
         if (isSmall) {
             loaderColor = '#ffffff';
+            placeHolderMessage = "report.cardViewCountPlaceHolder";
         }
 
         if (this.props.isFiltered) {

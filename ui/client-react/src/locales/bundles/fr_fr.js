@@ -106,6 +106,7 @@ export default {
             organizeReports: "Organiser",
             recordCount : "{recordCount} {nameForRecords} ",
             recordCountPlaceHolder : "Compte {nameForRecords}",
+            cardViewCountPlaceHolder : "Compte...",
             reportNavigationBar : "{pageStart} - {pageEnd}",
             previousToolTip: "Arrière",
             nextToolTip: "Prochain",
