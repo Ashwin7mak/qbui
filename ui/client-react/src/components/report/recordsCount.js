@@ -7,12 +7,12 @@ import Breakpoints from "../../utils/breakpoints";
 
 var RecordsCount = React.createClass({
     propTypes: {
-        isFiltered : React.PropTypes.bool,
-        recordCount : React.PropTypes.number,
-        filteredRecordCount : React.PropTypes.number,
-        nameForRecords : React.PropTypes.string,
-        clearAllFilters : React.PropTypes.func,
-        isCounting : React.PropTypes.bool,
+        isFiltered: React.PropTypes.bool,
+        recordCount: React.PropTypes.number,
+        filteredRecordCount: React.PropTypes.number,
+        nameForRecords: React.PropTypes.string,
+        clearAllFilters: React.PropTypes.func,
+        isCounting: React.PropTypes.bool,
     },
 
 
@@ -28,10 +28,9 @@ var RecordsCount = React.createClass({
         let message = "report.recordCount";
         let placeHolderMessage = "report.recordCountPlaceHolder";
         let dbl = null;
-        let isSmall = Breakpoints.isSmallBreakpoint();
         let loaderColor = '#404040';
 
-        if (isSmall) {
+        if (Breakpoints.isSmallBreakpoint()) {
             loaderColor = '#ffffff';
             placeHolderMessage = "report.cardViewCountPlaceHolder";
         }
