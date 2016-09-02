@@ -2,9 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import FieldFormats from '../../utils/fieldFormats' ;
-import {DefaultFieldValueEditor, MultiLineTextFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
+import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
     DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import TextFieldValueEditor from './textFieldValueEditor';
+import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
 import _ from 'lodash';
 
 /**

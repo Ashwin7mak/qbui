@@ -6,7 +6,7 @@
  *
  * expects NODE_ENV to be defined e.g. NODE_ENV=local
  *
- * run from qbui directory with `node ui/e2e/qbapp/dataGen.js`
+ * run from qbui directory with `node ui/e2e/qbapp/dataGenTextCustomizeAttributes.js`
  *
  * */
 // jshint sub: true
