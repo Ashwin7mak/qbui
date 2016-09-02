@@ -31,6 +31,7 @@ var CardViewNavigation = React.createClass({
             trail: 60,
             fps: 20,
             zIndex: 2e9,
+            color: '#7090ab',
             className: 'spinner',
             top: '50%',
             left: '30%',

@@ -136,32 +136,33 @@
                 var expectedTableResuts = [];
                 reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                     //sleep for loading of table to finish
-                    e2eBase.sleep(browser.params.smallSleep);
-                    reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
-                        reportServicePage.agGridRecordElList.map(function(row) {
-                            return {
-                                'Text Field': row.all(by.className('ag-cell-no-focus')).get(1).getText(),
-                                'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(4).getText()
-                            };
-                        }).then(function(results) {
-                            for (var i = 0; i < results.length; i++) {
-                                expectedTableResuts.push(results[i]);
-                            }
-                            var found = false;
-                            for (var j = 0; j < expectedTableResuts.length; j++) {
-                                for (var k = 0; k < actualTableResuts.length; k++) {
-                                    try {
-                                        if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
-                                            expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
-                                            found = true;
-                                            break;
+                    e2eBase.sleep(browser.params.smallSleep).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
+                            reportServicePage.agGridRecordElList.map(function(row) {
+                                return {
+                                    'Text Field': row.all(by.className('ag-cell-no-focus')).get(1).getText(),
+                                    'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(4).getText()
+                                };
+                            }).then(function(results) {
+                                for (var i = 0; i < results.length; i++) {
+                                    expectedTableResuts.push(results[i]);
+                                }
+                                var found = false;
+                                for (var j = 0; j < expectedTableResuts.length; j++) {
+                                    for (var k = 0; k < actualTableResuts.length; k++) {
+                                        try {
+                                            if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
+                                                expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
+                                                found = true;
+                                                break;
+                                            }
+                                        } catch (e) {
+                                            found = false;
+                                            throw new Error(e);
                                         }
-                                    } catch (e) {
-                                        found = false;
-                                        throw new Error(e);
                                     }
                                 }
-                            }
+                            });
                         });
                     });
                 });
@@ -301,6 +302,8 @@
                                 // Sort each array before comparing
                                 expect(selections.sort()).toEqual(facetSelections.sort());
                             });
+                        }).then(function() {
+                            reportFacetsPage.waitForReportReady();
                         });
                     }
                 }).then(function() {
@@ -341,9 +344,10 @@
                             // Sort each array before comparing
                             expect(selections.sort()).toEqual(facetSelections.sort());
                         }).then(function() {
+                            e2eBase.sleep(browser.params.smallSleep);
                             // Finally clear all facets from popup menu
                             reportFacetsPage.getFacetGroupElement("Text Field").then(function(facetGroupEl) {
-                                reportFacetsPage.waitForElementToBeClickable(facetGroupEl).then(function() {
+                                reportFacetsPage.waitForElement(facetGroupEl).then(function() {
                                     reportFacetsPage.clickClearAllFacetsIcon(facetGroupEl).then(function() {
                                         e2eBase.sleep(browser.params.smallSleep);
                                         reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {

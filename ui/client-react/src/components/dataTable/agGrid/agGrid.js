@@ -65,6 +65,7 @@ let AGGrid = React.createClass({
         reportFooter: React.PropTypes.element,
         columns: React.PropTypes.array,
         loading: React.PropTypes.bool,
+        isInlineEditOpen: React.PropTypes.bool,
         records: React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
@@ -401,10 +402,15 @@ let AGGrid = React.createClass({
             flux.actions.mark('component-AgGrid start');
         }
     },
-    componentDidUpdate() {
+    componentDidUpdate(prevProps,  prevState) {
         if (!this.props.loading) {
             let flux = this.getFlux();
             flux.actions.measure('component-AgGrid', 'component-AgGrid start');
+        }
+        if (!this.props.isInlineEditOpen && prevProps.isInlineEditOpen) {
+            // done saving close the edit
+            this.editRow();
+            logger.debug('edit completed');
         }
         // we have a new inserted row put it in edit mode
         if (typeof (this.props.editingIndex) !== 'undefined' && this.props.editingIndex !== null) {
@@ -430,6 +436,9 @@ let AGGrid = React.createClass({
             return true;
         }
         if (!_.isEqual(nextProps.columns, this.props.columns)) {
+            return true;
+        }
+        if (!_.isEqual(nextProps.isInlineEditOpen, this.props.isInlineEditOpen) && !nextProps.isInlineEditOpen) {
             return true;
         }
         return false;
@@ -666,9 +675,7 @@ let AGGrid = React.createClass({
             return;
         }
         let validation = this.props.onRecordSaveClicked(id);
-        if (validation && validation.ok) {
-            this.editRow(); // edit done
-        } else {
+        if (validation && !validation.ok) {
             //keep in edit and show error
             this.setState({rowEditErrors: validation}, () => {
                 this.gridOptions.context.rowEditErrors = validation;

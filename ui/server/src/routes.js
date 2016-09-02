@@ -9,6 +9,7 @@
     var authentication = require('./components/authentication');
     var log = require('./logger').getLogger();
     var _ = require('lodash');
+    var httpStatusCodes = require('./constants/httpStatusCodes');
     var mixins = require('./../../common/src/lodashMixins');
 
     require('./logger').getLogger();
@@ -31,7 +32,7 @@
                 sendOutLogMessage(req, res, req.body.level, 'CLIENT', req.body.msg);
                 // ...route terminates...logging a client side message only
             } else {
-                res.status(405).send('Method not supported');
+                res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send('Method not supported');
             }
         });
 
@@ -54,7 +55,7 @@
                     JSON.stringify(_.sortKeysBy(stats, (val, key) => key.toLowerCase()));
                 sendOutLogMessage(req, res, 'info', 'CLIENT_PERF', msg);
             } else {
-                res.status(405).send('Method not supported');
+                res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send('Method not supported');
             }
             // ...route terminates...logging a client side message only
         });
@@ -70,7 +71,7 @@
                     recordBulkDelete(req, res);
                 } else {
                     //the method doesn't exist, we can't execute this request, log an error!
-                    res.status(501).send('Method not implemented!');
+                    res.status(httpStatusCodes.NOT_IMPLEMENTED).send('Method not implemented!');
                 }
             } else if (requestHelper.isPost(req)) {
                 /*
@@ -81,7 +82,7 @@
                 return next();
             } else {
                 //the verb requested for this rest endpoint is not implemented yet, log an error!
-                res.status(405).send('Method not supported');
+                res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send('Method not supported');
             }
         });
 
@@ -105,25 +106,25 @@
 
         // unauthorized
         app.route('/unauthorized*')
-            .get(errors[401]);
+            .get(errors[httpStatusCodes.UNAUTHORIZED]);
 
         // forbidden
         app.route('/forbidden*')
-            .get(errors[403]);
+            .get(errors[httpStatusCodes.FORBIDDEN]);
 
         app.route('/pageNotFound*')
-                .get(errors[404]);
+                .get(errors[httpStatusCodes.NOT_FOUND]);
 
         app.route('/internalServerError*')
-                .get(errors[500]);
+                .get(errors[httpStatusCodes.INTERNAL_SERVER_ERROR]);
 
         // All undefined asset or api routes should return a 404
         app.route('/:url(api|auth|components|app|bower_components|assets)/*')
-                .get(errors[404]);
+                .get(errors[httpStatusCodes.NOT_FOUND]);
 
         //  Unknown page
         app.route('/*')
-                .get(errors[404]);
+                .get(errors[httpStatusCodes.NOT_FOUND]);
 
 
         function isClientLogEnabled() {
@@ -201,15 +202,15 @@
                         args.push({type:msgType, req: req}, clientMsg);
 
                         fn.apply(null, args);
-                        res.status(200).send('OK');
+                        res.status(httpStatusCodes.OK).send('OK');
                     } else {
-                        res.status(400).send('Bad Request');
+                        res.status(httpStatusCodes.BAD_REQUEST).send('Bad Request');
                     }
                 } else {
-                    res.status(400).send('Bad Request');
+                    res.status(httpStatusCodes.BAD_REQUEST).send('Bad Request');
                 }
             } else {
-                res.status(200).send('OK');
+                res.status(httpStatusCodes.OK).send('OK');
             }
         }
 

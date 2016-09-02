@@ -9,6 +9,7 @@
     @include not-small-breakpoint {
         background: $report-container-bg;
     }
+
     .layout-stage {
         flex:0 0 auto;
     }
@@ -37,6 +38,8 @@
     flex: 1 1 auto;
     flex-direction:column;
     position:relative;
+    //min-height is required in order for the scrollbar to work in firefox
+    min-height: 0;
 
     .tableActionsContainer {
         position: relative;
@@ -101,10 +104,16 @@
                     width:8%;
                 }
 
-                .recordsCount{
+                .recordsCount {
                     text-align: right;
                     font-family: "Lato", Sans-Serif;
                     font-size: 14px;
+
+                    @include small-breakpoint {
+                        color: $pagination-mobile-topbar-text-color;
+                        white-space: nowrap;
+                        margin-left: 15px;
+                    }
                 }
             }
 
@@ -180,6 +189,8 @@
         flex: 0 1 auto;
         width:100%;
         position:relative;
+        //min-height is required in order for the scrollbar to work in firefox
+        min-height: 0;
     }
 }
 

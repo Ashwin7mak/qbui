@@ -8,6 +8,7 @@
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');
     let url = require('url');
+    var consts = require('../../../../common/src/constants');
 
     module.exports = function(config) {
         let request = defaultRequest;
@@ -166,6 +167,19 @@
                     }
                 }
 
+                //get back json unless already specified
+                if (typeof opts === 'undefined') {
+                    opts = {};
+                }
+                if (typeof opts.headers === 'undefined') {
+                    opts.headers = {};
+                }
+                if (typeof opts.headers[consts.ACCEPT] === 'undefined') {
+
+                    opts.headers[consts.ACCEPT] = consts.APPLICATION_JSON;
+                }
+
+                req.headers = Object.assign({}, req.headers);
                 return new Promise((resolve, reject) =>{
                     if (immediatelyResolve) {
                         resolve();
@@ -288,7 +302,6 @@
                     }
                 }
             }
-
         };
 
         return helper;
