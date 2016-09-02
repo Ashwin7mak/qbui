@@ -10,7 +10,7 @@
     // Add a screenshot reporter for errors when testing locally
     var HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
     var reporter = new HtmlScreenshotReporter({
-        dest: './build/reports/e2e/',
+        dest: './ui/build/reports/e2e/',
         filename: 'e2e-test-report.html',
         ignoreSkippedSpecs: false,
         reportOnlyFailedSpecs: false,
@@ -37,8 +37,12 @@
             baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'],
+        exclude: [
+            baseE2EPath + 'qbapp/tests/reports/reportGroupingSortingViaIcon.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/tableHomePage.e2e.spec.js'
+        ],
 
         // ----- Capabilities to be passed to the webdriver instance ----
         //
