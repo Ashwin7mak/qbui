@@ -29,7 +29,6 @@ var RecordsCount = React.createClass({
         let message = "report.recordCount";
         let placeHolderMessage = "report.recordCountPlaceHolder";
         let dbl = null;
-        
         if (Breakpoints.isSmallBreakpoint()) {
             placeHolderMessage = "report.cardViewCountPlaceHolder";
         }
