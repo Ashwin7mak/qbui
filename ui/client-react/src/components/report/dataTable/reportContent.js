@@ -135,6 +135,7 @@ export let ReportContent = React.createClass({
                     let field = newRec[key];
                     if (field.value !== null) {
                         let change = {
+                            //the + before field.id is needed turn the field id from string into a number
                             oldVal: {value: null, id: +field.id},
                             newVal: {value: field.value},
                             fieldName: key
@@ -278,6 +279,7 @@ export let ReportContent = React.createClass({
     createColChange(value, display, field, payload) {
         let colChange = {};
         colChange.fieldName = field.name;
+        //the + before field.id is needed turn the field id from string into a number
         colChange.id = +field.id;
         colChange.value = _.cloneDeep(value);
         colChange.display = _.cloneDeep(display);

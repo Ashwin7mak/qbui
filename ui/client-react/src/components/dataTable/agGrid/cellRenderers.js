@@ -203,7 +203,9 @@ const CellRenderer = React.createClass({
         case FieldFormats.PERCENT_FORMAT:
             this.numericCellEdited(value);
             break;
-
+        case FieldFormats.TEXT_FORMAT:
+            this.textCellEdited(value);
+            break;
         default:
             this.cellEdited(value);
 
@@ -230,6 +232,7 @@ const CellRenderer = React.createClass({
             this.props.params.context.onFieldChange(change);
         }
     },
+
     /**
      * cell was edited, update the r/w and r/o value
      * @param value
@@ -237,8 +240,8 @@ const CellRenderer = React.createClass({
     cellEdited(value) {
         let theVals = {
             value: value,
+            display: value
         };
-        theVals.display = textFormatter.format(theVals, this.props.colDef.datatypeAttributes);
 
         this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
     },
@@ -252,6 +255,19 @@ const CellRenderer = React.createClass({
         current.isInvalid = result ? result.isInvalid : false;
         current.invalidMessage = result ? result.invalidMessage : null;
         this.setState({validationStatus : current});
+    },
+
+    /**
+     * textcell was edited, update the r/w and r/o value
+     * @param value
+     */
+    textCellEdited(value) {
+        let theVals = {
+            value: value,
+        };
+        theVals.display = textFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
     },
 
 

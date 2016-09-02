@@ -142,7 +142,6 @@ const FieldValueRenderer = React.createClass({
             className += ' bold';
         }
         commonProperties.idKey = this.props.idKey;
-        commonProperties.idKey = this.props.idKey;
         className += this.props.classes ? ' ' + this.props.classes : '';
 
         let renderedType =  this.getRendererForType(commonProperties);

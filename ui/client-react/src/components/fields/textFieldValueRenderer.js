@@ -38,6 +38,17 @@ const TextFieldValueRenderer = React.createClass({
         };
     },
 
+    /**
+     * Renders the text field showing some allowed html if set in fields attributes
+     *
+     * Note: use of dangerouslySetInnerHTML is necessary to support the
+     * 'html allowed' feature in text field supported in the current stack.
+     * The text formatter has preEncoded the value to include only the allowed tags.
+     *
+     * We may decide to sunset this feature and add a rich text field type
+     * later to better achieve the desired functionality per design meeting discussion.
+     * @returns {XML}
+     */
     render() {
         let classes = 'textField';
         if (this.props.classes) {

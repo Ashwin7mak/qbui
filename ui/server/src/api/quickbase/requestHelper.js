@@ -295,8 +295,7 @@
                         req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
                     }
                 }
-            },
-            INVALID_INPUT : 422
+            }
         };
 
         return helper;

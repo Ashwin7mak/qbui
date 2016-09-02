@@ -43,42 +43,6 @@
 
 
         /**
-         * Escape special characters in the given string to html entities.
-         *  handles escaping both within and outside of attributes.
-         * @param s - the string to escape
-         * @param forAttribute - true if the string is used in an attribute
-         * @return escaped html
-         */
-        escapeHTML: function(s, forAttribute) {
-            return s.replace(forAttribute ? /[&<>'"]/g : /[&<>]/g, function(c)  {
-                return {
-                    '&': "&amp;",
-                    '"': "&quot;",
-                    "'": '&#39;',
-                    '`': '&#96;',
-                    '<': "&lt;",
-                    '>': "&gt;"
-                }[c];
-            });
-        },
-
-        /**
-         * Unescape special characters in the given string of html.
-         *
-         * @param  {String} html
-         * @return {String}
-         */
-        unescape: function(html) {
-            return String(html)
-                .replace(/&amp;/g, '&')
-                .replace(/&quot;/g, '"')
-                .replace(/&#39;/g, "'")
-                .replace(/&#96;/g, "`")
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>');
-        },
-
-        /**
          * encodeForbiddenTags
          * Checks an HTML string for tags not in allow array and encodes those tags and text contained within those tags.
          */
