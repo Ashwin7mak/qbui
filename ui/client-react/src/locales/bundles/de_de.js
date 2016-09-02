@@ -102,11 +102,11 @@ export default {
                 yesCheck : "Ja"
             },
             filteredRecordCount :
-                "{filteredRecordCount} von {recordCount} {nameForRecords} ",
+                "{filteredRecordCount} von {recordCount} {recordOrRecords} ",
             newReport: "Neu",
             organizeReports: "Organisieren",
-            recordCount : "{recordCount} {nameForRecords} ",
-            recordCountPlaceHolder : "Zählen {nameForRecords}...",
+            recordCount : "{recordCount} {recordOrRecords} ",
+            recordCountPlaceHolder : "Zählen {recordOrRecords}...",
             cardViewCountPlaceHolder : "Zählen...",
             reportNavigationBar : "{pageStart} - {pageEnd}",
             searchPlaceHolder:  "Suchen Sie diese",

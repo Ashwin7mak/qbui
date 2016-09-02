@@ -13,7 +13,6 @@ var RecordsCount = React.createClass({
         isFiltered: React.PropTypes.bool,
         recordCount: React.PropTypes.number,
         filteredRecordCount: React.PropTypes.number,
-        nameForRecords: React.PropTypes.string,
         clearAllFilters: React.PropTypes.func,
         isCounting: React.PropTypes.bool,
     },
@@ -71,13 +70,13 @@ var RecordsCount = React.createClass({
                                 <I18nMessage message={message}
                                              filteredRecordCount={this.props.filteredRecordCount + ''}
                                              recordCount={this.props.recordCount + ''}
-                                             nameForRecords={this.props.nameForRecords}
+                                             recordOrRecords={this.props.recordCount > 1 ? 'records' : 'record'}
                                 />
                             </div>
                     </Loader>
                     {   this.props.isCounting ?
                         <div className="recordsCount">
-                            <I18nMessage message={placeHolderMessage} nameForRecords={this.props.nameForRecords} />
+                            <I18nMessage message={placeHolderMessage} recordOrRecords={this.props.recordCount > 1 ? 'records' : 'record'} />
                         </div> :
                         null
                     }
