@@ -5,6 +5,9 @@ import Loader  from 'react-loader';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
 import Breakpoints from "../../utils/breakpoints";
 
+const largeBreakpointColor = '#404040';
+const smallBreakpointColor = '#ffffff';
+
 var RecordsCount = React.createClass({
     propTypes: {
         isFiltered: React.PropTypes.bool,
@@ -14,8 +17,6 @@ var RecordsCount = React.createClass({
         clearAllFilters: React.PropTypes.func,
         isCounting: React.PropTypes.bool,
     },
-
-
     /**
      * renders the record count
      * if we have some dynamic filtering in effect include the number of filtered records out of the total
@@ -28,10 +29,8 @@ var RecordsCount = React.createClass({
         let message = "report.recordCount";
         let placeHolderMessage = "report.recordCountPlaceHolder";
         let dbl = null;
-        let loaderColor = '#404040';
-
+        
         if (Breakpoints.isSmallBreakpoint()) {
-            loaderColor = '#ffffff';
             placeHolderMessage = "report.cardViewCountPlaceHolder";
         }
 
@@ -54,7 +53,7 @@ var RecordsCount = React.createClass({
             trail: 60,
             fps: 20,
             zIndex: 2e9,
-            color: loaderColor,
+            color: !Breakpoints.isSmallBreakpoint() ? largeBreakpointColor : smallBreakpointColor,
             className: 'spinner',
             top: '54%',
             left: '33%',
