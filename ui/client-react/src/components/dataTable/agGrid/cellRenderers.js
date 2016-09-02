@@ -15,6 +15,7 @@ import CellEditor from './cellEditor';
 import * as dateTimeFormatter from '../../../../../common/src/formatter/dateTimeFormatter';
 import * as timeOfDayFormatter from '../../../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../../../common/src/formatter/numericFormatter';
+import * as textFormatter from '../../../../../common/src/formatter/textFormatter';
 
 import IconActions from '../../actions/iconActions';
 
@@ -135,7 +136,15 @@ const CellRenderer = React.createClass({
 
     render() {
 
-        let isEditable = !this.props.colDef.builtIn;
+        let isEditable = true;
+        // built in fields are not editable
+        if (typeof this.props.colDef.builtIn !== 'undefined' &&  this.props.colDef.builtIn) {
+            isEditable = false;
+        }
+        // field must be scalar i.e. user editable not a formula or generated value
+        if (typeof this.props.colDef.userEditableValue !== 'undefined' &&  !this.props.colDef.userEditableValue) {
+            isEditable = false;
+        }
 
         let key = CellRendererFactory.getCellKey(this.props);
 
@@ -163,6 +172,7 @@ const CellRenderer = React.createClass({
                                 onChange={this.onChange}
                                 onValidated={this.onValidated}
                                 key={key + '-edt'}
+                                idKey={key + '-edt'}
                                 params={this.props.params}
                                 onTabColumn={this.onTabColumn}
                                 validateFieldValue={this.props.validateFieldValue}
@@ -176,6 +186,7 @@ const CellRenderer = React.createClass({
                                        isEditable={isEditable}
                                        value={this.state.valueAndDisplay.value}
                                        key={key + '-dsp'}
+                                       idKey={key + '-dsp'}
                                        display={this.state.valueAndDisplay.display}
                                        attributes={this.props.colDef.datatypeAttributes}/>
                 }
@@ -200,7 +211,9 @@ const CellRenderer = React.createClass({
         case FieldFormats.PERCENT_FORMAT:
             this.numericCellEdited(value);
             break;
-
+        case FieldFormats.TEXT_FORMAT:
+            this.textCellEdited(value);
+            break;
         default:
             this.cellEdited(value);
 
@@ -227,6 +240,7 @@ const CellRenderer = React.createClass({
             this.props.params.context.onFieldChange(change);
         }
     },
+
     /**
      * cell was edited, update the r/w and r/o value
      * @param value
@@ -236,7 +250,8 @@ const CellRenderer = React.createClass({
             value: value,
             display: value
         };
-        this.setState({valueAndDisplay : theVals, validationStatus: {}}, ()=>{this.cellChanges();});
+
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
     },
 
     /**
@@ -248,6 +263,19 @@ const CellRenderer = React.createClass({
         current.isInvalid = result ? result.isInvalid : false;
         current.invalidMessage = result ? result.invalidMessage : null;
         this.setState({validationStatus : current});
+    },
+
+    /**
+     * textcell was edited, update the r/w and r/o value
+     * @param value
+     */
+    textCellEdited(value) {
+        let theVals = {
+            value: value,
+        };
+        theVals.display = textFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
     },
 
 
@@ -299,6 +327,7 @@ const CellRenderer = React.createClass({
 });
 
 export const TextCellRenderer = React.createClass({
+    displayName: 'TextCellRenderer',
     render() {
         let format = FieldFormats.TEXT_FORMAT;
         if (this.props.params && this.props.params.column && this.props.params.column.colDef &&
@@ -381,7 +410,7 @@ export const UserCellRenderer = React.createClass({
     }
 });
 export const CheckBoxCellRenderer = React.createClass({
-    displayName: 'PhoneCellRenderer',
+    displayName: 'CheckBoxCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.CHECKBOX_FORMAT, this.props);
     }

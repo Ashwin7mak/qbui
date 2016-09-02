@@ -184,7 +184,7 @@ let reportDataActions = {
                 this.dispatch(actions.ADD_REPORT_RECORD, {appId, tblId, record});
                 let recordService = new RecordService();
 
-                    //  save the changes to the record
+                // save the changes to the record
                 recordService.createRecord(appId, tblId, record).then(
                         response => {
                             logger.debug('RecordService createRecord success:' + JSON.stringify(response));

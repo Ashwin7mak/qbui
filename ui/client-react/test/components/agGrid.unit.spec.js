@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
 import AGGridReact from 'ag-grid-react';
 
-//import CellValueRenderer from '../../src/components/dataTable/agGrid/cellValueRenderer';
 import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
 
 import Loader  from 'react-loader';

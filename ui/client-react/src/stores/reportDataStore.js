@@ -6,6 +6,7 @@ import Logger from '../utils/logger';
 import Locale from '../locales/locales';
 import * as SchemaConsts from "../constants/schema";
 import FieldFormats from '../utils/fieldFormats';
+import * as textFormatter from '../../../common/src/formatter/textFormatter';
 import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormatter';
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
@@ -62,6 +63,9 @@ let reportModel = {
                     column.field = field.name;
                     column.fieldType = field.type;
                     column.builtIn = field.builtIn;
+                    column.unique = field.unique;
+                    column.userEditableValue = field.userEditableValue;
+                    column.dataIsCopyable = field.dataIsCopyable;
                     column.required = field.required;
                     column.defaultValue = null;
                     if (field.defaultValue && field.defaultValue.coercedValue) {
@@ -315,7 +319,7 @@ let reportModel = {
      * @returns {*} - a object with a format method
      */
     getFormatter(formatType) {
-        let answer = null;
+        let answer = textFormatter;
         switch (formatType) {
         case FieldFormats.DATETIME_FORMAT:
         case FieldFormats.DATE_FORMAT:
@@ -323,6 +327,9 @@ let reportModel = {
             break;
         case FieldFormats.TIME_FORMAT:
             answer = timeOfDayFormatter;
+            break;
+        case FieldFormats.TEXT_FORMAT:
+            answer = textFormatter;
             break;
         case FieldFormats.USER_FORMAT:
             answer = userFormatter;

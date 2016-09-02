@@ -9,6 +9,7 @@ var assert = require('assert');
 var requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
 var recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
 var constants = require('../../../../common/src/constants');
+var dataErrorCodes = require('../../../../common/src/dataEntryErrorCodes');
 
 /**
  * Unit tests for records apis
@@ -399,7 +400,74 @@ describe("Validate recordsApi", function() {
 
         });
     });
+    describe("when saveSingleRecord with body to validate is called", function() {
+        var executeReqStub = null;
 
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            recordsApi.setRequestHelperObject(requestHelper);
+        });
+
+        afterEach(function() {
+            executeReqStub.restore();
+        });
+
+        it('success return results ', function(done) {
+            req.url = '/records/2';
+            req.body = [{value: "1234", field : {type: "TEXT", clientSideAttributes : {max_chars : 4}}}];
+            var targetObject = "{}";
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = recordsApi.saveSingleRecord(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+
+        });
+
+        it('fail return results max_chars', function(done) {
+            let testField =  {type: "TEXT", clientSideAttributes : {max_chars : 4}};
+            req.url = '/records/2';
+            req.body = [{value: "12345", field: testField}];
+            let errType = dataErrorCodes.MAX_LEN_EXCEEDED;
+            var promise = recordsApi.saveSingleRecord(req);
+
+            promise.then(
+                function(error) {
+                },
+                function(error) {
+                    assert.equal(error.response.errors[0].type, errType);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('fail return results required field', function(done) {
+            let testField =  {type: "TEXT", required : true};
+            req.url = '/records/2';
+            req.body = [{value: "", field: testField}];
+            var errType = dataErrorCodes.REQUIRED_FIELD_EMPTY;
+            var promise = recordsApi.saveSingleRecord(req);
+
+            promise.then(
+                function(error) {
+                },
+                function(error) {
+                    assert.equal(error.response.errors[0].type, errType);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
     describe("when createSingleRecord is called", function() {
         var executeReqStub = null;
 

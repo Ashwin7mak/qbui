@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 
@@ -39,7 +40,9 @@ const TextFieldValueEditor = React.createClass({
 
         /**
          * listen for losing focus by setting a callback to the onBlur prop. */
-        onBlur: React.PropTypes.func
+        onBlur: React.PropTypes.func,
+
+        idKey: React.PropTypes.any
 
     },
 
@@ -69,6 +72,7 @@ const TextFieldValueEditor = React.createClass({
                           className={classes}
                           value={this.props.value === null ? '' : this.props.value}
                           type="text"
+                          key={'inp' + this.props.idKey}
                           placeholder={this.props.placeholder}
                           onChange={this.onChange}
                           onBlur={this.props.onBlur} />;
