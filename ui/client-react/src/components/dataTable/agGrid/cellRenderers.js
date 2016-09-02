@@ -297,10 +297,17 @@ const CellRenderer = React.createClass({
         let decimalMark = decimalPlaces && datatypeAttributes.clientSideAttributes ? datatypeAttributes.clientSideAttributes.decimal_mark : null;
 
         let theVals = {};
-        if (decimalMark === '.') {
-            theVals.value = value ? Number(value.replace(/[^0-9.]/g, "")) : value;
-        } else {
-            theVals.value = value ? Number(value.replace(/[^0-9,]/g, "")) : value;
+        if (value) {
+            let isNegative = value.indexOf("-") === 0;
+            if (decimalMark === '.') {
+                //preserve the decimal mark
+                theVals.value = +(value.replace(/[^0-9.]/g, ""));
+            } else if (decimalMark === ',') {
+                theVals.value = +(value.replace(/[^0-9,]/g, ""));
+            } else {
+                theVals.value = +(value.replace(/[^0-9]/g, ""));
+            }
+            theVals.value = isNegative ? -theVals.value : theVals.value;
         }
         if (datatypeAttributes.type === "PERCENT") {
             theVals.value = theVals.value ? theVals.value / 100 : 0;

@@ -3,11 +3,11 @@ let textValue1 = 'QuickBase';
 let textDisplay1 = 'QUICKBASE';
 let textValue2 = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel semper felis. Nunc quis metus hendrerit, lobortis purus dapibus, pulvinar sapien. Nunc ornare cursus sodales. Nulla consequat est ligula, sit amet iaculis metus pharetra id. Vestibulum nibh odio, euismod ac vehicula at, tincidunt condimentum lacus. ';
 let numberValue3 = 123456789;
+let numberDisplay3 = "123,456,789";
 
 let fieldDefWithBold = {
     "clientSideAttributes" : {"bold" : true}
 };
-
 
 const basicFieldValueRenderer = (
     <div>
@@ -32,9 +32,14 @@ const basicFieldValueRenderer = (
             <FieldValueRenderer type={1} display={textDisplay1} attributes={fieldDefWithBold} />
         </dd>
 
-        <dt>Field Renderer with Numeric Field type and a value {numberValue3} which is formatted according to the current locale:</dt>
+        <dt>Field Renderer with Numeric Field type and a value and display:</dt>
         <dd>
-            <FieldValueRenderer type={2} value={numberValue3} display="this is not used" />
+            <FieldValueRenderer type={2} value={numberValue3} display={numberDisplay3} />
+        </dd>
+
+        <dt>Field Renderer with Numeric Field type, bold attribute and a display: </dt>
+        <dd>
+            <FieldValueRenderer type={2} display={numberDisplay3} attributes={fieldDefWithBold} />
         </dd>
 
     </div>

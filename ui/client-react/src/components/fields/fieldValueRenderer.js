@@ -67,11 +67,9 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.NUMBER_FORMAT:
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.RATING_FORMAT: {
-            let rendered = this.props.value ?
-                    <NumericFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
+            let rendered = <NumericFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
                                               attributes={this.props.attributes}
-                                              {...commonProperties}/> :
-                         null;
+                                              {...commonProperties}/>
             return (rendered);
         }
         case FieldFormats.USER_FORMAT:

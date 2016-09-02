@@ -2,9 +2,9 @@ import React from 'react';
 import './fields.scss';
 import {I18nNumber} from '../../utils/i18nMessage';
 /**
- * # TextFieldValueRenderer
+ * # NumericFieldValueRenderer
  *
- * A TextFieldValueRenderer is a read only rendering of the field containing a single line text.
+ * A NumericFieldValueRenderer is a read only rendering of the field containing a numeric value.
  *
  * The value can be rendered as bold or not and classes can be optionally pass in for custom styling.
  */

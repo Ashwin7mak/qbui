@@ -3,9 +3,9 @@ import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 
 /**
- * # TextFieldValueEditor
+ * # NumericFieldValueEditor
  *
- * An editable rendering of a single line text field as an input box. The component can be supplied a value or not. Used within a FieldValueEditor
+ * An editable rendering of a number field as an input box. The component can be supplied a value or not. Used within a FieldValueEditor
  *
  */
 
@@ -19,7 +19,7 @@ const NumericFieldValueEditor = React.createClass({
             numberStr: React.PropTypes.number
         })]), //as of now it should be a number only. if we decide to add currency symbol etc within the box then thats diff
 
-        display: React.PropTypes.number,
+        display: React.PropTypes.string,
         /**
          * optional string to display when input is empty aka ghost text */
         placeholder: React.PropTypes.string,
