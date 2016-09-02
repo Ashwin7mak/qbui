@@ -53,9 +53,14 @@ const TextFieldValueEditor = React.createClass({
     },
 
     onChange(ev) {
-        //TODO: add debounce support for reduced re-rendering
         if (this.props.onChange) {
             this.props.onChange(ev.target.value);
+        }
+    },
+
+    onBlur(ev) {
+        if (this.props.onBlur) {
+            this.props.onBlur(ev);
         }
     },
 
@@ -75,7 +80,7 @@ const TextFieldValueEditor = React.createClass({
                           key={'inp' + this.props.idKey}
                           placeholder={this.props.placeholder}
                           onChange={this.onChange}
-                          onBlur={this.props.onBlur} />;
+                          onBlur={this.onBlur} />;
 
 
         return  (this.props.isInvalid ?

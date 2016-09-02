@@ -4,32 +4,30 @@ let editValue1 = '45.67';
 var BasicNumericFieldValueEditor = React.createClass({
     getInitialState() {
         return {
-            inputValue: this.props.value
+            inputValue: editValue1
         };
     },
-    onBlur(ev) {
-        if (this.props.onBlur) {
-            this.setState({inputValue: ev.target.value});
-        }
+    onChange(value) {
+        this.setState({inputValue: value});
     },
     render() {
         return (
             <div>
                 <dt>Empty Numeric Field Editor:</dt>
                 <dd>
-                    <NumericFieldValueEditor onBlur={this.onBlur}/>
+                    <NumericFieldValueEditor/>
                 </dd>
 
 
                 <dt>Empty Numeric Field Editor with placeholder text:</dt>
                 <dd>
-                    <NumericFieldValueEditor placeholder="placeholder text" onBlur={this.onBlur}/>
+                    <NumericFieldValueEditor placeholder="placeholder text"/>
                 </dd>
 
 
                 <dt>Numeric Field Editor with a value:</dt>
                 <dd>
-                    <NumericFieldValueEditor value={this.state.value} onBlur={this.onBlur}/>
+                    <NumericFieldValueEditor value={this.state.inputValue} onChange={this.onChange}/>
                 </dd>
 
             </div>
@@ -37,25 +35,4 @@ var BasicNumericFieldValueEditor = React.createClass({
     }
 });
 
-const basicNumericFieldValueEditor = (
-    <div>
-        <dt>Empty Numeric Field Editor:</dt>
-            <dd>
-              <NumericFieldValueEditor />
-            </dd>
-
-
-        <dt>Empty Numeric Field Editor with placeholder text:</dt>
-            <dd>
-                <NumericFieldValueEditor placeholder="$" />
-            </dd>
-
-
-        <dt>Numeric Field Editor with a value:</dt>
-            <dd>
-                <NumericFieldValueEditor value={editValue1} />
-            </dd>
-
-    </div>
-);
 ReactDOM.render(<BasicNumericFieldValueEditor />, mountNode);
