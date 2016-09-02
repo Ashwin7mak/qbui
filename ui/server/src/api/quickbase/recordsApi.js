@@ -392,7 +392,7 @@
              * @returns Promise
              */
             saveSingleRecord: function(req) {
-                let errors = this.validateChanges(req);
+                let errors = _validateChanges(req);
                 if (errors.length === 0) {
                     var opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;

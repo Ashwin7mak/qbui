@@ -8,8 +8,7 @@
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');
     let url = require('url');
-    let APPLICATION_JSON = 'application/json';
-    let ACCEPT = 'Accept';
+    var consts = require('../../../../common/src/constants');
 
     module.exports = function(config) {
         let request = defaultRequest;
@@ -169,8 +168,15 @@
                 }
 
                 //get back json unless already specified
-                if (typeof opts.headers[ACCEPT] === undefined) {
-                    opts.headers[ACCEPT] = APPLICATION_JSON;
+                if (typeof opts === 'undefined') {
+                    opts = {};
+                }
+                if (typeof opts.headers === 'undefined') {
+                    opts.headers = {};
+                }
+                if (typeof opts.headers[consts.ACCEPT] === 'undefined') {
+
+                    opts.headers[consts.ACCEPT] = consts.APPLICATION_JSON;
                 }
 
                 req.headers = Object.assign({}, req.headers);

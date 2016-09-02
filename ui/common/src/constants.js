@@ -13,6 +13,7 @@
         APPLICATION_JSON: 'application/json',
         APPLICATION_XML : 'application/xml',
         TEXT_HTML       : 'text/html',
+        ACCEPT          : 'Accept',
         UTC_TIMEZONE    : 'Universal',
         EST_TIMEZONE    : 'US/Eastern',
         PST_TIMEZONE    : 'US/Pacific',
