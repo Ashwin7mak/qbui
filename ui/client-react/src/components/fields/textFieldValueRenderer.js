@@ -43,7 +43,8 @@ const TextFieldValueRenderer = React.createClass({
      *
      * Note: use of dangerouslySetInnerHTML is necessary to support the
      * 'html allowed' feature in text field supported in the current stack.
-     * The text formatter has preEncoded the value to include only the allowed tags.
+     * The text formatter field value should be encoded  via the textformatter so the value includes
+     * only the allowed tags.
      *
      * We may decide to sunset this feature and add a rich text field type
      * later to better achieve the desired functionality per design meeting discussion.

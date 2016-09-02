@@ -136,7 +136,15 @@ const CellRenderer = React.createClass({
 
     render() {
 
-        let isEditable = !this.props.colDef.builtIn;
+        let isEditable = true;
+        // built in fields are not editable
+        if (typeof this.props.colDef.builtIn !== 'undefined' &&  this.props.colDef.builtIn) {
+            isEditable = false;
+        }
+        // field must be scalar i.e. user editable not a formula or generated value
+        if (typeof this.props.colDef.userEditableValue !== 'undefined' &&  !this.props.colDef.userEditableValue) {
+            isEditable = false;
+        }
 
         let key = CellRendererFactory.getCellKey(this.props);
 

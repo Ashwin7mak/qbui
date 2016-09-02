@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
-import FieldValueEditor  from '../../src/components/fields/fieldValueEditor';
+import FieldValueRenderer  from '../../src/components/fields/fieldValueRenderer';
 import FieldFormats from '../../src/utils/fieldFormats';
 var simpleStringify = require('../../../common/src/simpleStringify.js');
 
-describe('FieldValueEditor functions', () => {
+describe('FieldValueRenderer functions', () => {
     'use strict';
 
     let component;
@@ -29,46 +29,12 @@ describe('FieldValueEditor functions', () => {
         ];
         dataProvider.forEach((data) => {
             it(data.test, () => {
-                component = TestUtils.renderIntoDocument(<FieldValueEditor type={data.type}/>);
+                component = TestUtils.renderIntoDocument(<FieldValueRenderer type={data.type}/>);
                 expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
             });
         });
     });
 
-
-
-    it('test render of component with no onChange ', () => {
-        component = TestUtils.renderIntoDocument(<FieldValueEditor type={FieldFormats.TEXT_FORMAT} onChange={undefined}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        expect(TestUtils.isElementOfType(component, 'input').toBeTruthy);
-        let input = TestUtils.scryRenderedDOMComponentsWithClass(component, "input");
-    });
-
-    it('test render of component with placeholder', () => {
-        let ghostText = 'Enter here';
-        component = TestUtils.renderIntoDocument(<FieldValueEditor type={FieldFormats.TEXT_FORMAT} fieldDef={{placeholder:ghostText}}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        expect(TestUtils.isElementOfType(component, 'input').toBeTruthy);
-        let input = TestUtils.scryRenderedDOMComponentsWithClass(component, "input");
-        expect(input[0].placeholder).toEqual(ghostText);
-    });
-
-    it('test render of component isInvalid', () => {
-        component = TestUtils.renderIntoDocument(<FieldValueEditor type={FieldFormats.TEXT_FORMAT} isInvalid={true}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    });
-
-
-    it('test render of component required', () => {
-        component = TestUtils.renderIntoDocument(<FieldValueEditor type={FieldFormats.TEXT_FORMAT} fieldDef={{required : true}} indicateRequired = {true}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    });
-
-
-    it('test render of component required not shown', () => {
-        component = TestUtils.renderIntoDocument(<FieldValueEditor type={FieldFormats.TEXT_FORMAT} fieldDef={{required : true}} indicateRequired={false}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    });
 
     it('test render of component choices', () => {
         let choices = [
@@ -76,28 +42,32 @@ describe('FieldValueEditor functions', () => {
             {displayValue:'b'},
             {displayValue:'c'},
         ];
-        component = TestUtils.renderIntoDocument(<FieldValueEditor type={FieldFormats.TEXT_FORMAT} fieldDef={{choices : choices}} />);
+        component = TestUtils.renderIntoDocument(<FieldValueRenderer type={FieldFormats.TEXT_FORMAT} fieldDef={{choices : choices}} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    it('test onExitField', () => {
-        var callbacks = {
-            validateFieldValue : function validateFieldValue(def, target) {},
-            onValidated : function onValidated(def, target) {},
-        };
-        spyOn(callbacks, 'validateFieldValue').and.callThrough();
-        spyOn(callbacks, 'onValidated').and.callThrough();
-
-        component = TestUtils.renderIntoDocument(<FieldValueEditor type={FieldFormats.TEXT_FORMAT}
-                                  validateFieldValue={callbacks.validateFieldValue}
-                                  onValidated={callbacks.onValidated}
-        />);
+    it('test render of component bold', () => {
+        component = TestUtils.renderIntoDocument(<FieldValueRenderer type={FieldFormats.TEXT_FORMAT} attributes={{clientSideAttributes : {bold: true}}} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        component.onExitField({target:{value:'test'}});
-        expect(callbacks.validateFieldValue).toHaveBeenCalled();
-        expect(callbacks.onValidated).toHaveBeenCalled();
-
+        let boldField = ReactDOM.findDOMNode(component);
+        expect(boldField.classList.contains('bold')).toBeTruthy();
     });
+
+    it('test render of component not bold', () => {
+        component = TestUtils.renderIntoDocument(<FieldValueRenderer type={FieldFormats.TEXT_FORMAT} attributes={{clientSideAttributes : {bold: false}}} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let boldField = ReactDOM.findDOMNode(component);
+        expect(boldField.classList.contains('bold')).toBeFalsy();
+    });
+
+    it('test render of component added class', () => {
+        let classToAdd = "testFieldValueRenderer";
+        component = TestUtils.renderIntoDocument(<FieldValueRenderer type={FieldFormats.TEXT_FORMAT} classes={classToAdd} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let addedClass = ReactDOM.findDOMNode(component);
+        expect(addedClass.classList.contains(classToAdd)).toBeTruthy();
+    });
+
 
 
 });

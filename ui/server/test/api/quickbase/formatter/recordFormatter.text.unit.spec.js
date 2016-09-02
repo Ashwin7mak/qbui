@@ -103,4 +103,91 @@ describe('Text record formatter unit test', function() {
             });
         });
     });
+
+    /**
+     * DataProvider containing Records, FieldProperties and record display expectations Text fields
+     */
+    function htmlTestDataProvider() {
+
+        //with no html record value
+        var noHtmlRecord = [[{
+            id   : 7,
+            value: "hello this is plain text"
+        }]];
+        var noHtmlExpectedRecord =
+            [[{
+                id     : 7,
+                value  : "hello this is plain text",
+                display: "hello this is plain text"
+            }]];
+
+        //with allowed html record value
+        var withHtmlRecord = [[{
+            id   : 7,
+            value: "hello <blockquote>test</blockquote>  < strong> ok< / strong><"
+        }]];
+        var withHtmlExpectedRecord =
+            [[{
+                id     : 7,
+                value  : "hello <blockquote>test</blockquote>  < strong> ok< / strong><",
+                display: "hello <blockquote>test</blockquote>  < strong> ok< / strong>&lt;"
+            }]];
+
+        //with allowed html record value
+        var onlyBannedHtmlRecord = [[{
+            id   : 7,
+            value: "  <script>not allowed</script>"
+        }]];
+
+        var onlyBannedHtmlExpectedRecord =
+            [[{
+                id     : 7,
+                value  : "  <script>not allowed</script>",
+                display: "  &lt;script&gt;not allowed&lt;/script&gt;"
+            }]];
+
+        //with allowed html record value
+        var withBannedHtmlRecord = [[{
+            id   : 7,
+            value: "hello <blockquote>test</blockquote> other stuff <embed>not allowed</embed>"
+        }]];
+        var withBannedHtmlExpectedRecord =
+            [[{
+                id     : 7,
+                value  : "hello <blockquote>test</blockquote> other stuff <embed>not allowed</embed>",
+                display: "hello <blockquote>test</blockquote> other stuff &lt;embed&gt;not allowed&lt;/embed&gt;"
+            }]];
+
+        return [
+            {message: 'Text - allowed html text', records: noHtmlRecord, expectedRecords: noHtmlExpectedRecord},
+            {message: 'Text - allowed html text', records: withHtmlRecord, expectedRecords: withHtmlExpectedRecord},
+            {message: 'Text - not allowed html text', records: onlyBannedHtmlRecord, expectedRecords: onlyBannedHtmlExpectedRecord},
+            {message: 'Text - both allowed and not allowed html text', records: withBannedHtmlRecord, expectedRecords: withBannedHtmlExpectedRecord}
+        ];
+    }
+
+
+    /**
+     * Unit test that validates Text with html allowed records formatting
+     */
+    describe('should format a text with html for display', function() {
+        var fieldInfo = [
+            {
+                id                  : 7,
+                name                : 'text',
+                datatypeAttributes: {
+                    type: 'TEXT',
+                    htmlAllowed: true
+                },
+                type                : 'SCALAR'
+            }
+        ];
+        htmlTestDataProvider().forEach(function(entry) {
+            it('Test case: ' + entry.message, function(done) {
+                var formattedRecords = recordFormatter.formatRecords(entry.records, fieldInfo);
+                assert.deepEqual(formattedRecords, entry.expectedRecords, entry.message);
+                done();
+            });
+        });
+    });
 });

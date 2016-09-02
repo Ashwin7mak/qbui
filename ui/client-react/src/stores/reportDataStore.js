@@ -63,6 +63,9 @@ let reportModel = {
                     column.field = field.name;
                     column.fieldType = field.type;
                     column.builtIn = field.builtIn;
+                    column.unique = field.unique;
+                    column.userEditableValue = field.userEditableValue;
+                    column.dataIsCopyable = field.dataIsCopyable;
                     column.required = field.required;
                     column.defaultValue = null;
                     if (field.defaultValue && field.defaultValue.coercedValue) {
