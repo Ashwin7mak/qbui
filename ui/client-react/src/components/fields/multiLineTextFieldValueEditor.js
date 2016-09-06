@@ -1,7 +1,8 @@
 import React from 'react';
 
 /**
- * a multi-line text editor that dynamically changes its height
+ * # MultLineTextFieldValueEditor
+ * A multi-line text editor that dynamically changes its height
  */
 const MultiLineTextFieldValueEditor = React.createClass({
     displayName: 'MultiLineTextFieldValueEditor',
