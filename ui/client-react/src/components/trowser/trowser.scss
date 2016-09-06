@@ -14,13 +14,14 @@ $action-separator-color: #486c8f;
     color: $trowser-fg;
     max-height:0%;
     overflow:hidden;
-    -webkit-transition: max-height linear 1500ms;
-    transition: max-height ease-in-out 1500ms;
+    -webkit-transition: max-height ease 250ms;
+    transition: max-height ease 250ms;
     padding:0;
-
+    visibility:hidden;
 
     &.visible {
         max-height:100%;
+        visibility:visible;
     }
 
     .rightIcons {
@@ -37,11 +38,10 @@ $action-separator-color: #486c8f;
         .qbIcon {
             font-size:15px;
             vertical-align: baseline;
-            margin-left: 10px;
-            margin-right: 10px;
         }
         .breadcrumbs {
             flex:1 1 auto;
+            margin-left:16px;
             overflow:hidden;
             white-space:nowrap;
             h4 {
