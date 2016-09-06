@@ -1,8 +1,9 @@
 import React from 'react';
 
 import FieldFormats from '../../utils/fieldFormats';
-import {MultiLineTextFieldValueRenderer, DateFieldValueRenderer,  NumberFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
+import {MultiLineTextFieldValueRenderer,  NumberFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
 import TextFieldValueRenderer from './textFieldValueRenderer';
+import DateFieldValueRenderer from './dateFieldValueRenderer';
 import _ from 'lodash';
 
 /**
@@ -86,6 +87,7 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.DATE_FORMAT:
             return (
                     <DateFieldValueRenderer value={this.props.display}
+                                            //attributes={this.props.attributes}
                                             key={'dfvr-' + this.props.idKey}
                                         {...commonProperties}/>
                 );
@@ -93,6 +95,7 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.DATETIME_FORMAT: {
             return (
                     <DateFieldValueRenderer value={this.props.display}
+                                            //attributes={this.props.attributes}
                                             key={'dfvr-' + this.props.idKey}
                                             {...commonProperties}/>
                 );
@@ -101,6 +104,7 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.TIME_FORMAT: {
             return (
                     <DateFieldValueRenderer value={this.props.display}
+                                            //attributes={this.props.attributes}
                                             key={'dfvr-' + this.props.idKey}
                                             {...commonProperties}/>
                 );

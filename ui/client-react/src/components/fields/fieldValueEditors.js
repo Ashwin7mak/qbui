@@ -188,32 +188,32 @@ export const ComboBoxFieldValueEditor = React.createClass({
 /**
  * date-only cell editor
  */
-export const DateFieldValueEditor = React.createClass({
-    displayName: 'DateFieldValueEditor',
-
-    propTypes: {
-        value: React.PropTypes.string, // YYYY-MM-DD
-        onChange: React.PropTypes.func,
-        onBlur: React.PropTypes.func
-    },
-
-    onChange(newValue) {
-        this.props.onChange(newValue);
-    },
-
-    render() {
-        const format = "YYYY-MM-DD";
-        const fixedDate = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : moment().format(format);
-        return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={fixedDate}
-                           format={format}
-                           inputFormat="MM-DD-YYYY"
-                           onBlur={this.props.onBlur}
-                           onChange={this.onChange}
-                           mode="date"/>
-        </div>;
-    }
-});
+//export const DateFieldValueEditor = React.createClass({
+//    displayName: 'DateFieldValueEditor',
+//
+//    propTypes: {
+//        value: React.PropTypes.string, // YYYY-MM-DD
+//        onChange: React.PropTypes.func,
+//        onBlur: React.PropTypes.func
+//    },
+//
+//    onChange(newValue) {
+//        this.props.onChange(newValue);
+//    },
+//
+//    render() {
+//        const format = "YYYY-MM-DD";
+//        const fixedDate = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : moment().format(format);
+//        return <div className="cellEdit dateTimeField">
+//            <DateTimeField dateTime={fixedDate}
+//                           format={format}
+//                           inputFormat="MM-DD-YYYY"
+//                           onBlur={this.props.onBlur}
+//                           onChange={this.onChange}
+//                           mode="date"/>
+//        </div>;
+//    }
+//});
 
 /**
  * convert an ISO datetime string to the same string with fixed number of milliseconds digits
