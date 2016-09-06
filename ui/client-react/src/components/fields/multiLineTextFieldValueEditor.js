@@ -2,7 +2,8 @@ import React from 'react';
 
 /**
  * # MultiLineTextFieldValueEditor
- * A multi-line text editor that dynamically changes its height
+ * A multi-line text editor that dynamically changes its height. The text editor will not exceed
+ * the MAX_TEXTAREA_HEIGHT of 100. If it exceeds this height a scrollbar will appear.
  */
 const MultiLineTextFieldValueEditor = React.createClass({
     displayName: 'MultiLineTextFieldValueEditor',
