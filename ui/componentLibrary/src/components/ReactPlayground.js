@@ -11,6 +11,7 @@ const TextFieldValueRenderer = require('../../../client-react/src/components/fie
 const TextFieldValueEditor = require('../../../client-react/src/components/fields/textFieldValueEditor');
 const FieldValueRenderer = require('../../../client-react/src/components/fields/fieldValueRenderer');
 const FieldValueEditor = require('../../../client-react/src/components/fields/fieldValueEditor');
+const MultiLineTextFieldValueEditor = require('../../../client-react/src/components/fields/multiLineTextFieldValueEditor');
 /* eslint-enable */
 import {SafeAnchor, Alert} from 'react-bootstrap';
 
