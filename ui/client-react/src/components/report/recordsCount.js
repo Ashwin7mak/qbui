@@ -26,7 +26,11 @@ var RecordsCount = React.createClass({
      */
     render() {
         let message = "report.recordCount";
+        if (this.props.recordCount === 1) {
+            message = "report.singleRecordCount";
+        }
         let placeHolderMessage = "report.recordCountPlaceHolder";
+
         let dbl = null;
         if (Breakpoints.isSmallBreakpoint()) {
             placeHolderMessage = "report.cardViewCountPlaceHolder";
@@ -34,6 +38,9 @@ var RecordsCount = React.createClass({
 
         if (this.props.isFiltered) {
             message = "report.filteredRecordCount";
+            if (this.props.recordCount === 1) {
+                message = "report.filteredSingleRecordCount";
+            }
             dbl = this.props.clearAllFilters;
         }
         // TODO Code hygiene, set up loader options as an external constant. https://quickbase.atlassian.net/browse/MB-503
@@ -70,13 +77,12 @@ var RecordsCount = React.createClass({
                                 <I18nMessage message={message}
                                              filteredRecordCount={this.props.filteredRecordCount + ''}
                                              recordCount={this.props.recordCount + ''}
-                                             recordOrRecords={this.props.recordCount > 1 ? 'records' : 'record'}
                                 />
                             </div>
                     </Loader>
                     {   this.props.isCounting ?
                         <div className="recordsCount">
-                            <I18nMessage message={placeHolderMessage} recordOrRecords={this.props.recordCount > 1 ? 'records' : 'record'} />
+                            <I18nMessage message={placeHolderMessage} />
                         </div> :
                         null
                     }

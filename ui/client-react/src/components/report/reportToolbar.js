@@ -194,7 +194,13 @@ const ReportToolbar = React.createClass({
         //   component container, to display the correct page end, we set the page end to the total records count if records count
         //   is less than page size for the last page. Hence, the conditions to check for here, are that we are on the first page
         //   (page start is 1) and the number of records is equal to page end
-        let showNavigation = !isSmall && !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && !isError;
+        let showNavigationForFilteredPage = true;
+        let isReportFiltered = this.isFiltered() && (!_.isUndefined(this.props.reportData));
+        if (isReportFiltered && filteredRecordCount <= this.props.pageEnd) {
+            showNavigationForFilteredPage  = false;
+        }
+        let showNavigation = !isSmall && !isLoading && !isCountingRecords && !isError &&
+            !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && showNavigationForFilteredPage;
 
         let reportToolbar = (
 

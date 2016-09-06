@@ -47,13 +47,23 @@ const ReportFooter = React.createClass({
                 recordCount = this.props.reportData.data.recordsCount;
             }
         }
+        let isFiltered = false;
+        if (this.props.reportData.searchStringForFiltering && this.props.reportData.searchStringForFiltering.length !== 0) {
+            isFiltered = true;
+        } else {
+            isFiltered = this.props.reportData.selections ? this.props.reportData.selections.hasAnySelections() : false;
+        }
+        let showFooterForFilteredPage = true;
+        if (isFiltered && this.props.reportData.data.filteredRecordsCount <= this.props.pageEnd) {
+            showFooterForFilteredPage = false;
+        }
         // Conditional indicating display of record navigation arrows. Show when
         // - records/page have been loaded and
         // - if the total count of records is available, total number of records in report is greater than page size. In the parent
         //   component container, to display the correct page end, we set the page end to the total records count if records count
         //   is less than page size for the last page. Hence, the conditions to check for here, are that we are on the first page
         //   (page start is 1) and the number of records is equal to page end
-        let showFooterNavigation = !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
+        let showFooterNavigation = !isLoading && !isCountingRecords && !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && showFooterForFilteredPage;
         return (
             <div className="reportFooter">
                 <div className="leftReportFooter">
