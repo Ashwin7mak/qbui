@@ -1,7 +1,7 @@
 import React from 'react';
 
 /**
- * # MultLineTextFieldValueEditor
+ * # MultiLineTextFieldValueEditor
  * A multi-line text editor that dynamically changes its height
  */
 const MultiLineTextFieldValueEditor = React.createClass({
@@ -12,7 +12,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
          * the value to fill in the input box */
         value: React.PropTypes.string,
         /**
-         * the type for the textarea is text */
+         * the type for the textarea box is text */
         type: React.PropTypes.string,
         /**
          *listen for changes by setting a callback to the onChange prop */

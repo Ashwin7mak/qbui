@@ -5,7 +5,7 @@ import ReactPlayground from '../components/ReactPlayground';
 import Examples from '../components/Examples';
 import PropTable from '../components/PropTable';
 
-export default function MultiLineTextFieldValueExample() {
+export default function MultiLineTextFieldValueEditorDoc() {
     return (
         <div>
             <div dangerouslySetInnerHTML={{__html: Metadata.MultiLineTextFieldValueEditor.descHtml}} />
