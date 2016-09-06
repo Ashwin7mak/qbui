@@ -53,6 +53,8 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
+            cancelSelection: "Cancel changes",
+            saveRecord: "Save changes",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
             edit: "Edit",
