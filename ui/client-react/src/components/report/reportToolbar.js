@@ -239,7 +239,6 @@ const ReportToolbar = React.createClass({
                         <RecordsCount recordCount={recordCount}
                                       isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
                                       filteredRecordCount={filteredRecordCount}
-                                      nameForRecords={this.props.nameForRecords}
                                       clearAllFilters={this.props.clearAllFilters}
                                       isCounting={this.props.reportData.countingTotalRecords}
                         /> :
