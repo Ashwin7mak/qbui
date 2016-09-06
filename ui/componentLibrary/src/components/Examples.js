@@ -4,6 +4,7 @@ import TextFieldValueRendererExample from 'raw!../examples/TextFieldValueRendere
 import TextFieldValueEditorExample from 'raw!../examples/TextFieldValueEditorExample.js';
 import FieldValueEditorExample from 'raw!../examples/FieldValueEditorExample.js';
 import FieldValueRendererExample from 'raw!../examples/FieldValueRendererExample.js';
+import MultiLineTextFieldValueExample from 'raw!../examples/MultiLineTextFieldValueEditorExample.js';
 
 
 export default {
@@ -12,5 +13,6 @@ export default {
     TextFieldValueRenderer: TextFieldValueRendererExample,
     TextFieldValueEditor: TextFieldValueEditorExample,
     FieldValueRenderer: FieldValueRendererExample,
-    FieldValueEditor: FieldValueEditorExample
+    FieldValueEditor: FieldValueEditorExample,
+    MultLIneTextFieldValueExample: MultiLineTextFieldValueExample
 };
