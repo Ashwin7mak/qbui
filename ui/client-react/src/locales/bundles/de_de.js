@@ -99,7 +99,8 @@ export default {
                 seeMore : "weitere...",
                 tooManyValues: "Zu viele Werte für die Filterung zu verwenden",
                 noCheck : "Nein",
-                yesCheck : "Ja"
+                yesCheck : "Ja",
+                clearFacet: "Filter {facet} entfernen"
             },
             filteredRecordCount :
                 "{filteredRecordCount} von {recordCount} {recordOrRecords} ",
