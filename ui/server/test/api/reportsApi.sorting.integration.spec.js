@@ -63,6 +63,19 @@
         var sortByDateFid = 8;
 
 
+        ///*
+        // * Given an array of record JSON objects sort them by a certain field(s) (specified by a list of fids)
+        // * @Returns An array of sorted record JSON objects
+        // */
+        //function sortRecords(fids, recordsToSort) {
+        //    // sorts the list of records passing each record to the function that returns the value to sort with
+        //    var sortedRecords = _.sortBy(recordsToSort, function(row)  {
+        //        return getSortValue(row, fids);
+        //    });
+        //
+        //    return sortedRecords;
+        //}
+
         /*
          * Given an array of record JSON objects sort them by a certain field(s) (specified by a list of fids)
          * @Returns An array of sorted record JSON objects
@@ -260,31 +273,30 @@
                     var r = JSON.parse(report.body);
                     // Get the report data back, check for sortList prop which also contains groupBy
                     recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.GET).then(function(reportGetResult) {
-                        var reportGetResult = JSON.parse(reportGetResult.body);
-                        console.log("the actual sorted records after GET reports are: "+JSON.stringify(reportGetResult.reportData.data.records));
+                        var reportResults = JSON.parse(reportGetResult.body);
+                        console.log("the actual sorted records after GET reports are: " + JSON.stringify(reportResults.reportData.data.records));
 
                         //verify report Meta Data
-                        assert.strictEqual(reportGetResult.reportMetaData.data.name, reportToCreate.name, 'Unexpected report name returned in reportMetaData');
-                        assert.strictEqual(reportGetResult.reportMetaData.data.description, reportToCreate.description, 'Unexpected report description returned in reportMetaData');
-                        assert.strictEqual(reportGetResult.reportMetaData.data.type, reportToCreate.type, 'Unexpected report type returned in reportMetaData');
-                        assert.strictEqual(reportGetResult.reportMetaData.data.tableId, reportToCreate.tableId, 'Unexpected tableId returned in reportMetaData');
-                        assert.deepStrictEqual(reportGetResult.reportMetaData.data.sortList, testcase.sortList, 'Unexpected sortList returned in reportMetaData');
-                        assert.deepStrictEqual(reportGetResult.reportData.data.records.length, records.length, 'Unexpected records returned in reportData');
+                        assert.strictEqual(reportResults.reportMetaData.data.name, reportToCreate.name, 'Unexpected report name returned in reportMetaData');
+                        assert.strictEqual(reportResults.reportMetaData.data.description, reportToCreate.description, 'Unexpected report description returned in reportMetaData');
+                        assert.strictEqual(reportResults.reportMetaData.data.type, reportToCreate.type, 'Unexpected report type returned in reportMetaData');
+                        assert.strictEqual(reportResults.reportMetaData.data.tableId, reportToCreate.tableId, 'Unexpected tableId returned in reportMetaData');
+                        assert.deepStrictEqual(reportResults.reportMetaData.data.sortList, testcase.sortList, 'Unexpected sortList returned in reportMetaData');
+                        assert.deepStrictEqual(reportResults.reportData.data.records.length, records.length, 'Unexpected records returned in reportData');
 
                         // Execute a report and check sort order of records
-                        recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents', consts.GET).then(function(reportResults) {
-                            var results = JSON.parse(reportResults.body);
+                        recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents', consts.GET).then(function(reportResult) {
+                            var results = JSON.parse(reportResult.body);
 
-                            console.log("the records after GET reports/components are: "+JSON.stringify(results.records));
+                            console.log("the records after GET reports/components are: " + JSON.stringify(results.records));
 
                             // Sort the expected records by text field (id 6)
                             var sortedExpectedRecords = sortRecords(testcase.sortFids, records);
                             // Verify sorted records
-                            console.log("the expected sorted records  are: "+JSON.stringify(sortedExpectedRecords));
+                            console.log("the expected sorted records  are: " + JSON.stringify(sortedExpectedRecords));
                             if (testcase.sortList[0].sortOrder === 'desc') {
                                 verifyRecords(results.records, sortedExpectedRecords.reverse());
-                            }
-                            else {
+                            } else {
                                 verifyRecords(results.records, sortedExpectedRecords);
                             }
                             done();
