@@ -322,27 +322,40 @@ const CellRenderer = React.createClass({
         //look at the separator, if its a comma for decimal place then strip out other chars other than comma then run through formatter.
         let datatypeAttributes = this.props.colDef && this.props.colDef.datatypeAttributes ? this.props.colDef.datatypeAttributes : {};
         let decimalPlaces = datatypeAttributes.decimalPlaces;
-        let decimalMark = decimalPlaces && datatypeAttributes.clientSideAttributes ? datatypeAttributes.clientSideAttributes.decimal_mark : null;
+        let decimalMark = decimalPlaces && datatypeAttributes.clientSideAttributes && datatypeAttributes.clientSideAttributes.decimal_mark ? datatypeAttributes.clientSideAttributes.decimal_mark : '.';
 
-        let theVals = {};
+        let theVals = {value: null, display: null};
         if (value) {
-            let isNegative = value.indexOf("-") === 0;
+            let isNegative = value.indexOf('-') === 0;
+            // user can enter a value with repeated decimal marks. We need to keep the 1st one and remove the rest
+            // example 50.9.9 => 50.90 (for 2 decimal place)
+            // so strip out everything but numbers and decimal mark, then keep index of 1st decimal and remove other decimals
+
+            // clean up everything except for numbers and the decimal mark
             if (decimalMark === '.') {
-                //preserve the decimal mark
-                theVals.value = +(value.replace(/[^0-9.]/g, ""));
+                value = value.replace(/[^0-9.]/g, '');
             } else if (decimalMark === ',') {
-                theVals.value = +(value.replace(/[^0-9,]/g, ""));
+                value = value.replace(/[^0-9,]/g, '');
             } else {
-                theVals.value = +(value.replace(/[^0-9]/g, ""));
+                value = value.replace(/[^0-9]/g, '');
             }
-            theVals.value = isNegative ? -theVals.value : theVals.value;
+
+            // remove all decimal marks and then put back the 1st one
+            let decimal_index = value.indexOf(decimalMark);
+            value = value.replace(/[^0-9]/g, '');
+            value = (decimal_index > 0 ? value.slice(0, decimal_index) : "") + decimalMark + value.slice(decimal_index);
+
+            // convert to number
+            theVals.value  = value && value.length ? +value : null;
+            // put back the negative sign if needed.
+            theVals.value = theVals.value && isNegative ? -theVals.value : theVals.value;
         }
-        if (datatypeAttributes.type === "PERCENT") {
+        //if its a percent field the raw value is display value/100
+        if (datatypeAttributes.type === 'PERCENT') {
             theVals.value = theVals.value ? theVals.value / 100 : 0;
         }
 
-        theVals.value = theVals.value ? theVals.value : null;
-        theVals.display = theVals.value ? numericFormatter.format(theVals, datatypeAttributes) : "";
+        theVals.display = theVals.value ? numericFormatter.format(theVals, datatypeAttributes) : '';
 
         this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
     }

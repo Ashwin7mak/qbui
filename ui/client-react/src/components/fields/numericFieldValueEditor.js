@@ -15,7 +15,7 @@ const NumericFieldValueEditor = React.createClass({
     propTypes: {
         /**
          * the value to fill in the input box */
-        value: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.shape({
+        value: React.PropTypes.oneOfType([React.PropTypes.number, React.PropTypes.string, React.PropTypes.shape({
             numberStr: React.PropTypes.string
         })]), //as of now it should be a number only. if we decide to add currency symbol etc within the box then thats diff
 
