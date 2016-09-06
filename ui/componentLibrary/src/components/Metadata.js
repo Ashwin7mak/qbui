@@ -4,11 +4,11 @@ import TextFieldValueRendererMetadata from 'component-metadata!../../../client-r
 import TextFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/textFieldValueEditor.js';
 import FieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/fieldValueRenderer.js';
 import FieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/fieldValueEditor.js';
-import MultiLineTextFieldValueEditor from 'component-metadata!../../../client-react/src/components/fields/multiLineTextFieldValueEditor.js'
+import MultiLineTextFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiLineTextFieldValueEditor.js';
 import _ from 'lodash';
 
 var Metadata = _.merge(QBPanelMetadata, QBIconMetadata,
     TextFieldValueRendererMetadata, TextFieldValueEditorMetadata,
-    FieldValueRendererMetadata, FieldValueEditorMetadata, MultiLineTextFieldValueEditor);
+    FieldValueRendererMetadata, FieldValueEditorMetadata, MultiLineTextFieldValueEditorMetadata);
 
 export default Metadata;
