@@ -8,9 +8,17 @@ const MultiLineTextFieldValueEditor = React.createClass({
     displayName: 'MultiLineTextFieldValueEditor',
 
     propTypes: {
+        /**
+         * the value to fill in the input box */
         value: React.PropTypes.string,
+        /**
+         * the type for the textarea is text */
         type: React.PropTypes.string,
+        /**
+         *listen for changes by setting a callback to the onChange prop */
         onChange: React.PropTypes.func,
+        /**
+         * listen for losing focus by setting a callback to the onBlur prop */
         onBlur: React.PropTypes.func
     },
 
