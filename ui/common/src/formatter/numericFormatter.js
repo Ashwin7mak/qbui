@@ -28,7 +28,7 @@
     var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
     var CURRENCY_LEFT = 'LEFT';
     var CURRENCY_RIGHT = 'RIGHT';
-    var CURRENCY_RIGHT_OF_SIGN = 'RIGHT_OF_SIGN';
+    var CURRENCY_LEFT_OF_SIGN = 'LEFT_OF_SIGN';
     var CURRENCY_SYMBOL = '$';
     var PERCENT_SYMBOL = '%';
     //Defaults & supported values
@@ -196,6 +196,9 @@
      * @returns the numeric value formatted as a string
      */
     function formatNumericValue(numeric, opts) {
+        if (opts.decimalMark === ",") {
+            console.log("wait");
+        }
         var mantissaString = null, characteristicString = null;
 
         if (opts.type === consts.PERCENT || opts.type === consts.FORMULA_PERCENT) {
@@ -235,7 +238,7 @@
         if (opts.type === consts.FORMULA_CURRENCY || opts.type === consts.CURRENCY) {
             if (opts.position === CURRENCY_RIGHT) {
                 returnValue = returnValue + ' ' + opts.symbol;
-            } else if (opts.position === CURRENCY_RIGHT_OF_SIGN && returnValue.charAt(0) === DASH) {
+            } else if (opts.position === CURRENCY_LEFT_OF_SIGN && returnValue.charAt(0) === DASH) {
                 //Place the currency symbol between the - and the number itself
                 returnValue = returnValue.replace(/^(-)/, DASH + opts.symbol);
             } else {

@@ -321,15 +321,17 @@ const CellRenderer = React.createClass({
     numericCellEdited(value) {
         //look at the separator, if its a comma for decimal place then strip out other chars other than comma then run through formatter.
         let datatypeAttributes = this.props.colDef && this.props.colDef.datatypeAttributes ? this.props.colDef.datatypeAttributes : {};
+        let clientSideAttributes = datatypeAttributes.clientSideAttributes ? datatypeAttributes.clientSideAttributes : {};
         let decimalPlaces = datatypeAttributes.decimalPlaces;
-        let decimalMark = decimalPlaces && datatypeAttributes.clientSideAttributes && datatypeAttributes.clientSideAttributes.decimal_mark ? datatypeAttributes.clientSideAttributes.decimal_mark : '.';
+        let decimalMark = decimalPlaces && clientSideAttributes.decimal_mark ? clientSideAttributes.decimal_mark : '.';
+        let currencySymbol = datatypeAttributes && datatypeAttributes.type === "CURRENCY" &&  clientSideAttributes.symbol ?  clientSideAttributes.symbol : "";
 
         let theVals = {value: null, display: null};
         if (value) {
-            let isNegative = value.indexOf('-') === 0;
             // user can enter a value with repeated decimal marks. We need to keep the 1st one and remove the rest
             // example 50.9.9 => 50.90 (for 2 decimal place)
             // so strip out everything but numbers and decimal mark, then keep index of 1st decimal and remove other decimals
+            let isNegative = (value.indexOf('-') === 0) || (currencySymbol && value.indexOf(currencySymbol) === 0 ? value.indexOf('-') === 1 : false);
 
             // clean up everything except for numbers and the decimal mark
             if (decimalMark === '.') {
@@ -343,7 +345,7 @@ const CellRenderer = React.createClass({
             // remove all decimal marks and then put back the 1st one
             let decimal_index = value.indexOf(decimalMark);
             value = value.replace(/[^0-9]/g, '');
-            value = (decimal_index > 0 ? value.slice(0, decimal_index) : "") + decimalMark + value.slice(decimal_index);
+            value = decimal_index >= 0 ? value.slice(0, decimal_index) + "." + value.slice(decimal_index) : value;
 
             // convert to number
             theVals.value  = value && value.length ? +value : null;

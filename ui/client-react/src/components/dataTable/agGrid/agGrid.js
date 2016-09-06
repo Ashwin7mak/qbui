@@ -887,7 +887,7 @@ let AGGrid = React.createClass({
 
                 let {datatypeAttributes} = obj;
 
-                obj.headerClass = "gridHeaderCell";
+                obj.headerClass = "gridHeaderCell ";
                 obj.headerCellTemplate = this.getHeaderCellTemplate(obj);
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
@@ -901,6 +901,7 @@ let AGGrid = React.createClass({
                             switch (datatypeAttributes[attr]) {
 
                             case serverTypeConsts.NUMERIC:
+                                obj.headerClass += "AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
                                 break;
                             case serverTypeConsts.DATE :
@@ -919,12 +920,15 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(UserCellRenderer);
                                 break;
                             case serverTypeConsts.CURRENCY :
+                                obj.headerClass += "AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(CurrencyCellRenderer);
                                 break;
                             case serverTypeConsts.RATING :
+                                obj.headerClass += "AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(RatingCellRenderer);
                                 break;
                             case serverTypeConsts.PERCENT :
+                                obj.headerClass += "AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
                             case serverTypeConsts.DURATION :
