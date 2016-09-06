@@ -6,14 +6,14 @@ import DatePicker from 'react-bootstrap-datetimepicker';
 import moment from 'moment';
 
 /**
- * # DateFieldValueEditor
+ * # DateTimeFieldValueEditor
  *
- * An editable rendering of a date field. The component can be supplied a value or not. Used within a FieldValueEditor
+ * An editable rendering of a date time field. The component can be supplied a value or not. Used within a FieldValueEditor
  *
  */
 
-const DateFieldValueEditor = React.createClass({
-    displayName: 'DateFieldValueEditor',
+const DateTimeFieldValueEditor = React.createClass({
+    displayName: 'DateTimeFieldValueEditor',
 
     propTypes: {
         /**
@@ -80,4 +80,4 @@ const DateFieldValueEditor = React.createClass({
 
 });
 
-export default DateFieldValueEditor;
+export default DateTimeFieldValueEditor;

@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom';
 
 import FieldFormats from '../../utils/fieldFormats' ;
 import {DefaultFieldValueEditor, MultiLineTextFieldValueEditor, ComboBoxFieldValueEditor,
-    DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
+    UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import TextFieldValueEditor from './textFieldValueEditor';
 import DateFieldValueEditor from './dateFieldValueEditor';
+import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
+import TimeFieldValueEditor from './timeFieldValueEditor';
 import _ from 'lodash';
 
 /**

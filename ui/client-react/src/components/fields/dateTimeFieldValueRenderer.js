@@ -2,12 +2,13 @@ import React from 'react';
 import './fields.scss';
 import _ from 'lodash';
 /**
- * # DateFieldValueRenderer
+ * # DateTimeFieldValueRenderer
  *
- * A DateFieldValueRenderer is a read only rendering of the field containing a single date. The date
- * value is rendered according to display attributes and classes can be optionally passed in for custom styling.
+ * A read only rendering of a date, time or date/time value. The value is rendered according to
+ * display attributes defined in the dateTimeFormatter.  Classes can be optionally passed in for
+ * custom styling.
  */
-const DateFieldValueRenderer = React.createClass({
+const DateTimeFieldValueRenderer = React.createClass({
     displayName: 'DateFieldValueRenderer',
     propTypes: {
         /**
@@ -55,4 +56,4 @@ const DateFieldValueRenderer = React.createClass({
 });
 
 
-export default DateFieldValueRenderer;
+export default DateTimeFieldValueRenderer;

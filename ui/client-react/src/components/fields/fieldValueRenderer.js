@@ -3,7 +3,7 @@ import React from 'react';
 import FieldFormats from '../../utils/fieldFormats';
 import {MultiLineTextFieldValueRenderer,  NumberFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
 import TextFieldValueRenderer from './textFieldValueRenderer';
-import DateFieldValueRenderer from './dateFieldValueRenderer';
+import DateTimeFieldValueRenderer from './dateTimeFieldValueRenderer';
 import _ from 'lodash';
 
 /**
@@ -83,32 +83,15 @@ const FieldValueRenderer = React.createClass({
                                             key={'ufvr-' + this.props.idKey}
                                             {...commonProperties}/>
                 );
-
+        //  Date, dateTime and time use the same view formatter
         case FieldFormats.DATE_FORMAT:
+        case FieldFormats.DATETIME_FORMAT:
+        case FieldFormats.TIME_FORMAT:
             return (
-                    <DateFieldValueRenderer value={this.props.display}
-                                            //attributes={this.props.attributes}
-                                            key={'dfvr-' + this.props.idKey}
-                                        {...commonProperties}/>
+                    <DateTimeFieldValueRenderer value={this.props.display}
+                                                key={'dfvr-' + this.props.idKey}
+                                                {...commonProperties}/>
                 );
-
-        case FieldFormats.DATETIME_FORMAT: {
-            return (
-                    <DateFieldValueRenderer value={this.props.display}
-                                            //attributes={this.props.attributes}
-                                            key={'dfvr-' + this.props.idKey}
-                                            {...commonProperties}/>
-                );
-        }
-
-        case FieldFormats.TIME_FORMAT: {
-            return (
-                    <DateFieldValueRenderer value={this.props.display}
-                                            //attributes={this.props.attributes}
-                                            key={'dfvr-' + this.props.idKey}
-                                            {...commonProperties}/>
-                );
-        }
         case FieldFormats.CHECKBOX_FORMAT:
             return (
                     <input type="checkbox" disabled checked={this.props.value} key={'inp-' + this.props.idKey}/>
