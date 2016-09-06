@@ -42,7 +42,7 @@ let Trowser = React.createClass({
     render() {
         let trowserClasses = "trowser " + this.props.position;
         if (this.props.visible) {
-            trowserClasses += " visible animated bounceInDown";
+            trowserClasses += " visible";
         }
         return (
             <div className={trowserClasses} >

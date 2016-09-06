@@ -14,14 +14,12 @@ $action-separator-color: #486c8f;
     color: $trowser-fg;
     max-height:0%;
     overflow:hidden;
-    -webkit-transition: max-height ease 250ms;
-    transition: max-height ease 250ms;
+    -webkit-transition: max-height ease 750ms;
+    transition: max-height ease 750ms;
     padding:0;
-    visibility:hidden;
 
     &.visible {
         max-height:100%;
-        visibility:visible;
     }
 
     .rightIcons {
