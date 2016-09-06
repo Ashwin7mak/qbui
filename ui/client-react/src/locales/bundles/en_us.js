@@ -104,11 +104,12 @@ export default {
                 yesCheck : "Yes"
             },
             filteredRecordCount :
-                "{filteredRecordCount} of {recordCount} {nameForRecords} ",
+                "{filteredRecordCount} of {recordCount} {recordOrRecords} ",
             newReport: "New",
             organizeReports: "Organize",
-            recordCount : "{recordCount} {nameForRecords} ",
-            recordCountPlaceHolder : "Counting {nameForRecords}",
+            recordCount : "{recordCount} {recordOrRecords} ",
+            recordCountPlaceHolder : "Counting {recordOrRecords}...",
+            cardViewCountPlaceHolder : "Counting...",
             reportNavigationBar : "{pageStart} - {pageEnd}",
             previousToolTip: "Back",
             nextToolTip: "Next",

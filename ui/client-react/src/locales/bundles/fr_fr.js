@@ -101,11 +101,12 @@ export default {
                 yesCheck : "Oui"
             },
             filteredRecordCount :
-                "{filteredRecordCount} des {recordCount} {nameForRecords} ",
+                "{filteredRecordCount} des {recordCount} {recordOrRecords} ",
             newReport: "Nouveau",
             organizeReports: "Organiser",
-            recordCount : "{recordCount} {nameForRecords} ",
-            recordCountPlaceHolder : "Compte {nameForRecords}",
+            recordCount : "{recordCount} {recordOrRecords} ",
+            recordCountPlaceHolder : "Compte {recordOrRecords}...",
+            cardViewCountPlaceHolder : "Compte...",
             reportNavigationBar : "{pageStart} - {pageEnd}",
             previousToolTip: "Arrière",
             nextToolTip: "Prochain",

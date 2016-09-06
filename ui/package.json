@@ -143,7 +143,7 @@
     "node-sass": "^3.3.3",
     "open": "~0.0.5",
     "phantomjs": "^1.9.18",
-    "protractor-jasmine2-screenshot-reporter": "^0.3.1",
+    "protractor-jasmine2-screenshot-reporter": "^0.3.2",
     "q": "^1.4.1",
     "raw-loader": "^0.5.1",
     "react-addons-test-utils": "15.0.0",

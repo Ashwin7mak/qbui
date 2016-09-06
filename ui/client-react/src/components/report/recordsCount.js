@@ -3,28 +3,35 @@ import './report.scss';
 
 import Loader  from 'react-loader';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
+import Breakpoints from "../../utils/breakpoints";
 
+const largeBreakpointColor = '#404040';
+const smallBreakpointColor = '#ffffff';
 
 var RecordsCount = React.createClass({
     propTypes: {
-        isFiltered : React.PropTypes.bool,
-        recordCount : React.PropTypes.number,
-        filteredRecordCount : React.PropTypes.number,
-        nameForRecords : React.PropTypes.string,
-        clearAllFilters : React.PropTypes.func,
-        isCounting : React.PropTypes.bool,
+        isFiltered: React.PropTypes.bool,
+        recordCount: React.PropTypes.number,
+        filteredRecordCount: React.PropTypes.number,
+        clearAllFilters: React.PropTypes.func,
+        isCounting: React.PropTypes.bool,
     },
-
-
     /**
      * renders the record count
      * if we have some dynamic filtering in effect include the number of filtered records out of the total
      * otherwise just show the reports total records
+     *
+     * If it isSmall then we change the color fo the loader to match the color of the text for small breakpoints
+     * and it changes the text header from 'Counting {records}' to 'Counting...'
      */
     render() {
         let message = "report.recordCount";
         let placeHolderMessage = "report.recordCountPlaceHolder";
         let dbl = null;
+        if (Breakpoints.isSmallBreakpoint()) {
+            placeHolderMessage = "report.cardViewCountPlaceHolder";
+        }
+
         if (this.props.isFiltered) {
             message = "report.filteredRecordCount";
             dbl = this.props.clearAllFilters;
@@ -44,6 +51,7 @@ var RecordsCount = React.createClass({
             trail: 60,
             fps: 20,
             zIndex: 2e9,
+            color: !Breakpoints.isSmallBreakpoint() ? largeBreakpointColor : smallBreakpointColor,
             className: 'spinner',
             top: '54%',
             left: '33%',
@@ -62,13 +70,13 @@ var RecordsCount = React.createClass({
                                 <I18nMessage message={message}
                                              filteredRecordCount={this.props.filteredRecordCount + ''}
                                              recordCount={this.props.recordCount + ''}
-                                             nameForRecords={this.props.nameForRecords}
+                                             recordOrRecords={this.props.recordCount > 1 ? 'records' : 'record'}
                                 />
                             </div>
                     </Loader>
                     {   this.props.isCounting ?
                         <div className="recordsCount">
-                            <I18nMessage message={placeHolderMessage} nameForRecords={this.props.nameForRecords} />
+                            <I18nMessage message={placeHolderMessage} recordOrRecords={this.props.recordCount > 1 ? 'records' : 'record'} />
                         </div> :
                         null
                     }
