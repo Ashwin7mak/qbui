@@ -13,7 +13,7 @@ export default function MultiLineTextFieldValueExample() {
             <ReactPlayground codeText={Examples.MultiLineTextFieldValueEditor} />
 
             <h2>Props</h2>
-            <PropTable component="MultiLineTextFieldValueEditorExample" metadata={Metadata} />
+            <PropTable component="MultiLineTextFieldValueEditor" metadata={Metadata} />
         </div>
     );
 }
