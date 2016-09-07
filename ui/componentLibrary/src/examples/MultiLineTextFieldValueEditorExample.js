@@ -1,6 +1,6 @@
 const basicMultiLineTextFieldValueEditor = (
     <div>
-        <dt>Empty Text Field Editor:</dt>
+        <dt>Empty Multiline Text Field Editor:</dt>
         <dd>
             <MultiLineTextFieldValueEditor />
         </dd>
