@@ -37,7 +37,7 @@ describe('Percent record formatter unit test', function() {
 
         var expectedDecimal_NoFlags = JSON.parse(JSON.stringify(defaultRecordExp));
         expectedDecimal_NoFlags[0][0].value = numberDecimalOnly;
-        expectedDecimal_NoFlags[0][0].display = '75%';
+        expectedDecimal_NoFlags[0][0].display = '74.77%';
 
 
         var cases = [

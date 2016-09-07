@@ -20,10 +20,8 @@
     var consts = require('../constants');
 
     //Module constants:
-    var COMMA = ',';
     var DASH = '-';
     var ZERO_CHAR = '0';
-    var PERIOD = '.';
     var PATTERN_EVERY_THREE = 'EVERY_THREE';
     var PATTERN_THREE_THEN_TWO = 'THREE_THEN_TWO';
     var CURRENCY_LEFT = 'LEFT';
@@ -37,11 +35,11 @@
     var DEFAULT_CURRENCY_SYMBOL_POSITION = CURRENCY_LEFT;
     var DEFAULT_SEPARATOR_MARK = null;
     var DEFAULT_DECIMAL_PLACES = null;
-    var DEFAULT_DECIMAL_MARK = PERIOD;
+    var DEFAULT_DECIMAL_MARK = consts.NUMERIC_SEPARATOR.PERIOD;
     var DEFAULT_SEPARATOR_PATTERN = PATTERN_EVERY_THREE;
     var SUPPORTED_DELIMETERS = {};
-    SUPPORTED_DELIMETERS[COMMA] = true;
-    SUPPORTED_DELIMETERS[PERIOD] = true;
+    SUPPORTED_DELIMETERS[consts.NUMERIC_SEPARATOR.COMMA] = true;
+    SUPPORTED_DELIMETERS[consts.NUMERIC_SEPARATOR.PERIOD] = true;
     var SUPPORTED_SEPARATOR_PATTERNS = {};
     SUPPORTED_SEPARATOR_PATTERNS[PATTERN_EVERY_THREE] = true;
     SUPPORTED_SEPARATOR_PATTERNS[PATTERN_THREE_THEN_TWO] = true;
@@ -161,13 +159,13 @@
             return data[0];
         }
 
-        var coefficient = data[0].replace(PERIOD, ''),
+        var coefficient = data[0].replace(consts.NUMERIC_SEPARATOR.PERIOD, ''),
             exponent = Number(data[1]) + 1;
 
         //  is the exponent negative IE: 1.2345e-20
         if (exponent < 0) {
             //  format fraction as 0.xxxx or -0.xxx
-            var leadingZeros = (numeric < 0 ? DASH : '') + ZERO_CHAR + PERIOD;
+            var leadingZeros = (numeric < 0 ? DASH : '') + ZERO_CHAR + consts.NUMERIC_SEPARATOR.PERIOD;
 
             //  append the number of base 10 zeros
             while (exponent++) {
@@ -202,6 +200,12 @@
             numeric = numeric ? numeric * 100 : 0;
         }
 
+        //TODO this is a hack for now. New stack core is setting "blank" decimal places to max instead of null
+        if (opts.decimalPlaces === 14) {
+            opts.decimalPlaces = null;
+        }
+
+
         //Resolve the number value as a string with the proper decimal places
         var numString = Number(numeric).toString();
 
@@ -213,7 +217,7 @@
             numString = convertScientificNotation(numString);
         }
         //Split the string on the decimal point, if there is one
-        var numParts = numString.split(PERIOD);
+        var numParts = numString.split(consts.NUMERIC_SEPARATOR.PERIOD);
         mantissaString = numParts[0];
         if (numParts.length > 1) {
             characteristicString = numParts[1];

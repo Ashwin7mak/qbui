@@ -12,11 +12,6 @@ import RowEditActions from './rowEditActions';
 import CellValueRenderer from './cellValueRenderer';
 import CellEditor from './cellEditor';
 
-import * as dateTimeFormatter from '../../../../../common/src/formatter/dateTimeFormatter';
-import * as timeOfDayFormatter from '../../../../../common/src/formatter/timeOfDayFormatter';
-import * as numericFormatter from '../../../../../common/src/formatter/numericFormatter';
-import * as textFormatter from '../../../../../common/src/formatter/textFormatter';
-
 import IconActions from '../../actions/iconActions';
 
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
@@ -199,27 +194,8 @@ const CellRenderer = React.createClass({
         this.cellValidated(results);
     },
 
-    onBlur(value) {
-        switch (this.props.type) {
-        case FieldFormats.DATE_FORMAT:
-        case FieldFormats.DATETIME_FORMAT:
-        case FieldFormats.TIME_FORMAT:
-            this.dateTimeCellEdited(value);
-            break;
-
-        case FieldFormats.NUMBER_FORMAT:
-        case FieldFormats.RATING_FORMAT:
-        case FieldFormats.CURRENCY_FORMAT:
-        case FieldFormats.PERCENT_FORMAT:
-            this.numericCellEdited(value);
-            break;
-        case FieldFormats.TEXT_FORMAT:
-            this.textCellEdited(value);
-            break;
-        default:
-            this.cellEdited(value);
-
-        }
+    onBlur(theVals) {
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
     },
 
     cellChanges() {
@@ -267,101 +243,6 @@ const CellRenderer = React.createClass({
         this.setState({validationStatus : current});
     },
 
-    /**
-     * textcell was edited, update the r/w and r/o value
-     * @param value
-     */
-    textCellEdited(value) {
-        let theVals = {
-            value: value,
-        };
-        theVals.display = textFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
-    },
-
-
-    /**
-     * date, datetime, or time cell was edited
-     * @param newValue
-     */
-    dateTimeCellEdited(newValue) {
-        let theVals = {
-            value: newValue,
-        };
-        switch (this.props.type) {
-        case FieldFormats.DATE_FORMAT: {
-            // normalized form is YYYY-MM-DD
-            theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-            break;
-        }
-        case FieldFormats.TIME_FORMAT: {
-            // normalized form is 1970-01-01THH:MM:SSZ
-            theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-            break;
-        }
-        case FieldFormats.DATETIME_FORMAT: {
-            // normalized form is YYYY-MM-DDTHH:MM:SSZ
-            theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-            break;
-        }
-        default: {
-            theVals.display = newValue;
-            break;
-        }
-        }
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
-    },
-
-    /**
-     * numeric cell edited, update the display value from common formatter
-     * @param value
-     */
-    numericCellEdited(value) {
-        // the numericFormatter expects the string in a particular format - no comma as decimal marker, no multiple decimal markers etc
-        // the following cleans up the input value before running it through formatter
-        let datatypeAttributes = this.props.colDef && this.props.colDef.datatypeAttributes ? this.props.colDef.datatypeAttributes : {};
-        let clientSideAttributes = datatypeAttributes.clientSideAttributes ? datatypeAttributes.clientSideAttributes : {};
-        let decimalPlaces = datatypeAttributes.decimalPlaces;
-        let decimalMark = decimalPlaces && clientSideAttributes.decimal_mark ? clientSideAttributes.decimal_mark : '.';
-        let currencySymbol = datatypeAttributes && datatypeAttributes.type === "CURRENCY" &&  clientSideAttributes.symbol ?  clientSideAttributes.symbol : "";
-
-        let theVals = {value: null, display: null};
-        if (value) {
-            // user can enter a value with repeated decimal marks. We need to keep the 1st one and remove the rest
-            // example 50.9.9 => 50.90 (for 2 decimal place)
-            // so strip out everything but numbers and decimal mark, then keep index of 1st decimal and remove other decimals
-            let isNegative = (value.indexOf('-') === 0) || (currencySymbol && value.indexOf(currencySymbol) === 0 ? value.indexOf('-') === 1 : false);
-
-            // clean up everything except for numbers and the decimal mark
-            if (decimalMark === '.') {
-                value = value.replace(/[^0-9.]/g, '');
-            } else if (decimalMark === ',') {
-                value = value.replace(/[^0-9,]/g, '');
-            } else {
-                value = value.replace(/[^0-9]/g, '');
-            }
-
-            // remove all decimal marks and then put back the 1st one
-            let decimal_index = value.indexOf(decimalMark);
-            value = value.replace(/[^0-9]/g, '');
-            value = decimal_index >= 0 ? value.slice(0, decimal_index) + "." + value.slice(decimal_index) : value;
-
-            // convert to number
-            theVals.value  = value && value.length ? +value : null;
-            // put back the negative sign if needed.
-            theVals.value = theVals.value && isNegative ? -theVals.value : theVals.value;
-        }
-        //if its a percent field the raw value is display value/100
-        if (datatypeAttributes.type === 'PERCENT') {
-            theVals.value = theVals.value ? theVals.value / 100 : 0;
-        }
-
-        theVals.display = theVals.value ? numericFormatter.format(theVals, datatypeAttributes) : '';
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
-    }
 });
 
 export const TextCellRenderer = React.createClass({

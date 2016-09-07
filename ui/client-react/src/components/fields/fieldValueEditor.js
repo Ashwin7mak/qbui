@@ -112,7 +112,8 @@ const FieldValueEditor = React.createClass({
             placeholder : placeholder,
             tabIndex: "0",
             idKey : this.props.idKey,
-            ref:"fieldInput"
+            ref:"fieldInput",
+            fieldDef: this.props.fieldDef
         };
 
         switch (type) {
@@ -190,12 +191,12 @@ const FieldValueEditor = React.createClass({
         }
     },
 
-    onBlur(ev) {
+    onBlur(vals) {
         if (this.props.onBlur) {
-            this.props.onBlur(ev.target.value);
+            this.props.onBlur(vals);
         }
         //TODO this needs to be moved up the chain so that on blur the value is validated and state set at the same time.
-        this.onExitField(ev);
+        //this.onExitField(ev);
     },
     /**
      * onExitField called on Blur to check if the field is valid and send the validation results to onValidated
