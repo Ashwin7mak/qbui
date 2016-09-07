@@ -25,6 +25,11 @@ var RecordsCount = React.createClass({
      * and it changes the text header from 'Counting {records}' to 'Counting...'
      */
     render() {
+        // No records check
+        if ((this.props.isFiltered && (this.props.filteredRecordCount === null) || this.props.recordCount === null)) {
+            return null;
+        }
+        // Set resource property name
         let message = (this.props.recordCount === 1) ? "report.singleRecordCount" : "report.recordCount";
         let placeHolderMessage = (Breakpoints.isSmallBreakpoint()) ? "report.cardViewCountPlaceHolder" : "report.recordCountPlaceHolder";
 
@@ -57,10 +62,6 @@ var RecordsCount = React.createClass({
             hwaccel: false,
             position: 'absolute'
         };
-        if ((this.props.isFiltered && (this.props.filteredRecordCount === null) || this.props.recordCount === null)) {
-            // no records
-            return null;
-        }
         return (
             <div className="recordsCountLoaderContainer">
                 <Loader loaded={!this.props.isCounting} options={loaderOptions}>

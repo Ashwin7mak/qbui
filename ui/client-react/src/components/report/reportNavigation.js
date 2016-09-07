@@ -5,6 +5,7 @@ import QBToolTip from '../qbToolTip/qbToolTip';
 import './report.scss';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
 import Breakpoints from "../../utils/breakpoints";
+import Breakpoints from "../../utils/stringUtils";
 
 var ReportNavigation = React.createClass({
     propTypes: {
@@ -44,7 +45,7 @@ var ReportNavigation = React.createClass({
         let recordCount = (this.props.reportData.data && !isNaN(this.props.reportData.data.recordsCount)) ? this.props.reportData.data.recordsCount : 0;
 
         let isReportFiltered = false;
-        if (this.props.reportData.searchStringForFiltering && this.props.reportData.searchStringForFiltering.length !== 0) {
+        if (this.props.reportData.searchStringForFiltering && StringUtils.trim(this.props.reportData.searchStringForFiltering).length !== 0) {
             isReportFiltered = true;
         } else {
             isReportFiltered = this.props.reportData.selections ? this.props.reportData.selections.hasAnySelections() : false;
