@@ -79,7 +79,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     render() {
-
+        console.log('this.props.onChange: ', this.props.onChange);
         return <textarea ref="textarea" style={this.state.style}
                          onChange={this.onChange}
                          onBlur={this.props.onBlur}
@@ -87,7 +87,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
                          onKeyUp={this.onKeyUp}
                          className="cellEdit"
                          rows="1"
-                         value={this.props.value}/>;
+                         value={this.props.value === null ? "" : this.props.value} />;
     }
 });
 

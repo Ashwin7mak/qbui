@@ -4,7 +4,7 @@ const basicMultiLineTextFieldValueEditor = (
     <div>
         <dt>Empty Text Field Editor:</dt>
         <dd>
-            <MultiLineTextFieldValueEditor value={exampleList}/>
+            <MultiLineTextFieldValueEditor />
         </dd>
 
 
