@@ -57,24 +57,9 @@
         var generatedRecords;
         var records;
         // fids to sort by
-        var sortByRecordIdFid = 3;
         var sortByTextFid = 6;
         var sortByNumFid = 7;
         var sortByDateFid = 8;
-
-
-        ///*
-        // * Given an array of record JSON objects sort them by a certain field(s) (specified by a list of fids)
-        // * @Returns An array of sorted record JSON objects
-        // */
-        //function sortRecords(fids, recordsToSort) {
-        //    // sorts the list of records passing each record to the function that returns the value to sort with
-        //    var sortedRecords = _.sortBy(recordsToSort, function(row)  {
-        //        return getSortValue(row, fids);
-        //    });
-        //
-        //    return sortedRecords;
-        //}
 
         /*
          * Given an array of record JSON objects sort them by a certain field(s) (specified by a list of fids)
@@ -160,7 +145,7 @@
                 // Edit the numeric field so we can check the second level sort (ex: 6.7)
                 dupRecord.forEach(function(field) {
                     if (field.id === 7) {
-                        field.value = 1.00;
+                        field.value = 1.90;
                     }
                     if (field.id === 8) {
                         field.value = '1977-12-12';
@@ -192,15 +177,15 @@
         function sortingReportTestCases() {
             return [
                 {
-                    message: 'Sort by Numeric field in ascending order',
+                    message: 'Sort by Date field in ascending order',
                     sortList: [
                         {
-                            "fieldId": 7,
+                            "fieldId": 8,
                             "sortOrder": "asc",
                             "groupType": null
                         }
                     ],
-                    sortFids: [sortByNumFid]
+                    sortFids: [sortByDateFid]
                 },
                 {
                     message: 'Sort by Date field in descending order',
