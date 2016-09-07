@@ -196,17 +196,10 @@
      * @returns the numeric value formatted as a string
      */
     function formatNumericValue(numeric, opts) {
-        if (opts.decimalMark === ",") {
-            console.log("wait");
-        }
         var mantissaString = null, characteristicString = null;
 
         if (opts.type === consts.PERCENT || opts.type === consts.FORMULA_PERCENT) {
             numeric = numeric ? numeric * 100 : 0;
-        }
-
-        if (opts.decimalPlaces === 14) {
-            opts.decimalPlaces = null;
         }
 
         //Resolve the number value as a string with the proper decimal places

@@ -194,6 +194,7 @@ const FieldValueEditor = React.createClass({
         if (this.props.onBlur) {
             this.props.onBlur(ev.target.value);
         }
+        //TODO this needs to be moved up the chain so that on blur the value is validated and state set at the same time.
         this.onExitField(ev);
     },
     /**

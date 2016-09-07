@@ -73,8 +73,8 @@ const FieldValueRenderer = React.createClass({
             let rendered = <NumericFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
                                               attributes={this.props.attributes}
                                               key={'nfvr-' + this.props.idKey}
-                                              {...commonProperties}/>             
-			return (rendered);
+                                              {...commonProperties}/>;
+            return (rendered);
         }
         case FieldFormats.USER_FORMAT:
             return (

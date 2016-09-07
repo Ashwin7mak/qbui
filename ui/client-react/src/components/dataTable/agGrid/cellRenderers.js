@@ -319,7 +319,8 @@ const CellRenderer = React.createClass({
      * @param value
      */
     numericCellEdited(value) {
-        //look at the separator, if its a comma for decimal place then strip out other chars other than comma then run through formatter.
+        // the numericFormatter expects the string in a particular format - no comma as decimal marker, no multiple decimal markers etc
+        // the following cleans up the input value before running it through formatter
         let datatypeAttributes = this.props.colDef && this.props.colDef.datatypeAttributes ? this.props.colDef.datatypeAttributes : {};
         let clientSideAttributes = datatypeAttributes.clientSideAttributes ? datatypeAttributes.clientSideAttributes : {};
         let decimalPlaces = datatypeAttributes.decimalPlaces;
