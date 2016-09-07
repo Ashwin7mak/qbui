@@ -206,8 +206,7 @@ const FacetsMenu = React.createClass({
         this.props.reportData.data.facets.map((facet) => {
             if (selections.hasAnySelectionsForField(facet.id)) {
                 let kids = (selections.getFieldSelections(facet.id).map((value) => {
-                    return (
-                        <QBToolTip tipId={`selectedToken{facet.name}`} i18nMessageKey="report.facets.clearFacetSelection">
+                    return (<QBToolTip tipId={`selectedToken{facet.name}`} i18nMessageKey="report.facets.clearFacetSelection">
                             <span key={'token.' + facet.name + '.' + value}
                                   className="selectedToken"
                                   onClick={(e) => self.clearSelect(e, facet, value)}>
@@ -216,8 +215,7 @@ const FacetsMenu = React.createClass({
                                     <QBicon className="clearFacet" icon="clear-mini"/>
                                 </span>
                             </span>
-                        </QBToolTip>
-                    );
+                        </QBToolTip>);
                 }));
                 components.push(<div className="facetToken" key={'token' + facet.name} ><span className="facetNameToken">{facet.name}</span>
                     <span className="facetSelections">{kids}</span></div>);

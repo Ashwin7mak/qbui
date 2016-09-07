@@ -93,15 +93,13 @@ class FacetsItem extends Component {
         if (this.props.fieldSelections.length > 0) {
             // note onMouseDown instead of onClick necessary here to support rootClose on the menu
             // so that it will not propagate to thru to parent collapse while clearing selection
-            clearFacetsIcon = (
-                <span className="clearFacetContainer">
+            clearFacetsIcon = (<span className="clearFacetContainer">
                     <QBToolTip tipId="clearFacet" i18nMessageKey="report.facets.clearFacet" facet={facetName}>
                         <span onTouchStart={e => this.clearSelects(e)} onMouseDown={e => this.clearSelects(e)}>
                             <QBicon className="clearFacet" icon="clear-mini" />
                         </span>
                     </QBToolTip>
-                </span>
-            );
+                </span>);
             let listOfValues = this.props.facet.values.map(x => x.value);
             let originalOrderSelected =  _.intersection(listOfValues, this.props.fieldSelections);
             selectionStrings = (originalOrderSelected.map((item, index) => {
