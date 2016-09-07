@@ -195,17 +195,16 @@ const FieldValueEditor = React.createClass({
         if (this.props.onBlur) {
             this.props.onBlur(vals);
         }
-        //TODO this needs to be moved up the chain so that on blur the value is validated and state set at the same time.
-        //this.onExitField(ev);
+        this.onExitField(vals.value);
     },
     /**
      * onExitField called on Blur to check if the field is valid and send the validation results to onValidated
      */
-    onExitField(ev) {
+    onExitField(value) {
         // need to rerender this field with invalid state
         //on aggrid redraw, and on qbgrid set state
         if (this.props.validateFieldValue && this.props.onValidated) {
-            let fldValue = ev ? ev.target.value : ReactDOM.findDOMNode(this.refs.fieldInput).value;
+            let fldValue = value ? value : ReactDOM.findDOMNode(this.refs.fieldInput).value;
             let results = this.props.validateFieldValue(this.props.fieldDef, fldValue);
             this.props.onValidated(results);
         }
