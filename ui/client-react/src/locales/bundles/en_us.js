@@ -102,7 +102,7 @@ export default {
                 tooManyValues : "Too many values to use for filtering.",
                 noCheck : "No",
                 yesCheck : "Yes",
-                clearFacet: "Remove {facet} filter"
+                clearFacet: "Clear {facet} filter"
             },
             filteredRecordCount :
                 "{filteredRecordCount} of {recordCount} {recordOrRecords} ",
