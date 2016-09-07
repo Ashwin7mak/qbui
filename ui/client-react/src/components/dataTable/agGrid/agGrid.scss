@@ -486,7 +486,28 @@ $cell-edit-background-edit: #f3f8fe;
                 margin-left: 2px;
                 height: 30px;
                 background-color: $input-bg-color;
-
+                &.dateTimeCell {
+                    width: 87px;
+                    vertical-align: middle;
+                    .dropdown-toggle {
+                        width: 85px;
+                        border: 0;
+                    }
+                    .bootstrap-datetimepicker-widget {
+                        top: 45px !important;
+                    }
+                    &.dateCell {
+                        .bootstrap-datetimepicker-widget {
+                            right: 120px !important;
+                        }
+                    }
+                }
+                &.timeCell {
+                    .bootstrap-datetimepicker-widget td span {
+                        height: 27px;
+                        line-height: 27px;
+                    }
+                }
                 &.dateTimeField>* {
                     border:0;
                     .input-group.date input.form-control {
@@ -502,7 +523,9 @@ $cell-edit-background-edit: #f3f8fe;
                         padding:0;
                         border:0;
                         color: $icon-color;
-
+                    }
+                    .bootstrap-datetimepicker-widget {
+                        top: 45px !important;
                     }
                 }
                 &.input-group {

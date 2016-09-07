@@ -17,8 +17,11 @@ const DateFieldValueEditor = React.createClass({
 
     propTypes: {
         /**
-         * the value to fill in the date component */
+         * the raw date value in ISO format */
         value: React.PropTypes.string,
+
+        /* the display date value */
+        display: React.PropTypes.string,
 
         /**
          * renders with red border if true */
@@ -55,7 +58,7 @@ const DateFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'cellEdit dateTimeField';
+        let classes = 'cellEdit dateTimeField dateCell';
         let singlePicker = true;
 
         // error state css class
@@ -67,9 +70,10 @@ const DateFieldValueEditor = React.createClass({
         }
 
         const format = "YYYY-MM-DD";
-        const fixedDate = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : moment().format(format);
+        const theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(format) : moment().format(format);
+
         return <div className={classes}>
-            <DatePicker dateTime={fixedDate}
+            <DatePicker dateTime={theDate}
                         format={format}
                         inputFormat="MM/DD/YYYY"
                         onBlur={this.props.onBlur}

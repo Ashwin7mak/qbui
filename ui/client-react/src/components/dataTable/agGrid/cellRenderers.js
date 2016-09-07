@@ -41,7 +41,7 @@ class CellRendererFactory  {
             _.has(props.params.data[props.params.context.uniqueIdentifier], 'value') &&
             _.has(props.params, 'rowIndex')) {
             recId = props.params.data[props.params.context.uniqueIdentifier].value;
-            key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId ;
+            key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId;
         }
         return key;
     }
@@ -94,7 +94,7 @@ const CellRenderer = React.createClass({
                 valueAndDisplay: {
                     id: this.props.initialValue.id,
                     value: this.props.initialValue.value,
-                    display: this.props.initialValue.display,
+                    display: this.props.initialValue.display
                 },
                 validationStatus : null
             };
@@ -168,6 +168,8 @@ const CellRenderer = React.createClass({
                 { isEditable && (this.props.editing || !this.props.qbGrid) &&
                     <CellEditor type={cellType}
                                 value={this.state.valueAndDisplay.value}
+                                display={this.state.valueAndDisplay.display}
+                                attributes={this.props.colDef.datatypeAttributes}
                                 colDef={this.props.colDef}
                                 onChange={this.onChange}
                                 onValidated={this.onValidated}
@@ -271,7 +273,7 @@ const CellRenderer = React.createClass({
      */
     textCellEdited(value) {
         let theVals = {
-            value: value,
+            value: value
         };
         theVals.display = textFormatter.format(theVals, this.props.colDef.datatypeAttributes);
 
@@ -285,7 +287,7 @@ const CellRenderer = React.createClass({
      */
     dateTimeCellEdited(newValue) {
         let theVals = {
-            value: newValue,
+            value: newValue
         };
         switch (this.props.type) {
         case FieldFormats.DATE_FORMAT: {

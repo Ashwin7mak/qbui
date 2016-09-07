@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './fields.scss';
-import QBToolTip from '../qbToolTip/qbToolTip';
-import DatePicker from 'react-bootstrap-datetimepicker';
-import moment from 'moment';
+import DateFieldValueEditor from './dateFieldValueEditor';
+import TimeFieldValueEditor from './timeFieldValueEditor';
 
 /**
  * # DateTimeFieldValueEditor
@@ -19,6 +18,9 @@ const DateTimeFieldValueEditor = React.createClass({
         /**
          * the value to fill in the date component */
         value: React.PropTypes.string,
+
+        /* the display value to fill in the date component */
+        display: React.PropTypes.string,
 
         /**
          * renders with red border if true */
@@ -44,37 +46,9 @@ const DateTimeFieldValueEditor = React.createClass({
 
     },
 
-    getDefaultProps() {
-        return {
-            isInvalid: false
-        };
-    },
-
-    onChange(newValue) {
-        this.props.onChange(newValue);
-    },
-
     render() {
-        let classes = 'cellEdit dateTimeField';
-        let singlePicker = true;
-
-        // error state css class
-        if (this.props.isInvalid) {
-            classes += ' error';
-        }
-        if (this.props.classes) {
-            classes += ' ' + this.props.classes;
-        }
-
-        const format = "YYYY-MM-DD";
-        const fixedDate = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : moment().format(format);
-        return <div className={classes}>
-            <DatePicker dateTime={fixedDate}
-                        format={format}
-                        inputFormat="MM/DD/YYYY"
-                        onBlur={this.props.onBlur}
-                        onChange={this.onChange}
-                        mode="date"/>
+        return <div>
+            <DateFieldValueEditor classes={'dateTimeCell'} id={this.props.idKey} {...this.props}/><TimeFieldValueEditor classes={'dateTimeCell'} id={this.props.idKey} {...this.props} />
         </div>;
     }
 

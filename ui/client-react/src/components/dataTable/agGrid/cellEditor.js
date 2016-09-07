@@ -11,6 +11,8 @@ const CellEditor = React.createClass({
     propTypes: {
         type: React.PropTypes.number,
         value: React.PropTypes.any,
+        attributes: React.PropTypes.object,
+        display: React.PropTypes.any,
         idKey : React.PropTypes.any,
         colDef: React.PropTypes.object,
         onChange: React.PropTypes.func,
@@ -35,7 +37,9 @@ const CellEditor = React.createClass({
     render() {
         return (<FieldValueEditor  classes="cellEditWrapper"
                               type={this.props.type}
+                              display={this.props.display}
                               value={this.props.value}
+                              attributes={this.props.attributes}
                               fieldDef={this.props.colDef}
                               indicateRequired={true}
                               onChange={this.props.onChange}

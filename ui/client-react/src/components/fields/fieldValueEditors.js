@@ -220,77 +220,77 @@ export const ComboBoxFieldValueEditor = React.createClass({
  *
  * 2063-05-25T02:59:32.76Z returns 2063-05-25T02:59:32.760Z for example
  */
-function dateTimeStringWithFixedMillisSuffix(dateTimeStr, places) {
-
-    const millisSuffix = dateTimeStr.match(/\.[0-9]*/);
-    if (millisSuffix) {
-        let fixedMillis = parseFloat(millisSuffix).toFixed(places).substring(1);
-        return dateTimeStr.replace(/\.[0-9]*/, fixedMillis);
-    }
-    return dateTimeStr;
-}
+//function dateTimeStringWithFixedMillisSuffix(dateTimeStr, places) {
+//
+//    const millisSuffix = dateTimeStr.match(/\.[0-9]*/);
+//    if (millisSuffix) {
+//        let fixedMillis = parseFloat(millisSuffix).toFixed(places).substring(1);
+//        return dateTimeStr.replace(/\.[0-9]*/, fixedMillis);
+//    }
+//    return dateTimeStr;
+//}
 /**
  * date + time cell editor
  */
-export const DateTimeFieldValueEditor = React.createClass({
-    displayName: 'DateTimeFieldValueEditor',
-
-    propTypes: {
-        value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss
-        onChange: React.PropTypes.func,
-        onBlur: React.PropTypes.func
-    },
-
-    onChange(newValue) {
-        this.props.onChange(newValue);
-    },
-
-    render() {
-
-        const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
-        let dateTime = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : moment().format(format);
-        dateTime = dateTimeStringWithFixedMillisSuffix(dateTime, 3);
-
-        return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={dateTime}
-                           format={format}
-                           inputFormat="MM-DD-YYYY hh:mm:ss A"
-                           onBlur={this.props.onBlur}
-                           onChange={this.onChange}
-                           mode="datetime"/>
-        </div>;
-    }
-});
+//export const DateTimeFieldValueEditor = React.createClass({
+//    displayName: 'DateTimeFieldValueEditor',
+//
+//    propTypes: {
+//        value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss
+//        onChange: React.PropTypes.func,
+//        onBlur: React.PropTypes.func
+//    },
+//
+//    onChange(newValue) {
+//        this.props.onChange(newValue);
+//    },
+//
+//    render() {
+//
+//        const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
+//        let dateTime = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : moment().format(format);
+//        dateTime = dateTimeStringWithFixedMillisSuffix(dateTime, 3);
+//
+//        return <div className="cellEdit dateTimeField">
+//            <DateTimeField dateTime={dateTime}
+//                           format={format}
+//                           inputFormat="MM-DD-YYYY hh:mm:ss A"
+//                           onBlur={this.props.onBlur}
+//                           onChange={this.onChange}
+//                           mode="datetime"/>
+//        </div>;
+//    }
+//});
 
 /**
  * time of day cell editor
  */
-export const TimeFieldValueEditor = React.createClass({
-    displayName: 'TimeFieldValueEditor',
-
-    propTypes: {
-        value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss.SSS (Epoch date)
-        onChange: React.PropTypes.func,
-        onBlur: React.PropTypes.func
-    },
-    onChange(newValue) {
-        this.props.onChange(newValue);
-    },
-    render() {
-        const format = "YYYY-MM-DDTHH:mm:ss.SSS";
-        let localTime = this.props.value ? this.props.value.replace(/Z(\[.*?\])/, '') : moment().format(format);
-        localTime = dateTimeStringWithFixedMillisSuffix(localTime, 3);
-
-        return <div className="cellEdit dateTimeField">
-            <DateTimeField dateTime={localTime}
-                           format={format}
-                           inputFormat="h:mm:ss A"
-                           onBlur={this.props.onBlur}
-                           onChange={this.onChange}
-                           mode="time"/>
-        </div>;
-    }
-});
+//export const TimeFieldValueEditor = React.createClass({
+//    displayName: 'TimeFieldValueEditor',
+//
+//    propTypes: {
+//        value: React.PropTypes.string, // YYYY-MM-DDThh:mm:ss.SSS (Epoch date)
+//        onChange: React.PropTypes.func,
+//        onBlur: React.PropTypes.func
+//    },
+//    onChange(newValue) {
+//        this.props.onChange(newValue);
+//    },
+//    render() {
+//        const format = "YYYY-MM-DDTHH:mm:ss.SSS";
+//        let localTime = this.props.value ? this.props.value.replace(/Z(\[.*?\])/, '') : moment().format(format);
+//        localTime = dateTimeStringWithFixedMillisSuffix(localTime, 3);
+//
+//        return <div className="cellEdit dateTimeField">
+//            <DateTimeField dateTime={localTime}
+//                           format={format}
+//                           inputFormat="h:mm:ss A"
+//                           onBlur={this.props.onBlur}
+//                           onChange={this.onChange}
+//                           mode="time"/>
+//        </div>;
+//    }
+//});
 
 /**
  * checkbox cell editor
