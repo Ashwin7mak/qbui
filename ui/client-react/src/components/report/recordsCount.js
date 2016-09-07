@@ -25,23 +25,14 @@ var RecordsCount = React.createClass({
      * and it changes the text header from 'Counting {records}' to 'Counting...'
      */
     render() {
-        let message = "report.recordCount";
-        if (this.props.recordCount === 1) {
-            message = "report.singleRecordCount";
-        }
-        let placeHolderMessage = "report.recordCountPlaceHolder";
+        let message = (this.props.recordCount === 1) ? "report.singleRecordCount" : "report.recordCount";
+        let placeHolderMessage = (Breakpoints.isSmallBreakpoint()) ? "report.cardViewCountPlaceHolder" : "report.recordCountPlaceHolder";
 
         let dbl = null;
-        if (Breakpoints.isSmallBreakpoint()) {
-            placeHolderMessage = "report.cardViewCountPlaceHolder";
-        }
 
         if (this.props.isFiltered) {
-            message = "report.filteredRecordCount";
-            if (this.props.recordCount === 1) {
-                message = "report.filteredSingleRecordCount";
-            }
             dbl = this.props.clearAllFilters;
+            message = (this.props.recordCount === 1) ? "report.filteredSingleRecordCount" : "report.filteredRecordCount";
         }
         // TODO Code hygiene, set up loader options as an external constant. https://quickbase.atlassian.net/browse/MB-503
         var loaderOptions = {
@@ -69,26 +60,25 @@ var RecordsCount = React.createClass({
         if ((this.props.isFiltered && (this.props.filteredRecordCount === null) || this.props.recordCount === null)) {
             // no records
             return null;
-        } else {
-            return (
-                <div className="recordsCountLoaderContainer">
-                    <Loader loaded={!this.props.isCounting} options={loaderOptions}>
-                            <div className="recordsCount" onDoubleClick={dbl}>
-                                <I18nMessage message={message}
-                                             filteredRecordCount={this.props.filteredRecordCount + ''}
-                                             recordCount={this.props.recordCount + ''}
-                                />
-                            </div>
-                    </Loader>
-                    {   this.props.isCounting ?
-                        <div className="recordsCount">
-                            <I18nMessage message={placeHolderMessage} />
-                        </div> :
-                        null
-                    }
-                </div>
-            );
         }
+        return (
+            <div className="recordsCountLoaderContainer">
+                <Loader loaded={!this.props.isCounting} options={loaderOptions}>
+                        <div className="recordsCount" onDoubleClick={dbl}>
+                            <I18nMessage message={message}
+                                         filteredRecordCount={this.props.filteredRecordCount + ''}
+                                         recordCount={this.props.recordCount + ''}
+                            />
+                        </div>
+                </Loader>
+                {   this.props.isCounting ?
+                    <div className="recordsCount">
+                        <I18nMessage message={placeHolderMessage} />
+                    </div> :
+                    null
+                }
+            </div>
+        );
     }
 });
 
