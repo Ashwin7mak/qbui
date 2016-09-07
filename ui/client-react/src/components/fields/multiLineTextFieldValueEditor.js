@@ -26,12 +26,6 @@ const MultiLineTextFieldValueEditor = React.createClass({
     statics: {
         MAX_TEXTAREA_HEIGHT: 100
     },
-    getDefaultProps() {
-        return {
-            value: "",
-            type: "text"
-        };
-    },
 
     getInitialState() {
         return {
@@ -46,7 +40,10 @@ const MultiLineTextFieldValueEditor = React.createClass({
      * @param ev
      */
     onChange(ev) {
-        this.props.onChange(ev.target.value);
+        //TODO: add debounce support for reduced re-rendering
+        if (this.props.onChange) {
+            this.props.onChange(ev.target.value);
+        }
     },
 
     componentDidMount() {
@@ -79,15 +76,15 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     render() {
-        console.log('this.props.onChange: ', this.props.onChange);
         return <textarea ref="textarea" style={this.state.style}
-                         onChange={this.onChange}
-                         onBlur={this.props.onBlur}
-                         tabIndex="0"
-                         onKeyUp={this.onKeyUp}
-                         className="cellEdit"
-                         rows="1"
-                         value={this.props.value === null ? "" : this.props.value} />;
+                                        onChange={this.onChange}
+                                        onBlur={this.props.onBlur}
+                                        tabIndex="0"
+                                        onKeyUp={this.onKeyUp}
+                                        className="cellEdit"
+                                        rows="1"
+                                        value={this.props.value === null ? '' : this.props.value}
+                                        type="text" />;
     }
 });
 
