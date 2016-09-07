@@ -5,7 +5,7 @@ import QBToolTip from '../qbToolTip/qbToolTip';
 import './report.scss';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
 import Breakpoints from "../../utils/breakpoints";
-import Breakpoints from "../../utils/stringUtils";
+import StringUtils from "../../utils/stringUtils";
 
 var ReportNavigation = React.createClass({
     propTypes: {
