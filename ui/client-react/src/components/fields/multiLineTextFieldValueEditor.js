@@ -40,7 +40,6 @@ const MultiLineTextFieldValueEditor = React.createClass({
      * @param ev
      */
     onChange(ev) {
-        //TODO: add debounce support for reduced re-rendering
         if (this.props.onChange) {
             this.props.onChange(ev.target.value);
         }
