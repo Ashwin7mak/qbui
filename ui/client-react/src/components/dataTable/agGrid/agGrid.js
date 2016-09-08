@@ -354,7 +354,7 @@ let AGGrid = React.createClass({
      * @param colDef
      */
     onCellTab(colDef) {
-                               console.log('tabbed');
+
         const lastColumn = this.props.columns[this.props.columns.length - 1];
         if (colDef.field === lastColumn.field) {
             // tabbed out of last column

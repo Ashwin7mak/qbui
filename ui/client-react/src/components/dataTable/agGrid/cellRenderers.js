@@ -51,8 +51,7 @@ class CellRendererFactory  {
                              initialValue={props.params.value}
                              editing={props.editing}
                              params={props.params}
-                             appUsers={props.params &&  props.params.context ?
-                                 props.params.context.getAppUsers() : []}
+                             appUsers={ _.has(props.params, 'context.getAppUsers') ? props.params.context.getAppUsers() : []}
                              qbGrid={props.qbGrid}
                              key={CellRendererFactory.getCellKey(props)}
         />;

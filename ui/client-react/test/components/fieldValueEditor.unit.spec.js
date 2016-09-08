@@ -5,6 +5,23 @@ import FieldValueEditor  from '../../src/components/fields/fieldValueEditor';
 import FieldFormats from '../../src/utils/fieldFormats';
 var simpleStringify = require('../../../common/src/simpleStringify.js');
 
+const users = [
+    {
+        "userId": "58440038",
+        firstName: "Aditi",
+        lastName: "Goel",
+        screenName: "agoel@quickbase.com",
+        email: "agoel@quickbase.com"
+    },
+    {
+        "userId": "58453016",
+        firstName: "Drew",
+        lastName: "Stevens",
+        screenName: "dstevens@quickbase.com",
+        email: "dstevens@quickbase.com"
+    }
+];
+
 describe('FieldValueEditor functions', () => {
     'use strict';
 
@@ -29,7 +46,7 @@ describe('FieldValueEditor functions', () => {
         ];
         dataProvider.forEach((data) => {
             it(data.test, () => {
-                component = TestUtils.renderIntoDocument(<FieldValueEditor type={data.type}/>);
+                component = TestUtils.renderIntoDocument(<FieldValueEditor type={data.type} appUsers={users}/>);
                 expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
             });
         });

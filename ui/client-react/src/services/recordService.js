@@ -72,16 +72,19 @@ class RecordService extends BaseService {
     saveRecord(appId, tableId, recordId, changes) {
 
         const fixedChanges = _.cloneDeep(changes);
-        //  temp hack - patching user fields expects userID only on server not the field we got originally
-        fixedChanges.forEach( change => {
-            if (change.fieldName === "User") {
-                change.value = change.value.userId;
-            }
-        });
+        // temp hack - patching user fields expects userID only on server not the field we got originally
 
-        return new Promise((resolve, reject) => { resolve(); });
-        //let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
-        //return super.patch(url, fixedChanges);
+
+        if (_.isArray(fixedChanges)) {
+            fixedChanges.forEach(change => {
+                if (change.fieldName === "User") {
+                    change.value = change.value.userId;
+                }
+            });
+        }
+
+        let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
+        return super.patch(url, fixedChanges);
     }
 
 

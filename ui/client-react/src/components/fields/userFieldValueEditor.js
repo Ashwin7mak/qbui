@@ -17,7 +17,7 @@ const UserFieldValueEditor = React.createClass({
 
     getInitialState() {
 
-        return {selectedUserId: this.props.value.userId}
+        return {selectedUserId: this.props.value ? this.props.value.userId : null};
     },
 
     selectUser(user) {
@@ -35,7 +35,7 @@ const UserFieldValueEditor = React.createClass({
         return this.props.appUsers ?
             this.props.appUsers.map(user => {
                 const label = userFormatter.format({value: user}, datatypeAttributes);
-                return { value: user.userId, label};
+                return {value: user.userId, label};
             }) : [];
     },
 
@@ -61,8 +61,7 @@ const UserFieldValueEditor = React.createClass({
                 value={this.state.selectedUserId}
                 options={this.getSelectItems()}
                 onChange={this.selectUser}
-                onBlur={this.onBlur}
-            />
+                onBlur={this.onBlur} />
         );
     }
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Tooltip,OverlayTrigger} from 'react-bootstrap';
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 const UserFieldValueRenderer = React.createClass({
     displayName: 'UserFieldValueRenderer',
@@ -10,11 +10,11 @@ const UserFieldValueRenderer = React.createClass({
     },
 
     render() {
-                           console.log('renderme',this.props);
+
         const tooltip = (
             <Tooltip id="tooltip" style={{"whiteSpace":"nowrap"}} >
-                {this.props.value.screenName && <div>User Name: {this.props.value.screenName}</div>}
-                {this.props.value.email && <div>Email: {this.props.value.email}</div>}
+                {this.props.value && this.props.value.screenName && <div>User Name: {this.props.value.screenName}</div>}
+                {this.props.value && this.props.value.email && <div>Email: {this.props.value.email}</div>}
             </Tooltip>
         );
 

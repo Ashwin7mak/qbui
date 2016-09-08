@@ -107,13 +107,11 @@ let appsActions = {
         let appService = new AppService();
 
         appService.getAppUsers(appId).then(response => {
-            console.log('got users',response);
-                this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
-            },
-            error => {
-                this.dispatch(actions.LOAD_APP_USERS_FAILED);
-            }
-        );
+            this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
+        },
+        error => {
+            this.dispatch(actions.LOAD_APP_USERS_FAILED);
+        });
     },
 
     selectTableId(tblId) {
