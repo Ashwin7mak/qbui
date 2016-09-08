@@ -77,7 +77,12 @@ const FieldValueEditor = React.createClass({
 
         /**
          * message to display in the tool tip when isInvalid */
-        invalidMessage: React.PropTypes.string
+        invalidMessage: React.PropTypes.string,
+
+        /**
+         * how to identify the field input
+         */
+        idKey : React.PropTypes.any
     },
 
     getDefaultProps() {
@@ -105,6 +110,7 @@ const FieldValueEditor = React.createClass({
             onValidated: this.props.onValidated,
             placeholder : placeholder,
             tabIndex: "0",
+            idKey : this.props.idKey,
             ref:"fieldInput"
         };
 
@@ -155,6 +161,7 @@ const FieldValueEditor = React.createClass({
                                             isInvalid={this.props.isInvalid}
                                             invalidMessage={this.props.invalidMessage}
                                             onValidated={this.props.onValidated}
+                                            key={'tfve-' + this.props.idKey}
                                             classes="cellEdit"
                     />;
                     //Drew's change per Andrew if users want text box that

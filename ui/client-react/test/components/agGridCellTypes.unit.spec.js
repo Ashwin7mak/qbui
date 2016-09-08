@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
 import CellRenderers from '../../src/components/dataTable/agGrid/cellRenderers';
-import CellValueRenderer from '../../src/components/dataTable/agGrid/cellValueRenderer';
 
 import {DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer, NumericCellRenderer, TextCellRenderer, CheckBoxCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
 import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';

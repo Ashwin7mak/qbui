@@ -100,12 +100,14 @@ export default {
                 noCheck : "Non",
                 yesCheck : "Oui"
             },
-            filteredRecordCount :
-                "{filteredRecordCount} des {recordCount} {nameForRecords} ",
+            filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
+            filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",
             newReport: "Nouveau",
             organizeReports: "Organiser",
-            recordCount : "{recordCount} {nameForRecords} ",
-            recordCountPlaceHolder : "Compte {nameForRecords}",
+            recordCount : "{recordCount} enregistrements",
+            singleRecordCount : "{recordCount} record",
+            recordCountPlaceHolder : "Compte enregistrements...",
+            cardViewCountPlaceHolder : "Compte...",
             reportNavigationBar : "{pageStart} - {pageEnd}",
             previousToolTip: "Arrière",
             nextToolTip: "Prochain",

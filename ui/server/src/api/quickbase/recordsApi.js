@@ -39,10 +39,13 @@
 (function() {
     'use strict';
 
-    var Promise = require('bluebird');
-    var defaultRequest = require('request');
-    var log = require('../../logger').getLogger();
-    var perfLogger = require('../../perfLogger');
+    let Promise = require('bluebird');
+    let defaultRequest = require('request');
+    let _ = require('lodash');
+    let log = require('../../logger').getLogger();
+    let perfLogger = require('../../perfLogger');
+    let dataErrs = require('../../../../common/src/dataEntryErrorCodes');
+    var httpStatusCodes = require('../../constants/httpStatusCodes');
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -74,6 +77,7 @@
         //Module constants:
         var APPLICATION_JSON = 'application/json';
         var CONTENT_TYPE = 'Content-Type';
+        var CONTENT_LENGTH = 'content-length';
 
         var FIELDS = 'fields';
         var RECORD = 'record';
@@ -380,6 +384,7 @@
                 return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
             },
 
+
             /**
              * Save a single record data to a table.
              *
@@ -387,10 +392,18 @@
              * @returns Promise
              */
             saveSingleRecord: function(req) {
-                var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                //input expected in raw form for java
-                return requestHelper.executeRequest(req, opts);
+                let errors = _validateChanges(req);
+                if (errors.length === 0) {
+                    var opts = requestHelper.setOptions(req);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    //input expected in raw form for java
+                    return requestHelper.executeRequest(req, opts);
+                } else {
+                    //return error
+                    let errCode = httpStatusCodes.INVALID_INPUT;
+                    return Promise.reject({response:{message:'validation error', status:errCode, errors: errors}}
+                    );
+                }
             },
 
             /**
@@ -400,10 +413,18 @@
              * @returns Promise
              */
             createSingleRecord: function(req) {
-                var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                //input expected in raw form for java
-                return requestHelper.executeRequest(req, opts);
+                let errors = _validateChanges(req);
+                if (errors.length === 0) {
+                    var opts = requestHelper.setOptions(req);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    //input expected in raw form for java
+                    return requestHelper.executeRequest(req, opts);
+                } else {
+                    //return error
+                    let errCode = httpStatusCodes.INVALID_INPUT;
+                    return Promise.reject({response:{message:'validation error', status:errCode, errors: errors}}
+                    );
+                }
             },
 
             /**
@@ -431,4 +452,40 @@
         };
         return recordsApi;
     };
+
+    /**
+     * Validate changes to a record  basic checks for boundaries/types etc
+     *
+     * @param req
+     * @returns {Array}
+     * @private
+     */
+    function _validateChanges(req) {
+        let errors = [];
+        if (req.body && req.body.length) {
+            //look at each change
+            req.body.forEach((change, index) => {
+                if (change && change.field) {
+                    let field = change.field;
+
+                    //text field length limit
+                    if (field.type === "TEXT") {
+                        // within max chars?
+                        if (field.clientSideAttributes && field.clientSideAttributes.max_chars &&
+                            field.clientSideAttributes.max_chars > 0 &&
+                            change.value && change.value.length &&
+                            change.value.length > field.clientSideAttributes.max_chars) {
+                            errors.push({field, type: dataErrs.MAX_LEN_EXCEEDED, hadLength: change.value.length});
+                        }
+                    }
+                    // required field has value?
+                    if (field.required && (change.value === undefined || change.value === null || change.value === "")) {
+                        errors.push({field, type: dataErrs.REQUIRED_FIELD_EMPTY});
+                    }
+                }
+
+            });
+        }
+        return errors;
+    }
 }());

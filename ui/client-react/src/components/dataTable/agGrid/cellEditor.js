@@ -11,6 +11,7 @@ const CellEditor = React.createClass({
     propTypes: {
         type: React.PropTypes.number,
         value: React.PropTypes.any,
+        idKey : React.PropTypes.any,
         colDef: React.PropTypes.object,
         onChange: React.PropTypes.func,
         onBlur: React.PropTypes.func,
@@ -43,6 +44,8 @@ const CellEditor = React.createClass({
                               onValidated={this.props.onValidated}
                               validateFieldValue={this.props.validateFieldValue}
                               isInvalid={this.props.isInvalid}
+                              key={'fve' + this.props.idKey}
+                              idKey={this.props.idKey}
                               invalidMessage={this.props.invalidMessage}
                               ref={(c) => {
                                   //get reference to the component for this field

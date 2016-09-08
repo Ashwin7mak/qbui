@@ -63,12 +63,14 @@ const fakeReportData_simple = {
             col_num: {value: 1, id: 4},
             col_text: {value: 'abc', id: 5},
             col_date: {value: '01-01-2015', id: 6},
+            col_req: {value: null, id: 8},
             id: {value: 100, id: 7}
         }],
         records: [{
             col_num: {value: 1, id: 4},
             col_text: {value: 'abc', id: 5},
             col_date: {value: '01-01-2015', id: 6},
+            col_req: {value: null, id: 8},
             "Record ID#": {value: 100, id: 7}
         }],
         columns: [{
@@ -82,7 +84,73 @@ const fakeReportData_simple = {
             {
                 field: "col_date",
                 headerName: "col_date"
-            }]
+            },
+            {
+                field: "col_req",
+                headerName: "col_req"
+            }
+        ]
+    }
+};
+
+const fakeReportDataFields_simple = {
+    fields: {
+        data: [
+            {
+                "datatypeAttributes": {
+                    "type": "NUMERIC", "clientSideAttributes": {"width": 50, "bold": false, "word_wrap": false},
+                    "decimalPlaces": 0, "treatNullAsZero": true, "unitsDescription": ""
+                },
+                "id": 4, "name": "col_num", "type": "SCALAR",  "builtIn": false,
+                "dataIsCopyable": true, "includeInQuickSearch": true, "appearsByDefault": false, "userEditableValue": true,
+                "required": false, "defaultValue": {}, "multiChoiceSourceAllowed": false
+            },
+            {
+                "datatypeAttributes": {
+                    "type": "TEXT", "clientSideAttributes": {"width": 50, "bold": true, "word_wrap": false, "max_chars": 0},
+                    "htmlAllowed": false
+                }, "id": 5, "name": "abc", "type": "SCALAR", "builtIn": false,
+                "dataIsCopyable": true, "includeInQuickSearch": true, "appearsByDefault": true, "userEditableValue": true,
+                "required": false, "defaultValue": {}, "multiChoiceSourceAllowed": false
+            },
+            {
+                "datatypeAttributes": {
+                    "type": "DATE_TIME", "clientSideAttributes": {"width": 50, "bold": false, "word_wrap": false},
+                    "showMonthAsName": false, "showDayOfWeek": false, "hideYearIfCurrent": false, "dateFormat": "MM-dd-uuuu",
+                    "showTime": true, "showTimeZone": false, "timeZone": "America/Los_Angeles"
+                }, "id": 6, "name": "col_date", "type": "SCALAR", "builtIn": false,
+                "dataIsCopyable": true, "includeInQuickSearch": true, "appearsByDefault": false, "userEditableValue": true,
+                "required": true, "defaultValue": {}, "multiChoiceSourceAllowed": false
+            },
+            {
+                "datatypeAttributes": {
+                    "type": "NUMERIC", "clientSideAttributes": {"width": 50, "bold": false, "word_wrap": false},
+                    "decimalPlaces": 0, "treatNullAsZero": true, "unitsDescription": ""
+                }, "id": 7, "name": "Record ID#", "type": "SCALAR",  "builtIn": true,
+                "dataIsCopyable": true, "includeInQuickSearch": true, "appearsByDefault": false, "userEditableValue": false,
+                "required": true, "unique": true, "indexed": true, "keyField": true, "defaultValue": {},
+                "multiChoiceSourceAllowed": false
+            },
+            //a required field in the report
+            {
+                "datatypeAttributes": {
+                    "type": "TEXT", "clientSideAttributes": {"width": 50, "bold": true, "word_wrap": false, "max_chars": 0},
+                    "htmlAllowed": false
+                }, "id": 8, "name": "abc", "type": "SCALAR", "builtIn": false,
+                "dataIsCopyable": true, "includeInQuickSearch": true, "appearsByDefault": true, "userEditableValue": true,
+                "required": true, "defaultValue": {}, "multiChoiceSourceAllowed": false
+            },
+            //a unique field not in the report
+            {
+                "datatypeAttributes": {
+                    "type": "TEXT", "clientSideAttributes": {"width": 50, "bold": true, "word_wrap": false, "max_chars": 0},
+                    "htmlAllowed": false
+                }, "id": 9, "name": "abc", "type": "SCALAR", "builtIn": false,
+                "dataIsCopyable": true, "includeInQuickSearch": true, "appearsByDefault": true, "userEditableValue": true,
+                "unique": true, "defaultValue": {}, "multiChoiceSourceAllowed": false
+            },
+
+        ]
     }
 };
 
@@ -754,7 +822,8 @@ describe('ReportContent functions', () => {
                 4: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 4);})],
                 5: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 5);})],
                 6: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 6);})],
-                7: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 7);})]
+                7: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 7);})],
+                8: origRec[Object.keys(origRec).find((key) => {return (origRec[key].id === 8);})]
             }
         };
 
@@ -836,7 +905,8 @@ describe('ReportContent functions', () => {
             },
         },
             originalRecord: {fids:{
-                4: {value: 'older'}}
+                4: {value: 'older'}
+            }
             }
         };
 
@@ -1010,12 +1080,14 @@ describe('ReportContent functions', () => {
                 },
             }
         };
+        let attrs = {setting: true};
         let fieldsData = {
             fields : {
                 data: [
                     {
                         id: 4,
-                        builtIn: false
+                        builtIn: false,
+                        datatypeAttributes :attrs
                     },
                     {
                         id: 5,
@@ -1029,7 +1101,8 @@ describe('ReportContent functions', () => {
             fieldName: 'col_num',
             id: 4,
             value: "hi",
-            display: "there"
+            display: "there",
+            field: attrs
         }
         ];
         spyOn(flux.actions, 'saveNewReportRecord');
@@ -1059,7 +1132,9 @@ describe('ReportContent functions', () => {
             },
         },
                 originalRecord: {fids:{
-                    4: {value: 'older'}}
+                    4: {value: 'older'},
+                    8: {value: null}
+                }
                 }
         };
         component = TestUtils.renderIntoDocument(
@@ -1067,6 +1142,7 @@ describe('ReportContent functions', () => {
                             appId="123"
                             tblId="456"
                             reportData={fakeReportData_simple}
+                            fields={fakeReportDataFields_simple}
                             pendEdits={edits}
                             reportHeader={header_empty}
                             reportFooter={fakeReportFooter}

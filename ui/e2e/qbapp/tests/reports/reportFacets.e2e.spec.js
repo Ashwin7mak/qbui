@@ -136,32 +136,33 @@
                 var expectedTableResuts = [];
                 reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                     //sleep for loading of table to finish
-                    e2eBase.sleep(browser.params.smallSleep);
-                    reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
-                        reportServicePage.agGridRecordElList.map(function(row) {
-                            return {
-                                'Text Field': row.all(by.className('ag-cell-no-focus')).get(1).getText(),
-                                'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(4).getText()
-                            };
-                        }).then(function(results) {
-                            for (var i = 0; i < results.length; i++) {
-                                expectedTableResuts.push(results[i]);
-                            }
-                            var found = false;
-                            for (var j = 0; j < expectedTableResuts.length; j++) {
-                                for (var k = 0; k < actualTableResuts.length; k++) {
-                                    try {
-                                        if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
-                                            expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
-                                            found = true;
-                                            break;
+                    e2eBase.sleep(browser.params.smallSleep).then(function() {
+                        reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
+                            reportServicePage.agGridRecordElList.map(function(row) {
+                                return {
+                                    'Text Field': row.all(by.className('ag-cell-no-focus')).get(1).getText(),
+                                    'Checkbox Field': row.all(by.className('ag-cell-no-focus')).get(4).getText()
+                                };
+                            }).then(function(results) {
+                                for (var i = 0; i < results.length; i++) {
+                                    expectedTableResuts.push(results[i]);
+                                }
+                                var found = false;
+                                for (var j = 0; j < expectedTableResuts.length; j++) {
+                                    for (var k = 0; k < actualTableResuts.length; k++) {
+                                        try {
+                                            if (expectedTableResuts.length > 0 && JSON.stringify(expectedTableResuts[j]) === JSON.stringify(actualTableResuts[k])) {
+                                                expect(expectedTableResuts[j]).toEqual(actualTableResuts[k]);
+                                                found = true;
+                                                break;
+                                            }
+                                        } catch (e) {
+                                            found = false;
+                                            throw new Error(e);
                                         }
-                                    } catch (e) {
-                                        found = false;
-                                        throw new Error(e);
                                     }
                                 }
-                            }
+                            });
                         });
                     });
                 });
@@ -170,7 +171,7 @@
             it('Verify reports toolbar', function(done) {
                 reportServicePage.waitForElement(reportServicePage.reportContainerEl).then(function() {
                     // Verify the records count
-                    expect(reportServicePage.reportRecordsCount.getText()).toBe('6 Records');
+                    expect(reportServicePage.reportRecordsCount.getText()).toContain('6');
                     // Verify display of filter search box
                     expect(reportServicePage.reportFilterSearchBox.isDisplayed()).toBeTruthy();
                     // Verify display of facets filter button
@@ -301,6 +302,8 @@
                                 // Sort each array before comparing
                                 expect(selections.sort()).toEqual(facetSelections.sort());
                             });
+                        }).then(function() {
+                            reportFacetsPage.waitForReportReady();
                         });
                     }
                 }).then(function() {
@@ -309,7 +312,7 @@
                     reportServicePage.griddleWrapperEl.getAttribute('innerText').then(function(txt) {
                         if (txt === 'There is no data to display.') {
                             //Verify the toolbar still displays with filter button in it
-                            expect(reportServicePage.reportRecordsCount.getText()).toBe('0 of 6 Records');
+                            expect(reportServicePage.reportRecordsCount.getText()).toContain('0 of 6');
                             expect(reportFacetsPage.reportFacetFilterBtn.isDisplayed()).toBeTruthy();
                             done();
                         } else if (txt !== 'There is no data to display.') {
@@ -341,13 +344,14 @@
                             // Sort each array before comparing
                             expect(selections.sort()).toEqual(facetSelections.sort());
                         }).then(function() {
+                            e2eBase.sleep(browser.params.smallSleep);
                             // Finally clear all facets from popup menu
                             reportFacetsPage.getFacetGroupElement("Text Field").then(function(facetGroupEl) {
-                                reportFacetsPage.waitForElementToBeClickable(facetGroupEl).then(function() {
+                                reportFacetsPage.waitForElement(facetGroupEl).then(function() {
                                     reportFacetsPage.clickClearAllFacetsIcon(facetGroupEl).then(function() {
                                         e2eBase.sleep(browser.params.smallSleep);
                                         reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                                            expect(reportServicePage.reportRecordsCount.getText()).toBe('6 Records');
+                                            expect(reportServicePage.reportRecordsCount.getText()).toContain('6');
                                             done();
                                         });
                                     });
@@ -390,7 +394,7 @@
                                 return reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
                                     return e2eRetry.run(function() {
                                         reportFacetsPage.clearFacetTokensFromContainer().then(function() {
-                                            expect(reportServicePage.reportRecordsCount.getText()).toBe('6 Records');
+                                            expect(reportServicePage.reportRecordsCount.getText()).toContain('6');
                                             done();
                                         });
                                     });
