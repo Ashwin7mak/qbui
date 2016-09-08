@@ -47,7 +47,7 @@
                 it('Test case (field check): ' + entry.message, function(done) {
                     var targetElements = formElementGenerator.generateDefaultElements(entry.testFields);
 
-                    entry.testFields.forEach(function(element){
+                    entry.testFields.forEach(function(element) {
                         if (targetElements[element.id].fieldId !== element.id) {
                             assert.fail('Expected field Id ' + element.id + ' to match actual field Id ' + targetElements[element.id].fieldId);
                         }
