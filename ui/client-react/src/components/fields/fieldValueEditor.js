@@ -5,6 +5,7 @@ import FieldFormats from '../../utils/fieldFormats' ;
 import {DefaultFieldValueEditor, MultiLineTextFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
     DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import TextFieldValueEditor from './textFieldValueEditor';
+import NumericFieldValueEditor from './numericFieldValueEditor';
 import _ from 'lodash';
 
 /**
@@ -104,13 +105,15 @@ const FieldValueEditor = React.createClass({
 
         let commonProps = {
             value: this.props.value,
+            display: this.props.display,
             onChange: this.props.onChange,
-            onBlur: this.onExitField,
+            onBlur: this.onBlur,
             onValidated: this.props.onValidated,
             placeholder : placeholder,
             tabIndex: "0",
             idKey : this.props.idKey,
-            ref:"fieldInput"
+            ref:"fieldInput",
+            fieldDef: this.props.fieldDef
         };
 
         switch (type) {
@@ -135,8 +138,20 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.DURATION_FORMAT:
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.PERCENT_FORMAT: {
-            return <DefaultFieldValueEditor type="number"
-                                       {...commonProps} />;
+            if (_.has(this.props, 'fieldDef.choices')) {
+                return (
+                    <ComboBoxFieldValueEditor choices={this.props.fieldDef.choices}
+                        {...commonProps} />
+                );
+            } else {
+                return <NumericFieldValueEditor {...commonProps}
+                    onChange={this.props.onChange ? this.props.onChange : ()=>{}}
+                    isInvalid={this.props.isInvalid}
+                    invalidMessage={this.props.invalidMessage}
+                    onValidated={this.props.onValidated}
+                    classes="cellEdit"
+                />;
+            }
         }
 
         case FieldFormats.USER_FORMAT: {
@@ -173,14 +188,20 @@ const FieldValueEditor = React.createClass({
         }
     },
 
+    onBlur(vals) {
+        if (this.props.onBlur) {
+            this.props.onBlur(vals);
+        }
+        this.onExitField(vals.value);
+    },
     /**
      * onExitField called on Blur to check if the field is valid and send the validation results to onValidated
      */
-    onExitField(ev) {
+    onExitField(value) {
         // need to rerender this field with invalid state
         //on aggrid redraw, and on qbgrid set state
         if (this.props.validateFieldValue && this.props.onValidated) {
-            let fldValue = ev ? ev.target.value : ReactDOM.findDOMNode(this.refs.fieldInput).value;
+            let fldValue = value ? value : ReactDOM.findDOMNode(this.refs.fieldInput).value;
             let results = this.props.validateFieldValue(this.props.fieldDef, fldValue);
             this.props.onValidated(results);
         }

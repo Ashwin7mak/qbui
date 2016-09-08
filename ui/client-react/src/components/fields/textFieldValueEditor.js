@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
+import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 
 /**
  * # TextFieldValueEditor
@@ -42,8 +43,11 @@ const TextFieldValueEditor = React.createClass({
          * listen for losing focus by setting a callback to the onBlur prop. */
         onBlur: React.PropTypes.func,
 
-        idKey: React.PropTypes.any
+        idKey: React.PropTypes.any,
 
+        /**
+         * data type attributes for the field */
+        fieldDef: React.PropTypes.object
     },
 
     getDefaultProps() {
@@ -53,9 +57,19 @@ const TextFieldValueEditor = React.createClass({
     },
 
     onChange(ev) {
-        //TODO: add debounce support for reduced re-rendering
         if (this.props.onChange) {
             this.props.onChange(ev.target.value);
+        }
+    },
+
+    //send up the chain an object with value and formatted display value
+    onBlur(ev) {
+        let theVals = {
+            value: ev.target.value
+        };
+        theVals.display = textFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        if (this.props.onBlur) {
+            this.props.onBlur({value: ev.target.value, display: ev.target.value});
         }
     },
 
@@ -75,7 +89,7 @@ const TextFieldValueEditor = React.createClass({
                           key={'inp' + this.props.idKey}
                           placeholder={this.props.placeholder}
                           onChange={this.onChange}
-                          onBlur={this.props.onBlur} />;
+                          onBlur={this.onBlur} />;
 
 
         return  (this.props.isInvalid ?
