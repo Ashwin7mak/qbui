@@ -512,4 +512,56 @@ describe('AGGrid functions', () => {
         expect(editRowsTabbingOutOfLast.length).toBe(1);
         expect(editRowsTabbingOutOfLast).not.toBe(editRowsAfterSecondDblClick);
     });
+
+    it('has cells that are not editable (Record Id)', () => {
+        // Add uneditable row to the data
+        let dataWithUneditableField = Object.assign({}, fakeReportData_before);
+        dataWithUneditableField.data.records[0].col_record_id = {
+            id: 5,
+            value: 100,
+            display: "100"
+        };
+        dataWithUneditableField.data.columns.push({
+            id: 5,
+            field: "col_record_id",
+            headerName: "record_id",
+            datatypeAttributes: {type:"NUMERIC"},
+            userEditableValue: false
+        });
+
+        let callBacks = {
+            onEditRecordStart: function() {
+            },
+        };
+        const TestParent = React.createFactory(React.createClass({
+            // wrap the grid in a container with styles needed to render editing UI
+            render() {
+                return (<div className="reportToolsAndContentContainer singleSelection">
+                        <AGGrid ref="grid"
+                                flux={flux}
+                                keyField="col_record_id"
+                                uniqueIdentifier="col_record_id"
+                                onEditRecordStart={callBacks.onEditRecordStart}
+                                actions={TableActionsMock}
+                                records={dataWithUneditableField.data.records}
+                                columns={dataWithUneditableField.data.columns}
+                                loading={false}
+                                />
+                </div>);
+            }
+        }));
+
+        const parent = TestUtils.renderIntoDocument(TestParent());
+        let columnCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row:first-child .gridCell");
+        let firstCell = columnCells[0].parentElement;
+        mouseclick(firstCell, 2);
+
+        // There should be one cell that is not editable
+        let nonEditableCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing .nonEditable");
+        expect(nonEditableCells.length).toBe(1);
+
+        // The remaining cells should still be editable
+        let editableCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing .cellEditWrapper");
+        expect(editableCells.length).toBe(dataWithUneditableField.data.columns.length - 1);
+    });
 });
