@@ -6,6 +6,7 @@ import Logger from '../utils/logger';
 import Locale from '../locales/locales';
 import * as SchemaConsts from "../constants/schema";
 import FieldFormats from '../utils/fieldFormats';
+import NumberUtils from '../utils/numberUtils';
 import * as textFormatter from '../../../common/src/formatter/textFormatter';
 import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormatter';
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
@@ -488,8 +489,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.tblId = report.tblId;
         this.rptId = report.rptId;
 
-        this.pageOffset = (report.offset >= 0) ? report.offset : this.pageOffset;
-        this.numRows = report.numRows ? report.numRows : this.numRows;
+        this.pageOffset = NumberUtils.isInt(report.offset) && report.offset >= 0 ? report.offset : this.pageOffset;
+        this.numRows = NumberUtils.isInt(report.numRows) && report.numRows ? report.numRows : this.numRows;
 
         this.searchStringForFiltering = '' ;
         this.selections  = new FacetSelections();
