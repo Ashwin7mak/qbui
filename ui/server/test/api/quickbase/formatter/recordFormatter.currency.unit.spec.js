@@ -44,7 +44,7 @@ describe('Currency record formatter unit test', function() {
 
         //Test for right of sign
         var rightOfSignFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
-        rightOfSignFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        rightOfSignFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'LEFT_OF_SIGN';
         var rightOfSignInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightOfSignInput[0][0].value = -2.883;
         var rightOfSignExpected = jBigNum.parse(jBigNum.stringify(rightOfSignInput));
@@ -60,7 +60,7 @@ describe('Currency record formatter unit test', function() {
 
         //Test for right of sign
         var rightOfSignEuroFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
-        rightOfSignEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        rightOfSignEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'LEFT_OF_SIGN';
         rightOfSignEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.symbol = '€';
         var rightOfSignEuroInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightOfSignEuroInput[0][0].value = -2.883;
@@ -78,7 +78,7 @@ describe('Currency record formatter unit test', function() {
 
         //Test for right of sign positive value
         var rightOfSignPositiveEuroFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
-        rightOfSignPositiveEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        rightOfSignPositiveEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'LEFT_OF_SIGN';
         rightOfSignPositiveEuroFieldInfo[0].datatypeAttributes.clientSideAttributes.symbol = '€';
         var rightOfSignPositiveEuroInput = jBigNum.parse(jBigNum.stringify(defaultRecordInput));
         rightOfSignPositiveEuroInput[0][0].value = 2.883;
@@ -87,7 +87,7 @@ describe('Currency record formatter unit test', function() {
 
         //Greater than 16 digits of precision
         var rightOfSignPositiveEuroPrecisionFieldInfo = jBigNum.parse(jBigNum.stringify(noFlagsFieldInfo));
-        rightOfSignPositiveEuroPrecisionFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'RIGHT_OF_SIGN';
+        rightOfSignPositiveEuroPrecisionFieldInfo[0].datatypeAttributes.clientSideAttributes.position = 'LEFT_OF_SIGN';
         rightOfSignPositiveEuroPrecisionFieldInfo[0].datatypeAttributes.clientSideAttributes.symbol = '€';
         rightOfSignPositiveEuroPrecisionFieldInfo[0].decimalPlaces = 6;
         var rightOfSignPositiveEuroPrecisionInput = jBigNum.parse('[[{"id":7,"value":2232323232323.88356267}]]');

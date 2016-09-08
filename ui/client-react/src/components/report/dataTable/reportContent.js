@@ -269,6 +269,9 @@ export let ReportContent = React.createClass({
                 colChange.value = _.cloneDeep(newValue);
                 colChange.display = _.cloneDeep(newDisplay);
                 colChange.field = matchingField.datatypeAttributes;
+                if (colChange.field) {
+                    colChange.field.required = matchingField.required;
+                }
                 payload.push(colChange);
             }
         });
@@ -284,6 +287,7 @@ export let ReportContent = React.createClass({
         colChange.value = _.cloneDeep(value);
         colChange.display = _.cloneDeep(display);
         colChange.field = field.datatypeAttributes;
+        colChange.field.required = field.required;
         payload.push(colChange);
     },
 

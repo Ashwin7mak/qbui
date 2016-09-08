@@ -1,8 +1,9 @@
 import React from 'react';
 
 import FieldFormats from '../../utils/fieldFormats';
-import {MultiLineTextFieldValueRenderer, DateFieldValueRenderer,  NumberFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
+import {MultiLineTextFieldValueRenderer, DateFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
 import TextFieldValueRenderer from './textFieldValueRenderer';
+import NumericFieldValueRenderer from './numericFieldValueRenderer';
 import _ from 'lodash';
 
 /**
@@ -67,13 +68,12 @@ const FieldValueRenderer = React.createClass({
     getRendererForType(commonProperties) {
         switch (this.props.type) {
         case FieldFormats.NUMBER_FORMAT:
+        case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.RATING_FORMAT: {
-            let rendered = this.props.value ?
-                    <NumberFieldValueRenderer value={this.props.value}
+            let rendered = <NumericFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
                                               attributes={this.props.attributes}
                                               key={'nfvr-' + this.props.idKey}
-                                              {...commonProperties}/> :
-                         null;
+                                              {...commonProperties}/>;
             return (rendered);
         }
         case FieldFormats.USER_FORMAT:
@@ -120,7 +120,6 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:
         case FieldFormats.DURATION_FORMAT:
-        case FieldFormats.CURRENCY_FORMAT:
         default: {
             return (
                     <TextFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
