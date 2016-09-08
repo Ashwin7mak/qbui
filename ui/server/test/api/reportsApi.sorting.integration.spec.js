@@ -9,6 +9,7 @@
     var testConsts = require('./api.test.constants');
     var testUtils = require('./api.test.Utils');
     var errorCodes = require('../../src/api/errorCodes');
+    var request = require('request');
 
     // Bluebird Promise library
     var Promise = require('bluebird');
@@ -291,13 +292,9 @@
         });
 
         /**
-         * Negative test to create a report with an sortList param against the Reports API
-         * We currently do not thrown a response error during the create request. Most likely needs to be fixed.
-         *
-         * Java core does throw an exception when trying to parse the sortList
-         * "message":"Invalid sList entry when parsing fid.  sList: adg!@s3.
+         * Negative Test to validate 400 error when calling the Reports API endpoint with invalid sortList param
          */
-        it('Reports API - Should return an empty sortList when creating a report with an invalid sortList', function(done) {
+        it('Records API - Should return 400 error when creating report with an invalid sortList param', function(done) {
 
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
@@ -305,83 +302,20 @@
                 description: 'Invalid sortList',
                 type: 'TABLE',
                 tableId: app.tables[0].id,
-                sortList: {
+                sortList: [{
                     "fieldId": 10,
                     "sortOrder": "desc",
                     "groupType": null
-                },
+                }],
             };
-            // Create a report
-            recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
-                var r = JSON.parse(report.body);
 
-                // Get the report data back, check for sortList prop which also contains groupBy
-                recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.GET).then(function(reportGetResult) {
-                    var reportResult = JSON.parse(reportGetResult.body);
-                    assert.strictEqual(reportResult.name, reportToCreate.name, 'Unexpected report name returned');
-                    assert.strictEqual(reportResult.description, reportToCreate.description, 'Unexpected report description returned');
-                    assert.strictEqual(reportResult.type, reportToCreate.type, 'Unexpected report type returned');
-                    assert.strictEqual(reportResult.tableId, reportToCreate.tableId, 'Unexpected tableId returned');
-                    assert.deepStrictEqual(reportResult.sortList, [], 'Unexpected sortList returned');
-                    done();
-                });
-            }).catch(function(error) {
-                log.error(JSON.stringify(error));
-                done();
-            });
-        });
-
-        /**
-         * Test to validate sorting by calling the Records API endpoint
-         */
-        it('Records API - Should return sorted records when calling the endpoint with a sortList param', function(done) {
-
-            var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-
-            // Params to add to the record GET request
-            var sortList = sortByTextFid + '.' + sortByNumFid;
-            // Fid order to sort the expected records by
-            var sortFids = [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 7);}];
-            var sortOrder = ['asc', 'asc'];
-
-            // Query the records API with a supplied sortList, then verify sorting of the returned value
-            recordBase.apiBase.executeRequest(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList).then(function(recordGetResult) {
-                var recordResult = JSON.parse(recordGetResult.body);
-                // Sort the expected records by text field (id 6)
-                //var sortedExpectedRecords = sortRecords(sortFids, records);
-                var sortedExpectedRecords = sortRecords(records, sortFids, sortOrder);
-                // Verify sorted records
-                verifyRecords(recordResult.records, sortedExpectedRecords);
-                // Everything passed (here and in the above async call)
-                done();
-            }).catch(function(error) {
-                log.error(JSON.stringify(error));
-                done();
-            });
-        });
-
-        // TODO: QBSE-22556
-        // TODO: Reports API needs to throw proper errors when calling with invalid sortList param
-        /**
-         * Negative Test to validate 400 error when calling the Records API endpoint with invalid sortList param
-         */
-        it('Records API - Should return 400 error when calling the endpoint with an invalid sortList param', function(done) {
-
-            var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
-
-            // Invalid param to add to the record GET request
-            var sortList = 'int!';
-
-            // Query the records API with a supplied sortList, then verify sorting of the returned value
-            recordBase.apiBase.executeRequest(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList).then(function(recordGetError) {
-                var requestResult = JSON.parse(recordGetError.body);
-                assert.strictEqual(requestResult.statusCode, '400', 'Unexpected status code returned');
-                assert.strictEqual(requestResult.body.httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
-                assert.strictEqual(requestResult.body.message, 'The field as specified ' + sortList + ' cannot be resolved by either name or field ID.',
+            // Create a report with invalid sortList FID
+            request(recordBase.apiBase.createRequest(reportEndpoint, consts.POST, reportToCreate), function(error, response) {
+                var result = JSON.parse(response.body);
+                assert.equal(response.statusCode, 400, 'Unexpected status code.');
+                assert.strictEqual(result[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
+                assert.strictEqual(result[0].message, 'The field id is not valid.',
                     'Unexpected error message returned');
-                done();
-            }).catch(function(error) {
-                log.error(JSON.stringify(error));
                 done();
             });
         });

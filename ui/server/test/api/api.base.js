@@ -276,6 +276,37 @@
                 return deferred.promise;
             },
 
+            //Creates a REST request against the instance's realm using the configured javaHost
+            createRequest              : function(stringPath, method, body, headers, params) {
+                //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
+                var subdomain = '';
+                if (this.realm) {
+                    subdomain = this.realm.subdomain;
+                }
+                var opts = generateRequestOpts(stringPath, method, subdomain);
+                if (body) {
+                    opts.body = jsonBigNum.stringify(body);
+                }
+                // if we have a GET request and have params to add (since GET requests don't use JSON body values)
+                // we have to add those to the end of the generated URL as ?param=value
+                if (params) {
+                    // remove the trailing slash and add the parameters
+                    opts.url = opts.url.substring(0, opts.url.length - 1) + params;
+                }
+                //Setup headers
+                if (headers) {
+                    opts.headers = headers;
+                } else {
+                    opts.headers = DEFAULT_HEADERS;
+                }
+                if (this.authTicket) {
+                    opts.headers[TICKET_HEADER_KEY] = this.authTicket;
+                }
+                var reqInfo = opts.url;
+                log.debug('About to execute the request: ' + jsonBigNum.stringify(opts));
+                return opts;
+            },
+
             //Create a realm for API tests to run against and generates a ticket
             initialize        : function() {
                 var self = this;
