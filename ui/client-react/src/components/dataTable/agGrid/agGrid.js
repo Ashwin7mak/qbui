@@ -66,6 +66,7 @@ let AGGrid = React.createClass({
         loading: React.PropTypes.bool,
         isInlineEditOpen: React.PropTypes.bool,
         records: React.PropTypes.array,
+        appUsers:React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
         validateRecord: React.PropTypes.func,
@@ -349,7 +350,7 @@ let AGGrid = React.createClass({
      * @param colDef
      */
     onCellTab(colDef) {
-
+                               console.log('tabbed');
         const lastColumn = this.props.columns[this.props.columns.length - 1];
         if (colDef.field === lastColumn.field) {
             // tabbed out of last column
@@ -363,6 +364,16 @@ let AGGrid = React.createClass({
             }
         }
     },
+
+    /**
+     * get list of users for this app
+     *
+     * @returns {*|Array}
+     */
+    getAppUsers() {
+        return this.props.appUsers;
+    },
+
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
@@ -382,6 +393,8 @@ let AGGrid = React.createClass({
         this.gridOptions.context.keyField = this.props.keyField;
         this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
+
+        this.gridOptions.context.getAppUsers = this.getAppUsers;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
         this.gridOptions.getRowClass = this.getRowClass;

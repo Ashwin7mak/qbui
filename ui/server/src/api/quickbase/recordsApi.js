@@ -392,6 +392,7 @@
              * @returns Promise
              */
             saveSingleRecord: function(req) {
+                console.log('save single',req);
                 let errors = _validateChanges(req);
                 if (errors.length === 0) {
                     var opts = requestHelper.setOptions(req);

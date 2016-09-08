@@ -755,6 +755,7 @@ export let ReportContent = React.createClass({
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 onFieldChange={this.handleFieldChange}
                                 onRecordChange={this.handleRecordChange}
+                                appUsers={this.props.appUsers}
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
@@ -777,6 +778,7 @@ export let ReportContent = React.createClass({
                                 uniqueIdentifier={this.props.uniqueIdentifier || SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={keyField}
                                 appId={this.props.reportData.appId}
+                                appUsers={this.props.appUsers}
                                 isInlineEditOpen={this.props.pendEdits && this.props.pendEdits.isInlineEditOpen ? this.props.pendEdits.isInlineEditOpen : false}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordStart={this.handleEditRecordStart}
@@ -817,6 +819,7 @@ export let ReportContent = React.createClass({
                         }
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
+                                            appUsers={this.props.appUsers}
                                             uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                             keyField={keyField}
                                             reportHeader={this.props.reportHeader}

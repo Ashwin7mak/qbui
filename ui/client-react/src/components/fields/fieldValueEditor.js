@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 
 import FieldFormats from '../../utils/fieldFormats' ;
 import {DefaultFieldValueEditor, MultiLineTextFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
-    DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
+    DateTimeFieldValueEditor, TimeFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import TextFieldValueEditor from './textFieldValueEditor';
+import UserFieldValueEditor from './userFieldValueEditor';
 import _ from 'lodash';
 
 /**
@@ -140,7 +141,7 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.USER_FORMAT: {
-            return <UserFieldValueEditor  {...commonProps}/>;
+            return <UserFieldValueEditor  {...commonProps} appUsers={this.props.appUsers}/>;
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {

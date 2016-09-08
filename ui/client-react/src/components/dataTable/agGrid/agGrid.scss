@@ -46,6 +46,8 @@ $cell-edit-background-edit: #f3f8fe;
 
     .ag-body-container {
         background-color: $color2;
+        margin-bottom:160px;
+
     }
     /* prevent clipping of actions and dropdowns in 1st column */
     .ag-pinned-left-cols-viewport {
@@ -484,9 +486,12 @@ $cell-edit-background-edit: #f3f8fe;
                 display:inline-block;
                 margin-right:2px;
                 margin-left: 2px;
-                height: 30px;
+
                 background-color: $input-bg-color;
 
+                &:not(.Select) {
+                    height: 30px;
+                }
                 &.dateTimeField>* {
                     border:0;
                     .input-group.date input.form-control {

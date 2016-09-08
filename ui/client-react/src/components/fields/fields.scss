@@ -112,3 +112,7 @@ $data-font-size: $font-size-p;
 .cellData.NoWrap {
   white-space: nowrap;
 }
+
+.tooltip-inner {
+  max-width:none;
+}

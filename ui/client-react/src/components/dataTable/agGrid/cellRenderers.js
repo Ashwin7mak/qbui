@@ -16,6 +16,7 @@ import * as dateTimeFormatter from '../../../../../common/src/formatter/dateTime
 import * as timeOfDayFormatter from '../../../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../../../common/src/formatter/numericFormatter';
 import * as textFormatter from '../../../../../common/src/formatter/textFormatter';
+import * as userFormatter from '../../../../../common/src/formatter/userFormatter';
 
 import IconActions from '../../actions/iconActions';
 
@@ -56,6 +57,8 @@ class CellRendererFactory  {
                              initialValue={props.params.value}
                              editing={props.editing}
                              params={props.params}
+                             appUsers={props.params &&  props.params.context ?
+                                 props.params.context.getAppUsers() : []}
                              qbGrid={props.qbGrid}
                              key={CellRendererFactory.getCellKey(props)}
         />;
@@ -76,6 +79,7 @@ const CellRenderer = React.createClass({
         initialValue: React.PropTypes.object,
         editing: React.PropTypes.bool,
         validateFieldValue: React.PropTypes.func,
+        appUsers: React.PropTypes.array,
         qbGrid: React.PropTypes.bool // temporary, used to determine if we need to render both a renderer and editor (for ag-grid)
     },
 
@@ -178,6 +182,7 @@ const CellRenderer = React.createClass({
                                 validateFieldValue={this.props.validateFieldValue}
                                 isInvalid={invalidStatus.isInvalid}
                                 invalidMessage={invalidStatus.invalidMessage}
+                                appUsers={this.props.appUsers}
                     />
                 }
 
@@ -213,6 +218,9 @@ const CellRenderer = React.createClass({
             break;
         case FieldFormats.TEXT_FORMAT:
             this.textCellEdited(value);
+            break;
+        case FieldFormats.USER_FORMAT:
+            this.userCellEdited(value);
             break;
         default:
             this.cellEdited(value);
@@ -278,6 +286,19 @@ const CellRenderer = React.createClass({
         this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
     },
 
+
+    /**
+     *
+     * @param newValue
+     */
+    userCellEdited(newValue) {
+        let theVals = {
+            value: newValue
+        };
+        theVals.display = userFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
+    },
 
     /**
      * date, datetime, or time cell was edited
