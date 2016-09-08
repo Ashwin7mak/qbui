@@ -38,10 +38,11 @@ $action-separator-color: #486c8f;
         .qbIcon {
             font-size:15px;
             vertical-align: baseline;
+            margin-left: 10px;
+            margin-right: 10px;
         }
         .breadcrumbs {
             flex:1 1 auto;
-            margin-left:16px;
             overflow:hidden;
             white-space:nowrap;
             h4 {
