@@ -19,8 +19,8 @@
       "subnet_id": "{{user `aws_subnet_id`}}",
       "vpc_id": "{{user `aws_vpc_id`}}",
       "tags": {
-        "Layer": "3",
-        "App": "NodeJS",
+        "Layer": "4",
+        "App": "CoreUI",
         "Version": "{{user `version`}}"
       }
     }
