@@ -75,24 +75,22 @@ const RowEditActions = React.createClass({
 
         return (
             <span className="editTools">
-
-                 <OverlayTrigger  placement="bottom" overlay={<Tooltip id="cancelSelection">Cancel changes</Tooltip>}>
-                     <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
-                 </OverlayTrigger>
+                <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
+                    <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
+                </QBToolTip>
 
                 {validRow ?
-                     <OverlayTrigger  placement="bottom" overlay={<Tooltip id="saveRecord">Save changes</Tooltip>}>
+                    <QBToolTip tipId="saveRecord" location="bottom" i18nMessageKey="pageActions.saveRecord">
                         <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
-                    </OverlayTrigger> :
+                    </QBToolTip> :
 
                     <QBToolTip  rootClose={true} location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
                         <Button><QBIcon icon="alert" className="invalidRecord"/></Button>
                     </QBToolTip>
                 }
-
-                <OverlayTrigger placement="bottom" overlay={<Tooltip id="addRecord" >Add new record</Tooltip>}>
-                    <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
-                </OverlayTrigger>
+                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
+                  <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
+                </QBToolTip>
 
             </span>);
     }
