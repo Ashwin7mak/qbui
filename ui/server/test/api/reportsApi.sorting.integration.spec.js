@@ -95,6 +95,8 @@
          */
         function verifyRecords(actualRecords, expectedRecords) {
             // Assert if records from report results matches expected records
+            console.log("the actual records  are: " + JSON.stringify(actualRecords));
+            console.log("the expected records  are: " + JSON.stringify(expectedRecords));
             assert.deepStrictEqual(actualRecords, expectedRecords,
                 'Unexpected sorted report records returned: ' + JSON.stringify(actualRecords) + ', Expected: ' + JSON.stringify(expectedRecords));
         }
@@ -129,6 +131,7 @@
                 nonBuiltInFields = recordBase.getNonBuiltInFields(app.tables[0]);
                 // Generate some record JSON objects to add to the app
                 generatedRecords = recordBase.generateRecords(nonBuiltInFields, 5);
+                var generateEmptyRecords = recordBase.generateEmptyRecords(nonBuiltInFields, 1);
                 // TODO: QBSE-22522
                 // TODO: Intermittent bug with duplicate records. By default Java core will sort by recordID value if no sortList specified
                 // TODO: It will not default to this if sortList criteria matches on each fid specified (and no sorting takes place)
@@ -149,6 +152,8 @@
                 });
                 // Add the new record back in to create
                 generatedRecords.push(dupRecord);
+                //Add an empaty record back in to create
+                generatedRecords.push(generateEmptyRecords);
                 // Add the records to the app
                 recordBase.addRecords(app, app.tables[0], generatedRecords).then(function(returnedRecords) {
                     // Push the created records into an array (the add record call also returns the fields used)
@@ -213,7 +218,6 @@
                         }
                     ]
                 },
-                //TODO check below with Don/Ken
                 {
                     message: 'Sort by text field in descending then by numeric field in ascending then by date field in descending order',
                     sortFids: [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 7);}, function(row) {return getSortValue(row, 8);}],
@@ -260,8 +264,6 @@
                     // Get the report data back, check for sortList prop which also contains groupBy
                     recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.GET).then(function(reportGetResult) {
                         var reportResults = JSON.parse(reportGetResult.body);
-                        console.log("the actual sorted records after GET reports are: " + JSON.stringify(reportResults.reportData.data.records));
-
                         //verify report Meta Data
                         assert.strictEqual(reportResults.reportMetaData.data.name, reportToCreate.name, 'Unexpected report name returned in reportMetaData');
                         assert.strictEqual(reportResults.reportMetaData.data.description, reportToCreate.description, 'Unexpected report description returned in reportMetaData');
@@ -271,21 +273,13 @@
                         assert.deepStrictEqual(reportResults.reportData.data.records.length, records.length, 'Unexpected records returned in reportData');
 
                         // Execute a report and check sort order of records
+                        // TODO report/results API is not getting the records sorted.So using reportComponents below to verify.
                         recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents', consts.GET).then(function(reportResult) {
                             var results = JSON.parse(reportResult.body);
-
-                            console.log("the records after GET reports/components are: " + JSON.stringify(results.records));
-
                             // Sort the expected records
                             var sortedExpectedRecords = sortRecords(records, testcase.sortFids, testcase.sortOrder);
                             // Verify sorted records
-                            console.log("the expected sorted records  are: " + JSON.stringify(sortedExpectedRecords));
                             verifyRecords(results.records, sortedExpectedRecords);
-                            //if (testcase.sortList[0].sortOrder === 'desc') {
-                            //    verifyRecords(results.records, sortedExpectedRecords.reverse());
-                            //} else {
-                            //    verifyRecords(results.records, sortedExpectedRecords);
-                            //}
                             done();
                         });
                     });
@@ -311,7 +305,11 @@
                 description: 'Invalid sortList',
                 type: 'TABLE',
                 tableId: app.tables[0].id,
-                sortList: ["adg!@s3"]
+                sortList: {
+                    "fieldId": 10,
+                    "sortOrder": "desc",
+                    "groupType": null
+                },
             };
             // Create a report
             recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
@@ -326,13 +324,10 @@
                     assert.strictEqual(reportResult.tableId, reportToCreate.tableId, 'Unexpected tableId returned');
                     assert.deepStrictEqual(reportResult.sortList, [], 'Unexpected sortList returned');
                     done();
-                }).done(null, done); // This bubbles up errors out of the promise chain to let Mocha know there was a failure
-
-            }).done(null, function(error) {
-                // the then block threw an error
-                // so forward that error to Mocha
-                // same as calling .done(null, done)
-                done(error);
+                });
+            }).catch(function(error) {
+                log.error(JSON.stringify(error));
+                done();
             });
         });
 
@@ -344,24 +339,24 @@
             var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
 
             // Params to add to the record GET request
-            var sortList = sortByTextFid.toString() + '.' + sortByNumFid.toString();
+            var sortList = sortByTextFid + '.' + sortByNumFid;
             // Fid order to sort the expected records by
-            var sortFids = [sortByTextFid, sortByNumFid];
+            var sortFids = [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 7);}];
+            var sortOrder = ['asc', 'asc'];
 
             // Query the records API with a supplied sortList, then verify sorting of the returned value
             recordBase.apiBase.executeRequest(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList).then(function(recordGetResult) {
                 var recordResult = JSON.parse(recordGetResult.body);
                 // Sort the expected records by text field (id 6)
-                var sortedExpectedRecords = sortRecords(sortFids, records);
+                //var sortedExpectedRecords = sortRecords(sortFids, records);
+                var sortedExpectedRecords = sortRecords(records, sortFids, sortOrder);
                 // Verify sorted records
                 verifyRecords(recordResult.records, sortedExpectedRecords);
                 // Everything passed (here and in the above async call)
                 done();
-            }).done(null, function(error) {
-                // the then block threw an error
-                // so forward that error to Mocha
-                // same as calling .done(null, done)
-                done(error);
+            }).catch(function(error) {
+                log.error(JSON.stringify(error));
+                done();
             });
         });
 
@@ -385,11 +380,9 @@
                 assert.strictEqual(requestResult.body.message, 'The field as specified ' + sortList + ' cannot be resolved by either name or field ID.',
                     'Unexpected error message returned');
                 done();
-            }).done(null, function(error) {
-                // the then block threw an error
-                // so forward that error to Mocha
-                // same as calling .done(null, done)
-                done(error);
+            }).catch(function(error) {
+                log.error(JSON.stringify(error));
+                done();
             });
         });
 

@@ -216,6 +216,20 @@
                 return genRecords;
             },
             /**
+             * Uses the generators in the test_generators package to generate a list of empty record objects based on the
+             * given list of fields and number of records. This list can then be passed into the addRecords function.
+             */
+            generateEmptyRecords: function(fields, numRecords) {
+                var generatedEmptyRecords = [];
+                for (var i = 0; i < numRecords; i++) {
+                    var generatedRecord = recordGenerator.generateEmptyRecord(fields);
+                    //console.log(generatedRecord);
+                    generatedEmptyRecords.push(generatedRecord);
+                }
+                console.log("The empty records are: " + JSON.stringify(generatedEmptyRecords));
+                return generatedEmptyRecords;
+            },
+            /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
              * @Returns A promise chain.
              */
