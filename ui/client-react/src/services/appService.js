@@ -32,7 +32,7 @@ class AppService extends BaseService {
     getAppUsers(appId) {
         const users = [
             {
-                userId: "58440038",
+                "userId": "58440038",
                 firstName: "Aditi",
                 lastName: "Goel",
                 screenName: "agoel@quickbase.com",
@@ -53,7 +53,7 @@ class AppService extends BaseService {
                 "email": "cmartinez@quickbase.com"
             },
             {
-                userId: "58453016",
+                "userId": "58453016",
                 firstName: "Drew",
                 lastName: "Stevens",
                 screenName: "dstevens@quickbase.com",

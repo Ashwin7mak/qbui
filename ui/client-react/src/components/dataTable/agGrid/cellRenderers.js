@@ -12,12 +12,6 @@ import RowEditActions from './rowEditActions';
 import CellValueRenderer from './cellValueRenderer';
 import CellEditor from './cellEditor';
 
-import * as dateTimeFormatter from '../../../../../common/src/formatter/dateTimeFormatter';
-import * as timeOfDayFormatter from '../../../../../common/src/formatter/timeOfDayFormatter';
-import * as numericFormatter from '../../../../../common/src/formatter/numericFormatter';
-import * as textFormatter from '../../../../../common/src/formatter/textFormatter';
-import * as userFormatter from '../../../../../common/src/formatter/userFormatter';
-
 import IconActions from '../../actions/iconActions';
 
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
@@ -172,8 +166,10 @@ const CellRenderer = React.createClass({
                 { isEditable && (this.props.editing || !this.props.qbGrid) &&
                     <CellEditor type={cellType}
                                 value={this.state.valueAndDisplay.value}
+                                display={this.state.valueAndDisplay.display}
                                 colDef={this.props.colDef}
-                                onChange={this.onChange}
+                                onChange={this.cellEdited}
+                                onBlur={this.onBlur}
                                 onValidated={this.onValidated}
                                 key={key + '-edt'}
                                 idKey={key + '-edt'}
@@ -202,30 +198,10 @@ const CellRenderer = React.createClass({
         this.cellValidated(results);
     },
 
-    onChange(value) {
-        switch (this.props.type) {
-        case FieldFormats.DATE_FORMAT:
-        case FieldFormats.DATETIME_FORMAT:
-        case FieldFormats.TIME_FORMAT:
-            this.dateTimeCellEdited(value);
-            break;
 
-        case FieldFormats.NUMBER_FORMAT:
-        case FieldFormats.RATING_FORMAT:
-        case FieldFormats.CURRENCY_FORMAT:
-        case FieldFormats.PERCENT_FORMAT:
-            this.numericCellEdited(value);
-            break;
-        case FieldFormats.TEXT_FORMAT:
-            this.textCellEdited(value);
-            break;
-        case FieldFormats.USER_FORMAT:
-            this.userCellEdited(value);
-            break;
-        default:
-            this.cellEdited(value);
+    onBlur(theVals) {
 
-        }
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
     },
 
     cellChanges() {
@@ -271,79 +247,6 @@ const CellRenderer = React.createClass({
         current.isInvalid = result ? result.isInvalid : false;
         current.invalidMessage = result ? result.invalidMessage : null;
         this.setState({validationStatus : current});
-    },
-
-    /**
-     * textcell was edited, update the r/w and r/o value
-     * @param value
-     */
-    textCellEdited(value) {
-        let theVals = {
-            value: value,
-        };
-        theVals.display = textFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
-    },
-
-
-    /**
-     *
-     * @param newValue
-     */
-    userCellEdited(newValue) {
-        let theVals = {
-            value: newValue
-        };
-        theVals.display = userFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
-    },
-
-    /**
-     * date, datetime, or time cell was edited
-     * @param newValue
-     */
-    dateTimeCellEdited(newValue) {
-        let theVals = {
-            value: newValue,
-        };
-        switch (this.props.type) {
-        case FieldFormats.DATE_FORMAT: {
-            // normalized form is YYYY-MM-DD
-            theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-            break;
-        }
-        case FieldFormats.TIME_FORMAT: {
-            // normalized form is 1970-01-01THH:MM:SSZ
-            theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-            break;
-        }
-        case FieldFormats.DATETIME_FORMAT: {
-            // normalized form is YYYY-MM-DDTHH:MM:SSZ
-            theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-            break;
-        }
-        default: {
-            theVals.display = newValue;
-            break;
-        }
-        }
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
-    },
-
-    /**
-     * numeric cell edited, update the display value from common formatter
-     * @param value
-     */
-    numericCellEdited(value) {
-        let theVals = {
-            value: Number(value)
-        };
-        theVals.display = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
     }
 });
 

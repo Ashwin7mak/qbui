@@ -101,12 +101,13 @@ export default {
                 noCheck : "Nein",
                 yesCheck : "Ja"
             },
-            filteredRecordCount :
-                "{filteredRecordCount} von {recordCount} {recordOrRecords} ",
+            filteredRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnungen",
+            filteredSingleRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnen",
             newReport: "Neu",
             organizeReports: "Organisieren",
-            recordCount : "{recordCount} {recordOrRecords} ",
-            recordCountPlaceHolder : "Zählen {recordOrRecords}...",
+            recordCount : "{recordCount} aufzeichnungen",
+            singleRecordCount : "{recordCount} aufzeichnen",
+            recordCountPlaceHolder : "Zählen aufzeichnungen...",
             cardViewCountPlaceHolder : "Zählen...",
             reportNavigationBar : "{pageStart} - {pageEnd}",
             searchPlaceHolder:  "Suchen Sie diese",

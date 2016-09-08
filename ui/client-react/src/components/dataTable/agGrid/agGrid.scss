@@ -79,6 +79,10 @@ $cell-edit-background-edit: #f3f8fe;
                 display: block;
             }
         }
+        .subHeader {
+            text-align: right;
+            display: block;
+        }
     }
     .ag-header {
         overflow:visible;
@@ -412,7 +416,7 @@ $cell-edit-background-edit: #f3f8fe;
     > :not(.cellData) {
         display: none;
     }
-    &.numberFormat {
+    &.numberFormat,  &.currencyFormat, &.percentFormat{
         text-align: right;
     }
 }
@@ -472,6 +476,8 @@ $cell-edit-background-edit: #f3f8fe;
                 display: block;
                 padding-top: 5.5px;
                 cursor: not-allowed;
+                padding-left: 5px;
+                padding-right: 5px;
             }
             .cellEditWrapper {
                 display:flex;

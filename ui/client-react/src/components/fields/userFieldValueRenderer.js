@@ -10,6 +10,7 @@ const UserFieldValueRenderer = React.createClass({
     },
 
     render() {
+                           console.log('renderme',this.props);
         const tooltip = (
             <Tooltip id="tooltip" style={{"whiteSpace":"nowrap"}} >
                 {this.props.value.screenName && <div>User Name: {this.props.value.screenName}</div>}
