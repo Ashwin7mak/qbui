@@ -6,6 +6,7 @@ import './report.scss';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
 import Breakpoints from "../../utils/breakpoints";
 import StringUtils from "../../utils/stringUtils";
+import NumberUtils from "../../utils/numberUtils";
 
 var ReportNavigation = React.createClass({
     propTypes: {
@@ -42,7 +43,7 @@ var ReportNavigation = React.createClass({
         let isError = this.props.reportData.error ? true : false;
         let isLoading = this.props.reportData.loading ? true : false;
         let isCountingRecords = this.props.reportData.countingTotalRecords ? true : false;
-        let recordCount = (this.props.reportData.data && !isNaN(this.props.reportData.data.recordsCount)) ? this.props.reportData.data.recordsCount : 0;
+        let recordCount = this.props.reportData.data && NumberUtils.isInt(this.props.reportData.data.recordsCount) ? this.props.reportData.data.recordsCount : 0;
 
         let isReportFiltered = false;
         if (this.props.reportData.searchStringForFiltering && StringUtils.trim(this.props.reportData.searchStringForFiltering).length !== 0) {
@@ -51,8 +52,6 @@ var ReportNavigation = React.createClass({
             isReportFiltered = this.props.reportData.selections ? this.props.reportData.selections.hasAnySelections() : false;
         }
 
-        // let showNavigationForFilteredPage = (isReportFiltered && this.props.reportData.data.filteredRecordsCount <= this.props.pageEnd) ? false : true;
-        // let showNavigationForNonFilteredPage = !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
         let showNavigation = !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
         if (isReportFiltered) {
             showNavigation = this.props.reportData.data.filteredRecordsCount > this.props.pageEnd;
