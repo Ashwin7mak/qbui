@@ -62,14 +62,12 @@
         var sortByDateFid = 8;
 
         /*
-         * Given an array of record JSON objects sort them by a certain field(s) (specified by a list of fids)
+         * Given an array of record JSON objects sort them by a certain field(s) (specified by a list of fids and sort direction)
          * @Returns An array of sorted record JSON objects
          */
-        function sortRecords(fids, recordsToSort) {
-            // sorts the list of records passing each record to the function that returns the value to sort with
-            var sortedRecords = _.sortBy(recordsToSort, function(row)  {
-                return getSortValue(row, fids);
-            });
+        function sortRecords(recordsToSort, sortFids, sortOrder) {
+            // sorts the list of records passed in specified sort order for a given fid.
+            var sortedRecords = _.orderBy(recordsToSort, sortFids, sortOrder);
 
             return sortedRecords;
         }
@@ -79,17 +77,15 @@
          * Function is a custom sort function used by lodash from within the sortRecords function
          * @Returns The value that lodash should sort on
          */
-        function getSortValue(record, fids) {
+        function getSortValue(record, fid) {
             // By default returns nothing if not found
             var val = [];
-            fids.forEach(function(fid) {
-                // loop through the columns (fields) in the record
-                record.forEach(function(col) {
-                    // find the column we are sorting on and return its value
-                    if (col.id === fid) {
-                        val.push(col.value);
-                    }
-                });
+            // loop through the columns (fields) in the record
+            record.forEach(function(col) {
+                // find the column we are sorting on and return its value
+                if (col.id === fid) {
+                    val.push(col.value);
+                }
             });
             return val;
         }
@@ -178,18 +174,20 @@
             return [
                 {
                     message: 'Sort by Date field in ascending order',
+                    sortFids: [function(row) {return getSortValue(row, 8);}],
+                    sortOrder: ['asc'],
                     sortList: [
                         {
                             "fieldId": 8,
                             "sortOrder": "asc",
                             "groupType": null
                         }
-                    ],
-                    sortFids: [sortByDateFid]
+                    ]
                 },
                 {
                     message: 'Sort by Date field in descending order',
-                    sortFids: [sortByDateFid],
+                    sortFids: [function(row) {return getSortValue(row, 8);}],
+                    sortOrder: ['desc'],
                     sortList: [
                         {
                             "fieldId": 8,
@@ -199,8 +197,9 @@
                     ]
                 },
                 {
-                    message: 'Sort by text field then by numeric field in ascending order',
-                    sortFids: [sortByTextFid, sortByNumFid],
+                    message: 'Sort by text field in ascending then by numeric field in descending order',
+                    sortFids: [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 7);}],
+                    sortOrder: ['asc', 'desc'],
                     sortList: [
                         {
                             "fieldId": 6,
@@ -209,14 +208,16 @@
                         },
                         {
                             "fieldId": 7,
-                            "sortOrder": "asc",
+                            "sortOrder": "desc",
                             "groupType": null
                         }
                     ]
                 },
+                //TODO check below with Don/Ken
                 {
-                    message: 'Sort by text field then by numeric field then by date field in descending order',
-                    sortFids: [sortByTextFid, sortByNumFid, sortByDateFid],
+                    message: 'Sort by text field in descending then by numeric field in ascending then by date field in descending order',
+                    sortFids: [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 7);}, function(row) {return getSortValue(row, 8);}],
+                    sortOrder: ['desc', 'desc', 'asc'],
                     sortList: [
                         {
                             "fieldId": 6,
@@ -230,7 +231,7 @@
                         },
                         {
                             "fieldId": 8,
-                            "sortOrder": "desc",
+                            "sortOrder": "asc",
                             "groupType": null
                         }
                     ]
@@ -275,15 +276,16 @@
 
                             console.log("the records after GET reports/components are: " + JSON.stringify(results.records));
 
-                            // Sort the expected records by text field (id 6)
-                            var sortedExpectedRecords = sortRecords(testcase.sortFids, records);
+                            // Sort the expected records
+                            var sortedExpectedRecords = sortRecords(records, testcase.sortFids, testcase.sortOrder);
                             // Verify sorted records
                             console.log("the expected sorted records  are: " + JSON.stringify(sortedExpectedRecords));
-                            if (testcase.sortList[0].sortOrder === 'desc') {
-                                verifyRecords(results.records, sortedExpectedRecords.reverse());
-                            } else {
-                                verifyRecords(results.records, sortedExpectedRecords);
-                            }
+                            verifyRecords(results.records, sortedExpectedRecords);
+                            //if (testcase.sortList[0].sortOrder === 'desc') {
+                            //    verifyRecords(results.records, sortedExpectedRecords.reverse());
+                            //} else {
+                            //    verifyRecords(results.records, sortedExpectedRecords);
+                            //}
                             done();
                         });
                     });
