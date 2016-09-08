@@ -119,6 +119,46 @@ export const DateFieldValueEditor = React.createClass({
         this.props.onChange(newValue);
     },
 
+    //send up the chain an object with value and formatted display value
+    onBlur(ev) {
+        let theVals = this.getFormattedValues(ev.target.value);
+        if (this.props.onBlur) {
+            this.props.onBlur(theVals);
+        }
+    },
+
+    getFormattedValues(newValue) {
+        let theVals = {
+            value: newValue,
+        };
+        switch (this.props.type) {
+        case FieldFormats.DATE_FORMAT:
+            {
+                // normalized form is YYYY-MM-DD
+                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        case FieldFormats.TIME_FORMAT:
+            {
+                // normalized form is 1970-01-01THH:MM:SSZ
+                theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        case FieldFormats.DATETIME_FORMAT:
+            {
+                // normalized form is YYYY-MM-DDTHH:MM:SSZ
+                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        default:
+            {
+                theVals.display = newValue;
+                break;
+            }
+        }
+        return theVals;
+    },
+
     render() {
         const format = "YYYY-MM-DD";
         const fixedDate = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : moment().format(format);
@@ -126,7 +166,7 @@ export const DateFieldValueEditor = React.createClass({
             <DateTimeField dateTime={fixedDate}
                            format={format}
                            inputFormat="MM-DD-YYYY"
-                           onBlur={this.props.onBlur}
+                           onBlur={this.onBlur}
                            onChange={this.onChange}
                            mode="date"/>
         </div>;
@@ -163,6 +203,46 @@ export const DateTimeFieldValueEditor = React.createClass({
         this.props.onChange(newValue);
     },
 
+    //send up the chain an object with value and formatted display value
+    onBlur(ev) {
+        let theVals = this.getFormattedValues(ev.target.value);
+        if (this.props.onBlur) {
+            this.props.onBlur(theVals);
+        }
+    },
+
+    getFormattedValues(newValue) {
+        let theVals = {
+            value: newValue,
+        };
+        switch (this.props.type) {
+        case FieldFormats.DATE_FORMAT:
+            {
+                // normalized form is YYYY-MM-DD
+                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        case FieldFormats.TIME_FORMAT:
+            {
+                // normalized form is 1970-01-01THH:MM:SSZ
+                theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        case FieldFormats.DATETIME_FORMAT:
+            {
+                // normalized form is YYYY-MM-DDTHH:MM:SSZ
+                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        default:
+            {
+                theVals.display = newValue;
+                break;
+            }
+        }
+        return theVals;
+    },
+
     render() {
 
         const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
@@ -173,7 +253,7 @@ export const DateTimeFieldValueEditor = React.createClass({
             <DateTimeField dateTime={dateTime}
                            format={format}
                            inputFormat="MM-DD-YYYY hh:mm:ss A"
-                           onBlur={this.props.onBlur}
+                           onBlur={this.onBlur}
                            onChange={this.onChange}
                            mode="datetime"/>
         </div>;

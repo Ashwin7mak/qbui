@@ -102,7 +102,9 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    datatypeAttributes: {}
+                    datatypeAttributes: {
+                        type: "NUMERIC"
+                    }
                 }
             }
         };
@@ -110,13 +112,13 @@ describe('AGGrid cell editor functions', () => {
         component = TestUtils.renderIntoDocument(<NumericCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll(".numberCell span");
+        const valueElements = ReactDOM.findDOMNode(component).querySelectorAll("div.numericField");
         expect(valueElements.length).toBe(1);
 
         expect(valueElements[0].innerHTML).toEqual(params.value.display);
 
         const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
-        expect(edit.type).toEqual("number");
+        expect(edit.type).toEqual("text");
 
         edit.value = 456;
         TestUtils.Simulate.change(edit);

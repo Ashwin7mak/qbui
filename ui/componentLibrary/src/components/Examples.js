@@ -5,7 +5,8 @@ import TextFieldValueEditorExample from 'raw!../examples/TextFieldValueEditorExa
 import FieldValueEditorExample from 'raw!../examples/FieldValueEditorExample.js';
 import FieldValueRendererExample from 'raw!../examples/FieldValueRendererExample.js';
 import MultiLineTextFieldValueEditorExample from 'raw!../examples/MultiLineTextFieldValueEditorExample.js';
-
+import NumericFieldValueEditorExample from 'raw!../examples/NumericFieldValueEditorExample.js';
+import NumericFieldValueRendererExample from 'raw!../examples/NumericFieldValueRendererExample.js';
 
 export default {
     QBPanel: QBPanelExample,
@@ -14,5 +15,7 @@ export default {
     TextFieldValueEditor: TextFieldValueEditorExample,
     FieldValueRenderer: FieldValueRendererExample,
     FieldValueEditor: FieldValueEditorExample,
-    MultiLineTextFieldValueEditor: MultiLineTextFieldValueEditorExample
+    MultiLineTextFieldValueEditor: MultiLineTextFieldValueEditorExample,
+    NumericFieldValueRenderer: NumericFieldValueRendererExample,
+    NumericFieldValueEditor: NumericFieldValueEditorExample,
 };
