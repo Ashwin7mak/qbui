@@ -34,7 +34,7 @@ class PostgresSqlConnectInfo extends SqlConnectInfo {
                 throw InvalidUserDataException ;
             }
             def swimlaneId = Utils.executeCmd("${rootDirectory}/tools/ci/rdsGetTagValue.sh " + rdsInstance + " SwimlaneID");
-            def environment = Utils.executeCmd("${rootDirectory}/tools/ci/rdsGetTagValue.sh " + rdsInstance + " QuickBaseEnv");
+            def environment = Utils.executeCmd("${rootDirectory}/tools/ci/rdsGetTagValue.sh " + rdsInstance + " Environment");
 
             printInfo(awsEngine, rdsTag, rdsInstance, swimlaneId, environment)
             postgresUser = "dts";
