@@ -46,6 +46,16 @@ const MultiLineTextFieldValueEditor = React.createClass({
         }
     },
 
+    onBlur(ev) {
+        let theVals = {
+            value: ev.target.value
+        };
+        theVals.display = textFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        if (this.props.onBlur) {
+            this.props.onBlur({value: ev.target.value, display: ev.target.value});
+        }
+    },
+
     componentDidMount() {
         this.resize();
     },
@@ -78,7 +88,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
     render() {
         return <textarea ref="textarea" style={this.state.style}
                                         onChange={this.onChange}
-                                        onBlur={this.props.onBlur}
+                                        onBlur={this.onBlur}
                                         tabIndex="0"
                                         onKeyUp={this.onKeyUp}
                                         className="cellEdit"
