@@ -24,7 +24,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     statics: {
-        MAX_TEXTAREA_HEIGHT: 100
+        MAX_TEXTAREA_HEIGHT: 200
     },
 
     getInitialState() {
@@ -81,7 +81,9 @@ const MultiLineTextFieldValueEditor = React.createClass({
      * @param ev
      */
     onKeyUp(ev) {
-        this.resize();
+        if (this.refs.textarea.scrollHeight < 200) {
+            this.resize();
+        }
     },
 
     render() {
