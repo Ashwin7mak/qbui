@@ -96,6 +96,10 @@
             return this.generateEntityName();
         },
 
+        //Generates and returns a psuedo-random char string of specified length
+        generateStringWithFixLength: function(length) {
+            return chance.string({length: length, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'});
+        },
 
         //Generates and returns a psuedo-random char string of specified length
         generateEntityName: function(options) {
