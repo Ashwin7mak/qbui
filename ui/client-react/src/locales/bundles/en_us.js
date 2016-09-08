@@ -53,6 +53,7 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
+            saveAndAddRecord: "Save and add a new row",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
             edit: "Edit",
@@ -103,12 +104,13 @@ export default {
                 noCheck : "No",
                 yesCheck : "Yes"
             },
-            filteredRecordCount :
-                "{filteredRecordCount} of {recordCount} {recordOrRecords} ",
+            filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
+            filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
             newReport: "New",
             organizeReports: "Organize",
-            recordCount : "{recordCount} {recordOrRecords} ",
-            recordCountPlaceHolder : "Counting {recordOrRecords}...",
+            recordCount : "{recordCount} records",
+            singleRecordCount : "{recordCount} record",
+            recordCountPlaceHolder : "Counting records...",
             cardViewCountPlaceHolder : "Counting...",
             reportNavigationBar : "{pageStart} - {pageEnd}",
             previousToolTip: "Back",

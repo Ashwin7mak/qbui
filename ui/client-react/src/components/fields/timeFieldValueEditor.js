@@ -66,6 +66,46 @@ const TimeFieldValueEditor = React.createClass({
         return inputValue;
     },
 
+    //send up the chain an object with value and formatted display value
+    onBlur(ev) {
+        let theVals = this.getFormattedValues(ev.target.value);
+        if (this.props.onBlur) {
+            this.props.onBlur(theVals);
+        }
+    },
+
+    getFormattedValues(newValue) {
+        let theVals = {
+            value: newValue
+        };
+        switch (this.props.type) {
+        case FieldFormats.DATE_FORMAT:
+            {
+                // normalized form is YYYY-MM-DD
+                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        case FieldFormats.TIME_FORMAT:
+            {
+                // normalized form is 1970-01-01THH:MM:SSZ
+                theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        case FieldFormats.DATETIME_FORMAT:
+            {
+                // normalized form is YYYY-MM-DDTHH:MM:SSZ
+                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        default:
+            {
+                theVals.display = newValue;
+                break;
+            }
+        }
+        return theVals;
+    },
+
     /**
      * Return a map of times for a day by minute, starting at midnight and incrementing per
      * increment input parameter until the end of the day.
@@ -116,7 +156,7 @@ const TimeFieldValueEditor = React.createClass({
         return <div className={classes}>
             <Select
                 name="time-select"
-                //onBlur={this.props.onBlur}
+                //onBlur={this.onBlur}
                 onChange={this.onChange}
                 //onInputChange={this.onInputChange}
                 value={theTime}

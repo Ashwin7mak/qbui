@@ -43,7 +43,6 @@ const DateTimeFieldValueEditor = React.createClass({
         onBlur: React.PropTypes.func,
 
         idKey: React.PropTypes.any
-
     },
 
     render() {

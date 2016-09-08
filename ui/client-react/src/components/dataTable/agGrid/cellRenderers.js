@@ -12,11 +12,6 @@ import RowEditActions from './rowEditActions';
 import CellValueRenderer from './cellValueRenderer';
 import CellEditor from './cellEditor';
 
-import * as dateTimeFormatter from '../../../../../common/src/formatter/dateTimeFormatter';
-import * as timeOfDayFormatter from '../../../../../common/src/formatter/timeOfDayFormatter';
-import * as numericFormatter from '../../../../../common/src/formatter/numericFormatter';
-import * as textFormatter from '../../../../../common/src/formatter/textFormatter';
-
 import IconActions from '../../actions/iconActions';
 
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
@@ -171,7 +166,8 @@ const CellRenderer = React.createClass({
                                 display={this.state.valueAndDisplay.display}
                                 attributes={this.props.colDef.datatypeAttributes}
                                 colDef={this.props.colDef}
-                                onChange={this.onChange}
+                                onChange={this.cellEdited}
+                                onBlur={this.onBlur}
                                 onValidated={this.onValidated}
                                 key={key + '-edt'}
                                 idKey={key + '-edt'}
@@ -199,27 +195,8 @@ const CellRenderer = React.createClass({
         this.cellValidated(results);
     },
 
-    onChange(value) {
-        switch (this.props.type) {
-        case FieldFormats.DATE_FORMAT:
-        case FieldFormats.DATETIME_FORMAT:
-        case FieldFormats.TIME_FORMAT:
-            this.dateTimeCellEdited(value);
-            break;
-
-        case FieldFormats.NUMBER_FORMAT:
-        case FieldFormats.RATING_FORMAT:
-        case FieldFormats.CURRENCY_FORMAT:
-        case FieldFormats.PERCENT_FORMAT:
-            this.numericCellEdited(value);
-            break;
-        case FieldFormats.TEXT_FORMAT:
-            this.textCellEdited(value);
-            break;
-        default:
-            this.cellEdited(value);
-
-        }
+    onBlur(theVals) {
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
     },
 
     cellChanges() {
