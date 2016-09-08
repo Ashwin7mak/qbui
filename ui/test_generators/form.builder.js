@@ -1,5 +1,15 @@
 /**
  * form.builder.js allows you to chain together commands to build a form
+ *
+ * Form structure includes multiple tabs, sections, head and field elements.
+ * form.build.js exposes a list of utility methods to generate single
+ * or multiple form contains customizable sub components.
+ * When the form is built, form.build.js also leverage a list of chain builders, as below.
+ *
+ * form.tab.builder.js     -> responses to generate form tab element.
+ * form.section.builder.js -> responses to generate form section element.
+ * form.element.builder.js -> responses to generate form section header element, and field element
+ *
  * Created by xj on 9/2/16.
  */
 (function() {
