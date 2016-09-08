@@ -138,9 +138,6 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.DURATION_FORMAT:
         case FieldFormats.CURRENCY_FORMAT:
         case FieldFormats.PERCENT_FORMAT: {
-            if (_.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.symbol')) {
-                commonProps.placeholder = commonProps.placeholder ? commonProps.placeholder : this.props.fieldDef.datatypeAttributes.clientSideAttributes.symbol;
-            }
             if (_.has(this.props, 'fieldDef.choices')) {
                 return (
                     <ComboBoxFieldValueEditor choices={this.props.fieldDef.choices}

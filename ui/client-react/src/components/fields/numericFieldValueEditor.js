@@ -115,6 +115,13 @@ const NumericFieldValueEditor = React.createClass({
     },
 
     render() {
+        let placeholder = "";
+        if (this.props.placeholder) {
+            placeholder = this.props.placeholder;
+        } else if (_.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.symbol')) {
+            placeholder = this.props.fieldDef.datatypeAttributes.clientSideAttributes.symbol;
+        }
+
         let classes = 'input numericField';
         // error state css class
         if (this.props.isInvalid) {
@@ -127,7 +134,7 @@ const NumericFieldValueEditor = React.createClass({
                           className={classes}
                           value={this.props.display ? this.props.display : this.props.value}
                           type="text"
-                          placeholder={this.props.placeholder}
+                          placeholder={placeholder}
                           onChange={this.onChange}
                           onBlur={this.onBlur}/>;
 

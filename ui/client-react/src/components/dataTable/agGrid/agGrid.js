@@ -869,13 +869,16 @@ let AGGrid = React.createClass({
         let {headerName} = column;
         //if any of the columns has a units description add that in paratheses in a new line and raise the header height
         let headerSubscript = column.datatypeAttributes && column.datatypeAttributes.unitsDescription ? '(' + column.datatypeAttributes.unitsDescription + ')' : null;
+        let headerSubscriptHTML = "";
 
         if (headerSubscript) {
             this.rowHeight = consts.HEADER_WITH_SUB_HEIGHT;
+            headerSubscriptHTML = `<span class="subHeader">${headerSubscript}</span>`;
         }
+
         let cell = document.createElement('div');
         cell.className = "ag-header-cell";
-        let headerSubscriptHTML = headerSubscript ? `<span class="subHeader">${headerSubscript}</span>` : "";
+
         cell.innerHTML = `<div class="ag-header-cell-text">${headerName}${headerSubscriptHTML}</div>
             <span class="ag-header-icon ag-header-cell-menu-button "></span>`;
 
@@ -890,7 +893,7 @@ let AGGrid = React.createClass({
 
                 let {datatypeAttributes} = obj;
 
-                obj.headerClass = "gridHeaderCell ";
+                obj.headerClass = "gridHeaderCell";
                 obj.headerCellTemplate = this.getHeaderCellTemplate(obj);
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
@@ -904,7 +907,7 @@ let AGGrid = React.createClass({
                             switch (datatypeAttributes[attr]) {
 
                             case serverTypeConsts.NUMERIC:
-                                obj.headerClass += "AlignRight";
+                                obj.headerClass += " AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
                                 break;
                             case serverTypeConsts.DATE :
@@ -923,15 +926,15 @@ let AGGrid = React.createClass({
                                 obj.cellRenderer = reactCellRendererFactory(UserCellRenderer);
                                 break;
                             case serverTypeConsts.CURRENCY :
-                                obj.headerClass += "AlignRight";
+                                obj.headerClass += " AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(CurrencyCellRenderer);
                                 break;
                             case serverTypeConsts.RATING :
-                                obj.headerClass += "AlignRight";
+                                obj.headerClass += " AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(RatingCellRenderer);
                                 break;
                             case serverTypeConsts.PERCENT :
-                                obj.headerClass += "AlignRight";
+                                obj.headerClass += " AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
                             case serverTypeConsts.DURATION :
