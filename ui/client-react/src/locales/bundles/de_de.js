@@ -50,6 +50,7 @@ export default {
         },
         pageActions: {
             addRecord: "Datensatz hinzufügen",
+            saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
             favorite: "Favorit",
             gridEdit: "Gitter bearbeiten",
             edit: "Bearbeiten",

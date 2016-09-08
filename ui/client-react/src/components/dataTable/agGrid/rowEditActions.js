@@ -89,10 +89,9 @@ const RowEditActions = React.createClass({
                         <Button><QBIcon icon="alert" className="invalidRecord"/></Button>
                     </QBToolTip>
                 }
-
-                <OverlayTrigger placement="bottom" overlay={<Tooltip id="addRecord" >Add new record</Tooltip>}>
-                    <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
-                </OverlayTrigger>
+                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
+                  <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
+                </QBToolTip>
 
             </span>);
     }

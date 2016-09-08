@@ -53,6 +53,7 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
+            saveAndAddRecord: "Save and add a new row",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
             edit: "Edit",
