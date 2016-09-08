@@ -486,8 +486,32 @@ $cell-edit-background-edit: #f3f8fe;
                 margin-left: 2px;
                 height: 30px;
                 background-color: $input-bg-color;
+                &.timeCell {
+                    width: 100%;
+                    border: none;
+                    margin-top: 3px;
+                    .Select {
+                        height: 28px;
+                    }
+                    .Select-control {
+                        border-radius: 2px;
+                        height: 28px;
+                    }
+                    .Select-input {
+                        height: 28px;
+                    }
+                    .Select-value {
+                        line-height: 28px;
+                    }
+                    .Select-placeholder {
+                        line-height: 28px;
+                    }
+                }
+                &.dateCell {
+                    margin-top: 3px;
+                }
                 &.dateTimeCell {
-                    width: 87px;
+                    width: 92px;
                     vertical-align: middle;
                     .dropdown-toggle {
                         width: 85px;
@@ -502,19 +526,13 @@ $cell-edit-background-edit: #f3f8fe;
                         }
                     }
                 }
-                &.timeCell {
-                    .bootstrap-datetimepicker-widget td span {
-                        height: 27px;
-                        line-height: 27px;
-                    }
-                }
                 &.dateTimeField>* {
                     border:0;
                     .input-group.date input.form-control {
                         border:0;
-                        padding:0;
+                        padding:3px;
                         font-size: 12px;
-                        height: 25px;
+                        height: 28px;
                         border-radius:0;
                     }
                     .input-group.date .input-group-addon {

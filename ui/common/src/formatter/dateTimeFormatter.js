@@ -6,17 +6,18 @@
     'use strict';
     var moment = require('moment-timezone');
     var consts = require('../constants');
+
     //FORMATTING COMPONENTS
     var DASH = '-';
     var TWO_DIGIT_MONTH = 'MM';
     var MONTH_ABBREV = 'MMM';
     var DAY_OF_WEEK = 'dddd, ';
-    var TIME = ' h:mm A';
+    var TIME = 'h:mm A';
     var FOUR_DIGIT_YEAR = 'YYYY';
     var TWO_DIGIT_YEAR = 'YY';
     var TWO_DIGIT_DAY = 'DD';
     var DEFAULT_TIMEZONE = 'America/Los_Angeles';
-    var TIMEZONE_FORMATTER = ' z';
+    var TIMEZONE_FORMATTER = 'z';
     //Base formats
     var DATE_FORMATS = Object.freeze({
         MM_DD_YY  : TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
@@ -49,14 +50,6 @@
         return noYearString;
     }
 
-    function showTime(formatString) {
-        return formatString + TIME;
-    }
-
-    function showTimeZone(formatString) {
-        return formatString + TIMEZONE_FORMATTER;
-    }
-
     module.exports = {
 
         /**
@@ -71,30 +64,53 @@
             return JAVA_TO_JS_DATE_FORMATS;
         },
 
-        generateFormat: function(fieldInfo) {
-            var jsDateFormat;
+        getDateFormat: function(fieldInfo) {
+            var jsDateFormat = '';
             if (fieldInfo) {
                 jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.dateFormat];
             }
+
+            // apply a default date format if none defined
             if (!jsDateFormat) {
                 jsDateFormat = DATE_FORMATS.MM_DD_YYYY;
-            }
-            if (fieldInfo.showTime) {
-                jsDateFormat = showTime(jsDateFormat);
-            }
-            if (fieldInfo.showTimeZone) {
-                jsDateFormat = showTimeZone(jsDateFormat);
-            }
-            if (fieldInfo.showMonthAsName) {
-                jsDateFormat = showMonthAsName(jsDateFormat);
-            }
-            if (fieldInfo.showDayOfWeek) {
-                jsDateFormat = showDayOfWeek(jsDateFormat);
             }
             return jsDateFormat;
         },
 
-        format        : function(fieldValue, fieldInfo) {
+        getTimeFormat: function(fieldInfo) {
+            var jsTimeFormat = '';
+            if (fieldInfo.showTime) {
+                jsTimeFormat = TIME;
+            }
+            if (fieldInfo.showTimeZone) {
+                jsTimeFormat += (fieldInfo.showTime ? ' ' : '') + TIMEZONE_FORMATTER;
+            }
+            return jsTimeFormat;
+        },
+
+        generateFormat: function(fieldInfo) {
+            //  get date formatting requirements
+            var jsDateFormat = this.getDateFormat(fieldInfo);
+            //  get time formatting requirements
+            var jsTimeFormat = this.getTimeFormat(fieldInfo);
+
+            var jsFormat = '';
+            if (jsDateFormat) {
+                jsFormat = jsDateFormat + (jsTimeFormat ? ' ' : '') + jsTimeFormat;
+            } else {
+                jsFormat = jsTimeFormat;
+            }
+
+            if (fieldInfo.showMonthAsName) {
+                jsFormat = showMonthAsName(jsDateFormat);
+            }
+            if (fieldInfo.showDayOfWeek) {
+                jsFormat = showDayOfWeek(jsDateFormat);
+            }
+            return jsFormat;
+        },
+
+        format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }

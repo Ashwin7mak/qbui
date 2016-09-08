@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import DatePicker from 'react-bootstrap-datetimepicker';
+import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
 import moment from 'moment';
 
 /**
@@ -22,6 +23,9 @@ const DateFieldValueEditor = React.createClass({
 
         /* the display date value */
         display: React.PropTypes.string,
+
+        /* date attributes */
+        attributes: React.PropTypes.object,
 
         /**
          * renders with red border if true */
@@ -57,6 +61,15 @@ const DateFieldValueEditor = React.createClass({
         this.props.onChange(newValue);
     },
 
+    getDateFormat() {
+        let formatter = 'MM-DD-YYYY';   //default
+        if (this.props.attributes && this.props.attributes.dateFormat) {
+            let formatters = dateTimeFormatter.getJavaToJavaScriptDateFormats();
+            formatter = formatters[this.props.attributes.dateFormat];
+        }
+        return formatter;
+    },
+
     render() {
         let classes = 'cellEdit dateTimeField dateCell';
         let singlePicker = true;
@@ -69,16 +82,20 @@ const DateFieldValueEditor = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        const format = "YYYY-MM-DD";
-        const theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(format) : moment().format(format);
+        let format = dateTimeFormatter.getDateFormat(this.props.attributes);
+        const theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(format) : '';
+
+        //  if no date, then use the format as help placeholder
+        const defaultText = theDate ? theDate : format;
 
         return <div className={classes}>
             <DatePicker dateTime={theDate}
                         format={format}
-                        inputFormat="MM/DD/YYYY"
+                        inputFormat={format}
                         onBlur={this.props.onBlur}
                         onChange={this.onChange}
-                        mode="date"/>
+                        mode="date"
+                        defaultText={defaultText}/>
         </div>;
     }
 

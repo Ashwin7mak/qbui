@@ -114,6 +114,7 @@ const FieldValueEditor = React.createClass({
         let commonProps = {
             value: this.props.value,
             display: this.props.display,
+            attributes: this.props.attributes,
             onChange: this.props.onChange,
             onBlur: this.onExitField,
             onValidated: this.props.onValidated,

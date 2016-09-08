@@ -2,16 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
-import DatePicker from 'react-bootstrap-datetimepicker';
-import moment from 'moment';
 import {MenuItem, DropdownButton} from 'react-bootstrap';
+import ReactSelect from "react-select";
+import 'react-select/dist/react-select.css';
+import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
+import moment from 'moment';
+
 /**
  * # TimeFieldValueEditor
  *
  * An editable rendering of a time field. The component can be supplied a value or not. Used within a FieldValueEditor
  *
  */
-
 const TimeFieldValueEditor = React.createClass({
     displayName: 'TimeFieldValueEditor',
 
@@ -22,6 +24,9 @@ const TimeFieldValueEditor = React.createClass({
 
         /* the display time value */
         display: React.PropTypes.string,
+
+        /* field attributes */
+        attributes: React.PropTypes.object,
 
         /**
          * renders with red border if true */
@@ -63,14 +68,15 @@ const TimeFieldValueEditor = React.createClass({
      *
      * @returns {Array}
      */
-    getTimes(increment) {
+    getTimes(increment, attributes) {
         let map = [];
         let time = moment().startOf('day');     // set to midnight
         let endOfDay = moment().endOf('day');
+        let format = dateTimeFormatter.getTimeFormat(attributes);
 
         //  Loop until we are on the next day
         while (time.isBefore(endOfDay)) {
-            map.push({key:time.format("HH:mm"), display:time.format("hh:mm a")});
+            map.push({value:time.format("HH:mm"), label:time.format(format)});
             time.add(increment, 'm');
         }
         return map;
@@ -78,7 +84,6 @@ const TimeFieldValueEditor = React.createClass({
 
     render() {
         let classes = 'cellEdit dateTimeField timeCell';
-        let singlePicker = true;
 
         // error state css class
         if (this.props.isInvalid) {
@@ -88,37 +93,32 @@ const TimeFieldValueEditor = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        //const defaultFormat = "HH:mm:ss";
-        //const displayFormat = "hh:mm a";
-        //const theTime = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, ''), defaultFormat).format(displayFormat) : moment().format(displayFormat);
+        let theTime = '';
 
-        //<DropdownButton bsSize="small" title={theTime} key={this.props.key} id="dropdown-size-small">
-        //    {this.getTimes(30).map(function(time, index) {
-        //        return <MenuItem title={time.key}>{time.display}</MenuItem>;
-        //    })}
-        //</DropdownButton>
-        //<div className="input-group date">
-        //    <input type="text" className="form-control"/>
-        //</div>
-
-        let inputValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '00:00:00';
-        let timeOnlyFormat = 'HH:mm:ss';
-        let pickerFormat = 'YYYY-MM-DD hh:mm a';
-        let pickerDateTime = '';
-        if (moment(inputValue, timeOnlyFormat, true).isValid()) {
-            let today = moment().format("YYYY-MM-DD ") + inputValue;   // get today's date and append the time
-            pickerDateTime = moment(today).format(pickerFormat);
-        } else {
-            pickerDateTime = inputValue ? moment(inputValue).format(pickerFormat) : moment().format(pickerFormat);
+        let inputValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+        if (inputValue) {
+            let timeOnlyFormat = 'HH:mm:ss';
+            let format = dateTimeFormatter.getTimeFormat(this.props.attributes);
+            if (moment(inputValue, timeOnlyFormat, true).isValid()) {
+                let today = moment().format("YYYY-MM-DD ") + inputValue;   // get today's date and append the time
+                theTime = moment(today).format(format);
+            } else {
+                theTime = moment(inputValue).format(format);
+            }
         }
 
+        let options = this.getTimes(30, this.props.attributes);
+
         return <div className={classes}>
-            <DatePicker dateTime={pickerDateTime}
-                        format={pickerFormat}
-                        inputFormat="hh:mm a"
-                        onBlur={this.props.onBlur}
-                        onChange={this.onChange}
-                        mode="time"/>
+            <ReactSelect
+                name="time-select"
+                onBlur={this.props.onBlur}
+                onChange={this.onChange}
+                value={theTime}
+                options={options}
+                placeholder={theTime ? theTime : 'hh:mm'}
+                clearable={false}
+            />
         </div>;
     }
 
