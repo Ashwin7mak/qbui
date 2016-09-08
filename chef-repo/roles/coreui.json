@@ -27,12 +27,8 @@
     },
     "nodejs": {
       "app_deploy": {
-        "deployed_name": "webhooks",
-        "nexus": {
-          "repository": "snapshots",
-          "group_id": "com.quickbase",
-          "artifact_id": "webhooks"
-        }
+        "app_name": "helloworld",
+        "artifact_url": "https://gist.githubusercontent.com/rippinrobr/859451/raw/5cc95f4ca1a49c1f6139f533dc7438cc941c4376/hello-world.js"
       }
     }
   },
