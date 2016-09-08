@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import {MenuItem, DropdownButton} from 'react-bootstrap';
-import ReactSelect from "react-select";
+import Select from "react-select";
 import 'react-select/dist/react-select.css';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
 import moment from 'moment';
@@ -62,6 +62,10 @@ const TimeFieldValueEditor = React.createClass({
         this.props.onChange(newValue);
     },
 
+    onInputChange(inputValue) {
+        return inputValue;
+    },
+
     /**
      * Return a map of times for a day by minute, starting at midnight and incrementing per
      * increment input parameter until the end of the day.
@@ -110,10 +114,11 @@ const TimeFieldValueEditor = React.createClass({
         let options = this.getTimes(30, this.props.attributes);
 
         return <div className={classes}>
-            <ReactSelect
+            <Select
                 name="time-select"
-                onBlur={this.props.onBlur}
+                //onBlur={this.props.onBlur}
                 onChange={this.onChange}
+                //onInputChange={this.onInputChange}
                 value={theTime}
                 options={options}
                 placeholder={theTime ? theTime : 'hh:mm'}
