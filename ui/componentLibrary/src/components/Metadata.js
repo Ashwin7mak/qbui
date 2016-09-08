@@ -11,8 +11,7 @@ import _ from 'lodash';
 
 var Metadata = _.merge(QBPanelMetadata, QBIconMetadata,
     TextFieldValueRendererMetadata, TextFieldValueEditorMetadata,
-    FieldValueRendererMetadata, FieldValueEditorMetadata, MultiLineTextFieldValueEditorMetadata);
-    FieldValueRendererMetadata, FieldValueEditorMetadata,
+    FieldValueRendererMetadata, FieldValueEditorMetadata, MultiLineTextFieldValueEditorMetadata,
     NumericFieldValueRendererMetadata, NumericFieldValueEditorMetadata);
 
 export default Metadata;
