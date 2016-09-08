@@ -39,13 +39,6 @@ class AppService extends BaseService {
                 email: "agoel@quickbase.com"
             },
             {
-                "userId": "58452987",
-                "firstName": "",
-                "lastName": "",
-                "screenName": "dhatch@quickbase.com",
-                "email": "dhatch@quickbase.com"
-            },
-            {
                 "userId": "58452986",
                 "firstName": "Claire",
                 "lastName": "Martininez",
@@ -58,13 +51,6 @@ class AppService extends BaseService {
                 lastName: "Stevens",
                 screenName: "dstevens@quickbase.com",
                 email: "dstevens@quickbase.com"
-            },
-            {
-                "userId": "58453190",
-                "firstName": "first_-a4b5cfc3-3267-4267-a59c-3d4871199470",
-                "lastName": "last_-4309af3b-d650-414a-8afc-cd6eff486a4f",
-                "screenName": "pNmECQNGCj99057833@g88.net",
-                "email": "pNmECQNGCj99057833@g88.net"
             }
         ];
         return new Promise((resolve, reject) => {
