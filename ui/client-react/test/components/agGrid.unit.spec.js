@@ -119,6 +119,32 @@ function mouseclick(element, clickCount = 1) {
     element.dispatchEvent(event);
 }
 
+function getUneditableFieldTestData(options) {
+    // Add uneditable row to the data
+    let testData = Object.assign({}, fakeReportData_before);
+
+    // Remove checkboxes because they cause extra inputs and it messes up the count unexpectedly
+    delete testData.data.records[0].col_checkbox;
+    delete testData.data.records[1].col_checkbox;
+    testData.data.columns.splice(3, 1);
+
+    // Add uneditable data or a record ID field
+    testData.data.records[0].col_record_id = {
+        id: 5,
+        value: 100,
+        display: "100"
+    };
+    testData.data.columns.push({
+        id: 5,
+        field: (options.recordId ? "Record ID#" : "col_record_id"),
+        headerName: "record_id",
+        datatypeAttributes: {type:"NUMERIC"},
+        userEditableValue: options.userEditableValue
+    });
+
+    return testData;
+}
+
 describe('AGGrid functions', () => {
     'use strict';
 
@@ -513,21 +539,8 @@ describe('AGGrid functions', () => {
         expect(editRowsTabbingOutOfLast).not.toBe(editRowsAfterSecondDblClick);
     });
 
-    it('has cells that are not editable (Record Id)', () => {
-        // Add uneditable row to the data
-        let dataWithUneditableField = Object.assign({}, fakeReportData_before);
-        dataWithUneditableField.data.records[0].col_record_id = {
-            id: 5,
-            value: 100,
-            display: "100"
-        };
-        dataWithUneditableField.data.columns.push({
-            id: 5,
-            field: "col_record_id",
-            headerName: "record_id",
-            datatypeAttributes: {type:"NUMERIC"},
-            userEditableValue: false
-        });
+    it('does not show input fields for cells that are not user editable', () => {
+        let dataWithUneditableField = getUneditableFieldTestData({userEditableValue: false, recordId: false});
 
         let callBacks = {
             onEditRecordStart: function() {
@@ -556,12 +569,62 @@ describe('AGGrid functions', () => {
         let firstCell = columnCells[0].parentElement;
         mouseclick(firstCell, 2);
 
-        // There should be one cell that is not editable
-        let nonEditableCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing .nonEditable");
-        expect(nonEditableCells.length).toBe(1);
+        // There should only inputs for editable cells
+        let editableCellInputs = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing input");
+        expect(editableCellInputs.length).toBe(dataWithUneditableField.data.columns.length - 1);
+    });
 
-        // The remaining cells should still be editable
-        let editableCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing .cellEditWrapper");
-        expect(editableCells.length).toBe(dataWithUneditableField.data.columns.length - 1);
+    it('does not show input fields for record id cells', () => {
+        // Add uneditable row to the data
+        let dataWithRecordIdField = getUneditableFieldTestData({userEditableValue: true, recordId: true});
+
+        // Remove checkboxes because they cause extra inputs and it messes up the count unexpectedly
+        delete dataWithRecordIdField.data.records[0].col_checkbox;
+        delete dataWithRecordIdField.data.records[1].col_checkbox;
+        dataWithRecordIdField.data.columns.splice(3, 1);
+
+        dataWithRecordIdField.data.records[0].col_record_id = {
+            id: 5,
+            value: 100,
+            display: "100"
+        };
+        dataWithRecordIdField.data.columns.push({
+            id: 5,
+            field: "Record ID#",
+            headerName: "record_id",
+            datatypeAttributes: {type:"NUMERIC"},
+            userEditableValue: false
+        });
+
+        let callBacks = {
+            onEditRecordStart: function() {
+            },
+        };
+        const TestParent = React.createFactory(React.createClass({
+            // wrap the grid in a container with styles needed to render editing UI
+            render() {
+                return (<div className="reportToolsAndContentContainer singleSelection">
+                        <AGGrid ref="grid"
+                                flux={flux}
+                                keyField="col_record_id"
+                                uniqueIdentifier="col_record_id"
+                                onEditRecordStart={callBacks.onEditRecordStart}
+                                actions={TableActionsMock}
+                                records={dataWithRecordIdField.data.records}
+                                columns={dataWithRecordIdField.data.columns}
+                                loading={false}
+                                />
+                </div>);
+            }
+        }));
+
+        const parent = TestUtils.renderIntoDocument(TestParent());
+        let columnCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row:first-child .gridCell");
+        let firstCell = columnCells[0].parentElement;
+        mouseclick(firstCell, 2);
+
+        // There should only inputs for editable cells
+        let editableCellInputs = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing input");
+        expect(editableCellInputs.length).toBe(dataWithRecordIdField.data.columns.length - 1);
     });
 });
