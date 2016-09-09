@@ -20,6 +20,7 @@
         var request = defaultRequest;
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
+        //TODO: move getApps logic into this api
         var appsApi = {
 
             /**
