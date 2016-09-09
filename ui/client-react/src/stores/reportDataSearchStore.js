@@ -7,9 +7,10 @@ let ReportDataSearchStore = Fluxxor.createStore({
     initialize() {
         this.initInput();
         this.bindActions(
-            actions.FILTER_SEARCH_PENDING, this.onFilterSearchPending
+            actions.FILTER_SEARCH_PENDING, this.onFilterSearchPending,
+            actions.LOAD_REPORT, this.onSearchContextChanged,
+            actions.SELECT_TABLE, this.onSearchContextChanged
         );
-
     },
     initInput() {
         this.state =  {
@@ -19,6 +20,11 @@ let ReportDataSearchStore = Fluxxor.createStore({
 
     onFilterSearchPending(payload) {
         this.state.searchStringInput = payload.string;
+        this.emit('change');
+    },
+
+    onSearchContextChanged(payload) {
+        this.state.searchStringInput = '';
         this.emit('change');
     },
 
