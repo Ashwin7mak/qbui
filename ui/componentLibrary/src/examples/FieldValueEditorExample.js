@@ -9,6 +9,9 @@ let fieldDefWithPlaceholder = {
 let fieldDefWithRequired = {
     required : true
 };
+let fieldDefWithCurrencySymbol = {
+    "datatypeAttributes" : {"clientSideAttributes" : {"symbol" : "$"}}
+};
 
 const basicFieldValueEditor = (
     <div>
@@ -56,6 +59,22 @@ const basicFieldValueEditor = (
             <dd>
                 <FieldValueEditor type={2} value={editValue3} />
             </dd>
+
+        <dt>Numeric Field Editor field is required and show required indicator:</dt>
+        <dd>
+            <FieldValueEditor type={2} value={editValue3}
+                              fieldDef={fieldDefWithRequired} indicateRequired={true}/>
+        </dd>
+
+        <dt>Numeric Field Editor with a value and an error:</dt>
+        <dd>
+            <FieldValueEditor type={2} value={editValue3} isInvalid={editValue2Invalid} invalidMessage="Sample invalid message"/>
+        </dd>
+
+        <dt>Numeric Field Editor with Numeric Field type with currency symbol (no placeholder or value): </dt>
+        <dd>
+            <FieldValueEditor type={2} fieldDef={fieldDefWithCurrencySymbol} />
+        </dd>
 
     </div>
 );

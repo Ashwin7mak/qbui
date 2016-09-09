@@ -42,88 +42,6 @@ export const DefaultFieldValueEditor = React.createClass({
     }
 });
 
-
-/**
- * a multi-line text editor that dynamically changes its height
- */
-export const MultiLineTextFieldValueEditor = React.createClass({
-    displayName: 'MultiLineTextFieldValueEditor',
-
-    propTypes: {
-        value: React.PropTypes.string,
-        type: React.PropTypes.string,
-        onChange: React.PropTypes.func,
-        onBlur: React.PropTypes.func
-    },
-
-    statics: {
-        MAX_TEXTAREA_HEIGHT: 100
-    },
-    getDefaultProps() {
-        return {
-            value: "",
-            type: "text"
-        };
-    },
-
-    getInitialState() {
-        return {
-            style: {
-                height: "auto"
-            }
-        };
-    },
-
-    /**
-     * delegate text changes via callback
-     * @param ev
-     */
-    onChange(ev) {
-        this.props.onChange(ev.target.value);
-    },
-
-    componentDidMount() {
-        this.resize();
-    },
-
-    /**
-     * reset height to the natural value, unless it exceeds MAX_TEXTAREA_HEIGHT,
-     * in which case start using vertical scrolling
-     */
-    resize() {
-        this.setState({style: {height: "auto"}}, () => {
-            // now we can query the actual (auto) height
-            let newHeight = this.refs.textarea.scrollHeight;
-
-            if (newHeight < MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT) {
-                this.setState({style: {height: newHeight}});
-            } else {
-                this.setState({style: {height: MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT, overflowY: "auto"}});
-            }
-        });
-    },
-
-    /**
-     * force resizing during typing
-     * @param ev
-     */
-    onKeyUp(ev) {
-        this.resize();
-    },
-
-    render() {
-
-        return <textarea ref="textarea" style={this.state.style}
-                         onChange={this.onChange}
-                         onBlur={this.props.onBlur}
-                         tabIndex="0"
-                         onKeyUp={this.onKeyUp}
-                         className="cellEdit"
-                         rows="1"
-                         value={this.props.value}/>;
-    }
-});
-
 /**
  * placeholder for user picker
  */
@@ -201,6 +119,46 @@ export const DateFieldValueEditor = React.createClass({
         this.props.onChange(newValue);
     },
 
+    //send up the chain an object with value and formatted display value
+    onBlur(ev) {
+        let theVals = this.getFormattedValues(ev.target.value);
+        if (this.props.onBlur) {
+            this.props.onBlur(theVals);
+        }
+    },
+
+    getFormattedValues(newValue) {
+        let theVals = {
+            value: newValue,
+        };
+        switch (this.props.type) {
+        case FieldFormats.DATE_FORMAT:
+            {
+                // normalized form is YYYY-MM-DD
+                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        case FieldFormats.TIME_FORMAT:
+            {
+                // normalized form is 1970-01-01THH:MM:SSZ
+                theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        case FieldFormats.DATETIME_FORMAT:
+            {
+                // normalized form is YYYY-MM-DDTHH:MM:SSZ
+                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        default:
+            {
+                theVals.display = newValue;
+                break;
+            }
+        }
+        return theVals;
+    },
+
     render() {
         const format = "YYYY-MM-DD";
         const fixedDate = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : moment().format(format);
@@ -208,7 +166,7 @@ export const DateFieldValueEditor = React.createClass({
             <DateTimeField dateTime={fixedDate}
                            format={format}
                            inputFormat="MM-DD-YYYY"
-                           onBlur={this.props.onBlur}
+                           onBlur={this.onBlur}
                            onChange={this.onChange}
                            mode="date"/>
         </div>;
@@ -245,6 +203,46 @@ export const DateTimeFieldValueEditor = React.createClass({
         this.props.onChange(newValue);
     },
 
+    //send up the chain an object with value and formatted display value
+    onBlur(ev) {
+        let theVals = this.getFormattedValues(ev.target.value);
+        if (this.props.onBlur) {
+            this.props.onBlur(theVals);
+        }
+    },
+
+    getFormattedValues(newValue) {
+        let theVals = {
+            value: newValue,
+        };
+        switch (this.props.type) {
+        case FieldFormats.DATE_FORMAT:
+            {
+                // normalized form is YYYY-MM-DD
+                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        case FieldFormats.TIME_FORMAT:
+            {
+                // normalized form is 1970-01-01THH:MM:SSZ
+                theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        case FieldFormats.DATETIME_FORMAT:
+            {
+                // normalized form is YYYY-MM-DDTHH:MM:SSZ
+                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+                break;
+            }
+        default:
+            {
+                theVals.display = newValue;
+                break;
+            }
+        }
+        return theVals;
+    },
+
     render() {
 
         const format = "YYYY-MM-DDTHH:mm:ss.SSSZ";
@@ -255,7 +253,7 @@ export const DateTimeFieldValueEditor = React.createClass({
             <DateTimeField dateTime={dateTime}
                            format={format}
                            inputFormat="MM-DD-YYYY hh:mm:ss A"
-                           onBlur={this.props.onBlur}
+                           onBlur={this.onBlur}
                            onChange={this.onChange}
                            mode="datetime"/>
         </div>;
