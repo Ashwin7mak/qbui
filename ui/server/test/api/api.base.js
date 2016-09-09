@@ -276,8 +276,8 @@
                 return deferred.promise;
             },
 
-            //Creates a REST request against the instance's realm using the configured javaHost
-            createRequest              : function(stringPath, method, body, headers, params) {
+            //Creates a REST request Object against the instance's realm using the configured javaHost
+            createRequestObject              : function(stringPath, method, body, headers, params) {
                 //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
                 var subdomain = '';
                 if (this.realm) {

@@ -223,10 +223,8 @@
                 var generatedEmptyRecords = [];
                 for (var i = 0; i < numRecords; i++) {
                     var generatedRecord = recordGenerator.generateEmptyRecord(fields);
-                    //console.log(generatedRecord);
                     generatedEmptyRecords.push(generatedRecord);
                 }
-                console.log("The empty records are: " + JSON.stringify(generatedEmptyRecords));
                 return generatedEmptyRecords;
             },
             /**

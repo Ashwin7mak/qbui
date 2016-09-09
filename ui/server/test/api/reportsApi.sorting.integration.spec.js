@@ -20,33 +20,6 @@
     // Generator modules
     var appGenerator = require('../../../test_generators/app.generator.js');
 
-    /*
-     * Sorting and Grouping overview:
-     *
-     * In order to handle sorting and grouping for the client, Node uses BOTH the Reports and Records Java API endpoints (not just Records).
-     * It uses the Java Reports API in order to store and get the report's metadata containing the sortList parameter (also known as slist in Java)
-     * This parameter holds both the group by and sort by data for the set of fid (or fids).
-     * sortList (in this context) is an array that contains a string (or strings) and is in the following format: ['6:V']
-     * Node will use this endpoint to gather the metadata of the report, then query the Java Records API endpoint to get a sorted list of records.
-     * Node will then take this record list and use the gathered report metadata to do the actual grouping of records.
-     * It then returns this to the client ui.
-     *
-     * It's important to note that NO grouping is done on the Java side (only storing of the group by value).
-     *
-     * When accepting custom client side requests for sorting / grouping (example changing it via the UI), Node does not use the Java Reports endpoint
-     * to query for the record set to present to the client UI (as in running the actual report). This is because the Java Reports API does not accept
-     * overrides with custom parameters (like query, clist for example).
-     *
-     * Node calls the Java Records API to get a record set back and will supply its own sortList parameter to have Java return the sorted record list.
-     * It's important to note here that here the sortList parameter is only a string of fids separated by the dot character .
-     * This parameter knows nothing about grouping and is in the format '6.7.8'
-     *
-     * The tests below are integration tests for how Node uses these Java API endpoints. It can be argued that we could separate them into two files
-     * but for now I'll leave them here as a feature set for clarity sake. When / if there is more error checking implemented on the Java Reports API for
-     * the sortList parameters (see below) and the test case number increases we can break them up into separate spec files.
-     *
-     * - klabak
-     */
     describe('API - Validate report sorting execution', function() {
         // Set timeout for all tests in the spec file
         this.timeout(testConsts.INTEGRATION_TIMEOUT);
@@ -96,8 +69,6 @@
          */
         function verifyRecords(actualRecords, expectedRecords) {
             // Assert if records from report results matches expected records
-            console.log("the actual records  are: " + JSON.stringify(actualRecords));
-            console.log("the expected records  are: " + JSON.stringify(expectedRecords));
             assert.deepStrictEqual(actualRecords, expectedRecords,
                 'Unexpected sorted report records returned: ' + JSON.stringify(actualRecords) + ', Expected: ' + JSON.stringify(expectedRecords));
         }
@@ -310,7 +281,7 @@
             };
 
             // Create a report with invalid sortList FID
-            request(recordBase.apiBase.createRequest(reportEndpoint, consts.POST, reportToCreate), function(error, response) {
+            request(recordBase.apiBase.createRequestObject(reportEndpoint, consts.POST, reportToCreate), function(error, response) {
                 var result = JSON.parse(response.body);
                 assert.strictEqual(response.statusCode, 400, 'Unexpected status code.');
                 assert.strictEqual(result[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
@@ -351,17 +322,17 @@
         });
 
         /**
-         * Negative Test to validate 400 error when calling the Reports API endpoint with invalid sortList param
+         * Negative Test to validate 400 error when calling the Records API endpoint with invalid sortList param
          */
-        it('Records API - Should return 400 error when calling record endpoint with an invalid sortList param', function(done) {
+        it('Records API - Should return 400 error when calling records API endpoint with an invalid sortList param', function(done) {
 
             var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
 
             // Params to add to the record GET request
             var sortList = 'int!&&&';
 
-            // Create a report with invalid sortList FID
-            request(recordBase.apiBase.createRequest(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList), function(error, response) {
+            // Query a records API endpoint with invalid sortList FID
+            request(recordBase.apiBase.createRequestObject(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList), function(error, response) {
                 var requestResult = JSON.parse(response.body);
                 assert.strictEqual(response.statusCode, 400, 'Unexpected status code returned');
                 assert.strictEqual(JSON.parse(requestResult.body)[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
