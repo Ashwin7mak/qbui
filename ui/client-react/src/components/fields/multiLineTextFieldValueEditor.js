@@ -30,6 +30,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
     getInitialState() {
         return {
             style: {
+                width: 200,
                 height: "auto"
             }
         };
@@ -69,9 +70,9 @@ const MultiLineTextFieldValueEditor = React.createClass({
             let newHeight = this.refs.textarea.scrollHeight;
 
             if (newHeight < MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT) {
-                this.setState({style: {height: newHeight}});
+                this.setState({style: {height: newHeight, width: 200}});
             } else {
-                this.setState({style: {height: MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT, overflowY: "auto"}});
+                this.setState({style: {height: MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT, width: 200, overflowY: "auto"}});
             }
         });
     },
