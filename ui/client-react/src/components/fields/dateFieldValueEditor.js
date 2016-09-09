@@ -52,7 +52,13 @@ const DateFieldValueEditor = React.createClass({
     },
 
     onChange(newValue) {
-        this.props.onChange(newValue);
+        //  extract the time from the original value
+        let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+
+        //  extract the time component from the original; otherwise use midnight
+        let theDate = moment(origValue, "HH:mm:ss").isValid() ? moment(origValue) : moment().set({h:0, m:0, s:0, ms:0});
+
+        this.props.onChange(newValue + theDate.format(" HH:mm:ss"));
     },
 
     //send up the chain an object with value and formatted display value
@@ -105,7 +111,7 @@ const DateFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'cellEdit dateTimeField dateCell';
+        let classes = 'cellEdit dateCell';
         let singlePicker = true;
 
         // error state css class

@@ -505,18 +505,51 @@ $cell-edit-background-edit: #f3f8fe;
                     }
                     .Select-input {
                         height: 28px;
+                        color: $color25;
+                        font-size: 12px;
                     }
                     .Select-value {
                         line-height: 28px;
                     }
                     .Select-placeholder {
                         line-height: 28px;
+                        color: $color25;
+                    }
+                    .Select-option {
+                        color: $color25;
+                        font-size: 12px;
+                        padding-top: 1px;
+                    }
+                }
+                &.timeCell>* {
+                    .Select-placeholder {
+                        font-size: 12px;
                     }
                 }
                 &.dateCell {
                     margin-top: 3px;
                 }
-                &.dateTimeCell {
+                &.dateCell>* {
+                    border: 0;
+                    .input-group.date input.form-control {
+                        border: 0;
+                        padding: 3px;
+                        font-size: 12px;
+                        height: 28px;
+                        border-radius: 0;
+                    }
+                    .input-group.date .input-group-addon {
+                        background: #fff;
+                        height: 21px;
+                        padding: 0;
+                        border: 0;
+                        color: $icon-color;
+                    }
+                    .bootstrap-datetimepicker-widget {
+                        top: 45px !important;
+                    }
+                }
+                &.dateTimeField {
                     width: 92px;
                     vertical-align: middle;
                     .dropdown-toggle {
@@ -524,32 +557,7 @@ $cell-edit-background-edit: #f3f8fe;
                         border: 0;
                     }
                     .bootstrap-datetimepicker-widget {
-                        top: 45px !important;
-                    }
-                    &.dateCell {
-                        .bootstrap-datetimepicker-widget {
-                            right: 120px !important;
-                        }
-                    }
-                }
-                &.dateTimeField>* {
-                    border:0;
-                    .input-group.date input.form-control {
-                        border:0;
-                        padding:3px;
-                        font-size: 12px;
-                        height: 28px;
-                        border-radius:0;
-                    }
-                    .input-group.date .input-group-addon {
-                        background: #fff;
-                        height:21px;
-                        padding:0;
-                        border:0;
-                        color: $icon-color;
-                    }
-                    .bootstrap-datetimepicker-widget {
-                        top: 45px !important;
+                        right: 120px !important;
                     }
                 }
                 &.input-group {

@@ -47,7 +47,7 @@ const DateTimeFieldValueEditor = React.createClass({
 
     render() {
         return <div>
-            <DateFieldValueEditor classes={'dateTimeCell'} id={this.props.idKey} {...this.props}/><TimeFieldValueEditor classes={'dateTimeCell'} id={this.props.idKey} {...this.props} />
+            <DateFieldValueEditor classes={'dateTimeField'} id={this.props.idKey} {...this.props}/><TimeFieldValueEditor classes={'dateTimeField'} id={this.props.idKey} {...this.props} />
         </div>;
     }
 

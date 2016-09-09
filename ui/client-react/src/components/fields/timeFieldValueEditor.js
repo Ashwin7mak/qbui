@@ -59,15 +59,18 @@ const TimeFieldValueEditor = React.createClass({
     },
 
     onChange(newValue) {
-        this.props.onChange(newValue);
-    },
+        //  extract the date from the original value
+        let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
 
-    onInputChange(inputValue) {
-        return inputValue;
+        //  extract the date component from the original; otherwise use today's date
+        let theDate = moment(origValue, "YYYY-MM-DD").isValid() ? moment(origValue) : moment();
+
+        this.props.onChange(theDate.format("YYYY-MM-DD ") + newValue.value);
     },
 
     //send up the chain an object with value and formatted display value
     onBlur(ev) {
+        //TODO onInputChange instead ??
         let theVals = this.getFormattedValues(ev.target.value);
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
@@ -127,7 +130,7 @@ const TimeFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'cellEdit dateTimeField timeCell';
+        let classes = 'cellEdit timeCell';
 
         // error state css class
         if (this.props.isInvalid) {

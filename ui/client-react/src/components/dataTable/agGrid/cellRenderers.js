@@ -248,61 +248,60 @@ const CellRenderer = React.createClass({
      * textcell was edited, update the r/w and r/o value
      * @param value
      */
-    textCellEdited(value) {
-        let theVals = {
-            value: value
-        };
-        theVals.display = textFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
-    },
-
+    //textCellEdited(value) {
+    //    let theVals = {
+    //        value: value
+    //    };
+    //    theVals.display = textFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+    //
+    //    this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
+    //},
 
     /**
      * date, datetime, or time cell was edited
      * @param newValue
      */
-    dateTimeCellEdited(newValue) {
-        let theVals = {
-            value: newValue
-        };
-        switch (this.props.type) {
-        case FieldFormats.DATE_FORMAT: {
-            // normalized form is YYYY-MM-DD
-            theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-            break;
-        }
-        case FieldFormats.TIME_FORMAT: {
-            // normalized form is 1970-01-01THH:MM:SSZ
-            theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-            break;
-        }
-        case FieldFormats.DATETIME_FORMAT: {
-            // normalized form is YYYY-MM-DDTHH:MM:SSZ
-            theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-            break;
-        }
-        default: {
-            theVals.display = newValue;
-            break;
-        }
-        }
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
-    },
+    //dateTimeCellEdited(newValue) {
+    //    let theVals = {
+    //        value: newValue
+    //    };
+    //    switch (this.props.type) {
+    //    case FieldFormats.DATE_FORMAT: {
+    //        // normalized form is YYYY-MM-DD
+    //        theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+    //        break;
+    //    }
+    //    case FieldFormats.TIME_FORMAT: {
+    //        // normalized form is 1970-01-01THH:MM:SSZ
+    //        theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+    //        break;
+    //    }
+    //    case FieldFormats.DATETIME_FORMAT: {
+    //        // normalized form is YYYY-MM-DDTHH:MM:SSZ
+    //        theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+    //        break;
+    //    }
+    //    default: {
+    //        theVals.display = newValue;
+    //        break;
+    //    }
+    //    }
+    //
+    //    this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
+    //},
 
     /**
      * numeric cell edited, update the display value from common formatter
      * @param value
      */
-    numericCellEdited(value) {
-        let theVals = {
-            value: Number(value)
-        };
-        theVals.display = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
-    }
+    //numericCellEdited(value) {
+    //    let theVals = {
+    //        value: Number(value)
+    //    };
+    //    theVals.display = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
+    //
+    //    this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
+    //}
 });
 
 export const TextCellRenderer = React.createClass({
