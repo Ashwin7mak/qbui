@@ -246,7 +246,7 @@
 
         sortingReportTestCases().forEach(function(testcase) {
             /**
-             * Test to create a report with a sortList param via the Reports API (contains the sort order and groupBy properties for the report)
+             * Test to create a report with a sortList param via the Reports API (contains the sortList parameter for the report creation)
              * Verify the report properties after creating, then run the report and verify that the report results are sorted.
              */
             it('Reports API - Create a report: ' + testcase.message +
@@ -294,7 +294,7 @@
         /**
          * Negative Test to validate 400 error when calling the Reports API endpoint with invalid sortList param
          */
-        it('Records API - Should return 400 error when creating report with an invalid sortList param', function(done) {
+        it('Reports API - Should return 400 error when creating report with an invalid sortList param', function(done) {
 
             var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
             var reportToCreate = {
@@ -312,9 +312,60 @@
             // Create a report with invalid sortList FID
             request(recordBase.apiBase.createRequest(reportEndpoint, consts.POST, reportToCreate), function(error, response) {
                 var result = JSON.parse(response.body);
-                assert.equal(response.statusCode, 400, 'Unexpected status code.');
+                assert.strictEqual(response.statusCode, 400, 'Unexpected status code.');
                 assert.strictEqual(result[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
                 assert.strictEqual(result[0].message, 'The field id is not valid.',
+                    'Unexpected error message returned');
+                done();
+            });
+        });
+
+        /**
+         * Test to validate sorting by calling the Records API endpoint
+         */
+        it('Records API - Should return sorted records when calling the endpoint with a sortList param', function(done) {
+
+            var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+
+            // Params to add to the record GET request
+            var sortList = sortByTextFid + '.' + -sortByNumFid + '&&&';
+
+            // Fid order to sort the expected records by
+            var sortFids = [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 7);}];
+            var sortOrder = ['asc', 'desc'];
+
+            // Query the records API with a supplied sortList, then verify sorting of the returned value
+            recordBase.apiBase.executeRequest(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList).then(function(recordGetResult) {
+                var recordResult = JSON.parse(recordGetResult.body);
+                // Sort the expected records by text field (id 6) ascending then by numeric field (id 7) descending
+                var sortedExpectedRecords = sortRecords(records, sortFids, sortOrder);
+                // Verify sorted records
+                verifyRecords(recordResult.records, sortedExpectedRecords);
+                done();
+            }).done(null, function(error) {
+                // the then block threw an error
+                // so forward that error to Mocha
+                // same as calling .done(null, done)
+                done(error);
+            });
+        });
+
+        /**
+         * Negative Test to validate 400 error when calling the Reports API endpoint with invalid sortList param
+         */
+        it('Records API - Should return 400 error when calling record endpoint with an invalid sortList param', function(done) {
+
+            var recordEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
+
+            // Params to add to the record GET request
+            var sortList = 'int!&&&';
+
+            // Create a report with invalid sortList FID
+            request(recordBase.apiBase.createRequest(recordEndpoint, consts.GET, null, null, '?sortList=' + sortList), function(error, response) {
+                var requestResult = JSON.parse(response.body);
+                assert.strictEqual(response.statusCode, 400, 'Unexpected status code returned');
+                assert.strictEqual(JSON.parse(requestResult.body)[0].httpStatus, 'BAD_REQUEST', 'Unexpected http status returned');
+                assert.strictEqual(JSON.parse(requestResult.body)[0].message.replace(/[0-9]/g, ''), 'The field as specified - cannot be resolved by either name or field ID',
                     'Unexpected error message returned');
                 done();
             });
