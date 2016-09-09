@@ -15,6 +15,7 @@ import FilterUtils from '../../utils/filterUtils';
 import * as query from '../../constants/query';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
+import * as Constants from "../../../../common/src/constants";
 
 let logger = new Logger();
 
@@ -142,7 +143,7 @@ let ReportToolsAndContent = React.createClass({
         flux.actions.getFilteredRecords(this.props.selectedAppId,
             this.props.routeParams.tblId,
             typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-            {format:true, offset: this.props.reportData.pageOffset, numRows: this.props.reportData.numRows}, filter, queryParams);
+            {format:true, offset: Constants.PAGE.DEFAULT_OFFSET, numRows: Constants.PAGE.DEFAULT_NUM_ROWS}, filter, queryParams);
     },
     searchTheString(searchTxt) {
         this.getFlux().actions.filterSearchPending(searchTxt);

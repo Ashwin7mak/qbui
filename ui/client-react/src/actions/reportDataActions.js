@@ -370,9 +370,9 @@ let reportDataActions = {
         return new Promise((resolve, reject) => {
 
             if (appId && tblId && rptId) {
-                let format = overrideQueryParams && overrideQueryParams[query.FORMAT_PARAM] ? overrideQueryParams[query.FORMAT_PARAM] : constants.FORMAT.DISPLAY;
-                let offset = overrideQueryParams && overrideQueryParams[query.OFFSET_PARAM] ? overrideQueryParams[query.OFFSET_PARAM] : constants.PAGE.DEFAULT_OFFSET;
-                let rows = overrideQueryParams && overrideQueryParams[query.NUMROWS_PARAM] ? overrideQueryParams[query.NUMROWS_PARAM] : constants.PAGE.DEFAULT_NUM_ROWS;
+                // let format = overrideQueryParams && overrideQueryParams[query.FORMAT_PARAM] ? overrideQueryParams[query.FORMAT_PARAM] : constants.FORMAT.DISPLAY;
+                // let offset = overrideQueryParams && overrideQueryParams[query.OFFSET_PARAM] ? overrideQueryParams[query.OFFSET_PARAM] : constants.PAGE.DEFAULT_OFFSET;
+                // let rows = overrideQueryParams && overrideQueryParams[query.NUMROWS_PARAM] ? overrideQueryParams[query.NUMROWS_PARAM] : constants.PAGE.DEFAULT_NUM_ROWS;
                 let sortList = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
                 this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: sortList});
 
@@ -382,7 +382,7 @@ let reportDataActions = {
                 // Fetch the report meta data and parse the facet expression into a query expression
                 // that is used when querying for the report data.
                 var promises = [];
-                promises.push(reportService.getReport(appId, tblId, rptId, format, offset, rows));
+                promises.push(reportService.getReport(appId, tblId, rptId));//, format, offset, rows));
 
                 // The filter parameter may contain a facetExpression
                 let facetExpression = filter ? filter.facet : '';
@@ -400,12 +400,14 @@ let reportDataActions = {
                                 logger.debug('Filter Report Records service call successful');
                                 var model = reportModel.set(null, recordResponse);
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
+                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, recordResponse);
                                 resolve();
                             },
                             error => {
                                 //  axios upgraded to an error.response object in 0.13.x
                                 logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.getRecords:');
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, error.response.status);
+                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, error.response.status);
                                 reject();
                             }
                         ).catch(

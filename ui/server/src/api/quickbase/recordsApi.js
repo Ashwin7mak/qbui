@@ -83,6 +83,7 @@
         var RECORD = 'record';
         var RECORDS = 'records';
         var GROUPS = 'groups';
+        var FILTERED_RECORDS_COUNT = 'filteredCount';
         var request = defaultRequest;
 
         //Given an array of records and array of fields, remove any fields
@@ -185,13 +186,68 @@
             },
 
             /**
+             * Fetch all the records and the fields meta data from a table. In addition, fetch the count of records
+             * returned
+             *
+             * @param req
+             * @returns Promise
+             */
+            fetchRecordsFieldsAndCount: function(req) {
+                return new Promise(function(resolve, reject) {
+                    var fetchRequests = [this.fetchRecordsAndFields(req), this.fetchCountForRecords(req)];
+                    Promise.all(fetchRequests).then(
+                        function(response) {
+                            var responseObj = response[0];
+                            responseObj[FILTERED_RECORDS_COUNT] = response[1].body;
+                            resolve(responseObj);
+                        }.bind(this),
+                        function(response) {
+                            reject(response);
+                        }
+                    ).catch(function(error) {
+                        requestHelper.logUnexpectedError('recordsAPI..fetchRecordsFieldsAndCount', error, true);
+                        reject(error);
+                    });
+                }.bind(this));
+            },
+
+            /**
+             * Fetch the count of all records that match a user query
+             */
+            fetchCountForRecords: function(req) {
+                return new Promise((resolve5, reject5) => {
+                    let opts = requestHelper.setOptions(req);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsCountRoute(req.url);
+                    // Set the query parameter
+                    if (requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.QUERY)) {
+                        let queryParam = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
+                        opts.url += '?' + constants.REQUEST_PARAMETER.QUERY + '=' + queryParam;
+                    }
+
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            resolve5(response);
+                        },
+                        (error) => {
+                            log.error({req: req}, "Error getting report in fetchCountForRecords.");
+                            reject5(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('recordsApi..fetchCount in fetchCountForRecords', ex, true);
+                        reject5(ex);
+                    });
+                });
+            },
+
+            /**
              * Fetch all records and the fields meta data from a table.
              *
              * @param req
              * @returns Promise
              */
             fetchRecordsAndFields: function(req) {
-
                 return new Promise(function(resolve, reject) {
                     var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
@@ -239,9 +295,7 @@
                                     responseObject[RECORDS] = records;
                                 }
                             }
-
                             resolve(responseObject);
-
                         }.bind(this),
                         function(response) {
                             reject(response);
