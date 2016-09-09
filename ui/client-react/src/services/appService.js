@@ -9,8 +9,9 @@ class AppService extends BaseService {
 
         //  App Service API endpoints
         this.API = {
-            GET_APP     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}`,
-            GET_APPS    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`
+            GET_APP           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}`,
+            GET_APP_USERS     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.USERS}`,
+            GET_APPS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`,
         };
     }
 
@@ -56,6 +57,10 @@ class AppService extends BaseService {
         return new Promise((resolve, reject) => {
             resolve({data: users});
         });
+        /*
+        let url = super.constructUrl(this.API.GET_APP_USERS, [appId]);
+        return super.get(url);
+        */
     }
 
     /**
