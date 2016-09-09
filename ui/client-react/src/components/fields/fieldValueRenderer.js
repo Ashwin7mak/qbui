@@ -113,6 +113,7 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.MULTI_LINE_TEXT_FORMAT:
             return (
                     <MultiLineTextFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
+                                                     attributes={this.props.attributes}
                                                      key={'mltfvr-' + this.props.idKey}
                                                  {...commonProperties}/>
                 );
