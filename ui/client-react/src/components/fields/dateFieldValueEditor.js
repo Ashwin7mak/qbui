@@ -60,7 +60,7 @@ const DateFieldValueEditor = React.createClass({
             let newDate = '';
             for (let idx = 0; idx < formats.length; idx++) {
                 if (moment(newValue, formats[idx]).isValid()) {
-                    newDate = moment(newValue, formats[idx]);
+                    newDate = moment(newValue, formats[idx]).format('MM-DD-YYYY');
                     break;
                 }
             }
