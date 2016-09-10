@@ -52,20 +52,45 @@ const DateFieldValueEditor = React.createClass({
     },
 
     onChange(newValue) {
-        //  extract the time from the original value
-        let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+        if (newValue && (this.props.onChange || this.props.onDateTimeChange)) {
+            // TODO: deal with QB implied dates like Jan 2004 == Jan 1 2004
+            let formats = ['M-D-YYYY', 'M-DD-YYYY', 'MM-D-YYYY', 'M-DD-YYYY', 'MM-DD-YYYY',
+                           'YYYY-M-D', 'YYYY-M-DD', 'YYYY-MM-D', 'YYYY-M-DD', 'YYYY-MM-DD',
+                           'MMM D YYYY', 'MMM DD YYYY', 'MMM DD, YYYY', 'MMM D, YYYY'];
+            let newDate = '';
+            for (let idx = 0; idx < formats.length; idx++) {
+                if (moment(newValue, formats[idx]).isValid()) {
+                    newDate = moment(newValue, formats[idx]);
+                    break;
+                }
+            }
 
-        //  extract the time component from the original; otherwise use midnight
-        let theDate = moment(origValue, "HH:mm:ss").isValid() ? moment(origValue) : moment().set({h:0, m:0, s:0, ms:0});
-
-        this.props.onChange(newValue + theDate.format(" HH:mm:ss"));
+            // if not a valid date, user is manually inputting
+            if (newDate) {
+                if (this.props.onDateTimeChange) {
+                    this.props.onDateTimeChange(newDate);
+                } else {
+                    this.props.onChange(newDate);
+                }
+            }
+        }
     },
 
     //send up the chain an object with value and formatted display value
     onBlur(ev) {
-        let theVals = this.getFormattedValues(ev.target.value);
-        if (this.props.onBlur) {
-            this.props.onBlur(theVals);
+        if (ev.target && ev.target.value && (this.props.onBlur || this.props.onDateTimeBlur)) {
+
+            if (this.props.onDateTimeBlur) {
+                this.props.onDateTimeBlur(ev.target.value);
+            } else {
+                let vals = {
+                    value: ev.target.value,
+                    display: ''
+                };
+
+                vals.display = dateTimeFormatter.format(vals, this.props.attributes);
+                this.props.onBlur(vals);
+            }
         }
     },
 
@@ -76,38 +101,6 @@ const DateFieldValueEditor = React.createClass({
             formatter = formatters[this.props.attributes.dateFormat];
         }
         return formatter;
-    },
-
-    getFormattedValues(newValue) {
-        let theVals = {
-            value: newValue
-        };
-        switch (this.props.type) {
-        case FieldFormats.DATE_FORMAT:
-            {
-                // normalized form is YYYY-MM-DD
-                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-                break;
-            }
-        case FieldFormats.TIME_FORMAT:
-            {
-                // normalized form is 1970-01-01THH:MM:SSZ
-                theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-                break;
-            }
-        case FieldFormats.DATETIME_FORMAT:
-            {
-                // normalized form is YYYY-MM-DDTHH:MM:SSZ
-                theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-                break;
-            }
-        default:
-            {
-                theVals.display = newValue;
-                break;
-            }
-        }
-        return theVals;
     },
 
     render() {
@@ -132,7 +125,7 @@ const DateFieldValueEditor = React.createClass({
             <DatePicker dateTime={theDate}
                         format={format}
                         inputFormat={format}
-                        onBlur={this.onBlur}
+                        //onBlur={this.onBlur}
                         onChange={this.onChange}
                         mode="date"
                         defaultText={defaultText}/>

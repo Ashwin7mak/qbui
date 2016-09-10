@@ -118,6 +118,7 @@ const FieldValueEditor = React.createClass({
             value: this.props.value,
             display: this.props.display,
             attributes: this.props.attributes,
+            type: this.props.type,
             onChange: this.props.onChange,
             onBlur: this.onBlur,
             onValidated: this.props.onValidated,
