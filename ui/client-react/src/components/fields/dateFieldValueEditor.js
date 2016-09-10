@@ -54,13 +54,14 @@ const DateFieldValueEditor = React.createClass({
     onChange(newValue) {
         if (newValue && (this.props.onChange || this.props.onDateTimeChange)) {
             // TODO: deal with QB implied dates like Jan 2004 == Jan 1 2004
+            // TODO: FIX..
             let formats = ['M-D-YYYY', 'M-DD-YYYY', 'MM-D-YYYY', 'M-DD-YYYY', 'MM-DD-YYYY',
                            'YYYY-M-D', 'YYYY-M-DD', 'YYYY-MM-D', 'YYYY-M-DD', 'YYYY-MM-DD',
                            'MMM D YYYY', 'MMM DD YYYY', 'MMM DD, YYYY', 'MMM D, YYYY'];
             let newDate = '';
             for (let idx = 0; idx < formats.length; idx++) {
                 if (moment(newValue, formats[idx]).isValid()) {
-                    newDate = moment(newValue, formats[idx]).format('MM-DD-YYYY');
+                    newDate = moment(newValue, formats[idx]).format('YYYY-MM-DD');
                     break;
                 }
             }
@@ -116,6 +117,7 @@ const DateFieldValueEditor = React.createClass({
         }
 
         let format = dateTimeFormatter.getDateFormat(this.props.attributes);
+
         const theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(format) : '';
 
         //  if no date, then use the format as help placeholder
