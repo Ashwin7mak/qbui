@@ -121,7 +121,8 @@ const FieldValueEditor = React.createClass({
         };
 
         // Only allow the Record ID field to be a renderer, not an editor
-        if (this.props.fieldDef.field === DEFAULT_RECORD_KEY) {
+        let field = (typeof this.props.fieldDef === 'undefined' ? '' : this.props.fieldDef.field);
+        if (typeof field !== 'undefined' && field === DEFAULT_RECORD_KEY) {
             return <NumberFieldValueRenderer isEditable={false} type="number" {...commonProps} />;
         }
 
