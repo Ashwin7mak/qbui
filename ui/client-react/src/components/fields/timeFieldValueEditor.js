@@ -6,6 +6,7 @@ import {MenuItem, DropdownButton} from 'react-bootstrap';
 import Select from "react-select";
 import 'react-select/dist/react-select.css';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
+import timeFormatter from '../../../../common/src/formatter/timeOfDayFormatter';
 import fieldFormats from '../../utils/fieldFormats';
 import moment from 'moment';
 
