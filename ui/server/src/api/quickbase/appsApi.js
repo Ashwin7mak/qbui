@@ -7,6 +7,7 @@
     let defaultRequest = require('request');
     let perfLogger = require('../../perfLogger');
     var httpStatusCodes = require('../../constants/httpStatusCodes');
+    let log = require('../../logger').getLogger();
 
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
@@ -45,18 +46,19 @@
              */
             getAppUsers: function(req) {
 
-
                 return new Promise((resolve, reject) => {
                     var opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getAppUsersRoute(req.url);
 
-                    //  make the api request to get the table homepage report id
+                    //  make the api request to get the app users
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
                             if (response.body) {
                                 let users = JSON.parse(response.body);
                                 resolve(users);
+                            } else {
+                                resolve({});
                             }
                         },
                         (error) => {

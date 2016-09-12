@@ -41,14 +41,13 @@ describe("Validate appsApi", function() {
 
         it('success return results ', function(done) {
             req.url = '/app/1/users';
-            req.body = {data:'here'};
-            var targetObject = "{}";
+            var targetObject = "{'body':[]}";
             executeReqStub.returns(Promise.resolve(targetObject));
             var promise = appsApi.getAppUsers(req);
 
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, targetObject);
+                    assert.deepEqual(response, []);
                     done();
                 }
             ).catch(function(errorMsg) {

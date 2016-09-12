@@ -106,12 +106,15 @@ let appsActions = {
 
         let appService = new AppService();
 
-        appService.getAppUsers(appId).then(response => {
-            this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
-        },
-        error => {
-            this.dispatch(actions.LOAD_APP_USERS_FAILED);
-        });
+        if (appId !== this.selectedAppId) {
+            appService.getAppUsers(appId).then(response => {
+                this.selectedAppId = appId;
+                this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
+                },
+                error => {
+                    this.dispatch(actions.LOAD_APP_USERS_FAILED);
+                });
+        }
     },
 
     selectTableId(tblId) {
