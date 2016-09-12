@@ -564,6 +564,7 @@ describe('AGGrid functions', () => {
             }
         }));
 
+        // Start editing the row
         const parent = TestUtils.renderIntoDocument(TestParent());
         let columnCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row:first-child .gridCell");
         let firstCell = columnCells[0].parentElement;
@@ -577,24 +578,6 @@ describe('AGGrid functions', () => {
     it('does not show input fields for record id cells', () => {
         // Add uneditable row to the data
         let dataWithRecordIdField = getUneditableFieldTestData({userEditableValue: true, recordId: true});
-
-        // Remove checkboxes because they cause extra inputs and it messes up the count unexpectedly
-        delete dataWithRecordIdField.data.records[0].col_checkbox;
-        delete dataWithRecordIdField.data.records[1].col_checkbox;
-        dataWithRecordIdField.data.columns.splice(3, 1);
-
-        dataWithRecordIdField.data.records[0].col_record_id = {
-            id: 5,
-            value: 100,
-            display: "100"
-        };
-        dataWithRecordIdField.data.columns.push({
-            id: 5,
-            field: "Record ID#",
-            headerName: "record_id",
-            datatypeAttributes: {type:"NUMERIC"},
-            userEditableValue: false
-        });
 
         let callBacks = {
             onEditRecordStart: function() {
@@ -618,6 +601,7 @@ describe('AGGrid functions', () => {
             }
         }));
 
+        // Start editing the row
         const parent = TestUtils.renderIntoDocument(TestParent());
         let columnCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row:first-child .gridCell");
         let firstCell = columnCells[0].parentElement;
