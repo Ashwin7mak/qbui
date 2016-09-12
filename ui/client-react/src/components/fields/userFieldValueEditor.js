@@ -26,7 +26,7 @@ const UserFieldValueEditor = React.createClass({
     },
 
     getSelectedUser() {
-        return this.props.appUsers.find(appUser => appUser.userId === this.state.selectedUserId);
+        return this.props.appUsers.find(appUser => appUser.id === this.state.selectedUserId);
     },
 
     getSelectItems() {
@@ -35,7 +35,7 @@ const UserFieldValueEditor = React.createClass({
         return this.props.appUsers ?
             this.props.appUsers.map(user => {
                 const label = userFormatter.format({value: user}, datatypeAttributes);
-                return {value: user.userId, label};
+                return {value: user.id, label};
             }) : [];
     },
 

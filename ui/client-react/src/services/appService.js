@@ -31,36 +31,9 @@ class AppService extends BaseService {
      * @param appId
      */
     getAppUsers(appId) {
-        const users = [
-            {
-                "userId": "58440038",
-                firstName: "Aditi",
-                lastName: "Goel",
-                screenName: "agoel@quickbase.com",
-                email: "agoel@quickbase.com"
-            },
-            {
-                "userId": "58452986",
-                "firstName": "Claire",
-                "lastName": "Martininez",
-                "screenName": "cmartinez@quickbase.com",
-                "email": "cmartinez@quickbase.com"
-            },
-            {
-                "userId": "58453016",
-                firstName: "Drew",
-                lastName: "Stevens",
-                screenName: "dstevens@quickbase.com",
-                email: "dstevens@quickbase.com"
-            }
-        ];
-        return new Promise((resolve, reject) => {
-            resolve({data: users});
-        });
-        /*
+
         let url = super.constructUrl(this.API.GET_APP_USERS, [appId]);
         return super.get(url);
-        */
     }
 
     /**

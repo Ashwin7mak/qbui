@@ -44,9 +44,26 @@
              * @returns Promise
              */
             getAppUsers: function(req) {
-                var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                return requestHelper.executeRequest(req, opts);
+
+
+                return new Promise((resolve, reject) => {
+                    var opts = requestHelper.setOptions(req);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getAppUsersRoute(req.url);
+
+                    //  make the api request to get the table homepage report id
+                    requestHelper.executeRequest(req, opts).then(
+                        (response) => {
+                            if (response.body) {
+                                let users = JSON.parse(response.body);
+                                resolve(users);
+                            }
+                        },
+                        (error) => {
+                            log.error({req: req}, "Error getting app users in getAppUsers()");
+                            reject(error);
+                        });
+                });
             }
 
         };
