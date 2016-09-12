@@ -137,15 +137,26 @@ const TimeFieldValueEditor = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        let format = dateTimeFormatter.getTimeFormat(this.props.attributes);
+        let timeFormat = dateTimeFormatter.getTimeFormat(this.props.attributes);
+        let dateTimeFormat = "MM-DD-YYYY " + timeFormat
+
         let inputValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
         let theTime = '';
         if (inputValue) {
-            if (fieldFormats.TIME_FORMAT === this.props.type) {
-                let now = moment().format("YYYY-MM-DD ") + inputValue;
-                theTime = moment(now).format(format);
+            if (fieldFormats.TIME_FORMAT !== this.props.type) {
+                //  FF doesn't parse dates well, so if it's an invalid format,
+                //  then it's a time that has been edited and the format for
+                //  the input value is as defined below.
+                if (moment(inputValue).isValid()) {
+                    theTime = moment(inputValue).format(timeFormat);
+                } else {
+                    //  if not a parsable date format, then it's a time that has been edited and
+                    //  the format for the input value will be as below
+                    theTime = moment(inputValue, dateTimeFormat).format(timeFormat);
+                }
             } else {
-                theTime = moment(inputValue).format(format);
+                let now = moment().format("MM-DD-YYYY ") + inputValue;
+                theTime = moment(now, dateTimeFormat).format(timeFormat);
             }
         }
 
