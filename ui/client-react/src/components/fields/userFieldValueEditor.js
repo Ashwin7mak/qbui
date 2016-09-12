@@ -25,8 +25,12 @@ const UserFieldValueEditor = React.createClass({
         this.setState({selectedUserId: user ? user.value : null});
     },
 
+    getAppUser(id) {
+        return this.props.appUsers.find(user => user.id === id);
+    },
+
     getSelectedUser() {
-        const appUser = this.props.appUsers.find(user => user.id === this.state.selectedUserId);
+        const appUser = this.getAppUser(this.state.selectedUserId);
 
         if (appUser) {
             // sadly the app user object has an id property but the record user object has a userId property...
@@ -55,13 +59,13 @@ const UserFieldValueEditor = React.createClass({
     },
 
     onBlur() {
-        const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
 
+        const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
         const user = this.getSelectedUser();
 
         const theVals = {
             value: user,
-            display: user ? userFormatter.format(user, datatypeAttributes) : ''
+            display: user ? userFormatter.format({value: user}, datatypeAttributes) : ''
         };
 
         this.props.onBlur(theVals);
@@ -69,9 +73,15 @@ const UserFieldValueEditor = React.createClass({
 
     renderOption(option) {
 
+        const user = this.getAppUser(option.value);
+        const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
+        const userLabel = userFormatter.format({value: user}, datatypeAttributes);
+
         return (
-            <div><div>Drew</div><div><i>Stevens</i></div></div>
-        );
+            <div className="userOption">
+                <div className="userLabel">{userLabel}</div>
+                <div className="email">{user.email}</div>
+            </div>);
     },
 
     render() {
