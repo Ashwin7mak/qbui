@@ -26,9 +26,6 @@ describe('FieldValueEditor functions', () => {
     'use strict';
 
     let component;
-    let fieldDef = {
-        field: 'foo'
-    };
 
     describe('test render of component', () => {
         let dataProvider = [
