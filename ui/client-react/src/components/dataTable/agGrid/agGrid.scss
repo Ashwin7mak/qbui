@@ -520,6 +520,12 @@ $cell-edit-background-edit: #f3f8fe;
                         font-size: 12px;
                         padding-top: 1px;
                     }
+                    .Select-arrow-zone {
+                        background-color: $datepicker-bg;
+                        .glyphicon {
+                            color: $datepicker-select-button-fg;
+                        }
+                    }
                 }
                 &.timeCell>* {
                     .Select-placeholder {

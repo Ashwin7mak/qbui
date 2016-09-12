@@ -119,6 +119,12 @@ const TimeFieldValueEditor = React.createClass({
         }
     },
 
+    renderClockIcon() {
+        return (
+            <span className={glyphicon}></span>
+        );
+    },
+
     render() {
         let classes = 'cellEdit timeCell';
 
@@ -151,6 +157,7 @@ const TimeFieldValueEditor = React.createClass({
                 options={this.timeDropList}
                 placeholder={theTime ? theTime : 'hh:mm'}
                 clearable={false}
+                arrowRenderer={this.renderClockIcon}
             />
         </div>;
     }
