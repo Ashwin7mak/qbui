@@ -26,7 +26,14 @@ const UserFieldValueEditor = React.createClass({
     },
 
     getSelectedUser() {
-        return this.props.appUsers.find(appUser => appUser.id === this.state.selectedUserId);
+        const appUser = this.props.appUsers.find(appUser => appUser.id === this.state.selectedUserId);
+
+        // sadly the app user object has an id property but the record user object has a userId property...
+        let selectedUser = _.clone(appUser);
+        selectedUser.userId = selectedUser.id;
+        _.unset(selectedUser, "id");
+
+        return selectedUser;
     },
 
     getSelectItems() {
