@@ -539,7 +539,7 @@ describe('AGGrid functions', () => {
         expect(editRowsTabbingOutOfLast).not.toBe(editRowsAfterSecondDblClick);
     });
 
-    it('does not show input fields for cells that are not user editable', () => {
+    it('does not have input boxes for uneditable fields', () => {
         let dataWithUneditableField = getUneditableFieldTestData({userEditableValue: false, recordId: false});
 
         let callBacks = {
