@@ -110,10 +110,10 @@ let appsActions = {
             appService.getAppUsers(appId).then(response => {
                 this.selectedAppId = appId;
                 this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
-                },
-                error => {
-                    this.dispatch(actions.LOAD_APP_USERS_FAILED);
-                });
+            },
+            error => {
+                this.dispatch(actions.LOAD_APP_USERS_FAILED);
+            });
         }
     },
 

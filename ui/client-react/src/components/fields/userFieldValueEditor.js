@@ -26,14 +26,20 @@ const UserFieldValueEditor = React.createClass({
     },
 
     getSelectedUser() {
-        const appUser = this.props.appUsers.find(appUser => appUser.id === this.state.selectedUserId);
+        const appUser = this.props.appUsers.find(user => user.id === this.state.selectedUserId);
 
-        // sadly the app user object has an id property but the record user object has a userId property...
-        let selectedUser = _.clone(appUser);
-        selectedUser.userId = selectedUser.id;
-        _.unset(selectedUser, "id");
+        if (appUser) {
+            // sadly the app user object has an id property but the record user object has a userId property...
+            let selectedUser = _.clone(appUser);
+            if (appUser.id) {
+                selectedUser.userId = selectedUser.id;
+            }
+            _.unset(selectedUser, "id");
 
-        return selectedUser;
+            return selectedUser;
+        } else {
+            return null;
+        }
     },
 
     getSelectItems() {
@@ -42,7 +48,9 @@ const UserFieldValueEditor = React.createClass({
         return this.props.appUsers ?
             this.props.appUsers.map(user => {
                 const label = userFormatter.format({value: user}, datatypeAttributes);
-                return {value: user.id, label};
+                return {
+                    value: user.id,
+                    label};
             }) : [];
     },
 
@@ -59,13 +67,22 @@ const UserFieldValueEditor = React.createClass({
         this.props.onBlur(theVals);
     },
 
+    renderOption(option) {
+
+        return (
+            <div><div>Drew</div><div><i>Stevens</i></div></div>
+        );
+    },
+
     render() {
 
         return (
             <Select
                 className="cellEdit"
                 tabIndex="0"
+                matchPos="start"
                 value={this.state.selectedUserId}
+                optionRenderer={this.renderOption}
                 options={this.getSelectItems()}
                 onChange={this.selectUser}
                 onBlur={this.onBlur} />
