@@ -13,6 +13,7 @@
     var FIELD_TYPE_CONST = 'fieldType';
     var DATA_TYPE_CONST = 'dataType';
     var DATA_ATTR_CONST = 'dataAttr';
+    var MULTICHOICE_CONST = 'multipleChoice';
 
     //The max number of fields we will generate at random
     var maxRandomFields = 10;
@@ -290,16 +291,27 @@
             var fieldBuilder = fieldGenerator.getFieldBuilder();
             var dataTypeAttributeBuilder = fieldGenerator.getDataTypeBuilder();
             var dataTypeAttributes = dataTypeAttributeBuilder.withType(dataType).build();
+            var multiChoice = null;
             if (fieldNameToTypeMap[fieldName][DATA_ATTR_CONST]) {
                 console.log(`dataTypeAttributes for ${fieldName} before=${JSON.stringify(dataTypeAttributes)} adding ${JSON.stringify(fieldNameToTypeMap[fieldName][DATA_ATTR_CONST])}`);
                 dataTypeAttributes = Object.assign({}, dataTypeAttributes, fieldNameToTypeMap[fieldName][DATA_ATTR_CONST]);
                 console.log(`dataTypeAttributes for ${fieldName} after=${JSON.stringify(dataTypeAttributes)}`);
             }
+            if (fieldNameToTypeMap[fieldName][MULTICHOICE_CONST]) {
+                multiChoice = Object.assign({}, fieldNameToTypeMap[fieldName][MULTICHOICE_CONST]);
+            }
             if (fieldName.includes('User')) {
                 field = fieldBuilder.withName(fieldName).withFieldType(fieldType).withDataTypeAttributes(dataTypeAttributes).build();
                 field.indexed = true;
+            } else if (multiChoice !== null) {
+                field = fieldBuilder.withName(fieldName).withFieldType(fieldType)
+                    .withDataTypeAttributes(dataTypeAttributes)
+                    .withMultiChoice(multiChoice)
+                    .build();
             } else {
-                field = fieldBuilder.withName(fieldName).withFieldType(fieldType).withDataTypeAttributes(dataTypeAttributes).build();
+                field = fieldBuilder.withName(fieldName).withFieldType(fieldType)
+                    .withDataTypeAttributes(dataTypeAttributes)
+                    .build();
             }
             builderInstance.withField(field);
         });

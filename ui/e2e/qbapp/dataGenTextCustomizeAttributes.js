@@ -40,7 +40,7 @@ consts = require('../../common/src/constants.js');
         createdRecs();
     });
 
-    function addColumn(table, type, name, attrs) {
+    function addColumn(table, type, name, dataAttrs, other) {
 
         //optionally supplied specific field name otherwise use the fields type
         let fieldName = name || type.columnName;
@@ -51,8 +51,12 @@ consts = require('../../common/src/constants.js');
         };
 
         // optional add supplied attrs
-        if (attrs) {
-            table[fieldName].dataAttr = attrs;
+        if (dataAttrs) {
+            table[fieldName].dataAttr = dataAttrs;
+        }
+        if (other) {
+            Object.assign(table[fieldName], table[fieldName], other);
+            console.log('BrandonFieldName: ', fieldName, 'BrandonJSON: ', JSON.stringify(table[fieldName]));
         }
     }
 
@@ -116,6 +120,62 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Html allowed multiLine",
             {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 4})});
 
+        addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiChoice",
+            {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
+            {multipleChoice: {
+                choices: [
+                    {
+                        coercedValue: {
+                            value: "Ellie"
+                        },
+                        displayValue: "Ellie"
+                    },
+                    {
+                        coercedValue: {
+                            value: "Castedo"
+                        },
+                        displayValue: "Castedo"
+                    },
+                    {
+                        coercedValue: {
+                            value: "Franca"
+                        },
+                        displayValue: "Franca"
+                    },
+                    {
+                        coercedValue: {
+                            value: "Valesca"
+                        },
+                        displayValue: "Valesca"
+                    },
+                    {
+                        coercedValue: {
+                            value: "Johnny Blaze"
+                        },
+                        displayValue: "Johnny Blaze"
+                    },
+                    {
+                        coercedValue: {
+                            value: "Jeff"
+                        },
+                        displayValue: "Jeff"
+                    },
+                    {
+                        coercedValue: {
+                            value: "Robert"
+                        },
+                        displayValue: "Robert"
+                    },
+                    {
+                        coercedValue: {
+                            value: "Check"
+                        },
+                        displayValue: "Check"
+                    }
+                ],
+                allowNew: false,
+                sortAsGiven: false
+            }});
         return tableToFieldToFieldTypeMap;
     }
 
@@ -143,6 +203,8 @@ consts = require('../../common/src/constants.js');
             if (app && app.tables[e2eConsts.TABLE4]) {
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                 var tableFourNonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE4]);
+                console.log('Brandon tableFourNonBuiltInFields: ', JSON.stringify(tableFourNonBuiltInFields));
+
                 // Generate the record JSON objects
                 var tableFourGeneratedRecords = e2eBase.recordService.generateRecords(tableFourNonBuiltInFields, 14);
                 // Via the API create the records, a new report, then run the report.
@@ -171,8 +233,10 @@ consts = require('../../common/src/constants.js');
 
         var tableNames = '';
         app.tables.forEach((table, index) => {
-            tableNames += 'table' + index + 1 + 'Id:' + table.id + '\n';
-            tableNames += 'table' + index + 1 + 'Name:' + table.name + '\n';
+            tableNames += 'table' + index + 'Id:' + table.id + '\n';
+            tableNames += 'table' + index + 'Name:' + table.name + '\n';
+            tableNames += 'table' + index + 'Report link:' + e2eBase.getRequestReportsPageEndpoint(realmName, appId, table.id, 1)  + '\n';
+
         });
         console.log('\nHere is your generated test data: \n' +
             'realmName: ' + realmName + '\n' +

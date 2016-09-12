@@ -32,9 +32,18 @@
 
                 // Check that there is a mapping for the field type (otherwise don't generate a value for it)
                 if (field[fieldConsts.fieldKeys.TYPE] === consts.SCALAR || field[fieldConsts.fieldKeys.TYPE] === consts.REPORT_LINK) {
+                    var value = generateRecordValueForFieldType(field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][dataTypeConsts.dataTypeKeys.TYPE]);
+                    if (field.multipleChoice !== undefined) {
+                        //get number of choices avail from field.multipleChoice.choices.length
+                        var numChoices = field.multipleChoice.choices.length;
+                        //get a random index into the list of choices
+                        var randomIndex = rawValueGenerator.generateInt(0, numChoices - 1);
+                        //set the value as the random selected item from choice
+                        value = field.multipleChoice.choices[randomIndex].coercedValue.value;
+                    }
                     recordJson.push({
                         id   : field[fieldConsts.fieldKeys.ID],
-                        value: generateRecordValueForFieldType(field[fieldConsts.fieldKeys.DATA_TYPE_ATTRIBUTES][dataTypeConsts.dataTypeKeys.TYPE])
+                        value: value
                     });
                 }
             }
