@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import {DEFAULT_RECORD_KEY} from '../../constants/schema';
 import FieldFormats from '../../utils/fieldFormats' ;
 import {DefaultFieldValueEditor, MultiLineTextFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
     DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import TextFieldValueEditor from './textFieldValueEditor';
+import {NumberFieldValueRenderer} from './fieldValueRenderers';
 import _ from 'lodash';
 
 /**
@@ -112,6 +114,11 @@ const FieldValueEditor = React.createClass({
             idKey : this.props.idKey,
             ref:"fieldInput"
         };
+
+        // Only allow the Record ID field to be a renderer, not an editor
+        if (this.props.fieldDef.field === DEFAULT_RECORD_KEY) {
+            return <NumberFieldValueRenderer isEditable={false} type="number" {...commonProps} />;
+        }
 
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT:
@@ -228,4 +235,3 @@ const FieldValueEditor = React.createClass({
 });
 
 export default FieldValueEditor;
-
