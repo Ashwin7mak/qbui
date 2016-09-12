@@ -43,6 +43,11 @@
         USER            : 'USER',
         FILE_ATTACHMENT : 'FILE_ATTACHMENT',
 
+        NUMERIC_SEPARATOR: {
+            PERIOD: '.',
+            COMMA: ','
+        },
+
         //Query expressions
         QUERY_AND       : 'AND',
         QUERY_OR        : 'OR',
