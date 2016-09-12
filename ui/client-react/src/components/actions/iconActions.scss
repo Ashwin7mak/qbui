@@ -22,6 +22,7 @@ $page-actions-background-color: #486c8f;
             font-size: 20px;
             color: $topnav-icon-color;
             padding: 0;
+            line-height: 1px;
             &.dropdownToggle {
                 width: 20px;
             }
@@ -37,6 +38,7 @@ $page-actions-background-color: #486c8f;
             -webkit-border-radius:20px;
             background-color: $color-green-600;
             color: $color2;
+            margin-right: 30px;
         }
     }
 }

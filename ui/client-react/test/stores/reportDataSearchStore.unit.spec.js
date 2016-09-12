@@ -34,6 +34,7 @@ describe('Test ReportDataSearchFilter Store', () => {
         expect(flux.store(STORE_NAME).__actions__.FILTER_SEARCH_PENDING).toBeDefined();
 
     });
+
     it('test search input pending action', () => {
 
         let searchPendingAction = {
@@ -69,5 +70,37 @@ describe('Test ReportDataSearchFilter Store', () => {
         let state = flux.store(STORE_NAME).getState();
 
         expect(state.searchStringInput).toBeDefined(searchStringInput);
+    });
+
+    describe('search text is cleared when the search context is changed', () => {
+        it('clears the search text when a new report is selected', () => {
+            let state = flux.store(STORE_NAME).getState();
+
+            let loadReportAction = {
+                type: actions.LOAD_REPORT,
+                payload: {}
+            };
+
+            state.searchStringInput = 'test';
+
+            flux.dispatcher.dispatch(loadReportAction);
+
+            expect(state.searchStringInput).toEqual('');
+        });
+
+        it('clears the search text when a new table is selected', () => {
+            let state = flux.store(STORE_NAME).getState();
+
+            let selectTableAction = {
+                type: actions.SELECT_TABLE,
+                payload: {}
+            };
+
+            state.searchStringInput = 'test';
+
+            flux.dispatcher.dispatch(selectTableAction);
+
+            expect(state.searchStringInput).toEqual('');
+        });
     });
 });

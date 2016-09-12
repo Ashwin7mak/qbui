@@ -24,6 +24,7 @@ import TextFieldDoc from './docs/textFieldValueRenderer';
 import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
 import FieldValueRendererDoc from './docs/fieldValueRenderer';
 import FieldValueEditorDoc from './docs/fieldValueEditor';
+import MultiLineTextFieldValueEditorDoc from './docs/multiLineTextFieldValueEditor';
 import NumericFieldDoc from './docs/numericFieldValueRenderer';
 import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
 
@@ -41,6 +42,7 @@ render((
             <Route path="numericfieldValueEditor" component={NumericFieldValueEditorDoc} />
             <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
+            <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

@@ -2,15 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import FieldFormats from '../../utils/fieldFormats' ;
-import {DefaultFieldValueEditor, MultiLineTextFieldValueEditor, ComboBoxFieldValueEditor,
-    UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
-
+import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import DateFieldValueEditor from './dateFieldValueEditor';
 import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
-import NumericFieldValueEditor from './numericFieldValueEditor';
-import TextFieldValueEditor from './textFieldValueEditor';
 import TimeFieldValueEditor from './timeFieldValueEditor';
-
+import TextFieldValueEditor from './textFieldValueEditor';
+import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
+import NumericFieldValueEditor from './numericFieldValueEditor';
 import _ from 'lodash';
 
 /**
