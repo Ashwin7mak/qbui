@@ -5,6 +5,23 @@ import FieldValueEditor  from '../../src/components/fields/fieldValueEditor';
 import FieldFormats from '../../src/utils/fieldFormats';
 var simpleStringify = require('../../../common/src/simpleStringify.js');
 
+import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
+
+function setupI18nNumberMock() {
+    let I18nMessageMock = React.createClass({
+        render: function() {
+            return (
+                <div>I18Mock</div>
+            );
+        }
+    });
+    NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
+}
+
+function tearDownI18nNumberMock() {
+    NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
+}
+
 describe('FieldValueEditor functions', () => {
     'use strict';
 
@@ -99,5 +116,17 @@ describe('FieldValueEditor functions', () => {
 
     });
 
+    it('does not render an editor for a Record ID field', () => {
+        setupI18nNumberMock();
 
+        component = TestUtils.renderIntoDocument(
+            <FieldValueEditor type={FieldFormats.NUMBER_FORMAT} fieldDef={{field: 'Record ID#'}} />
+        );
+
+        // There should not be an input to change the value
+        let editableField = ReactDOM.findDOMNode(component).querySelectorAll('input');
+        expect(editableField.length).toBe(0);
+
+        tearDownI18nNumberMock();
+    });
 });
