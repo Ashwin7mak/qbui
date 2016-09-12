@@ -552,6 +552,10 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.reportModel.setSortFids(payload.sortList);
         this.reportModel.setGroupElements(payload.sortList);
+
+        this.pageOffset = NumberUtils.isInt(payload.offset) && payload.offset >= 0 ? payload.offset : this.pageOffset;
+        this.numRows = NumberUtils.isInt(payload.numRows) && payload.numRows ? payload.numRows : this.numRows;
+
         this.emit('change');
     },
 

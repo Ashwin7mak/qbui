@@ -38,6 +38,7 @@ const ReportRoute = React.createClass({
         let offset = this.props.reportData && NumberUtils.isInt(this.props.reportData.pageOffset) ? this.props.reportData.pageOffset : null;//constants.PAGE.OFFSET;
         let numRows = this.props.reportData && NumberUtils.isInt(this.props.reportData.numRows) ? this.props.reportData.numRows : null;//constants.PAGE.DEFAULT_NUM_ROWS;
 
+
         if (appId && tblId && rptId) {
             this.loadReport(appId, tblId, rptId, offset, numRows);
         }

@@ -370,11 +370,10 @@ let reportDataActions = {
         return new Promise((resolve, reject) => {
 
             if (appId && tblId && rptId) {
-                // let format = overrideQueryParams && overrideQueryParams[query.FORMAT_PARAM] ? overrideQueryParams[query.FORMAT_PARAM] : constants.FORMAT.DISPLAY;
-                // let offset = overrideQueryParams && overrideQueryParams[query.OFFSET_PARAM] ? overrideQueryParams[query.OFFSET_PARAM] : constants.PAGE.DEFAULT_OFFSET;
-                // let rows = overrideQueryParams && overrideQueryParams[query.NUMROWS_PARAM] ? overrideQueryParams[query.NUMROWS_PARAM] : constants.PAGE.DEFAULT_NUM_ROWS;
                 let sortList = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
-                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: sortList});
+                let offset = requiredQueryParams && requiredQueryParams[query.OFFSET_PARAM] ? requiredQueryParams[query.OFFSET_PARAM] : constants.PAGE.DEFAULT_OFFSET;
+                let numRows = requiredQueryParams && requiredQueryParams[query.NUMROWS_PARAM] ? requiredQueryParams[query.NUMROWS_PARAM] : constants.PAGE.DEFAULT_NUM_ROWS;
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, offset: offset, numRows: numRows, sortList: sortList});
 
                 let reportService = new ReportService();
                 let recordService = new RecordService();
@@ -382,7 +381,7 @@ let reportDataActions = {
                 // Fetch the report meta data and parse the facet expression into a query expression
                 // that is used when querying for the report data.
                 var promises = [];
-                promises.push(reportService.getReport(appId, tblId, rptId));//, format, offset, rows));
+                promises.push(reportService.getReport(appId, tblId, rptId));
 
                 // The filter parameter may contain a facetExpression
                 let facetExpression = filter ? filter.facet : '';

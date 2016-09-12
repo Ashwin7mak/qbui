@@ -12,6 +12,7 @@ import _ from 'lodash';
 import FacetSelections from '../facet/facetSelections';
 import './report.scss';
 import FilterUtils from '../../utils/filterUtils';
+import StringUtils from '../../utils/stringUtils';
 import * as query from '../../constants/query';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
@@ -214,7 +215,26 @@ let ReportToolsAndContent = React.createClass({
             let numRows = this.props.reportData.numRows;
             let newOffset = this.props.reportData.pageOffset + numRows;
             let sortList = this.props.reportData.sortList;
-            this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows, sortList);
+
+            let searchString = this.props.reportData.searchStringForFiltering;
+            if (StringUtils.isNonEmptyString(searchString)) {
+                let filter = {
+                    selections: this.props.reportData.selections,
+                    search: searchString,
+                    facet: this.props.reportData.facetExpression
+                };
+                let queryParams =  {
+                    format:format,
+                    offset:newOffset,
+                    numRows:numRows
+                };
+                let overrideQueryParams = {
+                    sortList:sortList
+                };
+                this.getFlux().actions.getFilteredRecords(appId, tblId, rptId, queryParams, filter, overrideQueryParams);
+            } else {
+                this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows, sortList);
+            }
         }
     },
     getPreviousReportPage() {
@@ -228,8 +248,28 @@ let ReportToolsAndContent = React.createClass({
             let format = true;
             let numRows = this.props.reportData.numRows;
             let newOffset = this.props.reportData.pageOffset - numRows;
+            let sortList = this.props.reportData.sortList;
 
-            this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
+            let searchString = this.props.reportData.searchStringForFiltering;
+            if (StringUtils.isNonEmptyString(searchString)) {
+                let filter = {
+                    selections: this.props.reportData.selections,
+                    search: searchString,
+                    facet: this.props.reportData.facetExpression
+                };
+                let queryParams =  {
+                    format:format,
+                    offset:newOffset,
+                    numRows:numRows
+                };
+                let overrideQueryParams = {
+                    sortList:sortList
+                };
+
+                this.getFlux().actions.getFilteredRecords(appId, tblId, rptId, queryParams, filter, overrideQueryParams);
+            } else {
+                this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
+            }
         }
     },
     render() {
@@ -249,13 +289,15 @@ let ReportToolsAndContent = React.createClass({
         this.pageStart = this.props.reportData.pageOffset + 1;
         // Define page end. This is page offset added to page size or number of rows.
         this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
-        // If we have the count of records for the report, and the total count is less than offset + pagesize, set the
-        // page end to total number of records. Ex. if the total number of records is 13 with page size of 10, set the
-        // page end for the last page to 13, instead of 20.
-        if (this.props.reportData.data && this.props.reportData.data.recordsCount) {
-            if (this.props.reportData.data.recordsCount && this.pageEnd > this.props.reportData.data.recordsCount) {
-                this.pageEnd = this.props.reportData.data.recordsCount;
-            }
+
+        if (this.props.reportData.data) {
+            let filteredRecordsCount = this.props.reportData.data.filteredRecordsCount;
+            let recordsCount = this.props.reportData.data.recordsCount;
+
+            let countToConsider = StringUtils.isNonEmptyString(this.props.reportData.searchStringForFiltering) && filteredRecordsCount ?
+                                    filteredRecordsCount :
+                                    recordsCount;
+            this.pageEnd = this.pageEnd > countToConsider ? countToConsider : this.pageEnd;
         }
 
         if (_.isUndefined(this.props.params) ||
