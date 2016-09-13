@@ -10,6 +10,7 @@ import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
 import Locale from '../../src/locales/locales';
 
+import DEFAULT_RECORD_KEY_ID from '../../src/constants/schema';
 
 var TableActionsMock = React.createClass({
     render: function() {return <div>table actions</div>;}
@@ -66,13 +67,14 @@ const fakeReportData_before = {
                 datatypeAttributes: {type:"NUMERIC"}
             },
             {
-                id:3,
+                // Skip 3 because that ID is reserved for Record ID#
+                id:4,
                 field: "col_date",
                 headerName: "col_date",
                 datatypeAttributes: {type:"DATE"}
             },
             {
-                id:4,
+                id:5,
                 field: "col_checkbox",
                 headerName: "col_check",
                 datatypeAttributes: {type:"CHECKBOX"}
@@ -130,13 +132,13 @@ function getUneditableFieldTestData(options) {
 
     // Add uneditable data or a record ID field
     testData.data.records[0].col_record_id = {
-        id: 5,
+        id: 6,
         value: 100,
         display: "100"
     };
     testData.data.columns.push({
-        id: 5,
-        field: (options.recordId ? "Record ID#" : "col_record_id"),
+        id: (options.recordId ? 3 : 6),
+        field: 'Record ID#',
         headerName: "record_id",
         datatypeAttributes: {type:"NUMERIC"},
         userEditableValue: options.userEditableValue
@@ -380,18 +382,17 @@ describe('AGGrid functions', () => {
                                                          loading={false}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        let datecol = _.find(fakeReportData_before.data.columns, function(col) {
+        let dateColIndex = _.findIndex(fakeReportData_before.data.columns, function(col) {
             return col.datatypeAttributes.type === "DATE";
         });
-
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
         let menuButtons = ReactDOM.findDOMNode(gridElement[0]).querySelectorAll(".ag-header button.dropdownToggle");
         expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
-        TestUtils.Simulate.click(menuButtons[datecol.id - 1]);
+        TestUtils.Simulate.click(menuButtons[dateColIndex]);
         let menu = gridElement[0].getElementsByClassName("dropdown-menu");
         expect(menu.length).toBeGreaterThan(1);
-        let menuoptions = menu[datecol.id - 1].querySelectorAll("a:last-child"); // find the menu item text
+        let menuoptions = menu[dateColIndex].querySelectorAll("a:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML.includes(Locale.getMessage("report.menu.sort.oldToNew"))).toBe(true);
         expect(menuoptions[1].innerHTML.includes(Locale.getMessage("report.menu.sort.newToOld"))).toBe(true);
         expect(menuoptions[2].innerHTML.includes(Locale.getMessage("report.menu.group.oldToNew"))).toBe(true);
@@ -406,17 +407,17 @@ describe('AGGrid functions', () => {
                                                          loading={false} selectedSortFids={[3]}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        let checkcol = _.find(fakeReportData_before.data.columns, function(col) {
+        let checkColIndex = _.findIndex(fakeReportData_before.data.columns, function(col) {
             return col.datatypeAttributes.type === "CHECKBOX";
         });
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
         let menuButtons = ReactDOM.findDOMNode(gridElement[0]).querySelectorAll(".ag-header button.dropdownToggle");
         expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
-        TestUtils.Simulate.click(menuButtons[checkcol.id - 1]);
+        TestUtils.Simulate.click(menuButtons[checkColIndex]);
         let menu = gridElement[0].getElementsByClassName("dropdown-menu");
         expect(menu.length).toBeGreaterThan(1);
-        let menuoptions = menu[checkcol.id - 1].querySelectorAll("a:last-child"); // find the menu item text
+        let menuoptions = menu[checkColIndex].querySelectorAll("a:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML.includes(Locale.getMessage("report.menu.sort.uncheckedToChecked"))).toBe(true);
         expect(menuoptions[1].innerHTML.includes(Locale.getMessage("report.menu.sort.checkedToUnchecked"))).toBe(true);
         expect(menuoptions[2].innerHTML.includes(Locale.getMessage("report.menu.group.uncheckedToChecked"))).toBe(true);

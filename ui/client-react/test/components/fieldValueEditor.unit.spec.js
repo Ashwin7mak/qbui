@@ -7,6 +7,8 @@ var simpleStringify = require('../../../common/src/simpleStringify.js');
 
 import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
 
+import {DEFAULT_RECORD_KEY_ID} from '../../src/constants/schema';
+
 function setupI18nNumberMock() {
     let I18nMessageMock = React.createClass({
         render: function() {
@@ -118,8 +120,13 @@ describe('FieldValueEditor functions', () => {
     it('does not render an editor for a Record ID field', () => {
         setupI18nNumberMock();
 
+        let fieldDef = {
+            id: DEFAULT_RECORD_KEY_ID,
+            field: 'Record ID#'
+        };
+
         component = TestUtils.renderIntoDocument(
-            <FieldValueEditor type={FieldFormats.NUMBER_FORMAT} fieldDef={{field: 'Record ID#'}} />
+            <FieldValueEditor type={FieldFormats.NUMBER_FORMAT} fieldDef={fieldDef} />
         );
 
         // There should not be an input to change the value
