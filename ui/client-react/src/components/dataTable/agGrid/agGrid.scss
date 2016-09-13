@@ -46,7 +46,7 @@ $cell-edit-background-edit: #f3f8fe;
 
     .ag-body-container {
         background-color: $color2;
-        margin-bottom:160px;
+        margin-bottom:230px;
 
     }
     /* prevent clipping of actions and dropdowns in 1st column */
@@ -627,3 +627,7 @@ $cell-edit-background-edit: #f3f8fe;
     overflow: visible;
 }
 
+
+.ag-row .ag-cell:last-child .Select-menu-outer {
+    right:0;
+}
