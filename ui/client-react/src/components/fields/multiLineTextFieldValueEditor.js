@@ -56,7 +56,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
         };
         theVals.display = textFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
         if (this.props.onBlur) {
-            this.props.onBlur({value: ev.target.value, display: ev.target.value});
+            this.props.onBlur({value: theVals.value, display: theVals.display});
         }
     },
 
