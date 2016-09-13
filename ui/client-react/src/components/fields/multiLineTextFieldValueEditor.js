@@ -25,13 +25,14 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     statics: {
-        MAX_TEXTAREA_HEIGHT: 200
+        MAX_TEXTAREA_HEIGHT: 200,
+        MAX_TEXTAREA_WIDTH: 200
     },
 
     getInitialState() {
         return {
             style: {
-                width: 200,
+                width: MultiLineTextFieldValueEditor.MAX_TEXTAREA_WIDTH,
                 height: "auto"
             }
         };
@@ -42,7 +43,9 @@ const MultiLineTextFieldValueEditor = React.createClass({
      * @param ev
      */
     onChange(ev) {
+        console.log('not if onChange: ', ev);
         if (this.props.onChange) {
+            console.log('hello on change!: ', ev);
             this.props.onChange(ev.target.value);
         }
     },
@@ -68,12 +71,12 @@ const MultiLineTextFieldValueEditor = React.createClass({
     resize() {
         this.setState({style: {height: "auto"}}, () => {
             // now we can query the actual (auto) height
-            let newHeight = this.refs.textarea.scrollHeight;
+            let newHeight = this.getScrollHeight();
 
             if (newHeight < MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT) {
-                this.setState({style: {height: newHeight, width: 200}});
+                this.setState({style: {height: newHeight, width: MultiLineTextFieldValueEditor.MAX_TEXTAREA_WIDTH}});
             } else {
-                this.setState({style: {height: MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT, width: 200, overflowY: "auto"}});
+                this.setState({style: {height: MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT, width: MultiLineTextFieldValueEditor.MAX_TEXTAREA_WIDTH, overflowY: "auto"}});
             }
         });
     },
@@ -83,9 +86,13 @@ const MultiLineTextFieldValueEditor = React.createClass({
      * @param ev
      */
     onKeyUp(ev) {
-        if (this.refs.textarea.scrollHeight < 200) {
+        if (this.getScrollHeight() < MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT) {
             this.resize();
         }
+    },
+
+    getScrollHeight() {
+        return this.refs.textarea.scrollHeight;
     },
 
     render() {
