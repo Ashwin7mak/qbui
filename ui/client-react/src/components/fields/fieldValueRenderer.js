@@ -1,9 +1,10 @@
 import React from 'react';
 
 import FieldFormats from '../../utils/fieldFormats';
-import {MultiLineTextFieldValueRenderer, DateFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
+import {DateFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
 import TextFieldValueRenderer from './textFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
+import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
 import _ from 'lodash';
 
 /**
