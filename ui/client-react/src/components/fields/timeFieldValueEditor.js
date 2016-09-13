@@ -24,11 +24,10 @@ function getTimesInMinutes(increment) {
     let map = [];
     let time = moment().startOf('day');
     let endOfDay = moment().endOf('day');
-    let format = 'HH:mm'; //dateTimeFormatter.getTimeFormat({showTime:true});
 
     //  Loop until we are on the next day
     while (time.isBefore(endOfDay)) {
-        map.push({value:time.format("HH:mm"), label:time.format(format)});
+        map.push({value:time.format("HH:mm"), label:time.format("hh:mm a")});
         time.add(increment, 'm');
     }
     return map;
@@ -157,6 +156,10 @@ const TimeFieldValueEditor = React.createClass({
                 let momentTime = moment(inputValue).isValid() ? moment(inputValue) : moment(inputValue, dateTimeFormat);
                 theTime = momentTime.format(timeFormat);
             }
+        }
+
+        if (!theTime) {
+            classes += ' ghost-text';
         }
 
         //  TODO: verify small breakpoint once form edit is implemented

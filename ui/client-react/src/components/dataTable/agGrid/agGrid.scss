@@ -504,6 +504,7 @@ $cell-edit-background-edit: #f3f8fe;
                         height: 28px;
                     }
                     .Select-input {
+                        padding-left: 1px;
                         height: 28px;
                         color: $color25;
                         font-size: 12px;
@@ -512,12 +513,12 @@ $cell-edit-background-edit: #f3f8fe;
                         line-height: 28px;
                     }
                     .Select-placeholder {
-                        line-height: 28px;
+                        line-height: 27px;
                         color: $color25;
+                        padding-left: 1px;
                     }
                     .Select-option {
                         color: $color25;
-                        font-size: 12px;
                         padding-top: 1px;
                     }
                     .Select-arrow-zone {
@@ -526,21 +527,29 @@ $cell-edit-background-edit: #f3f8fe;
                             color: $datepicker-select-button-fg;
                         }
                     }
-                }
-                &.timeCell>* {
-                    .Select-placeholder {
-                        font-size: 12px;
+                    &.ghost-text {
+                        .Select-placeholder {
+                            color: $color-black-500;
+                            font-style: italic;
+                            font-weight: bold;
+                        }
                     }
                 }
                 &.dateCell {
                     margin-top: 3px;
+                    &.ghost-text {
+                        .input-group.date input.form-control {
+                            color: $color-black-500;
+                            font-style: italic;
+                            font-weight: bold;
+                        }
+                    }
                 }
                 &.dateCell>* {
                     border: 0;
                     .input-group.date input.form-control {
                         border: 0;
                         padding: 3px;
-                        font-size: 12px;
                         height: 27px;
                         border-radius: 0;
                     }
@@ -558,12 +567,23 @@ $cell-edit-background-edit: #f3f8fe;
                 &.dateTimeField {
                     width: 94px;
                     vertical-align: middle;
+
+                    .bootstrap-datetimepicker-widget {
+                        right: 120px !important;
+                    }
+                    .input-group.date input.form-control {
+                        font-size:12px;
+                    }
+
                     .dropdown-toggle {
                         width: 85px;
                         border: 0;
                     }
-                    .bootstrap-datetimepicker-widget {
-                        right: 120px !important;
+                    .Select-option {
+                        font-size: 12px;
+                    }
+                    .Select-placeholder {
+                        font-size: 12px;
                     }
                 }
                 &.input-group {

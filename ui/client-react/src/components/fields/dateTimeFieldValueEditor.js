@@ -55,7 +55,9 @@ const DateTimeFieldValueEditor = React.createClass({
         if (this.props.onChange && value) {
             //  extract the time component from the original
             let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
-            let theOrigTime = moment(origValue).format(" HH:mm:ss");
+
+            //  if no time, then set to midnight
+            let theOrigTime = origValue ? moment(origValue).format(" HH:mm:ss") : '00:00:00';
 
             //  TODO: not sure if should be returned in ISO format
             //let newDate = moment(value + theOrigTime).toISOString();
@@ -69,82 +71,55 @@ const DateTimeFieldValueEditor = React.createClass({
         if (this.props.onChange && value) {
             //  extract the date component from the original
             let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
-            let theOrigDate = moment(origValue).format("MM-DD-YYYY ");
 
-            //  TODO: not sure if should be returned in ISO format
-            //let newDate = moment(theOrigDate + value).toISOString();
-            let newDate = theOrigDate + value;
+            //  if no original date, then set to now
+            let dateFormat = "MM-DD-YYYY ";
+            let theOrigDate = origValue ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
 
-            this.props.onChange(newDate);
+            this.props.onChange(theOrigDate + value);
         }
     },
 
     onDateBlur(value) {
         if (this.props.onBlur && value) {
             let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
-            let theOrigTime = moment(origValue).format(" HH:mm:ss");
-            let isoDate = moment(value + theOrigTime).toISOString();
 
-            let vals = {
-                value: isoDate,
+            //  if no time, then set to midnight
+            let theOrigTime = origValue ? moment(origValue).format(" HH:mm:ss") : '00:00:00';
+
+            let valueObject = {
+                value: moment(value + theOrigTime).toISOString(),
                 display: ''
             };
 
-            vals.display = dateTimeFormatter.format(vals, this.props.attributes);
-            this.props.onBlur(vals);
+            valueObject.display = dateTimeFormatter.format(valueObject, this.props.attributes);
+            this.props.onBlur(valueObject);
         }
-
-
-        //  TODO From timeFieldValueEditor onBlur event
-        //let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
-
-        //if (fieldFormats.TIME_FORMAT === this.props.type) {
-        //    vals.value = ev.target.value;
-        //    vals.display = timeFormatter.format(vals, this.props.attributes);
-        //} else {
-        //    //  extract the date component from the original; otherwise use epoch date
-        //    let origDate = moment(origValue).format("YYYY-MM-DD ") + ev.target.value;
-        //    let theDate = moment(origDate).format(moment.ISO_8601);
-        //
-        //    vals.value = theDate;
-        //    vals.display = dateTimeFormatter.format(vals, this.props.attributes);
-        //}
-
-        //  TODO From dateFieldValueEditor onBlur event
-        //let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
-
-        //  extract the time component from the original; otherwise use midnight
-        //let origMoment = moment(origValue);
-        //let newMoment = moment(ev.target.value);
-
-        //let theDate = moment(origValue, "HH:mm:ss").isValid() ? moment(origValue) : moment().set({h: 0, m: 0, s: 0, ms: 0});
-        //let newDate = ev.target.value + theDate.format(" HH:mm:ss");
-
-
     },
 
     onTimeBlur(value) {
 
         if (this.props.onBlur && value) {
             let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
-            let theOrigDate = moment(origValue).format("MM-DD-YYYY ");
 
-            let isoDate = moment(theOrigDate + value).toISOString();
+            //  if no original date, then set to now
+            let dateFormat = "MM-DD-YYYY ";
+            let theOrigDate = origValue ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
 
-            let vals = {
-                value: isoDate,
+            let valueObject = {
+                value: moment(theOrigDate + value).toISOString(),
                 display: ''
             };
 
-            vals.display = timeFormatter.format(vals, this.props.attributes);
-            this.props.onBlur(vals);
+            valueObject.display = timeFormatter.format(valueObject, this.props.attributes);
+            this.props.onBlur(valueObject);
         }
     },
 
     render() {
         return <div>
-            <DateFieldValueEditor onDateTimeChange={this.onDateChange} onDateTimeBlur={this.onDateBlur} classes={'dateTimeField'} id={this.props.idKey} {...this.props}/>
-            <TimeFieldValueEditor onDateTimeChange={this.onTimeChange} onDateTimeBlur={this.onTimeBlur} classes={'dateTimeField'} id={this.props.idKey} {...this.props} />
+            <DateFieldValueEditor onDateTimeChange={this.onDateChange} onDateTimeBlur={this.onDateBlur} classes={'dateTimeField'} {...this.props}/>
+            <TimeFieldValueEditor onDateTimeChange={this.onTimeChange} onDateTimeBlur={this.onTimeBlur} classes={'dateTimeField'} {...this.props}/>
         </div>;
     }
 

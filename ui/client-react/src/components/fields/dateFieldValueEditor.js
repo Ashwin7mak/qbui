@@ -111,7 +111,9 @@ const DateFieldValueEditor = React.createClass({
         const theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(format) : '';
 
         //  if no date, then use the format as help placeholder
-        const defaultText = theDate ? theDate : format.toLowerCase();
+        if (!theDate) {
+            classes += ' ghost-text';
+        }
 
         //  TODO: verify small breakpoint once form edit is implemented
         return (Breakpoints.isSmallBreakpoint() ?
@@ -124,13 +126,13 @@ const DateFieldValueEditor = React.createClass({
             <div className={classes}>
                 <DatePicker
                     name="date-picker"
-                    dateTime={theDate}
+                    dateTime={theDate ? theDate : moment().format(format)}
                     format={'MM-DD-YYYY'}
-                    inputFormat={theDate ? format : ''}
+                    inputFormat={format}
                     onBlur={this.onBlur}
                     onChange={this.onChange}
                     mode="date"
-                    defaultText={defaultText}/>
+                    defaultText={theDate ? theDate : format.toLowerCase()}/>
             </div>
         );
     }
