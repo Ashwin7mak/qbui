@@ -6,7 +6,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import {DEFAULT_RECORD_KEY} from '../../../constants/schema';
 import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
@@ -131,12 +130,7 @@ const CellRenderer = React.createClass({
     },
 
     render() {
-
         let isEditable = true;
-        // record ID fields are not editable
-        if (typeof this.props.colDef.field !== 'undefined' && this.props.colDef.field === DEFAULT_RECORD_KEY) {
-            isEditable = false;
-        }
 
         // built in fields are not editable
         if (typeof this.props.colDef.builtIn !== 'undefined' &&  this.props.colDef.builtIn) {
