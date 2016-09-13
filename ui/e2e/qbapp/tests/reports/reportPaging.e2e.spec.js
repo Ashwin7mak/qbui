@@ -25,7 +25,6 @@
          * Have to specify the done() callback at the end of the promise chain to let Jasmine know we are done with async calls
          */
         beforeAll(function(done) {
-            var nonBuiltInFields;
             e2eBase.reportsBasicSetUp(null, 55).then(function(appAndRecords) {
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
@@ -68,14 +67,6 @@
                 });
             });
 
-            //beforeEach(function(done) {
-            //    e2eRetry.ignoring().run(function() {
-            //        return reportServicePage.waitForElement(reportServicePage.agGridBodyEl);
-            //    }).then(function() {
-            //        done();
-            //    });
-            //});
-
             // Verify paging component appears at the top in the report toolbar and in report footer
             it('Verify paging components', function(done) {
                 // Verify pagination numbers
@@ -90,7 +81,7 @@
                 done();
             });
 
-            it('Verify number of records per page in report and record IDs 1-50', function(done) {
+            it('Verify number of records per page in report and record IDs', function(done) {
                 reportServicePage.agGridRecordElList.then(function(records) {
                     // Check we have max records being displayed
                     expect(records.length).toBe(e2eConsts.MAX_PAGING_SIZE);
@@ -115,7 +106,7 @@
                 });
             });
 
-            it('Verify paging nav prev functionality', function(done) {
+            it('Verify paging nav previous functionality', function(done) {
                 reportPagingPage.clickPagingNavButton(reportPagingPage.pagingFooterPrevButton).then(function() {
                     reportServicePage.agGridRecordElList.then(function(records) {
                         expect(records.length).toBe(e2eConsts.MAX_PAGING_SIZE);
@@ -127,6 +118,7 @@
                 });
             });
         });
+
         /**
          * After all tests are done, run the cleanup function in the base class
          */
