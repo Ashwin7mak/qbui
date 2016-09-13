@@ -100,7 +100,7 @@
             mediumSleep: 2500,
             largeSleep: 5000,
             // Constant for protractors ExpectedConditions functions (see e2ePageBase)
-            ecTimeout: 5000
+            ecTimeout: 7500
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function() {
@@ -142,7 +142,7 @@
 
             // Third party library that lets us retry webdriver commands
             global.e2eRetry = require('webdriverjs-retry');
-            e2eRetry.setDefaultTimeout(10000);
+            e2eRetry.setDefaultTimeout(15000);
 
             // Add jasmine-spec-reporter
             var SpecReporter = require('jasmine-spec-reporter');
