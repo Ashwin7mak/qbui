@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 
-
 import MultiLineTextFieldValueEditor  from '../../src/components/fields/multiLineTextFieldValueEditor';
 
 fdescribe('MultiLineTextFieldValueEditor functions', () => {
@@ -22,7 +21,6 @@ fdescribe('MultiLineTextFieldValueEditor functions', () => {
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         spyOn(component, 'resize');
-        // debugger;
         let textArea = ReactDOM.findDOMNode(component);
         TestUtils.Simulate.keyUp(
             textArea,
@@ -80,6 +78,47 @@ fdescribe('MultiLineTextFieldValueEditor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textArea = ReactDOM.findDOMNode(component);
         expect(textArea.value).toBe(text);
+    });
+
+    it('invokes onBlur', () => {
+        let expectedVals = {
+            value: 'test test',
+            display: 'display test'
+        };
+
+        let mockEvent = {
+            target: {
+                value: expectedVals.value
+            }
+        };
+        let mockParent = {
+            onBlur: function(ev) {
+                return '';
+            }
+        };
+        let mockTextFormatter = {
+            format: function() {
+                return expectedVals.display;
+            }
+        };
+        let mockFieldDef = {
+            dataTypeAttributes: 'foo'
+        };
+
+        spyOn(mockParent, 'onBlur');
+
+        MultiLineTextFieldValueEditor.__Rewire__('textFormatter', mockTextFormatter)
+        component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor fieldDef={mockFieldDef} onBlur={mockParent.onBlur} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let textArea = ReactDOM.findDOMNode(component);
+        TestUtils.Simulate.blur(
+            textArea,
+            mockEvent
+        );
+
+        expect(mockParent.onBlur).toHaveBeenCalledWith(expectedVals);
+        MultiLineTextFieldValueEditor.__ResetDependency__('textFormatter');
     });
 
 });
