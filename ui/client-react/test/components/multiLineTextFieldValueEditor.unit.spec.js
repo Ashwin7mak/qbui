@@ -20,36 +20,42 @@ describe('MultiLineTextFieldValueEditor functions', () => {
     it('resizes on keyup', () => {
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
         spyOn(component, 'resize');
+
         let textArea = ReactDOM.findDOMNode(component);
         TestUtils.Simulate.keyUp(
             textArea,
             {}
         );
+
         expect(component.resize).toHaveBeenCalled();
     });
 
-    it('does not resize on keyup when size is greater than 200', () => {
+    it('does not resize on keyup when size is greater than 200px', () => {
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor />);
-        spyOn(component, 'getScrollHeight').and.returnValue(300);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        spyOn(component, 'getScrollHeight').and.returnValue(300);
         spyOn(component, 'resize');
+
         let textArea = ReactDOM.findDOMNode(component);
         TestUtils.Simulate.keyUp(
             textArea,
             {}
         );
+
         expect(component.resize).not.toHaveBeenCalled();
     });
 
-    it('resizes to max height when the component first loads for long texts', () => {
+    it('resizes to max height when the component first loads when textarea is over 200px', () => {
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor />);
-        spyOn(component, 'getScrollHeight').and.returnValue(300);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        spyOn(component, 'getScrollHeight').and.returnValue(300);
 
         component.resize();
 
-        let textArea = ReactDOM.findDOMNode(component);
         expect(component.state.style.height).toBe(200);
     });
 
@@ -64,23 +70,29 @@ describe('MultiLineTextFieldValueEditor functions', () => {
                 return '';
             }
         };
+
         spyOn(mockParent, 'onChange');
+
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor onChange={mockParent.onChange} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
         let textArea = ReactDOM.findDOMNode(component);
         TestUtils.Simulate.change(textArea, mockEvent);
+
         expect(mockParent.onChange).toHaveBeenCalledWith(mockEvent.target.value);
     });
 
     it('test render of component with value', () => {
         let text = "testing testing 1 2 3";
+
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor value={text}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
         let textArea = ReactDOM.findDOMNode(component);
         expect(textArea.value).toBe(text);
     });
 
-    it('invokes onBlur', () => {
+    it('invokes parent\'s onBlur with textArea value and formatted display value', () => {
         let expectedVals = {
             value: 'test test',
             display: 'display test'
@@ -107,7 +119,7 @@ describe('MultiLineTextFieldValueEditor functions', () => {
 
         spyOn(mockParent, 'onBlur');
 
-        MultiLineTextFieldValueEditor.__Rewire__('textFormatter', mockTextFormatter)
+        MultiLineTextFieldValueEditor.__Rewire__('textFormatter', mockTextFormatter);
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor fieldDef={mockFieldDef} onBlur={mockParent.onBlur} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
