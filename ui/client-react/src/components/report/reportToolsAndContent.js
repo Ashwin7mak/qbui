@@ -208,33 +208,7 @@ let ReportToolsAndContent = React.createClass({
             if (this.props.reportData.pageOffset + this.props.reportData.numRows >= this.props.reportData.data.recordsCount) {
                 return false;
             }
-            let appId = this.props.params.appId;
-            let tblId = this.props.params.tblId;
-            let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
-            let format = true;
-            let numRows = this.props.reportData.numRows;
-            let newOffset = this.props.reportData.pageOffset + numRows;
-            let sortList = this.props.reportData.sortList;
-
-            let searchString = this.props.reportData.searchStringForFiltering;
-            if (StringUtils.isNonEmptyString(searchString)) {
-                let filter = {
-                    selections: this.props.reportData.selections,
-                    search: searchString,
-                    facet: this.props.reportData.facetExpression
-                };
-                let queryParams =  {
-                    format:format,
-                    offset:newOffset,
-                    numRows:numRows
-                };
-                let overrideQueryParams = {
-                    sortList:sortList
-                };
-                this.getFlux().actions.getFilteredRecords(appId, tblId, rptId, queryParams, filter, overrideQueryParams);
-            } else {
-                this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows, sortList);
-            }
+            this.getPageUsingOffsetMultiplicant(1);
         }
     },
     getPreviousReportPage() {
@@ -242,34 +216,42 @@ let ReportToolsAndContent = React.createClass({
             if (this.props.reportData.pageOffset === 0) {
                 return false;
             }
-            let appId = this.props.params.appId;
-            let tblId = this.props.params.tblId;
-            let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
-            let format = true;
-            let numRows = this.props.reportData.numRows;
-            let newOffset = this.props.reportData.pageOffset - numRows;
-            let sortList = this.props.reportData.sortList;
+            this.getPageUsingOffsetMultiplicant(-1);
+        }
+    },
+    getPageUsingOffsetMultiplicant(multiplicant) {
+        let appId = this.props.params.appId;
+        let tblId = this.props.params.tblId;
+        let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
+        let format = true;
+        let numRows = this.props.reportData.numRows;
+        let newOffset = this.props.reportData.pageOffset + (multiplicant * numRows);
 
-            let searchString = this.props.reportData.searchStringForFiltering;
-            if (StringUtils.isNonEmptyString(searchString)) {
-                let filter = {
-                    selections: this.props.reportData.selections,
-                    search: searchString,
-                    facet: this.props.reportData.facetExpression
-                };
-                let queryParams =  {
-                    format:format,
-                    offset:newOffset,
-                    numRows:numRows
-                };
-                let overrideQueryParams = {
-                    sortList:sortList
-                };
+        // Set up sort list
+        let sortList = "";
+        let data = this.props.reportData.data;
+        if (data && data.sortFids && data.sortFids.length > 0) {
+            sortList = ReportUtils.getListString(data.sortFids);
+        }
 
-                this.getFlux().actions.getFilteredRecords(appId, tblId, rptId, queryParams, filter, overrideQueryParams);
-            } else {
-                this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows);
-            }
+        let searchString = this.props.reportData.searchStringForFiltering;
+        if (StringUtils.isNonEmptyString(searchString)) {
+            let filter = {
+                selections: this.props.reportData.selections,
+                search: searchString,
+                facet: this.props.reportData.facetExpression
+            };
+            let queryParams =  {
+                format:format,
+                offset:newOffset,
+                numRows:numRows
+            };
+            let overrideQueryParams = {
+                sortList:sortList
+            };
+            this.getFlux().actions.getFilteredRecords(appId, tblId, rptId, queryParams, filter, overrideQueryParams);
+        } else {
+            this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows, sortList);
         }
     },
     render() {
