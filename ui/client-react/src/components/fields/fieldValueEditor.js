@@ -217,9 +217,7 @@ const FieldValueEditor = React.createClass({
          * not including the css align-items: center (align-items centered is used with the class cellEditWrapper, which was what the component
          * MultiLineTextFieldValueEditor was using, and it prevented it from lining up correctly).
          */
-        if (this.props.type === 13) {
-            classes += ' multiLineCellEditWrapper';
-        } else if (this.props.classes) {
+        if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
         // error state css class
