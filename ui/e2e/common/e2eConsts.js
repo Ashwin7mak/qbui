@@ -4,6 +4,9 @@
  */
 (function() {
     'use strict';
+    // Use client constants if we can
+    var clientConsts = require('./../../common/src/constants');
+
     module.exports = Object.freeze({
 
         XLARGE_SIZE : 'xlarge',
@@ -26,7 +29,7 @@
         TABLE3 : 2,
         TABLE4 : 3,
 
-        MAX_PAGING_SIZE : 50,
+        MAX_PAGING_SIZE : clientConsts.PAGE.DEFAULT_NUM_ROWS,
 
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
 

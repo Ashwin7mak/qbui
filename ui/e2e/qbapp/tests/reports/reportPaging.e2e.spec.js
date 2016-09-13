@@ -25,7 +25,7 @@
          * Have to specify the done() callback at the end of the promise chain to let Jasmine know we are done with async calls
          */
         beforeAll(function(done) {
-            e2eBase.reportsBasicSetUp(null, 55).then(function(appAndRecords) {
+            e2eBase.reportsBasicSetUp(null, e2eConsts.MAX_PAGING_SIZE + 5).then(function(appAndRecords) {
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
             }).then(function() {
@@ -93,7 +93,7 @@
                 });
             });
 
-            it('Verify paging nav next functionality', function(done) {
+            it('Verify paging nav next button functionality', function(done) {
                 reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
                     reportServicePage.agGridRecordElList.then(function(records) {
                         expect(records.length).toBeLessThan(11);
@@ -106,7 +106,7 @@
                 });
             });
 
-            it('Verify paging nav previous functionality', function(done) {
+            it('Verify paging nav previous button functionality', function(done) {
                 reportPagingPage.clickPagingNavButton(reportPagingPage.pagingFooterPrevButton).then(function() {
                     reportServicePage.agGridRecordElList.then(function(records) {
                         expect(records.length).toBe(e2eConsts.MAX_PAGING_SIZE);
@@ -117,6 +117,8 @@
                     });
                 });
             });
+
+            //TODO: Should add a test for counting records text to appear (need to fix bulk add first most likely)
         });
 
         /**
