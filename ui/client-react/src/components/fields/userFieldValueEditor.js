@@ -26,25 +26,9 @@ const UserFieldValueEditor = React.createClass({
     },
 
     getAppUser(id) {
-        return this.props.appUsers.find(user => user.id === id);
+        return this.props.appUsers.find(user => user.userId === id);
     },
 
-    getSelectedUser() {
-        const appUser = this.getAppUser(this.state.selectedUserId);
-
-        if (appUser) {
-            // sadly the app user object has an id property but the record user object has a userId property...
-            let selectedUser = _.clone(appUser);
-            if (appUser.id) {
-                selectedUser.userId = selectedUser.id;
-            }
-            _.unset(selectedUser, "id");
-
-            return selectedUser;
-        } else {
-            return null;
-        }
-    },
 
     getSelectItems() {
         const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
@@ -53,7 +37,7 @@ const UserFieldValueEditor = React.createClass({
             this.props.appUsers.map(user => {
                 const label = userFormatter.format({value: user}, datatypeAttributes);
                 return {
-                    value: user.id,
+                    value: user.userId,
                     label};
             }) : [];
     },
@@ -61,7 +45,7 @@ const UserFieldValueEditor = React.createClass({
     onBlur() {
 
         const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
-        const user = this.getSelectedUser();
+        const user = this.getAppUser(this.state.selectedUserId)
 
         const theVals = {
             value: user,

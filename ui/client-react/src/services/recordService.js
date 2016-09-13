@@ -72,8 +72,8 @@ class RecordService extends BaseService {
     saveRecord(appId, tableId, recordId, changes) {
 
         const fixedChanges = _.cloneDeep(changes);
-        // temp hack - patching user fields expects userID only on server not the field we got originally
 
+        // patching user fields expects user ID only on server not the user object we got originally
 
         if (_.isArray(fixedChanges)) {
             fixedChanges.forEach(change => {

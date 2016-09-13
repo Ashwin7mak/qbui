@@ -6,8 +6,9 @@
 
     let defaultRequest = require('request');
     let perfLogger = require('../../perfLogger');
-    var httpStatusCodes = require('../../constants/httpStatusCodes');
+    let httpStatusCodes = require('../../constants/httpStatusCodes');
     let log = require('../../logger').getLogger();
+    let _ = require('lodash');
 
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
@@ -56,6 +57,15 @@
                         (response) => {
                             if (response.body) {
                                 let users = JSON.parse(response.body);
+
+                                /**
+                                 * convert id property to userId for consistency with user values in records
+                                 */
+                                users.forEach(user => {
+                                    user.userId = user.id;
+                                    _.unset(user, "id");
+                                });
+
                                 resolve(users);
                             } else {
                                 resolve({});
