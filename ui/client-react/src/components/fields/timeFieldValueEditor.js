@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './fields.scss';
+
 import QBToolTip from '../qbToolTip/qbToolTip';
-import {MenuItem, DropdownButton} from 'react-bootstrap';
+
 import Select from "react-select";
 import 'react-select/dist/react-select.css';
+
+import Breakpoints from "../../utils/breakpoints";
+import fieldFormats from '../../utils/fieldFormats';
+import './fields.scss';
+
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
 import timeFormatter from '../../../../common/src/formatter/timeOfDayFormatter';
-import fieldFormats from '../../utils/fieldFormats';
 import moment from 'moment';
 
 /**
@@ -20,7 +24,7 @@ function getTimesInMinutes(increment) {
     let map = [];
     let time = moment().startOf('day');
     let endOfDay = moment().endOf('day');
-    let format = dateTimeFormatter.getTimeFormat({showTime:true});
+    let format = 'HH:mm'; //dateTimeFormatter.getTimeFormat({showTime:true});
 
     //  Loop until we are on the next day
     while (time.isBefore(endOfDay)) {
@@ -138,40 +142,45 @@ const TimeFieldValueEditor = React.createClass({
         }
 
         let timeFormat = dateTimeFormatter.getTimeFormat(this.props.attributes);
-        let dateTimeFormat = "MM-DD-YYYY " + timeFormat
+        let dateTimeFormat = "MM-DD-YYYY " + timeFormat;
 
         let inputValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
         let theTime = '';
         if (inputValue) {
-            if (fieldFormats.TIME_FORMAT !== this.props.type) {
-                //  FF doesn't parse dates well, so if it's an invalid format,
-                //  then it's a time that has been edited and the format for
-                //  the input value is as defined below.
-                if (moment(inputValue).isValid()) {
-                    theTime = moment(inputValue).format(timeFormat);
-                } else {
-                    //  if not a parsable date format, then it's a time that has been edited and
-                    //  the format for the input value will be as below
-                    theTime = moment(inputValue, dateTimeFormat).format(timeFormat);
-                }
-            } else {
+            if (fieldFormats.TIME_FORMAT === this.props.type) {
+                //  It's a time only field...just use today's date to allow us to format the time
                 let now = moment().format("MM-DD-YYYY ") + inputValue;
                 theTime = moment(now, dateTimeFormat).format(timeFormat);
+            } else {
+                //  Firefox parser is more strict than others when parsing; so may need to specify
+                //  the format of the input value if the moment parser can't parse the input value.
+                let momentTime = moment(inputValue).isValid() ? moment(inputValue) : moment(inputValue, dateTimeFormat);
+                theTime = momentTime.format(timeFormat);
             }
         }
 
-        return <div className={classes}>
-            <Select
-                name="time-select"
-                onBlur={this.onBlur}
-                onChange={this.onChange}
-                value={theTime}
-                options={this.timeDropList}
-                placeholder={theTime ? theTime : 'hh:mm'}
-                clearable={false}
-                arrowRenderer={this.renderClockIcon}
-            />
-        </div>;
+        //  TODO: verify small breakpoint once form edit is implemented
+        return (Breakpoints.isSmallBreakpoint() ?
+                <div className={classes}>
+                    <input type="time"
+                        name="time-select"
+                        onChange={this.onChange}
+                        value={theTime}
+                    />
+                </div> :
+                <div className={classes}>
+                    <Select
+                        name="time-select"
+                        onBlur={this.onBlur}
+                        onChange={this.onChange}
+                        value={theTime}
+                        options={this.timeDropList}
+                        placeholder={theTime ? theTime : 'hh:mm'}
+                        clearable={false}
+                        arrowRenderer={this.renderClockIcon}
+                    />
+                </div>
+        );
     }
 
 });

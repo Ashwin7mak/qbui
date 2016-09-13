@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './fields.scss';
+
 import QBToolTip from '../qbToolTip/qbToolTip';
+
+import Breakpoints from "../../utils/breakpoints";
+import './fields.scss';
+
 import DatePicker from 'react-bootstrap-datetimepicker';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
 import moment from 'moment';
@@ -53,25 +57,12 @@ const DateFieldValueEditor = React.createClass({
 
     onChange(newValue) {
         if (newValue && (this.props.onChange || this.props.onDateTimeChange)) {
-            // TODO: deal with QB implied dates like Jan 2004 == Jan 1 2004
-            // TODO: FIX..
-            let formats = ['M-D-YYYY', 'M-DD-YYYY', 'MM-D-YYYY', 'M-DD-YYYY', 'MM-DD-YYYY',
-                           'YYYY-M-D', 'YYYY-M-DD', 'YYYY-MM-D', 'YYYY-M-DD', 'YYYY-MM-DD',
-                           'MMM D YYYY', 'MMM DD YYYY', 'MMM DD, YYYY', 'MMM D, YYYY'];
-            let newDate = '';
-            for (let idx = 0; idx < formats.length; idx++) {
-                if (moment(newValue, formats[idx]).isValid()) {
-                    newDate = moment(newValue, formats[idx]).format('YYYY-MM-DD');
-                    break;
-                }
-            }
-
-            // if not a valid date, user is manually inputting
-            if (newDate) {
+            //  if the date is value, propagate the event
+            if (moment(newValue, 'MM-DD-YYYY').isValid()) {
                 if (this.props.onDateTimeChange) {
-                    this.props.onDateTimeChange(newDate);
+                    this.props.onDateTimeChange(newValue);
                 } else {
-                    this.props.onChange(newDate);
+                    this.props.onChange(newValue);
                 }
             }
         }
@@ -80,7 +71,6 @@ const DateFieldValueEditor = React.createClass({
     //send up the chain an object with value and formatted display value
     onBlur(ev) {
         if (ev.target && ev.target.value && (this.props.onBlur || this.props.onDateTimeBlur)) {
-
             if (this.props.onDateTimeBlur) {
                 this.props.onDateTimeBlur(ev.target.value);
             } else {
@@ -121,17 +111,28 @@ const DateFieldValueEditor = React.createClass({
         const theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(format) : '';
 
         //  if no date, then use the format as help placeholder
-        const defaultText = theDate ? theDate : format;
+        const defaultText = theDate ? theDate : format.toLowerCase();
 
-        return <div className={classes}>
-            <DatePicker dateTime={theDate}
-                        format={format}
-                        inputFormat={format}
-                        //onBlur={this.onBlur}
-                        onChange={this.onChange}
-                        mode="date"
-                        defaultText={defaultText}/>
-        </div>;
+        //  TODO: verify small breakpoint once form edit is implemented
+        return (Breakpoints.isSmallBreakpoint() ?
+            <div className={classes}>
+                <input type="date"
+                    name="date-picker"
+                    //onBlur={this.onBlur}
+                    onChange={this.onChange}/>
+            </div> :
+            <div className={classes}>
+                <DatePicker
+                    name="date-picker"
+                    dateTime={theDate}
+                    format={'MM-DD-YYYY'}
+                    inputFormat={theDate ? format : ''}
+                    onBlur={this.onBlur}
+                    onChange={this.onChange}
+                    mode="date"
+                    defaultText={defaultText}/>
+            </div>
+        );
     }
 
 });

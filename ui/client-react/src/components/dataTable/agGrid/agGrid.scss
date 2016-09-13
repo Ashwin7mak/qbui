@@ -541,12 +541,12 @@ $cell-edit-background-edit: #f3f8fe;
                         border: 0;
                         padding: 3px;
                         font-size: 12px;
-                        height: 28px;
+                        height: 27px;
                         border-radius: 0;
                     }
                     .input-group.date .input-group-addon {
                         background: #fff;
-                        height: 21px;
+                        height: 20px;
                         padding: 0;
                         border: 0;
                         color: $icon-color;
@@ -556,7 +556,7 @@ $cell-edit-background-edit: #f3f8fe;
                     }
                 }
                 &.dateTimeField {
-                    width: 92px;
+                    width: 94px;
                     vertical-align: middle;
                     .dropdown-toggle {
                         width: 85px;
@@ -578,7 +578,7 @@ $cell-edit-background-edit: #f3f8fe;
                         flex:1 1 auto;
                         border-radius:0;
                         border:0;
-                        height:21px;
+                        height:20px;
                         margin-right:1px;
                         font-size: 12px;
                         padding-left:2px;
