@@ -845,6 +845,9 @@ ReportContent.contextTypes = {
     touch: React.PropTypes.bool
 };
 
+ReportContent.propTypes = {
+    pendEdits: React.PropTypes.object.isRequired
+};
+
 export let ReportContentWithRouter = withRouter(ReportContent);
 export default ReportContentWithRouter;
-

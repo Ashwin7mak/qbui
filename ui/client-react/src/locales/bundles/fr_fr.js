@@ -50,7 +50,9 @@ export default {
         },
         pageActions: {
             addRecord: "Ajouter un enregistrement",
+            saveRecord: "Sauvegarder les modifications",
             saveAndAddRecord: "Enregistrer et ajouter une nouvelle ligne",
+            cancelSelection: "Annuler les modifications",
             favorite: "Préféré",
             gridEdit: "Grille modifier",
             edit: "Modifier",
