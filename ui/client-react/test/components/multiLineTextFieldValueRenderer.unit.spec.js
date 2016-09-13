@@ -5,7 +5,7 @@ import TestUtils from 'react-addons-test-utils';
 
 import MultiLineTextFieldValueRenderer  from '../../src/components/fields/multiLineTextFieldValueRenderer';
 
-fdescribe('MultiLineTextFieldValueRenderer functions', () => {
+describe('MultiLineTextFieldValueRenderer functions', () => {
     'use strict';
     var matchers = require('../reactJasmine');
     beforeEach(function() {
