@@ -45,7 +45,7 @@ const UserFieldValueEditor = React.createClass({
     onBlur() {
 
         const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
-        const user = this.getAppUser(this.state.selectedUserId)
+        const user = this.getAppUser(this.state.selectedUserId);
 
         const theVals = {
             value: user,
