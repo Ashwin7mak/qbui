@@ -43,9 +43,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
      * @param ev
      */
     onChange(ev) {
-        console.log('not if onChange: ', ev);
         if (this.props.onChange) {
-            console.log('hello on change!: ', ev);
             this.props.onChange(ev.target.value);
         }
     },
