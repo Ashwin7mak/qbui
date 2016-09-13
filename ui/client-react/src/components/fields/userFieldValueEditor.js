@@ -45,7 +45,7 @@ const UserFieldValueEditor = React.createClass({
                     label};
             }) : [];
 
-        const blankItems = [{value:null,label:"empty"}];
+        const blankItems = [{value:null, label:""}];
 
         return this.props.fieldDef.required ? appUserItems : blankItems.concat(appUserItems);
     },
@@ -104,7 +104,6 @@ const UserFieldValueEditor = React.createClass({
                 className="cellEdit"
                 tabIndex="0"
                 filterOption={this.filterOption}
-                autoSize={true}
                 value={this.state.selectedUserId}
                 optionRenderer={this.renderOption}
                 options={this.getSelectItems()}
