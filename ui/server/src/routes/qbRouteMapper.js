@@ -38,7 +38,7 @@
 
         routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
-        routeToGetFunction[routeConsts.RECORDS] = fetchAllRecordsAndCount;
+        routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT] = fetchReport;
         routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
@@ -266,38 +266,6 @@
                 },
                 function(response) {
                     logApiFailure(req, response, perfLog, 'Fetch All Records');
-
-                    //  client is waiting for a response..make sure one is always returned
-                    if (response && response.statusCode) {
-                        res.status(response.statusCode).send(response);
-                    } else {
-                        res.status(500).send(response);
-                    }
-                }
-            );
-        });
-    }
-
-    /**
-     * This function fetches all the records using records api, and fetches the count of all the records
-     * that are retrieved.
-     * This is used for both the records endpoint and the reports endpoint
-     * @param req
-     * @param res
-     */
-    /*eslint no-shadow:0 */
-    function fetchAllRecordsAndCount(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Fetch All Records and count', {req:filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            recordsApi.fetchRecordsFieldsAndCount(req).then(
-                function(response) {
-                    res.send(response);
-                    logApiSuccess(req, response, perfLog, 'Fetch All Records and count');
-                },
-                function(response) {
-                    logApiFailure(req, response, perfLog, 'Fetch All Records and count');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {
