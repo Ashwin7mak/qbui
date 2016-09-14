@@ -7,7 +7,7 @@ import {DefaultFieldValueEditor, DateFieldValueEditor,
 import TextFieldValueEditor from './textFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
 import NumericFieldValueEditor from './numericFieldValueEditor';
-import ComboBoxFieldValueEditor from './comboBoxFieldValueEditor'
+import ComboBoxFieldValueEditor from './comboBoxFieldValueEditor';
 import _ from 'lodash';
 
 /**
