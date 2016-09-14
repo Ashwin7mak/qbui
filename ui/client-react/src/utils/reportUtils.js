@@ -220,23 +220,6 @@ class ReportUtils {
     }
 
     /**
-    * Gets the id for the row even if the Record ID # field has been renamed
-    * @param rowData
-    *    {
-    *        fieldName: {
-    *            id: 3 // this is the field id
-    *            value: 2
-    *            display: "2"
-    *        }
-    *    }
-    * @returns {integer, null}
-    */
-    static getRowId(rowData) {
-        let recordIdField = _.find(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
-        return (typeof recordIdField.value === 'undefined' ? null : recordIdField.value);
-    }
-
-    /**
     * Determines what type of data has been provied and finds the unique record id field name
     * This is a helper method that can determine which type of data is available and get the record id field from it
     * @param {object} data
