@@ -9,32 +9,37 @@
     var reportServicePage = new ReportServicePage();
     var reportSortingPage = new ReportSortingPage();
 
+
     describe('Report Sorting', function() {
         var realmName;
         var realmId;
         var app;
-        var recordList;
+        var records;
+        var sortedRecords;
+        var sortedExpectedRecords = [];
 
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report.
          * Then creates them via the REST API.
          * Have to specify the done() callback at the end of the promise chain to let Jasmine know we are done with async calls
          */
+
+        /**
+         * Setup method. Generates JSON for an app, a table with different fields, and 10 records with different field types.
+         */
         beforeAll(function(done) {
             //Create a app, table and report
             e2eBase.reportsBasicSetUp().then(function(appAndRecords) {
                 // Set your global objects to use in the test functions
                 app = appAndRecords[0];
-                recordList = appAndRecords[1];
+                records = appAndRecords[1];
             }).then(function() {
                 // Generate 1 empty record
                 // Get the appropriate fields out of the third table
                 var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE1]);
                 var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
+                records.push(generatedEmptyRecords);
                 return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE1], generatedEmptyRecords);
-            }).then(function() {
-                //Create a report with facets [text field and checkbox field]
-                return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE1].id, [6, 15]);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
@@ -55,6 +60,48 @@
             });
         });
 
+
+        /*
+         * This function gets the value in the record parameter (array of field value pairs), where id matches the fid specified in the parameter
+         * Function is a custom sort function used by lodash from within the sortRecords function
+         * @Returns The value that lodash should sort on
+         */
+        var getSortValue = function(record, fid) {
+            // By default returns nothing if not found
+            var val = [];
+            // loop through the columns (fields) in the record
+            record.forEach(function(col) {
+                // find the column we are sorting on and return its value
+                if (col.id === fid) {
+                    val.push(col.value);
+                }
+            });
+            return val;
+        }
+
+        /**
+         * Function that will verify the filtered rows are contained in actual record list.
+         * @param facets Group
+         */
+        var verifySortedTableResults = function(expectedSortedTableResults) {
+            var sortedTableResults = [];
+            //Load the report in the UI
+            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function () {
+                //sleep for loading of table to finish
+                e2eBase.sleep(browser.params.smallSleep);
+                reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function () {
+                    reportServicePage.agGridRecordElList.getText().then(function (uiRecords) {
+                        for (var i = 1; i < uiRecords.length; i++) {
+                            sortedTableResults.push(uiRecords[i].replace(/\n/g, ","));
+                        }
+                        //console.log("the actual table sorted results are: " + JSON.stringify(sortedTableResults));
+                        //console.log("the expected sorted results are: " + JSON.stringify(expectedSortedTableResults));
+                        expect(sortedTableResults.join()).toEqual(expectedSortedTableResults.join());
+                    });
+                });
+            });
+        };
+
         /**
          * Data Provider for reports sorting Ascending testCases.
          * ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
@@ -64,235 +111,181 @@
         function sortingTestCases() {
             return [
                 {
-                    message: 'Text Field',
-                    ColumnName: 'Text Field',
-                    ColumnId: 2,
-                    AscItemText: 'Sort A to Z',
-                    DescItemText:'Sort Z to A'
-
+                    //the below are for UI calls
+                    message: 'Sort by Text field in ascending order',
+                    ColumnName: ['Text Field'],
+                    SortOrderItem: ['Sort A to Z'],
+                    //the below are for backend calls
+                    Fids: [6],
+                    sortFids: [function(row) {return getSortValue(row, 6);}],
+                    sortOrder: ['asc'],
+                    sortList: [
+                        {
+                            "fieldId": 6,
+                            "sortOrder": "asc",
+                            "groupType": null
+                        }
+                    ]
                 },
                 {
-                    message: 'Numeric Field',
-                    ColumnName: 'Numeric Field',
-                    ColumnId: 3,
-                    AscItemText:'Sort lowest to highest',
-                    DescItemText: 'Sort highest to lowest'
+                    //the below are for UI calls
+                    message: 'Sort by Text field in asc order then by Numeric in desc',
+                    ColumnName: ['Text Field', 'Numeric Field'],
+                    SortOrderItem: ['Sort A to Z', 'Sort highest to lowest'],
+                    //the below are for backend calls
+                    Fids: [6,7],
+                    sortFids: [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 7);}],
+                    sortOrder: ['asc','desc'],
+                    sortList: [
+                        {
+                            "fieldId": 6,
+                            "sortOrder": "asc",
+                            "groupType": null
+                        },
+                        {
+                            "fieldId": 7,
+                            "sortOrder": "desc",
+                            "groupType": null
+                        }
+                    ]
                 },
-                {
-                    message: 'Numeric Currency Field',
-                    ColumnName: 'Numeric Currency Field',
-                    ColumnId: 4,
-                    AscItemText: 'Sort lowest to highest',
-                    DescItemText: 'Sort highest to lowest'
-                },
-                {
-                    message: 'Numeric Percent Field',
-                    ColumnName: 'Numeric Percent Field',
-                    ColumnId: 5,
-                    AscItemText: 'Sort lowest to highest',
-                    DescItemText: 'Sort highest to lowest'
-                },
-                {
-                    message: 'Numeric Rating Field',
-                    ColumnName: 'Numeric Rating Field',
-                    ColumnId: 6,
-                    AscItemText: 'Sort lowest to highest',
-                    DescItemText: 'Sort highest to lowest'
-                },
-                {
-                    message: 'Date Field',
-                    ColumnName: 'Date Field',
-                    ColumnId: 7,
-                    AscItemText: 'Sort oldest to newest',
-                    DescItemText: 'Sort newest to oldest'
-                },
-                // TODO: UI is not currently displaying the full year on the date so breaks sorting in the tests
                 //{
-                //    message: 'Date Time Field',
-                //    ColumnName: 'Date Time Field',
-                //    ColumnId: 8,
+                //    message: 'Numeric Field',
+                //    ColumnName: 'Numeric Field',
+                //    ColumnId: 3,
+                //    AscItemText:'Sort lowest to highest',
+                //    DescItemText: 'Sort highest to lowest'
+                //},
+                //{
+                //    message: 'Numeric Currency Field',
+                //    ColumnName: 'Numeric Currency Field',
+                //    ColumnId: 4,
+                //    AscItemText: 'Sort lowest to highest',
+                //    DescItemText: 'Sort highest to lowest'
+                //},
+                //{
+                //    message: 'Numeric Percent Field',
+                //    ColumnName: 'Numeric Percent Field',
+                //    ColumnId: 5,
+                //    AscItemText: 'Sort lowest to highest',
+                //    DescItemText: 'Sort highest to lowest'
+                //},
+                //{
+                //    message: 'Numeric Rating Field',
+                //    ColumnName: 'Numeric Rating Field',
+                //    ColumnId: 6,
+                //    AscItemText: 'Sort lowest to highest',
+                //    DescItemText: 'Sort highest to lowest'
+                //},
+                //{
+                //    message: 'Date Field',
+                //    ColumnName: 'Date Field',
+                //    ColumnId: 7,
                 //    AscItemText: 'Sort oldest to newest',
                 //    DescItemText: 'Sort newest to oldest'
                 //},
-                {
-                    message: 'Duration Field',
-                    ColumnName: 'Duration Field',
-                    ColumnId: 10,
-                    AscItemText: 'Sort lowest to highest',
-                    DescItemText: 'Sort highest to lowest'
-                },
-                {
-                    message: 'Checkbox Field',
-                    ColumnName: 'Checkbox Field',
-                    ColumnId: 11,
-                    AscItemText: 'Sort unchecked to checked',
-                    DescItemText:'Sort checked to unchecked'
-                },
-                {
-                    message: 'Phone Number Field',
-                    ColumnName: 'Phone Number Field',
-                    ColumnId: 12,
-                    AscItemText: 'Sort lowest to highest',
-                    DescItemText: 'Sort highest to lowest'
-                },
-                {
-                    message: 'Email Address Field',
-                    ColumnName: 'Email Address Field',
-                    ColumnId: 13,
-                    AscItemText: 'Sort A to Z',
-                    DescItemText:'Sort Z to A'
-                },
-                {
-                    message: 'URL Text Field',
-                    ColumnName: 'URL Field',
-                    ColumnId: 14,
-                    AscItemText: 'Sort A to Z',
-                    DescItemText:'Sort Z to A'
-                }
+                //// TODO: UI is not currently displaying the full year on the date so breaks sorting in the tests
+                ////{
+                ////    message: 'Date Time Field',
+                ////    ColumnName: 'Date Time Field',
+                ////    ColumnId: 8,
+                ////    AscItemText: 'Sort oldest to newest',
+                ////    DescItemText: 'Sort newest to oldest'
+                ////},
+                //{
+                //    message: 'Duration Field',
+                //    ColumnName: 'Duration Field',
+                //    ColumnId: 10,
+                //    AscItemText: 'Sort lowest to highest',
+                //    DescItemText: 'Sort highest to lowest'
+                //},
+                //{
+                //    message: 'Checkbox Field',
+                //    ColumnName: 'Checkbox Field',
+                //    ColumnId: 11,
+                //    AscItemText: 'Sort unchecked to checked',
+                //    DescItemText:'Sort checked to unchecked'
+                //},
+                //{
+                //    message: 'Phone Number Field',
+                //    ColumnName: 'Phone Number Field',
+                //    ColumnId: 12,
+                //    AscItemText: 'Sort lowest to highest',
+                //    DescItemText: 'Sort highest to lowest'
+                //},
+                //{
+                //    message: 'Email Address Field',
+                //    ColumnName: 'Email Address Field',
+                //    ColumnId: 13,
+                //    AscItemText: 'Sort A to Z',
+                //    DescItemText:'Sort Z to A'
+                //},
+                //{
+                //    message: 'URL Text Field',
+                //    ColumnName: 'URL Field',
+                //    ColumnId: 14,
+                //    AscItemText: 'Sort A to Z',
+                //    DescItemText:'Sort Z to A'
+                //}
             ];
         }
 
-        describe('Report Sorting without Facets', function() {
+        describe('Report Sorting without Facets/Filters Report', function() {
+            sortingTestCases().forEach(function(testcase) {
+                it(testcase.message, function(done) {
+                    var r;
+                    var keyValue = [];
 
-            beforeAll(function(done) {
-                //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
-                done();
-            });
+                    //Create a report
+                    var reportsEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
+                    var reportToCreate = {
+                        name: testcase.message,
+                        type: 'TABLE',
+                        tableId: app.tables[0].id,
+                        fids  : testcase.Fids,
+                        sortList: testcase.sortList
+                    };
+                    //Create a report with testcase fids and sortLists
+                    e2eBase.recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportToCreate).then(function(report) {
+                        r = JSON.parse(report.body);
+                        //Verify that the report is created
+                        expect(r.id, 2);
+                    }).then(function(){
+                        // Sort the actual records using lodash _.orderby
+                        sortedRecords = reportSortingPage.sortRecords(records, testcase.sortFids, testcase.sortOrder);
 
-            /**
-             * Before each test starts just make sure the report list has loaded
-             */
-            beforeEach(function(done) {
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    done();
-                });
-            });
+                        for (var i = 1; i < sortedRecords.length; i++) {
+                            for (var j = 0; j < testcase.Fids.length; j++) {
+                                keyValue.push(getSortValue(sortedRecords[i], testcase.Fids[j]));
+                                //var keyValue = [getSortValue(sortedRecords[i], 6), getSortValue(sortedRecords[i], 7)];
+                            }
+                        }
+                        sortedExpectedRecords.push(keyValue.join());
 
-            /*
-             * Ascending Testcases
-             */
-            // Grab a random test case from the data provider
-            var sortingTestcase = sortingTestCases()[Math.floor(Math.random() * sortingTestCases().length)];
-            it('Ascending : ' + sortingTestcase.message, function(done) {
-                var actualTableResults;
-                var sortedTableResults;
-                // Get the records from column before sorting
-                reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
-                    actualTableResults = actualResults;
-                }).then(function() {
-                    //expand column header menu and select the Item
-                    reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.AscItemText);
-                }).then(function() {
-                    // Get the records from column after sorting
-                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
-                        sortedTableResults = sortedResults;
-                    });
-                }).then(function() {
-                    //Finally verify both the arrays
-                    reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults).then(function() {
+                    }).then(function(){
+                        //Go to created sorted report page directly.
+                        return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+                    }).then(function() {
+                        return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                            e2eBase.sleep(browser.params.smallSleep);
+                            //Verify table sorted results on UI with lodash sorted expected results.
+                            verifySortedTableResults(sortedExpectedRecords);
+                        });
+                    }).then(function(){
+                        //finally delete the report created
+                        e2eBase.recordBase.apiBase.executeRequest(reportsEndpoint + r.id, 'DELETE');
                         done();
                     });
                 });
             });
 
-            /*
-             * Descending Testcases
-             */
-            it('Descending : ' + sortingTestcase.message, function(done) {
-                var actualTableResults;
-                var sortedTableResults;
-                // Get the records from column before sorting
-                reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
-                    actualTableResults = actualResults;
-                }).then(function() {
-                    //expand column header menu and select the Item
-                    reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.DescItemText);
-                }).then(function() {
-                    // Get the records from column after sorting
-                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
-                        sortedTableResults = sortedResults;
-                    });
-                }).then(function() {
-                    //Finally verify both the arrays
-                    reportSortingPage.verifyDescending(sortingTestcase.message, actualTableResults, sortedTableResults).then(function() {
-                        done();
-                    });
-                });
-            });
         });
 
-        describe('Report Sorting with Facets', function() {
-
-            beforeAll(function(done) {
-                //go to report page directly
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
-                done();
-            });
-
-            /**
-             * Before each test starts just make sure the report list has loaded
-             */
-            beforeEach(function(done) {
-                reportServicePage.waitForElement(reportServicePage.agGridBodyEl).then(function() {
-                    done();
-                });
-            });
-
-            /*
-             * Ascending Testcases
-             */
-            // Grab a random test case from the data provider
-            var sortingTestcase = sortingTestCases()[Math.floor(Math.random() * sortingTestCases().length)];
-            it('Ascending : ' + sortingTestcase.message, function(done) {
-                var actualTableResults;
-                var sortedTableResults;
-                // Get the records from column before sorting
-                reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
-                    actualTableResults = actualResults;
-                }).then(function() {
-                    //expand column header menu and select the Item
-                    reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.AscItemText);
-                }).then(function() {
-                    // Get the records from column after sorting
-                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
-                        sortedTableResults = sortedResults;
-                    });
-                }).then(function() {
-                    //Finally verify both the arrays
-                    reportSortingPage.verifyAscending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults).then(function() {
-                        done();
-                    });
-                });
-            });
-
-            /*
-             * Descending Testcases
-             */
-            it('Descending : ' + sortingTestcase.message, function(done) {
-                var actualTableResults;
-                var sortedTableResults;
-                // Get the records from column before sorting
-                reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(actualResults) {
-                    actualTableResults = actualResults;
-                }).then(function() {
-                    //expand column header menu and select the Item
-                    reportSortingPage.expandColumnHeaderMenuAndSelectItem(sortingTestcase.ColumnName, sortingTestcase.DescItemText);
-                }).then(function() {
-                    // Get the records from column after sorting
-                    reportSortingPage.getColumnRecords(sortingTestcase.ColumnId).then(function(sortedResults) {
-                        sortedTableResults = sortedResults;
-                    });
-                }).then(function() {
-                    //Finally verify both the arrays
-                    reportSortingPage.verifyDescending(sortingTestcase.ColumnName, actualTableResults, sortedTableResults).then(function() {
-                        done();
-                    });
-                });
-            });
-        });
-
-        //TODO add a negative testcase for other breakpoints once Claire completes small breakpoint stuff
+        ////Verify the appropriate sorting sub-menu got selected in the header popup
+        //for (var i = 0; i < testcase.ColumnName.length; i++) {
+        //    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem(testcase.ColumnName[i], testcase.SortOrderItem[i]);
+        //}
+        //console.log("the sorted expected results are: "+JSON.stringify(sortedExpectedRecords));
 
         /**
          * After all tests are done, run the cleanup function in the base class
