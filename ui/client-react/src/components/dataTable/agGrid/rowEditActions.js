@@ -4,6 +4,7 @@ import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBIcon from '../../qbIcon/qbIcon';
 import {NotificationManager} from 'react-notifications';
 import {I18nMessage} from '../../../utils/i18nMessage';
+import ReportUtils from '../../../utils/reportUtils';
 import QBToolTip from '../../qbToolTip/qbToolTip';
 
 /**
@@ -20,7 +21,7 @@ const RowEditActions = React.createClass({
 
     onClickSave() {
         //get the current record id
-        const id = this.props.data[this.props.params.context.uniqueIdentifier];
+        const id = this.props.data[ReportUtils.getUniqueIdentifierFieldName(this.props.data)];
         this.props.params.context.onRecordSaveClicked(id);
         // commented code below deferred client side validation before save
         // till reactabular implemented
