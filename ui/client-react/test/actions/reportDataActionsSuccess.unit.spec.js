@@ -180,10 +180,10 @@ describe('Report Data Actions Filter Report functions -- success', () => {
     let responseRecordModel = {
         metaData: {},
         recordData: {
-                fields: [],
-                records: [],
-                query: 'someQuery',
-                filteredCount: 55
+            fields: [],
+            records: [],
+            query: 'someQuery',
+            filteredCount: 55
         },
         rptId: null
     };

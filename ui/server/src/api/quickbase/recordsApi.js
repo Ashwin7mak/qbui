@@ -145,7 +145,6 @@
              * @returns Promise
              */
             fetchSingleRecordAndFields: function(req) {
-
                 return new Promise(function(resolve, reject) {
                     var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
@@ -194,11 +193,16 @@
              */
             fetchRecordsFieldsAndCount: function(req) {
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecordsAndFields(req), this.fetchCountForRecords(req)];
-                    Promise.all(fetchRequests).then(
+                    var promises = [this.fetchRecordsAndFields(req), this.fetchCountForRecords(req)];
+                    Promise.all(promises).then(
                         (response) => {
-                            var responseObj = response[0];
-                            responseObj[FILTERED_RECORDS_COUNT] = response[1].body;
+                            var responseObj = response;
+                            if (response.length) {
+                                var responseObj = response[0];
+                                if (response[1]) {
+                                    responseObj[FILTERED_RECORDS_COUNT] = response[1].body;
+                                }
+                            }
                             resolve(responseObj);
                         },
                         (err) => {
@@ -225,18 +229,15 @@
                     opts.url += '?' + constants.REQUEST_PARAMETER.QUERY + '=' + queryParam;
                 }
 
-                return new Promise((resolve5, reject5) => {
+                return new Promise((resolve, reject) => {
                     requestHelper.executeRequest(req, opts).then(
                         result => {
-                            resolve5(result);
+                            resolve(result);
                         },
                         error => {
-                            reject5(error);
+                            reject(error);
                         }
-                    ).catch((ex) => {
-                        requestHelper.logUnexpectedError('recordsApi..fetch filtered records count in fetchCountForRecords', ex, true);
-                        reject5(ex);
-                    });
+                    );
                 });
             },
 
@@ -304,7 +305,6 @@
                         reject(error);
                     });
                 }.bind(this));
-
             },
 
             /**
