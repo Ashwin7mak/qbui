@@ -1,9 +1,10 @@
 import React from 'react';
 
 import FieldFormats from '../../utils/fieldFormats';
-import {MultiLineTextFieldValueRenderer, DateFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
+import {DateFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
 import TextFieldValueRenderer from './textFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
+import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
 import _ from 'lodash';
 
 /**
@@ -113,6 +114,7 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.MULTI_LINE_TEXT_FORMAT:
             return (
                     <MultiLineTextFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
+                                                     attributes={this.props.attributes}
                                                      key={'mltfvr-' + this.props.idKey}
                                                  {...commonProperties}/>
                 );
