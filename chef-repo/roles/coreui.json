@@ -24,6 +24,11 @@
           }
         }
       }
+    },
+    "nodejs": {
+      "app_deploy": {
+        "app_version": "1.0-1161"
+      }
     }
   },
   "override_attributes": {},
