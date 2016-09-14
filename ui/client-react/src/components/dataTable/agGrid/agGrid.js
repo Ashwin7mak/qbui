@@ -367,6 +367,8 @@ let AGGrid = React.createClass({
             }
         }
     },
+
+    // Caareful about setting things in context, they do not update when the related prop updates
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
@@ -384,7 +386,6 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
         this.gridOptions.context.keyField = this.props.keyField;
-        this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;

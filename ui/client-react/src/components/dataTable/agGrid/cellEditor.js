@@ -1,7 +1,7 @@
 import React from 'react';
 
 import FieldValueEditor from '../../fields/fieldValueEditor';
-
+import ReportUtils from '../../../utils/reportUtils';
 /**
  * Table cell inline edit specific editor
  */
@@ -51,9 +51,9 @@ const CellEditor = React.createClass({
                               invalidMessage={this.props.invalidMessage}
                               ref={(c) => {
                                   //get reference to the component for this field
-                                  if (this.props.params.data && this.props.params.context.uniqueIdentifier &&
-                                      this.props.params.data[this.props.params.context.uniqueIdentifier]) {
-                                      let rid = this.props.params.data[this.props.params.context.uniqueIdentifier].value;
+                                  let uniqueIdentifier = ReportUtils.getUniqueIdentifierFieldName(this.props.params.data);
+                                  if (this.props.params.data && uniqueIdentifier) {
+                                      let rid = this.props.params.data[uniqueIdentifier].value;
 
                                       if (!this.props.params.context.cells) {
                                           this.props.params.context.cells = {};
@@ -71,4 +71,3 @@ const CellEditor = React.createClass({
 });
 
 export default CellEditor;
-

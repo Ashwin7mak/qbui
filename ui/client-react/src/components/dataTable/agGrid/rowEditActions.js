@@ -39,7 +39,7 @@ const RowEditActions = React.createClass({
      * delete icon is not included but may come back shortly
      */
     onClickDelete() {
-        const id = this.props.data[this.props.params.context.uniqueIdentifier];
+        const id = this.props.data[ReportUtils.getUniqueIdentifierFieldName(this.props.data)];
         this.props.api.deselectAll();
 
         this.props.flux.actions.deleteReportRecord(id);
@@ -49,7 +49,7 @@ const RowEditActions = React.createClass({
     },
     onClickCancel() {
         //get the original unchanged values in data to rerender
-        const id = this.props.data[this.props.params.context.uniqueIdentifier];
+        const id = this.props.data[ReportUtils.getUniqueIdentifierFieldName(this.props.data)];
 
         if (this.props.params.node) {
             //ag-grid
@@ -63,7 +63,7 @@ const RowEditActions = React.createClass({
 
     onClickAdd() {
         //get the current record id
-        const id = this.props.data[this.props.params.context.uniqueIdentifier];
+        const id = this.props.data[ReportUtils.getUniqueIdentifierFieldName(this.props.data)];
         this.props.params.context.onRecordNewBlank(id);
         this.props.api.deselectAll();
     },
