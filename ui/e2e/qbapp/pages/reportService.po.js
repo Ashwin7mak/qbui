@@ -144,6 +144,72 @@
         };
 
         /**
+         * Given a record element that is being viewed in agGrid, return the value of that cell
+         * @param recordCellElement
+         */
+        this.getRecordCellValue = function(recordCellElement) {
+            // Check to see if the cell element has an sub element of input type checkbox
+            // See http://www.protractortest.org/#/api?view=ElementFinder.prototype.isElementPresent
+            return recordCellElement.element(by.className(' cellData')).isElementPresent(by.css('input[type="checkbox"]')).then(function(result) {
+                // If cell element is a checkbox field do special handling to get the value
+                if (result === true) {
+                    // See http://www.protractortest.org/#/api?view=webdriver.WebElement.prototype.isSelected for getting the checkbox value
+                    return recordCellElement.element(by.className(' cellData')).element(by.tagName('input')).isSelected();
+                } else {
+                    // Otherwise just grab the innerText value
+                    return recordCellElement.getAttribute('innerText');
+                }
+            });
+        };
+
+        /**
+         * Given a record element that is being viewed in agGrid, return the value of the specified cell number
+         * If no cellNumber defined, function will return all values from all the cells
+         * @param recordRowElement, recordCellNumber
+         */
+        this.getRecordValues = function(recordRowElement, recordCellNumber) {
+            var self = this;
+
+            return self.getRecordRowCells(recordRowElement).then(function(cells) {
+                // Return all record values if no cell number supplied
+                if (typeof recordCellNumber === 'undefined') {
+                    var fetchCellValuesPromises = [];
+                    for (var i = 0; i < cells.length; i++) {
+                        fetchCellValuesPromises.push(self.getRecordCellValue(cells[i]));
+                    }
+                    return Promise.all(fetchCellValuesPromises).then(function(results) {
+                        // Do post processing
+                        for (var j = 0; j < results.length; j++) {
+                            results[j] = self.formatRecordValue(results[j]);
+                        }
+                        return results;
+                    });
+                } else {
+                    // Get the value for a specific cell number
+                    return self.getRecordCellValue(cells[recordCellNumber]).then(function(result) {
+                        // Do post processing
+                        return self.formatRecordValue(result);
+                    });
+                }
+            });
+        };
+
+        /**
+         * Helper function to format record values returned from Protractor get functions
+         * Returns a string value
+         * @param rawRecordValue
+         */
+        this.formatRecordValue = function(rawRecordValue) {
+            if (typeof rawRecordValue === 'boolean') {
+                // Handle the checkbox field
+                return rawRecordValue.toString();
+            } else {
+                // Remove whitespace and any newline characters
+                return rawRecordValue.trim();
+            }
+        };
+
+        /**
          * Given a record element in agGrid, click on the selection checkbox for that record to open the edit menu
          * @param recordRowElement
          */

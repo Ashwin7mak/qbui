@@ -1,5 +1,5 @@
 import React from 'react';
-
+import FieldFormats from '../../../utils/fieldFormats' ;
 import FieldValueEditor from '../../fields/fieldValueEditor';
 
 /**
@@ -35,7 +35,13 @@ const CellEditor = React.createClass({
     },
 
     render() {
-        return (<FieldValueEditor  classes="cellEditWrapper"
+        let classes;
+        if (this.props.type === FieldFormats.MULTI_LINE_TEXT_FORMAT) {
+            classes = "multiLineCellEditWrapper";
+        } else {
+            classes = "cellEditWrapper";
+        }
+        return (<FieldValueEditor  classes={classes}
                               type={this.props.type}
                               value={this.props.value}
                               display={this.props.display}
