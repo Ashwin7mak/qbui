@@ -136,9 +136,9 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.DATETIME_FORMAT: {
-            if (this.props.attributes && this.props.attributes.showTime === false) {
-                return <DateFieldValueEditor key={'dfve-' + this.props.idKey} {...commonProps}/>;
-            }
+            //if (this.props.attributes && this.props.attributes.showTime === false) {
+            //    return <DateFieldValueEditor key={'dfve-' + this.props.idKey} {...commonProps}/>;
+            //}
             return <DateTimeFieldValueEditor key={'dtfve-' + this.props.idKey} {...commonProps}/>;
         }
 

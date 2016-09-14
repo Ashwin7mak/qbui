@@ -62,7 +62,9 @@ const DateFieldValueEditor = React.createClass({
                 if (this.props.onDateTimeChange) {
                     this.props.onDateTimeChange(newValue);
                 } else {
-                    this.props.onChange(newValue);
+                    //  need to convert to ISO_DATE supported format: YYYY-MM-DD
+                    let isoFormat = moment(newValue, 'MM-DD-YYYY').format('YYYY-MM-DD');
+                    this.props.onChange(isoFormat);
                 }
             }
         }
@@ -75,7 +77,7 @@ const DateFieldValueEditor = React.createClass({
                 this.props.onDateTimeBlur(ev.target.value);
             } else {
                 let vals = {
-                    value: ev.target.value,
+                    value: moment(ev.target.value, 'MM-DD-YYYY').format('YYYY-MM-DD'),
                     display: ''
                 };
 

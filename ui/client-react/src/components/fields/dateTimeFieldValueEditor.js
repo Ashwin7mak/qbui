@@ -59,11 +59,9 @@ const DateTimeFieldValueEditor = React.createClass({
             //  if no time, then set to midnight
             let theOrigTime = origValue ? moment(origValue).format(" HH:mm:ss") : '00:00:00';
 
-            //  TODO: not sure if should be returned in ISO format
-            //let newDate = moment(value + theOrigTime).toISOString();
-            let newDate = value + theOrigTime;
-
-            this.props.onChange(newDate);
+            //  need to convert to ISO_DATE_TIME supported format
+            let isoFormat = moment(value + theOrigTime).toISOString();
+            this.props.onChange(isoFormat);
         }
     },
 
@@ -76,7 +74,9 @@ const DateTimeFieldValueEditor = React.createClass({
             let dateFormat = "MM-DD-YYYY ";
             let theOrigDate = origValue ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
 
-            this.props.onChange(theOrigDate + value);
+            //  need to convert to ISO_DATE_TIME supported format
+            let isoFormat = moment(theOrigDate + value).toISOString();
+            this.props.onChange(isoFormat);
         }
     },
 
@@ -117,9 +117,18 @@ const DateTimeFieldValueEditor = React.createClass({
     },
 
     render() {
+        let showTimeEditor = true;
+        let dateTimeClass = 'dateTimeField';
+
+        if (this.props.attributes && this.props.attributes.showTime === false) {
+            showTimeEditor = false;
+            dateTimeClass = '';
+        }
+
         return <div>
-            <DateFieldValueEditor onDateTimeChange={this.onDateChange} onDateTimeBlur={this.onDateBlur} classes={'dateTimeField'} {...this.props}/>
-            <TimeFieldValueEditor onDateTimeChange={this.onTimeChange} onDateTimeBlur={this.onTimeBlur} classes={'dateTimeField'} {...this.props}/>
+            <DateFieldValueEditor onDateTimeChange={this.onDateChange} onDateTimeBlur={this.onDateBlur} classes={dateTimeClass} {...this.props}/>
+            {showTimeEditor ?
+                <TimeFieldValueEditor onDateTimeChange={this.onTimeChange} onDateTimeBlur={this.onTimeBlur} classes={dateTimeClass} {...this.props}/> : null}
         </div>;
     }
 

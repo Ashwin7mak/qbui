@@ -515,7 +515,8 @@ $cell-edit-background-edit: #f3f8fe;
                     .Select-placeholder {
                         line-height: 27px;
                         color: $color25;
-                        padding-left: 1px;
+                        padding: 1px;
+                        margin-left: 2px;
                     }
                     .Select-option {
                         color: $color25;
@@ -532,11 +533,14 @@ $cell-edit-background-edit: #f3f8fe;
                             color: $color-black-500;
                             font-style: italic;
                             font-weight: bold;
+                            padding: 1px;
+                            margin-left: 2px;
                         }
                     }
                 }
                 &.dateCell {
                     margin-top: 3px;
+                    vertical-align: middle;
                     &.ghost-text {
                         .input-group.date input.form-control {
                             color: $color-black-500;
