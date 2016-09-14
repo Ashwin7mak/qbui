@@ -35,8 +35,7 @@ describe('MultiLineTextFieldValueEditor functions', () => {
     it('does not resize on keyup when size is greater than 200px', () => {
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        spyOn(component, 'getScrollHeight').and.returnValue(300);
+        spyOn(component, 'getScrollHeight').and.returnValue(MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT  + 100);
         spyOn(component, 'resize');
 
         let textArea = ReactDOM.findDOMNode(component);
@@ -51,12 +50,11 @@ describe('MultiLineTextFieldValueEditor functions', () => {
     it('resizes to max height when the component first loads when textarea is over 200px', () => {
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        spyOn(component, 'getScrollHeight').and.returnValue(300);
+        spyOn(component, 'getScrollHeight').and.returnValue(MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT + 100);
 
         component.resize();
 
-        expect(component.state.style.height).toBe(200);
+        expect(component.state.style.height).toBe(MultiLineTextFieldValueEditor.MAX_TEXTAREA_HEIGHT);
     });
 
     it('invokes onChange when a user types in text', () => {
