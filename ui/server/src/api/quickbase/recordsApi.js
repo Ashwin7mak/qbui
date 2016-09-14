@@ -239,7 +239,7 @@
                                 }
                             }
                             if (response[2]) {
-                                responseObject[FILTERED_RECORDS_COUNT] = response[1].body;
+                                responseObject[FILTERED_RECORDS_COUNT] = response[2].body;
                             }
 
                             resolve(responseObject);

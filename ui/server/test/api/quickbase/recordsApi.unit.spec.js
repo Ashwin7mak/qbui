@@ -296,11 +296,13 @@ describe("Validate recordsApi", function() {
 
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
             executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
+            executeReqStub.onCall(2).returns(Promise.resolve({'body': '10'}));
             var promise = recordsApi.fetchRecordsAndFields(req);
             promise.then(
                 function(response) {
                     assert.equal(response.fields[0].display, '12-3454');
                     assert.equal(response.records[0][0].display, '1234525');
+                    assert.equal(response.filteredCount, '10');
                     assert.notEqual(response.groups.hasGrouping, true);
                     done();
                 }
