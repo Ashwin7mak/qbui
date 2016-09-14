@@ -215,23 +215,22 @@
              * Fetch the count of all records that match a user query
              */
             fetchCountForRecords: function(req) {
+                let opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsCountRoute(req.url);
+                // Set the query parameter
+                if (requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.QUERY)) {
+                    let queryParam = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
+                    opts.url += '?' + constants.REQUEST_PARAMETER.QUERY + '=' + queryParam;
+                }
+
                 return new Promise((resolve5, reject5) => {
-                    let opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-
-                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsCountRoute(req.url);
-                    // Set the query parameter
-                    if (requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.QUERY)) {
-                        let queryParam = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
-                        opts.url += '?' + constants.REQUEST_PARAMETER.QUERY + '=' + queryParam;
-                    }
-
                     requestHelper.executeRequest(req, opts).then(
-                        response => {
-                            resolve5(response);
+                        result => {
+                            resolve5(result);
                         },
                         error => {
-                            log.error({req: req}, "Error getting report in fetchCountForRecords.");
                             reject5(error);
                         }
                     ).catch((ex) => {

@@ -173,16 +173,27 @@ describe('Report Data Actions Filter Report functions -- success', () => {
         data: {
             fields: [],
             records: [],
-            query: 'someQuery'
+            query: 'someQuery',
+            filteredCount: 55
         }
     };
     let responseRecordModel = {
+        metaData: {},
+        recordData: {
+                fields: [],
+                records: [],
+                query: 'someQuery',
+                filteredCount: 55
+        },
+        rptId: null
+    };
+    let responseFilteredRecordsCount = {
         data: {
             fields: [],
             records: [],
             query: 'someQuery',
-            filteredCount:55
-        }
+            filteredCount: 55
+        },
     };
     let loadReportInputs = {
         appId: appId,
@@ -292,6 +303,8 @@ describe('Report Data Actions Filter Report functions -- success', () => {
         let overrideParams = {};
         overrideParams[query.COLUMNS_PARAM] = columns;
         overrideParams[query.SORT_LIST_PARAM] = sortList;
+        overrideParams[query.OFFSET_PARAM] = 0;
+        overrideParams[query.NUMROWS_PARAM] = 20;
 
         flux.actions.getFilteredRecords(appId, tblId, rptId, queryParams, undefined, overrideParams).then(
             () => {
@@ -304,7 +317,7 @@ describe('Report Data Actions Filter Report functions -- success', () => {
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputsWithOverrides]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_SUCCESS, responseRecordModel]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, responseRecordModel]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, responseFilteredRecordsCount]);
                 done();
             },
             () => {
