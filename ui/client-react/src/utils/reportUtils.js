@@ -4,6 +4,7 @@
 const listDelimiter = ".";
 const groupDelimiter = ":";
 import constants from '../../../common/src/constants';
+import * as SchemaConsts from '../constants/schema';
 
 class ReportUtils {
 
@@ -197,7 +198,6 @@ class ReportUtils {
 
     }
 
-
     /**
      * Combines a fid + order + groupType into a groupEl of format <+/-|fid|:groupType>
      * @param fid
@@ -218,7 +218,49 @@ class ReportUtils {
         }
         return result;
     }
+
+    /**
+    * Gets the id for the row even if the Record ID # field has been renamed
+    * @param rowData
+    *    {
+    *        fieldName: {
+    *            id: 3 // this is the field id
+    *            value: 2
+    *            display: "2"
+    *        }
+    *    }
+    * @returns {integer, null}
+    */
+    static getRowId(rowData) {
+        let recordIdField = _.find(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+        return (typeof recordIdField.value === 'undefined' ? null : recordIdField.value);
+    }
+
+    /**
+    * Gets the name of the field that is the unique identifier field (e.g., Record ID #)
+    * even if it is no longer named Record ID #
+    * @param fields
+    * @returns {string}
+    */
+    static getUniqueIdentifierFieldName(fields) {
+        if(requiredFieldsArePresent(fields)){
+                let uniqueIdentifierField = _.find(fields.fields.data, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+                if(uniqueIdentifierField){
+                    return uniqueIdentifierField.name;
+                } else {
+                    return SchemaConsts.DEFAULT_RECORD_KEY;
+                }
+        } else {
+            return SchemaConsts.DEFAULT_RECORD_KEY;
+        }
+    }
 }
+
+// PRIVATE METHODS
+function requiredFieldsArePresent(fields) {
+    return fields && fields.fields && fields.fields.data && fields.fields.data.length;
+}
+
 ReportUtils.listDelimiter = listDelimiter;
 ReportUtils.groupDelimiter = groupDelimiter;
 export default ReportUtils;

@@ -297,6 +297,8 @@ let ReportToolsAndContent = React.createClass({
                                 pageStart={this.pageStart}
                                 pageEnd={this.pageEnd}/>;
 
+            let uniqueIdentifier = ReportUtils.getUniqueIdentifierFieldName(this.props.fields);
+
             return (
                 <div className={classes}>
                     <label id="reactabularToggle" style={{display: "none"}}>&nbsp;
@@ -315,7 +317,7 @@ let ReportToolsAndContent = React.createClass({
                                    cardViewPagination={cardViewPagination }
                                    keyField={this.props.fields && this.props.fields.keyField ?
                                        this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
-                                   uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                   uniqueIdentifier={uniqueIdentifier}
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}
