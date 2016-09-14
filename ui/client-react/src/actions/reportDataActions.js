@@ -7,7 +7,7 @@ import ReportService from '../services/reportService';
 import RecordService from '../services/recordService';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-import constants from '../../../common/src/constants'
+import constants from '../../../common/src/constants';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';

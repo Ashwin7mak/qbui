@@ -154,12 +154,13 @@ const SortAndGroup = React.createClass({
                 changedGroupingStyle = false;
             }
         }
-
+        let pageOffset = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : constants.PAGE.DEFAULT_OFFSET;
+        let numRows = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : constants.PAGE.DEFAULT_NUM_ROWS;
         if (changedGroupingStyle) {
-            flux.actions.loadReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.reportData.pageOffset, this.props.reportData.numRows, sortGroupString);
+            flux.actions.loadReport(this.props.appId, this.props.tblId, this.props.rptId, true, pageOffset, numRows, sortGroupString);
         } else {
             overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true, offset: this.props.reportData.pageOffset, numRows: this.props.reportData.numRows}, this.props.filter, overrideParams);
+            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true, offset: pageOffset, numRows: numRows}, this.props.filter, overrideParams);
         }
     },
 

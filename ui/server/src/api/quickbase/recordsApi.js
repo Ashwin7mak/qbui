@@ -196,13 +196,13 @@
                 return new Promise(function(resolve, reject) {
                     var fetchRequests = [this.fetchRecordsAndFields(req), this.fetchCountForRecords(req)];
                     Promise.all(fetchRequests).then(
-                        function(response) {
+                        (response) => {
                             var responseObj = response[0];
                             responseObj[FILTERED_RECORDS_COUNT] = response[1].body;
                             resolve(responseObj);
-                        }.bind(this),
-                        function(response) {
-                            reject(response);
+                        },
+                        (err) => {
+                            reject(err);
                         }
                     ).catch(function(error) {
                         requestHelper.logUnexpectedError('recordsAPI..fetchRecordsFieldsAndCount', error, true);
@@ -227,15 +227,15 @@
                     }
 
                     requestHelper.executeRequest(req, opts).then(
-                        (response) => {
+                        response => {
                             resolve5(response);
                         },
-                        (error) => {
+                        error => {
                             log.error({req: req}, "Error getting report in fetchCountForRecords.");
                             reject5(error);
                         }
                     ).catch((ex) => {
-                        requestHelper.logUnexpectedError('recordsApi..fetchCount in fetchCountForRecords', ex, true);
+                        requestHelper.logUnexpectedError('recordsApi..fetch filtered records count in fetchCountForRecords', ex, true);
                         reject5(ex);
                     });
                 });

@@ -52,7 +52,7 @@ var ReportNavigation = React.createClass({
         }
 
         if (isReportFiltered) {
-            recordCount = this.props.reportData.data.filteredRecordsCount;;
+            recordCount = this.props.reportData.data.filteredRecordsCount;
         }
         let showNavigation = !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
         // Do not show navigation if:
