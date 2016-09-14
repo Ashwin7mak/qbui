@@ -244,10 +244,10 @@ class ReportUtils {
     *
     */
     static getUniqueIdentifierFieldName(data) {
-        if(data && _.has(data, 'fields')){
-            return this.getUniqueIdentifierFieldNameFromFields(data);
+        if (data && _.has(data, 'fields')) {
+            return ReportUtils.getUniqueIdentifierFieldNameFromFields(data);
         } else {
-            return this.getUniqueIdentifierFieldNameFromData(data);
+            return ReportUtils.getUniqueIdentifierFieldNameFromData(data);
         }
     }
 
@@ -258,13 +258,13 @@ class ReportUtils {
     * @returns {string}
     */
     static getUniqueIdentifierFieldNameFromFields(fields) {
-        if(requiredFieldsArePresent(fields)){
-                let uniqueIdentifierField = _.find(fields.fields.data, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
-                if(uniqueIdentifierField){
-                    return uniqueIdentifierField.name;
-                } else {
-                    return SchemaConsts.DEFAULT_RECORD_KEY;
-                }
+        if (requiredFieldsArePresent(fields)) {
+            let uniqueIdentifierField = _.find(fields.fields.data, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+            if (uniqueIdentifierField) {
+                return uniqueIdentifierField.name;
+            } else {
+                return SchemaConsts.DEFAULT_RECORD_KEY;
+            }
         } else {
             return SchemaConsts.DEFAULT_RECORD_KEY;
         }
@@ -285,7 +285,7 @@ class ReportUtils {
     */
     static getUniqueIdentifierFieldNameFromData(rowData) {
         let recordIdField = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
-        if(recordIdField) {
+        if (recordIdField) {
             return recordIdField;
         } else {
             return SchemaConsts.DEFAULT_RECORD_KEY;

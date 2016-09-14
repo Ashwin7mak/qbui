@@ -169,7 +169,7 @@ describe('ReportUtils - test getGListString', () => {
     });
 });
 
-fdescribe('ReportUtils', () => {
+describe('ReportUtils', () => {
     let testData;
     let recordIdCustomName = 'Employee ID';
 
@@ -237,14 +237,14 @@ fdescribe('ReportUtils', () => {
         it('returns the Record ID column name if it has not been changed', () => {
             testData = {};
             testData[SchemaConsts.DEFAULT_RECORD_KEY] = {
-                    id: 3,
-                    value: 8,
-                    display: '8'
+                id: 3,
+                value: 8,
+                display: '8'
             };
             testData['First Name'] = {
-                    id: 1,
-                    value: 'Bob',
-                    display: 'Bob'
+                id: 1,
+                value: 'Bob',
+                display: 'Bob'
             };
 
             let field = ReportUtils.getUniqueIdentifierFieldNameFromData(testData);
@@ -272,20 +272,20 @@ fdescribe('ReportUtils', () => {
 
     describe('getUniqueIdentifierFieldName', () => {
         it('gets the Record ID column name from row data', () => {
-            testData = {}
+            testData = {};
             testData[recordIdCustomName] = {
                 id: 3,
                 value: 8,
                 display: '8'
             };
             testData['First Name'] = {
-                    id: 1,
-                    value: 'Bob',
-                    display: 'Bob'
+                id: 1,
+                value: 'Bob',
+                display: 'Bob'
             };
 
             let field = ReportUtils.getUniqueIdentifierFieldName(testData);
-            expect(field).toBe(recordIdCustomName)
+            expect(field).toBe(recordIdCustomName);
         });
 
         it('gets the Record ID column name from a list of fields', () => {
