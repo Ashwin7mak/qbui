@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
+
 import RowEditActions from './rowEditActions';
 import CellValueRenderer from './cellValueRenderer';
 import CellEditor from './cellEditor';
@@ -17,8 +18,9 @@ import IconActions from '../../actions/iconActions';
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
 import './dateTimePicker.scss';
 
-import FieldFormats from '../../../utils/fieldFormats';
 import _ from 'lodash';
+import FieldFormats from '../../../utils/fieldFormats';
+import ReportUtils from '../../../utils/reportUtils';
 import Logger from "../../../utils/logger";
 
 
@@ -199,6 +201,8 @@ const CellRenderer = React.createClass({
     },
 
     cellChanges() {
+        let uniqueIdentifier = ReportUtils.getUniqueIdentifierFieldName(this.props.params.data);
+
         if (this.props &&
             _.has(this.props, 'params') &&
             _.has(this.props.params, 'data') &&
@@ -211,7 +215,7 @@ const CellRenderer = React.createClass({
                     oldVal: this.props.params.data[this.props.params.column.colId],
                     newVal: this.state.valueAndDisplay
                 },
-                recId: this.props.params.data[this.props.params.context.uniqueIdentifier].value,
+                recId: this.props.params.data[uniqueIdentifier].value,
                 fid: +this.props.params.colDef.id,
                 fieldName: this.props.params.column.colId
             };
@@ -374,4 +378,3 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
         </div>);
     }
 });
-
