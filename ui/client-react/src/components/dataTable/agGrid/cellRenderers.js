@@ -242,8 +242,9 @@ const CellRenderer = React.createClass({
         current.isInvalid = result ? result.isInvalid : false;
         current.invalidMessage = result ? result.invalidMessage : null;
         this.setState({validationStatus : current});
-    },
+    }
 
+    // TODO: remove once text and numeric components address display after an edit..
     /**
      * textcell was edited, update the r/w and r/o value
      * @param value
@@ -255,39 +256,6 @@ const CellRenderer = React.createClass({
     //    theVals.display = textFormatter.format(theVals, this.props.colDef.datatypeAttributes);
     //
     //    this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
-    //},
-
-    /**
-     * date, datetime, or time cell was edited
-     * @param newValue
-     */
-    //dateTimeCellEdited(newValue) {
-    //    let theVals = {
-    //        value: newValue
-    //    };
-    //    switch (this.props.type) {
-    //    case FieldFormats.DATE_FORMAT: {
-    //        // normalized form is YYYY-MM-DD
-    //        theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-    //        break;
-    //    }
-    //    case FieldFormats.TIME_FORMAT: {
-    //        // normalized form is 1970-01-01THH:MM:SSZ
-    //        theVals.display = timeOfDayFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-    //        break;
-    //    }
-    //    case FieldFormats.DATETIME_FORMAT: {
-    //        // normalized form is YYYY-MM-DDTHH:MM:SSZ
-    //        theVals.display = dateTimeFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-    //        break;
-    //    }
-    //    default: {
-    //        theVals.display = newValue;
-    //        break;
-    //    }
-    //    }
-    //
-    //    this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
     //},
 
     /**

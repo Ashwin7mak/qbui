@@ -1,17 +1,17 @@
 import React from 'react';
 import './fields.scss';
 import _ from 'lodash';
-import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
+import timeFormatter from '../../../../common/src/formatter/timeOfDayFormatter';
 
 /**
- * # DateTimeFieldValueRenderer
+ * # TimeFieldValueRenderer
  *
- * A read only rendering of a date or date/time value. The value is rendered according to
- * display attributes defined in the dateTimeFormatter.  Classes can be optionally passed in for
+ * A read only rendering of a time value. The value is rendered according to the
+ * display attributes defined timeFormatter.  Classes can be optionally passed in for
  * custom styling.
  */
-const DateTimeFieldValueRenderer = React.createClass({
-    displayName: 'DateTimeFieldValueRenderer',
+const TimeFieldValueRenderer = React.createClass({
+    displayName: 'TimeFieldValueRenderer',
     propTypes: {
         /**
          * the raw value */
@@ -52,16 +52,12 @@ const DateTimeFieldValueRenderer = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        if (this.props.attributes.clientSideAttributes.bold === true) {
-            classes += " bold";
-        }
-
         //  it's possible that the field has been edited and we need to format
-        let display = dateTimeFormatter.format({value: this.props.value}, this.props.attributes);
+        let display = timeFormatter.format({value: this.props.value}, this.props.attributes);
 
         return <div className={classes}>{display}</div>;
     }
 });
 
 
-export default DateTimeFieldValueRenderer;
+export default TimeFieldValueRenderer;

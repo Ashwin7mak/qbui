@@ -5,6 +5,7 @@ import FieldFormats from '../../utils/fieldFormats';
 import {MultiLineTextFieldValueRenderer,  UserFieldValueRenderer} from './fieldValueRenderers';
 import TextFieldValueRenderer from './textFieldValueRenderer';
 import DateTimeFieldValueRenderer from './dateTimeFieldValueRenderer';
+import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
 
 import _ from 'lodash';
@@ -85,13 +86,22 @@ const FieldValueRenderer = React.createClass({
                                             key={'ufvr-' + this.props.idKey}
                                             {...commonProperties}/>
                 );
-        //  Date, dateTime and time use the same view formatter
+        //  Date and dateTime use the same view formatter
         case FieldFormats.DATE_FORMAT:
         case FieldFormats.DATETIME_FORMAT:
+            return (
+                <DateTimeFieldValueRenderer value={this.props.value}
+                                            display={this.props.display}
+                                            attributes={this.props.attributes}
+                                            key={'dfvr-' + this.props.idKey}
+                    {...commonProperties}/>
+            );
         case FieldFormats.TIME_FORMAT:
             return (
-                    <DateTimeFieldValueRenderer value={this.props.display}
-                                                key={'dfvr-' + this.props.idKey}
+                    <TimeFieldValueRenderer value={this.props.value}
+                                            display={this.props.display}
+                                            attributes={this.props.attributes}
+                                            key={'dfvr-' + this.props.idKey}
                                                 {...commonProperties}/>
                 );
         case FieldFormats.CHECKBOX_FORMAT:
@@ -122,6 +132,7 @@ const FieldValueRenderer = React.createClass({
 
     render() {
 
+        //  TODO: move attribute test into low level component..
         let className = "";
         let commonProperties = {};
         if (_.has(this.props, 'attributes.clientSideAttributes.bold') &&
