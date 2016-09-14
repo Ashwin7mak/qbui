@@ -36,13 +36,21 @@
             //Format the results
             switch (format) {
             case FIRST_THEN_LAST:
-                baseValue = baseValue.firstName + ' ' + baseValue.lastName;
+                if (baseValue.firstName && baseValue.lastName) {
+                    baseValue = baseValue.firstName + ' ' + baseValue.lastName;
+                } else {
+                    baseValue = baseValue.screenName ? baseValue.screenName : baseValue.email;
+                }
                 break;
             case LAST_THEN_FIRST:
-                baseValue = baseValue.lastName + ', ' + baseValue.firstName;
+                if (baseValue.firstName && baseValue.lastName) {
+                    baseValue = baseValue.lastName + ', ' + baseValue.firstName;
+                } else {
+                    baseValue = baseValue.screenName ? baseValue.screenName : baseValue.email;
+                }
                 break;
             case SCREEN_NAME:
-                baseValue = baseValue.screenName;
+                baseValue = baseValue.screenName ? baseValue.screenName : baseValue.email;;
                 break;
             case USER_ID:
                 baseValue = baseValue.userId;

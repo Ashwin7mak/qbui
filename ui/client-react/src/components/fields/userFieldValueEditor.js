@@ -45,9 +45,18 @@ const UserFieldValueEditor = React.createClass({
                     label};
             }) : [];
 
-        const blankItems = [{value:null, label:""}];
+        // for each user, if there is another user with the same label, show the email to disambiguate
+        appUserItems.forEach(current => {
+            current.showEmail = appUserItems.reduce((count, user) => count + (user.label === current.label ? 1 : 0), 0) > 1;
+        });
 
-        return this.props.fieldDef.required ? appUserItems : blankItems.concat(appUserItems);
+        // if a field is not required, include a blank selection at the beginning of the list
+        if (!this.props.fieldDef.required) {
+            return  [{value:null, label:""}].concat(appUserItems);
+
+        }
+
+        return appUserItems
     },
 
     onBlur() {
@@ -76,7 +85,7 @@ const UserFieldValueEditor = React.createClass({
             <div className="userOption">
                 {this.state.selectedUserId === user.userId && <QbIcon icon="check-reversed"/>}
                 <div className="userLabel">{userLabel}</div>
-                <div className="email">{user.email}</div>
+                {option.showEmail && <div className="email">{user.email}</div>}
             </div>);
     },
 
@@ -90,10 +99,11 @@ const UserFieldValueEditor = React.createClass({
 
         filter = filter.toLowerCase();
 
-        return user.value === null || user.email.toLowerCase().startsWith(filter) ||
-            user.firstName.toLowerCase().startsWith(filter) ||
-            user.lastName.toLowerCase().startsWith(filter) ||
-            user.screenName.toLowerCase().startsWith(filter);
+        return user.value === null ||
+            user.email      && user.email.toLowerCase().startsWith(filter) ||
+            user.firstName  && user.firstName.toLowerCase().startsWith(filter) ||
+            user.lastName   && user.lastName.toLowerCase().startsWith(filter) ||
+            user.screenName && user.screenName.toLowerCase().startsWith(filter);
     },
 
     render() {
@@ -111,7 +121,7 @@ const UserFieldValueEditor = React.createClass({
                 placeholder="Search..."
                 noResultsText="Not found"
                 autosize={false}
-                clearable={!this.props.fieldDef.required}
+                clearable={false}
                 onBlur={this.onBlur} />
         );
     }

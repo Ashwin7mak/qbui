@@ -13,24 +13,6 @@ $selected-choice-color: $color-cyan-500;
         }
     }
 
-    .Select-clear-zone:hover .Select-clear {
-        color: #404040;
-    }
-    .Select-clear {
-        width:15px;
-        color: #999;
-        font-size:15px;
-        border-radius:7px;
-        overflow:hidden;
-        padding-top:5px;
-    }
-
-    /* override icon */
-    .Select-clear:before {
-        content: "\e916";
-        font-family: 'QuickBaseIconUISturdy' !important;
-    }
-
     .Select-menu-outer {
         max-height: 225px;
         width:auto;
