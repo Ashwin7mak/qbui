@@ -12,7 +12,7 @@
     var TWO_DIGIT_MONTH = 'MM';
     var MONTH_ABBREV = 'MMM';
     var DAY_OF_WEEK = 'dddd, ';
-    var TIME = 'h:mm A';
+    var TIME = 'h:mm a';
     var FOUR_DIGIT_YEAR = 'YYYY';
     var TWO_DIGIT_YEAR = 'YY';
     var TWO_DIGIT_DAY = 'DD';
@@ -102,10 +102,10 @@
             }
 
             if (fieldInfo.showMonthAsName) {
-                jsFormat = showMonthAsName(jsDateFormat);
+                jsFormat = showMonthAsName(jsFormat);
             }
             if (fieldInfo.showDayOfWeek) {
-                jsFormat = showDayOfWeek(jsDateFormat);
+                jsFormat = showDayOfWeek(jsFormat);
             }
             return jsFormat;
         },
