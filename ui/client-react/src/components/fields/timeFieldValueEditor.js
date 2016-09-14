@@ -22,6 +22,8 @@ import moment from 'moment';
  */
 function getTimesInMinutes(increment) {
     let map = [];
+    //map.push({value:null, label:""});  // add empty entry
+
     let time = moment().startOf('day');
     let endOfDay = moment().endOf('day');
 
@@ -101,11 +103,11 @@ const TimeFieldValueEditor = React.createClass({
         if (ev.target && ev.target.value && (this.props.onBlur || this.props.onDateTimeBlur)) {
 
             //  convert to military time
-            let formats = ['h:mm a', 'h:mm', 'h:mma'];
+            let formats = ['h:mm:ss a', 'h:mm:ss', 'h:mm a', 'h:mm'];
             let militaryTime = 'invalid';
             for (let idx = 0; idx < formats.length; idx++) {
                 if (moment(ev.target.value, formats[idx]).isValid()) {
-                    militaryTime = moment(ev.target.value, formats[idx]).format('H:mm');
+                    militaryTime = moment(ev.target.value, formats[idx]).format('H:mm:ss');
                     break;
                 }
             }
@@ -140,21 +142,22 @@ const TimeFieldValueEditor = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        let timeFormat = dateTimeFormatter.getTimeFormat(this.props.attributes);
-        let dateTimeFormat = "MM-DD-YYYY " + timeFormat;
-
         let inputValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
         let theTime = '';
         if (inputValue) {
-            if (fieldFormats.TIME_FORMAT === this.props.type) {
+            if (this.props.type === fieldFormats.TIME_FORMAT) {
+                let timeFormat = timeFormatter.generateFormatterString({scale:this.props.attributes.scale});
+
                 //  It's a time only field...just use today's date to allow us to format the time
                 let now = moment().format("MM-DD-YYYY ") + inputValue;
-                theTime = moment(now, dateTimeFormat).format(timeFormat);
+                theTime = moment(now, "MM-DD-YYYY " + timeFormat).format(timeFormat);
             } else {
+                let timeFormatForDate = dateTimeFormatter.getTimeFormat(this.props.attributes);
+
                 //  Firefox parser is more strict than others when parsing; so may need to specify
                 //  the format of the input value if the moment parser can't parse the input value.
-                let momentTime = moment(inputValue).isValid() ? moment(inputValue) : moment(inputValue, dateTimeFormat);
-                theTime = momentTime.format(timeFormat);
+                let momentTime = moment(inputValue).isValid() ? moment(inputValue) : moment(inputValue, "MM-DD-YYYY " + timeFormatForDate);
+                theTime = momentTime.format(timeFormatForDate);
             }
         }
 
