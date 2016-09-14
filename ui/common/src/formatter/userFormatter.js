@@ -50,7 +50,7 @@
                 }
                 break;
             case SCREEN_NAME:
-                baseValue = baseValue.screenName ? baseValue.screenName : baseValue.email;;
+                baseValue = baseValue.screenName ? baseValue.screenName : baseValue.email;
                 break;
             case USER_ID:
                 baseValue = baseValue.userId;

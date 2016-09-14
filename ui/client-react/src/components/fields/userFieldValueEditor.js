@@ -10,11 +10,11 @@ const UserFieldValueEditor = React.createClass({
     displayName: 'UserFieldValueEditor',
 
     propTypes: {
-        appUsers: React.PropTypes.array,
+        appUsers: React.PropTypes.array.isRequired,
         value: React.PropTypes.object,
         /**
          * data type attributes for the field */
-        fieldDef: React.PropTypes.object
+        fieldDef: React.PropTypes.object.isRequired
     },
 
     getInitialState() {
@@ -56,7 +56,7 @@ const UserFieldValueEditor = React.createClass({
 
         }
 
-        return appUserItems
+        return appUserItems;
     },
 
     onBlur() {
