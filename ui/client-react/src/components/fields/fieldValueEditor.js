@@ -209,9 +209,14 @@ const FieldValueEditor = React.createClass({
     },
 
     render() {
-
         // the css classes
         let classes = 'fieldValueEditor';
+        /**
+         * This checks to see if the type is 'MultiLineTextFieldValueEditor', if it is, the class assigned will be 'multiLineCellEditWrapper.'
+         * The purpose for this is to make sure the top of the textarea box stays aligned with the rest of the fields. This is accomplished by
+         * not including the css align-items: center (align-items centered is used with the class cellEditWrapper, which was what the component
+         * MultiLineTextFieldValueEditor was using, and it prevented it from lining up correctly).
+         */
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
