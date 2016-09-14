@@ -7,6 +7,9 @@
     var ReportServicePage = requirePO('reportService');
     var reportServicePage = new ReportServicePage();
 
+    // Lodash utility library
+    var _ = require('lodash');
+
 
     var ReportSortingPage = function() {
 
@@ -184,6 +187,30 @@
         };
 
         /*
+         * Function will Expand the Column header Menu and select the Item passed in parameter
+         */
+        this.expandColumnHeaderMenuAndVerifySelectedItem = function(columnName, itemToVerifySelected) {
+            var self = this;
+            return e2ePageBase.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                //open the Column Header PopUp Menu
+                return self.openColumnHeaderMenu(columnName);
+            }).then(function() {
+                return e2ePageBase.waitForElement(element(by.className('menuitem'))).then(function() {
+                    var items = reportServicePage.agGridContainerEl.all(by.className('menuitem'));
+                    return items.filter(function(elm) {
+                        return elm.element(by.className('menuitem')).getText().then(function(text) {
+                            console.log("the text is: " + JSON.stringify(text));
+                            return text === itemToVerifySelected;
+                        });
+                    }).then(function(filteredElement) {
+                        //Verify there is check mark beside the sort order Item
+                        expect(filteredElement[0].element(by.className('iconssturdy-check')).isDisplayed()).toBeTruthy();
+                    });
+                });
+            });
+        };
+
+        /*
          * Function to verify ascending of column Records
          */
         this.verifyAscending = function(columnName, actualColumnRecords, sortedColumnRecords) {
@@ -265,6 +292,16 @@
                 actualColumnRecords = [];
                 sortedColumnRecords = [];
             });
+        };
+
+        /*
+         * Function to verify sorting of column Records
+         */
+        this.sortRecords = function(recordsToSort, columnListToSort, sortOrder) {
+            // sorts the list of records passed in specified sort order for a given fid.
+            var sortedRecords = _.orderBy(recordsToSort, columnListToSort, sortOrder);
+
+            return sortedRecords;
         };
 
         /*

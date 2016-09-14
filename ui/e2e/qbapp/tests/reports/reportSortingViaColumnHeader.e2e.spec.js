@@ -77,7 +77,7 @@
                 }
             });
             return val;
-        }
+        };
 
         /**
          * Function that will verify the filtered rows are contained in actual record list.
@@ -86,16 +86,14 @@
         var verifySortedTableResults = function(expectedSortedTableResults) {
             var sortedTableResults = [];
             //Load the report in the UI
-            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function () {
+            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                 //sleep for loading of table to finish
                 e2eBase.sleep(browser.params.smallSleep);
-                reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function () {
-                    reportServicePage.agGridRecordElList.getText().then(function (uiRecords) {
+                reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
+                    reportServicePage.agGridRecordElList.getText().then(function(uiRecords) {
                         for (var i = 1; i < uiRecords.length; i++) {
                             sortedTableResults.push(uiRecords[i].replace(/\n/g, ","));
                         }
-                        //console.log("the actual table sorted results are: " + JSON.stringify(sortedTableResults));
-                        //console.log("the expected sorted results are: " + JSON.stringify(expectedSortedTableResults));
                         expect(sortedTableResults.join()).toEqual(expectedSortedTableResults.join());
                     });
                 });
@@ -103,7 +101,7 @@
         };
 
         /**
-         * Data Provider for reports sorting Ascending testCases.
+         * Data Provider for reports sorting testCases.
          * ['Record ID#', 'Text Field', 'Numeric Field', 'Numeric Currency Field', 'Numeric Percent Field', 'Numeric Rating Field',
          'Date Field', 'Date Time Field', 'Time of Day Field', 'Duration Field', 'Checkbox Field', 'Phone Number Field',
          'Email Address Field', 'URL Field'],
@@ -133,9 +131,9 @@
                     ColumnName: ['Text Field', 'Numeric Field'],
                     SortOrderItem: ['Sort A to Z', 'Sort highest to lowest'],
                     //the below are for backend calls
-                    Fids: [6,7],
+                    Fids: [6, 7],
                     sortFids: [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 7);}],
-                    sortOrder: ['asc','desc'],
+                    sortOrder: ['asc', 'desc'],
                     sortList: [
                         {
                             "fieldId": 6,
@@ -149,84 +147,33 @@
                         }
                     ]
                 },
-                //{
-                //    message: 'Numeric Field',
-                //    ColumnName: 'Numeric Field',
-                //    ColumnId: 3,
-                //    AscItemText:'Sort lowest to highest',
-                //    DescItemText: 'Sort highest to lowest'
-                //},
-                //{
-                //    message: 'Numeric Currency Field',
-                //    ColumnName: 'Numeric Currency Field',
-                //    ColumnId: 4,
-                //    AscItemText: 'Sort lowest to highest',
-                //    DescItemText: 'Sort highest to lowest'
-                //},
-                //{
-                //    message: 'Numeric Percent Field',
-                //    ColumnName: 'Numeric Percent Field',
-                //    ColumnId: 5,
-                //    AscItemText: 'Sort lowest to highest',
-                //    DescItemText: 'Sort highest to lowest'
-                //},
-                //{
-                //    message: 'Numeric Rating Field',
-                //    ColumnName: 'Numeric Rating Field',
-                //    ColumnId: 6,
-                //    AscItemText: 'Sort lowest to highest',
-                //    DescItemText: 'Sort highest to lowest'
-                //},
-                //{
-                //    message: 'Date Field',
-                //    ColumnName: 'Date Field',
-                //    ColumnId: 7,
-                //    AscItemText: 'Sort oldest to newest',
-                //    DescItemText: 'Sort newest to oldest'
-                //},
-                //// TODO: UI is not currently displaying the full year on the date so breaks sorting in the tests
-                ////{
-                ////    message: 'Date Time Field',
-                ////    ColumnName: 'Date Time Field',
-                ////    ColumnId: 8,
-                ////    AscItemText: 'Sort oldest to newest',
-                ////    DescItemText: 'Sort newest to oldest'
-                ////},
-                //{
-                //    message: 'Duration Field',
-                //    ColumnName: 'Duration Field',
-                //    ColumnId: 10,
-                //    AscItemText: 'Sort lowest to highest',
-                //    DescItemText: 'Sort highest to lowest'
-                //},
-                //{
-                //    message: 'Checkbox Field',
-                //    ColumnName: 'Checkbox Field',
-                //    ColumnId: 11,
-                //    AscItemText: 'Sort unchecked to checked',
-                //    DescItemText:'Sort checked to unchecked'
-                //},
-                //{
-                //    message: 'Phone Number Field',
-                //    ColumnName: 'Phone Number Field',
-                //    ColumnId: 12,
-                //    AscItemText: 'Sort lowest to highest',
-                //    DescItemText: 'Sort highest to lowest'
-                //},
-                //{
-                //    message: 'Email Address Field',
-                //    ColumnName: 'Email Address Field',
-                //    ColumnId: 13,
-                //    AscItemText: 'Sort A to Z',
-                //    DescItemText:'Sort Z to A'
-                //},
-                //{
-                //    message: 'URL Text Field',
-                //    ColumnName: 'URL Field',
-                //    ColumnId: 14,
-                //    AscItemText: 'Sort A to Z',
-                //    DescItemText:'Sort Z to A'
-                //}
+                {
+                    //the below are for UI calls
+                    message: 'Sort by Text field in desc order then by Numeric in asc order then by date in desc order',
+                    ColumnName: ['Text Field', 'Numeric Field', 'Date Field'],
+                    SortOrderItem: ['Sort Z to A', 'Sort lowest to highest', 'Sort newest to oldest'],
+                    //the below are for backend calls
+                    Fids: [6, 7, 11],
+                    sortFids: [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 7);}, function(row) {return getSortValue(row, 11);}],
+                    sortOrder: ['desc', 'asc', 'desc'],
+                    sortList: [
+                        {
+                            "fieldId": 6,
+                            "sortOrder": "desc",
+                            "groupType": null
+                        },
+                        {
+                            "fieldId": 7,
+                            "sortOrder": "asc",
+                            "groupType": null
+                        },
+                        {
+                            "fieldId": 11,
+                            "sortOrder": "desc",
+                            "groupType": null
+                        }
+                    ]
+                },
             ];
         }
 
@@ -250,30 +197,27 @@
                         r = JSON.parse(report.body);
                         //Verify that the report is created
                         expect(r.id, 2);
-                    }).then(function(){
+                    }).then(function() {
                         // Sort the actual records using lodash _.orderby
                         sortedRecords = reportSortingPage.sortRecords(records, testcase.sortFids, testcase.sortOrder);
 
                         for (var i = 1; i < sortedRecords.length; i++) {
                             for (var j = 0; j < testcase.Fids.length; j++) {
                                 keyValue.push(getSortValue(sortedRecords[i], testcase.Fids[j]));
-                                //var keyValue = [getSortValue(sortedRecords[i], 6), getSortValue(sortedRecords[i], 7)];
                             }
                         }
                         sortedExpectedRecords.push(keyValue.join());
-
-                    }).then(function(){
+                    }).then(function() {
                         //Go to created sorted report page directly.
-                        return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
+                        return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r.id));
                     }).then(function() {
                         return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                             e2eBase.sleep(browser.params.smallSleep);
                             //Verify table sorted results on UI with lodash sorted expected results.
                             verifySortedTableResults(sortedExpectedRecords);
                         });
-                    }).then(function(){
-                        //finally delete the report created
-                        e2eBase.recordBase.apiBase.executeRequest(reportsEndpoint + r.id, 'DELETE');
+                    }).then(function() {
+                        sortedExpectedRecords = [];
                         done();
                     });
                 });
