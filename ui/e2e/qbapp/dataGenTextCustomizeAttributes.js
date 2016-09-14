@@ -56,7 +56,6 @@ consts = require('../../common/src/constants.js');
         }
         if (other) {
             Object.assign(table[fieldName], table[fieldName], other);
-            console.log('BrandonFieldName: ', fieldName, 'BrandonJSON: ', JSON.stringify(table[fieldName]));
         }
     }
 
@@ -203,8 +202,6 @@ consts = require('../../common/src/constants.js');
             if (app && app.tables[e2eConsts.TABLE4]) {
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
                 var tableFourNonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE4]);
-                console.log('Brandon tableFourNonBuiltInFields: ', JSON.stringify(tableFourNonBuiltInFields));
-
                 // Generate the record JSON objects
                 var tableFourGeneratedRecords = e2eBase.recordService.generateRecords(tableFourNonBuiltInFields, 14);
                 // Via the API create the records, a new report, then run the report.
