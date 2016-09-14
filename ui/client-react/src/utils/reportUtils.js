@@ -237,12 +237,27 @@ class ReportUtils {
     }
 
     /**
+    * Determines what type of data has been provied and finds the unique record id field name
+    * This is a helper method that can determine which type of data is available and get the record id field from it
+    * @param {object} data
+    * @returns {string}
+    *
+    */
+    static getUniqueIdentifierFieldName(data) {
+        if(data && _.has(data, 'fields')){
+            return this.getUniqueIdentifierFieldNameFromFields(data);
+        } else {
+            return this.getUniqueIdentifierFieldNameFromData(data);
+        }
+    }
+
+    /**
     * Gets the name of the field that is the unique identifier field (e.g., Record ID #)
     * even if it is no longer named Record ID #
     * @param fields
     * @returns {string}
     */
-    static getUniqueIdentifierFieldName(fields) {
+    static getUniqueIdentifierFieldNameFromFields(fields) {
         if(requiredFieldsArePresent(fields)){
                 let uniqueIdentifierField = _.find(fields.fields.data, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
                 if(uniqueIdentifierField){
@@ -250,6 +265,28 @@ class ReportUtils {
                 } else {
                     return SchemaConsts.DEFAULT_RECORD_KEY;
                 }
+        } else {
+            return SchemaConsts.DEFAULT_RECORD_KEY;
+        }
+    }
+
+    /**
+    * Gets the name for the unique identifier row from grid data
+    * even if the Record ID # field has been renamed
+    * @param rowData
+    *    {
+    *        fieldName: {
+    *            id: 3 // this is the field id
+    *            value: 2
+    *            display: "2"
+    *        }
+    *    }
+    * @returns {string}
+    */
+    static getUniqueIdentifierFieldNameFromData(rowData) {
+        let recordIdField = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+        if(recordIdField) {
+            return recordIdField;
         } else {
             return SchemaConsts.DEFAULT_RECORD_KEY;
         }
