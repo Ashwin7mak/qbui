@@ -126,6 +126,9 @@
                         if (field.id === 11) {
                             field.value = '1977-12-12';
                         }
+                        if (field.id === 15) {
+                            field.value = 'true';
+                        }
                     });
                     // Add the new record back in to create
                     table1GeneratedRecords.push(dupRecord);
