@@ -85,7 +85,7 @@ const UserFieldValueEditor = React.createClass({
             <div className="userOption">
                 {this.state.selectedUserId === user.userId && <QbIcon icon="check-reversed"/>}
                 <div className="userLabel">{userLabel}</div>
-                {option.showEmail && <div className="email">{user.email}</div>}
+                {option.showEmail && user.email && <div className="email">{user.email}</div>}
             </div>);
     },
 
@@ -110,7 +110,6 @@ const UserFieldValueEditor = React.createClass({
 
         return (
             <Select
-                isOpen={true}
                 className="cellEdit"
                 tabIndex="0"
                 filterOption={this.filterOption}
