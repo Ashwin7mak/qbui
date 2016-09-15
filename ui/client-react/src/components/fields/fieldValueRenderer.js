@@ -2,7 +2,7 @@ import React from 'react';
 
 import FieldFormats from '../../utils/fieldFormats';
 
-import {DateFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
+import {DateFieldValueRenderer} from './fieldValueRenderers';
 import TextFieldValueRenderer from './textFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
 import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
