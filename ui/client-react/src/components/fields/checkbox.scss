@@ -1,0 +1,22 @@
+@import '../../assets/css/_qbColorVariables';
+
+$checkbox-color: $color-cyan-500;
+
+.checkbox {
+    &.renderer {
+        margin: 0;
+        text-align: center;
+
+        .symbol {
+            color: $checkbox-color;
+        }
+
+        .text {
+
+        }
+    }
+
+    &.editor {
+
+    }
+}
