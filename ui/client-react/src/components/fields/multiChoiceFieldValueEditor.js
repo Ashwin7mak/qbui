@@ -4,7 +4,7 @@ import {Input, InputGroup, FormControl, MenuItem, FormGroup, DropdownButton} fro
 /**
  * combo box cell editor
  */
-export const ComboBoxFieldValueEditor = React.createClass({
+export const MultiChoiceFieldValueEditor = React.createClass({
 
     propTypes: {
         choices: React.PropTypes.array, // array of choices with display value props
@@ -49,4 +49,4 @@ export const ComboBoxFieldValueEditor = React.createClass({
     }
 });
 
-export default ComboBoxFieldValueEditor;
+export default MultiChoiceFieldValueEditor;

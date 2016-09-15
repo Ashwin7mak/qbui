@@ -7,7 +7,7 @@ import {DefaultFieldValueEditor, DateFieldValueEditor,
 import TextFieldValueEditor from './textFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
 import NumericFieldValueEditor from './numericFieldValueEditor';
-import ComboBoxFieldValueEditor from './comboBoxFieldValueEditor';
+import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
 import _ from 'lodash';
 
 /**
@@ -168,7 +168,7 @@ const FieldValueEditor = React.createClass({
 
             if (_.has(this.props, 'fieldDef.choices')) {
                 return (
-                        <ComboBoxFieldValueEditor choices={this.props.fieldDef.choices}
+                        <MultiChoiceFieldValueEditor choices={this.props.fieldDef.choices}
                                              {...commonProps} />
                     );
             } else {
