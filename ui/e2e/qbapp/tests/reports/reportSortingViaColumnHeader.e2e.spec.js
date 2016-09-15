@@ -108,7 +108,6 @@
         var getExpectedSortedResultsUsingLoDashSort = function(Fids, sortFids, sortOrder) {
             var sortedRecords;
             // Sort the actual records using lodash _.orderby
-            console.log("the records are: " + JSON.stringify(actualRecords));
             sortedRecords = reportSortingPage.sortRecords(actualRecords, sortFids, sortOrder);
             for (var i = 0; i < sortedRecords.length; i++) {
                 for (var j = 0; j < Fids.length; j++) {
