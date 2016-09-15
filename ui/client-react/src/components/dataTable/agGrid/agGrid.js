@@ -39,7 +39,7 @@ function buildIconElement(icon) {
 }
 let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),
-    groupContracted: buildIconElement("icon_caretfilledright"),
+    groupContracted: buildIconElement("caret-filled-right"),
     menu: buildIconElement("caret-filled-down"),
     check: buildIconElement("check"),
     error: buildIconElement("alert")
