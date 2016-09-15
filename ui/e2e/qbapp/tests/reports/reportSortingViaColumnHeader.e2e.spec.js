@@ -15,9 +15,8 @@
         var realmId;
         var app;
         var records;
-        var r;
+        var report_Id;
         var keyValue = [];
-        var actualRecords = [];
         var sortedTableResults = [];
         var sortedExpectedRecords = [];
 
@@ -36,7 +35,6 @@
                 // Set your global objects to use in the test functions
                 app = appAndRecords[0];
                 records = appAndRecords[1];
-                actualRecords = records;
             }).then(function() {
                 // Generate 1 empty record
                 // Get the appropriate fields out of the table 1
@@ -49,7 +47,6 @@
                         field.value = 'false';
                     }
                 });
-                actualRecords.push(emptyRecord);
                 return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE1], generatedEmptyRecords);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
@@ -72,9 +69,6 @@
         });
 
         beforeEach(function(done) {
-            ////delete a report
-            //var reportsEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id);
-            //e2eBase.recordBase.apiBase.executeRequest(reportsEndpoint + r, 'DELETE');
             keyValue = [];
             sortedTableResults = [];
             sortedExpectedRecords = [];
@@ -88,7 +82,7 @@
          */
         var getSortedTableResults = function() {
             //Load the report in the UI
-            reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
+            return reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                 //sleep for loading of table to finish
                 e2eBase.sleep(browser.params.smallSleep);
                 reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
@@ -107,14 +101,18 @@
          */
         var getExpectedSortedResultsUsingLoDashSort = function(Fids, sortFids, sortOrder) {
             var sortedRecords;
-            // Sort the actual records using lodash _.orderby
-            sortedRecords = reportSortingPage.sortRecords(actualRecords, sortFids, sortOrder);
-            for (var i = 0; i < sortedRecords.length; i++) {
-                for (var j = 0; j < Fids.length; j++) {
-                    keyValue.push(reportSortingPage.getSortValue(sortedRecords[i], Fids[j]));
+            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id);
+            e2eBase.recordBase.apiBase.executeRequest(reportEndpoint + 1 + '/reportComponents', consts.GET).then(function(reportResult) {
+                var results = JSON.parse(reportResult.body);
+                // Sort the actual records using lodash _.orderby
+                sortedRecords = reportSortingPage.sortRecords(results.records, sortFids, sortOrder);
+                for (var i = 0; i < sortedRecords.length; i++) {
+                    for (var j = 0; j < Fids.length; j++) {
+                        keyValue.push(reportSortingPage.getSortValue(sortedRecords[i], Fids[j]));
+                    }
                 }
-            }
-            sortedExpectedRecords.push(keyValue.join());
+                sortedExpectedRecords.push(keyValue.join());
+            });
         };
 
         /**
@@ -179,13 +177,13 @@
         sortingTestCases().forEach(function(testcase) {
             it(testcase.message + ' for report without facets', function(done) {
                 //Create a report with Fids and sortFids.
-                return e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, testcase.Fids, testcase.sortList, null, testcase.message).then(function(reportId) {
-                    r = reportId;
+                e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, testcase.Fids, testcase.sortList, null, testcase.message).then(function(reportId) {
+                    report_Id = reportId;
                 }).then(function() {
                     getExpectedSortedResultsUsingLoDashSort(testcase.Fids, testcase.sortFids, testcase.sortOrder);
                 }).then(function() {
                     //Go to created sorted report page directly.
-                    return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r));
+                    return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, report_Id));
                 }).then(function() {
                     return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         e2eBase.sleep(browser.params.smallSleep);
@@ -216,13 +214,12 @@
                 }
             ];
             //Create a report with Fids, FacetFids and sortFids
-            return e2eBase.reportService.createReportWithFidsAndFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, Fids, facetFids, sortList).then(function(reportId) {
-                r = reportId;
-            }).then(function() {
+            e2eBase.reportService.createReportWithFidsAndFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, Fids, facetFids, sortList).then(function(reportId) {
+                report_Id = reportId;
                 getExpectedSortedResultsUsingLoDashSort(Fids, sortFids, ['asc', 'desc']);
             }).then(function() {
                 //Go to created sorted report page directly.
-                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r));
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, report_Id));
             }).then(function() {
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     e2eBase.sleep(browser.params.smallSleep);
@@ -237,11 +234,11 @@
 
         it("Verify Sorting and Checkmark beside selected Item for report without sortFids or facets", function(done) {
             //Create a report with just Fids
-            return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE1].id, [6], null, 'Report with just Fids').then(function(reportId) {
-                r = reportId;
+            e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE1].id, [6], null, 'Report with just Fids').then(function(reportId) {
+                report_Id = reportId;
             }).then(function() {
                 //Go to created sorted report page directly.
-                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r));
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, report_Id));
             }).then(function() {
                 //select the item from drop down menu
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
@@ -276,11 +273,11 @@
                 },
             ];
             //Create a report with Fids and sortFids.
-            return e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6, 11], sortList, null, "Verify Item Selected Report").then(function(reportId) {
-                r = reportId;
+            e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6, 11], sortList, null, "Verify Item Selected Report").then(function(reportId) {
+                report_Id = reportId;
             }).then(function() {
                 //Go to report 2 which has sortFids set.
-                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r));
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, report_Id));
             }).then(function() {
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     e2eBase.sleep(browser.params.smallSleep);
