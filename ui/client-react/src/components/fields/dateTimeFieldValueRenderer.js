@@ -52,11 +52,7 @@ const DateTimeFieldValueRenderer = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        if (this.props.attributes.clientSideAttributes.bold === true) {
-            classes += " bold";
-        }
-
-        //  it's possible that the field has been edited and we need to format
+        //  format the display value based on the field attributes
         let display = dateTimeFormatter.format({value: this.props.value}, this.props.attributes);
 
         return <div className={classes}>{display}</div>;
