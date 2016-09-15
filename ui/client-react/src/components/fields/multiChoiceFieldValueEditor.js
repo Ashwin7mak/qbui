@@ -17,12 +17,13 @@ export const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
-        return {choice: this.props.value ? this.props.value : null};
+        console.log('getInitialSTate this.props.value: ', this.props.value);
+        return {choice: {label: this.props.value}};
     },
 
-    selectUser(user) {
-        console.log('selectUser: ', user);
-        this.setState({choice: user ? user.value : null});
+    selectUser(choice) {
+        console.log('selectUser: ', choice);
+        this.setState({choice});
     },
 
     // getAppUser(id) {
@@ -33,26 +34,25 @@ export const MultiChoiceFieldValueEditor = React.createClass({
 
     getSelectItems() {
         const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
-        console.log('getSelectedItems choices: ', this.props.choices);
+        console.log('before map choices: ', this.props.choices);
+
         return this.props.choices ?
             this.props.choices.map(choice => {
-                const label = ({value: choice}, datatypeAttributes);
+                console.log('map choice: ', choice.displayValue);
                 return {
                     value: choice,
-                    label};
+                    label: choice.displayValue};
             }) : [];
     },
 
     onBlur() {
-
-        const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
-        const user = this.getAppUser(this.state.choice);
-
+        console.log('onBlur this.stat.choice: ', this.state.choice);
+        //give the right value to display for the parent,
         const theVals = {
-            value: user,
-            display: user ? userFormatter.format({value: user}, datatypeAttributes) : ''
+            value: this.state.choice,
+            display: this.state.choice
         };
-
+        console.log('onBlur theVals: ', theVals)
         this.props.onBlur(theVals);
     },
 
@@ -65,9 +65,8 @@ export const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     render() {
-        console.log('value: ', this.props.choices);
-        console.log('choices: ', this.props.value);
-        console.log('fieldDef: ', this.props.fieldDef);
+        console.log('this.state.choice: ', this.state.choice);
+        console.log('this.getSelectItems: ', this.getSelectItems());
         return (
             <Select
                 className="cellEdit"
