@@ -1,50 +1,83 @@
 import React from 'react';
-import {Input, InputGroup, FormControl, MenuItem, FormGroup, DropdownButton} from 'react-bootstrap';
-
+import Select from 'react-select';
+import 'react-select/dist/react-select.min.css';
+import './userFieldValueEditor.scss';
 /**
  * combo box cell editor
  */
 export const MultiChoiceFieldValueEditor = React.createClass({
+    displayName: 'MultiChoiceFieldValueEditor',
 
     propTypes: {
-        choices: React.PropTypes.array, // array of choices with display value props
-        onChange: React.PropTypes.func,
-        onBlur: React.PropTypes.func
+        choices: React.PropTypes.array,
+        value: React.PropTypes.object,
+        /**
+         * data type attributes for the field */
+        fieldDef: React.PropTypes.object
     },
 
-    // handle text input
-    onChange(ev) {
-        const newValue = ev.target.value;
-
-        this.props.onChange(newValue);
+    getInitialState() {
+        return {choice: this.props.value ? this.props.value : null};
     },
-    // handle dropdown selection
-    onSelect(choice) {
-        this.props.onChange(choice);
+
+    selectUser(user) {
+        console.log('selectUser: ', user);
+        this.setState({choice: user ? user.value : null});
+    },
+
+    // getAppUser(id) {
+    //     console.log('getAppUser ID', id);
+    //     return this.props.choices.find(user => user.userId === id);
+    // },
+
+
+    getSelectItems() {
+        const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
+        console.log('getSelectedItems choices: ', this.props.choices);
+        return this.props.choices ?
+            this.props.choices.map(choice => {
+                const label = ({value: choice}, datatypeAttributes);
+                return {
+                    value: choice,
+                    label};
+            }) : [];
+    },
+
+    onBlur() {
+
+        const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
+        const user = this.getAppUser(this.state.choice);
+
+        const theVals = {
+            value: user,
+            display: user ? userFormatter.format({value: user}, datatypeAttributes) : ''
+        };
+
+        this.props.onBlur(theVals);
+    },
+
+    renderOption(choice) {
+        console.log('renderOption option: ', choice)
+        return (
+            <div className="userOption">
+                <div className="userLabel">{choice.value.displayValue}</div>
+            </div>);
     },
 
     render() {
+        console.log('value: ', this.props.choices);
+        console.log('choices: ', this.props.value);
+        console.log('fieldDef: ', this.props.fieldDef);
         return (
-            <InputGroup className="cellEdit">
-                <FormControl type="text"
-                             value={this.props.value}
-                             onChange={this.onChange}
-                             onBlur={this.props.onBlur}
-                />
-                <DropdownButton pullRight={true}
-                                componentClass={InputGroup.Button}
-                                id="input-dropdown-addon"
-                                title="">
-
-                    {this.props.choices.map((choice, i) => (<MenuItem key={i}
-                                                                      onBlur={this.props.onBlur}
-                                                                      onSelect={() => {this.onSelect(choice.displayValue);}}>
-                        {choice.displayValue}
-                    </MenuItem>))
-                    }
-
-                </DropdownButton>
-            </InputGroup>
+            <Select
+                className="cellEdit"
+                tabIndex="0"
+                matchPos="start"
+                value={this.state.choice}
+                optionRenderer={this.renderOption}
+                options={this.getSelectItems()}
+                onChange={this.selectUser}
+                onBlur={this.onBlur} />
         );
     }
 });
