@@ -62,6 +62,8 @@
                 return '';
             }
 
+            fieldInfo = fieldInfo || {};
+
             //Declare the date and moment formatter
             var currentDate = new Date();
             var dd = currentDate.getDate().toString();

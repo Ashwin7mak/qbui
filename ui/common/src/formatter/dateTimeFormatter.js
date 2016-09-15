@@ -114,6 +114,9 @@
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
+
+            fieldInfo = fieldInfo || {};
+
             var timeZone = consts.UTC_TIMEZONE;
             if (fieldInfo.type === consts.DATE_TIME || fieldInfo.type === consts.FORMULA_DATE_TIME) {
                 timeZone = fieldInfo.timeZone;
