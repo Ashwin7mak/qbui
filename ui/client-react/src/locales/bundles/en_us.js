@@ -99,12 +99,14 @@ export default {
         },
         report : {
             blank : "blank",
-            facets :{
+            facets : {
                 noFacets : "No values",
                 seeMore : "more...",
                 tooManyValues : "Too many values to use for filtering.",
                 noCheck : "No",
-                yesCheck : "Yes"
+                yesCheck : "Yes",
+                clearFacet: "Clear {facet} filter",
+                clearFacetSelection: "Click to clear this filter"
             },
             filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
             filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
