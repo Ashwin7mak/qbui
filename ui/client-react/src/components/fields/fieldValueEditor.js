@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 
 import FieldFormats from '../../utils/fieldFormats' ;
 import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
-    DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
-import TextFieldValueEditor from './textFieldValueEditor';
+    DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor} from './fieldValueEditors';
+import CheckBoxFieldValueEditor from './checkBoxFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
 import NumericFieldValueEditor from './numericFieldValueEditor';
+import TextFieldValueEditor from './textFieldValueEditor';
 import _ from 'lodash';
 
 /**
@@ -255,4 +256,3 @@ const FieldValueEditor = React.createClass({
 });
 
 export default FieldValueEditor;
-
