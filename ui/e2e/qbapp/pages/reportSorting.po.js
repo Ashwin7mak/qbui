@@ -157,9 +157,9 @@
          * Function will select the Item passed in parameter from the column header popup menu
          */
         this.selectItems = function(itemToSelect) {
-            var items = reportServicePage.agGridContainerEl.all(by.className('open'));
+            var items = reportServicePage.agGridContainerEl.all(by.className('open')).all(by.tagName('li'));
             return items.filter(function(elm) {
-                return elm.element(by.tagName('li')).getText().then(function(text) {
+                return elm.getText().then(function(text) {
                     return text === itemToSelect;
                 });
             }).then(function(filteredElement) {
@@ -201,13 +201,13 @@
          * Function will select the Item passed in parameter from the column header popup menu
          */
         this.verifyItemSelected = function(itemToVerify) {
-            var items = reportServicePage.agGridContainerEl.all(by.className('open'));
+            var items = reportServicePage.agGridContainerEl.all(by.className('open')).all(by.tagName('li'));
             return items.filter(function(elm) {
-                return elm.element(by.tagName('li')).getText().then(function(text) {
+                return elm.getText().then(function(text) {
                     return text === itemToVerify;
                 });
             }).then(function(filteredElement) {
-                expect(filteredElement[0].element(by.tagName('a')).element(by.className('iconssturdy-check')).isDisplayed()).toBeTruthy();
+                expect(filteredElement[0].element(by.className('iconssturdy-check')).isDisplayed()).toBeTruthy();
             });
         };
 

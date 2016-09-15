@@ -10,7 +10,7 @@
     var reportSortingPage = new ReportSortingPage();
 
 
-    describe('Report Sorting', function() {
+    describe('Report Sorting Tests - ', function() {
         var realmName;
         var realmId;
         var app;
@@ -243,15 +243,16 @@
                 //select the item from drop down menu
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     e2eBase.sleep(browser.params.smallSleep);
-                    reportSortingPage.expandColumnHeaderMenuAndSelectItem("Text Field", "Sort A to Z");
+                    reportSortingPage.expandColumnHeaderMenuAndSelectItem("Text Field", "Sort Z to A");
                 });
             }).then(function() {
                 //finally verify item got selected
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Text Field", "Sort A to Z");
+                    e2eBase.sleep(browser.params.smallSleep);
+                    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Text Field", "Sort Z to A");
                 });
             }).then(function() {
-                getExpectedSortedResultsUsingLoDashSort([6], [function(row) {return reportSortingPage.getSortValue(row, 6);}], ['asc']);
+                getExpectedSortedResultsUsingLoDashSort([6], [function(row) {return reportSortingPage.getSortValue(row, 6);}], ['desc']);
             }).then(function() {
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     e2eBase.sleep(browser.params.smallSleep);
