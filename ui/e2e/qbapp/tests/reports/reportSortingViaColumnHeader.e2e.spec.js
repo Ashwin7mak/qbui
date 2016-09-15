@@ -195,9 +195,6 @@
                 }).then(function() {
                     verifyResults(sortedTableResults, sortedExpectedRecords);
                     done();
-                }).catch(function(error) {
-                    // Global catch that will grab any errors from chain above
-                    done.fail(+error.message);
                 });
             });
         });
@@ -235,9 +232,6 @@
             }).then(function() {
                 verifyResults(sortedTableResults, sortedExpectedRecords);
                 done();
-            }).catch(function(error) {
-                // Global catch that will grab any errors from chain above
-                done.fail(+error.message);
             });
         });
 
@@ -270,9 +264,6 @@
             }).then(function() {
                 verifyResults(sortedTableResults, sortedExpectedRecords);
                 done();
-            }).catch(function(error) {
-                // Global catch that will grab any errors from chain above
-                done.fail(+error.message);
             });
         });
 
@@ -297,9 +288,6 @@
                     reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Date Field", "Sort newest to oldest");
                     done();
                 });
-            }).catch(function(error) {
-                // Global catch that will grab any errors from chain above
-                done.fail(+error.message);
             });
         });
 
