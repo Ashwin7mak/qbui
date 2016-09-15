@@ -15,7 +15,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
         value: React.PropTypes.string,
         /**
          * the type for the textarea box is text */
-        type: React.PropTypes.string,
+        type: React.PropTypes.number,
         /**
          *listen for changes by setting a callback to the onChange prop */
         onChange: React.PropTypes.func,
