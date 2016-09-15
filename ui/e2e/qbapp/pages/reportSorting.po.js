@@ -117,10 +117,10 @@
                 e2ePageBase.waitForElementToBeClickable(filteredColumn[0]).then(function() {
                     return filteredColumn[0].click();
                 }).then(function() {
-                    var scrollToElm2 = filteredColumn[0].element(by.className('ag-header-cell-menu-button')).scrollIntoView;
+                    var scrollToElm2 = filteredColumn[0].element(by.className('iconssturdy-caret-filled-down')).scrollIntoView;
                     e2eBase.sleep(browser.params.smallSleep);
-                    e2ePageBase.waitForElementToBeClickable(filteredColumn[0].element(by.className('ag-header-cell-menu-button'))).then(function() {
-                        return filteredColumn[0].element(by.className('ag-header-cell-menu-button')).click();
+                    e2ePageBase.waitForElementToBeClickable(filteredColumn[0].element(by.className('iconssturdy-caret-filled-down'))).then(function() {
+                        return filteredColumn[0].element(by.className('iconssturdy-caret-filled-down')).click();
                     });
                 }).then(function() {
                     // Verify the popup menu is displayed

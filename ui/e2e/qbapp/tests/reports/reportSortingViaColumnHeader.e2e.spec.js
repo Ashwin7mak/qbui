@@ -241,7 +241,7 @@
             });
         });
 
-        it("Verify Sorting and Checkmark beside selected Item for report without sortFids or Fids or facets", function(done) {
+        it("Verify Sorting and Checkmark beside selected Item for report without sortFids or facets", function(done) {
             //Create a report with just Fids
             return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE1].id, [6], null, 'Report with just Fids').then(function(reportId) {
                 r = reportId;
