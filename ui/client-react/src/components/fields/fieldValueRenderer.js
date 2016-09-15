@@ -2,12 +2,13 @@ import React from 'react';
 
 import FieldFormats from '../../utils/fieldFormats';
 
-import {MultiLineTextFieldValueRenderer,  UserFieldValueRenderer} from './fieldValueRenderers';
+import {UserFieldValueRenderer} from './fieldValueRenderers';
+
 import TextFieldValueRenderer from './textFieldValueRenderer';
 import DateTimeFieldValueRenderer from './dateTimeFieldValueRenderer';
 import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
-
+import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
 import _ from 'lodash';
 
 /**
@@ -112,6 +113,7 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.MULTI_LINE_TEXT_FORMAT:
             return (
                     <MultiLineTextFieldValueRenderer value={this.props.display ? this.props.display : this.props.value}
+                                                     attributes={this.props.attributes}
                                                      key={'mltfvr-' + this.props.idKey}
                                                  {...commonProperties}/>
                 );
@@ -131,8 +133,6 @@ const FieldValueRenderer = React.createClass({
     },
 
     render() {
-
-        //  TODO: move attribute test into low level component..
         let className = "";
         let commonProperties = {};
         if (_.has(this.props, 'attributes.clientSideAttributes.bold') &&
