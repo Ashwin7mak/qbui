@@ -15,7 +15,10 @@
         var realmId;
         var app;
         var records;
-        var sortedRecords;
+        var r;
+        var keyValue = [];
+        var actualRecords = [];
+        var sortedTableResults = [];
         var sortedExpectedRecords = [];
 
         /**
@@ -33,6 +36,7 @@
                 // Set your global objects to use in the test functions
                 app = appAndRecords[0];
                 records = appAndRecords[1];
+                actualRecords = records;
             }).then(function() {
                 // Generate 1 empty record
                 // Get the appropriate fields out of the table 1
@@ -45,7 +49,7 @@
                         field.value = 'false';
                     }
                 });
-                records.push(emptyRecord);
+                actualRecords.push(emptyRecord);
                 return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE1], generatedEmptyRecords);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
@@ -67,31 +71,22 @@
             });
         });
 
+        beforeEach(function(done) {
+            ////delete a report
+            //var reportsEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id);
+            //e2eBase.recordBase.apiBase.executeRequest(reportsEndpoint + r, 'DELETE');
+            keyValue = [];
+            sortedTableResults = [];
+            sortedExpectedRecords = [];
+            done();
+        });
 
-        /*
-         * This function gets the value in the record parameter (array of field value pairs), where id matches the fid specified in the parameter
-         * Function is a custom sort function used by lodash from within the sortRecords function
-         * @Returns The value that lodash should sort on
-         */
-        var getSortValue = function(record, fid) {
-            // By default returns nothing if not found
-            var val = [];
-            // loop through the columns (fields) in the record
-            record.forEach(function(col) {
-                // find the column we are sorting on and return its value
-                if (col.id === fid) {
-                    val.push(col.value);
-                }
-            });
-            return val;
-        };
 
         /**
-         * Function that will verify the filtered rows are contained in actual record list.
-         * @param facets Group
+         * Function that will get the sorted records from the UI dataGrid.
+         *
          */
-        var verifySortedTableResults = function(expectedSortedTableResults) {
-            var sortedTableResults = [];
+        var getSortedTableResults = function() {
             //Load the report in the UI
             reportServicePage.waitForElement(reportServicePage.griddleWrapperEl).then(function() {
                 //sleep for loading of table to finish
@@ -101,11 +96,36 @@
                         for (var i = 0; i < uiRecords.length; i++) {
                             sortedTableResults.push(uiRecords[i].replace(/\n/g, ","));
                         }
-                        expect(sortedTableResults.join()).toEqual(expectedSortedTableResults.join());
                     });
                 });
             });
         };
+
+        /**
+         * Function that will sort the records using lodash in asked order
+         *@parms Fids, sortFids and sortOrder
+         */
+        var getExpectedSortedResultsUsingLoDashSort = function(Fids, sortFids, sortOrder) {
+            var sortedRecords;
+            // Sort the actual records using lodash _.orderby
+            console.log("the records are: " + JSON.stringify(actualRecords));
+            sortedRecords = reportSortingPage.sortRecords(actualRecords, sortFids, sortOrder);
+            for (var i = 0; i < sortedRecords.length; i++) {
+                for (var j = 0; j < Fids.length; j++) {
+                    keyValue.push(reportSortingPage.getSortValue(sortedRecords[i], Fids[j]));
+                }
+            }
+            sortedExpectedRecords.push(keyValue.join());
+        };
+
+        /**
+         * Function that will verify the actual versus expected sorted records
+         *@parms actualSortedResults, expectedsortedResults
+         */
+        var verifyResults = function(actualSortedResults, expectedsortedResults) {
+            expect(actualSortedResults.join()).toEqual(expectedsortedResults.join());
+        };
+
 
         /**
          * Data Provider for reports sorting testCases.
@@ -122,7 +142,7 @@
                     SortOrderItem: ['Sort A to Z'],
                     //the below are for backend calls
                     Fids: [6],
-                    sortFids: [function(row) {return getSortValue(row, 6);}],
+                    sortFids: [function(row) {return reportSortingPage.getSortValue(row, 6);}],
                     sortOrder: ['asc'],
                     sortList: [
                         {
@@ -139,7 +159,7 @@
                     SortOrderItem: ['Sort A to Z', 'Sort highest to lowest'],
                     //the below are for backend calls
                     Fids: [6, 7],
-                    sortFids: [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 7);}],
+                    sortFids: [function(row) {return reportSortingPage.getSortValue(row, 6);}, function(row) {return reportSortingPage.getSortValue(row, 7);}],
                     sortOrder: ['asc', 'desc'],
                     sortList: [
                         {
@@ -159,52 +179,34 @@
 
         sortingTestCases().forEach(function(testcase) {
             it(testcase.message + ' for report without facets', function(done) {
-                var r;
-                var keyValue = [];
-
-                //Create a report
-                var reportsEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-                var reportToCreate = {
-                    name: testcase.message,
-                    type: 'TABLE',
-                    tableId: app.tables[0].id,
-                    fids  : testcase.Fids,
-                    sortList: testcase.sortList
-                };
-                //Create a report with testcase fids and sortLists
-                e2eBase.recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportToCreate).then(function(report) {
-                    r = JSON.parse(report.body);
+                //Create a report with Fids and sortFids.
+                return e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, testcase.Fids, testcase.sortList, null, testcase.message).then(function(reportId) {
+                    r = reportId;
                 }).then(function() {
-                    // Sort the actual records using lodash _.orderby
-                    sortedRecords = reportSortingPage.sortRecords(records, testcase.sortFids, testcase.sortOrder);
-
-                    for (var i = 0; i < sortedRecords.length; i++) {
-                        for (var j = 0; j < testcase.Fids.length; j++) {
-                            keyValue.push(getSortValue(sortedRecords[i], testcase.Fids[j]));
-                        }
-                    }
-                    sortedExpectedRecords.push(keyValue.join());
+                    getExpectedSortedResultsUsingLoDashSort(testcase.Fids, testcase.sortFids, testcase.sortOrder);
                 }).then(function() {
                     //Go to created sorted report page directly.
-                    return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r.id));
+                    return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r));
                 }).then(function() {
                     return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         e2eBase.sleep(browser.params.smallSleep);
                         //Verify table sorted results on UI with lodash sorted expected results.
-                        verifySortedTableResults(sortedExpectedRecords);
+                        getSortedTableResults();
                     });
                 }).then(function() {
-                    sortedExpectedRecords = [];
+                    verifyResults(sortedTableResults, sortedExpectedRecords);
                     done();
+                }).catch(function(error) {
+                    // Global catch that will grab any errors from chain above
+                    done.fail(+error.message);
                 });
             });
         });
 
         it("Verify Text asc sort then by CheckBox Desc sort for report with Facets", function(done) {
-            var r;
-            var keyValue = [];
             var Fids = [6, 15];
-            var sortFids = [function(row) {return getSortValue(row, 6);}, function(row) {return getSortValue(row, 15);}];
+            var facetFids = [6, 15];
+            var sortFids = [function(row) {return reportSortingPage.getSortValue(row, 6);}, function(row) {return reportSortingPage.getSortValue(row, 15);}];
             var sortList = [
                 {
                     "fieldId": 6,
@@ -217,51 +219,90 @@
                     "groupType": null
                 }
             ];
-
-            //Create a report
-            var reportsEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
-            var reportToCreate = {
-                name: 'facets report',
-                type: 'TABLE',
-                tableId: app.tables[0].id,
-                fids  : Fids,
-                facetFids :Fids, //create filters/facets with Text and Checkbox
-                sortList: sortList
-            };
-            //Create a report with testcase fids and sortLists
-            e2eBase.recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportToCreate).then(function(report) {
-                r = JSON.parse(report.body);
+            //Create a report with Fids, FacetFids and sortFids
+            return e2eBase.reportService.createReportWithFidsAndFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, Fids, facetFids, sortList).then(function(reportId) {
+                r = reportId;
             }).then(function() {
-                // Sort the actual records using lodash _.orderby
-                sortedRecords = reportSortingPage.sortRecords(records, sortFids, ['asc', 'desc']);
-
-                for (var i = 0; i < sortedRecords.length; i++) {
-                    for (var j = 0; j < Fids.length; j++) {
-                        keyValue.push(getSortValue(sortedRecords[i], Fids[j]));
-                    }
-                }
-                sortedExpectedRecords.push(keyValue.join());
+                getExpectedSortedResultsUsingLoDashSort(Fids, sortFids, ['asc', 'desc']);
             }).then(function() {
                 //Go to created sorted report page directly.
-                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r.id));
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r));
             }).then(function() {
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     e2eBase.sleep(browser.params.smallSleep);
                     //Verify table sorted results on UI with lodash sorted expected results.
-                    verifySortedTableResults(sortedExpectedRecords);
+                    getSortedTableResults();
                 });
             }).then(function() {
-                sortedExpectedRecords = [];
+                verifyResults(sortedTableResults, sortedExpectedRecords);
                 done();
+            }).catch(function(error) {
+                // Global catch that will grab any errors from chain above
+                done.fail(+error.message);
             });
         });
 
+        it("Verify Sorting and Checkmark beside selected Item for report without sortFids or Fids or facets", function(done) {
+            //Create a report with just Fids
+            return e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE1].id, [6], null, 'Report with just Fids').then(function(reportId) {
+                r = reportId;
+            }).then(function() {
+                //Go to created sorted report page directly.
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r));
+            }).then(function() {
+                //select the item from drop down menu
+                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    e2eBase.sleep(browser.params.smallSleep);
+                    reportSortingPage.expandColumnHeaderMenuAndSelectItem("Text Field", "Sort A to Z");
+                });
+            }).then(function() {
+                //finally verify item got selected
+                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Text Field", "Sort A to Z");
+                });
+            }).then(function() {
+                getExpectedSortedResultsUsingLoDashSort([6], [function(row) {return reportSortingPage.getSortValue(row, 6);}], ['asc']);
+            }).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    e2eBase.sleep(browser.params.smallSleep);
+                    //Verify table sorted results on UI with lodash sorted expected results.
+                    getSortedTableResults();
+                });
+            }).then(function() {
+                verifyResults(sortedTableResults, sortedExpectedRecords);
+                done();
+            }).catch(function(error) {
+                // Global catch that will grab any errors from chain above
+                done.fail(+error.message);
+            });
+        });
 
-        ////Verify the appropriate sorting sub-menu got selected in the header popup
-        //for (var i = 0; i < testcase.ColumnName.length; i++) {
-        //    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem(testcase.ColumnName[i], testcase.SortOrderItem[i]);
-        //}
-        //console.log("the sorted expected results are: "+JSON.stringify(sortedExpectedRecords));
+        it("Verify Checkmark appears beside sorting menuItem for report with sortFids already set.", function(done) {
+            var sortList = [
+                {
+                    "fieldId": 11,
+                    "sortOrder": "desc",
+                    "groupType": null
+                },
+            ];
+            //Create a report with Fids and sortFids.
+            return e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6, 11], sortList, null, "Verify Item Selected Report").then(function(reportId) {
+                r = reportId;
+            }).then(function() {
+                //Go to report 2 which has sortFids set.
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, r));
+            }).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    e2eBase.sleep(browser.params.smallSleep);
+                    //finally verify item got selected
+                    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Date Field", "Sort newest to oldest");
+                    done();
+                });
+            }).catch(function(error) {
+                // Global catch that will grab any errors from chain above
+                done.fail(+error.message);
+            });
+        });
 
         /**
          * After all tests are done, run the cleanup function in the base class
