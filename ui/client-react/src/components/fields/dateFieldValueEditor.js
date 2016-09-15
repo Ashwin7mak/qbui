@@ -87,15 +87,6 @@ const DateFieldValueEditor = React.createClass({
         }
     },
 
-    getDateFormat() {
-        let formatter = 'MM-DD-YYYY';   //default
-        if (this.props.attributes && this.props.attributes.dateFormat) {
-            let formatters = dateTimeFormatter.getJavaToJavaScriptDateFormats();
-            formatter = formatters[this.props.attributes.dateFormat];
-        }
-        return formatter;
-    },
-
     render() {
         let classes = 'cellEdit dateCell';
         let singlePicker = true;

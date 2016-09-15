@@ -199,14 +199,18 @@ describe('AGGrid cell editor functions', () => {
         expect(dateEditInputs.length).toEqual(1);
         expect(dateEditInputs[0].value).toBe(`09-03-2015`);
 
+        //  change a date
+        TestUtils.Simulate.change(dateEditInputs[0], {"target": {"value":"10-15-2015"}});
+        expect(dateEditInputs[0].value).toBe("10-15-2015");
+
         //  test time droplist
         const timeEditInputs = ReactDOM.findDOMNode(component).querySelectorAll(".timeCell input");
         expect(timeEditInputs.length).toEqual(1);
         expect(timeEditInputs[0].value).toBe("");  // empty until a change
 
         //  change a time
-        TestUtils.Simulate.change(timeEditInputs[0], {"target": {"value":"10:33:03 AM"}});
-        expect(timeEditInputs[0].value).toBe("10:33:03 AM");
+        TestUtils.Simulate.change(timeEditInputs[0], {"target": {value: "10:30 am"}});
+        expect(timeEditInputs[0].value).toBe("10:30 am");
 
     });
 

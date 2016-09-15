@@ -22,7 +22,7 @@ import moment from 'moment';
  */
 function getTimesInMinutes(increment) {
     let map = [];
-    //map.push({value:null, label:""});  // add empty entry
+    //map.push({value:"", label:""});  // add empty entry
 
     let time = moment().startOf('day');
     let endOfDay = moment().endOf('day');
