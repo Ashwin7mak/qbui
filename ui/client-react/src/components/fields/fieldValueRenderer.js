@@ -2,9 +2,10 @@ import React from 'react';
 
 import FieldFormats from '../../utils/fieldFormats';
 import {DateFieldValueRenderer, UserFieldValueRenderer} from './fieldValueRenderers';
-import TextFieldValueRenderer from './textFieldValueRenderer';
-import NumericFieldValueRenderer from './numericFieldValueRenderer';
+import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
 import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
+import NumericFieldValueRenderer from './numericFieldValueRenderer';
+import TextFieldValueRenderer from './textFieldValueRenderer';
 import _ from 'lodash';
 
 /**
@@ -108,7 +109,8 @@ const FieldValueRenderer = React.createClass({
         }
         case FieldFormats.CHECKBOX_FORMAT:
             return (
-                    <input type="checkbox" disabled checked={this.props.value} key={'inp-' + this.props.idKey}/>
+                    <CheckBoxFieldValueRenderer value={this.props.value}
+                                                key={'inp-' + this.props.idKey} />
                 );
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT:
