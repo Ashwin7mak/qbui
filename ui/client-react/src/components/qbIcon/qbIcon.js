@@ -25,7 +25,7 @@ const QBicon = React.createClass({
         };
     },
     render: function() {
-        let className = this.props.className + ' qbIcon iconssturdy-' + this.props.icon;
+        let className = this.props.className + ' qbIcon iconTableUISturdy-' + this.props.icon;
 
         return (
             <span className={className} onClick={this.props.onClick}>
@@ -36,3 +36,4 @@ const QBicon = React.createClass({
 });
 
 export default QBicon;
+
