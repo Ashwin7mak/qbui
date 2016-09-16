@@ -65,21 +65,21 @@ describe('AGGrid cell editor functions', () => {
 
     it('test TextCellRenderer multiline', () => {
         const params = {
-             value: {
+            value: {
                 value: "Testing",
                 display: "Testing"
             },
-             column: {
+            column: {
                 colDef: {
-                    type : consts.SCALAR,
-                    datatypeAttributes: {
+                     type : consts.SCALAR,
+                     datatypeAttributes: {
                         clientSideAttributes: {
                             num_lines: 4
                         },
                     },
-                }
+                 }
             }
-         };
+        };
 
         component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
