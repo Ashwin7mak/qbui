@@ -46,10 +46,10 @@
              * will generate a 'list all' report. Returns a promise.
              */
             // TODO: QBSE-13518 Write a report generator in the test_generators package
-            createReportWithFids: function(appId, tableId, fids, query) {
+            createReportWithFids: function(appId, tableId, fids, query, reportName) {
                 var deferred = promise.pending();
                 var reportJSON = {
-                    name      : 'Report With Sorting',
+                    name      : reportName || 'Report With Sorting',
                     type      : 'TABLE',
                     fids  : fids,
                     ownerId   : '10000',
@@ -102,10 +102,10 @@
              * will generate a 'list all' report. Returns a promise.
              */
             // TODO: QBSE-13518 Write a report generator in the test_generators package
-            createReportWithFidsAndSort: function(appId, tableId, fids, sortfids, query) {
+            createReportWithFidsAndSortList: function(appId, tableId, fids, sortfids, query, reportName) {
                 var deferred = promise.pending();
                 var reportJSON = {
-                    name      : 'Report With Sorting',
+                    name      : reportName || 'Report With Sorting',
                     type      : 'TABLE',
                     fids  : fids,
                     sortList  : sortfids,
@@ -162,7 +162,7 @@
             createReportWithFidsAndFacetsAndSortLists: function(appId, tableId, fids, facetFids, sortFids, query, reportName) {
                 var deferred = promise.pending();
                 var reportJSON = {
-                    name      : reportName || 'Report With Facets',
+                    name      : reportName || 'Report With Fids SortList And Facets',
                     type      : 'TABLE',
                     fids      : fids,
                     facetFids : facetFids,

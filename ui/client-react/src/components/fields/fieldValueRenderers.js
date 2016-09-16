@@ -41,16 +41,3 @@ export const DateFieldValueRenderer = React.createClass({
         return <div className="dateCell data">{this.props.value}</div>;
     }
 });
-
-// like a text cell but use a PRE tag to preserve whitespace
-export const MultiLineTextFieldValueRenderer = React.createClass({
-    displayName: 'MultiLineTextFieldValueRenderer',
-
-    propTypes: {
-        value: React.PropTypes.any
-    },
-
-    render() {
-        return <pre className="multiLineTextCell data">{this.props.value}</pre>;
-    }
-});

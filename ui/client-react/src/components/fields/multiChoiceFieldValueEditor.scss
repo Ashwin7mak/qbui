@@ -8,6 +8,7 @@ $selected-choice-color: $color-cyan-500;
   .Select-control {
     border: 0;
     height:28px;
+    width:100%;
 
     .Select-input {
       height:28px;
@@ -27,8 +28,6 @@ $selected-choice-color: $color-cyan-500;
 
   .Select-menu-outer {
     max-height: 225px;
-    width:auto;
-
 
     .Select-menu {
       max-height: 223px;
@@ -38,13 +37,13 @@ $selected-choice-color: $color-cyan-500;
       .Select-option {
         &.is-selected {
           background-color: inherit;
-          .userLabel {
+          .choiceLabel {
             color: $selected-choice-color;
           }
         }
         padding-left:5px;
 
-        .userOption {
+        .choiceOption {
           position:relative;
         }
         .qbIcon {
@@ -54,16 +53,11 @@ $selected-choice-color: $color-cyan-500;
           font-size:12px;
           color: $selected-choice-color;
         }
-        .userLabel,.email {
-          margin-left:16px;
-        }
-        .userLabel {
-          font-size:14px;
+        .choiceLabel {
+          font-size: 14px;
           color: #404040;
-        }
-        .email {
-          font-size: 12px;
-          color: #969696;
+          margin-left:16px;
+          height:28px;
         }
       }
     }

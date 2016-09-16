@@ -194,7 +194,11 @@
                     return element.all(by.className('selectedToken')).then(function(items) {
                         items.forEach(function(item) {
                             item.element(by.className('clearFacet')).click();
-                            return self.waitForReportReady();
+                            return self.waitForReportReady().then(function() {
+                                return self.waitForFacetsPopupReady().then(function() {
+                                    return self.waitForReportReady();
+                                });
+                            });
                         });
                     });
                 });
@@ -203,11 +207,19 @@
 
         /**
          * Adding and removing facets refreshes the displayed report quite often.
-         * Function will wait for the loaded content to refresh. Helps with stability of tests.
+         * Function will wait for the loaded report content to refresh. Helps with stability of tests.
          */
         this.waitForReportReady = function() {
-            return e2ePageBase.waitForElement(reportServicePage.loadedContentEl);
+            return e2ePageBase.waitForElement(reportServicePage.agGridBodyEl);
         };
+
+        /**
+         * Function will wait for the facet popup menu to refresh. Helps with stability of tests.
+         */
+        this.waitForFacetsPopupReady = function() {
+            return e2ePageBase.waitForElement(this.reportFacetPopUpMenu);
+        };
+
     };
 
     ReportFacetsPage.prototype = e2ePageBase;

@@ -6,6 +6,7 @@ import Logger from '../utils/logger';
 import Locale from '../locales/locales';
 import * as SchemaConsts from "../constants/schema";
 import FieldFormats from '../utils/fieldFormats';
+import NumberUtils from '../utils/numberUtils';
 import * as textFormatter from '../../../common/src/formatter/textFormatter';
 import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormatter';
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
@@ -253,6 +254,14 @@ let reportModel = {
     },
 
     /**
+     * Update count of filtered records
+     * @param recordsCountData
+     */
+    updateFilteredRecordsCount: function(count) {
+        this.model.filteredRecordsCount = parseInt(count);
+    },
+
+    /**
      * Update the filtered Records from response.
      * @param recordData
      */
@@ -444,6 +453,8 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_RECORDS, this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
+            actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, this.onFilteredRecordsCountSuccess,
+            actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, this.onFilteredRecordsCountFailed,
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
@@ -488,8 +499,8 @@ let ReportDataStore = Fluxxor.createStore({
         this.tblId = report.tblId;
         this.rptId = report.rptId;
 
-        this.pageOffset = (report.offset >= 0) ? report.offset : this.pageOffset;
-        this.numRows = report.numRows ? report.numRows : this.numRows;
+        this.pageOffset = NumberUtils.isInt(report.offset) && report.offset >= 0 ? report.offset : this.pageOffset;
+        this.numRows = NumberUtils.isInt(report.numRows) && report.numRows ? report.numRows : this.numRows;
 
         this.searchStringForFiltering = '' ;
         this.selections  = new FacetSelections();
@@ -541,6 +552,10 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.reportModel.setSortFids(payload.sortList);
         this.reportModel.setGroupElements(payload.sortList);
+
+        this.pageOffset = NumberUtils.isInt(payload.offset) && payload.offset >= 0 ? payload.offset : this.pageOffset;
+        this.numRows = NumberUtils.isInt(payload.numRows) && payload.numRows ? payload.numRows : this.numRows;
+
         this.emit('change');
     },
 
@@ -561,6 +576,26 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onLoadRecordsFailed() {
+        this.loading = false;
+        this.editingIndex = null;
+        this.editingId = null;
+
+        this.error = true;
+        this.emit('change');
+    },
+
+    onFilteredRecordsCountSuccess(response) {
+        this.loading = false;
+        this.editingIndex = null;
+        this.editingId = null;
+
+        this.error = false;
+        this.reportModel.updateFilteredRecordsCount(response.data.filteredCount);
+
+        this.emit('change');
+    },
+
+    onFilteredRecordsCountFailed() {
         this.loading = false;
         this.editingIndex = null;
         this.editingId = null;

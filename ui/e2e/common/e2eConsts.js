@@ -4,6 +4,9 @@
  */
 (function() {
     'use strict';
+    // Use client constants if we can
+    var clientConsts = require('./../../common/src/constants');
+
     module.exports = Object.freeze({
 
         XLARGE_SIZE : 'xlarge',
@@ -26,6 +29,7 @@
         TABLE3 : 2,
         TABLE4 : 3,
 
+        MAX_PAGING_SIZE : clientConsts.PAGE.DEFAULT_NUM_ROWS,
         DEFAULT_NUM_RECORDS_TO_CREATE : 10,
         DEFAULT_NUM_CHOICES_TO_CREATE : 10,
 
@@ -34,22 +38,22 @@
         fieldType : {
             //Field types
             FORMULA: {
-                name: 'FORMULA',
+                name: 'FORMULA'
             },
             SCALAR: {
-                name: 'SCALAR',
+                name: 'SCALAR'
             },
             CONCRETE: {
-                name: 'CONCRETE',
+                name: 'CONCRETE'
             },
             REPORT_LINK: {
-                name: 'REPORT_LINK',
+                name: 'REPORT_LINK'
             },
             SUMMARY: {
-                name: 'SUMMARY',
+                name: 'SUMMARY'
             },
             LOOKUP: {
-                name: 'LOOKUP',
+                name: 'LOOKUP'
             }
         },
 
@@ -57,64 +61,64 @@
             //Data types
             CHECKBOX: {
                 name:'CHECKBOX',
-                columnName:'Checkbox',
+                columnName:'Checkbox'
             },
             TEXT: {
                 name:'TEXT',
-                columnName:'Text',
+                columnName:'Text'
             },
             PHONE_NUMBER: {
                 name:'PHONE_NUMBER',
-                columnName:'Phone Number',
+                columnName:'Phone Number'
             },
             DATE_TIME: {
                 name:'DATE_TIME',
-                columnName:'Date Time',
+                columnName:'Date Time'
             },
             DATE: {
                 name:'DATE',
-                columnName:'Date',
+                columnName:'Date'
             },
             DURATION: {
                 name:'DURATION',
-                columnName:'Duration',
+                columnName:'Duration'
             },
             TIME_OF_DAY: {
                 name:'TIME_OF_DAY',
-                columnName:'Time Of Day',
+                columnName:'Time Of Day'
             },
             NUMERIC: {
                 name:'NUMERIC',
-                columnName:'Numeric',
+                columnName:'Numeric'
             },
             CURRENCY: {
                 name:'CURRENCY',
-                columnName:'Currency',
+                columnName:'Currency'
             },
             RATING: {
                 name:'RATING',
-                columnName:'Rating',
+                columnName:'Rating'
             },
             PERCENT: {
                 name:'PERCENT',
-                columnName:'Percent',
+                columnName:'Percent'
             },
             URL: {
                 name:'URL',
-                columnName:'URL',
+                columnName:'URL'
             },
             EMAIL_ADDRESS: {
                 name:'EMAIL_ADDRESS',
-                columnName:'Email Address',
+                columnName:'Email Address'
             },
             USER: {
                 name:'USER',
-                columnName:'User',
+                columnName:'User'
             },
             FILE_ATTACHMENT : {
                 name:'FILE_ATTACHMENT',
-                columnName:'File Attachment',
-            },
+                columnName:'File Attachment'
+            }
         },
 
         /**

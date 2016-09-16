@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.min.css';
-import './userFieldValueEditor.scss';
+import './multiChoiceFieldValueEditor.scss';
 import QbIcon from '../qbIcon/qbIcon';
 /**
  * combo box cell editor
@@ -36,19 +36,20 @@ export const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     onBlur() {
-        //give the right value to display for the parent,
+        console.log('onBlur this.state.choice.value.coercedValue.value: ', this.state.choice.value.coercedValue.value);
         const theVals = {
-            value: this.state.choice,
-            display: this.state.choice
+            value: this.state.choice.value.coercedValue.value,
+            display: this.state.choice.value.displayValue
         };
+        console.log('onblur theVals: ', theVals);
         this.props.onBlur(theVals);
     },
 
     renderOption(choice) {
         return (
-            <div className="userOption">
+            <div className="choiceOption">
                 {this.state.choice.label === choice.value.displayValue && <QbIcon icon="check-reversed"/>}
-                <div className="userLabel">{choice.value.displayValue}</div>
+                <div className="choiceLabel">{choice.value.displayValue}</div>
             </div>);
     },
 
@@ -61,7 +62,7 @@ export const MultiChoiceFieldValueEditor = React.createClass({
                 optionRenderer={this.renderOption}
                 options={this.getSelectItems()}
                 onChange={this.selectChoice}
-                placeholder="Search..."
+                placeholder="Select..."
                 noResultsText="Not found"
                 autosize={false}
                 clearable={false}

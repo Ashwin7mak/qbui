@@ -130,8 +130,8 @@ const CellRenderer = React.createClass({
     },
 
     render() {
-
         let isEditable = true;
+
         // built in fields are not editable
         if (typeof this.props.colDef.builtIn !== 'undefined' &&  this.props.colDef.builtIn) {
             isEditable = false;
@@ -374,4 +374,3 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
         </div>);
     }
 });
-

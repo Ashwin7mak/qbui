@@ -3,6 +3,7 @@ import './cardViewList.scss';
 import QBicon from '../../qbIcon/qbIcon';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Loader  from 'react-loader';
+import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 /**
  * Footer component for report pagination small breakpoint. This adds the 'fetch next' text.
@@ -16,30 +17,6 @@ var CardViewFooter = React.createClass({
      * renders the report footer next button
      */
     render() {
-        // TODO Code hygiene, set up loader options as an external constant. https://quickbase.atlassian.net/browse/MB-503
-        let loaderOptions = {
-            lines: 7,
-            length: 0,
-            width: 5,
-            radius: 5,
-            scale: 1,
-            corners: 1,
-            opacity: 0,
-            rotate: 0,
-            direction: 1,
-            speed: 1.1,
-            trail: 60,
-            fps: 20,
-            zIndex: 2e9,
-            color: '#7090ab',
-            className: 'spinner',
-            top: '50%',
-            left: '30%',
-            shadow: false,
-            hwaccel: false,
-            position: 'absolute'
-        };
-
         return (
             <div>
                 <div className="cardViewFooter">
@@ -49,7 +26,7 @@ var CardViewFooter = React.createClass({
                     </button>
                 </div>
                 <div className="footerLoadingIndicator">
-                    <Loader loaded={false} options={loaderOptions}/>
+                    <Loader loaded={false} options={SpinnerConfigurations.CARD_VIEW_NAVIGATION}/>
                     <I18nMessage message="report.nextPageLoadingOnSwipe"/>
                 </div>
             </div>

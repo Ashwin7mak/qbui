@@ -89,7 +89,8 @@ let TableHomePageRoute = React.createClass({
                 searchStringForFiltering={this.props.reportData.searchStringForFiltering}
                 selectedRows={this.props.reportData.selectedRows}
                 scrollingReport={this.props.scrollingReport}
-                rptId={this.props.reportData ? this.props.reportData.rptId : null} />
+                rptId={this.props.reportData ? this.props.reportData.rptId : null}
+                pendEdits={this.props.pendEdits} />
         </div>);
     }
 });

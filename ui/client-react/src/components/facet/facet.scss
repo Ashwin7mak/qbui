@@ -168,8 +168,11 @@
       padding-right: 5px;
     }
 
-    .clearFacet {
+    .clearFacetContainer {
       float: right;
+    }
+
+    .clearFacet {
       color: $facetMenu-backgroundColor;
       cursor: pointer;
     }
@@ -264,5 +267,3 @@
 
     }
 }
-
-

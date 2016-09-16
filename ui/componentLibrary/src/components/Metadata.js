@@ -7,11 +7,12 @@ import FieldValueEditorMetadata from 'component-metadata!../../../client-react/s
 import MultiLineTextFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiLineTextFieldValueEditor.js';
 import NumericFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/numericFieldValueRenderer.js';
 import NumericFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/numericFieldValueEditor.js';
+import MultiChoiceFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiChoiceFieldValueEditor.js';
 import _ from 'lodash';
 
 var Metadata = _.merge(QBPanelMetadata, QBIconMetadata,
     TextFieldValueRendererMetadata, TextFieldValueEditorMetadata,
     FieldValueRendererMetadata, FieldValueEditorMetadata, MultiLineTextFieldValueEditorMetadata,
-    NumericFieldValueRendererMetadata, NumericFieldValueEditorMetadata);
+    NumericFieldValueRendererMetadata, NumericFieldValueEditorMetadata, MultiChoiceFieldValueEditorMetadata);
 
 export default Metadata;
