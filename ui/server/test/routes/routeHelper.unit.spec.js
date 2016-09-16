@@ -151,7 +151,7 @@ describe('Validate RouteHelper unit tests', function() {
             it('Test case: ' + testCase.name, function(done) {
                 assert.equal(routeHelper.getRecordsCountRoute(testCase.url), testCase.expectation);
                 done();
-            })
+            });
         });
     });
 
