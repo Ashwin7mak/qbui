@@ -27,8 +27,14 @@ export const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getSelectItems() {
-        return this.props.choices ?
-            this.props.choices.map(choice => {
+        let choices = this.props.choices;
+
+        if (this.props.fieldDef.required === false) {
+            choices = [{coercedValue: {value: ''}, displayValue:''}].concat(choices);
+        }
+
+        return choices ?
+            choices.map(choice => {
                 return {
                     value: choice,
                     label: choice.displayValue};
@@ -36,8 +42,6 @@ export const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     onBlur() {
-        //give the right value to display for the parent,
-        console.log('this.state.choice: ', this.state.choice);
         const theVals = {
             value: this.state.choice.value.coercedValue.value,
             display: this.state.choice.value.displayValue
@@ -46,6 +50,10 @@ export const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     renderOption(choice) {
+        console.log('renderOption: ', choice);
+        if (choice.value.displayValue === "") {
+            return <div>&nbsp;</div>;
+        }
         return (
             <div className="choiceOption">
                 {this.state.choice.label === choice.value.displayValue && <QbIcon icon="check-reversed"/>}
@@ -62,7 +70,7 @@ export const MultiChoiceFieldValueEditor = React.createClass({
                 optionRenderer={this.renderOption}
                 options={this.getSelectItems()}
                 onChange={this.selectChoice}
-                placeholder="Search..."
+                placeholder="Select..."
                 noResultsText="Not found"
                 autosize={false}
                 clearable={false}

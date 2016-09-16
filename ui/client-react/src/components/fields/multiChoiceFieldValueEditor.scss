@@ -38,7 +38,7 @@ $selected-choice-color: $color-cyan-500;
       .Select-option {
         &.is-selected {
           background-color: inherit;
-          .userLabel {
+          .choiceLabel {
             color: $selected-choice-color;
           }
         }
@@ -55,8 +55,9 @@ $selected-choice-color: $color-cyan-500;
           color: $selected-choice-color;
         }
         .choiceLabel {
-          font-size:14px;
+          font-size: 14px;
           color: #404040;
+          margin-left:16px
         }
       }
     }
