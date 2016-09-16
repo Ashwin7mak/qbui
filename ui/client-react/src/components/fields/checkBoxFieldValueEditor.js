@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react';
-
+import './checkbox.scss';
 /**
  * checkbox cell editor
  */
-export const CheckBoxFieldValueEditor = React.createClass({
+const CheckBoxFieldValueEditor = React.createClass({
     displayName: 'CheckBoxFieldValueEditor',
 
     propTypes: {
@@ -26,12 +26,11 @@ export const CheckBoxFieldValueEditor = React.createClass({
     render() {
 
         return <input ref="fieldInput"
+                      type="checkbox"
                       onChange={this.onChange}
                       onBlur={this.props.onBlur}
                       tabIndex="0"
-                      className="cellEdit"
                       defaultChecked={this.props.value} // react requirement
-                      type="checkbox"
         />;
     }
 });

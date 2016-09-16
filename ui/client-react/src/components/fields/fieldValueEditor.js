@@ -120,8 +120,7 @@ const FieldValueEditor = React.createClass({
 
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT:
-            return <CheckBoxFieldValueEditor {...commonProps}
-                />;
+            return <CheckBoxFieldValueEditor {...commonProps} />;
 
         case FieldFormats.DATE_FORMAT: {
             return <DateFieldValueEditor  {...commonProps}/>;

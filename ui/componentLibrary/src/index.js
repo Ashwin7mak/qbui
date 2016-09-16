@@ -18,15 +18,17 @@ import TableHomePageRoute from '../../client-react/src/components/table/tableHom
 
 import ComponentLibraryWrapper from './components/componentLibrary';
 
+import CheckBoxFieldValueEditorDoc from './docs/checkBoxFieldValueEditor';
+import CheckBoxFieldValueRendererDoc from './docs/checkBoxFieldValueRenderer';
+import FieldValueEditorDoc from './docs/fieldValueEditor';
+import FieldValueRendererDoc from './docs/fieldValueRenderer';
+import MultiLineTextFieldValueEditorDoc from './docs/multiLineTextFieldValueEditor';
+import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
+import NumericFieldValueRendererDoc from './docs/numericFieldValueRenderer';
+import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
+import TextFieldValueRendererDoc from './docs/textFieldValueRenderer';
 import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
-import TextFieldDoc from './docs/textFieldValueRenderer';
-import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
-import FieldValueRendererDoc from './docs/fieldValueRenderer';
-import FieldValueEditorDoc from './docs/fieldValueEditor';
-import MultiLineTextFieldValueEditorDoc from './docs/multiLineTextFieldValueEditor';
-import NumericFieldDoc from './docs/numericFieldValueRenderer';
-import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
 
 import './assets/componentLibrary.scss';
 
@@ -34,15 +36,17 @@ render((
     <Router history={browserHistory}>
         <Route path="components" component={ComponentLibraryWrapper}>
             <IndexRedirect to="qbpanel" />
+            <Route path="checkBoxFieldValueEditor" component={CheckBoxFieldValueEditorDoc} />
+            <Route path="checkBoxFieldValueRenderer" component={CheckBoxFieldValueRendererDoc} />
+            <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
+            <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
+            <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
+            <Route path="numericfieldValueEditor" component={NumericFieldValueEditorDoc} />
+            <Route path="numericFieldValueRenderer" component={NumericFieldValueRendererDoc} />
+            <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
+            <Route path="textFieldValueRenderer" component={TextFieldValueRendererDoc} />
             <Route path="qbpanel" component={QBPanelDoc} />
             <Route path="qbicon" component={QBIconDoc} />
-            <Route path="textFieldValueRenderer" component={TextFieldDoc} />
-            <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
-            <Route path="numericFieldValueRenderer" component={NumericFieldDoc} />
-            <Route path="numericfieldValueEditor" component={NumericFieldValueEditorDoc} />
-            <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
-            <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
-            <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));
