@@ -125,6 +125,11 @@ consts = require('../../common/src/constants.js');
                 choices: [
                     {
                         coercedValue: {
+                            value: ""
+                        },
+                        displayValue: ""
+                    },                    {
+                        coercedValue: {
                             value: "Ellie"
                         },
                         displayValue: "Ellie"

@@ -27,14 +27,8 @@ export const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getSelectItems() {
-        let choices = this.props.choices;
-
-        if (this.props.fieldDef.required === false) {
-            choices = [{coercedValue: {value: ''}, displayValue:''}].concat(choices);
-        }
-
-        return choices ?
-            choices.map(choice => {
+        return this.props.choices ?
+            this.props.choices.map(choice => {
                 return {
                     value: choice,
                     label: choice.displayValue};
@@ -42,18 +36,16 @@ export const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     onBlur() {
+        console.log('onBlur this.state.choice.value.coercedValue.value: ', this.state.choice.value.coercedValue.value);
         const theVals = {
             value: this.state.choice.value.coercedValue.value,
             display: this.state.choice.value.displayValue
         };
+        console.log('onblur theVals: ', theVals);
         this.props.onBlur(theVals);
     },
 
     renderOption(choice) {
-        console.log('renderOption: ', choice);
-        if (choice.value.displayValue === "") {
-            return <div>&nbsp;</div>;
-        }
         return (
             <div className="choiceOption">
                 {this.state.choice.label === choice.value.displayValue && <QbIcon icon="check-reversed"/>}
