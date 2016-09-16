@@ -352,6 +352,48 @@ describe("Validate recordsApi", function() {
         });
     });
 
+    describe("when fetchCountForRecords is called", function() {
+        var executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            recordsApi.setRequestHelperObject(requestHelper);
+        });
+
+        afterEach(function() {
+            executeReqStub.restore();
+        });
+
+        it('success return count when no query parameter is set', function(done) {
+            req.url = '/apps/1/tables/2/records/countQuery';
+            executeReqStub.onCall(0).returns(Promise.resolve({'body': '10'}));
+            var promise = recordsApi.fetchCountForRecords(req);
+            promise.then(
+                function(response) {
+                    assert.equal(response.body, '10');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('success return count when query is set', function(done) {
+            req.url = '/apps/1/tables/2/records/countQuery';
+            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:V';
+            executeReqStub.onCall(0).returns(Promise.resolve({'body': '10'}));
+            var promise = recordsApi.fetchCountForRecords(req);
+            promise.then(
+                function(response) {
+                    assert.equal(response.body, '10');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
     describe("when saveSingleRecord is called", function() {
         var executeReqStub = null;
 
