@@ -1,4 +1,6 @@
 @import '../../assets/css/_qbColorVariables';
+@import '../../assets/css/_qbVariables';
+
 
 $checkbox-color: $color-cyan-500;
 $checkbox-empty-color: $color-black-500;
@@ -27,6 +29,13 @@ $checkbox-disabled-color: $color-black-400;
       // General
       + label:after {
         border-radius: 3px;
+        height: 16px;
+        width: 16px;
+
+        @media(max-width: $small-breakpoint-width) {
+            height: 24px;
+            width: 24px;
+        }
       }
 
       + label:before,
@@ -52,8 +61,6 @@ $checkbox-disabled-color: $color-black-400;
       }
 
       &:not(:checked) + label:after {
-        height: 20px;
-        width: 20px;
         background-color: transparent;
         border: 2px solid $checkbox-empty-color;
         top: 0px;
@@ -65,8 +72,8 @@ $checkbox-disabled-color: $color-black-400;
         + label:before {
           top: 2px;
           left: 1px;
-          width: 8px;
-          height: 13px;
+          width: 6px;
+          height: 11px;
           border-top: 2px solid transparent;
           border-left: 2px solid transparent;
           border-right: 2px solid $checkbox-check-color;
@@ -74,12 +81,17 @@ $checkbox-disabled-color: $color-black-400;
           transform: rotateZ(37deg);
 
           transform-origin: 100% 100%;
+
+          @media(max-width: $small-breakpoint-width) {
+              left: 1px;
+              top: 3px;
+              width: 10px;
+              height: 15px;
+          }
         }
 
         + label:after {
           top: 0;
-          width: 20px;
-          height: 20px;
           border: 2px solid $checkbox-color;
           background-color: $checkbox-color;
           z-index: 0;
@@ -138,15 +150,20 @@ $checkbox-disabled-color: $color-black-400;
             margin-left: 0;
             overflow: auto;
             padding-left: 0;
-            padding-top: 3px;
+            padding-top: 1px;
             text-align: left;
             white-space: normal;
+
+            @media(max-width: $small-breakpoint-width) {
+                font-size: 16px;
+                padding-top: 5px;
+            }
         }
 
         input[type="checkbox"] {
             float: left;
             margin-left: 0;
-            margin-right: 10px;
+            margin-right: 9px;
             position: relative;
             height: 20px;
             width: 20px;
@@ -169,7 +186,7 @@ $checkbox-disabled-color: $color-black-400;
     .required-symbol {
         color: $checkbox-color;
         font-size: 18px;
-        left: 30px;
+        left: 28px;
         position: relative;
         top: -72px;
 
