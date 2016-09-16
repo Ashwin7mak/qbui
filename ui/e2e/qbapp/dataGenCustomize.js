@@ -6,7 +6,7 @@
  *
  * expects NODE_ENV to be defined e.g. NODE_ENV=local
  *
- * run from qbui directory with `node ui/e2e/qbapp/dataGenTextCustomizeAttributes.js`
+ * run from qbui directory with `node ui/e2e/qbapp/dataGenCustomize.js`
  *
  * */
 // jshint sub: true
@@ -31,16 +31,16 @@ consts = require('../../common/src/constants.js');
     var chance = require('chance').Chance();
 
     var app;
-    var recordList;
 
     e2eBase.setBaseUrl(config.DOMAIN);
     e2eBase.initialize();
 
+    //generate an app and console log the app and tables it created when done
     generateNewData(() => {
         createdRecs();
     });
 
-    function addColumn(table, type, name, dataAttrs, other) {
+    function addColumn(table, type, name, settings) {
 
         //optionally supplied specific field name otherwise use the fields type
         let fieldName = name || type.columnName;
@@ -51,25 +51,39 @@ consts = require('../../common/src/constants.js');
         };
 
         // optional add supplied attrs
-        if (dataAttrs) {
-            table[fieldName].dataAttr = dataAttrs;
-        }
-        if (other) {
-            Object.assign(table[fieldName], table[fieldName], other);
+        if (settings) {
+            table[fieldName] = Object.assign({}, table[fieldName], settings);
         }
     }
 
     function makeAppMap() {
-        var table1Name = 'Table 1 '; // or random name  chance.capitalize(chance.word({syllables: 4}));
-        var table2Name = 'Table 2 '; // or random name  chance.capitalize(chance.word({syllables: 4}));
-        var table3Name = 'Table 3 '; // or random name  chance.capitalize(chance.word({syllables: 3}));
-        var table4Name = 'Table 4 '; // or random name  chance.capitalize(chance.word({syllables: 3}));
+        var table1Name = 'Table 1 ';
+        var table2Name = 'Table 2 ';
+        var table3Name = 'Table 3 ';
+        var table4Name = 'Table 4 ';
 
         // Create the table schema (map object) to pass into the app generator
         var tableToFieldToFieldTypeMap = {};
         tableToFieldToFieldTypeMap[table1Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC);
+        var numericChoices = e2eBase.setupChoices(consts.NUMERIC, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {int:true, min:1, max:1000});
+        let baseNumClientRequiredProps = {
+            width: 50,
+            bold: false,
+            word_wrap: false,
+            separator_start: 4
+        };
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC, "Numeric MultiChoice",
+            {dataAttr:{clientSideAttributes: baseNumClientRequiredProps},
+                decimalPlaces: 0,
+                treatNullAsZero: true,
+                unitsDescription: "",
+                multipleChoice: {
+                    choices: numericChoices,
+                    allowNew: false,
+                    sortAsGiven: false
+                }});
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CURRENCY);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.PERCENT);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.RATING);
@@ -102,118 +116,70 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Single line default");
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiLine",
-            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 6})});
+            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {dataAttr:{num_lines : 6}})});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Max 10 chars",
-            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {max_chars : 10})});
+            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {dataAttr:{max_chars : 10}})});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Wordwrap",
-            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {word_wrap : true})});
+            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {dataAttr:{word_wrap : true}})});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Input width 10",
-            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {width : 10})});
+            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {dataAttr:{width : 10}})});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Html allowed single line",
-            {htmlAllowed: true});
+            {dataAttr:{htmlAllowed: true}});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Html allowed multiLine",
-            {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 4})});
+            {dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 4})}});
 
+        var choices = e2eBase.setupChoices(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {capitalize: true, numWords:2, randNumWords:true});
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiChoice",
-            {htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
-            {multipleChoice: {
-                choices: [
-                    {
-                        coercedValue: {
-                            value: "Ellie"
-                        },
-                        displayValue: "Ellie"
-                    },
-                    {
-                        coercedValue: {
-                            value: "Castedo"
-                        },
-                        displayValue: "Castedo"
-                    },
-                    {
-                        coercedValue: {
-                            value: "Franca"
-                        },
-                        displayValue: "Franca"
-                    },
-                    {
-                        coercedValue: {
-                            value: "Valesca"
-                        },
-                        displayValue: "Valesca"
-                    },
-                    {
-                        coercedValue: {
-                            value: "Johnny Blaze"
-                        },
-                        displayValue: "Johnny Blaze"
-                    },
-                    {
-                        coercedValue: {
-                            value: "Jeff"
-                        },
-                        displayValue: "Jeff"
-                    },
-                    {
-                        coercedValue: {
-                            value: "Robert"
-                        },
-                        displayValue: "Robert"
-                    },
-                    {
-                        coercedValue: {
-                            value: "Check"
-                        },
-                        displayValue: "Check"
-                    }
-                ],
-                allowNew: false,
-                sortAsGiven: false
-            }});
+            {dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
+             multipleChoice: {
+                 choices: choices,
+                 allowNew: false,
+                 sortAsGiven: false
+             }});
         return tableToFieldToFieldTypeMap;
     }
 
     function generateNewData(done) {
-        var nonBuiltInFields;
-        e2eBase.reportsBasicSetUp(makeAppMap()).then(function(appAndRecords) {
+        e2eBase.tablesSetUp(makeAppMap()).then(function(createdApp) {
             // Set your global objects to use in the test functions
-            app =  appAndRecords[0];
-            appAndRecords = appAndRecords[0];
-            recordList = appAndRecords[1];
-            // Get the appropriate fields out of the third table
-            nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE3]);
-            // Generate the record JSON objects
-            var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 5);
-            // Via the API create some records
-            return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedRecords);
+            app = createdApp;
+
+            var recordsConfig = {numRecordsToCreate: e2eConsts.DEFAULT_NUM_RECORDS_TO_CREATE, tablesConfig: {}};
+            // change # of records for some of the tables
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE3].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE3].name].numRecordsToCreate = 45;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE4].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE4].name].numRecordsToCreate = 100;
+            var createdResults = e2eBase.createRecords(app, recordsConfig);
+            createdResults.then(function(results) {
+                console.log(JSON.stringify(createdResults));
+                // after all the promises in results are done then call done callback to report complete
+                Promise.all(results.allPromises).then(function() {
+                    done();
+                });
+            }).catch(function(error) {
+                // Global catch that will grab any errors from chain above
+                // Will appropriately fail the beforeAll method so other tests won't run
+                console.log('Error during createRecords  ' + error.message);
+                console.log('stacktrace:' + error.stack);
+            });
         }).then(function() {
             // Generate 1 empty record
+            var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE3]);
             var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
             return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedEmptyRecords);
         }).then(function() {
             //Create a report with facets in table 3
             return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
-        }).then(() => {
-            if (app && app.tables[e2eConsts.TABLE4]) {
-                // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                var tableFourNonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE4]);
-                // Generate the record JSON objects
-                var tableFourGeneratedRecords = e2eBase.recordService.generateRecords(tableFourNonBuiltInFields, 14);
-                // Via the API create the records, a new report, then run the report.
-                e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE4], tableFourGeneratedRecords);
-                e2eBase.reportService.createReport(app.id, app.tables[e2eConsts.TABLE4].id);
-            }
-        }).then(function() {
-            done();
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above
-            // Will appropriately fail the beforeAll method so other tests won't run
             console.log('Error during setup  ' + error.message);
+            console.log('stacktrace:' + error.stack);
         });
     }
 
@@ -230,9 +196,9 @@ consts = require('../../common/src/constants.js');
 
         var tableNames = '';
         app.tables.forEach((table, index) => {
-            tableNames += 'table' + index + 'Id:' + table.id + '\n';
-            tableNames += 'table' + index + 'Name:' + table.name + '\n';
-            tableNames += 'table' + index + 'Report link:' + e2eBase.getRequestReportsPageEndpoint(realmName, appId, table.id, 1)  + '\n';
+            tableNames += 'table' + index + ' Id:' + table.id + '\n';
+            tableNames += 'table' + index + ' Name:' + table.name + '\n';
+            tableNames += 'table' + index + ' Report link:' + e2eBase.getRequestReportsPageEndpoint(realmName, appId, table.id, 1)  + '\n';
 
         });
         console.log('\nHere is your generated test data: \n' +

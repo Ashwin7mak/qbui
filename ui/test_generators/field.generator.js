@@ -41,6 +41,18 @@
             return field;
         },
 
+        generateChoices: function(fieldType, numberOfChoices, options) {
+            let result;
+            let genToUse = (fieldType === consts.TEXT) ? 'generateTextChoice' : 'generateNumericChoice';
+            result = [];
+            while (numberOfChoices--) {
+                let choice = rawValueGenerator[genToUse](options);
+                result.push(choice);
+            }
+            return result;
+        },
+
+
         fieldToJsonString: function(field) {
             return JSON.stringify(field);
         },

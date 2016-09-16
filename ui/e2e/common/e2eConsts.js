@@ -26,6 +26,9 @@
         TABLE3 : 2,
         TABLE4 : 3,
 
+        DEFAULT_NUM_RECORDS_TO_CREATE : 10,
+        DEFAULT_NUM_CHOICES_TO_CREATE : 10,
+
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
 
         fieldType : {
