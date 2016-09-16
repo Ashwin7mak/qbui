@@ -107,8 +107,9 @@ let CardViewListHolder = React.createClass({
      * Fetch next report page
      */
     swipedUp(e) {
-        // Complete swipe action only if footer is visible
-        if (this.isElementVisible("cardViewFooter")) {
+        // Complete swipe action only if footer is visible\
+        let evTarget = e.target;
+        if (this.doesClassNameMatch(evTarget, 'fetchNextButton') || this.doesClassNameMatch(evTarget, 'fetchNextArrow')) {
             this.props.getNextReportPage();
         }
     },
@@ -118,9 +119,25 @@ let CardViewListHolder = React.createClass({
      */
     swipedDown(e) {
         // Complete swipe action only if header is visible
-        if (this.isElementVisible("cardViewHeader")) {
+        let evTarget = e.target;
+        if (this.doesClassNameMatch(evTarget, 'fetchPreviousButton') || this.doesClassNameMatch(evTarget, 'fetchPreviousArrow')) {
             this.props.getPreviousReportPage();
         }
+    },
+
+    /**
+     * Checks if the event target element or its parent element matches the supplied classname
+     * @param evTarget
+     * @param name
+     * @returns {boolean}
+     */
+    doesClassNameMatch(evTarget, name) {
+        let targetClassName = evTarget && evTarget.className ? evTarget.className : "";
+        if (!targetClassName.includes(name)) {
+            // Try the parent element
+            targetClassName = evTarget.parentElement && evTarget.parentElement.className ? evTarget.parentElement.className : targetClassName;
+        }
+        return targetClassName.includes(name);
     },
 
     /**
@@ -130,16 +147,19 @@ let CardViewListHolder = React.createClass({
      * @param isUpSwipe - (swiped up relative to starting point)
      */
     swiping(evTarget, delta, isUpSwipe) {
-        if (isUpSwipe && evTarget === 'button.fetchNextButton') {
+        // let targetClassName = evTarget && evTarget.className ? evTarget.className : "";
+        if (isUpSwipe && (this.doesClassNameMatch(evTarget, 'fetchNextButton') || this.doesClassNameMatch(evTarget, 'fetchNextArrow '))) {
             // If up swipe, check for visibility of the 'Fetch More' button. If it is visible, display loading indicator,
             // move the table (including button and spinner) up proportional to the swipe distance. If the swipe exceeds
             // drag distance, snap the table, button and spinner to the bottom of screen.
-            this.handleVerticalSwipingMovement("cardViewFooter", "footerLoadingIndicator", evTarget, delta, true);
-        } else if (evTarget === 'button.fetchPreviousButton') {
-            // Down swipe. Check for visibility of 'Fetch Previous' button. If it is visible, display loading indicator,
-            // move table, button and indicator down proportional to swipe distance. If swipe exceeds drag distance,
-            // snap table, button and spinner to the top.
-            this.handleVerticalSwipingMovement("cardViewHeader", "headerLoadingIndicator", evTarget, delta, false);
+            this.handleVerticalSwipingMovement("cardViewFooter", "footerLoadingIndicator", delta, true);
+        } else {
+            if (this.doesClassNameMatch(evTarget,'fetchPreviousButton') || this.doesClassNameMatch(evTarget,'fetchPreviousArrow') ) {
+                // Down swipe. Check for visibility of 'Fetch Previous' button. If it is visible, display loading indicator,
+                // move table, button and indicator down proportional to swipe distance. If swipe exceeds drag distance,
+                // snap table, button and spinner to the top.
+                this.handleVerticalSwipingMovement("cardViewHeader", "headerLoadingIndicator", delta, false);
+            }
         }
     },
 
@@ -155,40 +175,29 @@ let CardViewListHolder = React.createClass({
      * @param delta - movement distance per swipe event
      * @param isUpward - indicates upward or downward motion. Negative is for upward motion.
      */
-    handleVerticalSwipingMovement(visibleElementName, loadingIndicatorElementName, evTarget, delta, isUpward) {
+    handleVerticalSwipingMovement(visibleElementName, loadingIndicatorElementName, delta, isUpward) {
         // Fetch card view table
         var tableElem = document.getElementsByClassName("cardViewList cardViewListHolder");
         if (tableElem && tableElem.length) {
             tableElem = tableElem[0];
         }
         if (tableElem) {
-            // Smoothen the animation
-    // tableElem.style.transition = 'transform 300ms';
-            // If the element that has to be checked for visibility (fetch more or fetch previous button depending on drag direction)
-            // is visible, process swipe
-            if (this.isElementVisible(visibleElementName)) {
-                // Fetch more or Fetch Previous element is visible, fetch corresponding loading spinner.
-                let loadingIndicatorElem = document.getElementsByClassName(loadingIndicatorElementName);
-                if (loadingIndicatorElem) {
-                    loadingIndicatorElem = loadingIndicatorElem[0];
-                }
-                // Safety check on table element and loading indicator element
-                if (loadingIndicatorElem) {
-                    // Display the loading indicator
-                    loadingIndicatorElem.style.display = "flex";
-                    // As long as the swipe is less than drag distance, move the table, header/footer button and spinner
-                    if (delta < MAX_SWIPE_DISTANCE) {
-                        tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + (delta) + 'px)';
-                    } else {
-                        // If the swipe exceeds drag distance, snap the table, footer and indicator to the top or bottom
-                        tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + '45px)';
-                    }
-                }
+            // Fetch more or Fetch Previous element is visible, fetch corresponding loading spinner.
+            let loadingIndicatorElem = document.getElementsByClassName(loadingIndicatorElementName);
+            if (loadingIndicatorElem) {
+                loadingIndicatorElem = loadingIndicatorElem[0];
             }
-            else {
-                // tableElem.style.transition = 'transform 0ms';
-                // tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + (delta) + 'px)';
-                // tableElem.scroll(0, delta);
+            // Safety check on table element and loading indicator element
+            if (loadingIndicatorElem) {
+                // Display the loading indicator
+                loadingIndicatorElem.style.display = "flex";
+                // As long as the swipe is less than drag distance, move the table, header/footer button and spinner
+                if (delta < MAX_SWIPE_DISTANCE) {
+                    tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + (delta) + 'px)';
+                } else {
+                    // If the swipe exceeds drag distance, snap the table, footer and indicator to the top or bottom
+                    tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + '45px)';
+                }
             }
         }
     },
