@@ -3,20 +3,39 @@
 $checkbox-color: $color-cyan-500;
 
 .checkbox {
-    &.renderer {
-        margin: 0;
-        text-align: center;
-
-        .symbol {
-            color: $checkbox-color;
+    &.hasLabel {
+        input, .symbol {
+            margin-right: 10px;
         }
 
-        .text {
+        .label {
+            color: $color-black-700;
+            font-size: 14px;
+            padding: 0;
+            position: absolute;
+            top: 2px;
+        }
 
+        input[type="checkbox"] {
+            margin-left: 0;
+            position: relative;
+            height: 20px;
+            width: 20px;
         }
     }
 
-    &.editor {
+    &:not(.hasLabel) {
+        text-align: center;
+    }
 
+    &.renderer {
+        margin: 0;
+
+
+
+        .symbol {
+            color: $checkbox-color;
+            font-size: 20px;
+        }
     }
 }

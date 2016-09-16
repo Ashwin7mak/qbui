@@ -1,9 +1,13 @@
 import React, {PropTypes} from 'react';
 import './checkbox';
 
+let defaultSymbolClasses = 'symbol qbIcon ';
+
 const CheckBoxFieldValueRenderer = React.createClass({
     propTypes: {
         value: PropTypes.bool,
+        label: PropTypes.string,
+        readOnly: PropTypes.bool,
         checkedIconClass: PropTypes.string,
         uncheckedIconClass: PropTypes.string
     },
@@ -12,24 +16,56 @@ const CheckBoxFieldValueRenderer = React.createClass({
         return {
             // If not specified, the checkbox should NOT be checked
             value: false,
+            readOnly: true,
+            label: 'test',
             checkedIconClass: 'iconssturdy-check',
             uncheckedIconClass: ''
         };
     },
 
-    getDisplayValue() {
-        let {checkedIconClass, uncheckedIconClass} = this.props;
+    renderDisplayValue() {
+        if(this.props.value) {
+            return this.renderCheckedSymbol();
+        } else {
+            return this.renderUncheckedSymbol();
+        }
+    },
 
-        let checkClass = 'symbol qbIcon ';
-        checkClass += (this.props.value ? checkedIconClass : uncheckedIconClass);
+    hasLabel() {
+        let label = this.props.label;
+        return label && label.length;
+    },
 
-        return (<span className={checkClass}></span>);
+    renderLabel() {
+        if(this.hasLabel()) {
+            return (<label className="label">{this.props.label}</label>);
+        } else {
+            return null;
+        }
+    },
+
+    renderCheckedSymbol() {
+        let classes = defaultSymbolClasses + this.props.checkedIconClass;
+        return (<span className={classes}></span>);
+    },
+
+    renderUncheckedSymbol() {
+        if(this.props.readOnly && this.props.uncheckedIconClass === '') {
+            return <input type="checkbox" disabled checked={false} />;
+        } else {
+            let classes = defaultSymbolClasses + this.props.uncheckedIconClass;
+            return (<span className={classes}></span>);
+        }
     },
 
     render() {
+        let classes = "checkbox renderer";
+        classes += (this.hasLabel() ? ' hasLabel' : '');
+
         return (
-            <div className="checkbox renderer">
-                {this.getDisplayValue()}
+            <div className={classes}>
+                {this.renderDisplayValue()}
+                {this.renderLabel()}
             </div>
         );
     }
