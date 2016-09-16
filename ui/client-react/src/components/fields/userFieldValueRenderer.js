@@ -11,18 +11,22 @@ const UserFieldValueRenderer = React.createClass({
 
     render() {
 
-        const tooltip = (
-            <Tooltip id="tooltip" style={{"whiteSpace":"nowrap"}} >
-                {this.props.value && this.props.value.screenName && <div>User Name: {this.props.value.screenName}</div>}
-                {this.props.value && this.props.value.email && <div>Email: {this.props.value.email}</div>}
-            </Tooltip>
-        );
+        if (this.props.value && (this.props.value.screenName || this.props.value.email)) {
 
-        return (
-            <OverlayTrigger className="userCell data" placement="top" overlay={tooltip}>
-                <div>{this.props.display}</div>
-            </OverlayTrigger>);
+            const tooltip = (
+                <Tooltip id="tooltip" style={{"whiteSpace":"nowrap"}} >
+                    {this.props.value && this.props.value.screenName && <div>User Name: {this.props.value.screenName}</div>}
+                    {this.props.value && this.props.value.email && <div>Email: {this.props.value.email}</div>}
+                </Tooltip>
+            );
 
+            return (
+                <OverlayTrigger className="userCell data" placement="top" overlay={tooltip}>
+                    <div>{this.props.display}</div>
+                </OverlayTrigger>);
+        }
+
+        return <div className="userCell data" >{this.props.display}</div>;
     }
 });
 
