@@ -44,7 +44,7 @@ $selected-choice-color: $color-cyan-500;
         }
         padding-left:5px;
 
-        .userOption {
+        .choiceOption {
           position:relative;
         }
         .qbIcon {
@@ -54,16 +54,9 @@ $selected-choice-color: $color-cyan-500;
           font-size:12px;
           color: $selected-choice-color;
         }
-        .userLabel,.email {
-          margin-left:16px;
-        }
-        .userLabel {
+        .choiceLabel {
           font-size:14px;
           color: #404040;
-        }
-        .email {
-          font-size: 12px;
-          color: #969696;
         }
       }
     }

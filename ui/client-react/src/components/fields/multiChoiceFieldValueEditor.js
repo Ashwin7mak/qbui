@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.min.css';
-import './userFieldValueEditor.scss';
+import './multiChoiceFieldValueEditor.scss';
 import QbIcon from '../qbIcon/qbIcon';
 /**
  * combo box cell editor
@@ -47,9 +47,9 @@ export const MultiChoiceFieldValueEditor = React.createClass({
 
     renderOption(choice) {
         return (
-            <div className="userOption">
+            <div className="choiceOption">
                 {this.state.choice.label === choice.value.displayValue && <QbIcon icon="check-reversed"/>}
-                <div className="userLabel">{choice.value.displayValue}</div>
+                <div className="choiceLabel">{choice.value.displayValue}</div>
             </div>);
     },
 
