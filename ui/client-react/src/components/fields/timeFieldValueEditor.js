@@ -22,7 +22,7 @@ import moment from 'moment';
  */
 function getTimesInMinutes(increment) {
     let map = [];
-    //map.push({value:"", label:""});  // add empty entry
+    map.push({value:null, label:""});  // add empty entry
 
     let time = moment().startOf('day');
     let endOfDay = moment().endOf('day');
@@ -90,37 +90,43 @@ const TimeFieldValueEditor = React.createClass({
     },
 
     onChange(newValue) {
-        if (newValue && newValue.value && (this.props.onChange || this.props.onDateTimeChange)) {
-            if (this.props.onDateTimeChange) {
-                this.props.onDateTimeChange(newValue.value);
-            } else {
-                this.props.onChange(newValue.value);
+        if (newValue && (this.props.onChange || this.props.onDateTimeChange)) {
+            if (newValue.value === null || newValue.value) {
+                if (this.props.onDateTimeChange) {
+                    this.props.onDateTimeChange(newValue.value);
+                } else {
+                    this.props.onChange(newValue.value);
+                }
             }
         }
     },
 
     onBlur(ev) {
-        if (ev.target && ev.target.value && (this.props.onBlur || this.props.onDateTimeBlur)) {
-
-            //  convert to military time
-            let formats = ['h:mm:ss a', 'h:mm:ss', 'h:mm a', 'h:mm'];
-            let militaryTime = 'invalid';
-            for (let idx = 0; idx < formats.length; idx++) {
-                if (moment(ev.target.value, formats[idx]).isValid()) {
-                    militaryTime = moment(ev.target.value, formats[idx]).format('H:mm:ss');
-                    break;
+        if (ev.target && (this.props.onBlur || this.props.onDateTimeBlur)) {
+            //  value of null means the empty option was selected
+            let militaryTime = null;
+            if (ev.target.value) {
+                //  convert to military time
+                let formats = ['h:mm:ss a', 'h:mm:ss', 'h:mm a', 'h:mm'];
+                for (let idx = 0; idx < formats.length; idx++) {
+                    if (moment(ev.target.value, formats[idx]).isValid()) {
+                        militaryTime = moment(ev.target.value, formats[idx]).format('H:mm:ss');
+                        break;
+                    }
                 }
             }
 
-            if (this.props.onDateTimeBlur) {
-                this.props.onDateTimeBlur(militaryTime);
-            } else {
-                let vals = {
-                    value: militaryTime,
-                    display: ''
-                };
-                vals.display = timeFormatter.format(vals, this.props.attributes);
-                this.props.onBlur(vals);
+            if (ev.target.value === null || militaryTime) {
+                if (this.props.onDateTimeBlur) {
+                    this.props.onDateTimeBlur(militaryTime);
+                } else {
+                    let valueObj = {
+                        value: militaryTime,
+                        display: ''
+                    };
+                    valueObj.display = timeFormatter.format(valueObj, this.props.attributes);
+                    this.props.onBlur(valueObj);
+                }
             }
         }
     },
@@ -129,6 +135,13 @@ const TimeFieldValueEditor = React.createClass({
         return (
             <span className={glyphicon}></span>
         );
+    },
+
+    renderOption(option) {
+        if (option.value === null) {
+            return <div>&nbsp;</div>;
+        }
+        return (<div>{option.value}</div>);
     },
 
     render() {
@@ -142,9 +155,9 @@ const TimeFieldValueEditor = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        let inputValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
-        let theTime = '';
-        if (inputValue) {
+        let theTime = null;
+        if (this.props.value) {
+            let inputValue = this.props.value.replace(/(\[.*?\])/, '');
             if (this.props.type === fieldFormats.TIME_FORMAT) {
                 let timeFormat = timeFormatter.generateFormatterString({scale:this.props.attributes.scale});
 
@@ -165,6 +178,19 @@ const TimeFieldValueEditor = React.createClass({
             classes += ' ghost-text';
         }
 
+        //  set the placeholder text to render
+        let placeholder = theTime;
+        if (!placeholder) {
+            //  if theTime is null, then user has cleared the time and set to empty,
+            //  otherwise set to placeholder format.
+            //if (theTime === null) {
+            //    placeholder = '';
+            //} else {
+            //    placeholder = 'hh:mm';
+            //}
+            placeholder = 'hh:mm';
+        }
+
         //  TODO: verify small breakpoint once form edit is implemented
         return (Breakpoints.isSmallBreakpoint() ?
                 <div className={classes}>
@@ -179,9 +205,10 @@ const TimeFieldValueEditor = React.createClass({
                         name="time-select"
                         onBlur={this.onBlur}
                         onChange={this.onChange}
-                        value={theTime}
+                        value={theTime ? theTime : ''}
                         options={this.timeDropList}
-                        placeholder={theTime ? theTime : 'hh:mm'}
+                        optionRenderer={this.renderOption}
+                        placeholder={placeholder}
                         clearable={false}
                         arrowRenderer={this.renderClockIcon}
                     />

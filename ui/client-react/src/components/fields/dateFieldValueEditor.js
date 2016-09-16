@@ -56,15 +56,17 @@ const DateFieldValueEditor = React.createClass({
     },
 
     onChange(newValue) {
-        if (newValue && (this.props.onChange || this.props.onDateTimeChange)) {
-            //  if the date is value, propagate the event
-            if (moment(newValue, 'MM-DD-YYYY').isValid()) {
+        if (this.props.onChange || this.props.onDateTimeChange) {
+            if (newValue === null || newValue) {
+                let formattedDate = null;
+                if (newValue !== null && moment(newValue, 'MM-DD-YYYY').isValid()) {
+                    formattedDate = moment(newValue, 'MM-DD-YYYY').format('YYYY-MM-DD');
+                }
+
                 if (this.props.onDateTimeChange) {
-                    this.props.onDateTimeChange(newValue);
+                    this.props.onDateTimeChange(formattedDate);
                 } else {
-                    //  need to convert to ISO_DATE supported format: YYYY-MM-DD
-                    let isoFormat = moment(newValue, 'MM-DD-YYYY').format('YYYY-MM-DD');
-                    this.props.onChange(isoFormat);
+                    this.props.onChange(formattedDate);
                 }
             }
         }
@@ -72,24 +74,30 @@ const DateFieldValueEditor = React.createClass({
 
     //send up the chain an object with value and formatted display value
     onBlur(ev) {
-        if (ev.target && ev.target.value && (this.props.onBlur || this.props.onDateTimeBlur)) {
-            if (this.props.onDateTimeBlur) {
-                this.props.onDateTimeBlur(ev.target.value);
-            } else {
-                let vals = {
-                    value: moment(ev.target.value, 'MM-DD-YYYY').format('YYYY-MM-DD'),
-                    display: ''
-                };
+        if (ev.target && (this.props.onBlur || this.props.onDateTimeBlur)) {
+            if (ev.target.value === null || ev.target.value) {
+                if (this.props.onDateTimeBlur) {
+                    this.props.onDateTimeBlur(ev.target.value);
+                } else {
+                    let newDate = null;
+                    if (ev.target.value) {
+                        newDate = moment(ev.target.value, 'MM-DD-YYYY').format('YYYY-MM-DD');
+                    }
 
-                vals.display = dateTimeFormatter.format(vals, this.props.attributes);
-                this.props.onBlur(vals);
+                    let valueObj = {
+                        value: newDate,
+                        display: ''
+                    };
+
+                    valueObj.display = dateTimeFormatter.format(valueObj, this.props.attributes);
+                    this.props.onBlur(valueObj);
+                }
             }
         }
     },
 
     render() {
         let classes = 'cellEdit dateCell';
-        let singlePicker = true;
 
         // error state css class
         if (this.props.isInvalid) {
@@ -99,13 +107,29 @@ const DateFieldValueEditor = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        let format = dateTimeFormatter.getDateFormat(this.props.attributes);
+        const format = dateTimeFormatter.getDateFormat(this.props.attributes);
 
-        const theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(format) : '';
+        let theDate = null;
+        if (this.props.value !== null) {
+            theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(format) : '';
+        }
 
-        //  if no date, then use the format as help placeholder
+        //  if no date, use the ghost format class for the help placeholder
         if (!theDate) {
             classes += ' ghost-text';
+        }
+
+        //  set the default date to render in the date picker.
+        let defaultText = theDate;
+        if (!defaultText) {
+            //  if theDate is null, then user has cleared the date and set to render the default format, otherwise
+            //  the date picker will render the current date.
+            //if (theDate === null) {
+            //    defaultText = '';
+            //} else {
+            //    defaultText = moment().format(format);
+            //}
+            defaultText = 'mm-dd-yyyy';
         }
 
         //  TODO: verify small breakpoint once form edit is implemented
@@ -125,7 +149,7 @@ const DateFieldValueEditor = React.createClass({
                     onBlur={this.onBlur}
                     onChange={this.onChange}
                     mode="date"
-                    defaultText={theDate ? theDate : format.toLowerCase()}/>
+                    defaultText={defaultText}/>
             </div>
         );
     }

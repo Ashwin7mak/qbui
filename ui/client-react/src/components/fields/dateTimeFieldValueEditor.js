@@ -52,67 +52,86 @@ const DateTimeFieldValueEditor = React.createClass({
     },
 
     onDateChange(value) {
-        if (this.props.onChange && value) {
-            //  extract the time component from the original
-            let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+        if (this.props.onChange) {
+            if (value === null || value) {
+                let isoFormat = null;
+                if (value !== null) {
+                    //  extract the time component from the original
+                    let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
 
-            //  if no time, then set to midnight
-            let theOrigTime = origValue ? moment(origValue).format(" HH:mm:ss") : '00:00:00';
-
-            //  need to convert to ISO_DATE_TIME supported format
-            let isoFormat = moment(value + theOrigTime).toISOString();
-            this.props.onChange(isoFormat);
+                    //  if no time, then set to midnight
+                    let theOrigTime = origValue ? moment(origValue).format(" HH:mm:ss") : '00:00:00';
+                    isoFormat = moment(value + theOrigTime).toISOString();
+                }
+                this.props.onChange(isoFormat);
+            }
         }
     },
 
     onTimeChange(value) {
-        if (this.props.onChange && value) {
-            //  extract the date component from the original
-            let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+        if (this.props.onChange) {
+            if (value === null || value) {
+                let isoFormat = null;
+                if (value !== null) {
+                    //  extract the date component from the original
+                    let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
 
-            //  if no original date, then set to now
-            let dateFormat = "MM-DD-YYYY ";
-            let theOrigDate = origValue ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
+                    //  if no original date, then set to now
+                    let dateFormat = "MM-DD-YYYY ";
+                    let theOrigDate = origValue ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
 
-            //  need to convert to ISO_DATE_TIME supported format
-            let isoFormat = moment(theOrigDate + value).toISOString();
-            this.props.onChange(isoFormat);
+                    //  need to convert to ISO_DATE_TIME supported format
+                    isoFormat = moment(theOrigDate + value).toISOString();
+                }
+                this.props.onChange(isoFormat);
+            }
         }
     },
 
     onDateBlur(value) {
-        if (this.props.onBlur && value) {
-            let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+        if (this.props.onBlur) {
+            if (value === null || value) {
+                let isoFormat = null;
+                if (value !== null) {
+                    let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
 
-            //  if no time, then set to midnight
-            let theOrigTime = origValue ? moment(origValue).format(" HH:mm:ss") : '00:00:00';
+                    //  if no time, then set to midnight
+                    let theOrigTime = origValue ? moment(origValue).format(" HH:mm:ss") : '00:00:00';
+                    isoFormat = moment(value + theOrigTime).toISOString();
+                }
 
-            let valueObject = {
-                value: moment(value + theOrigTime).toISOString(),
-                display: ''
-            };
+                let valueObject = {
+                    value: isoFormat,
+                    display: ''
+                };
 
-            valueObject.display = dateTimeFormatter.format(valueObject, this.props.attributes);
-            this.props.onBlur(valueObject);
+                valueObject.display = dateTimeFormatter.format(valueObject, this.props.attributes);
+                this.props.onBlur(valueObject);
+            }
         }
     },
 
     onTimeBlur(value) {
 
-        if (this.props.onBlur && value) {
-            let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+        if (this.props.onBlur) {
+            if (value === null || value) {
+                let isoFormat = null;
+                if (value !== null) {
+                    let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
 
-            //  if no original date, then set to now
-            let dateFormat = "MM-DD-YYYY ";
-            let theOrigDate = origValue ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
+                    //  if no original date, then set to now
+                    let dateFormat = "MM-DD-YYYY ";
+                    let theOrigDate = origValue ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
+                    isoFormat = moment(theOrigDate + value).toISOString();
+                }
+                let valueObject = {
+                    value: isoFormat,
+                    display: ''
+                };
 
-            let valueObject = {
-                value: moment(theOrigDate + value).toISOString(),
-                display: ''
-            };
-
-            valueObject.display = timeFormatter.format(valueObject, this.props.attributes);
-            this.props.onBlur(valueObject);
+                valueObject.display = timeFormatter.format(valueObject, this.props.attributes);
+                this.props.onBlur(valueObject);
+            }
         }
     },
 

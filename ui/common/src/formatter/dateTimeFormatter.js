@@ -17,7 +17,7 @@
     var TWO_DIGIT_YEAR = 'YY';
     var TWO_DIGIT_DAY = 'DD';
     var DEFAULT_TIMEZONE = 'America/Los_Angeles';
-    var TIMEZONE_FORMATTER = 'z';
+    var TIMEZONE_FORMATTER = '(z)';
     //Base formats
     var DATE_FORMATS = Object.freeze({
         MM_DD_YY  : TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
