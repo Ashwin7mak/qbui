@@ -128,7 +128,8 @@ class Logger {
             }
 
             if (this.logToConsole === true) {
-                console.log(level.name + ': ' + msg + exceptionMessage);
+                let consoleMethod = level.bunyanLevel || 'log';
+                console[consoleMethod](level.name + ': ' + msg + exceptionMessage);
             }
             if (this.logToServer === true) {
                 if (exception) {
