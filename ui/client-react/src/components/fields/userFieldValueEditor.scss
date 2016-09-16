@@ -1,0 +1,71 @@
+@import '../../assets/css/qbVariables';
+
+$selected-choice-color: $color-cyan-500;
+
+.cellWrapper .fieldValueEditor.cellEditWrapper .Select {
+  width: 100%;
+
+  .Select-control {
+    border: 0;
+    height:28px;
+
+    .Select-input {
+      height:28px;
+      padding-left:2px;
+    }
+    .Select-value {
+      padding-right: 40px;
+      padding-left:3px;
+      line-height: 28px;
+    }
+    .Select-placeholder {
+      line-height: 28px;
+      padding-left: 3px;
+      font-style: italic;
+    }
+  }
+
+  .Select-menu-outer {
+    max-height: 225px;
+    width:auto;
+
+
+    .Select-menu {
+      max-height: 223px;
+      overflow-y:auto;
+      overflow-x:hidden;
+
+      .Select-option {
+        &.is-selected {
+          background-color: inherit;
+          .userLabel {
+            color: $selected-choice-color;
+          }
+        }
+        padding-left:5px;
+
+        .userOption {
+          position:relative;
+        }
+        .qbIcon {
+          position:absolute;
+          left:0;
+          top:3px;
+          font-size:12px;
+          color: $selected-choice-color;
+        }
+        .userLabel,.email {
+          margin-left:16px;
+        }
+        .userLabel {
+          font-size:14px;
+          color: #404040;
+        }
+        .email {
+          font-size: 12px;
+          color: #969696;
+        }
+      }
+    }
+  }
+}
