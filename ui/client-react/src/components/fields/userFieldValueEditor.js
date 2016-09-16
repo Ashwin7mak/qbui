@@ -61,16 +61,16 @@ const UserFieldValueEditor = React.createClass({
     },
 
     onBlur() {
+        if (this.props.onBlur) {
+            const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
+            const user = this.getAppUser(this.state.selectedUserId);
 
-        const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
-        const user = this.getAppUser(this.state.selectedUserId);
-
-        const theVals = {
-            value: user,
-            display: user ? userFormatter.format({value: user}, datatypeAttributes) : ''
-        };
-
-        this.props.onBlur(theVals);
+            const theVals = {
+                value: user,
+                display: user ? userFormatter.format({value: user}, datatypeAttributes) : ''
+            };
+            this.props.onBlur(theVals);
+        }
     },
 
     renderOption(option) {
@@ -79,13 +79,14 @@ const UserFieldValueEditor = React.createClass({
             return <div>&nbsp;</div>;
         }
         const user = this.getAppUser(option.value);
+
         const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
         const userLabel = userFormatter.format({value: user}, datatypeAttributes);
 
         return (
             <div className="userOption">
                 {this.state.selectedUserId === user.userId && <QbIcon icon="check-reversed"/>}
-                <div className="userLabel">{userLabel}</div>
+                <div className="userLabel">{userLabel} {user.deactivated && <span className="deactivatedLabel">(deactivated)</span>}</div>
                 {option.showEmail && user.email && <div className="email">{user.email}</div>}
             </div>);
     },

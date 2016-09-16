@@ -465,8 +465,6 @@ $cell-edit-background-edit: #f3f8fe;
             right:0px;
             bottom:0px;
             background-color: $cell-edit-background-edit;
-
-            z-index:1;
             display:flex;
 
             .cellData:not(.nonEditable) {
