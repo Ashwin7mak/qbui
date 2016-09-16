@@ -1,21 +1,28 @@
 import React, {PropTypes} from 'react';
+import _ from 'lodash';
+import UniqueIdMixin from 'unique-id-mixin';
+
 import './checkbox.scss';
 /**
  * checkbox cell editor
  */
 const CheckBoxFieldValueEditor = React.createClass({
     displayName: 'CheckBoxFieldValueEditor',
-
+    mixins: [UniqueIdMixin],
     propTypes: {
         value: PropTypes.bool,
         onChange: PropTypes.func,
         onBlur: PropTypes.func,
-        label: PropTypes.string
+        label: PropTypes.string,
+        id: PropTypes.string,
+        isInvalid: PropTypes.bool
     },
 
     getDefaultProps() {
         return {
-            value: false
+            value: false,
+            label: ' ',
+            isInvalid: false
         };
     },
 
@@ -27,12 +34,16 @@ const CheckBoxFieldValueEditor = React.createClass({
     },
 
     hasLabel() {
-        return (this.props.label && this.props.label.length);
+        return (this.props.label !== ' ');
     },
 
     renderLabel() {
         if(this.hasLabel()) {
-            return (<label className="label">{this.props.label}</label>);
+            return (
+                <label className="label" htmlFor={this.getNextHtmlFor()}>
+                    {this.props.label}
+                </label>
+            );
         }
     },
 
@@ -42,14 +53,18 @@ const CheckBoxFieldValueEditor = React.createClass({
 
         return (
             <div className={classes}>
-                <input ref="fieldInput"
-                              type="checkbox"
-                              onChange={this.onChange}
-                              onBlur={this.props.onBlur}
-                              tabIndex="0"
-                              defaultChecked={this.props.value} // react requirement
+                <input id={this.getNextHtmlFor()}
+                       ref="fieldInput"
+                       type="checkbox"
+                       onChange={this.onChange}
+                       onBlur={this.props.onBlur}
+                       tabIndex="0"
+                       className="filled-in"
+                       defaultChecked={this.props.value} // react requirement
                               />
-                {this.renderLabel()}
+                <label className="label" htmlFor={this.getNextHtmlFor()}>
+                    {this.props.label}
+                </label>
             </div>
         );
     }
