@@ -7,6 +7,7 @@ import FieldValueRendererExample from 'raw!../examples/FieldValueRendererExample
 import MultiLineTextFieldValueEditorExample from 'raw!../examples/MultiLineTextFieldValueEditorExample.js';
 import NumericFieldValueEditorExample from 'raw!../examples/NumericFieldValueEditorExample.js';
 import NumericFieldValueRendererExample from 'raw!../examples/NumericFieldValueRendererExample.js';
+import MultiChoiceFieldValueEditorExample from 'raw!../examples/MultiChoiceFieldValueEditorExample.js';
 
 export default {
     QBPanel: QBPanelExample,
@@ -18,4 +19,5 @@ export default {
     MultiLineTextFieldValueEditor: MultiLineTextFieldValueEditorExample,
     NumericFieldValueRenderer: NumericFieldValueRendererExample,
     NumericFieldValueEditor: NumericFieldValueEditorExample,
+    MultiChoiceFieldValueEditor: MultiChoiceFieldValueEditorExample
 };
