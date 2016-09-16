@@ -102,7 +102,7 @@
                 });
             }).then(function() {
                 //Create a report with sorting and grouping (Sort startDate asc)
-                return e2eBase.reportService.createReportWithFidsAndSort(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], ["9"]);
+                return e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], ["9"]);
             }).then(function(testRecord) {
                 //Create a report with facets [text field and checkbox field]
                 return e2eBase.reportService.createReportWithFidsAndFacetsAndSortLists(app.id, app.tables[e2eConsts.TABLE1].id, [6, 7, 8, 9, 10, 11, 12], [6, 7], ["9"]);
