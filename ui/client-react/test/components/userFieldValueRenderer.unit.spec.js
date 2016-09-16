@@ -40,7 +40,6 @@ describe('UserFieldValueRenderer functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const userFieldValueRenderer = TestUtils.findRenderedDOMComponentWithTag(component, 'div');
 
-        console.log(userFieldValueRenderer);
         // check the display text
         expect(userFieldValueRenderer).toHaveText(display);
 

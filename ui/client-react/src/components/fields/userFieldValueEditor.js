@@ -14,7 +14,8 @@ const UserFieldValueEditor = React.createClass({
         value: React.PropTypes.object,
         /**
          * data type attributes for the field */
-        fieldDef: React.PropTypes.object.isRequired
+        fieldDef: React.PropTypes.object.isRequired,
+        onBlur: React.PropTypes.func
     },
 
     getInitialState() {
