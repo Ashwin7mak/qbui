@@ -30,13 +30,13 @@ var BasicCheckBoxFieldValueEditor = React.createClass({
                 </dd>
 
 
-            <dt>Checkbox With a Label:</dt>
+            <dt>Checkbox with a Label:</dt>
                 <dd>
                     <CheckBoxFieldValueEditor value={this.state.inputValue} label={shortLabelText} onChange={this.onChange} />
                 </dd>
 
 
-            <dt>CheckBox With a Long Label:</dt>
+            <dt>CheckBox with a Long Label:</dt>
                 <dd>
                     <CheckBoxFieldValueEditor value={this.state.inputValue} label={longLabelText} onChange={this.onChange} />
                 </dd>

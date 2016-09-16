@@ -3,21 +3,39 @@
 $checkbox-color: $color-cyan-500;
 
 .checkbox {
+    word-wrap: break-word;
+
+
     &.hasLabel {
         input, .symbol {
             margin-right: 10px;
         }
 
+        &::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
         .label {
             color: $color-black-700;
+            cursor: pointer;
+            display: block;
             font-size: 14px;
-            padding: 0;
-            position: absolute;
-            top: 2px;
+            line-height: normal;
+            margin-bottom: 40px;
+            margin-left: 0;
+            overflow: auto;
+            padding-left: 0;
+            padding-top: 3px;
+            text-align: left;
+            white-space: normal;
         }
 
         input[type="checkbox"] {
+            float: left;
             margin-left: 0;
+            margin-right: 10px;
             position: relative;
             height: 20px;
             width: 20px;
