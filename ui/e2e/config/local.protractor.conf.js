@@ -40,7 +40,6 @@
         exclude: [
             baseE2EPath + 'qbapp/tests/reports/reportGroupingSortingViaIcon.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
             baseE2EPath + 'qbapp/tests/reports/tableHomePage.e2e.spec.js'
         ],
 

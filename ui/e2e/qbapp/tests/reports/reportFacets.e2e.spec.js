@@ -366,7 +366,7 @@
             });
 
             //There wont be facet filter button displayed for small breakpoint
-            it('Verify clear all facets tokens from the container', function(done) {
+            xit('Verify clear all facets tokens from the container', function(done) {
                 e2eRetry.run(function() {
                     reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {

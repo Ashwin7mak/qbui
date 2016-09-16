@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import {DEFAULT_RECORD_KEY_ID} from '../../constants/schema';
+import {NumberFieldValueRenderer} from './fieldValueRenderers';
+
 import FieldFormats from '../../utils/fieldFormats' ;
 import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
     DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
@@ -117,6 +120,13 @@ const FieldValueEditor = React.createClass({
             fieldDef: this.props.fieldDef
         };
 
+        // Only allow the Record ID field to be a renderer, not an editor
+        // Record ID is found based on the ID of the fieldDef (should be built in as always 3)
+        let fieldId = (typeof this.props.fieldDef === 'undefined' ? '' : this.props.fieldDef.id);
+        if (typeof fieldId !== 'undefined' && fieldId === DEFAULT_RECORD_KEY_ID) {
+            return <NumberFieldValueRenderer isEditable={false} type="number" {...commonProps} />;
+        }
+
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT:
             return <CheckBoxFieldValueEditor {...commonProps}
@@ -209,9 +219,14 @@ const FieldValueEditor = React.createClass({
     },
 
     render() {
-
         // the css classes
         let classes = 'fieldValueEditor';
+        /**
+         * This checks to see if the type is 'MultiLineTextFieldValueEditor', if it is, the class assigned will be 'multiLineCellEditWrapper.'
+         * The purpose for this is to make sure the top of the textarea box stays aligned with the rest of the fields. This is accomplished by
+         * not including the css align-items: center (align-items centered is used with the class cellEditWrapper, which was what the component
+         * MultiLineTextFieldValueEditor was using, and it prevented it from lining up correctly).
+         */
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
@@ -250,4 +265,3 @@ const FieldValueEditor = React.createClass({
 });
 
 export default FieldValueEditor;
-
