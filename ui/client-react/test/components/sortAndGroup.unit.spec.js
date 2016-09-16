@@ -118,7 +118,9 @@ describe('SortAndGroup functions', () => {
             originalMetaData: {
                 sortList: [{fieldId: 5, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
                     {fieldId: 4, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
-                    {fieldId: 3, sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}]
+                    {fieldId: 3, sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}],
+                pageOffset: 0,
+                numRows: 20
             },
         }
     };

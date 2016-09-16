@@ -83,6 +83,7 @@
         var RECORD = 'record';
         var RECORDS = 'records';
         var GROUPS = 'groups';
+        var FILTERED_RECORDS_COUNT = 'filteredCount';
         var request = defaultRequest;
 
         //Given an array of records and array of fields, remove any fields
@@ -144,7 +145,6 @@
              * @returns Promise
              */
             fetchSingleRecordAndFields: function(req) {
-
                 return new Promise(function(resolve, reject) {
                     var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
@@ -191,9 +191,8 @@
              * @returns Promise
              */
             fetchRecordsAndFields: function(req) {
-
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
+                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req), this.fetchCountForRecords(req)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -239,9 +238,11 @@
                                     responseObject[RECORDS] = records;
                                 }
                             }
+                            if (response[2]) {
+                                responseObject[FILTERED_RECORDS_COUNT] = response[2].body;
+                            }
 
                             resolve(responseObject);
-
                         }.bind(this),
                         function(response) {
                             reject(response);
@@ -251,7 +252,6 @@
                         reject(error);
                     });
                 }.bind(this));
-
             },
 
             /**
@@ -384,6 +384,22 @@
                 return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
             },
 
+            /**
+             * Fetch the count of all records that match a user query
+             */
+            fetchCountForRecords: function(req) {
+                let opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsCountRoute(req.url);
+                // Set the query parameter
+                if (requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.QUERY)) {
+                    let queryParam = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
+                    opts.url += '?' + constants.REQUEST_PARAMETER.QUERY + '=' + queryParam;
+                }
+
+                return requestHelper.executeRequest(req, opts);
+            },
 
             /**
              * Save a single record data to a table.
