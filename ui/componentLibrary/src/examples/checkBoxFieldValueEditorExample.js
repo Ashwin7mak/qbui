@@ -46,7 +46,7 @@ var BasicCheckBoxFieldValueEditor = React.createClass({
                     <CheckBoxFieldValueEditor value={this.state.inputValue}
                                               label={shortLabelText}
                                               onChange={this.onChange}
-                                              isInvalid={true} />
+                                              invalid={true} />
                 </dd>
 
             <dt>Disabled Checkbox:</dt>
@@ -65,11 +65,16 @@ var BasicCheckBoxFieldValueEditor = React.createClass({
             <dt>Required Checkbox:</dt>
                 <dd>
                     <CheckBoxFieldValueEditor value={this.state.inputValue}
-                                              label={shortLabelText}
+                                              label="Required"
                                               onChange={this.onChange}
                                               required={true} />
-                </dd>
 
+                    <CheckBoxFieldValueEditor value={this.state.inputValue}
+                                              label="Required and invalid"
+                                              onChange={this.onChange}
+                                              required={true}
+                                              invalid={true} />
+                </dd>
 
             </div>
         );

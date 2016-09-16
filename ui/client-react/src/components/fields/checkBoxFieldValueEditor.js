@@ -15,16 +15,18 @@ const CheckBoxFieldValueEditor = React.createClass({
         onBlur: PropTypes.func,
         label: PropTypes.string,
         id: PropTypes.string,
-        isInvalid: PropTypes.bool,
-        disabled: PropTypes.bool
+        invalid: PropTypes.bool,
+        disabled: PropTypes.bool,
+        required: PropTypes.bool
     },
 
     getDefaultProps() {
         return {
             value: false,
             label: ' ',
-            isInvalid: false,
-            disabled: false
+            invalid: false,
+            disabled: false,
+            required: false
         };
     },
 
@@ -54,7 +56,15 @@ const CheckBoxFieldValueEditor = React.createClass({
         classes += (this.hasLabel() ? ' hasLabel' : '');
 
         let checkBoxClasses = '';
-        checkBoxClasses += (this.props.isInvalid ? 'invalid ' : '');
+        checkBoxClasses += (this.props.invalid ? 'invalid ' : '');
+        checkBoxClasses += (this.props.required ? 'required' : '');
+
+        let requiredSymbol;
+        if(this.props.required) {
+            let requiredSymbolClasses = 'required-symbol';
+            requiredSymbolClasses += (this.props.invalid ? ' invalid' : '');
+            requiredSymbol = <span className={requiredSymbolClasses}>*</span>;
+        }
 
         return (
             <div className={classes}>
@@ -70,6 +80,7 @@ const CheckBoxFieldValueEditor = React.createClass({
                 <label className="label" htmlFor={this.getNextHtmlFor()}>
                     {this.props.label}
                 </label>
+                {requiredSymbol}
             </div>
         );
     }

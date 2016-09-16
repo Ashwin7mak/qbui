@@ -120,7 +120,7 @@ $checkbox-disabled-color: $color-black-400;
       }
 
       &.invalid + label:after {
-          border-color: red;
+        border-color: $error-color;
       }
     }
 
@@ -163,6 +163,18 @@ $checkbox-disabled-color: $color-black-400;
         .symbol {
             color: $checkbox-color;
             font-size: 20px;
+        }
+    }
+
+    .required-symbol {
+        color: $checkbox-color;
+        font-size: 18px;
+        left: 30px;
+        position: relative;
+        top: -72px;
+
+        &.invalid {
+            color: $error-color;
         }
     }
 }
