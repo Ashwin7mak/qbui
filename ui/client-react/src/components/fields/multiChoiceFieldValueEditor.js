@@ -37,9 +37,10 @@ export const MultiChoiceFieldValueEditor = React.createClass({
 
     onBlur() {
         //give the right value to display for the parent,
+        console.log('this.state.choice: ', this.state.choice);
         const theVals = {
-            value: this.state.choice,
-            display: this.state.choice
+            value: this.state.choice.value.coercedValue.value,
+            display: this.state.choice.value.displayValue
         };
         this.props.onBlur(theVals);
     },
