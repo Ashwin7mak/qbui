@@ -71,13 +71,13 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                     type : consts.SCALAR,
-                     datatypeAttributes: {
+                    type : consts.SCALAR,
+                    datatypeAttributes: {
                         clientSideAttributes: {
                             num_lines: 4
                         },
                     },
-                 }
+                }
             }
         };
 
