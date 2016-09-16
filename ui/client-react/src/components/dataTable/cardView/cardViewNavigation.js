@@ -41,7 +41,7 @@ var CardViewNavigation = React.createClass({
         };
 
         return (
-            <div>
+            <div className="cardViewNavigationContainer">
                 <div className="headerLoadingIndicator">
                     <Loader loaded={false} options={loaderOptions}/>
                     <I18nMessage message="report.previousPageLoadingOnSwipe"/>

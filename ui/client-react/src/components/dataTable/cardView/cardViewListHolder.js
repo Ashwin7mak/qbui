@@ -30,7 +30,8 @@ let CardViewListHolder = React.createClass({
     getInitialState() {
         return {
             allowCardSelection: false,
-            swiping:false
+            swiping: false,
+            isNavButtonSwiping: false,
         };
     },
 
@@ -128,17 +129,17 @@ let CardViewListHolder = React.createClass({
      * @param delta - delta from touch starting position
      * @param isUpSwipe - (swiped up relative to starting point)
      */
-    swiping(delta, isUpSwipe) {
-        if (isUpSwipe) {
+    swiping(evTarget, delta, isUpSwipe) {
+        if (isUpSwipe && evTarget === 'button.fetchNextButton') {
             // If up swipe, check for visibility of the 'Fetch More' button. If it is visible, display loading indicator,
             // move the table (including button and spinner) up proportional to the swipe distance. If the swipe exceeds
             // drag distance, snap the table, button and spinner to the bottom of screen.
-            this.handleVerticalSwipingMovement("cardViewFooter", "footerLoadingIndicator", delta, true);
-        } else {
+            this.handleVerticalSwipingMovement("cardViewFooter", "footerLoadingIndicator", evTarget, delta, true);
+        } else if (evTarget === 'button.fetchPreviousButton') {
             // Down swipe. Check for visibility of 'Fetch Previous' button. If it is visible, display loading indicator,
             // move table, button and indicator down proportional to swipe distance. If swipe exceeds drag distance,
             // snap table, button and spinner to the top.
-            this.handleVerticalSwipingMovement("cardViewHeader", "headerLoadingIndicator", delta, false);
+            this.handleVerticalSwipingMovement("cardViewHeader", "headerLoadingIndicator", evTarget, delta, false);
         }
     },
 
@@ -154,33 +155,40 @@ let CardViewListHolder = React.createClass({
      * @param delta - movement distance per swipe event
      * @param isUpward - indicates upward or downward motion. Negative is for upward motion.
      */
-    handleVerticalSwipingMovement(visibleElementName, loadingIndicatorElementName, delta, isUpward) {
-        // If the element that has to be checked for visibility (fetch more or fetch previous button depending on drag direction)
-        // is visible, process swipe
-        if (this.isElementVisible(visibleElementName)) {
-            // Fetch more or Fetch Previous element is visible, fetch corresponding loading spinner.
-            let loadingIndicatorElem = document.getElementsByClassName(loadingIndicatorElementName);
-            if (loadingIndicatorElem) {
-                loadingIndicatorElem = loadingIndicatorElem[0];
-            }
-            // Fetch card view table
-            var tableElem = document.getElementsByClassName("cardViewList cardViewListHolder");
-            if (tableElem && tableElem.length) {
-                tableElem = tableElem[0];
-            }
-            // Safety check on table element and loading indicator element
-            if (tableElem && loadingIndicatorElem) {
-                // Smoothen the animation
-                tableElem.style.transition = 'transform 300ms';
-                // Display the loading indicator
-                loadingIndicatorElem.style.display = "flex";
-                // As long as the swipe is less than drag distance, move the table, header/footer button and spinner
-                if (delta < MAX_SWIPE_DISTANCE) {
-                    tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + (delta) + 'px)';
-                } else {
-                    // If the swipe exceeds drag distance, snap the table, footer and indicator to the top or bottom
-                    tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + '45px)';
+    handleVerticalSwipingMovement(visibleElementName, loadingIndicatorElementName, evTarget, delta, isUpward) {
+        // Fetch card view table
+        var tableElem = document.getElementsByClassName("cardViewList cardViewListHolder");
+        if (tableElem && tableElem.length) {
+            tableElem = tableElem[0];
+        }
+        if (tableElem) {
+            // Smoothen the animation
+    // tableElem.style.transition = 'transform 300ms';
+            // If the element that has to be checked for visibility (fetch more or fetch previous button depending on drag direction)
+            // is visible, process swipe
+            if (this.isElementVisible(visibleElementName)) {
+                // Fetch more or Fetch Previous element is visible, fetch corresponding loading spinner.
+                let loadingIndicatorElem = document.getElementsByClassName(loadingIndicatorElementName);
+                if (loadingIndicatorElem) {
+                    loadingIndicatorElem = loadingIndicatorElem[0];
                 }
+                // Safety check on table element and loading indicator element
+                if (loadingIndicatorElem) {
+                    // Display the loading indicator
+                    loadingIndicatorElem.style.display = "flex";
+                    // As long as the swipe is less than drag distance, move the table, header/footer button and spinner
+                    if (delta < MAX_SWIPE_DISTANCE) {
+                        tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + (delta) + 'px)';
+                    } else {
+                        // If the swipe exceeds drag distance, snap the table, footer and indicator to the top or bottom
+                        tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + '45px)';
+                    }
+                }
+            }
+            else {
+                // tableElem.style.transition = 'transform 0ms';
+                // tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + (delta) + 'px)';
+                // tableElem.scroll(0, delta);
             }
         }
     },
@@ -251,10 +259,11 @@ let CardViewListHolder = React.createClass({
 
 
         return (<Swipeable className="swipeable"
-                       onSwipingUp={(ev, delta) => {this.swiping(delta, true);}}
-                       onSwipingDown={(ev, delta) => {this.swiping(delta, false);}}
+                       onSwipingUp={(ev, delta) => {this.swiping(ev.target, delta, true);}}
+                       onSwipingDown={(ev, delta) => {this.swiping(ev.target, delta, false);}}
                        onSwipedUp={this.swipedUp}
-                       onSwipedDown={this.swipedDown}>
+                       onSwipedDown={this.swipedDown}
+                       preventDefaultTouchmoveEvent={false}>
 
                     <div className={cardViewListClasses} style={cardViewListStyle}>
                         {showPreviousButton ?
