@@ -8,6 +8,7 @@ $selected-choice-color: $color-cyan-500;
   .Select-control {
     border: 0;
     height:28px;
+    width:100%;
 
     .Select-input {
       height:28px;
@@ -27,8 +28,6 @@ $selected-choice-color: $color-cyan-500;
 
   .Select-menu-outer {
     max-height: 225px;
-    width:auto;
-
 
     .Select-menu {
       max-height: 223px;
@@ -57,7 +56,8 @@ $selected-choice-color: $color-cyan-500;
         .choiceLabel {
           font-size: 14px;
           color: #404040;
-          margin-left:16px
+          margin-left:16px;
+          height:28px;
         }
       }
     }
