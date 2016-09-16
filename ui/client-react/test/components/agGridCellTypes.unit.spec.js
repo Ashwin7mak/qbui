@@ -33,7 +33,70 @@ describe('AGGrid cell editor functions', () => {
         NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
     });
 
-    it('test TextCellRenderer', () => {
+    it('test TextCellRenderer scalar', () => {
+        const params = {
+            value: {
+                value: "TestingTextCell",
+                display: "TestingTextCell"
+            },
+            column: {
+                colDef: {
+                    type : consts.SCALAR
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const value = TestUtils.findRenderedDOMComponentWithClass(component, "cellData");
+        expect(value.innerText).toEqual(params.value.display);
+        expect(value.querySelectorAll('.textField').length).toEqual(1);
+
+
+        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+        expect(edit.type).toEqual("text");
+        expect(edit.value).toEqual(params.value.display);
+
+        edit.value = "newValue";
+        TestUtils.Simulate.change(edit);
+        expect(value.innerText).toEqual("newValue");
+    });
+
+    it('test TextCellRenderer multiline', () => {
+         const params = {
+            value: {
+                value: "Testing",
+                display: "Testing"
+            },
+            column: {
+                colDef: {
+                    type : consts.SCALAR,
+                    datatypeAttributes: {
+                        clientSideAttributes: {
+                            num_lines: 4
+                        },
+                    },
+                }
+            }
+        };
+
+         component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
+         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+         const value = TestUtils.findRenderedDOMComponentWithClass(component, "multiLineTextCell");
+         expect(value.innerHTML).toEqual(params.value.display);
+
+         const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+         expect(edit.type).toEqual("textarea");
+         expect(edit.value).toEqual(params.value.display);
+
+         edit.value = "newValue";
+         TestUtils.Simulate.change(edit);
+         expect(value.innerHTML).toEqual("newValue");
+     });
+
+    it('test TextCellRenderer colDef type undefined should default to editable', () => {
         const params = {
             value: {
                 value: "TestingTextCell",
@@ -62,40 +125,7 @@ describe('AGGrid cell editor functions', () => {
         expect(value.innerText).toEqual("newValue");
     });
 
-
-    it('test TextCellRenderer multiline', () => {
-        const params = {
-            value: {
-                value: "Testing",
-                display: "Testing"
-            },
-            column: {
-                colDef: {
-                    datatypeAttributes: {
-                        clientSideAttributes: {
-                            num_lines: 4
-                        },
-                    },
-                }
-            }
-        };
-
-        component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-
-        const value = TestUtils.findRenderedDOMComponentWithClass(component, "multiLineTextCell");
-        expect(value.innerHTML).toEqual(params.value.display);
-
-        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
-        expect(edit.type).toEqual("textarea");
-        expect(edit.value).toEqual(params.value.display);
-
-        edit.value = "newValue";
-        TestUtils.Simulate.change(edit);
-        expect(value.innerHTML).toEqual("newValue");
-    });
-
-    it('test TextCellRenderer Non SCALAR', () => {
+    it('test TextCellRenderer Non SCALAR should not allow editing', () => {
         const params = {
             value: {
                 value: "TestingTextCell",
@@ -128,6 +158,7 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
+                    type : consts.SCALAR,
                     datatypeAttributes: {
                         type: "NUMERIC"
                     }
@@ -157,7 +188,9 @@ describe('AGGrid cell editor functions', () => {
                 value: true
             },
             column: {
-                colDef: {}
+                colDef: {
+                    type : consts.SCALAR
+                }
             }
         };
 
@@ -181,6 +214,7 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
+                    type : consts.SCALAR,
                     datatypeAttributes: {
                         dateFormat: "MM-dd-uuuu"
                     }
@@ -209,6 +243,7 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
+                    type : consts.SCALAR,
                     datatypeAttributes: {
                         dateFormat: "MM-DD-YYYY hh:mm:ss"
                     }
@@ -248,6 +283,7 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
+                    type : consts.SCALAR,
                     datatypeAttributes: {
                         dateFormat: "MM-DD-YYYY",
                         showTime: true
@@ -274,7 +310,9 @@ describe('AGGrid cell editor functions', () => {
                 value: "2097-01-17"
             },
             column: {
-                colDef: {}
+                colDef: {
+                    type : consts.SCALAR
+                }
             }
         };
 
@@ -288,7 +326,9 @@ describe('AGGrid cell editor functions', () => {
                 value: "2097-01-17T00:33:03Z",
             },
             column: {
-                colDef: {}
+                colDef: {
+                    type : consts.SCALAR
+                }
             }
         };
 
@@ -303,7 +343,9 @@ describe('AGGrid cell editor functions', () => {
                 value: "1970-01-01T19:13:44Z"
             },
             column: {
-                colDef: {}
+                colDef: {
+                    type : consts.SCALAR
+                }
             }
         };
 
