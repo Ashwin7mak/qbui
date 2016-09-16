@@ -15,14 +15,16 @@ const CheckBoxFieldValueEditor = React.createClass({
         onBlur: PropTypes.func,
         label: PropTypes.string,
         id: PropTypes.string,
-        isInvalid: PropTypes.bool
+        isInvalid: PropTypes.bool,
+        disabled: PropTypes.bool
     },
 
     getDefaultProps() {
         return {
             value: false,
             label: ' ',
-            isInvalid: false
+            isInvalid: false,
+            disabled: false
         };
     },
 
@@ -51,17 +53,20 @@ const CheckBoxFieldValueEditor = React.createClass({
         let classes = "checkbox editor";
         classes += (this.hasLabel() ? ' hasLabel' : '');
 
+        let checkBoxClasses = 'filled-in';
+        checkBoxClasses += (this.props.isInvalid ? ' invalid' : '');
+
         return (
             <div className={classes}>
                 <input id={this.getNextHtmlFor()}
+                       className={checkBoxClasses}
                        ref="fieldInput"
                        type="checkbox"
                        onChange={this.onChange}
                        onBlur={this.props.onBlur}
                        tabIndex="0"
-                       className="filled-in"
                        defaultChecked={this.props.value} // react requirement
-                              />
+                       disabled={this.props.disabled} />
                 <label className="label" htmlFor={this.getNextHtmlFor()}>
                     {this.props.label}
                 </label>

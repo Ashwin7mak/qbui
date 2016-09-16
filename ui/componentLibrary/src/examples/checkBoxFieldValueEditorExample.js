@@ -9,11 +9,11 @@ let longLabelText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cr
 var BasicCheckBoxFieldValueEditor = React.createClass({
     getInitialState() {
         return {
-            value: false
+            inputValue: false
         };
     },
     onChange(value) {
-        this.setState({value: value});
+        this.setState({inputValue: value});
     },
     render() {
         return (
@@ -39,6 +39,35 @@ var BasicCheckBoxFieldValueEditor = React.createClass({
             <dt>CheckBox with a Long Label:</dt>
                 <dd>
                     <CheckBoxFieldValueEditor value={this.state.inputValue} label={longLabelText} onChange={this.onChange} />
+                </dd>
+
+            <dt>Invalid Checkbox:</dt>
+                <dd>
+                    <CheckBoxFieldValueEditor value={this.state.inputValue}
+                                              label={shortLabelText}
+                                              onChange={this.onChange}
+                                              isInvalid={true} />
+                </dd>
+
+            <dt>Disabled Checkbox:</dt>
+                <dd>
+                    <CheckBoxFieldValueEditor value={this.state.inputValue}
+                                              label="Unchecked but disabled"
+                                              onChange={this.onChange}
+                                              disabled={true} />
+
+                    <CheckBoxFieldValueEditor value={true}
+                                              label="Checked but disabled"
+                                              onChange={this.onChange}
+                                              disabled={true} />
+                </dd>
+
+            <dt>Required Checkbox:</dt>
+                <dd>
+                    <CheckBoxFieldValueEditor value={this.state.inputValue}
+                                              label={shortLabelText}
+                                              onChange={this.onChange}
+                                              required={true} />
                 </dd>
 
 
