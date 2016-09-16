@@ -20,7 +20,7 @@ import moment from 'moment';
  *
  * @returns {Array}
  */
-function getTimesInMinutes(increment) {
+function getTimesInMinutes(increment, militaryTime) {
     let map = [];
     map.push({value:null, label:""});  // add empty entry
 
@@ -29,7 +29,11 @@ function getTimesInMinutes(increment) {
 
     //  Loop until we are on the next day
     while (time.isBefore(endOfDay)) {
-        map.push({value:time.format("HH:mm"), label:time.format("hh:mm a")});
+        if (militaryTime) {
+            map.push({value: time.format("HH:mm"), label: time.format("HH:mm")});
+        } else {
+            map.push({value:time.format("HH:mm"), label:time.format("hh:mm a")});
+        }
         time.add(increment, 'm');
     }
     return map;
@@ -44,6 +48,7 @@ function getTimesInMinutes(increment) {
 const TimeFieldValueEditor = React.createClass({
     displayName: 'TimeFieldValueEditor',
     timeDropList:  getTimesInMinutes(30),
+    miliaryTimeDropList: getTimesInMinutes(30, true),
 
     propTypes: {
         /**
@@ -141,7 +146,7 @@ const TimeFieldValueEditor = React.createClass({
         if (option.value === null) {
             return <div>&nbsp;</div>;
         }
-        return (<div>{option.value}</div>);
+        return (<div>{option.label}</div>);
     },
 
     render() {
@@ -159,13 +164,13 @@ const TimeFieldValueEditor = React.createClass({
         if (this.props.value) {
             let inputValue = this.props.value.replace(/(\[.*?\])/, '');
             if (this.props.type === fieldFormats.TIME_FORMAT) {
-                let timeFormat = timeFormatter.generateFormatterString({scale:this.props.attributes.scale});
+                let timeFormat = timeFormatter.generateFormatterString(this.props.attributes);
 
                 //  It's a time only field...just use today's date to allow us to format the time
                 let now = moment().format("MM-DD-YYYY ") + inputValue;
                 theTime = moment(now, "MM-DD-YYYY " + timeFormat).format(timeFormat);
             } else {
-                let timeFormatForDate = dateTimeFormatter.getTimeFormat(this.props.attributes);
+                let timeFormatForDate = dateTimeFormatter.getTimeFormat({showTime:true});
 
                 //  Firefox parser is more strict than others when parsing; so may need to specify
                 //  the format of the input value if the moment parser can't parse the input value.
@@ -178,17 +183,9 @@ const TimeFieldValueEditor = React.createClass({
             classes += ' ghost-text';
         }
 
-        //  set the placeholder text to render
         let placeholder = theTime;
         if (!placeholder) {
-            //  if theTime is null, then user has cleared the time and set to empty,
-            //  otherwise set to placeholder format.
-            //if (theTime === null) {
-            //    placeholder = '';
-            //} else {
-            //    placeholder = 'hh:mm';
-            //}
-            placeholder = 'hh:mm';
+            placeholder = this.props.attributes.use24HourClock ? 'hh:mm:ss' : 'hh:mm';
         }
 
         //  TODO: verify small breakpoint once form edit is implemented
@@ -206,7 +203,7 @@ const TimeFieldValueEditor = React.createClass({
                         onBlur={this.onBlur}
                         onChange={this.onChange}
                         value={theTime ? theTime : ''}
-                        options={this.timeDropList}
+                        options={this.props.attributes.use24HourClock ? this.miliaryTimeDropList : this.timeDropList}
                         optionRenderer={this.renderOption}
                         placeholder={placeholder}
                         clearable={false}

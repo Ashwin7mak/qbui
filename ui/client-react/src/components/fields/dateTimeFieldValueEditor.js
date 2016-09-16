@@ -60,7 +60,7 @@ const DateTimeFieldValueEditor = React.createClass({
                     let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
 
                     //  if no time, then set to midnight
-                    let theOrigTime = origValue ? moment(origValue).format(" HH:mm:ss") : '00:00:00';
+                    let theOrigTime = origValue && moment(origValue).isValid ? moment(origValue).format(" HH:mm:ss") : ' 00:00:00';
                     isoFormat = moment(value + theOrigTime).toISOString();
                 }
                 this.props.onChange(isoFormat);
@@ -78,7 +78,7 @@ const DateTimeFieldValueEditor = React.createClass({
 
                     //  if no original date, then set to now
                     let dateFormat = "MM-DD-YYYY ";
-                    let theOrigDate = origValue ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
+                    let theOrigDate = origValue && moment(origValue).isValid ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
 
                     //  need to convert to ISO_DATE_TIME supported format
                     isoFormat = moment(theOrigDate + value).toISOString();
@@ -96,7 +96,7 @@ const DateTimeFieldValueEditor = React.createClass({
                     let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
 
                     //  if no time, then set to midnight
-                    let theOrigTime = origValue ? moment(origValue).format(" HH:mm:ss") : '00:00:00';
+                    let theOrigTime = origValue && moment(origValue).isValid ? moment(origValue).format(" HH:mm:ss") : ' 00:00:00';
                     isoFormat = moment(value + theOrigTime).toISOString();
                 }
 
@@ -121,7 +121,7 @@ const DateTimeFieldValueEditor = React.createClass({
 
                     //  if no original date, then set to now
                     let dateFormat = "MM-DD-YYYY ";
-                    let theOrigDate = origValue ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
+                    let theOrigDate = origValue && moment(origValue).isValid ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
                     isoFormat = moment(theOrigDate + value).toISOString();
                 }
                 let valueObject = {

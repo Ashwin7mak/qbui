@@ -119,19 +119,6 @@ const DateFieldValueEditor = React.createClass({
             classes += ' ghost-text';
         }
 
-        //  set the default date to render in the date picker.
-        let defaultText = theDate;
-        if (!defaultText) {
-            //  if theDate is null, then user has cleared the date and set to render the default format, otherwise
-            //  the date picker will render the current date.
-            //if (theDate === null) {
-            //    defaultText = '';
-            //} else {
-            //    defaultText = moment().format(format);
-            //}
-            defaultText = 'mm-dd-yyyy';
-        }
-
         //  TODO: verify small breakpoint once form edit is implemented
         return (Breakpoints.isSmallBreakpoint() ?
             <div className={classes}>
@@ -149,7 +136,7 @@ const DateFieldValueEditor = React.createClass({
                     onBlur={this.onBlur}
                     onChange={this.onChange}
                     mode="date"
-                    defaultText={defaultText}/>
+                    defaultText={theDate ? theDate : 'mm-dd-yyyy'}/>
             </div>
         );
     }
