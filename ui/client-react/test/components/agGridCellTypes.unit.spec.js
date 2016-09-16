@@ -64,12 +64,12 @@ describe('AGGrid cell editor functions', () => {
     });
 
     it('test TextCellRenderer multiline', () => {
-         const params = {
-            value: {
+        const params = {
+             value: {
                 value: "Testing",
                 display: "Testing"
             },
-            column: {
+             column: {
                 colDef: {
                     type : consts.SCALAR,
                     datatypeAttributes: {
@@ -79,22 +79,22 @@ describe('AGGrid cell editor functions', () => {
                     },
                 }
             }
-        };
+         };
 
-         component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
-         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        component = TestUtils.renderIntoDocument(<TextCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-         const value = TestUtils.findRenderedDOMComponentWithClass(component, "multiLineTextCell");
-         expect(value.innerHTML).toEqual(params.value.display);
+        const value = TestUtils.findRenderedDOMComponentWithClass(component, "multiLineTextCell");
+        expect(value.innerHTML).toEqual(params.value.display);
 
-         const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
-         expect(edit.type).toEqual("textarea");
-         expect(edit.value).toEqual(params.value.display);
+        const edit = TestUtils.findRenderedDOMComponentWithClass(component, "cellEdit");
+        expect(edit.type).toEqual("textarea");
+        expect(edit.value).toEqual(params.value.display);
 
-         edit.value = "newValue";
-         TestUtils.Simulate.change(edit);
-         expect(value.innerHTML).toEqual("newValue");
-     });
+        edit.value = "newValue";
+        TestUtils.Simulate.change(edit);
+        expect(value.innerHTML).toEqual("newValue");
+    });
 
     it('test TextCellRenderer colDef type undefined should default to editable', () => {
         const params = {
