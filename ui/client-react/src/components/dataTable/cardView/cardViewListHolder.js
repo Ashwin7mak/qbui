@@ -30,8 +30,7 @@ let CardViewListHolder = React.createClass({
     getInitialState() {
         return {
             allowCardSelection: false,
-            swiping: false,
-            isNavButtonSwiping: false,
+            swiping: false
         };
     },
 
@@ -153,13 +152,11 @@ let CardViewListHolder = React.createClass({
             // move the table (including button and spinner) up proportional to the swipe distance. If the swipe exceeds
             // drag distance, snap the table, button and spinner to the bottom of screen.
             this.handleVerticalSwipingMovement("cardViewFooter", "footerLoadingIndicator", delta, true);
-        } else {
-            if (this.doesClassNameMatch(evTarget,'fetchPreviousButton') || this.doesClassNameMatch(evTarget,'fetchPreviousArrow') ) {
-                // Down swipe. Check for visibility of 'Fetch Previous' button. If it is visible, display loading indicator,
-                // move table, button and indicator down proportional to swipe distance. If swipe exceeds drag distance,
-                // snap table, button and spinner to the top.
-                this.handleVerticalSwipingMovement("cardViewHeader", "headerLoadingIndicator", delta, false);
-            }
+        } else if (this.doesClassNameMatch(evTarget, 'fetchPreviousButton') || this.doesClassNameMatch(evTarget, 'fetchPreviousArrow')) {
+            // Down swipe. Check for visibility of 'Fetch Previous' button. If it is visible, display loading indicator,
+            // move table, button and indicator down proportional to swipe distance. If swipe exceeds drag distance,
+            // snap table, button and spinner to the top.
+            this.handleVerticalSwipingMovement("cardViewHeader", "headerLoadingIndicator", delta, false);
         }
     },
 
