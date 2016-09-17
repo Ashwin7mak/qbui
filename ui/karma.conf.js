@@ -54,7 +54,8 @@ module.exports = function(config) {
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "node_modules/ag-grid"),
                             path.resolve(__dirname, "node_modules/react-notifications"),
-                            path.resolve(__dirname, "node_modules/react-bootstrap-datetimepicker")
+                            path.resolve(__dirname, "node_modules/react-bootstrap-datetimepicker"),
+                            path.resolve(__dirname, "node_modules/react-select")
                         ],
                         loader: "style!css"
                     },

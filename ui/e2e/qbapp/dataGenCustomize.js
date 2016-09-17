@@ -67,8 +67,8 @@ consts = require('../../common/src/constants.js');
         tableToFieldToFieldTypeMap[table1Name] = {};
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC);
-        var numericChoices = e2eBase.setupChoices(consts.NUMERIC, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {int:true, min:1, max:1000});
-        let baseNumClientRequiredProps = {
+        var numericChoices = e2eBase.choicesSetUp(consts.NUMERIC, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {int:true, min:1, max:1000});
+        var baseNumClientRequiredProps = {
             width: 50,
             bold: false,
             word_wrap: false,
@@ -133,7 +133,16 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Html allowed multiLine",
             {dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 4})}});
 
-        var choices = e2eBase.setupChoices(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {capitalize: true, numWords:2, randNumWords:true});
+        var choices = e2eBase.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {capitalize: true, numWords:2, randNumWords:true});
+        var emptyChoice = {
+            coercedValue: {value: ''},
+            displayValue: ''
+        };
+        //temporarily add a placeholder blank(unchosen) selection to top of list
+        //once backend is fixed to support null/empty entry for choice to clear/unset choice then
+        //note numeric will also need a way to support setting null to clear the choice
+        // this can happen in the client editor component
+        choices.unshift(emptyChoice);
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiChoice",
             {dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
              multipleChoice: {
@@ -155,7 +164,8 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE3].name].numRecordsToCreate = 45;
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE4].name] = {};
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE4].name].numRecordsToCreate = 100;
-            var createdResults = e2eBase.createRecords(app, recordsConfig);
+            var createdResults = e2eBase.recordsSetUp(app, recordsConfig);
+
             createdResults.then(function(results) {
                 console.log(JSON.stringify(createdResults));
                 // after all the promises in results are done then call done callback to report complete
@@ -178,8 +188,12 @@ consts = require('../../common/src/constants.js');
             return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above
-            console.log('Error during setup  ' + error.message);
-            console.log('stacktrace:' + error.stack);
+            if (error) {
+                console.log('Error during setup  ' + error.message);
+                console.log('stacktrace:' + error.stack);
+            } else {
+                console.log('exiting on catch null error' + console.trace());
+            }
         });
     }
 
