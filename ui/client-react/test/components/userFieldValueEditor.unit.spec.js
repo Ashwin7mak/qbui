@@ -81,8 +81,8 @@ describe('UserFieldValueEditor functions', () => {
 
         // open options
 
-        let selectArrow = ReactDOM.findDOMNode(select).querySelector('.Select-arrow');
-        TestUtils.Simulate.mouseDown(selectArrow, {button: 0});
+        let selectControl = ReactDOM.findDOMNode(select).querySelector('.Select-control');
+        TestUtils.SimulateNative.mouseDown(selectControl, {button: 0});
 
         let options = ReactDOM.findDOMNode(select).querySelectorAll(".Select-option");
         expect(options.length).toEqual(0);
