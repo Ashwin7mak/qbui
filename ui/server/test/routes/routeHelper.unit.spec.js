@@ -153,6 +153,25 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
+    describe('validate getRecordsCountRoute method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', expectation: ''},
+            {name: 'test null url', url: null, expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', id: '1', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table id', url: '/apps/123/tables', id: '1', expectation: '/apps/123/tables'},
+            {name: 'test invalid url - no table id2', url: '/apps/123/tables/', id: '1', expectation: '/apps/123/tables/'},
+            {name: 'test valid url', url: '/apps/123/tables/456', id: null, expectation: '/apps/123/tables/456/records/countQuery'},
+            {name: 'test valid url - id=1', url: '/apps/123/tables/456', id: '1', expectation: '/apps/123/tables/456/records/countQuery'},
+            {name: 'test valid url - id=2', url: '/apps/123/tables/456/fields/789', id: '2', expectation: '/apps/123/tables/456/records/countQuery'}
+        ];
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getRecordsCountRoute(testCase.url), testCase.expectation);
+                done();
+            });
+        });
+    });
+
     describe('validate getReportCountRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', expectation: ''},

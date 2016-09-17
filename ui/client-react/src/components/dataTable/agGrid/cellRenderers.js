@@ -11,6 +11,7 @@ import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
 import RowEditActions from './rowEditActions';
 import CellValueRenderer from './cellValueRenderer';
 import CellEditor from './cellEditor';
+import consts from '../../../../../common/src/constants';
 
 import IconActions from '../../actions/iconActions';
 
@@ -132,16 +133,21 @@ const CellRenderer = React.createClass({
     },
 
     render() {
-
         let isEditable = true;
+
         // built in fields are not editable
         if (typeof this.props.colDef.builtIn !== 'undefined' &&  this.props.colDef.builtIn) {
             isEditable = false;
         }
-        // field must be scalar i.e. user editable not a formula or generated value
-        if (typeof this.props.colDef.userEditableValue !== 'undefined' &&  !this.props.colDef.userEditableValue) {
+        // field must be scalar
+        if (typeof this.props.colDef.type !== 'undefined' &&  this.props.colDef.type !== consts.SCALAR) {
             isEditable = false;
         }
+        // field must be editable i.e. user editable not a restricted value
+        if (typeof this.props.colDef.userEditableValue !== 'undefined' && !this.props.colDef.userEditableValue) {
+            isEditable = false;
+        }
+
 
         let key = CellRendererFactory.getCellKey(this.props);
 
@@ -378,4 +384,3 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
         </div>);
     }
 });
-

@@ -10,6 +10,7 @@ import Loader  from 'react-loader';
 import * as query from '../../src/constants/query';
 import Locale from '../../src/locales/locales';
 
+import DEFAULT_RECORD_KEY_ID from '../../src/constants/schema';
 
 var TableActionsMock = React.createClass({
     render: function() {return <div>table actions</div>;}
@@ -66,13 +67,14 @@ const fakeReportData_before = {
                 datatypeAttributes: {type:"NUMERIC"}
             },
             {
-                id:3,
+                // Skip 3 because that ID is reserved for Record ID#
+                id:4,
                 field: "col_date",
                 headerName: "col_date",
                 datatypeAttributes: {type:"DATE"}
             },
             {
-                id:4,
+                id:5,
                 field: "col_checkbox",
                 headerName: "col_check",
                 datatypeAttributes: {type:"CHECKBOX"}
@@ -117,6 +119,32 @@ function mouseclick(element, clickCount = 1) {
 
     // send click to element
     element.dispatchEvent(event);
+}
+
+function getUneditableFieldTestData(options) {
+    // Add uneditable row to the data
+    let testData = Object.assign({}, fakeReportData_before);
+
+    // Remove checkboxes because they cause extra inputs and it messes up the count unexpectedly
+    delete testData.data.records[0].col_checkbox;
+    delete testData.data.records[1].col_checkbox;
+    testData.data.columns.splice(3, 1);
+
+    // Add uneditable data or a record ID field
+    testData.data.records[0].col_record_id = {
+        id: 6,
+        value: 100,
+        display: "100"
+    };
+    testData.data.columns.push({
+        id: (options.recordId ? 3 : 6),
+        field: 'Record ID#',
+        headerName: "record_id",
+        datatypeAttributes: {type:"NUMERIC"},
+        userEditableValue: options.userEditableValue
+    });
+
+    return testData;
 }
 
 describe('AGGrid functions', () => {
@@ -354,18 +382,17 @@ describe('AGGrid functions', () => {
                                                          loading={false}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        let datecol = _.find(fakeReportData_before.data.columns, function(col) {
+        let dateColIndex = _.findIndex(fakeReportData_before.data.columns, function(col) {
             return col.datatypeAttributes.type === "DATE";
         });
-
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
         let menuButtons = ReactDOM.findDOMNode(gridElement[0]).querySelectorAll(".ag-header button.dropdownToggle");
         expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
-        TestUtils.Simulate.click(menuButtons[datecol.id - 1]);
+        TestUtils.Simulate.click(menuButtons[dateColIndex]);
         let menu = gridElement[0].getElementsByClassName("dropdown-menu");
         expect(menu.length).toBeGreaterThan(1);
-        let menuoptions = menu[datecol.id - 1].querySelectorAll("a:last-child"); // find the menu item text
+        let menuoptions = menu[dateColIndex].querySelectorAll("a:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML.includes(Locale.getMessage("report.menu.sort.oldToNew"))).toBe(true);
         expect(menuoptions[1].innerHTML.includes(Locale.getMessage("report.menu.sort.newToOld"))).toBe(true);
         expect(menuoptions[2].innerHTML.includes(Locale.getMessage("report.menu.group.oldToNew"))).toBe(true);
@@ -380,17 +407,17 @@ describe('AGGrid functions', () => {
                                                          loading={false} selectedSortFids={[3]}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        let checkcol = _.find(fakeReportData_before.data.columns, function(col) {
+        let checkColIndex = _.findIndex(fakeReportData_before.data.columns, function(col) {
             return col.datatypeAttributes.type === "CHECKBOX";
         });
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
         let menuButtons = ReactDOM.findDOMNode(gridElement[0]).querySelectorAll(".ag-header button.dropdownToggle");
         expect(menuButtons.length).toEqual(fakeReportData_before.data.columns.length);
-        TestUtils.Simulate.click(menuButtons[checkcol.id - 1]);
+        TestUtils.Simulate.click(menuButtons[checkColIndex]);
         let menu = gridElement[0].getElementsByClassName("dropdown-menu");
         expect(menu.length).toBeGreaterThan(1);
-        let menuoptions = menu[checkcol.id - 1].querySelectorAll("a:last-child"); // find the menu item text
+        let menuoptions = menu[checkColIndex].querySelectorAll("a:last-child"); // find the menu item text
         expect(menuoptions[0].innerHTML.includes(Locale.getMessage("report.menu.sort.uncheckedToChecked"))).toBe(true);
         expect(menuoptions[1].innerHTML.includes(Locale.getMessage("report.menu.sort.checkedToUnchecked"))).toBe(true);
         expect(menuoptions[2].innerHTML.includes(Locale.getMessage("report.menu.group.uncheckedToChecked"))).toBe(true);
@@ -511,5 +538,78 @@ describe('AGGrid functions', () => {
         // make sure we have a different edit row
         expect(editRowsTabbingOutOfLast.length).toBe(1);
         expect(editRowsTabbingOutOfLast).not.toBe(editRowsAfterSecondDblClick);
+    });
+
+    it('does not have input boxes for uneditable fields', () => {
+        let dataWithUneditableField = getUneditableFieldTestData({userEditableValue: false, recordId: false});
+
+        let callBacks = {
+            onEditRecordStart: function() {
+            },
+        };
+        const TestParent = React.createFactory(React.createClass({
+            // wrap the grid in a container with styles needed to render editing UI
+            render() {
+                return (<div className="reportToolsAndContentContainer singleSelection">
+                        <AGGrid ref="grid"
+                                flux={flux}
+                                keyField="col_record_id"
+                                uniqueIdentifier="col_record_id"
+                                onEditRecordStart={callBacks.onEditRecordStart}
+                                actions={TableActionsMock}
+                                records={dataWithUneditableField.data.records}
+                                columns={dataWithUneditableField.data.columns}
+                                loading={false}
+                                />
+                </div>);
+            }
+        }));
+
+        // Start editing the row
+        const parent = TestUtils.renderIntoDocument(TestParent());
+        let columnCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row:first-child .gridCell");
+        let firstCell = columnCells[0].parentElement;
+        mouseclick(firstCell, 2);
+
+        // There should only inputs for editable cells
+        let editableCellInputs = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing input");
+        expect(editableCellInputs.length).toBe(dataWithUneditableField.data.columns.length - 1);
+    });
+
+    it('does not show input fields for record id cells', () => {
+        // Add uneditable row to the data
+        let dataWithRecordIdField = getUneditableFieldTestData({userEditableValue: true, recordId: true});
+
+        let callBacks = {
+            onEditRecordStart: function() {
+            },
+        };
+        const TestParent = React.createFactory(React.createClass({
+            // wrap the grid in a container with styles needed to render editing UI
+            render() {
+                return (<div className="reportToolsAndContentContainer singleSelection">
+                        <AGGrid ref="grid"
+                                flux={flux}
+                                keyField="col_record_id"
+                                uniqueIdentifier="col_record_id"
+                                onEditRecordStart={callBacks.onEditRecordStart}
+                                actions={TableActionsMock}
+                                records={dataWithRecordIdField.data.records}
+                                columns={dataWithRecordIdField.data.columns}
+                                loading={false}
+                                />
+                </div>);
+            }
+        }));
+
+        // Start editing the row
+        const parent = TestUtils.renderIntoDocument(TestParent());
+        let columnCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row:first-child .gridCell");
+        let firstCell = columnCells[0].parentElement;
+        mouseclick(firstCell, 2);
+
+        // There should only inputs for editable cells
+        let editableCellInputs = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing input");
+        expect(editableCellInputs.length).toBe(dataWithRecordIdField.data.columns.length - 1);
     });
 });

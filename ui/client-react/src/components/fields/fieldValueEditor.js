@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import {DEFAULT_RECORD_KEY_ID} from '../../constants/schema';
+import {NumberFieldValueRenderer} from './fieldValueRenderers';
+
 import FieldFormats from '../../utils/fieldFormats' ;
 import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
     DateTimeFieldValueEditor, TimeFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
@@ -119,6 +122,13 @@ const FieldValueEditor = React.createClass({
             ref:"fieldInput",
             fieldDef: this.props.fieldDef
         };
+
+        // Only allow the Record ID field to be a renderer, not an editor
+        // Record ID is found based on the ID of the fieldDef (should be built in as always 3)
+        let fieldId = (typeof this.props.fieldDef === 'undefined' ? '' : this.props.fieldDef.id);
+        if (typeof fieldId !== 'undefined' && fieldId === DEFAULT_RECORD_KEY_ID) {
+            return <NumberFieldValueRenderer isEditable={false} type="number" {...commonProps} />;
+        }
 
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT:
@@ -259,4 +269,3 @@ const FieldValueEditor = React.createClass({
 });
 
 export default FieldValueEditor;
-

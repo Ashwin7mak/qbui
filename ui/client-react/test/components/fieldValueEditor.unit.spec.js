@@ -5,28 +5,29 @@ import FieldValueEditor  from '../../src/components/fields/fieldValueEditor';
 import FieldFormats from '../../src/utils/fieldFormats';
 var simpleStringify = require('../../../common/src/simpleStringify.js');
 
-const users = [
-    {
-        "userId": "58440038",
-        firstName: "Aditi",
-        lastName: "Goel",
-        screenName: "agoel@quickbase.com",
-        email: "agoel@quickbase.com"
-    },
-    {
-        "userId": "58453016",
-        firstName: "Drew",
-        lastName: "Stevens",
-        screenName: "dstevens@quickbase.com",
-        email: "dstevens@quickbase.com"
-    }
-];
+import {__RewireAPI__ as NumberFieldValueRendererRewire}  from '../../src/components/fields/fieldValueRenderers';
+
+import {DEFAULT_RECORD_KEY_ID} from '../../src/constants/schema';
+
+function setupI18nNumberMock() {
+    let I18nMessageMock = React.createClass({
+        render: function() {
+            return (
+                <div>I18Mock</div>
+            );
+        }
+    });
+    NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
+}
+
+function tearDownI18nNumberMock() {
+    NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
+}
 
 describe('FieldValueEditor functions', () => {
     'use strict';
 
     let component;
-
 
     describe('test render of component', () => {
         let dataProvider = [
@@ -46,7 +47,7 @@ describe('FieldValueEditor functions', () => {
         ];
         dataProvider.forEach((data) => {
             it(data.test, () => {
-                component = TestUtils.renderIntoDocument(<FieldValueEditor fieldDef={{required : true}} type={data.type} appUsers={users}/>);
+                component = TestUtils.renderIntoDocument(<FieldValueEditor type={data.type}/>);
                 expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
             });
         });
@@ -116,5 +117,22 @@ describe('FieldValueEditor functions', () => {
 
     });
 
+    it('does not render an editor for a Record ID field', () => {
+        setupI18nNumberMock();
 
+        let fieldDef = {
+            id: DEFAULT_RECORD_KEY_ID,
+            field: 'Record ID#'
+        };
+
+        component = TestUtils.renderIntoDocument(
+            <FieldValueEditor type={FieldFormats.NUMBER_FORMAT} fieldDef={fieldDef} />
+        );
+
+        // There should not be an input to change the value
+        let editableField = ReactDOM.findDOMNode(component).querySelectorAll('input');
+        expect(editableField.length).toBe(0);
+
+        tearDownI18nNumberMock();
+    });
 });
