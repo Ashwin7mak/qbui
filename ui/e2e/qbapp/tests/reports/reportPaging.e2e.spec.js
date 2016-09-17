@@ -10,8 +10,13 @@
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var ReportPagingPage = requirePO('reportPaging');
+    var ReportSortingPage = requirePO('reportSorting');
     var reportServicePage = new ReportServicePage();
     var reportPagingPage = new ReportPagingPage();
+    var reportSortingPage = new ReportSortingPage();
+
+    // Lodash utility library
+    var _ = require('lodash');
 
     describe('Report Paging Test Setup', function() {
         var realmName;
@@ -41,11 +46,8 @@
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     done();
                 });
-            }).catch(function(error) {
-                // Global catch that will grab any errors from chain above
-                // Will appropriately fail the beforeAll method so other tests won't run
-                done.fail('Error during test setup beforeAll: ' + error.message);
             });
+
         });
 
         /*
@@ -117,6 +119,61 @@
                     });
                 });
             });
+
+            it('Verify pagination for report with sorting defined', function(done) {
+                var reportId;
+                var sortList = [
+                    {
+                        "fieldId": 6,
+                        "sortOrder": "desc",
+                        "groupType": null
+                    },
+                ];
+                //Create a report with Fids and sortFids.
+                e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6], sortList, null, "Verify Item Selected Report").then(function(repId) {
+                    reportId = repId;
+                }).then(function() {
+                    //Go to report 2 which has sortFids set.
+                    return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, reportId));
+                }).then(function() {
+                    return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //Click next button in pagination
+                        reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
+                            reportServicePage.agGridRecordElList.then(function(records) {
+                                expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('51 - 56');
+                                //TODO: Bug next button is not being disabled in footer
+                                //expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
+                                expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
+                            });
+                        });
+                    });
+                }).then(function() {
+                    //Verify sorting item is selected is column header
+                    return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //finally verify item got selected
+                        reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Text Field", "Sort Z to A");
+                    });
+                }).then(function() {
+                    var expectedRecords = [];
+                    //get the records from UI
+                    reportServicePage.getRecordValues(reportServicePage.agGridRecordElList).then(function(uiRecords) {
+                        for (var i = 0; i < uiRecords.length; i++) {
+                            expectedRecords.push(uiRecords[i].replace(/\n/g, ","));
+                        }
+                        //verify records are in descending order
+                        _.every(expectedRecords, function(value, index, array) {
+                            // either it is the first element, or otherwise this element should
+                            // not be greater than the previous element.
+                            // spec requires string conversion
+                            return index === 0 || String(array[index - 1]) >= String(value);
+                        });
+                        done();
+                    });
+                });
+            });
+
 
             //TODO: Should add a test for counting records text to appear (need to fix bulk add first most likely)
         });

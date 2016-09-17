@@ -129,8 +129,13 @@
                     });
                     // Add the new record back in to create
                     table1GeneratedRecords.push(dupRecord);
-                    // Via the API create the records, a new report, then run the report.
-                    e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
+                    if (numberOfRecords < 11) {
+                        // Via the API create the records, a new report, then run the report.
+                        e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
+                    } else {
+                        // Via the API create the bulk records
+                        e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
+                    }
 
                     if (createdApp.tables[1]) {
                         // Get the appropriate fields out of the Create App response (specifically the created field Ids)

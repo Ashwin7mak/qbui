@@ -40,18 +40,7 @@
                 var deferred = promise.pending();
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
-                var fetchRecordPromises = [];
-                genRecords.forEach(function(currentRecord) {
-                    fetchRecordPromises.push(recordBase.createRecord(recordsEndpoint, currentRecord, null));
-                });
-                promise.all(fetchRecordPromises)
-                    .then(function(results) {
-                        deferred.resolve(results);
-                    }).catch(function(error) {
-                        console.log(JSON.stringify(error));
-                        deferred.reject(error);
-                    });
-                return deferred.promise;
+                return recordBase.createRecords(recordsEndpoint, genRecords, null);
             },
             /**
              * Uses the generators in the test_generators package to generate a list of record objects based on the

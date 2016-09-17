@@ -148,14 +148,7 @@
                 var fetchRecordDeferred = promise.pending();
                 init.then(function() {
                     var recordBulkEndpoint = recordsEndpoint + 'bulk';
-
-                    //Get the actual record JSON out of the records
-                    var recordObjects = [];
-                    records.forEach(function(object) {
-                        recordObjects.push(object.record);
-                    });
-
-                    apiBase.executeRequest(recordBulkEndpoint, consts.POST, recordObjects)
+                    apiBase.executeRequest(recordBulkEndpoint, consts.POST, records)
                             .then(function(recordBulkResponse) {
                                 var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
 
