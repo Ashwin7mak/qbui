@@ -245,7 +245,11 @@ const FieldValueEditor = React.createClass({
         //show required symbol
         let requiredDiv = null;
         if (this.props.indicateRequired) {
-            requiredDiv = <div className="requiredFlag requiredFlag-layout">{requiredIndication}</div>;
+            if (this.props.type === FieldFormats.MULTI_LINE_TEXT_FORMAT) {
+                requiredDiv = <div className="requiredFlag requiredFlag-layout-multiLineTextFieldValueEditor">{requiredIndication}</div>;
+            } else {
+                requiredDiv = <div className="requiredFlag requiredFlag-layout">{requiredIndication}</div>;
+            }
         }
 
         let renderedType = null;
