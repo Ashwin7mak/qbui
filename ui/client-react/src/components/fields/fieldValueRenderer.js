@@ -137,17 +137,24 @@ const FieldValueRenderer = React.createClass({
         }
     },
 
+    addDisplayAttributesToCommonProperties(commonProperties) {
+        if (_.has(this.props, 'attributes.clientSideAttributes')) {
+            let attributes = this.props.attributes.clientSideAttributes;
+            commonProperties.isBold = attributes.bold;
+            commonProperties.displayGraphic = attributes.display_graphic;
+        }
+
+        return commonProperties;
+    },
+
     render() {
+        let commonProperties = {};
+        commonProperties.idKey = this.props.idKey;
+        this.addDisplayAttributesToCommonProperties(commonProperties);
 
         let className = "";
-        let commonProperties = {};
-        if (_.has(this.props, 'attributes.clientSideAttributes.bold') &&
-            this.props.attributes.clientSideAttributes.bold) {
-            commonProperties.isBold = true;
-            className += ' bold';
-        }
-        commonProperties.idKey = this.props.idKey;
         className += this.props.classes ? ' ' + this.props.classes : '';
+        className += commonProperties.isBold ? ' bold' : '';
 
         let renderedType =  this.getRendererForType(commonProperties);
 
