@@ -106,10 +106,8 @@ let CardViewListHolder = React.createClass({
      * Fetch next report page
      */
     swipedUp(e) {
-        // Complete swipe action only if footer is visible\
-        let evTarget = e.target;
-        //if (this.doesClassNameMatch(evTarget, 'fetchNextButton') || this.doesClassNameMatch(evTarget, 'fetchNextArrow')) {//
-            if (this.isElementVisible('fetchNextButton') || this.isElementVisible('fetchNextArrow')) {
+        // Complete swipe action only if footer is visible
+        if (this.isElementVisible('cardViewFooter')) {
             this.props.getNextReportPage();
         }
     },
@@ -119,10 +117,8 @@ let CardViewListHolder = React.createClass({
      */
     swipedDown(e) {
         // Complete swipe action only if header is visible
-        let evTarget = e.target;
-        // if (this.doesClassNameMatch(evTarget, 'fetchPreviousButton') || this.doesClassNameMatch(evTarget, 'fetchPreviousArrow')) {
-        if (this.isElementVisible('fetchPreviousButton') || this.isElementVisible('fetchPreviousArrow')) {
-        this.props.getPreviousReportPage();
+        if (this.isElementVisible('cardViewHeader')) {
+            this.props.getPreviousReportPage();
         }
     },
 
@@ -147,19 +143,17 @@ let CardViewListHolder = React.createClass({
      * @param delta - delta from touch starting position
      * @param isUpSwipe - (swiped up relative to starting point)
      */
-    swiping(evTarget, delta, isUpSwipe) {
-        // let targetClassName = evTarget && evTarget.className ? evTarget.className : "";
-        if (isUpSwipe && (this.isElementVisible('fetchNextButton') || this.isElementVisible('fetchNextArrow '))) {
+    swiping(delta, isUpSwipe) {
+        if (isUpSwipe && this.isElementVisible('cardViewFooter')) {
             // If up swipe, check for visibility of the 'Fetch More' button. If it is visible, display loading indicator,
             // move the table (including button and spinner) up proportional to the swipe distance. If the swipe exceeds
             // drag distance, snap the table, button and spinner to the bottom of screen.
-            this.handleVerticalSwipingMovement("cardViewFooter", "footerLoadingIndicator", delta, true);
-        } else if (this.isElementVisible('fetchPreviousButton') || this.isElementVisible('fetchPreviousArrow ')) {
-            //this.doesClassNameMatch(evTarget, 'fetchPreviousButton') || this.doesClassNameMatch(evTarget, 'fetchPreviousArrow')) {
+            this.handleVerticalSwipingMovement("footerLoadingIndicator", delta, true);
+        } else if (this.isElementVisible('cardViewHeader')) {
             // Down swipe. Check for visibility of 'Fetch Previous' button. If it is visible, display loading indicator,
             // move table, button and indicator down proportional to swipe distance. If swipe exceeds drag distance,
             // snap table, button and spinner to the top.
-            this.handleVerticalSwipingMovement("cardViewHeader", "headerLoadingIndicator", delta, false);
+            this.handleVerticalSwipingMovement("headerLoadingIndicator", delta, false);
         }
     },
 
@@ -170,12 +164,11 @@ let CardViewListHolder = React.createClass({
      * proportional to the swipe distance. If the swipe exceeds drag distance, snap the table, visible element (header
      * or footer) and spinner to the top/bottom of screen.
      *
-     * @param visibleElementName - Class name of the header or the footer element.
      * @param loadingIndicatorElementName - Class name of the loading indicator container
      * @param delta - movement distance per swipe event
      * @param isUpward - indicates upward or downward motion. Negative is for upward motion.
      */
-    handleVerticalSwipingMovement(visibleElementName, loadingIndicatorElementName, delta, isUpward) {
+    handleVerticalSwipingMovement(loadingIndicatorElementName, delta, isUpward) {
         // Fetch card view table
         var tableElem = document.getElementsByClassName("cardViewList cardViewListHolder");
         if (tableElem && tableElem.length) {
