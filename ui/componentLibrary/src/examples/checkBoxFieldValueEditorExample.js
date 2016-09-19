@@ -9,8 +9,16 @@ let longLabelText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cr
 var BasicCheckBoxFieldValueEditor = React.createClass({
     getInitialState() {
         return {
+            example1Value: false,
+            example2Value: true,
             inputValue: false
         };
+    },
+    onChangeExample1(value) {
+        this.setState({example1Value: value});
+    },
+    onChangeExample2(value) {
+        this.setState({example2Value: value});
     },
     onChange(value) {
         this.setState({inputValue: value});
@@ -20,13 +28,13 @@ var BasicCheckBoxFieldValueEditor = React.createClass({
             <div>
             <dt>Unchecked (Default) Checkbox:</dt>
                 <dd>
-                  <CheckBoxFieldValueEditor value={this.state.inputValue} onChange={this.onChange} />
+                  <CheckBoxFieldValueEditor value={this.state.example1Value} onChange={this.onChangeExample1} />
                 </dd>
 
 
             <dt>Checked Checkbox:</dt>
                 <dd>
-                    <CheckBoxFieldValueEditor value={true} />
+                    <CheckBoxFieldValueEditor value={this.state.example2Value} onChange={this.onChangeExample2} />
                 </dd>
 
 
@@ -63,7 +71,8 @@ var BasicCheckBoxFieldValueEditor = React.createClass({
                                               label="Required"
                                               onChange={this.onChange}
                                               required={true} />
-
+                </dd>
+                <dd>
                     <CheckBoxFieldValueEditor value={this.state.inputValue}
                                               label="Required and invalid"
                                               onChange={this.onChange}
