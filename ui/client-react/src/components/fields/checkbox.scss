@@ -1,6 +1,14 @@
 @import '../../assets/css/_qbColorVariables';
 @import '../../assets/css/_qbVariables';
 
+@mixin unchecked-checkbox {
+    background-color: $checkbox-background-unchecked-color;
+    border: 2px solid $checkbox-border-color;
+    border-radius: 3px;
+    top: 0px;
+    z-index: 0;
+}
+
 .checkbox {
     /* Remove default checkbox */
     [type="checkbox"]:not(:checked),
@@ -49,10 +57,7 @@
       }
 
       &:not(:checked) + label:after {
-        background-color: $checkbox-background-unchecked-color;
-        border: 2px solid $checkbox-border-color;
-        top: 0px;
-        z-index: 0;
+        @include unchecked-checkbox
       }
 
       // Checked style
@@ -155,19 +160,20 @@
     &.renderer {
         margin: 0;
 
+        .label {
+            display: inline;
+        }
+
         .symbol {
             color: $checkbox-checkmark-readonly-color;
-            font-size: 20px;
+            font-size: 14px;
         }
 
         .checkbox-unchecked {
-          background-color: transparent;
-          border: 2px solid $checkbox-border-color;
-          display: inline-block;
-          height: $checkbox-size;
-          top: 0px;
-          width: $checkbox-size;
-          z-index: 0;
+            @include unchecked-checkbox
+            display: inline-block;
+            height: $checkbox-size;
+            width: $checkbox-size;
         }
 
     }
