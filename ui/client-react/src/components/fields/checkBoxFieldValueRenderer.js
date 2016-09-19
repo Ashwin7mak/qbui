@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import './checkbox';
 
-import I18nMessage from '../../utils/i18nMessage';
+import {I18nMessage} from '../../utils/i18nMessage';
 
 let defaultSymbolClasses = 'symbol qbIcon ';
 
@@ -37,11 +37,9 @@ const CheckBoxFieldValueRenderer = React.createClass({
 
     renderTextDisplayValue() {
         if(this.props.value) {
-            return "Yes";
-            // return <I18nMessage message="fields.checkbox.yes" />;
+            return <I18nMessage message="fields.checkbox.yes" />;
         } else {
-            return "No";
-            // return <I18nMessage message="fields.checkbox.no" />;
+            return <I18nMessage message="fields.checkbox.no" />;
         }
     },
 

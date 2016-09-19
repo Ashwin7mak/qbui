@@ -88,6 +88,12 @@ export default {
             }
 
         },
+        fields: {
+            checkbox: {
+                no: 'Nein',
+                yes: 'Ja'
+            }
+        },
         form : {
             tab : 'Tab',
             error: {

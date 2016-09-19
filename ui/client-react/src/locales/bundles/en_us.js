@@ -91,7 +91,7 @@ export default {
             }
         },
         fields: {
-            checkBox: {
+            checkbox: {
                 no: 'No',
                 yes: 'Yes'
             }
