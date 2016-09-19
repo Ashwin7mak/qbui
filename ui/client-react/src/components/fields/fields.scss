@@ -113,6 +113,7 @@ $data-font-size: $font-size-p;
   white-space: nowrap;
 }
 
+/* allow wide tooltips */
 .tooltip-inner {
   max-width:none;
 }

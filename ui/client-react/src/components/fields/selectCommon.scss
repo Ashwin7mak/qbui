@@ -1,5 +1,7 @@
 @import '../../assets/css/qbVariables';
 
+/* common styles for fields using react-select */
+
 $selected-choice-color: $color-cyan-500;
 
 .cellWrapper .fieldValueEditor.cellEditWrapper .Select {

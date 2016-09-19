@@ -41,7 +41,7 @@ export default {
         },
         field: {
             search: "Chercher",
-            searchNoMatch: "aucun utilisateur trouvé"
+            searchNoMatch: "Aucun utilisateur trouvé"
         },
         grid: {
             no_data: "Il n'y a pas de données à afficher."

@@ -12,8 +12,6 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
 import '../report/report.scss';
 
-import UserFieldValueEditor from '../fields/userFieldValueEditor';
-
 let TableHomePageRoute = React.createClass({
     mixins: [FluxMixin],
     nameForRecords: "Records",

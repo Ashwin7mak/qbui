@@ -17,7 +17,6 @@ const UserFieldValueRenderer = React.createClass({
 
     /**
      * render the user display name with a tooltip containing screen name and/or email
-     * @returns {XML}
      */
     render() {
 
