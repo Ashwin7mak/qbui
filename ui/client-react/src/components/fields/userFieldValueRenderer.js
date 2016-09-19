@@ -11,8 +11,17 @@ const UserFieldValueRenderer = React.createClass({
     displayName: 'UserFieldValueRenderer',
 
     propTypes: {
+        /**
+         * the label to display
+         */
         display: React.PropTypes.string,
-        value: React.PropTypes.object
+        /**
+         * the user object
+         */
+        value: React.PropTypes.shape({
+            screenName: React.PropTypes.string,
+            email: React.PropTypes.string
+        })
     },
 
     /**

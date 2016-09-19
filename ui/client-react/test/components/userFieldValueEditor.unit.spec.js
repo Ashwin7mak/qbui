@@ -52,7 +52,7 @@ describe('UserFieldValueEditor functions', () => {
 
         const fieldDef = {
             builtIn: false,
-            dataTypeAttributes: {
+            datatypeAttributes: {
                 type: "USER",
                 userDisplayFormat: "FIRST_THEN_LAST"
             },
@@ -66,7 +66,7 @@ describe('UserFieldValueEditor functions', () => {
 
         const fieldDef = {
             builtIn: false,
-            dataTypeAttributes: {
+            datatypeAttributes: {
                 type: "USER",
                 userDisplayFormat: "FIRST_THEN_LAST"
             },

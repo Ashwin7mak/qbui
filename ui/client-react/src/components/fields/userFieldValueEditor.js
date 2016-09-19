@@ -7,17 +7,33 @@ import 'react-select/dist/react-select.min.css';
 import './userFieldValueEditor.scss';
 
 /**
- * a minimal user picker
- */
+ * # UserFieldValueEditor
+ *
+ *
+ * This component presents a list of users and allows the user to select one of them.
+ *
+ *
+ * */
 const UserFieldValueEditor = React.createClass({
     displayName: 'UserFieldValueEditor',
 
     propTypes: {
+        /**
+         * the users available to choose from
+         */
         appUsers: React.PropTypes.array.isRequired,
+
+        /**
+         * the currently selected user
+         */
         value: React.PropTypes.object,
         /**
          * data type attributes for the field */
         fieldDef: React.PropTypes.object.isRequired,
+
+        /**
+         * callback when the user editor loses focus
+         */
         onBlur: React.PropTypes.func
     },
 

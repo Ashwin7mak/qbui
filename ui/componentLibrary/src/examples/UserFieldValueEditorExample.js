@@ -1,58 +1,70 @@
 
 const appUsers = [
     {
-        email: "user1@email.com",
+        email: "john.doe@email.com",
         firstName: "John",
-        lastName: "Smith",
-        screenName: "firstuser",
+        lastName: "Doe",
+        screenName: "john",
         userId: "1"
     },
     {
-        email: "user2@email.com",
+        email: "john.doe2@email.com",
         firstName: "John",
-        lastName: "Smith",
+        lastName: "Doe",
         userId: "2"
     },
     {
-        email: "user3@email.com",
+        email: "someone@email.com",
         userId: "3"
     },
     {
-        email: "user4@email.com",
+        email: "jsmith@somewhere.com",
         firstName: "John",
         lastName: "Smith",
         userId: "4"
     },
     {
-        email: "user5@email.com",
-        firstName: "John",
-        lastName: "Smith",
+        email: "mary.jones@company.com",
+        firstName: "Mary",
+        lastName: "Jones",
         deactivated: true,
         userId: "5"
     }
 ];
 
-const fieldDef = {
+const fieldDef1 = {
     builtIn: false,
-    dataTypeAttributes: {
+    datatypeAttributes: {
         type: "USER",
         userDisplayFormat: "FIRST_THEN_LAST"
     },
-    required: true
 };
 
+const fieldDef2 = {
+    builtIn: false,
+    dataTtypeAttributes: {
+        type: "USER",
+        userDisplayFormat: "LAST_THEN_FIRST",
+    },
+    required:true
+};
 var BasicUserFieldValueEditor = React.createClass({
 
     render() {
         return (
             <div>
-                <dt>User Field Editor:</dt>
+                <dt>User Field Editor (FIRST_THEN_LAST):</dt>
                     <dd>
-                        <UserFieldValueEditor value={{userId: "1"}} appUsers={appUsers} fieldDef={fieldDef}/>
+                        <UserFieldValueEditor value={{userId: "1"}} appUsers={appUsers} fieldDef={fieldDef1}/>
                     </dd>
 
-
+                <dt>User Field Editor (LAST_THEN_FIRST, required):</dt>
+                <dd>
+                    <UserFieldValueEditor value={{userId: "1"}} appUsers={appUsers} fieldDef={fieldDef2}/>
+                </dd>
             </div>
+
+
         );
     }
 });

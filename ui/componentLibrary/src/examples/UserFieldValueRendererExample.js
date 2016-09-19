@@ -1,15 +1,17 @@
 
 const user = {
-    screenName: "screenname",
-    email: "email@email.com"
+    screenName: "myScreenName",
+    email: "john.doe@email.com"
 };
-const display = "display name";
+const display = "John Doe";
 
 const userValueField = (
     <div>
         <dt>User Value Field:</dt>
         <dd>
+            <div style={{display: "inline-block"}}>
               <UserFieldValueRenderer value={user} display={display} />
+            </div>
         </dd>
 
     </div>
