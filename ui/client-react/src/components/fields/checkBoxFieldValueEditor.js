@@ -2,6 +2,8 @@ import React, {PropTypes} from 'react';
 import _ from 'lodash';
 import UniqueIdMixin from 'unique-id-mixin';
 
+import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
+
 import './checkbox.scss';
 /**
  * checkbox cell editor
@@ -17,6 +19,7 @@ const CheckBoxFieldValueEditor = React.createClass({
         id: PropTypes.string,
         invalid: PropTypes.bool,
         disabled: PropTypes.bool,
+        readOnly: PropTypes.bool,
         required: PropTypes.bool
     },
 
@@ -26,6 +29,7 @@ const CheckBoxFieldValueEditor = React.createClass({
             label: ' ',
             invalid: false,
             disabled: false,
+            readOnly: false,
             required: false
         };
     },
@@ -66,6 +70,11 @@ const CheckBoxFieldValueEditor = React.createClass({
             requiredSymbol = <span className={requiredSymbolClasses}>*</span>;
         }
 
+        // If a checkbox is readonly, return the renderer instead
+        if(this.props.readOnly) {
+            return <CheckBoxFieldValueRenderer {...this.props} />;
+        }
+        
         return (
             <div className={classes}>
                 <input id={this.getNextHtmlFor()}

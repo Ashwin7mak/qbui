@@ -71,6 +71,14 @@ var BasicCheckBoxFieldValueEditor = React.createClass({
                                               invalid={true} />
                 </dd>
 
+            <dt>Ready Only Checkbox Returns a Renderer:</dt>
+                <dd>
+                    <CheckBoxFieldValueEditor value={true}
+                                              label={shortLabelText}
+                                              onChange={this.onChange}
+                                              readOnly={true} />
+                </dd>
+
             </div>
         );
     }
