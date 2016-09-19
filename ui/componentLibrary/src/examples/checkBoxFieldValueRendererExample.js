@@ -40,20 +40,9 @@ var BasicCheckBoxFieldValueRenderer = React.createClass({
                     </dd>
 
 
-                <dt>Standard Checkbox With a Label:</dt>
+                <dt>Checkbox With a Label:</dt>
                     <dd>
                         <CheckBoxFieldValueRenderer value={true} label={shortLabelText} onChange={this.onChange} />
-                    </dd>
-
-
-                <dt>Yes/No Checkbox With a Label (Not a question):</dt>
-                    <dd>
-                        <CheckBoxFieldValueRenderer value={true} label={longLabelText} onChange={this.onChange} displayGraphic={false} />
-                    </dd>
-
-                <dt>Yes/No Checkbox With a Label Posed as a Question:</dt>
-                    <dd>
-                        <CheckBoxFieldValueRenderer value={true} label={questionLabel} onChange={this.onChange} displayGraphic={false} />
                     </dd>
 
             </div>
