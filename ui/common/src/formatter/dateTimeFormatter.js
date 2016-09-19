@@ -9,6 +9,8 @@
 
     //FORMATTING COMPONENTS
     var DASH = '-';
+    var COMMA = ',';
+    var SPACE = ' ';
     var TWO_DIGIT_MONTH = 'MM';
     var MONTH_ABBREV = 'MMM';
     var DAY_OF_WEEK = 'dddd, ';
@@ -18,13 +20,16 @@
     var TWO_DIGIT_DAY = 'DD';
     var DEFAULT_TIMEZONE = 'America/Los_Angeles';
     var TIMEZONE_FORMATTER = '(z)';
-    //Base formats
+
+    //Base formats  (US centric formatted dates -- does not support localized dates)
     var DATE_FORMATS = Object.freeze({
-        MM_DD_YY  : TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
-        MM_DD_YYYY: TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + FOUR_DIGIT_YEAR,
-        DD_MM_YYYY: TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + FOUR_DIGIT_YEAR,
-        DD_MM_YY  : TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_YEAR,
-        YYYY_MM_DD: FOUR_DIGIT_YEAR + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY
+        MM_DD_YY   : TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + TWO_DIGIT_YEAR,
+        MM_DD_YYYY : TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY + DASH + FOUR_DIGIT_YEAR,
+        DD_MM_YYYY : TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + FOUR_DIGIT_YEAR,
+        DD_MM_YY   : TWO_DIGIT_DAY + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_YEAR,
+        YYYY_MM_DD : FOUR_DIGIT_YEAR + DASH + TWO_DIGIT_MONTH + DASH + TWO_DIGIT_DAY,
+        MMM_DD_YY  : MONTH_ABBREV + SPACE + TWO_DIGIT_DAY + COMMA + SPACE + TWO_DIGIT_YEAR,
+        MMM_DD_YYYY: MONTH_ABBREV + SPACE + TWO_DIGIT_DAY + COMMA + SPACE + FOUR_DIGIT_YEAR
     });
     //resolves the moment.js format string from the JAVA 8 date format string
     var JAVA_TO_JS_DATE_FORMATS = Object.freeze({
@@ -36,7 +41,13 @@
     });
 
     function showMonthAsName(formatString) {
-        return formatString.replace(TWO_DIGIT_MONTH, MONTH_ABBREV);
+        if (formatString === DATE_FORMATS.MM_DD_YY) {
+            return DATE_FORMATS.MMM_DD_YY;
+        } else if (formatString === DATE_FORMATS.MM_DD_YYYY) {
+            return DATE_FORMATS.MMM_DD_YYYY;
+        } else {
+            return formatString.replace(TWO_DIGIT_MONTH, MONTH_ABBREV);
+        }
     }
 
     function showDayOfWeek(formatString) {
@@ -44,9 +55,12 @@
     }
 
     function hideYear(formatString) {
+        //  the testing order is important..changing will negatively impact yyyy-mm-dd tests
         var noYearString = formatString.replace(DASH + FOUR_DIGIT_YEAR, '');
         noYearString = noYearString.replace(FOUR_DIGIT_YEAR + DASH, '');
         noYearString = noYearString.replace(DASH + TWO_DIGIT_YEAR, '');
+        noYearString = noYearString.replace(COMMA + SPACE + FOUR_DIGIT_YEAR, '');
+        noYearString = noYearString.replace(COMMA + SPACE + TWO_DIGIT_YEAR, '');
         return noYearString;
     }
 
@@ -65,7 +79,9 @@
         },
 
         getDateFormat: function(fieldInfo) {
+
             var jsDateFormat = '';
+
             if (fieldInfo) {
                 jsDateFormat = JAVA_TO_JS_DATE_FORMATS[fieldInfo.dateFormat];
             }
@@ -74,23 +90,38 @@
             if (!jsDateFormat) {
                 jsDateFormat = DATE_FORMATS.MM_DD_YYYY;
             }
+
+            if (fieldInfo) {
+                if (fieldInfo.showMonthAsName) {
+                    jsDateFormat = showMonthAsName(jsDateFormat);
+                }
+                if (fieldInfo.showDayOfWeek) {
+                    jsDateFormat = showDayOfWeek(jsDateFormat);
+                }
+            }
+
             return jsDateFormat;
         },
 
         getTimeFormat: function(fieldInfo) {
             var jsTimeFormat = '';
-            if (fieldInfo.showTime) {
-                jsTimeFormat = TIME;
+
+            if (fieldInfo) {
+                if (fieldInfo.showTime) {
+                    jsTimeFormat = TIME;
+                }
+                if (fieldInfo.showTimeZone) {
+                    jsTimeFormat += (fieldInfo.showTime ? ' ' : '') + TIMEZONE_FORMATTER;
+                }
             }
-            if (fieldInfo.showTimeZone) {
-                jsTimeFormat += (fieldInfo.showTime ? ' ' : '') + TIMEZONE_FORMATTER;
-            }
+
             return jsTimeFormat;
         },
 
         generateFormat: function(fieldInfo) {
             //  get date formatting requirements
             var jsDateFormat = this.getDateFormat(fieldInfo);
+
             //  get time formatting requirements
             var jsTimeFormat = this.getTimeFormat(fieldInfo);
 
@@ -101,12 +132,6 @@
                 jsFormat = jsTimeFormat;
             }
 
-            if (fieldInfo.showMonthAsName) {
-                jsFormat = showMonthAsName(jsFormat);
-            }
-            if (fieldInfo.showDayOfWeek) {
-                jsFormat = showDayOfWeek(jsFormat);
-            }
             return jsFormat;
         },
 
