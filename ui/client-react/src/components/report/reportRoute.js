@@ -35,8 +35,8 @@ const ReportRoute = React.createClass({
         let tblId = params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
-        let offset = this.props.reportData && NumberUtils.isInt(this.props.reportData.pageOffset) ? this.props.reportData.pageOffset : null;//constants.PAGE.OFFSET;
-        let numRows = this.props.reportData && NumberUtils.isInt(this.props.reportData.numRows) ? this.props.reportData.numRows : null;//constants.PAGE.DEFAULT_NUM_ROWS;
+        let offset = this.props.reportData && NumberUtils.isInt(this.props.reportData.pageOffset) ? this.props.reportData.pageOffset : null;
+        let numRows = this.props.reportData && NumberUtils.isInt(this.props.reportData.numRows) ? this.props.reportData.numRows : null;
 
 
         if (appId && tblId && rptId) {

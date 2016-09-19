@@ -22,9 +22,16 @@ class TableService extends BaseService {
      * @param tableId
      * @returns {Promise.<{data}>}
      */
-    getHomePage(appId, tableId) {
+    getHomePage(appId, tableId, offset, numRows) {
         let url = super.constructUrl(this.API.GET_HOMEPAGE, [appId, tableId]);
-        return super.get(url);
+
+        let params = {};
+        if (NumberUtils.isInt(offset) && NumberUtils.isInt(numRows)) {
+            params[query.OFFSET_PARAM] = offset;
+            params[query.NUMROWS_PARAM] = numRows;
+        }
+
+        return super.get(url, {params:params});
     }
 }
 
