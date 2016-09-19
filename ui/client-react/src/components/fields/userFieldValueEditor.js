@@ -86,7 +86,7 @@ const UserFieldValueEditor = React.createClass({
         return (
             <div className="userOption">
                 {this.state.selectedUserId === user.userId && <QbIcon icon="check-reversed"/>}
-                <div className="userLabel">{userLabel} {!user.deactivated && <span className="deactivatedLabel">(deactivated)</span>}</div>
+                <div className="userLabel">{userLabel} {user.deactivated && <span className="deactivatedLabel">(deactivated)</span>}</div>
                 {option.showEmail && user.email && <div className="email">{user.email}</div>}
             </div>);
     },
