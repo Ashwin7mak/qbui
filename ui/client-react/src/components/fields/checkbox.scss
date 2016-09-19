@@ -1,6 +1,8 @@
 @import '../../assets/css/_qbColorVariables';
 @import '../../assets/css/_qbVariables';
 
+$checkbox-disabled-opacity: .4;
+
 @mixin unchecked-checkbox {
     background-color: $checkbox-background-unchecked-color;
     border: 2px solid $checkbox-border-color;
@@ -107,7 +109,7 @@
       &:disabled:not(:checked) + label:after {
         border-color: $checkbox-border-color;
         background-color: $checkbox-background-unchecked-color;
-        opacity: .4;
+        opacity: $checkbox-disabled-opacity;
       }
 
       &.invalid + label:after {
@@ -129,7 +131,6 @@
             display: block;
             font-size: 14px;
             line-height: normal;
-            margin-bottom: 40px;
             margin-left: 0;
             overflow: auto;
             padding-left: 0;
@@ -169,17 +170,25 @@
             @include unchecked-checkbox
             display: inline-block;
             height: $checkbox-size;
+            margin-right: 10px;
+            margin-top: 2px;
             width: $checkbox-size;
         }
 
+    }
+
+    &.disabled {
+        .checkbox-unchecked {
+            opacity: $checkbox-disabled-opacity;
+        }
     }
 
     .required-symbol {
         color: $required-asterisk-color;
         font-size: 18px;
         left: 28px;
-        position: relative;
-        top: -72px;
+        position: absolute;
+        top: -9px;
 
         &.invalid {
             color: $error-color;
