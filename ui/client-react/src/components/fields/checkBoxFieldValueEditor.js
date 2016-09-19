@@ -81,8 +81,10 @@ const CheckBoxFieldValueEditor = React.createClass({
             requiredSymbol = <span className={requiredSymbolClasses}>*</span>;
         }
 
-        // If a checkbox is disabled/readonly, return the renderer instead
-        if(this.props.readOnly) {
+        // If a checkbox is readonly, return the renderer instead
+        // Need to return a renderer if value is true and checkbox is disabled
+        // because could not get the checkmark to be in the correct place
+        if(this.props.readOnly || (this.props.disabled && this.props.value)) {
             return <CheckBoxFieldValueRenderer {...this.props} />;
         }
 

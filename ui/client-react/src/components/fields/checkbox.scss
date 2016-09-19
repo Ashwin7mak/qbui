@@ -2,6 +2,8 @@
 @import '../../assets/css/_qbVariables';
 
 $checkbox-disabled-opacity: .4;
+$checkbox-size: 16px;
+$checkbox-size-mobile: 24px;
 
 @mixin unchecked-checkbox {
     background-color: $checkbox-background-unchecked-color;
@@ -9,6 +11,11 @@ $checkbox-disabled-opacity: .4;
     border-radius: 3px;
     top: 0px;
     z-index: 0;
+}
+
+@mixin checkbox-checkmark-icon {
+    content: "\E904";
+    font-family: 'QuickBase-Sturdy';
 }
 
 .checkbox {
@@ -65,18 +72,17 @@ $checkbox-disabled-opacity: .4;
       // Checked style
       &:checked {
         + label:before {
-          top: 5px;
-          left: 4px;
-          font-size: 8px;
-          content: "\E904";
-          font-family: 'QuickBase-Sturdy';
-          opacity: 1;
-          color: $checkbox-checkmark-editable-color;
+            @include checkbox-checkmark-icon;
+            top: 5px;
+            left: 4px;
+            font-size: 8px;
+            opacity: 1;
+            color: $checkbox-checkmark-editable-color;
 
-          @media(max-width: $small-breakpoint-width) {
-              left: 1px;
-              top: 3px;
-          }
+            @media(max-width: $small-breakpoint-width) {
+                left: 1px;
+                top: 3px;
+            }
         }
 
         + label:after {
@@ -158,7 +164,8 @@ $checkbox-disabled-opacity: .4;
         margin: 0;
 
         .label {
-            display: inline;
+            display: inline-flex;
+            border: 2px solid transparent;
         }
 
         .symbol {
@@ -167,10 +174,10 @@ $checkbox-disabled-opacity: .4;
         }
 
         .checkbox-unchecked {
-            @include unchecked-checkbox
-            display: inline-block;
+            @include unchecked-checkbox;
+            display: inline-flex;
             height: $checkbox-size;
-            margin-right: 10px;
+            margin-right: 8px;
             margin-top: 2px;
             width: $checkbox-size;
         }

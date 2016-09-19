@@ -63,6 +63,11 @@ var BasicCheckBoxFieldValueEditor = React.createClass({
                                               label="I cannot be changed"
                                               disabled={true} />
                 </dd>
+                <dd>
+                    <CheckBoxFieldValueEditor value={true}
+                                              label="I cannot be changed"
+                                              disabled={true} />
+                </dd>
 
             <dt>Required Checkbox:</dt>
                 <dd>
