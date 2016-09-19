@@ -21,28 +21,28 @@ var BasicCheckBoxFieldValueRenderer = React.createClass({
             <div>
                 <dt>Standard Checkbox (Checked):</dt>
                     <dd>
-                      <CheckBoxFieldValueRenderer value={true} onChange={this.onChange} />
+                      <CheckBoxFieldValueRenderer value={true}/>
                     </dd>
 
                 <dt>Standard Checkbox (Unchecked):</dt>
                     <dd>
-                      <CheckBoxFieldValueRenderer value={this.state.inputValue} onChange={this.onChange} />
+                      <CheckBoxFieldValueRenderer value={this.state.inputValue} />
                     </dd>
 
 
                 <dt>Yes/No Checkbox (displayGraphic: false):</dt>
                     <dd>
                         <CheckBoxFieldValueRenderer value={true} displayGraphic={false} />
-                    </dd>
 
-                    <dd>
-                      <CheckBoxFieldValueRenderer value={this.state.inputValue} displayGraphic={false} />
+                        <CheckBoxFieldValueRenderer value={this.state.inputValue} displayGraphic={false} />
                     </dd>
 
 
                 <dt>Checkbox With a Label:</dt>
                     <dd>
-                        <CheckBoxFieldValueRenderer value={true} label={shortLabelText} onChange={this.onChange} />
+                        <CheckBoxFieldValueRenderer value={true} label={shortLabelText} />
+
+                        <CheckBoxFieldValueRenderer value={false} label={shortLabelText} />
                     </dd>
 
             </div>
