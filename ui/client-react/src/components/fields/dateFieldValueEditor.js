@@ -107,7 +107,7 @@ const DateFieldValueEditor = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        const format = dateTimeFormatter.getDateFormat(this.props.attributes);
+        const format = 'MM-DD-YYYY'; //dateTimeFormatter.getDateFormat(this.props.attributes);
 
         let theDate = null;
         if (this.props.value !== null) {

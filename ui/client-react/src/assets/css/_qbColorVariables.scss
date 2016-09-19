@@ -132,6 +132,8 @@ $color31:   #13dbf1;
 $color32:   #131f2b;
 $color33:   #365ebf; //big-leaf
 $color34:   #00b0c2; //waterpebble
+$color35:   #00abf4;
+$color36:   #f2b835;
 
 
 
@@ -233,10 +235,12 @@ $fieldLabel-color: $color3;
 
 $datepicker-header-bg: $color34;
 $datepicker-header-fg: $color2;
-$datepicker-date-hover-bg: $color5;
+$datepicker-date-hover-bg: $color7;
 $datepicker-select-button-fg: $color3;
-$datepicker-select-button-bg: $color5;
+$datepicker-select-button-bg: $color7;
+$datepicker-select-active: $color35;
 $datepicker-bg: $color2;
+$datepicker-bg-today: $color36;
 
 //== QBPanel
 $panel-border-color: $color4;
