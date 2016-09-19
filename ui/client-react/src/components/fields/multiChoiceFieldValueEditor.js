@@ -4,14 +4,21 @@ import 'react-select/dist/react-select.min.css';
 import './multiChoiceFieldValueEditor.scss';
 import QbIcon from '../qbIcon/qbIcon';
 /**
- * combo box cell editor
+ * # MultiChoiceFieldValueEditor
+ * A multi-choice field value editor that uses react select, it allows a user to select a single option from a drop down box
  */
-export const MultiChoiceFieldValueEditor = React.createClass({
+const MultiChoiceFieldValueEditor = React.createClass({
     displayName: 'MultiChoiceFieldValueEditor',
 
     propTypes: {
+        /**
+         * expects an array of choices */
         choices: React.PropTypes.array,
+        /**
+         * gets the selected value for input box for multi choice */
         value: React.PropTypes.object,
+        /**
+         * listen for losing focus by setting a callback to the onBlur prop */
         onBlur: React.PropTypes.func,
         /**
          * data type attributes for the field */
@@ -40,7 +47,10 @@ export const MultiChoiceFieldValueEditor = React.createClass({
             value: this.state.choice.value.coercedValue.value,
             display: this.state.choice.value.displayValue
         };
-        this.props.onBlur(theVals);
+
+        if (this.props.onBlur) {
+            this.props.onBlur(theVals);
+        }
     },
 
     renderOption(choice) {

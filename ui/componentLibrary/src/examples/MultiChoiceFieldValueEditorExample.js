@@ -55,7 +55,7 @@ let choices = [
     ]
 
 const basicMultiChoiceFieldValueEditor = (
-    <div>
+    <div style={{width:200}}>
         <dt>Multi Choice Field Editor:</dt>
         <dd>
             <MultiChoiceFieldValueEditor choices = {choices} />
