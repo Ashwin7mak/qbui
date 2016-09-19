@@ -12,7 +12,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
         checkedIconClass: PropTypes.string,
         uncheckedIconClass: PropTypes.string,
         displayGraphic: PropTypes.bool,
-        displayUnchecked: PropTypes.bool
+        hideUncheckedCheckbox: PropTypes.bool
     },
 
     getDefaultProps() {
@@ -22,7 +22,8 @@ const CheckBoxFieldValueRenderer = React.createClass({
             label: '',
             checkedIconClass: 'iconssturdy-check',
             uncheckedIconClass: 'checkbox-unchecked',
-            displayGraphic: true
+            displayGraphic: true,
+            hideUncheckedCheckbox: false
         };
     },
 
@@ -58,7 +59,9 @@ const CheckBoxFieldValueRenderer = React.createClass({
     },
 
     renderGraphicUncheckedSymbol() {
-        return (<span className={this.props.uncheckedIconClass}></span>);
+        if(!this.props.hideUncheckedCheckbox){
+            return (<span className={this.props.uncheckedIconClass}></span>);
+        }
     },
 
     hasLabel() {

@@ -27,7 +27,6 @@ var BasicCheckBoxFieldValueRenderer = React.createClass({
                 <dt>Standard Checkbox (Unchecked):</dt>
                     <dd>
                       <CheckBoxFieldValueRenderer value={this.state.inputValue} />
-                      <p>Set 'uncheckedIconClass' to null or blank string to hide unchecked checkbox</p>
                     </dd>
 
 
