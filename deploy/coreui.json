@@ -1,0 +1,632 @@
+{
+  "Description": "AWS QuickBase Pre-Prod Environment",
+  "Parameters": {
+    "KeyName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "Default": "development-preprod",
+      "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+    },
+    "paramServiceVersion": {
+      "Description": "The version of our UI code to install",
+      "Type": "String",
+      "Default": "LATEST"
+    },
+    "paramSwimlane": {
+      "Description": "The Swimlane Name",
+      "Type": "String",
+      "Default": "SW1"
+    },
+    "paramNodeInternalEnv": {
+      "Description": "The NodeJs Internal Environment",
+      "Type": "String"
+    },
+    "paramRouteGroup": {
+      "Description": "The Group of Routes to Enable",
+      "Type": "String",
+      "Default": "LH_V1"
+    },
+    "paramReleaseBucketRoot": {
+      "Type": "String",
+      "Description": "The location where release artifacts are generated and placed such that different swimlanes may use different builds while having some expectation that the paths remain consistent",
+      "Default": "s3://quickbase-preprod-software"
+    },
+    "paramS3Bucket": {
+      "Type": "String",
+      "Description": "The S3 bucket to allow upload/download of artifacts",
+      "Default": "quickbase-preprod-software"
+    },
+    "paramSecretsKMSKey": {
+      "Type": "String",
+      "Description": "The KMS Key to use for Secrets CLI",
+      "Default": "79461a25-ffdc-4fbf-ac4f-febb847dcb9b"
+    },
+    "paramEnvironment": {
+      "Type": "String",
+      "Default": "dev",
+      "Description": "The name of the environment: dev, integration, prod"
+    },
+    "paramElbSSLPort": {
+      "Type": "Number",
+      "Default": "443",
+      "Description": "The port for ELB SSL access"
+    },
+    "paramElbNonSSLPort": {
+      "Type": "Number",
+      "Default": "80",
+      "Description": "The port for ELB non-SSL access"
+    },
+    "paramInstanceSSLPort": {
+      "Type": "Number",
+      "Default": "9443",
+      "Description": "The SSL port for the node Instance"
+    },
+    "paramInstanceNonSSLPort": {
+      "Type": "Number",
+      "Default": "9000",
+      "Description": "The non-ssl port for the node Instance"
+    },
+    "paramVPC": {
+      "Description": "The VPC to use for node",
+      "Type": "String",
+      "Default": "vpc-c16fefa4",
+      "ConstraintDescription": "must be the id of an existing VPC"
+    },
+    "paramChefRpm": {
+      "Type": "String",
+      "Default": "chef-12.1.2-1.el6.x86_64.rpm",
+      "Description": "File name of Chef RPM (relative to ${paramS3Bucket}/Chef/)"
+    },
+    "paramCookbooksPath": {
+      "Type": "String",
+      "Default": "/Chef/cookbooks.tgz",
+      "Description": "The Chef-Solo cookbooks file (relative to ${paramS3Bucket})"
+    },
+    "paramNodeJsSubnets": {
+      "Type": "CommaDelimitedList",
+      "Default": "subnet-992e90ee, subnet-932af7ca",
+      "Description": "The multiple subnet ids where the node service will be launched"
+    },
+    "paramNodeJsServerCapacity": {
+      "Default": 2,
+      "Description": "The number of Node servers",
+      "Type": "Number",
+      "MinValue": "1",
+      "MaxValue": "5",
+      "ConstraintDescription": "must be between 1 and 5 EC2 instances"
+    },
+    "paramEC2ImageAMI": {
+      "Type": "String",
+      "Default": "ami-841df5e4",
+      "Description": "The AMI to use for all RedHat Enterprise Nodes"
+    },
+    "paramInstanceType": {
+      "Description": "EC2 instance type",
+      "Type": "String",
+      "Default": "m4.large"
+    },
+    "paramVPCCIDRBlock": {
+      "Description": "The IP address range of the VPC",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "10.82.144.0/21",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    },
+    "paramBastionCIDRBlock": {
+      "Description": "The IP address range of the bastion subnets.",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "10.82.144.64/26",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    },
+    "paramSplunkIndex": {
+      "Description": "The Splunk index",
+      "Type": "String",
+      "Default": "quickbase-ppdidx"
+    },
+    "paramDomainName": {
+      "Description": "The root domain",
+      "Type": "String",
+      "Default": "newstack.quickbaserocks.com"
+    },
+    "paramAlertSNSTopicARN": {
+      "Type": "String",
+      "Default": "arn:aws:sns:us-west-2:723670383381:dev-null",
+      "Description": "SNS Topic ARN to send ELB alerts to"
+    },
+    "paramAlertActionEnabled": {
+      "Type": "String",
+      "Default": false
+    },
+    "paramChefLogLevel":{
+      "Description": "Chef-solo debug level, defaults to info",
+      "Type": "String",
+      "Default": "info",
+      "AllowedValues": [
+        "info",
+        "debug"
+      ]
+    },
+    "paramFilebeat": {
+      "Description": "Deployment of filebeat (elasticsearch)",
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false",
+        "true"
+      ]
+    },
+    "paramInternetAccessSecurityGroupID": {
+      "Description": "The Security Group ID allowing select outbound Internet traffic",
+      "Type": "String",
+      "Default": "sg-f5264793"
+    },
+    "paramElbSubnets": {
+      "Description": "The subnets the ELB lives in",
+      "Type": "CommaDelimitedList",
+      "Default": "subnet-992e90ee, subnet-932af7ca"
+    }
+  },
+  "Conditions": {
+    "IsFilebeat":   { "Fn::Equals" : [ { "Ref" : "paramFilebeat" }, "true" ] }
+  },
+  "Resources": {
+    "InstanceRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": { "Service": "ec2.amazonaws.com" },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyName": "InstancePolicy",
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "cloudformation:DescribeStackResource",
+                    "ec2:CreateTags",
+                    "ec2:DeleteTags",
+                    "ec2:Describe*",
+                    "ec2:AttachVolume",
+                    "ec2:CreateVolume",
+                    "s3:GetObject",
+                    "elasticloadbalancing:DescribeLoadBalancers"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:ListBucket"
+                  ],
+                  "Resource": { "Fn::Join": [ "", [ "arn:aws:s3:::", { "Ref": "paramS3Bucket" } ] ] }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:GetObject",
+                    "s3:PutObject"
+                  ],
+                  "Resource": { "Fn::Join": [ "", [ "arn:aws:s3:::", { "Ref": "paramS3Bucket" }, "/*" ] ] }
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:ListBucket",
+                    "s3:ListBucketVersions",
+                    "s3:Get*"
+                  ],
+                  "Resource": [
+                    {"Fn::Join": ["", ["arn:aws:s3:::iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}, "/*"]]},
+                    {"Fn::Join": ["", ["arn:aws:s3:::iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}]]}
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:Encrypt",
+                    "kms:ReEncrypt",
+                    "kms:GenerateDataKey",
+                    "kms:GenerateDataKeyWithoutPlaintext",
+                    "kms:CreateGrant",
+                    "kms:ListGrants",
+                    "kms:RevokeGrant",
+                    "kms:DescribeKey"
+                  ],
+                  "Resource": {"Fn::Join": ["", ["arn:aws:kms:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":key/", {"Ref": "paramSecretsKMSKey"}]]}
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "sqs:SendMessage",
+                    "sqs:ReceiveMessage",
+                    "sqs:DeleteMessage",
+                    "sqs:GetQueueAttributes",
+                    "sqs:GetQueueUrl"
+                  ],
+                  "Resource": {"Fn::Join": [":", ["arn:aws:sqs", {"Ref": "AWS::Region"}, {"Ref": "AWS::AccountId"}, {"Fn::Join": ["-", [{"Ref": "paramSwimlane"}, {"Ref": "paramEnvironment"}, "queue"]]}]]}
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "InstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [
+          {"Ref": "InstanceRole"}
+        ]
+      }
+    },
+    "ElbSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable HTTPS, HTTP access",
+        "SecurityGroupIngress": [
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramElbSSLPort"}, "ToPort": {"Ref": "paramElbSSLPort"}, "CidrIp": {"Ref": "paramVPCCIDRBlock"}}
+        ],
+        "VpcId": {"Ref": "paramVPC"}
+      }
+    },
+    "NodeElasticLoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "AccessLoggingPolicy": {
+          "EmitInterval": 5,
+          "Enabled": "true",
+          "S3BucketName": {"Fn::Join": [ "-", ["quickbase-elb-logs", {"Ref": "AWS::AccountId"}, {"Ref": "AWS::Region"} ]]}
+        },
+        "LoadBalancerName": {"Ref": "AWS::StackName"},
+        "CrossZone": "true",
+        "Scheme": "internal",
+        "SecurityGroups": [{"Ref": "ElbSecurityGroup"}],
+        "LBCookieStickinessPolicy": [
+          {
+            "PolicyName": "CookieBasedPolicy",
+            "CookieExpirationPeriod": "30"
+          }
+        ],
+        "Listeners": [
+          {
+            "LoadBalancerPort": {"Ref": "paramElbNonSSLPort"},
+            "InstancePort": {"Ref": "paramInstanceNonSSLPort"},
+            "Protocol": "HTTP",
+            "InstanceProtocol": "HTTP"
+          },
+          {
+            "LoadBalancerPort": {"Ref": "paramElbSSLPort"},
+            "InstancePort": {"Ref": "paramInstanceSSLPort"},
+            "SSLCertificateId" : { "Fn::Join" : [ "", [ "arn:aws:iam::", { "Ref" : "AWS::AccountId" }, ":server-certificate/", {"Ref": "AWS::StackName"} ] ] },
+            "Protocol": "HTTPS",
+            "InstanceProtocol": "HTTPS"
+          }
+        ],
+        "HealthCheck": {
+          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramInstanceSSLPort"}, "/api/v1/health" ] ]},
+          "HealthyThreshold": "2",
+          "UnhealthyThreshold": "5",
+          "Interval": "10",
+          "Timeout": "5"
+        },
+        "Subnets": {"Ref": "paramElbSubnets"},
+        "Tags": [
+          {
+            "Key": "SwimlaneID",
+            "Value": {"Ref": "paramSwimlane"}
+          },
+          {
+            "Key": "QuickBaseEnv",
+            "Value": { "Ref": "paramEnvironment" }
+          }
+        ]
+      }
+    },
+    "InstanceSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "SSH from Bastion on 22; web access from VPC where only our ELB will hit 9000/9443",
+        "VpcId": {"Ref": "paramVPC"},
+        "SecurityGroupIngress": [
+          {"IpProtocol": "tcp", "FromPort": "22",   "ToPort": "22",   "CidrIp": {"Ref": "paramBastionCIDRBlock"}},
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramInstanceNonSSLPort"}, "ToPort": {"Ref": "paramInstanceNonSSLPort"}, "SourceSecurityGroupId": {"Ref": "ElbSecurityGroup"}},
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramInstanceSSLPort"}, "ToPort": {"Ref": "paramInstanceSSLPort"}, "SourceSecurityGroupId": {"Ref": "ElbSecurityGroup"}}
+        ],
+        "SecurityGroupEgress": [
+          {"IpProtocol": "-1", "CidrIp": {"Ref": "paramVPCCIDRBlock"}}
+        ]
+      }
+    },
+    "nodeJsGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "LaunchConfigurationName": {"Ref": "LaunchConfig"},
+        "MinSize": "1",
+        "MaxSize": "5",
+        "DesiredCapacity": {"Ref": "paramNodeJsServerCapacity"},
+        "LoadBalancerNames": [{"Ref": "NodeElasticLoadBalancer"}],
+        "VPCZoneIdentifier": {"Ref": "paramNodeJsSubnets"},
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {"Ref": "AWS::StackName"},
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "SwimlaneID",
+            "Value": {"Ref": "paramSwimlane"},
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "ServiceName",
+            "Value": "CoreUI",
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "ServiceVersion",
+            "Value": {"Ref": "paramServiceVersion"},
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "QuickBaseEnv",
+            "Value": { "Ref": "paramEnvironment" },
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "HostingProvider",
+            "Value": "AWS",
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Location",
+            "Value": {"Ref": "AWS::Region"},
+            "PropagateAtLaunch": "true"
+          }
+        ]
+      },
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Timeout": "PT80M"
+        }
+      },
+      "UpdatePolicy": {
+        "AutoScalingRollingUpdate": {
+          "MinInstancesInService": "1",
+          "MaxBatchSize": "1",
+          "PauseTime": "PT60M",
+          "WaitOnResourceSignals": "true"
+        }
+      }
+    },
+    "LaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Metadata": {
+        "AWS::CloudFormation::Init": {
+          "configSets": {
+            "default": [
+              "configure_qb_release",
+              "configure_cfn",
+              "install_chef",
+              "install_our_cookbooks",
+              "run_chef_solo"
+            ]
+          },
+          "configure_qb_release": {
+            "files": {
+              "/etc/profile.d/00qbrelease.sh": {
+                "content": {
+                  "Fn::Join": [ "", [
+                    "export QB_RELEASE_S3_PATH=",
+                    { "Ref": "paramReleaseBucketRoot" },
+                    "\n"
+                  ]
+                  ]
+                },
+                "mode": "000644",
+                "owner": "root",
+                "group": "root"
+              }
+            }
+          },
+          "configure_cfn": {
+            "files": {
+              "/etc/cfn/cfn-hup.conf": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "[main]\n",
+                      "stack=", {"Ref": "AWS::StackId"}, "\n",
+                      "region=", {"Ref": "AWS::Region"}, "\n"
+                    ]
+                  ]
+                },
+                "mode": "000400",
+                "owner": "root",
+                "group": "root"
+              },
+              "/etc/cfn/hooks.d/cfn-auto-reloader.conf": {
+                "content": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "[cfn-auto-reloader-hook]\n",
+                      "triggers=post.update\n",
+                      "path=Resources.LaunchConfig.Metadata.AWS::CloudFormation::Init\n",
+                      "action=/usr/bin/cfn-init -v ",
+                      "         --stack ", {"Ref": "AWS::StackName"},
+                      "         --resource LaunchConfig ",
+                      "         --region ", {"Ref": "AWS::Region"},
+                      "\n"
+                    ]
+                  ]
+                },
+                "mode": "000400",
+                "owner": "root",
+                "group": "root"
+              }
+            },
+            "commands": {
+              "01_repair_init_script": {
+                "command": "sed -i s#/opt/aws/bin/cfn-hup#/usr/bin/cfn-hup#g /usr/init/redhat/cfn-hup"
+              },
+              "02_make_init_script_executable": {
+                "command": "chmod 555 /usr/init/redhat/cfn-hup"
+              },
+              "03_install_init_script": {
+                "command": "ln -s /usr/init/redhat/cfn-hup /etc/init.d/cfn-hup"
+              }
+            },
+            "services": {
+              "sysvinit": {
+                "cfn-hup": {
+                  "enabled": "true",
+                  "ensureRunning": "true",
+                  "files": [ "/etc/cfn/cfn-hup.conf", "/etc/cfn/hooks.d/cfn-auto-reloader.conf" ]
+                }
+              }
+            }
+          },
+          "install_chef": {
+            "commands": {
+              "01_get_chef_rpm": {
+                "command": { "Fn::Join": ["", ["aws s3 cp s3://", { "Ref": "paramS3Bucket" }, "/Chef/", { "Ref": "paramChefRpm" }, " /tmp/"]] }
+              },
+              "02_install_chef": {
+                "command": { "Fn::Join": ["", ["rpm -Uvh /tmp/", { "Ref": "paramChefRpm" }]] }
+              },
+              "03_remove_chef_rpm_file": {
+                "command": { "Fn::Join": ["", ["rm -f /tmp/", { "Ref": "paramChefRpm" }]] }
+              },
+              "04_make_ohai_expose_ec2_information": {
+                "command": "mkdir --parents /etc/chef/ohai/hints && touch /etc/chef/ohai/hints/ec2.json"
+              }
+            }
+          },
+          "install_our_cookbooks": {
+            "commands": {
+              "01_get_our_cookbooks_dist_file": {
+                "command": { "Fn::Join": ["", ["aws s3 cp s3://", { "Ref": "paramS3Bucket" }, { "Ref": "paramCookbooksPath" }, " /dev/shm/cookbooks.tgz"]] }
+              },
+              "02_unpack_our_cookbooks": {
+                "command": { "Fn::Join": ["", ["mkdir /var/chef && chmod 755 /var/chef && tar -o -C /var/chef -xzf /dev/shm/cookbooks.tgz"]] }
+              },
+              "03_remove_our_cookbooks_dist_file": {
+                "command": "rm -f /dev/shm/cookbooks.tgz"
+              }
+            }
+          },
+          "run_chef_solo": {
+            "files": {
+              "/dev/shm/chef-attributes.json": {
+                "content": {
+                  "datadog": {
+                    "application_key": "d29bd4e200df9f222279caa4dbacc60c86f8b0f6",
+                    "api_key": "0c8a8316ea264c1391a346121614a8e7"                  }
+                }
+              }
+            },
+            "commands": {
+              "01_invoke_chef_solo": {
+                "command": { "Fn::Join": ["", ["chef-solo -o ohai,datadog::dd-agent,datadog::dd-handler,chef_handler_s3file,aws-env,aws,encrypted-ebs,secrets-cli,ntp,nodejs,splunk,filebeat,autoUpgrade,nodejs::reconfig -L /var/log/chef-solo.log -j /dev/shm/chef-attributes.json -l ", { "Ref": "paramChefLogLevel" } ]] }
+              }
+            }
+          }
+        },
+        "Chef": {
+          "StackName":            {"Ref": "AWS::StackName"},
+          "SwimlaneID":           {"Ref": "paramSwimlane"},
+          "ServiceVersion":       {"Ref": "paramServiceVersion"},
+          "Region":               {"Ref": "AWS::Region"},
+          "Environment":          {"Ref": "paramEnvironment"},
+          "S3Bucket":             {"Ref": "paramS3Bucket"},
+          "SecretBucket":         {"Fn::Join": ["", ["iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}]]},
+          "SecretsKMSKey":        {"Ref": "paramSecretsKMSKey"},
+          "SplunkIndex":          {"Ref": "paramSplunkIndex"},
+          "NodeInternalEnv":      {"Ref": "paramNodeInternalEnv"},
+          "RouteGroup":           {"Ref": "paramRouteGroup"},
+          "DomainName":           {"Ref": "paramDomainName"},
+          "Filebeat": {
+            "Fn::If": [
+              "IsFilebeat",
+              "true",
+              "false"
+            ]
+          }
+        }
+      },
+      "Properties": {
+        "ImageId": {"Ref": "paramEC2ImageAMI"},
+        "InstanceType": {"Ref": "paramInstanceType"},
+        "SecurityGroups": [{"Ref": "InstanceSecurityGroup"}, {"Ref": "paramInternetAccessSecurityGroupID"}],
+        "KeyName": {"Ref": "KeyName"},
+        "IamInstanceProfile": { "Ref": "InstanceProfile" },
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash -x\n",
+                "cfn-init -v ",
+                "         --stack ", {"Ref": "AWS::StackName"},
+                "         --resource LaunchConfig ",
+                "         --region ", {"Ref": "AWS::Region"},
+                "\n",
+                "# Signal the stack whether we've created the resource\n",
+                "cfn-signal -e $? ",
+                "         --stack ", {"Ref": "AWS::StackName"},
+                "         --resource nodeJsGroup ",
+                "         --region ", {"Ref": "AWS::Region"},
+                "\n"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "Route53Alias": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "AliasTarget": {
+          "HostedZoneId": { "Fn::GetAtt": ["NodeElasticLoadBalancer", "CanonicalHostedZoneNameID"] },
+          "DNSName": { "Fn::GetAtt": ["NodeElasticLoadBalancer", "DNSName"] }
+        },
+        "HostedZoneName": { "Fn::Join": ["", [{ "Ref": "paramDomainName" }, "."]] },
+        "Name": { "Fn::Join": ["", ["*.nodejs.", { "Ref": "paramSwimlane" }, ".", { "Ref": "paramDomainName" }, "."]] },
+        "Type": "A"
+      }
+    },
+    "BasicAlarm": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties" : {
+        "ActionsEnabled": {"Ref": "paramAlertActionEnabled"},
+        "AlarmActions": [{"Ref": "paramAlertSNSTopicARN" }],
+        "OKActions": [{"Ref": "paramAlertSNSTopicARN" }],
+        "ComparisonOperator": "LessThanThreshold",
+        "Dimensions": [{ "Name": "LoadBalancerName", "Value": { "Ref": "NodeElasticLoadBalancer" } }],
+        "EvaluationPeriods": "1",
+        "MetricName": "HealthyHostCount",
+        "Namespace": "AWS/ELB",
+        "Period": "60",
+        "Statistic": "Minimum",
+        "Threshold": "1"
+      }
+    }
+  }
+}
