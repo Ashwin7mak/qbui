@@ -1,16 +1,6 @@
 @import '../../assets/css/_qbColorVariables';
 @import '../../assets/css/_qbVariables';
 
-
-// Move these to Global colors
-$checkbox-background-checked-color: $color-cyan-500;
-$checkbox-background-unchecked-color: $color-black-100;
-$checkbox-border-color: $color-black-500;
-$checkbox-checkmark-editable-color: $color-black-100;
-$checkbox-checkmark-readonly-color: $color-cyan-500;
-$checkbox-size: 16px;
-$checkbox-size-mobile: 24px;
-
 .checkbox {
     /* Remove default checkbox */
     [type="checkbox"]:not(:checked),
