@@ -1,33 +1,67 @@
 import React, {PropTypes} from 'react';
 import './checkbox';
 
+import I18nMessage from '../../utils/i18nMessage';
+
 let defaultSymbolClasses = 'symbol qbIcon ';
 
 const CheckBoxFieldValueRenderer = React.createClass({
     propTypes: {
         value: PropTypes.bool,
         label: PropTypes.string,
-        readOnly: PropTypes.bool,
         checkedIconClass: PropTypes.string,
-        uncheckedIconClass: PropTypes.string
+        uncheckedIconClass: PropTypes.string,
+        displayGraphic: PropTypes.bool
     },
 
     getDefaultProps() {
         return {
             // If not specified, the checkbox should NOT be checked
             value: false,
-            readOnly: true,
-            label: 'test',
+            label: '',
             checkedIconClass: 'iconssturdy-check',
-            uncheckedIconClass: ''
+            uncheckedIconClass: '',
+            displayGraphic: true
         };
     },
 
     renderDisplayValue() {
-        if(this.props.value) {
-            return this.renderCheckedSymbol();
+        if(this.props.displayGraphic) {
+            return this.renderGraphicDisplayValue();
         } else {
-            return this.renderUncheckedSymbol();
+            return this.renderTextDisplayValue();
+        }
+    },
+
+    renderTextDisplayValue() {
+        if(this.props.value) {
+            return "Yes";
+            // return <I18nMessage message="fields.checkbox.yes" />;
+        } else {
+            return "No";
+            // return <I18nMessage message="fields.checkbox.no" />;
+        }
+    },
+
+    renderGraphicDisplayValue() {
+        if(this.props.value) {
+            return this.renderGraphicCheckedSymbol();
+        } else {
+            return this.renderGraphicUncheckedSymbol();
+        }
+    },
+
+    renderGraphicCheckedSymbol() {
+        let classes = defaultSymbolClasses + this.props.checkedIconClass;
+        return (<span className={classes}></span>);
+    },
+
+    renderGraphicUncheckedSymbol() {
+        if(this.props.readOnly && this.props.uncheckedIconClass === '') {
+            return <input type="checkbox" disabled checked={false} />;
+        } else {
+            let classes = defaultSymbolClasses + this.props.uncheckedIconClass;
+            return (<span className={classes}></span>);
         }
     },
 
@@ -41,20 +75,6 @@ const CheckBoxFieldValueRenderer = React.createClass({
             return (<label className="label">{this.props.label}</label>);
         } else {
             return null;
-        }
-    },
-
-    renderCheckedSymbol() {
-        let classes = defaultSymbolClasses + this.props.checkedIconClass;
-        return (<span className={classes}></span>);
-    },
-
-    renderUncheckedSymbol() {
-        if(this.props.readOnly && this.props.uncheckedIconClass === '') {
-            return <input type="checkbox" disabled checked={false} />;
-        } else {
-            let classes = defaultSymbolClasses + this.props.uncheckedIconClass;
-            return (<span className={classes}></span>);
         }
     },
 

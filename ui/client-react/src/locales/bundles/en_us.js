@@ -90,6 +90,12 @@ export default {
                 sign_out: "Sign out"
             }
         },
+        fields: {
+            checkBox: {
+                no: 'No',
+                yes: 'Yes'
+            }
+        },
         form : {
             tab : 'Tab',
             error: {

@@ -5,6 +5,7 @@ let longLabelText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cr
                "In in porttitor ante, ut vestibulum purus. Praesent metus erat, elementum " +
                "sed placerat eu, semper sed nisi. Praesent ultrices id sem quis accumsan. " +
                "Proin eu hendrerit ante.";
+let questionLabel = "Are you sure?"
 
 var BasicCheckBoxFieldValueRenderer = React.createClass({
     getInitialState() {
@@ -18,27 +19,41 @@ var BasicCheckBoxFieldValueRenderer = React.createClass({
     render() {
         return (
             <div>
-                <dt>Unchecked (Default) Checkbox:</dt>
+                <dt>Standard Checkbox (Checked):</dt>
                     <dd>
-                      <CheckBoxFieldValueEditor value={this.state.inputValue} onChange={this.onChange} />
+                      <CheckBoxFieldValueRenderer value={true} onChange={this.onChange} />
+                    </dd>
+
+                <dt>Standard Checkbox (Unchecked):</dt>
+                    <dd>
+                      <CheckBoxFieldValueRenderer value={this.state.inputValue} onChange={this.onChange} />
                     </dd>
 
 
-                <dt>Checked Checkbox:</dt>
+                <dt>Yes/No Checkbox (displayGraphic: false):</dt>
                     <dd>
-                        <CheckBoxFieldValueEditor value={true} />
+                        <CheckBoxFieldValueRenderer value={true} displayGraphic={false} />
+                    </dd>
+
+                    <dd>
+                      <CheckBoxFieldValueRenderer value={this.state.inputValue} displayGraphic={false} />
                     </dd>
 
 
-                <dt>Checkbox With a Label:</dt>
+                <dt>Standard Checkbox With a Label:</dt>
                     <dd>
-                        <CheckBoxFieldValueEditor value={this.state.inputValue} label={shortLabelText} onChange={this.onChange} />
+                        <CheckBoxFieldValueRenderer value={true} label={shortLabelText} onChange={this.onChange} />
                     </dd>
 
 
-                <dt>CheckBox With a Long Label:</dt>
+                <dt>Yes/No Checkbox With a Label (Not a question):</dt>
                     <dd>
-                        <CheckBoxFieldValueEditor value={this.state.inputValue} label={longLabelText} onChange={this.onChange} />
+                        <CheckBoxFieldValueRenderer value={true} label={longLabelText} onChange={this.onChange} displayGraphic={false} />
+                    </dd>
+
+                <dt>Yes/No Checkbox With a Label Posed as a Question:</dt>
+                    <dd>
+                        <CheckBoxFieldValueRenderer value={true} label={questionLabel} onChange={this.onChange} displayGraphic={false} />
                     </dd>
 
             </div>
