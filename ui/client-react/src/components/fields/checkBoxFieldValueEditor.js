@@ -35,7 +35,7 @@ const CheckBoxFieldValueEditor = React.createClass({
     onChange(ev) {
         ev.preventDefault();
 
-        // Don't change the value the checkbox is disabled/read only
+        // Don't change the value if the checkbox is disabled/read only
         if(this.props.disabled || this.props.readyOnly){
             return;
         }
