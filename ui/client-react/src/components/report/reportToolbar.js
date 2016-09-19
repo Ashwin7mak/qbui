@@ -237,7 +237,6 @@ const ReportToolbar = React.createClass({
                     <ReportNavigation reportData={this.props.reportData}
                                        pageStart={this.props.pageStart}
                                        pageEnd={this.props.pageEnd}
-                                       recordsCount={recordCount}
                                        getNextReportPage={this.props.getNextReportPage}
                                        getPreviousReportPage={this.props.getPreviousReportPage}
                     />

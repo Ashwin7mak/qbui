@@ -7,6 +7,7 @@ import ReportService from '../services/reportService';
 import RecordService from '../services/recordService';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+import constants from '../../../common/src/constants';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
@@ -370,7 +371,9 @@ let reportDataActions = {
 
             if (appId && tblId && rptId) {
                 let sortList = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
-                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: sortList});
+                let offset = requiredQueryParams && requiredQueryParams[query.OFFSET_PARAM] ? requiredQueryParams[query.OFFSET_PARAM] : constants.PAGE.DEFAULT_OFFSET;
+                let numRows = requiredQueryParams && requiredQueryParams[query.NUMROWS_PARAM] ? requiredQueryParams[query.NUMROWS_PARAM] : constants.PAGE.DEFAULT_NUM_ROWS;
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, offset: offset, numRows: numRows, sortList: sortList});
 
                 let reportService = new ReportService();
                 let recordService = new RecordService();
@@ -396,12 +399,14 @@ let reportDataActions = {
                                 logger.debug('Filter Report Records service call successful');
                                 var model = reportModel.set(null, recordResponse);
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
+                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, recordResponse);
                                 resolve();
                             },
                             error => {
                                 //  axios upgraded to an error.response object in 0.13.x
                                 logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.getRecords:');
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, error.response.status);
+                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, error.response.status);
                                 reject();
                             }
                         ).catch(

@@ -184,8 +184,9 @@ const TimeFieldValueEditor = React.createClass({
         }
 
         let placeholder = theTime;
+        let useMilitaryTime = this.props.attributes && this.props.attributes.use24HourClock;
         if (!placeholder) {
-            placeholder = this.props.attributes.use24HourClock ? 'hh:mm:ss' : 'hh:mm';
+            placeholder = useMilitaryTime ? 'hh:mm:ss' : 'hh:mm';
         }
 
         //  TODO: verify small breakpoint once form edit is implemented
@@ -203,7 +204,7 @@ const TimeFieldValueEditor = React.createClass({
                         onBlur={this.onBlur}
                         onChange={this.onChange}
                         value={theTime ? theTime : ''}
-                        options={this.props.attributes.use24HourClock ? this.miliaryTimeDropList : this.timeDropList}
+                        options={useMilitaryTime ? this.miliaryTimeDropList : this.timeDropList}
                         optionRenderer={this.renderOption}
                         placeholder={placeholder}
                         clearable={false}
