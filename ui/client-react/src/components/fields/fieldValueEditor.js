@@ -152,7 +152,7 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.PERCENT_FORMAT: {
             if (_.has(this.props, 'fieldDef.choices')) {
                 return (
-                    <ComboBoxFieldValueEditor choices={this.props.fieldDef.choices}
+                    <MultiChoiceFieldValueEditor choices={this.props.fieldDef.choices}
                         {...commonProps} />
                 );
             } else {

@@ -30,6 +30,8 @@
         TABLE4 : 3,
 
         MAX_PAGING_SIZE : clientConsts.PAGE.DEFAULT_NUM_ROWS,
+        DEFAULT_NUM_RECORDS_TO_CREATE : 10,
+        DEFAULT_NUM_CHOICES_TO_CREATE : 10,
 
         invalidCredentials: 'Invalid Credentials\nYour authorization credentials are invalid or expired.\nPlease click here to return to QuickBase.',
 
