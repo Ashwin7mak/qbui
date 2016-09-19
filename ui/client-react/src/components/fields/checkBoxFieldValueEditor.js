@@ -32,6 +32,12 @@ const CheckBoxFieldValueEditor = React.createClass({
         };
     },
 
+    onBlur(ev) {
+        if(this.props.onBlur) {
+            this.props.onBlur(this.props.value);
+        }
+    },
+
     onChange(ev) {
         ev.preventDefault();
 
