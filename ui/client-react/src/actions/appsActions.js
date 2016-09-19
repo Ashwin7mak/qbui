@@ -106,12 +106,13 @@ let appsActions = {
 
         let appService = new AppService();
 
+        // fetch the app users list if we don't have it already
+
         if (appId !== this.selectedAppId) {
             appService.getAppUsers(appId).then(response => {
                 this.selectedAppId = appId;
                 this.dispatch(actions.LOAD_APP_USERS_SUCCESS, response.data);
-            },
-            error => {
+            }, () => {
                 this.dispatch(actions.LOAD_APP_USERS_FAILED);
             });
         }

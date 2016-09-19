@@ -1,11 +1,14 @@
 import React from 'react';
 import Select from 'react-select';
 import QbIcon from '../qbIcon/qbIcon';
-
+import Locale from '../../locales/locales';
 import * as userFormatter from '../../../../common/src/formatter/userFormatter';
 import 'react-select/dist/react-select.min.css';
 import './userFieldValueEditor.scss';
 
+/**
+ * a minimal user picker
+ */
 const UserFieldValueEditor = React.createClass({
     displayName: 'UserFieldValueEditor',
 
@@ -23,18 +26,29 @@ const UserFieldValueEditor = React.createClass({
         return {selectedUserId: this.props.value ? this.props.value.userId : null};
     },
 
+    /**
+     * user selection callback
+     * @param user
+     */
     selectUser(user) {
-
         if (user || !this.props.fieldDef.required) {
             this.setState({selectedUserId: user ? user.value : null});
         }
     },
 
+    /**
+     * find user from appUsers with id
+     * @param id
+     * @returns {T}
+     */
     getAppUser(id) {
         return this.props.appUsers.find(user => user.userId === id);
     },
 
-
+    /**
+     * get value/label pairs for select menu items
+     * @returns array of user objects with value/label/showEmail properties
+     */
     getSelectItems() {
         const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
 
@@ -54,12 +68,14 @@ const UserFieldValueEditor = React.createClass({
         // if a field is not required, include a blank selection at the beginning of the list
         if (!this.props.fieldDef.required) {
             return  [{value:null, label:""}].concat(appUserItems);
-
         }
 
         return appUserItems;
     },
 
+    /**
+     * handle onBlur (invoke parent prop callback)
+     */
     onBlur() {
         if (this.props.onBlur) {
             const datatypeAttributes = this.props.fieldDef && this.props.fieldDef.datatypeAttributes ? this.props.fieldDef.datatypeAttributes : {};
@@ -73,10 +89,14 @@ const UserFieldValueEditor = React.createClass({
         }
     },
 
+    /**
+     * render an menu item in the select
+     * @param option user object with value & email flag
+     */
     renderOption(option) {
 
         if (option.value === null) {
-            return <div>&nbsp;</div>;
+            return <div>&nbsp;</div>; // placeholder for no-user
         }
         const user = this.getAppUser(option.value);
 
@@ -91,9 +111,16 @@ const UserFieldValueEditor = React.createClass({
             </div>);
     },
 
+    /**
+     * apply search text filter to menu item
+     * @param option
+     * @param filter
+     * @returns true if menu option matches filter
+     */
     filterOption(option, filter) {
 
         if (option.value === null) {
+            // only show placeholder when not searching
             return filter === '';
         }
 
@@ -108,6 +135,9 @@ const UserFieldValueEditor = React.createClass({
             user.screenName && user.screenName.toLowerCase().startsWith(filter);
     },
 
+    /**
+     * user picker wrapper on react-select component
+     */
     render() {
 
         return (
@@ -119,8 +149,8 @@ const UserFieldValueEditor = React.createClass({
                 optionRenderer={this.renderOption}
                 options={this.getSelectItems()}
                 onChange={this.selectUser}
-                placeholder="Search"
-                noResultsText="User not found"
+                placeholder={Locale.getMessage("field.search")}
+                noResultsText={Locale.getMessage("field.searchNoMatch")}
                 autosize={false}
                 clearable={false}
                 onBlur={this.onBlur} />

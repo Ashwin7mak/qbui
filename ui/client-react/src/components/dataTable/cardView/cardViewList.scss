@@ -11,9 +11,6 @@ $table-actions-container-bg: #fff;
     overflow-y:auto;
 }
 
-.reportTable>.tableLoaderContainer>.loadedContent>.swipeable {
-    flex: 1 1 auto;
-}
 .reportTable .cardViewListHolder {
     transform: translate3d(-40px,0,0);
     -webkit-transform: translate3d(-40px,0,0);

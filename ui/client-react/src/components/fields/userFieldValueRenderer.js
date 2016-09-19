@@ -1,6 +1,12 @@
 import React from 'react';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
+/**
+ * # UserFieldValueRenderer
+ *
+ * A UserFieldValueRenderer is a read only rendering of the field containing a user
+ *
+ */
 const UserFieldValueRenderer = React.createClass({
     displayName: 'UserFieldValueRenderer',
 
@@ -9,10 +15,15 @@ const UserFieldValueRenderer = React.createClass({
         value: React.PropTypes.object
     },
 
+    /**
+     * render the user display name with a tooltip containing screen name and/or email
+     * @returns {XML}
+     */
     render() {
 
         if (this.props.value && (this.props.value.screenName || this.props.value.email)) {
 
+            // we have info to place in a tooltip
             const tooltip = (
                 <Tooltip id="tooltip" style={{"whiteSpace":"nowrap"}} >
                     {this.props.value && this.props.value.screenName && <div>User Name: {this.props.value.screenName}</div>}
@@ -21,12 +32,12 @@ const UserFieldValueRenderer = React.createClass({
             );
 
             return (
-                <OverlayTrigger className="userCell data" placement="top" overlay={tooltip}>
-                    <div>{this.props.display}</div>
+                <OverlayTrigger placement="top" overlay={tooltip}>
+                    <div className="userCell userDisplayValue">{this.props.display}</div>
                 </OverlayTrigger>);
         }
 
-        return <div className="userCell data" >{this.props.display}</div>;
+        return <div className="userCell userDisplayValue" >{this.props.display}</div>;
     }
 });
 

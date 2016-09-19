@@ -373,7 +373,7 @@ let AGGrid = React.createClass({
     /**
      * get list of users for this app
      *
-     * @returns {*|Array}
+     * @returns app user objects
      */
     getAppUsers() {
         return this.props.appUsers;

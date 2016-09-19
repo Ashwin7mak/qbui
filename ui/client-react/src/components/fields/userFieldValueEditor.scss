@@ -1,39 +1,11 @@
 @import '../../assets/css/qbVariables';
-
-$selected-choice-color: $color-cyan-500;
+@import './selectCommon';
 
 .cellWrapper .fieldValueEditor.cellEditWrapper .Select {
-    width: 100%;
-
-    .Select-control {
-        border: 0;
-        height:28px;
-
-        .Select-input {
-            height:28px;
-            padding-left:2px;
-        }
-        .Select-value {
-            padding-right: 40px;
-            padding-left:3px;
-            line-height: 28px;
-        }
-        .Select-placeholder {
-            line-height: 28px;
-            padding-left: 3px;
-            font-style: italic;
-        }
-    }
 
     .Select-menu-outer {
-        max-height: 225px;
-        width:auto;
-
 
         .Select-menu {
-            max-height: 223px;
-            overflow-y:auto;
-            overflow-x:hidden;
 
             .Select-option {
                 &.is-selected {
@@ -47,19 +19,8 @@ $selected-choice-color: $color-cyan-500;
                     color: #969696;
                     font-style: italic;
                 }
-                padding-left:3px;
-                padding-top:4px;
-                padding-bottom:4px;
-
                 .userOption {
                     position:relative;
-                }
-                .qbIcon {
-                    position:absolute;
-                    left:0;
-                    top:1px;
-                    font-size:16px;
-                    color: $selected-choice-color;
                 }
                 .userLabel,.email {
                     margin-left:19px;
@@ -76,3 +37,5 @@ $selected-choice-color: $color-cyan-500;
         }
     }
 }
+
+

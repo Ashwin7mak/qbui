@@ -203,9 +203,7 @@ const CellRenderer = React.createClass({
         this.cellValidated(results);
     },
 
-
     onBlur(theVals) {
-
         this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
     },
 
