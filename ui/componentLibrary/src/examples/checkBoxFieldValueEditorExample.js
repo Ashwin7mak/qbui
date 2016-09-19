@@ -55,11 +55,6 @@ var BasicCheckBoxFieldValueEditor = React.createClass({
                                               label="Unchecked but disabled"
                                               onChange={this.onChange}
                                               disabled={true} />
-
-                    <CheckBoxFieldValueEditor value={true}
-                                              label="Checked but disabled"
-                                              onChange={this.onChange}
-                                              disabled={true} />
                 </dd>
 
             <dt>Required Checkbox:</dt>
