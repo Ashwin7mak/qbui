@@ -38,20 +38,14 @@
         left: 0;
         position: absolute;
         /* .1s delay is for check animation */
-        transition: border .25s, background-color .25s, width .20s .1s, height .20s .1s, top .20s .1s, left .20s .1s;
+        transition: border .25s, background-color .25s, font-size .20s .1s, width .20s .1s, height .20s .1s, top .20s .1s, left .20s .1s;
         z-index: 1;
       }
 
       // Unchecked style
       &:not(:checked) + label:before {
-        width: 0;
-        height: 0;
-        border: 3px solid transparent;
-        left: 6px;
-        top: 10px;
-
-        transform: rotateZ(37deg);
-        transform-origin: 100% 100%;
+        opacity: 0;
+        font-size: 0;
       }
 
       &:not(:checked) + label:after {
@@ -64,23 +58,17 @@
       // Checked style
       &:checked {
         + label:before {
-          top: 2px;
-          left: 1px;
-          width: 6px;
-          height: 11px;
-          border-top: 2px solid transparent;
-          border-left: 2px solid transparent;
-          border-right: 2px solid $checkbox-checkmark-editable-color;
-          border-bottom: 2px solid $checkbox-checkmark-editable-color;
-          transform: rotateZ(37deg);
-
-          transform-origin: 100% 100%;
+          top: 5px;
+          left: 4px;
+          font-size: 8px;
+          content: "\E904";
+          font-family: 'QuickBase-Sturdy';
+          opacity: 1;
+          color: $checkbox-checkmark-editable-color;
 
           @media(max-width: $small-breakpoint-width) {
               left: 1px;
               top: 3px;
-              width: 10px;
-              height: 15px;
           }
         }
 
@@ -127,6 +115,10 @@
             margin-right: 10px;
         }
 
+        [type="checkbox"]:checked + label:before {
+            top: 4px;
+        }
+
         .label {
             color: $color-black-700;
             display: block;
@@ -136,7 +128,7 @@
             margin-left: 0;
             overflow: auto;
             padding-left: 0;
-            padding-top: 1px;
+            padding-top: 0;
             text-align: left;
             white-space: normal;
 
