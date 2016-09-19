@@ -2,6 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.min.css';
 import './multiChoiceFieldValueEditor.scss';
+import './selectCommon.scss';
 import QbIcon from '../qbIcon/qbIcon';
 /**
  * # MultiChoiceFieldValueEditor
@@ -55,8 +56,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
     renderOption(choice) {
         return (
-            <div className="choiceOption">
-                {this.state.choice.label === choice.value.displayValue && <QbIcon icon="check-reversed"/>}
+            <div>
+                {this.state.choice.label === choice.value.displayValue && <QbIcon className="choiceQBIcon" icon="check-reversed"/>}
                 <div className="choiceLabel">{choice.value.displayValue}</div>
             </div>);
     },

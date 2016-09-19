@@ -1,0 +1,56 @@
+@import '../../assets/css/qbVariables';
+
+/* common styles for fields using react-select */
+
+$selected-choice-color: $color-cyan-500;
+
+.Select {
+  width: 100%;
+
+  .Select-control {
+    border: 1px;
+    height:28px;
+
+    .Select-input {
+      height:28px;
+      padding-left:2px;
+    }
+    .Select-value {
+      padding-right: 40px;
+      padding-left:3px;
+      line-height: 28px;
+    }
+    .Select-placeholder {
+      line-height: 28px;
+      padding-left: 3px;
+      font-style: italic;
+    }
+  }
+
+  .Select-menu-outer {
+    max-height: 340px;
+    min-width: 100%;
+    width:auto;
+
+    .Select-menu {
+      max-height: 340px;
+      overflow-y:auto;
+      overflow-x:hidden;
+
+      .Select-option {
+        position: relative;
+        padding-left:16px;
+        padding-top:4px;
+        padding-bottom:4px;
+
+        .qbIcon {
+          position:absolute;
+          left:0;
+          top:1px;
+          font-size:16px;
+          color: $selected-choice-color;
+        }
+      }
+    }
+  }
+}
