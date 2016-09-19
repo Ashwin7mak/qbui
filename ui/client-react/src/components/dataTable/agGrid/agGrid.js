@@ -368,7 +368,7 @@ let AGGrid = React.createClass({
         }
     },
 
-    // Caareful about setting things in context, they do not update when the related prop updates
+    // Careful about setting things in context, they do not update when the related prop updates
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
