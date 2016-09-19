@@ -36,12 +36,10 @@ export const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     onBlur() {
-        console.log('onBlur this.state.choice.value.coercedValue.value: ', this.state.choice.value.coercedValue.value);
         const theVals = {
             value: this.state.choice.value.coercedValue.value,
             display: this.state.choice.value.displayValue
         };
-        console.log('onblur theVals: ', theVals);
         this.props.onBlur(theVals);
     },
 
