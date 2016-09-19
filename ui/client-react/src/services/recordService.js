@@ -74,11 +74,11 @@ class RecordService extends BaseService {
         const fixedChanges = _.cloneDeep(changes);
 
         // patching user fields expects user ID only on server not the user object we got originally
-
+                            console.log('save', changes);
         if (_.isArray(fixedChanges)) {
             fixedChanges.forEach(change => {
                 if (change.field && change.field.type === "USER") {
-                    change.value = change.value.userId;
+                    change.value = change.value ? change.value.userId : "";
                 }
             });
         }

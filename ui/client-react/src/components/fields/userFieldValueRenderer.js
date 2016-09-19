@@ -41,11 +41,11 @@ const UserFieldValueRenderer = React.createClass({
 
             return (
                 <OverlayTrigger placement="top" overlay={tooltip}>
-                    <div className="userCell userDisplayValue">{this.props.display}</div>
+                    <div className="userDisplayValue">{this.props.display}</div>
                 </OverlayTrigger>);
         }
 
-        return <div className="userCell userDisplayValue" >{this.props.display}</div>;
+        return <div className="userDisplayValue" >{this.props.display}</div>;
     }
 });
 
