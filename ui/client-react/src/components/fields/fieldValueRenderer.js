@@ -110,7 +110,9 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.CHECKBOX_FORMAT:
             return (
                     <CheckBoxFieldValueRenderer value={this.props.value}
-                                                key={'inp-' + this.props.idKey} />
+                                                key={'inp-' + this.props.idKey}
+                                                hideUncheckedCheckbox={this.props.hideUncheckedCheckbox}
+                                                {...commonProperties} />
                 );
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT:

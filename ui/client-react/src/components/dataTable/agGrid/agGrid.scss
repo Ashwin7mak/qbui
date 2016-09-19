@@ -409,6 +409,13 @@ $cell-edit-background-edit: #f3f8fe;
             overflow:hidden;
             text-overflow:ellipsis;
         }
+        .checkbox {
+            text-align: center;
+
+            .checkbox-unchecked {
+                margin-left: 5px;
+            }
+        }
         flex: 1 1 auto;
     }
     > :not(.cellData) {
