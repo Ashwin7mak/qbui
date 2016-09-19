@@ -108,7 +108,8 @@ let CardViewListHolder = React.createClass({
     swipedUp(e) {
         // Complete swipe action only if footer is visible\
         let evTarget = e.target;
-        if (this.doesClassNameMatch(evTarget, 'fetchNextButton') || this.doesClassNameMatch(evTarget, 'fetchNextArrow')) {
+        //if (this.doesClassNameMatch(evTarget, 'fetchNextButton') || this.doesClassNameMatch(evTarget, 'fetchNextArrow')) {//
+            if (this.isElementVisible('fetchNextButton') || this.isElementVisible('fetchNextArrow')) {
             this.props.getNextReportPage();
         }
     },
@@ -119,8 +120,9 @@ let CardViewListHolder = React.createClass({
     swipedDown(e) {
         // Complete swipe action only if header is visible
         let evTarget = e.target;
-        if (this.doesClassNameMatch(evTarget, 'fetchPreviousButton') || this.doesClassNameMatch(evTarget, 'fetchPreviousArrow')) {
-            this.props.getPreviousReportPage();
+        // if (this.doesClassNameMatch(evTarget, 'fetchPreviousButton') || this.doesClassNameMatch(evTarget, 'fetchPreviousArrow')) {
+        if (this.isElementVisible('fetchPreviousButton') || this.isElementVisible('fetchPreviousArrow')) {
+        this.props.getPreviousReportPage();
         }
     },
 
@@ -147,12 +149,13 @@ let CardViewListHolder = React.createClass({
      */
     swiping(evTarget, delta, isUpSwipe) {
         // let targetClassName = evTarget && evTarget.className ? evTarget.className : "";
-        if (isUpSwipe && (this.doesClassNameMatch(evTarget, 'fetchNextButton') || this.doesClassNameMatch(evTarget, 'fetchNextArrow '))) {
+        if (isUpSwipe && (this.isElementVisible('fetchNextButton') || this.isElementVisible('fetchNextArrow '))) {
             // If up swipe, check for visibility of the 'Fetch More' button. If it is visible, display loading indicator,
             // move the table (including button and spinner) up proportional to the swipe distance. If the swipe exceeds
             // drag distance, snap the table, button and spinner to the bottom of screen.
             this.handleVerticalSwipingMovement("cardViewFooter", "footerLoadingIndicator", delta, true);
-        } else if (this.doesClassNameMatch(evTarget, 'fetchPreviousButton') || this.doesClassNameMatch(evTarget, 'fetchPreviousArrow')) {
+        } else if (this.isElementVisible('fetchPreviousButton') || this.isElementVisible('fetchPreviousArrow ')) {
+            //this.doesClassNameMatch(evTarget, 'fetchPreviousButton') || this.doesClassNameMatch(evTarget, 'fetchPreviousArrow')) {
             // Down swipe. Check for visibility of 'Fetch Previous' button. If it is visible, display loading indicator,
             // move table, button and indicator down proportional to swipe distance. If swipe exceeds drag distance,
             // snap table, button and spinner to the top.
