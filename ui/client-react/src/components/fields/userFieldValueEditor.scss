@@ -45,8 +45,11 @@ $selected-choice-color: $color-cyan-500;
                 .deactivatedLabel {
                     font-size: 12px;
                     color: #969696;
+                    font-style: italic;
                 }
                 padding-left:5px;
+                padding-top:4px;
+                padding-bottom:4px;
 
                 .userOption {
                     position:relative;
@@ -54,12 +57,12 @@ $selected-choice-color: $color-cyan-500;
                 .qbIcon {
                     position:absolute;
                     left:0;
-                    top:3px;
-                    font-size:12px;
+                    top:1px;
+                    font-size:16px;
                     color: $selected-choice-color;
                 }
                 .userLabel,.email {
-                    margin-left:16px;
+                    margin-left:18px;
                 }
                 .userLabel {
                     font-size:14px;
