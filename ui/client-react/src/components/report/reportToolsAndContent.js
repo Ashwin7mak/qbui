@@ -13,6 +13,7 @@ import FacetSelections from '../facet/facetSelections';
 import './report.scss';
 import FilterUtils from '../../utils/filterUtils';
 import * as query from '../../constants/query';
+import FieldUtils from '../../utils/fieldUtils';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
 
@@ -243,7 +244,7 @@ let ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
-        let uniqueIdentifier = ReportUtils.getUniqueIdentifierFieldName(this.props.fields);
+        let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.fields);
 
         // Define the page start. Page offset is zero indexed. For display purposes, add one.
         this.pageStart = this.props.reportData.pageOffset + 1;

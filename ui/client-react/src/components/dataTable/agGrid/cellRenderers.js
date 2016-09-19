@@ -20,7 +20,7 @@ import './dateTimePicker.scss';
 
 import _ from 'lodash';
 import FieldFormats from '../../../utils/fieldFormats';
-import ReportUtils from '../../../utils/reportUtils';
+import FieldUtils from '../../../utils/fieldUtils';
 import Logger from "../../../utils/logger";
 
 
@@ -35,7 +35,7 @@ class CellRendererFactory  {
             _.has(props.params, 'value.id') &&
             _.has(props.params, 'data') &&
             _.has(props.params, 'rowIndex')) {
-            recId = props.params.data[ReportUtils.getUniqueIdentifierFieldName(props.params.data)].value;
+            recId = props.params.data[FieldUtils.getUniqueIdentifierFieldName(props.params.data)].value;
             key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId ;
         }
         return key;
@@ -199,7 +199,7 @@ const CellRenderer = React.createClass({
     },
 
     cellChanges() {
-        let uniqueIdentifier = ReportUtils.getUniqueIdentifierFieldName(this.props.params.data);
+        let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
 
         if (this.props &&
             _.has(this.props, 'params') &&

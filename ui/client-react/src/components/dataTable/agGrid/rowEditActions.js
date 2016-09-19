@@ -4,7 +4,7 @@ import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBIcon from '../../qbIcon/qbIcon';
 import {NotificationManager} from 'react-notifications';
 import {I18nMessage} from '../../../utils/i18nMessage';
-import ReportUtils from '../../../utils/reportUtils';
+import FieldUtils from '../../../utils/fieldUtils';
 import QBToolTip from '../../qbToolTip/qbToolTip';
 
 /**
@@ -21,7 +21,7 @@ const RowEditActions = React.createClass({
 
     onClickSave() {
         //get the current record id
-        const id = this.props.data[ReportUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
         this.props.params.context.onRecordSaveClicked(id);
         // commented code below deferred client side validation before save
         // till reactabular implemented
@@ -39,7 +39,7 @@ const RowEditActions = React.createClass({
      * delete icon is not included but may come back shortly
      */
     onClickDelete() {
-        const id = this.props.data[ReportUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
         this.props.api.deselectAll();
 
         this.props.flux.actions.deleteReportRecord(id);
@@ -49,7 +49,7 @@ const RowEditActions = React.createClass({
     },
     onClickCancel() {
         //get the original unchanged values in data to rerender
-        const id = this.props.data[ReportUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
 
         if (this.props.params.node) {
             //ag-grid
@@ -63,7 +63,7 @@ const RowEditActions = React.createClass({
 
     onClickAdd() {
         //get the current record id
-        const id = this.props.data[ReportUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
         this.props.params.context.onRecordNewBlank(id);
         this.props.api.deselectAll();
     },
