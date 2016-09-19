@@ -14,7 +14,7 @@ const FieldValueEditor = require('../../../client-react/src/components/fields/fi
 const MultiLineTextFieldValueEditor = require('../../../client-react/src/components/fields/multiLineTextFieldValueEditor');
 const NumericFieldValueRenderer = require('../../../client-react/src/components/fields/numericFieldValueRenderer');
 const NumericFieldValueEditor = require('../../../client-react/src/components/fields/numericFieldValueEditor');
-const MultiChoiceFieldValueEditor = require('../../../client-react/src/components/fields/multiChoiceFieldValueEditor');
+const MultiChoiceFieldValueEditor = require('../../../client-react/src/components/fields/multiChoiceFieldValueEditor').default;
 /* eslint-enable */
 import {SafeAnchor, Alert} from 'react-bootstrap';
 

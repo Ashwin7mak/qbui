@@ -44,7 +44,7 @@ render((
             <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
             <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
-            <Route path="MultiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
+            <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));
