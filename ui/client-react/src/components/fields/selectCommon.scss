@@ -28,11 +28,11 @@ $selected-choice-color: $color-cyan-500;
     }
 
     .Select-menu-outer {
-        max-height: 225px; // shouldn't be taller than bottom margin on grid or it will clip
+        max-height: 340px; // shouldn't be taller than bottom margin on grid or it will clip
         width:auto;
 
         .Select-menu {
-            max-height: 223px;
+            max-height: 338px;
             overflow-y:auto;
             overflow-x:hidden;
 
