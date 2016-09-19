@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
 import _ from 'lodash';
-import UniqueIdMixin from 'unique-id-mixin';
 
 import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
 
@@ -77,7 +76,7 @@ const CheckBoxFieldValueEditor = React.createClass({
         }
 
         // If a checkbox is disabled/readonly, return the renderer instead
-        if(this.props.disabled || this.props.readOnly) {
+        if(this.props.readOnly) {
             return <CheckBoxFieldValueRenderer {...this.props} />;
         }
 
