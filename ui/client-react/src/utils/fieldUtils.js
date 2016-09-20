@@ -9,7 +9,7 @@ class FieldUtils {
     *
     */
     static getUniqueIdentifierFieldName(data) {
-        if (data && _.has(data, 'fields')) {
+        if (_.has(data, 'fields')) {
             return FieldUtils.getUniqueIdentifierFieldNameFromFields(data);
         } else {
             return FieldUtils.getUniqueIdentifierFieldNameFromData(data);
