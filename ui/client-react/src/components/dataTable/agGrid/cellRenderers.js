@@ -205,13 +205,13 @@ const CellRenderer = React.createClass({
     },
 
     cellChanges() {
-        let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
-
         if (this.props &&
             _.has(this.props, 'params') &&
             _.has(this.props.params, 'data') &&
             _.has(this.props.params, 'column.colId') &&
             _.has(this.props.params, 'colDef.id')) {
+
+            let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
 
             let change = {
                 values: {
