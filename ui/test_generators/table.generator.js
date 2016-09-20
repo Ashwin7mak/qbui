@@ -14,6 +14,7 @@
     var DATA_TYPE_CONST = 'dataType';
     var DATA_ATTR_CONST = 'dataAttr';
     var MULTICHOICE_CONST = 'multipleChoice';
+    var REQUIRED_CONST = 'required';
 
     //The max number of fields we will generate at random
     var maxRandomFields = 10;
@@ -300,8 +301,16 @@
             if (fieldNameToTypeMap[fieldName][MULTICHOICE_CONST]) {
                 multiChoice = Object.assign({}, fieldNameToTypeMap[fieldName][MULTICHOICE_CONST]);
             }
+
+            var requiredSetting;
+            if (fieldNameToTypeMap[fieldName][REQUIRED_CONST]) {
+                requiredSetting = fieldNameToTypeMap[fieldName][REQUIRED_CONST];
+            }
+
             if (fieldName.includes('User')) {
-                field = fieldBuilder.withName(fieldName).withFieldType(fieldType).withDataTypeAttributes(dataTypeAttributes).build();
+                field = fieldBuilder.withName(fieldName).withFieldType(fieldType)
+                    .withDataTypeAttributes(dataTypeAttributes)
+                    .build();
                 field.indexed = true;
             } else if (multiChoice !== null) {
                 field = fieldBuilder.withName(fieldName).withFieldType(fieldType)
@@ -312,6 +321,9 @@
                 field = fieldBuilder.withName(fieldName).withFieldType(fieldType)
                     .withDataTypeAttributes(dataTypeAttributes)
                     .build();
+            }
+            if (requiredSetting !== undefined) {
+                field.required = requiredSetting;
             }
             builderInstance.withField(field);
         });
