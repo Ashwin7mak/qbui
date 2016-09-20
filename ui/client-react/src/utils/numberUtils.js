@@ -13,13 +13,13 @@ class NumberUtils {
 
     /**
      * Returns value of the supplied property if it exists in the object, otherwise null
-     * @param parentObj
+     * @param obj
      * @param propertyName
      * @returns {*}
      */
-    static getNumericPropertyValue(parentObj, propertyName) {
-        if (parentObj && parentObj.hasOwnProperty(propertyName)) {
-            let propVal = parentObj[propertyName];
+    static getNumericPropertyValue(obj, propertyName) {
+        if (obj && obj.hasOwnProperty(propertyName)) {
+            let propVal = obj[propertyName];
             return NumberUtils.isInt(propVal) ? propVal : null;
         }
         return null;
