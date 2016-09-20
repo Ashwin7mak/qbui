@@ -58,7 +58,7 @@ afterEach(() => {
     CheckBoxFieldValueRenderer.__ResetDependency__('I18nMessage');
 });
 
-fdescribe('CheckBoxFieldValueRenderer', () => {
+describe('CheckBoxFieldValueRenderer', () => {
     it('has a default of an unchecked checkbox without a label', () => {
         component = TestUtils.renderIntoDocument(<CheckBoxFieldValueRenderer />);
         it_is_unchecked();
