@@ -50,6 +50,15 @@ $checkbox-size-mobile: 24px;
             z-index: 1;
         }
 
+        // Focus state
+        &:focus, + label:focus {
+            outline: none;
+        }
+
+        &:focus + label:after, + label:focus:after, label:focus:after {
+            box-shadow: 0 0 4px 1px $input-text-focus-border-color;
+        }
+
         // Unchecked style
         &:not(:checked) + label:before {
             opacity: 0;
@@ -143,6 +152,10 @@ $checkbox-size-mobile: 24px;
 
     &.renderer {
         margin: 0;
+
+        label:focus {
+            outline: none;
+        }
 
         .label {
             display: inline-flex;
