@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import './checkbox';
+import './checkbox.scss';
 
 import {I18nMessage} from '../../utils/i18nMessage';
 
