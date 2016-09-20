@@ -8,6 +8,9 @@ import IconActions from '../actions/iconActions';
 import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
 import {I18nMessage} from "../../utils/i18nMessage";
+import NumberUtils from '../../utils/numberUtils';
+
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
 import '../report/report.scss';
@@ -24,18 +27,21 @@ let TableHomePageRoute = React.createClass({
             />);
     },
 
-    loadTableHomePageReportFromParams(appId, tblId) {
+    loadTableHomePageReportFromParams(appId, tblId, offset, numRows) {
         const flux = this.getFlux();
         flux.actions.selectTableId(tblId);
         flux.actions.loadFields(appId, tblId);
-        flux.actions.loadTableHomePage(appId, tblId);
+        flux.actions.loadTableHomePage(appId, tblId, offset, numRows);
     },
     loadHomePageForParams(params) {
         let appId = params.appId;
         let tblId = params.tblId;
 
+        let offset = NumberUtils.getNumericPropertyValue(this.props.reportData, 'pageOffset');
+        let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows');
+
         if (appId && tblId) {
-            this.loadTableHomePageReportFromParams(appId, tblId);
+            this.loadTableHomePageReportFromParams(appId, tblId, offset, numRows);
         }
     },
     componentDidMount() {

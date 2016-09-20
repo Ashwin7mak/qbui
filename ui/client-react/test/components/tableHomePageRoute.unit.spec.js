@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
 import TableHomePageRoute  from '../../src/components/table/tableHomePageRoute';
 import FacetSelections  from '../../src/components/facet/facetSelections';
+import Constants from '../../../common/src/constants';
 
 describe('TableHomePageRoute functions', () => {
     'use strict';
@@ -21,7 +22,18 @@ describe('TableHomePageRoute functions', () => {
     };
 
     let routeParams = {appId:1, tblId:2};
-    let reportDataParams = {reportData: {selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+    let reportDataParams = {
+        reportData: {
+            pageOffset:Constants.PAGE.DEFAULT_OFFSET,
+            numRows:Constants.PAGE.DEFAULT_NUM_ROWS,
+            selections: new FacetSelections(),
+            data: {
+                columns: [
+                    {field: "col_num", headerName: "col_num"}
+                ]
+            }
+        }
+    };
 
     let flux = new Fluxxor.Flux(stores);
 
@@ -48,7 +60,9 @@ describe('TableHomePageRoute functions', () => {
 
         let params = {
             appId:1,
-            tblId:2
+            tblId:2,
+            offset:Constants.PAGE.DEFAULT_OFFSET,
+            numRows:Constants.PAGE.DEFAULT_NUM_ROWS
         };
 
         let oldProps = {
@@ -88,7 +102,9 @@ describe('TableHomePageRoute functions', () => {
             getInitialState() {
                 let params = {
                     appId:1,
-                    tblId:1
+                    tblId:1,
+                    offset:Constants.PAGE.DEFAULT_OFFSET,
+                    numRows:Constants.PAGE.DEFAULT_NUM_ROWS
                 };
                 let reportData = {
                     appId: 1,
@@ -134,7 +150,7 @@ describe('TableHomePageRoute functions', () => {
 
     it('test flux action loadTableHomePage is called with app data', () => {
         component = TestUtils.renderIntoDocument(<TableHomePageRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></TableHomePageRoute>);
-        expect(flux.actions.loadTableHomePage).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId);
+        expect(flux.actions.loadTableHomePage).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, reportDataParams.reportData.pageOffset, reportDataParams.reportData.numRows);
     });
 
     it('test flux action loadTableHomePage is not called on 2nd called with same app data', () => {
