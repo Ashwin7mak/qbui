@@ -63,16 +63,6 @@ const CheckBoxFieldValueEditor = React.createClass({
         return (this.props.label !== ' ');
     },
 
-    renderLabel() {
-        if (this.hasLabel()) {
-            return (
-                <label className="label" htmlFor={this.getNextHtmlFor()}>
-                    {this.props.label}
-                </label>
-            );
-        }
-    },
-
     render() {
         let classes = "checkbox editor";
         classes += (this.hasLabel() ? ' hasLabel' : '');
