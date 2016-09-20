@@ -8,7 +8,6 @@
 
             .Select-option {
                 &.is-selected {
-                    background-color: inherit;
                     .userLabel {
                         color: $selected-choice-color;
                     }
