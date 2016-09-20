@@ -5,7 +5,6 @@ let longLabelText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cr
                "In in porttitor ante, ut vestibulum purus. Praesent metus erat, elementum " +
                "sed placerat eu, semper sed nisi. Praesent ultrices id sem quis accumsan. " +
                "Proin eu hendrerit ante.";
-let questionLabel = "Are you sure?"
 
 var BasicCheckBoxFieldValueRenderer = React.createClass({
     getInitialState() {

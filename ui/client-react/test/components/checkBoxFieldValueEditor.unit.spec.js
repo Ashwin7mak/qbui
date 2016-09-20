@@ -35,9 +35,9 @@ let component;
 
 function findElements(query) {
     return ReactDOM.findDOMNode(component).querySelectorAll(query);
-};
+}
 
-function it_is_unchecked(){
+function it_is_unchecked() {
     let checkbox = findElements('[type="checkbox"]');
     expect(checkbox[0].checked).toBe(false);
 }

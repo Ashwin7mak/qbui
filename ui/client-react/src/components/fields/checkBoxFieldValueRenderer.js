@@ -28,7 +28,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
     },
 
     renderDisplayValue() {
-        if(this.props.displayGraphic) {
+        if (this.props.displayGraphic) {
             return this.renderGraphicDisplayValue();
         } else {
             return this.renderTextDisplayValue();
@@ -36,7 +36,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
     },
 
     renderTextDisplayValue() {
-        if(this.props.value) {
+        if (this.props.value) {
             return <I18nMessage message="fields.checkbox.yes" />;
         } else {
             return <I18nMessage message="fields.checkbox.no" />;
@@ -44,7 +44,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
     },
 
     renderGraphicDisplayValue() {
-        if(this.props.value) {
+        if (this.props.value) {
             return this.renderGraphicCheckedSymbol();
         } else {
             return this.renderGraphicUncheckedSymbol();
@@ -57,7 +57,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
     },
 
     renderGraphicUncheckedSymbol() {
-        if(!this.props.hideUncheckedCheckbox){
+        if (!this.props.hideUncheckedCheckbox) {
             return (<span className={this.props.uncheckedIconClass}></span>);
         }
     },
@@ -68,7 +68,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
     },
 
     renderLabel() {
-        if(this.hasLabel()) {
+        if (this.hasLabel()) {
             return (<label className="label">{this.props.label}</label>);
         } else {
             return null;

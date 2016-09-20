@@ -18,9 +18,9 @@ let component;
 
 function findElements(query) {
     return ReactDOM.findDOMNode(component).querySelectorAll(query);
-};
+}
 
-function it_is_unchecked(){
+function it_is_unchecked() {
     let unCheckedCheckbox = findElements('.checkbox-unchecked');
     expect(unCheckedCheckbox.length).toBe(1);
 }
@@ -40,7 +40,7 @@ function it_has_a_label(text = null) {
 
     expect(labels.length).toBe(1);
 
-    if(text) {
+    if (text) {
         expect(labels[0].textContent).toBe(text);
     }
 }

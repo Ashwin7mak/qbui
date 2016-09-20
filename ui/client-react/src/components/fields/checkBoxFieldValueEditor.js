@@ -34,13 +34,13 @@ const CheckBoxFieldValueEditor = React.createClass({
 
     onKeyDown(ev) {
         // Call on change if key press is space bar (for accessibility)
-        if(ev.keyCode === 32){
+        if (ev.keyCode === 32) {
             this.onChange(ev);
         }
     },
 
     onBlur(ev) {
-        if(this.props.onBlur) {
+        if (this.props.onBlur) {
             this.props.onBlur(this.props.value);
         }
     },
@@ -49,12 +49,12 @@ const CheckBoxFieldValueEditor = React.createClass({
         ev.preventDefault();
 
         // Don't change the value if the checkbox is disabled/read only
-        if(this.props.disabled || this.props.readyOnly){
+        if (this.props.disabled || this.props.readyOnly) {
             return;
         }
 
         const newValue = !this.props.value;
-        if(this.props.onChange){
+        if (this.props.onChange) {
             this.props.onChange(newValue);
         }
     },
@@ -64,7 +64,7 @@ const CheckBoxFieldValueEditor = React.createClass({
     },
 
     renderLabel() {
-        if(this.hasLabel()) {
+        if (this.hasLabel()) {
             return (
                 <label className="label" htmlFor={this.getNextHtmlFor()}>
                     {this.props.label}
@@ -82,7 +82,7 @@ const CheckBoxFieldValueEditor = React.createClass({
         checkBoxClasses += (this.props.required ? 'required' : '');
 
         let requiredSymbol;
-        if(this.props.required) {
+        if (this.props.required) {
             let requiredSymbolClasses = 'required-symbol';
             requiredSymbolClasses += (this.props.invalid ? ' invalid' : '');
             requiredSymbol = <span className={requiredSymbolClasses}>*</span>;
@@ -91,7 +91,7 @@ const CheckBoxFieldValueEditor = React.createClass({
         // If a checkbox is readonly, return the renderer instead
         // Need to return a renderer if value is true and checkbox is disabled
         // because could not get the checkmark to be in the correct place
-        if(this.props.readOnly || (this.props.disabled && this.props.value)) {
+        if (this.props.readOnly || (this.props.disabled && this.props.value)) {
             return <CheckBoxFieldValueRenderer {...this.props} />;
         }
 
