@@ -32,9 +32,9 @@ const CheckBoxFieldValueEditor = React.createClass({
         };
     },
 
-    onKeyPress(ev) {
+    onKeyDown(ev) {
         // Call on change if key press is space bar (for accessibility)
-        if(ev.key == ' '){
+        if(ev.keyCode === 32){
             this.onChange(ev);
         }
     },
@@ -108,7 +108,7 @@ const CheckBoxFieldValueEditor = React.createClass({
                 <label className="label"
                        onClick={this.onChange}
                        tabIndex="0"
-                       onKeyPress={this.onKeyPress} >
+                       onKeyDown={this.onKeyDown} >
                     {this.props.label}
                 </label>
                 {requiredSymbol}
