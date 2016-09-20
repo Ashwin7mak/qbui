@@ -75,7 +75,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
     render() {
         const options = this.getSelectItems();
-
+        const placeHolderMessage = <I18nMessage message="selection.placeholder" />
+        const notFoundMessage = <I18nMessage message="selection.notFound" />
         return (
             <div className="multiChoiceContainer">
                 {this.props.showAsRadio ?
@@ -86,7 +87,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
                         optionRenderer={this.renderOption}
                         options={options}
                         onChange={this.selectChoice}
-                        placeholder="Select..."
+                        placeholder={placeHolderMessage}
                         noResultsText="Not found"
                         autosize={false}
                         clearable={false}
