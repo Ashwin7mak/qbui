@@ -85,7 +85,6 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT);
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC);
         var numericChoices = e2eBase.choicesSetUp(consts.NUMERIC, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {int:true, min:1, max:1000});
-
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC, "Numeric MultiChoice",
             {dataAttr:{clientSideAttributes: baseNumClientRequiredProps},
                 decimalPlaces: 0,
@@ -137,7 +136,7 @@ consts = require('../../common/src/constants.js');
 
         tableToFieldToFieldTypeMap[table4Name] = {};
 
-        addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Single line default");
+        addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Single line required", {required:true});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiLine",
             {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {dataAttr:{num_lines : 6}})});
