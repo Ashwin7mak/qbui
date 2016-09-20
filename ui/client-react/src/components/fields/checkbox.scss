@@ -28,99 +28,78 @@ $checkbox-size-mobile: 24px;
     }
 
     [type="checkbox"] {
-      // Focused styles
-      &.tabbed:focus + label:after {
-        transform: scale(1);
-        border: 0;
-        border-radius: 50%;
-        box-shadow: 0 0 0 10px rgba(0,0,0,.1);
-        background-color: rgba(0,0,0,.1);
-      }
+        // General
+        + label:after {
+            border-radius: 3px;
+            height: $checkbox-size;
+            width: $checkbox-size;
 
-      // General
-      + label:after {
-        border-radius: 3px;
-        height: $checkbox-size;
-        width: $checkbox-size;
-
-        @media(max-width: $small-breakpoint-width) {
-            height: $checkbox-size-mobile;
-            width: $checkbox-size-mobile;
-        }
-      }
-
-      + label:before,
-      + label:after {
-        content: '';
-        left: 0;
-        position: absolute;
-        /* .1s delay is for check animation */
-        transition: border .25s, background-color .25s, font-size .20s .1s, width .20s .1s, height .20s .1s, top .20s .1s, left .20s .1s;
-        z-index: 1;
-      }
-
-      // Unchecked style
-      &:not(:checked) + label:before {
-        opacity: 0;
-        font-size: 0;
-      }
-
-      &:not(:checked) + label:after {
-        @include unchecked-checkbox
-      }
-
-      // Checked style
-      &:checked {
-        + label:before {
-            @include checkbox-checkmark-icon;
-            top: 5px;
-            left: 4px;
-            font-size: 8px;
-            opacity: 1;
-            color: $checkbox-checkmark-editable-color;
-
-            @media(max-width: $small-breakpoint-width) {
-                left: 1px;
-                top: 3px;
+            @include small-breakpoint {
+                height: $checkbox-size-mobile;
+                width: $checkbox-size-mobile;
             }
         }
 
+        + label:before,
         + label:after {
-          top: 0;
-          border: 2px solid $checkbox-background-checked-color;
-          background-color: $checkbox-background-checked-color;
-          z-index: 0;
+            content: '';
+            left: 0;
+            position: absolute;
+            /* .1s delay is for check animation */
+            transition: border .25s, background-color .25s, font-size .20s .1s, width .20s .1s, height .20s .1s, top .20s .1s, left .20s .1s;
+            z-index: 1;
         }
-      }
 
-      // Focused styles
-      &.tabbed:focus + label:after {
-        border-radius: 2px;
-        border-color: $checkbox-border-color;
-        background-color: rgba(0,0,0,.1);
-      }
+        // Unchecked style
+        &:not(:checked) + label:before {
+            opacity: 0;
+            font-size: 0;
+        }
 
-      &.tabbed:checked:focus + label:after {
-        border-radius: 2px;
-        background-color: $checkbox-background-checked-color;
-        border-color: $checkbox-background-checked-color;
-      }
+        &:not(:checked) + label:after {
+            @include unchecked-checkbox
+        }
 
-      // Disabled style
-      &:disabled:not(:checked) + label:before {
-        background-color: $checkbox-background-unchecked-color;
-        border: 2px solid transparent;
-      }
+        // Checked style
+        &:checked {
+            + label:before {
+                @include checkbox-checkmark-icon;
+                top: 5px;
+                left: 4px;
+                font-size: 8px;
+                opacity: 1;
+                color: $checkbox-checkmark-editable-color;
 
-      &:disabled:not(:checked) + label:after {
-        border-color: $checkbox-border-color;
-        background-color: $checkbox-background-unchecked-color;
-        opacity: $checkbox-disabled-opacity;
-      }
+                @include small-breakpoint {
+                    font-size: 14px;
+                    left: 5px;
+                    top: 5px;
+                }
+            }
 
-      &.invalid + label:after {
-        border-color: $error-color;
-      }
+            + label:after {
+              top: 0;
+              border: 2px solid $checkbox-background-checked-color;
+              background-color: $checkbox-background-checked-color;
+              z-index: 0;
+            }
+        }
+
+        // Disabled style
+        &:disabled:not(:checked) + label:before {
+            background-color: $checkbox-background-unchecked-color;
+            border: 2px solid transparent;
+        }
+
+        &:disabled:not(:checked) + label:after {
+            border-color: $checkbox-border-color;
+            background-color: $checkbox-background-unchecked-color;
+            opacity: $checkbox-disabled-opacity;
+        }
+
+        &.invalid + label:after {
+            border-color: $error-color;
+        }
     }
 
     &.hasLabel {
@@ -128,8 +107,10 @@ $checkbox-size-mobile: 24px;
             margin-right: 10px;
         }
 
-        [type="checkbox"]:checked + label:before {
-            top: 4px;
+        @include not-small-breakpoint {
+            [type="checkbox"]:checked + label:before {
+                top: 4px;
+            }
         }
 
         .label {
@@ -144,9 +125,9 @@ $checkbox-size-mobile: 24px;
             text-align: left;
             white-space: normal;
 
-            @media(max-width: $small-breakpoint-width) {
+            @include small-breakpoint {
                 font-size: 16px;
-                padding-top: 5px;
+                padding-top: 3px;
             }
         }
 
@@ -171,6 +152,11 @@ $checkbox-size-mobile: 24px;
         .symbol {
             color: $checkbox-checkmark-readonly-color;
             font-size: 14px;
+
+            @include small-breakpoint {
+                padding-left: 3px;
+                font-size: 18px;
+            }
         }
 
         .checkbox-unchecked {
@@ -180,6 +166,11 @@ $checkbox-size-mobile: 24px;
             margin-right: 8px;
             margin-top: 2px;
             width: $checkbox-size;
+
+            @include small-breakpoint {
+                height: $checkbox-size-mobile;
+                width: $checkbox-size-mobile;
+            }
         }
 
     }
