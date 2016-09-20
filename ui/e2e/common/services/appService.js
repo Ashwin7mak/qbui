@@ -85,7 +85,7 @@
 
                             // Via the serices API create the records, a new report and form
                             var reportPromise = services.reportService.createReport(createdApp.id, table.id);
-                            var recordsPromise = services.recordService.addRecords(createdApp, table, generatedRecords);
+                            var recordsPromise = services.recordService.addBulkRecords(createdApp, table, generatedRecords);
                             var formPromise = services.formService.createForm(createdApp.id, table.id);
 
                             results.allPromises.push(reportPromise);

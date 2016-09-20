@@ -13,6 +13,7 @@
         var recordService = {
             /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
+             * and fetches the created records
              * Returns a promise.
              */
             addRecords: function(app, table, genRecords) {
@@ -32,6 +33,8 @@
                     });
                 return deferred.promise;
             },
+
+
             /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
              * Returns a promise.
@@ -40,12 +43,8 @@
                 var deferred = promise.pending();
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
-                var fetchRecordPromises = [];
-                genRecords.forEach(function(currentRecord) {
-                    fetchRecordPromises.push(recordBase.createRecord(recordsEndpoint, currentRecord, null));
-                });
-                promise.all(fetchRecordPromises)
-                    .then(function(results) {
+                var fetchRecordPromises = recordBase.createRecords(recordsEndpoint, genRecords);
+                fetchRecordPromises.then(function(results) {
                         deferred.resolve(results);
                     }).catch(function(error) {
                         console.log(JSON.stringify(error));

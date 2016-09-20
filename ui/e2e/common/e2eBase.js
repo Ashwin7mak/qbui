@@ -309,6 +309,36 @@
                 return e2eBase.appService.createRecords(app, recordsConfig, services);
             },
 
+            /**
+             * Random generate a set of choices for a multi choice field
+             * @param type the type of data to generate TEXT or NUMBER
+             * @param numChoices - how many choices to generate
+             * @param options - optional how to generate the choices
+             * TEXT type options
+             * {
+             *      capitalize: boolean - capitalize the 1st word of each choice, default false,
+             *      numWords: number - the number of words in each choice, default 1,
+             *      wordType: 'realEnglishNouns' or 'realEnglishNouns' or 'randomLetters' - whether the words generated are
+             *                 real english words, nouns or random letters default is realEnglishNouns
+             *
+             *      randNumWords: boolean - whether the number of words is same for each choice or treated as a maximum
+             *                    and each is random number of words, default false,
+             *
+             *      if wordType is randomLetters the following options apply
+             *      wordLength or syllables (optional one or the other not both, if both throws error, default 1 - 3 syllables)
+             *                 wordLength : the 1-number of characters in each word
+             *                 syllables : the 1-number of syllables in each word
+             *
+             * }
+             * NUMERIC type options {
+             *        int: boolean - int or float, default true,
+             *        max: the larger number to randomly generate, default - MAX_INT for int or MAX_INT/10000 for float
+             *        min: the smallest number to randomly generate, default - MIN_INT for int , -MAX_INT/10000 for float
+             * }
+             *
+             * later other choice types may be added see - https://team.quickbase.com/db/bixuxqie3?a=dr&rid=12
+             * @returns {*}
+             */
             choicesSetUp(type, numChoices, options) {
                 return this.tableService.generateChoices(type, numChoices, options);
             },

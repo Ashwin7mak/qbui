@@ -62,18 +62,30 @@ consts = require('../../common/src/constants.js');
         var table3Name = 'Table 3 ';
         var table4Name = 'Table 4 ';
 
-        // Create the table schema (map object) to pass into the app generator
-        var tableToFieldToFieldTypeMap = {};
-        tableToFieldToFieldTypeMap[table1Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT);
-        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC);
-        var numericChoices = e2eBase.choicesSetUp(consts.NUMERIC, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {int:true, min:1, max:1000});
+        // convenience reusable settings
         var baseNumClientRequiredProps = {
             width: 50,
             bold: false,
             word_wrap: false,
             separator_start: 4
         };
+        let baseTextClientRequiredProps = {
+            width: 50,
+            bold: false,
+            word_wrap: false,
+        };
+        var emptyChoice = {
+            coercedValue: {value: ''},
+            displayValue: ''
+        };
+
+        // Create the table schema (map object) to pass into the app generator
+        var tableToFieldToFieldTypeMap = {};
+        tableToFieldToFieldTypeMap[table1Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC);
+        var numericChoices = e2eBase.choicesSetUp(consts.NUMERIC, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {int:true, min:1, max:1000});
+
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC, "Numeric MultiChoice",
             {dataAttr:{clientSideAttributes: baseNumClientRequiredProps},
                 decimalPlaces: 0,
@@ -97,7 +109,23 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL);
 
         tableToFieldToFieldTypeMap[table2Name] = {};
-        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.TEXT);
+        var textChoices = e2eBase.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {
+            capitalize: true,
+            numWords:2,
+            randNumWords:true,
+            wordType : 'randomLetters',
+            wordLength :6
+        });
+        //temporarily add a placeholder blank(unchosen) selection to top of list
+        textChoices.unshift(emptyChoice);
+        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.TEXT, "Text MultiChoice",
+            {dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
+                multipleChoice: {
+                    choices: textChoices,
+                    allowNew: false,
+                    sortAsGiven: false
+                }});
+
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.DATE);
         addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER);
 
@@ -108,11 +136,7 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.CHECKBOX);
 
         tableToFieldToFieldTypeMap[table4Name] = {};
-        let baseTextClientRequiredProps = {
-            width: 50,
-            bold: false,
-            word_wrap: false,
-        };
+
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Single line default");
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiLine",
@@ -133,11 +157,12 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Html allowed multiLine",
             {dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 4})}});
 
-        var choices = e2eBase.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {capitalize: true, numWords:2, randNumWords:true});
-        var emptyChoice = {
-            coercedValue: {value: ''},
-            displayValue: ''
-        };
+        var choices = e2eBase.choicesSetUp(consts.TEXT, e2eConsts.DEFAULT_NUM_CHOICES_TO_CREATE, {
+            capitalize: true,
+            numWords:1,
+            randNumWords:false,
+            wordType : 'realEnglishNouns'
+        });
         //temporarily add a placeholder blank(unchosen) selection to top of list
         //once backend is fixed to support null/empty entry for choice to clear/unset choice then
         //note numeric will also need a way to support setting null to clear the choice

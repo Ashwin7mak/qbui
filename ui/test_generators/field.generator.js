@@ -14,6 +14,10 @@
     var _ = require('lodash');
     var FIELD_KEYS = 'fieldKeys';
     var fieldTypeToFunctionCalls = {};
+    var choiceGenMap = {};
+
+    choiceGenMap[consts.TEXT] = rawValueGenerator.generateTextChoice.bind(rawValueGenerator);
+    choiceGenMap[consts.NUMERIC] = rawValueGenerator.generateNumericChoice.bind(rawValueGenerator);
 
     module.exports = {
         getFieldBuilder: function() {
@@ -43,10 +47,11 @@
 
         generateChoices: function(fieldType, numberOfChoices, options) {
             let result;
-            let genToUse = (fieldType === consts.TEXT) ? 'generateTextChoice' : 'generateNumericChoice';
+
+            let genToUse = choiceGenMap[fieldType];
             result = [];
             while (numberOfChoices--) {
-                let choice = rawValueGenerator[genToUse](options);
+                let choice = genToUse(options);
                 result.push(choice);
             }
             return result;

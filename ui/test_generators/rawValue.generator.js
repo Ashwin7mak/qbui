@@ -5,8 +5,8 @@
 (function() {
     'use strict';
     var chance = require('chance').Chance();
+    const randomWord = require('./words/word.generator');
     var appConsts = require('./app.constants');
-
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
     chance.mixin({
@@ -19,7 +19,6 @@
 
             return timeZone;
         },
-
         appDateFormat: function(options) {
             var dateFormat = options.dateFormat;
 
@@ -91,7 +90,7 @@
         },
 
         generateTextChoice: function(options) {
-            options = options || {capitalize: true, numWords: 1, randNumWords: false};
+            options = options || {capitalize: true, wordType:'realEnglishNouns', numWords: 1, randNumWords: false};
 
             let value = this.generateWords(options);
             return {
@@ -126,8 +125,27 @@
             }
             // loop down the count of words to generate
             let numWords = wordsToGen;
+
+            //options for random letter words
+            let wordOptions = {};
+            if (options.wordLength){
+                wordOptions.length = options.wordLength
+            }
+            if (options.syllables){
+                wordOptions.syllables = options.syllables
+            }
+
             while (numWords--) {
-                var word = chance.word();
+                // generate a word or get an real english word
+                var word;
+                if (options.wordType === this.WORD_TYPES.realEnglishNouns){
+                    word = randomWord.noun();
+                } else if (options.wordType === this.WORD_TYPES.realEnglishWords){
+                    word = randomWord.word();
+                } else {
+                    word = chance.word(wordOptions);
+                }
+
                 //capitalize first word if capitalize set
                 if (options.capitalize && numWords === wordsToGen - 1) {
                     word = chance.capitalize(word);
@@ -240,7 +258,13 @@
 
         pickUserIdFromList: function(userIds) {
             return chance.userId({userIds: userIds});
-        }
+        },
+        WORD_TYPES: {
+            'realEnglishNouns' : 'realEnglishNouns',
+            'realEnglishWords' : 'realEnglishWords',
+            'randomLetters' : 'randomLetters',
+        },
+
     };
 
 
