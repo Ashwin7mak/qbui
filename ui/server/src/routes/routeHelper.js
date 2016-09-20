@@ -8,6 +8,7 @@
     let FORMS = 'forms';
     let TABLES = 'tables';
     let RECORDS = 'records';
+    let COUNT_QUERY = 'countQuery';
     let REPORTS = 'reports';
     let REPORT_COUNT = 'count';
     let REPORT_RESULTS = 'results';
@@ -191,6 +192,27 @@
             let root = getUrlRoot(url, TABLES);
             if (root) {
                 return root + '/' + RECORDS + (recordId ? '/' + recordId : '');
+            }
+
+            //  no url root for TABLES found; return original url unchanged
+            return url;
+        },
+
+        /**
+         * For the given req.url, extract the APPS and TABLES identifiers/ids and
+         * append the RECORDS identifier and optional recordId.
+         *
+         * Example:  url: /apps/123/tables/456/rest/of/url
+         *           return: /apps/123/tables/456/records/<recordId>
+         *
+         * @param url
+         * @param recordId
+         * @returns {*}
+         */
+        getRecordsCountRoute: function(url) {
+            let root = getUrlRoot(url, TABLES);
+            if (root) {
+                return root + '/' + RECORDS + '/' + COUNT_QUERY;
             }
 
             //  no url root for TABLES found; return original url unchanged
