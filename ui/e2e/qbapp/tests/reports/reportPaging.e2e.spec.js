@@ -11,9 +11,11 @@
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var ReportPagingPage = requirePO('reportPaging');
     var ReportSortingPage = requirePO('reportSorting');
+    var ReportFacetsPage = requirePO('reportFacets');
     var reportServicePage = new ReportServicePage();
     var reportPagingPage = new ReportPagingPage();
     var reportSortingPage = new ReportSortingPage();
+    var reportFacetsPage = new ReportFacetsPage();
 
     // Lodash utility library
     var _ = require('lodash');
@@ -23,6 +25,8 @@
         var realmId;
         var app;
         var recordList;
+        var table2NonBuiltInFields;
+        var duplicateTextFieldValue;
 
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report.
@@ -34,6 +38,28 @@
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
             }).then(function() {
+                var duplicateRecords = [];
+                // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE4]);
+                // Generate the record JSON objects
+                var generatedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, 1);
+                //Create 60 duplicate records
+                var clonedArray = JSON.parse(JSON.stringify(generatedRecords));
+                var dupRecord = clonedArray[0];
+                for (var i = 0; i < 40; i++) {
+                    // Add the new record back in to create
+                    duplicateRecords.push(dupRecord);
+                }
+
+                //get the duplicate textField value
+                dupRecord.forEach(function(field) {
+                    if (field.id === 6) {
+                        duplicateTextFieldValue = field.value;
+                    }
+                });
+                //Add 60 duplicate records via bulk records API.
+                return e2eBase.recordService.addBulkRecords(app, app.tables[e2eConsts.TABLE4], duplicateRecords);
+            }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
@@ -43,7 +69,7 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     done();
                 });
             });
@@ -72,12 +98,12 @@
             // Verify paging component appears at the top in the report toolbar and in report footer
             it('Verify paging components', function(done) {
                 // Verify pagination numbers
-                expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 50');
+                expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
                 // Verify pagination nav buttons
                 expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeTruthy();
                 expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingToolbarNextButton)).toBeFalsy();
 
-                expect(reportPagingPage.pagingFooterPageNumbers.getText()).toBe('1 - 50');
+                expect(reportPagingPage.pagingFooterPageNumbers.getText()).toBe('1 - 20');
                 expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingFooterPrevButton)).toBeTruthy();
                 expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeFalsy();
                 done();
@@ -90,7 +116,7 @@
                     // Check the record ID of first record
                     expect(reportServicePage.getRecordValues(records[0], 0)).toBe('1');
                     // Check the record ID last record
-                    expect(reportServicePage.getRecordValues(records[49], 0)).toBe('50');
+                    expect(reportServicePage.getRecordValues(records[49], 0)).toBe('20');
                     done();
                 });
             });
@@ -99,7 +125,7 @@
                 reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
                     reportServicePage.agGridRecordElList.then(function(records) {
                         expect(records.length).toBeLessThan(11);
-                        expect(reportServicePage.getRecordValues(records[0], 0)).toBe('51');
+                        expect(reportServicePage.getRecordValues(records[0], 0)).toBe('21');
                         //TODO: Bug next button is not being disabled in footer
                         //expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
                         expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
@@ -130,7 +156,7 @@
                     },
                 ];
                 //Create a report with Fids and sortFids.
-                e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6], sortList, null, "Verify Item Selected Report").then(function(repId) {
+                e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6], sortList, null, "Report with Fids and SortLists").then(function(repId) {
                     reportId = repId;
                 }).then(function() {
                     //Go to report 2 which has sortFids set.
@@ -138,15 +164,9 @@
                 }).then(function() {
                     return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         e2eBase.sleep(browser.params.smallSleep);
-                        //Click next button in pagination
-                        reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
-                            reportServicePage.agGridRecordElList.then(function(records) {
-                                expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('51 - 56');
-                                //TODO: Bug next button is not being disabled in footer
-                                //expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
-                                expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
-                            });
-                        });
+                        //verify the original records count
+                        expect(reportServicePage.reportRecordsCount.getText()).toContain('26 records');
+                        expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
                     });
                 }).then(function() {
                     //Verify sorting item is selected is column header
@@ -154,6 +174,19 @@
                         e2eBase.sleep(browser.params.smallSleep);
                         //finally verify item got selected
                         reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Text Field", "Sort Z to A");
+                    });
+                }).then(function() {
+                    return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //Click next button in pagination
+                        reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
+                            reportServicePage.agGridRecordElList.then(function(records) {
+                                expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 26');
+                                //TODO: Bug next button is not being disabled in footer
+                                //expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
+                                expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
+                            });
+                        });
                     });
                 }).then(function() {
                     var expectedRecords = [];
@@ -176,6 +209,100 @@
 
 
             //TODO: Should add a test for counting records text to appear (need to fix bulk add first most likely)
+        });
+
+        it('Verify pagination for report with facets defined', function(done) {
+            var reportId;
+            //Create a report with FacetFids
+            e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE4].id, [6], null, "Test Facets Pagination").then(function(repId) {
+                reportId = repId;
+            }).then(function() {
+                //Go to report page directly.
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE4].id, reportId));
+            }).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    e2eBase.sleep(browser.params.smallSleep);
+                    //verify the original records count
+                    expect(reportServicePage.reportRecordsCount.getText()).toContain('40 records');
+                    expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
+                });
+            }).then(function() {
+                //Select facets
+                // Click on facet carat
+                return reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                    reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
+                        // Verify the popup menu is displayed
+                        //reportFacetsPage.waitForElement(reportFacetsPage.reportFacetPopUpMenu).then(function () {
+                        // Select facet group and items
+                        reportFacetsPage.selectGroupAndFacetItems("Text Field", [0]);
+                        // });
+                    });
+                });
+            }).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    e2eBase.sleep(browser.params.smallSleep);
+                    //verify the filtered records count
+                    expect(reportServicePage.reportRecordsCount.getText()).toContain('40 of 40 records');
+                    expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
+                });
+            }).then(function() {
+                //Click next button in pagination
+                reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
+                    reportServicePage.agGridRecordElList.then(function(records) {
+                        //verify the pagination count after going to next page
+                        expect(reportServicePage.reportRecordsCount.getText()).toContain('40 records');
+                        expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 40');
+                        //TODO: Bug next button is not being disabled in footer
+                        //expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
+                        expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
+                        done();
+                    });
+                });
+            }).then(function() {
+                done();
+            });
+
+        });
+
+        it('Verify pagination for report with search results', function(done) {
+            var reportId;
+            //Create a report with Fids .
+            e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE4].id, [6], null, "Test Search Pagination").then(function(repId) {
+                reportId = repId;
+            }).then(function() {
+                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE4].id, reportId));
+            }).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    e2eBase.sleep(browser.params.smallSleep);
+                    expect(reportServicePage.reportRecordsCount.getText()).toContain('40 records');
+                    expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
+                });
+            }).then(function() {
+                //search the report
+                return reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
+                    reportServicePage.reportFilterSearchBox.clear().sendKeys(duplicateTextFieldValue, protractor.Key.ENTER);
+                });
+            }).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    e2eBase.sleep(browser.params.smallSleep);
+                    //verify the search records count
+                    expect(reportServicePage.reportRecordsCount.getText()).toContain('40 of 40 records');
+                    expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
+                });
+            }).then(function() {
+                //Click next button in pagination
+                reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
+                    reportServicePage.agGridRecordElList.then(function(records) {
+                        //verify the pagination count after going to next page
+                        expect(reportServicePage.reportRecordsCount.getText()).toContain('40 records');
+                        expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 40');
+                        //TODO: Bug next button is not being disabled in footer
+                        //expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
+                        expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
+                        done();
+                    });
+                });
+            });
         });
 
         /**
