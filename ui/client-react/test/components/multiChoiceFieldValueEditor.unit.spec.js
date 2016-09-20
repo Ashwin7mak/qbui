@@ -4,28 +4,28 @@ import TestUtils from 'react-addons-test-utils';
 import MultiChoiceFieldValueEditor  from '../../src/components/fields/multiChoiceFieldValueEditor';
 
 const listbox_placeholderTextData = {
-    choices: []
+    choices: [{value: null, label: null}]
 };
 
 const listbox_renderWithSelection = {
-    choices: [{value: 'Apples', displayValue: 'Apples'},
-                {value: 'Apricots', displayValue: 'Apricots'},
-                {value: 'Bananas', displayValue: 'Bananas'},
+    choices: [{value: 'Apples', label: 'Apples'},
+                {value: 'Apricots', label: 'Apricots'},
+                {value: 'Bananas', label: 'Bananas'},
     ],
     value: "Apricots"
 };
 
 const listbox_noEmptyChoicesData = {
-    choices: [{value:'1701a', displayValue:'Enterprise 1701 A'},
-                {value:'1701b', displayValue:'Enterprise 1701 B'},
-                {value:'1701c', displayValue:'Enterprise 1701 C'},
-                {value:'1701d', displayValue:'Enterprise 1701 D'},
-                {value:' ', displayValue:' '},
-                {value:'1701e', displayValue:'Enterprise 1701 E'},
+    choices: [{value:'1701a', label:'Enterprise 1701 A'},
+                {value:'1701b', label:'Enterprise 1701 B'},
+                {value:'1701c', label:'Enterprise 1701 C'},
+                {value:'1701d', label:'Enterprise 1701 D'},
+                {value:' ', label:' '},
+                {value:'1701e', label:'Enterprise 1701 E'},
     ]
 };
 
-fdescribe('MultiChoiceFieldValueEditor functions', () => {
+describe('MultiChoiceFieldValueEditor functions', () => {
     'use strict';
     var matchers = require('../reactJasmine');
     beforeEach(function() {
@@ -45,13 +45,19 @@ fdescribe('MultiChoiceFieldValueEditor functions', () => {
 
     // Listbox, test that placeholder text appears when nothing is selected
     it('For a listbox, test display of placeholder text', () => {
-        component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor choices={listbox_placeholderTextData.choices}/>);
+        component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor choices={listbox_renderWithSelection.choices}
+                                                                              />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var node = ReactDOM.findDOMNode(component);
-        var placeholderDiv = node.getElementsByClassName("Select-control");
-        expect(placeholderDiv).toBeDefined();
-        expect(placeholderDiv.item(0)).toEqual("Select...");
+        // var placeholderDiv = node.getElementsByClassName("Select-value");
+        // expect(placeholderDiv).toBeDefined();
+        // expect(placeholderDiv[0]).toBeDefined();
+        TestUtils.Simulate.click(node);
+        var placeHolderNode = node.getElementsByClassName("Select-placeholder");
+        var spanNode = placeHolderNode[0].childNodes[0];
+        expect(spanNode.innerHTML).toEqual("Select...");
+
     });
 
     // Listbox, test render of component with a selection, should display selected text and a clear button
@@ -61,13 +67,20 @@ fdescribe('MultiChoiceFieldValueEditor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var node = ReactDOM.findDOMNode(component);
-        var selectControl = node.querySelector('.Select-control');
+        TestUtils.Simulate.click(node);
+        var placeHolderNode = node.getElementsByClassName("Select-value");
+        debugger;
 
-        expect(selectControl).toBeDefined();
-        expect(selectControl.item(0)).toEqual("Apricots");
+        var spanNode = placeHolderNode[0].childNodes[0];
 
-        var selectClearButton = node.querySelector('.Select-clear');
-        expect(selectClearButton).toBeDefined();
+        expect(spanNode.innerHTML).toEqual("Apricots");
+        // var selectControl = node.querySelector('.Select-control');
+
+        // expect(selectControl).toBeDefined();
+        // expect(selectControl.item(0)).toEqual("Apricots");
+        //
+        // var selectClearButton = node.querySelector('.Select-clear');
+        // expect(selectClearButton).toBeDefined();
     });
 
     // Listbox, test that no blank choices appear in the list

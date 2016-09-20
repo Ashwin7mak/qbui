@@ -33,6 +33,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
+        console.log('this.props.value: ', this.props.value);
         return {
             choice: {
                 label: this.props.value
@@ -42,7 +43,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
     selectChoice(choice) {
         this.setState({
-            choice
+            choice: choice
         });
     },
 
@@ -83,13 +84,24 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
         const placeHolderMessage = <I18nMessage message="selection.placeholder" />;
         const notFoundMessage = <I18nMessage message="selection.notFound" />;
+        let choice;
+        console.log('BEFORE IF this.props.value: ', typeof this.props.value);
+
+        if (this.props.value) {
+            choice = {label: this.props.value};
+        } else {
+            choice = false;
+        }
+
+        console.log('THIS CHOICE: ', choice);
+
 
         return (
             <div className="multiChoiceContainer">
                 {!this.props.showAsRadio ?
                     <Select
                         tabIndex="0"
-                        value={this.state.choice}
+                        value={choice}
                         optionRenderer={this.renderOption}
                         options={options}
                         onChange={this.selectChoice}
