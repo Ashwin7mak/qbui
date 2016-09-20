@@ -110,6 +110,8 @@ $cell-edit-background-edit: #f3f8fe;
         padding-left:4px;
         padding-top: 4px;
         display:inline-block;
+        float:left;
+        width: calc(100% - 20px); /* expand to enable right alignment but allow room for dropdown icon */
     }
 
     .gridCell {
