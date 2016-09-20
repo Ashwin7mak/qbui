@@ -5,7 +5,7 @@ import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import TableIcon from '../qbTableIcon/qbTableIcon';
 import IconActions from '../actions/iconActions';
 import {I18nMessage} from '../../utils/i18nMessage';
-import QBForm from './../QBForm/qbform.js';
+import Record from './../record/record';
 import {Link} from 'react-router';
 import simpleStringify from '../../../../common/src/simpleStringify';
 import Fluxxor from 'fluxxor';
@@ -164,7 +164,8 @@ export let RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        return !_.isEqual(this.props.form.formData, nextProps.form.formData);
+        return !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
+            !_.isEqual(this.props.pendEdits, nextProps.pendEdits);
     },
 
     /**
@@ -203,8 +204,7 @@ export let RecordRoute = React.createClass({
                     <ReactCSSTransitionGroup transitionName={nextOrPreviousTransitionName}
                                              transitionEnterTimeout={200}
                                              transitionLeaveTimeout={200}>
-
-                        <QBForm key={_.uniqueId()} errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null} formData={this.props.form ? this.props.form.formData : null}></QBForm>
+                        <Record recId={this.props.params.recordId} errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null} pendEdits={this.props.pendEdits ? this.props.pendEdits : null} formData={this.props.form ? this.props.form.formData : null}></Record>
 
                     </ReactCSSTransitionGroup>
                 </div>

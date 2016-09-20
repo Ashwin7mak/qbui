@@ -105,6 +105,14 @@ let QBForm = React.createClass({
      * @returns the record entry from formdata record array with the field ID
      */
     getFieldRecord(fieldId) {
+        if (_.has(this.props, 'pendEdits.recordChanges') && this.props.pendEdits.recordChanges[fieldId]) {
+            let vals = {};
+            vals.id = fieldId;
+            vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
+            vals.display = this.props.pendEdits.recordChanges[fieldId].newVal.display;
+            return vals;
+        }
+
         let record = this.props.formData.record || [];
 
         return _.find(record, val => {
@@ -148,7 +156,15 @@ let QBForm = React.createClass({
         let key = "field" + sectionIndex + "-" + element.orderIndex;
         return (
             <td key={key} colSpan={colSpan}>
-              <FieldElement element={element} relatedField={relatedField} fieldRecord={fieldRecord} includeLabel={includeLabel}/>
+              <FieldElement element={element} relatedField={relatedField} fieldRecord={fieldRecord} includeLabel={includeLabel} edit={this.props.edit}
+                            onEditRecordStart={this.props.onEditRecordStart}
+                            onEditRecordCancel={this.props.onEditRecordCancel}
+                            onChange={this.props.onFieldChange}
+                            onBlur={this.props.onFieldChange}
+                            onRecordChange={this.props.onRecordChange}
+                            onRecordSaveClicked={this.props.onRecordSaveClicked}
+                            validateRecord={this.props.validateRecord}
+                            idKey={"flm-" + this.props.idKey}/>
             </td>);
     },
 
@@ -261,7 +277,6 @@ let QBForm = React.createClass({
 
         return (
             <TabPane key={tab.orderIndex} tab={tab.title || Locale.getMessage("form.tab") + ' ' + tab.orderIndex}>
-                <br/>
                 {sections}
             </TabPane>
         );

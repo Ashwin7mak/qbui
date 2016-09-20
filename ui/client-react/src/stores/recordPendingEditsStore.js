@@ -85,6 +85,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.recordChanges[payload.changes.fid]) === 'undefined') {
             this.recordChanges[payload.changes.fid] = {};
         }
+        this.recordChanges =  _.cloneDeep(this.recordChanges);
         this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
         this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
         this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
