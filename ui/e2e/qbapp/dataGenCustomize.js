@@ -139,16 +139,16 @@ consts = require('../../common/src/constants.js');
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Single line required", {required:true});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "MultiLine",
-            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {dataAttr:{num_lines : 6}})});
+            {dataAttr:{clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 6})}});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Max 10 chars",
-            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {dataAttr:{max_chars : 10}})});
+            {dataAttr:{clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {max_chars : 10})}});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Wordwrap",
-            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {dataAttr:{word_wrap : true}})});
+            {dataAttr:{clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {word_wrap : true})}});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Input width 10",
-            {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {dataAttr:{width : 10}})});
+            {dataAttr: {clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {width : 10})}});
 
         addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT, "Html allowed single line",
             {dataAttr:{htmlAllowed: true}});
