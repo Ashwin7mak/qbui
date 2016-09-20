@@ -53,7 +53,7 @@ const CheckBoxFieldValueEditor = React.createClass({
             return;
         }
 
-        const newValue = !this.props.value;
+        let newValue = !this.props.value;
         if (this.props.onChange) {
             this.props.onChange(newValue);
         }
@@ -63,21 +63,32 @@ const CheckBoxFieldValueEditor = React.createClass({
         return (this.props.label !== ' ');
     },
 
-    render() {
-        let classes = "checkbox editor";
-        classes += (this.hasLabel() ? ' hasLabel' : '');
+    renderRequiredSymbol() {
+        let requiredSymbol = null;
 
-        let checkBoxClasses = '';
-        checkBoxClasses += (this.props.invalid ? 'invalid ' : '');
-        checkBoxClasses += (this.props.required ? 'required' : '');
-
-        let requiredSymbol;
         if (this.props.required) {
             let requiredSymbolClasses = 'required-symbol';
             requiredSymbolClasses += (this.props.invalid ? ' invalid' : '');
             requiredSymbol = <span className={requiredSymbolClasses}>*</span>;
         }
 
+        return requiredSymbol;
+    },
+
+    setGeneralClasses() {
+        let classes = "checkbox editor";
+        classes += (this.hasLabel() ? ' hasLabel' : '');
+        return classes;
+    },
+
+    setCheckBoxClasses() {
+        let checkBoxClasses = '';
+        checkBoxClasses += (this.props.invalid ? 'invalid ' : '');
+        checkBoxClasses += (this.props.required ? 'required' : '');
+        return checkBoxClasses;
+    },
+
+    render() {
         // If a checkbox is readonly, return the renderer instead
         // Need to return a renderer if value is true and checkbox is disabled
         // because could not get the checkmark to be in the correct place
@@ -86,8 +97,8 @@ const CheckBoxFieldValueEditor = React.createClass({
         }
 
         return (
-            <div className={classes}>
-                <input className={checkBoxClasses}
+            <div className={this.setGeneralClasses()}>
+                <input className={this.setCheckBoxClasses()}
                        checked={this.props.value}
                        ref="fieldInput"
                        type="checkbox"
@@ -101,7 +112,7 @@ const CheckBoxFieldValueEditor = React.createClass({
                        onKeyDown={this.onKeyDown} >
                     {this.props.label}
                 </label>
-                {requiredSymbol}
+                {this.renderRequiredSymbol()}
             </div>
         );
     }
