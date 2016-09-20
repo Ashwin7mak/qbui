@@ -78,6 +78,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
     setGeneralClasses() {
         let classes = "checkbox renderer";
         classes += (this.hasLabel() ? ' hasLabel' : '');
+        return classes;
     },
 
     render() {
