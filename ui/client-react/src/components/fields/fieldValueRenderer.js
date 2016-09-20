@@ -136,7 +136,6 @@ const FieldValueRenderer = React.createClass({
         let className = "";
         let commonProperties = {};
 
-        // TODO: this should get moved down to the respective individual components
         if (_.has(this.props, 'attributes.clientSideAttributes.bold') &&
             this.props.attributes.clientSideAttributes.bold) {
             commonProperties.isBold = true;

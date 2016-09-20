@@ -249,33 +249,6 @@ const CellRenderer = React.createClass({
         current.invalidMessage = result ? result.invalidMessage : null;
         this.setState({validationStatus : current});
     }
-
-    // TODO: remove once text and numeric components address display after an edit..
-    /**
-     * textcell was edited, update the r/w and r/o value
-     * @param value
-     */
-    //textCellEdited(value) {
-    //    let theVals = {
-    //        value: value
-    //    };
-    //    theVals.display = textFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-    //
-    //    this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
-    //},
-
-    /**
-     * numeric cell edited, update the display value from common formatter
-     * @param value
-     */
-    //numericCellEdited(value) {
-    //    let theVals = {
-    //        value: Number(value)
-    //    };
-    //    theVals.display = numericFormatter.format(theVals, this.props.colDef.datatypeAttributes);
-    //
-    //    this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus:null}, ()=>{this.cellChanges();});
-    //}
 });
 
 export const TextCellRenderer = React.createClass({

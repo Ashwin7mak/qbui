@@ -44,7 +44,7 @@
     .today {
         border-radius: 16px;
         background-color: $datepicker-bg-today;
-        color: $color11;
+        color: $color-black-700;
         font-weight: normal;
     }
 
@@ -53,15 +53,11 @@
         content: inherit;
         border: none;
     }
-
 }
 
 /* the little arrow on the top top right of the popup */
 .bootstrap-datetimepicker-widget.pull-right:after {
-    border-bottom-color: $color19;
-}
-.bootstrap-datetimepicker-widget.bottom:before {
-    //top: -8px;
+    border-bottom-color: $color-black-400;
 }
 
 .datepicker {

@@ -43,8 +43,7 @@ const TimeFieldValueRenderer = React.createClass({
     },
 
     /**
-     * Renders a date field
-     *
+     * Renders a formatted time field.
      */
     render() {
         let classes = 'dateCell data';

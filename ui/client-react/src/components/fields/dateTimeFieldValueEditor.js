@@ -51,13 +51,17 @@ const DateTimeFieldValueEditor = React.createClass({
         idKey: React.PropTypes.any
     },
 
+    getOrigValue() {
+        return this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+    },
+
     onDateChange(value) {
         if (this.props.onChange) {
             if (value === null || value) {
                 let isoFormat = null;
                 if (value !== null) {
                     //  extract the time component from the original
-                    let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+                    let origValue = this.getOrigValue();
 
                     //  if no time, then set to midnight
                     let theOrigTime = origValue && moment(origValue).isValid ? moment(origValue).format(" HH:mm:ss") : ' 00:00:00';
@@ -74,7 +78,7 @@ const DateTimeFieldValueEditor = React.createClass({
                 let isoFormat = null;
                 if (value !== null) {
                     //  extract the date component from the original
-                    let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+                    let origValue = this.getOrigValue();
 
                     //  if no original date, then set to now
                     let dateFormat = "MM-DD-YYYY ";
@@ -93,7 +97,7 @@ const DateTimeFieldValueEditor = React.createClass({
             if (value === null || value) {
                 let isoFormat = null;
                 if (value !== null) {
-                    let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+                    let origValue = this.getOrigValue();
 
                     //  if no time, then set to midnight
                     let theOrigTime = origValue && moment(origValue).isValid ? moment(origValue).format(" HH:mm:ss") : ' 00:00:00';
@@ -117,7 +121,7 @@ const DateTimeFieldValueEditor = React.createClass({
             if (value === null || value) {
                 let isoFormat = null;
                 if (value !== null) {
-                    let origValue = this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+                    let origValue = this.getOrigValue();
 
                     //  if no original date, then set to now
                     let dateFormat = "MM-DD-YYYY ";
