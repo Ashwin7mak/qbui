@@ -13,6 +13,7 @@ import './fields.scss';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
 import timeFormatter from '../../../../common/src/formatter/timeOfDayFormatter';
 import moment from 'moment';
+import momentTz from 'moment-timezone';
 
 /**
  * Return a map of times, in minutes, starting at midnight and adding
@@ -96,6 +97,7 @@ const TimeFieldValueEditor = React.createClass({
 
     onChange(newValue) {
         if (newValue && (this.props.onChange || this.props.onDateTimeChange)) {
+            //  value of null means the empty option was selected
             if (newValue.value === null || newValue.value) {
                 if (this.props.onDateTimeChange) {
                     this.props.onDateTimeChange(newValue.value);
@@ -108,7 +110,7 @@ const TimeFieldValueEditor = React.createClass({
 
     onBlur(ev) {
         if (ev.target && (this.props.onBlur || this.props.onDateTimeBlur)) {
-            //  value of null means the empty option was selected
+            //  convert the entered time to military format
             let militaryTime = null;
             if (ev.target.value) {
                 //  convert to military time
@@ -121,6 +123,7 @@ const TimeFieldValueEditor = React.createClass({
                 }
             }
 
+            //  null means the time was cleared by the user.
             if (ev.target.value === null || militaryTime) {
                 if (this.props.onDateTimeBlur) {
                     this.props.onDateTimeBlur(militaryTime);
@@ -165,16 +168,20 @@ const TimeFieldValueEditor = React.createClass({
             let inputValue = this.props.value.replace(/(\[.*?\])/, '');
             if (this.props.type === fieldFormats.TIME_FORMAT) {
                 let timeFormat = timeFormatter.generateFormatterString(this.props.attributes);
-
-                //  It's a time only field...just use today's date to allow us to format the time
-                let now = moment().format("MM-DD-YYYY ") + inputValue;
-                theTime = moment(now, "MM-DD-YYYY " + timeFormat).format(timeFormat);
+                //  It's a time only field...just use today's date to format the time
+                theTime = moment(inputValue, timeFormat).format(timeFormat);
             } else {
                 let timeFormatForDate = dateTimeFormatter.getTimeFormat({showTime:true});
 
+                //  Quickbase renders times based on the app setting, which may differ from the user's
+                //  time zone.  Because MomentJs renders date/times in the user's timezone, which may
+                //  not match the Quickbase setting, we must use the Quickbase setting to explicitly set
+                //  the time based on the Quickbase time zone.
+                let timeZone = dateTimeFormatter.getTimeZone(this.props.attributes);
+
                 //  Firefox parser is more strict than others when parsing; so may need to specify
                 //  the format of the input value if the moment parser can't parse the input value.
-                let momentTime = moment(inputValue).isValid() ? moment(inputValue) : moment(inputValue, "MM-DD-YYYY " + timeFormatForDate);
+                let momentTime = moment(inputValue).isValid() ? momentTz.tz(inputValue, timeZone) : momentTz.tz(inputValue, "MM-DD-YYYY " + timeFormatForDate, timeZone);
                 theTime = momentTime.format(timeFormatForDate);
             }
         }
@@ -186,7 +193,7 @@ const TimeFieldValueEditor = React.createClass({
         let placeholder = theTime;
         let useMilitaryTime = this.props.attributes && this.props.attributes.use24HourClock;
         if (!placeholder) {
-            placeholder = useMilitaryTime ? 'hh:mm:ss' : 'hh:mm';
+            placeholder = this.props.attributes && this.props.attributes.scale ? this.props.attributes.scale.toLowerCase() : 'hh:mm';
         }
 
         //  TODO: verify small breakpoint once form edit is implemented

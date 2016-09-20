@@ -18,7 +18,6 @@
     var FOUR_DIGIT_YEAR = 'YYYY';
     var TWO_DIGIT_YEAR = 'YY';
     var TWO_DIGIT_DAY = 'DD';
-    var DEFAULT_TIMEZONE = 'America/Los_Angeles';
     var TIMEZONE_FORMATTER = '(z)';
 
     //Base formats  (US centric formatted dates -- does not support localized dates)
@@ -78,6 +77,12 @@
             return JAVA_TO_JS_DATE_FORMATS;
         },
 
+        /**
+         * Return a MomentJs date format based on the fieldInfo settings.
+         *
+         * @param fieldInfo
+         * @returns {string}
+         */
         getDateFormat: function(fieldInfo) {
 
             var jsDateFormat = '';
@@ -103,6 +108,11 @@
             return jsDateFormat;
         },
 
+        /**
+         * Return a MomentJs time format based on the fieldInfo settings.
+         * @param fieldInfo
+         * @returns {string}
+         */
         getTimeFormat: function(fieldInfo) {
             var jsTimeFormat = '';
 
@@ -118,6 +128,33 @@
             return jsTimeFormat;
         },
 
+        /**
+         * Return the Timzone setting based on the fieldInfo settings.
+         * If no settings, then UTC timezone is returned by default.
+         *
+         * @param fieldInfo
+         * @returns {string}
+         */
+        getTimeZone: function(fieldInfo) {
+            var timeZone = consts.UTC_TIMEZONE;
+            if (fieldInfo) {
+                if (fieldInfo.type === consts.DATE_TIME || fieldInfo.type === consts.FORMULA_DATE_TIME) {
+                    timeZone = fieldInfo.timeZone;
+                    if (!timeZone) {
+                        //  If no time zone, then the app is using Pacific as its timezone.
+                        timeZone = consts.PST_TIMEZONE;
+                    }
+                }
+            }
+            return timeZone;
+        },
+
+        /**
+         * Generate a MomentJs date and time format based on the fieldInfo settings.
+         *
+         * @param fieldInfo
+         * @returns {string}
+         */
         generateFormat: function(fieldInfo) {
             //  get date formatting requirements
             var jsDateFormat = this.getDateFormat(fieldInfo);
@@ -142,13 +179,8 @@
 
             fieldInfo = fieldInfo || {};
 
-            var timeZone = consts.UTC_TIMEZONE;
-            if (fieldInfo.type === consts.DATE_TIME || fieldInfo.type === consts.FORMULA_DATE_TIME) {
-                timeZone = fieldInfo.timeZone;
-                if (!timeZone) {
-                    timeZone = DEFAULT_TIMEZONE;
-                }
-            }
+            var timeZone = this.getTimeZone(fieldInfo);
+
             var rawInput = fieldValue.value.replace(/(\[.*?\])/, '');
             var d;
             try {

@@ -6,11 +6,13 @@ import TimeFieldValueEditor from './timeFieldValueEditor';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
 import timeFormatter from '../../../../common/src/formatter/timeOfDayFormatter';
 import moment from 'moment';
+import momentTz from 'moment-timezone';
 
 /**
  * # DateTimeFieldValueEditor
  *
- * An editable rendering of a date time field. The component can be supplied a value or not. Used within a FieldValueEditor
+ * An editable rendering of a date time field. The component may be supplied a value.
+ * Used within a FieldValueEditor.
  *
  */
 
@@ -51,8 +53,36 @@ const DateTimeFieldValueEditor = React.createClass({
         idKey: React.PropTypes.any
     },
 
+    /**
+     * Return the original date and time supplied as a property to this component
+     *
+     * @returns {string}
+     */
     getOrigValue() {
         return this.props.value ? this.props.value.replace(/(\[.*?\])/, '') : '';
+    },
+
+    /**
+     * Get the original value supplied as a property to this component and extract out the time.  If there is
+     * no time, then midnight is used.
+     *
+     * @returns {string}
+     */
+    getOrigTime() {
+        let origValue = this.getOrigValue();
+        return origValue && moment(origValue).isValid ? moment(origValue).format("HH:mm:ss") : '00:00:00';
+    },
+
+    /**
+     * Get the original value supplied as a property to this component and extract out the date.  If there is no
+     * original date, then the current date is used.  The date is formatted as MM-DD-YYYY
+     *
+     * @returns {string}
+     */
+    getOrigDate() {
+        let origValue = this.getOrigValue();
+        let dateFormat = 'MM-DD-YYYY';
+        return origValue && moment(origValue).isValid ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
     },
 
     onDateChange(value) {
@@ -60,12 +90,9 @@ const DateTimeFieldValueEditor = React.createClass({
             if (value === null || value) {
                 let isoFormat = null;
                 if (value !== null) {
-                    //  extract the time component from the original
-                    let origValue = this.getOrigValue();
-
-                    //  if no time, then set to midnight
-                    let theOrigTime = origValue && moment(origValue).isValid ? moment(origValue).format(" HH:mm:ss") : ' 00:00:00';
-                    isoFormat = moment(value + theOrigTime).toISOString();
+                    //  have a new date; append the original time and return in UTC time.
+                    let newDateTime = value + ' ' + this.getOrigTime();
+                    isoFormat = moment(newDateTime).toISOString();
                 }
                 this.props.onChange(isoFormat);
             }
@@ -77,15 +104,10 @@ const DateTimeFieldValueEditor = React.createClass({
             if (value === null || value) {
                 let isoFormat = null;
                 if (value !== null) {
-                    //  extract the date component from the original
-                    let origValue = this.getOrigValue();
-
-                    //  if no original date, then set to now
-                    let dateFormat = "MM-DD-YYYY ";
-                    let theOrigDate = origValue && moment(origValue).isValid ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
-
-                    //  need to convert to ISO_DATE_TIME supported format
-                    isoFormat = moment(theOrigDate + value).toISOString();
+                    //  get the original date and append the new time(time was entered based on app timezone); return in utc time.
+                    let newDateTime = this.getOrigDate() + ' ' + value;
+                    let m = momentTz.tz(newDateTime, 'MM-DD-YYYY HH:mm', dateTimeFormatter.getTimeZone(this.props.attributes));
+                    isoFormat = m.utc().format();
                 }
                 this.props.onChange(isoFormat);
             }
@@ -97,11 +119,9 @@ const DateTimeFieldValueEditor = React.createClass({
             if (value === null || value) {
                 let isoFormat = null;
                 if (value !== null) {
-                    let origValue = this.getOrigValue();
-
-                    //  if no time, then set to midnight
-                    let theOrigTime = origValue && moment(origValue).isValid ? moment(origValue).format(" HH:mm:ss") : ' 00:00:00';
-                    isoFormat = moment(value + theOrigTime).toISOString();
+                    //  have a new date; append the original time and return in UTC time.
+                    let newDateTime = value + ' ' + this.getOrigTime();
+                    isoFormat = moment(newDateTime).toISOString();
                 }
 
                 let valueObject = {
@@ -121,12 +141,10 @@ const DateTimeFieldValueEditor = React.createClass({
             if (value === null || value) {
                 let isoFormat = null;
                 if (value !== null) {
-                    let origValue = this.getOrigValue();
-
-                    //  if no original date, then set to now
-                    let dateFormat = "MM-DD-YYYY ";
-                    let theOrigDate = origValue && moment(origValue).isValid ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
-                    isoFormat = moment(theOrigDate + value).toISOString();
+                    //  get the original date and append the new time(time was entered based on app timezone); return in utc time.
+                    let newDateTime = this.getOrigDate() + ' ' + value;
+                    let m = momentTz.tz(newDateTime, 'MM-DD-YYYY HH:mm', dateTimeFormatter.getTimeZone(this.props.attributes));
+                    isoFormat = m.utc().format();
                 }
                 let valueObject = {
                     value: isoFormat,
