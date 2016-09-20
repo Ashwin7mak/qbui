@@ -22,9 +22,13 @@ function buildMockParent(options = {disabled: false, readOnly: false}) {
         onChange(newValue) {
             this.setState({value: newValue});
         },
+        onBlur(value) {
+            return;
+        },
         render() {
             return <CheckBoxFieldValueEditor value={this.state.value}
                                              onChange={this.onChange}
+                                             onBlur={this.onBlur}
                                              disabled={options.disabled}
                                              readOnly={options.readOnly} />;
         }
@@ -149,5 +153,21 @@ describe('CheckBoxFieldValueEditor', () => {
 
         Simulate.click(domComponent);
         expect(component.state.value).toBe(false);
+    });
+
+    it('calls onBlur', () => {
+        let mockParent = {
+            onBlur: function(ev) {
+                return;
+            }
+        };
+        spyOn(mockParent, 'onBlur');
+
+        component = TestUtils.renderIntoDocument(<CheckBoxFieldValueEditor onBlur={mockParent.onBlur} />);
+        let domComponent = ReactDOM.findDOMNode(component).querySelector('input');
+
+        Simulate.blur(domComponent);
+
+        expect(mockParent.onBlur).toHaveBeenCalled();
     });
 });
