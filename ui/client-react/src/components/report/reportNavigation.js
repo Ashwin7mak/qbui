@@ -21,7 +21,6 @@ var ReportNavigation = React.createClass({
         }),
         pageStart: React.PropTypes.number,
         pageEnd: React.PropTypes.number,
-        recordsCount: React.PropTypes.number,
         getNextReportPage: React.PropTypes.func,
         getPreviousReportPage: React.PropTypes.func,
     },
@@ -52,10 +51,10 @@ var ReportNavigation = React.createClass({
             isReportFiltered = this.props.reportData.selections ? this.props.reportData.selections.hasAnySelections() : false;
         }
 
-        let showNavigation = !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
         if (isReportFiltered) {
-            showNavigation = this.props.reportData.data.filteredRecordsCount > this.props.pageEnd;
+            recordCount = this.props.reportData.data.filteredRecordsCount;
         }
+        let showNavigation = !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
         // Do not show navigation if:
         // - We're in the small breakpoint
         // - Page records have not been fetched
@@ -78,7 +77,7 @@ var ReportNavigation = React.createClass({
                                          pageEnd={this.props.pageEnd}
                             />
                         </div>
-                        <NextLink recordsCount={this.props.recordsCount}
+                        <NextLink recordsCount={recordCount}
                                   pageEnd={this.props.pageEnd}
                                   getNextReportPage={this.props.getNextReportPage}
                         />

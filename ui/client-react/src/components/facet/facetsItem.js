@@ -9,6 +9,7 @@ import  FacetsAspect from './facetsAspect';
 import Logger from '../../utils/logger';
 import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
+import QBToolTip from '../qbToolTip/qbToolTip';
 import simpleStringify from '../../../../common/src/simpleStringify';
 
 let logger = new Logger();
@@ -85,15 +86,22 @@ class FacetsItem extends Component {
      * @returns {XML}
      */
     renderFieldName() {
+        let facetName = this.props.facet.name;
         let clearFacetsIcon = "";
         let selectionInfo = "";
         let selectionStrings = "";
         if (this.props.fieldSelections.length > 0) {
             // note onMouseDown instead of onClick necessary here to support rootClose on the menu
             // so that it will not propagate to thru to parent collapse while clearing selection
-            clearFacetsIcon = (<span onTouchStart={e => this.clearSelects(e)} onMouseDown={e => this.clearSelects(e)} >
-                                    <QBicon className="clearFacet" icon="clear-mini" />
-                                </span>);
+            clearFacetsIcon = (
+                <span className="clearFacetContainer">
+                    <QBToolTip tipId="clearFacet" i18nMessageKey="report.facets.clearFacet" facet={facetName}>
+                        <span onTouchStart={e => this.clearSelects(e)} onMouseDown={e => this.clearSelects(e)}>
+                            <QBicon className="clearFacet" icon="clear-mini" />
+                        </span>
+                    </QBToolTip>
+                </span>
+            );
             let listOfValues = this.props.facet.values.map(x => x.value);
             let originalOrderSelected =  _.intersection(listOfValues, this.props.fieldSelections);
             selectionStrings = (originalOrderSelected.map((item, index) => {
@@ -111,7 +119,7 @@ class FacetsItem extends Component {
         }
         return (<div>
                     <h4 className={"facetName " + actionable} >
-                        <span>{this.props.facet.name}</span>
+                        <span>{facetName}</span>
                         {subtitle}
                         {clearFacetsIcon}
                     </h4>
@@ -206,4 +214,3 @@ FacetsItem.defaultProps = {
 };
 
 export default FacetsItem;
-

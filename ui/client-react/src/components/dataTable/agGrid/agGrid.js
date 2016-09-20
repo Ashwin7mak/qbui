@@ -16,6 +16,7 @@ import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
 import * as SchemaConsts from '../../../constants/schema';
+import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
         NumericCellRenderer, DurationCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
@@ -988,33 +989,10 @@ let AGGrid = React.createClass({
         let columnDefs = this.getColumns();
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
 
-        // TODO Code hygiene, set up loader options as an external constant. https://quickbase.atlassian.net/browse/MB-503
-        var loaderOptions = {
-            lines: 9,
-            length: 0,
-            width: 11,
-            radius: 18,
-            scale: 1,
-            corners: 1,
-            color: '#000',
-            opacity: 0,
-            rotate: 0,
-            direction: 1,
-            speed: 1,
-            trail: 60,
-            fps: 20,
-            zIndex: 2e9,
-            className: 'spinner',
-            top: '50%',
-            left: '50%',
-            shadow: false,
-            hwaccel: false,
-            position: 'absolute'
-        };
         return (
             <div className="reportTable">
                 <div className={gridWrapperClasses} ref="gridWrapper">
-                    <Loader loaded={!this.props.loading} options={loaderOptions}>
+                    <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT_REPORT}>
                         {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
                                 <AgGridReact

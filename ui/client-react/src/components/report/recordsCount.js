@@ -3,6 +3,7 @@ import './report.scss';
 
 import Loader  from 'react-loader';
 import {I18nMessage} from '../../../src/utils/i18nMessage';
+import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
 import Breakpoints from "../../utils/breakpoints";
 
 const largeBreakpointColor = '#404040';
@@ -39,29 +40,9 @@ var RecordsCount = React.createClass({
             dbl = this.props.clearAllFilters;
             message = (this.props.recordCount === 1) ? "report.filteredSingleRecordCount" : "report.filteredRecordCount";
         }
-        // TODO Code hygiene, set up loader options as an external constant. https://quickbase.atlassian.net/browse/MB-503
-        var loaderOptions = {
-            lines: 7,
-            length: 0,
-            width: 5,
-            radius: 5,
-            scale: 1,
-            corners: 1,
-            opacity: 0,
-            rotate: 0,
-            direction: 1,
-            speed: 1.1,
-            trail: 60,
-            fps: 20,
-            zIndex: 2e9,
-            color: !Breakpoints.isSmallBreakpoint() ? largeBreakpointColor : smallBreakpointColor,
-            className: 'spinner',
-            top: '54%',
-            left: '33%',
-            shadow: false,
-            hwaccel: false,
-            position: 'absolute'
-        };
+
+        let loaderOptions = SpinnerConfigurations.RECORD_COUNT;
+        loaderOptions.color = !Breakpoints.isSmallBreakpoint() ? largeBreakpointColor : smallBreakpointColor;
         return (
             <div className="recordsCountLoaderContainer">
                 <Loader loaded={!this.props.isCounting} options={loaderOptions}>

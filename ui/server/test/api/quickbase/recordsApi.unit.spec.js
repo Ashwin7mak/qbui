@@ -296,11 +296,13 @@ describe("Validate recordsApi", function() {
 
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
             executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
+            executeReqStub.onCall(2).returns(Promise.resolve({'body': '10'}));
             var promise = recordsApi.fetchRecordsAndFields(req);
             promise.then(
                 function(response) {
                     assert.equal(response.fields[0].display, '12-3454');
                     assert.equal(response.records[0][0].display, '1234525');
+                    assert.equal(response.filteredCount, '10');
                     assert.notEqual(response.groups.hasGrouping, true);
                     done();
                 }
@@ -342,6 +344,48 @@ describe("Validate recordsApi", function() {
                     assert.equal(response.groups.hasGrouping, true);
                     assert.equal(response.groups.totalRows, 2);
                     assert.equal(response.records.length, 0);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    describe("when fetchCountForRecords is called", function() {
+        var executeReqStub = null;
+
+        beforeEach(function() {
+            executeReqStub = sinon.stub(requestHelper, "executeRequest");
+            recordsApi.setRequestHelperObject(requestHelper);
+        });
+
+        afterEach(function() {
+            executeReqStub.restore();
+        });
+
+        it('success return count when no query parameter is set', function(done) {
+            req.url = '/apps/1/tables/2/records/countQuery';
+            executeReqStub.onCall(0).returns(Promise.resolve({'body': '10'}));
+            var promise = recordsApi.fetchCountForRecords(req);
+            promise.then(
+                function(response) {
+                    assert.equal(response.body, '10');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('success return count when query is set', function(done) {
+            req.url = '/apps/1/tables/2/records/countQuery';
+            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:V';
+            executeReqStub.onCall(0).returns(Promise.resolve({'body': '10'}));
+            var promise = recordsApi.fetchCountForRecords(req);
+            promise.then(
+                function(response) {
+                    assert.equal(response.body, '10');
                     done();
                 }
             ).catch(function(errorMsg) {

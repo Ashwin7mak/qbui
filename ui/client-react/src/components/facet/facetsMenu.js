@@ -7,6 +7,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import StringUtils from '../../utils/stringUtils';
 
 import QBicon from '../qbIcon/qbIcon';
+import QBToolTip from '../qbToolTip/qbToolTip';
 import  {facetsProp} from './facetProps';
 import FacetsList from './facetsList';
 import LimitConstants from './../../../../common/src/limitConstants';
@@ -205,14 +206,18 @@ const FacetsMenu = React.createClass({
         this.props.reportData.data.facets.map((facet) => {
             if (selections.hasAnySelectionsForField(facet.id)) {
                 let kids = (selections.getFieldSelections(facet.id).map((value) => {
-                    return (<span key={'token.' + facet.name + '.' + value}
-                                  className="selectedToken" onClick={(e) => self.clearSelect(e, facet, value)}>
-                                 <span className="selectedTokenName">
-                                      <span>{value}</span>
+                    return (
+                        <QBToolTip tipId={`selectedToken{facet.name}`} i18nMessageKey="report.facets.clearFacetSelection">
+                            <span key={'token.' + facet.name + '.' + value}
+                                  className="selectedToken"
+                                  onClick={(e) => self.clearSelect(e, facet, value)}>
+                                <span className="selectedTokenName">
+                                    <span>{value}</span>
                                     <QBicon className="clearFacet" icon="clear-mini"/>
-                                 </span>
-
-                          </span>);
+                                </span>
+                            </span>
+                        </QBToolTip>
+                    );
                 }));
                 components.push(<div className="facetToken" key={'token' + facet.name} ><span className="facetNameToken">{facet.name}</span>
                     <span className="facetSelections">{kids}</span></div>);
