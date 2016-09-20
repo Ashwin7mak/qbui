@@ -737,10 +737,10 @@ export let ReportContent = React.createClass({
             this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
         }
 
-        // Hide the footer if any rows are selected.
+        // Hide the footer if any rows are selected and for small breakpoint.
         const selectedRows = this.props.selectedRows;
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
-        let showFooter = !this.props.reactabular  && !areRowsSelected;
+        let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
         return (
                 <div className="loadedContent">
