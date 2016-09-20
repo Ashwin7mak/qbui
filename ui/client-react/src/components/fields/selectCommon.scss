@@ -8,9 +8,7 @@ $selected-choice-color: $color-cyan-500;
   width: 100%;
 
   .Select-control {
-    //Border has something to do with input box and drop down menu box not lining up
-    //border: 1px;
-    height:28px;
+    height:32px;
 
     .Select-input {
       height:28px;

@@ -65,7 +65,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
     render() {
         return (
             <Select
-                className="cellEdit"
                 tabIndex="0"
                 value={this.state.choice}
                 optionRenderer={this.renderOption}
