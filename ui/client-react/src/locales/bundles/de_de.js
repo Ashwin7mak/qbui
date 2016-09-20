@@ -21,7 +21,9 @@ export default {
             print: "Drucken",
             copy: "Kopieren",
             delete: "Löschen",
-            more: "Mehr..."
+            more: "Mehr...",
+            placeholder: 'Wählen...',
+            notFound: "Nicht gefunden"
         },
         footer: {
             copyright: "{year} QuickBase, Inc. Alle Rechte vorbehalten."

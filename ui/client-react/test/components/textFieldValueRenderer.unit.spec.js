@@ -1,9 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import TestUtils from 'react-addons-test-utils';
-
-
-import TextFieldValueRenderer  from '../../src/components/fields/textFieldValueRenderer';
+import React from "react";
+import ReactDOM from "react-dom";
+import TestUtils from "react-addons-test-utils";
+import TextFieldValueRenderer from "../../src/components/fields/textFieldValueRenderer";
 
 describe('TextFieldValueRenderer functions', () => {
     'use strict';

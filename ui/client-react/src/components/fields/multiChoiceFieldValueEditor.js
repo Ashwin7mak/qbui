@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import {RadioGroup, Radio} from 'react-radio-group';
 import 'react-select/dist/react-select.min.css';
 import './multiChoiceFieldValueEditor.scss';
 import './selectCommon.scss';
@@ -23,15 +24,25 @@ const MultiChoiceFieldValueEditor = React.createClass({
         onBlur: React.PropTypes.func,
         /**
          * data type attributes for the field */
-        fieldDef: React.PropTypes.object
+        fieldDef: React.PropTypes.object,
+        /**
+         * Used in forms. If set to true, will render radio buttons. Otherwise will render listbox.
+         * This property should map to 'show as radio buttons' property in a form */
+        showAsRadio: React.PropTypes.bool
     },
 
     getInitialState() {
-        return {choice: {label: this.props.value}};
+        return {
+            choice: {
+                label: this.props.value
+            }
+        };
     },
 
     selectChoice(choice) {
-        this.setState({choice});
+        this.setState({
+            choice
+        });
     },
 
     getSelectItems() {
@@ -63,18 +74,36 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     render() {
+        const options = this.getSelectItems();
+        const placeHolderMessage = <I18nMessage message="selection.placeholder" />
+        const notFoundMessage = <I18nMessage message="selection.notFound" />
         return (
-            <Select
-                tabIndex="0"
-                value={this.state.choice}
-                optionRenderer={this.renderOption}
-                options={this.getSelectItems()}
-                onChange={this.selectChoice}
-                placeholder="Select..."
-                noResultsText="Not found"
-                autosize={false}
-                clearable={false}
-                onBlur={this.onBlur} />
+
+            <div className="multiChoiceContainer">
+                {this.props.showAsRadio ?
+                    <Select
+                        tabIndex="0"
+                        value={this.state.choice}
+                        optionRenderer={this.renderOption}
+                        options={options}
+                        onChange={this.selectChoice}
+                        placeholder={placeHolderMessage}
+                        noResultsText={notFoundMessage}
+                        autosize={false}
+                        clearable={false}
+                        onBlur={this.onBlur} /> :
+
+                    <RadioGroup name="test" selectedValue={this.state.selectedValue}
+                                onChange={this.handleChange}
+                                onBlur={this.onBlur}>
+                        {   Object.keys(options).map(function(key, value) {
+                            return (<span>
+                                        <Radio value={key} /> {value}
+                                    </span>);
+                        })}
+                    </RadioGroup>
+                }
+            </div>
         );
     }
 });

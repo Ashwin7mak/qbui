@@ -12,6 +12,18 @@ describe('Logger', () => {
         log(msg) {
             return msg;
         }
+        error(msg) {
+            return msg;
+        }
+        debug(msg) {
+            return msg;
+        }
+        warn(msg) {
+            return msg;
+        }
+        info(msg) {
+            return msg;
+        }
     }
     beforeEach(() => {
         Logger.__Rewire__('LogService', mockLogService);
@@ -177,19 +189,19 @@ describe('Logger', () => {
         expect(logger.logToServer).toBeTruthy();
 
         spyOn(logger, 'logTheMessage').and.callThrough();
-        spyOn(console, 'log').and.returnValue('message logged to console');
+        spyOn(console, 'debug').and.returnValue('message logged to console');
         spyOn(logger, 'sendMessageToServer');
 
         logger.debug(logMsg);
 
         expect(logger.logTheMessage).toHaveBeenCalled();
-        expect(console.log).toHaveBeenCalled();
+        expect(console.debug).toHaveBeenCalled();
         expect(logger.sendMessageToServer).toHaveBeenCalled();
 
         Logger.__ResetDependency__('Configuration');
     });
 
-    it('test Logger with console only logging', () => {
+    it('test Logger with console only logging debug level', () => {
         let mockConfig = {
             logger: {
                 logToConsole: true,
@@ -205,13 +217,94 @@ describe('Logger', () => {
         expect(logger.logToServer).toBeFalsy();
 
         spyOn(logger, 'logTheMessage').and.callThrough();
-        spyOn(console, 'log').and.returnValue('message logged to console');
+        spyOn(console, 'debug').and.returnValue('message logged to console');
         spyOn(logger, 'sendMessageToServer');
 
         logger.debug(logMsg);
 
         expect(logger.logTheMessage).toHaveBeenCalled();
-        expect(console.log).toHaveBeenCalled();
+        expect(console.debug).toHaveBeenCalled();
+        expect(logger.sendMessageToServer).not.toHaveBeenCalled();
+
+        Logger.__ResetDependency__('Configuration');
+    });
+    it('test Logger with console only logging error level', () => {
+        let mockConfig = {
+            logger: {
+                logToConsole: true,
+                logToServer: false,
+                logLevel: LogLevel.ERROR
+            }
+        };
+
+        Logger.__Rewire__('Configuration', mockConfig);
+        let logger = new Logger();
+
+        expect(logger.logToConsole).toBeTruthy();
+        expect(logger.logToServer).toBeFalsy();
+
+        spyOn(logger, 'logTheMessage').and.callThrough();
+        spyOn(console, 'error').and.returnValue('message logged to console');
+        spyOn(logger, 'sendMessageToServer');
+
+        logger.error(logMsg);
+
+        expect(logger.logTheMessage).toHaveBeenCalled();
+        expect(console.error).toHaveBeenCalled();
+        expect(logger.sendMessageToServer).not.toHaveBeenCalled();
+
+        Logger.__ResetDependency__('Configuration');
+    });
+    it('test Logger with console only logging warn level', () => {
+        let mockConfig = {
+            logger: {
+                logToConsole: true,
+                logToServer: false,
+                logLevel: LogLevel.WARN
+            }
+        };
+
+        Logger.__Rewire__('Configuration', mockConfig);
+        let logger = new Logger();
+
+        expect(logger.logToConsole).toBeTruthy();
+        expect(logger.logToServer).toBeFalsy();
+
+        spyOn(logger, 'logTheMessage').and.callThrough();
+        spyOn(console, 'warn').and.returnValue('message logged to console');
+        spyOn(logger, 'sendMessageToServer');
+
+        logger.warn(logMsg);
+
+        expect(logger.logTheMessage).toHaveBeenCalled();
+        expect(console.warn).toHaveBeenCalled();
+        expect(logger.sendMessageToServer).not.toHaveBeenCalled();
+
+        Logger.__ResetDependency__('Configuration');
+    });
+    it('test Logger with console only logging info level', () => {
+        let mockConfig = {
+            logger: {
+                logToConsole: true,
+                logToServer: false,
+                logLevel: LogLevel.INFO
+            }
+        };
+
+        Logger.__Rewire__('Configuration', mockConfig);
+        let logger = new Logger();
+
+        expect(logger.logToConsole).toBeTruthy();
+        expect(logger.logToServer).toBeFalsy();
+
+        spyOn(logger, 'logTheMessage').and.callThrough();
+        spyOn(console, 'info').and.returnValue('message logged to console');
+        spyOn(logger, 'sendMessageToServer');
+
+        logger.info(logMsg);
+
+        expect(logger.logTheMessage).toHaveBeenCalled();
+        expect(console.info).toHaveBeenCalled();
         expect(logger.sendMessageToServer).not.toHaveBeenCalled();
 
         Logger.__ResetDependency__('Configuration');
