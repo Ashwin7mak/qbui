@@ -32,6 +32,13 @@ const CheckBoxFieldValueEditor = React.createClass({
         };
     },
 
+    onKeyPress(ev) {
+        // Call on change if key press is space bar (for accessibility)
+        if(ev.key == ' '){
+            this.onChange(ev);
+        }
+    },
+
     onBlur(ev) {
         if(this.props.onBlur) {
             this.props.onBlur(this.props.value);
@@ -99,7 +106,9 @@ const CheckBoxFieldValueEditor = React.createClass({
                        tabIndex="0"
                        disabled={this.props.disabled} />
                 <label className="label"
-                       onClick={this.onChange}>
+                       onClick={this.onChange}
+                       tabIndex="0"
+                       onKeyPress={this.onKeyPress} >
                     {this.props.label}
                 </label>
                 {requiredSymbol}
