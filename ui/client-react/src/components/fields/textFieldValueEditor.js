@@ -67,9 +67,13 @@ const TextFieldValueEditor = React.createClass({
         let theVals = {
             value: ev.target.value
         };
-        theVals.display = textFormatter.format(theVals, this.props.fieldDef.datatypeAttributes);
+        let attrs = null;
+        if (this.props.fieldDef && this.props.fieldDef.datatypeAttributes) {
+            attrs = this.props.fieldDef.datatypeAttributes;
+        }
+        theVals.display = textFormatter.format(theVals, attrs);
         if (this.props.onBlur) {
-            this.props.onBlur({value: ev.target.value, display: ev.target.value});
+            this.props.onBlur({value: theVals.value, display: theVals.display});
         }
     },
 
