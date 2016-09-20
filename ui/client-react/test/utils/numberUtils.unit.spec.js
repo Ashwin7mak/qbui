@@ -19,7 +19,7 @@ describe('NumberUtils', () => {
         let testObj = {
             numericValue: 50,
             textValue: 'yadayadayada'
-        }
+        };
 
         expect(NumberUtils.getNumericPropertyValue(testObj, 'nonExistentProperty')).toEqual(null);
         expect(NumberUtils.getNumericPropertyValue(testObj, 'numericValue')).toEqual(50);
