@@ -5,6 +5,7 @@ import 'react-select/dist/react-select.min.css';
 import './multiChoiceFieldValueEditor.scss';
 import './selectCommon.scss';
 import QbIcon from '../qbIcon/qbIcon';
+import {I18nMessage} from '../../../src/utils/i18nMessage';
 /**
  * # MultiChoiceFieldValueEditor
  * A multi-choice field value editor that uses react select, it allows a user to select a single option from a drop down box
@@ -79,7 +80,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         const notFoundMessage = <I18nMessage message="selection.notFound" />
         return (
             <div className="multiChoiceContainer">
-                {this.props.showAsRadio ?
+                {!this.props.showAsRadio ?
                     <Select
                         className="cellEdit"
                         tabIndex="0"
@@ -88,7 +89,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
                         options={options}
                         onChange={this.selectChoice}
                         placeholder={placeHolderMessage}
-                        noResultsText="Not found"
+                        noResultsText={notFoundMessage}
                         autosize={false}
                         clearable={false}
                         onBlur={this.onBlur} /> :

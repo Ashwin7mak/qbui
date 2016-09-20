@@ -49,7 +49,7 @@ describe('MultiChoiceFieldValueEditor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var node = ReactDOM.findDOMNode(component);
-        var placeholderDiv = node.getElementsByClassName("Select-placeholder");
+        var placeholderDiv = node.getElementsByClassName("Select-control");
         expect(placeholderDiv).toBeDefined();
         expect(placeholderDiv.item(0)).toEqual("Select...");
     });
