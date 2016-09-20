@@ -1,6 +1,6 @@
 import TableService from '../../src/services/tableService';
 import BaseService from '../../src/services/baseService';
-import Constants from '../../../common/src/Constants';
+import Constants from '../../../common/src/constants';
 
 describe('TableService functions', () => {
     'use strict';
