@@ -33,8 +33,13 @@ describe('MultiChoiceFieldValueEditor functions', () => {
     });
     let component;
 
-    it('test render of component', () => {
+    it('test render of component as listbox', () => {
         component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
+
+    it('test render of component as radio group', () => {
+        component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor showAsRadio={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
