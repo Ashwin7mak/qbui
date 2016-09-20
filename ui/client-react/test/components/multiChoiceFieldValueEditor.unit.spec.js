@@ -25,7 +25,7 @@ const listbox_noEmptyChoicesData = {
     ]
 };
 
-describe('MultiChoiceFieldValueEditor functions', () => {
+fdescribe('MultiChoiceFieldValueEditor functions', () => {
     'use strict';
     var matchers = require('../reactJasmine');
     beforeEach(function() {

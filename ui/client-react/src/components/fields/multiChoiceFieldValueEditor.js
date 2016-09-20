@@ -5,7 +5,7 @@ import 'react-select/dist/react-select.min.css';
 import './multiChoiceFieldValueEditor.scss';
 import './selectCommon.scss';
 import QbIcon from '../qbIcon/qbIcon';
-import {I18nMessage} from '../../../src/utils/i18nMessage';
+import {I18nMessage} from '../../utils/i18nMessage';
 /**
  * # MultiChoiceFieldValueEditor
  * A multi-choice field value editor that uses react select, it allows a user to select a single option from a drop down box
@@ -76,13 +76,18 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
     render() {
         const options = this.getSelectItems();
-        const placeHolderMessage = <I18nMessage message="selection.placeholder" />
-        const notFoundMessage = <I18nMessage message="selection.notFound" />
+        var radioButtons = [];
+        for (var i = 0; i < options.length; i++) {
+            radioButtons.push(<span className="multiChoiceRadio"><Radio value={options[i].value.coercedValue} />{options[i].label}</span>);
+        }
+
+        const placeHolderMessage = <I18nMessage message="selection.placeholder" />;
+        const notFoundMessage = <I18nMessage message="selection.notFound" />;
+
         return (
             <div className="multiChoiceContainer">
                 {!this.props.showAsRadio ?
                     <Select
-                        className="cellEdit"
                         tabIndex="0"
                         value={this.state.choice}
                         optionRenderer={this.renderOption}
@@ -93,16 +98,13 @@ const MultiChoiceFieldValueEditor = React.createClass({
                         autosize={false}
                         clearable={false}
                         onBlur={this.onBlur} /> :
-
-                    <RadioGroup name="test" selectedValue={this.state.selectedValue}
-                                onChange={this.handleChange}
-                                onBlur={this.onBlur}>
-                        {   Object.keys(options).map(function(key, value) {
-                            return (<span>
-                                        <Radio value={key} /> {value}
-                                    </span>);
-                        })}
-                    </RadioGroup>
+                    <div className="multiChoiceRadioContainer">
+                        <RadioGroup name="test" selectedValue={this.state.selectedValue}
+                                    onChange={this.handleChange}
+                                    onBlur={this.onBlur}>
+                            { radioButtons }
+                        </RadioGroup>
+                    </div>
                 }
             </div>
         );

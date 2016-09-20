@@ -1,10 +1,25 @@
- .choiceLabel {
+$multi-choice-field-box-height: 32px;
+.choiceLabel {
    padding-top: 6px;
    padding-bottom: 6px;
    //vertical-align: middle;
    height:32px;
- }
+}
 
 .choiceQBIcon{
   padding-top: 10px;
+}
+
+.multiChoiceRadioContainer {
+   height: $multi-choice-field-box-height;
+   padding-left:2px;
+   padding-right:2px;
+   max-height: 340px;
+   min-width: 100%;
+   width:auto;
  }
+
+.multiChoiceRadio {
+  position:relative;
+  top:5px;
+}
