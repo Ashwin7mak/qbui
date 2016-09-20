@@ -3,15 +3,16 @@
 /* common styles for fields using react-select */
 
 $selected-choice-color: $color-cyan-500;
+$multi-choice-field-box-height: 28px;
 
 .Select {
   width: 100%;
 
   .Select-control {
-    height:32px;
+    height:$multi-choice-field-box-height;
 
     .Select-input {
-      height:28px;
+      height:$multi-choice-field-box-height;
       padding-left:2px;
     }
     .Select-value {
@@ -20,7 +21,7 @@ $selected-choice-color: $color-cyan-500;
       line-height: 28px;
     }
     .Select-placeholder {
-      line-height: 28px;
+      line-height: $multi-choice-field-box-height;
       padding-left: 3px;
       font-style: italic;
     }
