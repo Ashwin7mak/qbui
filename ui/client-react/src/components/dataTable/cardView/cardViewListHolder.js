@@ -30,7 +30,7 @@ let CardViewListHolder = React.createClass({
     getInitialState() {
         return {
             allowCardSelection: false,
-            swiping:false
+            swiping: false
         };
     },
 
@@ -107,7 +107,7 @@ let CardViewListHolder = React.createClass({
      */
     swipedUp(e) {
         // Complete swipe action only if footer is visible
-        if (this.isElementVisible("cardViewFooter")) {
+        if (this.isElementVisible('cardViewFooter')) {
             this.props.getNextReportPage();
         }
     },
@@ -117,9 +117,24 @@ let CardViewListHolder = React.createClass({
      */
     swipedDown(e) {
         // Complete swipe action only if header is visible
-        if (this.isElementVisible("cardViewHeader")) {
+        if (this.isElementVisible('cardViewHeader')) {
             this.props.getPreviousReportPage();
         }
+    },
+
+    /**
+     * Checks if the event target element or its parent element matches the supplied classname
+     * @param evTarget
+     * @param name
+     * @returns {boolean}
+     */
+    doesClassNameMatch(evTarget, name) {
+        let targetClassName = evTarget && evTarget.className ? evTarget.className : "";
+        if (!targetClassName.includes(name)) {
+            // Try the parent element
+            targetClassName = evTarget.parentElement && evTarget.parentElement.className ? evTarget.parentElement.className : targetClassName;
+        }
+        return targetClassName.includes(name);
     },
 
     /**
@@ -129,16 +144,16 @@ let CardViewListHolder = React.createClass({
      * @param isUpSwipe - (swiped up relative to starting point)
      */
     swiping(delta, isUpSwipe) {
-        if (isUpSwipe) {
+        if (isUpSwipe && this.isElementVisible('cardViewFooter')) {
             // If up swipe, check for visibility of the 'Fetch More' button. If it is visible, display loading indicator,
             // move the table (including button and spinner) up proportional to the swipe distance. If the swipe exceeds
             // drag distance, snap the table, button and spinner to the bottom of screen.
-            this.handleVerticalSwipingMovement("cardViewFooter", "footerLoadingIndicator", delta, true);
-        } else {
+            this.handleVerticalSwipingMovement("footerLoadingIndicator", delta, true);
+        } else if (this.isElementVisible('cardViewHeader')) {
             // Down swipe. Check for visibility of 'Fetch Previous' button. If it is visible, display loading indicator,
             // move table, button and indicator down proportional to swipe distance. If swipe exceeds drag distance,
             // snap table, button and spinner to the top.
-            this.handleVerticalSwipingMovement("cardViewHeader", "headerLoadingIndicator", delta, false);
+            this.handleVerticalSwipingMovement("headerLoadingIndicator", delta, false);
         }
     },
 
@@ -149,29 +164,24 @@ let CardViewListHolder = React.createClass({
      * proportional to the swipe distance. If the swipe exceeds drag distance, snap the table, visible element (header
      * or footer) and spinner to the top/bottom of screen.
      *
-     * @param visibleElementName - Class name of the header or the footer element.
      * @param loadingIndicatorElementName - Class name of the loading indicator container
      * @param delta - movement distance per swipe event
      * @param isUpward - indicates upward or downward motion. Negative is for upward motion.
      */
-    handleVerticalSwipingMovement(visibleElementName, loadingIndicatorElementName, delta, isUpward) {
-        // If the element that has to be checked for visibility (fetch more or fetch previous button depending on drag direction)
-        // is visible, process swipe
-        if (this.isElementVisible(visibleElementName)) {
+    handleVerticalSwipingMovement(loadingIndicatorElementName, delta, isUpward) {
+        // Fetch card view table
+        var tableElem = document.getElementsByClassName("cardViewList cardViewListHolder");
+        if (tableElem && tableElem.length) {
+            tableElem = tableElem[0];
+        }
+        if (tableElem) {
             // Fetch more or Fetch Previous element is visible, fetch corresponding loading spinner.
             let loadingIndicatorElem = document.getElementsByClassName(loadingIndicatorElementName);
             if (loadingIndicatorElem) {
                 loadingIndicatorElem = loadingIndicatorElem[0];
             }
-            // Fetch card view table
-            var tableElem = document.getElementsByClassName("cardViewList cardViewListHolder");
-            if (tableElem && tableElem.length) {
-                tableElem = tableElem[0];
-            }
             // Safety check on table element and loading indicator element
-            if (tableElem && loadingIndicatorElem) {
-                // Smoothen the animation
-                tableElem.style.transition = 'transform 300ms';
+            if (loadingIndicatorElem) {
                 // Display the loading indicator
                 loadingIndicatorElem.style.display = "flex";
                 // As long as the swipe is less than drag distance, move the table, header/footer button and spinner
@@ -251,10 +261,11 @@ let CardViewListHolder = React.createClass({
 
 
         return (<Swipeable className="swipeable"
-                       onSwipingUp={(ev, delta) => {this.swiping(delta, true);}}
-                       onSwipingDown={(ev, delta) => {this.swiping(delta, false);}}
+                       onSwipingUp={(ev, delta) => {this.swiping(ev.target, delta, true);}}
+                       onSwipingDown={(ev, delta) => {this.swiping(ev.target, delta, false);}}
                        onSwipedUp={this.swipedUp}
-                       onSwipedDown={this.swipedDown}>
+                       onSwipedDown={this.swipedDown}
+                       preventDefaultTouchmoveEvent={false}>
 
                     <div className={cardViewListClasses} style={cardViewListStyle}>
                         {showPreviousButton ?
