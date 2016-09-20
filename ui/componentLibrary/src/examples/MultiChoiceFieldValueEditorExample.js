@@ -1,58 +1,58 @@
 let choices = [
-        {
-            coercedValue: {
-                value: ""
-            },
-            displayValue: ""
-        }, {
-            coercedValue: {
-                value: "Ellie"
-            },
-            displayValue: "Ellie"
+    {
+        coercedValue: {
+            value: ""
         },
-        {
-            coercedValue: {
-                value: "Castedo"
-            },
-            displayValue: "Castedo"
+        displayValue: ""
+    }, {
+        coercedValue: {
+            value: "Ellie"
         },
-        {
-            coercedValue: {
-                value: "Franca"
-            },
-            displayValue: "Franca"
+        displayValue: "Ellie"
+    },
+    {
+        coercedValue: {
+            value: "Castedo"
         },
-        {
-            coercedValue: {
-                value: "Valesca"
-            },
-            displayValue: "Valesca"
+        displayValue: "Castedo"
+    },
+    {
+        coercedValue: {
+            value: "Franca"
         },
-        {
-            coercedValue: {
-                value: "Johnny Blaze"
-            },
-            displayValue: "Johnny Blaze"
+        displayValue: "Franca"
+    },
+    {
+        coercedValue: {
+            value: "Valesca"
         },
-        {
-            coercedValue: {
-                value: "Jeff"
-            },
-            displayValue: "Jeff"
+        displayValue: "Valesca"
+    },
+    {
+        coercedValue: {
+            value: "Johnny Blaze"
         },
-        {
-            coercedValue: {
-                value: "Robert"
-            },
-            displayValue: "Robert"
+        displayValue: "Johnny Blaze"
+    },
+    {
+        coercedValue: {
+            value: "Jeff"
         },
-        {
-            coercedValue: {
-                value: "Check"
-            },
-            displayValue: "Check"
-        }
-    ]
+        displayValue: "Jeff"
+    },
+    {
+        coercedValue: {
+            value: "Robert"
+        },
+        displayValue: "Robert"
+    },
+    {
+        coercedValue: {
+            value: "Check"
+        },
+        displayValue: "Check"
+    }
+];
 
 const basicMultiChoiceFieldValueEditor = (
     <div style={{width:200}}>

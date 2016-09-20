@@ -128,19 +128,19 @@
 
             //options for random letter words
             let wordOptions = {};
-            if (options.wordLength){
-                wordOptions.length = options.wordLength
+            if (options.wordLength) {
+                wordOptions.length = options.wordLength;
             }
-            if (options.syllables){
-                wordOptions.syllables = options.syllables
+            if (options.syllables) {
+                wordOptions.syllables = options.syllables;
             }
 
             while (numWords--) {
                 // generate a word or get an real english word
                 var word;
-                if (options.wordType === this.WORD_TYPES.realEnglishNouns){
+                if (options.wordType === this.WORD_TYPES.realEnglishNouns) {
                     word = randomWord.noun();
-                } else if (options.wordType === this.WORD_TYPES.realEnglishWords){
+                } else if (options.wordType === this.WORD_TYPES.realEnglishWords) {
                     word = randomWord.word();
                 } else {
                     word = chance.word(wordOptions);

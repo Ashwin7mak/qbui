@@ -1,2 +1,3 @@
 'use strict';
-module.exports = __dirname + '/words.txt';
+var path = require('path');
+module.exports = path.join(__dirname, '/words.txt');

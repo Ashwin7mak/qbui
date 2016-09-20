@@ -45,11 +45,11 @@
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
                 var fetchRecordPromises = recordBase.createRecords(recordsEndpoint, genRecords);
                 fetchRecordPromises.then(function(results) {
-                        deferred.resolve(results);
-                    }).catch(function(error) {
-                        console.log(JSON.stringify(error));
-                        deferred.reject(error);
-                    });
+                    deferred.resolve(results);
+                }).catch(function(error) {
+                    console.log(JSON.stringify(error));
+                    deferred.reject(error);
+                });
                 return deferred.promise;
             },
             /**
