@@ -9,7 +9,9 @@ import ReportHeader from './reportHeader';
 import IconActions from '../actions/iconActions';
 import {Link} from 'react-router';
 import Logger from '../../utils/logger';
+import NumberUtils from '../../utils/numberUtils';
 import simpleStringify from '../../../../common/src/simpleStringify';
+import constants from '../../../../common/src/constants';
 import Fluxxor from 'fluxxor';
 import _ from 'lodash';
 import './report.scss';
@@ -32,16 +34,10 @@ const ReportRoute = React.createClass({
         let appId = params.appId;
         let tblId = params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
-        let offset = null;
-        let numRows = null;
-        if (this.props.reportData) {
-            if (this.props.reportData.pageOffset !== undefined) {
-                offset = this.props.reportData.pageOffset;
-            }
-            if (this.props.reportData.numRows !== undefined) {
-                numRows = this.props.reportData.numRows;
-            }
-        }
+
+        let offset = this.props.reportData && NumberUtils.isInt(this.props.reportData.pageOffset) ? this.props.reportData.pageOffset : null;//constants.PAGE.OFFSET;
+        let numRows = this.props.reportData && NumberUtils.isInt(this.props.reportData.numRows) ? this.props.reportData.numRows : null;//constants.PAGE.DEFAULT_NUM_ROWS;
+
 
         if (appId && tblId && rptId) {
             this.loadReport(appId, tblId, rptId, offset, numRows);
