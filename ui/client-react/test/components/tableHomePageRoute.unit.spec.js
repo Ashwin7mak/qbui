@@ -22,7 +22,18 @@ describe('TableHomePageRoute functions', () => {
     };
 
     let routeParams = {appId:1, tblId:2};
-    let reportDataParams = {reportData: {pageOffset:Constants.PAGE.DEFAULT_OFFSET, numRows:Constants.PAGE.DEFAULT_NUM_ROWS, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+    let reportDataParams = {
+        reportData: {
+            pageOffset:Constants.PAGE.DEFAULT_OFFSET,
+            numRows:Constants.PAGE.DEFAULT_NUM_ROWS,
+            selections: new FacetSelections(),
+            data: {
+                columns: [
+                    {field: "col_num", headerName: "col_num"}
+                ]
+            }
+        }
+    };
 
     let flux = new Fluxxor.Flux(stores);
 

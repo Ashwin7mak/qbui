@@ -37,8 +37,8 @@ let TableHomePageRoute = React.createClass({
         let appId = params.appId;
         let tblId = params.tblId;
 
-        let offset = this.props.reportData && NumberUtils.isInt(this.props.reportData.pageOffset) ? this.props.reportData.pageOffset : null;
-        let numRows = this.props.reportData && NumberUtils.isInt(this.props.reportData.numRows) ? this.props.reportData.numRows : null;
+        let offset = NumberUtils.getNumericPropertyValue(this.props.reportData, 'pageOffset');
+        let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows');
 
         if (appId && tblId) {
             this.loadTableHomePageReportFromParams(appId, tblId, offset, numRows);
