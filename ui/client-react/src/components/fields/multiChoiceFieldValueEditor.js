@@ -8,7 +8,8 @@ import QbIcon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
 /**
  * # MultiChoiceFieldValueEditor
- * A multi-choice field value editor that uses react select, it allows a user to select a single option from a drop down box
+ * A multi-choice field value editor that uses react select, it allows a user to select a single option from a drop down box.
+ * Also uses radio group component to render a radio group if called from forms.
  */
 const MultiChoiceFieldValueEditor = React.createClass({
     displayName: 'MultiChoiceFieldValueEditor',
@@ -33,7 +34,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
-        console.log('this.props.value: ', this.props.value);
         return {
             choice: {
                 label: this.props.value
@@ -85,16 +85,12 @@ const MultiChoiceFieldValueEditor = React.createClass({
         const placeHolderMessage = <I18nMessage message="selection.placeholder" />;
         const notFoundMessage = <I18nMessage message="selection.notFound" />;
         let choice;
-        console.log('BEFORE IF this.props.value: ', typeof this.props.value);
 
         if (this.props.value) {
             choice = {label: this.props.value};
         } else {
             choice = false;
         }
-
-        console.log('THIS CHOICE: ', choice);
-
 
         return (
             <div className="multiChoiceContainer">
