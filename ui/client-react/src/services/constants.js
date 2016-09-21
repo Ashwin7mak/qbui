@@ -36,6 +36,7 @@ export default {
     FORMS               : 'forms',
     LOG                 : 'log',
     LOG_PERF            : 'clientPerf',
+    USERS               : 'users',
 
     // API Entity actions
     FORMCOMPONENTS      : 'formComponents',
@@ -44,4 +45,5 @@ export default {
     RECORDSCOUNT        : 'recordsCount',
     RESULTS             : 'results',
     PARSE               : 'parse',
+    BULK                : 'bulk'
 };

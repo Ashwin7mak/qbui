@@ -31,7 +31,7 @@ let AddRecordButton = React.createClass({
 });
 
 /* The container for report and its toolbar */
-let ReportToolsAndContent = React.createClass({
+const ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
     facetFields : {},
     debounceInputMillis: 700, // a key send delay
@@ -41,6 +41,7 @@ let ReportToolsAndContent = React.createClass({
         tblId: React.PropTypes.string,
         rptId: React.PropTypes.string,
         reportData: React.PropTypes.object,
+        appUsers: React.PropTypes.array,
         pageActions: React.PropTypes.element,
         callbacks :  React.PropTypes.object,
         selectedRows: React.PropTypes.array,
@@ -351,6 +352,7 @@ let ReportToolsAndContent = React.createClass({
                                    tblId={this.props.params.tblId}
                                    rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
                                    reportData={this.props.reportData}
+                                   appUsers={this.props.appUsers}
                                    reportHeader={toolbar}
                                    reportFooter={reportFooter}
                                    cardViewPagination={cardViewPagination }

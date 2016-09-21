@@ -20,6 +20,8 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/components/numericFieldValueEditor" activeClassName="active">NumericFieldValueEditor</Link></li>
                             <li><Link to="/components/fieldValueRenderer" activeClassName="active">FieldValueRenderer</Link></li>
                             <li><Link to="/components/fieldValueEditor" activeClassName="active">FieldValueEditor</Link></li>
+                            <li><Link to="/components/userFieldRenderer" activeClassName="active">UserFieldRenderer</Link></li>
+                            <li><Link to="/components/userFieldEditor" activeClassName="active">UserFieldEditor</Link></li>
                             <li><Link to="/components/multiLineTextFieldValueEditor" activeClassName="active">MultiLineTextFieldValueEditor</Link></li>
                         </ul>
                     </nav>
