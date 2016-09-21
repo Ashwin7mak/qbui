@@ -1,61 +1,65 @@
 import FieldUtils from '../../src/utils/fieldUtils';
 import * as SchemaConsts from '../../src/constants/schema';
 
-describe('FieldUtils', () => {
+fdescribe('FieldUtils', () => {
     let testData;
     let recordIdCustomName = 'Employee ID';
 
     describe('getUniqueIdentifierFieldNameFromFields', () => {
-        it('returns the default Record ID column name if no fields are provided', () => {
-            testData = {};
 
-            let field = FieldUtils.getUniqueIdentifierFieldNameFromFields(testData);
-            expect(field).toBe(SchemaConsts.DEFAULT_RECORD_KEY);
+        let testCases = [
+            {
+                name: 'returns the default Record ID column name if no fields are provided',
+                data: {},
+                expectation: SchemaConsts.DEFAULT_RECORD_KEY
+            },
+            {
+                name: 'returns the default Record ID column name if a Record ID column is not found',
+                data: {
+                    fields: {
+                        data: [
+                            {id: 1, name: 'Last Name'},
+                            {id: 2, name: 'First Name'}
+                        ]
+                    }
+                },
+                expectation: SchemaConsts.DEFAULT_RECORD_KEY
+            },
+            {
+                name: 'finds Record ID column name if the field name has not been changed',
+                data: {
+                    fields: {
+                        data: [
+                            {id: 1, name: 'Last Name'},
+                            {id: 2, name: 'First Name'},
+                            {id: 3, name: SchemaConsts.DEFAULT_RECORD_KEY}
+                        ]
+                    }
+                },
+                expectation: SchemaConsts.DEFAULT_RECORD_KEY
+            },
+            {
+                name: 'finds the name of the Record ID field if the name has been changed to something else',
+                data: {
+                    fields: {
+                        data: [
+                            {id: 1, name: 'Last Name'},
+                            {id: 2, name: 'First Name'},
+                            {id: 3, name: recordIdCustomName}
+                        ]
+                    }
+                },
+                expectation: recordIdCustomName
+            }
+        ];
+
+        testCases.forEach(function(testCase) {
+            it(testCase.name, () => {
+                let field = FieldUtils.getUniqueIdentifierFieldNameFromFields(testCase.data);
+                expect(field).toBe(testCase.expectation);
+            });
         });
 
-        it('returns the default Record ID column name if a Record ID column is not found', () => {
-            testData = {
-                fields: {
-                    data: [
-                        {id: 1, name: 'Last Name'},
-                        {id: 2, name: 'First Name'}
-                    ]
-                }
-            };
-
-            let field = FieldUtils.getUniqueIdentifierFieldNameFromFields(testData);
-            expect(field).toBe(SchemaConsts.DEFAULT_RECORD_KEY);
-        });
-
-        it('finds Record ID column name if the field name has not been changed', () => {
-            testData = {
-                fields: {
-                    data: [
-                        {id: 1, name: 'Last Name'},
-                        {id: 2, name: 'First Name'},
-                        {id: 3, name: SchemaConsts.DEFAULT_RECORD_KEY}
-                    ]
-                }
-            };
-
-            let field = FieldUtils.getUniqueIdentifierFieldNameFromFields(testData);
-            expect(field).toBe(SchemaConsts.DEFAULT_RECORD_KEY);
-        });
-
-        it('finds the name of the Record ID field if the name has been changed to something else', () => {
-            testData = {
-                fields: {
-                    data: [
-                        {id: 1, name: 'Last Name'},
-                        {id: 2, name: 'First Name'},
-                        {id: 3, name: recordIdCustomName}
-                    ]
-                }
-            };
-
-            let field = FieldUtils.getUniqueIdentifierFieldNameFromFields(testData);
-            expect(field).toBe(recordIdCustomName);
-        });
     });
 
     describe('getUniqueIdentifierFieldNameFromData', () => {
