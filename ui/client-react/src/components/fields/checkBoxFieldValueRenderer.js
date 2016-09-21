@@ -36,11 +36,13 @@ const CheckBoxFieldValueRenderer = React.createClass({
     },
 
     renderTextDisplayValue() {
+        let checkBoxText;
         if (this.props.value) {
-            return <I18nMessage message="fields.checkbox.yes" />;
+            checkBoxText = <I18nMessage message="fields.checkbox.yes" />;
         } else {
-            return <I18nMessage message="fields.checkbox.no" />;
+            checkBoxText = <I18nMessage message="fields.checkbox.no" className="checkbox-text" />;
         }
+        return <span className="text">{checkBoxText}</span>;
     },
 
     renderGraphicDisplayValue() {
