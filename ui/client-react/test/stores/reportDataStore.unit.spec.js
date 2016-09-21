@@ -508,7 +508,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(loadReportAction);
 
         let saveReportRecordSuccessAction = {
-            type: actions.SAVE_REPORT_RECORD_SUCCESS,
+            type: actions.SAVE_RECORD_SUCCESS,
             payload: {recId : 1234, changes: [{fieldName:"loc", value:"test", display:"test"}]}
         };
 
@@ -698,7 +698,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(loadReportAction);
 
         let addReportRecordSuccessAction = {
-            type: actions.ADD_REPORT_RECORD_SUCCESS,
+            type: actions.ADD_RECORD_SUCCESS,
             payload: {recId : 1234, record: [{fieldName:"loc", value:"test", display:"test"}]}
         };
 
@@ -762,7 +762,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(loadReportAction);
 
         let addReportRecordSuccessAction = {
-            type: actions.ADD_REPORT_RECORD_SUCCESS,
+            type: actions.ADD_RECORD_SUCCESS,
             payload: {recId : 1234, record: [{fieldName:"loc", value:"test"}]}
         };
 
@@ -888,7 +888,7 @@ describe('Test ReportData Store', () => {
                 flux.dispatcher.dispatch(loadReportAction);
 
                 let addReportRecordSuccessAction = {
-                    type: actions.ADD_REPORT_RECORD_SUCCESS,
+                    type: actions.ADD_RECORD_SUCCESS,
                     payload: {recId: 1234, record: [{fieldName: "loc", value: "test"}]}
                 };
 
@@ -955,7 +955,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(loadReportAction);
 
         let addReportRecordSuccessAction = {
-            type: actions.ADD_REPORT_RECORD_FAILED,
+            type: actions.ADD_RECORD_FAILED,
         };
 
         flux.dispatcher.dispatch(addReportRecordSuccessAction);
@@ -1088,7 +1088,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         let onDeleteReportRecordSuccess = {
-            type: actions.DELETE_REPORT_RECORD_SUCCESS,
+            type: actions.DELETE_RECORD_SUCCESS,
             payload: 16
         };
 
@@ -1159,7 +1159,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         let onDeleteReportRecordSuccess = {
-            type: actions.DELETE_REPORT_RECORD_SUCCESS,
+            type: actions.DELETE_RECORD_SUCCESS,
             payload: 999999
         };
 
@@ -1231,7 +1231,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         let onDeleteReportRecordFailed = {
-            type: actions.DELETE_REPORT_RECORD_FAILED,
+            type: actions.DELETE_RECORD_FAILED,
             payload: {}
         };
 
@@ -1301,7 +1301,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         let onDeleteReportRecordBulkSuccess = {
-            type: actions.DELETE_REPORT_RECORD_BULK_SUCCESS,
+            type: actions.DELETE_RECORD_BULK_SUCCESS,
             payload: [16]
         };
 
@@ -1373,7 +1373,7 @@ describe('Test ReportData Store', () => {
 
         //bulk delete endpoint doesn't care if the recordId doesn't exist, it still returns 200 for a success
         let onDeleteReportRecordBulkSuccess = {
-            type: actions.DELETE_REPORT_RECORD_BULK_SUCCESS,
+            type: actions.DELETE_RECORD_BULK_SUCCESS,
             payload: [999999]
         };
 
@@ -1444,7 +1444,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(loadReportRecordsCountAction);
 
         let onDeleteReportRecordBulkFailed = {
-            type: actions.DELETE_REPORT_RECORD_BULK_FAILED,
+            type: actions.DELETE_RECORD_BULK_FAILED,
             payload: {}
         };
 

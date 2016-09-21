@@ -41,7 +41,7 @@ const RowEditActions = React.createClass({
         const id = this.props.data[this.props.params.context.uniqueIdentifier];
         this.props.api.deselectAll();
 
-        this.props.flux.actions.deleteReportRecord(id);
+        this.props.flux.actions.deleteRecord(id);
         setTimeout(()=> {
             NotificationManager.info('Record deleted', 'Deleted', 1500);
         }, 1000);

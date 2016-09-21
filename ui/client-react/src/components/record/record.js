@@ -9,11 +9,23 @@ let Record = React.createClass({
     mixins: [FluxMixin],
     displayName: 'Record',
 
-    componentDidMount: function() {
-        //this.handleEditRecordStart(this.props.recId);
+    /**
+     * Get the record as {fids, names}
+     * fids is a fid lookup hash looks like {6: {id:6, value: <val>, display: <display>}}
+     * names is not populated. Its here to keep in sync with the data structure used by grid for similar calls.
+     * @returns {*}
+     */
+    getOrigRec() {
+        let orig = {names:{}, fids:{}};
+        let rec = this.props.formData.record;
+        for (var key in rec) {
+            let field = rec[key];
+            orig.fids[field.id] = field;
+        }
+        return _.cloneDeep(orig);
     },
     /**
-     * When entering inline edit on a record, if it's an existing (already stored) record keep note
+     * When user starts editing a record (this is marked by first field change, if it's an existing (already stored) record keep note
      * its originalRecord values (for later undo/audit?)
      * if it's a new (unsaved) record note all it's non null values as changes to the new record
      * to be saved.
@@ -21,46 +33,37 @@ let Record = React.createClass({
      * was one or changes if it's a new record
      * @param recId
      */
-    handleEditRecordStart(recId) {
+    handleEditRecordStart() {
         const flux = this.getFlux();
         let origRec = null;
         let changes = {};
-        //if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
-        origRec = this.props.formData.record;
-        //} else {
-        //    //add each non null value as to the new record as a change
-        //    let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
-        //        return rec[this.props.uniqueIdentifier].value === recId;
-        //    });
-        //    if (newRec) {
-        //        changes = {};
-        //        // loop thru the values in the new rec add any non nulls to change set
-        //        // so it will be treated as dirty/not saved
-        //        Object.keys(newRec).forEach((key) => {
-        //            let field = newRec[key];
-        //            if (field.value !== null) {
-        //                let change = {
-        //                    //the + before field.id is needed turn the field id from string into a number
-        //                    oldVal: {value: null, id: +field.id},
-        //                    newVal: {value: field.value},
-        //                    fieldName: key
-        //                };
-        //                changes[field.id] = change;
-        //            }
-        //        });
-        //    }
-        //}
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes);
+        if (this.props.recId) {
+            origRec = this.getOrigRec();
+        } else {
+            let rec = this.props.formData.record;
+            for (var key in rec) {
+                let field = rec[key];
+                if (field.value !== null) {
+                    let change = {
+                        //the + before field.id is needed turn the field id from string into a number
+                        oldVal: {value: null, id: +field.id},
+                        newVal: {value: field.value}
+                    };
+                    changes[field.id] = change;
+                }
+            }
+        }
+        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, this.props.recId, origRec, changes);
     },
 
     /**
-     * When an inline edit is canceled
+     * When cancel is clicked
      * Initiate a recordPendingEditsCancel action the the app/table/recid
      * @param recId
      */
-    handleEditRecordCancel(recId) {
+    handleEditRecordCancel() {
         const flux = this.getFlux();
-        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, recId);
+        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
     },
 
     /**
@@ -68,10 +71,14 @@ let Record = React.createClass({
      * @param change - {fid:fieldid, values : {oldVal :{}, newVal:{}, fieldName:name}
      */
     handleFieldChange(change) {
+        // the first time field change is called recordChanges should be empty. at this time save the original records values to diff later with new values
+        if (_.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges)) {
+            this.handleEditRecordStart(this.props.recId);
+        }
         change.recId = this.props.recId;
         // call action to hold the field value change
         const flux = this.getFlux();
-        flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
+        flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, this.props.recId, change);
     },
 
     /**
@@ -82,9 +89,12 @@ let Record = React.createClass({
      * @returns {boolean}
      */
     handleRecordSaveClicked(id) {
-        //validate changed values
+        //validate changed values -- this is skipped for now
         //get pending changes
-        let validationResult = this.validateRecord(this.props.pendEdits.recordChanges);
+        let validationResult = {
+            ok : true,
+            errors: []
+        };
         if (validationResult.ok) {
             //signal record save action, will update an existing records with changed values
             // or add a new record
@@ -102,57 +112,27 @@ let Record = React.createClass({
      * @param recId
      * @returns {Array}
      */
-    handleRecordChange(recId) {
+    handleRecordChange() {
         const flux = this.getFlux();
-
-        // get the current edited data
-        let changes = {};
-        if (_.has(this.props, 'pendEdits.recordChanges')) {
-            changes = _.cloneDeep(this.props.pendEdits.recordChanges);
-        }
-
-
-        //calls action to save the record changes
-        // validate happen here or in action
-
-        let payload = [];
-        // columns id and new values array
-        //[{"id":6, "value":"Claire"}]
-
-
-        Object.keys(changes).forEach((key) => {
-            let newValue = changes[key].newVal.value;
-            let newDisplay = changes[key].newVal.display;
-            if (_.has(this.props, 'pendEdits.originalRecord.fids')) {
-                if (newValue !== this.props.pendEdits.originalRecord.fids[key].value) {
-                    //get each columns matching field description
-                    if (_.has(this.props, 'fields.fields.data')) {
-                        let matchingField = _.find(this.props.fields.fields.data, (field) => {
-                            return field.id === +key;
-                        });
-                        this.createColChange(newValue, newDisplay, matchingField, payload);
-                    }
-                }
-            }
-        });
-
-        this.getConstrainedUnchangedValues(changes, payload);
-        //for (changes)
-        flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-        flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);
-        return payload;
+        flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, this.props.recId);
+        flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.formData.fields);
     },
 
+
+
     render() {
-        return <QBForm {...this.props} edit={true}
-                                       idKey={"qfm-" + this.props.recId}
-                                       onEditRecordStart={this.handleEditRecordStart}
-                                       onEditRecordCancel={this.handleEditRecordCancel}
-                                       onFieldChange={this.handleFieldChange}
-                                       onRecordChange={this.handleRecordChange}
-                                       onRecordSaveClicked={this.handleRecordSaveClicked}
-                                       validateRecord={this.validateRecord}
-                                       validateFieldValue={ValidationUtils.checkFieldValue}/>;
+        return <div>
+            <button onClick={this.handleRecordSaveClicked}>Save</button>
+            <button onClick={this.handleEditRecordCancel}>Cancel</button>
+            <QBForm {...this.props} edit={true}
+                                    idKey={"qfm-" + this.props.recId}
+                //onEditRecordStart={this.handleEditRecordStart}
+                                    onEditRecordCancel={this.handleEditRecordCancel}
+                                    onFieldChange={this.handleFieldChange}
+                                    onRecordSaveClicked={this.handleRecordSaveClicked}
+                                    validateRecord={this.validateRecord}
+                                    validateFieldValue={ValidationUtils.checkFieldValue}/>
+        </div>;
     }
 });
 

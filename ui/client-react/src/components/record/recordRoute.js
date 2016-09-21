@@ -204,7 +204,12 @@ export let RecordRoute = React.createClass({
                     <ReactCSSTransitionGroup transitionName={nextOrPreviousTransitionName}
                                              transitionEnterTimeout={200}
                                              transitionLeaveTimeout={200}>
-                        <Record recId={this.props.params.recordId} errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null} pendEdits={this.props.pendEdits ? this.props.pendEdits : null} formData={this.props.form ? this.props.form.formData : null}></Record>
+                        <Record appId={this.props.params.appId}
+                                tblId={this.props.params.tblId}
+                                recId={this.props.params.recordId}
+                                errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
+                                pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
+                                formData={this.props.form ? this.props.form.formData : null}></Record>
 
                     </ReactCSSTransitionGroup>
                 </div>

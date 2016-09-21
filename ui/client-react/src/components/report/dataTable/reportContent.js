@@ -168,17 +168,6 @@ export let ReportContent = React.createClass({
 
         const flux = this.getFlux();
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
-        let changes = {};
-        if (_.has(this.props, 'pendEdits.recordChanges')) {
-            changes = _.cloneDeep(this.props.pendEdits.recordChanges);
-        }
-        if (typeof (changes[change.fid]) === 'undefined') {
-            changes[change.fid] = {};
-        }
-        changes[change.fid].oldVal = _.has(change, 'values.oldVal') ? change.values.oldVal : null;
-        changes[change.fid].newVal = _.has(change, 'values.newVal') ? change.values.newVal : null;
-        changes[change.fid].fieldName = _.has(change, 'fieldName') ? change.fieldName : null;
-
     },
 
     /**
@@ -235,7 +224,7 @@ export let ReportContent = React.createClass({
         const flux = this.getFlux();
         var recId = record[SchemaConsts.DEFAULT_RECORD_KEY].value;
         //this.props.nameForRecords
-        flux.actions.deleteReportRecord(this.props.appId, this.props.tblId, recId, this.props.nameForRecords);
+        flux.actions.deleteRecord(this.props.appId, this.props.tblId, recId, this.props.nameForRecords);
     },
 
     /**
@@ -275,44 +264,8 @@ export let ReportContent = React.createClass({
                 payload.push(colChange);
             }
         });
-        flux.actions.saveNewReportRecord(this.props.appId, this.props.tblId, payload);
+        flux.actions.saveNewRecord(this.props.appId, this.props.tblId, payload);
         return payload;
-    },
-
-    createColChange(value, display, field, payload) {
-        let colChange = {};
-        colChange.fieldName = field.name;
-        //the + before field.id is needed turn the field id from string into a number
-        colChange.id = +field.id;
-        colChange.value = _.cloneDeep(value);
-        colChange.display = _.cloneDeep(display);
-        colChange.field = field.datatypeAttributes;
-        colChange.field.required = field.required;
-        payload.push(colChange);
-    },
-
-    getConstrainedUnchangedValues(changes, list) {
-        // add in any editable fields values that are required or unique
-        // so that server can validate them if they were created before
-        // the field's constraint was made. so modifying a record
-        // via patch will check those fields for validity even if the user
-        // didn't edit the value
-        if (_.has(this.props, 'fields.fields.data')) {
-            this.props.fields.fields.data.forEach((field) => {
-                if (changes[field.id] === undefined) {
-                    if (!field.builtIn && (field.required || field.unique)) {
-                        if (this.props.pendEdits.originalRecord.fids[field.id]) {
-                            let newValue = this.props.pendEdits.originalRecord.fids[field.id].value;
-                            if (newValue === null) {
-                                newValue = "";
-                            }
-                            let newDisplay = this.props.pendEdits.originalRecord.fids[field.id].display;
-                            this.createColChange(newValue, newDisplay, field, list);
-                        }
-                    }
-                }
-            });
-        }
     },
 
     /**
@@ -322,43 +275,8 @@ export let ReportContent = React.createClass({
      */
     handleRecordChange(recId) {
         const flux = this.getFlux();
-
-        // get the current edited data
-        let changes = {};
-        if (_.has(this.props, 'pendEdits.recordChanges')) {
-            changes = _.cloneDeep(this.props.pendEdits.recordChanges);
-        }
-
-
-        //calls action to save the record changes
-        // validate happen here or in action
-
-        let payload = [];
-        // columns id and new values array
-        //[{"id":6, "value":"Claire"}]
-
-
-        Object.keys(changes).forEach((key) => {
-            let newValue = changes[key].newVal.value;
-            let newDisplay = changes[key].newVal.display;
-            if (_.has(this.props, 'pendEdits.originalRecord.fids')) {
-                if (newValue !== this.props.pendEdits.originalRecord.fids[key].value) {
-                    //get each columns matching field description
-                    if (_.has(this.props, 'fields.fields.data')) {
-                        let matchingField = _.find(this.props.fields.fields.data, (field) => {
-                            return field.id === +key;
-                        });
-                        this.createColChange(newValue, newDisplay, matchingField, payload);
-                    }
-                }
-            }
-        });
-
-        this.getConstrainedUnchangedValues(changes, payload);
-        //for (changes)
         flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-        flux.actions.saveReportRecord(this.props.appId, this.props.tblId, recId.value, payload);
-        return payload;
+        flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data);
     },
 
     /**

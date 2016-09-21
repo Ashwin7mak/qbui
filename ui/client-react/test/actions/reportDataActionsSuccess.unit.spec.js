@@ -398,12 +398,12 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId:4}]);
     });
 
-    it('test deleteReportRecord', (done) => {
-        flux.actions.deleteReportRecord(appId, tblId, recId).then(
+    it('test deleteRecord', (done) => {
+        flux.actions.deleteRecord(appId, tblId, recId).then(
             () => {
                 expect(mockRecordService.prototype.deleteRecord).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_REPORT_RECORD_SUCCESS, recId]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_RECORD_SUCCESS, recId]);
                 done();
             },
             () => {
@@ -413,12 +413,12 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         );
     });
 
-    it('test deleteReportRecordBulk resolve', (done) => {
-        flux.actions.deleteReportRecordBulk(appId, tblId, recIds).then(
+    it('test deleteRecordBulk resolve', (done) => {
+        flux.actions.deleteRecordBulk(appId, tblId, recIds).then(
             () => {
                 expect(mockRecordService.prototype.deleteRecordBulk).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_REPORT_RECORD_BULK_SUCCESS, recIds]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_RECORD_BULK_SUCCESS, recIds]);
                 done();
             },
             () => {
@@ -428,15 +428,15 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         );
     });
 
-    it('test saveReportRecord', (done) => {
+    it('test saveRecord', (done) => {
 
-        flux.actions.saveReportRecord(appId, tblId, recId, changes).then(
+        flux.actions.saveRecord(appId, tblId, recId, changes).then(
                 () => {
                     expect(mockRecordService.prototype.saveRecord).toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SAVE_REPORT_RECORD,
                         {appId, tblId, recId, changes}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SAVE_REPORT_RECORD_SUCCESS,
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SAVE_RECORD_SUCCESS,
                         jasmine.any(Object)]);
                     done();
                 },
@@ -447,15 +447,15 @@ describe('Report Data Actions Edit Report functions -- success', () => {
             );
     });
 
-    it('test saveNewReportRecord', (done) => {
+    it('test saveNewRecord', (done) => {
 
-        flux.actions.saveNewReportRecord(appId, tblId, newRecord).then(
+        flux.actions.saveNewRecord(appId, tblId, newRecord).then(
                 () => {
                     expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD,
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD,
                         {appId, tblId, record:newRecord}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_REPORT_RECORD_SUCCESS,
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_RECORD_SUCCESS,
                         jasmine.any(Object)]);
                     done();
                 },

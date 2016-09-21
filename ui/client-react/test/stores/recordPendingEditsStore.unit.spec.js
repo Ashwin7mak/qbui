@@ -190,7 +190,7 @@ describe('Test recordPendingEdits Store ', () => {
 
     it('test SaveRecordSuccess recordPendingEdits action', () => {
         let saveRecordSuccessAction = {
-            type: actions.SAVE_REPORT_RECORD_SUCCESS,
+            type: actions.SAVE_RECORD_SUCCESS,
             payload : Object.assign({}, appTableRecPayload)
         };
 
@@ -222,7 +222,7 @@ describe('Test recordPendingEdits Store ', () => {
         flux.dispatcher.dispatch(recordEditSaveAction);
 
         let saveRecordSuccessAction = {
-            type: actions.SAVE_REPORT_RECORD_SUCCESS,
+            type: actions.SAVE_RECORD_SUCCESS,
             payload : Object.assign({}, appTableRecPayload)
         };
 
@@ -255,7 +255,7 @@ describe('Test recordPendingEdits Store ', () => {
 
 
         let saveRecordFailedAction = {
-            type: actions.SAVE_REPORT_RECORD_FAILED,
+            type: actions.SAVE_RECORD_FAILED,
             payload : Object.assign({}, appTableRecPayload)
         };
 
@@ -275,7 +275,7 @@ describe('Test recordPendingEdits Store ', () => {
             }
         }};
         let onSaveAddedRecordAction = {
-            type: actions.ADD_REPORT_RECORD,
+            type: actions.ADD_RECORD,
             payload : Object.assign({}, appTableRecPayload, {recId: null}, changes)
 
         };
@@ -298,7 +298,7 @@ describe('Test recordPendingEdits Store ', () => {
             }
         }};
         let onSaveAddedRecordAction = {
-            type: actions.ADD_REPORT_RECORD,
+            type: actions.ADD_RECORD,
             payload : Object.assign({}, appTableRecPayload, {recId: null}, changes)
 
         };
@@ -313,7 +313,7 @@ describe('Test recordPendingEdits Store ', () => {
 
 
         let onAddRecordSuccessAction = {
-            type: actions.ADD_REPORT_RECORD_SUCCESS,
+            type: actions.ADD_RECORD_SUCCESS,
             payload : Object.assign({}, appTableRecPayload)
         };
 
@@ -325,7 +325,7 @@ describe('Test recordPendingEdits Store ', () => {
 
     it('test onAddRecordFailed recordPendingEdits action', () => {
         let onAddRecordFailedAction = {
-            type: actions.ADD_REPORT_RECORD_FAILED,
+            type: actions.ADD_RECORD_FAILED,
             payload : Object.assign({}, appTableRecPayload)
         };
 
