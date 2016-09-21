@@ -189,6 +189,7 @@ describe('ReportToolbar functions', () => {
                                                                 pageActions={pageActions}
                                                                 pageStart={1}
                                                                 pageEnd={0}
+                                                                recordsCount={0}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
@@ -212,6 +213,7 @@ describe('ReportToolbar functions', () => {
                                                                 pageActions={pageActions}
                                                                 pageStart={1}
                                                                 pageEnd={3}
+                                                                recordsCount={3}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");

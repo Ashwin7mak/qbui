@@ -26,7 +26,8 @@ const fakeReportData_fetchMoreOnly = {
         }
     },
     pageEnd: 50,
-    pageStart: 1
+    pageStart: 1,
+    recordsCount:100
 };
 
 const fakeReportData_fetchPreviousOnly = {
@@ -38,7 +39,8 @@ const fakeReportData_fetchPreviousOnly = {
         }
     },
     pageEnd: 100,
-    pageStart: 50
+    pageStart: 50,
+    recordsCount:100
 };
 
 const fakeReportData_fetchMoreAndPrevious = {
@@ -50,7 +52,8 @@ const fakeReportData_fetchMoreAndPrevious = {
         }
     },
     pageEnd: 100,
-    pageStart: 51
+    pageStart: 51,
+    recordsCount:100
 };
 
 const fakeReportData_noNagivationButtons = {
@@ -62,7 +65,8 @@ const fakeReportData_noNagivationButtons = {
         }
     },
     pageEnd: 10,
-    pageStart: 1
+    pageStart: 1,
+    recordsCount:100
 };
 
 const singleNodeTreeData = [{
