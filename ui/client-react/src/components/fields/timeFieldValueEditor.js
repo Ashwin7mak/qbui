@@ -139,11 +139,12 @@ const TimeFieldValueEditor = React.createClass({
         }
     },
 
-    renderClockIcon() {
-        return (
-            <span className={glyphicon}></span>
-        );
-    },
+    // TODO: waiting for react-select rc2 to leverage the arrow callback
+    //renderClockIcon() {
+    //    return (
+    //        <span></span>
+    //    );
+    //},
 
     renderOption(option) {
         if (option.value === null) {
@@ -215,7 +216,7 @@ const TimeFieldValueEditor = React.createClass({
                         optionRenderer={this.renderOption}
                         placeholder={placeholder}
                         clearable={false}
-                        arrowRenderer={this.renderClockIcon}
+                        //arrowRenderer={this.renderClockIcon}
                     />
                 </div>
         );
