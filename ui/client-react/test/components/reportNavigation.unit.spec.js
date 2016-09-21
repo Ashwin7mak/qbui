@@ -156,7 +156,7 @@ describe('Report Navigation tests', () => {
         });
         expect(nextPage.length).toBe(0);
     });
-    it('test navigation arrows are are not shown when records count is zero', () => {
+    it('test navigation arrows are not shown when records count is zero', () => {
         component = TestUtils.renderIntoDocument(<ReportNavigation recordsCount={fakeReportNavigationData.noRecords.recordsCount}
                                                                    pageStart={fakeReportNavigationData.noRecords.pageStart}
                                                                    pageEnd={fakeReportNavigationData.noRecords.pageEnd}
@@ -172,7 +172,7 @@ describe('Report Navigation tests', () => {
         });
         expect(nextPage.length).toBe(0);
     });
-    it('test navigation arrows are are not shown when filtered records count is zero', () => {
+    it('test navigation arrows are not shown when filtered records count is zero', () => {
         component = TestUtils.renderIntoDocument(<ReportNavigation recordsCount={fakeReportNavigationData.noFilteredRecordsReturned.recordsCount}
                                                                    pageStart={fakeReportNavigationData.noFilteredRecordsReturned.pageStart}
                                                                    pageEnd={fakeReportNavigationData.noFilteredRecordsReturned.pageEnd}
