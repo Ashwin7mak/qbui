@@ -183,7 +183,7 @@
             var expectedCurrentYearRecord = {
                 id: fid,
                 value: dateCurrentYear + UTC,
-                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr 1:51 am EDT'
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr 1:51 am (EDT)'
             };
 
             // DateTime in different year
@@ -191,7 +191,7 @@
             var expectedDiffYearRecord = {
                 id: fid,
                 value: dateDiffYear + UTC,
-                display: 'Wednesday, 12-Apr-2000 1:51 am EDT'
+                display: 'Wednesday, 12-Apr-2000 1:51 am (EDT)'
             };
 
             // Null date
@@ -297,7 +297,7 @@
             var expectedCurrentYearRecord = {
                 id: fid,
                 value: dateCurrentYear + UTC,
-                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12 1:51 am EDT'
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12 1:51 am (EDT)'
             };
 
             // DateTime in different year
@@ -305,7 +305,7 @@
             var expectedDiffYearRecord = {
                 id: fid,
                 value: dateDiffYear + UTC,
-                display: 'Wednesday, Apr 12, 2000 1:51 am EDT'
+                display: 'Wednesday, Apr 12, 2000 1:51 am (EDT)'
             };
 
             // Null date
@@ -411,7 +411,7 @@
             var expectedCurrentYearRecord = {
                 id: fid,
                 value: dateCurrentYear + UTC,
-                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 1:51 am EDT'
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12 1:51 am (EDT)'
             };
 
             // DateTime in different year
@@ -419,7 +419,7 @@
             var expectedDiffYearRecord = {
                 id: fid,
                 value: dateDiffYear + UTC,
-                display: 'Wednesday, Apr-12-00 1:51 am EDT'
+                display: 'Wednesday, Apr 12, 00 1:51 am (EDT)'
             };
 
             // Null date
@@ -525,7 +525,7 @@
             var expectedCurrentYearRecord = {
                 id: fid,
                 value: dateCurrentYear + UTC,
-                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr 1:51 am EDT'
+                display: testDateHelper.dayOfWeekAprilTwelve + ', 12-Apr 1:51 am (EDT)'
             };
 
             // DateTime in different year
@@ -533,7 +533,7 @@
             var expectedDiffYearRecord = {
                 id: fid,
                 value: dateDiffYear + UTC,
-                display: 'Wednesday, 12-Apr-00 1:51 am EDT'
+                display: 'Wednesday, 12-Apr-00 1:51 am (EDT)'
             };
 
             // Null date
@@ -640,7 +640,7 @@
             var expectedCurrentYearRecord = {
                 id: fid,
                 value: dateCurrentYear + UTC,
-                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 1:51 am EDT'
+                display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12 1:51 am (EDT)'
             };
 
             // DateTime in different year
@@ -648,7 +648,7 @@
             var expectedDiffYearRecord = {
                 id: fid,
                 value: dateDiffYear + UTC,
-                display: 'Wednesday, 2000-Apr-12 1:51 am EDT'
+                display: 'Wednesday, 2000-Apr-12 1:51 am (EDT)'
             };
 
             // Null date
