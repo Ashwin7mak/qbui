@@ -505,7 +505,6 @@ $cell-edit-background-edit: #f3f8fe;
 
                 &.timeCell {
                     width: 100%;
-                    border: none;
                     margin-top: 3px;
                     .Select {
                         height: 28px;
@@ -557,6 +556,9 @@ $cell-edit-background-edit: #f3f8fe;
                             font-style: italic;
                             font-weight: bold;
                         }
+                    }
+                    .glyphicon-calendar {
+                        color: $color-black-700;
                     }
                 }
                 &:not(.Select) {
