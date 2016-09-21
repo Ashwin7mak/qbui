@@ -9,6 +9,7 @@ let AppsStore = Fluxxor.createStore({
 
     initialize: function() {
         this.apps = [];
+        this.appUsers = [];
         this.loading = false;
         this.error = false;
 
@@ -17,7 +18,8 @@ let AppsStore = Fluxxor.createStore({
             actions.LOAD_APPS_SUCCESS, this.onLoadAppsSuccess,
             actions.LOAD_APPS_FAILED, this.onLoadAppsFailed,
             actions.SELECT_APP, this.onSelectApp,
-            actions.SELECT_TABLE, this.onSelectTable
+            actions.SELECT_TABLE, this.onSelectTable,
+            actions.LOAD_APP_USERS_SUCCESS, this.onLoadAppUsersSuccess
         );
 
         this.logger = new Logger();
@@ -50,7 +52,10 @@ let AppsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-
+    onLoadAppUsersSuccess: function(users) {
+        this.appUsers = users;
+        this.emit('change');
+    },
     onSelectApp: function(appId) {
         this.selectedAppId = appId;
 
@@ -65,6 +70,7 @@ let AppsStore = Fluxxor.createStore({
         return {
             apps: this.apps,
             selectedAppId: this.selectedAppId,
+            appUsers: this.appUsers,
             selectedTableId: this.selectedTableId,
             loading: this.loading,
             error: this.error

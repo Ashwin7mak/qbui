@@ -46,6 +46,7 @@ $cell-edit-background-edit: #f3f8fe;
 
     .ag-body-container {
         background-color: $color2;
+        margin-bottom:330px;
     }
     /* prevent clipping of actions and dropdowns in 1st column */
     .ag-pinned-left-cols-viewport {
@@ -109,6 +110,8 @@ $cell-edit-background-edit: #f3f8fe;
         padding-left:4px;
         padding-top: 4px;
         display:inline-block;
+        float:left;
+        width: calc(100% - 20px); /* expand to enable right alignment but allow room for dropdown icon */
     }
 
     .gridCell {
@@ -306,7 +309,7 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-menu-option-icon {
         padding: 0 5px;
     }
-    .qbIcon.iconssturdy-check {
+    .qbIcon.iconTableUISturdy-check {
         font-size: $grid-font-size + 2;
         width: $grid-font-size + 2;
         vertical-align: middle;
@@ -463,8 +466,6 @@ $cell-edit-background-edit: #f3f8fe;
             right:0px;
             bottom:0px;
             background-color: $cell-edit-background-edit;
-
-            z-index:1;
             display:flex;
 
             .cellData:not(.nonEditable) {
@@ -499,8 +500,9 @@ $cell-edit-background-edit: #f3f8fe;
                 display:inline-block;
                 margin-right:2px;
                 margin-left: 2px;
-                height: 30px;
+
                 background-color: $input-bg-color;
+
                 &.timeCell {
                     width: 100%;
                     border: none;
@@ -557,8 +559,12 @@ $cell-edit-background-edit: #f3f8fe;
                         }
                     }
                 }
+                &:not(.Select) {
+                    height: 30px;
+                }
                 &.dateCell>* {
                     border: 0;
+
                     .input-group.date input.form-control {
                         border: 0;
                         padding: 3px;
@@ -712,3 +718,7 @@ $cell-edit-background-edit: #f3f8fe;
     overflow: visible;
 }
 
+/* right justify menu on last column */
+.ag-row .ag-cell:last-child .Select-menu-outer {
+    right:0;
+}

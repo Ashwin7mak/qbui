@@ -2,13 +2,13 @@ import React from 'react';
 
 import FieldFormats from '../../utils/fieldFormats';
 
-import {UserFieldValueRenderer} from './fieldValueRenderers';
-
 import TextFieldValueRenderer from './textFieldValueRenderer';
 import DateTimeFieldValueRenderer from './dateTimeFieldValueRenderer';
 import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
 import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
+import UserFieldValueRenderer from './userFieldValueRenderer';
+
 import _ from 'lodash';
 
 /**
@@ -83,7 +83,7 @@ const FieldValueRenderer = React.createClass({
         }
         case FieldFormats.USER_FORMAT:
             return (
-                    <UserFieldValueRenderer value={this.props.display}
+                    <UserFieldValueRenderer value={this.props.value} display={this.props.display}
                                             key={'ufvr-' + this.props.idKey}
                                             {...commonProperties}/>
                 );

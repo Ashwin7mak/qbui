@@ -5,13 +5,17 @@ import {DEFAULT_RECORD_KEY_ID} from '../../constants/schema';
 import {NumberFieldValueRenderer} from './fieldValueRenderers';
 
 import FieldFormats from '../../utils/fieldFormats' ;
-import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
+
+import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import DateFieldValueEditor from './dateFieldValueEditor';
 import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
 import TimeFieldValueEditor from './timeFieldValueEditor';
 import TextFieldValueEditor from './textFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
+import UserFieldValueEditor from './userFieldValueEditor';
+
 import NumericFieldValueEditor from './numericFieldValueEditor';
+
 import _ from 'lodash';
 
 /**
@@ -174,7 +178,8 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.USER_FORMAT: {
-            return <UserFieldValueEditor  {...commonProps}/>;
+
+            return <UserFieldValueEditor {...commonProps} appUsers={this.props.appUsers}/>;
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {

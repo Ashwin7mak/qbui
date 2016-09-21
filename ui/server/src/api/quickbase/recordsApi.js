@@ -444,6 +444,7 @@
             },
 
             /**
+             * Delete a single record on a table
              *
              * @param req
              * @returns Promise
@@ -455,6 +456,7 @@
             },
 
             /**
+             * Delete record or records in bulk on a table
              *
              * @param req
              * @returns Promise

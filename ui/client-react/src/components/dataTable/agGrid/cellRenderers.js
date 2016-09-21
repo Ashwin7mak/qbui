@@ -52,6 +52,7 @@ class CellRendererFactory  {
                              initialValue={props.params.value}
                              editing={props.editing}
                              params={props.params}
+                             appUsers={ _.has(props.params, 'context.getAppUsers') ? props.params.context.getAppUsers() : []}
                              qbGrid={props.qbGrid}
                              key={CellRendererFactory.getCellKey(props)}
         />;
@@ -72,6 +73,7 @@ const CellRenderer = React.createClass({
         initialValue: React.PropTypes.object,
         editing: React.PropTypes.bool,
         validateFieldValue: React.PropTypes.func,
+        appUsers: React.PropTypes.array,
         qbGrid: React.PropTypes.bool // temporary, used to determine if we need to render both a renderer and editor (for ag-grid)
     },
 
@@ -181,6 +183,7 @@ const CellRenderer = React.createClass({
                                 validateFieldValue={this.props.validateFieldValue}
                                 isInvalid={invalidStatus.isInvalid}
                                 invalidMessage={invalidStatus.invalidMessage}
+                                appUsers={this.props.appUsers}
                     />
                 }
 
