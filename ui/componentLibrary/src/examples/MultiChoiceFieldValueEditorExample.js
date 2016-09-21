@@ -55,10 +55,16 @@ let choices = [
 ];
 
 const basicMultiChoiceFieldValueEditor = (
-    <div style={{width:200}}>
+    <div>
         <dt>Multi Choice Field Editor:</dt>
+        <div style={{width:200}}>
+            <dd>
+                <MultiChoiceFieldValueEditor choices = {choices} />
+            </dd>
+        </div>
+        <dt>Multi Choice Field Editor Radio Buttons:</dt>
         <dd>
-            <MultiChoiceFieldValueEditor choices = {choices} />
+            <MultiChoiceFieldValueEditor choices = {choices} showAsRadio={true}/>
         </dd>
 
 

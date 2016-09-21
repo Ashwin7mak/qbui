@@ -87,7 +87,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         const options = this.getSelectItems();
         var radioButtons = [];
         for (var i = 0; i < options.length; i++) {
-            radioButtons.push(<span className="multiChoiceRadio"><Radio value={options[i].value.coercedValue} />{options[i].label}</span>);
+            radioButtons.push(<span className="multiChoiceRadiochoice"><Radio value={options[i].value.coercedValue} />{options[i].label}<br /></span>);
         }
 
         const placeHolderMessage = <I18nMessage message="selection.placeholder" />;
@@ -117,7 +117,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
                         clearable={false}
                         onBlur={this.onBlur} /> :
                     <div className="multiChoiceRadioContainer">
-                        <RadioGroup name="test" selectedValue={this.state.selectedValue}
+                        <RadioGroup name="test"
+                                    selectedValue={this.state.selectedValue}
                                     onChange={this.handleChange}
                                     onBlur={this.onBlur}>
                             { radioButtons }
