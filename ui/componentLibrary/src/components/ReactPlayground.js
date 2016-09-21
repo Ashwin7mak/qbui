@@ -14,6 +14,8 @@ const NumericFieldValueEditor = require('../../../client-react/src/components/fi
 const NumericFieldValueRenderer = require('../../../client-react/src/components/fields/numericFieldValueRenderer');
 const TextFieldValueEditor = require('../../../client-react/src/components/fields/textFieldValueEditor');
 const TextFieldValueRenderer = require('../../../client-react/src/components/fields/textFieldValueRenderer');
+const UserFieldValueEditor = require('../../../client-react/src/components/fields/userFieldValueEditor');
+const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer');
 const QBicon = require('../../../client-react/src/components/qbIcon/qbIcon');
 const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel');
 

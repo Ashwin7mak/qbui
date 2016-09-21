@@ -9,6 +9,8 @@ import NumericFieldValueEditorMetadata from 'component-metadata!../../../client-
 import NumericFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/numericFieldValueRenderer.js';
 import TextFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/textFieldValueEditor.js';
 import TextFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/textFieldValueRenderer.js';
+import UserFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueEditor.js';
+import UserFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueRenderer.js';
 import QBIconMetadata from 'component-metadata!../../../client-react/src/components/qbIcon/qbIcon.js';
 import QBPanelMetadata from 'component-metadata!../../../client-react/src/components/QBPanel/qbpanel.js';
 
@@ -22,6 +24,8 @@ var Metadata = _.merge(
     NumericFieldValueRendererMetadata,
     TextFieldValueEditorMetadata,
     TextFieldValueRendererMetadata,
+    UserFieldValueEditorMetadata,
+    UserFieldValueRendererMetadata,
     QBIconMetadata,
     QBPanelMetadata
 );

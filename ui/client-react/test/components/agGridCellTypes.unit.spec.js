@@ -75,8 +75,8 @@ describe('AGGrid cell editor functions', () => {
                     datatypeAttributes: {
                         clientSideAttributes: {
                             num_lines: 4
-                        },
-                    },
+                        }
+                    }
                 }
             }
         };
@@ -230,15 +230,16 @@ describe('AGGrid cell editor functions', () => {
 
     });
 
-    it('test DateTimeFormatter edit', () => {
+    it('test DateTimeFormatter edit with time', () => {
         const params = {
             value: {
-                value: "2015-11-03T03:33:03.777Z"
+                value: "2015-09-03T09:33:03.777Z"
             },
             column: {
                 colDef: {
                     type : consts.SCALAR,
                     datatypeAttributes: {
+                        showTime: true,
                         dateFormat: "MM-DD-YYYY hh:mm:ss"
                     }
                 }
@@ -248,26 +249,52 @@ describe('AGGrid cell editor functions', () => {
         component = TestUtils.renderIntoDocument(<DateTimeCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const editInputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellEdit input");
-        expect(editInputs.length).toEqual(1);
+        //  test date picker
+        const dateEditInputs = ReactDOM.findDOMNode(component).querySelectorAll(".dateCell input");
+        expect(dateEditInputs.length).toEqual(1);
+        expect(dateEditInputs[0].value).toBe(`09-03-2015`);
 
-        //UTC
-        if (((new Date()).getTimezoneOffset() / 60) === 0) {
-            expect(editInputs[0].value).toBe(`11-03-2015 03:33:03 AM`);
-        }
-        //ET
-        if (((new Date()).getTimezoneOffset() / 60) === 4) {
-            expect(editInputs[0].value).toBe(`11-02-2015 10:33:03 PM`);
-        }
-        //PT
-        if (((new Date()).getTimezoneOffset() / 60) === 7) {
-            expect(editInputs[0].value).toBe(`11-02-2015 07:33:03 PM`);
-        }
+        //  change a date
+        TestUtils.Simulate.change(dateEditInputs[0], {"target": {"value":"10-15-2015"}});
+        expect(dateEditInputs[0].value).toBe("10-15-2015");
 
+        //  test time droplist
+        const timeEditInputs = ReactDOM.findDOMNode(component).querySelectorAll(".timeCell input");
+        expect(timeEditInputs.length).toEqual(1);
+        expect(timeEditInputs[0].value).toBe("");  // empty until a change
 
-        TestUtils.Simulate.change(editInputs[0], {"target": {"value":"11-03-2000 12:33:03 AM"}});
-        expect(editInputs[0].value).toBe("11-03-2000 12:33:03 AM");
+        //  change a time
+        TestUtils.Simulate.change(timeEditInputs[0], {"target": {value: "10:30 am"}});
+        expect(timeEditInputs[0].value).toBe("10:30 am");
 
+    });
+
+    it('test DateTimeFormatter edit w/o time', () => {
+        const params = {
+            value: {
+                value: "2015-09-03T09:33:03.777Z"
+            },
+            column: {
+                colDef: {
+                    datatypeAttributes: {
+                        showTime: false,
+                        dateFormat: "MM-DD-YYYY hh:mm:ss"
+                    }
+                }
+            }
+        };
+
+        component = TestUtils.renderIntoDocument(<DateTimeCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        //  test date picker
+        const dateEditInputs = ReactDOM.findDOMNode(component).querySelectorAll(".dateCell input");
+        expect(dateEditInputs.length).toEqual(1);
+        expect(dateEditInputs[0].value).toBe(`09-03-2015`);
+
+        //  test time droplist doesn't render
+        const timeEditInputs = ReactDOM.findDOMNode(component).querySelectorAll(".timeCell input");
+        expect(timeEditInputs.length).toEqual(0);
     });
 
     it('test TimeFormatter edit', () => {
@@ -291,10 +318,10 @@ describe('AGGrid cell editor functions', () => {
 
         const editInputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellEdit input");
         expect(editInputs.length).toEqual(1);
-        expect(editInputs[0].value).toBe("7:53:42 PM");
+        expect(editInputs[0].value).toBe("");   // no time
 
         TestUtils.Simulate.change(editInputs[0], {"target": {"value":"08:23:11 AM"}});
-        expect(editInputs[0].value).toBe("8:23:11 AM");
+        expect(editInputs[0].value).toBe("08:23:11 AM");
 
     });
 
@@ -305,6 +332,8 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
+
+                    datatypeAttributes: {},
                     type : consts.SCALAR
                 }
             }
@@ -317,10 +346,11 @@ describe('AGGrid cell editor functions', () => {
     it('test DateTimeFormatter', () => {
         const params = {
             value: {
-                value: "2097-01-17T00:33:03Z",
+                value: "2097-01-17T00:33:03Z"
             },
             column: {
                 colDef: {
+                    datatypeAttributes: {},
                     type : consts.SCALAR
                 }
             }
@@ -338,6 +368,7 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
+                    datatypeAttributes: {},
                     type : consts.SCALAR
                 }
             }

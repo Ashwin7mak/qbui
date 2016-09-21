@@ -7,6 +7,8 @@ import NumericFieldValueEditorExample from 'raw!../examples/NumericFieldValueEdi
 import NumericFieldValueRendererExample from 'raw!../examples/NumericFieldValueRendererExample.js';
 import TextFieldValueEditorExample from 'raw!../examples/TextFieldValueEditorExample.js';
 import TextFieldValueRendererExample from 'raw!../examples/TextFieldValueRendererExample.js';
+import UserFieldValueEditorExample from 'raw!../examples/UserFieldValueEditorExample.js';
+import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendererExample.js';
 import QBPanelExample from 'raw!../examples/QBPanelExample.js';
 import QBIconExample from 'raw!../examples/QBIconExample.js';
 
@@ -20,6 +22,8 @@ export default {
     NumericFieldValueRenderer: NumericFieldValueRendererExample,
     TextFieldValueEditor: TextFieldValueEditorExample,
     TextFieldValueRenderer: TextFieldValueRendererExample,
+    UserFieldValueEditor: UserFieldValueEditorExample,
+    UserFieldValueRenderer: UserFieldValueRendererExample,
     QBPanel: QBPanelExample,
     QBIcon: QBIconExample,
 };

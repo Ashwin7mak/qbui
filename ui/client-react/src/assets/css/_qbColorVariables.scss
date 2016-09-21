@@ -243,10 +243,16 @@ $checkbox-checkmark-readonly-color: $color-cyan-500;
 
 $datepicker-header-bg: $color34;
 $datepicker-header-fg: $color2;
-$datepicker-date-hover-bg: $color5;
+$datepicker-date-hover-bg: $color-blue-300;
 $datepicker-select-button-fg: $color3;
-$datepicker-select-button-bg: $color5;
+$datepicker-select-button-bg: $color7;
+$datepicker-select-active: $color-cyan-500;
 $datepicker-bg: $color2;
+$datepicker-bg-today: $color-orange-500;
+
+$user-picker-deactivated-label-fg: $color-black-600;
+$user-picker-user-label-fg: $color-black-700;
+$user-picker-email-label-fg: $color-black-600;
 
 
 //== QBPanel

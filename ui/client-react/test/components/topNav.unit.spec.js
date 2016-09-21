@@ -102,7 +102,7 @@ describe('TopNav functions', () => {
     });
 
     it('test global search renders', () => {
-        let searchInputContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-search");
+        let searchInputContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconTableUISturdy-search");
         expect(searchInputContainer.length).toEqual(1);
         TestUtils.Simulate.click(searchInputContainer[0]);
 

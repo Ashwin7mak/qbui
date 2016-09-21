@@ -27,6 +27,8 @@ import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
 import NumericFieldValueRendererDoc from './docs/numericFieldValueRenderer';
 import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
 import TextFieldValueRendererDoc from './docs/textFieldValueRenderer';
+import UserFieldRendererDoc from './docs/userFieldValueRenderer';
+import UserFieldEditorDoc from './docs/userFieldValueEditor';
 import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
 
@@ -45,6 +47,8 @@ render((
             <Route path="numericFieldValueRenderer" component={NumericFieldValueRendererDoc} />
             <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
             <Route path="textFieldValueRenderer" component={TextFieldValueRendererDoc} />
+            <Route path="userFieldRenderer" component={UserFieldRendererDoc} />
+            <Route path="userFieldEditor" component={UserFieldEditorDoc} />
             <Route path="qbpanel" component={QBPanelDoc} />
             <Route path="qbicon" component={QBIconDoc} />
         </Route>
