@@ -87,7 +87,7 @@ const CheckBoxFieldValueEditor = React.createClass({
 
     setCheckBoxClasses() {
         let checkBoxClasses = '';
-            checkBoxClasses += (this.isInvalid() ? 'invalid ' : '');
+        checkBoxClasses += (this.isInvalid() ? 'invalid ' : '');
         checkBoxClasses += (this.props.required ? 'required' : '');
         return checkBoxClasses;
     },
