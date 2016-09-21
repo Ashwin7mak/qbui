@@ -22,14 +22,14 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let tableActions = {
 
-    loadTableHomePage: function(appId, tblId) {
+    loadTableHomePage: function(appId, tblId, offset, numRows) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
                 let tableService = new TableService();
                 let reportService = new ReportService();
 
-                tableService.getHomePage(appId, tblId).then(
+                tableService.getHomePage(appId, tblId, offset, numRows).then(
                     (response) => {
                         var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
                         reportService.getReportRecordsCount(appId, tblId, model.rptId).then(

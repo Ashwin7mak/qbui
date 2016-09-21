@@ -1,6 +1,6 @@
 import TableService from '../../src/services/tableService';
 import BaseService from '../../src/services/baseService';
-import constants from '../../src/services/constants';
+import Constants from '../../../common/src/constants';
 
 describe('TableService functions', () => {
     'use strict';
@@ -17,8 +17,10 @@ describe('TableService functions', () => {
     it('test getHomePage function', () => {
         var appId = '123';
         var tableId = '456';
-        var url = tableService.constructUrl(tableService.API.GET_HOMEPAGE, [appId, tableId]);
-        tableService.getHomePage(appId, tableId);
-        expect(BaseService.prototype.get).toHaveBeenCalledWith(url);
+        var offset = Constants.PAGE.DEFAULT_OFFSET;
+        var numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
+        var url = tableService.constructUrl(tableService.API.GET_HOMEPAGE, [appId, tableId, offset, numRows]);
+        tableService.getHomePage(appId, tableId, offset, numRows);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:{offset:offset, numRows:numRows}});
     });
 });

@@ -1,7 +1,7 @@
 import FieldUtils from '../../src/utils/fieldUtils';
 import * as SchemaConsts from '../../src/constants/schema';
 
-fdescribe('FieldUtils', () => {
+describe('FieldUtils', () => {
     let testData;
     let recordIdCustomName = 'Employee ID';
 

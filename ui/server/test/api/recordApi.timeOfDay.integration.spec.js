@@ -77,11 +77,11 @@
         function noFlagsTimeOfDayDataProvider(fid) {
             // TimeOfDay in morning
             var earlyTODInput = [{id: fid, value: earlyTODIn}];
-            var expectedEarlyTODRecord = {id: fid, value: earlyTODOut, display: '9:00 AM'};
+            var expectedEarlyTODRecord = {id: fid, value: earlyTODOut, display: '9:00 am'};
 
             // TimeOfDay in afternoon
             var lateTODInput = [{id: fid, value: lateTODIn}];
-            var expectedLateTODRecord = {id: fid, value: lateTODOut, display: '3:00 PM'};
+            var expectedLateTODRecord = {id: fid, value: lateTODOut, display: '3:00 pm'};
 
             // Null date
             var nullInput = [{id: fid, value: null}];

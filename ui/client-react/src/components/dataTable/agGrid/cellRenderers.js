@@ -36,6 +36,7 @@ class CellRendererFactory  {
             _.has(props.params, 'value.id') &&
             _.has(props.params, 'data') &&
             _.has(props.params, 'rowIndex')) {
+
             recId = props.params.data[FieldUtils.getUniqueIdentifierFieldName(props.params.data)].value;
             key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId ;
         }
@@ -52,6 +53,7 @@ class CellRendererFactory  {
                              initialValue={props.params.value}
                              editing={props.editing}
                              params={props.params}
+                             appUsers={ _.has(props.params, 'context.getAppUsers') ? props.params.context.getAppUsers() : []}
                              qbGrid={props.qbGrid}
                              key={CellRendererFactory.getCellKey(props)}
         />;
@@ -72,6 +74,7 @@ const CellRenderer = React.createClass({
         initialValue: React.PropTypes.object,
         editing: React.PropTypes.bool,
         validateFieldValue: React.PropTypes.func,
+        appUsers: React.PropTypes.array,
         qbGrid: React.PropTypes.bool // temporary, used to determine if we need to render both a renderer and editor (for ag-grid)
     },
 
@@ -90,7 +93,7 @@ const CellRenderer = React.createClass({
                 valueAndDisplay: {
                     id: this.props.initialValue.id,
                     value: this.props.initialValue.value,
-                    display: this.props.initialValue.display,
+                    display: this.props.initialValue.display
                 },
                 validationStatus : null
             };
@@ -181,6 +184,7 @@ const CellRenderer = React.createClass({
                                 validateFieldValue={this.props.validateFieldValue}
                                 isInvalid={invalidStatus.isInvalid}
                                 invalidMessage={invalidStatus.invalidMessage}
+                                appUsers={this.props.appUsers}
                     />
                 }
 
@@ -248,8 +252,7 @@ const CellRenderer = React.createClass({
         current.isInvalid = result ? result.isInvalid : false;
         current.invalidMessage = result ? result.invalidMessage : null;
         this.setState({validationStatus : current});
-    },
-
+    }
 });
 
 export const TextCellRenderer = React.createClass({

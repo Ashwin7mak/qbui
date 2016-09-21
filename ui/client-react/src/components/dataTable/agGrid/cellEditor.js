@@ -21,7 +21,8 @@ const CellEditor = React.createClass({
         onTabColumn: React.PropTypes.func,
         validateFieldValue: React.PropTypes.func,
         isInvalid: React.PropTypes.bool,
-        invalidMessage: React.PropTypes.string
+        invalidMessage: React.PropTypes.string,
+        appUsers: React.PropTypes.array
     },
 
 
@@ -43,8 +44,8 @@ const CellEditor = React.createClass({
         }
         return (<FieldValueEditor  classes={classes}
                               type={this.props.type}
-                              value={this.props.value}
                               display={this.props.display}
+                              value={this.props.value}
                               fieldDef={this.props.colDef}
                               indicateRequired={true}
                               onChange={this.props.onChange}
@@ -56,6 +57,7 @@ const CellEditor = React.createClass({
                               key={'fve' + this.props.idKey}
                               idKey={this.props.idKey}
                               invalidMessage={this.props.invalidMessage}
+                              appUsers={this.props.appUsers}
                               ref={(c) => {
                                   //get reference to the component for this field
                                   let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
