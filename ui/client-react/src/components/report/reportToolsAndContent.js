@@ -273,12 +273,17 @@ let ReportToolsAndContent = React.createClass({
         this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
 
         if (this.props.reportData.data) {
+            let isReportFiltered = false;
+            if (this.props.reportData.searchStringForFiltering && StringUtils.trim(this.props.reportData.searchStringForFiltering).length !== 0) {
+                isReportFiltered = true;
+            } else {
+                isReportFiltered = this.props.reportData.selections ? this.props.reportData.selections.hasAnySelections() : false;
+            }
+
             let filteredRecordsCount = this.props.reportData.data.filteredRecordsCount;
             let recordsCount = this.props.reportData.data.recordsCount;
 
-            let countToConsider = StringUtils.isNonEmptyString(this.props.reportData.searchStringForFiltering) && filteredRecordsCount ?
-                                    filteredRecordsCount :
-                                    recordsCount;
+            let countToConsider = isReportFiltered && filteredRecordsCount ? filteredRecordsCount : recordsCount;
             this.pageEnd = this.pageEnd > countToConsider ? countToConsider : this.pageEnd;
         }
 
