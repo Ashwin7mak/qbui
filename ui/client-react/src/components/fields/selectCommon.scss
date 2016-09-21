@@ -10,6 +10,10 @@ $multi-choice-field-box-height: 28px;
 
   .Select-control {
     height:$multi-choice-field-box-height;
+    border-radius: 2px;
+    border: solid 1px $input-text-normal-border-color;
+    box-shadow: none;
+    outline: none;
 
     .Select-input {
       height:$multi-choice-field-box-height;
@@ -31,6 +35,10 @@ $multi-choice-field-box-height: 28px;
     max-height: 340px;
     min-width: 100%;
     width:auto;
+    border: solid 1px $input-text-normal-border-color;
+    box-shadow: none;
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
 
     .Select-menu {
       max-height: 340px;
@@ -39,15 +47,16 @@ $multi-choice-field-box-height: 28px;
 
       .Select-option {
         position: relative;
-        padding-left:16px;
+        padding-left:32px;
         padding-top:4px;
         padding-bottom:4px;
 
         .qbIcon {
           position:absolute;
           left:0;
-          top:1px;
+          margin-top:1px;
           font-size:16px;
+          padding: 7px;
           color: $selected-choice-color;
         }
       }
