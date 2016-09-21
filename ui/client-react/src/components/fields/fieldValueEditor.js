@@ -118,6 +118,9 @@ const FieldValueEditor = React.createClass({
             tabIndex: "0",
             idKey : this.props.idKey,
             ref:"fieldInput",
+            required: this.props.fieldDef.required,
+            readOnly: !this.props.fieldDef.userEditableValue,
+            invalid: this.props.isInvalid,
             fieldDef: this.props.fieldDef
         };
 
