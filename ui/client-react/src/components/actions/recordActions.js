@@ -40,7 +40,6 @@ let RecordActions = React.createClass({
         return (
             <div className={'recordActions'} onClick={this.onClick}>
 
-                    {this.props.selection && <span className="selectedRowsLabel">{this.props.selection.length}</span>}
                     <div className="actionIcons">
                         <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit") + " " + record}/>
                         <ActionIcon icon="print" tip={this.getSelectionTip("selection.print") + " " + record}/>
