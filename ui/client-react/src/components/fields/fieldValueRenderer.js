@@ -2,8 +2,9 @@ import React from 'react';
 
 import FieldFormats from '../../utils/fieldFormats';
 
-import {DateFieldValueRenderer} from './fieldValueRenderers';
 import TextFieldValueRenderer from './textFieldValueRenderer';
+import DateTimeFieldValueRenderer from './dateTimeFieldValueRenderer';
+import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
 import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
 import UserFieldValueRenderer from './userFieldValueRenderer';
@@ -86,29 +87,24 @@ const FieldValueRenderer = React.createClass({
                                             key={'ufvr-' + this.props.idKey}
                                             {...commonProperties}/>
                 );
-
+        //  Date and dateTime use the same view formatter
         case FieldFormats.DATE_FORMAT:
+        case FieldFormats.DATETIME_FORMAT:
             return (
-                    <DateFieldValueRenderer value={this.props.display}
+                <DateTimeFieldValueRenderer value={this.props.value}
+                                            display={this.props.display}
+                                            attributes={this.props.attributes}
                                             key={'dfvr-' + this.props.idKey}
-                                        {...commonProperties}/>
-                );
-
-        case FieldFormats.DATETIME_FORMAT: {
+                    {...commonProperties}/>
+            );
+        case FieldFormats.TIME_FORMAT:
             return (
-                    <DateFieldValueRenderer value={this.props.display}
+                    <TimeFieldValueRenderer value={this.props.value}
+                                            display={this.props.display}
+                                            attributes={this.props.attributes}
                                             key={'dfvr-' + this.props.idKey}
-                                            {...commonProperties}/>
+                                                {...commonProperties}/>
                 );
-        }
-
-        case FieldFormats.TIME_FORMAT: {
-            return (
-                    <DateFieldValueRenderer value={this.props.display}
-                                            key={'dfvr-' + this.props.idKey}
-                                            {...commonProperties}/>
-                );
-        }
         case FieldFormats.CHECKBOX_FORMAT:
             return (
                     <input type="checkbox" disabled checked={this.props.value} key={'inp-' + this.props.idKey}/>
@@ -137,9 +133,9 @@ const FieldValueRenderer = React.createClass({
     },
 
     render() {
-
         let className = "";
         let commonProperties = {};
+
         if (_.has(this.props, 'attributes.clientSideAttributes.bold') &&
             this.props.attributes.clientSideAttributes.bold) {
             commonProperties.isBold = true;

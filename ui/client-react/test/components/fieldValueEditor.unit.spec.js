@@ -60,7 +60,7 @@ describe('FieldValueEditor functions', () => {
             {test: "RATING_FORMAT", type: FieldFormats.RATING_FORMAT},
             {test: "DURATION_FORMAT", type: FieldFormats.DURATION_FORMAT},
             {test: "PHONE_FORMAT", type: FieldFormats.PHONE_FORMAT},
-            {test: "MULTI_LINE_TEXT_FORMAT", type: FieldFormats.MULTI_LINE_TEXT_FORMAT},
+            {test: "MULTI_LINE_TEXT_FORMAT", type: FieldFormats.MULTI_LINE_TEXT_FORMAT}
         ];
         dataProvider.forEach((data) => {
             it(data.test, () => {

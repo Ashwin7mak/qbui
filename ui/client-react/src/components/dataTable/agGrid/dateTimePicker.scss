@@ -1,12 +1,8 @@
 @import '../../../../src/assets/css/qbVariables';
 
 /* CSS hacks to the 3rd part date time picker to meet visual spec */
-
 .bootstrap-datetimepicker-widget.dropdown-menu {
-    background-color:$datepicker-header-bg;
-    padding-bottom:0;
-    padding-top:0;
-
+    padding-top: 0;
 
     /* the button that switches between views */
     .picker-switch {
@@ -38,15 +34,28 @@
         background: $datepicker-date-hover-bg;
     }
     .btn-primary, .active  {
-        background-color: $datepicker-header-bg;
+        background-color: $datepicker-select-active;
         font-weight:bold;
     }
 
+    //  show a circle for today's date
+    .today {
+        border-radius: 16px;
+        background-color: $datepicker-bg-today;
+        color: $color-black-700;
+        font-weight: normal;
+    }
+
+    //  hide the pickers default identification for today
+    .today::before {
+        content: inherit;
+        border: none;
+    }
 }
 
 /* the little arrow on the top top right of the popup */
 .bootstrap-datetimepicker-widget.pull-right:after {
-    border-bottom-color:$datepicker-header-bg;
+    border-bottom-color: $color-black-400;
 }
 
 .datepicker {
@@ -62,9 +71,6 @@
             font-size:14px;
             background-color: $datepicker-bg;
             tr:first-child {
-                background-color: $datepicker-header-bg;
-                color: $datepicker-header-fg;
-
                 th.switch,th.prev,th.next {
                     .glyphicon {
                         font-size: 22px;
@@ -76,20 +82,30 @@
                 color: $datepicker-select-button-fg;
             }
 
-            /* replace their prev/next bootstrap icons with ours */
-            .glyphicon-chevron-right:before {
-                font-family: "QuickBase-Sturdy";
+            .glyphicon-chevron-left:before {
+                font-family: "QuickBaseIconUISturdy";
                 content: "\E90B";
             }
 
-            /* we don't have a left so use the right one an flip it around */
-            .glyphicon-chevron-left     {
+            /* need to flip the right chevron as we're using the left */
+            .glyphicon-chevron-right {
                 transform: rotate(180deg);
             }
-            .glyphicon-chevron-left:before {
-                font-family: "QuickBase-Sturdy";
+            /* replace their prev/next bootstrap icons with ours */
+            .glyphicon-chevron-right:before {
+                font-family: "QuickBaseIconUISturdy";
                 content: "\E90B";
             }
+
+            tr {
+                th.prev:hover {
+                    background-color: transparent;
+                }
+                th.next:hover {
+                    background-color: transparent;
+                }
+            }
+
         }
 
         tbody tr {
@@ -113,7 +129,7 @@
 
         /* insert our icons */
         th.next:after, th.prev:after {
-            font-family: "QuickBase-Sturdy";
+            font-family: "QuickBaseIconUISturdy";
             content: "\E90B";
             font-size: 22px;
             color: #fff;
