@@ -1,15 +1,18 @@
 import React from 'react';
 
+import Fluxxor from 'fluxxor';
 import FieldLabelElement from './fieldLabelElement';
 import FieldValueRenderer from '../fields/fieldValueRenderer';
 import FieldValueEditor from '../fields/fieldValueEditor';
 import FieldFormats from '../../utils/fieldFormats';
 import './qbform.scss';
 
+let FluxMixin = Fluxxor.FluxMixin(React);
 /**s
  * render a field value, optionally with its label
  */
 const FieldElement = React.createClass({
+    mixins: [FluxMixin],
     displayName: 'FieldElement',
     propTypes: {
         element: React.PropTypes.object, // FormFieldElement from form API
@@ -38,6 +41,7 @@ const FieldElement = React.createClass({
     },
 
     onBlur(theVals) {
+        const flux = this.getFlux();
         let fid = this.props.relatedField.id;
         let change = {
             values: {
@@ -47,6 +51,7 @@ const FieldElement = React.createClass({
             fid: +fid,
             fieldName: this.props.relatedField.name
         };
+        flux.actions.recordPendingValidateField(this.props.relatedField, theVals.value);
         if (this.props.onBlur) {
             this.props.onChange(change);
         }
@@ -74,13 +79,15 @@ const FieldElement = React.createClass({
                             onValidated={this.props.onValidated}
                             isInvalid={this.props.isInvalid}
                             key={'fve-' + this.props.idKey}
-                            idKey={this.props.idKey}
+                            idKey={'fve-' + this.props.idKey}
                             invalidMessage={this.props.invalidMessage}/> :
             <FieldValueRenderer type={fieldType}
-                                           value={fieldRawValue}
-                                           display={fieldDisplayValue}
-                                           attributes={fieldDatatypeAttributes}
-                                           fieldDef = {this.props.relatedField} />;
+                            key={'fvr-' + this.props.idKey}
+                            idKey={'fvr-' + this.props.idKey}
+                            value={fieldRawValue}
+                            display={fieldDisplayValue}
+                            attributes={fieldDatatypeAttributes}
+                            fieldDef = {this.props.relatedField} />;
         return (
             <div className="formElement field">
                 {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} /> }

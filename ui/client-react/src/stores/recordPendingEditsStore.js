@@ -2,6 +2,7 @@ import * as actions from "../constants/actions";
 import Fluxxor from "fluxxor";
 import _ from 'lodash';
 import Logger from '../utils/logger';
+import ValidationUtils from '../utils/validationUtils';
 var logger = new Logger();
 
 /**
@@ -17,6 +18,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.RECORD_EDIT_CHANGE_FIELD, this.onRecordEditChangeField,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             actions.RECORD_EDIT_SAVE, this.onRecordEditSave,
+            actions.RECORD_EDIT_VALIDATE_FIELD, this.onRecordEditValidateField,
             actions.SAVE_REPORT_RECORD, this.onSaveRecord,
             actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
@@ -42,6 +44,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = null;
         this.originalRecord = null;
         this.recordChanges = {};
+        this.editErrors = {};
     },
 
     /**
@@ -68,6 +71,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.recordChanges = {};
             this.originalRecord = undefined;
         }
+        //TODO when a record gets into edit state it might already have errors so this should be populated with those
+        this.editErrors = {};
         this.isInlineEditOpen = true;
         this.emit('change');
     },
@@ -93,6 +98,21 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = payload.recId;
         this.isPendingEdit = true;
+        this.emit('change');
+    },
+
+    /**
+     * Called when a field is validated typically on blur.
+     * editErrors is an object of type {fid, {isInvalid, invalidMessgage}}
+     * @param def
+     * @param value
+     * @param checkRequired
+     */
+    onRecordEditValidateField(payload) {
+        if (!this.editErrors) {
+            this.editErrors = {};
+        }
+        this.editErrors[payload.fieldDef.id] = ValidationUtils.checkFieldValue(payload.fieldDef, payload.value, payload.checkRequired);
         this.emit('change');
     },
 
@@ -255,7 +275,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             currentEditingRecordId : this.currentEditingRecordId,
             originalRecord : this.originalRecord,
             recordChanges : this.recordChanges,
-            commitChanges : this.commitChanges
+            commitChanges : this.commitChanges,
+            editErrors: this.editErrors
         };
     },
 });

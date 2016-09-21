@@ -25,7 +25,7 @@ let Record = React.createClass({
         return _.cloneDeep(orig);
     },
     /**
-     * When user starts editing a record (this is marked by first field change, if it's an existing (already stored) record keep note
+     * When user starts editing a record (this is marked by first field change), if it's an existing (already stored) record keep note
      * its originalRecord values (for later undo/audit?)
      * if it's a new (unsaved) record note all it's non null values as changes to the new record
      * to be saved.
@@ -125,13 +125,9 @@ let Record = React.createClass({
             <button onClick={this.handleRecordSaveClicked}>Save</button>
             <button onClick={this.handleEditRecordCancel}>Cancel</button>
             <QBForm {...this.props} edit={true}
-                                    idKey={"qfm-" + this.props.recId}
-                //onEditRecordStart={this.handleEditRecordStart}
-                                    onEditRecordCancel={this.handleEditRecordCancel}
-                                    onFieldChange={this.handleFieldChange}
-                                    onRecordSaveClicked={this.handleRecordSaveClicked}
-                                    validateRecord={this.validateRecord}
-                                    validateFieldValue={ValidationUtils.checkFieldValue}/>
+                                    key={"qbf-" + this.props.recId}
+                                    idKey={"qbf-" + this.props.recId}
+                                    onFieldChange={this.handleFieldChange}/>
         </div>;
     }
 });

@@ -199,7 +199,6 @@ const FieldValueEditor = React.createClass({
         }
         }
     },
-
     onBlur(vals) {
         if (this.props.onBlur) {
             this.props.onBlur(vals);
