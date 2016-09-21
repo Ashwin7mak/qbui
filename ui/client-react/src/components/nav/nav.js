@@ -120,6 +120,7 @@ export let Nav = React.createClass({
      */
     getTrowserContent() {
 
+
         let selectReport = (report) => {
             this.hideTrowser();
             setTimeout(() => {

@@ -7,8 +7,6 @@ import IconActions from '../../actions/iconActions';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import ReportActions from '../../actions/reportActions';
-import RecordActions from '../../actions/recordActions';
 import Locale from '../../../locales/locales';
 import _ from 'lodash';
 import Loader  from 'react-loader';
@@ -72,6 +70,7 @@ let AGGrid = React.createClass({
         records: React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
+        rptId: React.PropTypes.string,
         validateRecord: React.PropTypes.func,
         validateFieldValue: React.PropTypes.func,
         onRowClick: React.PropTypes.func,
@@ -368,9 +367,24 @@ let AGGrid = React.createClass({
             }
         }
     },
+
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    openRecordForEdit(data) {
+
+        const {appId, tblId, rptId} = this.props;
+        const recordId = data[this.props.uniqueIdentifier].value;
+
+        const flux = this.getFlux();
+
+        flux.actions.openRecordForEdit(appId, tblId, recordId, rptId);
+    },
+
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
-        this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
+        this.gridOptions.context.defaultActionCallback = this.openRecordForEdit;
         this.gridOptions.context.cellTabCallback = this.onCellTab;
         this.gridOptions.context.onRecordChange = this.props.onRecordChange;
         this.gridOptions.context.onRecordAdd = this.props.onRecordAdd;

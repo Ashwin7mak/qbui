@@ -40,18 +40,18 @@ let RecordActions = React.createClass({
         return (
             <div className={'recordActions'} onClick={this.onClick}>
 
-                    <div className="actionIcons">
-                        <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit") + " " + record}/>
-                        <ActionIcon icon="print" tip={this.getSelectionTip("selection.print") + " " + record}/>
+                <div className="actionIcons">
+                    <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit") + " " + record}/>
+                    <ActionIcon icon="print" tip={this.getSelectionTip("selection.print") + " " + record}/>
 
-                        <EmailReportLink tip={this.getSelectionTip("selection.email") + " " + record}
-                                         subject={this.getEmailSubject()}
-                                         body={this.getEmailBody()}/>
+                    <EmailReportLink tip={this.getSelectionTip("selection.email") + " " + record}
+                                     subject={this.getEmailSubject()}
+                                     body={this.getEmailBody()}/>
 
-                        <ActionIcon icon="duplicate" tip={this.getSelectionTip("selection.copy") + " " + record}/>
-                        <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record}/>
-                        <ActionIcon icon="pickles" tip={this.getSelectionTip("selection.more") } onClick={this.showExtraActions}/>
-                    </div>
+                    <ActionIcon icon="duplicate" tip={this.getSelectionTip("selection.copy") + " " + record}/>
+                    <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record}/>
+                    <ActionIcon icon="pickles" tip={this.getSelectionTip("selection.more") } onClick={this.showExtraActions}/>
+                </div>
 
             </div>
         );
