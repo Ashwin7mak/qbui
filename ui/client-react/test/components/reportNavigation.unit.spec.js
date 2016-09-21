@@ -31,7 +31,34 @@ const fakeReportNavigationData = {
         recordsCount: 20,
         getPreviousReportPage: null,
         getNextReportPage: null
+    },
+    noRecords: {
+        pageStart: 1,
+        pageEnd: 10,
+        recordsCount: 0,
+        getPreviousReportPage: null,
+        getNextReportPage:null,
+        reportData: {
+            data: {
+                recordsCount: 0
+            }
+        }
+    },
+    noFilteredRecordsReturned: {
+        pageStart: 1,
+        pageEnd: 10,
+        recordsCount: 0,
+        getPreviousReportPage: null,
+        getNextReportPage:null,
+        reportData: {
+            data: {
+                recordsCount: 10,
+                filteredRecordsCount: 0
+            },
+            searchStringForFiltering: 'someRandomSearchString',
+        }
     }
+
 };
 
 describe('Report Navigation tests', () => {
@@ -129,5 +156,38 @@ describe('Report Navigation tests', () => {
         });
         expect(nextPage.length).toBe(0);
     });
+    it('test navigation arrows are not shown when records count is zero', () => {
+        component = TestUtils.renderIntoDocument(<ReportNavigation recordsCount={fakeReportNavigationData.noRecords.recordsCount}
+                                                                   pageStart={fakeReportNavigationData.noRecords.pageStart}
+                                                                   pageEnd={fakeReportNavigationData.noRecords.pageEnd}
+                                                                   getPreviousReportPage={fakeReportNavigationData.noRecords.getPreviousReportPage}
+                                                                   getNextReportPage={fakeReportNavigationData.noRecords.getNextReportPage}
+                                                                   reportData={fakeReportNavigationData.noRecords.reportData}/>);
+        var pageButton = TestUtils.findAllInRenderedTree(component, function(inst) {
+            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
+        });
+        expect(pageButton.length).toBe(0);
+        var nextPage = TestUtils.findAllInRenderedTree(component, function(inst) {
+            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";
+        });
+        expect(nextPage.length).toBe(0);
+    });
+    it('test navigation arrows are not shown when filtered records count is zero', () => {
+        component = TestUtils.renderIntoDocument(<ReportNavigation recordsCount={fakeReportNavigationData.noFilteredRecordsReturned.recordsCount}
+                                                                   pageStart={fakeReportNavigationData.noFilteredRecordsReturned.pageStart}
+                                                                   pageEnd={fakeReportNavigationData.noFilteredRecordsReturned.pageEnd}
+                                                                   getPreviousReportPage={fakeReportNavigationData.noFilteredRecordsReturned.getPreviousReportPage}
+                                                                   getNextReportPage={fakeReportNavigationData.noFilteredRecordsReturned.getNextReportPage}
+                                                                   reportData={fakeReportNavigationData.noFilteredRecordsReturned.reportData}/>);
+        var pageButton = TestUtils.findAllInRenderedTree(component, function(inst) {
+            return TestUtils.isDOMComponent(inst) && inst.id === "previousReportPage";
+        });
+        expect(pageButton.length).toBe(0);
+        var nextPage = TestUtils.findAllInRenderedTree(component, function(inst) {
+            return TestUtils.isDOMComponent(inst) && inst.id === "nextReportPage";
+        });
+        expect(nextPage.length).toBe(0);
+    });
+
 });
 

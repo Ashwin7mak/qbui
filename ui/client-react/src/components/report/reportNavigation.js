@@ -23,6 +23,7 @@ var ReportNavigation = React.createClass({
         pageEnd: React.PropTypes.number,
         getNextReportPage: React.PropTypes.func,
         getPreviousReportPage: React.PropTypes.func,
+        recordsCount: React.PropTypes.number,
     },
 
     /**
@@ -42,19 +43,8 @@ var ReportNavigation = React.createClass({
         let isError = this.props.reportData.error ? true : false;
         let isLoading = this.props.reportData.loading ? true : false;
         let isCountingRecords = this.props.reportData.countingTotalRecords ? true : false;
-        let recordCount = this.props.reportData.data && NumberUtils.isInt(this.props.reportData.data.recordsCount) ? this.props.reportData.data.recordsCount : 0;
 
-        let isReportFiltered = false;
-        if (this.props.reportData.searchStringForFiltering && StringUtils.trim(this.props.reportData.searchStringForFiltering).length !== 0) {
-            isReportFiltered = true;
-        } else {
-            isReportFiltered = this.props.reportData.selections ? this.props.reportData.selections.hasAnySelections() : false;
-        }
-
-        if (isReportFiltered) {
-            recordCount = this.props.reportData.data.filteredRecordsCount;
-        }
-        let showNavigation = !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
+        let showNavigation = !(this.props.recordsCount === this.props.pageEnd && this.props.pageStart === 1) && this.props.recordsCount !== 0;
         // Do not show navigation if:
         // - We're in the small breakpoint
         // - Page records have not been fetched
@@ -77,7 +67,7 @@ var ReportNavigation = React.createClass({
                                          pageEnd={this.props.pageEnd}
                             />
                         </div>
-                        <NextLink recordsCount={recordCount}
+                        <NextLink recordsCount={this.props.recordsCount}
                                   pageEnd={this.props.pageEnd}
                                   getNextReportPage={this.props.getNextReportPage}
                         />
