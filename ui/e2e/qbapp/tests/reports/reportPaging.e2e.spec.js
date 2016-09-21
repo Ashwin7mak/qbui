@@ -65,9 +65,10 @@
                 var generatedRecords = e2eBase.recordService.generateRecords(table4NonBuiltInFields, 1);
                 return e2eBase.recordService.addBulkRecords(app, app.tables[e2eConsts.TABLE4], generatedRecords);
             }).then(function() {
+                var table3NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE3]);
                 //generate less than 20 records into table 3 for negative testing
                 // Generate the random records JSON objects into table 3
-                var generatedRecords = e2eBase.recordService.generateRecords(table4NonBuiltInFields, 19);
+                var generatedRecords = e2eBase.recordService.generateRecords(table3NonBuiltInFields, 19);
                 return e2eBase.recordService.addBulkRecords(app, app.tables[e2eConsts.TABLE3], generatedRecords);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
