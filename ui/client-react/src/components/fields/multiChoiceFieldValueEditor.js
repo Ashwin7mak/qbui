@@ -48,8 +48,16 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getSelectItems() {
-        return this.props.choices ?
-            this.props.choices.map(choice => {
+        let choices = this.props.choices;
+        /*
+        *This is commented out right now, because the current Schema in core does not accept/save null inputs
+        * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
+        * */
+        // if (this.props.fieldDef.required === false) {
+        //     choices = ([{coercedValue: {value: ""}, displayValue: ""}]).concat(choices);
+        // }
+        return choices ?
+            choices.map(choice => {
                 return {
                     value: choice,
                     label: choice.displayValue};
