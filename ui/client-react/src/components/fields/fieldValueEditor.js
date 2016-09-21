@@ -6,10 +6,13 @@ import {NumberFieldValueRenderer} from './fieldValueRenderers';
 
 import FieldFormats from '../../utils/fieldFormats' ;
 import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
-    DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
+    DateTimeFieldValueEditor, TimeFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import TextFieldValueEditor from './textFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
+import UserFieldValueEditor from './userFieldValueEditor';
+
 import NumericFieldValueEditor from './numericFieldValueEditor';
+
 import _ from 'lodash';
 
 /**
@@ -166,7 +169,8 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.USER_FORMAT: {
-            return <UserFieldValueEditor  {...commonProps}/>;
+
+            return <UserFieldValueEditor {...commonProps} appUsers={this.props.appUsers}/>;
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {

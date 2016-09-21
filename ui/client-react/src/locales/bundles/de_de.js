@@ -39,6 +39,10 @@ export default {
             searchRecordsPlaceholder: "Suche...",
             backToReport: "Zurück zu melden"
         },
+        field: {
+            search: "Suche",
+            searchNoMatch: "Keine Benutzer gefunden"
+        },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen."
         },
