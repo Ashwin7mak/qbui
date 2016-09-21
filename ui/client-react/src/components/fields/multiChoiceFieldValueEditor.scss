@@ -22,5 +22,10 @@ $multi-choice-field-box-height: 32px;
 .multiChoiceRadio {
   position:relative;
   top:5px;
-  padding: 7px;
+}
+
+input[type="radio"], input[type="checkbox"] {
+  margin: 9px;
+  height: 16px;
+  width: 16px;
 }

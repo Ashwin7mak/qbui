@@ -50,18 +50,42 @@ const MultiChoiceFieldValueEditor = React.createClass({
     getSelectItems() {
         let choices = this.props.choices;
         /*
-        *This is commented out right now, because the current Schema in core does not accept/save null inputs
-        * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
+        * Checks to see if multi choice should be displayed as radio buttons and if the field is required.
+        * If the field is not required, then it will append '<None>' to the end of it
         * */
-        // if (this.props.fieldDef.required === false) {
-        //     choices = ([{coercedValue: {value: ""}, displayValue: ""}]).concat(choices);
-        // }
-        return choices ?
-            choices.map(choice => {
-                return {
-                    value: choice,
-                    label: choice.displayValue};
-            }) : [];
+        if (!this.props.showAsRadio) {
+            let none = "\<None\>";
+            choices = choices ?
+                choices.map(choice => {
+                    console.log('MAP choice: ', choice);
+                    return <span className="multiChoiceRadiochoice"><Radio value={choice.coercedValue.displayValue} />{choice.displayValue}<br /></span>;
+                }) : [];
+            /*
+             *This is commented out right now, because the current Schema in core does not accept/save null inputs
+             * This gives the user the ability to select none as an input.
+             * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
+             * */
+            // if (this.props.fieldDef.required === false) {
+            //     choices.push(<span className="multiChoiceRadiochoice"><Radio value={""} />{none}<br /></span>);
+            // }
+            return choices;
+        } else {
+            /*
+             *This is commented out right now, because the current Schema in core does not accept/save null inputs
+             * This gives the user the ability to select an empty space as an input
+             * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
+             * */
+            // if (this.props.fieldDef.required === false) {
+            //     choices = ([{coercedValue: {value: ""}, displayValue: ""}]).concat(choices);
+            // }
+            return choices ?
+                choices.map(choice => {
+                    return {
+                        value: choice,
+                        label: choice.displayValue
+                    };
+                }) : [];
+        }
     },
 
     onBlur() {
@@ -85,17 +109,14 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
     render() {
         const options = this.getSelectItems();
-        var radioButtons = [];
-        for (var i = 0; i < options.length; i++) {
-            radioButtons.push(<span className="multiChoiceRadiochoice"><Radio value={options[i].value.coercedValue} />{options[i].label}<br /></span>);
-        }
 
         const placeHolderMessage = <I18nMessage message="selection.placeholder" />;
         const notFoundMessage = <I18nMessage message="selection.notFound" />;
         let choice;
-
-        console.log('this.state.choice: ', this.state.choice);
-
+        /*
+        * This checks ot see if there is a value, if there is no value, then it sets value to false
+        * This allows the placeholder text to be displayed
+        * */
         if (this.props.value) {
             choice = this.state.choice;
         } else {
@@ -104,7 +125,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
         return (
             <div className="multiChoiceContainer">
-                {!this.props.showAsRadio ?
+                {this.props.showAsRadio ?
                     <Select
                         tabIndex="0"
                         value={choice}
@@ -118,10 +139,10 @@ const MultiChoiceFieldValueEditor = React.createClass({
                         onBlur={this.onBlur} /> :
                     <div className="multiChoiceRadioContainer">
                         <RadioGroup name="test"
-                                    selectedValue={this.state.selectedValue}
-                                    onChange={this.handleChange}
+                                    selectedValue={choice}
+                                    onChange={this.selectChoice}
                                     onBlur={this.onBlur}>
-                            { radioButtons }
+                            { options }
                         </RadioGroup>
                     </div>
                 }
