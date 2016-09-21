@@ -170,7 +170,6 @@ const CellRenderer = React.createClass({
                     <CellEditor type={cellType}
                                 value={this.state.valueAndDisplay.value}
                                 display={this.state.valueAndDisplay.display}
-                                attributes={this.props.colDef.datatypeAttributes}
                                 colDef={this.props.colDef}
                                 onChange={this.cellEdited}
                                 onBlur={this.onBlur}

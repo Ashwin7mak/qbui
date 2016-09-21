@@ -15,6 +15,9 @@ import momentTz from 'moment-timezone';
  * Used within a FieldValueEditor.
  *
  */
+const DATE_FORMAT = 'MM-DD-YYYY';
+const TIME_FORMAT = 'HH:mm:ss';
+const DATE_TIME_FORMAT = DATE_FORMAT + ' ' + TIME_FORMAT;
 
 const DateTimeFieldValueEditor = React.createClass({
     displayName: 'DateTimeFieldValueEditor',
@@ -70,7 +73,7 @@ const DateTimeFieldValueEditor = React.createClass({
      */
     getOrigTime() {
         let origValue = this.getOrigValue();
-        return origValue && moment(origValue).isValid ? moment(origValue).format("HH:mm:ss") : '00:00:00';
+        return origValue && moment(origValue).isValid() ? moment(origValue).format(TIME_FORMAT) : momentTz.tz('00:00:00', TIME_FORMAT, dateTimeFormatter.getTimeZone(this.props.attributes));
     },
 
     /**
@@ -81,8 +84,7 @@ const DateTimeFieldValueEditor = React.createClass({
      */
     getOrigDate() {
         let origValue = this.getOrigValue();
-        let dateFormat = 'MM-DD-YYYY';
-        return origValue && moment(origValue).isValid ? moment(origValue).format(dateFormat) : moment().format(dateFormat);
+        return origValue && moment(origValue).isValid() ? moment(origValue).format(DATE_FORMAT) : moment().format(DATE_FORMAT);
     },
 
     onDateChange(value) {
@@ -106,7 +108,7 @@ const DateTimeFieldValueEditor = React.createClass({
                 if (value !== null) {
                     //  get the original date and append the new time(time was entered based on app timezone); return in utc time.
                     let newDateTime = this.getOrigDate() + ' ' + value;
-                    let m = momentTz.tz(newDateTime, 'MM-DD-YYYY HH:mm', dateTimeFormatter.getTimeZone(this.props.attributes));
+                    let m = momentTz.tz(newDateTime, DATE_TIME_FORMAT, dateTimeFormatter.getTimeZone(this.props.attributes));
                     isoFormat = m.utc().format();
                 }
                 this.props.onChange(isoFormat);
@@ -143,7 +145,7 @@ const DateTimeFieldValueEditor = React.createClass({
                 if (value !== null) {
                     //  get the original date and append the new time(time was entered based on app timezone); return in utc time.
                     let newDateTime = this.getOrigDate() + ' ' + value;
-                    let m = momentTz.tz(newDateTime, 'MM-DD-YYYY HH:mm', dateTimeFormatter.getTimeZone(this.props.attributes));
+                    let m = momentTz.tz(newDateTime, DATE_TIME_FORMAT, dateTimeFormatter.getTimeZone(this.props.attributes));
                     isoFormat = m.utc().format();
                 }
                 let valueObject = {

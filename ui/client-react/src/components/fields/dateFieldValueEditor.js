@@ -16,6 +16,8 @@ import moment from 'moment';
  * An editable rendering of a date field. The component can be supplied a value or not. Used within a FieldValueEditor
  *
  */
+const DATE_INPUT = 'MM-DD-YYYY';
+const DATE_FORMATTED = 'YYYY-MM-DD';
 
 const DateFieldValueEditor = React.createClass({
     displayName: 'DateFieldValueEditor',
@@ -59,8 +61,8 @@ const DateFieldValueEditor = React.createClass({
         if (this.props.onChange || this.props.onDateTimeChange) {
             if (newValue === null || newValue) {
                 let formattedDate = null;
-                if (newValue !== null && moment(newValue, 'MM-DD-YYYY').isValid()) {
-                    formattedDate = moment(newValue, 'MM-DD-YYYY').format('YYYY-MM-DD');
+                if (newValue !== null && moment(newValue, DATE_INPUT).isValid()) {
+                    formattedDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
                 }
 
                 if (this.props.onDateTimeChange) {
@@ -81,7 +83,7 @@ const DateFieldValueEditor = React.createClass({
                 } else {
                     let newDate = null;
                     if (ev.target.value) {
-                        newDate = moment(ev.target.value, 'MM-DD-YYYY').format('YYYY-MM-DD');
+                        newDate = moment(ev.target.value, DATE_INPUT).format(DATE_FORMATTED);
                     }
 
                     let valueObj = {
@@ -107,11 +109,9 @@ const DateFieldValueEditor = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        const format = 'MM-DD-YYYY'; //dateTimeFormatter.getDateFormat(this.props.attributes);
-
         let theDate = null;
         if (this.props.value !== null) {
-            theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(format) : '';
+            theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(DATE_INPUT) : '';
         }
 
         //  if no date, use the ghost format class for the help placeholder
@@ -124,19 +124,19 @@ const DateFieldValueEditor = React.createClass({
             <div className={classes}>
                 <input type="date"
                     name="date-picker"
-                    //onBlur={this.onBlur}
+                    onBlur={this.onBlur}
                     onChange={this.onChange}/>
             </div> :
             <div className={classes}>
                 <DatePicker
                     name="date-picker"
-                    dateTime={theDate ? theDate : moment().format(format)}
-                    format={'MM-DD-YYYY'}
-                    inputFormat={format}
+                    dateTime={theDate ? theDate : moment().format(DATE_INPUT)}
+                    format={DATE_INPUT}
+                    inputFormat={DATE_INPUT}
                     onBlur={this.onBlur}
                     onChange={this.onChange}
                     mode="date"
-                    defaultText={theDate ? theDate : 'mm-dd-yyyy'}/>
+                    defaultText={theDate ? theDate : DATE_INPUT.toLowerCase()}/>
             </div>
         );
     }

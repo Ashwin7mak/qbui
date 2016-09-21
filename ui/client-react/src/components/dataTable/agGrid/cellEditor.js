@@ -11,7 +11,6 @@ const CellEditor = React.createClass({
     propTypes: {
         type: React.PropTypes.number,
         value: React.PropTypes.any,
-        attributes: React.PropTypes.object,
         display: React.PropTypes.any,
         idKey : React.PropTypes.any,
         colDef: React.PropTypes.object,
@@ -45,7 +44,6 @@ const CellEditor = React.createClass({
                               type={this.props.type}
                               display={this.props.display}
                               value={this.props.value}
-                              attributes={this.props.attributes}
                               fieldDef={this.props.colDef}
                               indicateRequired={true}
                               onChange={this.props.onChange}
