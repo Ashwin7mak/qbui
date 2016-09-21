@@ -20,7 +20,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
             // If not specified, the checkbox should NOT be checked
             value: false,
             label: '',
-            checkedIconClass: 'iconssturdy-check',
+            checkedIconClass: 'iconTableUISturdy-check',
             uncheckedIconClass: 'checkbox-unchecked',
             displayGraphic: true,
             hideUncheckedCheckbox: false
