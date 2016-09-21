@@ -7,8 +7,6 @@ $checkbox-size: 16px;
 $checkbox-size-mobile: 24px;
 $checkbox-font-size-mobile: 16px;
 
-$input-border-focus-color: rgba(54, 94, 191, 0.25);
-
 @mixin unchecked-checkbox {
     background-color: $checkbox-background-unchecked-color;
     border: 2px solid $checkbox-border-color;
@@ -60,7 +58,7 @@ $input-border-focus-color: rgba(54, 94, 191, 0.25);
         }
 
         &:focus + label:after, + label:focus:after, label:focus:after {
-            box-shadow: 0px 0px 0px 2px $input-border-focus-color;
+            box-shadow: 0px 0px 0px 2px $input-field-focus-border-color;
         }
 
         // Unchecked style
