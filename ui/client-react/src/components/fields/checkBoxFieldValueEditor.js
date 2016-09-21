@@ -63,12 +63,16 @@ const CheckBoxFieldValueEditor = React.createClass({
         return (this.props.label !== ' ');
     },
 
+    isInvalid() {
+        return (this.props.invalid || (this.props.required && !this.props.value));
+    },
+
     renderRequiredSymbol() {
         let requiredSymbol = null;
 
         if (this.props.required) {
             let requiredSymbolClasses = 'required-symbol';
-            requiredSymbolClasses += (this.props.invalid ? ' invalid' : '');
+            requiredSymbolClasses += (this.isInvalid() ? ' invalid' : '');
             requiredSymbol = <span className={requiredSymbolClasses}>*</span>;
         }
 
@@ -83,9 +87,22 @@ const CheckBoxFieldValueEditor = React.createClass({
 
     setCheckBoxClasses() {
         let checkBoxClasses = '';
-        checkBoxClasses += (this.props.invalid ? 'invalid ' : '');
+            checkBoxClasses += (this.isInvalid() ? 'invalid ' : '');
         checkBoxClasses += (this.props.required ? 'required' : '');
         return checkBoxClasses;
+    },
+
+    renderLabel() {
+        let labelText = (this.hasLabel() ? this.props.label : ' ');
+
+        return (
+            <label className="label"
+                   onClick={this.onChange}
+                   tabIndex="0"
+                   onKeyDown={this.onKeyDown} >
+                {labelText}
+            </label>
+        );
     },
 
     render() {
@@ -106,12 +123,7 @@ const CheckBoxFieldValueEditor = React.createClass({
                        onBlur={this.onBlur}
                        tabIndex="0"
                        disabled={this.props.disabled} />
-                <label className="label"
-                       onClick={this.onChange}
-                       tabIndex="0"
-                       onKeyDown={this.onKeyDown} >
-                    {this.props.label}
-                </label>
+                {this.renderLabel()}
                 {this.renderRequiredSymbol()}
             </div>
         );

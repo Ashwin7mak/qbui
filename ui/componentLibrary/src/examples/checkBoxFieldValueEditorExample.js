@@ -71,7 +71,7 @@ var BasicCheckBoxFieldValueEditor = React.createClass({
 
             <dt>Required Checkbox:</dt>
                 <dd>
-                    <CheckBoxFieldValueEditor value={this.state.inputValue}
+                    <CheckBoxFieldValueEditor value={this.state.example2Value}
                                               label="Required"
                                               onChange={this.onChange}
                                               required={true} />
