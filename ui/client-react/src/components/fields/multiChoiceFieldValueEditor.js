@@ -94,8 +94,10 @@ const MultiChoiceFieldValueEditor = React.createClass({
         const notFoundMessage = <I18nMessage message="selection.notFound" />;
         let choice;
 
+        console.log('this.state.choice: ', this.state.choice);
+
         if (this.props.value) {
-            choice = {label: this.props.value};
+            choice = this.state.choice;
         } else {
             choice = false;
         }
