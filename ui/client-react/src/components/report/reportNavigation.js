@@ -54,7 +54,7 @@ var ReportNavigation = React.createClass({
         if (isReportFiltered) {
             recordCount = this.props.reportData.data.filteredRecordsCount;
         }
-        let showNavigation = !(recordCount === this.props.pageEnd && this.props.pageStart === 1);
+        let showNavigation = !(recordCount === this.props.pageEnd && this.props.pageStart === 1) && recordCount !== 0;
         // Do not show navigation if:
         // - We're in the small breakpoint
         // - Page records have not been fetched
