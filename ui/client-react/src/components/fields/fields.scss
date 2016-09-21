@@ -2,7 +2,7 @@
 
 $data-font-size: $font-size-p;
 
-@mixin focus-shadow($color:$input-text-focus-border-color) {
+@mixin focus-shadow($color:$input-border-focus-color) {
   box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
 }
 

@@ -1,5 +1,6 @@
 @import '../../assets/css/_qbColorVariables';
 @import '../../assets/css/_qbVariables';
+@import './fields';
 
 $checkbox-disabled-opacity: .4;
 
@@ -63,7 +64,7 @@ $checkbox-font-size-mobile: 16px;
         }
 
         &:focus + label:after, + label:focus:after, label:focus:after {
-            box-shadow: 0px 0px 0px 2px $input-field-focus-border-color;
+            @include focus-shadow;
         }
 
         // Unchecked style
