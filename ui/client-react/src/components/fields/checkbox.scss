@@ -21,6 +21,11 @@ $checkbox-font-size-mobile: 16px;
 }
 
 .checkbox {
+    label {
+        min-height: 12px;
+        min-width: 12px;
+    }
+
     /* Remove default checkbox */
     [type="checkbox"]:not(:checked),
     [type="checkbox"]:checked {
@@ -150,6 +155,10 @@ $checkbox-font-size-mobile: 16px;
             height: 20px;
             width: 20px;
         }
+
+        .required-symbol {
+            left: 28px;
+        }
     }
 
     &.renderer {
@@ -207,7 +216,7 @@ $checkbox-font-size-mobile: 16px;
     .required-symbol {
         color: $required-asterisk-color;
         font-size: 18px;
-        left: 28px;
+        left: 4px;
         position: absolute;
         top: -9px;
 
