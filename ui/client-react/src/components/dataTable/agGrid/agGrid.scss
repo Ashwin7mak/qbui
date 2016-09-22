@@ -503,25 +503,110 @@ $cell-edit-background-edit: #f3f8fe;
 
                 background-color: $input-bg-color;
 
+                &.timeCell {
+                    width: 100%;
+                    margin-top: 3px;
+                    .Select {
+                        height: 28px;
+                    }
+                    .Select-control {
+                        border-radius: 2px;
+                        height: 28px;
+                    }
+                    .Select-input {
+                        padding-left: 1px;
+                        height: 28px;
+                        color: $color25;
+                    }
+                    .Select-value {
+                        line-height: 28px;
+                    }
+                    .Select-placeholder {
+                        line-height: 27px;
+                        color: $color25;
+                        padding: 1px;
+                        margin-left: 2px;
+                    }
+                    .Select-option {
+                        color: $color25;
+                        padding-top: 1px;
+                    }
+                    .Select-arrow-zone {
+                        background-color: $datepicker-bg;
+                        .glyphicon {
+                            color: $datepicker-select-button-fg;
+                        }
+                    }
+                    &.ghost-text {
+                        .Select-placeholder {
+                            color: $color-black-500;
+                            font-style: italic;
+                            font-weight: bold;
+                            padding: 1px;
+                            margin-left: 2px;
+                        }
+                    }
+                }
+                &.dateCell {
+                    margin-top: 3px;
+                    vertical-align: middle;
+                    &.ghost-text {
+                        .input-group.date input.form-control {
+                            color: $color-black-500;
+                            font-style: italic;
+                            font-weight: bold;
+                        }
+                    }
+                    .glyphicon-calendar {
+                        color: $color-black-700;
+                    }
+                }
                 &:not(.Select) {
                     height: 30px;
                 }
-                &.dateTimeField>* {
-                    border:0;
+                &.dateCell>* {
+                    border: 0;
+
                     .input-group.date input.form-control {
-                        border:0;
-                        padding:0;
-                        font-size: 12px;
-                        height: 25px;
-                        border-radius:0;
+                        border: 0;
+                        padding: 3px;
+                        height: 27px;
+                        border-radius: 0;
                     }
                     .input-group.date .input-group-addon {
                         background: #fff;
-                        height:21px;
-                        padding:0;
-                        border:0;
+                        height: 20px;
+                        padding: 0;
+                        border: 0;
                         color: $icon-color;
+                    }
+                    .bootstrap-datetimepicker-widget {
+                        top: 45px !important;
+                    }
+                }
+                &.dateTimeField {
+                    width: 94px;
+                    vertical-align: middle;
 
+                    .bootstrap-datetimepicker-widget {
+                        right: 120px !important;
+                    }
+                    .input-group.date input.form-control {
+                        font-size:12px;
+                    }
+
+                    .dropdown-toggle {
+                        width: 85px;
+                        border: 0;
+                    }
+                    .Select-option {
+                        font-size: 12px;
+                    }
+                    .Select-placeholder {
+                        font-size: 12px;
+                    }
+                    .Select-input {
+                        font-size: 12px;
                     }
                 }
                 &.input-group {
@@ -536,7 +621,7 @@ $cell-edit-background-edit: #f3f8fe;
                         flex:1 1 auto;
                         border-radius:0;
                         border:0;
-                        height:21px;
+                        height:20px;
                         margin-right:1px;
                         font-size: 12px;
                         padding-left:2px;

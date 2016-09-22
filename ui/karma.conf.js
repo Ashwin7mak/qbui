@@ -76,7 +76,7 @@ module.exports = function(config) {
                         include: [
                             path.resolve(__dirname, "client-react/src"),
                             path.resolve(__dirname, "componentLibrary/src")
-                        ],
+                        ]
                     },
                     {
                         test   : /\.woff|\.woff2|\.svg|.eot|\.ttf/,
@@ -85,7 +85,7 @@ module.exports = function(config) {
                     {
                         include: /\.json$/,
                         loaders: ["json-loader"]
-                    },
+                    }
                 ],
                 postLoaders: [
                     { //delays coverage til after tests are run, fixing transpiled source coverage error
@@ -180,7 +180,7 @@ module.exports = function(config) {
         // allow for client console logging
         client: {
             captureConsole: true
-        },
+        }
 
     });
 };

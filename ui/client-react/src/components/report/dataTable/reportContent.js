@@ -819,7 +819,8 @@ export let ReportContent = React.createClass({
                             getNextReportPage={this.props.reportFooter.props.getNextReportPage}
                             getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}
                             pageStart={this.props.reportFooter.props.pageStart}
-                            pageEnd={this.props.reportFooter.props.pageEnd}/>
+                            pageEnd={this.props.reportFooter.props.pageEnd}
+                            recordsCount={this.props.reportFooter.props.recordsCount}/>
                         }
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}

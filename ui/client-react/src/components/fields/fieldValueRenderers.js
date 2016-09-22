@@ -14,7 +14,6 @@ export const NumberFieldValueRenderer = React.createClass({
     }
 });
 
-
 export const DateFieldValueRenderer = React.createClass({
     displayName: 'DateFieldValueRenderer',
 

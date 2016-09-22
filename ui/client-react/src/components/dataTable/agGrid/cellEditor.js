@@ -43,8 +43,8 @@ const CellEditor = React.createClass({
         }
         return (<FieldValueEditor  classes={classes}
                               type={this.props.type}
-                              value={this.props.value}
                               display={this.props.display}
+                              value={this.props.value}
                               fieldDef={this.props.colDef}
                               indicateRequired={true}
                               onChange={this.props.onChange}
