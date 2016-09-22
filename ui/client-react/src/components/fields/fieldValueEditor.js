@@ -144,7 +144,7 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.CHECKBOX_FORMAT: {
             return <CheckBoxFieldValueEditor {...commonProps} />;
         }
-        
+
         case FieldFormats.DATE_FORMAT: {
             let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
             return <DateFieldValueEditor key={'dfve-' + this.props.idKey} attributes={attributes} {...commonProps}/>;
