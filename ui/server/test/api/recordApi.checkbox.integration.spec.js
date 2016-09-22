@@ -11,7 +11,7 @@
     /**
      * Integration test for Checkbox Field
      */
-    describe.only('API - Checkbox test cases', function() {
+    describe('API - Checkbox test cases', function() {
 
         // Application containing a Checkbox field
         var checkboxApp = {
