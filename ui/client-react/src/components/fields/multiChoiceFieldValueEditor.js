@@ -46,9 +46,15 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     selectChoice(choice) {
-        this.setState({
-            choice: choice
-        });
+        if (this.props.showAsRadio) {
+            this.setState({
+                choice: choice
+            });
+        } else {
+            this.setState({
+                choice: {label: choice}
+            });
+        }
     },
 
     getSelectItems() {
@@ -58,25 +64,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
         * If the field is not required, then it will append '<None>' to the end of it
         * */
         if (this.props.showAsRadio) {
-            let none = "\<None\>";
-            choices = choices ?
-                choices.map(choice => {
-                    console.log('MAP choice: ', choice);
-                    return <span className="multiChoiceRadiochoice">
-                                <Radio value={choice.coercedValue.displayValue} />
-                                {choice.displayValue}<br />
-                            </span>;
-                }) : [];
-            /*
-             *This is commented out right now, because the current Schema in core does not accept/save null inputs
-             * This gives the user the ability to select none as an input.
-             * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
-             * */
-            // if (this.props.fieldDef.required === false) {
-            //     choices.push(<span className="multiChoiceRadiochoice"><Radio value={""} />{none}<br /></span>);
-            // }
-            return choices;
-        } else {
             /*
              *This is commented out right now, because the current Schema in core does not accept/save null inputs
              * This gives the user the ability to select an empty space as an input
@@ -92,15 +79,41 @@ const MultiChoiceFieldValueEditor = React.createClass({
                         label: choice.displayValue
                     };
                 }) : [];
+        } else {
+            let none = "\<None\>";
+            choices = choices ?
+                choices.map(choice => {
+                    console.log('MAP choice: ', choice);
+                    return <span className="multiChoiceRadiochoice">
+                                <Radio value={choice.coercedValue.value} />
+                        {choice.displayValue}<br />
+                            </span>;
+                }) : [];
+            /*
+             *This is commented out right now, because the current Schema in core does not accept/save null inputs
+             * This gives the user the ability to select none as an input.
+             * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
+             * */
+            // if (this.props.fieldDef.required === false) {
+            //     choices.push(<span className="multiChoiceRadiochoice"><Radio value={""} />{none}<br /></span>);
+            // }
+            return choices;
         }
     },
 
     onBlur() {
-        const theVals = {
-            value: this.state.choice.value.coercedValue.value,
-            display: this.state.choice.value.displayValue
-        };
-
+        let theVals;
+        if (this.props.showAsRadio) {
+            theVals = {
+                value: this.state.choice.value.coercedValue.value,
+                display: this.state.choice.value.displayValue
+            };
+        } else {
+            theVals = {
+                value: this.state.choice.label,
+                display: this.state.choice.label
+            };
+        }
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
@@ -127,11 +140,11 @@ const MultiChoiceFieldValueEditor = React.createClass({
         if (this.props.showAsRadio) {
             choice = this.props.value ? this.state.choice : false;
         } else {
-            choice = this.props.value ? this.state.choice : '';
+            choice = this.props.value ? this.state.choice.label : '';
         }
         return (
             <div className="multiChoiceContainer">
-                {!this.props.showAsRadio ?
+                {this.props.showAsRadio ?
                         <Select
                             tabIndex="0"
                             value={choice}
