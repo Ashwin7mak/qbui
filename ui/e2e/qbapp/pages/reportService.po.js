@@ -150,11 +150,11 @@
         this.getRecordCellValue = function(recordCellElement) {
             // Check to see if the cell element has an sub element of input type checkbox
             // See http://www.protractortest.org/#/api?view=ElementFinder.prototype.isElementPresent
-            return recordCellElement.element(by.className(' cellData')).isElementPresent(by.css('input[type="checkbox"]')).then(function(result) {
+            return recordCellElement.element(by.className(' cellData')).isElementPresent(by.className('checkbox')).then(function(result) {
                 // If cell element is a checkbox field do special handling to get the value
                 if (result === true) {
                     // See http://www.protractortest.org/#/api?view=webdriver.WebElement.prototype.isSelected for getting the checkbox value
-                    return recordCellElement.element(by.className(' cellData')).isElementPresent(by.css('.checked'));
+                    return recordCellElement.element(by.className(' cellData')).isElementPresent(by.className('checked'));
                 } else {
                     // Otherwise just grab the innerText value
                     return recordCellElement.getAttribute('innerText');
