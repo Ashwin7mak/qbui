@@ -97,13 +97,17 @@ const MultiChoiceFieldValueEditor = React.createClass({
         } else {
             choices = choices ?
                 choices.map(choice => {
-                    return <span key={choice.coercedValue.value} className="multiChoiceRadioOption">
-                                <Radio value={choice.coercedValue.value} />{choice.displayValue}<br />
+                    return <span key={choice.coercedValue.value} className="multiChoiceRadioOption" >
+                                <label><Radio value={choice.coercedValue.value} id={choice.coercedValue.value}/>{choice.displayValue}</label><br />
                             </span>;
                 }) : [];
             // This gives the user the ability to select none as an input.
             if (this.props.fieldDef && this.props.fieldDef.required === false) {
-                choices.push(<span key={""} className="multiChoiceRadioOption"><Radio key={""} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>{CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}<br /></span>);
+                choices.push(<span key={""} className="multiChoiceRadioOption">
+                                <label><Radio key={""} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
+                                    {CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}</label>
+                                <br />
+                            </span>);
             }
             return choices;
         }
