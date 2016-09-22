@@ -200,8 +200,7 @@
             numeric = numeric ? numeric * 100 : 0;
         }
 
-        //TODO this is a hack for now. New stack core is setting "blank" decimal places to max instead of null
-        if (opts.decimalPlaces === 14) {
+        if (typeof opts.decimalPlaces === 'undefined') {
             opts.decimalPlaces = null;
         }
 
