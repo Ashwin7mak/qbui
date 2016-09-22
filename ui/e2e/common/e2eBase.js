@@ -105,6 +105,7 @@
             // Setup method that generates an application, table, report and a specified number of records
             basicSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
+                var MIN_RECORDSCOUNT = 11;
                 e2eBase.setUp();
                 // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
@@ -129,7 +130,7 @@
                     });
                     // Add the new record back in to create
                     table1GeneratedRecords.push(dupRecord);
-                    if (numberOfRecords < 11) {
+                    if (numberOfRecords < MIN_RECORDSCOUNT) {
                         // Via the API create the records, a new report, then run the report.
                         e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords);
                     } else {

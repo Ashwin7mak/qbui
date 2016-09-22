@@ -194,12 +194,6 @@
                         e2eBase.sleep(browser.params.smallSleep);
                         expect(reportServicePage.reportRecordsCount.getText()).toContain('26 records');
                         expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
-                        //finally verify item got selected in popup menu
-                        reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Text Field", "Sort Z to A");
-                    });
-                }).then(function() {
-                    return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                        e2eBase.sleep(browser.params.smallSleep);
                         //Click next button in pagination
                         reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
                             reportServicePage.agGridRecordElList.then(function(records) {
@@ -211,18 +205,13 @@
                     });
                 }).then(function() {
                     var expectedRecords = [];
-                    //get the records from UI
+                    //get the records from UI and verify they are sorted
                     reportServicePage.getRecordValues(reportServicePage.agGridRecordElList).then(function(uiRecords) {
                         for (var i = 0; i < uiRecords.length; i++) {
                             expectedRecords.push(uiRecords[i].replace(/\n/g, ","));
                         }
                         //verify records are in descending order
-                        _.every(expectedRecords, function(value, index, array) {
-                            // either it is the first element, or otherwise this element should
-                            // not be greater than the previous element.
-                            // spec requires string conversion
-                            return index === 0 || String(array[index - 1]) >= String(value);
-                        });
+                        reportSortingPage.verifyRecordsSortOrder(expectedRecords, "desc");
                         done();
                     });
                 });
@@ -263,15 +252,13 @@
                                         expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
                                         //Click next button in pagination
                                         reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
-                                            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                                                reportServicePage.agGridRecordElList.then(function(records) {
-                                                    //verify the pagination count after going to next page
-                                                    expect(reportServicePage.reportRecordsCount.getText()).toContain('41 records');
-                                                    expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 41');
-                                                    expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
-                                                    expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
-                                                    done();
-                                                });
+                                            reportServicePage.agGridRecordElList.then(function(records) {
+                                                //verify the pagination count after going to next page
+                                                expect(reportServicePage.reportRecordsCount.getText()).toContain('41 records');
+                                                expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 41');
+                                                expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
+                                                expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
+                                                done();
                                             });
                                         });
                                     }
