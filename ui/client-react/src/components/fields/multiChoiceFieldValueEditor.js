@@ -39,18 +39,18 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
-        if (!this.props.showAsRadio) {
-            let val = this.props.value ? this.props.value : "";
-            // Radio Group component expects a string value.
+        if (this.props.showAsRadio) {
             return {
-                choice: val
+                // React select expects an object
+                choice: {
+                    label: this.props.value
+                }
             };
         }
+        let val = this.props.value ? this.props.value : "";
+        // Radio Group component expects a string value.
         return {
-            // React select expects an object
-            choice: {
-                label: this.props.value
-            }
+            choice: val
         };
     },
     /**
@@ -79,11 +79,11 @@ const MultiChoiceFieldValueEditor = React.createClass({
         * If the field is not required, append '<None>' as the last radio button
         * */
         if (this.props.showAsRadio) {
-            /*
+            /**
              *This is commented out right now, because the current Schema in core does not accept/save null inputs
              * This gives the user the ability to select an empty space as an input
              * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
-             * */
+             */
             // if (this.props.fieldDef.required === false) {
             //     choices = ([{coercedValue: {value: ""}, displayValue: ""}]).concat(choices);
             // }
@@ -101,24 +101,28 @@ const MultiChoiceFieldValueEditor = React.createClass({
                                 <label><Radio value={choice.coercedValue.value} id={choice.coercedValue.value}/>{choice.displayValue}</label><br />
                             </span>;
                 }) : [];
-            // This gives the user the ability to select none as an input.
-            if (this.props.fieldDef && this.props.fieldDef.required === false) {
-                choices.push(<span key={""} className="multiChoiceRadioOption">
-                                <label><Radio key={""} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
-                                    {CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}</label>
-                                <br />
-                            </span>);
-            }
+            /**
+             *This is commented out right now, because the current Schema in core does not accept/save null inputs
+             * This gives the user the ability to select an empty space as an input
+             * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
+             */
+            // if (this.props.fieldDef && this.props.fieldDef.required === false) {
+            //     choices.push(<span key={""} className="multiChoiceRadioOption">
+            //                     <label><Radio key={""} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
+            //                         {CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}</label>
+            //                     <br />
+            //                 </span>);
+            // }
             return choices;
         }
     },
 
     onBlur() {
         let theVals;
-        if (!this.props.showAsRadio) {
+        if (this.props.showAsRadio) {
             theVals = {
-                value: this.state.choice,
-                display: this.state.choice
+                value: this.state.choice.label,
+                display: this.state.choice.label
             };
         } else {
             theVals = {
@@ -152,7 +156,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
         } else {
             choice = this.props.value ? this.state.choice.label : '';
         }
-        console.log('showAsRadio: ', this.props.showAsRadio);
         return (
             <div className="multiChoiceContainer">
                 {this.props.showAsRadio ?
