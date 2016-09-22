@@ -75,10 +75,10 @@ const MultiChoiceFieldValueEditor = React.createClass({
     getSelectItems() {
         let choices = this.props.choices;
         /*
-        * Checks to see if multi choice should be displayed as radio buttons and if the field is required.
-        * If the field is not required, append '<None>' as the last radio button
-        * */
-        if (this.props.showAsRadio) {
+         * Checks to see if multi choice should be displayed as radio buttons and if the field is required.
+         * If the field is not required, append '<None>' as the last radio button
+         * */
+        if (!this.props.showAsRadio) {
             /**
              *This is commented out right now, because the current Schema in core does not accept/save null inputs
              * This gives the user the ability to select an empty space as an input
@@ -158,18 +158,18 @@ const MultiChoiceFieldValueEditor = React.createClass({
         }
         return (
             <div className="multiChoiceContainer">
-                {this.props.showAsRadio ?
-                        <Select
-                            tabIndex="0"
-                            value={choice}
-                            optionRenderer={this.renderOption}
-                            options={options}
-                            onChange={this.selectChoice}
-                            placeholder={placeHolderMessage}
-                            noResultsText={notFoundMessage}
-                            autosize={false}
-                            clearable={false}
-                            onBlur={this.onBlur} /> :
+                {!this.props.showAsRadio ?
+                    <Select
+                        tabIndex="0"
+                        value={choice}
+                        optionRenderer={this.renderOption}
+                        options={options}
+                        onChange={this.selectChoice}
+                        placeholder={placeHolderMessage}
+                        noResultsText={notFoundMessage}
+                        autosize={false}
+                        clearable={false}
+                        onBlur={this.onBlur} /> :
                     <div className="multiChoiceRadioContainer">
                         <RadioGroup name={this.props.radioGroupName}
                                     selectedValue={choice}

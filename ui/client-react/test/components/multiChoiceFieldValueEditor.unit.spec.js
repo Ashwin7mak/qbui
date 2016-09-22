@@ -38,11 +38,6 @@ describe('MultiChoiceFieldValueEditor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
-    it('test render of component as radio group', () => {
-        component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor showAsRadio={true}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-    });
-
     // Listbox, test that placeholder text appears when nothing is selected
     it('For a listbox, test display of placeholder text', () => {
         component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor choices={listbox_renderWithSelection.choices}
@@ -99,8 +94,12 @@ describe('MultiChoiceFieldValueEditor functions', () => {
     });
 
 
-    // Multichoice radios
-    // if show as radio buttons is set, displays radio buttons list
-    // choice for none has to appear at end
+    // Multichoice component display of radio group
+    it('test render of component as radio group', () => {
+        component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor showAsRadio={true}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+    });
+
+    // For radio group, test 'none' option
 
 });
