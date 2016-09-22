@@ -302,9 +302,11 @@
       "Metadata": {
         "AWS::CloudFormation::Init": {
           "configSets": {
-            "default": [ "run_chef", "setup_environment_variable", "get_secrets", "verify_instance_health" ]
+            "default": [ "run_chef", "verify_instance_health" ]
           },
           "run_chef": {
+            //GET SECRETS
+            //APP_ENV
             "files": {
               "/dev/shm/chef-attributes-int.json": {
                 "content": {
@@ -377,29 +379,6 @@
               },
               "04_enable_and_start_splunk": {
                 "command": "systemctl enable splunk && systemctl start splunk"
-              }
-            }
-          },
-          "setup_environment_variable": {
-            "commands": {
-              "01_add_environment_to_etc_sysconfig_nodejs": {
-                "command": { "Fn::Join": ["",["echo 'APP_ENV=\"", { "Ref": "paramEnvironment" }, "\"' >> /etc/sysconfig/coreui-nodejs"]] }
-              }
-            }
-          },
-          "get_secrets": {
-            "commands": {
-              "01_make_secrets_dir": {
-                "command": "mkdir -p /dev/shm/secrets && chmod 750 /dev/shm/secrets && chgrp nodejs /dev/shm/secrets"
-              },
-              "02_get_common_local_properties": {
-                "command": "/usr/local/bin/secrets get --kms-cmk-id alias/iss-qbase-secrets --output /dev/shm/secrets/webhook.local.properties --region $(cat /tmp/region) --s3-bucket $(cat /tmp/secrets-bucket) --secret-name webhooks/webhook.local.properties"
-              },
-              "03_set_permissions": {
-                "command": "chmod 640 /dev/shm/secrets/webhook.local.properties && chgrp nodejs /dev/shm/secrets/webhook.local.properties"
-              },
-              "04_enable_and_start_coreui_nodejs": {
-                "command": "systemctl enable coreui-nodejs && systemctl start coreui-nodejs"
               }
             }
           },
