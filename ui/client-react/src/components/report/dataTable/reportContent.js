@@ -742,11 +742,12 @@ export let ReportContent = React.createClass({
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
         let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
+        const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
         return (
                 <div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <div className="reportContent">
+                    <div className={isInlineEditOpen ? "reportContent inlineEditing" : "reportContent"}>
 
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
@@ -763,7 +764,7 @@ export let ReportContent = React.createClass({
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
-                                isInlineEditOpen={this.props.pendEdits && this.props.pendEdits.isInlineEditOpen ? this.props.pendEdits.isInlineEditOpen : false}
+                                isInlineEditOpen={isInlineEditOpen}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
                                 recordsCount={recordsCount}
                                 groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
@@ -783,7 +784,7 @@ export let ReportContent = React.createClass({
                                 keyField={keyField}
                                 appId={this.props.reportData.appId}
                                 appUsers={this.props.appUsers}
-                                isInlineEditOpen={this.props.pendEdits && this.props.pendEdits.isInlineEditOpen ? this.props.pendEdits.isInlineEditOpen : false}
+                                isInlineEditOpen={isInlineEditOpen}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}
