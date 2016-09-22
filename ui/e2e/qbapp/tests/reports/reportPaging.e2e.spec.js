@@ -257,8 +257,7 @@
                                     if (selections[0] !== duplicateTextFieldValue) {
                                         //verify the filtered records count
                                         expect(reportServicePage.reportRecordsCount.getText()).toContain('1 of 41 records');
-                                        //TODO bug getting fixed by Yogi.Paging should not show up at all when just 1 record
-                                        //  expect (reportPagingPage.pagingToolbarContainer.isDisplayed()).toBeFalsy();
+                                        expect (reportPagingPage.pagingToolbarContainer.isPresent()).toBeFalsy();
                                         done();
                                     } else {
                                         //verify the filtered records count

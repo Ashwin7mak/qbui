@@ -40,7 +40,7 @@
                 var deferred = promise.pending();
                 //Resolve the proper record endpoint specific to the generated app and table
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, table.id);
-                return recordBase.createRecords(recordsEndpoint, genRecords, null);
+                return recordBase.createBulkRecords(recordsEndpoint, genRecords, null);
             },
             /**
              * Uses the generators in the test_generators package to generate a list of record objects based on the
