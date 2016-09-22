@@ -42,10 +42,6 @@ export default {
             searchRecordsPlaceholder: "Search...",
             backToReport: "Back to the report"
         },
-        field: {
-            search: "Search",
-            searchNoMatch: "No users found"
-        },
         grid: {
             no_data: "There is no data to display."
         },
@@ -103,14 +99,12 @@ export default {
         },
         report : {
             blank : "blank",
-            facets : {
+            facets :{
                 noFacets : "No values",
                 seeMore : "more...",
                 tooManyValues : "Too many values to use for filtering.",
                 noCheck : "No",
-                yesCheck : "Yes",
-                clearFacet: "Clear {facet} filter",
-                clearFacetSelection: "Click to clear this filter"
+                yesCheck : "Yes"
             },
             filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
             filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
@@ -131,16 +125,17 @@ export default {
             sortAndGroup : {
                 addField: "Add a field",
                 by: "by",
-                changeOrder: "Change order",
+                changeGroupOrder: "Change group order",
+                changeSortOrder: "Change sort order",
                 chooseFields :  {
-                    group: "Choose Field for grouping",
-                    sort: "Choose Field for sorting"
+                    group: "Choose a field to group by",
+                    sort: "Choose a field to sort by"
                 },
                 group: "Group",
                 header : "Sort & Group",
                 moreFields : "more fields...",
                 reset: "Reset",
-                resetTip : "Exit and restore to original report sort and group settings",
+                resetTip : "Exit and restore to original sort and group settings",
                 sort:   "Sort",
                 stopGroupingBy: "Stop grouping by",
                 stopSortingBy: "Stop sorting by",

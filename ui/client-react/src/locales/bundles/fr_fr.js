@@ -39,10 +39,6 @@ export default {
             searchRecordsPlaceholder: "Chercher...",
             backToReport: "Retour au rapport"
         },
-        field: {
-            search: "Chercher",
-            searchNoMatch: "Aucun utilisateur trouvé"
-        },
         grid: {
             no_data: "Il n'y a pas de données à afficher."
         },
@@ -105,9 +101,7 @@ export default {
                 seeMore : "plus...",
                 tooManyValues: "Trop de valeurs à utiliser pour le filtrage",
                 noCheck : "Non",
-                yesCheck : "Oui",
-                clearFacet: "Enlever le filtre {facet}",
-                clearFacetSelection: "Cliquez pour désactiver ce filtre"
+                yesCheck : "Oui"
             },
             filteredRecordCount : "{filteredRecordCount} des {recordCount} enregistrements",
             filteredSingleRecordCount : "{filteredRecordCount} de {recordCount} record",
@@ -128,16 +122,17 @@ export default {
             sortAndGroup : {
                 addField: "Ajouter le champ",
                 by: "par",
-                changeOrder: "ordre de changement",
+                changeGroupOrder: "Gruppe wechseln bestellen",
+                changeSortOrder: "Changer l'ordre de groupe",
                 chooseFields :  {
-                    group: "Choisir un champ pour le groupement",
-                    sort: "Choisir un champ pour le tri"
+                    group: "Choisissez un champ à un groupe par",
+                    sort: "Choisissez un champ pour trier par"
                 },
                 group: "Groupe",
                 header : "Trier & Groupe",
                 moreFields : "plus de champs ...",
                 reset: "Réinitialiser",
-                resetTip : "Sortir et restaurer à l'original tri du rapport et les paramètres du groupe",
+                resetTip : "Quitter et restaurer tri initial et les paramètres du groupe",
                 sort:   "Trier",
                 stopGroupingBy: "Arrêter le regroupement par",
                 stopSortingBy: "Arrêter le tri par",
