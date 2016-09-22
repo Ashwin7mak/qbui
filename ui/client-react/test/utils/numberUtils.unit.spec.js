@@ -14,4 +14,15 @@ describe('NumberUtils', () => {
         expect(NumberUtils.isInt(obj)).toBeFalsy();
     });
 
+
+    it('test getNumericPropertyValue function', () => {
+        let testObj = {
+            numericValue: 50,
+            textValue: 'yadayadayada'
+        };
+
+        expect(NumberUtils.getNumericPropertyValue(testObj, 'nonExistentProperty')).toEqual(null);
+        expect(NumberUtils.getNumericPropertyValue(testObj, 'numericValue')).toEqual(50);
+        expect(NumberUtils.getNumericPropertyValue(testObj, 'textValue')).toEqual(null);
+    });
 });

@@ -28,6 +28,7 @@ const ReportFooter = React.createClass({
         getNextReportPage: React.PropTypes.func,
         pageStart: React.PropTypes.number,
         pageEnd: React.PropTypes.number,
+        recordsCount: React.PropTypes.number,
     },
 
     render() {
@@ -42,6 +43,7 @@ const ReportFooter = React.createClass({
                                           pageEnd={this.props.pageEnd}
                                           getNextReportPage={this.props.getNextReportPage}
                                           getPreviousReportPage={this.props.getPreviousReportPage}
+                                          recordsCount={this.props.recordsCount}
                         />
                 </div>
             </div>

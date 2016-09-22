@@ -173,9 +173,9 @@ $stage-headline-color: $color-black-700;
 
 //== Report
 $report-backgroundColor:          $color13;
-$pagination-iconfont-normal-color: $color-black-700;
+$pagination-iconfont-normal-color: $color-cyan-700;
 $pagination-iconfont-disabled-color: $color-black-400;
-$pagination-iconfont-hover-color: $color-black-600;
+$pagination-iconfont-hover-color: $color-cyan-300;
 $pagination-text-normal-color: $color-black-700;
 
 //== Report grouped headers
@@ -230,13 +230,18 @@ $secondary-bar-page-actions-bg: #476B90;
 //== Field labels used on report card view and forms
 $fieldLabel-color: $color3;
 
+$user-picker-deactivated-label-fg: $color-black-600;
+$user-picker-user-label-fg: $color-black-700;
+$user-picker-email-label-fg: $color-black-600;
 
 $datepicker-header-bg: $color34;
 $datepicker-header-fg: $color2;
-$datepicker-date-hover-bg: $color5;
+$datepicker-date-hover-bg: $color-blue-300;
 $datepicker-select-button-fg: $color3;
-$datepicker-select-button-bg: $color5;
+$datepicker-select-button-bg: $color7;
+$datepicker-select-active: $color-cyan-500;
 $datepicker-bg: $color2;
+$datepicker-bg-today: $color-orange-500;
 
 //== QBPanel
 $panel-border-color: $color4;

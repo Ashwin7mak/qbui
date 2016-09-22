@@ -5,11 +5,17 @@ import {DEFAULT_RECORD_KEY_ID} from '../../constants/schema';
 import {NumberFieldValueRenderer} from './fieldValueRenderers';
 
 import FieldFormats from '../../utils/fieldFormats' ;
-import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, DateFieldValueEditor,
-    DateTimeFieldValueEditor, TimeFieldValueEditor, UserFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
+
+import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
+import DateFieldValueEditor from './dateFieldValueEditor';
+import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
+import TimeFieldValueEditor from './timeFieldValueEditor';
 import TextFieldValueEditor from './textFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
+import UserFieldValueEditor from './userFieldValueEditor';
+
 import NumericFieldValueEditor from './numericFieldValueEditor';
+
 import _ from 'lodash';
 
 /**
@@ -28,6 +34,9 @@ const FieldValueEditor = React.createClass({
         /**
          * the value to render */
         value: React.PropTypes.any,
+
+        /* the display value */
+        display: React.PropTypes.any,
 
         /**
          * optional additional classes for the input to customize styling */
@@ -110,6 +119,7 @@ const FieldValueEditor = React.createClass({
         let commonProps = {
             value: this.props.value,
             display: this.props.display,
+            type: this.props.type,
             onChange: this.props.onChange,
             onBlur: this.onBlur,
             onValidated: this.props.onValidated,
@@ -129,19 +139,21 @@ const FieldValueEditor = React.createClass({
 
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT:
-            return <CheckBoxFieldValueEditor {...commonProps}
-                />;
+            return <CheckBoxFieldValueEditor {...commonProps}/>;
 
         case FieldFormats.DATE_FORMAT: {
-            return <DateFieldValueEditor  {...commonProps}/>;
+            let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
+            return <DateFieldValueEditor key={'dfve-' + this.props.idKey} attributes={attributes} {...commonProps}/>;
         }
 
         case FieldFormats.DATETIME_FORMAT: {
-            return <DateTimeFieldValueEditor  {...commonProps}/>;
+            let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
+            return <DateTimeFieldValueEditor key={'dtfve-' + this.props.idKey} attributes={attributes} {...commonProps}/>;
         }
 
         case FieldFormats.TIME_FORMAT: {
-            return <TimeFieldValueEditor  {...commonProps} />;
+            let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
+            return <TimeFieldValueEditor key={'tfve-' + this.props.idKey} attributes={attributes} {...commonProps} />;
         }
 
         case FieldFormats.NUMBER_FORMAT:
@@ -167,7 +179,8 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.USER_FORMAT: {
-            return <UserFieldValueEditor  {...commonProps}/>;
+
+            return <UserFieldValueEditor {...commonProps} appUsers={this.props.appUsers}/>;
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {

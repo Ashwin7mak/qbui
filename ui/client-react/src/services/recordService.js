@@ -15,7 +15,7 @@ class RecordService extends BaseService {
             PATCH_RECORD       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
             CREATE_RECORD      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
             DELETE_RECORD      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
-            DELETE_RECORD_BULK : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/bulk`
+            DELETE_RECORD_BULK : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/${constants.BULK}`
 
         };
     }
@@ -61,6 +61,28 @@ class RecordService extends BaseService {
     }
 
     /**
+     * replace user objects in value property with user IDs
+     * @param changes record or changes containing objects with value keys
+     * @returns copy of changes with user objects replaced with user ID strings
+     */
+    convertUserValueObjectsToIds(changes) {
+
+        const fixedChanges = _.cloneDeep(changes);
+
+        // patching user fields expects user ID only on server not the user object we got originally
+
+        if (_.isArray(fixedChanges)) {
+            fixedChanges.forEach(change => {
+                if (change.field && change.field.type === "USER") {
+                    change.value = change.value ? change.value.userId : "";
+                }
+            });
+        }
+
+        return fixedChanges;
+    }
+
+    /**
      * Save changes to a record
      *
      * @param appId
@@ -70,8 +92,11 @@ class RecordService extends BaseService {
      * @returns promise
      */
     saveRecord(appId, tableId, recordId, changes) {
+
+        const fixedChanges = this.convertUserValueObjectsToIds(changes);
+
         let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
-        return super.patch(url, changes);
+        return super.patch(url, fixedChanges);
     }
 
 
@@ -85,7 +110,10 @@ class RecordService extends BaseService {
      */
     createRecord(appId, tableId, record) {
         let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
-        return super.post(url, record);
+
+        const fixedRecord = this.convertUserValueObjectsToIds(record);
+
+        return super.post(url, fixedRecord);
     }
 
     /**

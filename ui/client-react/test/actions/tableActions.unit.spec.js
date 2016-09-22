@@ -1,6 +1,8 @@
 import Fluxxor from 'fluxxor';
 import tableActions from '../../src/actions/tableActions';
 import * as actions from '../../src/constants/actions';
+import Constants from '../../../common/src/constants';
+
 import Promise from 'bluebird';
 
 describe('Table Actions functions', () => {
@@ -8,6 +10,9 @@ describe('Table Actions functions', () => {
 
     let appId = 'appId';
     let tblId = 'tblId';
+    let offset = Constants.PAGE.DEFAULT_OFFSET;
+    let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
+
     let responseData = {
         reportMetaData: {data: {id: 3}},
         reportData: {}
@@ -46,12 +51,12 @@ describe('Table Actions functions', () => {
     });
 
     var tableActionsTests = [
-        {name:'test loadTableHomePage action', appId: appId, tblId: tblId}
+        {name:'test loadTableHomePage action', appId: appId, tblId: tblId, offset: offset, numRows: numRows}
     ];
 
     tableActionsTests.forEach(function(test) {
         it(test.name, function(done) {
-            flux.actions.loadTableHomePage(test.appId, test.tblId).then(
+            flux.actions.loadTableHomePage(test.appId, test.tblId, test.offset, test.numRows).then(
                 () => {
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId: '3'}]);

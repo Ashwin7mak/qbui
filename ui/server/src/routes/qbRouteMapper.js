@@ -14,6 +14,7 @@
     var formsApi;
     var recordsApi;
     var reportsApi;
+    var appsApi;
 
     var routeGroupMapper = require('./qbRouteGroupMapper');
     var routeGroup;
@@ -28,12 +29,15 @@
         formsApi = require('../api/quickbase/formsApi')(config);
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
+        appsApi = require('../api/quickbase/appsApi')(config);
 
         /* internal data */
         /*
          * routeToGetFunction maps each route to the proper function associated with that route for a GET request
          */
         var routeToGetFunction = {};
+        routeToGetFunction[routeConsts.APP_USERS] = getAppUsers;
+
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
 
         routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
@@ -215,6 +219,36 @@
             modifyRequestPathForApi(req);
             returnFunction(req, res);
         }
+    }
+
+    /**
+     * This is the function for getting all users for an app
+     * @param req
+     * @param res
+     */
+    /*eslint no-shadow:0 */
+    function getAppUsers(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get App Users', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            appsApi.getAppUsers(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get App Users');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get App Users');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
     }
 
     /**

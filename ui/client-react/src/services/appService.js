@@ -1,5 +1,6 @@
 import constants from './constants';
 import BaseService from './baseService';
+import Promise from 'bluebird';
 
 class AppService extends BaseService {
 
@@ -8,8 +9,9 @@ class AppService extends BaseService {
 
         //  App Service API endpoints
         this.API = {
-            GET_APP     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}`,
-            GET_APPS    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`
+            GET_APP           : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}`,
+            GET_APP_USERS     : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.USERS}`,
+            GET_APPS          : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}`,
         };
     }
 
@@ -21,6 +23,16 @@ class AppService extends BaseService {
      */
     getApp(appId) {
         let url = super.constructUrl(this.API.GET_APP, [appId]);
+        return super.get(url);
+    }
+
+    /**
+     * get users for app (mocked for now)
+     * @param appId
+     */
+    getAppUsers(appId) {
+
+        let url = super.constructUrl(this.API.GET_APP_USERS, [appId]);
         return super.get(url);
     }
 

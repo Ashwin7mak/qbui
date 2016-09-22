@@ -132,10 +132,10 @@ export let RecordRoute = React.createClass({
 
                     {(showBack || showNext) && <div className="iconActions">
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
-                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="icon_caretfilledleft"/></Button>
+                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>
                         </OverlayTrigger>
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
-                            <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="icon_caretfilledright"/></Button>
+                            <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                         </OverlayTrigger>
                     </div> }
 

@@ -657,16 +657,17 @@ export let ReportContent = React.createClass({
             this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
         }
 
-        // Hide the footer if any rows are selected.
+        // Hide the footer if any rows are selected and for small breakpoint.
         const selectedRows = this.props.selectedRows;
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
-        let showFooter = !this.props.reactabular  && !areRowsSelected;
+        let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
+        const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
         return (
                 <div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <div className="reportContent">
+                    <div className={isInlineEditOpen ? "reportContent inlineEditing" : "reportContent"}>
 
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
@@ -679,10 +680,11 @@ export let ReportContent = React.createClass({
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 onFieldChange={this.handleFieldChange}
                                 onRecordChange={this.handleRecordChange}
+                                appUsers={this.props.appUsers}
                                 appId={this.props.reportData.appId}
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
-                                isInlineEditOpen={this.props.pendEdits && this.props.pendEdits.isInlineEditOpen ? this.props.pendEdits.isInlineEditOpen : false}
+                                isInlineEditOpen={isInlineEditOpen}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
                                 recordsCount={recordsCount}
                                 groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
@@ -701,7 +703,8 @@ export let ReportContent = React.createClass({
                                 uniqueIdentifier={this.props.uniqueIdentifier || SchemaConsts.DEFAULT_RECORD_KEY}
                                 keyField={keyField}
                                 appId={this.props.reportData.appId}
-                                isInlineEditOpen={this.props.pendEdits && this.props.pendEdits.isInlineEditOpen ? this.props.pendEdits.isInlineEditOpen : false}
+                                appUsers={this.props.appUsers}
+                                isInlineEditOpen={isInlineEditOpen}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}
@@ -737,10 +740,12 @@ export let ReportContent = React.createClass({
                             getNextReportPage={this.props.reportFooter.props.getNextReportPage}
                             getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}
                             pageStart={this.props.reportFooter.props.pageStart}
-                            pageEnd={this.props.reportFooter.props.pageEnd}/>
+                            pageEnd={this.props.reportFooter.props.pageEnd}
+                            recordsCount={this.props.reportFooter.props.recordsCount}/>
                         }
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
+                                            appUsers={this.props.appUsers}
                                             uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                             keyField={keyField}
                                             reportHeader={this.props.reportHeader}

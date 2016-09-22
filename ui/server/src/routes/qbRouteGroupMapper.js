@@ -14,8 +14,10 @@
      * routeGroupDisabled maps each enumerated route group to the routes that are disabled for a route/method combination
      */
     var routeGroupDisabled = {};
-    routeGroupDisabled[routeGroups.DEBUG] = [];
+    routeGroupDisabled[routeGroups.DEBUG] = [
+        {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}];
     routeGroupDisabled[routeGroups.LH_V1] = [
+        {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.FORM_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.REPORT_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.REPORT_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
