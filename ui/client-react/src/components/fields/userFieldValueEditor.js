@@ -37,9 +37,20 @@ const UserFieldValueEditor = React.createClass({
         onBlur: React.PropTypes.func
     },
 
+    /**
+     * select userId from value prop
+     * @returns {{selectedUserId: null}}
+     */
     getInitialState() {
 
-        return {selectedUserId: this.props.value ? this.props.value.userId : null};
+        let selectedUserId = this.props.value ? this.props.value.userId : null;
+
+        // select the first user if the value was not set but is required
+        if (selectedUserId === null && this.props.fieldDef.required && this.props.appUsers.length > 0) {
+            selectedUserId = this.props.appUsers[0].userId;
+        }
+
+        return {selectedUserId};
     },
 
     /**
