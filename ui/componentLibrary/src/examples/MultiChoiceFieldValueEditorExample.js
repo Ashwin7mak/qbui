@@ -49,6 +49,10 @@ let choices = [
     }
 ];
 
+let fieldDef = {
+    required: false
+};
+
 const basicMultiChoiceFieldValueEditor = (
     <div>
         <dt>Multi Choice Field Editor:</dt>
@@ -59,7 +63,7 @@ const basicMultiChoiceFieldValueEditor = (
         </div>
         <dt>Multi Choice Field Editor Radio Buttons:</dt>
         <dd>
-            <MultiChoiceFieldValueEditor showAsRadio={true} choices={choices} value="Jeff" radioGroupName="exampleRadioGroup"/>
+            <MultiChoiceFieldValueEditor showAsRadio={true} choices={choices} fieldDef={fieldDef} radioGroupName="exampleRadioGroup" value="Jeff"/>
         </dd>
     </div>
 );

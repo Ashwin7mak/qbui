@@ -6,9 +6,10 @@ import './multiChoiceFieldValueEditor.scss';
 import './selectCommon.scss';
 import QbIcon from '../qbIcon/qbIcon';
 import {I18nMessage} from '../../utils/i18nMessage';
+import * as CompConstants from '../../constants/componentConstants';
 /**
  * # MultiChoiceFieldValueEditor
- * A multi-choice field value editor that uses react select, it allows a user to select a single option from a drop down box.
+ * A multi-choice field value editor that uses react select, allows a user to select a single option from a drop down box.
  * Also uses radio group component to render a radio group if called from forms.
  */
 const MultiChoiceFieldValueEditor = React.createClass({
@@ -25,7 +26,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
          * listen for losing focus by setting a callback to the onBlur prop */
         onBlur: React.PropTypes.func,
         /**
-         * data type attributes for the field */
+         * data type attributes for the field. Currently supports 'required' attribute only. */
         fieldDef: React.PropTypes.object,
         /**
          * Used in forms. If set to true, will render radio buttons. Otherwise will render listbox.
@@ -38,15 +39,25 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
+        if (this.props.showAsRadio) {
+            let val = this.props.value ? this.props.value : "";
+            // Radio Group component expects a string value.
+            return {
+                choice: val
+            };
+        }
         return {
+            // React select expects an object
             choice: {
                 label: this.props.value
             }
         };
     },
-
+    /**
+     * Set the user selection to component state
+     * @param choice
+     */
     selectChoice(choice) {
-        console.log('selectChoice: ', choice);
         if (this.props.showAsRadio) {
             this.setState({
                 choice: choice
@@ -57,14 +68,17 @@ const MultiChoiceFieldValueEditor = React.createClass({
             });
         }
     },
-
+    /**
+     * Populate items for component render
+     * @returns {Array}
+     */
     getSelectItems() {
         let choices = this.props.choices;
         /*
         * Checks to see if multi choice should be displayed as radio buttons and if the field is required.
-        * If the field is not required, then it will append '<None>' to the end of it
+        * If the field is not required, append '<None>' as the last radio button
         * */
-        if (this.props.showAsRadio) {
+        if (!this.props.showAsRadio) {
             /*
              *This is commented out right now, because the current Schema in core does not accept/save null inputs
              * This gives the user the ability to select an empty space as an input
@@ -81,22 +95,16 @@ const MultiChoiceFieldValueEditor = React.createClass({
                     };
                 }) : [];
         } else {
-            let none = "\<None\>";
             choices = choices ?
                 choices.map(choice => {
-                    return <span className="multiChoiceRadiochoice">
-                                <Radio value={choice.coercedValue.value} />
-                        {choice.displayValue}<br />
+                    return <span key={choice.coercedValue.value} className="multiChoiceRadioOption">
+                                <Radio value={choice.coercedValue.value} />{choice.displayValue}<br />
                             </span>;
                 }) : [];
-            /*
-             *This is commented out right now, because the current Schema in core does not accept/save null inputs
-             * This gives the user the ability to select none as an input.
-             * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
-             * */
-            // if (this.props.fieldDef.required === false) {
-            //     choices.push(<span className="multiChoiceRadiochoice"><Radio value={""} />{none}<br /></span>);
-            // }
+            // This gives the user the ability to select none as an input.
+            if (this.props.fieldDef && this.props.fieldDef.required === false) {
+                choices.push(<span key={""} className="multiChoiceRadioOption"><Radio key={""} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>{CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}<br /></span>);
+            }
             return choices;
         }
     },
@@ -105,8 +113,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
         let theVals;
         if (this.props.showAsRadio) {
             theVals = {
-                value: this.state.choice.value.coercedValue.value,
-                display: this.state.choice.value.displayValue
+                value: this.state.choice,
+                display: this.state.choice
             };
         } else {
             theVals = {
@@ -133,10 +141,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
         const placeHolderMessage = <I18nMessage message="selection.placeholder"/>;
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
         let choice;
-        /*
-         * This checks ot see if there is a value, if there is no value, then it sets value to false
-         * This allows the placeholder text to be displayed
-         * */
         if (this.props.showAsRadio) {
             choice = this.props.value ? this.state.choice : false;
         } else {
@@ -144,7 +148,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         }
         return (
             <div className="multiChoiceContainer">
-                {this.props.showAsRadio ?
+                {!this.props.showAsRadio ?
                         <Select
                             tabIndex="0"
                             value={choice}

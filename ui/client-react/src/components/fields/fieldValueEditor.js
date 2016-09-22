@@ -152,7 +152,7 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.PERCENT_FORMAT: {
             if (_.has(this.props, 'fieldDef.choices')) {
                 return (
-                    <MultiChoiceFieldValueEditor choices={this.props.fieldDef.choices}
+                    <MultiChoiceFieldValueEditor choices={this.props.fieldDef.choices} showAsRadio={true}
                         {...commonProps} />
                 );
             } else {
@@ -178,7 +178,7 @@ const FieldValueEditor = React.createClass({
 
             if (_.has(this.props, 'fieldDef.choices')) {
                 return (
-                        <MultiChoiceFieldValueEditor choices={this.props.fieldDef.choices}
+                        <MultiChoiceFieldValueEditor choices={this.props.fieldDef.choices} showAsRadio={true}
                                              {...commonProps} />
                     );
             } else {
