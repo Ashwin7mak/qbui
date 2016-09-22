@@ -39,7 +39,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
-        if (this.props.showAsRadio) {
+        if (!this.props.showAsRadio) {
             let val = this.props.value ? this.props.value : "";
             // Radio Group component expects a string value.
             return {
@@ -78,7 +78,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         * Checks to see if multi choice should be displayed as radio buttons and if the field is required.
         * If the field is not required, append '<None>' as the last radio button
         * */
-        if (!this.props.showAsRadio) {
+        if (this.props.showAsRadio) {
             /*
              *This is commented out right now, because the current Schema in core does not accept/save null inputs
              * This gives the user the ability to select an empty space as an input
@@ -115,7 +115,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
     onBlur() {
         let theVals;
-        if (this.props.showAsRadio) {
+        if (!this.props.showAsRadio) {
             theVals = {
                 value: this.state.choice,
                 display: this.state.choice
@@ -134,7 +134,9 @@ const MultiChoiceFieldValueEditor = React.createClass({
     renderOption(choice) {
         return (
             <div>
-                {this.state.choice.label === choice.value.displayValue && <QbIcon className="choiceQBIcon" icon="check-reversed"/>}
+                {this.state.choice.label !== '' ?
+                this.state.choice.label === choice.value.displayValue && <QbIcon className="choiceQBIcon" icon="check-reversed"/> :
+                    null}
                 <div className="choiceLabel">{choice.value.displayValue}</div>
             </div>);
     },
@@ -150,9 +152,10 @@ const MultiChoiceFieldValueEditor = React.createClass({
         } else {
             choice = this.props.value ? this.state.choice.label : '';
         }
+        console.log('showAsRadio: ', this.props.showAsRadio);
         return (
             <div className="multiChoiceContainer">
-                {!this.props.showAsRadio ?
+                {this.props.showAsRadio ?
                         <Select
                             tabIndex="0"
                             value={choice}
