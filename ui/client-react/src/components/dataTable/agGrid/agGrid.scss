@@ -153,6 +153,9 @@ $cell-edit-background-edit: #f3f8fe;
     .gridHeaderCell.AlignRight, .gridCell.AlignRight {
         text-align: right;
     }
+    .gridHeaderCell.AlignCenter, .gridCell.AlignCenter {
+        text-align: center;
+    }
     .gridCell.selectionCell {
         overflow:visible;
         .ag-cell-value {
