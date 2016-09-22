@@ -60,7 +60,9 @@
         beforeAll(function(done) {
             return e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                 e2eBase.sleep(browser.params.smallSleep);
-                done();
+                return reportServicePage.waitForElement(reportCardViewPage.loadedContentEl).then(function() {
+                    done();
+                });
             });
         });
 

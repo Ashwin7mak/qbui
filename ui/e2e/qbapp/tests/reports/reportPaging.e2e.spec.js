@@ -98,10 +98,8 @@
                 // Go to report page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
 
-                // Safari is being flaky waiting for this element so retry
-                e2eRetry.ignoring().run(function() {
-                    return reportServicePage.waitForElement(reportServicePage.agGridContainerEl);
-                }).then(function() {
+                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    e2eBase.sleep(browser.params.smallSleep);
                     done();
                 });
             });
@@ -168,7 +166,7 @@
                     //verify the original records count
                     return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         e2eBase.sleep(browser.params.smallSleep);
-                        expect(reportPagingPage.pagingToolbarContainer.isDisplayed()).toBeFalsy();
+                        expect(reportPagingPage.pagingToolbarContainer.isPresent()).toBeFalsy();
                         done();
                     });
                 });
@@ -257,7 +255,7 @@
                                     if (selections[0] !== duplicateTextFieldValue) {
                                         //verify the filtered records count
                                         expect(reportServicePage.reportRecordsCount.getText()).toContain('1 of 41 records');
-                                        expect (reportPagingPage.pagingToolbarContainer.isPresent()).toBeFalsy();
+                                        expect(reportPagingPage.pagingToolbarContainer.isPresent()).toBeFalsy();
                                         done();
                                     } else {
                                         //verify the filtered records count
