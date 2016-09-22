@@ -8,7 +8,8 @@ import MultiLineTextFieldValueEditorExample from 'raw!../examples/MultiLineTextF
 import NumericFieldValueEditorExample from 'raw!../examples/NumericFieldValueEditorExample.js';
 import NumericFieldValueRendererExample from 'raw!../examples/NumericFieldValueRendererExample.js';
 import MultiChoiceFieldValueEditorExample from 'raw!../examples/MultiChoiceFieldValueEditorExample.js';
-
+import UserFieldValueEditorExample from 'raw!../examples/UserFieldValueEditorExample.js';
+import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendererExample.js';
 export default {
     QBPanel: QBPanelExample,
     QBIcon: QBIconExample,
@@ -19,5 +20,7 @@ export default {
     MultiLineTextFieldValueEditor: MultiLineTextFieldValueEditorExample,
     NumericFieldValueRenderer: NumericFieldValueRendererExample,
     NumericFieldValueEditor: NumericFieldValueEditorExample,
-    MultiChoiceFieldValueEditor: MultiChoiceFieldValueEditorExample
+    MultiChoiceFieldValueEditor: MultiChoiceFieldValueEditorExample,
+    UserFieldValueRenderer: UserFieldValueRendererExample,
+    UserFieldValueEditor: UserFieldValueEditorExample,
 };

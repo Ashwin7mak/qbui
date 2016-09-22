@@ -776,7 +776,8 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_pagedData}
                                                                 reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}/>);
+                                                                reportFooter={fakeReportFooter}
+                                                                recordsCount={100}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportFooter");
         expect(reportNavigation.length).toEqual(1);
@@ -1202,7 +1203,8 @@ describe('ReportContent functions', () => {
                                                                 uniqueIdentifier="RecId"
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                router={[]} />);
+                                                                router={[]}
+                                                                recordsCount={100}/>);
         component.openRow({RecId: {value: 2}});
         expect(component.props.router).toContain('/app/123/table/456/report/2/record/2');
     });

@@ -28,7 +28,8 @@ import MultiLineTextFieldValueEditorDoc from './docs/multiLineTextFieldValueEdit
 import NumericFieldDoc from './docs/numericFieldValueRenderer';
 import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
 import MultiChoiceFieldValueEditorDoc from './docs/multiChoiceFieldValueEditor';
-
+import UserFieldRendererDoc from './docs/userFieldValueRenderer';
+import UserFieldEditorDoc from './docs/userFieldValueEditor';
 import './assets/componentLibrary.scss';
 
 render((
@@ -41,6 +42,8 @@ render((
             <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
             <Route path="numericFieldValueRenderer" component={NumericFieldDoc} />
             <Route path="numericfieldValueEditor" component={NumericFieldValueEditorDoc} />
+            <Route path="userFieldRenderer" component={UserFieldRendererDoc} />
+            <Route path="userFieldEditor" component={UserFieldEditorDoc} />
             <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
             <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />

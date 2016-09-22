@@ -24,6 +24,23 @@ function tearDownI18nNumberMock() {
     NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
 }
 
+const users = [
+    {
+        "userId": "58440038",
+        firstName: "Aditi",
+        lastName: "Goel",
+        screenName: "agoel@quickbase.com",
+        email: "agoel@quickbase.com"
+    },
+    {
+        "userId": "58453016",
+        firstName: "Drew",
+        lastName: "Stevens",
+        screenName: "dstevens@quickbase.com",
+        email: "dstevens@quickbase.com"
+    }
+];
+
 describe('FieldValueEditor functions', () => {
     'use strict';
 
@@ -43,11 +60,11 @@ describe('FieldValueEditor functions', () => {
             {test: "RATING_FORMAT", type: FieldFormats.RATING_FORMAT},
             {test: "DURATION_FORMAT", type: FieldFormats.DURATION_FORMAT},
             {test: "PHONE_FORMAT", type: FieldFormats.PHONE_FORMAT},
-            {test: "MULTI_LINE_TEXT_FORMAT", type: FieldFormats.MULTI_LINE_TEXT_FORMAT},
+            {test: "MULTI_LINE_TEXT_FORMAT", type: FieldFormats.MULTI_LINE_TEXT_FORMAT}
         ];
         dataProvider.forEach((data) => {
             it(data.test, () => {
-                component = TestUtils.renderIntoDocument(<FieldValueEditor type={data.type}/>);
+                component = TestUtils.renderIntoDocument(<FieldValueEditor fieldDef={{required: true}} type={data.type} appUsers={users}/>);
                 expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
             });
         });
