@@ -61,9 +61,6 @@ const NumericFieldValueEditor = React.createClass({
             this.props.onChange(ev.target.value);
         }
     },
-    shouldComponentUpdate(nextProps) {
-        return !_.isEqual(this.props, nextProps);
-    },
     getFormattedValues(value) {
         // the numericFormatter expects the string in a particular format - no comma as decimal marker, no multiple decimal markers etc
         // the following cleans up the input value before running it through formatter

@@ -61,9 +61,6 @@ const TextFieldValueEditor = React.createClass({
             this.props.onChange(ev.target.value);
         }
     },
-    shouldComponentUpdate(nextProps) {
-        return !_.isEqual(this.props, nextProps);
-    },
 
     //send up the chain an object with value and formatted display value
     onBlur(ev) {
