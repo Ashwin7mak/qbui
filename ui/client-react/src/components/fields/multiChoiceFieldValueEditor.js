@@ -30,7 +30,11 @@ const MultiChoiceFieldValueEditor = React.createClass({
         /**
          * Used in forms. If set to true, will render radio buttons. Otherwise will render listbox.
          * This property should map to 'show as radio buttons' property in a form */
-        showAsRadio: React.PropTypes.bool
+        showAsRadio: React.PropTypes.bool,
+        /**
+         * Group name for the radio buttons, if component is rendered as radio button group
+         */
+        radioGroupName: React.PropTypes.string
     },
 
     getInitialState() {
@@ -53,12 +57,15 @@ const MultiChoiceFieldValueEditor = React.createClass({
         * Checks to see if multi choice should be displayed as radio buttons and if the field is required.
         * If the field is not required, then it will append '<None>' to the end of it
         * */
-        if (!this.props.showAsRadio) {
+        if (this.props.showAsRadio) {
             let none = "\<None\>";
             choices = choices ?
                 choices.map(choice => {
                     console.log('MAP choice: ', choice);
-                    return <span className="multiChoiceRadiochoice"><Radio value={choice.coercedValue.displayValue} />{choice.displayValue}<br /></span>;
+                    return <span className="multiChoiceRadiochoice">
+                                <Radio value={choice.coercedValue.displayValue} />
+                                {choice.displayValue}<br />
+                            </span>;
                 }) : [];
             /*
              *This is commented out right now, because the current Schema in core does not accept/save null inputs
@@ -125,20 +132,20 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
         return (
             <div className="multiChoiceContainer">
-                {this.props.showAsRadio ?
-                    <Select
-                        tabIndex="0"
-                        value={choice}
-                        optionRenderer={this.renderOption}
-                        options={options}
-                        onChange={this.selectChoice}
-                        placeholder={placeHolderMessage}
-                        noResultsText={notFoundMessage}
-                        autosize={false}
-                        clearable={false}
-                        onBlur={this.onBlur} /> :
+                {!this.props.showAsRadio ?
+                        <Select
+                            tabIndex="0"
+                            value={choice}
+                            optionRenderer={this.renderOption}
+                            options={options}
+                            onChange={this.selectChoice}
+                            placeholder={placeHolderMessage}
+                            noResultsText={notFoundMessage}
+                            autosize={false}
+                            clearable={false}
+                            onBlur={this.onBlur} /> :
                     <div className="multiChoiceRadioContainer">
-                        <RadioGroup name="test"
+                        <RadioGroup name={this.props.radioGroupName}
                                     selectedValue={choice}
                                     onChange={this.selectChoice}
                                     onBlur={this.onBlur}>

@@ -1,11 +1,6 @@
 let choices = [
     {
         coercedValue: {
-            value: ""
-        },
-        displayValue: ""
-    }, {
-        coercedValue: {
             value: "Ellie"
         },
         displayValue: "Ellie"
@@ -64,10 +59,8 @@ const basicMultiChoiceFieldValueEditor = (
         </div>
         <dt>Multi Choice Field Editor Radio Buttons:</dt>
         <dd>
-            <MultiChoiceFieldValueEditor choices = {choices} showAsRadio={true}/>
+            <MultiChoiceFieldValueEditor showAsRadio={true} choices={choices} radioGroupName="exampleRadioGroup"/>
         </dd>
-
-
     </div>
 );
 ReactDOM.render(basicMultiChoiceFieldValueEditor, mountNode);

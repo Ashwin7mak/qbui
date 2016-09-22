@@ -11,13 +11,13 @@ $multi-choice-field-box-height: 32px;
 }
 
 .multiChoiceRadioContainer {
-   height: $multi-choice-field-box-height;
+   height:auto;
    padding-left:2px;
    padding-right:2px;
    max-height: 340px;
    min-width: 100%;
    width:auto;
- }
+}
 
 .multiChoiceRadio {
   position:relative;
