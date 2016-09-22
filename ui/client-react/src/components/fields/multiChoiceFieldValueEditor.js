@@ -20,7 +20,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         choices: React.PropTypes.array,
         /**
          * gets the selected value for input box for multi choice */
-        value: React.PropTypes.object,
+        value: React.PropTypes.string,
         /**
          * listen for losing focus by setting a callback to the onBlur prop */
         onBlur: React.PropTypes.func,
@@ -46,6 +46,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     selectChoice(choice) {
+        console.log('selectChoice: ', choice);
         if (this.props.showAsRadio) {
             this.setState({
                 choice: choice
@@ -83,7 +84,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
             let none = "\<None\>";
             choices = choices ?
                 choices.map(choice => {
-                    console.log('MAP choice: ', choice);
                     return <span className="multiChoiceRadiochoice">
                                 <Radio value={choice.coercedValue.value} />
                         {choice.displayValue}<br />
