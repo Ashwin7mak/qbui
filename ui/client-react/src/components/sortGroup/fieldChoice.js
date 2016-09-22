@@ -58,11 +58,10 @@ const FieldChoice = React.createClass({
             order =  (this.props.field.descendOrder && this.props.field.descendOrder === true) ? 'down' : 'up';
             fid = " fid:" + this.props.field.id;
         }
-        if(this.props.type==='group')  {
-            msgKey="report.sortAndGroup.changeGroupOrder";
-        }
-        else  {
-            msgKey="report.sortAndGroup.changeSortOrder";
+        if (this.props.type === 'group')  {
+            msgKey = "report.sortAndGroup.changeGroupOrder";
+        } else  {
+            msgKey = "report.sortAndGroup.changeSortOrder";
         }
         let byMessage = this.props.then ?
             "report.sortAndGroup.thenBy" : "report.sortAndGroup.by";
