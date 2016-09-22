@@ -263,13 +263,15 @@
                                         expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
                                         //Click next button in pagination
                                         reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
-                                            reportServicePage.agGridRecordElList.then(function(records) {
-                                                //verify the pagination count after going to next page
-                                                expect(reportServicePage.reportRecordsCount.getText()).toContain('41 records');
-                                                expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 41');
-                                                expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
-                                                expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
-                                                done();
+                                            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function () {
+                                                reportServicePage.agGridRecordElList.then(function (records) {
+                                                    //verify the pagination count after going to next page
+                                                    expect(reportServicePage.reportRecordsCount.getText()).toContain('41 records');
+                                                    expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 41');
+                                                    expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
+                                                    expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
+                                                    done();
+                                                });
                                             });
                                         });
                                     }
