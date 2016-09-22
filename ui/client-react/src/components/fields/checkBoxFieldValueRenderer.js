@@ -54,7 +54,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
     },
 
     renderGraphicCheckedSymbol() {
-        let classes = defaultSymbolClasses + this.props.checkedIconClass;
+        let classes = `${defaultSymbolClasses} checked ${this.props.checkedIconClass}`;
         return (<span className={classes}></span>);
     },
 

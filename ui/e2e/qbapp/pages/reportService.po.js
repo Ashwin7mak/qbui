@@ -154,7 +154,7 @@
                 // If cell element is a checkbox field do special handling to get the value
                 if (result === true) {
                     // See http://www.protractortest.org/#/api?view=webdriver.WebElement.prototype.isSelected for getting the checkbox value
-                    return recordCellElement.element(by.className(' cellData')).element(by.tagName('input')).isSelected();
+                    return recordCellElement.element(by.className(' cellData')).isElementPresent(by.css('.checked'));
                 } else {
                     // Otherwise just grab the innerText value
                     return recordCellElement.getAttribute('innerText');
