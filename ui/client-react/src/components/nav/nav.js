@@ -192,6 +192,7 @@ export let Nav = React.createClass({
                             key: this.props.location ? this.props.location.pathname : "",
                             selectedAppId: this.state.apps.selectedAppId,
                             reportData: this.state.reportData,
+                            appUsers: this.state.apps.appUsers,
                             pendEdits:this.state.pendEdits,
                             fields: this.state.fields,
                             form: this.state.form,

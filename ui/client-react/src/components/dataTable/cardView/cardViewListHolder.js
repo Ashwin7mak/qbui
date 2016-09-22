@@ -285,8 +285,7 @@ let CardViewListHolder = React.createClass({
                                       onSwipe={this.onSwipe} />
 
                         {showNextButton ?
-                            (<CardViewFooter getNextReportPage={this.props.getNextReportPage}
-                            />) :
+                            (<CardViewFooter getNextReportPage={this.props.getNextReportPage}/>) :
                             <div className="spacer"></div>
                         }
                     </div>

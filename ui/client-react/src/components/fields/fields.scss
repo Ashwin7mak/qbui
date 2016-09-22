@@ -108,7 +108,16 @@ $data-font-size: $font-size-p;
   white-space: nowrap;
 }
 
+.userDisplayValue {
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
 .cellData.NoWrap {
   white-space: nowrap;
+}
+
+/* allow wide tooltips */
+.tooltip-inner {
+  max-width:none;
 }
