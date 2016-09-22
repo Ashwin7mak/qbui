@@ -54,12 +54,12 @@ const basicMultiChoiceFieldValueEditor = (
         <dt>Multi Choice Field Editor:</dt>
         <div style={{width:200}}>
             <dd>
-                <MultiChoiceFieldValueEditor choices = {choices} />
+                <MultiChoiceFieldValueEditor choices = {choices} value="Jeff"/>
             </dd>
         </div>
         <dt>Multi Choice Field Editor Radio Buttons:</dt>
         <dd>
-            <MultiChoiceFieldValueEditor showAsRadio={true} choices={choices} radioGroupName="exampleRadioGroup"/>
+            <MultiChoiceFieldValueEditor showAsRadio={true} choices={choices} value="Jeff" radioGroupName="exampleRadioGroup"/>
         </dd>
     </div>
 );

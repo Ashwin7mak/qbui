@@ -117,19 +117,18 @@ const MultiChoiceFieldValueEditor = React.createClass({
     render() {
         const options = this.getSelectItems();
 
-        const placeHolderMessage = <I18nMessage message="selection.placeholder" />;
-        const notFoundMessage = <I18nMessage message="selection.notFound" />;
+        const placeHolderMessage = <I18nMessage message="selection.placeholder"/>;
+        const notFoundMessage = <I18nMessage message="selection.notFound"/>;
         let choice;
         /*
-        * This checks ot see if there is a value, if there is no value, then it sets value to false
-        * This allows the placeholder text to be displayed
-        * */
-        if (this.props.value) {
-            choice = this.state.choice;
+         * This checks ot see if there is a value, if there is no value, then it sets value to false
+         * This allows the placeholder text to be displayed
+         * */
+        if (this.props.showAsRadio) {
+            choice = this.props.value ? this.state.choice : false;
         } else {
-            choice = false;
+            choice = this.props.value ? this.state.choice : '';
         }
-
         return (
             <div className="multiChoiceContainer">
                 {!this.props.showAsRadio ?
