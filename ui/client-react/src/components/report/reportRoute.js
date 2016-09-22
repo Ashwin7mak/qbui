@@ -35,9 +35,9 @@ const ReportRoute = React.createClass({
         let tblId = params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
-        let offset = this.props.reportData && NumberUtils.isInt(this.props.reportData.pageOffset) ? this.props.reportData.pageOffset : null;//constants.PAGE.OFFSET;
-        let numRows = this.props.reportData && NumberUtils.isInt(this.props.reportData.numRows) ? this.props.reportData.numRows : null;//constants.PAGE.DEFAULT_NUM_ROWS;
 
+        let offset = NumberUtils.getNumericPropertyValue(this.props.reportData, 'pageOffset');
+        let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows');
 
         if (appId && tblId && rptId) {
             this.loadReport(appId, tblId, rptId, offset, numRows);
@@ -110,6 +110,7 @@ const ReportRoute = React.createClass({
                 <ReportToolsAndContent
                     params={this.props.params}
                     reportData={this.props.reportData}
+                    appUsers={this.props.appUsers}
                     pendEdits={this.props.pendEdits}
                     routeParams={this.props.routeParams}
                     selectedAppId={this.props.selectedAppId}
