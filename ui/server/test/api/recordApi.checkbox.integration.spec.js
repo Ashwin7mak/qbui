@@ -9,11 +9,11 @@
 
 
     /**
-     * Integration test for Text field formatting
+     * Integration test for Checkbox Field
      */
     describe.only('API - Checkbox test cases', function() {
 
-        // Application containing a Text field
+        // Application containing a Checkbox field
         var checkboxApp = {
             name  : 'Checkbox App',
             tables: [
@@ -49,7 +49,7 @@
         }
 
         /**
-         * Integration test that validates Checkbox record
+         * Integration test that saves and retrives Checkbox records
          */
         it('Should create and retrieve valid checkbox records', function(done) {
             this.timeout(testConsts.INTEGRATION_TIMEOUT * checkboxDataProvider().length);
@@ -66,7 +66,6 @@
                 assert(checkboxField, 'Did not find checkbox field');
 
                 var records = checkboxDataProvider(checkboxField.id);
-                // itSavesRecordsThroughTheApi(app, records, done);
                 var fetchRecordPromises = [];
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
                 recordBase.createRecords(recordsEndpoint, records).then(function(recordIdList) {
