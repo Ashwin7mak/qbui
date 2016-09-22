@@ -45,11 +45,11 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_CANCEL).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.RECORD_EDIT_SAVE).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD_SUCCESS).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.SAVE_REPORT_RECORD_FAILED).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.ADD_REPORT_RECORD).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.ADD_REPORT_RECORD_SUCCESS).toBeDefined();
-        expect(flux.store(STORE_NAME).__actions__.ADD_REPORT_RECORD_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.SAVE_RECORD_SUCCESS).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.SAVE_RECORD_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.ADD_RECORD).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.ADD_RECORD_SUCCESS).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.ADD_RECORD_FAILED).toBeDefined();
 
     });
 

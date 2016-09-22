@@ -121,9 +121,15 @@ let Record = React.createClass({
 
 
     render() {
+        //add dummy buttons for testing save/cancel functionality
+        //TODO - remove these once trowser has these buttons instead
+        let dummyButtons = <div style={{display:"none"}}>
+                <button onClick={this.handleRecordSaveClicked}>Save</button>
+                <button onClick={this.handleEditRecordCancel}>Cancel</button>
+            </div>;
+
         return <div>
-            <button onClick={this.handleRecordSaveClicked}>Save</button>
-            <button onClick={this.handleEditRecordCancel}>Cancel</button>
+            {dummyButtons}
             <QBForm {...this.props} edit={true}
                                     key={"qbf-" + this.props.recId}
                                     idKey={"qbf-" + this.props.recId}

@@ -275,8 +275,10 @@ export let ReportContent = React.createClass({
      */
     handleRecordChange(recId) {
         const flux = this.getFlux();
-        flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-        flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data);
+        if (_.has(this.props, 'fields.fields.data')) {
+            flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
+            flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data);
+        }
     },
 
     /**

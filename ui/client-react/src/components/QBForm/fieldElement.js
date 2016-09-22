@@ -21,20 +21,22 @@ const FieldElement = React.createClass({
         includeLabel: React.PropTypes.bool // render label above field (otherwise ignore it)
     },
 
-    onChange(newVal) {
-        //validate the field change and show error if any.
-        //ValidationUtils.checkFieldValue()
-
-        //bubble up onChange with the old/new values
+    getChanges(theVals) {
         let fid = this.props.relatedField.id;
         let change = {
             values: {
                 oldVal: this.props.fieldRecord,
-                newVal: {value: newVal, display: newVal}
+                newVal: {value: theVals.value, display: theVals.display}
             },
             fid: +fid,
             fieldName: this.props.relatedField.name
         };
+        return change;
+    },
+
+    onChange(newVal) {
+        //bubble up onChange with the old/new values
+        let change = this.getChanges({value: newVal, display: newVal});
         if (this.props.onChange) {
             this.props.onChange(change);
         }
@@ -42,18 +44,10 @@ const FieldElement = React.createClass({
 
     onBlur(theVals) {
         const flux = this.getFlux();
-        let fid = this.props.relatedField.id;
-        let change = {
-            values: {
-                oldVal: this.props.fieldRecord,
-                newVal: theVals
-            },
-            fid: +fid,
-            fieldName: this.props.relatedField.name
-        };
         flux.actions.recordPendingValidateField(this.props.relatedField, theVals.value);
+        let change = this.getChanges(theVals);
         if (this.props.onBlur) {
-            this.props.onChange(change);
+            this.props.onBlur(change);
         }
     },
 

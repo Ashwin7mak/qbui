@@ -353,13 +353,13 @@ const flux = {
         },
         newBlankReportRecord: ()=> {
         },
-        saveReportRecord: ()=> {
+        saveRecord: ()=> {
         },
-        saveNewReportRecord: ()=> {
+        saveNewRecord: ()=> {
         },
         logMeasurements : ()=> {
         },
-        deleteReportRecord: ()=> {
+        deleteRecord: ()=> {
         },
         openingReportRow: ()=> {
         }

@@ -172,7 +172,9 @@ let recordActions = {
             colChange.value = _.cloneDeep(value);
             colChange.display = _.cloneDeep(display);
             colChange.field = field.datatypeAttributes;
-            colChange.field.required = field.required;
+            if (colChange.field) {
+                colChange.field.required = field.required;
+            }
             payload.push(colChange);
         }
 
