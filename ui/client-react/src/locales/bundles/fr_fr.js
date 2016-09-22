@@ -263,7 +263,7 @@ export default {
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {Résoudre ce domaine}\n other {Corriger ces # champs}\n} ",
         invalidMsg : {
             required: 'Remplissez {fieldName}',
-            maxChars: "Utilisez jusqu'à caractères {num}",
+            maxChars: "Utilisez jusqu'à caractères {maxNum}",
         },
 
     }

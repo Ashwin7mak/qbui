@@ -46,6 +46,7 @@
     let perfLogger = require('../../perfLogger');
     let dataErrs = require('../../../../common/src/dataEntryErrorCodes');
     var httpStatusCodes = require('../../constants/httpStatusCodes');
+    var ValidationUtils = require('../../../../common/src/validationUtils');
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -482,26 +483,14 @@
         let errors = [];
         if (req.body && req.body.length) {
             //look at each change
-            req.body.forEach((change, index) => {
+            req.body.forEach((change) => {
                 if (change && change.field) {
-                    let field = change.field;
-
-                    //text field length limit
-                    if (field.type === "TEXT") {
-                        // within max chars?
-                        if (field.clientSideAttributes && field.clientSideAttributes.max_chars &&
-                            field.clientSideAttributes.max_chars > 0 &&
-                            change.value && change.value.length &&
-                            change.value.length > field.clientSideAttributes.max_chars) {
-                            errors.push({field, type: dataErrs.MAX_LEN_EXCEEDED, hadLength: change.value.length});
-                        }
-                    }
-                    // required field has value?
-                    if (field.required && (change.value === undefined || change.value === null || change.value === "")) {
-                        errors.push({field, type: dataErrs.REQUIRED_FIELD_EMPTY});
+                    // validate it
+                    let results = ValidationUtils.checkFieldValue(change.field, change.value);
+                    if (results.isInvalid) {
+                        errors.push(results);
                     }
                 }
-
             });
         }
         return errors;

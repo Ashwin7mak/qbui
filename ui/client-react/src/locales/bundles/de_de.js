@@ -264,7 +264,7 @@ export default {
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Beheben Sie dieses Feld}\n other {Fix diese # Felder}\n} ",
         invalidMsg : {
             required: 'Füllen Sie das {fieldName}',
-            maxChars: 'Verwenden Sie bis zu {num} Zeichen',
+            maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
         },
 
     }

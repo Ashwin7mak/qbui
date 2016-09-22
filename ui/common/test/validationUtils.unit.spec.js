@@ -1,8 +1,5 @@
-import React from 'react';
-import TestUtils from 'react-addons-test-utils';
-import _ from 'lodash';
-import LimitConstants from '../../../common/src/limitConstants';
-import ValidationUtils from '../../src/utils/validationUtils';
+import LimitConstants from '../src/limitConstants';
+import ValidationUtils from '../src/validationUtils';
 
 describe('test validateFieldValue', () => {
 

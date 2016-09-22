@@ -11,7 +11,8 @@ import * as SchemaConsts from "../../../constants/schema";
 import * as GroupTypes from "../../../constants/groupTypes";
 import Locales from "../../../locales/locales";
 import ReportFooter from '../reportFooter';
-import ValidationUtils from "../../../utils/validationUtils";
+import ValidationUtils from "../../../../../common/src/validationUtils";
+import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 
@@ -277,6 +278,26 @@ export let ReportContent = React.createClass({
         });
         flux.actions.saveNewReportRecord(this.props.appId, this.props.tblId, payload);
         return payload;
+    },
+
+    handleValidateFieldValue(def, value) {
+        let field;
+        let results;
+
+        // get the field for this def
+        if (_.has(this.props, 'fields.fields.data')) {
+            field = _.find(this.props.fields.fields.data, (aField) => {
+                return field.id === +aField.id;
+            });
+        }
+        if (field) {
+            results = ValidationUtils.checkFieldValue(field, value);
+            if (results.isInvalid) {
+                // format the message for the client
+                results.invalidMessage = ValidationMessage.getMessage(results);
+            }
+        }
+        return results;
     },
 
     createColChange(value, display, field, payload) {
@@ -793,7 +814,7 @@ export let ReportContent = React.createClass({
                                 onRecordNewBlank={this.handleRecordNewBlank}
                                 onRecordSaveClicked={this.handleRecordSaveClicked}
                                 validateRecord={this.validateRecord}
-                                validateFieldValue={ValidationUtils.checkFieldValue}
+                                validateFieldValue={this.handleValidateFieldValue}
                                 getOrigRec={this.getOrigRec}
                                 getPendingChanges={this.getPendingChanges}
                                 tblId={this.props.reportData.tblId}
