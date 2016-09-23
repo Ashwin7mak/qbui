@@ -154,21 +154,21 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
         return (
             <div className="multiChoiceContainer">
-                {!this.props.showAsRadio ?
-                    <Select
-                        tabIndex="0"
-                        value={choice}
-                        optionRenderer={this.renderOption}
-                        options={options}
-                        onChange={this.selectChoice}
-                        placeholder={placeHolderMessage}
-                        noResultsText={notFoundMessage}
-                        autosize={false}
-                        clearable={false}
-                        onBlur={this.onBlur} /> :
+                {this.props.showAsRadio ?
                     <div className="multiChoiceRadioContainer">
                         { options }
-                    </div>
+                    </div> :
+                    <Select
+                    tabIndex="0"
+                    value={choice}
+                    optionRenderer={this.renderOption}
+                    options={options}
+                    onChange={this.selectChoice}
+                    placeholder={placeHolderMessage}
+                    noResultsText={notFoundMessage}
+                    autosize={false}
+                    clearable={false}
+                    onBlur={this.onBlur} />
                 }
             </div>
         );
