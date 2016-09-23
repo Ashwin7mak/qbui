@@ -91,7 +91,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
                 }) : [];
             // Add none option if the field is not required
             if (this.props.fieldDef && this.props.fieldDef.required === false) {
-                choices.push(<label key={"\<None\>"}
+                choices.push(<label key={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
                                     className="multiChoiceRadioOption"
                                     onClick={this.selectChoice}
                                     onBlur={this.onBlur}>

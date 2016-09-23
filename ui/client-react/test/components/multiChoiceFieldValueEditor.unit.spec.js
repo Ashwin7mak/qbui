@@ -119,7 +119,7 @@ describe('MultiChoiceFieldValueEditor functions', () => {
         var radioText1 = radioContainerNode.childNodes[0].childNodes[2].textContent;
         var radioText2 = radioContainerNode.childNodes[1].childNodes[2].textContent;
         var radioText3 = radioContainerNode.childNodes[2].childNodes[2].textContent;
-        var radioText4 = radioContainerNode.childNodes[3].childNodes[2].textContent;
+        var radioText4 = radioContainerNode.childNodes[3].childNodes[1].childNodes[0].textContent;
 
         expect(radioText1).toEqual("Apples");
         expect(radioText2).toEqual("Apricots");
