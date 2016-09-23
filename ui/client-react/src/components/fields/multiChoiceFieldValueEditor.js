@@ -58,7 +58,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
      * @param choice
      */
     selectChoice(event) {
-        console.log('event: ', event.target);
         if (event.target) {
             this.setState({
                 choice: event.target.value
