@@ -11,8 +11,10 @@ You will need the following:
 
 1. A local oracle server (see https://github.com/QuickBase/QuickBase for getting setup)
 2. A local tomcat server (see https://github.com/QuickBase/QuickBase for getting setup)
-3. Access to the AWS Pre-production server (AWS account)
+3. Access to the AWS Pre-production server (AWS account). If you need an account, please complete
+an ops request at https://team.quickbase.com/db/bhvkpd55u
 4. Bastion must be setup (see below)
+5. If working from home, you will need VPN to access https://www.jenkinscs1.quickbaserocks.com
 
 ## Setting up Bastion
 
@@ -43,8 +45,62 @@ You will need the following:
 
 ## Setup Your Tests to Migrate and Save Data
 
-1. Update the `migration.local.properties` in `QuickBase/migration/src/main/resources` (easier to search for the file using CMD-SHIFT-N) to point to the migration server. (You may want to ask a team member for a copy of their file)
-2. Comment out the contents of the `destroy` method in `MigrationTestSetup.java` (in `QuickBase/migration/src/test/java/com.quickbase/migration/legacy/services/`) so that the migrated data are not deleted after the test completes.
+1. Update the `migration.local.properties` in `QuickBase/migration/src/main/resources` (easier to search for the file using CMD-SHIFT-N) to point to the migration server. The migration server is the test server running current stack at http://www.jenkinscs1.quickbaserocks.com. You are migrating to your local dev environment which hosts the newstack java core (e.g., http://localhost:8080/api). You may want to ask a team member for a copy of their file. An example file is below.
+    ```java
+    # Example of migration.local.properties for migrating data to a dev environment
+
+    #integration endpoint
+    realmId=117000
+    realmName=localhost
+    endpoint=http://quickbase-dev.com:8080/api
+
+    migration.apiserver.endpoint=http://quickbase-dev.com:8080/api/api/v1
+    migration.apiserver.creation.realm=localhost
+    migration.apiserver.creation.realmId=117000
+    migration.recordChunkSize=1000
+    migration.maxErrorRetries=10000
+    migration.api.chunkSize=1000
+
+    migration.source.bufferedReads=10
+    migration.destination.threadcount=1
+
+    connectionTimeout=60000
+    connectionRequestTimeout=60000
+    socketTimeout=60000
+
+    legacy.admin.username=administrator
+    legacy.admin.password=jbcdjja
+    legacy.user.password=quickbase123
+    legacy.testkey=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    legacy.excludeFiles=true
+    legacy.sql.driver=net.sourceforge.jtds.jdbc.Driver
+    legacy.sql.user=quickbase
+    legacy.sql.password=onebase
+
+    auth.ticket.validate=true
+    auth.ticket.encryption.salt=salt123
+    auth.ticket.encryption.anothersalt=salt456
+    auth.ticket.encryption.hashkey=*ad023,.SdfW
+    auth.ticket.version.max=8
+    auth.ticket.version.min=8
+    auth.ticket.version.current = 8
+    auth.ticket.ignore.expiration = false
+    auth.ticket.duration.minutes = 7200
+
+    #
+    ##################################################################################################################
+    #   Migration Properties that reference a lab server.  This is used when testing against a branch
+    #   that has yet to be merged into the master branch!
+    ##################################################################################################################
+
+    migration.aleroot=http://www.jenkinscs1.quickbaserocks.com/ALE
+    legacy.quickbase.endpoint=https://jenkinscs1.quickbaserocks.com:443
+    legacy.sql.url=jdbc:jtds:sqlserver://localhost:1433/QuickBase
+    ```
+2. In `MigrationTestSetup.java` (in `QuickBase/migration/src/test/java/com.quickbase/migration/legacy/services/`),
+set the annotation above the `destroy` method to `@AfterClass(enabled = false, alwaysRun = true)` (currently on line 156).
+This prevents the migrated data from being deleted after the test completes. If that doesn't work, try
+commenting out the contents of the `destroy` method as shown below.
   ``` java
   //QuickBase/migration/src/test/java/com.quickbase/migration/legacy/services/MigrationTestSetup.java
   // starting on line 150
@@ -52,7 +108,7 @@ You will need the following:
     /**
      * Cleanup data used in testing.
      */
-    @AfterClass(alwaysRun = true)
+    @AfterClass(enabled = false, alwaysRun = true)
     public void destroy() {
   //        if (null != newRealm) {
   //            // Remove current stack and new stack realms used in testing
