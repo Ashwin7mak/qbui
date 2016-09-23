@@ -36,6 +36,7 @@ function buildMockParent(options = {disabled: false, readOnly: false}) {
 }
 
 let component;
+let requiredSymbol = '*';
 
 function findElements(query) {
     return ReactDOM.findDOMNode(component).querySelectorAll(query);
@@ -115,7 +116,7 @@ describe('CheckBoxFieldValueEditor', () => {
 
         let asterisk = findElements('.required-symbol');
         expect(asterisk.length).toBe(1);
-        expect(asterisk[0].textContent).toBe('*');
+        expect(asterisk[0].textContent).toBe(requiredSymbol);
     });
 
     it('asterisk is hidden when a checkbox is not required', () => {
