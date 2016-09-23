@@ -73,7 +73,14 @@ const DateTimeFieldValueEditor = React.createClass({
      */
     getOrigTime() {
         let origValue = this.getOrigValue();
-        return origValue && moment(origValue).isValid() ? moment(origValue).format(TIME_FORMAT) : momentTz.tz('00:00:00', TIME_FORMAT, dateTimeFormatter.getTimeZone(this.props.attributes));
+        let m = null;
+        if (origValue && moment(origValue).isValid()) {
+            return moment(origValue).format(TIME_FORMAT);
+        } else {
+            let a = moment().startOf('day').format(DATE_TIME_FORMAT);
+            let b = momentTz.tz(a, DATE_TIME_FORMAT, dateTimeFormatter.getTimeZone(this.props.attributes));
+            return b.format(TIME_FORMAT);
+        }
     },
 
     /**

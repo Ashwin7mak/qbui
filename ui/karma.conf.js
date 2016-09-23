@@ -22,9 +22,10 @@ module.exports = function(config) {
         exclude: [],
 
         // add webpack as the preprocessor
+        // code coverage against all client react code EXCEPT npm modules that we have privately forked
         preprocessors: {
             "tests.webpack.js": ["webpack", "sourcemap"],
-            "client-react/src/**/*.js" : ["coverage"]
+            "client-react/src/!(components/npm)/**/*.js" : ["coverage"]
         },
 
         webpack: {

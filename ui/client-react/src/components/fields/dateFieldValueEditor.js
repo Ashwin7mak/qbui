@@ -6,7 +6,7 @@ import QBToolTip from '../qbToolTip/qbToolTip';
 import Breakpoints from "../../utils/breakpoints";
 import './fields.scss';
 
-import DatePicker from 'react-bootstrap-datetimepicker';
+import DatePicker from '../npm/datetimePicker/lib/DateTimeField';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
 import moment from 'moment';
 
@@ -130,11 +130,12 @@ const DateFieldValueEditor = React.createClass({
             <div className={classes}>
                 <DatePicker
                     name="date-picker"
-                    dateTime={theDate ? theDate : moment().format(DATE_INPUT)}
+                    dateTime={theDate}
                     format={DATE_INPUT}
                     inputFormat={DATE_INPUT}
                     onBlur={this.onBlur}
                     onChange={this.onChange}
+                    showToday={true}
                     mode="date"
                     defaultText={theDate ? theDate : DATE_INPUT.toLowerCase()}/>
             </div>
