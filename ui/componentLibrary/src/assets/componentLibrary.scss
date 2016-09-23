@@ -34,16 +34,16 @@ $font-path: '../../../client-react/src/assets/fonts/';
 .comp-library-nav {
     flex: 0 1 auto;
     width: 100%;
-    background: $color30;
+    background: $color-blue-700;
     h3 {
-        color: $color7;
+        color: $color-blue-300;
         font-size: 20px;
         font-weight: normal;
         text-align: center;
         margin-bottom: 20px !important;
     }
     h4 {
-        color: $color7;
+        color: $color-blue-300;
         font-weight: normal;
         margin-left: 10px;
         margin-top: 20px;
@@ -55,10 +55,10 @@ $font-path: '../../../client-react/src/assets/fonts/';
     }
     li {
         list-style: none;
-        border-bottom: 1px solid $color32;
+        border-bottom: 1px solid $color-blue-800;
     }
     li:first-child {
-        border-top: 1px solid $color32;
+        border-top: 1px solid $color-blue-800;
     }
     li a {
         display: block;
@@ -70,10 +70,10 @@ $font-path: '../../../client-react/src/assets/fonts/';
         padding: 20px;
         // margin-bottom: 3px;
         &:hover {
-            background: $color26;
+            background: $color-cyan-800;
         }
         &.active {
-            background: $color27;
+            background: $color-teal-600;
         }
         @media (min-width: 768px) {
             padding: 10px 10%;
