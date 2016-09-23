@@ -70,7 +70,7 @@
          * Before each test starts just make sure the report has loaded in the UI
          */
         beforeEach(function(done) {
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            reportServicePage.waitForElement(reportServicePage.agGridContainerEl).then(function() {
                 done();
             });
         });
