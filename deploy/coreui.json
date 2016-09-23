@@ -456,7 +456,6 @@
             }
           }
         }
-      }
     },
       "Properties": {
         "ImageId": {"Ref": "paramEC2ImageAMI"},
