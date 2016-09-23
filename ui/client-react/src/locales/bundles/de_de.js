@@ -269,6 +269,6 @@ export default {
             required: 'Füllen Sie das {fieldName}',
             maxChars: 'Verwenden Sie bis zu {num} Zeichen',
         },
-
+        noneOption: "\<Keiner\>"
     }
 };

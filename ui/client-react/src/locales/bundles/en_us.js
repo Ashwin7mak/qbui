@@ -270,6 +270,7 @@ export default {
         invalidMsg : {
             required: 'Fill in the {fieldName}',
             maxChars: 'Use up to {num} characters',
-        }
+        },
+        noneOption: "\<None\>"
     }
 };

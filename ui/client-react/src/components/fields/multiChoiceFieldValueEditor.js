@@ -78,16 +78,28 @@ const MultiChoiceFieldValueEditor = React.createClass({
         if (this.props.showAsRadio) {
             choices = choices ?
                 choices.map(choice => {
-                    return (<label key={choice.coercedValue.value} className="multiChoiceRadioOption" onClick={this.selectChoice} onBlur={this.onBlur}>
-                        <input type="radio" name={this.props.radioGroupName} value={choice.coercedValue.value} checked={this.state.choice === choice.coercedValue.value} onChange={this.onClick}/>
+                    return (<label key={choice.coercedValue.value}
+                                   className="multiChoiceRadioOption"
+                                   onClick={this.selectChoice}
+                                   onBlur={this.onBlur}>
+                        <input type="radio" name={this.props.radioGroupName}
+                               value={choice.coercedValue.value}
+                               checked={this.state.choice === choice.coercedValue.value}
+                               onChange={this.onClick}/>
                         {choice.displayValue}
                         <br />
                     </label>);
                 }) : [];
             // Add none option if the field is not required
             if (this.props.fieldDef && this.props.fieldDef.required === false) {
-                choices.push(<label key={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE} className="multiChoiceRadioOption" onClick={this.onClick} onBlur={this.onBlur}>
-                    <input type="radio" name={this.props.radioGroupName} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE} checked={this.state.choice === ""} onChange={this.onClick}/>{CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}
+                choices.push(<label key={"\<None\>"}
+                                    className="multiChoiceRadioOption"
+                                    onClick={this.selectChoice}
+                                    onBlur={this.onBlur}>
+                    <input type="radio" name={this.props.radioGroupName}
+                           value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
+                           onChange={this.onClick}/>
+                    <I18nMessage message={"noneOption"} />
                     <br />
                 </label>);
             }

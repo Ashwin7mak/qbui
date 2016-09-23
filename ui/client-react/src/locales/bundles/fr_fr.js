@@ -268,6 +268,6 @@ export default {
             required: 'Remplissez {fieldName}',
             maxChars: "Utilisez jusqu'à caractères {num}",
         },
-
+        noneOption: "\<Aucun\>"
     }
 };
