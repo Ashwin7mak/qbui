@@ -38,20 +38,20 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
-        if (!this.props.showAsRadio) {
+        if (this.props.showAsRadio) {
+            // For radio render
+            let val = this.props.value ? this.props.value : "";
             return {
-                // React select expects an object
-                choice: {
-                    label: this.props.value
-                }
+                choice: val
             };
         }
-
-        // For radio render
-        let val = this.props.value ? this.props.value : "";
         return {
-            choice: val
+            // React select expects an object
+            choice: {
+                label: this.props.value
+            }
         };
+
     },
     onClick(ev) {
         this.selectChoice(ev.target.value);
