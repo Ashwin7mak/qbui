@@ -28,11 +28,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
     },
 
     renderDisplayValue() {
-        if (this.props.displayGraphic) {
-            return this.renderGraphicDisplayValue();
-        } else {
-            return this.renderTextDisplayValue();
-        }
+        return (this.props.displayGraphic ? this.renderGraphicDisplayValue() : this.renderTextDisplayValue());
     },
 
     renderTextDisplayValue() {
@@ -46,11 +42,7 @@ const CheckBoxFieldValueRenderer = React.createClass({
     },
 
     renderGraphicDisplayValue() {
-        if (this.props.value) {
-            return this.renderGraphicCheckedSymbol();
-        } else {
-            return this.renderGraphicUncheckedSymbol();
-        }
+        return (this.props.value ? this.renderGraphicCheckedSymbol() : this.renderGraphicUncheckedSymbol());
     },
 
     renderGraphicCheckedSymbol() {
