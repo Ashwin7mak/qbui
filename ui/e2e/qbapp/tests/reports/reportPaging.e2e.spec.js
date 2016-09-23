@@ -20,7 +20,7 @@
     // Lodash utility library
     var _ = require('lodash');
 
-    describe('Report Paging Test Setup', function() {
+    describe('Report Paging Tests SetUp', function() {
         var realmName;
         var realmId;
         var app;
@@ -217,105 +217,102 @@
                 });
             });
 
-
-            //TODO: Should add a test for counting records text to appear (need to fix bulk add first most likely)
-        });
-
-        it('Verify pagination for report with facets defined', function(done) {
-            var reportId;
-            //Create a report with FacetFids
-            e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE4].id, [6], null, "Test Facets Pagination").then(function(repId) {
-                reportId = repId;
-            }).then(function() {
-                //Go to report page directly.
-                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE4].id, reportId));
-            }).then(function() {
-                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    e2eBase.sleep(browser.params.smallSleep);
-                    //Select facets and verify pagination count
-                    reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
-                        reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
-                            // Select facet group and items
-                            reportFacetsPage.selectGroupAndFacetItems("Text Field", [0]).then(function(facetSelections) {
-                                // Get facet tokens from the reports toolbar and verify against selected items on reports toolbar
-                                reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
-                                    return tokenName.getText();
-                                }).then(function(selections) {
-                                    if (selections[0] !== duplicateTextFieldValue) {
-                                        //verify the filtered records count
-                                        expect(reportServicePage.reportRecordsCount.getText()).toContain('1 of 41 records');
-                                        expect(reportPagingPage.pagingToolbarContainer.isPresent()).toBeFalsy();
-                                        done();
-                                    } else {
-                                        //verify the filtered records count
-                                        expect(reportServicePage.reportRecordsCount.getText()).toContain('40 of 41 records');
-                                        expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
-                                        //Click next button in pagination
-                                        reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
-                                            reportServicePage.agGridRecordElList.then(function(records) {
-                                                //verify the pagination count after going to next page
-                                                expect(reportServicePage.reportRecordsCount.getText()).toContain('41 records');
-                                                expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 41');
-                                                expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
-                                                expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
-                                                done();
+            it('Verify pagination for report with facets defined', function(done) {
+                var reportId;
+                //Create a report with FacetFids
+                e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE4].id, [6], null, "Test Facets Pagination").then(function(repId) {
+                    reportId = repId;
+                }).then(function() {
+                    //Go to report page directly.
+                    return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE4].id, reportId));
+                }).then(function() {
+                    return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //Select facets and verify pagination count
+                        reportFacetsPage.waitForElementToBeClickable(reportFacetsPage.reportFacetFilterBtnCaret).then(function() {
+                            reportFacetsPage.reportFacetFilterBtnCaret.click().then(function() {
+                                // Select facet group and items
+                                reportFacetsPage.selectGroupAndFacetItems("Text Field", [0]).then(function(facetSelections) {
+                                    // Get facet tokens from the reports toolbar and verify against selected items on reports toolbar
+                                    reportFacetsPage.reportFacetNameSelections.map(function(tokenName, tokenindex) {
+                                        return tokenName.getText();
+                                    }).then(function(selections) {
+                                        if (selections[0] !== duplicateTextFieldValue) {
+                                            //verify the filtered records count
+                                            expect(reportServicePage.reportRecordsCount.getText()).toContain('1 of 41 records');
+                                            expect(reportPagingPage.pagingToolbarContainer.isPresent()).toBeFalsy();
+                                            done();
+                                        } else {
+                                            //verify the filtered records count
+                                            expect(reportServicePage.reportRecordsCount.getText()).toContain('40 of 41 records');
+                                            expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
+                                            //Click next button in pagination
+                                            reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
+                                                reportServicePage.agGridRecordElList.then(function(records) {
+                                                    //verify the pagination count after going to next page
+                                                    expect(reportServicePage.reportRecordsCount.getText()).toContain('41 records');
+                                                    expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 41');
+                                                    expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
+                                                    expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
+                                                    done();
+                                                });
                                             });
-                                        });
-                                    }
+                                        }
+                                    });
                                 });
                             });
                         });
                     });
                 });
+
             });
 
-        });
-
-        it('Verify pagination for report with search results', function(done) {
-            var reportId;
-            //Create a report with Fids .
-            e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE4].id, [6], null, "Test Search Pagination").then(function(repId) {
-                reportId = repId;
-            }).then(function() {
-                return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE4].id, reportId));
-            }).then(function() {
-                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    e2eBase.sleep(browser.params.smallSleep);
-                    expect(reportServicePage.reportRecordsCount.getText()).toContain('41 records');
-                    expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
-                });
-            }).then(function() {
-                //search the report
-                return reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
-                    reportServicePage.reportFilterSearchBox.clear().sendKeys(duplicateTextFieldValue, protractor.Key.ENTER);
-                });
-            }).then(function() {
-                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    e2eBase.sleep(browser.params.smallSleep);
-                    //verify the search records count
-                    expect(reportServicePage.reportRecordsCount.getText()).toContain('40 of 41 records');
-                    expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
-                });
-            }).then(function() {
-                //Click next button in pagination
-                reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
-                    reportServicePage.agGridRecordElList.then(function(records) {
-                        //verify the pagination count after going to next page
+            it('Verify pagination for report with search results', function(done) {
+                var reportId;
+                //Create a report with Fids .
+                e2eBase.reportService.createReportWithFids(app.id, app.tables[e2eConsts.TABLE4].id, [6], null, "Test Search Pagination").then(function(repId) {
+                    reportId = repId;
+                }).then(function() {
+                    return RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE4].id, reportId));
+                }).then(function() {
+                    return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        e2eBase.sleep(browser.params.smallSleep);
                         expect(reportServicePage.reportRecordsCount.getText()).toContain('41 records');
-                        expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 41');
-                        expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
-                        expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
-                        done();
+                        expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
+                    });
+                }).then(function() {
+                    //search the report
+                    return reportServicePage.waitForElementToBeClickable(reportServicePage.reportFilterSearchBox).then(function() {
+                        reportServicePage.reportFilterSearchBox.clear().sendKeys(duplicateTextFieldValue, protractor.Key.ENTER);
+                    });
+                }).then(function() {
+                    return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                        e2eBase.sleep(browser.params.smallSleep);
+                        //verify the search records count
+                        expect(reportServicePage.reportRecordsCount.getText()).toContain('40 of 41 records');
+                        expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('1 - 20');
+                    });
+                }).then(function() {
+                    //Click next button in pagination
+                    reportPagingPage.clickPagingNavButton(reportPagingPage.pagingToolbarNextButton).then(function() {
+                        reportServicePage.agGridRecordElList.then(function(records) {
+                            //verify the pagination count after going to next page
+                            expect(reportServicePage.reportRecordsCount.getText()).toContain('41 records');
+                            expect(reportPagingPage.pagingToolbarPageNumbers.getText()).toBe('21 - 41');
+                            expect(reportPagingPage.getPagingNextButtonDisabled(reportPagingPage.pagingFooterNextButton)).toBeTruthy();
+                            expect(reportPagingPage.getPagingPrevButtonDisabled(reportPagingPage.pagingToolbarPrevButton)).toBeFalsy();
+                            done();
+                        });
                     });
                 });
             });
-        });
 
-        /**
-         * After all tests are done, run the cleanup function in the base class
-         */
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
+            /**
+             * After all tests are done, run the cleanup function in the base class
+             */
+            afterAll(function(done) {
+                e2eBase.cleanup(done);
+            });
         });
     });
 }());
