@@ -12,6 +12,7 @@
     let REPORTS = 'reports';
     let REPORT_COUNT = 'count';
     let REPORT_RESULTS = 'results';
+    let USERS = 'users';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
     //      (.*)? - optionally match any character(s)
@@ -91,6 +92,26 @@
                 }
             }
             //  return requestUrl unchanged
+            return url;
+        },
+
+        /**
+         * For the given req.url, extract the APPS identifier/id and
+         * append the USERS identifier.
+         *
+         * Example:  url: /apps/123/rest/of/url
+         *           return: /apps/123/users
+         *
+         * @param url
+         * @returns {*}
+         */
+        getAppUsersRoute: function(url) {
+            let root = getUrlRoot(url, APPS);
+            if (root) {
+                return root + '/' + USERS + '/';
+            }
+
+            //  no url root for APPS found; return original url unchanged
             return url;
         },
 

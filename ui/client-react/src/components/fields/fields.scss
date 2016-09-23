@@ -97,7 +97,6 @@ $data-font-size: $font-size-p;
 .requiredFlag-layout {
   display: block;
   padding-left: 2px;
-  overflow-y: auto;
 }
 
 .textFormat .cellData .textField {
@@ -108,7 +107,16 @@ $data-font-size: $font-size-p;
   white-space: nowrap;
 }
 
+.userDisplayValue {
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
 .cellData.NoWrap {
   white-space: nowrap;
+}
+
+/* allow wide tooltips */
+.tooltip-inner {
+  max-width:none;
 }

@@ -36,11 +36,11 @@ const serverTypeConsts = require('../../../../../common/src/constants');
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 function buildIconElement(icon) {
-    return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
+    return "<span class='qbIcon iconTableUISturdy-" + icon + "'></span>";
 }
 let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),
-    groupContracted: buildIconElement("icon_caretfilledright"),
+    groupContracted: buildIconElement("caret-filled-right"),
     menu: buildIconElement("caret-filled-down"),
     check: buildIconElement("check"),
     error: buildIconElement("alert")
@@ -70,6 +70,7 @@ let AGGrid = React.createClass({
         loading: React.PropTypes.bool,
         isInlineEditOpen: React.PropTypes.bool,
         records: React.PropTypes.array,
+        appUsers:React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
         validateRecord: React.PropTypes.func,
@@ -368,6 +369,17 @@ let AGGrid = React.createClass({
             }
         }
     },
+
+    /**
+     * get list of users for this app
+     *
+     * @returns app user objects
+     */
+    getAppUsers() {
+        return this.props.appUsers;
+    },
+
+    // Careful about setting things in context, they do not update when the related prop updates
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
@@ -385,8 +397,9 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
         this.gridOptions.context.keyField = this.props.keyField;
-        this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
+
+        this.gridOptions.context.getAppUsers = this.getAppUsers;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
         this.gridOptions.getRowClass = this.getRowClass;
@@ -549,7 +562,7 @@ let AGGrid = React.createClass({
         this.clickTimeout = setTimeout(() => {
             // navigate to record if timeout wasn't canceled by 2nd click
             this.clickTimeout = null;
-            if (this.props.onRowClick && (this.api.getSelectedRows().length === 0)) {
+            if (this.props.onRowClick && (!this.state.editingRowNode)) {
                 this.props.onRowClick(params.data);
             }
         }, 500);

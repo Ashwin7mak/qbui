@@ -11,7 +11,7 @@
     var TWELVE_HOUR_CLOCK = 'h:';
     var MM = 'mm';
     var SS = ':ss';
-    var AM_PM = ' A';
+    var AM_PM = ' a';
     var DEFAULT_TIMEZONE = 'America/Los_Angeles';
 
     var JAVA_FORMAT_TO_JS_FORMAT = {
@@ -61,6 +61,8 @@
             if (!fieldValue || !fieldValue.value) {
                 return '';
             }
+
+            fieldInfo = fieldInfo || {};
 
             //Declare the date and moment formatter
             var currentDate = new Date();

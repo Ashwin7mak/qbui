@@ -189,6 +189,7 @@ describe('ReportToolbar functions', () => {
                                                                 pageActions={pageActions}
                                                                 pageStart={1}
                                                                 pageEnd={0}
+                                                                recordsCount={0}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
@@ -212,6 +213,7 @@ describe('ReportToolbar functions', () => {
                                                                 pageActions={pageActions}
                                                                 pageStart={1}
                                                                 pageEnd={3}
+                                                                recordsCount={3}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
@@ -238,7 +240,7 @@ describe('ReportToolbar functions', () => {
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         // empty filter icon is no shown
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-filter-tool");
+        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconTableUISturdy-filter-tool");
         expect(filterIcon.length).toEqual(0);
 
     });
@@ -253,7 +255,7 @@ describe('ReportToolbar functions', () => {
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         // empty filter icon is shown
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-filter-tool");
+        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconTableUISturdy-filter-tool");
         expect(filterIcon.length).toEqual(1);
 
     });

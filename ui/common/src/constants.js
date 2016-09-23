@@ -14,9 +14,10 @@
         APPLICATION_XML : 'application/xml',
         TEXT_HTML       : 'text/html',
         ACCEPT          : 'Accept',
+        // Timezones
         UTC_TIMEZONE    : 'Universal',
-        EST_TIMEZONE    : 'US/Eastern',
-        PST_TIMEZONE    : 'US/Pacific',
+        EST_TIMEZONE    : 'America/New_York',
+        PST_TIMEZONE    : 'America/Los_Angeles',
         CET_TIMEZONE    : 'Europe/Berlin',
         JST_TIMEZONE    : 'Asia/Tokyo',
         //Field types

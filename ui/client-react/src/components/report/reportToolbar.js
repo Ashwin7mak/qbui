@@ -46,6 +46,7 @@ const ReportToolbar = React.createClass({
         searchTheString: React.PropTypes.func,
         pageStart: React.PropTypes.number,
         pageEnd: React.PropTypes.number,
+        recordsCount: React.PropTypes.number,
     },
 
     getDefaultProps() {
@@ -239,6 +240,7 @@ const ReportToolbar = React.createClass({
                                        pageEnd={this.props.pageEnd}
                                        getNextReportPage={this.props.getNextReportPage}
                                        getPreviousReportPage={this.props.getPreviousReportPage}
+                                       recordsCount={this.props.recordsCount}
                     />
                 </div>
                 {this.props.pageActions}

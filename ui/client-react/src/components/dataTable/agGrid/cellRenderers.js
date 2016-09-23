@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
+
 import RowEditActions from './rowEditActions';
 import CellValueRenderer from './cellValueRenderer';
 import CellEditor from './cellEditor';
@@ -18,8 +19,9 @@ import IconActions from '../../actions/iconActions';
 import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
 import './dateTimePicker.scss';
 
-import FieldFormats from '../../../utils/fieldFormats';
 import _ from 'lodash';
+import FieldFormats from '../../../utils/fieldFormats';
+import FieldUtils from '../../../utils/fieldUtils';
 import Logger from "../../../utils/logger";
 
 
@@ -33,10 +35,9 @@ class CellRendererFactory  {
             _.has(props, 'params') &&
             _.has(props.params, 'value.id') &&
             _.has(props.params, 'data') &&
-            _.has(props.params, 'context.uniqueIdentifier') &&
-            _.has(props.params.data[props.params.context.uniqueIdentifier], 'value') &&
             _.has(props.params, 'rowIndex')) {
-            recId = props.params.data[props.params.context.uniqueIdentifier].value;
+
+            recId = props.params.data[FieldUtils.getUniqueIdentifierFieldName(props.params.data)].value;
             key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId ;
         }
         return key;
@@ -52,6 +53,7 @@ class CellRendererFactory  {
                              initialValue={props.params.value}
                              editing={props.editing}
                              params={props.params}
+                             appUsers={ _.has(props.params, 'context.getAppUsers') ? props.params.context.getAppUsers() : []}
                              qbGrid={props.qbGrid}
                              key={CellRendererFactory.getCellKey(props)}
         />;
@@ -72,6 +74,7 @@ const CellRenderer = React.createClass({
         initialValue: React.PropTypes.object,
         editing: React.PropTypes.bool,
         validateFieldValue: React.PropTypes.func,
+        appUsers: React.PropTypes.array,
         qbGrid: React.PropTypes.bool // temporary, used to determine if we need to render both a renderer and editor (for ag-grid)
     },
 
@@ -90,7 +93,7 @@ const CellRenderer = React.createClass({
                 valueAndDisplay: {
                     id: this.props.initialValue.id,
                     value: this.props.initialValue.value,
-                    display: this.props.initialValue.display,
+                    display: this.props.initialValue.display
                 },
                 validationStatus : null
             };
@@ -181,6 +184,7 @@ const CellRenderer = React.createClass({
                                 validateFieldValue={this.props.validateFieldValue}
                                 isInvalid={invalidStatus.isInvalid}
                                 invalidMessage={invalidStatus.invalidMessage}
+                                appUsers={this.props.appUsers}
                     />
                 }
 
@@ -209,15 +213,16 @@ const CellRenderer = React.createClass({
             _.has(this.props, 'params') &&
             _.has(this.props.params, 'data') &&
             _.has(this.props.params, 'column.colId') &&
-            _.has(this.props.params, 'context.uniqueIdentifier') &&
             _.has(this.props.params, 'colDef.id')) {
+
+            let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
 
             let change = {
                 values: {
                     oldVal: this.props.params.data[this.props.params.column.colId],
                     newVal: this.state.valueAndDisplay
                 },
-                recId: this.props.params.data[this.props.params.context.uniqueIdentifier].value,
+                recId: this.props.params.data[uniqueIdentifier].value,
                 fid: +this.props.params.colDef.id,
                 fieldName: this.props.params.column.colId
             };
@@ -247,8 +252,7 @@ const CellRenderer = React.createClass({
         current.isInvalid = result ? result.isInvalid : false;
         current.invalidMessage = result ? result.invalidMessage : null;
         this.setState({validationStatus : current});
-    },
-
+    }
 });
 
 export const TextCellRenderer = React.createClass({

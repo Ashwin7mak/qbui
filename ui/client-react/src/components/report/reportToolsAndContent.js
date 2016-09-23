@@ -14,6 +14,7 @@ import './report.scss';
 import FilterUtils from '../../utils/filterUtils';
 import StringUtils from '../../utils/stringUtils';
 import * as query from '../../constants/query';
+import FieldUtils from '../../utils/fieldUtils';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
 import * as Constants from "../../../../common/src/constants";
@@ -31,7 +32,7 @@ let AddRecordButton = React.createClass({
 });
 
 /* The container for report and its toolbar */
-let ReportToolsAndContent = React.createClass({
+const ReportToolsAndContent = React.createClass({
     mixins: [FluxMixin],
     facetFields : {},
     debounceInputMillis: 700, // a key send delay
@@ -41,6 +42,7 @@ let ReportToolsAndContent = React.createClass({
         tblId: React.PropTypes.string,
         rptId: React.PropTypes.string,
         reportData: React.PropTypes.object,
+        appUsers: React.PropTypes.array,
         pageActions: React.PropTypes.element,
         callbacks :  React.PropTypes.object,
         selectedRows: React.PropTypes.array,
@@ -184,7 +186,8 @@ let ReportToolsAndContent = React.createClass({
                               getNextReportPage={this.getNextReportPage}
                               getPreviousReportPage={this.getPreviousReportPage}
                               pageStart={this.pageStart}
-                              pageEnd={this.pageEnd}/>;
+                              pageEnd={this.pageEnd}
+                              recordsCount={this.recordsCount}/>;
     },
     getSelectionActions() {
         return (<ReportActions selection={this.props.selectedRows} appId={this.props.params.appId} tblId={this.props.params.tblId} rptId={this.props.params.rptId} nameForRecords={this.props.nameForRecords}/>);
@@ -254,6 +257,24 @@ let ReportToolsAndContent = React.createClass({
             this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows, sortList);
         }
     },
+    /**
+     * Returns the count of records for a report.
+     * If the report has been filtered or has facets, returns the filtered count. If not, returns the total records count.
+     */
+    getReportRecordsCount(reportData) {
+        if (reportData.data) {
+            let isReportFiltered = false;
+                // check if report filtered?
+            if (reportData.searchStringForFiltering && StringUtils.trim(reportData.searchStringForFiltering).length !== 0) {
+                isReportFiltered = true;
+            } else {
+                // Report is not filtered, check for facet selections.
+                isReportFiltered = reportData.selections ? reportData.selections.hasAnySelections() : false;
+            }
+            return isReportFiltered ? reportData.data.filteredRecordsCount : reportData.data.recordsCount;
+        }
+        return 0;
+    },
     render() {
         let classes = "reportToolsAndContentContainer";
         if (this.props.selectedRows) {
@@ -266,21 +287,16 @@ let ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
+        let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.fields);
 
         // Define the page start. Page offset is zero indexed. For display purposes, add one.
         this.pageStart = this.props.reportData.pageOffset + 1;
         // Define page end. This is page offset added to page size or number of rows.
         this.pageEnd = this.props.reportData.pageOffset + this.props.reportData.numRows;
 
-        if (this.props.reportData.data) {
-            let filteredRecordsCount = this.props.reportData.data.filteredRecordsCount;
-            let recordsCount = this.props.reportData.data.recordsCount;
+        this.recordsCount = this.getReportRecordsCount(this.props.reportData);
+        this.pageEnd = this.pageEnd > this.recordsCount ? this.recordsCount : this.pageEnd;
 
-            let countToConsider = StringUtils.isNonEmptyString(this.props.reportData.searchStringForFiltering) && filteredRecordsCount ?
-                                    filteredRecordsCount :
-                                    recordsCount;
-            this.pageEnd = this.pageEnd > countToConsider ? countToConsider : this.pageEnd;
-        }
 
         if (_.isUndefined(this.props.params) ||
             _.isUndefined(this.props.params.appId) ||
@@ -306,21 +322,24 @@ let ReportToolsAndContent = React.createClass({
                                          getNextReportPage={this.getNextReportPage}
                                          getPreviousReportPage={this.getPreviousReportPage}
                                          pageStart={this.pageStart}
-                                         pageEnd={this.pageEnd}/>;
+                                         pageEnd={this.pageEnd}
+                                         recordsCount={this.recordsCount}/>;
 
             let reportFooter = <ReportFooter
                                 reportData={this.props.reportData}
                                 getNextReportPage={this.getNextReportPage}
                                 getPreviousReportPage={this.getPreviousReportPage}
                                 pageStart={this.pageStart}
-                                pageEnd={this.pageEnd}/>;
+                                pageEnd={this.pageEnd}
+                                recordsCount={this.recordsCount}/>;
 
             let cardViewPagination = <ReportFooter
                                 reportData={this.props.reportData}
                                 getNextReportPage={this.getNextReportPage}
                                 getPreviousReportPage={this.getPreviousReportPage}
                                 pageStart={this.pageStart}
-                                pageEnd={this.pageEnd}/>;
+                                pageEnd={this.pageEnd}
+                                recordsCount={this.recordsCount}/>;
 
             return (
                 <div className={classes}>
@@ -335,12 +354,13 @@ let ReportToolsAndContent = React.createClass({
                                    tblId={this.props.params.tblId}
                                    rptId={typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId}
                                    reportData={this.props.reportData}
+                                   appUsers={this.props.appUsers}
                                    reportHeader={toolbar}
                                    reportFooter={reportFooter}
                                    cardViewPagination={cardViewPagination }
                                    keyField={this.props.fields && this.props.fields.keyField ?
                                        this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
-                                   uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                   uniqueIdentifier={uniqueIdentifier}
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}
