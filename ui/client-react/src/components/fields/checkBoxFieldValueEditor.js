@@ -4,9 +4,7 @@ import _ from 'lodash';
 import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
 
 import './checkbox.scss';
-/**
- * checkbox cell editor
- */
+
 const CheckBoxFieldValueEditor = React.createClass({
     displayName: 'CheckBoxFieldValueEditor',
     propTypes: {
@@ -18,7 +16,8 @@ const CheckBoxFieldValueEditor = React.createClass({
         invalid: PropTypes.bool,
         disabled: PropTypes.bool,
         readOnly: PropTypes.bool,
-        required: PropTypes.bool
+        required: PropTypes.bool,
+        requiredSymbol: PropTypes.string
     },
 
     getDefaultProps() {
@@ -28,7 +27,8 @@ const CheckBoxFieldValueEditor = React.createClass({
             invalid: false,
             disabled: false,
             readOnly: false,
-            required: false
+            required: false,
+            requiredSymbol: '*'
         };
     },
 
@@ -73,7 +73,7 @@ const CheckBoxFieldValueEditor = React.createClass({
         if (this.props.required) {
             let requiredSymbolClasses = 'required-symbol';
             requiredSymbolClasses += (this.isInvalid() ? ' invalid' : '');
-            requiredSymbol = <span className={requiredSymbolClasses}>*</span>;
+            requiredSymbol = <span className={requiredSymbolClasses}>{this.props.requiredSymbol}</span>;
         }
 
         return requiredSymbol;
