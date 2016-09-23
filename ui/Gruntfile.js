@@ -925,6 +925,99 @@ module.exports = function(grunt) {
         ]);
     });
 
+    grunt.registerTask('addComponentToLibrary', 'Add a React component to the component library', function(){
+        // Current Component Info
+        var componentName = grunt.option('name');
+        var componentPath = grunt.option('path');
+        var componentPathArray = componentPath.split('/');
+        var componentFileName = componentPathArray.pop();
+
+        console.log('COMPONET FILE NAME: ', componentFileName);
+
+        // Must provide a component class name
+        if(!componentName){
+            grunt.fail.fatal('Please provide a component name with the flag --name');
+        }
+
+        // Must provide a path to the component
+        if(!componentPath){
+            grunt.fail.fatal('Please provide a component path with the flag --path');
+        }
+
+        // Must be an existing file
+        if(!grunt.file.exists(componentPath)){
+            grunt.fail.fatal('A component file does not exist at /qbui/ui/' + componentPath);
+        }
+
+        // Component Library Info
+        var componentLibraryPath = 'componentLibrary/';
+        var componentLibrarySrcPath = componentLibraryPath + 'src/'
+        var componentLibraryTemplatePath = componentLibraryPath + 'templates/';
+        var docFile = componentLibrarySrcPath + 'docs/' + componentFileName;
+        var metaDataFilePath = componentLibrarySrcPath + 'components/Metadata.js';
+        var metaDataFile = grunt.file.read(metaDataFilePath);
+        var exampleFile = componentLibrarySrcPath + 'examples/' + componentName + '.js';
+        var examplesFile = componentLibrarySrcPath + 'components/Examples.js';
+        var playgroundFile = componentLibrarySrcPath + 'components/ReactPlayground.js';
+        var indexFile = componentLibrarySrcPath + 'index.js';
+        var routesFile = componentLibrarySrcPath + 'components/componentLibrary.js';
+
+        var componentData = {
+            componentName: componentName,
+            componentPath: componentPath
+        };
+
+        // ---  Create Component Doc File ---
+        var docTemplate = grunt.file.read(componentLibraryTemplatePath + 'doc.tmpl.js');
+        grunt.file.write(docFile, grunt.template.process(docTemplate, {data: componentData}));
+
+        // --- Update Metadata.js ---
+        var metaDataFileArray = metaDataFile.split("\n");
+
+        var endOfImport = metaDataFileArray.indexOf('// END OF IMPORT STATEMENTS');
+        metaDataFileArray.splice(endOfImport, 0, 'import ' + componentName + "Metadata from 'component-metadata!../../../" + componentPath + "';");
+
+        var endOfMerge = metaDataFileArray.indexOf('    // END OF METADATA MERGE');
+        metaDataFileArray[endOfMerge - 1] = metaDataFileArray[endOfMerge - 1] + ',';
+        metaDataFileArray.splice(endOfMerge, 0, '    ' + componentName + 'Metadata');
+
+        grunt.file.write(metaDataFilePath, metaDataFileArray.join("\n"));
+
+        // --- Generate default example ---
+        var exampleTemplate = grunt.file.read(componentLibraryTemplatePath + 'example.tmpl.js');
+        grunt.file.write(exampleFile, grunt.template.process(exampleTemplate, {data: componentData}));
+
+        // --- Add example to Examples.js ---
+        var examplesFileArray = grunt.file.read(examplesFile).split("\n");
+        endOfImport = examplesFileArray.indexOf('//END OF IMPORT STATEMENTS');
+        examplesFileArray.splice(endOfImport, 0, 'import ' + componentName + 'Example' from "'raw!../examples/" + componentName + "Example.js';");
+
+        endOfMerge = examplesFileArray.indexOf('    // END OF EXPORT');
+        examplesFileArray.splice(endOfMerge, 0, componentName + ': ' + componentName + 'Example,');
+
+        grunt.file.write(examplesFile, examplesFileArray.join("\n"));
+
+        // --- Import component to ReactPlayground.js ---
+        playgroundFileArray = grunt.file.read(playgroundFile).split("\n");
+
+        endOfImport = playgroundFileArray.indexOf('// END OF REQUIRE STATEMENTS');
+        playgroundFileArray.splice(endOfImport, 0, 'const ' + componentName + " = require('../../../" + componentPath + "');")
+
+        // --- Add a route to index.js ---
+        indexFileArray = grunt.file.read(indexFile).split("\n");
+        var endOfRoutes = indexFileArray.indexOf('</Route>');
+        var routeTemplate = grunt.file.read(componentLibraryTemplatePath + 'route.tmpl.js');
+        indexFileArray.split(endOfRoutes, 0, grunt.template.process(routeTemplate, {data: componentData}));
+        grunt.file.write(indexFile, indexFileArray.join("\n"));
+
+        // --- Add link to componentLibrary.js ---
+        var routesFileArray = grunt.file.read(routesFile).split("\n");
+        var endOfLinks = routesFileArray.indexOf('</nav>') - 1;
+        var linkTemplate = grunt.file.read(componentLibraryTemplatePath + 'link.tmpl.js');
+        routesFileArray.splice(endOfLinks, 0, grunt.template.process(linkTemplate, {data: componentData}));
+        grunt.file.write(routesFile, routesFileArray.join("\n"));
+    });
+
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-sauce-connect-launcher');

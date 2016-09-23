@@ -9,6 +9,9 @@ import NumericFieldValueEditorExample from 'raw!../examples/NumericFieldValueEdi
 import NumericFieldValueRendererExample from 'raw!../examples/NumericFieldValueRendererExample.js';
 import UserFieldValueEditorExample from 'raw!../examples/UserFieldValueEditorExample.js';
 import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendererExample.js';
+// END OF IMPORT STATEMENTS
+// The comment above is used for a grunt task. Please do not delete.
+
 export default {
     QBPanel: QBPanelExample,
     QBIcon: QBIconExample,
@@ -21,4 +24,6 @@ export default {
     NumericFieldValueEditor: NumericFieldValueEditorExample,
     UserFieldValueRenderer: UserFieldValueRendererExample,
     UserFieldValueEditor: UserFieldValueEditorExample,
+    // END OF EXPORT
+    // The comment above is used for a grunt task. Please do not delete.
 };
