@@ -51,7 +51,7 @@
     "react-loader": "^2.0.0",
     "react-notifications": "^1.2.0",
     "react-router": "2.6.1",
-    "react-select": "^1.0.0-rc.1",
+    "react-select": "^1.0.0-rc.2",
     "react-swipeable": "^3.6.0",
     "reactabular": "^0.14.2",
     "request": "^2.53.0",
