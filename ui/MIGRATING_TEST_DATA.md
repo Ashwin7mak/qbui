@@ -208,6 +208,26 @@ commenting out the contents of the `destroy` method as shown below.
 
 ## Troubleshooting
 
+### I migrated my app, but now I can't login because no users were migrated
+
+Open the Oracle Databse on your dev machine (e.g., through the SqlDeveloper app) and
+find the `[id]_USERAPPROLES` table. You can add a row that gives the administrator access. The RoleID
+should be 12 for the administrator (UserID 10000).
+E.g.,
+
+APPID | USERID | ROLEID
+---- | ---- | ----
+[Your app id] | 10000 | 12
+
+**NOTE:**
+You can find your App Id by visiting your app on newstack in your local dev environment
+and getting the id from the URL.
+`http://[realm_id].localhost:9000/app/[app_id]`
+
+**Note 2:**
+You have to find the `[id]_USERAPPROLES` table that is for the realm your app is in. Look at the
+`[id]_META` table to make sure you are modifying the table associated with your realm/app.
+
 ### I get a "properties not found" error when running the tests
 
 Try copying:
@@ -216,8 +236,7 @@ Try copying:
 - `mchange-log.properties`
 from `allServices/src/main/webapp/WEB-INF/` to `migration/src/main/resources/`
 
-
-### I'm getting Authentication errors
+### I'm getting Authentication errors while running the migration test
 
 Make sure the 'salts' are the same across all of the following files:
 - `migration.local.properties`
