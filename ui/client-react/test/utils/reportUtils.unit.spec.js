@@ -167,5 +167,3 @@ describe('ReportUtils - test getGListString', () => {
         });
     });
 });
-
-
