@@ -1,6 +1,5 @@
 import React from 'react';
 import Select from 'react-select';
-import {RadioGroup, Radio} from 'react-radio-group';
 import 'react-select/dist/react-select.min.css';
 import './multiChoiceFieldValueEditor.scss';
 import './selectCommon.scss';
@@ -39,7 +38,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
-        if (this.props.showAsRadio) {
+        if (!this.props.showAsRadio) {
             return {
                 // React select expects an object
                 choice: {
@@ -47,11 +46,15 @@ const MultiChoiceFieldValueEditor = React.createClass({
                 }
             };
         }
+
+        // For radio render
         let val = this.props.value ? this.props.value : "";
-        // Radio Group component expects a string value.
         return {
             choice: val
         };
+    },
+    onClick(ev) {
+        this.selectChoice(ev.target.value);
     },
     /**
      * Set the user selection to component state
@@ -97,19 +100,18 @@ const MultiChoiceFieldValueEditor = React.createClass({
         } else {
             choices = choices ?
                 choices.map(choice => {
-                    return <span key={choice.coercedValue.value} className="multiChoiceRadioOption" >
-                                <label><Radio value={choice.coercedValue.value} id={choice.coercedValue.value}/>{choice.displayValue}</label><br />
-                            </span>;
-                }) : [];
-            /**
-             * Add none option if the field is not required
-             */
-            if (this.props.fieldDef && this.props.fieldDef.required === false) {
-                choices.push(<span key={""} className="multiChoiceRadioOption">
-                                <label><Radio key={""} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
-                                    {CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}</label>
+                    return (<label key={choice.coercedValue.value} className="multiChoiceRadioOption" onClick={this.onClick} onBlur={this.onBlur}>
+                                <input type="radio" name={this.props.radioGroupName} value={choice.coercedValue.value} checked={this.state.choice === choice.coercedValue.value} onChange={this.onClick}/>
+                                {choice.displayValue}
                                 <br />
-                            </span>);
+                            </label>);
+                }) : [];
+            // Add none option if the field is not required
+            if (this.props.fieldDef && this.props.fieldDef.required === false) {
+                choices.push(<label key={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE} className="multiChoiceRadioOption" onClick={this.onClick} onBlur={this.onBlur}>
+                                <input type="radio" name={this.props.radioGroupName} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE} checked={this.state.choice === ""} onChange={this.onClick}/>{CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}
+                                <br />
+                            </label>);
             }
             return choices;
         }
@@ -119,8 +121,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
         let theVals;
         if (this.props.showAsRadio) {
             theVals = {
-                value: this.state.choice.label,
-                display: this.state.choice.label
+                value: this.state.choice,
+                display: this.state.choice
             };
         } else {
             theVals = {
@@ -148,12 +150,14 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
         const placeHolderMessage = <I18nMessage message="selection.placeholder"/>;
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
+
         let choice;
-        if (this.props.showAsRadio) {
+        if (!this.props.showAsRadio) {
             choice = this.props.value ? this.state.choice : false;
         } else {
-            choice = this.props.value ? this.state.choice.label : '';
+            choice = this.props.value ? this.state.choice : '';
         }
+
         return (
             <div className="multiChoiceContainer">
                 {!this.props.showAsRadio ?
@@ -169,12 +173,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
                         clearable={false}
                         onBlur={this.onBlur} /> :
                     <div className="multiChoiceRadioContainer">
-                        <RadioGroup name={this.props.radioGroupName}
-                                    selectedValue={choice}
-                                    onChange={this.selectChoice}
-                                    onBlur={this.onBlur}>
-                            { options }
-                        </RadioGroup>
+                        { options }
                     </div>
                 }
             </div>

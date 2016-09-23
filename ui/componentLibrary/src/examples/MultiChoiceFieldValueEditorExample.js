@@ -58,7 +58,7 @@ const basicMultiChoiceFieldValueEditor = (
         <dt>Multi Choice Field Editor:</dt>
         <div style={{width:200}}>
             <dd>
-                <MultiChoiceFieldValueEditor choices = {choices} value="Jeff"/>
+                <MultiChoiceFieldValueEditor choices={choices} value="Jeff"/>
             </dd>
         </div>
         <dt>Multi Choice Field Editor Radio Buttons:</dt>
