@@ -57,8 +57,8 @@ const FieldElement = React.createClass({
         let fieldType = FieldFormats.getFormatType(fieldDatatypeAttributes.type);
 
         //catch the non-implemented pieces.
-        let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "display value";
-        let fieldRawValue = this.props.fieldRecord ? this.props.fieldRecord.value : "raw value";
+        let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "";
+        let fieldRawValue = this.props.fieldRecord ? this.props.fieldRecord.value : "";
 
         let fieldElement = this.props.edit ?
             <FieldValueEditor type={fieldType}

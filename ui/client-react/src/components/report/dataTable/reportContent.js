@@ -234,38 +234,11 @@ export let ReportContent = React.createClass({
      */
     handleRecordAdd(recordChanges) {
         const flux = this.getFlux();
-
-        //save changes in record
-        let payload = [];
-        // columns id and new values array
-        //[{"id":6, "value":"Claire"}]
-        Object.keys(recordChanges).forEach((recKey) => {
-            //get each columns matching field description
-            let matchingField = null;
-            if (_.has(this.props, 'fields.fields.data')) {
-                matchingField = _.find(this.props.fields.fields.data, (field) => {
-                    return field.id === +recKey;
-                });
-            }
-            // only post the non built in fields values
-            if (matchingField && matchingField.builtIn === false) {
-                let newValue = recordChanges[recKey].newVal.value;
-                let newDisplay = recordChanges[recKey].newVal.display;
-
-                let colChange = {};
-                colChange.fieldName = recordChanges[recKey].fieldName;
-                colChange.id = +recKey;
-                colChange.value = _.cloneDeep(newValue);
-                colChange.display = _.cloneDeep(newDisplay);
-                colChange.field = matchingField.datatypeAttributes;
-                if (colChange.field) {
-                    colChange.field.required = matchingField.required;
-                }
-                payload.push(colChange);
-            }
-        });
-        flux.actions.saveNewRecord(this.props.appId, this.props.tblId, payload);
-        return payload;
+        let fields = {};
+        if (_.has(this.props, 'fields.fields.data')) {
+            fields = this.props.fields.fields.data;
+        }
+        flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields);
     },
 
     /**

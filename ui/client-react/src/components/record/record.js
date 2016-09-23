@@ -88,7 +88,7 @@ let Record = React.createClass({
      * @param id
      * @returns {boolean}
      */
-    handleRecordSaveClicked(id) {
+    handleRecordSaveClicked() {
         //validate changed values -- this is skipped for now
         //get pending changes
         let validationResult = {
@@ -99,10 +99,10 @@ let Record = React.createClass({
             //signal record save action, will update an existing records with changed values
             // or add a new record
             let changes = null;
-            if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
+            if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 changes = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
-                changes = this.handleRecordChange(id);
+                changes = this.handleRecordChange(this.props.recId);
             }
         }
         return validationResult;
@@ -118,22 +118,30 @@ let Record = React.createClass({
         flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.formData.fields);
     },
 
-
+    /**
+     * Save a new record
+     * @param recordChanges
+     * @returns {Array} of field values for the new record
+     */
+    handleRecordAdd(recordChanges) {
+        const flux = this.getFlux();
+        flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.formData.fields);
+    },
 
     render() {
         //add dummy buttons for testing save/cancel functionality
         //TODO - remove these once trowser has these buttons instead
-        let dummyButtons = <div style={{display:"none"}}>
-                <button onClick={this.handleRecordSaveClicked}>Save</button>
-                <button onClick={this.handleEditRecordCancel}>Cancel</button>
+        let dummyButtons = <div>
+                <button class="save button" onClick={this.handleRecordSaveClicked}>Save</button>
+                <button class="cancel button" onClick={this.handleEditRecordCancel}>Cancel</button>
             </div>;
 
         return <div>
             {dummyButtons}
-            <QBForm {...this.props} edit={true}
-                                    key={"qbf-" + this.props.recId}
-                                    idKey={"qbf-" + this.props.recId}
-                                    onFieldChange={this.handleFieldChange}/>
+            <QBForm {...this.props}
+                    key={"qbf-" + this.props.recId}
+                    idKey={"qbf-" + this.props.recId}
+                    onFieldChange={this.handleFieldChange}/>
         </div>;
     }
 });

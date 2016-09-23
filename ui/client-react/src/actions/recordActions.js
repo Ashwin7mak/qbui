@@ -28,10 +28,45 @@ let recordActions = {
     /**
      * save a new record
      */
-    saveNewRecord(appId, tblId, record) {
+    saveNewRecord(appId, tblId, recordChanges, fields) {
+        function getRecord(_recordChanges, _fields) {
+            //save changes in record
+            let payload = [];
+            // columns id and new values array
+            //[{"id":6, "value":"Claire"}]
+            if (_recordChanges) {
+                Object.keys(_recordChanges).forEach((recKey) => {
+                    //get each columns matching field description
+                    let matchingField = null;
+                    if (_fields) {
+                        matchingField = _.find(_fields, (field) => {
+                            return field.id === +recKey;
+                        });
+                    }
+                    // only post the non built in fields values
+                    if (matchingField && matchingField.builtIn === false) {
+                        let newValue = _recordChanges[recKey].newVal.value;
+                        let newDisplay = _recordChanges[recKey].newVal.display;
+
+                        let colChange = {};
+                        colChange.fieldName = _recordChanges[recKey].fieldName;
+                        colChange.id = +recKey;
+                        colChange.value = _.cloneDeep(newValue);
+                        colChange.display = _.cloneDeep(newDisplay);
+                        colChange.field = matchingField.datatypeAttributes;
+                        if (colChange.field) {
+                            colChange.field.required = matchingField.required;
+                        }
+                        payload.push(colChange);
+                    }
+                });
+            }
+            return payload;
+        }
             // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
-            if (appId && tblId && record) {
+            let record = getRecord(recordChanges, fields);
+            if (appId && tblId && record.length) {
                 this.dispatch(actions.ADD_RECORD, {appId, tblId, record});
                 let recordService = new RecordService();
 
@@ -67,7 +102,7 @@ let recordActions = {
                     );
             } else {
                 var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
-                        appId + '; TblId:' + tblId + '; record:' + record;
+                        appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
                 logger.error(errMessage);
                 this.dispatch(actions.ADD_RECORD_FAILED, {error: errMessage});
                 reject();

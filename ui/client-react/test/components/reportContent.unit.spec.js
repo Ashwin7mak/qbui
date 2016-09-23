@@ -1119,7 +1119,7 @@ describe('ReportContent functions', () => {
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordAdd(edits.recordChanges);
-        expect(flux.actions.saveNewRecord).toHaveBeenCalledWith('123', '456', newRec);
+        expect(flux.actions.saveNewRecord).toHaveBeenCalledWith('123', '456', edits.recordChanges, fieldsData.fields.data);
     });
 
     it('test handleRecordChange', () => {

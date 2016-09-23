@@ -29,8 +29,8 @@ flux.addActions(recordActions);
 describe('Record actions Edit Record functions -- Negative', () => {
     'use strict';
 
-    let changes = {};
-    let newRecord = {};
+    let edits = {};
+    let fields = {};
 
     class mockRecordService {
         constructor() {}
@@ -43,11 +43,15 @@ describe('Record actions Edit Record functions -- Negative', () => {
         deleteRecordBulk(a, t, r) {
             return Promise.resolve({data:responseData});
         }
+        createRecord(a, t, r, c) {
+            return Promise.resolve({data:responseData});
+        }
     }
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockRecordService.prototype, 'saveRecord');
+        spyOn(mockRecordService.prototype, 'createRecord');
         spyOn(mockRecordService.prototype, 'deleteRecord');
         spyOn(mockRecordService.prototype, 'deleteRecordBulk');
         recordActions.__Rewire__('RecordService', mockRecordService);
@@ -57,17 +61,19 @@ describe('Record actions Edit Record functions -- Negative', () => {
         recordActions.__ResetDependency__('RecordService');
     });
     var dataProvider = [
-        {test:'test saveRecord with missing appId', appId:null, tblId:2, recId:3, changes:changes},
-        {test:'test saveRecord with missing tblId', appId:1, tblId:null, recId:3, changes:changes},
-        {test:'test saveRecord with missing recId', appId:1, tblId:2, recId:undefined, changes:changes},
-        {test:'test saveRecord with null recId', appId:1, tblId:2, recId:null, changes:changes},
-        {test:'test saveRecord with missing changes', appId:1, tblId:2, recId:3, changes:null}
+        {test:'test saveRecord with missing appId', appId:null, tblId:2, recId:3, pendEdits:edits, fields: fields},
+        {test:'test saveRecord with missing tblId', appId:1, tblId:null, recId:3, pendEdits:edits, fields: fields},
+        {test:'test saveRecord with missing recId', appId:1, tblId:2, recId:undefined, pendEdits:edits, fields: fields},
+        {test:'test saveRecord with null recId', appId:1, tblId:2, recId:null, pendEdits:edits, fields: fields},
+        {test:'test saveRecord with missing edits', appId:1, tblId:2, recId:3, pendEdits:null, fields: fields},
+        {test:'test saveRecord with missing fields', appId:1, tblId:2, recId:3, pendEdits:edits, fields: null}
     ];
 
     var saveNewDataProvider = [
-        {test:'test saveNewDataProvider with missing appId', appId:null, tblId:2, record:newRecord},
-        {test:'test saveNewDataProvider with missing tblId', appId:1, tblId:null, record:newRecord},
-        {test:'test saveNewDataProvider with missing record', appId:1, tblId:2, record:null}
+        {test:'test saveNewDataProvider with missing appId', appId:null, tblId:2, recordChanges:edits, fields: fields},
+        {test:'test saveNewDataProvider with missing tblId', appId:1, tblId:null, recordChanges:edits, fields: fields},
+        {test:'test saveNewDataProvider with missing changes', appId:1, tblId:2, recordChanges:null, fields: fields},
+        {test:'test saveNewDataProvider with missing fields', appId:1, tblId:2, recordChanges:edits, fields: null}
     ];
 
     var deleteDataProvider = [
@@ -87,7 +93,7 @@ describe('Record actions Edit Record functions -- Negative', () => {
 
         it(data.test, (done) => {
 
-            flux.actions.saveRecord(data.appId, data.tblId, data.recId, data.changes).then(
+            flux.actions.saveRecord(data.appId, data.tblId, data.recId, data.pendEdits, data.fields).then(
                 () => {
                     expect(true).toBe(false);
                     done();
@@ -104,13 +110,13 @@ describe('Record actions Edit Record functions -- Negative', () => {
     saveNewDataProvider.forEach(function(data) {
 
         it(data.test, (done) => {
-            flux.actions.saveNewRecord(data.appId, data.tblId, data.record).then(
+            flux.actions.saveNewRecord(data.appId, data.tblId, data.recordChanges, data.fields).then(
                 () => {
                     expect(true).toBe(false);
                     done();
                 },
                 () => {
-                    expect(mockRecordService.prototype.deleteRecord).not.toHaveBeenCalled();
+                    expect(mockRecordService.prototype.createRecord).not.toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.ADD_RECORD_FAILED, jasmine.any(Object));
                     done();
                 }
@@ -239,15 +245,14 @@ describe('Record actions Edit Record functions -- errors / exceptions Negative',
             }
         }
         recordActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.saveNewRecord(inputs.appId, inputs.tblId, {}).then(
+        flux.actions.saveNewRecord(inputs.appId, inputs.tblId, {}, {}).then(
             () => {
                 expect(true).toBe(false);
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD, {appId: inputs.appId, tblId:inputs.tblId, record: {}}]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_RECORD_FAILED,
-                    jasmine.objectContaining({error: jasmine.any(Object)})]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD_FAILED,
+                    {error: 'Missing one or more required input parameters to recordActions.addRecord. AppId:' + inputs.appId + '; TblId:' + inputs.tblId + '; recordChanges:{}; fields:{}'}]);
                 done();
             }
         );
@@ -263,12 +268,12 @@ describe('Record actions Edit Record functions -- errors / exceptions Negative',
                 return Promise.resolve({data: {}});
             }
         }
-        flux.actions.saveNewRecord(inputs.appId, inputs.tblId, {}).then(
+        flux.actions.saveNewRecord(inputs.appId, inputs.tblId, {}, {}).then(
             () => {
                 expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD,
-                    {appId, tblId, record:newRecord}]);
+                    {appId, tblId, record:[]}]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_RECORD_FAILED,
                     jasmine.objectContaining({error : jasmine.any(Object)})]);
                 done();

@@ -11,7 +11,6 @@ describe('Record actions - Edit Record functions -- success', () => {
     let tblId = '2';
     let recId = '3';
     let recIds = [1, 2, 3];
-    let newRecord = {data:'value'};
     let responseData = {appId, tblId, data: 'success'};
 
     class mockRecordService {
@@ -121,12 +120,43 @@ describe('Record actions - Edit Record functions -- success', () => {
 
     it('test saveNewRecord', (done) => {
 
-        flux.actions.saveNewRecord(appId, tblId, newRecord).then(
+        let recordChanges = {
+            4:{
+                fieldName : 'col_num',
+                newVal: {value:"hi", display:"there"},
+            },
+            5:{
+                fieldName : 'col_builtin',
+                newVal: {value:"5", display:"no edit"},
+            },
+        };
+        let attrs = {setting: true};
+        let fields = [
+            {
+                id: 4,
+                builtIn: false,
+                datatypeAttributes :attrs
+            },
+            {
+                id: 5,
+                builtIn: true
+            },
+        ];
+
+        let newRec = [{
+            fieldName: 'col_num',
+            id: 4,
+            value: "hi",
+            display: "there",
+            field: attrs
+        }
+        ];
+        flux.actions.saveNewRecord(appId, tblId, recordChanges, fields).then(
                 () => {
                     expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD,
-                        {appId, tblId, record:newRecord}]);
+                        {appId, tblId, record:newRec}]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_RECORD_SUCCESS,
                         jasmine.any(Object)]);
                     done();
