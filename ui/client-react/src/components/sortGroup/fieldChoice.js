@@ -50,12 +50,18 @@ const FieldChoice = React.createClass({
         let order = '';
         let fid = '';
         let isEmpty = ' empty';
+        let msgKey = '';
 
         if (hasField) {
             name = this.props.field.name;
             isEmpty = ' notEmpty';
             order =  (this.props.field.descendOrder && this.props.field.descendOrder === true) ? 'down' : 'up';
             fid = " fid:" + this.props.field.id;
+        }
+        if (this.props.type === 'group')  {
+            msgKey = "report.sortAndGroup.changeGroupOrder";
+        } else  {
+            msgKey = "report.sortAndGroup.changeSortOrder";
         }
         let byMessage = this.props.then ?
             "report.sortAndGroup.thenBy" : "report.sortAndGroup.by";
@@ -66,13 +72,11 @@ const FieldChoice = React.createClass({
                         <span className="prefix">
                           <I18nMessage message={byMessage}/>
                         </span>
-                        <QBToolTip location="top" tipId="fieldName" plainMessage={name + fid}>
-                            <span className="fieldName">{name}</span>
-                        </QBToolTip>
+                        <span className="fieldName">{name}</span>
                     </div>
                     <div className="fieldChoiceActions">
                         { order ? (
-                        <QBToolTip location="top" tipId="orderIcon" i18nMessageKey="report.sortAndGroup.changeOrder">
+                        <QBToolTip location="top" tipId="orderIcon" i18nMessageKey={msgKey}>
                             <span className={"action sortOrderIcon " + order} tabIndex="0"
                                   onClick={() => this.props.onSetOrder(this.props.type, this.props.index,
                                                             !this.props.field.descendOrder, this.props.field)} >

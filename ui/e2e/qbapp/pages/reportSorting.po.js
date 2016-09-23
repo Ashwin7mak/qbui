@@ -111,21 +111,13 @@
                     var columnHeader = text.replace(/(\r\n|\n|\r)/gm, '');
                     return columnHeader === columnName;
                 });
-            }).then(function(filteredColumn) {
-                var scrollToElm1 = filteredColumn[0].scrollIntoView;
-                e2eBase.sleep(browser.params.smallSleep);
-                e2ePageBase.waitForElementToBeClickable(filteredColumn[0]).then(function() {
-                    return filteredColumn[0].click();
-                }).then(function() {
-                    var scrollToElm2 = filteredColumn[0].element(by.className('iconssturdy-caret-filled-down')).scrollIntoView;
-                    e2eBase.sleep(browser.params.smallSleep);
-                    e2ePageBase.waitForElementToBeClickable(filteredColumn[0].element(by.className('iconssturdy-caret-filled-down'))).then(function() {
-                        return filteredColumn[0].element(by.className('iconssturdy-caret-filled-down')).click();
-                    });
+            }).then(function(filteredColumns) {
+                return e2ePageBase.waitForElementToBeClickable(filteredColumns[0].element(by.className('dropdownToggle'))).then(function() {
+                    return filteredColumns[0].element(by.className('dropdownToggle')).click();
                 }).then(function() {
                     // Verify the popup menu is displayed
-                    return e2ePageBase.waitForElement(filteredColumn[0].element(by.className('dropdown-menu'))).then(function() {
-                        return expect(filteredColumn[0].element(by.className('dropdown-menu')).isDisplayed()).toBeTruthy();
+                    return e2ePageBase.waitForElement(filteredColumns[0].element(by.className('dropdown-menu'))).then(function() {
+                        return expect(filteredColumns[0].element(by.className('dropdown-menu')).isDisplayed()).toBeTruthy();
                     });
                 });
             });
@@ -207,7 +199,7 @@
                     return text === itemToVerify;
                 });
             }).then(function(filteredElement) {
-                expect(filteredElement[0].element(by.className('iconssturdy-check')).isDisplayed()).toBeTruthy();
+                expect(filteredElement[0].element(by.className('iconTableUISturdy-check')).isDisplayed()).toBeTruthy();
             });
         };
 
@@ -322,6 +314,25 @@
             var sortedRecords = _.orderBy(recordsToSort, columnListToSort, sortOrder);
 
             return sortedRecords;
+        };
+
+        /*
+         * Function to verify records are in ascending or descending order
+         */
+        this.verifyRecordsSortOrder = function(records, sortOrder) {
+            //verify records are in descending order
+            _.every(records, function(value, index, array) {
+                // either it is the first element, or otherwise this element should
+                // not be greater than the previous element.
+                // spec requires string conversion
+                if (sortOrder === 'desc') {
+                    //verify records are in descending order
+                    return index === 0 || String(array[index - 1]) >= String(value);
+                } else {
+                    //verify records are in ascending order
+                    return index === 0 || String(array[index - 1]) <= String(value);
+                }
+            });
         };
 
         /*
