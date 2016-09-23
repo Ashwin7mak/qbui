@@ -954,7 +954,7 @@ module.exports = function(grunt) {
         var docFile = componentLibrarySrcPath + 'docs/' + componentFileName;
         var metaDataFilePath = componentLibrarySrcPath + 'components/Metadata.js';
         var metaDataFile = grunt.file.read(metaDataFilePath);
-        var exampleFile = componentLibrarySrcPath + 'examples/' + componentName + '.js';
+        var exampleFile = componentLibrarySrcPath + 'examples/' + componentName + 'Example.js';
         var examplesFile = componentLibrarySrcPath + 'components/Examples.js';
         var playgroundFile = componentLibrarySrcPath + 'components/ReactPlayground.js';
         var indexFile = componentLibrarySrcPath + 'index.js';
@@ -1003,10 +1003,15 @@ module.exports = function(grunt) {
 
         // // --- Add a route to index.js ---
         var indexFileArray = grunt.file.read(indexFile).split("\n");
+
+        endOfImport = indexFileArray.indexOf('// END OF IMPORT STATEMENTS');
+        indexFileArray.splice(endOfImport, 0, 'import ' + componentName + "Doc from './docs/" + componentFileName + "';")
+
         var endOfRoutes = indexFileArray.indexOf('        </Route>');
         var routeTemplate = grunt.file.read(componentLibraryTemplatePath + 'route.tmpl.js');
         // Slice on the end removes extra newline
         indexFileArray.splice(endOfRoutes, 0, grunt.template.process(routeTemplate, {data: componentData}).slice(0, -1));
+
         grunt.file.write(indexFile, indexFileArray.join("\n"));
 
         // // --- Add link to componentLibrary.js ---
