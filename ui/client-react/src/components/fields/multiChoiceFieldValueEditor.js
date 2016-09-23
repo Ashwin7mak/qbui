@@ -102,17 +102,15 @@ const MultiChoiceFieldValueEditor = React.createClass({
                             </span>;
                 }) : [];
             /**
-             *This is commented out right now, because the current Schema in core does not accept/save null inputs
-             * This gives the user the ability to select an empty space as an input
-             * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
+             * Add none option if the field is not required
              */
-            // if (this.props.fieldDef && this.props.fieldDef.required === false) {
-            //     choices.push(<span key={""} className="multiChoiceRadioOption">
-            //                     <label><Radio key={""} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
-            //                         {CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}</label>
-            //                     <br />
-            //                 </span>);
-            // }
+            if (this.props.fieldDef && this.props.fieldDef.required === false) {
+                choices.push(<span key={""} className="multiChoiceRadioOption">
+                                <label><Radio key={""} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
+                                    {CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}</label>
+                                <br />
+                            </span>);
+            }
             return choices;
         }
     },
