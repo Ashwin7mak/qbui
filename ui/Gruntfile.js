@@ -932,8 +932,6 @@ module.exports = function(grunt) {
         var componentPathArray = componentPath.split('/');
         var componentFileName = componentPathArray.pop();
 
-        console.log('COMPONET FILE NAME: ', componentFileName);
-
         // Must provide a component class name
         if(!componentName){
             grunt.fail.fatal('Please provide a component name with the flag --name');
@@ -983,39 +981,45 @@ module.exports = function(grunt) {
 
         grunt.file.write(metaDataFilePath, metaDataFileArray.join("\n"));
 
-        // --- Generate default example ---
+        // // --- Generate default example ---
         var exampleTemplate = grunt.file.read(componentLibraryTemplatePath + 'example.tmpl.js');
         grunt.file.write(exampleFile, grunt.template.process(exampleTemplate, {data: componentData}));
 
-        // --- Add example to Examples.js ---
+        // // --- Add example to Examples.js ---
         var examplesFileArray = grunt.file.read(examplesFile).split("\n");
-        endOfImport = examplesFileArray.indexOf('//END OF IMPORT STATEMENTS');
-        examplesFileArray.splice(endOfImport, 0, 'import ' + componentName + 'Example' from "'raw!../examples/" + componentName + "Example.js';");
+        endOfImport = examplesFileArray.indexOf('// END OF IMPORT STATEMENTS');
+        examplesFileArray.splice(endOfImport, 0, 'import ' + componentName + "Example from 'raw!../examples/" + componentName + "Example.js';");
 
         endOfMerge = examplesFileArray.indexOf('    // END OF EXPORT');
-        examplesFileArray.splice(endOfMerge, 0, componentName + ': ' + componentName + 'Example,');
+        examplesFileArray.splice(endOfMerge, 0, '    ' + componentName + ': ' + componentName + 'Example,');
 
         grunt.file.write(examplesFile, examplesFileArray.join("\n"));
 
-        // --- Import component to ReactPlayground.js ---
-        playgroundFileArray = grunt.file.read(playgroundFile).split("\n");
-
+        // // --- Import component to ReactPlayground.js ---
+        var playgroundFileArray = grunt.file.read(playgroundFile).split("\n");
         endOfImport = playgroundFileArray.indexOf('// END OF REQUIRE STATEMENTS');
-        playgroundFileArray.splice(endOfImport, 0, 'const ' + componentName + " = require('../../../" + componentPath + "');")
+        playgroundFileArray.splice(endOfImport, 0, 'const ' + componentName + " = require('../../../" + componentPath + "');");
+        grunt.file.write(playgroundFile, playgroundFileArray.join("\n"));
 
-        // --- Add a route to index.js ---
-        indexFileArray = grunt.file.read(indexFile).split("\n");
-        var endOfRoutes = indexFileArray.indexOf('</Route>');
+        // // --- Add a route to index.js ---
+        var indexFileArray = grunt.file.read(indexFile).split("\n");
+        var endOfRoutes = indexFileArray.indexOf('        </Route>');
         var routeTemplate = grunt.file.read(componentLibraryTemplatePath + 'route.tmpl.js');
-        indexFileArray.split(endOfRoutes, 0, grunt.template.process(routeTemplate, {data: componentData}));
+        // Slice on the end removes extra newline
+        indexFileArray.splice(endOfRoutes, 0, grunt.template.process(routeTemplate, {data: componentData}).slice(0, -1));
         grunt.file.write(indexFile, indexFileArray.join("\n"));
 
-        // --- Add link to componentLibrary.js ---
+        // // --- Add link to componentLibrary.js ---
         var routesFileArray = grunt.file.read(routesFile).split("\n");
-        var endOfLinks = routesFileArray.indexOf('</nav>') - 1;
+        var endOfLinks = routesFileArray.indexOf('                    </nav>') - 1;
         var linkTemplate = grunt.file.read(componentLibraryTemplatePath + 'link.tmpl.js');
-        routesFileArray.splice(endOfLinks, 0, grunt.template.process(linkTemplate, {data: componentData}));
+        routesFileArray.splice(endOfLinks, 0, grunt.template.process(linkTemplate, {data: componentData}).slice(0, -1));
         grunt.file.write(routesFile, routesFileArray.join("\n"));
+
+        grunt.log.ok('Completed! Your component ' + componentName + ' is now in the library.');
+        grunt.log.subhead('Next steps:');
+        grunt.log.writeln('1) Double check the placement of the link in the nav menu in ' + routesFile);
+        grunt.log.writeln('2) Improve your example in ' + exampleFile);
     });
 
     grunt.loadNpmTasks('grunt-shell-spawn');
