@@ -58,7 +58,9 @@ const MultiChoiceFieldValueEditor = React.createClass({
      * @param choice
      */
     selectChoice(choice) {
-        if (this.props.showAsRadio) {
+        console.log('this.props.showAsRadio: ', this.props.showAsRadio);
+        console.log('selectChoice choice: ', choice);
+        if (!this.props.showAsRadio) {
             this.setState({
                 choice: choice
             });
@@ -134,10 +136,12 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     renderOption(choice) {
+        console.log('this.state.choice: ', this.state.choice);
+        console.log('choice: ', choice);
         return (
             <div>
                 {this.state.choice.label !== '' ?
-                this.state.choice.label === choice.value.displayValue && <QbIcon className="choiceQBIcon" icon="check-reversed"/> :
+                this.state.choice.label === choice.label && <QbIcon className="choiceQBIcon" icon="check-reversed"/> :
                     null}
                 <div className="choiceLabel">{choice.value.displayValue}</div>
             </div>);
