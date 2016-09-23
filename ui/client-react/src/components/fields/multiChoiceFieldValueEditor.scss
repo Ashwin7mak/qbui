@@ -1,4 +1,7 @@
+@import '../../assets/css/qbVariables';
+
 $multi-choice-field-box-height: 32px;
+
 .choiceLabel {
    padding-top: 6px;
    padding-bottom: 6px;
@@ -32,4 +35,54 @@ input[type="radio"], input[type="checkbox"] {
   margin: 9px;
   height: 16px;
   width: 16px;
+}
+
+.multiChoiceRadioContainer {
+    .Select {
+        .Select-control {
+            height: $multi-choice-field-box-height;
+            border-radius: 2px;
+            border: solid 1px $input-text-normal-border-color;
+            box-shadow: none;
+            outline: none;
+
+            .Select-input {
+                height: $multi-choice-field-box-height;
+                padding-left: 2px;
+            }
+            .Select-value {
+                padding-right: 40px;
+                padding-left: 3px;
+                line-height: $multi-choice-field-box-height;
+            }
+            .Select-placeholder {
+                line-height: $multi-choice-field-box-height;
+                padding-left: 3px;
+                font-style: italic;
+            }
+        }
+    }
+    .Select-menu-outer {
+        border: solid 1px $input-text-normal-border-color;
+        box-shadow: none;
+        border-bottom-right-radius: 2px;
+        border-bottom-left-radius: 2px;
+
+        .Select-menu {
+            .Select-option {
+
+                padding-left: 32px;
+                padding-top: 4px;
+                padding-bottom: 4px;
+
+                .qbIcon {
+                    position: absolute;
+                    left: 0;
+                    margin-top: 1px;
+                    font-size: 16px;
+                    padding: 7px;
+                }
+            }
+        }
+    }
 }

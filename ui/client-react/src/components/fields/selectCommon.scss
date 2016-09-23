@@ -3,63 +3,49 @@
 /* common styles for fields using react-select */
 
 $selected-choice-color: $color-cyan-500;
-$multi-choice-field-box-height: 28px;
+$select-control-height: 28px;
 
 .Select {
-  width: 100%;
+    width: 100%;
 
-  .Select-control {
-    height:$multi-choice-field-box-height;
-    border-radius: 2px;
-    border: solid 1px $input-text-normal-border-color;
-    box-shadow: none;
-    outline: none;
+    .Select-control {
+        height:$select-control-height;
 
-    .Select-input {
-      height:$multi-choice-field-box-height;
-      padding-left:2px;
-    }
-    .Select-value {
-      padding-right: 40px;
-      padding-left:3px;
-      line-height: 28px;
-    }
-    .Select-placeholder {
-      line-height: $multi-choice-field-box-height;
-      padding-left: 3px;
-      font-style: italic;
-    }
-  }
-
-  .Select-menu-outer {
-    max-height: 340px;
-    min-width: 100%;
-    width:auto;
-    border: solid 1px $input-text-normal-border-color;
-    box-shadow: none;
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 2px;
-
-    .Select-menu {
-      max-height: 340px;
-      overflow-y:auto;
-      overflow-x:hidden;
-
-      .Select-option {
-        position: relative;
-        padding-left:32px;
-        padding-top:4px;
-        padding-bottom:4px;
-
-        .qbIcon {
-          position:absolute;
-          left:0;
-          margin-top:1px;
-          font-size:16px;
-          padding: 7px;
-          color: $selected-choice-color;
+        .Select-input {
+            height:$select-control-height;
+            padding-left:2px;
+            padding-top:0;
+            padding-bottom:0;
         }
-      }
+        .Select-value {
+            padding-right: 40px;
+            padding-left:3px;
+            line-height: $select-control-height;
+        }
+        .Select-placeholder {
+            line-height: $select-control-height;
+            padding-left: 3px;
+            font-style: italic;
+        }
     }
-  }
+
+    .Select-menu-outer {
+        max-height: 340px; // shouldn't be taller than bottom margin on grid or it will clip
+        min-width: 100%;
+        width:auto;
+
+        .Select-menu {
+            max-height: 338px;
+            overflow-y:auto;
+            overflow-x:hidden;
+
+            .Select-option {
+                position: relative;
+                .qbIcon {
+                    position: absolute;
+                    color: $selected-choice-color;
+                }
+            }
+        }
+    }
 }

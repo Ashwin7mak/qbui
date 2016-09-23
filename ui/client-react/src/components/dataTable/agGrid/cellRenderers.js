@@ -128,6 +128,7 @@ const CellRenderer = React.createClass({
         case FieldFormats.PHONE_FORMAT:           return "phoneFormat";
         case FieldFormats.TEXT_FORMAT:            return "textFormat";
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
+        case FieldFormats.USER_FORMAT:            return "userFormat";
         default:                                  return "textFormat";
         }
     },
