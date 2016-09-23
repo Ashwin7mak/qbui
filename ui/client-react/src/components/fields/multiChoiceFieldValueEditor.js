@@ -158,29 +158,29 @@ const MultiChoiceFieldValueEditor = React.createClass({
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
 
         let choice;
-        if (!this.props.showAsRadio) {
-            choice = this.props.value ? this.state.choice : false;
-        } else {
+        if (this.props.showAsRadio) {
             choice = this.props.value ? this.state.choice : '';
+        } else {
+            choice = this.props.value ? this.state.choice : false;
         }
 
         return (
             <div className="multiChoiceContainer">
-                {!this.props.showAsRadio ?
-                    <Select
-                        tabIndex="0"
-                        value={choice}
-                        optionRenderer={this.renderOption}
-                        options={options}
-                        onChange={this.selectChoice}
-                        placeholder={placeHolderMessage}
-                        noResultsText={notFoundMessage}
-                        autosize={false}
-                        clearable={false}
-                        onBlur={this.onBlur} /> :
+                {this.props.showAsRadio ?
                     <div className="multiChoiceRadioContainer">
                         { options }
-                    </div>
+                    </div> :
+                    <Select
+                    tabIndex="0"
+                    value={choice}
+                    optionRenderer={this.renderOption}
+                    options={options}
+                    onChange={this.selectChoice}
+                    placeholder={placeHolderMessage}
+                    noResultsText={notFoundMessage}
+                    autosize={false}
+                    clearable={false}
+                    onBlur={this.onBlur} />
                 }
             </div>
         );
