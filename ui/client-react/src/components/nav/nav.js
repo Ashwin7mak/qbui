@@ -70,7 +70,7 @@ export let Nav = React.createClass({
         if (Breakpoints.isSmallBreakpoint()) {
             flux.actions.toggleLeftNav(false);
         }
-        flux.actions.showTrowser();
+        flux.actions.showTrowser("reports");
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
     },
 
@@ -120,20 +120,32 @@ export let Nav = React.createClass({
      */
     getTrowserContent() {
 
+        switch (this.state.nav.trowserContent) {
+        case "reports" :
+        {
 
-        let selectReport = (report) => {
-            this.hideTrowser();
-            setTimeout(() => {
-                // give UI transition a moment to execute
-                if (this.props.router) {
-                    this.props.router.push(report.link);
-                }
-            });
-        };
+            let selectReport = (report) => {
+                this.hideTrowser();
+                setTimeout(() => {
+                    // give UI transition a moment to execute
+                    if (this.props.router) {
+                        this.props.router.push(report.link);
+                    }
+                });
+            };
 
-        return <ReportManager reportsData={this.state.reportsData}
-                              onSelectReport={selectReport}
-                              filterReportsName={this.state.nav.filterReportsName} />;
+            return <ReportManager reportsData={this.state.reportsData}
+                                  onSelectReport={selectReport}
+                                  filterReportsName={this.state.nav.filterReportsName}/>;
+        }
+        case "record":
+        {
+            return "stick the report crap here";
+        }
+        default: {
+            return "no content specified...";
+        }
+        }
     },
 
     /* toggle apps list - if on collapsed nav, open left nav and display apps */

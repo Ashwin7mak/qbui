@@ -40,20 +40,23 @@ function updateQueryStringParam(key, value) {
     }
     window.history.replaceState({}, "", baseUrl + params);
 };
+
 let formActions = {
 
-    openRecordForEdit(appId, tblId, recordId, rptId) {
+    openRecordForEdit(appId, tblId, rptId = null, recordId = null) {
         console.log('edit', recordId);
         console.log(browserHistory);
         console.log(this);
 
-        updateQueryStringParam("er",recordId);
+
+        updateQueryStringParam("er",recordId ? recordId : "new");
 
         this.flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, "edit").then(() => {
             console.log('loaded form');
-            this.dispatch(actions.SHOW_TROWSER);
+            this.dispatch(actions.SHOW_TROWSER, "record");
         });
     },
+
 
     loadFormAndRecord(appId, tblId, recordId, rptId, formType) {
         //  promise is returned in support of unit testing only

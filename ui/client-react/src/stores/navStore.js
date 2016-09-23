@@ -17,6 +17,7 @@ let NavStore = Fluxxor.createStore({
             showTopNav: true,
             searching:false,
             trowserOpen: false,
+            trowserContent: null,
             topTitle: null,
             scrollingReport: false,
             filterReportsName: ''
@@ -46,8 +47,9 @@ let NavStore = Fluxxor.createStore({
         this.setLocaleBundle();
         this.emit('change');
     },
-    onShowTrowser: function() {
+    onShowTrowser: function(content) {
         this.state.trowserOpen = true;
+        this.state.trowserContent = content;
         this.emit('change');
     },
     onHideTrowser: function() {

@@ -5,8 +5,8 @@ import Breakpoints from '../utils/breakpoints';
 
 let navActions = {
 
-    showTrowser() {
-        this.dispatch(actions.SHOW_TROWSER);
+    showTrowser(what) {
+        this.dispatch(actions.SHOW_TROWSER, what);
     },
     hideTrowser() {
         this.dispatch(actions.HIDE_TROWSER);
