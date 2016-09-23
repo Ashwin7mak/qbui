@@ -302,11 +302,12 @@
       "Metadata": {
         "AWS::CloudFormation::Init": {
           "configSets": {
-            "default": [ "run_chef", "verify_instance_health" ]
+            "default": [
+              "run_chef",
+              "verify_instance_health"
+            ]
           },
           "run_chef": {
-            //GET SECRETS
-            //APP_ENV
             "files": {
               "/dev/shm/chef-attributes-int.json": {
                 "content": {
@@ -315,7 +316,17 @@
                       "index": "quickbase-ppdidx",
                       "logs_to_index": {
                         "default": {
-                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
+                          "_meta": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "aws_stack_name::",
+                                {
+                                  "Ref": "AWS::StackName"
+                                }
+                              ]
+                            ]
+                          }
                         },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
@@ -323,6 +334,14 @@
                           "blacklist": "\\.(gz|bz2|z|zip)$"
                         }
                       }
+                    }
+                  },
+                  "nodejs": {
+                    "reconfig": {
+                      "node_internal_env": "PRE_PROD",
+                      "rest_endpoint": "https://localhost.api.trunk.newstack.quickbaserocks.com",
+                      "route_group": "LH_V1",
+                      "stack_name": "TRUNK-int-nodejs"
                     }
                   }
                 }
@@ -334,7 +353,17 @@
                       "index": "quickbase-ppdidx",
                       "logs_to_index": {
                         "default": {
-                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
+                          "_meta": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "aws_stack_name::",
+                                {
+                                  "Ref": "AWS::StackName"
+                                }
+                              ]
+                            ]
+                          }
                         },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
@@ -353,7 +382,17 @@
                       "index": "quickbase-prdidx",
                       "logs_to_index": {
                         "default": {
-                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
+                          "_meta": {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "aws_stack_name::",
+                                {
+                                  "Ref": "AWS::StackName"
+                                }
+                              ]
+                            ]
+                          }
                         },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
@@ -371,7 +410,18 @@
                 "command": "/opt/splunkforwarder/bin/splunk set default-hostname $(hostname) -auth admin:changeme"
               },
               "02_run_chef": {
-                "command": { "Fn::Join": ["",["chef-client -z -o splunkclouduf::configure -j /dev/shm/chef-attributes-", {"Ref": "paramEnvironment"}, ".json"]] },
+                "command": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "chef-client -z -o nodejs::reconfig -j /dev/shm/chef-attributes-",
+                      {
+                        "Ref": "paramEnvironment"
+                      },
+                      ".json"
+                    ]
+                  ]
+                },
                 "cwd": "/tmp/chef-repo"
               },
               "03_status": {
@@ -385,20 +435,29 @@
           "verify_instance_health": {
             "commands": {
               "ELBHealthCheck": {
-                "command": { "Fn::Join": ["", [
-                  "until [ \"$state\" == \"\\\"InService\\\"\" ]; do ",
-                  "  state=$(aws --region $(cat /tmp/region) elb describe-instance-health ",
-                  "              --load-balancer-name ", { "Ref": "ElasticLoadBalancer" },
-                  "              --instances $(cat /tmp/instance-id) ",
-                  "              --query InstanceStates[0].State); ",
-                  "  sleep 10; ",
-                  "done"
-                ]]}
+                "command": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "until [ \"$state\" == \"\\\"InService\\\"\" ]; do ",
+                      "  state=$(aws --region $(cat /tmp/region) elb describe-instance-health ",
+                      "              --load-balancer-name ",
+                      {
+                        "Ref": "ElasticLoadBalancer"
+                      },
+                      "              --instances $(cat /tmp/instance-id) ",
+                      "              --query InstanceStates[0].State); ",
+                      "  sleep 10; ",
+                      "done"
+                    ]
+                  ]
+                }
               }
             }
           }
         }
-      },
+      }
+    },
       "Properties": {
         "ImageId": {"Ref": "paramEC2ImageAMI"},
         "InstanceType": {"Ref": "paramInstanceType"},
