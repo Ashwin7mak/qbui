@@ -9,13 +9,25 @@ import NumericFieldValueRendererMetadata from 'component-metadata!../../../clien
 import NumericFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/numericFieldValueEditor.js';
 import UserFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueRenderer.js';
 import UserFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueEditor.js';
+// END OF IMPORT STATEMENTS
+// above comment used for grunt task, please do not delete
 
 import _ from 'lodash';
 
-var Metadata = _.merge(QBPanelMetadata, QBIconMetadata,
-    TextFieldValueRendererMetadata, TextFieldValueEditorMetadata,
-    FieldValueRendererMetadata, FieldValueEditorMetadata, MultiLineTextFieldValueEditorMetadata,
-    NumericFieldValueRendererMetadata, NumericFieldValueEditorMetadata,
-    UserFieldValueRendererMetadata, UserFieldValueEditorMetadata);
+var Metadata = _.merge(
+    QBPanelMetadata,
+    QBIconMetadata,
+    TextFieldValueRendererMetadata,
+    TextFieldValueEditorMetadata,
+    FieldValueRendererMetadata,
+    FieldValueEditorMetadata,
+    MultiLineTextFieldValueEditorMetadata,
+    NumericFieldValueRendererMetadata,
+    NumericFieldValueEditorMetadata,
+    UserFieldValueRendererMetadata,
+    UserFieldValueEditorMetadata
+    // END OF METADATA MERGE
+    // above comment used for grunt task, please do not delete
+);
 
 export default Metadata;
