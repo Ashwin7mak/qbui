@@ -53,16 +53,13 @@ const MultiChoiceFieldValueEditor = React.createClass({
         };
 
     },
-    onClick(ev) {
-        this.selectChoice(ev.target.value);
-    },
     /**
      * Set the user selection to component state
      * @param choice
      */
-    selectChoice(choice) {
+    selectChoice(event) {
         this.setState({
-            choice: choice
+            choice: event.target.value
         });
     },
     /**
@@ -94,7 +91,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         } else {
             choices = choices ?
                 choices.map(choice => {
-                    return (<label key={choice.coercedValue.value} className="multiChoiceRadioOption" onClick={this.onClick} onBlur={this.onBlur}>
+                    return (<label key={choice.coercedValue.value} className="multiChoiceRadioOption" onClick={this.selectChoice} onBlur={this.onBlur}>
                                 <input type="radio" name={this.props.radioGroupName} value={choice.coercedValue.value} checked={this.state.choice === choice.coercedValue.value} onChange={this.onClick}/>
                                 {choice.displayValue}
                                 <br />
