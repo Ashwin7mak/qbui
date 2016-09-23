@@ -4,7 +4,8 @@ import TestUtils from 'react-addons-test-utils';
 import MultiChoiceFieldValueEditor  from '../../src/components/fields/multiChoiceFieldValueEditor';
 
 const listbox_renderWithSelection = {
-    choices: [{value: 'Apples', label: 'Apples'},
+    choices: [
+                {value: 'Apples', label: 'Apples'},
                 {value: 'Apricots', label: 'Apricots'},
                 {value: 'Bananas', label: 'Bananas'},
     ],
@@ -12,7 +13,8 @@ const listbox_renderWithSelection = {
 };
 
 const listbox_noEmptyChoicesData = {
-    choices: [{value:'1701a', label:'Enterprise 1701 A'},
+    choices: [
+                {value:'1701a', label:'Enterprise 1701 A'},
                 {value:'1701b', label:'Enterprise 1701 B'},
                 {value:'1701c', label:'Enterprise 1701 C'},
                 {value:'1701d', label:'Enterprise 1701 D'},
