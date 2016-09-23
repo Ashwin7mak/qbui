@@ -61,17 +61,9 @@ const MultiChoiceFieldValueEditor = React.createClass({
      * @param choice
      */
     selectChoice(choice) {
-        console.log('this.props.showAsRadio: ', this.props.showAsRadio);
-        console.log('selectChoice choice: ', choice);
-        if (!this.props.showAsRadio) {
-            this.setState({
-                choice: choice
-            });
-        } else {
-            this.setState({
-                choice: {label: choice}
-            });
-        }
+        this.setState({
+            choice: choice
+        });
     },
     /**
      * Populate items for component render
@@ -138,8 +130,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     renderOption(choice) {
-        console.log('this.state.choice: ', this.state.choice);
-        console.log('choice: ', choice);
         return (
             <div>
                 {this.state.choice.label !== '' ?

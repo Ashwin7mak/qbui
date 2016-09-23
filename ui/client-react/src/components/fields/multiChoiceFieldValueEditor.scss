@@ -18,6 +18,10 @@ $multi-choice-field-box-height: 32px;
    width:auto;
 }
 
+.multiChoiceRadioOption {
+   display: inline;
+}
+
 input[type="radio"], input[type="checkbox"] {
   margin: 9px;
   height: 16px;
