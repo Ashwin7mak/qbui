@@ -7,6 +7,7 @@ const basic<%= componentName %>Example = (
         <dd>
             <<%= componentName %> />
         </dd>
+    </div>
 );
 
 ReactDOM.render(basic<%= componentName %>Example, mountNode);
