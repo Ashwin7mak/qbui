@@ -68,11 +68,24 @@ const MultiChoiceFieldValueEditor = React.createClass({
      */
     getSelectItems() {
         let choices = this.props.choices;
-        /*
-         * Checks to see if multi choice should be displayed as radio buttons and if the field is required.
-         * If the field is not required, append '<None>' as the last radio button
-         * */
-        if (!this.props.showAsRadio) {
+        if (this.props.showAsRadio) {
+            choices = choices ?
+                choices.map(choice => {
+                    return (<label key={choice.coercedValue.value} className="multiChoiceRadioOption" onClick={this.selectChoice} onBlur={this.onBlur}>
+                        <input type="radio" name={this.props.radioGroupName} value={choice.coercedValue.value} checked={this.state.choice === choice.coercedValue.value} onChange={this.onClick}/>
+                        {choice.displayValue}
+                        <br />
+                    </label>);
+                }) : [];
+            // Add none option if the field is not required
+            if (this.props.fieldDef && this.props.fieldDef.required === false) {
+                choices.push(<label key={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE} className="multiChoiceRadioOption" onClick={this.onClick} onBlur={this.onBlur}>
+                    <input type="radio" name={this.props.radioGroupName} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE} checked={this.state.choice === ""} onChange={this.onClick}/>{CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}
+                    <br />
+                </label>);
+            }
+            return choices;
+        } else {
             /**
              *This is commented out right now, because the current Schema in core does not accept/save null inputs
              * This gives the user the ability to select an empty space as an input
@@ -88,23 +101,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
                         label: choice.displayValue
                     };
                 }) : [];
-        } else {
-            choices = choices ?
-                choices.map(choice => {
-                    return (<label key={choice.coercedValue.value} className="multiChoiceRadioOption" onClick={this.selectChoice} onBlur={this.onBlur}>
-                                <input type="radio" name={this.props.radioGroupName} value={choice.coercedValue.value} checked={this.state.choice === choice.coercedValue.value} onChange={this.onClick}/>
-                                {choice.displayValue}
-                                <br />
-                            </label>);
-                }) : [];
-            // Add none option if the field is not required
-            if (this.props.fieldDef && this.props.fieldDef.required === false) {
-                choices.push(<label key={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE} className="multiChoiceRadioOption" onClick={this.onClick} onBlur={this.onBlur}>
-                                <input type="radio" name={this.props.radioGroupName} value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE} checked={this.state.choice === ""} onChange={this.onClick}/>{CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_MESSAGE}
-                                <br />
-                            </label>);
-            }
-            return choices;
         }
     },
 
