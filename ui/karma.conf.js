@@ -3,6 +3,7 @@
 var path = require("path");
 var webpack = require('webpack');
 var nodeModulesPath = path.resolve(__dirname, "node_modules");
+var npmComponentsPath = path.resolve(__dirname, "client-react/src/components/npm");
 
 module.exports = function(config) {
     "use strict";
@@ -41,7 +42,7 @@ module.exports = function(config) {
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "componentLibrary/test")
                         ],
-                        exclude: [nodeModulesPath],
+                        exclude: [nodeModulesPath, npmComponentsPath],
                         loader: "babel-loader",
                         query: {
                             plugins: ['babel-plugin-rewire', 'babel-plugin-rewire-ignore-coverage']
@@ -55,7 +56,6 @@ module.exports = function(config) {
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "node_modules/ag-grid"),
                             path.resolve(__dirname, "node_modules/react-notifications"),
-                            path.resolve(__dirname, "node_modules/react-bootstrap-datetimepicker"),
                             path.resolve(__dirname, 'node_modules/react-select')
                         ],
                         loader: "style!css"
@@ -97,6 +97,7 @@ module.exports = function(config) {
                         ],
                         exclude: [
                             nodeModulesPath,
+                            npmComponentsPath,
                             path.resolve(__dirname, "client-react/test"),
                             path.resolve(__dirname, "componentLibrary/test")
                         ],

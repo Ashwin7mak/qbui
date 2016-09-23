@@ -6,7 +6,7 @@ import QBToolTip from '../qbToolTip/qbToolTip';
 import Breakpoints from "../../utils/breakpoints";
 import './fields.scss';
 
-import DatePicker from '../npm/datetimePicker/lib/DateTimeField';
+import DatePicker from '../../components/npm/datetimePicker/lib/DateTimeField';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
 import moment from 'moment';
 

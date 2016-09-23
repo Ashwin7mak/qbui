@@ -44,7 +44,6 @@
     "react": "~15.0.1",
     "react-addons-css-transition-group": "15.0.0",
     "react-bootstrap": "^0.29.0",
-    "react-bootstrap-datetimepicker": "0.0.22",
     "react-codemirror": "^0.2.6",
     "react-cookie": "^0.3.4",
     "react-dom": "~15.0.1",
