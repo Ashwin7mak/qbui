@@ -663,7 +663,6 @@ module.exports = function(grunt) {
 
     // Load and register custom external grunt scripts
     // All grunt tasks in ../scripts/gruntTasks will be loaded/registered
-    grunt.log.ok('Loading external grunt tasks');
     grunt.loadTasks('../scripts/gruntTasks');
 
     // Production build
