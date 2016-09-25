@@ -139,14 +139,17 @@ module.exports = function(grunt) {
         var componentName = grunt.option('name');
         var componentPath = grunt.option('path');
         checkForRequiredOptions(componentName, componentPath);
-        var componentFileName = getComponentFileName(componentPath);
 
-        // Create an object for passing information to templates and subfunctions
+        // Important paths
+        var componentFileName = getComponentFileName(componentPath);
         var componentLibraryPath = 'componentLibrary/';
         var componentLibrarySrcPath = componentLibraryPath + 'src/';
+
+        // Create an object for passing information to templates and subfunctions
         var componentData = {
             componentName: componentName,
             componentPath: componentPath,
+            componentFileName: componentFileName,
             // Component Library Info
             componentLibraryPath: componentLibraryPath,
             componentLibrarySrcPath: componentLibrarySrcPath,
