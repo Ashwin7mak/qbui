@@ -12,6 +12,15 @@ Welcome to the QuickBase component library. This is a little wrapper that lets u
 For example:
 `$ grunt addComponentToLibrary --name=MyNewComponent --path=client-react/src/components/myNewComponent.js`
 
+#### Grunt Task Dependencies
+
+(All paths relative to qbui/ui/componentLibrary/src/)
+
+1. `components/Examples.js` exists and has two comments (`// END OF IMPORT` and `// END OF EXPORT`)
+2. `components/Metadata.js` exists and has two comments (`// END OF IMPORT STATEMENTS` and `// END OF METADATA MERGE`)
+3. `components/componentLibrary` exists and has a `<nav>` block
+4. `components/ReactPlayground.js` exists and has a comment (`// END OF IMPORT STATEMENTS`)
+5. `index.js` exists and has a `<Route>` block
 
 ### For reference:
 1. Setup a new 'doc' file in `componentLibrary/src/docs`. You can use the other files as an example.
@@ -39,7 +48,7 @@ There is a component for taking the proptype documentation and turning it into a
 <PropTable component="QBicon" metadata={Metadata} />
 ```
 
-*TODO: Metadata can be passed automatically through the [tree using Context](https://facebook.github.io/react/docs/context.html). This would make it so that we don't have to pass in the `Metadata` object every time it's added to the page. Same with `ReactPlayground`.
+*TODO:* Metadata can be passed automatically through the [tree using Context](https://facebook.github.io/react/docs/context.html). This would make it so that we don't have to pass in the `Metadata` object every time it's added to the page. Same with `ReactPlayground`.
 
 
 ### ReactPlayground
