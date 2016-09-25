@@ -55,9 +55,15 @@ module.exports = function(grunt) {
         var metaDataFileArray = metaDataFile.split("\n");
 
         var endOfImport = metaDataFileArray.indexOf(IMPORT_COMMENT);
+        if (endOfImport < 0) {
+            grunt.log.error('// END OF IMPORT comment missing from Metadata.js. Import may be misplaced.');
+        }
         metaDataFileArray.splice(endOfImport, 0, 'import ' + componentData.componentName + "Metadata from 'component-metadata!../../../" + componentData.componentPath + "';");
 
         var endOfMerge = metaDataFileArray.indexOf(METADATA_MERGE_COMMENT);
+        if (endOfMerge < 0) {
+            grunt.log.error('// END OF MERGE comment missing from Metadata.js. Statement may be misplaced.');
+        }
         metaDataFileArray[endOfMerge - 1] = metaDataFileArray[endOfMerge - 1] + ',';
         metaDataFileArray.splice(endOfMerge, 0, '    ' + componentData.componentName + 'Metadata');
 
@@ -73,10 +79,16 @@ module.exports = function(grunt) {
     function addToExamples(componentData) {
         // --- Add example to Examples.js ---
         var examplesFileArray = grunt.file.read(componentData.examplesFile).split("\n");
-        endOfImport = examplesFileArray.indexOf(IMPORT_COMMENT);
+        var endOfImport = examplesFileArray.indexOf(IMPORT_COMMENT);
+        if (endOfImport < 0) {
+            grunt.log.error('// END OF IMPORT comment missing from Examples.js. Import may be misplaced.');
+        }
         examplesFileArray.splice(endOfImport, 0, 'import ' + componentData.componentName + "Example from 'raw!../examples/" + componentData.componentName + "Example.js';");
 
         var endOfExport = examplesFileArray.indexOf(EXAMPLES_END_EXPORT_COMMENT);
+        if (endOfExport < 0) {
+            grunt.log.error('// END OF EXPORT comment missing from Examples.js. Statement may be misplaced.');
+        }
         examplesFileArray.splice(endOfExport, 0, '    ' + componentData.componentName + ': ' + componentData.componentName + 'Example,');
 
         grunt.file.write(componentData.examplesFile, examplesFileArray.join("\n"));
@@ -85,7 +97,10 @@ module.exports = function(grunt) {
     function addToPlayground(componentData) {
         // --- Import component to ReactPlayground.js ---
         var playgroundFileArray = grunt.file.read(componentData.playgroundFile).split("\n");
-        endOfImport = playgroundFileArray.indexOf(IMPORT_COMMENT);
+        var endOfImport = playgroundFileArray.indexOf(IMPORT_COMMENT);
+        if (endOfImport < 0) {
+            grunt.log.error('// END OF IMPORT comment missing from ReactPlayground.js. Import may be misplaced.');
+        }
         playgroundFileArray.splice(endOfImport, 0, 'const ' + componentData.componentName + " = require('../../../" + componentData.componentPath + "');");
         grunt.file.write(componentData.playgroundFile, playgroundFileArray.join("\n"));
     }
@@ -94,7 +109,10 @@ module.exports = function(grunt) {
         // --- Add a route to index.js ---
         var indexFileArray = grunt.file.read(componentData.indexFile).split("\n");
 
-        endOfImport = indexFileArray.indexOf(IMPORT_COMMENT);
+        var endOfImport = indexFileArray.indexOf(IMPORT_COMMENT);
+        if (endOfImport < 0) {
+            grunt.log.error('// END OF IMPORT comment missing from index.js. Import may be misplaced.');
+        }
         indexFileArray.splice(endOfImport, 0, 'import ' + componentData.componentName + "Doc from './docs/" + componentData.componentFileName + "';")
 
         // Extra spacing here to match indentation
