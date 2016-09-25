@@ -36,3 +36,4 @@ const QBicon = React.createClass({
 });
 
 export default QBicon;
+

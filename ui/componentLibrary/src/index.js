@@ -28,6 +28,7 @@ import FieldValueEditorDoc from './docs/fieldValueEditor';
 import MultiLineTextFieldValueEditorDoc from './docs/multiLineTextFieldValueEditor';
 import NumericFieldDoc from './docs/numericFieldValueRenderer';
 import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
+import MultiChoiceFieldValueEditorDoc from './docs/multiChoiceFieldValueEditor';
 import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import UserFieldEditorDoc from './docs/userFieldValueEditor';
 // END OF IMPORT STATEMENTS
@@ -47,6 +48,7 @@ render((
             <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
             <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
+            <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

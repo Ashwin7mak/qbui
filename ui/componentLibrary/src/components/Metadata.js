@@ -7,6 +7,7 @@ import FieldValueEditorMetadata from 'component-metadata!../../../client-react/s
 import MultiLineTextFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiLineTextFieldValueEditor.js';
 import NumericFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/numericFieldValueRenderer.js';
 import NumericFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/numericFieldValueEditor.js';
+import MultiChoiceFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiChoiceFieldValueEditor.js';
 import UserFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueRenderer.js';
 import UserFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueEditor.js';
 // END OF IMPORT STATEMENTS
@@ -25,7 +26,8 @@ var Metadata = _.merge(
     NumericFieldValueRendererMetadata,
     NumericFieldValueEditorMetadata,
     UserFieldValueRendererMetadata,
-    UserFieldValueEditorMetadata
+    UserFieldValueEditorMetadata,
+    MultiChoiceFieldValueEditorMetadata
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete
 );

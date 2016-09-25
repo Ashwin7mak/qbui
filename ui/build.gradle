@@ -99,6 +99,7 @@ def executorId = System.getenv("EXECUTOR_NUMBER");
 def sauceURL = "http://quickbase-dev.com:9000";
 def sauceKey = System.getenv("SAUCE_KEY");
 def sauceJobName = "JENKINS_UI_E2E_" + System.getenv("BUILD_NUMBER");
+def sauceProdJobName = "JENKINS_UI_E2E_PROD_SMOKETEST" + System.getenv("BUILD_NUMBER");
 def tunnelIdentifier = "JENKINS_TUNNEL_E2E_" + System.getenv("BUILD_NUMBER");
 
 // TODO: Pull the code below out into a separate groovy class - QBSE-19142
@@ -443,11 +444,19 @@ task gruntCiE2ETestsNoColor(type: GruntTask) {
     finalizedBy stopTomcat
 }
 
-//browser tests in AWS
+//browser tests in AWS running in sauce labs against a candidate build
 task gruntE2EAWSSauce(type: GruntTask) {
     doFirst {
         tasks.invokeInstallSauceLabs.execute()
         args = ["test:e2eAWSSauce", "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
+    }
+}
+
+//browser tests in AWS that run on Sauce labs against production
+task gruntE2EProdSauce(type: GruntTask) {
+    doFirst {
+        tasks.invokeInstallSauceLabs.execute()
+        args = ["test:e2eProdSauce", "--sauceKey", sauceKey, "--sauceJobName", sauceProdJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
 }
 

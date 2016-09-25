@@ -20,7 +20,8 @@
             DATA_IS_COPYABLE      : 'dataIsCopyable',
             INCLUDE_IN_QUICKSEARCH: 'includeInQuickSearch',
             CLIENT_SIDE_ATTRIBUTES: 'clientSideAttributes',
-            DATA_TYPE_ATTRIBUTES  : 'datatypeAttributes'
+            DATA_TYPE_ATTRIBUTES  : 'datatypeAttributes',
+            MULTIPLE_CHOICE       : 'multipleChoice'
         },
         /******************************************************************/
         /*            FIELD TYPES AVAILABLE FOR USE IN TABLES             */
