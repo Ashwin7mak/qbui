@@ -56,13 +56,13 @@ module.exports = function(grunt) {
 
         var endOfImport = metaDataFileArray.indexOf(IMPORT_COMMENT);
         if (endOfImport < 0) {
-            grunt.log.error('// END OF IMPORT comment missing from Metadata.js. Import may be misplaced.');
+            grunt.log.error(IMPORT_COMMENT + ' comment missing from Metadata.js. Import may be misplaced.');
         }
         metaDataFileArray.splice(endOfImport, 0, 'import ' + componentData.componentName + "Metadata from 'component-metadata!../../../" + componentData.componentPath + "';");
 
         var endOfMerge = metaDataFileArray.indexOf(METADATA_MERGE_COMMENT);
         if (endOfMerge < 0) {
-            grunt.log.error('// END OF MERGE comment missing from Metadata.js. Statement may be misplaced.');
+            grunt.log.error(METADATA_MERGE_COMMENT + ' comment missing from Metadata.js. Statement may be misplaced.');
         }
         metaDataFileArray[endOfMerge - 1] = metaDataFileArray[endOfMerge - 1] + ',';
         metaDataFileArray.splice(endOfMerge, 0, '    ' + componentData.componentName + 'Metadata');
@@ -81,13 +81,13 @@ module.exports = function(grunt) {
         var examplesFileArray = grunt.file.read(componentData.examplesFile).split("\n");
         var endOfImport = examplesFileArray.indexOf(IMPORT_COMMENT);
         if (endOfImport < 0) {
-            grunt.log.error('// END OF IMPORT comment missing from Examples.js. Import may be misplaced.');
+            grunt.log.error(IMPORT_COMMENT + ' comment missing from Examples.js. Import may be misplaced.');
         }
         examplesFileArray.splice(endOfImport, 0, 'import ' + componentData.componentName + "Example from 'raw!../examples/" + componentData.componentName + "Example.js';");
 
         var endOfExport = examplesFileArray.indexOf(EXAMPLES_END_EXPORT_COMMENT);
         if (endOfExport < 0) {
-            grunt.log.error('// END OF EXPORT comment missing from Examples.js. Statement may be misplaced.');
+            grunt.log.error(EXAMPLES_END_EXPORT_COMMENT + ' comment missing from Examples.js. Statement may be misplaced.');
         }
         examplesFileArray.splice(endOfExport, 0, '    ' + componentData.componentName + ': ' + componentData.componentName + 'Example,');
 
@@ -99,7 +99,7 @@ module.exports = function(grunt) {
         var playgroundFileArray = grunt.file.read(componentData.playgroundFile).split("\n");
         var endOfImport = playgroundFileArray.indexOf(IMPORT_COMMENT);
         if (endOfImport < 0) {
-            grunt.log.error('// END OF IMPORT comment missing from ReactPlayground.js. Import may be misplaced.');
+            grunt.log.error(IMPORT_COMMENT + ' comment missing from ReactPlayground.js. Import may be misplaced.');
         }
         playgroundFileArray.splice(endOfImport, 0, 'const ' + componentData.componentName + " = require('../../../" + componentData.componentPath + "');");
         grunt.file.write(componentData.playgroundFile, playgroundFileArray.join("\n"));
@@ -111,7 +111,7 @@ module.exports = function(grunt) {
 
         var endOfImport = indexFileArray.indexOf(IMPORT_COMMENT);
         if (endOfImport < 0) {
-            grunt.log.error('// END OF IMPORT comment missing from index.js. Import may be misplaced.');
+            grunt.log.error(IMPORT_COMMENT + ' comment missing from index.js. Import may be misplaced.');
         }
         indexFileArray.splice(endOfImport, 0, 'import ' + componentData.componentName + "Doc from './docs/" + componentData.componentFileName + "';")
 
