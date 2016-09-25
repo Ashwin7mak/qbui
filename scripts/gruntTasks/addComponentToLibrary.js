@@ -52,7 +52,7 @@ module.exports = function(grunt) {
         };
 
         // ---  Create Component Doc File ---
-        var docTemplate = grunt.file.read(componentLibraryTemplatePath + 'doc.tmpl.js');
+        var docTemplate = grunt.file.read(componentLibraryTemplatePath + 'doc.tmpl');
         grunt.file.write(docFile, grunt.template.process(docTemplate, {data: componentData}));
 
         // --- Update Metadata.js ---
@@ -68,7 +68,7 @@ module.exports = function(grunt) {
         grunt.file.write(metaDataFilePath, metaDataFileArray.join("\n"));
 
         // // --- Generate default example ---
-        var exampleTemplate = grunt.file.read(componentLibraryTemplatePath + 'example.tmpl.js');
+        var exampleTemplate = grunt.file.read(componentLibraryTemplatePath + 'example.tmpl');
         grunt.file.write(exampleFile, grunt.template.process(exampleTemplate, {data: componentData}));
 
         // // --- Add example to Examples.js ---
@@ -94,7 +94,7 @@ module.exports = function(grunt) {
         indexFileArray.splice(endOfImport, 0, 'import ' + componentName + "Doc from './docs/" + componentFileName + "';")
 
         var endOfRoutes = indexFileArray.indexOf('        </Route>');
-        var routeTemplate = grunt.file.read(componentLibraryTemplatePath + 'route.tmpl.js');
+        var routeTemplate = grunt.file.read(componentLibraryTemplatePath + 'route.tmpl');
         // Slice on the end removes extra newline
         indexFileArray.splice(endOfRoutes, 0, grunt.template.process(routeTemplate, {data: componentData}).slice(0, -1));
 
@@ -103,7 +103,7 @@ module.exports = function(grunt) {
         // // --- Add link to componentLibrary.js ---
         var routesFileArray = grunt.file.read(routesFile).split("\n");
         var endOfLinks = routesFileArray.indexOf('                    </nav>') - 1;
-        var linkTemplate = grunt.file.read(componentLibraryTemplatePath + 'link.tmpl.js');
+        var linkTemplate = grunt.file.read(componentLibraryTemplatePath + 'link.tmpl');
         routesFileArray.splice(endOfLinks, 0, grunt.template.process(linkTemplate, {data: componentData}).slice(0, -1));
         grunt.file.write(routesFile, routesFileArray.join("\n"));
 
