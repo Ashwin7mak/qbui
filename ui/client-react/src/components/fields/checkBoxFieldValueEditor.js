@@ -5,6 +5,12 @@ import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
 
 import './checkbox.scss';
 
+/**
+ * # CheckBoxFieldValueEditor
+ *
+ * An editable checkbox for boolean or yes/no values.
+ *
+ */
 const CheckBoxFieldValueEditor = React.createClass({
     displayName: 'CheckBoxFieldValueEditor',
     propTypes: {

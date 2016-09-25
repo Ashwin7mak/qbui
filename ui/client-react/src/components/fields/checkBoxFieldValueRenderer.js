@@ -5,6 +5,12 @@ import {I18nMessage} from '../../utils/i18nMessage';
 
 let defaultSymbolClasses = 'symbol qbIcon ';
 
+/**
+ * # CheckBoxFieldValueRenderer
+ *
+ * Renders boolean or yes/no type values.
+ *
+ */
 const CheckBoxFieldValueRenderer = React.createClass({
     propTypes: {
         value: PropTypes.bool,
