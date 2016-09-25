@@ -28,17 +28,17 @@ module.exports = function(grunt) {
 
     function checkForRequiredOptions(componentName, componentPath) {
         // Must provide a component class name
-        if(!componentName){
+        if (!componentName) {
             grunt.fail.fatal('Please provide a component name with the flag --name');
         }
 
         // Must provide a path to the component
-        if(!componentPath){
+        if (!componentPath) {
             grunt.fail.fatal('Please provide a component path with the flag --path');
         }
 
         // Must be an existing file
-        if(!grunt.file.exists(componentPath)){
+        if (!grunt.file.exists(componentPath)) {
             grunt.fail.fatal('A component file does not exist at /qbui/ui/' + componentPath);
         }
     }
