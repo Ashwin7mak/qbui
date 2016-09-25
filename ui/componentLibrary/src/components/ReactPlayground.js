@@ -16,7 +16,7 @@ const NumericFieldValueRenderer = require('../../../client-react/src/components/
 const NumericFieldValueEditor = require('../../../client-react/src/components/fields/numericFieldValueEditor');
 const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer');
 const UserFieldValueEditor = require('../../../client-react/src/components/fields/userFieldValueEditor');
-// END OF REQUIRE STATEMENTS
+// END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
 /* eslint-enable */
