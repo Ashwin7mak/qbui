@@ -18,10 +18,10 @@ const UrlFieldValueEditor = React.createClass({
         return {
             value: '',
             allowedProtocols: []
-        }
+        };
     },
     render() {
-        return <TextFieldValueEditor {...this.props} />
+        return <TextFieldValueEditor {...this.props} />;
     }
 });
 
