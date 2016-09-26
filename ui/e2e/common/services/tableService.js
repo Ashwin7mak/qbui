@@ -5,6 +5,9 @@
 (function() {
     'use strict';
     // TODO: Will need to add in recordBase as a parameter here when we need it in future functions
+    //App generator module
+    var fieldGenerator = require('../../../test_generators/field.generator.js');
+
     module.exports = function() {
         var tableService = {
             /**
@@ -18,6 +21,9 @@
                     }
                 });
                 return nonBuiltInFields;
+            },
+            generateChoices : function(type, numChoices, options) {
+                return fieldGenerator.generateChoices(type, numChoices, options);
             }
         };
         return tableService;

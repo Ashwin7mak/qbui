@@ -42,6 +42,11 @@
                     return this;
                 },
 
+                withMultiChoice: function(multiChoice) {
+                    fieldUnderConstruction[fieldConstants.fieldKeys.MULTIPLE_CHOICE] = multiChoice;
+                    return this;
+                },
+
                 withTableId: function(tableId) {
                     fieldUnderConstruction[fieldConstants.fieldKeys.TABLE_ID] = tableId;
                     return this;

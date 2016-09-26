@@ -3,16 +3,16 @@
 /* common styles for fields using react-select */
 
 $selected-choice-color: $color-cyan-500;
+$select-control-height: 28px;
 
 .Select {
     width: 100%;
 
     .Select-control {
-        border: 0;
-        height:28px;
+        height:$select-control-height;
 
         .Select-input {
-            height:28px;
+            height:$select-control-height;
             padding-left:2px;
             padding-top:0;
             padding-bottom:0;
@@ -20,10 +20,10 @@ $selected-choice-color: $color-cyan-500;
         .Select-value {
             padding-right: 40px;
             padding-left:3px;
-            line-height: 28px;
+            line-height: $select-control-height;
         }
         .Select-placeholder {
-            line-height: 28px;
+            line-height: $select-control-height;
             padding-left: 3px;
             font-style: italic;
         }
@@ -31,6 +31,7 @@ $selected-choice-color: $color-cyan-500;
 
     .Select-menu-outer {
         max-height: 340px; // shouldn't be taller than bottom margin on grid or it will clip
+        min-width: 100%;
         width:auto;
 
         .Select-menu {
@@ -39,16 +40,9 @@ $selected-choice-color: $color-cyan-500;
             overflow-x:hidden;
 
             .Select-option {
-
-                padding-left:3px;
-                padding-top:4px;
-                padding-bottom:4px;
-
+                position: relative;
                 .qbIcon {
-                    position:absolute;
-                    left:0;
-                    top:1px;
-                    font-size:16px;
+                    position: absolute;
                     color: $selected-choice-color;
                 }
             }
