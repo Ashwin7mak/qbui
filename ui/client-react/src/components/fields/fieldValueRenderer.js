@@ -8,6 +8,7 @@ import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
 import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
 import UserFieldValueRenderer from './userFieldValueRenderer';
+import UrlFieldValueRenderer from './urlFieldValueRenderer';
 
 import _ from 'lodash';
 
@@ -48,6 +49,7 @@ const FieldValueRenderer = React.createClass({
          * - DURATION_FORMAT = 11;
          * - PHONE_FORMAT = 12;
          * - MULTI_LINE_TEXT_FORMAT = 13;
+         * - URL = 14;
          **/
         type: React.PropTypes.number,
 
@@ -117,6 +119,8 @@ const FieldValueRenderer = React.createClass({
                                                      key={'mltfvr-' + this.props.idKey}
                                                  {...commonProperties}/>
                 );
+        case FieldFormats.URL:
+            return <UrlFieldValueRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
 
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:
