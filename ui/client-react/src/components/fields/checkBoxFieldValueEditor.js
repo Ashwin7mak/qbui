@@ -14,15 +14,34 @@ import './checkbox.scss';
 const CheckBoxFieldValueEditor = React.createClass({
     displayName: 'CheckBoxFieldValueEditor',
     propTypes: {
+        /**
+         * The value of the checkbox (true/false) */
         value: PropTypes.bool,
+
         onChange: PropTypes.func,
+
         onBlur: PropTypes.func,
+
+        /**
+         * Set the label that displays next to the checkbox */
         label: PropTypes.string,
+
+        /**
+         * Set the id of the input for the checkbox */
         id: PropTypes.string,
+
         invalid: PropTypes.bool,
+
         disabled: PropTypes.bool,
+
         readOnly: PropTypes.bool,
+
+        /**
+         * Set a checkbox as required (i.e., must be checked) */
         required: PropTypes.bool,
+
+        /**
+         * Change the symbol to show when a checkbox is required (default: *) */
         requiredSymbol: PropTypes.string
     },
 

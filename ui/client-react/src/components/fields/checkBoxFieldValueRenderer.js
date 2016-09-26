@@ -13,11 +13,28 @@ let defaultSymbolClasses = 'symbol qbIcon ';
  */
 const CheckBoxFieldValueRenderer = React.createClass({
     propTypes: {
+        /**
+         * The value of the checkbox (true/false) */
         value: PropTypes.bool,
+
+        /**
+         * The label that appears next to a checkbox */
         label: PropTypes.string,
+
+        /**
+         * Change the checked icon by providing a different css class */
         checkedIconClass: PropTypes.string,
+
+        /**
+         * Change the unchecked icon by providing a different css class */
         uncheckedIconClass: PropTypes.string,
+
+        /**
+         * Show as a checkmark (true) or as the words Yes/No (false) */
         displayGraphic: PropTypes.bool,
+
+        /**
+         * Will not display an empty checkbox when set to true */
         hideUncheckedCheckbox: PropTypes.bool
     },
 
