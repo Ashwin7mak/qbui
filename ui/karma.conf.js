@@ -3,7 +3,7 @@
 var path = require("path");
 var webpack = require('webpack');
 var nodeModulesPath = path.resolve(__dirname, "node_modules");
-var npmComponentsPath = path.resolve(__dirname, "client-react/src/components/npm");
+var nodeComponentsPath = path.resolve(__dirname, "client-react/src/components/node");
 
 module.exports = function(config) {
     "use strict";
@@ -23,10 +23,10 @@ module.exports = function(config) {
         exclude: [],
 
         // add webpack as the preprocessor
-        // code coverage against all client react code EXCEPT npm modules that we have privately forked
+        // code coverage against all client react code EXCEPT node modules that we have privately forked
         preprocessors: {
             "tests.webpack.js": ["webpack", "sourcemap"],
-            "client-react/src/!(components/npm)/**/*.js" : ["coverage"]
+            "client-react/src/!(components/node)/**/*.js" : ["coverage"]
         },
 
         webpack: {
@@ -42,7 +42,7 @@ module.exports = function(config) {
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "componentLibrary/test")
                         ],
-                        exclude: [nodeModulesPath, npmComponentsPath],
+                        exclude: [nodeModulesPath, nodeComponentsPath],
                         loader: "babel-loader",
                         query: {
                             plugins: ['babel-plugin-rewire', 'babel-plugin-rewire-ignore-coverage']
@@ -97,7 +97,7 @@ module.exports = function(config) {
                         ],
                         exclude: [
                             nodeModulesPath,
-                            npmComponentsPath,
+                            nodeComponentsPath,
                             path.resolve(__dirname, "client-react/test"),
                             path.resolve(__dirname, "componentLibrary/test")
                         ],

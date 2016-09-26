@@ -104,7 +104,6 @@ const DateTimeFieldValueEditor = React.createClass({
         if (this.props.onChange) {
             if (value === null || value) {
                 let isoFormat = null;
-                let isoFormat2 = null;
                 if (value !== null) {
                     //  have a new date; append the original time and return in UTC time.
                     let newDateTime = value + ' ' + this.getOrigTime();
