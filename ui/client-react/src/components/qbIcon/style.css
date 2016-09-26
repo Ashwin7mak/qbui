@@ -290,4 +290,12 @@
 .iconTableUISturdy-info:before {
   content: "\e955";
 }
-
+.iconTableUISturdy-scroll:before {
+    content: "\e952";
+}
+.iconTableUISturdy-check-reversed:before {
+    content: "\e953";
+}
+.iconTableUISturdy-info:before {
+    content: "\e955";
+}

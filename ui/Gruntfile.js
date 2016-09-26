@@ -476,6 +476,14 @@ module.exports = function(grunt) {
                     }
                 }
             },
+            sauce_production : {
+                options: {
+                    configFile: './e2e/config/sauceLabs/sauce.production.protractor.conf.js',
+                    args: {
+                        baseUrl   : testJsConfig.DOMAIN
+                    }
+                }
+            },
             local              : {
                 options: {
                     configFile: './e2e/config/local.protractor.conf.js',
@@ -863,6 +871,16 @@ module.exports = function(grunt) {
                 'env:test',
                 'sauce_connect:aws',
                 'protractor:sauce_multi_browser'
+            ]);
+        }
+
+        // Run the protractor e2e smoke test on Sauce Labs against QuickBase production
+        // Currently used for e2e smoke test job in Jenkins
+        if (target === 'e2eProdSauce') {
+            return grunt.task.run([
+                'env:test',
+                'sauce_connect:aws',
+                'protractor:sauce_production'
             ]);
         }
 

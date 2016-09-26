@@ -5,8 +5,8 @@
 (function() {
     'use strict';
     var chance = require('chance').Chance();
+    const randomWord = require('./words/word.generator');
     var appConsts = require('./app.constants');
-
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
     chance.mixin({
@@ -19,7 +19,6 @@
 
             return timeZone;
         },
-
         appDateFormat: function(options) {
             var dateFormat = options.dateFormat;
 
@@ -88,6 +87,77 @@
         //Generates and returns a psuedo-random 32 char string that is URL safe
         generateValidSubdomainString: function() {
             return chance.string({pool: SUBDOMAIN_CHARS, length: 32});
+        },
+
+        generateTextChoice: function(options) {
+            options = options || {capitalize: true, wordType:'realEnglishNouns', numWords: 1, randNumWords: false};
+
+            let value = this.generateWords(options);
+            return {
+                coercedValue: {
+                    value: value
+                },
+                displayValue: value
+            };
+        },
+
+        generateNumericChoice: function(options) {
+            options = options || {int: true};
+            let min, max;
+            min = options.min;
+            max = options.max;
+            let num =  options.int ? this.generateInt(min, max) : this.generateDouble(min, max);
+            return {
+                coercedValue: {
+                    value: num
+                },
+                displayValue: num // TBD does num need formatting?
+            };
+        },
+
+
+        generateWords: function(options) {
+            let answer = '';
+            // get number of words to create
+            let wordsToGen = options.numWords || 1;
+            if (options.randNumWords) {
+                wordsToGen = chance.integer({min: 1, max: wordsToGen});
+            }
+            // loop down the count of words to generate
+            let numWords = wordsToGen;
+
+            //options for random letter words
+            let wordOptions = {};
+            if (options.wordLength) {
+                wordOptions.length = options.wordLength;
+            }
+            if (options.syllables) {
+                wordOptions.syllables = options.syllables;
+            }
+
+            while (numWords--) {
+                // generate a word or get an real english word
+                var word;
+                if (options.wordType === this.WORD_TYPES.realEnglishNouns) {
+                    word = randomWord.noun();
+                } else if (options.wordType === this.WORD_TYPES.realEnglishWords) {
+                    word = randomWord.word();
+                } else {
+                    word = chance.word(wordOptions);
+                }
+
+                //capitalize first word if capitalize set
+                if (options.capitalize && numWords === wordsToGen - 1) {
+                    word = chance.capitalize(word);
+                }
+                //append to space answer after the first word
+                if (answer.length !== 0) {
+                    answer += ' ';
+                }
+                //append the next word
+                answer += word;
+            }
+            return answer;
         },
 
         //Generates and returns a psuedo-random char string of specified length
@@ -168,7 +238,7 @@
             return chance.floating({min: min, max: max});
         },
 
-        //Generates and returns a psuedo-random integer
+        //Generates and returns a psuedo-random integers
         generateInt: function(min, max) {
             return chance.integer({min: min, max: max});
         },
@@ -188,7 +258,13 @@
 
         pickUserIdFromList: function(userIds) {
             return chance.userId({userIds: userIds});
-        }
+        },
+        WORD_TYPES: {
+            'realEnglishNouns' : 'realEnglishNouns',
+            'realEnglishWords' : 'realEnglishWords',
+            'randomLetters' : 'randomLetters',
+        },
+
     };
 
 

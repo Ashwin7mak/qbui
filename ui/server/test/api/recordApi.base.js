@@ -154,7 +154,6 @@
                     records.forEach(function(object) {
                         recordObjects.push(object.record);
                     });
-
                     apiBase.executeRequest(recordBulkEndpoint, consts.POST, recordObjects)
                             .then(function(recordBulkResponse) {
                                 var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
@@ -166,6 +165,27 @@
 
                                 fetchRecordDeferred.resolve(recordIdList);
                             }).catch(function(currError) {log.error(JSON.stringify(currError));});
+                }).catch(function(err) {log.error(JSON.stringify(err));});
+                return fetchRecordDeferred.promise;
+            },
+            // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
+            createBulkRecords: function(recordsEndpoint, records) {
+                log.debug('Records to create: ' + JSON.stringify(records));
+                var fetchRecordDeferred = promise.pending();
+                init.then(function() {
+                    var recordBulkEndpoint = recordsEndpoint + 'bulk';
+
+                    apiBase.executeRequest(recordBulkEndpoint, consts.POST, records)
+                        .then(function(recordBulkResponse) {
+                            var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
+
+                            var recordIdList = [];
+                            parsedRecordIdList.forEach(function(jsonObj) {
+                                recordIdList.push(jsonObj.id);
+                            });
+
+                            fetchRecordDeferred.resolve(recordIdList);
+                        }).catch(function(currError) {log.error(JSON.stringify(currError));});
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },

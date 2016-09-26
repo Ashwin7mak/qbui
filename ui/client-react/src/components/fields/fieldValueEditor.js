@@ -6,15 +6,15 @@ import {NumberFieldValueRenderer} from './fieldValueRenderers';
 
 import FieldFormats from '../../utils/fieldFormats' ;
 
-import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
+import {DefaultFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
 import DateFieldValueEditor from './dateFieldValueEditor';
 import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
 import TimeFieldValueEditor from './timeFieldValueEditor';
 import TextFieldValueEditor from './textFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
-
 import NumericFieldValueEditor from './numericFieldValueEditor';
+import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
 
 import _ from 'lodash';
 
@@ -163,7 +163,7 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.PERCENT_FORMAT: {
             if (_.has(this.props, 'fieldDef.choices')) {
                 return (
-                    <ComboBoxFieldValueEditor choices={this.props.fieldDef.choices}
+                    <MultiChoiceFieldValueEditor choices={this.props.fieldDef.choices}
                         {...commonProps} />
                 );
             } else {
@@ -190,7 +190,7 @@ const FieldValueEditor = React.createClass({
 
             if (_.has(this.props, 'fieldDef.choices')) {
                 return (
-                        <ComboBoxFieldValueEditor choices={this.props.fieldDef.choices}
+                        <MultiChoiceFieldValueEditor choices={this.props.fieldDef.choices}
                                              {...commonProps} />
                     );
             } else {
