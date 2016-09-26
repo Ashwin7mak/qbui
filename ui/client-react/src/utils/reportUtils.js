@@ -197,7 +197,6 @@ class ReportUtils {
 
     }
 
-
     /**
      * Combines a fid + order + groupType into a groupEl of format <+/-|fid|:groupType>
      * @param fid
@@ -219,6 +218,7 @@ class ReportUtils {
         return result;
     }
 }
+
 ReportUtils.listDelimiter = listDelimiter;
 ReportUtils.groupDelimiter = groupDelimiter;
 export default ReportUtils;

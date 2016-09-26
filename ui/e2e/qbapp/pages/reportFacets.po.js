@@ -210,7 +210,11 @@
          * Function will wait for the loaded report content to refresh. Helps with stability of tests.
          */
         this.waitForReportReady = function() {
-            return e2ePageBase.waitForElement(reportServicePage.agGridBodyEl);
+            if (breakpointSize !== 'small') {
+                return e2ePageBase.waitForElement(reportServicePage.loadedContentEl);
+            } else {
+                return e2ePageBase.waitForElement(reportServicePage.agGridBodyEl);
+            }
         };
 
         /**

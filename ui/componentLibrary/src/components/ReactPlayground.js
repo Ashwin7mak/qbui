@@ -9,6 +9,7 @@ const CheckBoxFieldValueEditor = require('../../../client-react/src/components/f
 const CheckBoxFieldValueRenderer = require('../../../client-react/src/components/fields/checkBoxFieldValueRenderer');
 const FieldValueEditor = require('../../../client-react/src/components/fields/fieldValueEditor');
 const FieldValueRenderer = require('../../../client-react/src/components/fields/fieldValueRenderer');
+const MultiChoiceFieldValueEditor = require('../../../client-react/src/components/fields/multiChoiceFieldValueEditor');
 const MultiLineTextFieldValueEditor = require('../../../client-react/src/components/fields/multiLineTextFieldValueEditor');
 const NumericFieldValueEditor = require('../../../client-react/src/components/fields/numericFieldValueEditor');
 const NumericFieldValueRenderer = require('../../../client-react/src/components/fields/numericFieldValueRenderer');

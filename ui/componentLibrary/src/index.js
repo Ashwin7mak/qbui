@@ -22,6 +22,7 @@ import CheckBoxFieldValueEditorDoc from './docs/checkBoxFieldValueEditor';
 import CheckBoxFieldValueRendererDoc from './docs/checkBoxFieldValueRenderer';
 import FieldValueEditorDoc from './docs/fieldValueEditor';
 import FieldValueRendererDoc from './docs/fieldValueRenderer';
+import MultiChoiceFieldValueEditorDoc from './docs/multiChoiceFieldValueEditor';
 import MultiLineTextFieldValueEditorDoc from './docs/multiLineTextFieldValueEditor';
 import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
 import NumericFieldValueRendererDoc from './docs/numericFieldValueRenderer';
@@ -42,6 +43,7 @@ render((
             <Route path="checkBoxFieldValueRenderer" component={CheckBoxFieldValueRendererDoc} />
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
             <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
+            <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
             <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
             <Route path="numericfieldValueEditor" component={NumericFieldValueEditorDoc} />
             <Route path="numericFieldValueRenderer" component={NumericFieldValueRendererDoc} />

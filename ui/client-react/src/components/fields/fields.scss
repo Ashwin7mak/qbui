@@ -43,9 +43,13 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of focus input shadow
-[type="text"]:focus.input  {
+[type="text"]:focus.input,
+  textarea:focus,
+  .is-focused:not(.is-open)>.Select-control {
   outline: none;
   border: solid 1px $input-text-focus-border-color;
+  //Added border-color for multi choice text box
+  border-color: $input-text-focus-border-color !important;
   @include focus-shadow();
 }
 
@@ -119,4 +123,9 @@ $data-font-size: $font-size-p;
 /* allow wide tooltips */
 .tooltip-inner {
   max-width:none;
+}
+
+
+.timeCell .Select .Select-control {
+    border: 0;
 }

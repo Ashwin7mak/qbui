@@ -2,6 +2,7 @@ import CheckBoxFieldValueEditorExample from 'raw!../examples/checkBoxFieldValueE
 import CheckBoxFieldValueRendererExample from 'raw!../examples/checkBoxFieldValueRendererExample.js';
 import FieldValueEditorExample from 'raw!../examples/FieldValueEditorExample.js';
 import FieldValueRendererExample from 'raw!../examples/FieldValueRendererExample.js';
+import MultiChoiceFieldValueEditorExample from 'raw!../examples/MultiChoiceFieldValueEditorExample.js';
 import MultiLineTextFieldValueEditorExample from 'raw!../examples/MultiLineTextFieldValueEditorExample.js';
 import NumericFieldValueEditorExample from 'raw!../examples/NumericFieldValueEditorExample.js';
 import NumericFieldValueRendererExample from 'raw!../examples/NumericFieldValueRendererExample.js';
@@ -17,6 +18,7 @@ export default {
     CheckBoxFieldValueRenderer: CheckBoxFieldValueRendererExample,
     FieldValueEditor: FieldValueEditorExample,
     FieldValueRenderer: FieldValueRendererExample,
+    MultiChoiceFieldValueEditor: MultiChoiceFieldValueEditorExample,
     MultiLineTextFieldValueEditor: MultiLineTextFieldValueEditorExample,
     NumericFieldValueEditor: NumericFieldValueEditorExample,
     NumericFieldValueRenderer: NumericFieldValueRendererExample,
