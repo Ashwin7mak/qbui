@@ -15,7 +15,6 @@ import UserFieldValueRendererMetadata from 'component-metadata!../../../client-r
 import QBIconMetadata from 'component-metadata!../../../client-react/src/components/qbIcon/qbIcon.js';
 import QBPanelMetadata from 'component-metadata!../../../client-react/src/components/QBPanel/qbpanel.js';
 
-<<<<<<< HEAD
 var Metadata = _.merge(
     CheckBoxFieldValueEditorMetadata,
     CheckBoxFieldValueRendererMetadata,
