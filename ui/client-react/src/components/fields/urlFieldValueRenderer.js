@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import TextFieldValueRenderer from './TextFieldValueRenderer';
+import TextFieldValueRenderer from './textFieldValueRenderer';
 
 const UrlFieldValueRenderer = React.createClass({
     displayName: 'UrlFieldValueRenderer',
