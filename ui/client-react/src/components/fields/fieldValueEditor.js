@@ -15,6 +15,7 @@ import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
 import NumericFieldValueEditor from './numericFieldValueEditor';
 import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
+import UrlFieldValueEditor from './urlFieldValueEditor';
 
 import _ from 'lodash';
 
@@ -57,6 +58,7 @@ const FieldValueEditor = React.createClass({
          * - DURATION_FORMAT = 11;
          * - PHONE_FORMAT = 12;
          * - MULTI_LINE_TEXT_FORMAT = 13;
+         * - URL = 14;
          **/
         type: React.PropTypes.number,
 
@@ -184,6 +186,9 @@ const FieldValueEditor = React.createClass({
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
             return <MultiLineTextFieldValueEditor {...commonProps} />;
+        }
+        case FieldFormats.URL: {
+            return <UrlFieldValueEditor {...commonProps} />;
         }
         case FieldFormats.TEXT_FORMAT:
         default: {
