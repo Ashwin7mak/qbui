@@ -20,7 +20,7 @@
       "subnet_id": "{{user `aws_subnet_id`}}",
       "vpc_id": "{{user `aws_vpc_id`}}",
       "tags": {
-        "AMI_Source": "{{user `source_ami`}}",
+        "AMI Source": "{{user `source_ami`}}",
         "AMI Version": "{{user `ami_version`}}",
         "Layer": "4",
         "Service": "CoreUI",
