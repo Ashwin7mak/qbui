@@ -120,7 +120,12 @@ const FieldValueRenderer = React.createClass({
                                                  {...commonProperties}/>
                 );
         case FieldFormats.URL:
-            return <UrlFieldValueRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
+            let {open_in_new_window} = this.props.attributes.clientSideAttributes;
+            debugger;
+            return <UrlFieldValueRenderer value={this.props.value}
+                                          display={this.props.display}
+                                          openInNewWindow={open_in_new_window}
+                                          {...commonProperties} />;
 
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:

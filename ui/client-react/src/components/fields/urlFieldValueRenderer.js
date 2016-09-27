@@ -35,7 +35,20 @@ const UrlFieldValueRenderer = React.createClass({
         };
     },
     render() {
-        return <TextFieldValueRenderer {...this.props} />;
+        let classes = 'linkField';
+        classes += (this.props.showAsButton ? ' btn' : '');
+
+        if(this.props.clickable) {
+            let target = (this.props.openInNewWindow ? '_blank': '_self');
+            return (
+                <a href={this.props.value} target={target} className={classes}>
+                    {this.props.display}
+                </a>
+            );
+        } else {
+            classes += ' noLink disabled';
+            return <span className="classes">{this.props.display}</span>;
+        }
     }
 });
 
