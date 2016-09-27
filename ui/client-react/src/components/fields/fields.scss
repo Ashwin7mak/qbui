@@ -26,15 +26,6 @@ $data-font-size: $font-size-p;
   background-color: $input-bg-color;
 }
 
-// layout of input userdata on a form
-.formContainer [type="text"].input {
-  padding: 5px;
-  width: 280px;
-  &.defaultInputWidth {
-    width: inherit;
-  }
-}
-
 // layout of input userdata in an inline edit table
 .reportTable [type="text"].input {
   margin: 0 0 0 1px;

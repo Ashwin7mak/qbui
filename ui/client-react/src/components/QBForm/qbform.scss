@@ -76,6 +76,13 @@
     .formElement.field .viewElement {
         padding: 5px;
     }
+    [type="text"].input {
+        padding: 5px;
+        width: 280px;
+        &.defaultInputWidth {
+            width: inherit;
+        }
+    }
 }
 /* For mobile phones: */
 @include small-breakpoint {
@@ -98,6 +105,12 @@
                 .fieldValue {
                     font-size: $font-size-small;
                 }
+            }
+        }
+        [type="text"].input {
+            width: 100%;
+            &.defaultInputWidth {
+                width: 100%;
             }
         }
     }
