@@ -303,8 +303,57 @@
         "AWS::CloudFormation::Init": {
           "configSets": {
             "default": [
+              "run_chef",
               "verify_instance_health"
             ]
+          },
+          "run_chef": {
+            "files": {
+              "/dev/shm/chef-attributes-int.json": {
+                "content": {
+                  "splunk": {
+                    "forwarder": {
+                      "index": "quickbase-ppdidx",
+                      "logs_to_index": {
+                        "default": {
+                          "_meta": {
+                            "Fn::Join": [ "", [ "aws_stack_name::", { "Ref": "AWS::StackName" } ] ]
+                          }
+                        },
+                        "monitor:///var/log/qbase": {
+                          "disabled": "0",
+                          "index": "quickbase-prdidx",
+                          "blacklist": "\\.(gz|bz2|z|zip)$"
+                        }
+                      }
+                    }
+                  },
+                  "nodejs": {
+                    "reconfig": {
+                      "node_internal_env": "PRE_PROD",
+                      "rest_endpoint": "https://localhost.api.trunk.newstack.quickbaserocks.com",
+                      "route_group": "LH_V1",
+                      "stack_name": "TRUNK-int-nodejs"
+                    }
+                  }
+                }
+              }
+            },
+            "commands": {
+              "01_set_splunk_hostname": {
+                "command": "/opt/splunkforwarder/bin/splunk set default-hostname $(hostname) -auth admin:changeme"
+              },
+              "02_run_chef": {
+                "command": { "Fn::Join": [ "", [ "chef-client -z -o nodejs::reconfig -j /dev/shm/chef-attributes-", { "Ref": "paramEnvironment" }, ".json" ] ] },
+                "cwd": "/var/packer/coreui/chef"
+              },
+              "03_status": {
+                "command": "systemctl status splunk || true"
+              },
+              "04_enable_and_start_splunk": {
+                "command": "systemctl enable splunk && systemctl start splunk"
+              }
+            }
           },
           "verify_instance_health": {
             "commands": {
