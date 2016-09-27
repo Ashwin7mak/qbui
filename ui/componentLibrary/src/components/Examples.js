@@ -12,6 +12,8 @@ import UserFieldValueEditorExample from 'raw!../examples/UserFieldValueEditorExa
 import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendererExample.js';
 import QBPanelExample from 'raw!../examples/QBPanelExample.js';
 import QBIconExample from 'raw!../examples/QBIconExample.js';
+// END OF IMPORT STATEMENTS
+// The comment above is used for a grunt task. Please do not delete.
 
 export default {
     CheckBoxFieldValueEditor: CheckBoxFieldValueEditorExample,
@@ -28,4 +30,6 @@ export default {
     UserFieldValueRenderer: UserFieldValueRendererExample,
     QBPanel: QBPanelExample,
     QBIcon: QBIconExample,
+    // END OF EXPORT
+    // The comment above is used for a grunt task. Please do not delete.
 };

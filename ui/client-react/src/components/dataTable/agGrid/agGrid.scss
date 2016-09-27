@@ -550,8 +550,14 @@ $cell-edit-background-edit: #f3f8fe;
                     }
                     .Select-arrow-zone {
                         background-color: $datepicker-bg;
+                        padding-right: 0;
                         .glyphicon {
                             color: $datepicker-select-button-fg;
+                        }
+                        .glyphicon-time {
+                            color: $color-black-700;
+                            padding-top: 5px;
+                            padding-left: 5px;
                         }
                     }
                     &.ghost-text {
@@ -576,6 +582,7 @@ $cell-edit-background-edit: #f3f8fe;
                     }
                     .glyphicon-calendar {
                         color: $color-black-700;
+                        padding-top: 1px;
                     }
                 }
                 &:not(.Select) {

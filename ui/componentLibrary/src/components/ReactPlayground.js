@@ -19,6 +19,8 @@ const UserFieldValueEditor = require('../../../client-react/src/components/field
 const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer');
 const QBicon = require('../../../client-react/src/components/qbIcon/qbIcon');
 const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel');
+// END OF IMPORT STATEMENTS
+// The comment above is used for a grunt task. Please do not delete.
 
 /* eslint-enable */
 import {SafeAnchor, Alert} from 'react-bootstrap';

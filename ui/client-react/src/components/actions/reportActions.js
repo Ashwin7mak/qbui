@@ -46,7 +46,7 @@ let ReportActions = React.createClass({
      */
     handleBulkDelete() {
         const flux = this.getFlux();
-        flux.actions.deleteReportRecordBulk(this.props.appId, this.props.tblId, this.props.selection, this.props.nameForRecords);
+        flux.actions.deleteRecordBulk(this.props.appId, this.props.tblId, this.props.selection, this.props.nameForRecords);
     },
 
     /**

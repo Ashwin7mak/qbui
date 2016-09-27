@@ -17,6 +17,7 @@ import RecordRoute from '../../client-react/src/components/record/recordRoute';
 import TableHomePageRoute from '../../client-react/src/components/table/tableHomePageRoute';
 
 import ComponentLibraryWrapper from './components/componentLibrary';
+import './assets/componentLibrary.scss';
 
 import CheckBoxFieldValueEditorDoc from './docs/checkBoxFieldValueEditor';
 import CheckBoxFieldValueRendererDoc from './docs/checkBoxFieldValueRenderer';
@@ -32,8 +33,8 @@ import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import UserFieldEditorDoc from './docs/userFieldValueEditor';
 import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
-
-import './assets/componentLibrary.scss';
+// END OF IMPORT STATEMENTS
+// Above comment used for Grunt task. Please do not delete.
 
 render((
     <Router history={browserHistory}>

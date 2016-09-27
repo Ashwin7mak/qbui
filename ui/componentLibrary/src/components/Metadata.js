@@ -14,6 +14,8 @@ import UserFieldValueEditorMetadata from 'component-metadata!../../../client-rea
 import UserFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueRenderer.js';
 import QBIconMetadata from 'component-metadata!../../../client-react/src/components/qbIcon/qbIcon.js';
 import QBPanelMetadata from 'component-metadata!../../../client-react/src/components/QBPanel/qbpanel.js';
+// END OF IMPORT STATEMENTS
+// above comment used for grunt task, please do not delete
 
 var Metadata = _.merge(
     CheckBoxFieldValueEditorMetadata,
@@ -30,6 +32,8 @@ var Metadata = _.merge(
     UserFieldValueRendererMetadata,
     QBIconMetadata,
     QBPanelMetadata
+    // END OF METADATA MERGE
+    // above comment used for grunt task, please do not delete
 );
 
 export default Metadata;

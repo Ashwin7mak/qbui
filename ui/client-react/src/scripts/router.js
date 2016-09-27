@@ -21,6 +21,7 @@ import FacetMenuStore from "../stores/facetMenuStore";
 import facetMenuActions from "../actions/facetMenuActions";
 import PerfStore from "../stores/perfStore";
 import perfActions from "../actions/perfActions";
+import recordActions from "../actions/recordActions";
 import PerfLogUtils from "../utils/perf/perfLogUtils";
 
 import AppsHome from "../components/apps/home";
@@ -63,6 +64,7 @@ flux.addActions(fieldsActions);
 flux.addActions(formActions);
 flux.addActions(tableActions);
 flux.addActions(perfActions);
+flux.addActions(recordActions);
 
 //to ensure you don't get cascading dispatch errors with Fluxxor
 // if you dispatch actions from within componentWillMount or componentDidMount
