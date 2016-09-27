@@ -60,7 +60,9 @@ var DateTimeField = (function (_Component) {
       }
     };
 
-    //  CUSTOMIZED viewDate and selectedDate to default to  current month and day if the input value is invalid
+    //  CUSTOMIZED
+    //  viewDate and selectedDate to default to current month and day if the input value is invalid
+    //
     this.state = {
       showDatePicker: this.props.mode !== _ConstantsJs2["default"].MODE_TIME,
       showTimePicker: this.props.mode === _ConstantsJs2["default"].MODE_TIME,
@@ -82,7 +84,7 @@ var DateTimeField = (function (_Component) {
      *
      * @param nextProps
      * @returns {*}
-       */
+     */
     this.componentWillReceiveProps = function (nextProps) {
       var state = {};
       //  CUSTOMIZED to add !dateTime test
@@ -106,37 +108,44 @@ var DateTimeField = (function (_Component) {
       return _this.setState(state);
     };
 
-    // CUSTOMIZED...add onBlur event handling
+    /**
+     *  CUSTOMIZED...add onBlur event handling
+     *
+     *  Handle various MomentJS quickbase shortcut keys for dates..not locale saavy
+     *
+     * @param event
+     * @returns {*}
+     */
     this.onBlur = function (event) {
 
       var dateTemplate = event.target == null ? event : event.target.value;
       var value = null;
 
-      //  handle various MomentJS quickbase shortcut keys for dates..not locale saavy
-
       //
-      // Month/Year combination; default to last day of the month;
-      // For month only, use current year.
+      // Month/Year combination; default to last day of the month; if month only, use current year.
       //
       var monthFormats = ['MMM', 'MMMM', 'MMM YYYY', 'MMMM YYYY'];
       if ((0, _moment2["default"])(dateTemplate, monthFormats, true).isValid()) {
         value = (0, _moment2["default"])(dateTemplate, monthFormats, true).endOf("month").format(_this.state.inputFormat);
       } else {
         //
-        // Year only...set to last day of the year
+        // Year only; set date to last day of the year
         //
         var yearFormats = ['YYYY'];
         if ((0, _moment2["default"])(dateTemplate, yearFormats, true).isValid()) {
           value = (0, _moment2["default"])(dateTemplate, yearFormats, true).endOf("year").format(_this.state.inputFormat);
         } else {
           //
-          // Month/Day.  Use current year.
+          // Month/Day formats.  Year is set to current year.
           //
           var monthDayFormats = ['MMM D', 'MMMM D', 'MMM-D', 'M-D', 'M D'];
           if ((0, _moment2["default"])(dateTemplate, monthDayFormats, true).isValid()) {
             var currentYr = (0, _moment2["default"])().format('YYYY');
             value = (0, _moment2["default"])(dateTemplate, monthDayFormats, true).year(currentYr).format(_this.state.inputFormat);
           } else {
+            //
+            //  Month/Day/Year formats
+            //
             var monthDayYrFormats = ['MMM D YYYY', 'MMMM D YYYY', 'MMM-D-YYYY', 'M-D-YYYY', 'M D YYYY'];
             if ((0, _moment2["default"])(dateTemplate, monthDayYrFormats, true).isValid()) {
               value = (0, _moment2["default"])(dateTemplate, monthDayYrFormats, true).format(_this.state.inputFormat);
@@ -152,58 +161,6 @@ var DateTimeField = (function (_Component) {
           return this.props.onBlur((0, _moment2["default"])(this.state.inputValue, this.state.inputFormat, true).format(this.props.format), value);
         });
       }
-    };
-
-    /**
-     * CUSTOMIZE to handle unique Quickbase shortcut keys 't', '[' and ']'.
-     *
-     * @param event
-     * @returns {*}
-     */
-    this.onKeyPress = function (event) {
-
-      //  Shortcuts:
-      //  t - today (if no date is entered)
-      //  ] - increment 1 day  (if a date has already been entered)
-      //  [ - subtract 1 day
-
-      //  test for shortcut keys.
-      var value = null;
-      var ASCII_T = 116;
-      var ASCII_LEFT_BRACKET = 91;
-      var ASCII_RIGHT_BRACKET = 93;
-
-      if (event.charCode === ASCII_T) {
-        if (!event.target.value) {
-          value = (0, _moment2["default"])().format(_this.state.inputFormat);
-        }
-      } else {
-        //  test for [ and ]
-        if (event.charCode === ASCII_LEFT_BRACKET || event.charCode === ASCII_RIGHT_BRACKET) {
-          if (_this.props.dateTime) {
-            if (event.charCode === ASCII_RIGHT_BRACKET) {
-              value = (0, _moment2["default"])(_this.props.dateTime, _this.props.format).add(1, 'd').format(_this.state.inputFormat);
-            } else {
-              value = (0, _moment2["default"])(_this.props.dateTime, _this.props.format).subtract(1, 'd').format(_this.state.inputFormat);
-            }
-          }
-        }
-      }
-      if (value) {
-        //  prevent the onChange event from firing within this class..will set the state and
-        //  propagate the onChange event if one exists.
-        event.preventDefault();
-
-        //   set the state and return
-        return _this.setState({
-          inputValue: value,
-          selectedDate: (0, _moment2["default"])(value, _this.state.inputFormat, true),
-          viewDate: (0, _moment2["default"])(value, _this.state.inputFormat, true).startOf("month")
-        }, function () {
-            return this.props.onChange((0, _moment2["default"])(this.state.inputValue, this.state.inputFormat, true).format(this.props.format), value);
-        });
-      }
-
     };
 
     /**
@@ -230,14 +187,62 @@ var DateTimeField = (function (_Component) {
       return _this.setState({
         inputValue: value
       }, function () {
-        //  CUSTOMIZED to return empty value if the date is not a valid format to
-        //  allow for manual entry of a date.
+        //  CUSTOMIZED to return empty value to allow for manual entry of a date.
         if ((0, _moment2["default"])(this.state.inputValue, this.state.inputFormat, true).isValid()) {
           return this.props.onChange((0, _moment2["default"])(this.state.inputValue, this.state.inputFormat, true).format(this.props.format), value);
         } else {
           return this.props.onChange('', value);
         }
       });
+    };
+
+    /**
+     * CUSTOMIZE to handle unique Quickbase shortcut keys 't', '[' and ']'.
+     *
+     * @param event
+     * @returns {*}
+     */
+    this.onKeyPress = function (event) {
+
+      //  Shortcuts:
+      //  t - today (if no date is entered)
+      //  ] - increment 1 day  (if a date has already been entered)
+      //  [ - subtract 1 day
+
+      var value = null;
+      var ASCII_T = 116;
+      var ASCII_LEFT_BRACKET = 91;
+      var ASCII_RIGHT_BRACKET = 93;
+
+      if (event.charCode === ASCII_T) {
+        if (!event.target.value) {
+          value = (0, _moment2["default"])().format(_this.state.inputFormat);
+        }
+      } else {
+        if (event.charCode === ASCII_LEFT_BRACKET || event.charCode === ASCII_RIGHT_BRACKET) {
+          if (_this.props.dateTime) {
+            if (event.charCode === ASCII_RIGHT_BRACKET) {
+              value = (0, _moment2["default"])(_this.props.dateTime, _this.props.format).add(1, 'd').format(_this.state.inputFormat);
+            } else {
+              value = (0, _moment2["default"])(_this.props.dateTime, _this.props.format).subtract(1, 'd').format(_this.state.inputFormat);
+            }
+          }
+        }
+      }
+
+      if (value) {
+        //  preventDefault() stops the onChange event from getting triggered after processing completes
+        event.preventDefault();
+
+        //   set the state and return
+        return _this.setState({
+          inputValue: value,
+          selectedDate: (0, _moment2["default"])(value, _this.state.inputFormat, true),
+          viewDate: (0, _moment2["default"])(value, _this.state.inputFormat, true).startOf("month")
+        }, function () {
+          return this.props.onChange((0, _moment2["default"])(this.state.inputValue, this.state.inputFormat, true).format(this.props.format), value);
+        });
+      }
     };
 
     this.getValue = function () {
