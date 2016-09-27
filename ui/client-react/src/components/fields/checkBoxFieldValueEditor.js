@@ -85,7 +85,11 @@ const CheckBoxFieldValueEditor = React.createClass({
     },
 
     hasLabel() {
-        return (this.props.label !== ' ');
+        // Because the visible checkbox is just CSS on the label
+        // the label will default to a space to ensure the checkbox appears
+        // but that shouldn't count as having a label. Passing in {null} or a blank
+        // space for the label will still work correctly.
+        return (this.props.label && this.props.label !== ' ');
     },
 
     isInvalid() {
