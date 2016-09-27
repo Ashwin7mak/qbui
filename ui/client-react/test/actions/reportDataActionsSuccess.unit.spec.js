@@ -328,47 +328,17 @@ describe('Report Data Actions Filter Report functions -- success', () => {
     });
 });
 
-describe('Report Data Actions Edit Report functions -- success', () => {
+describe('Report Data Actions - Edit Record functions -- success', () => {
     'use strict';
 
     let appId = '1';
     let tblId = '2';
-    let recId = '3';
-    let recIds = [1, 2, 3];
-    let changes = {};
-    let newRecord = {data:'value'};
-    let responseData = {appId, tblId, data: 'success'};
-
-    class mockRecordService {
-        constructor() {}
-        saveRecord(a, t, r, c) {
-            return Promise.resolve({data:responseData});
-        }
-        createRecord(a, t, r) {
-            return Promise.resolve({data: {body: '{"id" : 34}'}});
-        }
-        deleteRecord(a, b, r) {
-            return Promise.resolve({data:responseData});
-        }
-        deleteRecordBulk(a, b, r) {
-            return Promise.resolve({data:responseData});
-        }
-    }
     let stores = {};
     let flux = new Fluxxor.Flux(stores);
     flux.addActions(reportDataActions);
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockRecordService.prototype, 'saveRecord').and.callThrough();
-        spyOn(mockRecordService.prototype, 'createRecord').and.callThrough();
-        spyOn(mockRecordService.prototype, 'deleteRecord').and.callThrough();
-        spyOn(mockRecordService.prototype, 'deleteRecordBulk').and.callThrough();
-        reportDataActions.__Rewire__('RecordService', mockRecordService);
-    });
-
-    afterEach(() => {
-        reportDataActions.__ResetDependency__('RecordService');
     });
 
     it('test selectedRows', () => {
@@ -397,73 +367,4 @@ describe('Report Data Actions Edit Report functions -- success', () => {
         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
         expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId:4}]);
     });
-
-    it('test deleteReportRecord', (done) => {
-        flux.actions.deleteReportRecord(appId, tblId, recId).then(
-            () => {
-                expect(mockRecordService.prototype.deleteRecord).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_REPORT_RECORD_SUCCESS, recId]);
-                done();
-            },
-            () => {
-                expect(true).toBe(false);
-                done();
-            }
-        );
-    });
-
-    it('test deleteReportRecordBulk resolve', (done) => {
-        flux.actions.deleteReportRecordBulk(appId, tblId, recIds).then(
-            () => {
-                expect(mockRecordService.prototype.deleteRecordBulk).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.DELETE_REPORT_RECORD_BULK_SUCCESS, recIds]);
-                done();
-            },
-            () => {
-                expect(true).toBe(false);
-                done();
-            }
-        );
-    });
-
-    it('test saveReportRecord', (done) => {
-
-        flux.actions.saveReportRecord(appId, tblId, recId, changes).then(
-                () => {
-                    expect(mockRecordService.prototype.saveRecord).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SAVE_REPORT_RECORD,
-                        {appId, tblId, recId, changes}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SAVE_REPORT_RECORD_SUCCESS,
-                        jasmine.any(Object)]);
-                    done();
-                },
-                () => {
-                    expect(true).toBe(false);
-                    done();
-                }
-            );
-    });
-
-    it('test saveNewReportRecord', (done) => {
-
-        flux.actions.saveNewReportRecord(appId, tblId, newRecord).then(
-                () => {
-                    expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_REPORT_RECORD,
-                        {appId, tblId, record:newRecord}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_REPORT_RECORD_SUCCESS,
-                        jasmine.any(Object)]);
-                    done();
-                },
-                () => {
-                    expect(true).toBe(false);
-                    done();
-                }
-            );
-    });
-
 });

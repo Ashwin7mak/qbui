@@ -2,6 +2,7 @@ import * as actions from "../constants/actions";
 import Fluxxor from "fluxxor";
 import _ from 'lodash';
 import Logger from '../utils/logger';
+import ValidationUtils from '../utils/validationUtils';
 var logger = new Logger();
 
 /**
@@ -17,12 +18,13 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.RECORD_EDIT_CHANGE_FIELD, this.onRecordEditChangeField,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
             actions.RECORD_EDIT_SAVE, this.onRecordEditSave,
+            actions.RECORD_EDIT_VALIDATE_FIELD, this.onRecordEditValidateField,
             actions.SAVE_REPORT_RECORD, this.onSaveRecord,
-            actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
-            actions.SAVE_REPORT_RECORD_FAILED, this.onSaveRecordFailed,
-            actions.ADD_REPORT_RECORD, this.onSaveAddedRecord,
-            actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
-            actions.ADD_REPORT_RECORD_FAILED, this.onAddRecordFailed
+            actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
+            actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
+            actions.ADD_RECORD, this.onSaveAddedRecord,
+            actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
+            actions.ADD_RECORD_FAILED, this.onAddRecordFailed
         );
         this._initData();
         this.commitChanges = [];
@@ -42,6 +44,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = null;
         this.originalRecord = null;
         this.recordChanges = {};
+        this.editErrors = {};
     },
 
     /**
@@ -68,6 +71,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.recordChanges = {};
             this.originalRecord = undefined;
         }
+        //TODO when a record gets into edit state it might already have errors so this should be populated with those
+        this.editErrors = {};
         this.isInlineEditOpen = true;
         this.emit('change');
     },
@@ -85,6 +90,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.recordChanges[payload.changes.fid]) === 'undefined') {
             this.recordChanges[payload.changes.fid] = {};
         }
+        this.recordChanges =  _.cloneDeep(this.recordChanges);
         this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
         this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
         this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
@@ -92,6 +98,21 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = payload.recId;
         this.isPendingEdit = true;
+        this.emit('change');
+    },
+
+    /**
+     * Called when a field is validated typically on blur.
+     * editErrors is an object of type {fid, {isInvalid, invalidMessgage}}
+     * @param def
+     * @param value
+     * @param checkRequired
+     */
+    onRecordEditValidateField(payload) {
+        if (!this.editErrors) {
+            this.editErrors = {};
+        }
+        this.editErrors[payload.fieldDef.id] = ValidationUtils.checkFieldValue(payload.fieldDef, payload.value, payload.checkRequired);
         this.emit('change');
     },
 
@@ -152,7 +173,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingRecordId = payload.recId;
         let entry = this._getEntryKey();
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
-            this.commitChanges[entry].status = actions.SAVE_REPORT_RECORD_SUCCESS;
+            this.commitChanges[entry].status = actions.SAVE_RECORD_SUCCESS;
         }
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
@@ -169,7 +190,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingRecordId = payload.recId;
         let entry = this._getEntryKey();
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
-            this.commitChanges[entry].status = actions.SAVE_REPORT_RECORD_FAILED;
+            this.commitChanges[entry].status = actions.SAVE_RECORD_FAILED;
         }
         this.isInlineEditOpen = true;
         this.emit('change');
@@ -204,7 +225,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.commitChanges[entry].changes.push(this.recordChanges);
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
-            this.commitChanges[entry].status = actions.ADD_REPORT_RECORD_SUCCESS;
+            this.commitChanges[entry].status = actions.ADD_RECORD_SUCCESS;
         }
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
@@ -225,7 +246,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.commitChanges[entry] = {};
         }
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
-            this.commitChanges[entry].status = actions.ADD_REPORT_RECORD_FAILED;
+            this.commitChanges[entry].status = actions.ADD_RECORD_FAILED;
         }
         this.emit('change');
     },
@@ -254,7 +275,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             currentEditingRecordId : this.currentEditingRecordId,
             originalRecord : this.originalRecord,
             recordChanges : this.recordChanges,
-            commitChanges : this.commitChanges
+            commitChanges : this.commitChanges,
+            editErrors: this.editErrors
         };
     },
 });
