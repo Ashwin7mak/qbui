@@ -73,7 +73,7 @@ let reportModel = {
                         column.defaultValue = {value: field.defaultValue.coercedValue.value, display: field.defaultValue.displayValue};
                     }
 
-                    if (field.multiChoiceSourceAllowed && field.multipleChoice) {
+                    if (field.multipleChoice && field.multipleChoice.choices) {
                         column.choices = field.multipleChoice.choices;
                     }
                     //  client side attributes..

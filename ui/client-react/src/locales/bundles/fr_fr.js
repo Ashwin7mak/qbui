@@ -21,7 +21,9 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
-            more: "Plus..."
+            more: "Plus...",
+            placeholder: "Sélectionner...",
+            notFound: "Pas trouvé"
         },
         footer: {
             copyright: "{year} QuickBase, Inc. Tous droits réservés."
@@ -266,6 +268,6 @@ export default {
             required: 'Remplissez {fieldName}',
             maxChars: "Utilisez jusqu'à caractères {num}",
         },
-
+        noneOption: "\<Aucun\>"
     }
 };

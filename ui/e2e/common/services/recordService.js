@@ -13,6 +13,7 @@
         var recordService = {
             /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
+             * and fetches the created records
              * Returns a promise.
              */
             addRecords: function(app, table, genRecords) {
@@ -32,6 +33,8 @@
                     });
                 return deferred.promise;
             },
+
+
             /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.
              * Returns a promise.
