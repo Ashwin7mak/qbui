@@ -16,7 +16,7 @@ import consts from '../../../../../common/src/constants';
 
 import IconActions from '../../actions/iconActions';
 
-import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
+import '../../node/datetimePicker/css/bootstrap-datetimepicker.css';
 import './dateTimePicker.scss';
 
 import _ from 'lodash';

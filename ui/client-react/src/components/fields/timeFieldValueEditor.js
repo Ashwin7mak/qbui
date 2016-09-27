@@ -108,43 +108,44 @@ const TimeFieldValueEditor = React.createClass({
         }
     },
 
-    onBlur(ev) {
-        if (ev.target && (this.props.onBlur || this.props.onDateTimeBlur)) {
-            //  convert the entered time to military format
-            let militaryTime = null;
-            if (ev.target.value) {
-                //  convert to military time
-                let formats = ['h:mm:ss a', 'h:mm:ss', 'h:mm a', 'h:mm'];
-                for (let idx = 0; idx < formats.length; idx++) {
-                    if (moment(ev.target.value, formats[idx]).isValid()) {
-                        militaryTime = moment(ev.target.value, formats[idx]).format('H:mm:ss');
-                        break;
+    onBlur(newValue) {
+        if (newValue && (this.props.onBlur || this.props.onDateTimeBlur)) {
+            if (newValue.value === null || newValue.value) {
+                //  convert the entered time to military format
+                let militaryTime = null;
+                if (newValue.value) {
+                    //  convert to military time
+                    let formats = ['h:mm:ss a', 'h:mm:ss', 'h:mm a', 'h:mm'];
+                    for (let idx = 0; idx < formats.length; idx++) {
+                        if (moment(newValue.value, formats[idx]).isValid()) {
+                            militaryTime = moment(newValue.value, formats[idx]).format('H:mm:ss');
+                            break;
+                        }
                     }
                 }
-            }
 
-            //  null means the time was cleared by the user.
-            if (ev.target.value === null || militaryTime) {
-                if (this.props.onDateTimeBlur) {
-                    this.props.onDateTimeBlur(militaryTime);
-                } else {
-                    let valueObj = {
-                        value: militaryTime,
-                        display: ''
-                    };
-                    valueObj.display = timeFormatter.format(valueObj, this.props.attributes);
-                    this.props.onBlur(valueObj);
+                //  null means the time was cleared by the user.
+                if (newValue.value === null || militaryTime) {
+                    if (this.props.onDateTimeBlur) {
+                        this.props.onDateTimeBlur(militaryTime);
+                    } else {
+                        let valueObj = {
+                            value: militaryTime,
+                            display: ''
+                        };
+                        valueObj.display = timeFormatter.format(valueObj, this.props.attributes);
+                        this.props.onBlur(valueObj);
+                    }
                 }
             }
         }
     },
 
-    // TODO: waiting for react-select rc2 to leverage the arrow callback
-    //renderClockIcon() {
-    //    return (
-    //        <span></span>
-    //    );
-    //},
+    renderClockIcon() {
+        return (
+            <span className="glyphicon glyphicon-time"></span>
+        );
+    },
 
     renderOption(option) {
         if (option.value === null) {
@@ -216,7 +217,7 @@ const TimeFieldValueEditor = React.createClass({
                         optionRenderer={this.renderOption}
                         placeholder={placeholder}
                         clearable={false}
-                        //arrowRenderer={this.renderClockIcon}
+                        arrowRenderer={this.renderClockIcon}
                     />
                 </div>
         );
