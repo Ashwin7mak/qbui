@@ -143,7 +143,7 @@
           }
         ],
         "HealthCheck": {
-          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramInstancePort"}, "/webhooks/v1/health" ] ]},
+          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramInstancePort"}, "/api/v1/health" ] ]},
           "HealthyThreshold": "2",
           "UnhealthyThreshold": "2",
           "Interval": "5",
