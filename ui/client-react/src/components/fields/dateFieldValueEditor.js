@@ -75,15 +75,15 @@ const DateFieldValueEditor = React.createClass({
     },
 
     //send up the chain an object with value and formatted display value
-    onBlur(ev) {
-        if (ev.target && (this.props.onBlur || this.props.onDateTimeBlur)) {
-            if (ev.target.value === null || ev.target.value) {
+    onBlur(newValue) {
+        if (this.props.onBlur || this.props.onDateTimeBlur) {
+            if (newValue === null || newValue) {
                 if (this.props.onDateTimeBlur) {
-                    this.props.onDateTimeBlur(ev.target.value);
+                    this.props.onDateTimeBlur(newValue);
                 } else {
                     let newDate = null;
-                    if (ev.target.value) {
-                        newDate = moment(ev.target.value, DATE_INPUT).format(DATE_FORMATTED);
+                    if (newValue) {
+                        newDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
                     }
 
                     let valueObj = {
