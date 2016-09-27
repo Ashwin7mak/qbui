@@ -17,6 +17,8 @@ const NumericFieldValueEditor = require('../../../client-react/src/components/fi
 const MultiChoiceFieldValueEditor = require('../../../client-react/src/components/fields/multiChoiceFieldValueEditor');
 const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer');
 const UserFieldValueEditor = require('../../../client-react/src/components/fields/userFieldValueEditor');
+// END OF IMPORT STATEMENTS
+// The comment above is used for a grunt task. Please do not delete.
 
 /* eslint-enable */
 import {SafeAnchor, Alert} from 'react-bootstrap';
