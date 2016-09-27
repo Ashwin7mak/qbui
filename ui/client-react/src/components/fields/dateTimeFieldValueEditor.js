@@ -73,7 +73,6 @@ const DateTimeFieldValueEditor = React.createClass({
      */
     getOrigTime() {
         let origValue = this.getOrigValue();
-        let m = null;
         if (origValue && moment(origValue).isValid()) {
             return moment(origValue).format(TIME_FORMAT);
         } else {
