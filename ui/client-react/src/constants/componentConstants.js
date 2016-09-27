@@ -1,0 +1,3 @@
+export const MULTICHOICE_RADIOGROUP = {
+    NONE_OPTION_VALUE: ''
+};

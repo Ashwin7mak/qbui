@@ -7,6 +7,7 @@ import FieldValueEditorMetadata from 'component-metadata!../../../client-react/s
 import MultiLineTextFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiLineTextFieldValueEditor.js';
 import NumericFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/numericFieldValueRenderer.js';
 import NumericFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/numericFieldValueEditor.js';
+import MultiChoiceFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiChoiceFieldValueEditor.js';
 import UserFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueRenderer.js';
 import UserFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueEditor.js';
 
@@ -16,6 +17,6 @@ var Metadata = _.merge(QBPanelMetadata, QBIconMetadata,
     TextFieldValueRendererMetadata, TextFieldValueEditorMetadata,
     FieldValueRendererMetadata, FieldValueEditorMetadata, MultiLineTextFieldValueEditorMetadata,
     NumericFieldValueRendererMetadata, NumericFieldValueEditorMetadata,
-    UserFieldValueRendererMetadata, UserFieldValueEditorMetadata);
+    UserFieldValueRendererMetadata, UserFieldValueEditorMetadata, MultiChoiceFieldValueEditorMetadata);
 
 export default Metadata;

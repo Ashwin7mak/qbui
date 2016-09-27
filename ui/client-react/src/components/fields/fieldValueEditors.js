@@ -1,6 +1,4 @@
 import React from 'react';
-import {Input, InputGroup, FormControl, MenuItem, FormGroup, DropdownButton} from 'react-bootstrap';
-import moment from 'moment';
 
 /**
  * Initial field component implementations for demo, these will become separate component files
@@ -42,50 +40,17 @@ export const DefaultFieldValueEditor = React.createClass({
 });
 
 /**
- * combo box cell editor
+ * placeholder for user picker
  */
-export const ComboBoxFieldValueEditor = React.createClass({
-
-    propTypes: {
-        choices: React.PropTypes.array, // array of choices with display value props
-        onChange: React.PropTypes.func,
-        onBlur: React.PropTypes.func
-    },
-
-    // handle text input
-    onChange(ev) {
-        const newValue = ev.target.value;
-
-        this.props.onChange(newValue);
-    },
-    // handle dropdown selection
-    onSelect(choice) {
-        this.props.onChange(choice);
-    },
+export const UserFieldValueEditor = React.createClass({
+    displayName: 'UserFieldValueEditor',
 
     render() {
-        return (
-            <InputGroup className="cellEdit">
-                <FormControl type="text"
-                             value={this.props.value}
-                             onChange={this.onChange}
-                             onBlur={this.props.onBlur}
-                             />
-                <DropdownButton pullRight={true}
-                                componentClass={InputGroup.Button}
-                                id="input-dropdown-addon"
-                                title="">
+        return <input ref="fieldInput"
+                      tabIndex="0"
+                      onBlur={this.props.onBlur}
+                      className="cellEdit"/>;
 
-                    {this.props.choices.map((choice, i) => (<MenuItem key={i}
-                                                                      onBlur={this.props.onBlur}
-                                                                      onSelect={() => {this.onSelect(choice.displayValue);}}>
-                                                                {choice.displayValue}
-                                                            </MenuItem>))
-                    }
-
-                </DropdownButton>
-            </InputGroup>
-        );
     }
 });
 

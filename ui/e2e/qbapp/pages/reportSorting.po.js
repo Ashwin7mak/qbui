@@ -317,6 +317,25 @@
         };
 
         /*
+         * Function to verify records are in ascending or descending order
+         */
+        this.verifyRecordsSortOrder = function(records, sortOrder) {
+            //verify records are in descending order
+            _.every(records, function(value, index, array) {
+                // either it is the first element, or otherwise this element should
+                // not be greater than the previous element.
+                // spec requires string conversion
+                if (sortOrder === 'desc') {
+                    //verify records are in descending order
+                    return index === 0 || String(array[index - 1]) >= String(value);
+                } else {
+                    //verify records are in ascending order
+                    return index === 0 || String(array[index - 1]) <= String(value);
+                }
+            });
+        };
+
+        /*
          * Function to select group By Items
          */
         this.selectGroupByItems = function(itemsToSelect) {

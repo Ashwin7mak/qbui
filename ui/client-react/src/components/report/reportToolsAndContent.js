@@ -14,6 +14,7 @@ import './report.scss';
 import FilterUtils from '../../utils/filterUtils';
 import StringUtils from '../../utils/stringUtils';
 import * as query from '../../constants/query';
+import FieldUtils from '../../utils/fieldUtils';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
 import * as Constants from "../../../../common/src/constants";
@@ -286,6 +287,7 @@ const ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
+        let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.fields);
 
         // Define the page start. Page offset is zero indexed. For display purposes, add one.
         this.pageStart = this.props.reportData.pageOffset + 1;
@@ -358,7 +360,7 @@ const ReportToolsAndContent = React.createClass({
                                    cardViewPagination={cardViewPagination }
                                    keyField={this.props.fields && this.props.fields.keyField ?
                                        this.props.fields.keyField.name : SchemaConsts.DEFAULT_RECORD_KEY }
-                                   uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                   uniqueIdentifier={uniqueIdentifier}
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}

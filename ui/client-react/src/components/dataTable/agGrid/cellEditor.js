@@ -1,6 +1,7 @@
 import React from 'react';
 import FieldFormats from '../../../utils/fieldFormats' ;
 import FieldValueEditor from '../../fields/fieldValueEditor';
+import FieldUtils from '../../../utils/fieldUtils';
 
 /**
  * Table cell inline edit specific editor
@@ -59,9 +60,9 @@ const CellEditor = React.createClass({
                               appUsers={this.props.appUsers}
                               ref={(c) => {
                                   //get reference to the component for this field
-                                  if (this.props.params.data && this.props.params.context.uniqueIdentifier &&
-                                      this.props.params.data[this.props.params.context.uniqueIdentifier]) {
-                                      let rid = this.props.params.data[this.props.params.context.uniqueIdentifier].value;
+                                  let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
+                                  if (this.props.params.data && uniqueIdentifier) {
+                                      let rid = this.props.params.data[uniqueIdentifier].value;
 
                                       if (!this.props.params.context.cells) {
                                           this.props.params.context.cells = {};
@@ -79,4 +80,3 @@ const CellEditor = React.createClass({
 });
 
 export default CellEditor;
-
