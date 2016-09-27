@@ -16,7 +16,7 @@
 
         td {
             vertical-align:top;
-            padding-bottom: 30px;
+            padding-bottom: 25px;
         }
         tr:last-child td {
             padding-bottom:0;
@@ -36,13 +36,20 @@
             display: block;
             color: $fieldLabel-color;
             max-width: 10em;
+            span {
+                display: inline-block;
+                vertical-align:top;
+            }
+            .requiredFlag-layout {
+                padding-right: 2px;
+            }
         }
 
         /* field label in field td */
         .field .fieldLabel {
             max-width: 20em;
             text-align:left;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .field {
@@ -59,6 +66,17 @@
     }
 }
 
+.editForm {
+    .fieldLabel {
+        margin-top: 5px;
+    }
+    .field .fieldLabel {
+        margin-top: 0;
+    }
+    .formElement.field .viewElement {
+        padding: 5px;
+    }
+}
 /* For mobile phones: */
 @include small-breakpoint {
     .formSection {

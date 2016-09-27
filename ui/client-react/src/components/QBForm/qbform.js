@@ -131,7 +131,7 @@ let QBForm = React.createClass({
         let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
         return (
             <td key={key}>
-                <FieldLabelElement element={element} relatedField={relatedField} />
+                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={true} reserveSpaceForRequired={true} />
             </td>);
     },
 
@@ -164,6 +164,10 @@ let QBForm = React.createClass({
         let validationStatus =  this.getFieldValidationStatus(element.fieldId);
 
         let key = "field" + sectionIndex + "-" + element.orderIndex;
+
+        //if the form prop calls for element to be required update fieldDef accordingly
+        relatedField.required = relatedField.required || element.required;
+
         return (
             <td key={key} colSpan={colSpan}>
               <FieldElement element={element}
@@ -172,7 +176,8 @@ let QBForm = React.createClass({
                             relatedField={relatedField}
                             fieldRecord={fieldRecord}
                             includeLabel={includeLabel}
-                            edit={this.props.edit}
+                            indicateRequiredOnLabel={true}
+                            edit={this.props.edit && !element.readOnly}
                             onChange={this.props.onFieldChange}
                             onBlur={this.props.onFieldChange}
                             isInvalid={validationStatus.isInvalid}
@@ -226,6 +231,10 @@ let QBForm = React.createClass({
 
             if (index === arr.length - 1) {
                 // the last element - add the final cell(s) to the row
+                if (!props.positionSameRow) {
+                    rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
+                    currentRowElements = [];
+                }
                 currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, true));
                 rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
             } else {
@@ -326,7 +335,7 @@ let QBForm = React.createClass({
 
         return (
             <div className="formContainer">
-                <form>
+                <form className={this.props.edit ? "editForm" : "viewForm"}>
                     {errorMsg ? <div className="errorSection">{errorMsg}</div> : formContent}
                 </form>
             </div>

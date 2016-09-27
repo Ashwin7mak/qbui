@@ -28,9 +28,11 @@ $data-font-size: $font-size-p;
 
 // layout of input userdata on a form
 .formContainer [type="text"].input {
-  padding: 10px;
+  padding: 5px;
   width: 280px;
-  height: 35px;
+  &.defaultInputWidth {
+    width: inherit;
+  }
 }
 
 // layout of input userdata in an inline edit table

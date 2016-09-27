@@ -61,13 +61,14 @@ const FieldElement = React.createClass({
         let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "";
         let fieldRawValue = this.props.fieldRecord ? this.props.fieldRecord.value : "";
 
+        let indicateRequiredOnField = !this.props.indicateRequiredOnLabel;
         let fieldElement = this.props.edit ?
             <FieldValueEditor type={fieldType}
                             value={fieldRawValue}
                             display={fieldDisplayValue}
                             attributes={fieldDatatypeAttributes}
                             fieldDef = {this.props.relatedField}
-                            indicateRequired={true}
+                            indicateRequired={indicateRequiredOnField}
                             onChange={this.onChange}
                             onBlur={this.onBlur}
                             onKeyDown={this.onKeyDown}
@@ -85,7 +86,7 @@ const FieldElement = React.createClass({
                             fieldDef = {this.props.relatedField} />;
         return (
             <div className="formElement field">
-                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} /> }
+                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} /> }
 
                 <span className="cellWrapper">
                     { (fieldDisplayValue !== null || fieldRawValue !== null) && fieldElement }

@@ -135,6 +135,7 @@ const FieldValueRenderer = React.createClass({
     render() {
         let className = "";
         let commonProperties = {};
+        commonProperties.classes = "viewElement";
 
         if (_.has(this.props, 'attributes.clientSideAttributes.bold') &&
             this.props.attributes.clientSideAttributes.bold) {
