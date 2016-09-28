@@ -6,7 +6,7 @@
     var baseE2EPath = '../../../e2e/';
     // Overwrite sauce.global.protractor.conf spec files since that's all we need to change to run the smoke test
     globalSauceConfig.specs = [
-        baseE2EPath + 'qbapp/tests/reports/prodSmokeTest.e2e.spec.js'
+        baseE2EPath + 'qbapp/tests/prodSmokeTest.e2e.spec.js'
     ];
     // Set the capability object to use for Sauce Labs
     globalSauceConfig.multiCapabilities = [

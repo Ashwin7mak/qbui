@@ -21,7 +21,7 @@
             builderInstance.withLabelPosition('LEFT');
             builderInstance.withDisplayOptions(formElementDisplayOptions);
             builderInstance.withDisplayText(rawValue.generateStringWithFixLength(51));
-            return builderInstance.build();
+            return {"FormHeaderElement": builderInstance.build()};
         },
 
         generateDefaultElements: function(fields) {
@@ -42,11 +42,11 @@
                 builderInstance.withLabelPosition('LEFT');
                 builderInstance.withType('FIELD');
 
-                elements[elementIndex] = builderInstance.build();
+                elements[elementIndex] = {"FormFieldElement": builderInstance.build()};
                 elementIndex++;
             });
 
             return elements;
-        },
+        }
     };
 }());
