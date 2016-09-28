@@ -7,7 +7,19 @@
     "datadog": {
       "api_key": "0c8a8316ea264c1391a346121614a8e7",
       "application_key": "d29bd4e200df9f222279caa4dbacc60c86f8b0f6",
-      "hostname": ""
+      "hostname": "",
+      "process": {
+        "instances": [
+          {
+            "name": "coreui-nodejs",
+            "search_string": [
+              "coreui",
+              "nodejs"
+            ]
+          }
+        ]
+      }
+
     },
     "splunk": {
       "forwarder": {
@@ -25,6 +37,7 @@
     "recipe[datadog::dd-handler]",
     "recipe[splunkclouduf::configure]",
     "recipe[splunkclouduf::cloneprep]",
-    "recipe[nodejs::app_deploy]"
+    "recipe[nodejs::app_deploy]",
+    "recipe[datadog::process]"
   ]
 }
