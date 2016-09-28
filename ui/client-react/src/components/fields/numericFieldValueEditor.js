@@ -131,9 +131,6 @@ const NumericFieldValueEditor = React.createClass({
         }
         let width = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.width : null;
 
-        if (width) {
-            classes += ' defaultInputWidth';
-        }
         let inputBox = <input ref="textInput"
                           className={classes}
                           value={this.props.display ? this.props.display : this.props.value}

@@ -74,7 +74,8 @@ let reportModel = {
                     }
 
                     if (field.multipleChoice && field.multipleChoice.choices) {
-                        column.choices = field.multipleChoice.choices;
+                        column.multipleChoice = {};
+                        column.multipleChoice.choices = field.multipleChoice.choices;
                     }
                     //  client side attributes..
                     column.datatypeAttributes = field.datatypeAttributes;

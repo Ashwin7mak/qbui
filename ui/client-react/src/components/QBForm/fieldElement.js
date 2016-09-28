@@ -9,7 +9,7 @@ import './qbform.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 /**s
- * render a field value, optionally with its label
+ * render a form field value, optionally with its label
  */
 const FieldElement = React.createClass({
     mixins: [FluxMixin],
@@ -62,6 +62,13 @@ const FieldElement = React.createClass({
         let fieldRawValue = this.props.fieldRecord ? this.props.fieldRecord.value : "";
 
         let indicateRequiredOnField = !this.props.indicateRequiredOnLabel;
+
+        //if the field prop has a width defined this affected the element's layout so add the class to indicate
+        let classes = '';
+        if (_.has(this.props, 'relatedField.datatypeAttributes.clientSideAttributes.width') && this.props.relatedField.datatypeAttributes.clientSideAttributes.width !== 50) {
+            classes = 'fieldInputWidth';
+        }
+
         let fieldElement = this.props.edit ?
             <FieldValueEditor type={fieldType}
                             value={fieldRawValue}
@@ -76,20 +83,21 @@ const FieldElement = React.createClass({
                             isInvalid={this.props.isInvalid}
                             key={'fve-' + this.props.idKey}
                             idKey={'fve-' + this.props.idKey}
-                            invalidMessage={this.props.invalidMessage}/> :
-            <FieldValueRenderer type={fieldType}
+                            invalidMessage={this.props.invalidMessage}
+                            classes={classes}/> :
+            ((fieldDisplayValue !== null || fieldRawValue !== null) && <FieldValueRenderer type={fieldType}
                             key={'fvr-' + this.props.idKey}
                             idKey={'fvr-' + this.props.idKey}
                             value={fieldRawValue}
                             display={fieldDisplayValue}
                             attributes={fieldDatatypeAttributes}
-                            fieldDef = {this.props.relatedField} />;
+                            fieldDef = {this.props.relatedField} />);
         return (
             <div className="formElement field">
                 {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} /> }
 
                 <span className="cellWrapper">
-                    { (fieldDisplayValue !== null || fieldRawValue !== null) && fieldElement }
+                    { fieldElement }
                 </span>
             </div>);
     }

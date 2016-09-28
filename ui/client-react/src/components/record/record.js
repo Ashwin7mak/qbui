@@ -131,7 +131,8 @@ let Record = React.createClass({
     render() {
         //add dummy buttons for testing save/cancel functionality
         //TODO - remove these once trowser has these buttons instead
-        let dummyButtons = <div style={{display:"none"}}>
+        let style =  this.props.edit ? {} : {display:"none"};
+        let dummyButtons = <div style={style}>
                 <button class="save button" onClick={this.handleRecordSaveClicked}>Save</button>
                 <button class="cancel button" onClick={this.handleEditRecordCancel}>Cancel</button>
             </div>;

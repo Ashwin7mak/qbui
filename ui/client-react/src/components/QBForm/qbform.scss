@@ -76,12 +76,15 @@
     .formElement.field .viewElement {
         padding: 5px;
     }
-    [type="text"].input {
-        padding: 5px;
+    .fieldValueEditor {
         width: 280px;
-        &.defaultInputWidth {
+        &.fieldInputWidth {
             width: inherit;
         }
+    }
+    [type="text"].input {
+        padding: 5px;
+        width: 100%;
     }
 }
 /* For mobile phones: */
