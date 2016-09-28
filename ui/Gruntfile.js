@@ -661,6 +661,10 @@ module.exports = function(grunt) {
     });
     //------------END OF initConfig
 
+    // Load and register custom external grunt scripts
+    // All grunt tasks in ../scripts/gruntTasks will be loaded/registered
+    grunt.loadTasks('../scripts/gruntTasks');
+
     // Production build
     grunt.registerTask('webpackbuild', ['webpack:build']);
 

@@ -13,15 +13,15 @@ describe('ReportActions functions', () => {
     let tblId = 1;
     let flux = {
         actions:{
-            deleteReportRecordBulk: function() {return;}
+            deleteRecordBulk: function() {return;}
         }
     };
     beforeEach(() => {
-        spyOn(flux.actions, 'deleteReportRecordBulk');
+        spyOn(flux.actions, 'deleteRecordBulk');
     });
 
     afterEach(() => {
-        flux.actions.deleteReportRecordBulk.calls.reset();
+        flux.actions.deleteRecordBulk.calls.reset();
     });
 
     it('test render of component', () => {
@@ -53,6 +53,6 @@ describe('ReportActions functions', () => {
         var node = ReactDOM.findDOMNode(actionIcons[2]);
         TestUtils.Simulate.click(node);
 
-        expect(flux.actions.deleteReportRecordBulk).toHaveBeenCalled();
+        expect(flux.actions.deleteRecordBulk).toHaveBeenCalled();
     });
 });

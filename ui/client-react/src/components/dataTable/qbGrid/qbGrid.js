@@ -479,7 +479,7 @@ const QBGrid = React.createClass({
      * @param data
      */
     deleteRecord(data) {
-        //flux.actions.deleteReportRecord(...) which should do the delete causing the grid to re-render
+        //flux.actions.deleteRecord(...) which should do the delete causing the grid to re-render
     },
 
     /**
