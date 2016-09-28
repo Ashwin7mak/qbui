@@ -31,6 +31,11 @@ import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
 import MultiChoiceFieldValueEditorDoc from './docs/multiChoiceFieldValueEditor';
 import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import UserFieldEditorDoc from './docs/userFieldValueEditor';
+import DateFieldValueEditorDoc from './docs/dateFieldValueEditor.js';
+import TimeFieldValueRendererDoc from './docs/timeFieldValueRenderer.js';
+import TimeFieldValueEditorDoc from './docs/timeFieldValueEditor.js';
+import DateTimeFieldValueRendererDoc from './docs/dateTimeFieldValueRenderer.js';
+import DateTimeFieldValueEditorDoc from './docs/dateTimeFieldValueEditor.js';
 // END OF IMPORT STATEMENTS
 
 render((
@@ -49,6 +54,11 @@ render((
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
             <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
             <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
+            <Route path="dateFieldValueEditor" component={DateFieldValueEditorDoc} />
+            <Route path="timeFieldValueRenderer" component={TimeFieldValueRendererDoc} />
+            <Route path="timeFieldValueEditor" component={TimeFieldValueEditorDoc} />
+            <Route path="dateTimeFieldValueRenderer" component={DateTimeFieldValueRendererDoc} />
+            <Route path="dateTimeFieldValueEditor" component={DateTimeFieldValueEditorDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

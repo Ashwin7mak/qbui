@@ -92,7 +92,6 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.DATETIME_FORMAT:
             return (
                 <DateTimeFieldValueRenderer value={this.props.value}
-                                            display={this.props.display}
                                             attributes={this.props.attributes}
                                             key={'dfvr-' + this.props.idKey}
                     {...commonProperties}/>
@@ -100,7 +99,6 @@ const FieldValueRenderer = React.createClass({
         case FieldFormats.TIME_FORMAT:
             return (
                     <TimeFieldValueRenderer value={this.props.value}
-                                            display={this.props.display}
                                             attributes={this.props.attributes}
                                             key={'dfvr-' + this.props.idKey}
                                                 {...commonProperties}/>

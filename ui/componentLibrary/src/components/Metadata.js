@@ -10,6 +10,11 @@ import NumericFieldValueEditorMetadata from 'component-metadata!../../../client-
 import MultiChoiceFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiChoiceFieldValueEditor.js';
 import UserFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueRenderer.js';
 import UserFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueEditor.js';
+import DateFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/dateFieldValueEditor.js';
+import TimeFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/timeFieldValueRenderer.js';
+import TimeFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/timeFieldValueEditor.js';
+import DateTimeFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/dateTimeFieldValueRenderer.js';
+import DateTimeFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/dateTimeFieldValueEditor.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -27,7 +32,12 @@ var Metadata = _.merge(
     NumericFieldValueEditorMetadata,
     UserFieldValueRendererMetadata,
     UserFieldValueEditorMetadata,
-    MultiChoiceFieldValueEditorMetadata
+    MultiChoiceFieldValueEditorMetadata,
+    DateFieldValueEditorMetadata,
+    TimeFieldValueRendererMetadata,
+    TimeFieldValueEditorMetadata,
+    DateTimeFieldValueRendererMetadata,
+    DateTimeFieldValueEditorMetadata
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete
 );

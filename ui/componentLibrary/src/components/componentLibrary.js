@@ -24,6 +24,11 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/components/userFieldEditor" activeClassName="active">UserFieldEditor</Link></li>
                             <li><Link to="/components/multiLineTextFieldValueEditor" activeClassName="active">MultiLineTextFieldValueEditor</Link></li>
                             <li><Link to="/components/multiChoiceFieldValueEditor" activeClassName="active">MultiChoiceFieldValueEditor</Link></li>
+                            <li><Link to="/components/dateFieldValueEditor" activeClassName="active">DateFieldValueEditor</Link></li>
+                            <li><Link to="/components/timeFieldValueRenderer" activeClassName="active">TimeFieldValueRenderer</Link></li>
+                            <li><Link to="/components/timeFieldValueEditor" activeClassName="active">TimeFieldValueEditor</Link></li>
+                            <li><Link to="/components/dateTimeFieldValueRenderer" activeClassName="active">DateTimeFieldValueRenderer</Link></li>
+                            <li><Link to="/components/dateTimeFieldValueEditor" activeClassName="active">DateTimeFieldValueEditor</Link></li>
                         </ul>
                     </nav>
                 </div>
