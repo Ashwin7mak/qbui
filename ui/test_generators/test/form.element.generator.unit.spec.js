@@ -48,40 +48,40 @@
                     var targetElements = formElementGenerator.generateDefaultElements(entry.testFields);
 
                     entry.testFields.forEach(function(element) {
-                        if (targetElements[element.id]["FormFieldElement"].fieldId !== element.id) {
+                        if (targetElements[element.id].FormFieldElement.fieldId !== element.id) {
                             assert.fail('Expected field Id ' + element.id + ' to match actual field Id ' + targetElements[element.id].fieldId);
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].required === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.required === "undefined") {
                             assert.fail('Expected required field to be set ');
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].useAlternateLabel === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.useAlternateLabel === "undefined") {
                             assert.fail('Expected useAlternateLabel field to be set ');
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].useAlternateLabel === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.useAlternateLabel === "undefined") {
                             assert.fail('Expected useAlternateLabel field to be set ');
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].orderIndex === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.orderIndex === "undefined") {
                             assert.fail('Expected orderIndex field to be set ');
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].readOnly === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.readOnly === "undefined") {
                             assert.fail('Expected readOnly field to be set ');
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].positionSameRow === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.positionSameRow === "undefined") {
                             assert.fail('Expected positionSameRow field to be set ');
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].displayText === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.displayText === "undefined") {
                             assert.fail('Expected displayText field to be set ');
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].labelPosition === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.labelPosition === "undefined") {
                             assert.fail('Expected labelPosition field to be set ');
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].type === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.type === "undefined") {
                             assert.fail('Expected type field to be set ');
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].displayOptions === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.displayOptions === "undefined") {
                             assert.fail('Expected displayOptions field to be set ');
                         }
-                        if (typeof targetElements[element.id]["FormFieldElement"].displayText === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.displayText === "undefined") {
                             assert.fail('Expected displayText field to be set ');
                         }
                     });
@@ -96,7 +96,7 @@
         describe('test form header element', function() {
             it('Test case (header element check): ', function(done) {
                 var targetHeaderElementsObject = formElementGenerator.generateDefaultHeaderElement();
-                var targetHeaderElements = targetHeaderElementsObject["FormHeaderElement"];
+                var targetHeaderElements = targetHeaderElementsObject.FormHeaderElement;
 
                 if (typeof targetHeaderElements[formElementConstants.elementKeys.TYPE] === "undefined") {
                     assert.fail('Expected type field to be set ');
@@ -116,4 +116,3 @@
         });
     });
 }());
-
