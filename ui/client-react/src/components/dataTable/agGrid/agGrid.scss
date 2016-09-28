@@ -160,6 +160,9 @@ $cell-edit-background-edit: #f3f8fe;
     .gridHeaderCell.AlignRight, .gridCell.AlignRight {
         text-align: right;
     }
+    .gridHeaderCell.AlignCenter, .gridCell.AlignCenter {
+        text-align: center;
+    }
     .gridCell.selectionCell {
         overflow:visible;
         .ag-cell-value {
@@ -316,7 +319,7 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-menu-option-icon {
         padding: 0 5px;
     }
-    .qbIcon.iconTableUISturdy-check {
+    .saveRecord.qbIcon.iconTableUISturdy-check {
         font-size: $grid-font-size + 2;
         width: $grid-font-size + 2;
         vertical-align: middle;
@@ -418,6 +421,13 @@ $cell-edit-background-edit: #f3f8fe;
         .textCell {
             overflow:hidden;
             text-overflow:ellipsis;
+        }
+        .checkbox {
+            text-align: center;
+
+            .checkbox-unchecked {
+                margin-left: 5px;
+            }
         }
         flex: 1 1 auto;
     }

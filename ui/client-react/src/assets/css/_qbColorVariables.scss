@@ -239,9 +239,15 @@ $secondary-bar-page-actions-bg: #476B90;
 
 $fieldLabel-color: $color3;
 
-$user-picker-deactivated-label-fg: $color-black-600;
-$user-picker-user-label-fg: $color-black-700;
-$user-picker-email-label-fg: $color-black-600;
+$required-asterisk-color: $color-cyan-700;
+$error-color: $color-red-700;
+
+//== Fields
+$checkbox-background-checked-color: $color-cyan-500;
+$checkbox-background-unchecked-color: $color-black-100;
+$checkbox-border-color: $color-black-500;
+$checkbox-checkmark-editable-color: $color-black-100;
+$checkbox-checkmark-readonly-color: $color-cyan-500;
 
 $datepicker-header-bg: $color34;
 $datepicker-header-fg: $color2;
@@ -261,17 +267,19 @@ $urlButton-background-normal-colorstop2-color: $color-black-100;
 @mixin urlButtonDisabled() {
     opacity: .4;
 }
-
 $urlbutton-background-focus-colorstop1-color: $color-black-800;
 $urlbutton-background-focus-colorstop2-color: $color-black-100;
 @mixin urlButtonBackgroundFocusGradient() {
     background: linear-gradient(to top, $urlButton-background-focus-colorstop1-color -700%, $urlButton-background-focus-colorstop2-color 90%);
 }
-
 $urlButton-border-color: $color-black-300;
 $urlButton-background-hover-color: $color-black-100;
 $urlButton-background-focus-colorstop1-color: $color-black-800;
 $urlButton-background-focus-colorstop2-color: $color-black-100;
+
+$user-picker-deactivated-label-fg: $color-black-600;
+$user-picker-user-label-fg: $color-black-700;
+$user-picker-email-label-fg: $color-black-600;
 
 //== QBPanel
 $panel-border-color: $color4;

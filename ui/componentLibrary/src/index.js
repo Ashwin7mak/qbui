@@ -19,40 +19,45 @@ import TableHomePageRoute from '../../client-react/src/components/table/tableHom
 import ComponentLibraryWrapper from './components/componentLibrary';
 import './assets/componentLibrary.scss';
 
+import CheckBoxFieldValueEditorDoc from './docs/checkBoxFieldValueEditor';
+import CheckBoxFieldValueRendererDoc from './docs/checkBoxFieldValueRenderer';
+import FieldValueEditorDoc from './docs/fieldValueEditor';
+import FieldValueRendererDoc from './docs/fieldValueRenderer';
+import MultiChoiceFieldValueEditorDoc from './docs/multiChoiceFieldValueEditor';
+import MultiLineTextFieldValueEditorDoc from './docs/multiLineTextFieldValueEditor';
+import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
+import NumericFieldValueRendererDoc from './docs/numericFieldValueRenderer';
+import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
+import TextFieldValueRendererDoc from './docs/textFieldValueRenderer';
+import UrlFieldValueEditorDoc from './docs/urlFieldValueEditor.js';
+import UrlFieldValueRendererDoc from './docs/urlFieldValueRenderer.js';
+import UserFieldEditorDoc from './docs/userFieldValueEditor';
+import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
-import TextFieldDoc from './docs/textFieldValueRenderer';
-import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
-import FieldValueRendererDoc from './docs/fieldValueRenderer';
-import FieldValueEditorDoc from './docs/fieldValueEditor';
-import MultiLineTextFieldValueEditorDoc from './docs/multiLineTextFieldValueEditor';
-import NumericFieldDoc from './docs/numericFieldValueRenderer';
-import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
-import MultiChoiceFieldValueEditorDoc from './docs/multiChoiceFieldValueEditor';
-import UserFieldRendererDoc from './docs/userFieldValueRenderer';
-import UserFieldEditorDoc from './docs/userFieldValueEditor';
-import UrlFieldValueRendererDoc from './docs/urlFieldValueRenderer.js';
-import UrlFieldValueEditorDoc from './docs/urlFieldValueEditor.js';
 // END OF IMPORT STATEMENTS
+// Above comment used for Grunt task. Please do not delete.
 
 render((
     <Router history={browserHistory}>
         <Route path="components" component={ComponentLibraryWrapper}>
             <IndexRedirect to="qbpanel" />
-            <Route path="qbpanel" component={QBPanelDoc} />
-            <Route path="qbicon" component={QBIconDoc} />
-            <Route path="textFieldValueRenderer" component={TextFieldDoc} />
-            <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
-            <Route path="numericFieldValueRenderer" component={NumericFieldDoc} />
+            <Route path="checkBoxFieldValueEditor" component={CheckBoxFieldValueEditorDoc} />
+            <Route path="checkBoxFieldValueRenderer" component={CheckBoxFieldValueRendererDoc} />
+            <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
+            <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
+            <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
+            <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
             <Route path="numericfieldValueEditor" component={NumericFieldValueEditorDoc} />
+            <Route path="numericFieldValueRenderer" component={NumericFieldValueRendererDoc} />
+            <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
+            <Route path="textFieldValueRenderer" component={TextFieldValueRendererDoc} />
+            <Route path="urlFieldValueEditor" component={UrlFieldValueEditorDoc} />
+            <Route path="urlFieldValueRenderer" component={UrlFieldValueRendererDoc} />
             <Route path="userFieldRenderer" component={UserFieldRendererDoc} />
             <Route path="userFieldEditor" component={UserFieldEditorDoc} />
-            <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
-            <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
-            <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
-            <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
-            <Route path="urlFieldValueRenderer" component={UrlFieldValueRendererDoc} />
-            <Route path="urlFieldValueEditor" component={UrlFieldValueEditorDoc} />
+            <Route path="qbpanel" component={QBPanelDoc} />
+            <Route path="qbicon" component={QBIconDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));
