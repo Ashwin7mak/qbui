@@ -21,7 +21,11 @@ const MultiLineTextFieldValueEditor = React.createClass({
         onChange: React.PropTypes.func,
         /**
          * listen for losing focus by setting a callback to the onBlur prop */
-        onBlur: React.PropTypes.func
+        onBlur: React.PropTypes.func,
+        /**
+         * Show a scroll bar version for inline editing.
+         */
+        showScrollForMultiLine: React.PropTypes.bool
     },
 
     statics: {
@@ -94,13 +98,17 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     render() {
-        return <textarea ref="textarea" style={this.state.style}
+        let cols = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.width : null;
+        let rows = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.num_lines') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.num_lines : 1;
+        let style = this.props.showScrollForMultiLine ? this.state.style : {};
+        return <textarea ref="textarea" style={style}
                                         onChange={this.onChange}
                                         onBlur={this.onBlur}
                                         tabIndex="0"
                                         onKeyUp={this.onKeyUp}
                                         className="cellEdit"
-                                        rows="1"
+                                        rows={rows}
+                                        cols={cols}
                                         value={this.props.value === null ? '' : this.props.value}
                                         type="text" />;
     }

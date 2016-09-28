@@ -56,7 +56,7 @@ const FieldElement = React.createClass({
     render() {
         let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
             this.props.relatedField.datatypeAttributes : {};
-        let fieldType = FieldFormats.getFormatType(fieldDatatypeAttributes.type);
+        let fieldType = FieldFormats.getFormatType(fieldDatatypeAttributes);
 
         //catch the non-implemented pieces.
         let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "";

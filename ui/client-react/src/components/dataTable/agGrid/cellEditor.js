@@ -58,6 +58,7 @@ const CellEditor = React.createClass({
                               idKey={this.props.idKey}
                               invalidMessage={this.props.invalidMessage}
                               appUsers={this.props.appUsers}
+                              showScrollForMultiLine={true}
                               ref={(c) => {
                                   //get reference to the component for this field
                                   let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);

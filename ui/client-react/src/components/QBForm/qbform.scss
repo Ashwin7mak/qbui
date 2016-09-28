@@ -1,5 +1,7 @@
 @import '../../assets/css/qbVariables';
 
+$edit-field-padding: 5px;
+
 .formContainer {
     padding: 10px;
 }
@@ -68,18 +70,21 @@
 
 .editForm {
     .fieldLabel {
-        margin-top: 5px;
+        margin-top: $edit-field-padding;
     }
     .field .fieldLabel {
         margin-top: 0;
     }
     .formElement.field .viewElement {
-        padding: 5px;
+        padding: $edit-field-padding;
     }
     .fieldValueEditor {
         width: 280px;
         &.fieldInputWidth {
             width: inherit;
+        }
+        .checkbox {
+            margin-top: $edit-field-padding;
         }
     }
     [type="text"].input {
