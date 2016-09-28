@@ -49,40 +49,39 @@ function getTimesInMinutes(increment, militaryTime) {
 const TimeFieldValueEditor = React.createClass({
     displayName: 'TimeFieldValueEditor',
     timeDropList:  getTimesInMinutes(30),
-    miliaryTimeDropList: getTimesInMinutes(30, true),
+    militaryTimeDropList: getTimesInMinutes(30, true),
 
     propTypes: {
         /**
-         * the raw date value in ISO format */
+         *  the raw date value in ISO format */
         value: React.PropTypes.string,
 
-        /* the display time value */
-        display: React.PropTypes.string,
-
-        /* field attributes */
+        /**
+         *  field attributes */
         attributes: React.PropTypes.object,
 
-        /* field type */
+        /**
+         *  field type - could be Time or DateTime */
         type: React.PropTypes.number,
 
         /**
-         * renders with red border if true */
+         *  renders with red border if true */
         isInvalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         *  message to display in the tool tip when isInvalid */
         invalidMessage: React.PropTypes.string,
 
         /**
-         * optional additional classes for the input to customize styling */
+         *  optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
 
         /**
-         * listen for changes by setting a callback to the onChange prop.  */
+         *  listen for changes by setting a callback to the onChange prop.  */
         onChange: React.PropTypes.func,
 
         /**
-         * listen for losing focus by setting a callback to the onBlur prop. */
+         *  listen for losing focus by setting a callback to the onBlur prop. */
         onBlur: React.PropTypes.func,
 
         idKey: React.PropTypes.any
@@ -213,7 +212,7 @@ const TimeFieldValueEditor = React.createClass({
                         onBlur={this.onBlur}
                         onChange={this.onChange}
                         value={theTime ? theTime : ''}
-                        options={useMilitaryTime ? this.miliaryTimeDropList : this.timeDropList}
+                        options={useMilitaryTime ? this.militaryTimeDropList : this.timeDropList}
                         optionRenderer={this.renderOption}
                         placeholder={placeholder}
                         clearable={false}
