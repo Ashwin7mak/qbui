@@ -25,6 +25,7 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/components/multiLineTextFieldValueEditor" activeClassName="active">MultiLineTextFieldValueEditor</Link></li>
                             <li><Link to="/components/multiChoiceFieldValueEditor" activeClassName="active">MultiChoiceFieldValueEditor</Link></li>
                             <li><Link to="/components/urlFieldValueRenderer" activeClassName="active">UrlFieldValueRenderer</Link></li>
+                            <li><Link to="/components/urlFieldValueEditor" activeClassName="active">UrlFieldValueEditor</Link></li>
                         </ul>
                     </nav>
                 </div>

@@ -11,6 +11,7 @@ import MultiChoiceFieldValueEditorMetadata from 'component-metadata!../../../cli
 import UserFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueRenderer.js';
 import UserFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueEditor.js';
 import UrlFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/urlFieldValueRenderer.js';
+import UrlFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/urlFieldValueEditor.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -29,7 +30,8 @@ var Metadata = _.merge(
     UserFieldValueRendererMetadata,
     UserFieldValueEditorMetadata,
     MultiChoiceFieldValueEditorMetadata,
-    UrlFieldValueRendererMetadata
+    UrlFieldValueRendererMetadata,
+    UrlFieldValueEditorMetadata
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete
 );
