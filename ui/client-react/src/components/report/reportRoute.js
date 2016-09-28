@@ -59,9 +59,22 @@ const ReportRoute = React.createClass({
             />);
     },
 
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    editNewRecord() {
+
+        const {appId, tblId, rptId} = this.props.params;
+
+        const flux = this.getFlux();
+
+        flux.actions.editNewRecord(appId, tblId, rptId);
+    },
+
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
+            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.favorite', icon:'star'},
             {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
             {msg: 'pageActions.email', icon:'mail'},

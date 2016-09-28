@@ -69,6 +69,7 @@ $action-separator-color: #486c8f;
         display:flex;
         flex-direction:column;
         flex: 1 1 auto;
+        overflow:auto;
     }
     .trowserFooter {
         color: #fff;

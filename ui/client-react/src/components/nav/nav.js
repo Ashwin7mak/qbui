@@ -4,8 +4,8 @@ import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
 import ReportManagerTrowser from "../report/reportManagerTrowser";
-
-
+import RecordTrowser from "../record/recordTrowser";
+import * as SchemaConsts from "../../constants/schema";
 import GlobalActions from "../actions/globalActions";
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
@@ -109,16 +109,31 @@ export let Nav = React.createClass({
         if (this.state.nav.leftNavVisible) {
             classes += " leftNavOpen";
         }
+        let editRecordId = this.props.location.query.editRec;
 
+        if (editRecordId === "new") {
+            editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
+        }
         return (<div className={classes}>
 
-            <ReportManagerTrowser visible={this.state.nav.trowserOpen}
+            <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === "editRecord"}
+                           router={this.props.router}
+                           form={this.state.form}
+                           appId={this.props.params.appId}
+                           tblId={this.props.params.tblId}
+                           recId={editRecordId}
+                           pendEdits={this.state.pendEdits}
+                           appUsers={this.state.apps.appUsers}
+                           selectedApp={this.getSelectedApp()}
+                           selectedTable={this.getSelectedTable()}
+            />
+
+            <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === "reports"}
                                   router={this.props.router}
                                   selectedTable={this.getSelectedTable()}
                                   filterReportsName={this.state.nav.filterReportsName}
                                   reportsData={this.state.reportsData}
             />
-
 
             <LeftNav
                 visible={this.state.nav.leftNavVisible}

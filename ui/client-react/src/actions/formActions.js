@@ -49,12 +49,8 @@ function removeQueryString() {
 let formActions = {
 
     openRecordForEdit(appId, tblId, rptId = null, recordId = null) {
-        console.log('edit', recordId);
-        console.log(browserHistory);
-        console.log(this);
 
-
-        updateQueryStringParam("er",recordId ? recordId : "new");
+        updateQueryStringParam("editRec",recordId);
 
         this.flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, "edit").then(() => {
 
@@ -62,8 +58,18 @@ let formActions = {
         });
     },
 
+    editNewRecord(appId, tblId, rptId = null) {
 
-    loadFormAndRecord(appId, tblId, recordId, rptId, formType) {
+
+        updateQueryStringParam("editRec", "new");
+
+        this.flux.actions.loadFormAndRecord(appId, tblId, 1, rptId, "edit", true).then(() => {
+
+            this.flux.actions.showTrowser("editRecord");
+        });
+    },
+
+    loadFormAndRecord(appId, tblId, recordId, rptId, formType, ignoreRecord = false) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && recordId) {
@@ -73,6 +79,10 @@ let formActions = {
                 formService.getFormAndRecord(appId, tblId, recordId, rptId, formType).then(
                     (response) => {
                         resolve();
+
+                        if (ignoreRecord) {
+                            response.data.record = null;
+                        }
                         this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS, response.data);
                     },
                     (error) => {

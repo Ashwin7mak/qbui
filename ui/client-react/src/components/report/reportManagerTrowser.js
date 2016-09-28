@@ -3,6 +3,7 @@ import Fluxxor from 'fluxxor';
 import Trowser from "../trowser/trowser";
 import ReportManager from "./reportManager";
 import {I18nMessage} from "../../utils/i18nMessage";
+import Button from 'react-bootstrap/lib/Button';
 
 import QBicon from "../qbIcon/qbIcon";
 import TableIcon from "../qbTableIcon/qbTableIcon";
@@ -22,7 +23,7 @@ let ReportManagerTrowser = React.createClass({
                 if (this.props.router) {
                     this.props.router.push(report.link);
                 }
-            });
+            },500);
         };
 
         return <ReportManager reportsData={this.props.reportsData}
@@ -53,6 +54,11 @@ let ReportManagerTrowser = React.createClass({
         </div>);
     },
 
+    getTrowserRightIcons() {
+        return (
+            <Button bsStyle="primary" onClick={this.hideTrowser}>Done</Button>);
+    },
+
     hideTrowser() {
         let flux = this.getFlux();
         flux.actions.filterReportsByName("");
@@ -67,8 +73,8 @@ let ReportManagerTrowser = React.createClass({
                      visible={this.props.visible}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
                      centerActions={this.getTrowserActions()}
+                     rightIcons={this.getTrowserRightIcons()}
                      onCancel={this.hideTrowser}
-                     onDone={this.hideTrowser}
                      content={this.getTrowserContent()} />
         );
     }
