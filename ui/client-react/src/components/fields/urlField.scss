@@ -1,0 +1,38 @@
+@import '../../../src/assets/css/qbVariables';
+
+.urlField {
+    a {
+        color: $link-text-normal-color;
+    }
+
+    a:hover {
+        color: $link-text-hover-color;
+    }
+
+    .link {
+
+    }
+
+    .btn{
+        &.btn-default {
+            @include urlButtonBackgroundGradient();
+            color: $link-text-normal-color;
+        }
+
+        &.btn-default:hover {
+            background: $urlButton-background-hover-color;
+            color: $link-text-normal-color;
+        }
+
+        &.btn-default:focus {
+            @include focus-shadow();
+            @include urlButtonBackgroundFocusGradient();
+            color: $link-text-normal-color;
+        }
+
+        &.btn-default.disabled {
+            @include urlButtonDisabled();
+        }
+    }
+
+}
