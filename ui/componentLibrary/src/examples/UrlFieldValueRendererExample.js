@@ -10,14 +10,19 @@ const basicUrlFieldValueRendererExample = (
             <UrlFieldValueRenderer value={exampleLink} display={exampleLink} />
         </dd>
 
-        <dt>Non-Clickable Link</dt>
+        <dt>Disabled Link</dt>
         <dd>
-            <UrlFieldValueRenderer value={exampleLink} display={exampleLink} clickable={false} />
+            <UrlFieldValueRenderer value={exampleLink} display={exampleLink} disabled={true} />
         </dd>
 
-        <dt>Show as a Button</dt>
+        <dt>Link Button</dt>
         <dd>
             <UrlFieldValueRenderer value={exampleLink} display={exampleLink} showAsButton={true} />
+        </dd>
+
+        <dt>Disabled Link Button</dt>
+        <dd>
+            <UrlFieldValueRenderer value={exampleLink} display={exampleLink} showAsButton={true} disabled={true} />
         </dd>
 
         <dt>This link opens in a new window</dt>
