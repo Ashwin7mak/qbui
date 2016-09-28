@@ -122,11 +122,11 @@ const FieldValueRenderer = React.createClass({
                                                  {...commonProperties}/>
                 );
         case FieldFormats.URL:
-            let {open_in_new_window} = this.props.attributes.clientSideAttributes;
-            debugger;
+            let {open_in_new_window, show_as_button} = this.props.attributes.clientSideAttributes;
             return <UrlFieldValueRenderer value={this.props.value}
                                           display={this.props.display}
                                           openInNewWindow={open_in_new_window}
+                                          showAsButton={show_as_button}
                                           {...commonProperties} />;
 
         case FieldFormats.TEXT_FORMAT:
