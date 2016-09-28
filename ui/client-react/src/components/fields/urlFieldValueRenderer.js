@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import TextFieldValueRenderer from './textFieldValueRenderer';
+import './urlField.scss';
 
 const UrlFieldValueRenderer = React.createClass({
     displayName: 'UrlFieldValueRenderer',
@@ -21,34 +22,52 @@ const UrlFieldValueRenderer = React.createClass({
         showAsButton: PropTypes.bool,
 
         /*
-        * If true, the link will be clickable. Otherwise, the link will only
-        * appear as text */
-        clickable: PropTypes.bool
+        * Shows a link button as disabled if true
+        * */
+        disabled: PropTypes.bool
     },
     getDefaultProps() {
         return {
-            clickable: true,
             display: '',
+            disabled: false,
             openInNewWindow: true,
             showAsButton: false,
             value: ''
         };
     },
-    render() {
-        let classes = 'linkField';
-        classes += (this.props.showAsButton ? ' btn' : '');
+    setLinkClasses() {
+        let linkClasses = (this.props.showAsButton ? 'btn btn-default' : 'link');
+        linkClasses += (this.props.disabled ? ' disabled' : '');
 
-        if(this.props.clickable) {
-            let target = (this.props.openInNewWindow ? '_blank': '_self');
+        return linkClasses;
+    },
+    renderLink() {
+        let target = (this.props.openInNewWindow ? '_blank': '_self');
+
+        if(this.props.disabled) {
             return (
-                <a href={this.props.value} target={target} className={classes}>
+                <span className={this.setLinkClasses()}>
+                    {this.props.display}
+                </span>
+            );
+
+        } else {
+            return (
+                <a href={this.props.value} target={target} className={this.setLinkClasses()}>
                     {this.props.display}
                 </a>
             );
-        } else {
-            classes += ' noLink disabled';
-            return <span className="classes">{this.props.display}</span>;
         }
+    },
+    render() {
+        let classes = 'urlField';
+
+        return (
+            <div className={classes}>
+                {this.renderLink()}
+            </div>
+        );
+
     }
 });
 
