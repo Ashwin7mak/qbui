@@ -53,39 +53,3 @@ export const UserFieldValueEditor = React.createClass({
 
     }
 });
-
-/**
- * checkbox cell editor
- */
-export const CheckBoxFieldValueEditor = React.createClass({
-    displayName: 'CheckBoxFieldValueEditor',
-
-    propTypes: {
-        value: React.PropTypes.bool,
-        onChange: React.PropTypes.func,
-        onBlur: React.PropTypes.func
-    },
-
-    getDefaultProps() {
-        return {
-            value: false
-        };
-    },
-
-    onChange(ev) {
-        const newValue = ev.target.checked;
-        this.props.onChange(newValue);
-    },
-
-    render() {
-
-        return <input ref="fieldInput"
-                      onChange={this.onChange}
-                      onBlur={this.props.onBlur}
-                      tabIndex="0"
-                      className="cellEdit"
-                      defaultChecked={this.props.value} // react requirement
-                      type="checkbox"
-        />;
-    }
-});

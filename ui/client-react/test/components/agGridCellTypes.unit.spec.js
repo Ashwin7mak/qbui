@@ -197,14 +197,8 @@ describe('AGGrid cell editor functions', () => {
         component = TestUtils.renderIntoDocument(<CheckBoxCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const inputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellData input");
-        expect(inputs.length).toEqual(1);
-        expect(inputs[0].checked).toBe(true);
-
-        const editInputs = ReactDOM.findDOMNode(component).querySelectorAll("input.cellEdit");
-        expect(editInputs.length).toEqual(1);
-        TestUtils.Simulate.change(editInputs[0], {"target": {"checked": false}});
-        expect(inputs[0].checked).toBe(false);
+        const checkbox = ReactDOM.findDOMNode(component).querySelectorAll(".cellData .checkbox");
+        expect(checkbox.length).toEqual(1);
     });
 
     it('test DateCellRenderer edit', () => {
@@ -424,4 +418,3 @@ describe('AGGrid cell editor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 });
-
