@@ -920,20 +920,21 @@ let AGGrid = React.createClass({
                         case 'type': {
                             switch (datatypeAttributes[attr]) {
 
-                            case serverTypeConsts.NUMERIC:
+                            case serverTypeConsts.NUMERIC :
                                 obj.headerClass += " AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
                                 break;
                             case serverTypeConsts.DATE :
                                 obj.cellRenderer = reactCellRendererFactory(DateCellRenderer);
                                 break;
-                            case serverTypeConsts.DATE_TIME:
+                            case serverTypeConsts.DATE_TIME :
                                 obj.cellRenderer = reactCellRendererFactory(DateTimeCellRenderer);
                                 break;
                             case serverTypeConsts.TIME_OF_DAY :
                                 obj.cellRenderer = reactCellRendererFactory(TimeCellRenderer);
                                 break;
                             case serverTypeConsts.CHECKBOX :
+                                obj.headerClass += " AlignCenter";
                                 obj.cellRenderer = reactCellRendererFactory(CheckBoxCellRenderer);
                                 break;
                             case serverTypeConsts.USER :

@@ -231,9 +231,15 @@ $secondary-bar-page-actions-bg: #476B90;
 //== Field labels used on report card view and forms
 $fieldLabel-color: $color3;
 
-$user-picker-deactivated-label-fg: $color-black-600;
-$user-picker-user-label-fg: $color-black-700;
-$user-picker-email-label-fg: $color-black-600;
+$required-asterisk-color: $color-cyan-700;
+$error-color: $color-red-700;
+
+//== Fields
+$checkbox-background-checked-color: $color-cyan-500;
+$checkbox-background-unchecked-color: $color-black-100;
+$checkbox-border-color: $color-black-500;
+$checkbox-checkmark-editable-color: $color-black-100;
+$checkbox-checkmark-readonly-color: $color-cyan-500;
 
 $datepicker-header-bg: $color34;
 $datepicker-header-fg: $color2;
@@ -243,6 +249,11 @@ $datepicker-select-button-bg: $color7;
 $datepicker-select-active: $color-cyan-500;
 $datepicker-bg: $color2;
 $datepicker-bg-today: $color-orange-500;
+
+$user-picker-deactivated-label-fg: $color-black-600;
+$user-picker-user-label-fg: $color-black-700;
+$user-picker-email-label-fg: $color-black-600;
+
 
 //== QBPanel
 $panel-border-color: $color4;
