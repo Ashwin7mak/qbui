@@ -27,7 +27,7 @@
             generateChoices : function(type, numChoices, options) {
                 return fieldGenerator.generateChoices(type, numChoices, options);
             },
-            setDefaultTableHomePage : function (appId, tableId) {
+            setDefaultTableHomePage : function(appId, tableId) {
                 recordBase.apiBase.setDefaultTableHomePage(appId, tableId, 1);
                 return true;
             }
