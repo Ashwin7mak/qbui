@@ -723,6 +723,17 @@ export let ReportContent = React.createClass({
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
+        let agBodyContainer = document.getElementsByClassName('ag-body-container');
+        let agBodyViewport = document.getElementsByClassName('ag-body-viewport');
+        console.log('agBodyContainer', agBodyContainer);
+        if (agBodyContainer.length === 1) {
+            console.log('agBodyContainer', agBodyContainer);
+            console.log('agBodyViewport', agBodyViewport);
+            console.log('agBodyContainer', agBodyContainer[0].clientHeight);
+            console.log('agBodyViewPort', agBodyViewport[0].clientHeight);
+        }
+
+        // console.log('padding: ', window.getComputedStyle(agBodyContainer, null).getPropertyValue('padding-bottom'))
 
         let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
         if (this.props.keyField) {

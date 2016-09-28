@@ -162,7 +162,32 @@ const MultiChoiceFieldValueEditor = React.createClass({
         } else {
             choice = this.props.value ? this.state.choice : false;
         }
+        console.log('window Height: ', window.innerHeight);
+        console.log('document Height: ', document.body.clientHeight);
+        let reportToolsAndContentContainer = document.getElementsByClassName('reportToolsAndContentContainer');
+        let reportContainer = document.getElementsByClassName('reportContainer');
+        let agBodyContainer = document.getElementsByClassName('ag-body-container');
+        let agBodyViewport = document.getElementsByClassName('ag-body-viewport');
+        let agBodyViewportWrapper = document.getElementsByClassName('ag-body-viewport-wrapper');
+        let agPinnedLeftColsViewport = document.getElementsByClassName('ag-pinned-left-cols-viewport');
+        let aPinnedLeftColsContainer = document.getElementsByClassName('ag-pinned-left-cols-container');
+        let agBody = document.getElementsByClassName('ag-body');
+        if (agBodyContainer.length === 1) {
+            console.log('MULTICHOICE reportToolsAndContentContainer', reportToolsAndContentContainer[0].offsetHeight);
+            console.log('MULTICHOICE reportContainer', reportContainer[0].offsetHeight);
+            console.log('MULTICHOICE agBodyContainer', agBodyContainer[0].offsetHeight);
+            console.log('MULTICHOICE agBodyViewPort', agBodyViewport[0].offsetHeight);
+            console.log('MULTICHOICE agBodyViewPortWrapper', agBodyViewportWrapper[0].offsetHeight);
+            console.log('MULTICHOICE agPinnedLeftColsViewport', agPinnedLeftColsViewport[0].offsetHeight);
+            console.log('MULTICHOICE aPinnedLeftColsContainer', aPinnedLeftColsContainer[0].offsetHeight);
+            console.log('COMPUTED STYLE reportContainer: ', window.getComputedStyle(reportContainer[0]).getPropertyValue("padding-bottom"));
+            console.log('COMPUTED STYLE agBodyContainer: ', window.getComputedStyle(agBodyContainer[0]).getPropertyValue("padding-bottom"));
+            console.log('COMPUTED STYLE agBodyViewPort: ', window.getComputedStyle(agBodyViewport[0]).getPropertyValue("padding-bottom"));
+            console.log('COMPUTED STYLE agBodyContainer: ', window.getComputedStyle(agBodyViewportWrapper[0]).getPropertyValue("padding-bottom"));
+            console.log('COMPUTED STYLE agBodyContainer: ', window.getComputedStyle(agBodyContainer[0]).getPropertyValue("padding-bottom"));
+            console.log('COMPUTED STYLE agBody: ', window.getComputedStyle(agBody[0]).getPropertyValue("height"));
 
+        }
         return (
             <div className="multiChoiceContainer">
                 {this.props.showAsRadio ?
