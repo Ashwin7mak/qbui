@@ -20,7 +20,7 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let reportActions = {
 
-    loadReports: function(appId, tblId) {
+    loadReports(appId, tblId) {
 
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {

@@ -22,10 +22,10 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 });
 
 function updateQueryStringParam(key, value) {
-    var baseUrl = [location.protocol, '//', location.host, location.pathname].join(''),
-        urlQueryString = document.location.search,
-        newParam = key + '=' + value,
-        params = '?' + newParam;
+    let baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
+    let urlQueryString = document.location.search;
+    let newParam = key + '=' + value;
+    let params = '?' + newParam;
 
     // If the "search" string exists, then build params from it
     if (urlQueryString) {
@@ -41,6 +41,11 @@ function updateQueryStringParam(key, value) {
     window.history.replaceState({}, "", baseUrl + params);
 };
 
+function removeQueryString() {
+    var baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
+    window.history.replaceState({}, "", baseUrl);
+}
+
 let formActions = {
 
     openRecordForEdit(appId, tblId, rptId = null, recordId = null) {
@@ -52,8 +57,8 @@ let formActions = {
         updateQueryStringParam("er",recordId ? recordId : "new");
 
         this.flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, "edit").then(() => {
-            console.log('loaded form');
-            this.dispatch(actions.SHOW_TROWSER, "record");
+
+            this.flux.actions.showTrowser("editRecord");
         });
     },
 

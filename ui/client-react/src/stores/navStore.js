@@ -17,7 +17,7 @@ let NavStore = Fluxxor.createStore({
             showTopNav: true,
             searching:false,
             trowserOpen: false,
-            trowserContent: null,
+            trowserContent: "editRecord",
             topTitle: null,
             scrollingReport: false,
             filterReportsName: ''

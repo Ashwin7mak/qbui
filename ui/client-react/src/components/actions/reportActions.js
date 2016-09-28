@@ -70,28 +70,6 @@ let ReportActions = React.createClass({
                         <ActionIcon icon="duplicate" tip={this.getSelectionTip("selection.copy")}/>
                         <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")} onClick={this.handleBulkDelete}/>
 
-                        {/* custom actions later
-                         {this.props.customActions &&
-                         <div className="actionButtons">
-                         {this.props.customActions.map((action) => {
-                         return (<a key={action}><Button bsStyle="primary">{action}</Button></a>);
-                         })}
-
-                         </div>}
-
-
-                        <Dropdown id="extraActionsMenu">
-
-                            <ActionIcon icon="pickles" bsRole="toggle" tip={Locale.getMessage('selection.more')}/>
-
-                            <Dropdown.Menu>
-                                <MenuItem eventKey="1">Extra 1 goes here</MenuItem>
-                                <MenuItem eventKey="2">Extra 2 goes here</MenuItem>
-                                <MenuItem eventKey="3">Extra 3 goes here</MenuItem>
-                            </Dropdown.Menu>
-
-                        </Dropdown>
-                         */}
                     </div>
 
                 </div>

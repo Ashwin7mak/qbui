@@ -1,12 +1,11 @@
 import React from "react";
-import {I18nMessage} from "../../utils/i18nMessage";
-import Trowser from "../trowser/trowser";
+
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
-import ReportManager from "../report/reportManager";
-import QBicon from "../qbIcon/qbIcon";
-import TableIcon from "../qbTableIcon/qbTableIcon";
+import ReportManagerTrowser from "../report/reportManagerTrowser";
+
+
 import GlobalActions from "../actions/globalActions";
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
@@ -59,11 +58,7 @@ export let Nav = React.createClass({
                                startTabIndex={100}
                                position={"left"}/>);
     },
-    hideTrowser() {
-        let flux = this.getFlux();
-        flux.actions.filterReportsByName("");
-        flux.actions.hideTrowser();
-    },
+
     onSelectTableReports(tableId) {
         const flux = this.getFlux();
 
@@ -93,60 +88,8 @@ export let Nav = React.createClass({
         }
         return null;
     },
-    /**
-     *  get breadcrumb element for top of trowser
-     */
-    getTrowserBreadcrumbs() {
-        const table = this.getSelectedTable();
 
-        return (
-            <h4>
-                <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""} <QBicon icon="caret-right"/>
-                <I18nMessage message={'nav.reportsHeading'}/>
-            </h4>);
 
-    },
-    /**
-     *  get actions element for bottome center of trowser (placeholders for now)
-     */
-    getTrowserActions() {
-        return (<div className={"centerActions"}>
-                <a href="#"><QBicon icon="add-mini"/><I18nMessage message={'report.newReport'}/></a>
-                <a href="#"><QBicon icon="settings"/><I18nMessage message={'report.organizeReports'}/></a>
-            </div>);
-    },
-    /**
-     * get trowser content (report nav for now)
-     */
-    getTrowserContent() {
-
-        switch (this.state.nav.trowserContent) {
-        case "reports" :
-        {
-
-            let selectReport = (report) => {
-                this.hideTrowser();
-                setTimeout(() => {
-                    // give UI transition a moment to execute
-                    if (this.props.router) {
-                        this.props.router.push(report.link);
-                    }
-                });
-            };
-
-            return <ReportManager reportsData={this.state.reportsData}
-                                  onSelectReport={selectReport}
-                                  filterReportsName={this.state.nav.filterReportsName}/>;
-        }
-        case "record":
-        {
-            return "stick the report crap here";
-        }
-        default: {
-            return "no content specified...";
-        }
-        }
-    },
 
     /* toggle apps list - if on collapsed nav, open left nav and display apps */
     toggleAppsList(open) {
@@ -169,13 +112,13 @@ export let Nav = React.createClass({
 
         return (<div className={classes}>
 
-            <Trowser position={"top"}
-                     visible={this.state.nav.trowserOpen}
-                     breadcrumbs={this.getTrowserBreadcrumbs()}
-                     centerActions={this.getTrowserActions()}
-                     onCancel={this.hideTrowser}
-                     onDone={this.hideTrowser}
-                     content={this.getTrowserContent()} />
+            <ReportManagerTrowser visible={this.state.nav.trowserOpen}
+                                  router={this.props.router}
+                                  selectedTable={this.getSelectedTable()}
+                                  filterReportsName={this.state.nav.filterReportsName}
+                                  reportsData={this.state.reportsData}
+            />
+
 
             <LeftNav
                 visible={this.state.nav.leftNavVisible}
