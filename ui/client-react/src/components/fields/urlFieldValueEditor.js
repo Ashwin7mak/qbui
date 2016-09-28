@@ -21,7 +21,7 @@ const UrlFieldValueEditor = React.createClass({
         };
     },
     render() {
-        return <TextFieldValueEditor {...this.props} />;
+        return <TextFieldValueEditor type="url" {...this.props} />;
     }
 });
 

@@ -18,19 +18,25 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of input userdata
-[type="text"].input {
+[type="text"].input,
+[type="url"].input,
+[type="email"].input {
   background-color: $input-bg-color;
 }
 
 // layout of input userdata on a form
-.formContainer [type="text"].input {
+.formContainer [type="text"].input,
+.formContainer [type="url"].input,
+.formContainer [type="email"].input {
   padding: 10px;
   width: 280px;
   height: 35px;
 }
 
 // layout of input userdata in an inline edit table
-.reportTable [type="text"].input {
+.reportTable [type="text"].input,
+.reportTable [type="url"].input,
+.reportTable [type="email"].input {
   margin: 0 0 0 1px;
   padding: 0 0 0 2px;
   width: inherit;
@@ -39,6 +45,8 @@ $data-font-size: $font-size-p;
 
 // visual style of focus input shadow
 [type="text"]:focus.input,
+[type="url"]:focus.input,
+[type="email"]:focus.input,
   textarea:focus,
   .is-focused:not(.is-open)>.Select-control {
   outline: none;
@@ -50,7 +58,11 @@ $data-font-size: $font-size-p;
 
 // visual style of input error
 .textField.error [type="text"].input,
-[type="text"].input.error {
+.textField.error [type="url"].input,
+.textField.error [type="email"].input,
+[type="text"].input.error,
+[type="url"].input.error,
+[type="email"].input.error {
   border-top: 1px solid $input-text-error-border-color;
   border-right: 1px solid  $input-text-error-border-color;
   border-bottom: 1px solid $input-text-error-border-color;
@@ -60,7 +72,11 @@ $data-font-size: $font-size-p;
 
 // visual style of focus input error
 .textField.error [type="text"]:focus.input,
-[type="text"]:focus.input.error {
+.textField.error [type="url"]:focus.input,
+.textField.error [type="email"]:focus.input,
+[type="text"]:focus.input.error,
+[type="url"]:focus.input.error,
+[type="email"]:focus.input.error {
   outline: none;
   border-top: 1px solid $input-text-error-border-color;
   border-right: 1px solid  $input-text-error-border-color;

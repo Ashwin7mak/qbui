@@ -47,12 +47,17 @@ const TextFieldValueEditor = React.createClass({
 
         /**
          * data type attributes for the field */
-        fieldDef: React.PropTypes.object
+        fieldDef: React.PropTypes.object,
+
+        /**
+        * Set the input type to either text, email, or url to allow better mobile keyboards */
+        type: React.PropTypes.oneOf(['text', 'email', 'url'])
     },
 
     getDefaultProps() {
         return {
-            isInvalid: false
+            isInvalid: false,
+            type: 'text'
         };
     },
 
@@ -89,7 +94,7 @@ const TextFieldValueEditor = React.createClass({
         let inputBox = <input ref="textInput"
                           className={classes}
                           value={this.props.display ? this.props.display : this.props.value}
-                          type="text"
+                          type={this.props.type}
                           key={'inp' + this.props.idKey}
                           placeholder={this.props.placeholder}
                           onChange={this.onChange}
