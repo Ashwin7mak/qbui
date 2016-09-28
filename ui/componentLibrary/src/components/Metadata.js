@@ -10,6 +10,7 @@ import NumericFieldValueEditorMetadata from 'component-metadata!../../../client-
 import MultiChoiceFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiChoiceFieldValueEditor.js';
 import UserFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueRenderer.js';
 import UserFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueEditor.js';
+import UrlFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/urlFieldValueRenderer.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -27,7 +28,8 @@ var Metadata = _.merge(
     NumericFieldValueEditorMetadata,
     UserFieldValueRendererMetadata,
     UserFieldValueEditorMetadata,
-    MultiChoiceFieldValueEditorMetadata
+    MultiChoiceFieldValueEditorMetadata,
+    UrlFieldValueRendererMetadata
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete
 );

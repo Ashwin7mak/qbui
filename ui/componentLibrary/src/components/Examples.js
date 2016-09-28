@@ -10,6 +10,7 @@ import NumericFieldValueRendererExample from 'raw!../examples/NumericFieldValueR
 import MultiChoiceFieldValueEditorExample from 'raw!../examples/MultiChoiceFieldValueEditorExample.js';
 import UserFieldValueEditorExample from 'raw!../examples/UserFieldValueEditorExample.js';
 import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendererExample.js';
+import UrlFieldValueRendererExample from 'raw!../examples/UrlFieldValueRendererExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -26,6 +27,7 @@ export default {
     MultiChoiceFieldValueEditor: MultiChoiceFieldValueEditorExample,
     UserFieldValueRenderer: UserFieldValueRendererExample,
     UserFieldValueEditor: UserFieldValueEditorExample,
+    UrlFieldValueRenderer: UrlFieldValueRendererExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };

@@ -31,6 +31,7 @@ import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
 import MultiChoiceFieldValueEditorDoc from './docs/multiChoiceFieldValueEditor';
 import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import UserFieldEditorDoc from './docs/userFieldValueEditor';
+import UrlFieldValueRendererDoc from './docs/urlFieldValueRenderer.js';
 // END OF IMPORT STATEMENTS
 
 render((
@@ -49,6 +50,7 @@ render((
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
             <Route path="multiLineTextFieldValueEditor" component={MultiLineTextFieldValueEditorDoc} />
             <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
+            <Route path="urlFieldValueRenderer" component={UrlFieldValueRendererDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

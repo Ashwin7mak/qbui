@@ -17,6 +17,7 @@ const NumericFieldValueEditor = require('../../../client-react/src/components/fi
 const MultiChoiceFieldValueEditor = require('../../../client-react/src/components/fields/multiChoiceFieldValueEditor');
 const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer');
 const UserFieldValueEditor = require('../../../client-react/src/components/fields/userFieldValueEditor');
+const UrlFieldValueRenderer = require('../../../client-react/src/components/fields/urlFieldValueRenderer.js');
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
