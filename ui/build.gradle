@@ -572,7 +572,7 @@ sonarqube {
         property "sonar.coverage.exclusions", "**/*.spec.js"
         property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
         property "client-react.sonar.sources", "${projectDir}/client-react/src"
-        property "client-react.sonar.exclusions", "**/assets/**,**/constants/**,**/locales/bundles/**,**/mocks/**"
+        property "client-react.sonar.exclusions", "**/assets/**,**/components/node/**,**/constants/**,**/locales/bundles/**,**/mocks/**"
 
         //  import the ui LCOV coverage report
         property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"

@@ -168,6 +168,7 @@ const FieldValueEditor = React.createClass({
                 );
             } else {
                 return <NumericFieldValueEditor {...commonProps}
+                    key={'nfve-' + this.props.idKey}
                     onChange={this.props.onChange ? this.props.onChange : ()=>{}}
                     isInvalid={this.props.isInvalid}
                     invalidMessage={this.props.invalidMessage}
@@ -211,7 +212,6 @@ const FieldValueEditor = React.createClass({
         }
         }
     },
-
     onBlur(vals) {
         if (this.props.onBlur) {
             this.props.onBlur(vals);

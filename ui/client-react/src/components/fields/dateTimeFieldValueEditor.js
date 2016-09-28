@@ -73,7 +73,19 @@ const DateTimeFieldValueEditor = React.createClass({
      */
     getOrigTime() {
         let origValue = this.getOrigValue();
-        return origValue && moment(origValue).isValid() ? moment(origValue).format(TIME_FORMAT) : momentTz.tz('00:00:00', TIME_FORMAT, dateTimeFormatter.getTimeZone(this.props.attributes));
+        if (origValue && moment(origValue).isValid()) {
+            return moment(origValue).format(TIME_FORMAT);
+        } else {
+            let timeZone = dateTimeFormatter.getTimeZone(this.props.attributes);
+            let today = moment().startOf('day').format(DATE_TIME_FORMAT);
+
+            //  get midnight in app timezone
+            let midnight = momentTz.tz(today, DATE_TIME_FORMAT, timeZone);
+
+            //  get the utc time and return the time in the user's timezone
+            let utc = midnight.utc().format();
+            return moment(utc).format(TIME_FORMAT);
+        }
     },
 
     /**

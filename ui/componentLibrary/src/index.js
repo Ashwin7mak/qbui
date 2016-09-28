@@ -17,6 +17,7 @@ import RecordRoute from '../../client-react/src/components/record/recordRoute';
 import TableHomePageRoute from '../../client-react/src/components/table/tableHomePageRoute';
 
 import ComponentLibraryWrapper from './components/componentLibrary';
+import './assets/componentLibrary.scss';
 
 import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
@@ -30,7 +31,7 @@ import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
 import MultiChoiceFieldValueEditorDoc from './docs/multiChoiceFieldValueEditor';
 import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import UserFieldEditorDoc from './docs/userFieldValueEditor';
-import './assets/componentLibrary.scss';
+// END OF IMPORT STATEMENTS
 
 render((
     <Router history={browserHistory}>
