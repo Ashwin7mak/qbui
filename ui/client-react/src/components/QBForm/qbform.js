@@ -184,6 +184,7 @@ let QBForm = React.createClass({
                             onBlur={this.props.onFieldChange}
                             isInvalid={validationStatus.isInvalid}
                             invalidMessage={validationStatus.invalidMessage}
+                            appUsers={this.props.appUsers}
               />
             </td>);
     },

@@ -18,7 +18,8 @@ const FieldElement = React.createClass({
         element: React.PropTypes.object, // FormFieldElement from form API
         relatedField: React.PropTypes.object, // field from Form data
         fieldRecord: React.PropTypes.object, // the record data
-        includeLabel: React.PropTypes.bool // render label above field (otherwise ignore it)
+        includeLabel: React.PropTypes.bool, // render label above field (otherwise ignore it)
+        appUsers: React.PropTypes.array.isRequired // app users
     },
 
     getChanges(theVals) {
@@ -68,6 +69,7 @@ const FieldElement = React.createClass({
             classes = 'fieldInputWidth';
         }
 
+
         let fieldElement = this.props.edit ?
             <FieldValueEditor type={fieldType}
                             value={fieldRawValue}
@@ -83,14 +85,16 @@ const FieldElement = React.createClass({
                             key={'fve-' + this.props.idKey}
                             idKey={'fve-' + this.props.idKey}
                             invalidMessage={this.props.invalidMessage}
-                            classes={classes}/> :
+                            classes={classes}
+                             appUsers={this.props.appUsers}/> :
             ((fieldDisplayValue !== null || fieldRawValue !== null) && <FieldValueRenderer type={fieldType}
                             key={'fvr-' + this.props.idKey}
                             idKey={'fvr-' + this.props.idKey}
                             value={fieldRawValue}
                             display={fieldDisplayValue}
                             attributes={fieldDatatypeAttributes}
-                            fieldDef = {this.props.relatedField} />);
+                            fieldDef = {this.props.relatedField}
+                             />);
         return (
             <div className="formElement field">
                 {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} /> }

@@ -91,7 +91,10 @@ $edit-field-padding: 5px;
         padding: 5px;
         width: 100%;
     }
-
+    /* don't bleed through dropdowns */
+    .input-group .form-control {
+        z-index: inherit;
+    }
 }
 /* For mobile phones: */
 @include small-breakpoint {
