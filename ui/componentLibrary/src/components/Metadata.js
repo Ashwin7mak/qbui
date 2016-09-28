@@ -44,7 +44,6 @@ var Metadata = _.merge(
     UserFieldValueRendererMetadata,
     QBIconMetadata,
     QBPanelMetadata
-
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete
 );
