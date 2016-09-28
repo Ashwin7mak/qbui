@@ -188,7 +188,7 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
-            return <MultiLineTextFieldValueEditor {...commonProps} />;
+            return <MultiLineTextFieldValueEditor {...commonProps} showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
         }
         case FieldFormats.TEXT_FORMAT:
         default: {
@@ -196,7 +196,7 @@ const FieldValueEditor = React.createClass({
             if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
                 return (
                         <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
-                                             {...commonProps} />
+                                             {...commonProps}/>
                     );
             } else {
                 return <TextFieldValueEditor {...commonProps}
