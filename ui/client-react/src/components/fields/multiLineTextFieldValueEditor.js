@@ -109,7 +109,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
                                         className="cellEdit"
                                         rows={rows}
                                         cols={cols}
-                                        value={this.props.value === null ? '' : this.props.value}
+                                        value={this.props.display ? this.props.display : this.props.value}
                                         type="text" />;
     }
 });

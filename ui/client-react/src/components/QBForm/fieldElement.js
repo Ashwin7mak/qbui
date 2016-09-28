@@ -36,8 +36,7 @@ const FieldElement = React.createClass({
 
     onChange(newVal) {
         //bubble up onChange with the old/new values
-        let rawValue = this.props.fieldRecord ? this.props.fieldRecord.value : "";
-        let change = this.getChanges({value: rawValue, display: newVal});
+        let change = this.getChanges({value: newVal, display: newVal});
         if (this.props.onChange) {
             this.props.onChange(change);
         }

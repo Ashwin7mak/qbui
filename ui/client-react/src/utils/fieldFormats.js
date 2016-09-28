@@ -20,6 +20,9 @@ class FieldFormats {
             case serverTypeConsts.DATE :
                 return FieldFormats.DATE_FORMAT;
 
+            case serverTypeConsts.DURATION :
+                return FieldFormats.DURATION_FORMAT;
+
             case serverTypeConsts.DATE_TIME:
                 return FieldFormats.DATETIME_FORMAT;
 

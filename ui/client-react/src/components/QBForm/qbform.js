@@ -166,7 +166,9 @@ let QBForm = React.createClass({
         let key = "field" + sectionIndex + "-" + element.orderIndex;
 
         //if the form prop calls for element to be required update fieldDef accordingly
-        relatedField.required = relatedField.required || element.required;
+        if (relatedField) {
+            relatedField.required = relatedField.required || element.required;
+        }
 
         return (
             <td key={key} colSpan={colSpan}>
