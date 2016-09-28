@@ -497,7 +497,7 @@
                         }
                     }
                     // required field has value?
-                    if (field.required && (change.value === undefined || change.value === null || change.value === "")) {
+                    if (field.required && (change.value === undefined || change.value === null || change.value === "" || change.value === false)) {
                         errors.push({field, type: dataErrs.REQUIRED_FIELD_EMPTY});
                     }
                 }

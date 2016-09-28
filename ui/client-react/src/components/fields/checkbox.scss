@@ -1,0 +1,228 @@
+@import '../../assets/css/_qbColorVariables';
+@import '../../assets/css/_qbVariables';
+@import './fields';
+
+$checkbox-disabled-opacity: .4;
+
+$checkbox-size: 16px;
+$checkbox-size-mobile: 24px;
+$checkbox-font-size-mobile: 16px;
+
+@mixin unchecked-checkbox {
+    background-color: $checkbox-background-unchecked-color;
+    border: 2px solid $checkbox-border-color;
+    border-radius: 3px;
+    top: 0px;
+    z-index: 0;
+}
+
+@mixin checkbox-checkmark-icon {
+    content: "\E904";
+    font-family: 'QuickBaseIconUISturdy';
+}
+
+.checkbox {
+    label {
+        min-height: 12px;
+        min-width: 12px;
+    }
+
+    /* Remove default checkbox */
+    [type="checkbox"]:not(:checked),
+    [type="checkbox"]:checked {
+      position: absolute;
+      left: -9999px;
+      opacity: 0;
+    }
+
+    [type="checkbox"] {
+        // General
+        + label:after {
+            border-radius: 3px;
+            height: $checkbox-size;
+            width: $checkbox-size;
+
+            @include small-breakpoint {
+                height: $checkbox-size-mobile;
+                width: $checkbox-size-mobile;
+            }
+        }
+
+        + label:before,
+        + label:after {
+            content: '';
+            left: 0;
+            position: absolute;
+            /* .1s delay is for check animation */
+            transition: border .25s, background-color .25s, font-size .20s .1s, width .20s .1s, height .20s .1s, top .20s .1s, left .20s .1s;
+            z-index: 1;
+        }
+
+        // Focus state
+        &:focus, + label:focus {
+            outline: none;
+        }
+
+        &:focus + label:after, + label:focus:after, label:focus:after {
+            @include focus-shadow;
+        }
+
+        // Unchecked style
+        &:not(:checked) + label:before {
+            opacity: 0;
+            font-size: 0;
+        }
+
+        &:not(:checked) + label:after {
+            @include unchecked-checkbox
+        }
+
+        // Checked style
+        &:checked {
+            + label:before {
+                @include checkbox-checkmark-icon;
+                top: 5px;
+                left: 4px;
+                font-size: 8px;
+                opacity: 1;
+                color: $checkbox-checkmark-editable-color;
+
+                @include small-breakpoint {
+                    font-size: 14px;
+                    left: 5px;
+                    top: 5px;
+                }
+            }
+
+            + label:after {
+              top: 0;
+              border: 2px solid $checkbox-background-checked-color;
+              background-color: $checkbox-background-checked-color;
+              z-index: 0;
+            }
+        }
+
+        // Disabled style
+        &:disabled:not(:checked) + label:before {
+            background-color: $checkbox-background-unchecked-color;
+            border: 2px solid transparent;
+        }
+
+        &:disabled:not(:checked) + label:after {
+            border-color: $checkbox-border-color;
+            background-color: $checkbox-background-unchecked-color;
+            opacity: $checkbox-disabled-opacity;
+        }
+
+        &.invalid + label:after {
+            border-color: $error-color;
+        }
+    }
+
+    &.hasLabel {
+        input, .symbol {
+            margin-right: 10px;
+        }
+
+        @include not-small-breakpoint {
+            [type="checkbox"]:checked + label:before {
+                top: 4px;
+            }
+        }
+
+        .label {
+            color: $color-black-700;
+            display: block;
+            font-size: $font-size;
+            line-height: normal;
+            margin-left: 0;
+            overflow: auto;
+            padding-left: 0;
+            padding-top: 0;
+            text-align: left;
+            white-space: normal;
+
+            @include small-breakpoint {
+                font-size: $checkbox-font-size-mobile;
+                padding-top: 3px;
+            }
+        }
+
+        input[type="checkbox"] {
+            float: left;
+            margin-left: 0;
+            margin-right: 9px;
+            position: relative;
+            height: 20px;
+            width: 20px;
+        }
+
+        .required-symbol {
+            left: 28px;
+        }
+    }
+
+    &.renderer {
+        margin: 0;
+
+        label:focus {
+            outline: none;
+        }
+
+        .label {
+            display: inline;
+            border: 2px solid transparent;
+        }
+
+        .symbol {
+            color: $checkbox-checkmark-readonly-color;
+            font-size: 14px;
+
+            @include small-breakpoint {
+                padding-left: 3px;
+                font-size: 18px;
+            }
+        }
+
+        .text {
+            font-size: $font-size;
+
+            @include small-breakpoint {
+                font-size: $checkbox-font-size-mobile;
+            }
+        }
+
+        .checkbox-unchecked {
+            @include unchecked-checkbox;
+            display: inline-flex;
+            height: $checkbox-size;
+            margin-right: 8px;
+            margin-top: 2px;
+            width: $checkbox-size;
+
+            @include small-breakpoint {
+                height: $checkbox-size-mobile;
+                width: $checkbox-size-mobile;
+            }
+        }
+
+    }
+
+    &.disabled {
+        .checkbox-unchecked {
+            opacity: $checkbox-disabled-opacity;
+        }
+    }
+
+    .required-symbol {
+        color: $required-asterisk-color;
+        font-size: 18px;
+        left: 4px;
+        position: absolute;
+        top: -9px;
+
+        &.invalid {
+            color: $error-color;
+        }
+    }
+}

@@ -1,15 +1,14 @@
 import React from 'react';
+import _ from 'lodash';
 
 import FieldFormats from '../../utils/fieldFormats';
-
-import TextFieldValueRenderer from './textFieldValueRenderer';
+import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
 import DateTimeFieldValueRenderer from './dateTimeFieldValueRenderer';
-import TimeFieldValueRenderer from './timeFieldValueRenderer';
-import NumericFieldValueRenderer from './numericFieldValueRenderer';
 import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
+import NumericFieldValueRenderer from './numericFieldValueRenderer';
+import TextFieldValueRenderer from './textFieldValueRenderer';
+import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import UserFieldValueRenderer from './userFieldValueRenderer';
-
-import _ from 'lodash';
 
 /**
  * # FieldValueRenderer
@@ -107,7 +106,10 @@ const FieldValueRenderer = React.createClass({
                 );
         case FieldFormats.CHECKBOX_FORMAT:
             return (
-                    <input type="checkbox" disabled checked={this.props.value} key={'inp-' + this.props.idKey}/>
+                    <CheckBoxFieldValueRenderer value={this.props.value}
+                                                key={'inp-' + this.props.idKey}
+                                                hideUncheckedCheckbox={this.props.hideUncheckedCheckbox}
+                                                {...commonProperties} />
                 );
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT:
@@ -132,17 +134,24 @@ const FieldValueRenderer = React.createClass({
         }
     },
 
-    render() {
-        let className = "";
-        let commonProperties = {};
-
-        if (_.has(this.props, 'attributes.clientSideAttributes.bold') &&
-            this.props.attributes.clientSideAttributes.bold) {
-            commonProperties.isBold = true;
-            className += ' bold';
+    addDisplayAttributesToCommonProperties(commonProperties) {
+        if (_.has(this.props, 'attributes.clientSideAttributes')) {
+            let attributes = this.props.attributes.clientSideAttributes;
+            commonProperties.isBold = attributes.bold;
+            commonProperties.displayGraphic = attributes.display_graphic;
         }
+
+        return commonProperties;
+    },
+
+    render() {
+        let commonProperties = {};
         commonProperties.idKey = this.props.idKey;
+        this.addDisplayAttributesToCommonProperties(commonProperties);
+
+        let className = "";
         className += this.props.classes ? ' ' + this.props.classes : '';
+        className += commonProperties.isBold ? ' bold' : '';
 
         let renderedType =  this.getRendererForType(commonProperties);
 
