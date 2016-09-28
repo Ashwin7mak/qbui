@@ -93,7 +93,7 @@ const CheckBoxFieldValueEditor = React.createClass({
     },
 
     isInvalid() {
-        return (this.props.invalid || (this.props.required && !this.props.value));
+        return this.props.invalid;
     },
 
     renderRequiredSymbol() {
