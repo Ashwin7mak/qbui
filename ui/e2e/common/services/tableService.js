@@ -29,7 +29,6 @@
             },
             setDefaultTableHomePage : function (appId, tableId) {
                 recordBase.apiBase.setDefaultTableHomePage(appId, tableId, 1);
-                // apiBase.setDefaultTableHomePage(appId, tableId, 1);
                 return true;
             }
         };
