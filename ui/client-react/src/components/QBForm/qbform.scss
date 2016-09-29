@@ -10,7 +10,15 @@ $edit-field-padding: 5px;
     display: block;
 
     .formTable {
-        margin-left: 20px;
+        margin-left: 10px;
+    }
+    .qbPanelHeader {
+        padding: 15px 0 15px 20px;
+        // if the section doesnt have a header, when its collapsed the height should be same as others
+        min-height: 54px;
+        .qbPanelHeaderIcon {
+            top: 4px;
+        }
     }
     .fieldRow {
 
@@ -29,7 +37,7 @@ $edit-field-padding: 5px;
             max-width: 100%;
             display: flex;
             flex-direction: column;
-            margin-right:20px;
+            margin-right:15px;
         }
 
         /* separate field label td left of field */
@@ -51,7 +59,7 @@ $edit-field-padding: 5px;
         .field .fieldLabel {
             max-width: 20em;
             text-align:left;
-            margin-bottom: 8px;
+            margin-bottom: $edit-field-padding;
         }
 
         .field {
@@ -113,17 +121,15 @@ $edit-field-padding: 5px;
                 max-width: 100%;
                 .fieldLabel {
                     font-size: $font-size-small;
+                    margin-bottom: 0px;
                 }
                 .fieldValue {
                     font-size: $font-size-small;
                 }
             }
         }
-        [type="text"].input {
+        .fieldValueEditor, textarea.cellEdit{
             width: 100%;
-            &.defaultInputWidth {
-                width: 100%;
-            }
         }
     }
 }

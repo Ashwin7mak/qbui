@@ -1,6 +1,6 @@
 import React from 'react';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
-
+import Breakpoints from "../../utils/breakpoints";
 /**
  * # MultiLineTextFieldValueEditor
  * A multi-line text editor that dynamically changes its height. The text editor will not exceed
@@ -99,6 +99,9 @@ const MultiLineTextFieldValueEditor = React.createClass({
 
     render() {
         let cols = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.width : null;
+        if (Breakpoints.isSmallBreakpoint()) {
+            cols = 1;
+        }
         let rows = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.num_lines') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.num_lines : 1;
         let style = this.props.showScrollForMultiLine ? this.state.style : {};
         return <textarea ref="textarea" style={style}
