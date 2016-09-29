@@ -162,11 +162,22 @@ export let RecordRoute = React.createClass({
         flux.actions.editNewRecord(appId, tblId, rptId);
     },
 
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    openRecordForEdit() {
+
+        const {appId, tblId, rptId, recordId} = this.props.params;
+        const flux = this.getFlux();
+
+        flux.actions.openRecordForEdit(appId, tblId, rptId, recordId);
+    },
     getPageActions() {
 
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
-            {msg: 'pageActions.edit', icon:'edit'},
+            {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'pageActions.email', icon:'mail'},
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.delete', icon:'delete'},
