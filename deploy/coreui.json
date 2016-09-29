@@ -16,10 +16,9 @@
       "Description": "The environment name (prod, qual, int, etc)",
       "Type": "String",
       "AllowedValues": [
-        "perf",
-        "awsci",
-        "int",
+        "dev",
         "qual",
+        "int",
         "prod"
       ]
     },
@@ -311,35 +310,6 @@
           },
           "run_chef": {
             "files": {
-              "/dev/shm/chef-attributes-awsci.json": {
-                "content": {
-                  "splunk": {
-                    "forwarder": {
-                      "index": "quickbase-ppdidx",
-                      "logs_to_index": {
-                        "default": {
-                          "_meta": {
-                            "Fn::Join": [ "", [ "aws_stack_name::", { "Ref": "AWS::StackName" } ] ]
-                          }
-                        },
-                        "monitor:///var/log/qbase": {
-                          "disabled": "0",
-                          "index": "quickbase-ppdidx",
-                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
-                        }
-                      }
-                    }
-                  },
-                  "nodejs": {
-                    "reconfig": {
-                      "node_internal_env": "PRE_PROD",
-                      "rest_endpoint": "https://localhost.api.trunk.newstack.quickbaserocks.com",
-                      "route_group": "LH_V1",
-                      "stack_name": "TRUNK-int-nodejs"
-                    }
-                  }
-                }
-              },
               "/dev/shm/chef-attributes-dev.json": {
                 "content": {
                   "splunk": {
@@ -362,9 +332,9 @@
                   "nodejs": {
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
-                      "rest_endpoint": "https://localhost.api.trunk.newstack.quickbaserocks.com",
+                      "rest_endpoint": "https://localhost.tomcat.trunk.newstack.quickbaserocks.com",
                       "route_group": "LH_V1",
-                      "stack_name": "TRUNK-int-nodejs"
+                      "stack_name": "coreui-dev1"
                     }
                   }
                 }
@@ -391,9 +361,9 @@
                   "nodejs": {
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
-                      "rest_endpoint": "https://localhost.api.trunk.newstack.quickbaserocks.com",
+                      "rest_endpoint": "https://localhost.tomcat.trunk.newstack.quickbaserocks.com",
                       "route_group": "LH_V1",
-                      "stack_name": "TRUNK-int-nodejs"
+                      "stack_name": "coreui-qual1"
                     }
                   }
                 }
@@ -431,7 +401,7 @@
                 "content": {
                   "splunk": {
                     "forwarder": {
-                      "index": "quickbase-ppdidx",
+                      "index": "quickbase-prdidx",
                       "logs_to_index": {
                         "default": {
                           "_meta": {
@@ -448,10 +418,10 @@
                   },
                   "nodejs": {
                     "reconfig": {
-                      "node_internal_env": "PROD",
-                      "rest_endpoint": "https://localhost.api.trunk.newstack.quickbaserocks.com",
+                      "node_internal_env": "PRODUCTION",
+                      "rest_endpoint": "https://localhost.tomcat.prod1.newstack.quickbaserocks.com",
                       "route_group": "LH_V1",
-                      "stack_name": "TRUNK-int-nodejs"
+                      "stack_name": "coreui-prod1"
                     }
                   }
                 }
