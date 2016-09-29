@@ -56,15 +56,6 @@ let Record = React.createClass({
         flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, this.props.recId, origRec, changes);
     },
 
-    /**
-     * When cancel is clicked
-     * Initiate a recordPendingEditsCancel action the the app/table/recid
-     * @param recId
-     */
-    handleEditRecordCancel() {
-        const flux = this.getFlux();
-        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
-    },
 
     /**
      * Initiate recordPendingEditsChangeField action to hold the unsaved field value change
@@ -81,63 +72,10 @@ let Record = React.createClass({
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, this.props.recId, change);
     },
 
-    /**
-     * User wants to save changes to a record. First we do client side validation
-     * and if validation is successful we initiate the save action for the new or existing record
-     * if validation if not ok we stay in edit mode and show the errors (TBD)
-     * @param id
-     * @returns {boolean}
-     */
-    handleRecordSaveClicked() {
-        //validate changed values -- this is skipped for now
-        //get pending changes
-        let validationResult = {
-            ok : true,
-            errors: []
-        };
-        if (validationResult.ok) {
-            //signal record save action, will update an existing records with changed values
-            // or add a new record
-            let changes = null;
-            if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
-                changes = this.handleRecordAdd(this.props.pendEdits.recordChanges);
-            } else {
-                changes = this.handleRecordChange(this.props.recId);
-            }
-        }
-        return validationResult;
-    },
-    /**
-     * Save changes to an existing record
-     * @param recId
-     * @returns {Array}
-     */
-    handleRecordChange() {
-        const flux = this.getFlux();
-        flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, this.props.recId);
-        flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.formData.fields);
-    },
-
-    /**
-     * Save a new record
-     * @param recordChanges
-     * @returns {Array} of field values for the new record
-     */
-    handleRecordAdd(recordChanges) {
-        const flux = this.getFlux();
-        flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.formData.fields);
-    },
 
     render() {
-        //add dummy buttons for testing save/cancel functionality
-        //TODO - remove these once trowser has these buttons instead
-        let dummyButtons = <div style={{display:"inline"}}>
-                <button class="save button" onClick={this.handleRecordSaveClicked}>Save</button>
-                <button class="cancel button" onClick={this.handleEditRecordCancel}>Cancel</button>
-            </div>;
 
         return <div>
-            {dummyButtons}
             <QBForm {...this.props}
                     key={"qbf-" + this.props.recId}
                     idKey={"qbf-" + this.props.recId}

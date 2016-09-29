@@ -55,14 +55,15 @@ let RecordTrowser = React.createClass({
         if (validationResult.ok) {
             //signal record save action, will update an existing records with changed values
             // or add a new record
-            let changes = null;
+            let promise;
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
-                changes = this.handleRecordAdd(this.props.pendEdits.recordChanges);
+                promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
-                this.handleRecordChange(this.props.recId).then(()=> {
-                    this.hideTrowser();
-                },(err) => {console.log('error!',err);});
+                promise = this.handleRecordChange(this.props.recId);
             }
+            promise.then(() => {
+                this.hideTrowser();
+            });
         }
         return validationResult;
     },
@@ -84,7 +85,7 @@ let RecordTrowser = React.createClass({
      */
     handleRecordAdd(recordChanges) {
         const flux = this.getFlux();
-        flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.formData.fields);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.formData.fields);
     },
 
     getTrowserRightIcons() {
@@ -99,7 +100,9 @@ let RecordTrowser = React.createClass({
 
     cancelEditing() {
         const flux = this.getFlux();
-        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
+        if (this.props.recId) {
+            flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
+        }
         flux.actions.hideTrowser();
     },
     /**

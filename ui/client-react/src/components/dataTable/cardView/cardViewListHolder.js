@@ -259,7 +259,7 @@ let CardViewListHolder = React.createClass({
             };
         }
 
-
+                                                console.log(this.props);
         return (<Swipeable className="swipeable"
                        onSwipingUp={(ev, delta) => {this.swiping(ev.target, delta, true);}}
                        onSwipingDown={(ev, delta) => {this.swiping(ev.target, delta, false);}}
@@ -275,6 +275,7 @@ let CardViewListHolder = React.createClass({
                         }
 
                         <CardViewList ref="cardViewList" node={recordNodes}
+                                      uniqueIdentifier={this.props.uniqueIdentifier}
                                       groupId=""
                                       groupLevel={-1}
                                       allowCardSelection={this.allowCardSelection}
@@ -282,6 +283,7 @@ let CardViewListHolder = React.createClass({
                                       onRowSelected={this.onCardRowSelected}
                                       onRowClicked={this.props.onRowClicked}
                                       isRowSelected={this.isRowSelected}
+                                      onEditRecord={this.openRecordForEdit}
                                       onSwipe={this.onSwipe} />
 
                         {showNextButton ?
@@ -306,6 +308,13 @@ let CardViewListHolder = React.createClass({
         this.refs.cardViewListWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
+    openRecordForEdit(recordId) {
+        const {appId, tblId, rptId} = this.props.reportData;
+
+        const flux = this.getFlux();
+
+        flux.actions.openRecordForEdit(appId, tblId, rptId, recordId);
+    },
     render() {
         let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
 

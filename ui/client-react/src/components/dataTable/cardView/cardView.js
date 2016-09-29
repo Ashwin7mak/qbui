@@ -175,6 +175,10 @@ let CardView = React.createClass({
             this.props.onRowClicked(this.props.data);
         }
     },
+    onEditAction() {
+        this.props.onEditAction(this.props.data);
+    },
+
     render() {
         if (this.props.data) {
             let row = this.createRow();
@@ -219,7 +223,7 @@ let CardView = React.createClass({
                     </div>
 
                     <div ref={"actions"} style={actionsStyle} className={rowActionsClasses}>
-                        <RecordActions  {...this.props}/>
+                        <RecordActions  {...this.props} onEditAction={this.onEditAction}/>
                     </div>
                 </Swipeable>
             );

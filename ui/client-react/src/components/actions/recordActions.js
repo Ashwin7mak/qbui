@@ -41,7 +41,7 @@ let RecordActions = React.createClass({
             <div className={'recordActions'} onClick={this.onClick}>
 
                 <div className="actionIcons">
-                    <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit") + " " + record}/>
+                    <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit") + " " + record} onClick={this.props.onEditAction}/>
                     <ActionIcon icon="print" tip={this.getSelectionTip("selection.print") + " " + record}/>
 
                     <EmailReportLink tip={this.getSelectionTip("selection.email") + " " + record}
