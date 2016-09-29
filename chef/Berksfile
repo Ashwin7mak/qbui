@@ -5,6 +5,6 @@ group :external do
 end
 
 group :internal do
-  cookbook 'nodejs', git: 'git@github.com:QuickBase/cookbook-nodejs.git', branch: 'coreui-deployment'
+  cookbook 'nodejs', git: 'git@github.com:QuickBase/cookbook-nodejs.git', branch: 'master'
   cookbook 'splunkclouduf', git: 'git@github.com:QuickBase/cookbook-splunkclouduf.git', branch: 'master'
 end
