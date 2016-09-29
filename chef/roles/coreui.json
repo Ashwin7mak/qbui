@@ -1,5 +1,5 @@
 {
-  "name": "nodejs",
+  "name": "coreui",
   "json_class": "Chef::Role",
   "description": "CoreUI App AMI Layer",
   "chef_type": "role",
