@@ -502,7 +502,7 @@
           "DNSName": { "Fn::GetAtt": ["ElasticLoadBalancer", "DNSName"] }
         },
         "HostedZoneName": { "Fn::Join": ["", [{ "Ref": "paramDomainName" }, "."]] },
-        "Name": { "Fn::Join": ["", [{ "Ref": "AWS::StackName" }, "." , { "Ref": "paramDomainName" }, "."]] },
+        "Name": { "Fn::Join": ["", ["*.nodejs.", { "Ref": "AWS::StackName" }, ".", { "Ref": "paramDomainName" }, "."]] },
         "Type": "A"
       }
     }
