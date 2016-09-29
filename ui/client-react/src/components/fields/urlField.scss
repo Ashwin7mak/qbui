@@ -1,19 +1,23 @@
 @import '../../../src/assets/css/qbVariables';
 
 .urlField {
-    a {
+    &, a {
         color: $link-text-normal-color;
     }
 
-    a:hover {
-        color: $link-text-hover-color;
+    &:hover:not(.disabled), a:hover {
+        text-decoration: underline;
+
+        .urlIcon {
+            opacity: 1;
+        }
     }
 
     .link {
 
     }
 
-    .btn{
+    .btn {
         &.btn-default {
             @include urlButtonBackgroundGradient();
             color: $link-text-normal-color;
@@ -22,6 +26,7 @@
         &.btn-default:hover {
             background: $urlButton-background-hover-color;
             color: $link-text-normal-color;
+            text-decoration: none;
         }
 
         &.btn-default:focus {
@@ -33,6 +38,25 @@
 
         &.btn-default.disabled {
             @include urlButtonDisabled();
+        }
+    }
+
+    .disabled {
+        color: $text-color;
+    }
+
+    .urlIcon {
+        display: inline;
+        float: none;
+        margin-left: 10px;
+        opacity: 0;
+
+        transition: opacity .2s ease-in-out;
+
+        @include small-breakpoint {
+            float: right;
+            margin-left: 0;
+            opacity: 1;
         }
     }
 }

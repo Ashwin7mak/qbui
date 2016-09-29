@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react';
 import TextFieldValueRenderer from './textFieldValueRenderer';
+import UrlUtils from '../../utils/urlUtils';
+
 import './urlField.scss';
 
 const UrlFieldValueRenderer = React.createClass({
@@ -63,12 +65,23 @@ const UrlFieldValueRenderer = React.createClass({
             );
         }
     },
+    renderIcon() {
+        if (!this.props.showAsButton && !this.props.disabled) {
+            return (
+                <div className='urlIcon'>
+                    {UrlUtils.renderIconForUrl(this.props.value)}
+                </div>
+            );
+        }
+    },
     render() {
         let classes = 'urlField';
+        classes += (this.props.disabled ? ' disabled' : '');
 
         return (
             <div className={classes}>
                 {this.renderLink()}
+                {this.renderIcon()}
             </div>
         );
 

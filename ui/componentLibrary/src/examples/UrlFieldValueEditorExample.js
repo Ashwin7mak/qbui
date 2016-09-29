@@ -1,6 +1,3 @@
-// This is a basic example for the React playground
-// Please update to include other properties or states for your component
-
 const UrlFieldValueEditorExample = React.createClass({
     getInitialState() {
         return {
