@@ -88,7 +88,7 @@ describe('FieldElement functions', () => {
         let expectedCallBackArgs = {
             values: {
                 oldVal: {value: "old", display: "old"},
-                newVal: {value: "old", display: "new"}
+                newVal: {value: "new", display: "new"}
             },
             fid: 6,
             fieldName: "field"

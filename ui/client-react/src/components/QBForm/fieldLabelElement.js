@@ -25,7 +25,7 @@ const FieldLabelElement = React.createClass({
     render() {
         // symbol that a value required
         let requiredIndication = this.props.reserveSpaceForRequired ? '\u00a0' : '';
-        if (this.props.indicateRequiredOnLabel && (this.props.element.required || this.props.relatedField.required)) {
+        if (this.props.indicateRequiredOnLabel && ((this.props.element && this.props.element.required) || (this.props.relatedField && this.props.relatedField.required))) {
             requiredIndication = '*';
         }
 

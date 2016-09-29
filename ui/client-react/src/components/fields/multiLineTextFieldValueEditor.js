@@ -41,6 +41,11 @@ const MultiLineTextFieldValueEditor = React.createClass({
             }
         };
     },
+    getDefaultProps() {
+        return {
+            showScrollForMultiLine: false
+        };
+    },
 
     /**
      * delegate text changes via callback
