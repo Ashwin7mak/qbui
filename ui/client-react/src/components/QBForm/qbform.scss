@@ -14,10 +14,14 @@ $edit-field-padding: 5px;
     }
     .qbPanelHeader {
         padding: 15px 0 15px 20px;
-        // if the section doesnt have a header, when its collapsed the height should be same as others
-        min-height: 54px;
         .qbPanelHeaderIcon {
             top: 4px;
+        }
+    }
+    &.closed {
+        .qbPanelHeader {
+            // if the section doesnt have a header, when its collapsed the height should be same as others
+            min-height: 54px;
         }
     }
     .fieldRow {
