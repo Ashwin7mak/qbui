@@ -3,7 +3,11 @@ import QBicon from '../components/qbIcon/qbIcon.js';
 
 const UrlUtils = {
     getProtocolFromUrl(url) {
-        return url.split(':')[0];
+        if(url && url.length) {
+            return url.split(':')[0];
+        } else {
+            return null;
+        }
     },
     getIconForProtocol(protocol) {
         switch(protocol) {
