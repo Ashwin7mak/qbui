@@ -510,8 +510,8 @@ $cell-edit-background-edit: #f3f8fe;
             }
             .cellEdit {
                 display:inline-block;
-                margin-right:2px;
-                margin-left: 2px;
+                //margin-right:2px;
+                //margin-left: 2px;
                 background-color: $input-bg-color;
                 &.input-group {
                     flex: 1 1 auto;

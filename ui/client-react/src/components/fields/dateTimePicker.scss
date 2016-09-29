@@ -201,7 +201,7 @@
     &.ghost-text {
         .Select-placeholder {
             color: $color-black-500;
-            font-style: italic;
+            font-style: italic !important;
             font-weight: bold;
             padding: 1px;
             margin-left: 2px;
@@ -214,6 +214,7 @@
     display:inline-block;
     margin-bottom: 3px;
     vertical-align: middle;
+    width: 100%;
 
     //  this positions the calendar
     position: relative;
@@ -258,6 +259,7 @@
 
     //  dateCell styles for date/time combo
     &.dateCell {
+        margin-right: 2px;
         .input-group.date input.form-control {
             font-size: 12px;
         }
