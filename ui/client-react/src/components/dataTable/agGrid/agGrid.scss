@@ -463,7 +463,7 @@ $cell-edit-background-edit: #f3f8fe;
         border-right: 1px solid $row-border-color;
         > .cellWrapper.textFormat {
             align-items:flex-start;
-            padding-top:6px;
+            padding-top:0px;
             textarea {
                 resize: none;
                 overflow:hidden;

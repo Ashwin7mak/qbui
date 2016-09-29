@@ -156,7 +156,6 @@
 //  edit styles for a time cell
 .timeCell.cellEdit {
     display:inline-block;
-    margin-top: 3px;
     margin-bottom: 3px;
     width: 100%;
     .Select {
@@ -210,10 +209,9 @@
     }
 }
 
-//  edit styles for a date cell
+//  edit mode styles for a date cell
 .dateCell.cellEdit {
     display:inline-block;
-    margin-top: 3px;
     margin-bottom: 3px;
     vertical-align: middle;
 
@@ -253,7 +251,7 @@
     }
 }
 
-//  edit styles for a date/time field combination
+//  edit mode styles for a date/time field combination
 .dateTimeField.cellEdit {
     width: 94px;
     vertical-align: middle;
