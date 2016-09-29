@@ -109,31 +109,32 @@ export let Nav = React.createClass({
         if (this.state.nav.leftNavVisible) {
             classes += " leftNavOpen";
         }
-        let editRecordId = this.props.location.query.editRec;
+        let editRecordId = _.has(this.props, "location.query") ? this.props.location.query.editRec : null;
 
         if (editRecordId === "new") {
             editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
         }
         return (<div className={classes}>
 
-            <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === "editRecord"}
-                           router={this.props.router}
-                           form={this.state.form}
-                           appId={this.props.params.appId}
-                           tblId={this.props.params.tblId}
-                           recId={editRecordId}
-                           pendEdits={this.state.pendEdits}
-                           appUsers={this.state.apps.appUsers}
-                           selectedApp={this.getSelectedApp()}
-                           selectedTable={this.getSelectedTable()}
-            />
-
-            <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === "reports"}
-                                  router={this.props.router}
-                                  selectedTable={this.getSelectedTable()}
-                                  filterReportsName={this.state.nav.filterReportsName}
-                                  reportsData={this.state.reportsData}
-            />
+            {this.props.params && this.props.params.appId &&
+                <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === "editRecord"}
+                               router={this.props.router}
+                               form={this.state.form}
+                               appId={this.props.params.appId}
+                               tblId={this.props.params.tblId}
+                               recId={editRecordId}
+                               pendEdits={this.state.pendEdits}
+                               appUsers={this.state.apps.appUsers}
+                               selectedApp={this.getSelectedApp()}
+                               selectedTable={this.getSelectedTable()} />
+            }
+            {this.props.params && this.props.params.appId &&
+                <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === "reports"}
+                                      router={this.props.router}
+                                      selectedTable={this.getSelectedTable()}
+                                      filterReportsName={this.state.nav.filterReportsName}
+                                      reportsData={this.state.reportsData}/>
+            }
 
             <LeftNav
                 visible={this.state.nav.leftNavVisible}

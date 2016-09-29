@@ -6,7 +6,7 @@ import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
-import { browserHistory } from 'react-router';
+import {browserHistory} from 'react-router';
 
 let logger = new Logger();
 
@@ -39,7 +39,7 @@ function updateQueryStringParam(key, value) {
         }
     }
     window.history.replaceState({}, "", baseUrl + params);
-};
+}
 
 function removeQueryString() {
     var baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
@@ -50,7 +50,7 @@ let formActions = {
 
     openRecordForEdit(appId, tblId, rptId = null, recordId = null) {
 
-        updateQueryStringParam("editRec",recordId);
+        updateQueryStringParam("editRec", recordId);
 
         this.flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, "edit").then(() => {
 

@@ -50,22 +50,6 @@ describe('Record functions', () => {
         const record = ReactDOM.findDOMNode(component);
         expect(record).toBeDefined();
     });
-    it('test save record callback for edit', () => {
-        component = TestUtils.renderIntoDocument(<Record recId={1} flux={flux} formData={{}}></Record>);
-        component.handleRecordSaveClicked({value: 1});
-        expect(flux.actions.recordPendingEditsCommit).toHaveBeenCalled();
-        expect(flux.actions.saveRecord).toHaveBeenCalled();
-    });
-    it('test save record callback for add', () => {
-        component = TestUtils.renderIntoDocument(<Record flux={flux} formData={{}}></Record>);
-        component.handleRecordSaveClicked({});
-        //TODO
-    });
-    it('test cancel callback', () => {
-        component = TestUtils.renderIntoDocument(<Record recId={1} flux={flux}></Record>);
-        component.handleEditRecordCancel();
-        expect(flux.actions.recordPendingEditsCancel).toHaveBeenCalled();
-    });
     it('test field change callback', () => {
         component = TestUtils.renderIntoDocument(<Record recId={1} flux={flux} pendEdits={{recordChanges: {}}} formData={{}}></Record>);
         component.handleFieldChange({});

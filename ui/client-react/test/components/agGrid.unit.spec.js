@@ -157,6 +157,7 @@ describe('AGGrid functions', () => {
             getFilteredRecords: ()=>{},
             selectedRows: ()=>{},
             rowClicked: ()=>{},
+            openRecordForEdit: ()=> {},
             mark: ()=>{},
             measure: ()=>{}
         }
@@ -167,7 +168,7 @@ describe('AGGrid functions', () => {
         NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'rowClicked');
-
+        spyOn(flux.actions, 'openRecordForEdit');
     });
 
     afterEach(() => {
@@ -175,6 +176,7 @@ describe('AGGrid functions', () => {
         NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
         flux.actions.getFilteredRecords.calls.reset();
         flux.actions.rowClicked.calls.reset();
+        flux.actions.openRecordForEdit.calls.reset();
     });
 
     it('test render of component', () => {
@@ -434,6 +436,7 @@ describe('AGGrid functions', () => {
                 return (<div className="reportToolsAndContentContainer singleSelection">
                     <AGGrid ref="grid"
                             flux={flux}
+                            uniqueIdentifier="col_num"
                             actions={TableActionsMock}
                             records={fakeReportData_before.data.records}
                             columns={fakeReportData_before.data.columns}
@@ -452,7 +455,7 @@ describe('AGGrid functions', () => {
 
         // click on edit icon
         TestUtils.Simulate.click(editButtons[0]);
-        expect(flux.actions.rowClicked).toHaveBeenCalled();
+        expect(flux.actions.openRecordForEdit).toHaveBeenCalled();
 
         // find the dropdown buttons
         const dropdownButtons = ReactDOM.findDOMNode(grid).querySelectorAll(".gridCell button.dropdownToggle");

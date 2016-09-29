@@ -23,7 +23,6 @@ let ReportManager = React.createClass({
     onChangeSearch(ev) {
         const flux = this.getFlux();
         flux.actions.filterReportsByName(ev.target.value);
-        console.log(ev.target.value);
     },
     clearSearch() {
         const flux = this.getFlux();

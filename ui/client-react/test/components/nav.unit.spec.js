@@ -80,13 +80,15 @@ describe('Nav functions', () => {
 
     beforeEach(() => {
         NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
-        NavRewireAPI.__Rewire__('Trowser', TrowserMock);
+        NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
+        NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
         NavRewireAPI.__Rewire__('TopNav', TopNavMock);
     });
 
     afterEach(() => {
         NavRewireAPI.__ResetDependency__('LeftNav');
-        NavRewireAPI.__ResetDependency__('Trowser');
+        NavRewireAPI.__ResetDependency__('RecordTrowser');
+        NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
         NavRewireAPI.__ResetDependency__('TopNav');
     });
 

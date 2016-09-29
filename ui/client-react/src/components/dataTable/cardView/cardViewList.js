@@ -31,7 +31,7 @@ let CardViewList = React.createClass({
      */
     onEditRecord(data) {
 
-       this.props.onEditRecord(data[this.props.uniqueIdentifier].value);
+        this.props.onEditRecord(data[this.props.uniqueIdentifier].value);
     },
 
     getRows() {
@@ -76,7 +76,7 @@ let CardViewList = React.createClass({
                         </Collapse>
                     </div> :
                     <CardView key={this.props.node[this.props.uniqueIdentifier]}
-                              rowId={this.props.node[this.props.uniqueIdentifier].value}
+                              rowId={this.props.node[this.props.uniqueIdentifier] ? this.props.node[this.props.uniqueIdentifier].value : null}
                               data={this.props.node}
                               allowCardSelection={this.props.allowCardSelection}
                               onToggleCardSelection={this.props.onToggleCardSelection}

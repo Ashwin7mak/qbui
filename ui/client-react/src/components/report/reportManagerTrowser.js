@@ -23,7 +23,7 @@ let ReportManagerTrowser = React.createClass({
                 if (this.props.router) {
                     this.props.router.push(report.link);
                 }
-            },500);
+            }, 500);
         };
 
         return <ReportManager reportsData={this.props.reportsData}

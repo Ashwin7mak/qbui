@@ -259,7 +259,6 @@ let CardViewListHolder = React.createClass({
             };
         }
 
-                                                console.log(this.props);
         return (<Swipeable className="swipeable"
                        onSwipingUp={(ev, delta) => {this.swiping(ev.target, delta, true);}}
                        onSwipingDown={(ev, delta) => {this.swiping(ev.target, delta, false);}}
