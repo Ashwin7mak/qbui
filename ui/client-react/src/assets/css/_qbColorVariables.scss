@@ -267,11 +267,12 @@ $urlButton-background-normal-colorstop2-color: $color-black-100;
 @mixin urlButtonDisabled() {
     opacity: .4;
 }
-$urlbutton-background-focus-colorstop1-color: $color-black-800;
-$urlbutton-background-focus-colorstop2-color: $color-black-100;
+$urlButton-background-focus-colorstop1-color: $color-black-800;
+$urlButton-background-focus-colorstop2-color: $color-black-100;
 @mixin urlButtonBackgroundFocusGradient() {
-    background: linear-gradient(to top, $urlButton-background-focus-colorstop1-color -700%, $urlButton-background-focus-colorstop2-color 90%);
+    background: linear-gradient(to top, rgba($urlButton-background-focus-colorstop1-color, 0.05), rgba($urlButton-background-focus-colorstop2-color, 0.05));
 }
+$urlButton-border-focus-color: $color-indigo-800;
 $urlButton-border-color: $color-black-300;
 $urlButton-background-hover-color: $color-black-100;
 $urlButton-background-focus-colorstop1-color: $color-black-800;

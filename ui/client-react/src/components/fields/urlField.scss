@@ -28,6 +28,7 @@
             @include focus-shadow();
             @include urlButtonBackgroundFocusGradient();
             color: $link-text-normal-color;
+            border-color: $urlButton-border-focus-color;
         }
 
         &.btn-default.disabled {
