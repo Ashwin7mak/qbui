@@ -12,14 +12,10 @@
         "instances": [
           {
             "name": "coreui-nodejs",
-            "search_string": [
-              "coreui",
-              "nodejs"
-            ]
+            "search_string": ["node"]
           }
         ]
       }
-
     },
     "splunk": {
       "forwarder": {
