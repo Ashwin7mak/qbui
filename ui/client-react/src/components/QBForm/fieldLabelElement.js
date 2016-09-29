@@ -9,22 +9,18 @@ const FieldLabelElement = React.createClass({
     propTypes: {
         element: React.PropTypes.object, // FormFieldElement from form API
         relatedField: React.PropTypes.object, // field from Form data
-        indicateRequiredOnLabel: React.PropTypes.bool,
-        //always render a non-breaking space even if required sign isnt there
-        //this is needed to line up required and non required field labels
-        reserveSpaceForRequired: React.PropTypes.bool
+        indicateRequiredOnLabel: React.PropTypes.bool
     },
 
     getDefaultProps() {
         return {
-            indicateRequiredOnLabel: false,
-            reserveSpaceForRequired: false
+            indicateRequiredOnLabel: false
         };
     },
 
     render() {
         // symbol that a value required
-        let requiredIndication = this.props.reserveSpaceForRequired ? '\u00a0' : '';
+        let requiredIndication = '';
         if (this.props.indicateRequiredOnLabel && ((this.props.element && this.props.element.required) || (this.props.relatedField && this.props.relatedField.required))) {
             requiredIndication = '*';
         }

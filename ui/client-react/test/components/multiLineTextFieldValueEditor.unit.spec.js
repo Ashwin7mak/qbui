@@ -146,7 +146,7 @@ describe('MultiLineTextFieldValueEditor functions', () => {
                     width: 20
                 }
             }
-        }
+        };
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor fieldDef={fieldDef}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textArea = component.refs.textarea;
@@ -159,7 +159,7 @@ describe('MultiLineTextFieldValueEditor functions', () => {
                     num_lines: 20
                 }
             }
-        }
+        };
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor fieldDef={fieldDef}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textArea = component.refs.textarea;
@@ -173,7 +173,7 @@ describe('MultiLineTextFieldValueEditor functions', () => {
                     width: 20
                 }
             }
-        }
+        };
         component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor fieldDef={fieldDef}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let textArea = component.refs.textarea;

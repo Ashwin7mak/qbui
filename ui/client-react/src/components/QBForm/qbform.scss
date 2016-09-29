@@ -99,8 +99,10 @@ $edit-field-padding: 5px;
             margin-top: $edit-field-padding;
         }
     }
+    [type="text"].input, textarea.cellEdit {
+        padding: $edit-field-padding;
+    }
     [type="text"].input {
-        padding: 5px;
         width: 100%;
     }
     /* don't bleed through dropdowns */
