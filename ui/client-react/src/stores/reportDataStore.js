@@ -86,7 +86,8 @@ let reportModel = {
                     }
 
                     if (fieldDef.multipleChoice && fieldDef.multipleChoice.choices) {
-                        column.choices = fieldDef.multipleChoice.choices;
+                        column.multipleChoice = {};
+                        column.multipleChoice.choices = fieldDef.multipleChoice.choices;
                     }
                     //  client side attributes..
                     column.placeholder = (fieldDef.datatypeAttributes && fieldDef.datatypeAttributes.type && fieldDef.datatypeAttributes.type === serverTypeConsts.EMAIL_ADDRESS) ?
@@ -387,7 +388,7 @@ let reportModel = {
 
             //format the value by field display type
             if (fieldMeta && fieldMeta.datatypeAttributes && fieldMeta.datatypeAttributes.type) {
-                let formatType = FieldFormats.getFormatType(fieldMeta.datatypeAttributes.type);
+                let formatType = FieldFormats.getFormatType(fieldMeta.datatypeAttributes);
                 let formatter = this.getFormatter(formatType);
 
                 // if there's a formatter use it to format the display version
