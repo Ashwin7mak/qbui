@@ -8,8 +8,11 @@ import './fields.scss';
 
 import DatePicker from '../../components/node/datetimePicker/lib/DateTimeField';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
-import moment from 'moment';
 
+import '../node/datetimePicker/css/bootstrap-datetimepicker.css';
+import './dateTimePicker.scss';
+
+import moment from 'moment';
 /**
  * # DateFieldValueEditor
  *
