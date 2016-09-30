@@ -1,4 +1,4 @@
-@import '../../../../src/assets/css/qbVariables';
+@import '../../../src/assets/css/qbVariables';
 
 /* CSS hacks to the 3rd part date time picker to meet visual spec */
 .bootstrap-datetimepicker-widget.dropdown-menu {
@@ -64,6 +64,7 @@
 
         td,th {
             border-radius:0;
+            padding: 4px;
         }
 
         /* the title bar with prev/next/date etc */
@@ -146,3 +147,109 @@
         }
     }
 }
+
+/* hide datepicker if it's been opened but we're not over that cell */
+.dateCell.cellEdit:not(:hover) .bootstrap-datetimepicker-widget {
+    display:none !important;
+}
+
+//  edit styles for a time cell
+.timeCell.cellEdit {
+    display:inline-block;
+    margin-bottom: 3px;
+    width: 100%;
+    .Select {
+        height: 28px;
+        border: 0;
+    }
+    .Select-control {
+        border-radius: 2px;
+        height: 28px;
+        border: 0;
+    }
+    .Select-input {
+        padding-left: 1px;
+        height: 28px;
+        color: $color25;
+    }
+    .Select-value {
+        line-height: 28px;
+    }
+    .Select-placeholder {
+        line-height: 28px;
+        color: $color-black-700;
+        padding: 0 1px;
+        margin-left: 2px;
+        font-style: normal !important;   // override SelectCommon setting
+    }
+    .Select-option {
+        color: $color25;
+        padding-top: 1px;
+    }
+    .Select-arrow-zone {
+        background-color: $datepicker-bg;
+        padding-right: 0;
+        .glyphicon {
+            color: $datepicker-select-button-fg;
+        }
+        .glyphicon-time {
+            color: $color-black-700;
+            padding-top: 3px;
+            padding-left: 5px;
+        }
+    }
+    &.ghost-text {
+        .Select-placeholder {
+            color: $color-black-500;
+            font-style: italic !important;
+            font-weight: bold;
+            padding: 1px;
+            margin-left: 2px;
+        }
+    }
+}
+
+//  edit mode styles for a date cell
+.dateCell.cellEdit {
+    display:inline-block;
+    margin-bottom: 3px;
+    vertical-align: middle;
+    width: 100%;
+
+    //  this positions the calendar
+    position: relative;
+    &.ghost-text {
+        .input-group.date input.form-control {
+            color: $color-black-500;
+            font-style: italic;
+            font-weight: bold;
+        }
+    }
+    .glyphicon-calendar {
+        color: $color-black-700;
+    }
+}
+
+.dateCell.cellEdit>* {
+    border: 0;
+
+    .input-group.date input.form-control {
+        border: 0;
+        padding: 3px;
+        height: 28px;
+        border-radius: 0;
+    }
+    .input-group.date .input-group-addon {
+        background: #fff;
+        height: 20px;
+        padding: 0;
+        border: 0;
+        color: $icon-color;
+    }
+    .bootstrap-datetimepicker-widget {
+        top: 34px !important;
+    }
+}
+
+
+

@@ -16,9 +16,6 @@ import consts from '../../../../../common/src/constants';
 
 import IconActions from '../../actions/iconActions';
 
-import '../../node/datetimePicker/css/bootstrap-datetimepicker.css';
-import './dateTimePicker.scss';
-
 import _ from 'lodash';
 import FieldFormats from '../../../utils/fieldFormats';
 import FieldUtils from '../../../utils/fieldUtils';
