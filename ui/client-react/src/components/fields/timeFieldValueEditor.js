@@ -49,40 +49,39 @@ function getTimesInMinutes(increment, militaryTime) {
 const TimeFieldValueEditor = React.createClass({
     displayName: 'TimeFieldValueEditor',
     timeDropList:  getTimesInMinutes(30),
-    miliaryTimeDropList: getTimesInMinutes(30, true),
+    militaryTimeDropList: getTimesInMinutes(30, true),
 
     propTypes: {
         /**
-         * the raw date value in ISO format */
+         *  the raw date value in ISO format */
         value: React.PropTypes.string,
 
-        /* the display time value */
-        display: React.PropTypes.string,
-
-        /* field attributes */
+        /**
+         *  field attributes */
         attributes: React.PropTypes.object,
 
-        /* field type */
+        /**
+         *  field type - could be Time or DateTime */
         type: React.PropTypes.number,
 
         /**
-         * renders with red border if true */
+         *  renders with red border if true */
         isInvalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         *  message to display in the tool tip when isInvalid */
         invalidMessage: React.PropTypes.string,
 
         /**
-         * optional additional classes for the input to customize styling */
+         *  optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
 
         /**
-         * listen for changes by setting a callback to the onChange prop.  */
+         *  listen for changes by setting a callback to the onChange prop.  */
         onChange: React.PropTypes.func,
 
         /**
-         * listen for losing focus by setting a callback to the onBlur prop. */
+         *  listen for losing focus by setting a callback to the onBlur prop. */
         onBlur: React.PropTypes.func,
 
         idKey: React.PropTypes.any
@@ -108,43 +107,44 @@ const TimeFieldValueEditor = React.createClass({
         }
     },
 
-    onBlur(ev) {
-        if (ev.target && (this.props.onBlur || this.props.onDateTimeBlur)) {
-            //  convert the entered time to military format
-            let militaryTime = null;
-            if (ev.target.value) {
-                //  convert to military time
-                let formats = ['h:mm:ss a', 'h:mm:ss', 'h:mm a', 'h:mm'];
-                for (let idx = 0; idx < formats.length; idx++) {
-                    if (moment(ev.target.value, formats[idx]).isValid()) {
-                        militaryTime = moment(ev.target.value, formats[idx]).format('H:mm:ss');
-                        break;
+    onBlur(newValue) {
+        if (newValue && (this.props.onBlur || this.props.onDateTimeBlur)) {
+            if (newValue.value === null || newValue.value) {
+                //  convert the entered time to military format
+                let militaryTime = null;
+                if (newValue.value) {
+                    //  convert to military time
+                    let formats = ['h:mm:ss a', 'h:mm:ss', 'h:mm a', 'h:mm'];
+                    for (let idx = 0; idx < formats.length; idx++) {
+                        if (moment(newValue.value, formats[idx]).isValid()) {
+                            militaryTime = moment(newValue.value, formats[idx]).format('H:mm:ss');
+                            break;
+                        }
                     }
                 }
-            }
 
-            //  null means the time was cleared by the user.
-            if (ev.target.value === null || militaryTime) {
-                if (this.props.onDateTimeBlur) {
-                    this.props.onDateTimeBlur(militaryTime);
-                } else {
-                    let valueObj = {
-                        value: militaryTime,
-                        display: ''
-                    };
-                    valueObj.display = timeFormatter.format(valueObj, this.props.attributes);
-                    this.props.onBlur(valueObj);
+                //  null means the time was cleared by the user.
+                if (newValue.value === null || militaryTime) {
+                    if (this.props.onDateTimeBlur) {
+                        this.props.onDateTimeBlur(militaryTime);
+                    } else {
+                        let valueObj = {
+                            value: militaryTime,
+                            display: ''
+                        };
+                        valueObj.display = timeFormatter.format(valueObj, this.props.attributes);
+                        this.props.onBlur(valueObj);
+                    }
                 }
             }
         }
     },
 
-    // TODO: waiting for react-select rc2 to leverage the arrow callback
-    //renderClockIcon() {
-    //    return (
-    //        <span></span>
-    //    );
-    //},
+    renderClockIcon() {
+        return (
+            <span className="glyphicon glyphicon-time"></span>
+        );
+    },
 
     renderOption(option) {
         if (option.value === null) {
@@ -212,11 +212,11 @@ const TimeFieldValueEditor = React.createClass({
                         onBlur={this.onBlur}
                         onChange={this.onChange}
                         value={theTime ? theTime : ''}
-                        options={useMilitaryTime ? this.miliaryTimeDropList : this.timeDropList}
+                        options={useMilitaryTime ? this.militaryTimeDropList : this.timeDropList}
                         optionRenderer={this.renderOption}
                         placeholder={placeholder}
                         clearable={false}
-                        //arrowRenderer={this.renderClockIcon}
+                        arrowRenderer={this.renderClockIcon}
                     />
                 </div>
         );

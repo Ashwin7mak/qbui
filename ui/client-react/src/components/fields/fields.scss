@@ -2,7 +2,7 @@
 
 $data-font-size: $font-size-p;
 
-@mixin focus-shadow($color:$input-text-focus-border-color) {
+@mixin focus-shadow($color:$input-border-focus-color) {
   box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
 }
 
@@ -28,7 +28,6 @@ $data-font-size: $font-size-p;
 
 // layout of input userdata on a form
 .formContainer [type="text"].input {
-  margin: 10px 20px 10px 10px;
   padding: 10px;
   width: 280px;
   height: 35px;
@@ -43,9 +42,13 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of focus input shadow
-[type="text"]:focus.input  {
+[type="text"]:focus.input,
+  textarea:focus,
+  .is-focused:not(.is-open)>.Select-control {
   outline: none;
   border: solid 1px $input-text-focus-border-color;
+  //Added border-color for multi choice text box
+  border-color: $input-text-focus-border-color !important;
   @include focus-shadow();
 }
 
@@ -119,4 +122,9 @@ $data-font-size: $font-size-p;
 /* allow wide tooltips */
 .tooltip-inner {
   max-width:none;
+}
+
+
+.timeCell .Select .Select-control {
+    border: 0;
 }

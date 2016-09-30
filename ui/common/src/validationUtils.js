@@ -43,13 +43,13 @@
             // checkRequired is before saving not on each value change
             if (checkRequired && _.has(fieldDef, 'required') && fieldDef.required &&
                 (value === undefined || value === null ||
-                (value.length !== undefined && value.length === 0))) {
+                (value.length !== undefined && value.length === 0) ||
+                value === false)) {
                 results.isInvalid = true;
                 results.error.messageId = 'invalidMsg.required';
                 results.error.code = dataErrs.REQUIRED_FIELD_EMPTY;
                 results.error.data = {
-                    field : fieldDef,
-                    fieldId: fieldDef.id,
+                   fieldId: fieldDef.id,
                     fieldName : name
                 };
 
@@ -62,7 +62,6 @@
                 results.error.messageId = 'invalidMsg.maxChars';
                 results.error.code = dataErrs.MAX_LEN_EXCEEDED;
                 results.error.data = {
-                    field: fieldDef,
                     fieldId: fieldDef.id,
                     maxNum : fieldDef.datatypeAttributes.clientSideAttributes.max_chars,
                     hadNum: value.length
@@ -76,7 +75,6 @@
                 results.error.messageId  = 'invalidMsg.maxChars';
                 results.error.code = dataErrs.MAX_LEN_EXCEEDED;
                 results.error.data = {
-                    field: fieldDef,
                     fieldId: fieldDef.id,
                     maxNum : LimitConstants.maxTextFieldValueLength,
                     hadNum: value.length

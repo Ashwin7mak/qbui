@@ -353,13 +353,13 @@ const flux = {
         },
         newBlankReportRecord: ()=> {
         },
-        saveReportRecord: ()=> {
+        saveRecord: ()=> {
         },
-        saveNewReportRecord: ()=> {
+        saveNewRecord: ()=> {
         },
         logMeasurements : ()=> {
         },
-        deleteReportRecord: ()=> {
+        deleteRecord: ()=> {
         },
         openingReportRow: ()=> {
         }
@@ -929,7 +929,7 @@ describe('ReportContent functions', () => {
     it('test handleRecordDelete', () => {
         let keyField = "id";
         let origRec = Object.assign({}, fakeReportData_simple.data.records[0]);
-        spyOn(flux.actions, 'deleteReportRecord');
+        spyOn(flux.actions, 'deleteRecord');
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 appId="123"
@@ -941,7 +941,7 @@ describe('ReportContent functions', () => {
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordDelete(origRec);
-        expect(flux.actions.deleteReportRecord).toHaveBeenCalled();
+        expect(flux.actions.deleteRecord).toHaveBeenCalled();
     });
 
     it('test handleRecordSaveClicked', () => {
@@ -1111,7 +1111,7 @@ describe('ReportContent functions', () => {
             fieldDef: fieldsData.fields.data[0],
         }
         ];
-        spyOn(flux.actions, 'saveNewReportRecord');
+        spyOn(flux.actions, 'saveNewRecord');
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 appId="123"
@@ -1124,13 +1124,13 @@ describe('ReportContent functions', () => {
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordAdd(edits.recordChanges);
-        expect(flux.actions.saveNewReportRecord).toHaveBeenCalledWith('123', '456', newRec);
+        expect(flux.actions.saveNewRecord).toHaveBeenCalledWith('123', '456', edits.recordChanges, fieldsData.fields.data);
     });
 
     it('test handleRecordChange', () => {
         let keyField = "id";
         spyOn(flux.actions, 'recordPendingEditsCommit');
-        spyOn(flux.actions, 'saveReportRecord');
+        spyOn(flux.actions, 'saveRecord');
         let edits = {recordChanges:{
             4:{
                 fieldName : 'col_num',
@@ -1161,7 +1161,7 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordChange({value:100});
         expect(flux.actions.recordPendingEditsCommit).toHaveBeenCalled();
-        expect(flux.actions.saveReportRecord).toHaveBeenCalled();
+        expect(flux.actions.saveRecord).toHaveBeenCalled();
     });
 
 

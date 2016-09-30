@@ -21,7 +21,9 @@ export default {
             print: "Drucken",
             copy: "Kopieren",
             delete: "Löschen",
-            more: "Mehr..."
+            more: "Mehr...",
+            placeholder: 'Wählen...',
+            notFound: "Nicht gefunden"
         },
         footer: {
             copyright: "{year} QuickBase, Inc. Alle Rechte vorbehalten."
@@ -92,6 +94,12 @@ export default {
             }
 
         },
+        fields: {
+            checkbox: {
+                no: 'Nein',
+                yes: 'Ja'
+            }
+        },
         form : {
             tab : 'Tab',
             error: {
@@ -129,16 +137,17 @@ export default {
             sortAndGroup : {
                 addField: "Feld hinzufügen",
                 by: "nach",
-                changeOrder: "Austausch bestellen",
+                changeGroupOrder: "Gruppe wechseln bestellen",
+                changeSortOrder: "Reihenfolge ändern",
                 chooseFields :  {
-                    group: "Wählen Sie Feld für die Gruppierung",
-                    sort: "Wählen Sie für die Sortierung"
+                    group: "Wählen Sie ein Feld zu einer Gruppe von",
+                    sort: "Wählen Sie ein Feld zu sortieren, indem Sie"
                 },
                 group: "Gruppen",
                 header : "Sortieren & Gruppen",
                 moreFields : "mehr Felder ...",
                 reset: "Zurückstellen",
-                resetTip : "Verlassen und Wiederherstellung des ursprünglichen Berichts zu sortieren und zu Gruppeneinstellungen",
+                resetTip : "Verlassen und Wiederherstellung des ursprünglichen Art und Gruppeneinstellungen",
                 sort:   "Sortieren",
                 stopGroupingBy: "Stoppen Gruppierung von",
                 stopSortingBy: "Stoppen die Sortierung nach",
@@ -266,6 +275,6 @@ export default {
             required: 'Füllen Sie das {fieldName}',
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
         },
-
+        noneOption: "\<Keiner\>"
     }
 };

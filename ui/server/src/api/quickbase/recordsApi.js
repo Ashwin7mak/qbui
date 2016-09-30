@@ -416,7 +416,8 @@
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts);
                 } else {
-                    //return error
+                    //log & return error
+                    log.warn('Invalid input saving record:' + JSON.stringify(errors));
                     let errCode = httpStatusCodes.INVALID_INPUT;
                     return Promise.reject({response:{message:'validation error', status:errCode, errors: errors}}
                     );
@@ -437,7 +438,8 @@
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts);
                 } else {
-                    //return error
+                    //log & return error
+                    log.warn('Invalid input saving record:' + JSON.stringify(errors));
                     let errCode = httpStatusCodes.INVALID_INPUT;
                     return Promise.reject({response:{message:'validation error', status:errCode, errors: errors}}
                     );
@@ -486,7 +488,7 @@
             req.body.forEach((change) => {
                 if (change && change.fieldDef) {
                     // validate it
-                    let results = ValidationUtils.checkFieldValue(change.fieldDef, change.fieldName, change.value, true);
+                    let results = ValidationUtils.checkFieldValue(change, change.fieldName, change.value, true);
                     if (results.isInvalid) {
                         errors.push(results);
                     }

@@ -166,8 +166,7 @@
         flex-direction: row;
         justify-content:flex-end;
         align-items: center;
-        flex: 1 1 auto;
-        min-height: 61px;
+        flex: 0 1 auto;
 
         color:$pagination-iconfont-normal-color;
 
@@ -178,13 +177,6 @@
             position: relative;
             width: 50%;
             margin-left: 50%;
-
-            /* push the reportNavigation element up into the grid bottom margin (which exists
-               to allow field pickers etc. to display without clipping), below the last grid row */
-            .reportNavigation {
-                position:absolute;
-                top:-230px;
-            }
         }
 
         .hidden {
@@ -194,7 +186,7 @@
 
     .loadedContent {
         display:flex;
-        flex: 0 1 auto;
+        flex: 1 1 auto;
         width:100%;
         position:relative;
         //min-height is required in order for the scrollbar to work in firefox
@@ -234,6 +226,8 @@
 .reportContent {
     width:100%;
     flex:1 1 auto;
+    display:flex;
+    flex-direction:column;
     position:relative;
     overflow:auto;
 }

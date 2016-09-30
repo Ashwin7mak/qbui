@@ -1,22 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import _ from 'lodash';
 
 import {DEFAULT_RECORD_KEY_ID} from '../../constants/schema';
 import {NumberFieldValueRenderer} from './fieldValueRenderers';
 
 import FieldFormats from '../../utils/fieldFormats' ;
 
-import {DefaultFieldValueEditor, ComboBoxFieldValueEditor, CheckBoxFieldValueEditor} from './fieldValueEditors';
+import {DefaultFieldValueEditor} from './fieldValueEditors';
+
+import CheckBoxFieldValueEditor from './checkBoxFieldValueEditor';
 import DateFieldValueEditor from './dateFieldValueEditor';
 import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
-import TimeFieldValueEditor from './timeFieldValueEditor';
-import TextFieldValueEditor from './textFieldValueEditor';
+import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
-import UserFieldValueEditor from './userFieldValueEditor';
-
 import NumericFieldValueEditor from './numericFieldValueEditor';
-
-import _ from 'lodash';
+import TextFieldValueEditor from './textFieldValueEditor';
+import TimeFieldValueEditor from './timeFieldValueEditor';
+import UserFieldValueEditor from './userFieldValueEditor';
 
 /**
  * # FieldValueEditor
@@ -131,6 +132,9 @@ const FieldValueEditor = React.createClass({
             tabIndex: "0",
             idKey : this.props.idKey,
             ref:"fieldInput",
+            required: (this.props.fieldDef ? this.props.fieldDef.required : false),
+            readOnly: (this.props.fieldDef ? !this.props.fieldDef.userEditableValue : false),
+            invalid: this.props.isInvalid,
             fieldDef: this.props.fieldDef,
             fieldName: this.props.fieldName
         };
@@ -143,8 +147,9 @@ const FieldValueEditor = React.createClass({
         }
 
         switch (type) {
-        case FieldFormats.CHECKBOX_FORMAT:
-            return <CheckBoxFieldValueEditor {...commonProps}/>;
+        case FieldFormats.CHECKBOX_FORMAT: {
+            return <CheckBoxFieldValueEditor {...commonProps} />;
+        }
 
         case FieldFormats.DATE_FORMAT: {
             let attributes = this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null;
@@ -168,11 +173,12 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.PERCENT_FORMAT: {
             if (_.has(this.props, 'fieldDef.choices')) {
                 return (
-                    <ComboBoxFieldValueEditor choices={this.props.fieldDef.choices}
+                    <MultiChoiceFieldValueEditor choices={this.props.fieldDef.choices}
                         {...commonProps} />
                 );
             } else {
                 return <NumericFieldValueEditor {...commonProps}
+                    key={'nfve-' + this.props.idKey}
                     onChange={this.props.onChange ? this.props.onChange : ()=>{}}
                     isInvalid={this.props.isInvalid}
                     invalidMessage={this.props.invalidMessage}
@@ -183,7 +189,6 @@ const FieldValueEditor = React.createClass({
         }
 
         case FieldFormats.USER_FORMAT: {
-
             return <UserFieldValueEditor {...commonProps} appUsers={this.props.appUsers}/>;
         }
 
@@ -195,7 +200,7 @@ const FieldValueEditor = React.createClass({
 
             if (_.has(this.props, 'fieldDef.choices')) {
                 return (
-                        <ComboBoxFieldValueEditor choices={this.props.fieldDef.choices}
+                        <MultiChoiceFieldValueEditor choices={this.props.fieldDef.choices}
                                              {...commonProps} />
                     );
             } else {
@@ -216,7 +221,6 @@ const FieldValueEditor = React.createClass({
         }
         }
     },
-
     onBlur(vals) {
         if (this.props.onBlur) {
             this.props.onBlur(vals);

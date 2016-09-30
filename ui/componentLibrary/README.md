@@ -2,6 +2,27 @@
 Welcome to the QuickBase component library. This is a little wrapper that lets us show off and play with components in QBUI. Only reusable components should be added to this library.
 
 ## Adding a component to the library
+
+### Use the Grunt task
+1. In your terminal, navigate to the qbui/ui folder
+2. Run the following grunt task using the name of your component and relative path to your component (from qbui/ui folder)
+
+`$ grunt addComponentToLibrary --name=[name of component] --path=[relative path to component]`
+
+For example:
+`$ grunt addComponentToLibrary --name=MyNewComponent --path=client-react/src/components/myNewComponent.js`
+
+#### Grunt Task Dependencies
+
+(All paths relative to qbui/ui/componentLibrary/src/)
+
+1. `components/Examples.js` exists and has two comments (`// END OF IMPORT` and `// END OF EXPORT`)
+2. `components/Metadata.js` exists and has two comments (`// END OF IMPORT STATEMENTS` and `// END OF METADATA MERGE`)
+3. `components/componentLibrary` exists and has a `<nav>` block
+4. `components/ReactPlayground.js` exists and has a comment (`// END OF IMPORT STATEMENTS`)
+5. `index.js` exists and has a `<Route>` block
+
+### For reference:
 1. Setup a new 'doc' file in `componentLibrary/src/docs`. You can use the other files as an example.
 1. Add a reference to `componentLibrary/src/components/Metadata.js` so we have the component and PropType descriptions.
 1. Add a new file in `componentLibrary/src/examples` that contains an example of using the component. This is what gets rendered into `<ReactPlayground />`.
@@ -27,7 +48,7 @@ There is a component for taking the proptype documentation and turning it into a
 <PropTable component="QBicon" metadata={Metadata} />
 ```
 
-*TODO: Metadata can be passed automatically through the [tree using Context](https://facebook.github.io/react/docs/context.html). This would make it so that we don't have to pass in the `Metadata` object every time it's added to the page. Same with `ReactPlayground`.
+*TODO:* Metadata can be passed automatically through the [tree using Context](https://facebook.github.io/react/docs/context.html). This would make it so that we don't have to pass in the `Metadata` object every time it's added to the page. Same with `ReactPlayground`.
 
 
 ### ReactPlayground

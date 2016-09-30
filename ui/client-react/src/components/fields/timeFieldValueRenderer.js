@@ -14,21 +14,20 @@ const TimeFieldValueRenderer = React.createClass({
     displayName: 'TimeFieldValueRenderer',
     propTypes: {
         /**
-         * the raw value */
+         *  raw time value */
         value: React.PropTypes.string,
 
-        /* the display value */
+        /**
+         *  optionally include the display value */
         display: React.PropTypes.string,
 
         /**
-         * optional additional classes for the input to customize styling */
+         *  optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
 
         /**
-         * field attributes
-         */
+         *  field attributes */
         attributes: React.PropTypes.object
-
     },
 
     getDefaultProps() {
@@ -51,8 +50,8 @@ const TimeFieldValueRenderer = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
-        //  format the display value based on the field attributes
-        let display = timeFormatter.format({value: this.props.value}, this.props.attributes);
+        //  use display value if passed in, otherwise format the value based on the field attributes
+        let display = this.props.display ? this.props.display : timeFormatter.format({value: this.props.value}, this.props.attributes);
 
         return <div className={classes}>{display}</div>;
     }

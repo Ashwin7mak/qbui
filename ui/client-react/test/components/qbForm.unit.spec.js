@@ -94,7 +94,7 @@ const fakeQBFormData = {
                                     "orderIndex": 0,
                                     "readOnly": false,
                                     "required": false,
-                                    "fieldId": 2,
+                                    "fieldId": 6,
                                     "fieldLabel": "testLabel2",
                                     "fieldValue": 123,
                                     "fieldType": "NUMERIC"
@@ -167,7 +167,14 @@ const emptyQBFormData = {
     fields: [{id: 2, name: "field name", datatypeAttributes: {type: "TEXT"}}]
 };
 
-let flux = {};
+var FieldElementMock = React.createClass({
+    render: function() {
+        return (
+            <div className="formElement field">{this.props.display}</div>
+        );
+    }
+});
+
 
 class BreakpointsAlwaysSmallMock {
 
@@ -181,27 +188,35 @@ describe('QBForm functions', () => {
 
     let component;
 
+    beforeEach(() => {
+        QBForm.__Rewire__('FieldElement', FieldElementMock);
+    });
+
+    afterEach(() => {
+        QBForm.__ResetDependency__('FieldElement');
+    });
+
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} flux={flux}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"}></QBForm>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const qbForm = ReactDOM.findDOMNode(component);
         expect(qbForm).toBeDefined();
     });
 
     it('test render of tabs', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
         const tabs = TestUtils.scryRenderedComponentsWithType(component, TabPane);
         expect(tabs.length).toEqual(2);
     });
 
     it('test render of sections', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
         const sections = TestUtils.scryRenderedDOMComponentsWithClass(component, "formSection");
         expect(sections.length).toEqual(2);
     });
 
     it('test render of formElements with labels on left', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
         const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
         expect(fieldElements.length).toEqual(1);
 
@@ -213,39 +228,31 @@ describe('QBForm functions', () => {
 
         QBForm.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
 
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
         const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
         expect(fieldElements.length).toEqual(2);
 
         const fieldLabelElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement fieldLabel");
-        expect(fieldLabelElements.length).toEqual(2);
+        expect(fieldLabelElements.length).toEqual(0); // labels will be rendered as a part of FieldElement so none should show up for this case
 
         QBForm.__ResetDependency__('Breakpoints');
     });
 
     it('test render of text form elements', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
         const textElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement text");
         expect(textElements.length).toEqual(2);
     });
 
-    it('test render of field form elements', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} flux={flux}></QBForm>);
-        const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
-
-        expect(fieldElements.length).toEqual(1);
-        const fieldValue = fieldElements[0].querySelector(".textField");
-        expect(fieldValue.innerText, "field value");
-    });
 
     it('test render of empty section', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={emptyQBFormData} flux={flux}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={emptyQBFormData}></QBForm>);
         const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement");
         expect(fieldElements.length).toEqual(0);
     });
 
     it('test render of form with unauthorized error status', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} errorStatus={403} formData={fakeQBFormData} flux={flux}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} errorStatus={403} formData={fakeQBFormData}></QBForm>);
         const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
         expect(fieldElements.length).toEqual(0);
 
@@ -254,11 +261,49 @@ describe('QBForm functions', () => {
     });
 
     it('test render of form with misc error status', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} errorStatus={500} formData={fakeQBFormData} flux={flux}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} errorStatus={500} formData={fakeQBFormData}></QBForm>);
         const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
         expect(fieldElements.length).toEqual(0);
 
         const errorSection = TestUtils.scryRenderedDOMComponentsWithClass(component, "errorSection");
         expect(errorSection.length).toEqual(1);
+    });
+
+    it('test render of form field element with data from pendingEdits', () => {
+        let edits = {
+            recordChanges: {
+                6: {
+                    fieldName: "test",
+                    newVal: {value: "value", display: "display"}
+                }
+            }
+        };
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} pendEdits={edits}></QBForm>);
+        const fieldElements = TestUtils.scryRenderedComponentsWithType(component, FieldElementMock);
+        expect(fieldElements.length).toEqual(1);
+        expect(fieldElements[0].props.fieldRecord.display).toEqual("display");
+        expect(fieldElements[0].props.fieldRecord.value).toEqual("value");
+    });
+
+    it('test render of form field element with editErrors', () => {
+        let edits = {
+            recordChanges: {
+                6: {
+                    fieldName: "test",
+                    newVal: {value: "value", display: "display"}
+                }
+            },
+            editErrors: {
+                6: {
+                    isInvalid: true,
+                    invalidMessage: "invalid"
+                }
+            }
+        };
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} pendEdits={edits}></QBForm>);
+        const fieldElements = TestUtils.scryRenderedComponentsWithType(component, FieldElementMock);
+        expect(fieldElements.length).toEqual(1);
+        expect(fieldElements[0].props.isInvalid).toEqual(true);
+        expect(fieldElements[0].props.invalidMessage).toEqual("invalid");
     });
 });

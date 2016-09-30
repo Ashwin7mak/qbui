@@ -85,7 +85,7 @@ let reportModel = {
                         column.defaultValue = {value: fieldDef.defaultValue.coercedValue.value, display: fieldDef.defaultValue.displayValue};
                     }
 
-                    if (fieldDef.multiChoiceSourceAllowed && fieldDef.multipleChoice) {
+                    if (fieldDef.multipleChoice && fieldDef.multipleChoice.choices) {
                         column.choices = fieldDef.multipleChoice.choices;
                     }
                     //  client side attributes..
@@ -226,37 +226,39 @@ let reportModel = {
      * @param changes - the changes to make to the record form is [{id: fieldid, display: dispVal, value: raw, fieldName: name}, ...]
      */
     updateARecord(oldRecId, newRecId, changes) {
-        let record = this.findRecordById(this.model.records, oldRecId);
-        let filtRecord = this.findRecordById(this.model.filteredRecords, oldRecId);
+        if (this.model.records && this.model.filteredRecords) {
+            let record = this.findRecordById(this.model.records, oldRecId);
+            let filtRecord = this.findRecordById(this.model.filteredRecords, oldRecId);
 
-        // update with new recid
-        if (newRecId !== null) {
-            if (record) {
-                record[this.model.keyField.name].value = newRecId;
+            // update with new recid
+            if (newRecId !== null) {
+                if (record) {
+                    record[this.model.keyField.name].value = newRecId;
+                }
+                if (filtRecord) {
+                    filtRecord[this.model.keyField.name].value = newRecId;
+                }
             }
-            if (filtRecord) {
-                filtRecord[this.model.keyField.name].value = newRecId;
-            }
+            // change the data values
+            changes.forEach(change => {
+                if (change.display === undefined) {
+                    //format value for display
+                    this.formatFieldValue(change);
+                }
+                if (record) {
+                    record[change.fieldName].value = change.value;
+                    if (change.display !== undefined) {
+                        record[change.fieldName].display = change.display;
+                    }
+                }
+                if (filtRecord) {
+                    filtRecord[change.fieldName].value = change.value;
+                    if (change.display !== undefined) {
+                        filtRecord[change.fieldName].display = change.display;
+                    }
+                }
+            });
         }
-        // change the data values
-        changes.forEach(change => {
-            if (change.display === undefined) {
-                //format value for display
-                this.formatFieldValue(change);
-            }
-            if (record) {
-                record[change.fieldName].value = change.value;
-                if (change.display !== undefined) {
-                    record[change.fieldName].display = change.display;
-                }
-            }
-            if (filtRecord) {
-                filtRecord[change.fieldName].value = change.value;
-                if (change.display !== undefined) {
-                    filtRecord[change.fieldName].display = change.display;
-                }
-            }
-        });
     },
 
     updateRecordsCount: function(recordsCountData) {
@@ -473,17 +475,17 @@ let ReportDataStore = Fluxxor.createStore({
             actions.SELECTED_ROWS, this.onSelectedRows,
 
             actions.NEW_BLANK_REPORT_RECORD, this.onAddReportRecord,
-            actions.DELETE_REPORT_RECORD, this.onDeleteReportRecord,
-            actions.DELETE_REPORT_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
-            actions.DELETE_REPORT_RECORD_FAILED, this.onDeleteReportRecordFailed,
-            actions.DELETE_REPORT_RECORD_BULK, this.onDeleteReportRecordBulk,
-            actions.DELETE_REPORT_RECORD_BULK_SUCCESS, this.onDeleteReportRecordBulkSuccess,
-            actions.DELETE_REPORT_RECORD_BULK_FAILED, this.onDeleteReportRecordBulkFailed,
+            actions.DELETE_RECORD, this.onDeleteReportRecord,
+            actions.DELETE_RECORD_SUCCESS, this.onDeleteReportRecordSuccess,
+            actions.DELETE_RECORD_FAILED, this.onDeleteReportRecordFailed,
+            actions.DELETE_RECORD_BULK, this.onDeleteReportRecordBulk,
+            actions.DELETE_RECORD_BULK_SUCCESS, this.onDeleteReportRecordBulkSuccess,
+            actions.DELETE_RECORD_BULK_FAILED, this.onDeleteReportRecordBulkFailed,
             actions.RECORD_EDIT_CANCEL, this.onRecordEditCancel,
-            actions.SAVE_REPORT_RECORD_SUCCESS, this.onSaveRecordSuccess,
-            actions.SAVE_REPORT_RECORD_FAILED, this.onClearEdit,
-            actions.ADD_REPORT_RECORD_SUCCESS, this.onAddRecordSuccess,
-            actions.ADD_REPORT_RECORD_FAILED, this.onClearEdit,
+            actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
+            actions.SAVE_RECORD_FAILED, this.onClearEdit,
+            actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
+            actions.ADD_RECORD_FAILED, this.onClearEdit,
 
             actions.LOAD_REPORT_RECORDS_COUNT, this.onLoadReportRecordsCount,
             actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, this.onLoadReportRecordsCountSuccess,

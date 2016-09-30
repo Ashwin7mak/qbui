@@ -24,33 +24,31 @@ const DateTimeFieldValueEditor = React.createClass({
 
     propTypes: {
         /**
-         * the value to fill in the date component */
+         *  raw date time value */
         value: React.PropTypes.string,
 
-        /* the display value to fill in the date component */
-        display: React.PropTypes.string,
-
-        /* field attributes */
+        /**
+         *  field attributes */
         attributes: React.PropTypes.object,
 
         /**
-         * renders with red border if true */
+         *  renders with red border if true */
         isInvalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         *  message to display in the tool tip when isInvalid */
         invalidMessage: React.PropTypes.string,
 
         /**
-         * optional additional classes for the input to customize styling */
+         *  optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
 
         /**
-         * listen for changes by setting a callback to the onChange prop.  */
+         *  listen for changes by setting a callback to the onChange prop.  */
         onChange: React.PropTypes.func,
 
         /**
-         * listen for losing focus by setting a callback to the onBlur prop. */
+         *  listen for losing focus by setting a callback to the onBlur prop. */
         onBlur: React.PropTypes.func,
 
         idKey: React.PropTypes.any
@@ -73,7 +71,19 @@ const DateTimeFieldValueEditor = React.createClass({
      */
     getOrigTime() {
         let origValue = this.getOrigValue();
-        return origValue && moment(origValue).isValid() ? moment(origValue).format(TIME_FORMAT) : momentTz.tz('00:00:00', TIME_FORMAT, dateTimeFormatter.getTimeZone(this.props.attributes));
+        if (origValue && moment(origValue).isValid()) {
+            return moment(origValue).format(TIME_FORMAT);
+        } else {
+            let timeZone = dateTimeFormatter.getTimeZone(this.props.attributes);
+            let today = moment().startOf('day').format(DATE_TIME_FORMAT);
+
+            //  get midnight in app timezone
+            let midnight = momentTz.tz(today, DATE_TIME_FORMAT, timeZone);
+
+            //  get the utc time and return the time in the user's timezone
+            let utc = midnight.utc().format();
+            return moment(utc).format(TIME_FORMAT);
+        }
     },
 
     /**

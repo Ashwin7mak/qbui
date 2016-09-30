@@ -61,15 +61,11 @@ class RecordService extends BaseService {
     }
 
     /**
-     * Save changes to a record
-     *
-     * @param appId
-     * @param tableId
-     * @param recordId
-     * @param changes
-     * @returns promise
+     * replace user objects in value property with user IDs
+     * @param changes record or changes containing objects with value keys
+     * @returns copy of changes with user objects replaced with user ID strings
      */
-    saveRecord(appId, tableId, recordId, changes) {
+    convertUserValueObjectsToIds(changes) {
 
         const fixedChanges = _.cloneDeep(changes);
 
@@ -82,6 +78,22 @@ class RecordService extends BaseService {
                 }
             });
         }
+
+        return fixedChanges;
+    }
+
+    /**
+     * Save changes to a record
+     *
+     * @param appId
+     * @param tableId
+     * @param recordId
+     * @param changes
+     * @returns promise
+     */
+    saveRecord(appId, tableId, recordId, changes) {
+
+        const fixedChanges = this.convertUserValueObjectsToIds(changes);
 
         let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
         return super.patch(url, fixedChanges);
@@ -98,7 +110,10 @@ class RecordService extends BaseService {
      */
     createRecord(appId, tableId, record) {
         let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
-        return super.post(url, record);
+
+        const fixedRecord = this.convertUserValueObjectsToIds(record);
+
+        return super.post(url, fixedRecord);
     }
 
     /**

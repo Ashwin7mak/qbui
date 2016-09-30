@@ -6,7 +6,7 @@ import QBToolTip from '../qbToolTip/qbToolTip';
 import Breakpoints from "../../utils/breakpoints";
 import './fields.scss';
 
-import DatePicker from 'react-bootstrap-datetimepicker';
+import DatePicker from '../../components/node/datetimePicker/lib/DateTimeField';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
 import moment from 'moment';
 
@@ -24,13 +24,11 @@ const DateFieldValueEditor = React.createClass({
 
     propTypes: {
         /**
-         * the raw date value in ISO format */
+         * raw date value */
         value: React.PropTypes.string,
 
-        /* the display date value */
-        display: React.PropTypes.string,
-
-        /* date attributes */
+        /**
+         * date attributes */
         attributes: React.PropTypes.object,
 
         /**
@@ -45,7 +43,12 @@ const DateFieldValueEditor = React.createClass({
          * optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
 
+        /**
+         * listen for changes by setting a callback to the onChange prop.  */
         onChange: React.PropTypes.func,
+
+        /**
+         * listen for losing focus by setting a callback to the onBlur prop. */
         onBlur: React.PropTypes.func,
 
         idKey: React.PropTypes.any
@@ -75,15 +78,15 @@ const DateFieldValueEditor = React.createClass({
     },
 
     //send up the chain an object with value and formatted display value
-    onBlur(ev) {
-        if (ev.target && (this.props.onBlur || this.props.onDateTimeBlur)) {
-            if (ev.target.value === null || ev.target.value) {
+    onBlur(newValue) {
+        if (this.props.onBlur || this.props.onDateTimeBlur) {
+            if (newValue === null || newValue) {
                 if (this.props.onDateTimeBlur) {
-                    this.props.onDateTimeBlur(ev.target.value);
+                    this.props.onDateTimeBlur(newValue);
                 } else {
                     let newDate = null;
-                    if (ev.target.value) {
-                        newDate = moment(ev.target.value, DATE_INPUT).format(DATE_FORMATTED);
+                    if (newValue) {
+                        newDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
                     }
 
                     let valueObj = {
@@ -130,11 +133,12 @@ const DateFieldValueEditor = React.createClass({
             <div className={classes}>
                 <DatePicker
                     name="date-picker"
-                    dateTime={theDate ? theDate : moment().format(DATE_INPUT)}
+                    dateTime={theDate}
                     format={DATE_INPUT}
                     inputFormat={DATE_INPUT}
                     onBlur={this.onBlur}
                     onChange={this.onChange}
+                    showToday={true}
                     mode="date"
                     defaultText={theDate ? theDate : DATE_INPUT.toLowerCase()}/>
             </div>

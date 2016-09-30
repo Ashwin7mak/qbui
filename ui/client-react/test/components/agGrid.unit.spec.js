@@ -612,4 +612,64 @@ describe('AGGrid functions', () => {
         let editableCellInputs = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing input");
         expect(editableCellInputs.length).toBe(dataWithRecordIdField.data.columns.length - 1);
     });
+
+    it('allows editing of a cell even if the Record ID column name has been changed', () => {
+        AGGrid.__ResetDependency__('AgGridReact');
+        let callBacks = {
+            onEditRecordStart: function() {
+            },
+        };
+        spyOn(callBacks, 'onEditRecordStart');
+
+        let testData = Object.assign({}, fakeReportData_before);
+        testData.data.columns.push({
+            id: 3,
+            field: 'Employee ID',
+            headerName: 'employee_id',
+            datatypeAttributes: {type: 'Numeric'},
+            userEditableValue: false
+        });
+        testData.data.records[0].col_record_id = {
+            id: 6,
+            value: 8,
+            display: '8'
+        };
+
+        const TestParent = React.createFactory(React.createClass({
+            // wrap the grid in a container with styles needed to render editing UI
+            render() {
+                return (<div className="reportToolsAndContentContainer singleSelection">
+                        <AGGrid ref="grid"
+                                flux={flux}
+                                keyField="col_num"
+                                uniqueIdentifier="col_num"
+                                onEditRecordStart={callBacks.onEditRecordStart}
+                                actions={TableActionsMock}
+                                records={testData.data.records}
+                                columns={testData.data.columns}
+                                loading={false}
+                                />
+                </div>);
+            }
+        }));
+
+        const parent = TestUtils.renderIntoDocument(TestParent());
+
+        // find the edited rows
+        const editRows = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing");
+        expect(editRows.length).toBe(0);
+
+        // find the field cells in the 1st row
+        const columnCells = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row:first-child .gridCell");
+        expect(columnCells.length).toBe(fakeReportData_before.data.columns.length);
+
+        // select a row via double click on the 1st cell
+        let firstCell = columnCells[0].parentElement;
+        mouseclick(firstCell, 2);
+
+        // look for row with the editing class added
+        const editRowsAfterDblClick = ReactDOM.findDOMNode(parent).querySelectorAll(".ag-body-container .ag-row.editing");
+        expect(editRowsAfterDblClick.length).toBe(1);
+        expect(callBacks.onEditRecordStart).toHaveBeenCalled();
+    });
 });

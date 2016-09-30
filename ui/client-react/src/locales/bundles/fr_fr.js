@@ -21,7 +21,9 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
-            more: "Plus..."
+            more: "Plus...",
+            placeholder: "Sélectionner...",
+            notFound: "Pas trouvé"
         },
         footer: {
             copyright: "{year} QuickBase, Inc. Tous droits réservés."
@@ -91,6 +93,12 @@ export default {
                 sign_out: "Se déconnecter"
             }
         },
+        fields: {
+            checkbox: {
+                no: 'Non',
+                yes: 'Oui'
+            }
+        },
         form : {
             tab : 'Onglet',
             error: {
@@ -128,16 +136,17 @@ export default {
             sortAndGroup : {
                 addField: "Ajouter le champ",
                 by: "par",
-                changeOrder: "ordre de changement",
+                changeGroupOrder: "Gruppe wechseln bestellen",
+                changeSortOrder: "Changer l'ordre de groupe",
                 chooseFields :  {
-                    group: "Choisir un champ pour le groupement",
-                    sort: "Choisir un champ pour le tri"
+                    group: "Choisissez un champ à un groupe par",
+                    sort: "Choisissez un champ pour trier par"
                 },
                 group: "Groupe",
                 header : "Trier & Groupe",
                 moreFields : "plus de champs ...",
                 reset: "Réinitialiser",
-                resetTip : "Sortir et restaurer à l'original tri du rapport et les paramètres du groupe",
+                resetTip : "Quitter et restaurer tri initial et les paramètres du groupe",
                 sort:   "Trier",
                 stopGroupingBy: "Arrêter le regroupement par",
                 stopSortingBy: "Arrêter le tri par",
@@ -265,6 +274,6 @@ export default {
             required: 'Remplissez {fieldName}',
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
         },
-
+        noneOption: "\<Aucun\>"
     }
 };

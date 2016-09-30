@@ -271,7 +271,7 @@
                     "fieldId": 11,
                     "sortOrder": "desc",
                     "groupType": null
-                },
+                }
             ];
             //Create a report with Fids and sortFids.
             e2eBase.reportService.createReportWithFidsAndSortList(app.id, app.tables[e2eConsts.TABLE1].id, [6, 11], sortList, null, "Verify Item Selected Report").then(function(reportId) {

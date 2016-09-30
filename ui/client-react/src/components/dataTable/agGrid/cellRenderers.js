@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import Locale from '../../../locales/locales';
 import {I18nDate, I18nTime, I18nNumber} from '../../../utils/i18nMessage';
+
 import RowEditActions from './rowEditActions';
 import CellValueRenderer from './cellValueRenderer';
 import CellEditor from './cellEditor';
@@ -15,11 +16,12 @@ import consts from '../../../../../common/src/constants';
 
 import IconActions from '../../actions/iconActions';
 
-import 'react-bootstrap-datetimepicker/css/bootstrap-datetimepicker.css';
+import '../../node/datetimePicker/css/bootstrap-datetimepicker.css';
 import './dateTimePicker.scss';
 
-import FieldFormats from '../../../utils/fieldFormats';
 import _ from 'lodash';
+import FieldFormats from '../../../utils/fieldFormats';
+import FieldUtils from '../../../utils/fieldUtils';
 import Logger from "../../../utils/logger";
 
 
@@ -33,11 +35,10 @@ class CellRendererFactory  {
             _.has(props, 'params') &&
             _.has(props.params, 'value.id') &&
             _.has(props.params, 'data') &&
-            _.has(props.params, 'context.uniqueIdentifier') &&
-            _.has(props.params.data[props.params.context.uniqueIdentifier], 'value') &&
             _.has(props.params, 'rowIndex')) {
-            recId = props.params.data[props.params.context.uniqueIdentifier].value;
-            key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId;
+
+            recId = props.params.data[FieldUtils.getUniqueIdentifierFieldName(props.params.data)].value;
+            key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId ;
         }
         return key;
     }
@@ -128,6 +129,7 @@ const CellRenderer = React.createClass({
         case FieldFormats.PHONE_FORMAT:           return "phoneFormat";
         case FieldFormats.TEXT_FORMAT:            return "textFormat";
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
+        case FieldFormats.USER_FORMAT:            return "userFormat";
         default:                                  return "textFormat";
         }
     },
@@ -220,15 +222,16 @@ const CellRenderer = React.createClass({
             _.has(this.props, 'params') &&
             _.has(this.props.params, 'data') &&
             _.has(this.props.params, 'column.colId') &&
-            _.has(this.props.params, 'context.uniqueIdentifier') &&
             _.has(this.props.params, 'colDef.id')) {
+
+            let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
 
             let change = {
                 values: {
                     oldVal: this.props.params.data[this.props.params.column.colId],
                     newVal: this.state.valueAndDisplay
                 },
-                recId: this.props.params.data[this.props.params.context.uniqueIdentifier].value,
+                recId: this.props.params.data[uniqueIdentifier].value,
                 fid: +this.props.params.colDef.id,
                 fieldName: this.props.params.column.colId,
                 fieldDef: this.props.params.colDef.fieldDef

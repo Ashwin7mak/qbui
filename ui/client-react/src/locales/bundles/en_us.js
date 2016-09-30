@@ -24,7 +24,9 @@ export default {
             print: "Print",
             copy: "Copy",
             delete: "Delete",
-            more: "More..."
+            more: "More...",
+            placeholder: "Select...",
+            notFound: "Not Found"
         },
         footer: {
             copyright: "{year} QuickBase, Inc. All rights reserved."
@@ -94,6 +96,12 @@ export default {
                 sign_out: "Sign out"
             }
         },
+        fields: {
+            checkbox: {
+                no: 'No',
+                yes: 'Yes'
+            }
+        },
         form : {
             tab : 'Tab',
             error: {
@@ -131,16 +139,17 @@ export default {
             sortAndGroup : {
                 addField: "Add a field",
                 by: "by",
-                changeOrder: "Change order",
+                changeGroupOrder: "Change group order",
+                changeSortOrder: "Change sort order",
                 chooseFields :  {
-                    group: "Choose Field for grouping",
-                    sort: "Choose Field for sorting"
+                    group: "Choose a field to group by",
+                    sort: "Choose a field to sort by"
                 },
                 group: "Group",
                 header : "Sort & Group",
                 moreFields : "more fields...",
                 reset: "Reset",
-                resetTip : "Exit and restore to original report sort and group settings",
+                resetTip : "Exit and restore to original sort and group settings",
                 sort:   "Sort",
                 stopGroupingBy: "Stop grouping by",
                 stopSortingBy: "Stop sorting by",
@@ -267,6 +276,7 @@ export default {
         invalidMsg : {
             required: 'Fill in the {fieldName}',
             maxChars: 'Use up to {maxNum} characters',
-        }
+        },
+        noneOption: "\<None\>"
     }
 };

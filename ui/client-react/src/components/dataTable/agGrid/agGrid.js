@@ -379,6 +379,7 @@ let AGGrid = React.createClass({
         return this.props.appUsers;
     },
 
+    // Careful about setting things in context, they do not update when the related prop updates
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
         this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
@@ -396,7 +397,6 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
         this.gridOptions.context.keyField = this.props.keyField;
-        this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
 
         this.gridOptions.context.getAppUsers = this.getAppUsers;
@@ -683,6 +683,7 @@ let AGGrid = React.createClass({
                 });
             }
         }
+        this.props.onFieldChange(change);
     },
 
     handleRecordSaveClicked(id) {
@@ -922,20 +923,21 @@ let AGGrid = React.createClass({
                         case 'type': {
                             switch (datatypeAttributes[attr]) {
 
-                            case serverTypeConsts.NUMERIC:
+                            case serverTypeConsts.NUMERIC :
                                 obj.headerClass += " AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
                                 break;
                             case serverTypeConsts.DATE :
                                 obj.cellRenderer = reactCellRendererFactory(DateCellRenderer);
                                 break;
-                            case serverTypeConsts.DATE_TIME:
+                            case serverTypeConsts.DATE_TIME :
                                 obj.cellRenderer = reactCellRendererFactory(DateTimeCellRenderer);
                                 break;
                             case serverTypeConsts.TIME_OF_DAY :
                                 obj.cellRenderer = reactCellRendererFactory(TimeCellRenderer);
                                 break;
                             case serverTypeConsts.CHECKBOX :
+                                obj.headerClass += " AlignCenter";
                                 obj.cellRenderer = reactCellRendererFactory(CheckBoxCellRenderer);
                                 break;
                             case serverTypeConsts.USER :
