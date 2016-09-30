@@ -626,7 +626,7 @@ describe('AGGrid functions', () => {
             id: 3,
             field: 'Employee ID',
             headerName: 'employee_id',
-            datatypeAttributes: {type: 'Numeric'},
+            fieldDef: {datatypeAttributes: {type: 'Numeric'}},
             userEditableValue: false
         });
         testData.data.records[0].col_record_id = {

@@ -76,11 +76,15 @@ describe('Record actions - Edit Record functions -- success', () => {
     });
 
     it('test saveRecord', (done) => {
-
+        let fields = [{
+            id:6,
+            name: "test",
+        }];
         let edits = {
             recordChanges: {
                 6: {
                     fieldName: "test",
+                    fieldDef: fields[0],
                     newVal: {value: "value", display: "display"}
                 }
             },
@@ -92,12 +96,9 @@ describe('Record actions - Edit Record functions -- success', () => {
                 }}
             }
         };
-        let fields = [{
-            id:6,
-            name: "test",
-        }];
+
         let changes = [{display : "display",
-            field: undefined,
+            fieldDef: fields[0],
             fieldName: "test",
             id: 6,
             value: "value"}];
@@ -120,16 +121,7 @@ describe('Record actions - Edit Record functions -- success', () => {
 
     it('test saveNewRecord', (done) => {
 
-        let recordChanges = {
-            4:{
-                fieldName : 'col_num',
-                newVal: {value:"hi", display:"there"},
-            },
-            5:{
-                fieldName : 'col_builtin',
-                newVal: {value:"5", display:"no edit"},
-            },
-        };
+
         let attrs = {setting: true};
         let fields = [
             {
@@ -142,13 +134,24 @@ describe('Record actions - Edit Record functions -- success', () => {
                 builtIn: true
             },
         ];
-
+        let recordChanges = {
+            4:{
+                fieldName : 'col_num',
+                fieldDef: fields[0],
+                newVal: {value:"hi", display:"there"},
+            },
+            5:{
+                fieldName : 'col_builtin',
+                fieldDef: fields[1],
+                newVal: {value:"5", display:"no edit"},
+            },
+        };
         let newRec = [{
             fieldName: 'col_num',
             id: 4,
             value: "hi",
             display: "there",
-            field: attrs
+            fieldDef: fields[0]
         }
         ];
         flux.actions.saveNewRecord(appId, tblId, recordChanges, fields).then(
