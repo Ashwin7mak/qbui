@@ -5,8 +5,25 @@
 (function() {
     'use strict';
     //Module constants:
-    var PROTOCOL_SPLIT_STRING = '://';
+    //Escaped / for regex
+    var PROTOCOL_SPLIT_STRING = ":\/\/";
+    var SUPPORTED_PROTOCOLS = [
+        PROTOCOL_SPLIT_STRING,
+        'callto',
+        'imessage',
+        'mailto',
+        'sms',
+        'skype',
+        'tel'
+    ];
     var DISPLAY_PROTOCOL_DEFAULT = true;
+
+    function getProtocolStringForRegex() {
+        return SUPPORTED_PROTOCOLS.reduce(function(regexString, protocol, currentIndex) {
+            regexString += (protocol + (currentIndex < SUPPORTED_PROTOCOLS.length ? '|' : ''));
+            return regexString;
+        }, '');
+    }
 
     module.exports = {
         //Given a URL string as input, formats as a URL with display preferences applied.
@@ -20,20 +37,19 @@
             } else {
                 //Resolve the displayProtocol display property
                 var displayProtocol = DISPLAY_PROTOCOL_DEFAULT;
-                if (fieldInfo) {
-                    if (fieldInfo.displayProtocol === false) {
+                if (fieldInfo && fieldInfo.displayProtocol === false) {
                         displayProtocol = false;
-                    }
                 }
                 //If displayProtocol is false, split off the protocol, if there is one on the value
                 if (!displayProtocol) {
-                    var protocolIndex = baseValue.indexOf(PROTOCOL_SPLIT_STRING);
-                    if (protocolIndex !== -1) {
-                        baseValue = baseValue.slice(protocolIndex + PROTOCOL_SPLIT_STRING.length);
-                    }
+                    baseValue = this.stripProtocol(baseValue);
                 }
             }
             return baseValue;
+        },
+        stripProtocol: function(url) {
+            var protocolRegex = new RegExp(`^(.{2,5}${getProtocolStringForRegex()}):?`, 'i');
+            return url.replace(protocolRegex, '');
         }
     };
 }());
