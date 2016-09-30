@@ -49,7 +49,7 @@
                 results.error.messageId = 'invalidMsg.required';
                 results.error.code = dataErrs.REQUIRED_FIELD_EMPTY;
                 results.error.data = {
-                   fieldId: fieldDef.id,
+                    fieldId: fieldDef.id,
                     fieldName : name
                 };
 
