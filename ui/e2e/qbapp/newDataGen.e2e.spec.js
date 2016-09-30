@@ -1,31 +1,22 @@
 /**
- * E2E Smoke Test
- *
+ * E2E DataGen Setup. Run 'grunt test:e2eLocalDataGen' to execute this via terminal
  */
 
 (function() {
     'use strict';
 
-    //Load the page Objects
-    var ReportServicePage = requirePO('reportService');
-    var RequestAppsPage = requirePO('requestApps');
-    var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var ReportFacetsPage = requirePO('reportFacets');
-    var reportServicePage = new ReportServicePage();
-    var reportFacetsPage = new ReportFacetsPage();
-
-    describe('E2E Smoke Test Setup', function() {
+    describe('E2E DataGen Test Setup', function() {
         var app;
+        var reportIds;
 
         /**
-         * Setup method. Generates JSON for an app, a table, a set of records and a report.
-         * Then creates them via the REST API.
-         * Have to specify the done() callback at the end of the promise chain to let Jasmine know we are done with async calls
+         * Setup method. Creates application via the API.
          */
         beforeAll(function(done) {
-            e2eBase.defaultSetup().then(function(createdApp) {
+            e2eBase.fullReportsSetup().then(function(responses) {
                 // Set your global objects to use in the test functions
-                app = createdApp;
+                app = responses[0];
+                reportIds = responses[1];
             }).then(function() {
                 done();
             }).catch(function(error) {

@@ -202,14 +202,24 @@
                 });
                 return deferred.promise;
             },
-            createDefaultReport: function(appId, tableId, name, fids, facetFids, sortList, query) {
+            createDefaultReport: function(appId, tableId, name, fids, sortList, facetFids, query) {
                 var deferred = promise.pending();
+                var printableSortList = [];
+
+                if (sortList) {
+                    sortList.forEach(function(sortObj) {
+                        printableSortList.push(JSON.stringify(sortObj));
+                    });
+                } else {
+                    printableSortList.push('');
+                }
+
                 var reportJSON = {
                     name      : name || 'Default Test Report',
                     description : 'This is the default report description and it belongs in the stage. We could be so lucky! ' +
                     'This report was created with the following parameters - ' +
                     'fids: ' + fids + ', ' +
-                    'sortList: ' + sortList + ', ' +
+                    'sortList: ' + printableSortList + ', ' +
                     'facetFids: ' + facetFids + ', ' +
                     'query: ' + query,
                     type      : 'TABLE',

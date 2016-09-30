@@ -260,18 +260,20 @@
                 return tableToFieldToFieldTypeMap;
             },
 
-            // Setup method that generates an application, table, report and a specified number of records
-            // Creates an App, 1 2 Tables with all Field Types, 10 Records, 1 List All Report with all Features and 1 Form to go with it
+            /*
+             * Setup method that generates an application, table, report and a specified number of records
+             * Creates an App, 1 2 Tables with all Field Types, 10 Records, 1 List All Report with all Features and 1 Form to go with it
+             */
             defaultSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
-                // Use map of tables passed in or create basic
+                // Use map of tables passed in or create default
                 if (!tableToFieldToFieldTypeMap) {
-                    tableToFieldToFieldTypeMap  = this.createDefaultTableMap();
+                    tableToFieldToFieldTypeMap  = e2eConsts.createDefaultTableMap();
                 }
 
-                // Use num of records to generate or use 10 by default
+                // Use num of records to generate or use 25 by default to enable paging
                 if (!numberOfRecords) {
-                    numberOfRecords  = 10;
+                    numberOfRecords  = e2eConsts.MAX_PAGING_SIZE + 5;
                 }
 
                 e2eBase.setUp();
@@ -280,156 +282,115 @@
                 // Create the app via the API
                 return e2eBase.appService.createApp(generatedApp).then(function(app) {
                     createdApp = app;
-                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-                    // Generate the record JSON objects
-                    var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
-
-                    // Get the appropriate fields out of the Create App response (specifically the created field Ids)
-                    var table2NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[1]);
-                    // Generate the record JSON objects
-                    var table2GeneratedRecords = e2eBase.recordService.generateRecords(table2NonBuiltInFields, numberOfRecords);
-
+                    // Count how many tables in map and loop over them to create records and reports
+                    var numberOfTables = createdApp.tables.length;
                     var createAppPromises = [];
-                    // Via the API create records
-                    createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], table1GeneratedRecords));
-                    createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[1], table2GeneratedRecords));
-                    // Create a list all report for each table
-                    createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Table 1 List All Report', null, null, null, null));
-                    createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[1].id, 'Table 2 List All Report', null, null, null, null));
-                    // Create a default form for each table
+
+                    for (var i = 0; i < numberOfTables; i++) {
+                        // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                        var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[i]);
+                        // Generate the record JSON objects
+                        var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, numberOfRecords);
+
+                        // Create 1 duplicate record
+                        var clonedArray = JSON.parse(JSON.stringify(generatedRecords));
+                        var dupRecord = clonedArray[0];
+                        // Edit the numeric and date fields so we can check the second level sort (ex: 6.7)
+                        dupRecord.forEach(function(field) {
+                            if (field.id === 7) {
+                                field.value = 1.90;
+                            }
+                            if (field.id === 11) {
+                                field.value = '1977-12-12';
+                            }
+                        });
+                        // Add the duplicate record back in to create via API
+                        generatedRecords.push(dupRecord);
+
+                        // Generate 1 empty record
+                        var generatedEmptyRecord = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
+                        // Add the empty record back in to create via API
+                        generatedRecords.push(generatedEmptyRecord);
+
+                        // Via the API create records
+                        createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        // Create a list all report for the table
+                        createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[i].id, 'Table ' + (i + 1) + ' List All Report', null, null, null, null));
+
+                        //TODO: Default Table Homepage
+                        //TODO: Users Roles and Permissions
+                        //TODO: Custom table homepage based on role
+                    }
+                    // Create a default form for each table (uses the app JSON)
                     createAppPromises.push(e2eBase.formService.createDefaultForms(createdApp));
 
-                    //TODO: Roles and Permissions
-                    //TODO: Table Homepage
-
+                    // Send all requests via Promise.all
                     return Promise.all(createAppPromises);
                 }).then(function() {
                     // Return back the created app response object
                     return createdApp;
                 }).catch(function(e) {
                     // Catch any errors and reject the promise with it
-                    return Promise.reject(new Error('Error during defaultSetup: ', e));
+                    return Promise.reject(new Error('Error during defaultSetup: ' + e.message));
                 });
             },
 
-            //TODO Move this into e2eConsts.js
             /*
-             * Creates a mapping for two tables with all supported field types that can be passed into the test generators package
+             * Setup function that will create you all currently supported report types. Calls the default setup functions as well.
+             * @param numRecords is how many records will be generated per table
              */
-            createDefaultTableMap() {
-                var table1Name = 'Table 1';
-                var table2Name = 'Table 2';
+            fullReportsSetup: function(numRecords) {
+                var createdApp;
 
-                // Create the table schema (map object) to pass into the app generator
-                var tableToFieldToFieldTypeMap = {};
-                tableToFieldToFieldTypeMap[table1Name] = {};
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[1]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.TEXT
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[2]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.NUMERIC
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[3]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.CURRENCY
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[4]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.PERCENT
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[5]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.RATING
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[6]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DATE
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[7]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DATE_TIME
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[8]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.TIME_OF_DAY
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[9]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DURATION
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[10]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.CHECKBOX
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[11]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.PHONE_NUMBER
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[12]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.EMAIL_ADDRESS
-                };
-                tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[13]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.URL
-                };
-                tableToFieldToFieldTypeMap[table2Name] = {};
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[1]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.TEXT
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[2]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.NUMERIC
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[3]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.CURRENCY
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[4]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.PERCENT
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[5]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.RATING
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[6]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DATE
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[7]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DATE_TIME
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[8]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.TIME_OF_DAY
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[9]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.DURATION
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[10]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.CHECKBOX
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[11]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.PHONE_NUMBER
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[12]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.EMAIL_ADDRESS
-                };
-                tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[13]] = {
-                    fieldType: consts.SCALAR,
-                    dataType: consts.URL
-                };
-                return tableToFieldToFieldTypeMap;
+                return this.defaultSetup(null, numRecords).then(function(createdAppResponse) {
+                    createdApp = createdAppResponse;
+
+                    // We know the structure of table 1 so can hard code here to generate some more report types
+                    // Only show Text, Numeric and Date fields on the report
+                    var fids = [6, 7, 11, 15];
+                    // TODO: Going to have to extend this for grouping once implementation is complete
+                    // Second level sort, first ascending on the Text field and then descending on the Numeric field
+                    var sortList = [
+                        {
+                            "fieldId": 6,
+                            "sortOrder": "asc",
+                            "groupType": null
+                        },
+                        {
+                            "fieldId": 7,
+                            "sortOrder": "desc",
+                            "groupType": null
+                        }
+                    ];
+                    // Use the Text field and Checkbox field for facets
+                    var facetFids = [6, 15];
+                    var reportIds = [];
+
+                    //TODO: Had issue using promise.all here, it wasn't creating all the reports even though was getting responses from all 4 calls
+                    // Create report with fids
+                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null).then(function(rid1) {
+                        reportIds.push(rid);
+                        // Create report with sortList
+                        return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null).then(function(rid2) {
+                            reportIds.push(rid);
+                            // Create report with facetFids
+                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null).then(function(rid3) {
+                                reportIds.push(rid);
+                                // Create report with all params defined
+                                return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null).then(function(rid4) {
+                                    reportIds.push(rid);
+                                    return reportIds;
+                                });
+                            });
+                        });
+                    });
+                }).then(function(reportIds) {
+                    // Return back the list of reportIds
+                    return [createdApp, reportIds];
+                }).catch(function(e) {
+                    // Catch any errors and reject the promise with it
+                    return Promise.reject(new Error('Error during fullReportsSetup: ' + e.message));
+                });
             },
 
 
