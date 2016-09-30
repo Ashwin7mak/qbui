@@ -37,7 +37,7 @@
             // Initialize the service modules to use the same base class
             appService: appService(recordBase),
             recordService: recordService(recordBase),
-            tableService: tableService(),
+            tableService: tableService(recordBase),
             reportService: reportService(recordBase),
             formService: formService(recordBase),
             // Initialize the utils class
@@ -317,7 +317,6 @@
                         // Create a list all report for the table
                         createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[i].id, 'Table ' + (i + 1) + ' List All Report', null, null, null, null));
 
-                        //TODO: Default Table Homepage
                         //TODO: Users Roles and Permissions
                         //TODO: Custom table homepage based on role
                     }
@@ -327,7 +326,12 @@
                     // Send all requests via Promise.all
                     return Promise.all(createAppPromises);
                 }).then(function() {
-                    // Return back the created app response object
+                    // Set default table homepage
+                    return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[0].id, 1);
+                }).then(function() {
+                    // Set default table homepage
+                    return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[1].id, 1);
+                }).then(function() {
                     return createdApp;
                 }).catch(function(e) {
                     // Catch any errors and reject the promise with it
@@ -369,16 +373,16 @@
                     //TODO: Had issue using promise.all here, it wasn't creating all the reports even though was getting responses from all 4 calls
                     // Create report with fids
                     return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null).then(function(rid1) {
-                        reportIds.push(rid);
+                        reportIds.push(rid1);
                         // Create report with sortList
                         return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null).then(function(rid2) {
-                            reportIds.push(rid);
+                            reportIds.push(rid2);
                             // Create report with facetFids
                             return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null).then(function(rid3) {
-                                reportIds.push(rid);
+                                reportIds.push(rid3);
                                 // Create report with all params defined
                                 return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null).then(function(rid4) {
-                                    reportIds.push(rid);
+                                    reportIds.push(rid4);
                                     return reportIds;
                                 });
                             });

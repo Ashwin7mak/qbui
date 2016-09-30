@@ -1,22 +1,19 @@
 /**
  * E2E DataGen Setup. Run 'grunt test:e2eLocalDataGen' to execute this via terminal
  */
-
 (function() {
     'use strict';
 
     describe('E2E DataGen Test Setup', function() {
-        var app;
-        var reportIds;
+        var testApp;
 
         /**
          * Setup method. Creates application via the API.
          */
         beforeAll(function(done) {
             e2eBase.fullReportsSetup().then(function(responses) {
-                // Set your global objects to use in the test functions
-                app = responses[0];
-                reportIds = responses[1];
+                // Set your global app to use in the test functions
+                testApp = responses[0];
             }).then(function() {
                 done();
             }).catch(function(error) {
@@ -32,9 +29,9 @@
         it('Will print out your realmName, realmId, appId and tableIds', function() {
             var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
             var realmId = e2eBase.recordBase.apiBase.realm.id;
-            var appId = app.id;
-            var table1Id = app.tables[0].id;
-            var table2Id = app.tables[1].id;
+            var appId = testApp.id;
+            var table1Id = testApp.tables[0].id;
+            var table2Id = testApp.tables[1].id;
 
             // Protractor tests will launch node at port 9001 by default so do a replace to the default local.js port
             var ticketEndpointRequest = e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint).replace('9001', '9000');
