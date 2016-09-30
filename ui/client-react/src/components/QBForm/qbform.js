@@ -1,7 +1,6 @@
 import React from 'react';
 import QBPanel from '../QBPanel/qbpanel.js';
 import Tabs, {TabPane} from 'rc-tabs';
-import Fluxxor from 'fluxxor';
 import FieldElement from './fieldElement';
 import FieldLabelElement from './fieldLabelElement';
 import Breakpoints from '../../utils/breakpoints';
@@ -10,7 +9,6 @@ import Locale from '../../locales/locales';
 import './qbform.scss';
 import './tabs.scss';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
 /*
  Custom QuickBase Form component that has 1 property.
  activeTab: the tab we want to display first when viewing the form, defaults to the first tab
@@ -22,8 +20,6 @@ let QBForm = React.createClass({
         LABEL_ABOVE: "ABOVE", // label is in same cell as field value, above it
         LABEL_LEFT: "LEFT"    // label is in a separate cell as the fielv value, to its left
     },
-
-    mixins: [FluxMixin],
 
     propTypes: {
 
@@ -105,6 +101,14 @@ let QBForm = React.createClass({
      * @returns the record entry from formdata record array with the field ID
      */
     getFieldRecord(fieldId) {
+        if (_.has(this.props, 'pendEdits.recordChanges') && this.props.pendEdits.recordChanges[fieldId]) {
+            let vals = {};
+            vals.id = fieldId;
+            vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
+            vals.display = this.props.pendEdits.recordChanges[fieldId].newVal.display;
+            return vals;
+        }
+
         let record = this.props.formData.record || [];
 
         return _.find(record, val => {
@@ -127,8 +131,20 @@ let QBForm = React.createClass({
         let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
         return (
             <td key={key}>
-                <FieldLabelElement element={element} relatedField={relatedField} />
+                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={this.props.edit} />
             </td>);
+    },
+
+    getFieldValidationStatus(fieldId) {
+        let validationResult = {
+            isInvalid : false,
+            invalidMessage: ""
+        };
+        if (_.has(this.props, 'pendEdits.editErrors') && this.props.pendEdits.editErrors[fieldId]) {
+            validationResult.isInvalid = this.props.pendEdits.editErrors[fieldId].isInvalid;
+            validationResult.invalidMessage = this.props.pendEdits.editErrors[fieldId].invalidMessage;
+        }
+        return validationResult;
     },
 
     /**
@@ -145,10 +161,31 @@ let QBForm = React.createClass({
 
         let fieldRecord = this.getFieldRecord(element.fieldId);
 
+        let validationStatus =  this.getFieldValidationStatus(element.fieldId);
+
         let key = "field" + sectionIndex + "-" + element.orderIndex;
+
+        //if the form prop calls for element to be required update fieldDef accordingly
+        if (relatedField) {
+            relatedField.required = relatedField.required || element.required;
+        }
+
         return (
             <td key={key} colSpan={colSpan}>
-              <FieldElement element={element} relatedField={relatedField} fieldRecord={fieldRecord} includeLabel={includeLabel}/>
+              <FieldElement element={element}
+                            key={"fe-" + this.props.idKey}
+                            idKey={"fe-" + this.props.idKey}
+                            relatedField={relatedField}
+                            fieldRecord={fieldRecord}
+                            includeLabel={includeLabel}
+                            indicateRequiredOnLabel={this.props.edit}
+                            edit={this.props.edit && !element.readOnly}
+                            onChange={this.props.onFieldChange}
+                            onBlur={this.props.onFieldChange}
+                            isInvalid={validationStatus.isInvalid}
+                            invalidMessage={validationStatus.invalidMessage}
+                            appUsers={this.props.appUsers}
+              />
             </td>);
     },
 
@@ -197,6 +234,10 @@ let QBForm = React.createClass({
 
             if (index === arr.length - 1) {
                 // the last element - add the final cell(s) to the row
+                if (!props.positionSameRow) {
+                    rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
+                    currentRowElements = [];
+                }
                 currentRowElements = currentRowElements.concat(this.getTableCells(sectionElement, section.orderIndex, labelPosition, true));
                 rows.push(<tr key={key++} className="fieldRow">{currentRowElements}</tr>);
             } else {
@@ -261,7 +302,6 @@ let QBForm = React.createClass({
 
         return (
             <TabPane key={tab.orderIndex} tab={tab.title || Locale.getMessage("form.tab") + ' ' + tab.orderIndex}>
-                <br/>
                 {sections}
             </TabPane>
         );
@@ -298,7 +338,7 @@ let QBForm = React.createClass({
 
         return (
             <div className="formContainer">
-                <form>
+                <form className={this.props.edit ? "editForm" : "viewForm"}>
                     {errorMsg ? <div className="errorSection">{errorMsg}</div> : formContent}
                 </form>
             </div>

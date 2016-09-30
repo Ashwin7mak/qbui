@@ -26,14 +26,6 @@ $data-font-size: $font-size-p;
   background-color: $input-bg-color;
 }
 
-// layout of input userdata on a form
-.formContainer [type="text"].input {
-  margin: 10px 20px 10px 10px;
-  padding: 10px;
-  width: 280px;
-  height: 35px;
-}
-
 // layout of input userdata in an inline edit table
 .reportTable [type="text"].input {
   margin: 0 0 0 1px;
@@ -123,9 +115,4 @@ $data-font-size: $font-size-p;
 /* allow wide tooltips */
 .tooltip-inner {
   max-width:none;
-}
-
-
-.timeCell .Select .Select-control {
-    border: 0;
 }
