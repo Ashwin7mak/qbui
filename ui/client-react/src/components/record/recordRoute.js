@@ -148,11 +148,36 @@ export let RecordRoute = React.createClass({
         }
 
     },
+
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    openRecordForEdit(data) {
+
+        const {appId, tblId, rptId, recordId} = this.props.params;
+
+        const flux = this.getFlux();
+
+        flux.actions.openRecordForEdit(appId, tblId, rptId, recordId);
+    },
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    editNewRecord() {
+
+        const {appId, tblId, rptId} = this.props.params;
+
+        const flux = this.getFlux();
+
+        flux.actions.editNewRecord(appId, tblId, rptId);
+    },
     getPageActions() {
 
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
-            {msg: 'pageActions.edit', icon:'edit'},
+            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'pageActions.email', icon:'mail'},
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.delete', icon:'delete'},
@@ -211,7 +236,7 @@ export let RecordRoute = React.createClass({
                                 pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
                                 formData={this.props.form ? this.props.form.formData : null}
                                 appUsers={this.props.appUsers}
-                                edit={true}></Record>
+                                edit={false}></Record>
 
                     </ReactCSSTransitionGroup>
                 </div>
