@@ -50,6 +50,15 @@
         stripProtocol: function(url) {
             var protocolRegex = new RegExp(`^(.{2,5}${getProtocolStringForRegex()}):?`, 'i');
             return url.replace(protocolRegex, '');
+        },
+        protocolIsMissingFrom: function(url) {
+            return url === this.stripProtocol(url);
+        },
+        addProtocol: function(url, protocol = 'http://') {
+            if(protocolIsMissingFrom(url)) {
+                url = protocol + url;
+            }
+            return url;
         }
     };
 }());

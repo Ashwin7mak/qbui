@@ -101,7 +101,7 @@ describe('TextFieldValueEditor functions', () => {
     });
 });
 
-fdescribe('TextFieldValueEditor', () => {
+describe('TextFieldValueEditor', () => {
     it('can optionally set a different text input type for better mobile keyboard support (url or phone)', () => {
         let component = TestUtils.renderIntoDocument(<TextFieldValueEditor inputType="tel" />);
         let textInput = ReactDOM.findDOMNode(component);

@@ -123,4 +123,30 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
             });
         });
     });
+
+    describe('protocolIsMissingFrom', () => {
+        let testCases = [
+            {
+                name: 'it returns false if there is a protocol on the url',
+                url: 'https://google.com',
+                expectation: false
+            },
+            {
+                name: 'it returns false if the url has a special protocl (e.g., mailto:)',
+                url: 'mailto:test@quickbase.com',
+                expectation: false
+            },
+            {
+                name: 'it returns true if there is no protocol on the url',
+                url: 'www.google.com',
+                expectation: true
+            }
+        ];
+
+        testCases.forEach(function(testCase) {
+            it(testCase.name, () => {
+                expect(urlFileAttachmentReportLinkFormatter.protocolIsMissingFrom(testCase.url)).toBe(testCase.expectation);
+            });
+        });
+    });
 });
