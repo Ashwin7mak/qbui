@@ -4,7 +4,7 @@ import TestUtils, {Simulate} from 'react-addons-test-utils';
 
 import UrlFieldValueEditor from '../../src/components/fields/UrlFieldValueEditor';
 
-fdescribe('UrlFieldValueEditor', () => {
+describe('UrlFieldValueEditor', () => {
     let component;
     let placeholderText = 'www.example.com'; // Specified in https://quickbase.atlassian.net/wiki/display/qbasepd/Error+messages
     let testUrl = 'www.google.com';
@@ -42,5 +42,5 @@ fdescribe('UrlFieldValueEditor', () => {
         let domComponent = ReactDOM.findDOMNode(component);
 
         expect(domComponent.placeholder).toEqual(placeholderText);
-    })
+    });
 });

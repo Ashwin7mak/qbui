@@ -38,7 +38,7 @@
                 //Resolve the displayProtocol display property
                 var displayProtocol = DISPLAY_PROTOCOL_DEFAULT;
                 if (fieldInfo && fieldInfo.displayProtocol === false) {
-                        displayProtocol = false;
+                    displayProtocol = false;
                 }
                 //If displayProtocol is false, split off the protocol, if there is one on the value
                 if (!displayProtocol) {
@@ -55,7 +55,7 @@
             return url === this.stripProtocol(url);
         },
         addProtocol: function(url, protocol = 'http://') {
-            if(this.protocolIsMissingFrom(url)) {
+            if (this.protocolIsMissingFrom(url)) {
                 url = protocol + url;
             }
             return url;

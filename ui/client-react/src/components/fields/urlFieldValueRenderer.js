@@ -47,14 +47,14 @@ const UrlFieldValueRenderer = React.createClass({
         return urlFileAttachmentReportLinkFormatter.addProtocol(this.props.value);
     },
     renderLink() {
-        let target = (this.props.openInNewWindow ? '_blank': '_self');
+        let target = (this.props.openInNewWindow ? '_blank' : '_self');
 
         // Don't render an empty button
-        if(!this.props.display || this.props.display === '') {
-            return <span className='link'></span>;
+        if (!this.props.display || this.props.display === '') {
+            return <span className="link"></span>;
         }
 
-        if(this.props.disabled) {
+        if (this.props.disabled) {
             return (
                 <span className={this.setLinkClasses()}>
                     {this.props.display}
@@ -72,7 +72,7 @@ const UrlFieldValueRenderer = React.createClass({
     renderIcon() {
         if (!this.props.showAsButton && !this.props.disabled) {
             return (
-                <div className='urlIcon'>
+                <div className="urlIcon">
                     {UrlUtils.renderIconForUrl(this.props.value)}
                 </div>
             );

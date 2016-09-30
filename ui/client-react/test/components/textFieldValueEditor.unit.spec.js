@@ -128,7 +128,7 @@ describe('TextFieldValueEditor', () => {
             rawValue: null,
             expectation: ''
         },
-    ]
+    ];
 
     inputValueTestCases.forEach(function(testCase) {
         it(testCase.name, () => {

@@ -3,13 +3,13 @@ const UrlFieldValueEditorExample = React.createClass({
         return {
             value: 'https://www.quickbase.com',
             invalidValue: 'quickbase'
-        }
+        };
     },
     onChange(newValue) {
-        this.setState({ value: newValue });
+        this.setState({value: newValue});
     },
     onChangeInvalidValue(newValue) {
-        this.setState({ value: newValue });
+        this.setState({value: newValue});
     },
     render() {
         return (

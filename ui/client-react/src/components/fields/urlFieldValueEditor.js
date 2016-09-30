@@ -25,7 +25,7 @@ const UrlFieldValueEditor = React.createClass({
 
         return <TextFieldValueEditor inputType="url"
                                      value={value}
-                                     placeholder='www.example.com'
+                                     placeholder="www.example.com"
                                      {...otherProps} />;
     }
 });

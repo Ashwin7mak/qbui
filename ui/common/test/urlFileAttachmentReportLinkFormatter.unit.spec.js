@@ -70,7 +70,7 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
                 data: 'imessage:' + expectedUrl + ':test',
                 expectation: expectedUrl + ':test'
             }
-        ]
+        ];
 
         testCases.forEach(function(testCase) {
             it(testCase.name, () => {

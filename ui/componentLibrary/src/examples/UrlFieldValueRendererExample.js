@@ -29,14 +29,14 @@ const basicUrlFieldValueRendererExample = (
 
         <dt>Displays alternate text:</dt>
         <dd>
-            <UrlFieldValueRenderer value={exampleLink} display='Click Me!' />
+            <UrlFieldValueRenderer value={exampleLink} display="Click Me!" />
         </dd>
 
         <dt>Displays an icon for special protocols (on hover for desktop):</dt>
         <dd>
-            <UrlFieldValueRenderer value='mailto:test@quickbase.com' display='test@quickbase.com' />
-            <UrlFieldValueRenderer value='tel:5555555555' display='(555) 555-5555 (tel)' />
-            <UrlFieldValueRenderer value='sms:5555555555' display='(555) 555-5555 (sms)' />
+            <UrlFieldValueRenderer value="mailto:test@quickbase.com" display="test@quickbase.com" />
+            <UrlFieldValueRenderer value="tel:5555555555" display="(555) 555-5555 (tel)" />
+            <UrlFieldValueRenderer value="sms:5555555555" display="(555) 555-5555 (sms)" />
         </dd>
 
 
