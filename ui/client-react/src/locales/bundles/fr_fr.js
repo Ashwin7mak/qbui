@@ -93,6 +93,12 @@ export default {
                 sign_out: "Se déconnecter"
             }
         },
+        fields: {
+            checkbox: {
+                no: 'Non',
+                yes: 'Oui'
+            }
+        },
         form : {
             tab : 'Onglet',
             error: {

@@ -107,6 +107,9 @@ consts = require('../../common/src/constants.js');
             //Create a report with facets in table 3
             return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
         }).then(function() {
+            //set report home page
+            return e2eBase.tableService.setDefaultTableHomePage(app.id, app.tables[e2eConsts.TABLE1].id);
+        }).then(function() {
             done();
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above

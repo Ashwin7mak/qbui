@@ -197,14 +197,8 @@ describe('AGGrid cell editor functions', () => {
         component = TestUtils.renderIntoDocument(<CheckBoxCellRenderer params={params} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        const inputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellData input");
-        expect(inputs.length).toEqual(1);
-        expect(inputs[0].checked).toBe(true);
-
-        const editInputs = ReactDOM.findDOMNode(component).querySelectorAll("input.cellEdit");
-        expect(editInputs.length).toEqual(1);
-        TestUtils.Simulate.change(editInputs[0], {"target": {"checked": false}});
-        expect(inputs[0].checked).toBe(false);
+        const checkbox = ReactDOM.findDOMNode(component).querySelectorAll(".cellData .checkbox");
+        expect(checkbox.length).toEqual(1);
     });
 
     it('test DateCellRenderer edit', () => {
@@ -236,7 +230,7 @@ describe('AGGrid cell editor functions', () => {
 
     });
 
-    it('test DateTimeFormatter edit with time', () => {
+    it('test DateTimeFormatter - change a date', () => {
         const params = {
             value: {
                 value: "2015-09-03T09:33:03.777Z"
@@ -266,13 +260,8 @@ describe('AGGrid cell editor functions', () => {
 
         //  test time droplist
         const timeEditInputs = ReactDOM.findDOMNode(component).querySelectorAll(".timeCell input");
-        expect(timeEditInputs.length).toEqual(1);
-        expect(timeEditInputs[0].value).toBe("");  // empty until a change
-
-        //  change a time
-        TestUtils.Simulate.change(timeEditInputs[0], {"target": {value: "10:30 am"}});
-        expect(timeEditInputs[0].value).toBe("10:30 am");
-
+        expect(timeEditInputs.length).toEqual(2);
+        expect(timeEditInputs[0].value).toBe("02:33");
     });
 
     it('test DateTimeFormatter edit - quickbase shortcuts', () => {
@@ -343,7 +332,7 @@ describe('AGGrid cell editor functions', () => {
         expect(timeEditInputs.length).toEqual(0);
     });
 
-    it('test TimeFormatter edit', () => {
+    it('test TimeFormatter', () => {
         const params = {
             value: {
                 value: "1970-01-01T19:53:42.531Z[UTC]"
@@ -363,12 +352,8 @@ describe('AGGrid cell editor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         const editInputs = ReactDOM.findDOMNode(component).querySelectorAll(".cellEdit input");
-        expect(editInputs.length).toEqual(1);
-        expect(editInputs[0].value).toBe("");   // no time
-
-        TestUtils.Simulate.change(editInputs[0], {"target": {"value":"08:23:11 AM"}});
-        expect(editInputs[0].value).toBe("08:23:11 AM");
-
+        expect(editInputs.length).toEqual(2);
+        expect(editInputs[0].value).toBe("19:53");
     });
 
     it('test DateFormatter', () => {
@@ -424,4 +409,3 @@ describe('AGGrid cell editor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 });
-

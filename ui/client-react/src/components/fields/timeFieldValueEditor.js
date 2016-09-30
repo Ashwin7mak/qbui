@@ -12,8 +12,17 @@ import './fields.scss';
 
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
 import timeFormatter from '../../../../common/src/formatter/timeOfDayFormatter';
+import '../node/datetimePicker/css/bootstrap-datetimepicker.css';
+import './dateTimePicker.scss';
+
 import moment from 'moment';
 import momentTz from 'moment-timezone';
+
+import lodash from 'lodash';
+
+const DROPLIST_FORMAT_VALUE = 'HH:mm';
+const DROPLIST_FORMAT_LABEL = 'hh:mm a';
+const DROPLIST_FORMAT_LABEL_MILITARY = 'HH:mm';
 
 /**
  * Return a map of times, in minutes, starting at midnight and adding
@@ -31,13 +40,44 @@ function getTimesInMinutes(increment, militaryTime) {
     //  Loop until we are on the next day
     while (time.isBefore(endOfDay)) {
         if (militaryTime) {
-            map.push({value: time.format("HH:mm"), label: time.format("HH:mm")});
+            map.push({value: time.format(DROPLIST_FORMAT_VALUE), label: time.format(DROPLIST_FORMAT_LABEL_MILITARY)});
         } else {
-            map.push({value:time.format("HH:mm"), label:time.format("hh:mm a")});
+            map.push({value:time.format(DROPLIST_FORMAT_VALUE), label:time.format(DROPLIST_FORMAT_LABEL)});
         }
         time.add(increment, 'm');
     }
     return map;
+}
+
+/**
+ * Insert a time into the drop list in sorted position.
+ *
+ * @param dropList - the list
+ * @param obj - obj to insert into the list
+ */
+function insertTimeIntoList(dropList, time, militaryTime) {
+
+    let obj = {
+        value: time.format(DROPLIST_FORMAT_VALUE),
+        label: time.format(militaryTime ? DROPLIST_FORMAT_LABEL_MILITARY : DROPLIST_FORMAT_LABEL)
+    };
+
+    //  Is the time in the list
+    let el = dropList.find(function(e) {
+        return e.value === obj.value;
+    });
+
+    //  insert if not already in list
+    if (el === undefined) {
+        //  find the index to insert the time
+        let idx = lodash.sortedIndexBy(dropList, obj,
+            function(o) {
+                return o.value;
+            }
+        );
+        //  insert the obj at the specified index
+        dropList.splice(idx, 0, obj);
+    }
 }
 
 /**
@@ -48,41 +88,38 @@ function getTimesInMinutes(increment, militaryTime) {
  */
 const TimeFieldValueEditor = React.createClass({
     displayName: 'TimeFieldValueEditor',
-    timeDropList:  getTimesInMinutes(30),
-    miliaryTimeDropList: getTimesInMinutes(30, true),
 
     propTypes: {
         /**
-         * the raw date value in ISO format */
+         *  the raw date value in ISO format */
         value: React.PropTypes.string,
 
-        /* the display time value */
-        display: React.PropTypes.string,
-
-        /* field attributes */
+        /**
+         *  field attributes */
         attributes: React.PropTypes.object,
 
-        /* field type */
+        /**
+         *  field type - could be Time or DateTime */
         type: React.PropTypes.number,
 
         /**
-         * renders with red border if true */
+         *  renders with red border if true */
         isInvalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         *  message to display in the tool tip when isInvalid */
         invalidMessage: React.PropTypes.string,
 
         /**
-         * optional additional classes for the input to customize styling */
+         *  optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
 
         /**
-         * listen for changes by setting a callback to the onChange prop.  */
+         *  listen for changes by setting a callback to the onChange prop.  */
         onChange: React.PropTypes.func,
 
         /**
-         * listen for losing focus by setting a callback to the onBlur prop. */
+         *  listen for losing focus by setting a callback to the onBlur prop. */
         onBlur: React.PropTypes.func,
 
         idKey: React.PropTypes.any
@@ -108,24 +145,26 @@ const TimeFieldValueEditor = React.createClass({
         }
     },
 
-    onBlur(newValue) {
-        if (newValue && (this.props.onBlur || this.props.onDateTimeBlur)) {
-            if (newValue.value === null || newValue.value) {
+    onBlur(event) {
+        var newValue = event.target === null ? event : event.target.value;
+
+        if (this.props.onBlur || this.props.onDateTimeBlur) {
+            if (newValue === null || newValue) {
                 //  convert the entered time to military format
                 let militaryTime = null;
-                if (newValue.value) {
+                if (newValue) {
                     //  convert to military time
                     let formats = ['h:mm:ss a', 'h:mm:ss', 'h:mm a', 'h:mm'];
                     for (let idx = 0; idx < formats.length; idx++) {
-                        if (moment(newValue.value, formats[idx]).isValid()) {
-                            militaryTime = moment(newValue.value, formats[idx]).format('H:mm:ss');
+                        if (moment(newValue, formats[idx]).isValid()) {
+                            militaryTime = moment(newValue, formats[idx]).format('H:mm:ss');
                             break;
                         }
                     }
                 }
 
                 //  null means the time was cleared by the user.
-                if (newValue.value === null || militaryTime) {
+                if (newValue === null || militaryTime) {
                     if (this.props.onDateTimeBlur) {
                         this.props.onDateTimeBlur(militaryTime);
                     } else {
@@ -165,15 +204,26 @@ const TimeFieldValueEditor = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
+        //  build the droplist based on how the time element is displayed
+        let showAsMilitaryTime = this.props.attributes && this.props.attributes.use24HourClock;
+        let timeDropList = getTimesInMinutes(30, showAsMilitaryTime);
+
         let theTime = null;
+        let dropListTime = null;
         if (this.props.value) {
             let inputValue = this.props.value.replace(/(\[.*?\])/, '');
+            let momentTime = null;
+            let timeFormat = null;
+
             if (this.props.type === fieldFormats.TIME_FORMAT) {
-                let timeFormat = timeFormatter.generateFormatterString(this.props.attributes);
+                //  use the TimeFormatter to get the time format
+                timeFormat = timeFormatter.generateFormatterString(this.props.attributes);
+
                 //  It's a time only field...just use today's date to format the time
-                theTime = moment(inputValue, timeFormat).format(timeFormat);
+                momentTime = moment(inputValue, timeFormat);
             } else {
-                let timeFormatForDate = dateTimeFormatter.getTimeFormat({showTime:true});
+                //  it's a date time object; use the dateTimeFormatter to get the time format
+                timeFormat = dateTimeFormatter.getTimeFormat({showTime:true});
 
                 //  Quickbase renders times based on the app setting, which may differ from the user's
                 //  time zone.  Because MomentJs renders date/times in the user's timezone, which may
@@ -181,20 +231,22 @@ const TimeFieldValueEditor = React.createClass({
                 //  the time based on the Quickbase time zone.
                 let timeZone = dateTimeFormatter.getTimeZone(this.props.attributes);
 
-                //  Firefox parser is more strict than others when parsing; so may need to specify
-                //  the format of the input value if the moment parser can't parse the input value.
-                let momentTime = moment(inputValue).isValid() ? momentTz.tz(inputValue, timeZone) : momentTz.tz(inputValue, "MM-DD-YYYY " + timeFormatForDate, timeZone);
-                theTime = momentTime.format(timeFormatForDate);
+                //  Firefox parser is more strict than others when parsing; so specify the
+                //  format of the input value if the moment parser can't parse the input value.
+                momentTime = moment(inputValue).isValid() ? momentTz.tz(inputValue, timeZone) : momentTz.tz(inputValue, "MM-DD-YYYY " + timeFormat, timeZone);
             }
-        }
 
-        if (!theTime) {
-            classes += ' ghost-text';
+            //  convert the moment time into the appropriate display format
+            theTime = momentTime.format(timeFormat);
+            dropListTime = momentTime.format(DROPLIST_FORMAT_VALUE);
+
+            //  if the time is not in the droplist, add it
+            insertTimeIntoList(timeDropList, momentTime, showAsMilitaryTime);
         }
 
         let placeholder = theTime;
-        let useMilitaryTime = this.props.attributes && this.props.attributes.use24HourClock;
-        if (!placeholder) {
+        if (!theTime) {
+            classes += ' ghost-text';
             placeholder = this.props.attributes && this.props.attributes.scale ? this.props.attributes.scale.toLowerCase() : 'hh:mm';
         }
 
@@ -204,7 +256,7 @@ const TimeFieldValueEditor = React.createClass({
                     <input type="time"
                         name="time-select"
                         onChange={this.onChange}
-                        value={theTime}
+                        value={theTime ? theTime : ''}
                     />
                 </div> :
                 <div className={classes}>
@@ -212,8 +264,8 @@ const TimeFieldValueEditor = React.createClass({
                         name="time-select"
                         onBlur={this.onBlur}
                         onChange={this.onChange}
-                        value={theTime ? theTime : ''}
-                        options={useMilitaryTime ? this.miliaryTimeDropList : this.timeDropList}
+                        value={dropListTime ? dropListTime : ''}
+                        options={timeDropList}
                         optionRenderer={this.renderOption}
                         placeholder={placeholder}
                         clearable={false}
