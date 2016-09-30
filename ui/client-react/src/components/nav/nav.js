@@ -111,8 +111,10 @@ export let Nav = React.createClass({
 
         if (this.props.location.query.editRec && !this.state.nav.trowserOpen && !this.state.form.formLoading) {
 
+            const ignoreRec = editRec === "new";
+
             const flux = this.getFlux();
-            flux.actions.loadFormAndRecord(appId, tblId, editRec === "new" ? "1" : editRec, rptId, "edit").then(() => {
+            flux.actions.loadFormAndRecord(appId, tblId, ignoreRec ? "1" : editRec, rptId, "edit", ignoreRec).then(() => {
                 flux.actions.showTrowser("editRecord");
             });
         }
