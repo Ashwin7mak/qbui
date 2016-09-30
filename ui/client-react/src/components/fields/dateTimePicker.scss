@@ -251,34 +251,5 @@
     }
 }
 
-//  edit mode styles for a date/time field combination
-.dateTimeField.cellEdit {
-    width: 94px;
-    vertical-align: middle;
 
-    //  dateCell styles for date/time combo
-    &.dateCell {
-        margin-right: 2px;
-        .input-group.date input.form-control {
-            font-size: 12px;
-        }
-    }
-
-    //  timeCell styles for date/time combo
-    &.timeCell {
-        .Select-option {
-            font-size: 12px;
-        }
-        .Select-placeholder {
-            font-size: 12px;
-        }
-        .Select-input {
-            font-size: 12px;
-        }
-        .Select-value {
-            padding-right: 20px !important;
-            font-size: 12px;
-        }
-    }
-}
 
