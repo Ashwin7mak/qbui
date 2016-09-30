@@ -55,7 +55,7 @@
             return url === this.stripProtocol(url);
         },
         addProtocol: function(url, protocol = 'http://') {
-            if(protocolIsMissingFrom(url)) {
+            if(this.protocolIsMissingFrom(url)) {
                 url = protocol + url;
             }
             return url;
