@@ -22,7 +22,7 @@ import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
         NumericCellRenderer, DurationCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
         CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer}  from './cellRenderers';
 
-import * as GroupTypes from '../../../constants/groupTypes';
+import * as GroupTypes from '../../../../../common/src/groupTypes';
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';

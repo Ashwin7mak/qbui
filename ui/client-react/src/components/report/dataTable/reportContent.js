@@ -8,7 +8,7 @@ import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
 import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
-import * as GroupTypes from "../../../constants/groupTypes";
+import * as GroupTypes from "../../../../../common/src/groupTypes";
 import Locales from "../../../locales/locales";
 import ReportFooter from '../reportFooter';
 import ValidationUtils from "../../../utils/validationUtils";

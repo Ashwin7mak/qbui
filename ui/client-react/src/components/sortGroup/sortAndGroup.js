@@ -10,11 +10,11 @@ import './sortAndGroup.scss';
 
 import SortAndGroupDialog from './sortAndGroupDialog';
 import ReportUtils from '../../utils/reportUtils';
-import * as GroupTypes from '../../constants/groupTypes';
 import MockData from '../../mocks/sortGroup';
 import * as query from '../../constants/query';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import constants from '../../../../common/src/constants';
+import * as GroupTypes from '../../../../common/src/groupTypes';
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';
 
