@@ -102,6 +102,22 @@ export let Nav = React.createClass({
             flux.actions.toggleLeftNav(true);
         }
     },
+
+    componentDidUpdate() {
+
+        const {appId, tblId, rptId} = this.props.params;
+
+        const editRec = this.props.location.query.editRec;
+
+        if (this.props.location.query.editRec && !this.state.nav.trowserOpen && !this.state.form.formLoading) {
+
+            const flux = this.getFlux();
+            flux.actions.loadFormAndRecord(appId, tblId, editRec == "new" ? "1" : editRec, rptId, "edit").then(() => {
+                flux.actions.showTrowser("editRecord");
+            });
+        }
+    },
+
     render() {
         const flux = this.getFlux();
 

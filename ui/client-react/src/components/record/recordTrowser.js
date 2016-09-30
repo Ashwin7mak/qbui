@@ -7,8 +7,9 @@ import Button from 'react-bootstrap/lib/Button';
 import QBicon from "../qbIcon/qbIcon";
 import TableIcon from "../qbTableIcon/qbTableIcon";
 import ValidationUtils from "../../utils/validationUtils";
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
-
+import {browserHistory} from 'react-router';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 let RecordTrowser = React.createClass({
@@ -50,7 +51,7 @@ let RecordTrowser = React.createClass({
             ok : true,
             errors: []
         };
-
+                           debugger;
         if (validationResult.ok) {
             //signal record save action, will update an existing records with changed values
             // or add a new record
@@ -93,11 +94,15 @@ let RecordTrowser = React.createClass({
     },
 
     hideTrowser() {
+        WindowLocationUtils.pushWithoutQuery()
+
         let flux = this.getFlux();
         flux.actions.hideTrowser();
     },
 
     cancelEditing() {
+        WindowLocationUtils.pushWithoutQuery()
+
         const flux = this.getFlux();
         if (this.props.recId) {
             flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);

@@ -5,7 +5,7 @@ import Promise from 'bluebird';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-
+import WindowLocationUtils from '../utils/windowLocationUtils';
 import {browserHistory} from 'react-router';
 
 let logger = new Logger();
@@ -21,52 +21,18 @@ Promise.onPossiblyUnhandledRejection(function(err) {
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
-function updateQueryStringParam(key, value) {
-    let baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
-    let urlQueryString = document.location.search;
-    let newParam = key + '=' + value;
-    let params = '?' + newParam;
 
-    // If the "search" string exists, then build params from it
-    if (urlQueryString) {
-        let keyRegex = new RegExp('([\?&])' + key + '[^&]*');
-
-        // If param exists already, update it
-        if (urlQueryString.match(keyRegex) !== null) {
-            params = urlQueryString.replace(keyRegex, "$1" + newParam);
-        } else { // Otherwise, add it to end of query string
-            params = urlQueryString + '&' + newParam;
-        }
-    }
-    window.history.replaceState({}, "", baseUrl + params);
-}
-
-function removeQueryString() {
-    var baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
-    window.history.replaceState({}, "", baseUrl);
-}
 
 let formActions = {
 
     openRecordForEdit(appId, tblId, rptId = null, recordId = null) {
 
-        updateQueryStringParam("editRec", recordId);
-
-        this.flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, "edit").then(() => {
-
-            this.flux.actions.showTrowser("editRecord");
-        });
+        WindowLocationUtils.pushWithQuery("editRec", recordId);
     },
 
     editNewRecord(appId, tblId, rptId = null) {
 
-
-        updateQueryStringParam("editRec", "new");
-
-        this.flux.actions.loadFormAndRecord(appId, tblId, 1, rptId, "edit", true).then(() => {
-
-            this.flux.actions.showTrowser("editRecord");
-        });
+        WindowLocationUtils.pushWithQuery("editRec", "new");
     },
 
     loadFormAndRecord(appId, tblId, recordId, rptId, formType, ignoreRecord = false) {
