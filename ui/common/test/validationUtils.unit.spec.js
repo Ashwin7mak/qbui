@@ -2,7 +2,7 @@ var LimitConstants = require('../src/limitConstants');
 var ValidationUtils = require('../src/validationUtils');
 var assert = require('assert');
 
-describe.only('test validateFieldValue', () => {
+describe('test validateFieldValue', () => {
 
     it('null field definition gets no errors', () => {
         var def = null;

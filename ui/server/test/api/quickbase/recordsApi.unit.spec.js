@@ -475,7 +475,7 @@ describe("Validate recordsApi", function() {
         });
 
         it('fail return results max_chars', function(done) {
-            let testField =  {type: "TEXT", clientSideAttributes : {max_chars : 4}};
+            let testField =  {datatypeAttributes :{type: "TEXT", clientSideAttributes : {max_chars : 4}}};
             req.url = '/records/2';
             req.body = [{value: "12345", fieldDef: testField}];
             let errType = dataErrorCodes.MAX_LEN_EXCEEDED;
@@ -485,16 +485,16 @@ describe("Validate recordsApi", function() {
                 function(error) {
                 },
                 function(error) {
-                    assert.equal(error.response.errors[0].type, errType);
+                    assert.equal(error.response.errors[0].error.code, errType);
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+                done(new Error('unable to resolve all tests: ' + JSON.stringify(errorMsg)));
             });
         });
 
         it('fail return results required field', function(done) {
-            let testField =  {type: "TEXT", required : true};
+            let testField =  {datatypeAttributes :{type: "TEXT"}, required : true};
             req.url = '/records/2';
             req.body = [{value: "", fieldDef: testField}];
             var errType = dataErrorCodes.REQUIRED_FIELD_EMPTY;
@@ -504,11 +504,11 @@ describe("Validate recordsApi", function() {
                 function(error) {
                 },
                 function(error) {
-                    assert.equal(error.response.errors[0].type, errType);
+                    assert.equal(error.response.errors[0].error.code, errType);
                     done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+                done(new Error('unable to resolve all tests: ' + JSON.stringify(errorMsg)));
             });
         });
     });
