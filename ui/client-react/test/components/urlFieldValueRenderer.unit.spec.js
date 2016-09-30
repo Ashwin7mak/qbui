@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 
-import UrlFieldValueRenderer from '../../src/components/fields/UrlFieldValueRenderer';
+import UrlFieldValueRenderer from '../../src/components/fields/urlFieldValueRenderer';
 
 describe('UrlFieldValueRenderer', () => {
     let component, domComponent;

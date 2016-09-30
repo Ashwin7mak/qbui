@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 
-import UrlFieldValueEditor from '../../src/components/fields/UrlFieldValueEditor';
+import UrlFieldValueEditor from '../../src/components/fields/urlFieldValueEditor';
 
 describe('UrlFieldValueEditor', () => {
     let component;
