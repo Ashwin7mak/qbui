@@ -407,15 +407,15 @@ export let ReportContent = React.createClass({
                         let datePart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
                         if (datePart.length > 1) {
                             switch (groupType) {
-                            case GroupTypes.GROUP_TYPE.date.month:
+                            case GroupTypes.GROUP_TYPE.DATE.month:
                                 let month = Locales.getMessage('month.' + datePart[0].toLowerCase());
                                 groupData.group = Locales.getMessage('groupHeader.date.month', {month: month, year: datePart[1]});
                                 break;
-                            case GroupTypes.GROUP_TYPE.date.quarter:
+                            case GroupTypes.GROUP_TYPE.DATE.quarter:
                                 let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
                                 groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter: abbrQuarter, year: datePart[1]});
                                 break;
-                            case GroupTypes.GROUP_TYPE.date.fiscalQuarter:
+                            case GroupTypes.GROUP_TYPE.DATE.fiscalQuarter:
                                 let abbrFiscalQtr = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
                                 let abbrFiscalYr = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[1];
                                 groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter: abbrFiscalQtr, year: abbrFiscalYr});
@@ -423,16 +423,16 @@ export let ReportContent = React.createClass({
                             }
                         } else {
                             switch (groupType) {
-                            case GroupTypes.GROUP_TYPE.date.fiscalYear:
+                            case GroupTypes.GROUP_TYPE.DATE.fiscalYear:
                                 groupData.group = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[0];
                                 break;
-                            case GroupTypes.GROUP_TYPE.date.week:
+                            case GroupTypes.GROUP_TYPE.DATE.week:
                                 groupData.group = Locales.getMessage('groupHeader.date.week', {date: this.localizeDate(datePart[0])});
                                 break;
-                            case GroupTypes.GROUP_TYPE.date.day:
+                            case GroupTypes.GROUP_TYPE.DATE.day:
                                 groupData.group = this.localizeDate(datePart[0]);
                                 break;
-                            case GroupTypes.GROUP_TYPE.date.equals:
+                            case GroupTypes.GROUP_TYPE.DATE.equals:
                                 let opts = null;
                                 if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME) {
                                     opts = {
@@ -460,26 +460,26 @@ export let ReportContent = React.createClass({
                         let timeOfDay = null;
 
                         switch (groupType) {
-                        case GroupTypes.GROUP_TYPE.timeOfDay.equals:
-                        case GroupTypes.GROUP_TYPE.timeOfDay.second:
+                        case GroupTypes.GROUP_TYPE.TIME_OF_DAY.equals:
+                        case GroupTypes.GROUP_TYPE.TIME_OF_DAY.second:
                             timeOfDay = this.parseTimeOfDay(groupData.group);
                             if (timeOfDay) {
                                 groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric', second: 'numeric'});
                             }
                             break;
-                        case GroupTypes.GROUP_TYPE.timeOfDay.minute:
+                        case GroupTypes.GROUP_TYPE.TIME_OF_DAY.minute:
                             timeOfDay = this.parseTimeOfDay(groupData.group);
                             if (timeOfDay) {
                                 groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
                             }
                             break;
-                        case GroupTypes.GROUP_TYPE.timeOfDay.hour:
+                        case GroupTypes.GROUP_TYPE.TIME_OF_DAY.hour:
                             timeOfDay = this.parseTimeOfDay(groupData.group);
                             if (timeOfDay) {
                                 groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
                             }
                             break;
-                        case GroupTypes.GROUP_TYPE.timeOfDay.am_pm:
+                        case GroupTypes.GROUP_TYPE.TIME_OF_DAY.am_pm:
                             timeOfDay = this.parseTimeOfDay(groupData.group);
                             if (timeOfDay) {
                                 groupData.group = (timeOfDay.getHours() < 12 ? Locales.getMessage('groupHeader.am') : Locales.getMessage('groupHeader.pm'));
@@ -494,7 +494,7 @@ export let ReportContent = React.createClass({
                     if (groupField.datatypeAttributes.type === SchemaConsts.DURATION) {
                         //  With duration of equals, the group value contains 2 pieces of information;
                         //  the 1st is the duration value; the 2nd is the group type.
-                        if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
+                        if (groupType === GroupTypes.GROUP_TYPE.DURATION.equals) {
                             let durationPart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
                             if (durationPart.length > 1) {
                                 groupData.group = durationPart[0];
@@ -505,19 +505,19 @@ export let ReportContent = React.createClass({
 
                         let messageKey = '';
                         switch (groupType) {
-                        case GroupTypes.GROUP_TYPE.duration.second:
+                        case GroupTypes.GROUP_TYPE.DURATION.second:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.second' : 'groupHeader.duration.seconds';
                             break;
-                        case GroupTypes.GROUP_TYPE.duration.minute:
+                        case GroupTypes.GROUP_TYPE.DURATION.minute:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.minute' : 'groupHeader.duration.minutes';
                             break;
-                        case GroupTypes.GROUP_TYPE.duration.hour:
+                        case GroupTypes.GROUP_TYPE.DURATION.hour:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.hour' : 'groupHeader.duration.hours';
                             break;
-                        case GroupTypes.GROUP_TYPE.duration.week:
+                        case GroupTypes.GROUP_TYPE.DURATION.week:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.week' : 'groupHeader.duration.weeks';
                             break;
-                        case GroupTypes.GROUP_TYPE.duration.day:
+                        case GroupTypes.GROUP_TYPE.DURATION.day:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.day' : 'groupHeader.duration.days';
                             break;
                         }
