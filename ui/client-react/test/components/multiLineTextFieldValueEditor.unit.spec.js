@@ -1,8 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
+import Breakpoints from '../../src/utils/breakpoints';
 
 import MultiLineTextFieldValueEditor  from '../../src/components/fields/multiLineTextFieldValueEditor';
+
+class BreakpointsAlwaysSmallMock {
+
+    static isSmallBreakpoint() {
+        return true;
+    }
+}
 
 describe('MultiLineTextFieldValueEditor functions', () => {
     'use strict';
@@ -112,7 +120,7 @@ describe('MultiLineTextFieldValueEditor functions', () => {
             }
         };
         let mockFieldDef = {
-            dataTypeAttributes: 'foo'
+            datatypeAttributes: 'foo'
         };
 
         spyOn(mockParent, 'onBlur');
@@ -131,4 +139,45 @@ describe('MultiLineTextFieldValueEditor functions', () => {
         MultiLineTextFieldValueEditor.__ResetDependency__('textFormatter');
     });
 
+    it('test render with specified width', () => {
+        let fieldDef = {
+            datatypeAttributes: {
+                clientSideAttributes: {
+                    width: 20
+                }
+            }
+        };
+        component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor fieldDef={fieldDef}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let textArea = component.refs.textarea;
+        expect(+(textArea.getAttribute('cols'))).toEqual(20);
+    });
+    it('test render with specified height', () => {
+        let fieldDef = {
+            datatypeAttributes: {
+                clientSideAttributes: {
+                    num_lines: 20
+                }
+            }
+        };
+        component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor fieldDef={fieldDef}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let textArea = component.refs.textarea;
+        expect(+(textArea.getAttribute('rows'))).toEqual(20);
+    });
+    it('test render with specified width on small breakpoint', () => {
+        MultiLineTextFieldValueEditor.__Rewire__('Breakpoints', BreakpointsAlwaysSmallMock);
+        let fieldDef = {
+            datatypeAttributes: {
+                clientSideAttributes: {
+                    width: 20
+                }
+            }
+        };
+        component = TestUtils.renderIntoDocument(<MultiLineTextFieldValueEditor fieldDef={fieldDef}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let textArea = component.refs.textarea;
+        expect(+(textArea.getAttribute('cols'))).toEqual(1);
+        MultiLineTextFieldValueEditor.__ResetDependency__('Breakpoints');
+    });
 });

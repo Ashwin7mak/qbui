@@ -146,6 +146,7 @@ const FieldValueRenderer = React.createClass({
         let commonProperties = {};
         commonProperties.idKey = this.props.idKey;
         this.addDisplayAttributesToCommonProperties(commonProperties);
+        commonProperties.classes = "viewElement";
 
         let className = "";
         className += this.props.classes ? ' ' + this.props.classes : '';

@@ -18,7 +18,8 @@ let relatedField = {
     name: "field",
     datatypeAttributes: {
         type: "TEXT"
-    }
+    },
+    required: true
 };
 let fieldRecord = {
     display: "display",
@@ -59,6 +60,14 @@ describe('FieldElement functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, FieldLabelElement).length).toEqual(1);
     });
 
+    it('test render of required on labels', () =>{
+        component = TestUtils.renderIntoDocument(<FieldElement flux={flux} element={element} fieldRecord={fieldRecord} relatedField={relatedField} edit={false} includeLabel={true} indicateRequiredOnLabel={true}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        let fieldLabel = TestUtils.scryRenderedDOMComponentsWithClass(component, 'fieldLabel');
+        expect(fieldLabel.length).toEqual(1);
+        expect(fieldLabel[0].innerHTML).toContain('*');
+    });
+
     it('test onChange for edit component', () =>{
         spyOn(flux.actions, 'recordPendingValidateField');
         var callbacks = {
@@ -88,7 +97,7 @@ describe('FieldElement functions', () => {
         let expectedCallBackArgs = {
             values: {
                 oldVal: {value: "old", display: "old"},
-                newVal: {value: "old", display: "new"}
+                newVal: {value: "new", display: "new"}
             },
             fid: 6,
             fieldName: "field"
