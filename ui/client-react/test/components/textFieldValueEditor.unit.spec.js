@@ -99,6 +99,44 @@ describe('TextFieldValueEditor functions', () => {
         TestUtils.Simulate.blur(textField, {"target": {"value":newValue}});
         expect(callbacks.onBlur).toHaveBeenCalledWith({value: newValue, display: newValue});
     });
+});
 
+fdescribe('TextFieldValueEditor', () => {
+    it('can optionally set a different text input type for better mobile keyboard support (url or phone)', () => {
+        let component = TestUtils.renderIntoDocument(<TextFieldValueEditor inputType="tel" />);
+        let textInput = ReactDOM.findDOMNode(component);
 
+        expect(textInput.type).toEqual('tel');
+    });
+
+    let inputValueTestCases = [
+        {
+            name: 'uses the display value by default',
+            displayValue: 'display',
+            rawValue: 'raw',
+            expectation: 'display'
+        },
+        {
+            name: 'uses the raw value if the display value is not set',
+            displayValue: null,
+            rawValue: 'raw',
+            expectation: 'raw'
+        },
+        {
+            name: 'uses a blank string if both display value and raw value are null',
+            displayValue: null,
+            rawValue: null,
+            expectation: ''
+        },
+    ]
+
+    inputValueTestCases.forEach(function(testCase) {
+        it(testCase.name, () => {
+            let component = TestUtils.renderIntoDocument(<TextFieldValueEditor value={testCase.rawValue}
+                                                                               display={testCase.displayValue} />);
+            let textInput = ReactDOM.findDOMNode(component);
+
+            expect(textInput.value).toEqual(testCase.expectation);
+        });
+    });
 });
