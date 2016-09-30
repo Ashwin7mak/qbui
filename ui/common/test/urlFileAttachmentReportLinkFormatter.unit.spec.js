@@ -80,7 +80,7 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
         });
     });
 
-    fdescribe('format', () => {
+    describe('format', () => {
         let testUrl = 'http://google.com';
 
         let testCases = [
