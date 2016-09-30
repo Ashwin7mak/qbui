@@ -463,7 +463,7 @@ $cell-edit-background-edit: #f3f8fe;
         border-right: 1px solid $row-border-color;
         > .cellWrapper.textFormat {
             align-items:flex-start;
-            padding-top:0px;
+            padding-top: 0;
             textarea {
                 resize: none;
                 overflow:hidden;
@@ -510,8 +510,6 @@ $cell-edit-background-edit: #f3f8fe;
             }
             .cellEdit {
                 display:inline-block;
-                //margin-right:2px;
-                //margin-left: 2px;
                 background-color: $input-bg-color;
                 &.input-group {
                     flex: 1 1 auto;

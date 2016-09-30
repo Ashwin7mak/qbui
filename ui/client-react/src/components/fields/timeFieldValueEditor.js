@@ -254,9 +254,9 @@ const TimeFieldValueEditor = React.createClass({
         return (Breakpoints.isSmallBreakpoint() ?
                 <div className={classes}>
                     <input type="time"
-                           name="time-select"
-                           onChange={this.onChange}
-                           value={theTime}
+                        name="time-select"
+                        onChange={this.onChange}
+                        value={theTime ? theTime : ''}
                     />
                 </div> :
                 <div className={classes}>
