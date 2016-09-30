@@ -1,6 +1,6 @@
 import React from 'react';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
-
+import Breakpoints from "../../utils/breakpoints";
 /**
  * # MultiLineTextFieldValueEditor
  * A multi-line text editor that dynamically changes its height. The text editor will not exceed
@@ -21,7 +21,11 @@ const MultiLineTextFieldValueEditor = React.createClass({
         onChange: React.PropTypes.func,
         /**
          * listen for losing focus by setting a callback to the onBlur prop */
-        onBlur: React.PropTypes.func
+        onBlur: React.PropTypes.func,
+        /**
+         * Show a scroll bar version for inline editing.
+         */
+        showScrollForMultiLine: React.PropTypes.bool
     },
 
     statics: {
@@ -35,6 +39,11 @@ const MultiLineTextFieldValueEditor = React.createClass({
                 width: MultiLineTextFieldValueEditor.MAX_TEXTAREA_WIDTH,
                 height: "auto"
             }
+        };
+    },
+    getDefaultProps() {
+        return {
+            showScrollForMultiLine: false
         };
     },
 
@@ -94,14 +103,21 @@ const MultiLineTextFieldValueEditor = React.createClass({
     },
 
     render() {
-        return <textarea ref="textarea" style={this.state.style}
+        let cols = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.width : null;
+        if (Breakpoints.isSmallBreakpoint()) {
+            cols = 1;
+        }
+        let rows = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.num_lines') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.num_lines : 1;
+        let style = this.props.showScrollForMultiLine ? this.state.style : {};
+        return <textarea ref="textarea" style={style}
                                         onChange={this.onChange}
                                         onBlur={this.onBlur}
                                         tabIndex="0"
                                         onKeyUp={this.onKeyUp}
                                         className="cellEdit"
-                                        rows="1"
-                                        value={this.props.value === null ? '' : this.props.value}
+                                        rows={rows}
+                                        cols={cols}
+                                        value={this.props.display ? this.props.display : this.props.value}
                                         type="text" />;
     }
 });

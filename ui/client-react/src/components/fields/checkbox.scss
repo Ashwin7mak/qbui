@@ -22,6 +22,8 @@ $checkbox-font-size-mobile: 16px;
 }
 
 .checkbox {
+    //clear out the default margins
+    margin: 0;
     label {
         min-height: 12px;
         min-width: 12px;

@@ -75,7 +75,7 @@ $cell-edit-background-edit: #f3f8fe;
         }
         .collapser {
             position: absolute;
-            left: 18px;
+            left: 22px;
         }
 
         &.selected {
@@ -403,11 +403,6 @@ $cell-edit-background-edit: #f3f8fe;
     display:none;
 }
 
-/* hide datepicker if it's been opened but we're not over that cell */
-.ag-row.editing .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget {
-    display:none !important;
-}
-
 .emptyCell {
     visibility:hidden;
 }
@@ -468,7 +463,7 @@ $cell-edit-background-edit: #f3f8fe;
         border-right: 1px solid $row-border-color;
         > .cellWrapper.textFormat {
             align-items:flex-start;
-            padding-top:6px;
+            padding-top: 0;
             textarea {
                 resize: none;
                 overflow:hidden;
@@ -515,124 +510,7 @@ $cell-edit-background-edit: #f3f8fe;
             }
             .cellEdit {
                 display:inline-block;
-                margin-right:2px;
-                margin-left: 2px;
-
                 background-color: $input-bg-color;
-
-                &.timeCell {
-                    width: 100%;
-                    margin-top: 3px;
-                    .Select {
-                        height: 28px;
-                    }
-                    .Select-control {
-                        border-radius: 2px;
-                        height: 28px;
-                    }
-                    .Select-input {
-                        padding-left: 1px;
-                        height: 28px;
-                        color: $color25;
-                    }
-                    .Select-value {
-                        line-height: 28px;
-                    }
-                    .Select-placeholder {
-                        line-height: 27px;
-                        color: $color25;
-                        padding: 1px;
-                        margin-left: 2px;
-                    }
-                    .Select-option {
-                        color: $color25;
-                        padding-top: 1px;
-                    }
-                    .Select-arrow-zone {
-                        background-color: $datepicker-bg;
-                        padding-right: 0;
-                        .glyphicon {
-                            color: $datepicker-select-button-fg;
-                        }
-                        .glyphicon-time {
-                            color: $color-black-700;
-                            padding-top: 5px;
-                            padding-left: 5px;
-                        }
-                    }
-                    &.ghost-text {
-                        .Select-placeholder {
-                            color: $color-black-500;
-                            font-style: italic;
-                            font-weight: bold;
-                            padding: 1px;
-                            margin-left: 2px;
-                        }
-                    }
-                }
-                &.dateCell {
-                    margin-top: 3px;
-                    vertical-align: middle;
-                    &.ghost-text {
-                        .input-group.date input.form-control {
-                            color: $color-black-500;
-                            font-style: italic;
-                            font-weight: bold;
-                        }
-                    }
-                    .glyphicon-calendar {
-                        color: $color-black-700;
-                        padding-top: 1px;
-                    }
-                }
-                &:not(.Select) {
-                    height: 30px;
-                }
-                &.dateCell>* {
-                    border: 0;
-
-                    .input-group.date input.form-control {
-                        border: 0;
-                        padding: 3px;
-                        height: 27px;
-                        border-radius: 0;
-                    }
-                    .input-group.date .input-group-addon {
-                        background: #fff;
-                        height: 20px;
-                        padding: 0;
-                        border: 0;
-                        color: $icon-color;
-                    }
-                    .bootstrap-datetimepicker-widget {
-                        top: 45px !important;
-                    }
-                }
-                &.dateTimeField {
-                    width: 94px;
-                    vertical-align: middle;
-
-                    .bootstrap-datetimepicker-widget {
-                        right: 120px !important;
-                    }
-                    .input-group.date input.form-control {
-                        font-size:12px;
-                    }
-
-                    .dropdown-toggle {
-                        width: 85px;
-                        border: 0;
-                    }
-                    .Select-option {
-                        font-size: 12px;
-                    }
-                    .Select-placeholder {
-                        font-size: 12px;
-                    }
-                    .Select-input {
-                        font-size: 12px;
-                    }
-                }
                 &.input-group {
                     flex: 1 1 auto;
                     display:flex;
@@ -664,7 +542,36 @@ $cell-edit-background-edit: #f3f8fe;
                 }
             }
 
+            //  edit mode styles for a date/time field combination within the grid
+            .cellEdit.dateTimeField {
+                width: 94px;
+                vertical-align: middle;
 
+                //  dateCell styles for date/time combo
+                &.dateCell {
+                    margin-right: 2px;
+                    .input-group.date input.form-control {
+                        font-size: 12px;
+                    }
+                }
+
+                //  timeCell styles for date/time combo
+                &.timeCell {
+                    .Select-option {
+                        font-size: 12px;
+                    }
+                    .Select-placeholder {
+                        font-size: 12px;
+                    }
+                    .Select-input {
+                        font-size: 12px;
+                    }
+                    .Select-value {
+                        padding-right: 20px !important;
+                        font-size: 12px;
+                    }
+                }
+            }
         }
         > .ag-cell-wrapper:first-child {
             border-left:1px solid $row-border-color;

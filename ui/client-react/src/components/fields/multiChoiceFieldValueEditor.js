@@ -162,7 +162,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
         } else {
             choice = this.props.value ? this.state.choice : false;
         }
-
         return (
             <div className="multiChoiceContainer">
                 {this.props.showAsRadio ?

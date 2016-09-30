@@ -8,8 +8,11 @@ import './fields.scss';
 
 import DatePicker from '../../components/node/datetimePicker/lib/DateTimeField';
 import dateTimeFormatter from '../../../../common/src/formatter/dateTimeFormatter';
-import moment from 'moment';
 
+import '../node/datetimePicker/css/bootstrap-datetimepicker.css';
+import './dateTimePicker.scss';
+
+import moment from 'moment';
 /**
  * # DateFieldValueEditor
  *
@@ -24,13 +27,11 @@ const DateFieldValueEditor = React.createClass({
 
     propTypes: {
         /**
-         * the raw date value in ISO format */
+         * raw date value */
         value: React.PropTypes.string,
 
-        /* the display date value */
-        display: React.PropTypes.string,
-
-        /* date attributes */
+        /**
+         * date attributes */
         attributes: React.PropTypes.object,
 
         /**
@@ -45,7 +46,12 @@ const DateFieldValueEditor = React.createClass({
          * optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
 
+        /**
+         * listen for changes by setting a callback to the onChange prop.  */
         onChange: React.PropTypes.func,
+
+        /**
+         * listen for losing focus by setting a callback to the onBlur prop. */
         onBlur: React.PropTypes.func,
 
         idKey: React.PropTypes.any

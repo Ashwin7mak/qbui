@@ -7,46 +7,62 @@ class FieldFormats {
     /**
      * get the formatter type given a field type
      * if the field type is not found it defaults to format.TEXT_FORMAT
-     * @param fieldType
+     * @param datatypeAttributes
      * @return formatType from formats
      */
-    static getFormatType(fieldType) {
+    static getFormatType(datatypeAttributes) {
 
-        switch (fieldType) {
-        case serverTypeConsts.NUMERIC:
-            return FieldFormats.NUMBER_FORMAT;
+        if (datatypeAttributes) {
+            switch (datatypeAttributes.type) {
+            case serverTypeConsts.NUMERIC:
+                return FieldFormats.NUMBER_FORMAT;
 
-        case serverTypeConsts.DATE :
-            return FieldFormats.DATE_FORMAT;
+            case serverTypeConsts.DATE :
+                return FieldFormats.DATE_FORMAT;
 
-        case serverTypeConsts.DATE_TIME:
-            return FieldFormats.DATETIME_FORMAT;
+            case serverTypeConsts.DURATION :
+                return FieldFormats.DURATION_FORMAT;
 
-        case serverTypeConsts.TIME_OF_DAY :
-            return FieldFormats.TIME_FORMAT;
+            case serverTypeConsts.DATE_TIME:
+                return FieldFormats.DATETIME_FORMAT;
 
-        case serverTypeConsts.CHECKBOX :
-            return FieldFormats.CHECKBOX_FORMAT;
+            case serverTypeConsts.TIME_OF_DAY :
+                return FieldFormats.TIME_FORMAT;
 
-        case serverTypeConsts.USER :
-            return FieldFormats.USER_FORMAT;
+            case serverTypeConsts.CHECKBOX :
+                return FieldFormats.CHECKBOX_FORMAT;
 
-        case serverTypeConsts.CURRENCY :
-            return FieldFormats.CURRENCY_FORMAT;
+            case serverTypeConsts.USER :
+                return FieldFormats.USER_FORMAT;
 
-        case serverTypeConsts.RATING :
-            return FieldFormats.RATING_FORMAT;
+            case serverTypeConsts.CURRENCY :
+                return FieldFormats.CURRENCY_FORMAT;
 
-        case serverTypeConsts.PERCENT :
-            return FieldFormats.PERCENT_FORMAT;
+            case serverTypeConsts.RATING :
+                return FieldFormats.RATING_FORMAT;
 
-        case serverTypeConsts.URL :
-            return FieldFormats.URL;
+            case serverTypeConsts.PERCENT :
+                return FieldFormats.PERCENT_FORMAT;
 
-        default:
-            return FieldFormats.TEXT_FORMAT;
+            case serverTypeConsts.URL :
+                return FieldFormats.URL;
 
+            case serverTypeConsts.TEXT :
+                let numLines = 1;
+                if (_.has(datatypeAttributes, 'clientSideAttributes.num_lines')) {
+                    numLines = datatypeAttributes.clientSideAttributes.num_lines;
+                }
+                if (numLines > 1) {
+                    return FieldFormats.MULTI_LINE_TEXT_FORMAT;
+                }
+                return FieldFormats.TEXT_FORMAT;
+
+            default:
+                return FieldFormats.TEXT_FORMAT;
+
+            }
         }
+        return FieldFormats.TEXT_FORMAT;
     }
 }
 

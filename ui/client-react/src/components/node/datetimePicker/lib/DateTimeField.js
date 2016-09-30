@@ -111,7 +111,8 @@ var DateTimeField = (function (_Component) {
     /**
      *  CUSTOMIZED...add onBlur event handling
      *
-     *  Handle various MomentJS quickbase shortcut keys for dates..not locale saavy
+     *  Handle various MomentJS quickbase shortcut keys for dates.
+     *  NOTE: NOT locale saavy
      *
      * @param event
      * @returns {*}
@@ -138,7 +139,7 @@ var DateTimeField = (function (_Component) {
           //
           // Month/Day formats.  Year is set to current year.
           //
-          var monthDayFormats = ['MMM D', 'MMMM D', 'MMM-D', 'M-D', 'M D'];
+          var monthDayFormats = ['MMM D', 'MMMM D', 'MMM-D', 'M-D', 'M D', 'M/D'];
           if ((0, _moment2["default"])(dateTemplate, monthDayFormats, true).isValid()) {
             var currentYr = (0, _moment2["default"])().format('YYYY');
             value = (0, _moment2["default"])(dateTemplate, monthDayFormats, true).year(currentYr).format(_this.state.inputFormat);
@@ -146,7 +147,7 @@ var DateTimeField = (function (_Component) {
             //
             //  Month/Day/Year formats
             //
-            var monthDayYrFormats = ['MMM D YYYY', 'MMMM D YYYY', 'MMM-D-YYYY', 'M-D-YYYY', 'M D YYYY'];
+            var monthDayYrFormats = ['MMM D YYYY', 'MMMM D YYYY', 'MMM-D-YYYY', 'M-D-YYYY', 'M D YYYY', 'M/D/YYYY'];
             if ((0, _moment2["default"])(dateTemplate, monthDayYrFormats, true).isValid()) {
               value = (0, _moment2["default"])(dateTemplate, monthDayYrFormats, true).format(_this.state.inputFormat);
             }
