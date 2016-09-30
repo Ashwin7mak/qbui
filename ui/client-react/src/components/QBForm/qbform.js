@@ -131,7 +131,7 @@ let QBForm = React.createClass({
         let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
         return (
             <td key={key}>
-                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={true} />
+                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={this.props.edit} />
             </td>);
     },
 
@@ -178,7 +178,7 @@ let QBForm = React.createClass({
                             relatedField={relatedField}
                             fieldRecord={fieldRecord}
                             includeLabel={includeLabel}
-                            indicateRequiredOnLabel={true}
+                            indicateRequiredOnLabel={this.props.edit}
                             edit={this.props.edit && !element.readOnly}
                             onChange={this.props.onFieldChange}
                             onBlur={this.props.onFieldChange}

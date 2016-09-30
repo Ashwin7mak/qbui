@@ -8,6 +8,8 @@ import FieldFormats from '../../utils/fieldFormats';
 import './qbform.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
+//TODO currently all fields have a default width of 50 defined by core. This needs to be fixed -- specific field types should have specific defaults
+const DEFAULT_FIELD_WIDTH = 50;
 /**s
  * render a form field value, optionally with its label
  */
@@ -65,36 +67,39 @@ const FieldElement = React.createClass({
 
         //if the field prop has a width defined this affected the element's layout so add the class to indicate
         let classes = '';
-        if (_.has(this.props, 'relatedField.datatypeAttributes.clientSideAttributes.width') && this.props.relatedField.datatypeAttributes.clientSideAttributes.width !== 50) {
+        if (_.has(this.props, 'relatedField.datatypeAttributes.clientSideAttributes.width') && this.props.relatedField.datatypeAttributes.clientSideAttributes.width !== DEFAULT_FIELD_WIDTH) {
             classes = 'fieldInputWidth';
         }
 
+        let fieldElement = null;
+        if (this.props.edit) {
+            fieldElement = <FieldValueEditor type={fieldType}
+                                             value={fieldRawValue}
+                                             display={fieldDisplayValue}
+                                             attributes={fieldDatatypeAttributes}
+                                             fieldDef = {this.props.relatedField}
+                                             indicateRequired={indicateRequiredOnField}
+                                             onChange={this.onChange}
+                                             onBlur={this.onBlur}
+                                             onKeyDown={this.onKeyDown}
+                                             onValidated={this.props.onValidated}
+                                             isInvalid={this.props.isInvalid}
+                                             key={'fve-' + this.props.idKey}
+                                             idKey={'fve-' + this.props.idKey}
+                                             invalidMessage={this.props.invalidMessage}
+                                             classes={classes}
+                                             appUsers={this.props.appUsers}/>;
+        } else if (fieldDisplayValue !== null || fieldRawValue !== null) { //if there is no value do not render the field
+            fieldElement = <FieldValueRenderer type={fieldType}
+                                               key={'fvr-' + this.props.idKey}
+                                               idKey={'fvr-' + this.props.idKey}
+                                               value={fieldRawValue}
+                                               display={fieldDisplayValue}
+                                               attributes={fieldDatatypeAttributes}
+                                               fieldDef={this.props.relatedField}
+            />;
+        }
 
-        let fieldElement = this.props.edit ?
-            <FieldValueEditor type={fieldType}
-                            value={fieldRawValue}
-                            display={fieldDisplayValue}
-                            attributes={fieldDatatypeAttributes}
-                            fieldDef = {this.props.relatedField}
-                            indicateRequired={indicateRequiredOnField}
-                            onChange={this.onChange}
-                            onBlur={this.onBlur}
-                            onKeyDown={this.onKeyDown}
-                            onValidated={this.props.onValidated}
-                            isInvalid={this.props.isInvalid}
-                            key={'fve-' + this.props.idKey}
-                            idKey={'fve-' + this.props.idKey}
-                            invalidMessage={this.props.invalidMessage}
-                            classes={classes}
-                             appUsers={this.props.appUsers}/> :
-            ((fieldDisplayValue !== null || fieldRawValue !== null) && <FieldValueRenderer type={fieldType}
-                            key={'fvr-' + this.props.idKey}
-                            idKey={'fvr-' + this.props.idKey}
-                            value={fieldRawValue}
-                            display={fieldDisplayValue}
-                            attributes={fieldDatatypeAttributes}
-                            fieldDef = {this.props.relatedField}
-                             />);
         return (
             <div className="formElement field">
                 {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} /> }
