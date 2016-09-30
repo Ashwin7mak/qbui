@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import TextFieldValueRenderer from './textFieldValueRenderer';
 import UrlUtils from '../../utils/urlUtils';
-
+import urlFileAttachmentReportLinkFormatter from '../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import './urlField.scss';
 
 const UrlFieldValueRenderer = React.createClass({
@@ -43,6 +43,9 @@ const UrlFieldValueRenderer = React.createClass({
 
         return linkClasses;
     },
+    renderLinkHref() {
+        return urlFileAttachmentReportLinkFormatter.addProtocol(this.props.value);
+    },
     renderLink() {
         let target = (this.props.openInNewWindow ? '_blank': '_self');
 
@@ -59,7 +62,7 @@ const UrlFieldValueRenderer = React.createClass({
             );
         } else {
             return (
-                <a href={this.props.value} target={target} className={this.setLinkClasses()}>
+                <a href={this.renderLinkHref()} target={target} className={this.setLinkClasses()}>
                     {this.props.display}
                     {this.renderIcon()}
                 </a>
