@@ -51,7 +51,7 @@ let RecordTrowser = React.createClass({
             ok : true,
             errors: []
         };
-                           debugger;
+
         if (validationResult.ok) {
             //signal record save action, will update an existing records with changed values
             // or add a new record
@@ -94,14 +94,14 @@ let RecordTrowser = React.createClass({
     },
 
     hideTrowser() {
-        WindowLocationUtils.pushWithoutQuery()
+        WindowLocationUtils.pushWithoutQuery();
 
         let flux = this.getFlux();
         flux.actions.hideTrowser();
     },
 
     cancelEditing() {
-        WindowLocationUtils.pushWithoutQuery()
+        WindowLocationUtils.pushWithoutQuery();
 
         const flux = this.getFlux();
         if (this.props.recId) {
