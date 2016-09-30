@@ -7,15 +7,14 @@ Other repos for QuickBase:
 
 * [java backend](https://github.com/QuickBase/QuickBase)
 *  and [aws](https://github.com/QuickBase/aws)
-are also part of the Quickbase application. 
+are also part of the Quickbase application.
 
 see also:
 [QBUI project File structure](FILESSTRUCTURE.md)
 
 
 ##Knowledge Prerequisites
-1. Writing Javascript, Node.js, React
-2. Read coding conventions (convention settings in https://github.com/QuickBase/qbui/tree/master/documents/devDesign)
+Writing Javascript, Node.js, React
 
 
 ##Pre-installation
@@ -29,55 +28,81 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
     * GitHub
     * NodeJS - ui web server plugin
     * SASS support - enhances css with variables and methods plugin
-  * Know working versions of Intellij are 14.1.2 and 14.1.4 
-  * Use the QuickBase/intelliJSettings.jar from the Quickbase project. 
-* Java and Tomcat to run the backend	
-    
-##Installing 
+  * Known working versions of Intellij are 14.1.2 and 14.1.4
+  * Use the QuickBase/intelliJSettings.jar from the Quickbase project.
+* Java and Tomcat to run the backend
+
+##Installing
+
+To avoid permission issues caused by installing npm modules globally, you can either 1) [install NVM](https://github.com/QuickBase/qbui/blob/master/ui/README.md#install-node-via-nvm) (on Mac) OR 2) [install node and configure](https://github.com/QuickBase/qbui/blob/master/ui/README.md#install-node-and-configure-global-node-modules) where node installs global npm modules.
+
+#### Install Node via NVM
+
+[NVM](https://github.com/creationix/nvm) only works with Mac but is the easier and cleaner option.
+Install NVM (Node Version Manager) via Wget:
+
+```bash
+    wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.32.0/install.sh | bash
+```
+
+Next, install Node.js v4.2.2 and set v4.2.2 as your default version of node (as of 2/1/2016, v5.5.0 is not fully tested with qbui).
+
+```bash
+    nvm install node 4.2.2 && nvm alias default 4.2.2
+```
+
+To verify installation enter `nvm list default` which should print:
+```bash
+    ->         v4.2.2
+```
+If nvm and node were successfully installed, skip the next section about installing Node.js and global node configuration.
+
+#### Install Node and configure global node modules
+
 * Install node.js (v4.2.x or higher, as of 2/1/2016, v5.5.0 is not fully tested with qbui) from the [Node.js site](http://nodejs.org/)
 
 * (*Optional*) Make a place for any global node modules and no permission issues
 
-1. Create a .node folder from command line.
-       
-	``` bash
-	mkdir ~/.node
-	```
-   
-2. Adjust your node settings so that the global modules get installed locally for your login.
-	    
-	``` bash
-	npm config set prefix=~/.node
-	```
-      This is required because when you try to install modules globally (npm install -g), npm will install it in /usr/local/    and this will cause permission issues. In order to prevent this, adjust your node settings to install global modules     local for your login.
+    1. Create a .node folder from command line.
 
-3. Add this directory to your PATH.
-    
-   ``` bash
-   export PATH=$PATH:$HOME/.node/bin
-   ```
+        ``` bash
+        mkdir ~/.node
+        ```
+
+    2. Adjust your node settings so that the global modules get installed locally for your login.
+
+        ``` bash
+        npm config set prefix=~/.node
+        ```
+          This is required because when you try to install modules globally (npm install -g), npm will install it in /usr/local/    and this will cause permission issues. In order to prevent this, adjust your node settings to install global modules     local for your login.
+
+    3. Add this directory to your PATH.
+
+       ``` bash
+       export PATH=$PATH:$HOME/.node/bin
+       ```
 
 * Install homebrew if it's not already installed. Test if it's install by running `brew --version` if says not found, install homebrew with:
-	    
-	```
-	    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-	```
+
+    ```
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    ```
 * Install grunt with npm
-	``` bash
-	npm install -g grunt
-	npm install -g grunt-cli
-	```
-    
-* **qbui** project uses npm as its *package managers* and Grunt as its *task runner*. 
+    ``` bash
+    npm install -g grunt
+    npm install -g grunt-cli
+    ```
+
+* **qbui** project uses npm as its *package managers* and Grunt as its *task runner*.
 
     The top level of the project holds the CI Jenkins Gradle related files and the source for the ui is under the ui directory
 
-     Node modules are managed by package.json. 
+     Node modules are managed by package.json.
 
-    Grunt tasks are defined in the Gruntfile.js 
+    Grunt tasks are defined in the Gruntfile.js
 
-    
-* Then get the qbui project repo 
+
+* Then get the qbui project repo
 
     ```
     git clone -b master ssh://git@github.com/quickbase/qbui.git
@@ -88,7 +113,7 @@ FIRST - Do all the Quickbase java backend development [setup instructions](https
     git clone -b master https://github.com/QuickBase/qbui.git
     ```
 
-    *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12). 
+    *Note:* If you get an error about no developer tools found when executing git, make sure you have xCode from Apple installed (and the cli tools). Go to the AppStore application and [install xcode](http://itunes.apple.com/us/app/xcode/id497799835?ls=1&mt=12).
 
 ##Configuring
 Environment specific configurations reside in the qbui/ui/server/src/config/environment directory. The application requires a run-time environment to be defined and configured.  
@@ -104,7 +129,7 @@ Notes about the above configuration:
 
 SSL support is commented out.  See the section at the bottom of this README for setup instruction.
 
-Environment variable 'javaHost' points to a local instance rest endpoint.  Change to point to another server instance if not running Quickbase java backend locally. 
+Environment variable 'javaHost' points to a local instance rest endpoint.  Change to point to another server instance if not running Quickbase java backend locally.
 
 RUN-TIME configuration.
 
@@ -115,11 +140,11 @@ The following run-time environment variable is supported:
         For example:
 
         NODE_ENV=test
-        
+
         will load the test.js file for configuration, default is local.js
 
 
-##Instructions to run server and watch for changes 
+##Instructions to run server and watch for changes
 
 * `cd` to the \<project root\>qbui/ui directory.
 
@@ -132,52 +157,52 @@ The following run-time environment variable is supported:
 * Current urls supported
     * http://localhost:9000/
 
-###Note : 
+###Note :
  The Node Server only listen via a specific ip/hostname when running with dev hotloader,
  as the hotload server needs the ip of main express server. When running in production mode listen is just scoped to port, not ip.node -
 
 ## Testing
 cd to <project root>/qbui/ui directory
 ###Lint and Code Style tests
-Running `grunt codeStandards` will run the lint tasks. This task validates the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
+Running `grunt codeStandards` from will run the lint tasks. This task validates the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
 
 * Linting check [ESLint](http://eslint.org/docs/rules/) -
-	Look at the .eslintrc files for the lint rules and coding standards
-	and set the following settings for coding style errors to appear in the IDE inspection. (This step is manual due to difference user code paths)
+    Look at the .eslintrc files for the lint rules and coding standards
+    and set the following settings for coding style errors to appear in the IDE inspection. (This step is manual due to difference user code paths)
 
-	
-	*  In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` or `File/Other Settings... /Default Settings...` and then select the options for `Languages & Frameworks` then `Code Quality Tools` then `Javascript` and disable all the others but enable ESLint and set the following ESLint settings 
-	
-	*  ESLint dialog 
-    	* ![eslintDialogScreenShot.png](eslintDialogScreenShot.png) 
-	* Note: The lint and coding standards settings are found in `.eslintrc` file(s). Each directory can overide the general settings with its own .eslintrc file or in line a file can specify `/* eslint rule:value */` to override with comment statements. 
-	* The rules are based on several standards see [https://github.com/jscs-dev/node-jscs/tree/master/presets](https://github.com/jscs-dev/node-jscs/tree/master/presets)  as well as data from statistics on github open source code [http://sideeffect.kr/popularconvention#javascript](http://sideeffectkr/popularconvention#javascript
-	
-	* The ESLint setup in the above dialog will now run eslint with the Intellij `Analyze\Inspect Code...` feature and while you edit it will show errors in the left margin in red. 
-	
-	* ESLint is part of the build and build will fail if there are errors. 
 
-	* The script to run eslint from the command line is `NODE_ENV=local npm run lint` or to fix the stylistic [fixable errors][http://eslint.org/docs/rules/) run `NODE_ENV=local npm run lintFix` our build does lintFix. The lint npm script runs ` node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' .`
+    *  In the qbui Intellij project, go to Main Menu `Intellij IDEA/Preferences...` or `File/Other Settings... /Default Settings...` and then select the options for `Languages & Frameworks` then `Code Quality Tools` then `Javascript` and disable all the others but enable ESLint and set the following ESLint settings
 
-	
-	* Also to run the eslint on the source from Intellij *custom tool* with clickable links to error location, do the following 
-		1. Create a external tool (`IntelliJ\Preferences...\Tools\Exterenal Tools`) to run eslint using this
-		   - program: `npm`
-		   - parameters: `run lintFix`
-		   - working directory: `$ProjectFileDir$/ui`
-		       
-		2. Use an output filter like: 
-		
-		   ```bash
-		     $FILE_PATH$.*:$LINE$.*:$COLUMN$
-		    
-		   ```
-		   * For Example ![eslintExternalTool](eslintExternalTool.png)
-		   
-		3. When launching the tool now any eslint errors listed which have file location will be also clickable. Clicking will take you to the error location in the Intellij editor:
-		   ![](eslintErrorExample.png)
-       
-   
+    *  ESLint dialog
+        * ![eslintDialogScreenShot.png](eslintDialogScreenShot.png)
+    * Note: The lint and coding standards settings are found in `.eslintrc` file(s). Each directory can overide the general settings with its own .eslintrc file or in line a file can specify `/* eslint rule:value */` to override with comment statements.
+    * The rules are based on several standards see [https://github.com/jscs-dev/node-jscs/tree/master/presets](https://github.com/jscs-dev/node-jscs/tree/master/presets)  as well as data from statistics on github open source code [http://sideeffect.kr/popularconvention#javascript](http://sideeffectkr/popularconvention#javascript
+
+    * The ESLint setup in the above dialog will now run eslint with the Intellij `Analyze\Inspect Code...` feature and while you edit it will show errors in the left margin in red.
+
+    * ESLint is part of the build and build will fail if there are errors.
+
+    * The script to run eslint from the command line is `NODE_ENV=local npm run lint` or to fix the stylistic [fixable errors][http://eslint.org/docs/rules/) run `NODE_ENV=local npm run lintFix` our build does lintFix. The lint npm script runs ` node_modules/eslint/bin/eslint.js --ext .js --ext .jsx --format 'node_modules/eslint-friendly-formatter' .`
+
+
+    * Also to run the eslint on the source from Intellij *custom tool* with clickable links to error location, do the following
+        1. Create a external tool (`IntelliJ\Preferences...\Tools\Exterenal Tools`) to run eslint using this
+           - program: `npm`
+           - parameters: `run lintFix`
+           - working directory: `$ProjectFileDir$/ui`
+
+        2. Use an output filter like:
+
+           ```bash
+             $FILE_PATH$.*:$LINE$.*:$COLUMN$
+
+           ```
+           * For Example ![eslintExternalTool](eslintExternalTool.png)
+
+        3. When launching the tool now any eslint errors listed which have file location will be also clickable. Clicking will take you to the error location in the Intellij editor:
+           ![](eslintErrorExample.png)
+
+
 
 
 
@@ -221,7 +246,7 @@ a local DNS server (Dnsmasq):
 
         # Start Dnsmasq automatically when the OS starts:
         sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
-        
+
         #if you ever need to unload it use
         sudo launchctl remove homebrew.mxcl.dnsmasq
         sudo launchctl unload /Library/LaunchDaemons/homebrew.mxcl.dnsmasq.plist
@@ -266,7 +291,7 @@ To setup protractor e2e tests, you must first run
 
 Edit and configure your own copy of e2e.js located in qbui/ui/server/config/environment if needed.
 
-Use `grunt test:e2eLocal` to have protractor go through tests located in the `e2e` folder. You will need to have both your local node server 
+Use `grunt test:e2eLocal` to have protractor go through tests located in the `e2e` folder. You will need to have both your local node server
 and your java server running.
 
 See [Debugging UI](./DEBUGGING.md)
@@ -281,33 +306,33 @@ For more information on sauce visit: https://docs.saucelabs.com/
 
 To configure protractor to use different browsers, modify or add a file to the protractor configuration under qbui/ui/e2e/config.
 
-For all of the browser capabilities check out: 
+For all of the browser capabilities check out:
 
 http://www.ignoredbydinosaurs.com/2015/04/angular-protractor-tests-and-sauce-connect-config
-and 
+and
 https://www.browserstack.com/automate/capabilities
 
 ##Using Gradle to build distribution node server
-Gradle is used to build a production version of the node server and client application. 
+Gradle is used to build a production version of the node server and client application.
 
-Output from the Gradle Build and Test task is saved under the /build folder. 
+Output from the Gradle Build and Test task is saved under the /build folder.
 
 Supported Gradle tasks include:
 
         gradle build - cleans dist and build folder; builds deployable code in dist folder; runs unit tests; runs code coverage; creates zip file.
         gradle clean - cleans gradle build folder AND grunt dist folder
         gradle test  - cleans dist folder; runs unit tests; runs code coverage.  Equivalent to 'gradle clean test'
-        gradle (default) - equivalent to 'gradle clean test build' 
-  
+        gradle (default) - equivalent to 'gradle clean test build'
+
 To run a gradle task, cd to the dist dir and run:
- 
-        `npm install --production` 
-        
+
+        `npm install --production`
+
         which will install all the necessary modules for the release in node_modules under dist.
         NOTE: using --production will not include all the development node_modules needed to build/compile/compress/test the code.
 
 To run the production distribution node server, run one of the following (may need sudo):
-       
+
         NODE_ENV=aws PORT=9000 node server/app.js
         NODE_ENV=aws PORT=9000 npm start
 
@@ -315,7 +340,7 @@ To run the production distribution node server, run one of the following (may ne
 To start a node server with forever which ensures that a given node script runs continuously:
 
         NODE_ENV=aws PORT=9000 node_modules/forever/bin/forever start server/app.js
-    
+
 To stop a running node server with forever:
 
         NODE_ENV=aws PORT=9000 node_modules/forever/bin/forever stop server/app.js
@@ -399,7 +424,7 @@ Open a browser to verify.
 
 To stop or not accept SSL requests, comment out/remove the SSL_KEY object in your run-time environment configuration file...(ie: local.env.js).
 
-       
+
 
 ##Access REST endpoints over SSL
 Update the javahost run-time configuration parameter to use the https protocol and appropriate port.  For example, include the following
@@ -413,17 +438,17 @@ setting in the local.env.js file:
 POSSIBLE ISSUES -- and how to resolve
 
 1. First, since the ui has dependencies on the java backend make sure:
-    
-    1.1. your Tomcat server is running 
-    
+
+    1.1. your Tomcat server is running
+
     * see [Quickbase repo](https://github.com/QuickBase/QuickBase/raw/master/README.md)
-    
-    1.2. your Oracle DB is up 
-    
+
+    1.2. your Oracle DB is up
+
     * see [oracle vm setup info](https://wiki.intuit.com/display/qbasepd/Local+Oracle+Linux+VM+Setup)
-    
+
     1.3. your Node express server is running
-    
+
     * under this repo ui dir run 'grunt serve'
 
 2. When running unit tests, if the following error is outputted, it means PhantomJS is not installed on your machine:
@@ -436,10 +461,10 @@ POSSIBLE ISSUES -- and how to resolve
    manually install by running:
 
       npm install karma-phantomjs-launcher
-      
+
 3. If when running your node server you see ECONNREFUSED in the logs make sure you have followed the instructions for the DNS workaround on mac above
 
-      
+
 ##Other Resources
 
 * Links for learning Node, react, etc - [https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md]([https://github.com/QuickBase/QuickBaseUIProto/blob/development/ui/LEARNING.md)
@@ -459,7 +484,3 @@ Contributors
 + Mark Roper
 + Micah Zimring
 + Rick Beyer
-
-      
-      
-
