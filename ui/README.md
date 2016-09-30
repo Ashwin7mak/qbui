@@ -164,7 +164,7 @@ The following run-time environment variable is supported:
 ## Testing
 cd to <project root>/qbui/ui directory
 ###Lint and Code Style tests
-Running `grunt codeStandards` from will run the lint tasks. This task validates the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
+Running `grunt codeStandards`from `/qbui/ui` directory will run the lint tasks. This task validates the javascript follows best practices and ensures the code is formatted to our qbui coding styles.
 
 * Linting check [ESLint](http://eslint.org/docs/rules/) -
     Look at the .eslintrc files for the lint rules and coding standards
