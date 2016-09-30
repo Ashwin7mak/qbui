@@ -53,6 +53,10 @@
 
         transition: opacity .2s ease-in-out;
 
+        &:hover {
+            text-decoration: none;
+        }
+
         @include small-breakpoint {
             float: right;
             margin-left: 0;

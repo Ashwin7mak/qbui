@@ -61,6 +61,7 @@ const UrlFieldValueRenderer = React.createClass({
             return (
                 <a href={this.props.value} target={target} className={this.setLinkClasses()}>
                     {this.props.display}
+                    {this.renderIcon()}
                 </a>
             );
         }
@@ -81,7 +82,6 @@ const UrlFieldValueRenderer = React.createClass({
         return (
             <div className={classes}>
                 {this.renderLink()}
-                {this.renderIcon()}
             </div>
         );
 
