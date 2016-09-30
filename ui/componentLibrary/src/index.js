@@ -21,6 +21,9 @@ import './assets/componentLibrary.scss';
 
 import CheckBoxFieldValueEditorDoc from './docs/checkBoxFieldValueEditor';
 import CheckBoxFieldValueRendererDoc from './docs/checkBoxFieldValueRenderer';
+import DateFieldValueEditorDoc from './docs/dateFieldValueEditor.js';
+import DateTimeFieldValueEditorDoc from './docs/dateTimeFieldValueEditor.js';
+import DateTimeFieldValueRendererDoc from './docs/dateTimeFieldValueRenderer.js';
 import FieldValueEditorDoc from './docs/fieldValueEditor';
 import FieldValueRendererDoc from './docs/fieldValueRenderer';
 import MultiChoiceFieldValueEditorDoc from './docs/multiChoiceFieldValueEditor';
@@ -29,10 +32,14 @@ import NumericFieldValueEditorDoc from './docs/numericFieldValueEditor';
 import NumericFieldValueRendererDoc from './docs/numericFieldValueRenderer';
 import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
 import TextFieldValueRendererDoc from './docs/textFieldValueRenderer';
+import TimeFieldValueEditorDoc from './docs/timeFieldValueEditor.js';
+import TimeFieldValueRendererDoc from './docs/timeFieldValueRenderer.js';
 import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import UserFieldEditorDoc from './docs/userFieldValueEditor';
+
 import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
+
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -42,6 +49,9 @@ render((
             <IndexRedirect to="qbpanel" />
             <Route path="checkBoxFieldValueEditor" component={CheckBoxFieldValueEditorDoc} />
             <Route path="checkBoxFieldValueRenderer" component={CheckBoxFieldValueRendererDoc} />
+            <Route path="dateFieldValueEditor" component={DateFieldValueEditorDoc} />
+            <Route path="dateTimeFieldValueEditor" component={DateTimeFieldValueEditorDoc} />
+            <Route path="dateTimeFieldValueRenderer" component={DateTimeFieldValueRendererDoc} />
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
             <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
             <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
@@ -50,6 +60,8 @@ render((
             <Route path="numericFieldValueRenderer" component={NumericFieldValueRendererDoc} />
             <Route path="textfieldValueEditor" component={TextFieldValueEditorDoc} />
             <Route path="textFieldValueRenderer" component={TextFieldValueRendererDoc} />
+            <Route path="timeFieldValueEditor" component={TimeFieldValueEditorDoc} />
+            <Route path="timeFieldValueRenderer" component={TimeFieldValueRendererDoc} />
             <Route path="userFieldRenderer" component={UserFieldRendererDoc} />
             <Route path="userFieldEditor" component={UserFieldEditorDoc} />
             <Route path="qbpanel" component={QBPanelDoc} />
