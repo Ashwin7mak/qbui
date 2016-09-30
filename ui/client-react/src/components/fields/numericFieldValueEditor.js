@@ -129,6 +129,8 @@ const NumericFieldValueEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+        let width = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.width : null;
+
         let inputBox = <input ref="textInput"
                           className={classes}
                           value={this.props.display ? this.props.display : this.props.value}
@@ -136,7 +138,8 @@ const NumericFieldValueEditor = React.createClass({
                           key={'inp' + this.props.idKey}
                           placeholder={placeholder}
                           onChange={this.onChange}
-                          onBlur={this.onBlur}/>;
+                          onBlur={this.onBlur}
+                          size={width}/>;
 
 
         return  (this.props.isInvalid ?

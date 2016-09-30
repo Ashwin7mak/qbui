@@ -50,6 +50,7 @@ input[type="radio"], input[type="checkbox"] {
         box-shadow: none;
         border-bottom-right-radius: 2px;
         border-bottom-left-radius: 2px;
+        z-index: 3;
 
         .Select-menu {
             .Select-option {
