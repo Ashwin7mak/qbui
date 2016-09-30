@@ -19,6 +19,7 @@ apply plugin: 'com.moowork.node'
 apply plugin: 'org.sonarqube'
 apply plugin: 'sonarBuildBreak'
 apply plugin: 'com.bmuschko.cargo'
+apply plugin: 'maven'
 
 //grab the current working directory to use later on
 def cwd = project.getProjectDir().absolutePath
@@ -241,22 +242,6 @@ node {
 //  Gradle tasks
 //******************************************************
 
-task zip(type: Zip) {
-
-    archiveName = getProjectArchive()
-    destinationDir = file("$buildDir/distributions/")
-    zip64 = true
-
-    from ('dist') {
-        into('dist')
-    }
-}
-
-zip.doFirst {
-    println( "Assembling: " + getProjectArchive() )
-    println( "Branch : " + getProjectArchive() )
-}
-
 task clean_dist_node_modules(type: Delete) {
     delete 'dist/node_modules'
 }
@@ -466,10 +451,34 @@ task installExpress(type: NpmTask) {
     args = ['install', 'express', '--save-dev']
 }
 
+task zip(type: Zip) {
+    def branchName;
+    if (System.getProperty("GIT_BRANCH") != null) {
+        branchName = System.getProperty("GIT_BRANCH")
+    } else if (System.getenv("GIT_BRANCH") != null) {
+        branchName = System.getenv("GIT_BRANCH")
+    } else {
+        // indicate the branch is associated with an individual user
+        branchName = "user"
+    }
+
+    branchName = branchName.replaceAll("origin\\/", "");
+    if (!branchName.equals("master")) {
+        project.version = project.version + "-SNAPSHOT"
+    }
+
+    project.ext.zipArchiveName = project.name + "-" + project.version + ".zip"
+    destinationDir = file("$buildDir/distributions/")
+    zip64 = true
+
+    from ('dist') {
+        into('dist')
+    }
+}
+
 //******************************************************
 //  Define task dependencies
 //******************************************************
-
 zip.dependsOn clean, npmInstallProduction
 build.dependsOn clean, grunt_build
 clean.dependsOn grunt_clean, cleanBuildDir
@@ -477,56 +486,31 @@ test.dependsOn clean, gruntUnitTestsNoColor
 npmInstallProduction.dependsOn grunt_build, dumpSys
 
 
-// the directory for nightly builds used to release from
-project.group = "build_rpms"
 artifacts {
-    archives file: file("build/distributions/" + getProjectArchive()),
-        name: "${project.name}",
-        type: "zip",
-        builtBy: zip
+    archives file: file("build/distributions/" + project.ext.zipArchiveName),
+            name: "service",
+            type: "zip",
+            builtBy: zip
 }
 
-def ivyPasswd = System.getProperty("ivyPasswd", "");         // The IVY password for the Nexus repository
-def ivyUser = System.getProperty("ivyUser", "qbbuilds");     // By default use the qbbuilds user, password needs to be provided
-def paramBranch =  System.getProperty("GIT_BRANCH", "");
 
-/*
- Push the zip file with the build to the Nexus Repository.
- The repo is located at
-http://pppdc9prd0t4:8081/nexus/index.html#welcome
-
-username is admin
-pw -- ask OPS or Agave
-
-The zips go to the Phoenix repository under QuickBase/ui/ if they are versioned, and to the Snapshots repository if
-they are not versioned.
-
- */
 uploadArchives {
-    def uploadUrl = "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/"
-    def layoutStr = "[organisation]/[module]/[revision]/[artifact]-[revision](.[ext])"
-    // release archives vs dev  have different archive path on repo server dev builds go to nonrelease snapshot dir
-    // repo server policy for snapshots(update-able rpms) cannot live on release repo dirs
-    // organisation - Project.getGroup(): build_rpms
-    // module - Project.getName(): ui
-    // revision - Project.getVersion(): phoenix-1.0
-    if (isCIBuild()) {
-        uploadUrl += "/phoenix/"
-        layoutStr = getArchiveLayoutStr(false)
-    } else {
-        uploadUrl += "/snapshots/"
-        layoutStr = getArchiveLayoutStr(true)
-    }
     repositories {
-        ivy {
-            credentials {
-                username "${ivyUser}"
-                password "${ivyPasswd}"
+        mavenDeployer {
+            repository(url: project.ext.nexusRoot + "continuous-releases/") {
+                authentication(userName: project.ext.nexusUser, password: project.ext.nexusPassword)
             }
-            url "${uploadUrl}"
-            layout 'pattern' , {
-                artifact "${layoutStr}"
+            snapshotRepository(url: project.ext.nexusRoot + "continuous-snapshots/") {
+                authentication(userName: project.ext.nexusUser, password: project.ext.nexusPassword)
             }
+
+            addFilter('service') {artifact, file ->
+                artifact.name == 'service'
+            }
+
+            pom('service').groupId = project.group
+            pom('service').artifactId = project.name
+            pom('service').version = project.version
         }
     }
 }
@@ -546,9 +530,8 @@ sonarqube {
     def branchName = proc.in.text.replace("\n", "").replace("\r", "").trim()
     println 'branchName:' + branchName;
 
-    if (paramBranch) {
-        println 'paramBranch:' + paramBranch;
-        branchName = paramBranch;
+    if (branchName) {
+        println branchName;
     }
 
     properties {
@@ -604,20 +587,6 @@ def getReleasePrefix() {
         prefix += "_${user}"
     }
     return prefix
-}
-
-def getProjectArchive() {
-    return "${project.name}-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.zip"
-}
-
-def getArchiveLayoutStr(useBuildTime) {
-    def base = "[organisation]/[module]/[revision]/[artifact]-${getReleasePrefix()}_${getRpmVersion()}"
-    if (useBuildTime) {
-        base += getBuildTime()
-    } else {
-        base += "-${getRelease()}"
-    }
-    return "${base}(.[ext])"
 }
 
 def getBuildTime() {
