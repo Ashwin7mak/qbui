@@ -173,13 +173,14 @@ export let ReportContent = React.createClass({
         if (_.has(this.props, 'pendEdits.recordChanges')) {
             changes = _.cloneDeep(this.props.pendEdits.recordChanges);
         }
+        //add field to changes hash if field has not already been modified/added
         if (typeof (changes[change.fid]) === 'undefined') {
             changes[change.fid] = {};
+            changes[change.fid].fieldDef = change.fieldDef;
+            changes[change.fid].fieldName = _.has(change, 'fieldName') ? change.fieldName : null;
         }
         changes[change.fid].oldVal = _.has(change, 'values.oldVal') ? change.values.oldVal : null;
         changes[change.fid].newVal = _.has(change, 'values.newVal') ? change.values.newVal : null;
-        changes[change.fid].fieldName = _.has(change, 'fieldName') ? change.fieldName : null;
-
     },
 
     /**
@@ -253,12 +254,8 @@ export let ReportContent = React.createClass({
         //[{"id":6, "value":"Claire"}]
         Object.keys(recordChanges).forEach((recKey) => {
             //get each columns matching field description
-            let matchingField = null;
-            if (_.has(this.props, 'fields.fields.data')) {
-                matchingField = _.find(this.props.fields.fields.data, (field) => {
-                    return field.id === +recKey;
-                });
-            }
+            let matchingField = recordChanges[recKey].fieldDef;
+
             // only post the non built in fields values
             if (matchingField && matchingField.builtIn === false) {
                 let newValue = recordChanges[recKey].newVal.value;
@@ -269,10 +266,7 @@ export let ReportContent = React.createClass({
                 colChange.id = +recKey;
                 colChange.value = _.cloneDeep(newValue);
                 colChange.display = _.cloneDeep(newDisplay);
-                colChange.field = matchingField.datatypeAttributes;
-                if (colChange.field) {
-                    colChange.field.required = matchingField.required;
-                }
+                colChange.fieldDef = matchingField;
                 payload.push(colChange);
             }
         });
@@ -280,18 +274,12 @@ export let ReportContent = React.createClass({
         return payload;
     },
 
-    handleValidateFieldValue(def, value) {
-        let field;
+    handleValidateFieldValue(fieldDef, fieldName, value) {
         let results;
 
-        // get the field for this def
-        if (_.has(this.props, 'fields.fields.data')) {
-            field = _.find(this.props.fields.fields.data, (aField) => {
-                return field.id === +aField.id;
-            });
-        }
-        if (field) {
-            results = ValidationUtils.checkFieldValue(field, value);
+        // check the value against the fieldDef
+        if (fieldDef) {
+            results = ValidationUtils.checkFieldValue(fieldDef, fieldName, value);
             if (results.isInvalid) {
                 // format the message for the client
                 results.invalidMessage = ValidationMessage.getMessage(results);
@@ -300,15 +288,13 @@ export let ReportContent = React.createClass({
         return results;
     },
 
-    createColChange(value, display, field, payload) {
+    createColChange(value, display, fieldId, fieldDef, payload) {
         let colChange = {};
-        colChange.fieldName = field.name;
-        //the + before field.id is needed turn the field id from string into a number
-        colChange.id = +field.id;
+        colChange.fieldName = fieldDef.name;
+        colChange.id = fieldId;
         colChange.value = _.cloneDeep(value);
         colChange.display = _.cloneDeep(display);
-        colChange.field = field.datatypeAttributes;
-        colChange.field.required = field.required;
+        colChange.fieldDef = fieldDef;
         payload.push(colChange);
     },
 
@@ -328,7 +314,7 @@ export let ReportContent = React.createClass({
                                 newValue = "";
                             }
                             let newDisplay = this.props.pendEdits.originalRecord.fids[field.id].display;
-                            this.createColChange(newValue, newDisplay, field, list);
+                            this.createColChange(newValue, newDisplay, field.id, field, list);
                         }
                     }
                 }
@@ -356,21 +342,16 @@ export let ReportContent = React.createClass({
 
         let payload = [];
         // columns id and new values array
-        //[{"id":6, "value":"Claire"}]
+        //[{"id":6, "value":"Claire", "field":obj}]
 
 
         Object.keys(changes).forEach((key) => {
             let newValue = changes[key].newVal.value;
             let newDisplay = changes[key].newVal.display;
             if (_.has(this.props, 'pendEdits.originalRecord.fids')) {
+                // include only if value differs from original record value
                 if (newValue !== this.props.pendEdits.originalRecord.fids[key].value) {
-                    //get each columns matching field description
-                    if (_.has(this.props, 'fields.fields.data')) {
-                        let matchingField = _.find(this.props.fields.fields.data, (field) => {
-                            return field.id === +key;
-                        });
-                        this.createColChange(newValue, newDisplay, matchingField, payload);
-                    }
+                    this.createColChange(newValue, newDisplay, key, changes[key].fieldDef, payload);
                 }
             }
         });

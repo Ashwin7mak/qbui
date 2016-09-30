@@ -184,7 +184,7 @@ let AGGrid = React.createClass({
      */
     getSortAscText(column, prependText) {
         let message = " ";
-        switch (column.datatypeAttributes.type) {
+        switch (column.fieldDef.datatypeAttributes.type) {
         case "CHECKBOX": message =  "uncheckedToChecked"; break;
         case "TEXT":
         case "URL":
@@ -200,7 +200,7 @@ let AGGrid = React.createClass({
     },
     getSortDescText(column, prependText) {
         let message = " ";
-        switch (column.datatypeAttributes.type) {
+        switch (column.fieldDef.datatypeAttributes.type) {
         case "CHECKBOX": message =  "checkedToUnchecked"; break;
         case "TEXT":
         case "URL":
@@ -659,7 +659,7 @@ let AGGrid = React.createClass({
             return;
         }
 
-        // if field was in error remove error
+        // if field was in error remove error since a change was made
         if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
             // is the field being changed currently in error state if so remove error
             // and it will get re-validated on blur or save
@@ -683,7 +683,6 @@ let AGGrid = React.createClass({
                 });
             }
         }
-        this.props.onFieldChange(change);
     },
 
     handleRecordSaveClicked(id) {
@@ -701,8 +700,8 @@ let AGGrid = React.createClass({
     },
 
 
-    handleValidateFieldValue(def, value, checkRequired) {
-        let status = this.props.validateFieldValue(def, value, checkRequired);
+    handleValidateFieldValue(def, name, value, checkRequired) {
+        let status = this.props.validateFieldValue(def, name, value, checkRequired);
         let origErrors = this.state.rowEditErrors;
         let newErrors;
         let found = -1;
@@ -881,8 +880,8 @@ let AGGrid = React.createClass({
     getHeaderCellTemplate(column) {
 
         let {headerName} = column;
-        //if any of the columns has a units description add that in paratheses in a new line and raise the header height
-        let headerSubscript = column.datatypeAttributes && column.datatypeAttributes.unitsDescription ? '(' + column.datatypeAttributes.unitsDescription + ')' : null;
+        //if any of the columns has a units description add that in parentheses in a new line and raise the header height
+        let headerSubscript = column && column.fieldDef && column.fieldDef.datatypeAttributes && column.fieldDef.datatypeAttributes.unitsDescription ? '(' + column.fieldDef.datatypeAttributes.unitsDescription + ')' : null;
         let headerSubscriptHTML = "";
 
         if (headerSubscript) {
@@ -905,14 +904,17 @@ let AGGrid = React.createClass({
         if (columns) {
             let columnsData = columns.map((obj, index) => {
 
-                let {datatypeAttributes} = obj;
-
                 obj.headerClass = "gridHeaderCell";
                 obj.headerCellTemplate = this.getHeaderCellTemplate(obj);
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
 
+                let datatypeAttributes;
+                if (typeof obj.fieldDef !== 'undefined' &&
+                    typeof obj.fieldDef.datatypeAttributes !== 'undefined') {
+                    datatypeAttributes = obj.fieldDef.datatypeAttributes;
+                }
                 if (datatypeAttributes) {
                     for (let attr in datatypeAttributes) {
                         switch (attr) {
@@ -962,19 +964,6 @@ let AGGrid = React.createClass({
                         }
                     }
 
-                    // todo: this really be be done in the cell renderers instead
-                    if (datatypeAttributes.clientSideAttributes) {
-                        let clientSideAttributes = datatypeAttributes.clientSideAttributes;
-                        for (let cattr in clientSideAttributes) {
-                            switch (cattr) {
-                            case 'word_wrap':
-                                if (clientSideAttributes[cattr]) {
-                                    this.setCSSClass_helper(obj, "NoWrap");
-                                }
-                                break;
-                            }
-                        }
-                    }
                 }
                 return obj;
             });

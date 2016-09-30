@@ -52,19 +52,19 @@ const fakeReportData_after = {
                 id: 1,
                 field: "Record ID#",
                 headerName: "Record ID#",
-                datatypeAttributes: {type:"NUMERIC"}
+                fieldDef: {datatypeAttributes: {type:"NUMERIC"}}
             },
             {
                 id: 2,
                 field: "Text Field",
                 headerName: "Text Field",
-                datatypeAttributes: {type:"TEXT"}
+                fieldDef: {datatypeAttributes: {type:"TEXT"}}
             },
             {
                 id: 3,
                 field: "Numeric Field",
                 headerName: "Numeric Field",
-                datatypeAttributes: {type:"NUMERIC"}
+                fieldDef: {datatypeAttributes: {type:"NUMERIC"}}
             }]
     }
 };

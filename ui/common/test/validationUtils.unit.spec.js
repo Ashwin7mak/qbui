@@ -1,47 +1,52 @@
-import LimitConstants from '../src/limitConstants';
-import ValidationUtils from '../src/validationUtils';
+var LimitConstants = require('../src/limitConstants');
+var ValidationUtils = require('../src/validationUtils');
+var assert = require('assert');
 
-describe('test validateFieldValue', () => {
+describe.only('test validateFieldValue', () => {
 
     it('null field definition gets no errors', () => {
-        let def = null;
-        let value = "hello";
-        let result = ValidationUtils.checkFieldValue(def, value);
-        expect(result).not.toBeNull();
-        expect(result.isInvalid).toBeFalsy();
+        var def = null;
+        var name = null;
+        var value = "hello";
+        var result = ValidationUtils.checkFieldValue(def, name, value);
+        assert.notEqual(result, null);
+        assert.equal(result.isInvalid, false);
     });
 
     it('undefined field definition gets no errors', () => {
-        let def = undefined;
-        let value = "hello";
-        let result = ValidationUtils.checkFieldValue(def, value);
-        expect(result).not.toBeNull();
-        expect(result.isInvalid).toBeFalsy();
+        var def = undefined;
+        var name = undefined;
+        var value = "hello";
+        var result = ValidationUtils.checkFieldValue(def, name, value);
+        assert.notEqual(result, null);
+        assert.equal(result.isInvalid, false);
     });
 
     describe('required test', () => {
+        var name = 'testFieldRequired';
 
         describe('required with some value gets no errors', () => {
-            let dataProvider = [
+            var dataProvider = [
                 {test: '0 value ', value: 0},
                 {test: 'string value ', value: "this"},
                 {test: 'date object value', value: new Date()},
                 {test: 'object value', value: {this:'is an', object:44}},
                 {test: 'number value not error', value: -1223.34},
             ];
+
             dataProvider.forEach((data) => {
                 it(data.test, () => {
-                    let def = {required: true};
-                    let value = data.value;
-                    let result = ValidationUtils.checkFieldValue(def, value, true);
-                    expect(result).not.toBeNull();
-                    expect(result.isInvalid).toBeFalsy();
+                    var def = {fieldDef: {required: true}};
+                    var value = data.value;
+                    var result = ValidationUtils.checkFieldValue(def, name, value, true);
+                    assert.notEqual(result, null);
+                    assert.equal(result.isInvalid, false);
                 });
             });
         });
 
         describe('required with ', () => {
-            let dataProvider = [
+            var dataProvider = [
                 {test: 'null value gets error', value: null, isInvalid: true},
                 {test: 'empty string value gets error', value: "", isInvalid: true},
                 {test: 'undefined value gets error', value: undefined, isInvalid: true},
@@ -49,25 +54,25 @@ describe('test validateFieldValue', () => {
             ];
             dataProvider.forEach((data) => {
                 it(data.test, () => {
-                    let def = {required: true};
-                    let value = data.value;
-                    let result = ValidationUtils.checkFieldValue(def, value, true);
-                    expect(result).not.toBeNull();
-                    expect(result.isInvalid).toEqual(data.isInvalid);
+                    var def = {fieldDef: {required: true}};
+                    var value = data.value;
+                    var result = ValidationUtils.checkFieldValue(def, name, value, true);
+                    assert.notEqual(result, null);
+                    assert.equal(result.isInvalid, data.isInvalid);
                 });
             });
         });
     });
 
     describe('max field length test ', () => {
-        let maxChars = 4;
-        let def = {required: false, datatypeAttributes : {clientSideAttributes : {max_chars: maxChars}}};
-        let defSys = {required: false};
+        var maxChars = 4;
+        var def = {fieldDef: {required: false, datatypeAttributes : {clientSideAttributes : {max_chars: maxChars}}}};
+        var defSys = {fieldDef: {required: false}};
         var chance = require('chance').Chance();
-        let sysMaxString = chance.string({length: LimitConstants.maxTextFieldValueLength + 1});
+        var sysMaxString = chance.string({length: LimitConstants.maxTextFieldValueLength + 1});
+        var name = 'testField';
 
-
-        let dataProvider = [
+        var dataProvider = [
             {test: `max: ${maxChars}`, value: null, isInvalid: false, def: def},
             {test: `max: ${maxChars}`, value: undefined, isInvalid: false, def: def},
             {test: `max: ${maxChars}`, value: '', isInvalid: false, def: def},
@@ -81,10 +86,10 @@ describe('test validateFieldValue', () => {
         ];
         dataProvider.forEach((data) => {
             it(data.test + ` value:${data.value} expected isInvalid:${data.isInvalid}`, () => {
-                let value = data.value;
-                let result = ValidationUtils.checkFieldValue(data.def, value);
-                expect(result).not.toBeNull();
-                expect(result.isInvalid).toEqual(data.isInvalid);
+                var value = data.value;
+                var result = ValidationUtils.checkFieldValue(data.def, name, value);
+                assert.notEqual(result, null);
+                assert.equal(result.isInvalid, data.isInvalid);
             });
         });
     });

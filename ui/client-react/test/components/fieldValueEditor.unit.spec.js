@@ -117,7 +117,7 @@ describe('FieldValueEditor functions', () => {
 
     it('test onExitField', () => {
         var callbacks = {
-            validateFieldValue : function validateFieldValue(def, target) {},
+            validateFieldValue : function validateFieldValue(def, name, target) {},
             onValidated : function onValidated(def, target) {},
         };
         spyOn(callbacks, 'validateFieldValue').and.callThrough();

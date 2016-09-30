@@ -1069,41 +1069,46 @@ describe('ReportContent functions', () => {
 
     it('test handleRecordAdd', () => {
         let keyField = "id";
-        let edits = {
-            recordChanges:{
-                4:{
-                    fieldName : 'col_num',
-                    newVal: {value:"hi", display:"there"},
-                },
-                5:{
-                    fieldName : 'col_builtin',
-                    newVal: {value:"5", display:"no edit"},
-                },
-            }
-        };
         let attrs = {setting: true};
         let fieldsData = {
             fields : {
                 data: [
                     {
                         id: 4,
+                        name: 'col_num',
                         builtIn: false,
                         datatypeAttributes :attrs
                     },
                     {
                         id: 5,
+                        name :  'col_builtin',
                         builtIn: true
                     },
                 ]
             }
         };
+        let edits = {
+            recordChanges:{
+                4:{
+                    fieldName : 'col_num',
+                    fieldDef : fieldsData.fields.data[0],
+                    newVal: {value:"hi", display:"there"},
+                },
+                5:{
+                    fieldName : 'col_builtin',
+                    fieldDef : fieldsData.fields.data[1],
+                    newVal: {value:"5", display:"no edit"},
+                },
+            }
+        };
+
 
         let newRec = [{
             fieldName: 'col_num',
             id: 4,
             value: "hi",
             display: "there",
-            field: attrs
+            fieldDef: fieldsData.fields.data[0],
         }
         ];
         spyOn(flux.actions, 'saveNewReportRecord');
@@ -1129,6 +1134,10 @@ describe('ReportContent functions', () => {
         let edits = {recordChanges:{
             4:{
                 fieldName : 'col_num',
+                fieldDef : {
+                    name: 'col_num',
+                    id: 4
+                },
                 newVal: {value:"hi", display:"there"},
             },
         },

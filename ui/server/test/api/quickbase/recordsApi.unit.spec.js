@@ -477,7 +477,7 @@ describe("Validate recordsApi", function() {
         it('fail return results max_chars', function(done) {
             let testField =  {type: "TEXT", clientSideAttributes : {max_chars : 4}};
             req.url = '/records/2';
-            req.body = [{value: "12345", field: testField}];
+            req.body = [{value: "12345", fieldDef: testField}];
             let errType = dataErrorCodes.MAX_LEN_EXCEEDED;
             var promise = recordsApi.saveSingleRecord(req);
 
@@ -496,7 +496,7 @@ describe("Validate recordsApi", function() {
         it('fail return results required field', function(done) {
             let testField =  {type: "TEXT", required : true};
             req.url = '/records/2';
-            req.body = [{value: "", field: testField}];
+            req.body = [{value: "", fieldDef: testField}];
             var errType = dataErrorCodes.REQUIRED_FIELD_EMPTY;
             var promise = recordsApi.saveSingleRecord(req);
 

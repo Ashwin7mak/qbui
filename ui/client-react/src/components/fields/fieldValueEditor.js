@@ -61,8 +61,12 @@ const FieldValueEditor = React.createClass({
         type: React.PropTypes.number,
 
         /**
-         * a field definition see swagger field & coldef */
+         * a field definition see swagger field */
         fieldDef: React.PropTypes.object,
+
+        /**
+         * a  name to use for this field */
+        fieldName: React.PropTypes.string,
 
         /**
          * listen for changes by setting a callback to the onChange prop.  */
@@ -127,7 +131,8 @@ const FieldValueEditor = React.createClass({
             tabIndex: "0",
             idKey : this.props.idKey,
             ref:"fieldInput",
-            fieldDef: this.props.fieldDef
+            fieldDef: this.props.fieldDef,
+            fieldName: this.props.fieldName
         };
 
         // Only allow the Record ID field to be a renderer, not an editor
@@ -226,7 +231,7 @@ const FieldValueEditor = React.createClass({
         //on aggrid redraw, and on qbgrid set state
         if (this.props.validateFieldValue && this.props.onValidated) {
             let fldValue = value ? value : ReactDOM.findDOMNode(this.refs.fieldInput).value;
-            let results = this.props.validateFieldValue(this.props.fieldDef, fldValue);
+            let results = this.props.validateFieldValue(this.props.fieldDef, this.props.fieldName, fldValue);
             this.props.onValidated(results);
         }
     },

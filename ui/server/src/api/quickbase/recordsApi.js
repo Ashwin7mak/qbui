@@ -484,9 +484,9 @@
         if (req.body && req.body.length) {
             //look at each change
             req.body.forEach((change) => {
-                if (change && change.field) {
+                if (change && change.fieldDef) {
                     // validate it
-                    let results = ValidationUtils.checkFieldValue(change.field, change.value);
+                    let results = ValidationUtils.checkFieldValue(change.fieldDef, change.fieldName, change.value, true);
                     if (results.isInvalid) {
                         errors.push(results);
                     }

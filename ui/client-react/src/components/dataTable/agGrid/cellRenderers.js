@@ -136,18 +136,26 @@ const CellRenderer = React.createClass({
         let isEditable = true;
 
         // built in fields are not editable
-        if (typeof this.props.colDef.builtIn !== 'undefined' &&  this.props.colDef.builtIn) {
+        if (typeof this.props.colDef.fieldDef !== 'undefined' &&
+            typeof this.props.colDef.fieldDef.builtIn !== 'undefined' &&  this.props.colDef.fieldDef.builtIn) {
             isEditable = false;
         }
-        // field must be scalar
-        if (typeof this.props.colDef.type !== 'undefined' &&  this.props.colDef.type !== consts.SCALAR) {
+        // field must be scalar (a non-generated field value)
+        if (typeof this.props.colDef.fieldType !== 'undefined' &&  this.props.colDef.fieldType !== consts.SCALAR) {
             isEditable = false;
         }
         // field must be editable i.e. user editable not a restricted value
-        if (typeof this.props.colDef.userEditableValue !== 'undefined' && !this.props.colDef.userEditableValue) {
+        if (typeof this.props.colDef.fieldDef !== 'undefined' &&
+            typeof this.props.colDef.fieldDef.userEditableValue !== 'undefined' && !this.props.colDef.fieldDef.userEditableValue) {
             isEditable = false;
         }
 
+
+        let attributes = null;
+        if (typeof this.props.colDef.fieldDef !== 'undefined' &&
+            typeof this.props.colDef.fieldDef.datatypeAttributes !== 'undefined') {
+            attributes = this.props.colDef.fieldDef.datatypeAttributes;
+        }
 
         let key = CellRendererFactory.getCellKey(this.props);
 
@@ -194,7 +202,7 @@ const CellRenderer = React.createClass({
                                        key={key + '-dsp'}
                                        idKey={key + '-dsp'}
                                        display={this.state.valueAndDisplay.display}
-                                       attributes={this.props.colDef.datatypeAttributes}/>
+                                       attributes={attributes}/>
                 }
             </span>);
     },
@@ -222,7 +230,8 @@ const CellRenderer = React.createClass({
                 },
                 recId: this.props.params.data[this.props.params.context.uniqueIdentifier].value,
                 fid: +this.props.params.colDef.id,
-                fieldName: this.props.params.column.colId
+                fieldName: this.props.params.column.colId,
+                fieldDef: this.props.params.colDef.fieldDef
             };
             this.props.params.context.onFieldChange(change);
         }
@@ -258,10 +267,10 @@ export const TextCellRenderer = React.createClass({
     render() {
         let format = FieldFormats.TEXT_FORMAT;
         if (this.props.params && this.props.params.column && this.props.params.column.colDef &&
-            this.props.params.column.colDef.datatypeAttributes &&
-            this.props.params.column.colDef.datatypeAttributes.clientSideAttributes &&
-            this.props.params.column.colDef.datatypeAttributes.clientSideAttributes.num_lines &&
-            this.props.params.column.colDef.datatypeAttributes.clientSideAttributes.num_lines > 1) {
+            this.props.params.column.colDef.fieldDef &&  this.props.params.column.colDef.fieldDef.datatypeAttributes &&
+            this.props.params.column.colDef.fieldDef.datatypeAttributes.clientSideAttributes &&
+            this.props.params.column.colDef.fieldDef.datatypeAttributes.clientSideAttributes.num_lines &&
+            this.props.params.column.colDef.fieldDef.datatypeAttributes.clientSideAttributes.num_lines > 1) {
             format = FieldFormats.MULTI_LINE_TEXT_FORMAT;
         }
         return CellRendererFactory.makeCellRenderer(format, this.props);

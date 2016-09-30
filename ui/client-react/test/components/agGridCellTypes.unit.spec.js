@@ -40,9 +40,9 @@ describe('AGGrid cell editor functions', () => {
                 display: "TestingTextCell"
             },
             column: {
-                colDef: {
+                colDef: {fieldDef: {
                     type : consts.SCALAR
-                }
+                }}
             }
         };
 
@@ -71,10 +71,12 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    type : consts.SCALAR,
-                    datatypeAttributes: {
-                        clientSideAttributes: {
-                            num_lines: 4
+                    fieldDef: {
+                        type: consts.SCALAR,
+                        datatypeAttributes: {
+                            clientSideAttributes: {
+                                num_lines: 4
+                            }
                         }
                     }
                 }
@@ -104,6 +106,9 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
+                    fieldDef : {
+
+                    }
                 }
             }
         };
@@ -133,7 +138,7 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    type : consts.FORMULA
+                    fieldType : consts.FORMULA,
                 }
             }
         };
@@ -158,10 +163,12 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    type : consts.SCALAR,
-                    datatypeAttributes: {
-                        type: "NUMERIC"
-                    }
+                    fieldDef: {
+                        type : consts.SCALAR,
+                        datatypeAttributes: {
+                            type: "NUMERIC"
+                        }
+                    },
                 }
             }
         };
@@ -189,7 +196,9 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    type : consts.SCALAR
+                    fieldDef: {
+                        type: consts.SCALAR
+                    }
                 }
             }
         };
@@ -215,8 +224,10 @@ describe('AGGrid cell editor functions', () => {
             column: {
                 colDef: {
                     type : consts.SCALAR,
-                    datatypeAttributes: {
-                        dateFormat: "MM-dd-uuuu"
+                    fieldDef: {
+                        datatypeAttributes: {
+                            dateFormat: "MM-dd-uuuu"
+                        }
                     }
                 }
             }
@@ -244,9 +255,11 @@ describe('AGGrid cell editor functions', () => {
             column: {
                 colDef: {
                     type : consts.SCALAR,
-                    datatypeAttributes: {
-                        showTime: true,
-                        dateFormat: "MM-DD-YYYY hh:mm:ss"
+                    fieldDef: {
+                        datatypeAttributes: {
+                            showTime: true,
+                            dateFormat: "MM-DD-YYYY hh:mm:ss"
+                        }
                     }
                 }
             }
@@ -282,9 +295,11 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    datatypeAttributes: {
-                        showTime: false,
-                        dateFormat: "MM-DD-YYYY hh:mm:ss"
+                    fieldDef: {
+                        datatypeAttributes: {
+                            showTime: false,
+                            dateFormat: "MM-DD-YYYY hh:mm:ss"
+                        }
                     }
                 }
             }
@@ -310,10 +325,12 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    type : consts.SCALAR,
-                    datatypeAttributes: {
-                        dateFormat: "MM-DD-YYYY",
-                        showTime: true
+                    fieldDef: {
+                        type : consts.SCALAR,
+                        datatypeAttributes: {
+                            dateFormat: "MM-DD-YYYY",
+                            showTime: true
+                        }
                     }
                 }
             }
@@ -338,9 +355,10 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-
-                    datatypeAttributes: {},
-                    type : consts.SCALAR
+                    fieldDef: {
+                        datatypeAttributes: {},
+                        type: consts.SCALAR
+                    }
                 }
             }
         };
@@ -356,8 +374,10 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    datatypeAttributes: {},
-                    type : consts.SCALAR
+                    fieldDef: {
+                        datatypeAttributes: {},
+                        type: consts.SCALAR
+                    }
                 }
             }
         };
@@ -374,8 +394,10 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    datatypeAttributes: {},
-                    type : consts.SCALAR
+                    fieldDef: {
+                        datatypeAttributes: {},
+                        type: consts.SCALAR
+                    }
                 }
             }
         };

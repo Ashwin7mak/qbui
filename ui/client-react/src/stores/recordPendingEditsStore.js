@@ -88,6 +88,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
         this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
         this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
+        this.recordChanges[payload.changes.fid].fieldDef = payload.changes.fieldDef;
         this.currentEditingAppId = payload.appId;
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = payload.recId;
