@@ -354,7 +354,7 @@ const SortAndGroup = React.createClass({
                 howToGroup: GroupTypes.COMMON.equals  //  default group type
             };
 
-            // either an object or string
+            // either an object: {fid,sortOrder,groupType} or string: fid:groupType
             if (typeof originalVal === "string") {
                 let origValParts = originalVal.split(ReportUtils.groupDelimiter);
                 if (origValParts.length === 2) {
