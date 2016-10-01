@@ -40,7 +40,8 @@ module.exports = function(config) {
                             path.resolve(__dirname, "client-react/src"),
                             path.resolve(__dirname, "client-react/test"),
                             path.resolve(__dirname, "componentLibrary/src"),
-                            path.resolve(__dirname, "componentLibrary/test")
+                            path.resolve(__dirname, "componentLibrary/test"),
+                            path.resolve(__dirname, "common/test")
                         ],
                         exclude: [nodeModulesPath, nodeComponentsPath],
                         loader: "babel-loader",
