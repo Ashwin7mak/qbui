@@ -48,13 +48,14 @@
             return baseValue;
         },
         stripProtocol: function(url) {
-            var protocolRegex = new RegExp(`^(.{2,5}${getProtocolStringForRegex()}):?`, 'i');
+            var protocolRegex = new RegExp('^(.{2,5}' + getProtocolStringForRegex() + '):?', 'i');
             return url.replace(protocolRegex, '');
         },
         protocolIsMissingFrom: function(url) {
-            return url === this.stripProtocol(url);
+            return (url === this.stripProtocol(url));
         },
-        addProtocol: function(url, protocol = 'http://') {
+        addProtocol: function(url, protocol) {
+            protocol = (protocol ? protocol : 'http://');
             if (this.protocolIsMissingFrom(url)) {
                 url = protocol + url;
             }
