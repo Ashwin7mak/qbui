@@ -47,9 +47,13 @@
             }
             return baseValue;
         },
+        protocolRegex: new RegExp('^(.{2,5}' + getProtocolStringForRegex() + '):?', 'i'),
+        getProtocolFromUrl: function(url) {
+            var protocolMatch = url.match(this.protocolRegex);
+            return (protocolMatch === null ? null : protocolMatch[0].split(':')[0]);
+        },
         stripProtocol: function(url) {
-            var protocolRegex = new RegExp('^(.{2,5}' + getProtocolStringForRegex() + '):?', 'i');
-            return url.replace(protocolRegex, '');
+            return url.replace(this.protocolRegex, '');
         },
         protocolIsMissingFrom: function(url) {
             return (url === this.stripProtocol(url));

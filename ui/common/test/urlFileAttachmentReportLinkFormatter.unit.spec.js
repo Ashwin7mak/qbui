@@ -1,6 +1,43 @@
 var urlFileAttachmentReportLinkFormatter = require('../src/formatter/urlFileAttachmentReportLinkFormatter');
 
 describe('urlFileAttachmentReportLinkFormatter', () => {
+    describe('getProtocol', () => {
+        let testCases = [
+            {
+                name: 'Returns the protocol if it is http',
+                url: 'http://quickbase.com',
+                expectation: 'http'
+            },
+            {
+                name: 'Returns the protocol if it is https',
+                url: 'https://www.quickbase.com',
+                expectation: 'https'
+            },
+            {
+                name: 'Returns special prococols (tel)',
+                url: 'tel:555-555-5555',
+                expectation: 'tel'
+            },
+            {
+                name: 'Returns special protocols (sms)',
+                url: 'sms:555-555-5555',
+                expectation: 'sms'
+            },
+            {
+                name: 'Returns special protocols (mailto)',
+                url: 'mailto:test@quickbase.com',
+                expectation: 'mailto'
+            }
+        ];
+
+        testCases.forEach(function(testCase) {
+            it(testCase.name, () => {
+                let protocol = urlFileAttachmentReportLinkFormatter.getProtocolFromUrl(testCase.url);
+                expect(protocol).toBe(testCase.expectation);
+            });
+        });
+    });
+
     describe('stripProtocol', () => {
         let expectedUrl = 'quickbase.com';
 
