@@ -13,10 +13,6 @@
         }
     }
 
-    .link {
-
-    }
-
     .btn {
         &.btn-default {
             @include urlButtonBackgroundGradient();
@@ -50,12 +46,9 @@
         float: none;
         margin-left: 10px;
         opacity: 0;
+        text-decoration: none;
 
         transition: opacity .2s ease-in-out;
-
-        &:hover {
-            text-decoration: none;
-        }
 
         @include small-breakpoint {
             float: right;

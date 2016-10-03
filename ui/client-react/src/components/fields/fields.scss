@@ -2,6 +2,14 @@
 
 $data-font-size: $font-size-p;
 
+@mixin text-input-focus {
+    outline: none;
+    border: solid 1px $input-text-focus-border-color;
+    //Added border-color for multi choice text box
+    border-color: $input-text-focus-border-color !important;
+    @include focus-shadow();
+}
+
 // plain user data
 .data {
   color : $data-color;
@@ -18,62 +26,47 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of input userdata
-[type="text"].input,
-[type="url"].input,
-[type="email"].input {
-  background-color: $input-bg-color;
+[type="text"],
+[type="url"],
+[type="email"] {
+    .input {
+        background-color: $input-bg-color;
+    }
+
+    // layout of input userdata in an inline edit table
+    .reportTable & {
+        margin: 0 0 0 1px;
+        padding: 0 0 0 2px;
+        width: inherit;
+        height:  30px;
+    }
+
+    &:focus.input {
+        @include text-input-focus;
+    }
+
+    // visual style of input error
+    .textField.error &.input, &.input.error {
+        border-top: 1px solid $input-text-error-border-color;
+        border-right: 1px solid  $input-text-error-border-color;
+        border-bottom: 1px solid $input-text-error-border-color;
+        border-left: 5px solid $input-text-error-border-color;
+        box-shadow: none;
+    }
+
+    // visual style of focus input error
+    .textField.error &:focus.input, &:focus.input.error {
+        outline: none;
+        border-top: 1px solid $input-text-error-border-color;
+        border-right: 1px solid  $input-text-error-border-color;
+        border-bottom: 1px solid $input-text-error-border-color;
+        border-left: 5px solid $input-text-error-border-color;
+        @include focus-shadow($input-text-error-border-color);
+    }
 }
 
-// layout of input userdata in an inline edit table
-.reportTable [type="text"].input,
-.reportTable [type="url"].input,
-.reportTable [type="email"].input {
-  margin: 0 0 0 1px;
-  padding: 0 0 0 2px;
-  width: inherit;
-  height:  30px;
-}
-
-// visual style of focus input shadow
-[type="text"]:focus.input,
-[type="url"]:focus.input,
-[type="email"]:focus.input,
-  textarea:focus,
-  .is-focused:not(.is-open)>.Select-control {
-  outline: none;
-  border: solid 1px $input-text-focus-border-color;
-  //Added border-color for multi choice text box
-  border-color: $input-text-focus-border-color !important;
-  @include focus-shadow();
-}
-
-// visual style of input error
-.textField.error [type="text"].input,
-.textField.error [type="url"].input,
-.textField.error [type="email"].input,
-[type="text"].input.error,
-[type="url"].input.error,
-[type="email"].input.error {
-  border-top: 1px solid $input-text-error-border-color;
-  border-right: 1px solid  $input-text-error-border-color;
-  border-bottom: 1px solid $input-text-error-border-color;
-  border-left: 5px solid $input-text-error-border-color;
-  box-shadow: none;
-}
-
-// visual style of focus input error
-.textField.error [type="text"]:focus.input,
-.textField.error [type="url"]:focus.input,
-.textField.error [type="email"]:focus.input,
-[type="text"]:focus.input.error,
-[type="url"]:focus.input.error,
-[type="email"]:focus.input.error {
-  outline: none;
-  border-top: 1px solid $input-text-error-border-color;
-  border-right: 1px solid  $input-text-error-border-color;
-  border-bottom: 1px solid $input-text-error-border-color;
-  border-left: 5px solid $input-text-error-border-color;
-  @include focus-shadow($input-text-error-border-color);
+textarea:focus, .is-focused:not(.is-open)>.Select-control {
+    @include text-input-focus;
 }
 
 .invalidRecord.tooltip >.tooltip-arrow,
