@@ -1,14 +1,8 @@
 import React from 'react';
 import QBicon from '../components/qbIcon/qbIcon.js';
+import UrlFileAttachmentReportLinkFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 
 const UrlUtils = {
-    getProtocolFromUrl(url) {
-        if (url && url.length) {
-            return url.split(':')[0];
-        } else {
-            return null;
-        }
-    },
     getIconForProtocol(protocol) {
         switch (protocol) {
         case 'tel':
@@ -27,7 +21,7 @@ const UrlUtils = {
         }
     },
     renderIconForUrl(url) {
-        let protocol = UrlUtils.getProtocolFromUrl(url);
+        let protocol = UrlFileAttachmentReportLinkFormatter.getProtocolFromUrl(url);
 
         if (protocol && protocol !== '') {
             return (
