@@ -6,19 +6,17 @@ import TextFieldValueEditor from './textFieldValueEditor';
 const UrlFieldValueEditor = React.createClass({
     displayName: 'UrlFieldValueEditor',
     propTypes: {
-        /*
-        * The value of the URL (e.g., https://quickbase.com) */
+
+        /**
+        * The value of the URL (e.g., https://quickbase.com).
+        * **Note:** The display prop is set dynamically based on the value. */
         value: PropTypes.string,
 
-        /*
-        * Which protocols are allowed for a URL (e.g., HTTP, HTTPS. FTP, etc.).
-        * By default anything allowed. */
-        allowedProtocols: PropTypes.array
+        onBlur: PropTypes.func
     },
     getDefaultProps() {
         return {
-            value: '',
-            allowedProtocols: []
+            value: ''
         };
     },
     onBlur(updatedValues) {
