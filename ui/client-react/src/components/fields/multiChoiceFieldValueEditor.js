@@ -74,6 +74,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
      */
     getSelectItems() {
         let choices = this.props.choices;
+        let selectedValue = this.state.choice ? this.state.choice : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
         if (this.props.showAsRadio) {
             choices = choices ?
                 choices.map(choice => {
@@ -83,10 +84,9 @@ const MultiChoiceFieldValueEditor = React.createClass({
                                    onBlur={this.onBlur}>
                         <input type="radio" name={this.props.radioGroupName}
                                value={choice.coercedValue.value}
-                               checked={this.state.choice === choice.coercedValue.value}
+                               checked={selectedValue === choice.coercedValue.value}
                                onChange={this.onClick}/>
                         {choice.displayValue}
-                        <br />
                     </label>);
                 }) : [];
             // Add none option if the field is not required
@@ -97,9 +97,9 @@ const MultiChoiceFieldValueEditor = React.createClass({
                                     onBlur={this.onBlur}>
                     <input type="radio" name={this.props.radioGroupName}
                            value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
-                           onChange={this.onClick}/>
+                           onChange={this.onClick}
+                           checked={selectedValue === CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
                     <I18nMessage message={"noneOption"} />
-                    <br />
                 </label>);
             }
             return choices;

@@ -270,8 +270,12 @@ let QBForm = React.createClass({
             sectionTitle = section.headerElement.FormHeaderElement.displayText;
         }
 
+        let classes = 'formSection';
+        if (section.pseudo) {
+            classes += ' pseudo';
+        }
         return (
-            <QBPanel className="formSection"
+            <QBPanel className={classes}
                      title={sectionTitle}
                      key={"section" + section.orderIndex}
                      isOpen={true}
