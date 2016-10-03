@@ -12,8 +12,15 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 let ReportManagerTrowser = React.createClass({
     mixins: [FluxMixin],
+
+    propTypes: {
+        visible: React.PropTypes.bool,
+        reportsData: React.PropTypes.object,
+        filterReportsName: React.PropTypes.string,
+        selectedTable: React.PropTypes.object
+    },
     /**
-     * get trowser content (report nav for now)
+     * get trowser content
      */
     getTrowserContent() {
         let selectReport = (report) => {
