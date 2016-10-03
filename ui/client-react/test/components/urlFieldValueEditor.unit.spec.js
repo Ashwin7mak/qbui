@@ -8,6 +8,7 @@ describe('UrlFieldValueEditor', () => {
     let component;
     let placeholderText = 'www.example.com'; // Specified in https://quickbase.atlassian.net/wiki/display/qbasepd/Error+messages
     let testUrl = 'www.google.com';
+    let testUrlWithProtocol = 'http://www.google.com';
     let testDisplayUrl = "Don't edit me";
 
     let MockParent = React.createClass({
@@ -20,8 +21,17 @@ describe('UrlFieldValueEditor', () => {
         onChange(newValue) {
             this.setState({url: newValue});
         },
+        onBlur(updatedValueObject) {
+            this.setState(updatedValueObject);
+        },
         render() {
-            return <UrlFieldValueEditor value={this.state.value} display={this.state.displayUrl} onChange={this.onChange} />;
+            return (
+                <UrlFieldValueEditor value={this.state.value}
+                                     display={this.state.display}
+                                     onChange={this.onChange}
+                                     onBlur={this.onBlur}
+                                     fieldDef={{datatypeAttributes: {displayProtocol: false}}}/>
+            );
         }
     });
 
@@ -45,34 +55,9 @@ describe('UrlFieldValueEditor', () => {
     });
 
     it('formats the url for display onBlur', () => {
-        let testUrl = 'www.test.com';
-        let testUrlWithProtocol = 'http://' + testUrl;
-
-        let MockParent = React.createClass({
-            getInitialState() {
-                return {
-                    value: testUrl,
-                    display: testUrl
-                };
-            },
-            onChange(newValue) {
-                this.setState({value: newValue});
-            },
-            onBlur(updatedValueObject) {
-                this.setState(updatedValueObject);
-            },
-            render() {
-                return (
-                    <UrlFieldValueEditor value={this.state.value}
-                                         display={this.state.display}
-                                         onChange={this.onChange}
-                                         onBlur={this.onBlur}
-                                         fieldDef={{datatypeAttributes: {displayProtocol: false}}}/>
-                );
-            }
-        });
-
         component = TestUtils.renderIntoDocument(<MockParent />);
+        component.setState({value: testUrl, display: ''});
+
         let input = ReactDOM.findDOMNode(component);
 
         Simulate.blur(input, {
