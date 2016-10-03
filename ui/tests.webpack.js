@@ -11,6 +11,3 @@ clientReactModules.keys().forEach(clientReactModules);
 
 var compLibraryModules = require.context('./componentLibrary/test', true, /.unit.spec.js$/);
 compLibraryModules.keys().forEach(compLibraryModules);
-
-var commonModules = require.context('./common/test', true, /.unit.spec.js$/);
-commonModules.keys().forEach(commonModules);
