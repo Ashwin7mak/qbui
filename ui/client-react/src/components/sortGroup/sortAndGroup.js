@@ -14,7 +14,7 @@ import MockData from '../../mocks/sortGroup';
 import * as query from '../../constants/query';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import constants from '../../../../common/src/constants';
-import * as GroupTypes from '../../../../common/src/groupTypes';
+import {GROUP_TYPE} from '../../../../common/src/groupTypes';
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';
 
@@ -268,7 +268,7 @@ const SortAndGroup = React.createClass({
         item.decendOrder = false;
         item.type = type;
         if (type === KIND.GROUP) {
-            item.howToGroup = GroupTypes.COMMON.equals;
+            item.howToGroup = GROUP_TYPE.COMMON.equals;
         }
         item.unparsedVal = this.getUnparsedVal(item, type);
         item.name = field.name;
@@ -351,7 +351,7 @@ const SortAndGroup = React.createClass({
             let groupItem = {
                 unparsedVal : originalVal,
                 type: KIND.GROUP,
-                howToGroup: GroupTypes.COMMON.equals  //  default group type
+                howToGroup: GROUP_TYPE.COMMON.equals  //  default group type
             };
 
             // either an object: {fid,sortOrder,groupType} or string: fid:groupType
