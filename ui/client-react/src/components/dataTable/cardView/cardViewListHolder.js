@@ -307,6 +307,10 @@ let CardViewListHolder = React.createClass({
         this.refs.cardViewListWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
+    /**
+     * card edit action callbac, edit in trowser
+     * @param recordId
+     */
     openRecordForEdit(recordId) {
 
         const flux = this.getFlux();

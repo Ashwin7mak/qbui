@@ -104,15 +104,15 @@ export let Nav = React.createClass({
         }
     },
 
-    componentDidUpdate() {
-
+    /**
+     * open existing or new record in trowser if editRec param exists
+     */
+    updateRecordTrowser() {
         const {appId, tblId, rptId} = this.props.params;
 
         const editRec = this.props.location.query.editRec;
 
         if (this.props.location.query.editRec && !this.state.nav.trowserOpen && !this.state.form.formLoading) {
-
-            const ignoreRec = editRec === "new";
 
             const flux = this.getFlux();
 
@@ -121,11 +121,16 @@ export let Nav = React.createClass({
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             } else {
-                flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", false).then(() => {
+                flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit").then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             }
         }
+    },
+
+    componentDidUpdate() {
+
+        this.updateRecordTrowser();
     },
 
     render() {

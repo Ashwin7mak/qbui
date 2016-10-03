@@ -41,7 +41,7 @@
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
 
         routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
-        routeToGetFunction[routeConsts.FORM_COMPONENTS_ONLY] = fetchFormComponentsOnly;
+        routeToGetFunction[routeConsts.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT] = fetchReport;
@@ -351,7 +351,7 @@
      * @param req
      * @param res
      */
-    function fetchFormComponentsOnly(req, res) {
+    function fetchFormComponents(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
 
@@ -379,7 +379,7 @@
      * @param req
      * @param res
      */
-    function fetchFormComponents(req, res) {
+    function fetchFormAndRecordComponents(req, res) {
         let perfLog = perfLogger.getInstance();
         perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
 

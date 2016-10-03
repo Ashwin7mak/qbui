@@ -10,7 +10,7 @@ var logger = new Logger();
  */
 let FormStore = Fluxxor.createStore({
 
-    initialize: function() {
+    initialize() {
         this.formData = {};
         this.formLoading = false;
         this.errorStatus = null;
@@ -27,24 +27,24 @@ let FormStore = Fluxxor.createStore({
 
         this.logger = new Logger();
     },
-    onLoadForm: function() {
+    onLoadForm() {
         this.formLoading = true;
         this.errorStatus = null;
         this.emit("change");
     },
-    onLoadFormFailed: function(errorStatus) {
+    onLoadFormFailed(errorStatus) {
         this.formLoading = false;
         this.formData = {};
         this.errorStatus = errorStatus;
         this.emit("change");
     },
-    onLoadFormSuccess: function(formData) {
+    onLoadFormSuccess(formData) {
         this.formLoading = false;
         this.formData = formData;
         this.errorStatus = null;
         this.emit('change');
     },
-    getState: function() {
+    getState() {
         return {
             formData: this.formData,
             formLoading: this.formLoading,

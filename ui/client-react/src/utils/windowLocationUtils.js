@@ -45,6 +45,11 @@ class WindowLocationUtils {
         return window.location.hostname.split(".")[0];
     }
 
+    /**
+     * push current url with key=value query param
+     * @param key
+     * @param value
+     */
     static pushWithQuery(key, value) {
 
         let urlQueryString = document.location.search;
@@ -65,6 +70,9 @@ class WindowLocationUtils {
         browserHistory.push(location.pathname + params);
     }
 
+    /**
+     * push current url without query params
+     */
     static pushWithoutQuery() {
 
         browserHistory.push(location.pathname);

@@ -175,6 +175,10 @@ let CardView = React.createClass({
             this.props.onRowClicked(this.props.data);
         }
     },
+
+    /**
+     * edit card callback
+     */
     onEditAction() {
         this.props.onEditAction(this.props.data);
     },

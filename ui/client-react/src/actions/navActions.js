@@ -7,7 +7,7 @@ let navActions = {
 
     /**
      * show trowser
-     * @param content
+     * @param content "reports", "editRecord" etc. - see trowserConstants.js
      */
     showTrowser(content) {
         this.dispatch(actions.SHOW_TROWSER, content);

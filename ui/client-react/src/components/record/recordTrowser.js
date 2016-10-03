@@ -12,8 +12,20 @@ import * as SchemaConsts from "../../constants/schema";
 import {browserHistory} from 'react-router';
 let FluxMixin = Fluxxor.FluxMixin(React);
 
+/**
+ * trowser containing a record component
+ */
 let RecordTrowser = React.createClass({
     mixins: [FluxMixin],
+
+    propTypes: {
+        appId: React.PropTypes.string,
+        tblId: React.PropTypes.string,
+        recId: React.PropTypes.string,
+        visible: React.PropTypes.bool,
+        form: React.PropTypes.object,
+        pendEdits: React.PropTypes.object
+    },
     /**
      * get trowser content (report nav for now)
      */

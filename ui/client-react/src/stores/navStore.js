@@ -9,7 +9,7 @@ let logger = new Logger();
 
 let NavStore = Fluxxor.createStore({
 
-    initialize: function() {
+    initialize() {
         this.state = {
             leftNavVisible: false,
             leftNavExpanded: true,
@@ -43,37 +43,37 @@ let NavStore = Fluxxor.createStore({
         );
     },
 
-    onChangeLocale: function() {
+    onChangeLocale() {
         logger.debug('changing locale: ' + Locale.getLocale());
         this.setLocaleBundle();
         this.emit('change');
     },
-    onShowTrowser: function(content) {
+    onShowTrowser(content) {
         this.state.trowserOpen = true;
         this.state.trowserContent = content;
         this.emit('change');
     },
-    onHideTrowser: function() {
+    onHideTrowser() {
         this.state.trowserOpen = false;
         this.emit('change');
     },
-    onSetTopTitle: function(title) {
+    onSetTopTitle(title) {
         this.state.topTitle = title;
         this.emit('change');
     },
-    onShowTopNav: function() {
+    onShowTopNav() {
         this.state.showTopNav = true;
         this.emit('change');
     },
-    onHideTopNav: function() {
+    onHideTopNav() {
         this.state.showTopNav = false;
         this.emit('change');
     },
-    onToggleSearch: function() {
+    onToggleSearch() {
         this.state.searchBarOpen = !this.state.searchBarOpen;
         this.emit('change');
     },
-    onSearching: function(searching) {
+    onSearching(searching) {
         this.state.searching = searching;
         this.emit('change');
     },
@@ -85,7 +85,7 @@ let NavStore = Fluxxor.createStore({
      * toggle left nav visible (small breakpoint state)
      * @param visible force visible/hidden
      */
-    onToggleLeftNavVisible: function(visible) {
+    onToggleLeftNavVisible(visible) {
         if (visible === false || visible === true) {
             this.state.leftNavVisible = visible;
         } else {
@@ -97,7 +97,7 @@ let NavStore = Fluxxor.createStore({
      * toggle left nav expanded/collapsed (non-small breakpoint state)
      * @param expanded force expanded/collapsed
      */
-    onToggleLeftNavExpanded: function(expanded) {
+    onToggleLeftNavExpanded(expanded) {
         if (expanded === false || expanded === true) {
             this.state.leftNavExpanded = expanded;
         } else {
@@ -109,7 +109,7 @@ let NavStore = Fluxxor.createStore({
      * toggle apps list
      * @param show force shown/hidden
      */
-    onToggleAppsList: function(show) {
+    onToggleAppsList(show) {
         if (show === false || show === true) {
             this.state.appsListOpen = show;
         } else {
@@ -118,16 +118,16 @@ let NavStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onScrollingReport: function(scrolling) {
+    onScrollingReport(scrolling) {
         this.state.scrollingReport = scrolling;
         this.emit('change');
     },
 
-    getState: function() {
+    getState() {
         return this.state;
     },
 
-    setLocaleBundle: function() {
+    setLocaleBundle() {
         this.state.i18n = Locale.getI18nBundle();
     }
 });
