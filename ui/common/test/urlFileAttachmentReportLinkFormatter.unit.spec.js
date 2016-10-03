@@ -1,5 +1,6 @@
 'use strict';
 
+var assert = require('assert');
 var urlFileAttachmentReportLinkFormatter = require('../src/formatter/urlFileAttachmentReportLinkFormatter');
 
 describe('urlFileAttachmentReportLinkFormatter', () => {
@@ -35,7 +36,7 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
         testCases.forEach(function(testCase) {
             it(testCase.name, () => {
                 let protocol = urlFileAttachmentReportLinkFormatter.getProtocolFromUrl(testCase.url);
-                expect(protocol).toBe(testCase.expectation);
+                assert.equal(protocol, testCase.expectation);
             });
         });
     });
@@ -114,7 +115,7 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
         testCases.forEach(function(testCase) {
             it(testCase.name, () => {
                 let formattedUrl = urlFileAttachmentReportLinkFormatter.stripProtocol(testCase.data);
-                expect(formattedUrl).toBe(testCase.expectation);
+                assert.equal(formattedUrl, testCase.expectation);
             });
         });
     });
@@ -158,7 +159,7 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
         testCases.forEach(function(testCase) {
             it(testCase.name, () => {
                 let formattedUrl = urlFileAttachmentReportLinkFormatter.format(testCase.fieldValue, testCase.fieldInfo);
-                expect(formattedUrl).toBe(testCase.expectation);
+                assert.equal(formattedUrl, testCase.expectation);
             });
         });
     });
@@ -184,7 +185,7 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
 
         testCases.forEach(function(testCase) {
             it(testCase.name, () => {
-                expect(urlFileAttachmentReportLinkFormatter.protocolIsMissingFrom(testCase.url)).toBe(testCase.expectation);
+                assert.equal(urlFileAttachmentReportLinkFormatter.protocolIsMissingFrom(testCase.url), testCase.expectation);
             });
         });
     });
