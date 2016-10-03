@@ -9,9 +9,9 @@
     'use strict';
 
     // Load the page objects
-    var ReportServicePage = requirePO('reportService');
-    var CurrentStackLoginPage = requirePO('currentStackLogin');
-    var CurrentStackReportsPage = requirePO('currentStackReports');
+    var ReportServicePage = require('../pages/reportService.po');
+    var CurrentStackLoginPage = require('../pages/currentStackLogin.po');
+    var CurrentStackReportsPage = require('../pages/currentStackReports.po');
 
     var reportServicePage = new ReportServicePage();
     var currentStackLoginPage = new CurrentStackLoginPage();

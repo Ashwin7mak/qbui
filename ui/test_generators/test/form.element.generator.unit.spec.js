@@ -5,7 +5,7 @@
 (function() {
     'use strict';
 
-    var formElementGenerator = require('../form.element.geneartor');
+    var formElementGenerator = require('../form.element.generator');
     var formElementConstants = require('../form.element.constants');
     var constant = require('../../common/src/constants');
     var _ = require('lodash');
@@ -48,40 +48,40 @@
                     var targetElements = formElementGenerator.generateDefaultElements(entry.testFields);
 
                     entry.testFields.forEach(function(element) {
-                        if (targetElements[element.id].fieldId !== element.id) {
+                        if (targetElements[element.id].FormFieldElement.fieldId !== element.id) {
                             assert.fail('Expected field Id ' + element.id + ' to match actual field Id ' + targetElements[element.id].fieldId);
                         }
-                        if (typeof targetElements[element.id].required === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.required === "undefined") {
                             assert.fail('Expected required field to be set ');
                         }
-                        if (typeof targetElements[element.id].useAlternateLabel === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.useAlternateLabel === "undefined") {
                             assert.fail('Expected useAlternateLabel field to be set ');
                         }
-                        if (typeof targetElements[element.id].useAlternateLabel === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.useAlternateLabel === "undefined") {
                             assert.fail('Expected useAlternateLabel field to be set ');
                         }
-                        if (typeof targetElements[element.id].orderIndex === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.orderIndex === "undefined") {
                             assert.fail('Expected orderIndex field to be set ');
                         }
-                        if (typeof targetElements[element.id].readOnly === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.readOnly === "undefined") {
                             assert.fail('Expected readOnly field to be set ');
                         }
-                        if (typeof targetElements[element.id].positionSameRow === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.positionSameRow === "undefined") {
                             assert.fail('Expected positionSameRow field to be set ');
                         }
-                        if (typeof targetElements[element.id].displayText === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.displayText === "undefined") {
                             assert.fail('Expected displayText field to be set ');
                         }
-                        if (typeof targetElements[element.id].labelPosition === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.labelPosition === "undefined") {
                             assert.fail('Expected labelPosition field to be set ');
                         }
-                        if (typeof targetElements[element.id].type === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.type === "undefined") {
                             assert.fail('Expected type field to be set ');
                         }
-                        if (typeof targetElements[element.id].displayOptions === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.displayOptions === "undefined") {
                             assert.fail('Expected displayOptions field to be set ');
                         }
-                        if (typeof targetElements[element.id].displayText === "undefined") {
+                        if (typeof targetElements[element.id].FormFieldElement.displayText === "undefined") {
                             assert.fail('Expected displayText field to be set ');
                         }
                     });
@@ -95,18 +95,19 @@
          */
         describe('test form header element', function() {
             it('Test case (header element check): ', function(done) {
-                var targetHeasderElements = formElementGenerator.generateDefaultHeaderElement();
+                var targetHeaderElementsObject = formElementGenerator.generateDefaultHeaderElement();
+                var targetHeaderElements = targetHeaderElementsObject.FormHeaderElement;
 
-                if (typeof targetHeasderElements[formElementConstants.elementKeys.TYPE] === "undefined") {
+                if (typeof targetHeaderElements[formElementConstants.elementKeys.TYPE] === "undefined") {
                     assert.fail('Expected type field to be set ');
                 }
-                if (typeof targetHeasderElements[formElementConstants.elementKeys.LAB_POSITION] === "undefined") {
+                if (typeof targetHeaderElements[formElementConstants.elementKeys.LAB_POSITION] === "undefined") {
                     assert.fail('Expected labelPosition field to be set ');
                 }
-                if (typeof targetHeasderElements[formElementConstants.elementKeys.DISPLAY_OPTIONS] === "undefined") {
+                if (typeof targetHeaderElements[formElementConstants.elementKeys.DISPLAY_OPTIONS] === "undefined") {
                     assert.fail('Expected displayOptions field to be set ');
                 }
-                if (typeof targetHeasderElements[formElementConstants.elementKeys.DISPLAY_TEXT] === "undefined") {
+                if (typeof targetHeaderElements[formElementConstants.elementKeys.DISPLAY_TEXT] === "undefined") {
                     assert.fail('Expected displayText field to be set ');
                 }
 
@@ -115,4 +116,3 @@
         });
     });
 }());
-
