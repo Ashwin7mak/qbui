@@ -308,11 +308,10 @@ let CardViewListHolder = React.createClass({
     },
 
     openRecordForEdit(recordId) {
-        const {appId, tblId, rptId} = this.props.reportData;
 
         const flux = this.getFlux();
 
-        flux.actions.openRecordForEdit(appId, tblId, rptId, recordId);
+        flux.actions.openRecordForEdit(recordId);
     },
     render() {
         let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];

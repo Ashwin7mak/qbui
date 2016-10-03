@@ -65,11 +65,9 @@ const ReportRoute = React.createClass({
      */
     editNewRecord() {
 
-        const {appId, tblId, rptId} = this.props.params;
-
         const flux = this.getFlux();
 
-        flux.actions.editNewRecord(appId, tblId, rptId);
+        flux.actions.editNewRecord();
     },
 
     getPageActions(maxButtonsBeforeMenu) {

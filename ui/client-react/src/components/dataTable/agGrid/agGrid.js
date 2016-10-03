@@ -375,12 +375,11 @@ let AGGrid = React.createClass({
      */
     openRecordForEdit(data) {
 
-        const {appId, tblId, rptId} = this.props;
         const recordId = data[this.props.uniqueIdentifier].value;
 
         const flux = this.getFlux();
 
-        flux.actions.openRecordForEdit(appId, tblId, rptId, recordId);
+        flux.actions.openRecordForEdit(recordId);
     },
 
     /**

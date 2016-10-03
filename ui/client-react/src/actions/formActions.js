@@ -10,7 +10,6 @@ import {browserHistory} from 'react-router';
 
 let logger = new Logger();
 
-
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
 //  because the core application code has no logic implemented to handle a rejected
@@ -25,12 +24,12 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let formActions = {
 
-    openRecordForEdit(appId, tblId, rptId = null, recordId = null) {
+    openRecordForEdit(recordId) {
 
         WindowLocationUtils.pushWithQuery("editRec", recordId);
     },
 
-    editNewRecord(appId, tblId, rptId = null) {
+    editNewRecord() {
 
         WindowLocationUtils.pushWithQuery("editRec", "new");
     },

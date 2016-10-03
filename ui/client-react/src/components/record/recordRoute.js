@@ -153,13 +153,11 @@ export let RecordRoute = React.createClass({
      * edit the selected record in the trowser
      * @param data row record data
      */
-    openRecordForEdit(data) {
-
-        const {appId, tblId, rptId, recordId} = this.props.params;
+    openRecordForEdit() {
 
         const flux = this.getFlux();
 
-        flux.actions.openRecordForEdit(appId, tblId, rptId, recordId);
+        flux.actions.openRecordForEdit(this.props.params.recordId);
     },
     /**
      * edit the selected record in the trowser
@@ -167,11 +165,9 @@ export let RecordRoute = React.createClass({
      */
     editNewRecord() {
 
-        const {appId, tblId, rptId} = this.props.params;
-
         const flux = this.getFlux();
 
-        flux.actions.editNewRecord(appId, tblId, rptId);
+        flux.actions.editNewRecord();
     },
     getPageActions() {
 
