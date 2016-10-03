@@ -16,25 +16,29 @@ let FormStore = Fluxxor.createStore({
         this.errorStatus = null;
 
         this.bindActions(
-            actions.LOAD_FORM_AND_RECORD, this.onLoadFormAndRecord,
-            actions.LOAD_FORM_AND_RECORD_SUCCESS, this.onLoadFormAndRecordSuccess,
-            actions.LOAD_FORM_AND_RECORD_FAILED, this.onLoadFormAndRecordFailed
+            actions.LOAD_FORM_AND_RECORD, this.onLoadForm,
+            actions.LOAD_FORM_AND_RECORD_SUCCESS, this.onLoadFormSuccess,
+            actions.LOAD_FORM_AND_RECORD_FAILED, this.onLoadFormFailed,
+
+            actions.LOAD_FORM, this.onLoadForm,
+            actions.LOAD_FORM_SUCCESS, this.onLoadFormSuccess,
+            actions.LOAD_FORM_FAILED, this.onLoadFormFailed
         );
 
         this.logger = new Logger();
     },
-    onLoadFormAndRecord: function() {
+    onLoadForm: function() {
         this.formLoading = true;
         this.errorStatus = null;
         this.emit("change");
     },
-    onLoadFormAndRecordFailed: function(errorStatus) {
+    onLoadFormFailed: function(errorStatus) {
         this.formLoading = false;
         this.formData = {};
         this.errorStatus = errorStatus;
         this.emit("change");
     },
-    onLoadFormAndRecordSuccess: function(formData) {
+    onLoadFormSuccess: function(formData) {
         this.formLoading = false;
         this.formData = formData;
         this.errorStatus = null;

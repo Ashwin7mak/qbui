@@ -206,7 +206,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
-            var promise = formsApi.fetchFormComponents(req);
+            var promise = formsApi.fetchFormComponents(req, true);
             promise.then(
                 function(response) {
                     assert.deepEqual(response, expectedSuccessResponse);
@@ -248,7 +248,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
-            var promise = formsApi.fetchFormComponents(req);
+            var promise = formsApi.fetchFormComponents(req, true);
             promise.then(
                 function(response) {
                     assert.deepEqual(response, expectedSuccessResponse);
@@ -289,7 +289,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
-            var promise = formsApi.fetchFormComponents(req);
+            var promise = formsApi.fetchFormComponents(req, true);
             promise.then(
                 function(response) {
                     assert.deepEqual(response, expectedSuccessResponse);
@@ -327,7 +327,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.resolve({record: expectedSuccessResponse.record, fields: expectedSuccessResponse.fields}));
 
-            var promise = formsApi.fetchFormComponents(req);
+            var promise = formsApi.fetchFormComponents(req, true);
 
             promise.then(
                 function(response) {
@@ -367,7 +367,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({body:bodyFields}));
             fetchRecordStub.returns(Promise.reject(error_message));
 
-            var promise = formsApi.fetchFormComponents(req);
+            var promise = formsApi.fetchFormComponents(req, true);
 
             promise.then(
                 function(response) {
@@ -392,7 +392,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.reject({message:'someError', status:errorStatus}));
             fetchRecordStub.returns(Promise.reject({message:'someError', status:errorStatus}));
 
-            var promise = formsApi.fetchFormComponents(req);
+            var promise = formsApi.fetchFormComponents(req, true);
 
             promise.then(
                 function(response) {
@@ -417,7 +417,7 @@ describe('Validate FormsApi unit tests', function() {
             fetchTableFieldsStub.returns(Promise.resolve({}));
             fetchRecordStub.returns(Promise.resolve({}));
 
-            var promise = formsApi.fetchFormComponents(req);
+            var promise = formsApi.fetchFormComponents(req, true);
 
             promise.then(
                 function(response) {

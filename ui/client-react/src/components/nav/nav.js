@@ -114,9 +114,16 @@ export let Nav = React.createClass({
             const ignoreRec = editRec === "new";
 
             const flux = this.getFlux();
-            flux.actions.loadFormAndRecord(appId, tblId, ignoreRec ? "1" : editRec, rptId, "edit", ignoreRec).then(() => {
-                flux.actions.showTrowser("editRecord");
-            });
+
+            if (editRec === "new") {
+                flux.actions.loadForm(appId, tblId, rptId, "edit").then(() => {
+                    flux.actions.showTrowser("editRecord");
+                });
+            } else {
+                flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", false).then(() => {
+                    flux.actions.showTrowser("editRecord");
+                });
+            }
         }
     },
 

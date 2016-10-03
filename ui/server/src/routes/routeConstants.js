@@ -37,7 +37,7 @@
         //
         //  TABLE ENDPOINTS for FORM, RECORD and REPORT
         FORM_COMPONENTS         : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
-
+        FORM_COMPONENTS_ONLY    : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',
         RECORD                  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
         RECORDS                 : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
         RECORDS_BULK            : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/bulk',

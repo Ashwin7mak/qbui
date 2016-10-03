@@ -35,7 +35,40 @@ let formActions = {
         WindowLocationUtils.pushWithQuery("editRec", "new");
     },
 
-    loadFormAndRecord(appId, tblId, recordId, rptId, formType, ignoreRecord = false) {
+    loadForm(appId, tblId, rptId, formType) {
+
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            if (appId && tblId) {
+                this.dispatch(actions.LOAD_FORM);
+
+                let formService = new FormService();
+                formService.getForm(appId, tblId, rptId, formType).then(
+                    (response) => {
+                        resolve();
+
+                        response.data.record = null;
+                        this.dispatch(actions.LOAD_FORM_SUCCESS, response.data);
+                    },
+                    (error) => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        if (error.response.status === 403) {
+                            logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
+                        }
+                        this.dispatch(actions.LOAD_FORM_FAILED, error.response.status);
+                        reject();
+                    }
+                );
+            } else {
+                logger.error('formService.loadFormAndRecord: Missing required input parameters.');
+                reject();
+            }
+        });
+    },
+
+    loadFormAndRecord(appId, tblId, recordId, rptId, formType) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && recordId) {
@@ -46,9 +79,6 @@ let formActions = {
                     (response) => {
                         resolve();
 
-                        if (ignoreRecord) {
-                            response.data.record = null;
-                        }
                         this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS, response.data);
                     },
                     (error) => {
