@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 
+import UrlFileAttachmentReportLinkFormatter from '../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import TextFieldValueEditor from './textFieldValueEditor';
 
 const UrlFieldValueEditor = React.createClass({
@@ -20,12 +21,20 @@ const UrlFieldValueEditor = React.createClass({
             allowedProtocols: []
         };
     },
+    onBlur(updatedValues) {
+        // Format the displayed url before passing up to the parent
+        updatedValues.display = UrlFileAttachmentReportLinkFormatter.format(updatedValues, this.props.fieldDef.datatypeAttributes);
+        if (this.props.onBlur) {
+            this.props.onBlur(updatedValues);
+        }
+    },
     render() {
-        let {value, display, ...otherProps} = this.props;
+        let {value, display, onBlur, ...otherProps} = this.props;
 
         return <TextFieldValueEditor inputType="url"
                                      value={value}
                                      placeholder="www.example.com"
+                                     onBlur={this.onBlur}
                                      {...otherProps} />;
     }
 });

@@ -43,4 +43,42 @@ describe('UrlFieldValueEditor', () => {
 
         expect(domComponent.placeholder).toEqual(placeholderText);
     });
+
+    it('formats the url for display onBlur', () => {
+        let testUrl = 'www.test.com';
+        let testUrlWithProtocol = 'http://' + testUrl;
+
+        let MockParent = React.createClass({
+            getInitialState() {
+                return {
+                    value: testUrl,
+                    display: testUrl
+                };
+            },
+            onChange(newValue) {
+                this.setState({value: newValue});
+            },
+            onBlur(updatedValueObject) {
+                this.setState(updatedValueObject);
+            },
+            render() {
+                return (
+                    <UrlFieldValueEditor value={this.state.value}
+                                         display={this.state.display}
+                                         onChange={this.onChange}
+                                         onBlur={this.onBlur}
+                                         fieldDef={{datatypeAttributes: {displayProtocol: false}}}/>
+                );
+            }
+        });
+
+        component = TestUtils.renderIntoDocument(<MockParent />);
+        let input = ReactDOM.findDOMNode(component);
+
+        Simulate.blur(input, {
+            value: testUrlWithProtocol
+        });
+
+        expect(component.state.display).toEqual(testUrl);
+    });
 });
