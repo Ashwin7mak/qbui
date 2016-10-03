@@ -17,7 +17,7 @@
             return {
                 build: function() {
                     if (formTabSections.length > 0) {
-                        formTabUnderConstruction[formTabConstants.tabKeys.SECTIONS] = formTabSections;
+                        formTabUnderConstruction[formTabConstants.tabKeys.SECTIONS] = formTabSections[0];
                     }
                     return formTabUnderConstruction;
                 },
@@ -36,7 +36,7 @@
                 withSection: function(section) {
                     formTabSections.push(section);
                     return this;
-                },
+                }
             };
         }
     };

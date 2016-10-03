@@ -21,12 +21,12 @@
 
         builder: function() {
             var formUnderConstruction = {};
-            var formTabs = [];
+            var formTabs = {};
 
             return {
                 build: function() {
-                    if (formTabs.length > 0) {
-                        formUnderConstruction[formConstants.formKeys.FORM_TABS] = formTabs;
+                    if (formTabs[0]) {
+                        formUnderConstruction[formConstants.formKeys.FORM_TABS] = formTabs[0];
                     }
                     return formUnderConstruction;
                 },
@@ -102,15 +102,9 @@
                     return this;
                 },
                 withTab: function(tab) {
-                    formTabs.push(tab);
+                    formTabs[0] = tab;
                     return this;
-                },
-                withAdditionalTabs: function(tabs) {
-                    formTabs.concat(tabs);
-                },
-                withTabs: function(tabs) {
-                    formTabs = tabs;
-                },
+                }
             };
         }
     };

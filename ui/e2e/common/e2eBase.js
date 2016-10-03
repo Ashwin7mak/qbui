@@ -37,7 +37,7 @@
             // Initialize the service modules to use the same base class
             appService: appService(recordBase),
             recordService: recordService(recordBase),
-            tableService: tableService(),
+            tableService: tableService(recordBase),
             reportService: reportService(recordBase),
             formService: formService(recordBase),
             // Initialize the utils class
@@ -259,6 +259,153 @@
                 };
                 return tableToFieldToFieldTypeMap;
             },
+
+            /*
+             * Setup method that generates an application, table, report and a specified number of records
+             * Creates an App, 1 2 Tables with all Field Types, 10 Records, 1 List All Report with all Features and 1 Form to go with it
+             */
+            defaultSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
+                var createdApp;
+                // Use map of tables passed in or create default
+                if (!tableToFieldToFieldTypeMap) {
+                    tableToFieldToFieldTypeMap  = e2eConsts.createDefaultTableMap();
+                }
+
+                // Use num of records to generate or use 25 by default to enable paging
+                if (!numberOfRecords) {
+                    numberOfRecords  = e2eConsts.MAX_PAGING_SIZE + 5;
+                }
+
+                e2eBase.setUp();
+                // Generate the app JSON object
+                var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
+                // Create the app via the API
+                return e2eBase.appService.createApp(generatedApp).then(function(app) {
+                    createdApp = app;
+                    // Count how many tables in map and loop over them to create records and reports
+                    var numberOfTables = createdApp.tables.length;
+                    var createAppPromises = [];
+
+                    for (var i = 0; i < numberOfTables; i++) {
+                        // Get the appropriate fields out of the Create App response (specifically the created field Ids)
+                        var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[i]);
+                        // Generate the record JSON objects
+                        var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, numberOfRecords);
+
+                        // Create 1 duplicate record
+                        var clonedArray = JSON.parse(JSON.stringify(generatedRecords));
+                        var dupRecord = clonedArray[0];
+                        // Edit the numeric and date fields so we can check the second level sort (ex: 6.7)
+                        dupRecord.forEach(function(field) {
+                            if (field.id === 7) {
+                                field.value = 1.90;
+                            }
+                            if (field.id === 11) {
+                                field.value = '1977-12-12';
+                            }
+                        });
+                        // Add the duplicate record back in to create via API
+                        generatedRecords.push(dupRecord);
+
+                        // Generate 1 empty record
+                        var generatedEmptyRecord = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
+                        // Add the empty record back in to create via API
+                        generatedRecords.push(generatedEmptyRecord);
+
+                        // Via the API create records
+                        createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        // Create a list all report for the table
+                        createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[i].id, 'Table ' + (i + 1) + ' List All Report', null, null, null, null));
+
+                        //TODO: Users Roles and Permissions
+                        //TODO: Custom table homepage based on role
+                    }
+                    // Create a default form for each table (uses the app JSON)
+                    createAppPromises.push(e2eBase.formService.createDefaultForms(createdApp));
+
+                    // Send all requests via Promise.all
+                    return Promise.all(createAppPromises);
+                }).then(function() {
+                    // Set default table homepage for Table 1
+                    return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[0].id, 1);
+                }).then(function() {
+                    // Set default table homepage for Table 2
+                    return e2eBase.tableService.setDefaultTableHomePage(createdApp.id, createdApp.tables[1].id, 1);
+                }).then(function() {
+                    return createdApp;
+                }).catch(function(e) {
+                    // Catch any errors and reject the promise with it
+                    return Promise.reject(new Error('Error during defaultSetup: ' + e.message));
+                });
+            },
+
+            /*
+             * Setup function that will create you all currently supported report types. Calls the default setup functions as well.
+             * @param numRecords is how many records will be generated per table
+             */
+            fullReportsSetup: function(numRecords) {
+                var createdApp;
+
+                return this.defaultSetup(null, numRecords).then(function(createdAppResponse) {
+                    createdApp = createdAppResponse;
+
+                    var TEXT_FID = 6;
+                    var NUMERIC_FID = 7;
+                    var DATE_FID = 11;
+                    var CHECKBOX_FID = 15;
+
+                    // We know the structure of table 1 so can hard code here to generate some more report types
+                    // Only show Text, Numeric, Date and Checkbox fields on the report
+                    var fids = [TEXT_FID, NUMERIC_FID, DATE_FID, CHECKBOX_FID];
+                    // TODO: Going to have to extend this for grouping once implementation is complete
+                    // Second level sort, first ascending on the Text field and then descending on the Numeric field
+                    var sortList = [
+                        {
+                            "fieldId": TEXT_FID,
+                            "sortOrder": "asc",
+                            "groupType": null
+                        },
+                        {
+                            "fieldId": NUMERIC_FID,
+                            "sortOrder": "desc",
+                            "groupType": null
+                        }
+                    ];
+                    // Use the Text field and Checkbox field for facets
+                    var facetFids = [TEXT_FID, CHECKBOX_FID];
+                    var reportIds = [];
+
+                    //TODO: Had issue using promise.all here, it wasn't creating all the reports even though was getting responses from all 4 calls
+                    // Create report with fids
+                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null).then(function(rid1) {
+                        reportIds.push(rid1);
+                        // Create report with sortList
+                        return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null).then(function(rid2) {
+                            reportIds.push(rid2);
+                            // Create report with facetFids
+                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null).then(function(rid3) {
+                                reportIds.push(rid3);
+                                // Create report with all params defined
+                                return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null).then(function(rid4) {
+                                    reportIds.push(rid4);
+                                    return reportIds;
+                                });
+                            });
+                        });
+                    });
+                }).then(function(reportIds) {
+                    // Return back the list of reportIds
+                    return [createdApp, reportIds];
+                }).catch(function(e) {
+                    // Catch any errors and reject the promise with it
+                    return Promise.reject(new Error('Error during fullReportsSetup: ' + e.message));
+                });
+            },
+
+
+            /*
+             * @deprecated Please use defaultSetup or fullReportsSetup going forward
+             */
 
             // Setup method for the reports spec files. Creates the table / field mapping to be generated by basicSetup
             reportsBasicSetUp: function(tableToFieldToFieldTypeMap, numRecords) {
