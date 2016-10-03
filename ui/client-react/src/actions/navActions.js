@@ -5,6 +5,10 @@ import Breakpoints from '../utils/breakpoints';
 
 let navActions = {
 
+    /**
+     * show trowser
+     * @param content
+     */
     showTrowser(content) {
         this.dispatch(actions.SHOW_TROWSER, content);
     },

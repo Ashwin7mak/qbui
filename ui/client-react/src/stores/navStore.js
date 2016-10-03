@@ -1,4 +1,5 @@
 import * as actions from '../constants/actions';
+import * as TrowserConsts from "../constants/trowserConstants";
 
 import Fluxxor from 'fluxxor';
 import Locale from '../locales/locales';
@@ -17,7 +18,7 @@ let NavStore = Fluxxor.createStore({
             showTopNav: true,
             searching:false,
             trowserOpen: false,
-            trowserContent: "editRecord",
+            trowserContent: TrowserConsts.TROWSER_EDIT_RECORD,
             topTitle: null,
             scrollingReport: false,
             filterReportsName: ''

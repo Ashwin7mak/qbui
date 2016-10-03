@@ -24,16 +24,31 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let formActions = {
 
+    /**
+     * edit an existing record
+     * @param recordId
+     */
     openRecordForEdit(recordId) {
 
+        // add editRec query param and let the router take action
         WindowLocationUtils.pushWithQuery("editRec", recordId);
     },
 
+    /**
+     * start editing a new record
+     */
     editNewRecord() {
-
+        // add editRec=new query param and let the router take action
         WindowLocationUtils.pushWithQuery("editRec", "new");
     },
 
+    /**
+     * load form for new record
+     * @param appId
+     * @param tblId
+     * @param rptId
+     * @param formType
+     */
     loadForm(appId, tblId, rptId, formType) {
 
         //  promise is returned in support of unit testing only
@@ -67,6 +82,14 @@ let formActions = {
         });
     },
 
+    /**
+     * load form and record data for edit
+     * @param appId
+     * @param tblId
+     * @param recordId
+     * @param rptId
+     * @param formType
+     */
     loadFormAndRecord(appId, tblId, recordId, rptId, formType) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {

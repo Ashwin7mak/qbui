@@ -13,6 +13,7 @@ import {withRouter} from 'react-router';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
+import * as TrowserConsts from "../../constants/trowserConstants";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -65,7 +66,7 @@ export let Nav = React.createClass({
         if (Breakpoints.isSmallBreakpoint()) {
             flux.actions.toggleLeftNav(false);
         }
-        flux.actions.showTrowser("reports");
+        flux.actions.showTrowser(TrowserConsts.TROWSER_REPORTS);
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
     },
 
@@ -117,11 +118,11 @@ export let Nav = React.createClass({
 
             if (editRec === "new") {
                 flux.actions.loadForm(appId, tblId, rptId, "edit").then(() => {
-                    flux.actions.showTrowser("editRecord");
+                    flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             } else {
                 flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", false).then(() => {
-                    flux.actions.showTrowser("editRecord");
+                    flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             }
         }
@@ -142,7 +143,7 @@ export let Nav = React.createClass({
         return (<div className={classes}>
 
             {this.props.params && this.props.params.appId &&
-                <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === "editRecord"}
+                <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
                                form={this.state.form}
                                appId={this.props.params.appId}
@@ -154,7 +155,7 @@ export let Nav = React.createClass({
                                selectedTable={this.getSelectedTable()} />
             }
             {this.props.params && this.props.params.appId &&
-                <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === "reports"}
+                <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}
                                       router={this.props.router}
                                       selectedTable={this.getSelectedTable()}
                                       filterReportsName={this.state.nav.filterReportsName}
