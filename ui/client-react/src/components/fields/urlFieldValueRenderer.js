@@ -49,7 +49,7 @@ const UrlFieldValueRenderer = React.createClass({
         let target = (this.props.openInNewWindow ? '_blank' : '_self');
 
         // Don't render an empty button
-        if (!this.props.display || this.props.display === '') {
+        if (!this.props.display) {
             return <span className="link"></span>;
         }
 
