@@ -39,17 +39,3 @@ export const DefaultFieldValueEditor = React.createClass({
     }
 });
 
-/**
- * placeholder for user picker
- */
-export const UserFieldValueEditor = React.createClass({
-    displayName: 'UserFieldValueEditor',
-
-    render() {
-        return <input ref="fieldInput"
-                      tabIndex="0"
-                      onBlur={this.props.onBlur}
-                      className="cellEdit"/>;
-
-    }
-});

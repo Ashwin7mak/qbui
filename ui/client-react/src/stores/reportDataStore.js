@@ -74,7 +74,8 @@ let reportModel = {
                     }
 
                     if (field.multipleChoice && field.multipleChoice.choices) {
-                        column.choices = field.multipleChoice.choices;
+                        column.multipleChoice = {};
+                        column.multipleChoice.choices = field.multipleChoice.choices;
                     }
                     //  client side attributes..
                     column.datatypeAttributes = field.datatypeAttributes;
@@ -375,7 +376,7 @@ let reportModel = {
 
             //format the value by field display type
             if (fieldMeta && fieldMeta.datatypeAttributes && fieldMeta.datatypeAttributes.type) {
-                let formatType = FieldFormats.getFormatType(fieldMeta.datatypeAttributes.type);
+                let formatType = FieldFormats.getFormatType(fieldMeta.datatypeAttributes);
                 let formatter = this.getFormatter(formatType);
 
                 // if there's a formatter use it to format the display version
