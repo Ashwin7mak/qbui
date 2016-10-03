@@ -1,3 +1,5 @@
+'use strict';
+
 var urlFileAttachmentReportLinkFormatter = require('../src/formatter/urlFileAttachmentReportLinkFormatter');
 
 describe('urlFileAttachmentReportLinkFormatter', () => {
