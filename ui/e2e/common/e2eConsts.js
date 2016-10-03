@@ -151,6 +151,124 @@
                 //    offsetWidth: '300'
                 //}
             ];
+        },
+
+        /*
+         * Creates a mapping for two tables with all supported field types that can be passed into the test generators package
+         */
+        createDefaultTableMap() {
+            var table1Name = 'Table 1';
+            var table2Name = 'Table 2';
+
+            // Create the table schema (map object) to pass into the app generator
+            var tableToFieldToFieldTypeMap = {};
+            tableToFieldToFieldTypeMap[table1Name] = {};
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[1]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.TEXT
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[2]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.NUMERIC
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[3]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.CURRENCY
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[4]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.PERCENT
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[5]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.RATING
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[6]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.DATE
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[7]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.DATE_TIME
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[8]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.TIME_OF_DAY
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[9]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.DURATION
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[10]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.CHECKBOX
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[11]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.PHONE_NUMBER
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[12]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.EMAIL_ADDRESS
+            };
+            tableToFieldToFieldTypeMap[table1Name][e2eConsts.reportFieldNames[13]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.URL
+            };
+            tableToFieldToFieldTypeMap[table2Name] = {};
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[1]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.TEXT
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[2]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.NUMERIC
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[3]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.CURRENCY
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[4]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.PERCENT
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[5]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.RATING
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[6]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.DATE
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[7]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.DATE_TIME
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[8]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.TIME_OF_DAY
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[9]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.DURATION
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[10]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.CHECKBOX
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[11]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.PHONE_NUMBER
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[12]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.EMAIL_ADDRESS
+            };
+            tableToFieldToFieldTypeMap[table2Name][e2eConsts.reportFieldNames[13]] = {
+                fieldType: consts.SCALAR,
+                dataType: consts.URL
+            };
+            return tableToFieldToFieldTypeMap;
         }
     });
 

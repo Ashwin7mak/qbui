@@ -233,29 +233,30 @@
                     try {
                         // Collapse the leftNav
                         reportServicePage.waitForElementToBeClickable(reportServicePage.topNavToggleHamburgerEl).then(function() {
-                            reportServicePage.topNavToggleHamburgerEl.click();
-                            // Hover over the table link icon in leftNav
-                            browser.actions().mouseMove(reportServicePage.tableLinksElList.get(0)).perform();
-                            // Open the reportsMenu
-                            reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(0));
-                            // Load report
-                            // Wait for the report list to load
-                            reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
-                                // Find and select the report
-                                reportServicePage.selectReport('My Reports', 'Test Report');
-                                done();
+                            reportServicePage.topNavToggleHamburgerEl.click().then(function() {
+                                // Hover over the table link icon in leftNav
+                                browser.actions().mouseMove(reportServicePage.tableLinksElList.get(0)).perform().then(function() {
+                                    // Open the reportsMenu
+                                    reportServicePage.openReportsMenu(reportServicePage.tableLinksElList.get(0));
+                                    // Load report
+                                    // Wait for the report list to load
+                                    reportServicePage.waitForElement(reportServicePage.reportGroupsDivEl).then(function() {
+                                        // Find and select the report
+                                        reportServicePage.selectReport('My Reports', 'Test Report').then(function() {
+                                            // Expand the leftNav
+                                            reportServicePage.waitForElementToBeClickable(reportServicePage.topNavToggleHamburgerEl).then(function() {
+                                                e2eBase.sleep(browser.params.smallSleep).then(function() {
+                                                    reportServicePage.topNavToggleHamburgerEl.click();
+                                                    done();
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
                             });
                         });
                     } catch (e) {
                         throw new Error(e);
-                    } finally {
-                        // Expand the leftNav
-                        reportServicePage.waitForElementToBeClickable(reportServicePage.topNavToggleHamburgerEl).then(function() {
-                            reportServicePage.topNavToggleHamburgerEl.click();
-                            //    // Go back to the table homepage
-                            //    reportServicePage.tableLinksElList.get(3).click();
-                            done();
-                        });
                     }
                 } else {
                     done();
