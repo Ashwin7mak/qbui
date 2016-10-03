@@ -18,12 +18,7 @@
     ];
     var DISPLAY_PROTOCOL_DEFAULT = true;
 
-    function getProtocolStringForRegex() {
-        return SUPPORTED_PROTOCOLS.reduce(function(regexString, protocol, currentIndex) {
-            regexString += (protocol + (currentIndex < SUPPORTED_PROTOCOLS.length ? '|' : ''));
-            return regexString;
-        }, '');
-    }
+    var getProtocolStringForRegex = () => { return SUPPORTED_PROTOCOLS.join('|'); };
 
     module.exports = {
         //Given a URL string as input, formats as a URL with display preferences applied.
@@ -59,7 +54,7 @@
             return (url === this.stripProtocol(url));
         },
         addProtocol: function(url, protocol) {
-            protocol = (protocol ? protocol : 'http://');
+            protocol = protocol || 'http://';
             if (this.protocolIsMissingFrom(url)) {
                 url = protocol + url;
             }
