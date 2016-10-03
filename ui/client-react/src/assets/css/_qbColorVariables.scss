@@ -231,12 +231,12 @@ $secondary-bar-fg: #fff;
 $secondary-bar-bg: #009AAE;
 $secondary-bar-page-actions-bg: #476B90;
 
-//== Field labels used on report card view and forms
 @mixin focus-shadow($color:$input-border-focus-color) {
   box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
   outline: none;
 }
 
+//== Field labels used on report card view and forms
 $fieldLabel-color: $color3;
 
 $required-asterisk-color: $color-cyan-700;
