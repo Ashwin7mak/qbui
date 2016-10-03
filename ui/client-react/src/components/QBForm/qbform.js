@@ -262,7 +262,7 @@ let QBForm = React.createClass({
      * @param singleColumn force single column
      *
      */
-    createSection(section, singleColumn) {
+    createSection(section, singleColumn, isFirstSection) {
         let sectionTitle = "";
 
         // build the section header.
@@ -271,9 +271,15 @@ let QBForm = React.createClass({
         }
 
         let classes = 'formSection';
-        if (section.pseudo) {
-            classes += ' pseudo';
+        /*
+        A section is marked as pseudo if its the user did not select a set of elements to be part of a section but for uniformity of structure core
+        adds a section around these elements. In this case the interface is similar to a section except for collapsible behavior.
+        A section is also treated non-collapsible if its the first section and has no elements or no header
+         */
+        if (section.pseudo || (isFirstSection && (!sectionTitle.length || !Object.keys(section.elements).length))) {
+            classes += ' nonCollapsible';
         }
+
         return (
             <QBPanel className={classes}
                      title={sectionTitle}
@@ -297,10 +303,11 @@ let QBForm = React.createClass({
      */
     createTab(tab, singleColumn) {
         let sections = [];
-
+        let isFirstSection = true;
         if (tab.sections) {
             Object.keys(tab.sections).forEach(key => {
-                sections.push(this.createSection(tab.sections[key], singleColumn));
+                sections.push(this.createSection(tab.sections[key], singleColumn, isFirstSection));
+                isFirstSection = false;
             });
         }
 
