@@ -5,7 +5,7 @@
     'use strict';
     var globalLocalConfig = require('./local.protractor.conf.js').config;
     globalLocalConfig.specs = [
-        '../qbapp/dataGen.e2e.spec.js'
+        '../qbapp/newDataGen.e2e.spec.js'
     ];
     exports.config = globalLocalConfig;
 }());
