@@ -294,7 +294,7 @@
 
             // Find and select the report based on name
             //TODO: Break this filter out into a separate function
-            this.reportGroupElList.filter(function(elem) {
+            return this.reportGroupElList.filter(function(elem) {
                 // Return the element or elements
                 return elem.element(by.className('qbPanelHeaderTitleText')).getText().then(function(text) {
                     // Match the text
@@ -309,7 +309,7 @@
                     });
                 }).then(function(reportLinkElements) {
                     return reportLinkElements[0].click().then(function() {
-                        e2ePageBase.waitForElementToBeInvisible(self.reportTrowserContent);
+                        e2ePageBase.waitForElement(self.agGridContainerEl);
                     });
                 });
             });

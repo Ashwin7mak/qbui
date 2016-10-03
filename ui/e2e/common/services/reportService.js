@@ -201,6 +201,59 @@
                     deferred.reject(error);
                 });
                 return deferred.promise;
+            },
+            createDefaultReport: function(appId, tableId, name, fids, sortList, facetFids, query) {
+                var deferred = promise.pending();
+                var printableSortList = [];
+
+                if (sortList) {
+                    sortList.forEach(function(sortObj) {
+                        printableSortList.push(JSON.stringify(sortObj));
+                    });
+                } else {
+                    printableSortList.push('');
+                }
+
+                var reportJSON = {
+                    name      : name || 'Default Test Report',
+                    description : 'This is the default report description and it belongs in the stage. We could be so lucky! ' +
+                    'This report was created with the following parameters - ' +
+                    'fids: ' + fids + ', ' +
+                    'sortList: ' + printableSortList + ', ' +
+                    'facetFids: ' + facetFids + ', ' +
+                    'query: ' + query,
+                    type      : 'TABLE',
+                    //TODO: Extend function when we add test data support for roles and perms
+                    ownerId   : '10000',
+                    //showDescriptionOnReport: false,
+                    //hideReport: false,
+                    //showSearchBox: true,
+                    fids      : fids,
+                    sortList  : sortList,
+                    facetFids : facetFids,
+                    //facetBehavior: 'default',
+                    query      : query
+                    //allowEdit: true,
+                    //allowView: true,
+                    //displayNewlyChangedRecords: false,
+                    //reportFormat: '',
+                    //calculatedColumns: null,
+                    //rolesWithGrantedAccess: [],
+                    //summary: 'hide'
+                };
+                var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId);
+
+                // TODO: QBSE-13843 Create helper GET And POST functions that extend this executeRequest function
+                recordBase.apiBase.executeRequest(reportsEndpoint, 'POST', reportJSON).then(function(result) {
+                    //console.log('Report create result');
+                    var parsed = JSON.parse(result.body);
+                    var id = parsed.id;
+                    deferred.resolve(id);
+                }).catch(function(error) {
+                    console.error(JSON.stringify(error));
+                    deferred.reject(error);
+                });
+                return deferred.promise;
             }
         };
         return reportService;

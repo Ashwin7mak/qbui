@@ -34,7 +34,8 @@
         },
         // list of files / patterns to load in the browser
         specs: [
-            baseE2EPath + 'qbapp/tests/reports/*.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [
@@ -50,10 +51,10 @@
         // https://github.com/SeleniumHQ/selenium/blob/master/javascript/webdriver/capabilities.js
         capabilities: {
             browserName: 'chrome',
-            breakpointSize: 'xlarge',
+            breakpointSize: 'xlarge'
             // These two values enable parallel testing which will run a spec file per instance
-            shardTestFiles: true,
-            maxInstances: 2
+            //shardTestFiles: true,
+            //maxInstances: 2
         },
         // Uncomment below if you want to run multiple breakpoints or multiple browsers
         // Overrides any capabilities you have set above
