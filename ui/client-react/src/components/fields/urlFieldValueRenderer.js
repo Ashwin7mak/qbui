@@ -4,6 +4,13 @@ import UrlUtils from '../../utils/urlUtils';
 import urlFileAttachmentReportLinkFormatter from '../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import './urlField.scss';
 
+/**
+ * # UrlFieldValueRenderer
+ *
+ * Renders URLs as links or buttons.
+ * Includes support for email, tel, and sms icons if those protocols are specified.
+ *
+ */
 const UrlFieldValueRenderer = React.createClass({
     displayName: 'UrlFieldValueRenderer',
     propTypes: {

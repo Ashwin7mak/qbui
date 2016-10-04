@@ -3,6 +3,12 @@ import React, {PropTypes} from 'react';
 import UrlFileAttachmentReportLinkFormatter from '../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import TextFieldValueEditor from './textFieldValueEditor';
 
+/**
+ * # UrlFieldValueRenderer
+ *
+ * A wrapper for textFieldValueEditor with settings to help edit (and format edited) URLs.
+ *
+ */
 const UrlFieldValueEditor = React.createClass({
     displayName: 'UrlFieldValueEditor',
     propTypes: {
