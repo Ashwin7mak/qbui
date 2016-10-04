@@ -53,7 +53,7 @@
                 return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
             }).then(function() {
                 // Wait for the leftNav to load
-                return reportServicePage.waitForElement(reportServicePage.appsListDivEl)
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl);
             }).then(function() {
                 done();
             }).catch(function(error) {
@@ -63,11 +63,11 @@
             });
         });
 
-        beforeAll(function (done) {
+        beforeAll(function(done) {
             // Go to report page directly
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
 
-            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function () {
+            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 e2eBase.sleep(browser.params.smallSleep); //but why tho?
                 done();
             });
@@ -76,13 +76,13 @@
         /*
          * Change the language to German, then, switch to another app and verify language is still German.
          */
-        it('verify user\'s language settings persist when switching to another app', function (done) {
-            reportServicePage.waitForElementToBeClickable(reportServicePage.topNavEllipsesGlobActEl).then(function () {
+        it('verify user\'s language settings persist when switching to another app', function(done) {
+            reportServicePage.waitForElementToBeClickable(reportServicePage.topNavEllipsesGlobActEl).then(function() {
                 // - click the ellipses in the top navigation bar
                 // - change language to German
-                return reportServicePage.topNavEllipsesGlobActEl.click().then(function () {
+                return reportServicePage.topNavEllipsesGlobActEl.click().then(function() {
                     return reportServicePage.waitForElementToBeClickable(reportServicePage.topNavLangGerman);
-                }).then(function () {
+                }).then(function() {
                     return reportServicePage.topNavLangGerman.click();
                 });
             }).then(function() {
