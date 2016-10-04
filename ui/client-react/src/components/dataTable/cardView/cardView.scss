@@ -13,13 +13,6 @@ $card-border-color: $color4;
 $chevron_opened_icon: url('../../../../src/assets/images/chevron_opened.svg');
 $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
 
-/* Fields in cardview span the width of the small device */
-@include small-breakpoint {
-    .formTable {
-        width: 100%;
-    }
-}
-
 .swipeable.actionsOpen .custom-row-card {
     margin-left: -240px;
     margin-right: 240px;
