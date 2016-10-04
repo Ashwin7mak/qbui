@@ -14,8 +14,6 @@ const UrlUtils = {
         case 'sms':
         case 'imessage':
             return 'speechbubble-outline';
-        case 'file':
-            return 'report-summary';
         default:
             return '';
         }
