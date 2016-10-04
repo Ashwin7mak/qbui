@@ -73,7 +73,11 @@
         this.topNavGlobalActionsListEl = this.topNavGlobalActionsListUlEl.all(by.className('link'));
         this.topNavUserGlobActEl = this.topNavGlobalActionsListEl.get(0);
         this.topNavHelpGlobActEl = this.topNavGlobalActionsListEl.get(1);
-        this.topNavElipsesGlobActEl = this.topNavGlobalActionsListEl.get(2);
+        this.topNavEllipsesGlobActEl = this.topNavRightDivEl.element(by.id('nav-right-dropdown'));
+        // Preferences dropdown
+        this.topNavPreferenceContainer = this.topNavRightDivEl.element(by.css('.dropdown .dropdown-menu'));
+        this.topNavLangEnglish = this.topNavPreferenceContainer.all(by.className('localeLink')).get(0);
+        this.topNavLangGerman = this.topNavPreferenceContainer.all(by.className('localeLink')).get(1);
 
         // Report Container
         this.mainContentEl = element(by.className('mainContent'));

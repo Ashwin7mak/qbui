@@ -2,18 +2,19 @@
  * E2E test which verifies language preferences are maintained when switching from one app to another. See MB-443.
  * Based on dataGen.e2e.spec.js, Created by gedwards on 10/3/16.
  */
-// jshint sub: true
-// jscs:disable requireDotNotation
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 3 * 60 * 1000; // 3 minute max
-
 (function() {
     'use strict';
-    var tableOneNumberOfRecords = 1;  // change value to how many records you want to generate for table 1
 
-    describe('Report Language test', function() {
+    var ReportServicePage = requirePO('reportService');
+    var RequestAppsPage = requirePO('requestApps');
+    var RequestSessionTicketPage = requirePO('requestSessionTicket');
+    var reportServicePage = new ReportServicePage();
+
+    describe('Report Language tests', function() {
         var app;
         var recordList;
+        var realmName;
+        var realmId;
         /**
          * Setup method. Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
          */
@@ -43,6 +44,17 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 3 * 60 * 1000; // 3 minute max
                 var basicApp = e2eBase.appService.generateAppFromMap(e2eBase.makeBasicMap());
                 return e2eBase.appService.createApp(basicApp);
             }).then(function() {
+                // Get a session ticket for that subdomain and realmId (stores it in the browser)
+                realmName = e2eBase.recordBase.apiBase.realm.subdomain;
+                realmId = e2eBase.recordBase.apiBase.realm.id;
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
+                // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            }).then(function() {
+                // Wait for the leftNav to load
+                return reportServicePage.waitForElement(reportServicePage.appsListDivEl)
+            }).then(function() {
                 done();
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
@@ -51,38 +63,53 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 3 * 60 * 1000; // 3 minute max
             });
         });
 
-        /**
-         * Test method. Prints out the generated test data and endpoints to the console.
-         */
-        it('Will print out your realmName, realmId, appId and tableIds', function() {
-            var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
-            var realmId = e2eBase.recordBase.apiBase.realm.id;
-            var appId = app.id;
-            var table1Id = app.tables[0].id;
-            var table2Id = app.tables[1].id;
+        beforeAll(function (done) {
+            // Go to report page directly
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
 
-            // Protractor tests will launch node at port 9001 by default so do a replace to the default local.js port
-            var ticketEndpointRequest = e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint).replace('9001', '9000');
-            var appEndpointRequest = e2eBase.getRequestAppsPageEndpoint(realmName).replace('9001', '9000');
-
-            console.log('\nHere is your generated test data: \n' +
-                'realmName: ' + realmName + '\n' +
-                'realmId: ' + realmId + '\n' +
-                'appId: ' + appId + '\n' +
-                'table1Id: ' + table1Id + '\n' +
-                'table2Id: ' + table2Id + '\n' +
-                'To generate a session ticket for your realm paste this into your browser: \n' +
-                ticketEndpointRequest + '\n' +
-                'Access your test app here (must have generated a ticket first): \n' +
-                appEndpointRequest + '\n'
-            );
+            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function () {
+                e2eBase.sleep(browser.params.smallSleep); //but why tho?
+                done();
+            });
         });
 
-        /**
-         * TODO:####
+        /*
+         * Change the language to German, then, switch to another app and verify language is still German.
          */
-        it('can change user\'s language settings', function() {
-
+        it('verify user\'s language settings persist when switching to another app', function (done) {
+            reportServicePage.waitForElementToBeClickable(reportServicePage.topNavEllipsesGlobActEl).then(function () {
+                // - click the ellipses in the top navigation bar
+                // - change language to German
+                return reportServicePage.topNavEllipsesGlobActEl.click().then(function () {
+                    return reportServicePage.waitForElementToBeClickable(reportServicePage.topNavLangGerman);
+                }).then(function () {
+                    return reportServicePage.topNavLangGerman.click();
+                });
+            }).then(function() {
+                // TODO: might want to wait for the element to contain the proper text in case of some lag
+                // verify the "Help" link is in German
+                expect(reportServicePage.topNavHelpGlobActEl.getText()).toEqual('Hilfe');
+            }).then(function() {
+                // - click the AppToggle
+                // - switch to the 2nd app
+                // - verify that the language is still German
+                return reportServicePage.clickAppToggle().then(function() {
+                    return reportServicePage.waitForElement(reportServicePage.appsListDivEl);
+                }).then(function() {
+                    return reportServicePage.appLinksElList.get(1).click();
+                }).then(function() {
+                    return reportServicePage.waitForElement(reportServicePage.topNavHelpGlobActEl);
+                });
+            }).then(function() {
+                // verify the "Help" link is in German
+                expect(reportServicePage.topNavHelpGlobActEl.getText()).toEqual('Hilfe');
+            }).then(function() {
+                done();
+            });
         });
+
+        /* TODO: create afterAll block
+         * once language settings become persistent across sessions, reset the user's language back to the default.
+         */
     });
 }());
