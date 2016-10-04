@@ -8,7 +8,9 @@ describe('UrlFieldValueRenderer', () => {
     let component, domComponent;
     let alternateText = 'Click Me!';
     let urlWithProtocol = 'http://www.quickbase.com/';
-    let urlWithoutProtocol = 'www.quickbase.com';
+    let urlWithoutProtocol = 'www.quickbase.com/';
+    let urlWithSpecialCharacters = 'http://www.quickbase.com?javascript: function() { alert("hello!") }';
+    let expectedEncodedUrl = 'http://www.quickbase.com/?javascript:%20function()%20%7B%20alert(%22hello!%22)%20%7D';
     let telephoneNumber = 'tel:555-555-5555';
 
     it('displays a url as a clickable link by default', () => {
@@ -85,7 +87,17 @@ describe('UrlFieldValueRenderer', () => {
         domComponent = ReactDOM.findDOMNode(component).querySelector('a');
 
         expect(domComponent.href).toEqual(urlWithProtocol);
-        expect(domComponent.textContent).toEqual(urlWithoutProtocol);
+        expect(domComponent.textContent).toEqual(urlWithProtocol);
+    });
+
+    it("will not add a protocol to the displayed text if the text is something besides a url (i.e., we don't want http:\\Click Me)", () => {
+        component = TestUtils.renderIntoDocument(<UrlFieldValueRenderer value={urlWithoutProtocol}
+                                                                        display={alternateText} />);
+
+        domComponent = ReactDOM.findDOMNode(component).querySelector('a');
+
+        expect(domComponent.href).toEqual(urlWithProtocol);
+        expect(domComponent.textContent).toEqual(alternateText);
     });
 
     it('displays alternate text for the link', () => {
@@ -106,5 +118,14 @@ describe('UrlFieldValueRenderer', () => {
         domComponent = ReactDOM.findDOMNode(component).querySelector('.qbIcon');
 
         expect(domComponent).not.toEqual(null);
+    });
+
+    it('encodes urls', () => {
+        component = TestUtils.renderIntoDocument(<UrlFieldValueRenderer value={urlWithSpecialCharacters}
+                                                                        display={urlWithSpecialCharacters} />);
+
+        domComponent = ReactDOM.findDOMNode(component).querySelector('a');
+
+        expect(domComponent.href).toEqual(expectedEncodedUrl);
     });
 });
