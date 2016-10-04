@@ -59,5 +59,11 @@
         .qbIcon {
             font-size: $font-size-p;
         }
+
+        /* Mail Icon is a slightly different size and needs to be adjusted */
+        .iconTableUISturdy-mail {
+            position: relative;
+            top: 2px;
+        }
     }
 }
