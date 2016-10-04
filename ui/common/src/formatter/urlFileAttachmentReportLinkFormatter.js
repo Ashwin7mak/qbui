@@ -18,8 +18,6 @@
     ];
     var DISPLAY_PROTOCOL_DEFAULT = true;
 
-    var getProtocolStringForRegex = () => { return SUPPORTED_PROTOCOLS.join('|'); };
-
     module.exports = {
         //Given a URL string as input, formats as a URL with display preferences applied.
         format: function(fieldValue, fieldInfo) {
@@ -42,7 +40,7 @@
             }
             return baseValue;
         },
-        protocolRegex: new RegExp('^(.{2,5}' + getProtocolStringForRegex() + '):?', 'i'),
+        protocolRegex: new RegExp('^(.{2,5}' + SUPPORTED_PROTOCOLS.join('|') + '):?', 'i'),
         getProtocolFromUrl: function(url) {
             var protocolMatch = url.match(this.protocolRegex);
             return (protocolMatch === null ? null : protocolMatch[0].split(':')[0]);
