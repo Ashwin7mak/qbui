@@ -52,7 +52,7 @@
         stripProtocol: function(url) {
             return url.replace(this.protocolRegex, '');
         },
-        isLikelyAFilePath(url) {
+        isLikelyAFilePath: function(url) {
             return /^.:/.test(url);
         },
         protocolIsMissingFrom: function(url) {
