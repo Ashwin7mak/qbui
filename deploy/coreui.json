@@ -16,6 +16,7 @@
       "Description": "The environment name (prod, qual, int, etc)",
       "Type": "String",
       "AllowedValues": [
+        "try",
         "dev",
         "qual",
         "int",
@@ -310,6 +311,35 @@
           },
           "run_chef": {
             "files": {
+              "/dev/shm/chef-attributes-try.json": {
+                "content": {
+                  "splunk": {
+                    "forwarder": {
+                      "index": "quickbase-ppdidx",
+                      "logs_to_index": {
+                        "default": {
+                          "_meta": {
+                            "Fn::Join": [ "", [ "aws_stack_name::", { "Ref": "AWS::StackName" } ] ]
+                          }
+                        },
+                        "monitor:///var/log/qbase": {
+                          "disabled": "0",
+                          "index": "quickbase-ppdidx",
+                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                        }
+                      }
+                    }
+                  },
+                  "nodejs": {
+                    "reconfig": {
+                      "node_internal_env": "PRE_PROD",
+                      "rest_endpoint": "https://localhost.api.trunk.newstack.quickbaserocks.com",
+                      "route_group": "LH_V1",
+                      "stack_name": "coreui-try1"
+                    }
+                  }
+                }
+              },
               "/dev/shm/chef-attributes-dev.json": {
                 "content": {
                   "splunk": {
