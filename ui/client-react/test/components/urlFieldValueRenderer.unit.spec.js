@@ -80,26 +80,6 @@ describe('UrlFieldValueRenderer', () => {
         expect(domComponent.textContent).toEqual('');
     });
 
-    it('adds a protocol to the url if one is missing', () => {
-        component = TestUtils.renderIntoDocument(<UrlFieldValueRenderer value={urlWithoutProtocol}
-                                                                        display={urlWithoutProtocol} />);
-
-        domComponent = ReactDOM.findDOMNode(component).querySelector('a');
-
-        expect(domComponent.href).toEqual(urlWithProtocol);
-        expect(domComponent.textContent).toEqual(urlWithProtocol);
-    });
-
-    it("will not add a protocol to the displayed text if the text is something besides a url (i.e., we don't want http:\\Click Me)", () => {
-        component = TestUtils.renderIntoDocument(<UrlFieldValueRenderer value={urlWithoutProtocol}
-                                                                        display={alternateText} />);
-
-        domComponent = ReactDOM.findDOMNode(component).querySelector('a');
-
-        expect(domComponent.href).toEqual(urlWithProtocol);
-        expect(domComponent.textContent).toEqual(alternateText);
-    });
-
     it('displays alternate text for the link', () => {
         component = TestUtils.renderIntoDocument(<UrlFieldValueRenderer value={urlWithProtocol}
                                                                         display={alternateText} />);

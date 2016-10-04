@@ -53,15 +53,6 @@ const UrlFieldValueRenderer = React.createClass({
         let linkHref = UrlFileAttachmentReportLinkFormatter.addProtocol(this.props.value);
         return encodeURI(linkHref);
     },
-    renderLinkDisplayText() {
-        if (displayingUrl(this.props.display, this.props.value)) {
-            // Add the default protocol if a protocol is not provided
-            return UrlFileAttachmentReportLinkFormatter.addProtocol(this.props.display);
-        } else {
-            // Otherwise only display the text
-            return this.props.display;
-        }
-    },
     renderLink() {
         let target = (this.props.openInNewWindow ? '_blank' : '_self');
 
@@ -73,13 +64,13 @@ const UrlFieldValueRenderer = React.createClass({
         if (this.props.disabled) {
             return (
                 <span className={this.setLinkClasses()}>
-                    {this.renderLinkDisplayText()}
+                    {this.props.display}
                 </span>
             );
         } else {
             return (
                 <a href={this.renderLinkHref()} target={target} className={this.setLinkClasses()}>
-                    {this.renderLinkDisplayText()}
+                    {this.props.display}
                     {this.renderIcon()}
                 </a>
             );
@@ -106,9 +97,5 @@ const UrlFieldValueRenderer = React.createClass({
 
     }
 });
-
-function displayingUrl(linkText, linkHref) {
-    return (linkText === linkHref);
-}
 
 export default UrlFieldValueRenderer;

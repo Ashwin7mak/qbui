@@ -17,7 +17,7 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
                 expectation: 'https'
             },
             {
-                name: 'Returns special prococols (tel)',
+                name: 'Returns special protocols (tel)',
                 url: 'tel:555-555-5555',
                 expectation: 'tel'
             },
@@ -33,7 +33,7 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
             }
         ];
 
-        testCases.forEach(function(testCase) {
+        testCases.forEach((testCase) => {
             it(testCase.name, () => {
                 let protocol = urlFileAttachmentReportLinkFormatter.getProtocolFromUrl(testCase.url);
                 assert.equal(protocol, testCase.expectation);
@@ -112,7 +112,7 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
             }
         ];
 
-        testCases.forEach(function(testCase) {
+        testCases.forEach((testCase) => {
             it(testCase.name, () => {
                 let formattedUrl = urlFileAttachmentReportLinkFormatter.stripProtocol(testCase.data);
                 assert.equal(formattedUrl, testCase.expectation);
@@ -122,6 +122,7 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
 
     describe('format', () => {
         let testUrl = 'http://google.com';
+        let testUrlWithoutProtocol = 'google.com';
 
         let testCases = [
             {
@@ -149,14 +150,26 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
                 expectation: testUrl
             },
             {
+                name: 'adds the protocol if it is missing',
+                fieldValue: {value: testUrlWithoutProtocol},
+                fieldInfo: {},
+                expectation: testUrl
+            },
+            {
                 name: 'strips the protocol if displayProtocol is set to false',
                 fieldValue: {value: testUrl},
                 fieldInfo: {displayProtocol: false},
-                expectation: 'google.com'
+                expectation: testUrlWithoutProtocol
+            },
+            {
+                name: 'does not add the protocol if displayProtocol is set to false',
+                fieldValue: {value: testUrlWithoutProtocol},
+                fieldInfo: {displayProtocol: false},
+                expectation: testUrlWithoutProtocol
             }
         ];
 
-        testCases.forEach(function(testCase) {
+        testCases.forEach((testCase) => {
             it(testCase.name, () => {
                 let formattedUrl = urlFileAttachmentReportLinkFormatter.format(testCase.fieldValue, testCase.fieldInfo);
                 assert.equal(formattedUrl, testCase.expectation);
@@ -167,26 +180,66 @@ describe('urlFileAttachmentReportLinkFormatter', () => {
     describe('protocolIsMissingFrom', () => {
         let testCases = [
             {
-                name: 'it returns false if there is a protocol on the url',
+                name: 'returns false if there is a protocol on the url',
                 url: 'https://google.com',
                 expectation: false
             },
             {
-                name: 'it returns false if the url has a special protocl (e.g., mailto:)',
+                name: 'returns false if the url has a special protocol (e.g., mailto:)',
                 url: 'mailto:test@quickbase.com',
                 expectation: false
             },
             {
-                name: 'it returns true if there is no protocol on the url',
+                name: 'returns true if there is no protocol on the url',
                 url: 'www.google.com',
                 expectation: true
             }
         ];
 
-        testCases.forEach(function(testCase) {
+        testCases.forEach((testCase) => {
             it(testCase.name, () => {
                 assert.equal(urlFileAttachmentReportLinkFormatter.protocolIsMissingFrom(testCase.url), testCase.expectation);
             });
+        });
+    });
+
+    describe('addProtocol', () => {
+        let testCases = [
+            {
+                name: 'does not change the url if a protocol is already present (http)',
+                url: 'http://google.com',
+                expectation: 'http://google.com'
+            },
+            {
+                name: 'does not change the url if a protocol is already present (https)',
+                url: 'https://google.com',
+                expectation: 'https://google.com'
+            },
+            {
+                name: 'does not change the url if a protocol is already present (tel)',
+                url: 'tel:google.com',
+                expectation: 'tel:google.com'
+            },
+            {
+                name: 'adds the default protocol (http) if a protocol is not present on the url',
+                url: 'google.com',
+                expectation: 'http://google.com'
+            },
+            {
+                name: 'adds the file:// protocol is the link appears to be a file path',
+                url: 'c:/text.txt',
+                expectation: 'file://c:/text.txt'
+            }
+        ];
+
+        testCases.forEach((testCase) => {
+            it(testCase.name, () => {
+                assert.equal(urlFileAttachmentReportLinkFormatter.addProtocol(testCase.url), testCase.expectation);
+            });
+        });
+
+        it('adds the specified protocol if one is provided', () => {
+            assert.equal(urlFileAttachmentReportLinkFormatter.addProtocol('google.com', 'https://'), 'https://google.com');
         });
     });
 });

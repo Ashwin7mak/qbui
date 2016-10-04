@@ -33,8 +33,12 @@
                 if (fieldInfo && fieldInfo.displayProtocol === false) {
                     displayProtocol = false;
                 }
-                //If displayProtocol is false, split off the protocol, if there is one on the value
-                if (!displayProtocol) {
+
+                if (displayProtocol) {
+                    // If display protocol is true, make sure a protocol is displayed
+                    baseValue = this.addProtocol(baseValue);
+                } else {
+                    //If displayProtocol is false, split off the protocol, if there is one on the value
                     baseValue = this.stripProtocol(baseValue);
                 }
             }
@@ -48,11 +52,17 @@
         stripProtocol: function(url) {
             return url.replace(this.protocolRegex, '');
         },
+        isLikelyAFilePath(url) {
+            return /^.:/.test(url);
+        },
         protocolIsMissingFrom: function(url) {
             return (url === this.stripProtocol(url));
         },
         addProtocol: function(url, protocol) {
-            protocol = protocol || 'http://';
+            if (!protocol) {
+                protocol = (this.isLikelyAFilePath(url) ? 'file://' : 'http://');
+            }
+
             if (this.protocolIsMissingFrom(url)) {
                 url = protocol + url;
             }
