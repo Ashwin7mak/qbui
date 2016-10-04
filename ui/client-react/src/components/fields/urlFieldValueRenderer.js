@@ -54,7 +54,7 @@ const UrlFieldValueRenderer = React.createClass({
         return encodeURI(linkHref);
     },
     renderLinkDisplayText() {
-        if(displayingUrl(this.props.display, this.props.value)) {
+        if (displayingUrl(this.props.display, this.props.value)) {
             // Add the default protocol if a protocol is not provided
             return UrlFileAttachmentReportLinkFormatter.addProtocol(this.props.display);
         } else {

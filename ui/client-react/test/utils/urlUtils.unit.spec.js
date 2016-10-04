@@ -6,7 +6,7 @@ describe('UrlUtils', () => {
     let phoneIcon = 'phone-outline';
     let mailIcon = 'mail';
     let messageIcon = 'speechbubble-outline';
-    let fileIcon = 'report-summary';
+    let fileIcon = ''; // No file icon currently available
 
     describe('getIconForProtocol', () => {
         let testCases = [
@@ -41,7 +41,7 @@ describe('UrlUtils', () => {
                 expectation: messageIcon
             },
             {
-                name: 'Returns the file icon for files',
+                name: 'Returns the file icon (if available) for file links',
                 protocol: 'file',
                 expectation: fileIcon
             },
