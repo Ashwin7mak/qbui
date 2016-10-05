@@ -15,7 +15,7 @@ var Stage = React.createClass({
     },
 
     getInitialState: function() {
-        return {open: true};
+        return {open: false};
     },
 
     toggleStage: function() {

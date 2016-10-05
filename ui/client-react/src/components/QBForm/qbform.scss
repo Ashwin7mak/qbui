@@ -24,6 +24,11 @@ $edit-field-padding: 5px;
             min-height: 54px;
         }
     }
+    &.nonCollapsible {
+        .qbPanelHeaderIcon {
+            display: none;
+        }
+    }
     .fieldRow {
 
         padding: 5px 0;
@@ -108,6 +113,22 @@ $edit-field-padding: 5px;
     /* don't bleed through dropdowns */
     .input-group .form-control {
         z-index: inherit;
+    }
+    .cellEdit.dateTimeField {
+        width: calc(50% - 1px);
+        vertical-align: middle;
+
+        //  dateCell styles for date/time combo
+        &.dateCell {
+            margin-right: 2px;
+        }
+
+        //  timeCell styles for date/time combo
+        &.timeCell {
+            .Select-value {
+                padding-right: 20px !important;
+            }
+        }
     }
 }
 /* For mobile phones: */
