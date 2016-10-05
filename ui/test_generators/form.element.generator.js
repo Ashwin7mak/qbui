@@ -31,12 +31,12 @@
             _.forEach(fields, function(field) {
                 var builderInstance = formElementBuilder.builder();
 
-                builderInstance.withUseAlternateLabel(rawValue.generateBool());
-                builderInstance.withReadOnly(rawValue.generateBool());
+                //builderInstance.withUseAlternateLabel(rawValue.generateBool());
+                //builderInstance.withReadOnly(rawValue.generateBool());
                 builderInstance.withRequired(rawValue.generateBool());
                 builderInstance.withFieldId(field[fieldConsts.fieldKeys.ID]);
                 builderInstance.withOrderIndex(elementIndex);
-                builderInstance.withPositionSameRow(rawValue.generateBool());
+                builderInstance.withPositionSameRow(rawValue.generateBool()); //all fields displays in same row if we comment out this
                 builderInstance.withDisplayText(rawValue.generateString());
                 builderInstance.withDisplayOptions(formElementDisplayOptions);
                 builderInstance.withLabelPosition('LEFT');
