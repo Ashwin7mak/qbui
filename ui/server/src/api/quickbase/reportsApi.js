@@ -399,6 +399,9 @@
 
                                         addReportMetaQueryParameters(req, reportMetaData, false);
 
+                                        //  add the homepage report id
+                                        requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.HOME_PAGE_ID, homepageReportId);
+
                                         this.fetchReportComponents(req, homepageReportId).then(
                                             (reportData) => {
                                                 //  return the metadata and report content

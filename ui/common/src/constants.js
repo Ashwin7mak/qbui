@@ -66,7 +66,8 @@
             QUERY: 'query',
             COLUMNS: 'columns',
             OFFSET: 'offset',
-            NUM_ROWS: 'numRows'
+            NUM_ROWS: 'numRows',
+            HOME_PAGE_ID: 'homePageId'
         },
         FORMAT : {
             DISPLAY: 'display',

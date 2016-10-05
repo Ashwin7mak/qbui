@@ -296,6 +296,7 @@
 
                 //  get the request parameters
                 let search = url.parse(req.url).search;
+                let query = url.parse(opts.url, true).query;
 
                 if (routeHelper.isRecordsRoute(req.url)) {
                     if (req.params.recordId) {
@@ -316,8 +317,14 @@
                             opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
                         }
                     } else {
-                        //  not an expected route; set to return all records for the given table
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
+                        //  loading the home page report?
+                        let homePageId = query[constants.REQUEST_PARAMETER.HOME_PAGE_ID];
+                        if (routeHelper.isTableHomePageRoute(req.url) && homePageId) {
+                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url, homePageId);
+                        } else {
+                            //  not an expected route; set to return all records for the given table
+                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
+                        }
                     }
                 }
 
@@ -332,7 +339,6 @@
                 // Given the report meta data doesn't have default grouping on prod/pre-prod, and the UI
                 // only groups using equals, this should be fine for the interim until a complete solution
                 // is implemented.
-                let query = url.parse(opts.url, true).query;
                 if (query && query.hasOwnProperty(constants.REQUEST_PARAMETER.SORT_LIST)) {
                     let sList = query[constants.REQUEST_PARAMETER.SORT_LIST];
                     if (sList) {
