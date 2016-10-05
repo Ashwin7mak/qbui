@@ -336,7 +336,7 @@
                     },
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
-                      "rest_endpoint": "https://localhost.tomcat.trunk.newstack.quickbaserocks.com",
+                      "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-try1"
                     }
@@ -368,7 +368,7 @@
                     },
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
-                      "rest_endpoint": "https://localhost.tomcat.trunk.newstack.quickbaserocks.com",
+                      "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-dev1"
                     }
@@ -400,7 +400,7 @@
                     },
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
-                      "rest_endpoint": "https://localhost.tomcat.trunk.newstack.quickbaserocks.com",
+                      "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-qual1"
                     }
@@ -432,7 +432,7 @@
                     },
                     "reconfig": {
                       "node_internal_env": "PRE_PROD",
-                      "rest_endpoint": "https://localhost.tomcat.trunk.newstack.quickbaserocks.com",
+                      "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-int1"
                     }
@@ -464,7 +464,7 @@
                     },
                     "reconfig": {
                       "node_internal_env": "PRODUCTION",
-                      "rest_endpoint": "https://localhost.tomcat.prod1.newstack.quickbaserocks.com",
+                      "rest_endpoint": "https://t.tomcat.PROD1.newstack.quickbaserocks.com:8443",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-prod1"
                     }
