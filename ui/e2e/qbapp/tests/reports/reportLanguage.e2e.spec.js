@@ -70,7 +70,6 @@
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
 
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                e2eBase.sleep(browser.params.smallSleep); //but why tho?
                 done();
             });
         });
