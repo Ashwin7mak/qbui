@@ -199,6 +199,12 @@
                             var responseObject;
 
                             var records = jsonBigNum.parse(response[0].body);
+
+                            //  report/results result is an object
+                            if (!Array.isArray(records)) {
+                                records = records.records;
+                            }
+
                             var groupedRecords;
 
                             //  return raw undecorated record values due to flag format=raw
