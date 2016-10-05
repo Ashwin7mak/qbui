@@ -34,10 +34,15 @@
         function verifyRecords(reportResults) {
             var actualReportResults = [];
             var expectedReportRecords = [];
-            //For each report record results push to an array.
-            for (var i in reportResults.records) {
-                actualReportResults.push(reportResults.records[i]);
+
+            var records = reportResults;
+            if (!Array.isArray(records)) {
+                records = reportResults.records;
             }
+            records.forEach(function(record) {
+                actualReportResults.push(record);
+            });
+
             //Push the expected records to an array.
             for (var j in expectedRecords) {
                 expectedReportRecords.push(expectedRecords[j]);

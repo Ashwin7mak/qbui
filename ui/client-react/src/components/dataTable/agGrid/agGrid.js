@@ -35,7 +35,7 @@ import {
     UrlCellRenderer,
 }  from './cellRenderers';
 
-import * as GroupTypes from '../../../constants/groupTypes';
+import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
@@ -261,7 +261,7 @@ let AGGrid = React.createClass({
 
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
         let sortFid = column.id.toString();
-        let groupString = ReportUtils.getGroupString(sortFid, asc, GroupTypes.GROUP_TYPE.text.equals);
+        let groupString = ReportUtils.getGroupString(sortFid, asc, GROUP_TYPE.TEXT.equals);
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
         let sortListParam = ReportUtils.prependSortFidToList(sortList, groupString);
 

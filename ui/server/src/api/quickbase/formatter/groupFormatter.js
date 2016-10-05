@@ -6,14 +6,15 @@
 (function() {
     'use strict';
     var constants = require('../../../../../common/src/constants');
-    var groupTypes = require('../../groupTypes');
     var log = require('../../../logger').getLogger();
     var lodash = require('lodash');
-    var groupUtils = require('../../../utility/groupUtils');
-    var dateFormatter = require('../../../../../common/src/formatter/dateTimeFormatter');
-    var logger = require('../../../logger').getLogger();
     var requestHelper = require('../requestHelper')();
-    dateFormatter.setLogger(logger);
+
+    var dateFormatter = require('../../../../../common/src/formatter/dateTimeFormatter');
+    dateFormatter.setLogger(log);
+
+    var groupUtils = require('../../../utility/groupUtils');
+    var groupTypes = require('../../../../../common/src/groupTypes').GROUP_TYPE;
 
     /**
      * Provide a list of data types where grouping is to be performed against the raw
@@ -257,6 +258,8 @@
         case constants.RATING:      // RATING is a sub-type of NUMERIC
             switch (groupType) {
             case groupTypes.NUMERIC.equals:
+                return rawDataValue;
+            case groupTypes.NUMERIC.value:
                 return rawDataValue;
             case groupTypes.NUMERIC.thousandth:
                 return groupUtils.getRangeFraction(rawDataValue, 4);
