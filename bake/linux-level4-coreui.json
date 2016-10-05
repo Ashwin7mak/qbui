@@ -13,7 +13,6 @@
       "type": "amazon-ebs",
       "ami_name": "{{user `ami_name`}}.v{{user `ami_version`}}",
       "instance_type": "{{user `aws_instance_size`}}",
-      "iam_instance_profile": "JenkinsSlaveRole",
       "region": "us-west-2",
       "source_ami": "{{user `source_ami`}}",
       "ssh_username": "ec2-user",
