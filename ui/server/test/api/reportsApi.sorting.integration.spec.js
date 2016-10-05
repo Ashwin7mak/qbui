@@ -251,7 +251,9 @@
                             // Sort the expected records
                             var sortedExpectedRecords = sortRecords(records, testcase.sortFids, testcase.sortOrder);
                             // Verify sorted records
-                            verifyRecords(results.records, sortedExpectedRecords);
+                            verifyRecords(results.records.records, sortedExpectedRecords);
+                            // No grouping
+                            assert.equal(results.records.groups, null, 'Excepted groups object to be null when testing sort only report');
                             done();
                         });
                     });
