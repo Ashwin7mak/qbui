@@ -32,7 +32,6 @@ buildscript {
         nexusRepoRoot = "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/"
         nexusUser = "developer"
         nexusPassword = "id2ubV8miEVhXtGd"
-        quickbaseVersion = "1.0"
     }
     repositories {
         maven {

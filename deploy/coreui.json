@@ -318,9 +318,7 @@
                       "index": "quickbase-ppdidx",
                       "logs_to_index": {
                         "default": {
-                          "_meta": {
-                            "Fn::Join": [ "", [ "aws_stack_name::", { "Ref": "AWS::StackName" } ] ]
-                          }
+                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
                         },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
@@ -350,9 +348,7 @@
                       "index": "quickbase-ppdidx",
                       "logs_to_index": {
                         "default": {
-                          "_meta": {
-                            "Fn::Join": [ "", [ "aws_stack_name::", { "Ref": "AWS::StackName" } ] ]
-                          }
+                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
                         },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
@@ -382,9 +378,7 @@
                       "index": "quickbase-ppdidx",
                       "logs_to_index": {
                         "default": {
-                          "_meta": {
-                            "Fn::Join": [ "", [ "aws_stack_name::", { "Ref": "AWS::StackName" } ] ]
-                          }
+                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
                         },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
@@ -414,9 +408,7 @@
                       "index": "quickbase-ppdidx",
                       "logs_to_index": {
                         "default": {
-                          "_meta": {
-                            "Fn::Join": [ "", [ "aws_stack_name::", { "Ref": "AWS::StackName" } ] ]
-                          }
+                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
                         },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
@@ -446,9 +438,7 @@
                       "index": "quickbase-prdidx",
                       "logs_to_index": {
                         "default": {
-                          "_meta": {
-                            "Fn::Join": [ "", [ "aws_stack_name::", { "Ref": "AWS::StackName" } ] ]
-                          }
+                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
                         },
                         "monitor:///var/log/qbase": {
                           "disabled": "0",
