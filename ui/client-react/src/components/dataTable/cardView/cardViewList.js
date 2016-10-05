@@ -78,6 +78,7 @@ let CardViewList = React.createClass({
                     <CardView key={this.props.node[this.props.uniqueIdentifier]}
                               rowId={this.props.node[this.props.uniqueIdentifier] ? this.props.node[this.props.uniqueIdentifier].value : null}
                               data={this.props.node}
+                              uniqueIdentifier={this.props.uniqueIdentifier}
                               allowCardSelection={this.props.allowCardSelection}
                               onToggleCardSelection={this.props.onToggleCardSelection}
                               onRowSelected={this.props.onRowSelected}

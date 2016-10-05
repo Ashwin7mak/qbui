@@ -206,7 +206,7 @@ let CardView = React.createClass({
                 rowActionsClasses += this.state.showActions ? "open" : "closed";
             }
 
-            const isSelected = this.props.isRowSelected(this.props.data);
+            const isSelected = _.has(this.props.data, this.props.uniqueIdentifier) && this.props.isRowSelected(this.props.data[this.props.uniqueIdentifier].value);
 
             return (
                 <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swipingActions ? "actionsOpen" : "actionsClosed") }

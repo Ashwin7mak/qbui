@@ -19,7 +19,8 @@ let ReportActions = React.createClass({
         rptId: React.PropTypes.string,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
-        nameForRecords: React.PropTypes.string
+        nameForRecords: React.PropTypes.string,
+        onEditSelected: React.PropTypes.func
     },
 
     getEmailSubject() {
@@ -50,6 +51,18 @@ let ReportActions = React.createClass({
     },
 
     /**
+     * edit icon was clicked
+     */
+    onEditClicked() {
+
+        if (this.props.selection && this.props.selection.length === 1) {
+            const flux = this.getFlux();
+
+            const recordId = this.props.selection[0];
+            flux.actions.openRecordForEdit(recordId);
+        }
+    },
+    /**
      * render the actions, omitting 'edit' if we have multiple selections
      */
     render() {
@@ -60,7 +73,9 @@ let ReportActions = React.createClass({
                 <div>
                     {<span className="selectedRowsLabel">{this.props.selection.length}</span>}
                     <div className="actionIcons">
-                        {this.props.selection.length === 1 && <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit")}/>}
+                        {this.props.selection.length === 1 &&
+                            <ActionIcon icon="edit" onClick={this.onEditClicked} tip={this.getSelectionTip("selection.edit")}/>
+                        }
                         <ActionIcon icon="print" tip={this.getSelectionTip("selection.print")}/>
 
                         <EmailReportLink tip={this.getSelectionTip("selection.email")}
