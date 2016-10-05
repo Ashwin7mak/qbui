@@ -16,7 +16,10 @@ describe('RecordTrowser functions', () => {
 
     let flux = {
         actions: {
-
+            recordPendingEditsCommit() {return;},
+            recordPendingEditsCancel() {return;},
+            saveRecord() {return;},
+            saveNewRecord() {return;}
         }
     };
 
@@ -24,10 +27,20 @@ describe('RecordTrowser functions', () => {
 
     beforeEach(() => {
         RecordTrowser.__Rewire__('Record', RecordMock);
+
+        spyOn(flux.actions, 'recordPendingEditsCommit');
+        spyOn(flux.actions, 'recordPendingEditsCancel');
+        spyOn(flux.actions, 'saveRecord');
+        spyOn(flux.actions, 'saveNewRecord');
     });
 
     afterEach(() => {
         RecordTrowser.__ResetDependency__('Record');
+
+        flux.actions.recordPendingEditsCommit.calls.reset();
+        flux.actions.recordPendingEditsCancel.calls.reset();
+        flux.actions.saveRecord.calls.reset();
+        flux.actions.saveNewRecord.calls.reset();
     });
 
     it('test render of loading component', () => {
@@ -36,6 +49,6 @@ describe('RecordTrowser functions', () => {
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-
     });
+
 });
