@@ -303,11 +303,9 @@ let QBForm = React.createClass({
      */
     createTab(tab, singleColumn) {
         let sections = [];
-        let isFirstSection = true;
         if (tab.sections) {
-            Object.keys(tab.sections).forEach(key => {
-                sections.push(this.createSection(tab.sections[key], singleColumn, isFirstSection));
-                isFirstSection = false;
+            Object.keys(tab.sections).forEach((key, index) => {
+                sections.push(this.createSection(tab.sections[key], singleColumn, index === 0));
             });
         }
 
