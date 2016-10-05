@@ -211,7 +211,7 @@ export let RecordRoute = React.createClass({
                                 pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
                                 formData={this.props.form ? this.props.form.formData : null}
                                 appUsers={this.props.appUsers}
-                                edit={false}></Record>
+                                edit={true}></Record>
 
                     </ReactCSSTransitionGroup>
                 </div>
