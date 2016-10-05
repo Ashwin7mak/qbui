@@ -15,14 +15,22 @@ let FormStore = Fluxxor.createStore({
         this.formLoading = false;
         this.errorStatus = null;
 
+        this.editFormData = {};
+        this.editFormLoading = false;
+        this.editFormErrorStatus = null;
+
         this.bindActions(
             actions.LOAD_FORM_AND_RECORD, this.onLoadForm,
             actions.LOAD_FORM_AND_RECORD_SUCCESS, this.onLoadFormSuccess,
             actions.LOAD_FORM_AND_RECORD_FAILED, this.onLoadFormFailed,
 
-            actions.LOAD_FORM, this.onLoadForm,
-            actions.LOAD_FORM_SUCCESS, this.onLoadFormSuccess,
-            actions.LOAD_FORM_FAILED, this.onLoadFormFailed
+            actions.LOAD_EDIT_FORM, this.onLoadEditForm,
+            actions.LOAD_EDIT_FORM_SUCCESS, this.onLoadEditFormSuccess,
+            actions.LOAD_EDIT_FORM_FAILED, this.onLoadEditFormFailed,
+
+            actions.LOAD_EDIT_FORM_AND_RECORD, this.onLoadEditForm,
+            actions.LOAD_EDIT_FORM_AND_RECORD_SUCCESS, this.onLoadEditFormSuccess,
+            actions.LOAD_EDIT_FORM_AND_RECORD_FAILED, this.onLoadEditFormFailed
         );
 
         this.logger = new Logger();
@@ -44,11 +52,32 @@ let FormStore = Fluxxor.createStore({
         this.errorStatus = null;
         this.emit('change');
     },
+    onLoadEditForm() {
+        this.editFormLoading = true;
+        this.editFormErrorStatus = null;
+        this.emit("change");
+    },
+    onLoadEditFormFailed(errorStatus) {
+        this.editFormLoading = false;
+        this.editFormData = {};
+        this.editFormErrorStatus = errorStatus;
+        this.emit("change");
+    },
+    onLoadEditFormSuccess(formData) {
+        this.editFormLoading = false;
+        this.editFormData = formData;
+        this.editFormErrorStatus = null;
+        this.emit('change');
+    },
     getState() {
         return {
             formData: this.formData,
             formLoading: this.formLoading,
-            errorStatus: this.errorStatus
+            errorStatus: this.errorStatus,
+
+            editFormData: this.editFormData,
+            editFormLoading: this.editFormLoading,
+            editFormErrorStatus: this.editFormErrorStatus,
         };
     },
 });

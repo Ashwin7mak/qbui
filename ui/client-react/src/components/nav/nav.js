@@ -113,16 +113,16 @@ export let Nav = React.createClass({
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
-        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.nav.trowserOpen && !this.state.form.formLoading) {
+        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.nav.trowserOpen && !this.state.form.editFormLoading) {
 
             const flux = this.getFlux();
 
             if (editRec === UrlConsts.NEW_RECORD_VALUE) {
-                flux.actions.loadForm(appId, tblId, rptId, "edit").then(() => {
+                flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             } else {
-                flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit").then(() => {
+                flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             }
