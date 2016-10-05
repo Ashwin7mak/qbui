@@ -10,10 +10,10 @@ let sortByFields = [{name:'QuickBase', descendOrder:true, type:'sort', unparsedV
 ];
 
 let groupByFields = [
-    {name:'Project', descendOrder:true, type:'group', unparsedVal:"-1:V", id: 1},
-    //{name:'Region', descendOrder:true, type:'group', unparsedVal:"-3:V", id: 3},
-    //{name:'Status', descendOrder:true, type:'group', unparsedVal:"-4:V", id: 4},
-    // {name:'Date', descendOrder:false, type:'group', unparsedVal:"5:V", id: 5}
+    {name:'Project', descendOrder:true, type:'group', unparsedVal:"-1:EQUALS", id: 1},
+    //{name:'Region', descendOrder:true, type:'group', unparsedVal:"-3:EQUALS", id: 3},
+    //{name:'Status', descendOrder:true, type:'group', unparsedVal:"-4:EQUALS", id: 4},
+    // {name:'Date', descendOrder:false, type:'group', unparsedVal:"5:EQUALS", id: 5}
 ];
 
 export default {SORT: sortByFields, GROUP: groupByFields};

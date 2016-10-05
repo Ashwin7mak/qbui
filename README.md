@@ -10,9 +10,9 @@ or
 For developer instructions to setup and run see <https://github.com/QuickBase/qbui/blob/master/ui/README.md#instructions-to-run-for-development> for details
 
 For running locally make sure you copy
- `qbui/ui/server/config/environment/local.js.sample`
+
+ `qbui/ui/server/src/config/environment/local.js.sample`
 
  to
 
- `qbui/ui/server/config/environment/local.js`
-
+ `qbui/ui/server/src/config/environment/local.js`
