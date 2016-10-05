@@ -9,6 +9,8 @@
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
+    // The expected text displayed in the "Help" link when the language is set to German
+    var HELP_GERMAN = 'Hilfe';
 
     describe('Report Language tests', function() {
         var app;
@@ -88,7 +90,7 @@
             }).then(function() {
                 // TODO: might want to wait for the element to contain the proper text in case of some lag
                 // verify the "Help" link is in German
-                expect(reportServicePage.topNavHelpGlobActEl.getText()).toEqual('Hilfe');
+                expect(reportServicePage.topNavHelpGlobActEl.getText()).toEqual(HELP_GERMAN);
             }).then(function() {
                 // - click the AppToggle
                 // - switch to the 2nd app
@@ -102,7 +104,7 @@
                 });
             }).then(function() {
                 // verify the "Help" link is in German
-                expect(reportServicePage.topNavHelpGlobActEl.getText()).toEqual('Hilfe');
+                expect(reportServicePage.topNavHelpGlobActEl.getText()).toEqual(HELP_GERMAN);
             }).then(function() {
                 done();
             });

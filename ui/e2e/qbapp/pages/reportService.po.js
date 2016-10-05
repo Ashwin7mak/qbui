@@ -76,8 +76,8 @@
         this.topNavEllipsesGlobActEl = this.topNavRightDivEl.element(by.id('nav-right-dropdown'));
         // Preferences dropdown
         this.topNavPreferenceContainer = this.topNavRightDivEl.element(by.css('.dropdown .dropdown-menu'));
-        this.topNavLangEnglish = this.topNavPreferenceContainer.all(by.className('localeLink')).get(0);
-        this.topNavLangGerman = this.topNavPreferenceContainer.all(by.className('localeLink')).get(1);
+        this.topNavLangEnglish = this.topNavPreferenceContainer.element(by.css('.localeLink [title="en-us"]'));
+        this.topNavLangGerman = this.topNavPreferenceContainer.element(by.css('.localeLink [title="de-de"]'));
 
         // Report Container
         this.mainContentEl = element(by.className('mainContent'));
