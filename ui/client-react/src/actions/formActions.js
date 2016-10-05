@@ -7,6 +7,7 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import {browserHistory} from 'react-router';
+import * as UrlConsts from "../constants/urlConstants";
 
 let logger = new Logger();
 
@@ -31,7 +32,7 @@ let formActions = {
     openRecordForEdit(recordId) {
 
         // add editRec query param and let the router take action
-        WindowLocationUtils.pushWithQuery("editRec", recordId);
+        WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recordId);
     },
 
     /**
@@ -39,7 +40,7 @@ let formActions = {
      */
     editNewRecord() {
         // add editRec=new query param and let the router take action
-        WindowLocationUtils.pushWithQuery("editRec", "new");
+        WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
     },
 
     /**

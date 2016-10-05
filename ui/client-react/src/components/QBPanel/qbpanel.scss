@@ -60,6 +60,7 @@
         flex-wrap: wrap;
         flex-direction: column;
         background-color: $panel-background-color;
+        overflow:auto;
         .qbPanelHeaderIcon {
             color: $panel-header-icon-color;
         }

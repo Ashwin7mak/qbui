@@ -14,6 +14,7 @@ import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
+import * as UrlConsts from "../../constants/urlConstants";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -110,13 +111,13 @@ export let Nav = React.createClass({
     updateRecordTrowser() {
         const {appId, tblId, rptId} = this.props.params;
 
-        const editRec = this.props.location.query.editRec;
+        const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
-        if (this.props.location.query.editRec && !this.state.nav.trowserOpen && !this.state.form.formLoading) {
+        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.nav.trowserOpen && !this.state.form.formLoading) {
 
             const flux = this.getFlux();
 
-            if (editRec === "new") {
+            if (editRec === UrlConsts.NEW_RECORD_VALUE) {
                 flux.actions.loadForm(appId, tblId, rptId, "edit").then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
@@ -140,9 +141,9 @@ export let Nav = React.createClass({
         if (this.state.nav.leftNavVisible) {
             classes += " leftNavOpen";
         }
-        let editRecordId = _.has(this.props, "location.query") ? this.props.location.query.editRec : null;
+        let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
 
-        if (editRecordId === "new") {
+        if (editRecordId === UrlConsts.NEW_RECORD_VALUE) {
             editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
         }
         return (<div className={classes}>
