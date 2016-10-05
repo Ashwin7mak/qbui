@@ -2,14 +2,16 @@
 
 var should = require('should');
 var assert = require('assert');
-var groupUtils = require('../../src/utility/groupUtils.js');
-var groupTypes = require('../../src/api/groupTypes');
 var constants = require('../../../common/src/constants');
 var dateTimeFormatter = require('../../../common/src/formatter/dateTimeFormatter');
 var logger = require('../../src/logger').getLogger();
 dateTimeFormatter.setLogger(logger);
 
 var moment = require('moment');
+
+var groups = require('../../../common/src/groupTypes');
+var groupUtils = require('../../src/utility/groupUtils.js');
+var groupTypes = groups.GROUP_TYPE;
 
 /**
  * Unit tests for Group Utility functions

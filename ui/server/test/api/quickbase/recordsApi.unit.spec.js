@@ -10,6 +10,7 @@ var requestHelper = require('./../../../src/api/quickbase/requestHelper')(config
 var recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
 var constants = require('../../../../common/src/constants');
 var dataErrorCodes = require('../../../../common/src/dataEntryErrorCodes');
+var groupTypes = require('../../../../common/src/groupTypes').GROUP_TYPE;
 
 /**
  * Unit tests for records apis
@@ -292,7 +293,7 @@ describe("Validate recordsApi", function() {
 
         it('success return records array with display parameter type and no grouping', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=display';
-            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:V';
+            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:' + groupTypes.COMMON.equals;
 
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
             executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
@@ -333,7 +334,7 @@ describe("Validate recordsApi", function() {
 
         it('success return records array with display parameter type with grouping', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=display';
-            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=2:V';
+            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=2:' + groupTypes.COMMON.equals;
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
             executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
             var promise = recordsApi.fetchRecordsAndFields(req);
@@ -380,7 +381,7 @@ describe("Validate recordsApi", function() {
 
         it('success return count when query is set', function(done) {
             req.url = '/apps/1/tables/2/records/countQuery';
-            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:V';
+            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:' + groupTypes.COMMON.equals;
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '10'}));
             var promise = recordsApi.fetchCountForRecords(req);
             promise.then(

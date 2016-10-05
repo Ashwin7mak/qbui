@@ -20,8 +20,15 @@ import reportModel from '../models/reportModel';
 
 //  Build the request query parameters needed to properly filter the report request based on the report
 //  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
-function buildRequestQuery(reportMetaData, requiredQueryParams, overrideQueryParams, facetQueryExpression, filter) {
+function buildRequestQuery(response, requiredQueryParams, overrideQueryParams, facetQueryExpression, filter) {
     var queryParams = {};
+    var reportMetaData = {};
+
+    if (response.data && response.data.reportMetaData) {
+        reportMetaData = response.data.reportMetaData;
+    } else {
+        reportMetaData = response;
+    }
 
     //required query params
     queryParams[query.OFFSET_PARAM] = requiredQueryParams[query.OFFSET_PARAM];
