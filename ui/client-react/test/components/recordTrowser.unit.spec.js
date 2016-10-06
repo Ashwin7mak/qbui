@@ -17,11 +17,11 @@ describe('RecordTrowser functions', () => {
 
     let flux = {
         actions: {
-            recordPendingEditsCommit() {return;},
-            recordPendingEditsCancel() {return;},
+            recordPendingEditsCommit() {},
+            recordPendingEditsCancel() {},
             saveRecord() {return Promise.resolve({});},
             saveNewRecord() {return Promise.resolve({});},
-            hideTrowser() {return;}
+            hideTrowser() {}
         }
     };
 
