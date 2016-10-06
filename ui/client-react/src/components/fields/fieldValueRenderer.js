@@ -4,6 +4,7 @@ import _ from 'lodash';
 import FieldFormats from '../../utils/fieldFormats';
 import CheckBoxFieldValueRenderer from './checkBoxFieldValueRenderer';
 import DateTimeFieldValueRenderer from './dateTimeFieldValueRenderer';
+import EmailFieldValueRenderer from './emailFieldValueRenderer';
 import MultiLineTextFieldValueRenderer from './multiLineTextFieldValueRenderer';
 import NumericFieldValueRenderer from './numericFieldValueRenderer';
 import TextFieldValueRenderer from './textFieldValueRenderer';
@@ -47,6 +48,7 @@ const FieldValueRenderer = React.createClass({
          * - DURATION_FORMAT = 11;
          * - PHONE_FORMAT = 12;
          * - MULTI_LINE_TEXT_FORMAT = 13;
+         * - EMAIL_ADDRESS = 14;
          **/
         type: React.PropTypes.number,
 
@@ -117,6 +119,9 @@ const FieldValueRenderer = React.createClass({
                                                      key={'mltfvr-' + this.props.idKey}
                                                  {...commonProperties}/>
                 );
+
+        case FieldFormats.EMAIL_ADDRESS:
+            return <EmailFieldValueRenderer value={this.props.value} display={this.props.display} {...commonProperties} />;
 
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:

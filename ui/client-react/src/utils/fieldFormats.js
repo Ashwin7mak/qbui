@@ -11,7 +11,6 @@ class FieldFormats {
      * @return formatType from formats
      */
     static getFormatType(datatypeAttributes) {
-
         if (datatypeAttributes) {
             switch (datatypeAttributes.type) {
             case serverTypeConsts.NUMERIC:
@@ -54,6 +53,9 @@ class FieldFormats {
                 }
                 return FieldFormats.TEXT_FORMAT;
 
+            case serverTypeConsts.EMAIL_ADDRESS :
+                return FieldFormats.EMAIL_ADDRESS;
+
             default:
                 return FieldFormats.TEXT_FORMAT;
 
@@ -76,6 +78,6 @@ FieldFormats.RATING_FORMAT = 10;
 FieldFormats.DURATION_FORMAT = 11;
 FieldFormats.PHONE_FORMAT = 12;
 FieldFormats.MULTI_LINE_TEXT_FORMAT = 13;
+FieldFormats.EMAIL_ADDRESS = 14;
 
 export default FieldFormats;
-
