@@ -40,6 +40,7 @@ import UserFieldEditorDoc from './docs/userFieldValueEditor';
 import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
 
+import EmailFieldValueEditorDoc from './docs/emailFieldValueEditor.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -52,6 +53,7 @@ render((
             <Route path="dateFieldValueEditor" component={DateFieldValueEditorDoc} />
             <Route path="dateTimeFieldValueEditor" component={DateTimeFieldValueEditorDoc} />
             <Route path="dateTimeFieldValueRenderer" component={DateTimeFieldValueRendererDoc} />
+            <Route path="emailFieldValueEditor" component={EmailFieldValueEditorDoc} />
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
             <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
             <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />

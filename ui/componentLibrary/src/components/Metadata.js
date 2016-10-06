@@ -21,6 +21,7 @@ import UserFieldValueRendererMetadata from 'component-metadata!../../../client-r
 import QBIconMetadata from 'component-metadata!../../../client-react/src/components/qbIcon/qbIcon.js';
 import QBPanelMetadata from 'component-metadata!../../../client-react/src/components/QBPanel/qbpanel.js';
 
+import EmailFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/emailFieldValueEditor.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -43,7 +44,8 @@ var Metadata = _.merge(
     UserFieldValueEditorMetadata,
     UserFieldValueRendererMetadata,
     QBIconMetadata,
-    QBPanelMetadata
+    QBPanelMetadata,
+    EmailFieldValueEditorMetadata
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete
 );

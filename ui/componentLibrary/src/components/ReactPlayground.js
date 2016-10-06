@@ -26,6 +26,7 @@ const UserFieldValueRenderer = require('../../../client-react/src/components/fie
 const QBicon = require('../../../client-react/src/components/qbIcon/qbIcon');
 const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel');
 
+const EmailFieldValueEditor = require('../../../client-react/src/components/fields/emailFieldValueEditor.js');
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
