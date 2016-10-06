@@ -505,10 +505,6 @@ sonarqube {
     def branchName = proc.in.text.replace("\n", "").replace("\r", "").trim()
     println 'branchName:' + branchName;
 
-    if (branchName) {
-        println branchName;
-    }
-
     properties {
         // the user name becomes part of the project key, this way Jenkins builds are separated from the commoners, meaning you...
         property "sonar.projectKey", "ui:${branchName}:${user}"
