@@ -134,13 +134,14 @@
              * @param req
              * @returns Promise
              */
-            fetchFormComponents: function(req) {
+            fetchFormComponents: function(req, fetchRecord) {
 
                 return new Promise(function(resolve, reject) {
                     //  fetch the form meta data and fields on the table
                     var fetchRequests = [this.fetchFormMetaData(req), this.fetchTableFields(req)];
                     Promise.all(fetchRequests).then(
                         function(response) {
+
                             //  create return object with the form meta data
                             let obj = {
                                 formMeta: JSON.parse(response[0].body),
@@ -164,17 +165,29 @@
                                 let columnList = collectionUtils.convertListToDelimitedString(fidList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
                                 requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
 
-                                //  get the records and fields
-                                recordsApi.fetchSingleRecordAndFields(req).then(
-                                    function(resp) {
-                                        obj.record = resp.record;
-                                        obj.fields = resp.fields;
-                                        resolve(obj);
-                                    },
-                                    function(err) {
-                                        reject(err);
-                                    }
-                                );
+                                if (fetchRecord) {
+                                    //  get the records and fields
+                                    recordsApi.fetchSingleRecordAndFields(req).then(
+                                        function(resp) {
+                                            obj.record = resp.record;
+                                            obj.fields = resp.fields;
+                                            resolve(obj);
+                                        },
+                                        function(err) {
+                                            reject(err);
+                                        }
+                                    );
+                                } else {
+                                    recordsApi.fetchFields(req).then(
+                                        function(resp) {
+                                            obj.fields = JSON.parse(resp.body);
+                                            resolve(obj);
+                                        },
+                                        function(err) {
+                                            reject(err);
+                                        }
+                                    );
+                                }
                             } else {
                                 //  no fids on the form; just return the form meta data and empty records and fields
                                 resolve(obj);

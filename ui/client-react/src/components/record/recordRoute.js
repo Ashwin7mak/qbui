@@ -148,11 +148,32 @@ export let RecordRoute = React.createClass({
         }
 
     },
+
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    openRecordForEdit() {
+
+        const flux = this.getFlux();
+
+        flux.actions.openRecordForEdit(this.props.params.recordId);
+    },
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    editNewRecord() {
+
+        const flux = this.getFlux();
+
+        flux.actions.editNewRecord();
+    },
     getPageActions() {
 
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
-            {msg: 'pageActions.edit', icon:'edit'},
+            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'pageActions.email', icon:'mail'},
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.delete', icon:'delete'},
@@ -208,7 +229,6 @@ export let RecordRoute = React.createClass({
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
                                 errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
-                                pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
                                 formData={this.props.form ? this.props.form.formData : null}
                                 appUsers={this.props.appUsers}
                                 edit={true}></Record>

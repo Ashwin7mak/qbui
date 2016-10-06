@@ -41,6 +41,7 @@
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
 
         routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
+        routeToGetFunction[routeConsts.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT] = fetchReport;
@@ -355,7 +356,35 @@
         perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            formsApi.fetchFormComponents(req).then(
+            formsApi.fetchFormComponents(req, false).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Form Components');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Form Components');
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+    /**
+     * Fetch form meta data and record data for a record.
+     *
+     * @param req
+     * @param res
+     */
+    function fetchFormAndRecordComponents(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            formsApi.fetchFormComponents(req, true).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Form Components');

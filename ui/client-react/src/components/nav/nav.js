@@ -1,12 +1,11 @@
 import React from "react";
-import {I18nMessage} from "../../utils/i18nMessage";
-import Trowser from "../trowser/trowser";
+
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
-import ReportManager from "../report/reportManager";
-import QBicon from "../qbIcon/qbIcon";
-import TableIcon from "../qbTableIcon/qbTableIcon";
+import ReportManagerTrowser from "../report/reportManagerTrowser";
+import RecordTrowser from "../record/recordTrowser";
+import * as SchemaConsts from "../../constants/schema";
 import GlobalActions from "../actions/globalActions";
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
@@ -14,6 +13,8 @@ import {withRouter} from 'react-router';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
+import * as TrowserConsts from "../../constants/trowserConstants";
+import * as UrlConsts from "../../constants/urlConstants";
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -59,18 +60,14 @@ export let Nav = React.createClass({
                                startTabIndex={100}
                                position={"left"}/>);
     },
-    hideTrowser() {
-        let flux = this.getFlux();
-        flux.actions.filterReportsByName("");
-        flux.actions.hideTrowser();
-    },
+
     onSelectTableReports(tableId) {
         const flux = this.getFlux();
 
         if (Breakpoints.isSmallBreakpoint()) {
             flux.actions.toggleLeftNav(false);
         }
-        flux.actions.showTrowser();
+        flux.actions.showTrowser(TrowserConsts.TROWSER_REPORTS);
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
     },
 
@@ -93,47 +90,8 @@ export let Nav = React.createClass({
         }
         return null;
     },
-    /**
-     *  get breadcrumb element for top of trowser
-     */
-    getTrowserBreadcrumbs() {
-        const table = this.getSelectedTable();
 
-        return (
-            <h4>
-                <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""} <QBicon icon="caret-right"/>
-                <I18nMessage message={'nav.reportsHeading'}/>
-            </h4>);
 
-    },
-    /**
-     *  get actions element for bottome center of trowser (placeholders for now)
-     */
-    getTrowserActions() {
-        return (<div className={"centerActions"}>
-                <a href="#"><QBicon icon="add-mini"/><I18nMessage message={'report.newReport'}/></a>
-                <a href="#"><QBicon icon="settings"/><I18nMessage message={'report.organizeReports'}/></a>
-            </div>);
-    },
-    /**
-     * get trowser content (report nav for now)
-     */
-    getTrowserContent() {
-
-        let selectReport = (report) => {
-            this.hideTrowser();
-            setTimeout(() => {
-                // give UI transition a moment to execute
-                if (this.props.router) {
-                    this.props.router.push(report.link);
-                }
-            });
-        };
-
-        return <ReportManager reportsData={this.state.reportsData}
-                              onSelectReport={selectReport}
-                              filterReportsName={this.state.nav.filterReportsName} />;
-    },
 
     /* toggle apps list - if on collapsed nav, open left nav and display apps */
     toggleAppsList(open) {
@@ -146,6 +104,36 @@ export let Nav = React.createClass({
             flux.actions.toggleLeftNav(true);
         }
     },
+
+    /**
+     * open existing or new record in trowser if editRec param exists
+     */
+    updateRecordTrowser() {
+        const {appId, tblId, rptId} = this.props.params;
+
+        const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
+
+        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.nav.trowserOpen && !this.state.form.editFormLoading) {
+
+            const flux = this.getFlux();
+
+            if (editRec === UrlConsts.NEW_RECORD_VALUE) {
+                flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
+                    flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
+                });
+            } else {
+                flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
+                    flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
+                });
+            }
+        }
+    },
+
+    componentDidUpdate() {
+
+        this.updateRecordTrowser();
+    },
+
     render() {
         const flux = this.getFlux();
 
@@ -153,16 +141,32 @@ export let Nav = React.createClass({
         if (this.state.nav.leftNavVisible) {
             classes += " leftNavOpen";
         }
+        let editRecordId = _.has(this.props, "location.query") ? this.props.location.query[UrlConsts.EDIT_RECORD_KEY] : null;
 
+        if (editRecordId === UrlConsts.NEW_RECORD_VALUE) {
+            editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
+        }
         return (<div className={classes}>
 
-            <Trowser position={"top"}
-                     visible={this.state.nav.trowserOpen}
-                     breadcrumbs={this.getTrowserBreadcrumbs()}
-                     centerActions={this.getTrowserActions()}
-                     onCancel={this.hideTrowser}
-                     onDone={this.hideTrowser}
-                     content={this.getTrowserContent()} />
+            {this.props.params && this.props.params.appId &&
+                <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
+                               router={this.props.router}
+                               form={this.state.form}
+                               appId={this.props.params.appId}
+                               tblId={this.props.params.tblId}
+                               recId={editRecordId}
+                               pendEdits={this.state.pendEdits}
+                               appUsers={this.state.apps.appUsers}
+                               selectedApp={this.getSelectedApp()}
+                               selectedTable={this.getSelectedTable()} />
+            }
+            {this.props.params && this.props.params.appId &&
+                <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}
+                                      router={this.props.router}
+                                      selectedTable={this.getSelectedTable()}
+                                      filterReportsName={this.state.nav.filterReportsName}
+                                      reportsData={this.state.reportsData}/>
+            }
 
             <LeftNav
                 visible={this.state.nav.leftNavVisible}

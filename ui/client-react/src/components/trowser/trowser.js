@@ -10,11 +10,10 @@ let Trowser = React.createClass({
     propTypes: {
         visible: React.PropTypes.bool.isRequired,
         position: React.PropTypes.string, // top or bottom
-        leftActions: React.PropTypes.element,
-        centerActions: React.PropTypes.element,
-        breadcrumbs: React.PropTypes.element,
-        content: React.PropTypes.element.isRequired,
-        onDone: React.PropTypes.func,
+        leftActions: React.PropTypes.node,
+        centerActions: React.PropTypes.node,
+        breadcrumbs: React.PropTypes.node,
+        content: React.PropTypes.node.isRequired,
         onCancel: React.PropTypes.func,
     },
     defaultProps: {
@@ -70,7 +69,8 @@ let Trowser = React.createClass({
                         {this.props.centerActions}
 
                         <div className={"rightIcons"}>
-                            <Button bsStyle="primary" onClick={this.props.onDone}>Done</Button>
+                            {this.props.rightIcons}
+
                         </div>
                     </div>
                 </div>
