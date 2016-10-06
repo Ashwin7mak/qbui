@@ -1,0 +1,50 @@
+{
+  "name": "nodejs",
+  "default_attributes": {
+    "datadog": {
+      "api_key": "0c8a8316ea264c1391a346121614a8e7",
+      "application_key": "d29bd4e200df9f222279caa4dbacc60c86f8b0f6",
+      "hostname": "",
+      "process": {
+        "instances": [
+          {
+            "name": "node",
+            "search_string": "node"
+          }
+        ]
+      }
+    },
+    "splunk": {
+      "forwarder": {
+        "logs_to_index": {
+          "monitor:///var/log/qbase": {
+            "disabled": "0",
+            "index": "quickbase-ppdidx",
+            "blacklist": "\\.(gz|bz2|z|zip)$"
+          }
+        }
+      }
+    },
+    "nodejs": {
+      "app_deploy": {
+        "deployed_name": "webhooks",
+        "nexus": {
+          "repository": "snapshots",
+          "group_id": "com.quickbase",
+          "artifact_id": "webhooks"
+        }
+      }
+    }
+  },
+  "override_attributes": {},
+  "json_class": "Chef::Role",
+  "description": "Base NodeJS AMI Layer",
+  "chef_type": "role",
+  "run_list": [
+    "recipe[datadog::dd-handler]",
+    "recipe[splunkclouduf::configure]",
+    "recipe[splunkclouduf::cloneprep]",
+    "recipe[datadog::process]",
+    "recipe[nodejs::app_deploy]"
+  ]
+}

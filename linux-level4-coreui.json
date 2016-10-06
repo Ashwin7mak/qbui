@@ -1,0 +1,42 @@
+{
+  "variables": {
+    "ami_name": null,
+    "aws_instance_size": null,
+    "aws_subnet_id": null,
+    "aws_vpc_id": null,
+    "chef_role": null,
+    "source_ami": null,
+    "version": null
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "ami_name": "{{user `ami_name`}}.v{{user `version`}}",
+      "instance_type": "{{user `aws_instance_size`}}",
+      "region": "us-west-2",
+      "source_ami": "{{user `source_ami`}}",
+      "ssh_username": "ec2-user",
+      "subnet_id": "{{user `aws_subnet_id`}}",
+      "vpc_id": "{{user `aws_vpc_id`}}",
+      "tags": {
+        "Layer": "3",
+        "App": "NodeJS",
+        "Version": "{{user `version`}}"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "chef-solo",
+      "cookbook_paths": [
+        "chef-repo/cookbooks"
+      ],
+      "execute_command": "{{if .Sudo}}sudo -E {{end}}chef-solo --no-color -c {{.ConfigPath}} -j {{.JsonPath}}",
+      "roles_path": "chef-repo/roles",
+      "run_list": [
+        "role[{{user `chef_role`}}]"
+      ],
+      "skip_install": true
+    }
+  ]
+}
