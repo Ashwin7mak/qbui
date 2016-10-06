@@ -461,6 +461,7 @@
             perfLog.init("Build GroupList using core group result");
 
             let groupBy = this.group(req, fields);
+            let totalRows = 0;
 
             if (records && records.type === 'GROUP') {
                 var data = [];
@@ -495,6 +496,8 @@
                                 }
                             }
                         });
+
+                        totalRows++;
                         node.children.push(columns);
                     });
 
@@ -504,7 +507,7 @@
 
                 groupBy.gridData = data;
                 groupBy.hasGrouping = true;
-                groupBy.totalRows = data.length;
+                groupBy.totalRows = totalRows;
             }
 
             //  log performance data
