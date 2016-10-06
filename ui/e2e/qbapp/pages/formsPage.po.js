@@ -6,9 +6,16 @@
     var _ = require('lodash');
 
     var e2ePageBase = require('./../../common/e2ePageBase');
+    var rawValueGenerator = require('./../../../test_generators/rawValue.generator');
     var ReportServicePage = requirePO('reportService');
     var reportServicePage = new ReportServicePage();
-    var formFields = [];
+    var testValues = [];
+
+    var sDate = '12-12-2020';
+    var sText = rawValueGenerator.generateString(10);
+    var sNumeric = rawValueGenerator.generateDouble(0, 10);
+    var sTime = '2:30 am';
+
 
     var FormsPage = function() {
         this.formTrowserHeader = element(by.className('trowserHeader'));
@@ -35,6 +42,7 @@
         //form title
         this.formTitle = this.formContainerEl.element(by.className('qbPanelHeaderTitleText'));
 
+
         this.clickFormSaveBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
@@ -51,11 +59,6 @@
         };
 
         this.enterFormValues = function(fieldLabel) {
-            var sDate = '12-12-2016';
-            var sText = 'abcdefghijklmn';
-            var sNumeric = '123.0';
-            var sTime = '02:30 am';
-
             if (fieldLabel === 'dateCell') {
                 //enter date fields
                 return this.formTable.all(by.className(fieldLabel)).filter(function(elm) {
@@ -98,6 +101,34 @@
                 });
             }
         };
+
+        this.verifyFieldValuesInReportTable = function(recordRowNo, fieldType) {
+            reportServicePage.agGridRecordElList.then(function(records) {
+                if (fieldType === 'numericField') {
+                    //numeric field
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 2)).toBe(sNumeric.toString());
+                    //numeric currency field
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 3)).toBe('$' + sNumeric);
+                    //numeric percent field
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 4)).toBe(sNumeric + '%');
+                    //numeric rating field
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 5)).toBe(sNumeric.toString());
+                    //numeric duration field
+                    // expect(reportServicePage.getRecordValues(records[7], 9)).toBe('2.0337302E-7 weeks');
+                } if (fieldType === 'dateCell') {
+                    //date field
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 6)).toBe(sDate);
+                    //date Time field
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 7)).toBe(sDate+' '+sTime);
+                }if (fieldType === 'timeCell') {
+                    //time of day field
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 8)).toBe(sTime);
+                }if (fieldType === 'checkbox') {
+                    //checkbox field
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 10)).toBe('true');
+                }
+            });
+        }
 
     };
     FormsPage.prototype = e2ePageBase;

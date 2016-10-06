@@ -54,6 +54,9 @@
         });
 
         it('Add a record from the form', function(done) {
+            //var fieldTypeClassNames = ['timeCell', 'dateCell','textField', 'numericField', 'checkbox'];
+            var fieldTypeClassNames = ['timeCell', 'dateCell', 'numericField', 'checkbox'];
+
             return reportServicePage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                 return reportServicePage.waitForElementToBeClickable(reportServicePage.reportAddRecordBtn).then(function() {
                     //click on add record button
@@ -62,46 +65,27 @@
                     // Check that the add form container is displayed
                     expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
                 }).then(function() {
-                    //var fieldTypeClassNames = ['timeCell', 'dateCell','textField', 'numericField', 'checkbox'];
-                    var fieldTypeClassNames = ['timeCell', 'dateCell', 'numericField', 'checkbox'];
                     //get the fields from the table and generate a record
                     for (var i = 0; i < fieldTypeClassNames.length; i++) {
                         formsPage.enterFormValues(fieldTypeClassNames[i]);
                     }
-                }).then(function() {
+                }).then(function(testValues) {
                     //Save the form
                     formsPage.clickFormSaveBtn();
-                }).then(function() {
+                }).then(function(testValues) {
                     //close the form
                     formsPage.clickFormCloseBtn();
-                }).then(function() {
+                }).then(function(testValues) {
                     //reload the report to verify the row edited
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                     return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                         //Verify there are 7 records after editing 1
                         e2eBase.sleep(browser.params.smallSleep);
                         expect(reportServicePage.reportRecordsCount.getText()).toContain('8 records');
-                        reportServicePage.agGridRecordElList.then(function(records) {
-                            //numeric field
-                            expect(reportServicePage.getRecordValues(records[7], 2)).toBe('123');
-                            //numeric currency field
-                            expect(reportServicePage.getRecordValues(records[7], 3)).toBe('$123');
-                            //numeric percent field
-                            expect(reportServicePage.getRecordValues(records[7], 4)).toBe('123%');
-                            //numeric rating field
-                            expect(reportServicePage.getRecordValues(records[7], 5)).toBe('123');
-                            //date field
-                            expect(reportServicePage.getRecordValues(records[7], 6)).toBe('12-12-2016');
-                            //date Time field
-                            expect(reportServicePage.getRecordValues(records[7], 7)).toBe('12-12-2016 2:30 am');
-                            //time of day field
-                            expect(reportServicePage.getRecordValues(records[7], 8)).toBe('2:30 am');
-                            //numeric duration field
-                            expect(reportServicePage.getRecordValues(records[7], 9)).toBe('2.0337302E-7 weeks');
-                            //checkbox field
-                            expect(reportServicePage.getRecordValues(records[7], 10)).toBe('true');
-                            done();
-                        });
+                        for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                            formsPage.verifyFieldValuesInReportTable(7, fieldTypeClassNames[j]);
+                        }
+                        done();
                     });
                 });
             });
