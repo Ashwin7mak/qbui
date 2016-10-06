@@ -96,7 +96,7 @@ const CardViewListMock = React.createClass({
         );
     },
     simulateSwipeRightForSelection: function() {
-        this.props.onToggleCardSelection(true, this.props.node);
+        this.props.onToggleCardSelection(true, {col_num: 1, col_text: "abc", col_date: "01-01-2015"});
     },
     simulateSwipeLeftInSelection() {
         this.props.onToggleCardSelection(false);
@@ -122,7 +122,7 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test render of loading component', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} reportData={fakeReportData_loading}/>);
+        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} uniqueIdentifier="col_num" reportData={fakeReportData_loading}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let cards = TestUtils.scryRenderedDOMComponentsWithClass(component, "cardViewList");
@@ -130,7 +130,7 @@ describe('CardViewListHolder functions', () => {
     });
 
     it('test render of empty component', () => {
-        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} reportData={fakeReportData_empty}/>);
+        component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux} selectedRows={[]} uniqueIdentifier="col_num" reportData={fakeReportData_empty}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let cards = TestUtils.scryRenderedDOMComponentsWithClass(component, "cardViewList");
@@ -169,6 +169,7 @@ describe('CardViewListHolder functions', () => {
     it('test render of first paginated page, fetch more button only', () => {
         component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
                                                                      selectedRows={[]}
+                                                                     uniqueIdentifier="col_num"
                                                                      reportData={fakeReportData_fetchMoreOnly.reportData}
                                                                      pageEnd={fakeReportData_fetchMoreOnly.pageEnd}
                                                                      pageStart={fakeReportData_fetchMoreOnly.pageStart}/>);
@@ -180,6 +181,7 @@ describe('CardViewListHolder functions', () => {
     it('test render of last paginated page, fetch previous button only', () => {
         component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
                                                                      selectedRows={[]}
+                                                                     uniqueIdentifier="col_num"
                                                                      reportData={fakeReportData_fetchPreviousOnly.reportData}
                                                                      pageEnd={fakeReportData_fetchPreviousOnly.pageEnd}
                                                                      pageStart={fakeReportData_fetchPreviousOnly.pageStart}/>);
@@ -192,6 +194,7 @@ describe('CardViewListHolder functions', () => {
     it('test render of second paginated page, next and previous button to be rendered', () => {
         component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
                                                                      selectedRows={[]}
+                                                                     uniqueIdentifier="col_num"
                                                                      reportData={fakeReportData_fetchMoreAndPrevious.reportData}
                                                                      pageEnd={fakeReportData_fetchMoreAndPrevious.pageEnd}
                                                                      pageStart={fakeReportData_fetchMoreAndPrevious.pageStart}/>);
@@ -209,6 +212,7 @@ describe('CardViewListHolder functions', () => {
     it('test fetch more and fetch previous buttons are NOT generated', () => {
         component = TestUtils.renderIntoDocument(<CardViewListHolder flux={flux}
                                                                      selectedRows={[]}
+                                                                     uniqueIdentifier="col_num"
                                                                      reportData={fakeReportData_noNagivationButtons.reportData}
                                                                      pageStart={fakeReportData_noNagivationButtons.pageStart}
                                                                      pageEnd={fakeReportData_noNagivationButtons.pageEnd}/>);

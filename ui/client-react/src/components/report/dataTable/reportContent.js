@@ -613,7 +613,9 @@ export let ReportContent = React.createClass({
         this.capturePerfTiming(prevProps);
     },
 
+
     render() {
+
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
         let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
@@ -721,7 +723,7 @@ export let ReportContent = React.createClass({
                                             uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
                                             keyField={keyField}
                                             reportHeader={this.props.reportHeader}
-                                            selectionActions={<ReportActions />}
+                                            selectionActions={<ReportActions selection={this.props.selectedRows}/>}
                                             onScroll={this.onScrollRecords}
                                             onRowClicked={this.openRow}
                                             selectedRows={this.props.selectedRows}
