@@ -104,10 +104,10 @@ $edit-field-padding: 5px;
             top: $edit-field-padding;
         }
     }
-    [type="text"].input, textarea.cellEdit {
+    .input, textarea.cellEdit {
         padding: $edit-field-padding;
     }
-    [type="text"].input {
+    .input, .select {
         width: 100%;
     }
     /* don't bleed through dropdowns */
@@ -138,6 +138,7 @@ $edit-field-padding: 5px;
 
         .formTable {
             margin-left: 0px;
+            width: 100%;
         }
 
         .fieldRow {

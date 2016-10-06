@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
+import ValidatedFieldWrapper from './ValidatedFieldWrapper';
+
 
 /**
  * # TextFieldValueEditor
@@ -96,14 +98,8 @@ const TextFieldValueEditor = React.createClass({
                           onBlur={this.onBlur} />;
 
 
-        return  (this.props.isInvalid ?
-                (<QBToolTip location="top" tipId="invalidInput" delayHide={3000}
-                            plainMessage={this.props.invalidMessage}>
-                    {inputBox}
-                </QBToolTip>) :
-                inputBox
-        );
+        return  (inputBox);
     }
 });
 
-export default TextFieldValueEditor;
+export default ValidatedFieldWrapper(TextFieldValueEditor);

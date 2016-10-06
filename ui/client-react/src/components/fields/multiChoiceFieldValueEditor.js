@@ -4,8 +4,12 @@ import 'react-select/dist/react-select.min.css';
 import './multiChoiceFieldValueEditor.scss';
 import './selectCommon.scss';
 import QbIcon from '../qbIcon/qbIcon';
+import QBToolTip from '../qbToolTip/qbToolTip';
 import {I18nMessage} from '../../utils/i18nMessage';
 import * as CompConstants from '../../constants/componentConstants';
+import Breakpoints from '../../utils/breakpoints';
+import Locale from '../../locales/locales';
+import ValidationWrapper from './ValidatedFieldWrapper';
 /**
  * # MultiChoiceFieldValueEditor
  * A multi-choice field value editor that uses react select, allows a user to select a single option from a drop down box.
@@ -38,7 +42,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
-        if (this.props.showAsRadio) {
+        if (this.props.showAsRadio || Breakpoints.isSmallBreakpoint()) {
             // For radio render
             let val = this.props.value ? this.props.value : "";
             return {
@@ -73,6 +77,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
      * @returns {Array}
      */
     getSelectItems() {
+        let touch = Breakpoints.isSmallBreakpoint();
         let choices = this.props.choices;
         let selectedValue = this.state.choice ? this.state.choice : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
         if (this.props.showAsRadio) {
@@ -103,6 +108,18 @@ const MultiChoiceFieldValueEditor = React.createClass({
                 </label>);
             }
             return choices;
+        } else if (touch) {
+            if (choices) {
+                let placeholder =  Locale.getMessage('selection.placeholder');
+                choices = choices.map(choice => {
+                    return (<option value={choice.coercedValue.value}>{choice.displayValue}</option>);
+                });
+                // Add the placeholder/none option to the top of the array
+                if (this.props.fieldDef && this.props.fieldDef.required === false) {
+                    choices.unshift(<option value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}>{placeholder}</option>);
+                }
+            }
+            return choices;
         } else {
             /**
              *This is commented out right now, because the current Schema in core does not accept/save null inputs
@@ -124,7 +141,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
     onBlur() {
         let theVals;
-        if (this.props.showAsRadio) {
+        if (this.props.showAsRadio || Breakpoints.isSmallBreakpoint()) {
             theVals = {
                 value: this.state.choice,
                 display: this.state.choice
@@ -162,13 +179,18 @@ const MultiChoiceFieldValueEditor = React.createClass({
         } else {
             choice = this.props.value ? this.state.choice : false;
         }
-        return (
-            <div className="multiChoiceContainer">
-                {this.props.showAsRadio ?
-                    <div className="multiChoiceRadioContainer">
-                        { options }
-                    </div> :
-                    <Select
+        let touch = Breakpoints.isSmallBreakpoint();
+        let editElement = null;
+        if (this.props.showAsRadio) {
+            editElement = <div className="multiChoiceRadioContainer">
+                {this.props.isInvalid ? <div className="errorBar"></div> : ''}
+                <div className="multiChoiceRadioOptionContainer">{ options }</div></div>;
+        } else if (touch) {
+            let selectedValue = this.state.choice ? this.state.choice : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
+            editElement = <select className="select" value={selectedValue} onChange={this.selectChoice}
+                                  onBlur={this.onBlur}>{options}</select>;
+        } else {
+            editElement = <Select
                     tabIndex="0"
                     value={choice}
                     optionRenderer={this.renderOption}
@@ -178,11 +200,11 @@ const MultiChoiceFieldValueEditor = React.createClass({
                     noResultsText={notFoundMessage}
                     autosize={false}
                     clearable={false}
-                    onBlur={this.onBlur} />
-                }
-            </div>
-        );
+                    onBlur={this.onBlur} />;
+        }
+
+        return  <div className="multiChoiceContainer">{editElement}</div>;
     }
 });
 
-export default MultiChoiceFieldValueEditor;
+export default ValidationWrapper(MultiChoiceFieldValueEditor);

@@ -3,6 +3,7 @@ import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import * as numericFormatter from '../../../../common/src/formatter/numericFormatter';
 import * as consts from '../../../../common/src/constants';
+import ValidationWrapper from './ValidatedFieldWrapper';
 
 /**
  * # NumericFieldValueEditor
@@ -142,14 +143,8 @@ const NumericFieldValueEditor = React.createClass({
                           size={width}/>;
 
 
-        return  (this.props.isInvalid ?
-                (<QBToolTip location="top" tipId="invalidInput" delayHide={3000}
-                            plainMessage={this.props.invalidMessage}>
-                    {inputBox}
-                </QBToolTip>) :
-                inputBox
-        );
+        return  (inputBox);
     }
 });
 
-export default NumericFieldValueEditor;
+export default ValidationWrapper(NumericFieldValueEditor);

@@ -50,16 +50,24 @@ $multi-choice-field-box-height: 32px;
     }
 
     .multiChoiceRadioContainer {
-      height: auto;
-      padding-left: 2px;
-      padding-right: 2px;
-      max-height: 340px;
-      min-width: 100%;
-      width: auto;
+        padding-left: 2px;
+        padding-right: 2px;
+        max-height: 340px;
+        min-width: 100%;
+        position: relative;
 
-      .multiChoiceRadioOption {
-        display: block;
-        font-weight: normal;
-      }
+        .errorBar {
+            height: 100%;
+            background-color: red;
+            width: 6px;
+            position: absolute;
+        }
+        .multiChoiceRadioOptionContainer {
+            margin-left: 10px;
+            .multiChoiceRadioOption {
+                display: block;
+                font-weight: normal;
+            }
+        }
     }
 }
