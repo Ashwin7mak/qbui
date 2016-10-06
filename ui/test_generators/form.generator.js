@@ -16,6 +16,10 @@
 
     var singleTabAndSectionForm = {};
 
+    var singleTabAndSectionViewForm = {};
+    var singleTabAndSectionEditForm = {};
+    var singleTabAndSectionCreateForm = {};
+
     module.exports = {
         getFormBuilder: function() {
             var builderInstance = formBuilder.builder();
@@ -46,6 +50,66 @@
             });
 
             return singleTabAndSectionForm;
-        }
+        },
+
+        generateSingleTabAndSecCreateForm: function(table) {
+            var builderInstance = formBuilder.builder();
+            var appId = table[tableConsts.APP_ID];
+            var tableId = table[tableConsts.ID];
+
+            builderInstance.withAppId(appId);
+            builderInstance.withTableId(tableId);
+            builderInstance.withName(rawValueGenearator.generateStringWithFixLength(10));
+            builderInstance.withDescription(rawValueGenearator.generateStringWithFixLength(20));
+            builderInstance.withWrapLabel(rawValueGenearator.generateBool());
+            builderInstance.withIncludeBuiltIns(rawValueGenearator.generateBool());
+            builderInstance.withWrapElements(rawValueGenearator.generateBool());
+            builderInstance.withNewFieldAction('DO_NOTHING');
+            builderInstance.withTab(formTabGeneator.generateDefaultSingleTab(table));
+
+            singleTabAndSectionCreateForm[singleTabAndSectionCreateForm.size++] = builderInstance.build();
+
+            return singleTabAndSectionCreateForm;
+        },
+
+        generateSingleTabAndSecEditForm: function(table) {
+            var builderInstance = formBuilder.builder();
+            var appId = table[tableConsts.APP_ID];
+            var tableId = table[tableConsts.ID];
+
+            builderInstance.withAppId(appId);
+            builderInstance.withTableId(tableId);
+            builderInstance.withName(rawValueGenearator.generateStringWithFixLength(10));
+            builderInstance.withDescription(rawValueGenearator.generateStringWithFixLength(20));
+            builderInstance.withWrapLabel(rawValueGenearator.generateBool());
+            builderInstance.withIncludeBuiltIns(rawValueGenearator.generateBool());
+            builderInstance.withWrapElements(rawValueGenearator.generateBool());
+            builderInstance.withNewFieldAction('DO_NOTHING');
+            builderInstance.withTab(formTabGeneator.generateDefaultSingleTab(table));
+
+            singleTabAndSectionEditForm[singleTabAndSectionEditForm.size++] = builderInstance.build();
+
+            return singleTabAndSectionEditForm;
+        },
+
+        generateSingleTabAndSecViewForm: function(table) {
+            var builderInstance = formBuilder.builder();
+            var appId = table[tableConsts.APP_ID];
+            var tableId = table[tableConsts.ID];
+
+            builderInstance.withAppId(appId);
+            builderInstance.withTableId(tableId);
+            builderInstance.withName(rawValueGenearator.generateStringWithFixLength(10));
+            builderInstance.withDescription(rawValueGenearator.generateStringWithFixLength(20));
+            builderInstance.withWrapLabel(rawValueGenearator.generateBool());
+            builderInstance.withIncludeBuiltIns(rawValueGenearator.generateBool());
+            builderInstance.withWrapElements(rawValueGenearator.generateBool());
+            builderInstance.withNewFieldAction('DO_NOTHING');
+            builderInstance.withTab(formTabGeneator.generateDefaultSingleTab(table));
+
+            singleTabAndSectionCreateForm[singleTabAndSectionCreateForm.size++] = builderInstance.build();
+
+            return singleTabAndSectionCreateForm;
+        },
     };
 }());
