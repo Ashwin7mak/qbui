@@ -7,8 +7,11 @@
     'use strict';
     var constants = require('../../../../../common/src/constants');
     var log = require('../../../logger').getLogger();
+    var perfLogger = require('../../../perfLogger');
     var lodash = require('lodash');
     var requestHelper = require('../requestHelper')();
+
+    var recordFormatter = require('./recordFormatter')();
 
     var dateFormatter = require('../../../../../common/src/formatter/dateTimeFormatter');
     dateFormatter.setLogger(log);
@@ -441,6 +444,77 @@
     module.exports = {
 
         /**
+         * Take result set from core that include grouping information and return object that
+         * the client will consume.
+         *
+         * TODO: temporary function name -- will be properly named once core grouping is implement fully
+         * TODO: and client-side grouping is removed.
+         *
+         * @param req
+         * @param fields
+         * @param groups
+         * @param formatForDisplay
+         * @returns {*|{hasGrouping: boolean, fields: Array, gridColumns: Array, gridData: Array, totalRows: number}}
+         */
+        coreGroup: function(req, fields, records, formatForDisplay) {
+            let perfLog = perfLogger.getInstance();
+            perfLog.init("Build GroupList using core group result");
+
+            let groupBy = this.group(req, fields);
+
+            if (records && records.type === 'GROUP') {
+                var data = [];
+
+                //  Build a map for quick field information retrieval by id.  The map
+                //  key is the field.id; the map value is the field object.
+                let map = new Map();
+                fields.forEach((field) => {
+                    map.set(field.id, field);
+                });
+
+                records.groups.forEach((group) => {
+                    var node = {
+                        children: [],
+                        group: Array.isArray(group.summaryRef) && group.summaryRef.length > 0 ? group.summaryRef[0] : 'No group name'
+                    };
+
+                    let groupRecords = formatForDisplay === true ? recordFormatter.formatRecords(group.records, fields) : group.records;
+
+                    let children = [];
+                    groupRecords.forEach((record) => {
+                        let columns = {};
+                        record.forEach((column) => {
+                            let fld = map.get(column.id);
+                            if (fld !== undefined) {
+                                columns[fld.name] = {
+                                    id: fld.id,
+                                    value: column.value
+                                };
+                                if (formatForDisplay === true) {
+                                    columns[fld.name].display = column.display;
+                                }
+                            }
+                        });
+                        node.children.push(columns);
+                    });
+
+                    data.push(node);
+
+                });
+
+                groupBy.gridData = data;
+                groupBy.hasGrouping = true;
+                groupBy.totalRows = data.length;
+            }
+
+            //  log performance data
+            perfLog.log();
+
+            return groupBy;
+
+        },
+
+        /**
          * Group the supplied records according to the glist content(if any) defined on the request.
          *
          * @param req
@@ -468,7 +542,7 @@
                 fields: []
             };
 
-            if (fields && records) {
+            if (fields) {
                 //
                 // Is there a grouping parameter included on the request.  The format of the parameter
                 // is 'fid1:groupType1.fid2:groupType2...fidN:groupTypeN'.
@@ -541,6 +615,8 @@
                         }
                     });
 
+                    //  TODO: remove below block once grouping is fully supported on core
+
                     // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
                     // to true and populate the grid columns and data arrays.
                     if (groupBy.fields.length > 0) {
@@ -552,12 +628,14 @@
                             }
                         });
 
-                        groupBy.hasGrouping = true;
-                        groupBy.gridData = createGroupDataGrid(groupBy.fields, sortBy.fields, fields, records);
+                        if (records) {
+                            groupBy.hasGrouping = true;
+                            groupBy.gridData = createGroupDataGrid(groupBy.fields, sortBy.fields, fields, records);
 
-                        //  TODO: with paging, this is flawed...
-                        if (groupBy.gridData.length > 0) {
-                            groupBy.totalRows = records.length;
+                            //  TODO: with paging, this is flawed...
+                            if (groupBy.gridData.length > 0) {
+                                groupBy.totalRows = records.length;
+                            }
                         }
                     }
                 }

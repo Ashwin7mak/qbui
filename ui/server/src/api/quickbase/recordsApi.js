@@ -196,53 +196,64 @@
 
                     Promise.all(fetchRequests).then(
                         function(response) {
-                            var responseObject;
+                            var responseObject = {};
 
                             var records = jsonBigNum.parse(response[0].body);
-
-                            //  report/results result is an object
-                            if (!Array.isArray(records)) {
-                                records = records.records;
-                            }
-
-                            var groupedRecords;
 
                             //  return raw undecorated record values due to flag format=raw
                             if (this.isRawFormat(req)) {
                                 responseObject = records;
                             } else {
-                                //  response object will include a fields meta data block plus record values
-                                var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
-
-                                if (this.isDisplayFormat(req)) {
-                                    //  initialize perfLogger
-                                    let perfLog = perfLogger.getInstance();
-                                    perfLog.init("Format Display Records", {req:req, idsOnly:true});
-
-                                    //  format records for display and log perf stats
-                                    records = recordFormatter.formatRecords(records, fields);
-                                    perfLog.log();
-
-                                    //  re-init perfLogger
-                                    perfLog.init("Build GroupList");
-
-                                    //  if grouping, return a data structure organized according to the
-                                    //  grouping requirements and log perf stats
-                                    groupedRecords = groupFormatter.group(req, fields, records);
-                                    perfLog.log();
-                                }
-
-                                responseObject = {};
-                                responseObject[FIELDS] = fields;
+                                //  build empty response object array elements to return
+                                responseObject[FIELDS] = removeUnusedFields(records[0], JSON.parse(response[1].body));
                                 responseObject[RECORDS] = [];
                                 responseObject[GROUPS] = [];
+                                responseObject[FILTERED_RECORDS_COUNT] = null;
 
-                                //  if we are grouping our results, no need to send the flat result set.
-                                if (groupedRecords && groupedRecords.hasGrouping === true) {
-                                    responseObject[GROUPS] = groupedRecords;
+                                //
+                                //  Just the home page currently calls report/result endpoint, which has the refactored
+                                //  json result that includes grouping.   Client side filtering, grouping and sorting
+                                //  still use the records endpoint as report/results does not yet accept filtering
+                                //  parameters.
+                                if (records.type === 'GROUP') {
+                                    //  format the records using the server side grouping results
+                                    responseObject[GROUPS] = groupFormatter.coreGroup(req, responseObject[FIELDS], records, this.isDisplayFormat(req));
                                 } else {
-                                    responseObject[RECORDS] = records;
+                                    //  NEED to support records api and reports api json output, so output may be
+                                    //  an array or an object...this is temporary and will get removed once all
+                                    //  report endpoint processing is moved into reportsApi
+                                    if (!Array.isArray(records)) {
+                                        records = records.records;
+                                    }
+
+                                    if (this.isDisplayFormat(req)) {
+                                        //  initialize perfLogger
+                                        let perfLog = perfLogger.getInstance();
+                                        perfLog.init("Format Display Records", {req: req, idsOnly: true});
+
+                                        records = recordFormatter.formatRecords(records, responseObject[FIELDS]);
+                                        perfLog.log();
+
+                                        //  re-init perfLogger
+                                        perfLog.init("Build GroupList");
+
+                                        //  REMOVE once all grouping is no longer associated with a records
+                                        //  api request.  Want grouping to be a report centric operation, so only
+                                        //  reportsApi should know about it...
+                                        //
+                                        //  NOTE: client side grouping is dependent on records being formatted for display
+                                        var groupedRecords = groupFormatter.group(req, responseObject[FIELDS], records);
+                                        perfLog.log();
+                                    }
+
+                                    //  if we are grouping our results, no need to send the flat result set.
+                                    if (groupedRecords && groupedRecords.hasGrouping === true) {
+                                        responseObject[GROUPS] = groupedRecords;
+                                    } else {
+                                        responseObject[RECORDS] = records;
+                                    }
                                 }
+
                             }
                             if (response[2]) {
                                 responseObject[FILTERED_RECORDS_COUNT] = response[2].body;
@@ -311,7 +322,7 @@
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                     }
                 } else {
-                    //  if not a records route, check to see if it is a request for reportComponents
+                    //  if not a records route, check to see if it is a request for reportComponents or report home page
                     /*eslint no-lonely-if:0 */
                     if (routeHelper.isReportComponentRoute(req.url)) {
                         //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
