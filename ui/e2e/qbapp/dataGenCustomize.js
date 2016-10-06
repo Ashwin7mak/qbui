@@ -196,6 +196,7 @@ consts = require('../../common/src/constants.js');
                 Promise.all(results.allPromises).then(function() {
                     done();
                 });
+                return createdResults;
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
@@ -210,6 +211,17 @@ consts = require('../../common/src/constants.js');
         }).then(function() {
             //Create a report with facets in table 3
             return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
+        }).then(function() {
+            //set table home pages to 1st report
+            // Create a default form for each table (uses the app JSON)
+            return e2eBase.formService.createDefaultForms(app);
+        }).then(function() {
+            var theTHPs = [];
+            app.tables.forEach((table) => {
+                // Set default table homepage for Table 1
+                theTHPs.push(e2eBase.tableService.setDefaultTableHomePage(app.id, table.id, 1));
+            });
+            return (Promise.all(theTHPs));
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above
             if (error) {

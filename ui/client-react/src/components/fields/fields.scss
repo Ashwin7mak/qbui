@@ -40,9 +40,12 @@ $data-font-size: $font-size-p;
   .is-focused:not(.is-open)>.Select-control {
   outline: none;
   border: solid 1px $input-text-focus-border-color;
+  @include focus-shadow();
+}
+
+.is-focused:not(.is-open)>.Select-control {
   //Added border-color for multi choice text box
   border-color: $input-text-focus-border-color !important;
-  @include focus-shadow();
 }
 
 // visual style of input error
@@ -101,6 +104,10 @@ $data-font-size: $font-size-p;
 }
 .textFormat .cellData.NoWrap .textField {
   white-space: nowrap;
+}
+
+.multiLineCellEditWrapper .cellEdit {
+  min-height: 28px;
 }
 
 .userDisplayValue {

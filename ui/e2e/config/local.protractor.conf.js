@@ -114,8 +114,12 @@
                 return require(baseE2EPath + relativePath + '.js');
             };
 
+            // allow devs to gendata / e2etest to a single known realm not random as needed for tests
+            // by setting realmToUse in e2e.conf file
+            var localConf = require('../../server/src/config/environment');
+
             // Read the base classes
-            global.e2eBase = requireCommon('common/e2eBase')();
+            global.e2eBase = requireCommon('common/e2eBase')(localConf);
             global.e2eConsts = requireCommon('common/e2eConsts');
             global.e2eUtils = requireCommon('common/e2eUtils')();
             global.consts = require('../../common/src/constants');

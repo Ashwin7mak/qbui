@@ -98,6 +98,14 @@ const FieldValueEditor = React.createClass({
         invalidMessage: React.PropTypes.string,
 
         /**
+         * callback method called when the editor is mounted */
+        attachGridCell: React.PropTypes.func,
+
+        /**
+         * callback method called when the editor is unmounted */
+        detachGridCell: React.PropTypes.func,
+
+        /**
          * how to identify the field input
          */
         idKey : React.PropTypes.any
@@ -239,6 +247,7 @@ const FieldValueEditor = React.createClass({
             this.props.onValidated(results);
         }
     },
+
 
     render() {
         // the css classes

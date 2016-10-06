@@ -409,17 +409,17 @@
              * @returns Promise
              */
             saveSingleRecord: function(req) {
-                let errors = _validateChanges(req);
-                if (errors.length === 0) {
+                let answer = _validateChanges(req);
+                if (answer.errors.length === 0) {
                     var opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts);
                 } else {
                     //log & return error
-                    log.warn('Invalid input saving record:' + JSON.stringify(errors));
+                    log.warn('Invalid input saving record:' + JSON.stringify(answer));
                     let errCode = httpStatusCodes.INVALID_INPUT;
-                    return Promise.reject({response:{message:'validation error', status:errCode, errors: errors}}
+                    return Promise.reject({response:{message:'validation error', status:errCode, errors: answer}}
                     );
                 }
             },
@@ -431,17 +431,17 @@
              * @returns Promise
              */
             createSingleRecord: function(req) {
-                let errors = _validateChanges(req);
-                if (errors.length === 0) {
+                let answer = _validateChanges(req);
+                if (answer.errors.length === 0) {
                     var opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts);
                 } else {
                     //log & return error
-                    log.warn('Invalid input saving record:' + JSON.stringify(errors));
+                    log.warn('Invalid input saving record:' + JSON.stringify(answer));
                     let errCode = httpStatusCodes.INVALID_INPUT;
-                    return Promise.reject({response:{message:'validation error', status:errCode, errors: errors}}
+                    return Promise.reject({response:{message:'validation error', status:errCode, errors: answer}}
                     );
                 }
             },
@@ -478,11 +478,13 @@
      * Validate changes to a record  basic checks for boundaries/types etc
      *
      * @param req
-     * @returns {Array}
+     * @returns {{ok: boolean, errors: Array}}
      * @private
      */
     function _validateChanges(req) {
         let errors = [];
+        let ok = true;
+
         if (req.body && req.body.length) {
             //look at each change
             req.body.forEach((change) => {
@@ -490,11 +492,16 @@
                     // validate it
                     let results = ValidationUtils.checkFieldValue(change, change.fieldName, change.value, true);
                     if (results.isInvalid) {
+                        ok = false;
                         errors.push(results);
                     }
                 }
             });
         }
-        return errors;
+        return {
+            ok : ok,
+            errors: errors
+        };
+
     }
 }());

@@ -200,20 +200,13 @@ export let ReportContent = React.createClass({
      * @returns {boolean}
      */
     handleRecordSaveClicked(id) {
-        //validate changed values
-        //get pending changes
-        let validationResult = this.validateRecord(this.props.pendEdits.recordChanges);
-        if (validationResult.ok) {
-            //signal record save action, will update an existing records with changed values
-            // or add a new record
-            let changes = null;
-            if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
-                changes = this.handleRecordAdd(this.props.pendEdits.recordChanges);
-            } else {
-                changes = this.handleRecordChange(id);
-            }
+        //signal record save action, server will validate and if ok update an existing records with changed values
+        // or add a new record
+        if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
+            this.handleRecordAdd(this.props.pendEdits.recordChanges);
+        } else {
+            this.handleRecordChange(id);
         }
-        return validationResult;
     },
 
     /**
@@ -246,7 +239,6 @@ export let ReportContent = React.createClass({
     /**
      * Save changes to an existing record
      * @param recId
-     * @returns {Array}
      */
     handleRecordChange(recId) {
         const flux = this.getFlux();
@@ -255,6 +247,7 @@ export let ReportContent = React.createClass({
             flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data);
         }
     },
+
 
     handleValidateFieldValue(fieldDef, fieldName, value) {
         let results;
@@ -651,6 +644,7 @@ export let ReportContent = React.createClass({
         let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
         const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
+        const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
         return (
                 <div className="loadedContent">
                 {this.props.reportData.error ?
@@ -673,6 +667,8 @@ export let ReportContent = React.createClass({
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
                                 isInlineEditOpen={isInlineEditOpen}
+                                pendEdits={this.props.pendEdits}
+                                editErrors={editErrors}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
                                 recordsCount={recordsCount}
                                 groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
@@ -693,6 +689,8 @@ export let ReportContent = React.createClass({
                                 appId={this.props.reportData.appId}
                                 appUsers={this.props.appUsers}
                                 isInlineEditOpen={isInlineEditOpen}
+                                pendEdits={this.props.pendEdits}
+                                editErrors={editErrors}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}

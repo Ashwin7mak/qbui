@@ -100,6 +100,29 @@ const CellRenderer = React.createClass({
         }
     },
 
+    getRecId() {
+       return this.props.params.data[this.props.params.context.uniqueIdentifier].value;
+    },
+
+    getFieldId() {
+        return this.props.colDef.fieldDef.id;
+    },
+
+    componentWillMount() {
+        //register this component
+        // if form/parent needs to call component to setState
+        if (this.props.params.context.attachGridCell) {
+            this.props.params.context.attachGridCell(this, this.getRecId(), this.getFieldId());
+        }
+    },
+
+    componentWillUnmount() {
+        //unregister this component
+        // if form/parent needs to call component to setState
+        if (this.props.params.context.detachGridCell) {
+            this.props.params.context.detachGridCell(this.getRecId(), this.getFieldId());
+        }
+    },
     /**
      * inform the grid that we've tabbed out of an editor
      */
@@ -362,6 +385,18 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
         }
     },
 
+    getInitialState() {
+        return {
+            rowEditErrors : null
+        }
+    },
+
+    updateRowEditErrors(rowEditErrors) {
+        if (rowEditErrors != this.state.rowEditErrors) {
+            this.setState({rowEditErrors: rowEditErrors});
+        }
+    },
+
     /**
      * placeholder for deleting a record
      */
@@ -385,6 +420,7 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
             <RowEditActions flux={this.props.params.context.flux}
                             api={this.props.params.api}
                             data={this.props.params.data}
+                            rowEditErrors={this.state.rowEditErrors}
                             params={this.props.params}
             />
             <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
