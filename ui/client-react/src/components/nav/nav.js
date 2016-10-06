@@ -108,12 +108,13 @@ export let Nav = React.createClass({
     /**
      * open existing or new record in trowser if editRec param exists
      */
-    updateRecordTrowser() {
+    updateRecordTrowser(oldRecId) {
+
         const {appId, tblId, rptId} = this.props.params;
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
-        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.nav.trowserOpen && !this.state.form.editFormLoading) {
+        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && oldRecId !== editRec) {
 
             const flux = this.getFlux();
 
@@ -129,9 +130,9 @@ export let Nav = React.createClass({
         }
     },
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
 
-        this.updateRecordTrowser();
+        this.updateRecordTrowser(prevProps.location.query.editRec);
     },
 
     render() {
@@ -158,7 +159,8 @@ export let Nav = React.createClass({
                                pendEdits={this.state.pendEdits}
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
-                               selectedTable={this.getSelectedTable()} />
+                               selectedTable={this.getSelectedTable()}
+                               reportData={this.state.reportData}/>
             }
             {this.props.params && this.props.params.appId &&
                 <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}

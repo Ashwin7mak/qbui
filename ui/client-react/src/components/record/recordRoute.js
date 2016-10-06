@@ -231,7 +231,9 @@ export let RecordRoute = React.createClass({
                                 errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
                                 formData={this.props.form ? this.props.form.formData : null}
                                 appUsers={this.props.appUsers}
-                                edit={false}></Record>
+                                edit={false}
+                                key={_.uniqueId()}
+                        />
 
                     </ReactCSSTransitionGroup>
                 </div>

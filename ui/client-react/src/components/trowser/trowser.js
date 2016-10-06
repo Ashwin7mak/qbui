@@ -43,6 +43,9 @@ let Trowser = React.createClass({
         if (this.props.visible) {
             trowserClasses += " visible";
         }
+        if (this.props.className) {
+            trowserClasses += " " + this.props.className;
+        }
         return (
             <div className={trowserClasses} >
                 <div className={"trowserBackground"} onClick={this.props.onCancel}/>

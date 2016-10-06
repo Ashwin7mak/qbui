@@ -29,10 +29,13 @@ let formActions = {
      * edit an existing record
      * @param recordId
      */
-    openRecordForEdit(recordId) {
+    openRecordForEdit(recId) {
+
+        // let flux know we're editing a record so we can navigate back and forth
+        this.dispatch(actions.EDIT_REPORT_RECORD, {recId});
 
         // add editRec query param and let the router take action
-        WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recordId);
+        WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
     },
 
     /**
