@@ -60,7 +60,8 @@ let CardViewListHolder = React.createClass({
      * is row selected callback
      */
     isRowSelected(row) {
-        return this.props.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
+
+        return this.props.selectedRows.indexOf(row) !== -1;
     },
 
     /**
@@ -71,13 +72,13 @@ let CardViewListHolder = React.createClass({
 
         const flux = this.getFlux();
 
-        const id = row[this.props.uniqueIdentifier];
+        const id = row[this.props.uniqueIdentifier].value;
 
         let selectedRows = this.props.selectedRows;
 
         if (selectedRows.indexOf(id) === -1) {
             // not already selected, add to selectedRows
-            selectedRows.push(row[this.props.uniqueIdentifier]);
+            selectedRows.push(id);
         } else {
             // already selected, remove from selectedRows
             selectedRows = _.without(selectedRows, id);

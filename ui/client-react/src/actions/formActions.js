@@ -50,12 +50,20 @@ let formActions = {
      * @param rptId
      * @param formType
      */
-    loadForm(appId, tblId, rptId, formType) {
+    loadForm(appId, tblId, rptId, formType, isEdit = false) {
 
+        let loadAction = actions.LOAD_FORM;
+        let successAction = actions.LOAD_FORM_SUCCESS;
+        let failedAction = actions.LOAD_FORM_FAILED;
+        if (isEdit) {
+            loadAction = actions.LOAD_EDIT_FORM;
+            successAction = actions.LOAD_EDIT_FORM_SUCCESS;
+            failedAction = actions.LOAD_EDIT_FORM_FAILED;
+        }
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
-                this.dispatch(actions.LOAD_FORM);
+                this.dispatch(loadAction);
 
                 let formService = new FormService();
                 formService.getForm(appId, tblId, rptId, formType).then(
@@ -63,7 +71,7 @@ let formActions = {
                         resolve();
 
                         response.data.record = null;
-                        this.dispatch(actions.LOAD_FORM_SUCCESS, response.data);
+                        this.dispatch(successAction, response.data);
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
@@ -72,7 +80,7 @@ let formActions = {
                         } else {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
                         }
-                        this.dispatch(actions.LOAD_FORM_FAILED, error.response.status);
+                        this.dispatch(failedAction, error.response.status);
                         reject();
                     }
                 );
@@ -91,18 +99,27 @@ let formActions = {
      * @param rptId
      * @param formType
      */
-    loadFormAndRecord(appId, tblId, recordId, rptId, formType) {
+    loadFormAndRecord(appId, tblId, recordId, rptId, formType, isEdit = false) {
+        let loadAction = actions.LOAD_FORM_AND_RECORD;
+        let successAction = actions.LOAD_FORM_AND_RECORD_SUCCESS;
+        let failedAction = actions.LOAD_FORM_AND_RECORD_FAILED;
+        if (isEdit) {
+            loadAction = actions.LOAD_EDIT_FORM_AND_RECORD;
+            successAction = actions.LOAD_EDIT_FORM_AND_RECORD_SUCCESS;
+            failedAction = actions.LOAD_EDIT_FORM_AND_RECORD_FAILED;
+        }
+
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && recordId) {
-                this.dispatch(actions.LOAD_FORM_AND_RECORD);
+                this.dispatch(loadAction);
 
                 let formService = new FormService();
                 formService.getFormAndRecord(appId, tblId, recordId, rptId, formType).then(
                     (response) => {
                         resolve();
 
-                        this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS, response.data);
+                        this.dispatch(successAction, response.data);
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
@@ -111,7 +128,7 @@ let formActions = {
                         } else {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadFormAndRecord:');
                         }
-                        this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, error.response.status);
+                        this.dispatch(failedAction, error.response.status);
                         reject();
                     }
                 );

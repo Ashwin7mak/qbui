@@ -36,9 +36,9 @@ let RecordTrowser = React.createClass({
                 tblId={this.props.tblId}
                 recId={this.props.recId}
                 appUsers={this.props.appUsers}
-                errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
+                errorStatus={this.props.form && this.props.form.editFormErrorStatus ? this.props.form.editFormErrorStatus : null}
                 pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
-                formData={this.props.form ? this.props.form.formData : null}
+                formData={this.props.form ? this.props.form.editFormData : null}
                 edit={true} />);
     },
     /**
@@ -87,7 +87,7 @@ let RecordTrowser = React.createClass({
     handleRecordChange() {
         const flux = this.getFlux();
         flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, this.props.recId);
-        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.form.formData.fields);
+        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.form.editFormData.fields);
     },
 
     /**
@@ -97,7 +97,7 @@ let RecordTrowser = React.createClass({
      */
     handleRecordAdd(recordChanges) {
         const flux = this.getFlux();
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.formData.fields);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.editFormData.fields);
     },
 
     getTrowserRightIcons() {
@@ -125,7 +125,6 @@ let RecordTrowser = React.createClass({
      * trowser to wrap report manager
      */
     render() {
-
         return (
             <Trowser position={"top"}
                      visible={this.props.visible}

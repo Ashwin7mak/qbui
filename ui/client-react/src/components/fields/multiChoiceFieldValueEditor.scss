@@ -2,33 +2,13 @@
 
 $multi-choice-field-box-height: 32px;
 
-.choiceLabel {
-   padding-top: 6px;
-   padding-bottom: 6px;
-   //vertical-align: middle;
-   height:32px;
-}
-
-.multiChoiceRadioContainer {
-   height:auto;
-   padding-left:2px;
-   padding-right:2px;
-   max-height: 340px;
-   min-width: 100%;
-   width:auto;
-}
-
-.multiChoiceRadioOption {
-   display: inline;
-}
-
-input[type="radio"], input[type="checkbox"] {
-  margin: 9px;
-  height: 16px;
-  width: 16px;
-}
-
 .multiChoiceContainer {
+    input[type="radio"], input[type="checkbox"] {
+        margin: 4px;
+        height: 16px;
+        width: 16px;
+        vertical-align: middle;
+    }
     .Select {
         .Select-control {
             height: $multi-choice-field-box-height;
@@ -67,5 +47,19 @@ input[type="radio"], input[type="checkbox"] {
                 }
             }
         }
+    }
+
+    .multiChoiceRadioContainer {
+      height: auto;
+      padding-left: 2px;
+      padding-right: 2px;
+      max-height: 340px;
+      min-width: 100%;
+      width: auto;
+
+      .multiChoiceRadioOption {
+        display: block;
+        font-weight: normal;
+      }
     }
 }

@@ -229,7 +229,6 @@ export let RecordRoute = React.createClass({
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
                                 errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
-                                pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
                                 formData={this.props.form ? this.props.form.formData : null}
                                 appUsers={this.props.appUsers}
                                 edit={false}></Record>
