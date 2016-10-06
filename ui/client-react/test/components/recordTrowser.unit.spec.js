@@ -2,6 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import RecordTrowser from '../../src/components/record/recordTrowser';
+import Promise from 'bluebird';
 
 const RecordMock = React.createClass({
     render: function() {
@@ -18,8 +19,9 @@ describe('RecordTrowser functions', () => {
         actions: {
             recordPendingEditsCommit() {return;},
             recordPendingEditsCancel() {return;},
-            saveRecord() {return;},
-            saveNewRecord() {return;}
+            saveRecord() {return Promise.resolve({});},
+            saveNewRecord() {return Promise.resolve({});},
+            hideTrowser() {return;}
         }
     };
 
@@ -30,8 +32,9 @@ describe('RecordTrowser functions', () => {
 
         spyOn(flux.actions, 'recordPendingEditsCommit');
         spyOn(flux.actions, 'recordPendingEditsCancel');
-        spyOn(flux.actions, 'saveRecord');
-        spyOn(flux.actions, 'saveNewRecord');
+        spyOn(flux.actions, 'saveRecord').and.callThrough();
+        spyOn(flux.actions, 'saveNewRecord').and.callThrough();
+        spyOn(flux.actions, 'hideTrowser');
     });
 
     afterEach(() => {
@@ -41,6 +44,7 @@ describe('RecordTrowser functions', () => {
         flux.actions.recordPendingEditsCancel.calls.reset();
         flux.actions.saveRecord.calls.reset();
         flux.actions.saveNewRecord.calls.reset();
+        flux.actions.hideTrowser.calls.reset();
     });
 
     it('test render of loading component', () => {
@@ -51,4 +55,47 @@ describe('RecordTrowser functions', () => {
 
     });
 
+    it('test cancelling the record trowser', () => {
+
+        component = TestUtils.renderIntoDocument(<RecordTrowser pendEdits={{recordChanges: {}}} flux={flux} recId={"1"} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        const closeIcon = TestUtils.findRenderedDOMComponentWithClass(component, "iconTableUISturdy-close");
+        TestUtils.Simulate.click(closeIcon);
+
+        expect(flux.actions.hideTrowser).toHaveBeenCalled();
+    });
+
+    it('test saving new record in the trowser', () => {
+
+        const form = {editFormData: {}};
+
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{recordChanges: {}}} flux={flux} recId={null} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let saveButton = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .btn");
+        expect(saveButton.length).toBe(1);
+
+        TestUtils.Simulate.click(saveButton[0]);
+
+        expect(flux.actions.saveNewRecord).toHaveBeenCalled();
+    });
+
+    it('test saving existing record in the trowser', () => {
+
+        const form = {editFormData: {}};
+
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{recordChanges: {}}} flux={flux} recId={"1"} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let saveButton = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .btn");
+        expect(saveButton.length).toBe(1);
+
+        TestUtils.Simulate.click(saveButton[0]);
+
+        expect(flux.actions.saveRecord).toHaveBeenCalled();
+    });
 });
