@@ -23,7 +23,7 @@
           "monitor:///var/log/qbase": {
             "disabled": "0",
             "index": "quickbase-ppdidx",
-            "blacklist": "\\.(gz|bz2|z|zip)$"
+            "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
           }
         }
       }
