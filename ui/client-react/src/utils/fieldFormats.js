@@ -78,6 +78,6 @@ FieldFormats.RATING_FORMAT = 10;
 FieldFormats.DURATION_FORMAT = 11;
 FieldFormats.PHONE_FORMAT = 12;
 FieldFormats.MULTI_LINE_TEXT_FORMAT = 13;
-FieldFormats.EMAIL_ADDRESS = 14;
+FieldFormats.EMAIL_ADDRESS = 15;
 
 export default FieldFormats;

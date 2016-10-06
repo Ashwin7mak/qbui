@@ -59,7 +59,7 @@ const FieldValueEditor = React.createClass({
          * - DURATION_FORMAT = 11;
          * - PHONE_FORMAT = 12;
          * - MULTI_LINE_TEXT_FORMAT = 13;
-         * - EMAIL_ADDRESS = 14;
+         * - EMAIL_ADDRESS = 15;
          **/
         type: React.PropTypes.number,
 
