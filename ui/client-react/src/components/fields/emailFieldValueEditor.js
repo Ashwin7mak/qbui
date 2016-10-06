@@ -34,7 +34,7 @@ const EmailFieldValueEditor = React.createClass({
     onBlur(newValue) {
         if (this.props.onBlur) {
             this.props.onBlur({
-                display: EmailFormatter.format(newValue.value, this.props.fieldDef),
+                display: EmailFormatter.format(newValue, this.props.fieldDef.datatypeAttributes),
                 value: newValue.value
             });
         }
