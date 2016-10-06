@@ -497,10 +497,10 @@ artifacts {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: project.ext.nexusRoot + "continuous-releases/") {
+            repository(url: project.ext.nexusRepoRoot + "continuous-releases/") {
                 authentication(userName: project.ext.nexusUser, password: project.ext.nexusPassword)
             }
-            snapshotRepository(url: project.ext.nexusRoot + "continuous-snapshots/") {
+            snapshotRepository(url: project.ext.nexusRepoRoot + "continuous-snapshots/") {
                 authentication(userName: project.ext.nexusUser, password: project.ext.nexusPassword)
             }
 
