@@ -454,7 +454,7 @@
                     },
                     "reconfig": {
                       "node_internal_env": "PRODUCTION",
-                      "rest_endpoint": "https://t.tomcat.PROD1.newstack.quickbaserocks.com:8443",
+                      "rest_endpoint": "https://t.tomcat.PROD1.newstack.quickbase.com:8443",
                       "route_group": "LH_V1",
                       "stack_name": "coreui-prod1"
                     }
