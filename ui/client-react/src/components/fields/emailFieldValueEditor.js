@@ -51,6 +51,7 @@ const EmailFieldValueEditor = React.createClass({
                                      value={this.props.value}
                                      placeholder='name@domain.com'
                                      inputType='email'
+                                     invalidMessage={(this.props.invalidMessage || 'Email is required')}
                                      {...otherProps} />
     }
 });
