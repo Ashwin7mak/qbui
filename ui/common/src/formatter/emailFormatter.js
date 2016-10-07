@@ -15,7 +15,17 @@
     SUPPORTED_FORMATS[UP_TO_UNDERSCORE] = true;
     SUPPORTED_FORMATS[UP_TO_AT_SIGN] = true;
 
+    function hasDomain(email) {
+        return email.indexOf('@') >= 0;
+    }
+
     module.exports = {
+        addDefaultDomain: function(email, domain) {
+            if (domain && !hasDomain(email)) {
+                email = email + '@' + domain;
+            }
+            return email;
+        },
         //Given a email string as input, formats as a email with display preferences applied.
         format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
@@ -25,6 +35,8 @@
             var baseValue = fieldValue.value;
             //If there are clientSideAttributes, evaluate format & linkText attributes
             if (fieldInfo && fieldInfo.clientSideAttributes) {
+                baseValue = this.addDefaultDomain(baseValue, fieldInfo.defaultDomain);
+
                 if (fieldInfo.clientSideAttributes.linkText) {
                     //If there is a linkText set, use that
                     baseValue = fieldInfo.clientSideAttributes.linkText;
