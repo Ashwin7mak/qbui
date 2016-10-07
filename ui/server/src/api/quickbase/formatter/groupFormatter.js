@@ -452,18 +452,18 @@
          *
          * @param req
          * @param fields
-         * @param groups
+         * @param report
          * @param formatForDisplay
          * @returns {*|{hasGrouping: boolean, fields: Array, gridColumns: Array, gridData: Array, totalRows: number}}
          */
-        coreGroup: function(req, fields, records, formatForDisplay) {
+        coreGroup: function(req, fields, report) {
             let perfLog = perfLogger.getInstance();
             perfLog.init("Build GroupList using core group result");
 
             let groupBy = this.group(req, fields);
             let totalRows = 0;
 
-            if (records && records.type === constants.RECORD_TYPE.GROUP) {
+            if (report && report.type === constants.RECORD_TYPE.GROUP) {
                 var data = [];
 
                 //  Build a map for quick field information retrieval by id.  The map
@@ -473,13 +473,13 @@
                     map.set(field.id, field);
                 });
 
-                records.groups.forEach((group) => {
+                report.groups.forEach((group) => {
                     var node = {
                         children: [],
                         group: Array.isArray(group.summaryRef) && group.summaryRef.length > 0 ? group.summaryRef[0] : 'No group name'
                     };
 
-                    let groupRecords = formatForDisplay === true ? recordFormatter.formatRecords(group.records, fields) : group.records;
+                    let groupRecords = requestHelper.isDisplayFormat(req) ? recordFormatter.formatRecords(group.records, fields) : group.records;
 
                     let children = [];
                     groupRecords.forEach((record) => {
@@ -491,7 +491,7 @@
                                     id: fld.id,
                                     value: column.value
                                 };
-                                if (formatForDisplay === true) {
+                                if (requestHelper.isDisplayFormat(req)) {
                                     columns[fld.name].display = column.display;
                                 }
                             }

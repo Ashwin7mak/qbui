@@ -27,6 +27,56 @@ describe("Validate fieldsApi", function() {
         }
     };
 
+    describe("test removeUnusedFields", function() {
+
+        var fieldList = [];
+
+        beforeEach(function() {
+            fieldList = [];
+        });
+
+        function addRecords(i) {
+            var recordList = [];
+            for (var idx = 0; idx < i; idx++) {
+                recordList.push({id: idx});
+            }
+            return recordList;
+        }
+
+        function addFields(i) {
+            fieldList = [];
+            for (var idx = 0; idx < i; idx++) {
+                fieldList.push({id:idx});
+            }
+            return fieldList;
+        }
+
+        function getFields(i) {
+            var list = [];
+            for (var idx = 0; idx < i; idx++) {
+                if (idx < fieldList.length) {
+                    list.push(fieldList[idx]);
+                }
+            }
+            return list;
+        }
+
+        var testCases = [
+            {name: 'record and fields empty', records: [], fields: [], expectation: []},
+            {name: 'record and fields not arrays', records: 'rec', fields: 5, expectation: 5},
+            {name: 'record and fields - test 1', records: addRecords(3), fields: addFields(3), expectation: getFields(3)},
+            {name: 'record and fields - test 2', records: addRecords(3), fields: addFields(1), expectation: getFields(1)}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                var flds = fieldsApi.removeUnusedFields(testCase.records, testCase.fields);
+                assert.deepEqual(flds, testCase.expectation);
+                done();
+            });
+        });
+    });
+
     describe("when getFields is called", function() {
         var executeReqStub = null;
 

@@ -14,6 +14,25 @@
 
         let request = defaultRequest;
 
+        /**
+         * Given an id and collection of fields, search for the id in
+         * the collection and return the field if found; otherwise return null.
+         *
+         * @param fields
+         * @param id
+         * @returns {*}
+         */
+        function findFieldById(fields, id) {
+            if (Array.isArray(fields)) {
+                for (let idx = 0; idx < fields.length; idx++) {
+                    if (fields[idx].id === id) {
+                        return fields[idx];
+                    }
+                }
+            }
+            return null;
+        }
+
         let fieldsApi = {
 
             /**
@@ -29,6 +48,28 @@
              */
             setRequestHelperObject: function(requestHelperOverride) {
                 requestHelper = requestHelperOverride;
+            },
+
+            /**
+             * Remove any fields not records in the records
+             * @param array of records
+             * @param array of fields
+             * @returns array of fields where the field element is found in one of the records
+             */
+            removeUnusedFields: function(records, fields) {
+                let returnFields = fields;
+                if (Array.isArray(records) && Array.isArray(fields)) {
+                    if (records.length !== fields.length) {
+                        returnFields = [];
+                        records.forEach((record) => {
+                            var field = findFieldById(fields, record.id);
+                            if (field !== null) {
+                                returnFields.push(field);
+                            }
+                        });
+                    }
+                }
+                return returnFields;
             },
 
             /**

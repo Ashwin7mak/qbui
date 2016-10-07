@@ -301,6 +301,14 @@
                         req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
                     }
                 }
+            },
+
+            isDisplayFormat: function(req) {
+                return this.getQueryParameterValue(req, consts.REQUEST_PARAMETER.FORMAT) === consts.FORMAT.DISPLAY;
+            },
+
+            isRawFormat: function(req) {
+                return this.getQueryParameterValue(req, consts.REQUEST_PARAMETER.FORMAT) === consts.FORMAT.RAW;
             }
         };
 

@@ -323,6 +323,7 @@ describe('Validate ReportsApi unit tests', function() {
 
         var getExecuteRequestStub;
         var executeReqLogSpy;
+        var fetchReportStub;
         var fetchReportComponentsStub;
 
         var responseBody = '' +
@@ -338,15 +339,18 @@ describe('Validate ReportsApi unit tests', function() {
 
             getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
             executeReqLogSpy = sinon.spy(requestHelper, "logUnexpectedError");
+            fetchReportStub = sinon.stub(reportsApi, "fetchReport");
             fetchReportComponentsStub = sinon.stub(reportsApi, "fetchReportComponents");
         });
         afterEach(function() {
             getExecuteRequestStub.restore();
             executeReqLogSpy.restore();
+            fetchReportStub.restore();
             fetchReportComponentsStub.restore();
         });
         it('Test success ', function(done) {
             getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
+            fetchReportStub.returns(Promise.resolve('reportData'));
             fetchReportComponentsStub.returns(Promise.resolve('reportData'));
 
             var promise = reportsApi.fetchTableHomePageReport(req);

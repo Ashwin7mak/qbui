@@ -14,6 +14,7 @@ var should = require('should');
 var assert = require('assert');
 var sinon = require('sinon');
 var log = require('./../../../src/logger').getLogger();
+var consts = require('./../../../../common/src/constants');
 
 /**
  * Unit tests for User field formatting
@@ -445,4 +446,55 @@ describe('Validate RequestHelper unit tests', function() {
         });
     });
 
+    describe('validate isRawFormat function', function() {
+        var req = {
+            url: '',
+            params: {}
+        };
+
+        beforeEach(function() {
+            req.url = 'app/1/tables/2';
+        });
+
+        var testCases = [
+            {name: 'test format = raw is true', format: consts.FORMAT.RAW, expectation: true},
+            {name: 'test format = raw is false empty', format: '', expectation: false},
+            {name: 'test format = raw is false', format: consts.FORMAT.DISPLAY, expectation: false}];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                if (testCase.format) {
+                    req.url += '?' + consts.REQUEST_PARAMETER.FORMAT + '=' + testCase.format;
+                }
+                assert.equal(requestHelper.isRawFormat(req), testCase.expectation);
+                done();
+            });
+        });
+    });
+
+    describe('validate isDisplayFormat function', function() {
+        var req = {
+            url: '',
+            params: {}
+        };
+
+        beforeEach(function() {
+            req.url = 'app/1/tables/2';
+        });
+
+        var testCases = [
+            {name: 'test format = display is true', format: consts.FORMAT.DISPLAY, expectation: true},
+            {name: 'test format = display is false empty', format: '', expectation: false},
+            {name: 'test format = display is false', format: consts.FORMAT.RAW, expectation: false}];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                if (testCase.format) {
+                    req.url += '?' + consts.REQUEST_PARAMETER.FORMAT + '=' + testCase.format;
+                }
+                assert.equal(requestHelper.isDisplayFormat(req), testCase.expectation);
+                done();
+            });
+        });
+    });
 });

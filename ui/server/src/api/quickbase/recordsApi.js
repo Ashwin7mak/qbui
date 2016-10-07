@@ -77,32 +77,6 @@
         var FILTERED_RECORDS_COUNT = 'filteredCount';
         var request = defaultRequest;
 
-        //Given an array of records and array of fields, remove any fields
-        //not referenced in the records
-        function removeUnusedFields(record, fields) {
-            var returnFields = fields;
-            if (record && fields && record.length !== fields.length) {
-                returnFields = [];
-                for (var idx = 0; idx < record.length; idx++) {
-                    var f = findFieldById(record[idx].id, fields);
-                    if (f !== null) {
-                        returnFields.push(f);
-                    }
-                }
-            }
-            return returnFields;
-        }
-
-        //Given a field id and collection of fields, find and return the field ID
-        function findFieldById(fieldId, fields) {
-            for (var idx = 0; idx < fields.length; idx++) {
-                if (fields[idx].id === fieldId) {
-                    return fields[idx];
-                }
-            }
-            return null;
-        }
-
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         var recordsApi = {
 
@@ -119,14 +93,6 @@
              */
             setRequestHelperObject: function(requestHelperOverride) {
                 requestHelper = requestHelperOverride;
-            },
-
-            isDisplayFormat: function(req) {
-                return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.DISPLAY;
-            },
-
-            isRawFormat: function(req) {
-                return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.RAW;
             },
 
             fetchFields: function(req) {
@@ -149,14 +115,14 @@
                             var responseObject;
 
                             //return raw undecorated record values due to flag format=raw
-                            if (this.isRawFormat(req)) {
+                            if (requestHelper.isRawFormat(req)) {
                                 responseObject = record;
                             } else {
                                 //response object will include a fields meta data block plus record values
-                                var fields = removeUnusedFields(record, JSON.parse(response[1].body));
+                                var fields = fieldsApi.removeUnusedFields(record, JSON.parse(response[1].body));
 
                                 //format records for display if requested with the flag format=display
-                                if (this.isDisplayFormat(req)) {
+                                if (requestHelper.isDisplayFormat(req)) {
                                     record = recordFormatter.formatRecords([record], fields)[0];
                                 }
 
@@ -167,7 +133,7 @@
 
                             resolve(responseObject);
 
-                        }.bind(this),
+                        },
                         function(response) {
                             reject(response);
                         }
@@ -196,11 +162,10 @@
                             var records = jsonBigNum.parse(response[0].body);
 
                             //  return raw undecorated record values due to flag format=raw
-                            if (this.isRawFormat(req)) {
+                            if (requestHelper.isRawFormat(req)) {
                                 responseObject = records;
                             } else {
                                 //  build empty response object array elements to return
-                                responseObject[FIELDS] = removeUnusedFields(records[0], JSON.parse(response[1].body));
                                 responseObject[RECORDS] = [];
                                 responseObject[GROUPS] = [];
                                 responseObject[FILTERED_RECORDS_COUNT] = null;
@@ -212,7 +177,8 @@
                                 //  parameters.
                                 if (records.type === constants.RECORD_TYPE.GROUP) {
                                     //  format the records using the server side grouping results
-                                    responseObject[GROUPS] = groupFormatter.coreGroup(req, responseObject[FIELDS], records, this.isDisplayFormat(req));
+                                    responseObject[FIELDS] = fieldsApi.removeUnusedFields(records.groups[0].records[0], JSON.parse(response[1].body));
+                                    responseObject[GROUPS] = groupFormatter.coreGroup(req, responseObject[FIELDS], records);
                                 } else {
                                     //  NEED to support records api and reports api json output, so output may be
                                     //  an array or an object...this is temporary and will get removed once all
@@ -221,10 +187,12 @@
                                         records = records.records;
                                     }
 
-                                    if (this.isDisplayFormat(req)) {
+                                    if (requestHelper.isDisplayFormat(req)) {
+                                        responseObject[FIELDS] = fieldsApi.removeUnusedFields(records[0], JSON.parse(response[1].body));
+
                                         //  initialize perfLogger
                                         let perfLog = perfLogger.getInstance();
-                                        perfLog.init("Format Display Records", {req: req, idsOnly: true});
+                                        perfLog.init("RecordsApi..Format Display Records", {req: req, idsOnly: true});
 
                                         records = recordFormatter.formatRecords(records, responseObject[FIELDS]);
                                         perfLog.log();
@@ -249,13 +217,14 @@
                                     }
                                 }
 
-                            }
-                            if (response[2]) {
-                                responseObject[FILTERED_RECORDS_COUNT] = response[2].body;
+                                if (response[2]) {
+                                    responseObject[FILTERED_RECORDS_COUNT] = response[2].body;
+                                }
+
                             }
 
                             resolve(responseObject);
-                        }.bind(this),
+                        },
                         function(response) {
                             reject(response);
                         }
@@ -329,14 +298,8 @@
                             opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
                         }
                     } else {
-                        //  loading the home page report?
-                        let homePageId = query[constants.REQUEST_PARAMETER.HOME_PAGE_ID];
-                        if (routeHelper.isTableHomePageRoute(req.url) && homePageId) {
-                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url, homePageId);
-                        } else {
-                            //  not an expected route; set to return all records for the given table
-                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
-                        }
+                        //  not an expected route; set to return all records for the given table
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                     }
                 }
 
