@@ -1,4 +1,5 @@
 @import '../../../src/assets/css/qbVariables';
+@import './fields';
 
 .urlField {
     &, a {
@@ -13,16 +14,28 @@
         }
     }
 
+    a:focus {
+        /* Don't show focus state on the whole link. Should be on link and icon separately */
+        border: none;
+        box-shadow: none;
+        outline: none;
+    }
+
+    a .link:focus, a .urlIcon:focus {
+        outline: none;
+        @include text-input-focus-with-rounding;
+        padding: 2px;
+    }
+
+    a .urlIcon:focus {
+        padding-left: 4px;
+        padding-right: 3px;
+    }
+
     .btn {
         &.btn-default {
             @include urlButtonBackgroundGradient();
             color: $link-text-normal-color;
-        }
-
-        &.btn-default:hover {
-            background: $urlButton-background-hover-color;
-            color: $link-text-normal-color;
-            text-decoration: none;
         }
 
         &.btn-default:focus {
@@ -30,6 +43,12 @@
             @include urlButtonBackgroundFocusGradient();
             color: $link-text-normal-color;
             border-color: $urlButton-border-focus-color;
+        }
+
+        &.btn-default:hover {
+            background: $urlButton-background-hover-color;
+            color: $link-text-normal-color;
+            text-decoration: none;
         }
 
         &.btn-default.disabled {

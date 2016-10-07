@@ -10,6 +10,11 @@ $data-font-size: $font-size-p;
     @include focus-shadow();
 }
 
+@mixin text-input-focus-with-rounding {
+    @include text-input-focus;
+    border-radius: 2px;
+}
+
 // plain user data
 .data {
   color : $data-color;

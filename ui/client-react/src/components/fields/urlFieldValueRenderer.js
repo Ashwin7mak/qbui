@@ -70,7 +70,9 @@ const UrlFieldValueRenderer = React.createClass({
         } else {
             return (
                 <a href={this.renderLinkHref()} target={target} className={this.setLinkClasses()}>
-                    {this.props.display}
+                    <span className="link">
+                        {this.props.display}
+                    </span>
                     {this.renderIcon()}
                 </a>
             );
