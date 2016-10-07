@@ -484,7 +484,7 @@
      * Validate changes to a record  basic checks for boundaries/types etc
      *
      * @param req
-     * @returns {{ok: boolean, errors: Array}}
+     * @returns {Array}
      * @private
      */
     function _validateChanges(req) {
