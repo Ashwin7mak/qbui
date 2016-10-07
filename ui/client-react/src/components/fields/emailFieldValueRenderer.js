@@ -8,6 +8,9 @@ import UrlFieldValueRenderer from './urlFieldValueRenderer';
  * Renders emails as links
  * A small wrapper for UrlFieldValueRenderer specifically for Emails
  *
+ * The component will automatically add `mailto:` to an email address. Otherwise,
+ * it will leave the protocol specified by the user and display the appropriate
+ * icon.
  */
 const EmailFieldValueRenderer = React.createClass({
     displayName: 'EmailFieldValueRenderer',
@@ -22,16 +25,20 @@ const EmailFieldValueRenderer = React.createClass({
     },
     getDefaultProps() {
         return {
-            display: ''
+            display: '',
+            value: null
         }
     },
     render() {
-        let emailLink = UrlFileAttachmentReportLinkFormatter.addProtocol(this.props.value, 'mailto:');
         // Remove value from props to be replaced by the formatted email
         let {value, ...otherProps} = this.props;
 
+        // Format as an email link
+        value = (value || this.props.display);
+        let emailLink = UrlFileAttachmentReportLinkFormatter.addProtocol(value, 'mailto:');
+
         return (
-            <UrlFieldValueRenderer value={emailLink} {...otherProps} />
+            <UrlFieldValueRenderer value={emailLink} {...otherProps} inputType='email' />
         );
     }
 });
