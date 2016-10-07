@@ -52,6 +52,32 @@
             return singleTabAndSectionForm;
         },
 
+        generateSingleTabAndSecFormWithAddAndEdit: function(app) {
+            var tables = app[appConsts.TABLES];
+            var tableIndex = 0;
+
+            _.forEach(tables, function(table) {
+                var builderInstance = formBuilder.builder();
+                var appId = table[tableConsts.APP_ID];
+                var tableId = table[tableConsts.ID];
+
+                builderInstance.withAppId(appId);
+                builderInstance.withTableId(tableId);
+                builderInstance.withName(rawValueGenearator.generateStringWithFixLength(10));
+                builderInstance.withDescription(rawValueGenearator.generateStringWithFixLength(20));
+                builderInstance.withWrapLabel(rawValueGenearator.generateBool());
+                builderInstance.withIncludeBuiltIns(rawValueGenearator.generateBool());
+                builderInstance.withWrapElements(rawValueGenearator.generateBool());
+                builderInstance.withNewFieldAction('DO_NOTHING');
+                builderInstance.withTab(formTabGeneator.generateDefaultSingleTabWithAddAndEdit(table));
+
+                singleTabAndSectionForm[tableIndex] = builderInstance.build();
+                tableIndex++;
+            });
+
+            return singleTabAndSectionForm;
+        },
+
         generateSingleTabAndSecCreateForm: function(table) {
             var builderInstance = formBuilder.builder();
             var appId = table[tableConsts.APP_ID];

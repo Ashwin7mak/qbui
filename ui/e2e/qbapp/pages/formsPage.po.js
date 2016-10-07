@@ -9,12 +9,19 @@
     var rawValueGenerator = require('./../../../test_generators/rawValue.generator');
     var ReportServicePage = requirePO('reportService');
     var reportServicePage = new ReportServicePage();
-    var testValues = [];
 
-    var sDate = '12-12-2020';
+    var date = new Array();
+    date = new Date().toJSON().slice(0, 10).split('-');
     var sText = rawValueGenerator.generateString(10);
     var sNumeric = rawValueGenerator.generateDouble(0, 10);
-    var sTime = '2:30 am';
+    var sTime = "12:00 am";
+
+    var sDate = date[1] + '-' + date[2] + '-' + date[0];
+
+
+    console.log("the date is: " + sDate);
+    console.log("the numeric is: " + sNumeric);
+    console.log("The time is: " + sTime);
 
 
     var FormsPage = function() {
@@ -48,8 +55,14 @@
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
                 return self.formSaveBtn.click().then(function() {
                     //return $.growl({title: 'success', message: 'record saved'});
-                    //TODO need to figure out how to verify growl text which says success record saved
+                    ////TODO need to figure out how to verify growl text which says success record saved
+                    // Check that the edit notification is displayed
+                    //reportServicePage.waitForElement(reportServicePage.editSuccessPopup); This dosent wrk here
                     e2eBase.sleep(browser.params.largeSleep);
+                    browser.manage().logs().get('browser').then(function(browserLog) {
+                        expect(browserLog.length).toEqual(0);
+                        console.log("the browser log is: "+JSON.stringify(browserLog));
+                    });
                 });
             });
         };
@@ -94,7 +107,7 @@
                 return this.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                     return elm;
                 }).map(function(elm) {
-                    elm.element(by.className('glyphicon-time')).click();
+                    elm.element(by.className('Select-control')).element(by.className('glyphicon-time')).click();
                     // Let the drop down animate
                     e2eBase.sleep(browser.params.smallSleep);
                     return elm.element(by.tagName('input')).sendKeys(sTime, protractor.Key.ENTER);
@@ -119,7 +132,7 @@
                     //date field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 6)).toBe(sDate);
                     //date Time field
-                    expect(reportServicePage.getRecordValues(records[recordRowNo], 7)).toBe(sDate+' '+sTime);
+                    expect(reportServicePage.getRecordValues(records[recordRowNo], 7)).toBe(sDate + ' ' + sTime);
                 }if (fieldType === 'timeCell') {
                     //time of day field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 8)).toBe(sTime);
@@ -128,7 +141,7 @@
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 10)).toBe('true');
                 }
             });
-        }
+        };
 
     };
     FormsPage.prototype = e2ePageBase;

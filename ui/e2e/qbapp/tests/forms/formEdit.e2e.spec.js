@@ -34,11 +34,13 @@
             });
         });
 
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
+        //afterAll(function(done) {
+        //    e2eBase.cleanup(done);
+        //});
 
         it('Edit a record via recordActions edit pencil using basic report', function(done) {
+            //var fieldTypeClassNames = ['dateCell','textField', 'numericField', 'checkbox'];
+            var fieldTypeClassNames = ['numericField'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
@@ -48,8 +50,6 @@
                 // Check that the add form container is displayed
                 expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
             }).then(function() {
-                //var fieldTypeClassNames = ['dateCell','textField', 'numericField', 'checkbox'];
-                var fieldTypeClassNames = ['numericField'];
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
@@ -65,25 +65,16 @@
                     //Verify there are 6 records after adding 1
                     e2eBase.sleep(browser.params.smallSleep);
                     expect(reportServicePage.reportRecordsCount.getText()).toContain('7 records');
-                    reportServicePage.agGridRecordElList.then(function(records) {
-                        // Check the all numeric field
-                        //numeric field
-                        expect(reportServicePage.getRecordValues(records[2], 2)).toBe('123');
-                        //numeric currency field
-                        expect(reportServicePage.getRecordValues(records[2], 3)).toBe('$123');
-                        //numeric percent field
-                        expect(reportServicePage.getRecordValues(records[2], 4)).toBe('123%');
-                        //numeric rating field
-                        expect(reportServicePage.getRecordValues(records[2], 5)).toBe('123');
-                        //numeric duration field
-                        expect(reportServicePage.getRecordValues(records[2], 9)).toBe('2.0337302E-7 weeks');
-                        done();
-                    });
+                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                    }
+                    done();
                 });
             });
         });
 
         it('Edit a record via stage pageActions edit pencil using report with sorting', function(done) {
+            var fieldTypeClassNames = ['numericField'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "3"));
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
@@ -93,7 +84,6 @@
                 // Check that the add form container is displayed
                 expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
             }).then(function() {
-                var fieldTypeClassNames = ['numericField'];
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
@@ -109,37 +99,25 @@
                     //Verify there are 6 records after adding 1
                     e2eBase.sleep(browser.params.smallSleep);
                     expect(reportServicePage.reportRecordsCount.getText()).toContain('7 records');
-                    reportServicePage.agGridRecordElList.then(function(records) {
-                        // Check the all numeric field
-                        //numeric field
-                        expect(reportServicePage.getRecordValues(records[5], 2)).toBe('123');
-                        //numeric currency field
-                        expect(reportServicePage.getRecordValues(records[5], 3)).toBe('$123');
-                        //numeric percent field
-                        expect(reportServicePage.getRecordValues(records[5], 4)).toBe('123%');
-                        //numeric rating field
-                        expect(reportServicePage.getRecordValues(records[5], 5)).toBe('123');
-                        //numeric duration field
-                        expect(reportServicePage.getRecordValues(records[5], 9)).toBe('2.0337302E-7 weeks');
-                        done();
-                    });
+                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(5, fieldTypeClassNames[j]);
+                    }
+                    done();
                 });
             });
         });
 
-        //TODO the below script will fail since edit pencil not opening the edit form from reports toolbar
-        xit('Edit a record from the tableActions Container using report with facets', function(done) {
+        it('Edit a record from the tableActions Container using report with facets', function(done) {
+            var fieldTypeClassNames = ['numericField'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "4"));
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //click on add record button
-                reportServicePage.clickEditPencilOnReportActions(6);
+                reportServicePage.clickEditPencilOnReportActions(1);
                 reportServicePage.waitForElement(formsPage.formEditContainerEl);
                 // Check that the add form container is displayed
                 expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
             }).then(function() {
-                //var fieldTypeClassNames = ['timeCell', 'dateCell','textField', 'numericField', 'checkbox'];
-                var fieldTypeClassNames = ['timeCell', 'dateCell', 'numericField', 'checkbox'];
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
@@ -148,36 +126,16 @@
                 //Save the form
                 formsPage.clickFormSaveBtn();
             }).then(function() {
-                //close the form
-                formsPage.clickFormCloseBtn();
-            }).then(function() {
                 //reload the report to verify the row edited
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "4"));
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     //Verify there are 7 records after editing 1
                     e2eBase.sleep(browser.params.smallSleep);
-                    expect(reportServicePage.reportRecordsCount.getText()).toContain('8 records');
-                    reportServicePage.agGridRecordElList.then(function(records) {
-                        //numeric field
-                        expect(reportServicePage.getRecordValues(records[6], 2)).toBe('123');
-                        //numeric currency field
-                        expect(reportServicePage.getRecordValues(records[6], 3)).toBe('$123');
-                        //numeric percent field
-                        expect(reportServicePage.getRecordValues(records[6], 4)).toBe('123%');
-                        //numeric rating field
-                        expect(reportServicePage.getRecordValues(records[6], 5)).toBe('123');
-                        //date field
-                        expect(reportServicePage.getRecordValues(records[6], 6)).toBe('12-12-2016');
-                        //date Time field
-                        expect(reportServicePage.getRecordValues(records[6], 7)).toBe('12-12-2016 2:30 am');
-                        //time of day field
-                        expect(reportServicePage.getRecordValues(records[6], 8)).toBe('2:30 am');
-                        //numeric duration field
-                        expect(reportServicePage.getRecordValues(records[6], 9)).toBe('2.0337302E-7 weeks');
-                        //checkbox field
-                        expect(reportServicePage.getRecordValues(records[6], 10)).toBe('true');
-                        done();
-                    });
+                    expect(reportServicePage.reportRecordsCount.getText()).toContain('7 records');
+                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(1, fieldTypeClassNames[j]);
+                    }
+                    done();
                 });
             });
         });

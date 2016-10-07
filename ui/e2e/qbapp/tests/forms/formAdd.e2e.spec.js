@@ -54,7 +54,7 @@
         });
 
         it('Add a record from the form', function(done) {
-            //var fieldTypeClassNames = ['timeCell', 'dateCell','textField', 'numericField', 'checkbox'];
+            //TODO textField.Right now even phone no field says textField. Sp coudnt enter values and save record
             var fieldTypeClassNames = ['timeCell', 'dateCell', 'numericField', 'checkbox'];
 
             return reportServicePage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
@@ -90,20 +90,6 @@
                 });
             });
         });
-
-        xit('Add a record from the form', function(done) {
-            //var fieldValues = [];
-            //var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE1]);
-            //var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 1);
-            //var clonedArray = JSON.parse(JSON.stringify(generatedRecords));
-            //var genRecord = clonedArray[0];
-            //genRecord.forEach(function(field) {
-            //    fieldValues.push(field.value);
-            //});
-            //console.log ("the generated records are: "+JSON.stringify(fieldValues));
-
-        });
-
 
     });
 }());

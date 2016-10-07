@@ -12,6 +12,7 @@
     var _ = require('lodash');
 
     const formElementDisplayOptions = ['ADD', 'EDIT', 'VIEW'];
+    const formElementDisplayOptionsAddAndEdit = ['ADD', 'EDIT', 'VIEW'];
 
     module.exports = {
         generateDefaultHeaderElement: function() {
@@ -31,14 +32,36 @@
             _.forEach(fields, function(field) {
                 var builderInstance = formElementBuilder.builder();
 
-                //builderInstance.withUseAlternateLabel(rawValue.generateBool());
-                //builderInstance.withReadOnly(rawValue.generateBool());
+                builderInstance.withUseAlternateLabel(rawValue.generateBool());
+                builderInstance.withReadOnly(rawValue.generateBool());
                 builderInstance.withRequired(rawValue.generateBool());
                 builderInstance.withFieldId(field[fieldConsts.fieldKeys.ID]);
                 builderInstance.withOrderIndex(elementIndex);
                 builderInstance.withPositionSameRow(rawValue.generateBool()); //all fields displays in same row if we comment out this
                 builderInstance.withDisplayText(rawValue.generateString());
                 builderInstance.withDisplayOptions(formElementDisplayOptions);
+                builderInstance.withLabelPosition('LEFT');
+                builderInstance.withType('FIELD');
+
+                elements[elementIndex] = {"FormFieldElement": builderInstance.build()};
+                elementIndex++;
+            });
+
+            return elements;
+        },
+        generateDefaultElementsWithAddAndEdit: function(fields) {
+            var elements = {};
+            var elementIndex = 0;
+
+            _.forEach(fields, function(field) {
+                var builderInstance = formElementBuilder.builder();
+
+                builderInstance.withRequired(rawValue.generateBool());
+                builderInstance.withFieldId(field[fieldConsts.fieldKeys.ID]);
+                builderInstance.withOrderIndex(elementIndex);
+                builderInstance.withPositionSameRow(rawValue.generateBool()); //all fields displays in same row if we comment out this
+                builderInstance.withDisplayText(rawValue.generateString());
+                builderInstance.withDisplayOptions(formElementDisplayOptionsAddAndEdit);
                 builderInstance.withLabelPosition('LEFT');
                 builderInstance.withType('FIELD');
 
