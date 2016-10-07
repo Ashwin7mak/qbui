@@ -41,6 +41,7 @@ import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
 
 import EmailFieldValueEditorDoc from './docs/emailFieldValueEditor.js';
+import EmailFieldValueRendererDoc from './docs/emailFieldValueRenderer.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -68,6 +69,7 @@ render((
             <Route path="userFieldEditor" component={UserFieldEditorDoc} />
             <Route path="qbpanel" component={QBPanelDoc} />
             <Route path="qbicon" component={QBIconDoc} />
+            <Route path="emailFieldValueRenderer" component={EmailFieldValueRendererDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

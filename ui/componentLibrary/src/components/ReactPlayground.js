@@ -10,6 +10,8 @@ const CheckBoxFieldValueRenderer = require('../../../client-react/src/components
 const DateFieldValueEditor = require('../../../client-react/src/components/fields/dateFieldValueEditor.js');
 const DateTimeFieldValueEditor = require('../../../client-react/src/components/fields/dateTimeFieldValueEditor.js');
 const DateTimeFieldValueRenderer = require('../../../client-react/src/components/fields/dateTimeFieldValueRenderer.js');
+const EmailFieldValueEditor = require('../../../client-react/src/components/fields/emailFieldValueEditor.js');
+const EmailFieldValueRenderer = require('../../../client-react/src/components/fields/emailFieldValueRenderer.js');
 const FieldValueEditor = require('../../../client-react/src/components/fields/fieldValueEditor');
 const FieldValueRenderer = require('../../../client-react/src/components/fields/fieldValueRenderer');
 const MultiChoiceFieldValueEditor = require('../../../client-react/src/components/fields/multiChoiceFieldValueEditor');
@@ -26,7 +28,6 @@ const UserFieldValueRenderer = require('../../../client-react/src/components/fie
 const QBicon = require('../../../client-react/src/components/qbIcon/qbIcon');
 const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel');
 
-const EmailFieldValueEditor = require('../../../client-react/src/components/fields/emailFieldValueEditor.js');
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 

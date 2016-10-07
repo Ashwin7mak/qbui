@@ -4,6 +4,7 @@ import DateFieldValueEditorExample from 'raw!../examples/DateFieldValueEditorExa
 import DateTimeFieldValueEditorExample from 'raw!../examples/DateTimeFieldValueEditorExample.js';
 import DateTimeFieldValueRendererExample from 'raw!../examples/DateTimeFieldValueRendererExample.js';
 import EmailFieldValueEditorExample from 'raw!../examples/EmailFieldValueEditorExample.js';
+import EmailFieldValueRendererExample from 'raw!../examples/EmailFieldValueRendererExample.js';
 import FieldValueEditorExample from 'raw!../examples/FieldValueEditorExample.js';
 import FieldValueRendererExample from 'raw!../examples/FieldValueRendererExample.js';
 import MultiChoiceFieldValueEditorExample from 'raw!../examples/MultiChoiceFieldValueEditorExample.js';
@@ -43,6 +44,7 @@ export default {
     QBPanel: QBPanelExample,
     QBIcon: QBIconExample,
     EmailFieldValueEditor: EmailFieldValueEditorExample,
+    EmailFieldValueRenderer: EmailFieldValueRendererExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };
