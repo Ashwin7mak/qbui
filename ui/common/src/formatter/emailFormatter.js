@@ -21,6 +21,9 @@
 
     module.exports = {
         addDefaultDomain: function(email, domain) {
+            // Core and current stack add a domain to a blank string, so that
+            // same functionality occurs here. To remove, just check if email is
+            // blank before adding a default domain. `if (domain && email && !hasDomain(email)) {`
             if (domain && !hasDomain(email)) {
                 email = email + '@' + domain;
             }
