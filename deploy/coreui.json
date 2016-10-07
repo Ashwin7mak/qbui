@@ -453,6 +453,7 @@
                       "app_name": "coreui"
                     },
                     "reconfig": {
+                      "secrets_s3_bucket": {"Fn::Join": ["", ["iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}]]},
                       "node_internal_env": "PRODUCTION",
                       "rest_endpoint": "https://t.tomcat.PROD1.newstack.quickbase.com:8443",
                       "route_group": "LH_V1",
