@@ -127,8 +127,8 @@
         "GroupDescription": "Enable HTTP access to ELB",
         "VpcId": {"Ref": "paramVPC"},
         "SecurityGroupIngress": [
-          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBSSLPort"}, "ToPort": {"Ref": "paramELBSSLPort"}, "CidrIp": "0.0.0.0/0"},
-          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBNonSSLPort"}, "ToPort": {"Ref": "paramELBNonSSLPort"}, "CidrIp": "0.0.0.0/0"},
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBSSLPort"}, "ToPort": {"Ref": "paramELBSSLPort"}, "CidrIp": {"Ref": "paramVPCCIDRBlock"}},
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBNonSSLPort"}, "ToPort": {"Ref": "paramELBNonSSLPort"}, "CidrIp": {"Ref": "paramVPCCIDRBlock"}},
         ]
       }
     },
@@ -142,30 +142,39 @@
         },
         "LoadBalancerName": {"Ref": "AWS::StackName"},
         "CrossZone": "true",
-        "Scheme": "internet-facing",
+        "Scheme": "internal",
         "ConnectionDrainingPolicy": {
           "Enabled": "true",
           "Timeout": {"Ref": "paramConnectionDrainingTimeout"}
         },
-        "SecurityGroups": [{"Ref": "ElbSecurityGroup"}, {"Ref": "paramNatSecurityGroupID"}],
+        "SecurityGroups": [{"Ref": "ElbSecurityGroup"}],
+        "LBCookieStickinessPolicy": [
+          {
+            "PolicyName": "CookieBasedPolicy",
+            "CookieExpirationPeriod": "30"
+          }
+        ],
         "Listeners": [
           {
             "LoadBalancerPort": {"Ref": "paramELBSSLPort"},
             "InstancePort": {"Ref": "paramSSLInstancePort"},
-            "Protocol": "TCP"
+            "SSLCertificateId" : { "Fn::Join" : [ "", [ "arn:aws:iam::", { "Ref" : "AWS::AccountId" }, ":server-certificate/", {"Ref": "AWS::StackName"} ] ] },
+            "Protocol": "HTTPS",
+            "InstanceProtocol": "HTTPS"
           },
           {
             "LoadBalancerPort": {"Ref": "paramELBNonSSLPort"},
             "InstancePort": {"Ref": "paramNonSSLInstancePort"},
-            "Protocol": "TCP"
+            "Protocol": "HTTP",
+            "InstanceProtocol": "HTTP"
           }
         ],
         "HealthCheck": {
           "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramSSLInstancePort"}, "/api/v1/health" ] ]},
           "HealthyThreshold": "2",
-          "UnhealthyThreshold": "2",
-          "Interval": "5",
-          "Timeout": "2"
+          "UnhealthyThreshold": "5",
+          "Interval": "10",
+          "Timeout": "5"
         },
         "Subnets": {"Ref": "paramELBSubnets"},
         "Tags": [
@@ -176,6 +185,10 @@
           {
             "Key": "ServiceName",
             "Value": {"Ref": "paramServiceName"}
+          },
+          {
+            "Key": "Environment",
+            "Value": { "Ref": "paramEnvironment" }
           }
         ]
       }
