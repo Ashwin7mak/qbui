@@ -130,7 +130,7 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
 
     .deleteIcon {
         background-color: $color-black-100;
-        color: $color-black-500;
+        color: $clearmini-normal-color;
         cursor: pointer;
         max-height: 16px;
         max-width: 16px;
@@ -139,6 +139,10 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
         top: 49%;
 
         transform: translateY(-50%);
+
+        &:hover {
+            color: $clearmini-hover-color;
+        }
 
         .qbIcon {
             font-size: 14px;
