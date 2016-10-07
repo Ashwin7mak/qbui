@@ -88,6 +88,7 @@ $color-pink-600: #c72f79;
 
 
 //----- semantic color usage
+$text-color: $color-black-700;
 $data-color: $color-black-700;
 $input-bg-color:$color-black-100;
 $input-text-focus-border-color:   $color-indigo-800;
@@ -165,6 +166,8 @@ $icon-pickles-color: #404040;
 $selection-badge-color: $color20;
 
 $text-link-color: #337ab7;
+$link-text-normal-color: $color-indigo-700;
+$link-text-hover-color: $color-cyan-700;
 $selected-check-color:  $color16;
 
 //== Stage
@@ -228,6 +231,11 @@ $secondary-bar-fg: #fff;
 $secondary-bar-bg: #009AAE;
 $secondary-bar-page-actions-bg: #476B90;
 
+@mixin focus-shadow($color:$input-border-focus-color) {
+  box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
+  outline: none;
+}
+
 //== Field labels used on report card view and forms
 $fieldLabel-color: $color3;
 
@@ -250,10 +258,29 @@ $datepicker-select-active: $color-cyan-500;
 $datepicker-bg: $color2;
 $datepicker-bg-today: $color-orange-500;
 
+// UrlField
+$urlButton-background-normal-colorstop1-color: $color-black-200;
+$urlButton-background-normal-colorstop2-color: $color-black-100;
+@mixin urlButtonBackgroundGradient() {
+    background: linear-gradient(to top, $urlButton-background-normal-colorstop1-color, $urlButton-background-normal-colorstop2-color);
+}
+@mixin urlButtonDisabled() {
+    opacity: .4;
+}
+$urlButton-background-focus-colorstop1-color: $color-black-800;
+$urlButton-background-focus-colorstop2-color: $color-black-100;
+@mixin urlButtonBackgroundFocusGradient() {
+    background: linear-gradient(to top, rgba($urlButton-background-focus-colorstop1-color, 0.05), rgba($urlButton-background-focus-colorstop2-color, 0.05));
+}
+$urlButton-border-focus-color: $color-indigo-800;
+$urlButton-border-color: $color-black-300;
+$urlButton-background-hover-color: $color-black-100;
+$urlButton-background-focus-colorstop1-color: $color-black-800;
+$urlButton-background-focus-colorstop2-color: $color-black-100;
+
 $user-picker-deactivated-label-fg: $color-black-600;
 $user-picker-user-label-fg: $color-black-700;
 $user-picker-email-label-fg: $color-black-600;
-
 
 //== QBPanel
 $panel-border-color: $color4;
