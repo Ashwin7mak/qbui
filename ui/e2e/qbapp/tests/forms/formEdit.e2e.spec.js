@@ -34,9 +34,9 @@
             });
         });
 
-        //afterAll(function(done) {
-        //    e2eBase.cleanup(done);
-        //});
+        afterAll(function(done) {
+            e2eBase.cleanup(done);
+        });
 
         it('Edit a record via recordActions edit pencil using basic report', function(done) {
             //var fieldTypeClassNames = ['dateCell','textField', 'numericField', 'checkbox'];

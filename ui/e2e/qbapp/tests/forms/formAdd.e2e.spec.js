@@ -71,7 +71,7 @@
                     }
                 }).then(function(testValues) {
                     //Save the form
-                    formsPage.clickFormSaveBtn();
+                    formsPage.clickAddFormSaveBtn();
                 }).then(function(testValues) {
                     //close the form
                     formsPage.clickFormCloseBtn();

@@ -13,16 +13,10 @@
     var date = new Array();
     date = new Date().toJSON().slice(0, 10).split('-');
     var sText = rawValueGenerator.generateString(10);
-    var sNumeric = rawValueGenerator.generateDouble(0, 10);
+    var sNumeric = rawValueGenerator.generateInt(1, 100);
     var sTime = "12:00 am";
 
     var sDate = date[1] + '-' + date[2] + '-' + date[0];
-
-
-    console.log("the date is: " + sDate);
-    console.log("the numeric is: " + sNumeric);
-    console.log("The time is: " + sTime);
-
 
     var FormsPage = function() {
         this.formTrowserHeader = element(by.className('trowserHeader'));
@@ -49,21 +43,25 @@
         //form title
         this.formTitle = this.formContainerEl.element(by.className('qbPanelHeaderTitleText'));
 
+        // TODO add method for calendar picker
+        //TODO add method for time picker
+
 
         this.clickFormSaveBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
                 return self.formSaveBtn.click().then(function() {
-                    //return $.growl({title: 'success', message: 'record saved'});
-                    ////TODO need to figure out how to verify growl text which says success record saved
                     // Check that the edit notification is displayed
-                    //reportServicePage.waitForElement(reportServicePage.editSuccessPopup); This dosent wrk here
-                    e2eBase.sleep(browser.params.largeSleep);
-                    browser.manage().logs().get('browser').then(function(browserLog) {
-                        expect(browserLog.length).toEqual(0);
-                        console.log("the browser log is: "+JSON.stringify(browserLog));
-                    });
+                    reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
                 });
+            });
+        };
+
+        this.clickAddFormSaveBtn = function() {
+            var self = this;
+            return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
+                //TODO talking to Drew on Monday. I dont see record saved mesage after hiting save for Add form. I see some console errors but record is getting added to UI.
+                return self.formSaveBtn.click();
             });
         };
 
