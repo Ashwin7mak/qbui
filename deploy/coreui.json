@@ -471,10 +471,7 @@
                 "command": { "Fn::Join": [ "", [ "chef-client -z -o nodejs::reconfig -j /dev/shm/chef-attributes-", { "Ref": "paramEnvironment" }, ".json" ] ] },
                 "cwd": "/var/packer/coreui/chef"
               },
-              "03_status": {
-                "command": "systemctl status splunk || true"
-              },
-              "04_enable_and_start_splunk": {
+              "03_enable_and_start_splunk": {
                 "command": "systemctl enable splunk && systemctl start splunk"
               }
             }
