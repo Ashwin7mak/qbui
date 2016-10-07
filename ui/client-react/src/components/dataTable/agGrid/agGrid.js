@@ -998,8 +998,8 @@ let AGGrid = React.createClass({
                 obj.minWidth = 100;
 
                 let datatypeAttributes;
-                if (typeof obj.fieldDef !== 'undefined' &&
-                    typeof obj.fieldDef.datatypeAttributes !== 'undefined') {
+                if (_.has(obj, 'fieldDef.datatypeAttributes') &&
+                    obj.fieldDef.datatypeAttributes) {
                     datatypeAttributes = obj.fieldDef.datatypeAttributes;
                 }
                 if (datatypeAttributes) {

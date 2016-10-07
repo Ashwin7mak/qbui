@@ -11,6 +11,7 @@
 
     var LimitConstants = require('./limitConstants');
     var dataErrs = require('./dataEntryErrorCodes');
+    var constants = require('./constants');
     var _ = require('lodash');
 
     module.exports = {
@@ -68,8 +69,8 @@
                 };
 
             // check system limit text chars
-            } else if (value !== undefined && _.has(value, 'length') &&
-                value.length > LimitConstants.maxTextFieldValueLength) {
+            } else if (value !== undefined && typeof value === 'string' &&
+                _.has(value, 'length') && value.length > LimitConstants.maxTextFieldValueLength) {
                 //max input length is LimitConstants. maxTextFieldValueLength
                 results.isInvalid = true;
                 results.error.messageId  = 'invalidMsg.maxChars';
