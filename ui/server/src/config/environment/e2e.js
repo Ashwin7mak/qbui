@@ -58,7 +58,7 @@
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
-        realmToUse: 'localhost',
+        //realmToUse: 'localhost',
 
         //Node's understanding of a grouping of routes to be enabled/disabled
         routeGroup: routeGroups.DEBUG,
