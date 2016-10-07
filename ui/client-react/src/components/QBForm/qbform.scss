@@ -83,6 +83,9 @@ $edit-field-padding: 5px;
             margin-right: 0;
         }
     }
+    .errorText {
+        color: $tootip-error-color !important;
+    }
 }
 
 .editForm {
@@ -158,6 +161,9 @@ $edit-field-padding: 5px;
         }
         .fieldValueEditor, textarea.cellEdit{
             width: 100%;
+        }
+        .errorText {
+            font-size: $font-size-small;
         }
     }
 }

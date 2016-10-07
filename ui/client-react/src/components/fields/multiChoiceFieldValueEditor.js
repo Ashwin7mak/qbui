@@ -203,8 +203,22 @@ const MultiChoiceFieldValueEditor = React.createClass({
                     onBlur={this.onBlur} />;
         }
 
-        return  <div className="multiChoiceContainer">{editElement}</div>;
+        editElement = <div className="multiChoiceContainer">{editElement}</div>;
+
+        if (this.props.isInvalid) {
+            return (
+                touch ? <div className="errorContainer">
+                            {editElement}
+                            <div className="errorText">{this.props.invalidMessage}</div>
+                        </div> :
+                    <QBToolTip location="top" tipId="invalidInput" delayHide={3000}
+                               plainMessage={"test"}>
+                        {editElement}
+                    </QBToolTip>);
+        } else {
+            return {editElement};
+        }
     }
 });
 
-export default ValidationWrapper(MultiChoiceFieldValueEditor);
+export default MultiChoiceFieldValueEditor;

@@ -13,7 +13,7 @@ const ValidatedFieldWrapper = (FieldComponent) => {
                 return (
                     isSmall ? <div className="errorContainer">
                                 <FieldComponent {...this.props}/>
-                                <div>{this.props.invalidMessage}</div>
+                                <div className="errorText">{this.props.invalidMessage}</div>
                             </div> :
                         <QBToolTip location="top" tipId="invalidInput" delayHide={3000}
                                    plainMessage={"test"}>

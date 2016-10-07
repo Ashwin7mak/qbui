@@ -102,7 +102,7 @@ const FieldElement = React.createClass({
 
         return (
             <div className="formElement field">
-                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} /> }
+                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} isInvalid={this.props.isInvalid}/> }
 
                 <span className="cellWrapper">
                     { fieldElement }

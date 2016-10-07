@@ -58,7 +58,7 @@ $multi-choice-field-box-height: 32px;
 
         .errorBar {
             height: 100%;
-            background-color: red;
+            background-color: $tootip-error-color;
             width: 6px;
             position: absolute;
         }
