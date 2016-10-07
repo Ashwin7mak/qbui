@@ -820,8 +820,8 @@ let AGGrid = React.createClass({
         //update state of errors in the grid
         if (newErrors !== undefined && !_.isEqual(origErrors, newErrors)) {
             this.setState({rowEditErrors: newErrors}, () => {
-                    this.gridOptions.context.rowEditErrors = newErrors;
-                });
+                this.gridOptions.context.rowEditErrors = newErrors;
+            });
         }
         return status;
     },

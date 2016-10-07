@@ -140,8 +140,8 @@ const CellRenderer = React.createClass({
     componentWillMount() {
         if (this.props.params && this.props.params.context &&
             this.props.params.context.attachGridCell) {
-                this.props.params.context.attachGridCell(this, this.getRecId(), this.getFieldId());
-            }
+            this.props.params.context.attachGridCell(this, this.getRecId(), this.getFieldId());
+        }
     },
     /**
      * unregister this component
