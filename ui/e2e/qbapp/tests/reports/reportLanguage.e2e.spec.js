@@ -109,8 +109,12 @@
             });
         });
 
-        /* TODO: create afterAll block
-         * once language settings become persistent across sessions, reset the user's language back to the default.
+        /**
+         * After all tests are done, run the cleanup function in the base class
+         * TODO: once language settings become persistent across sessions, reset the user's language back to the default.
          */
+        afterAll(function(done) {
+            e2eBase.cleanup(done);
+        });
     });
 }());
