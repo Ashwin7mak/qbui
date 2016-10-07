@@ -880,16 +880,21 @@ let ReportDataStore = Fluxxor.createStore({
      */
     updateEditRecordNavContext(recId, nextOrPrevious = "") {
 
+
         const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
 
         const index = filteredRecords.findIndex(rec => rec[keyField.name] && rec[keyField.name].value === recId);
 
         // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
+
         this.currentEditRecordId = recId;
 
-        this.nextEditRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
-        this.previousEditRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
-
+        if (recId === "new") {
+            this.nextEditRecordId = this.previousEditRecordId = null;
+        } else {
+            this.nextEditRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
+            this.previousEditRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
+        }
         this.nextOrPreviousEdit = nextOrPrevious;
 
         this.emit("change");

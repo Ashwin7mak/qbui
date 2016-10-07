@@ -42,6 +42,9 @@ let formActions = {
      * start editing a new record
      */
     editNewRecord() {
+
+        this.dispatch(actions.EDIT_REPORT_RECORD, {"recId":"new"});
+
         // add editRec=new query param and let the router take action
         WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
     },
