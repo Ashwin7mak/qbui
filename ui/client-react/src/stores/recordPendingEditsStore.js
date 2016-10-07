@@ -205,7 +205,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         };
 
         // get errors from payload if not ok
-        if (_.has(payload, 'error.data.response.errors') && !payload.error.data.response.errors.ok){
+        if (_.has(payload, 'error.data.response.errors') && !payload.error.data.response.errors.ok) {
             this.editErrors = payload.error.data.response.errors;
             // fill in client message
             this.editErrors.errors.forEach(fieldError => {

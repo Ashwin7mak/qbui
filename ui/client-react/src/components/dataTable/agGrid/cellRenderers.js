@@ -100,26 +100,55 @@ const CellRenderer = React.createClass({
         }
     },
 
+    /**
+     * get row uniqueIdentifier value that this cells is rendered in (usually record id)
+     * @returns value primitive
+     */
     getRecId() {
-       return this.props.params.data[this.props.params.context.uniqueIdentifier].value;
-    },
-
-    getFieldId() {
-        return this.props.colDef.fieldDef.id;
-    },
-
-    componentWillMount() {
-        //register this component
-        // if form/parent needs to call component to setState
-        if (this.props.params.context.attachGridCell) {
-            this.props.params.context.attachGridCell(this, this.getRecId(), this.getFieldId());
+        let recIdAnswer = null;
+        if (this.props &&
+            _.has(this.props, 'params') &&
+            _.has(this.props.params, 'data') &&
+            _.has(this.props.params, 'context') &&
+            _.has(this.props.params, 'context.uniqueIdentifier') &&
+            !_.isUndefined(this.props.params.data) &&
+            !_.isUndefined(this.props.params.context.uniqueIdentifier) &&
+            !_.isUndefined(this.props.params.data[this.props.params.context.uniqueIdentifier]) ) {
+            recIdAnswer = this.props.params.data[this.props.params.context.uniqueIdentifier].value;
         }
+        return recIdAnswer;
     },
-
+    /**
+     * get this cells field id
+     * @returns id - field number number
+     */
+    getFieldId() {
+        let fieldIdAnswer = null;
+        if (this.props &&
+            _.has(this.props, 'colDef') &&
+            _.has(this.props.colDef, 'fieldDef') &&
+            _.has(this.props.colDef, 'fieldDef.id') &&
+            !_.isUndefined(this.props.colDef.fieldDef.id)) {
+            fieldIdAnswer = this.props.colDef.fieldDef.id;
+        }
+        return fieldIdAnswer;
+    },
+    /**
+     * register this component
+     *  if form/parent needs to call component to setState in in or call its methods
+     */
+    componentWillMount() {
+        if (this.props.params && this.props.params.context &&
+            this.props.params.context.attachGridCell) {
+                this.props.params.context.attachGridCell(this, this.getRecId(), this.getFieldId());
+            }
+    },
+    /**
+     * unregister this component
+     */
     componentWillUnmount() {
-        //unregister this component
-        // if form/parent needs to call component to setState
-        if (this.props.params.context.detachGridCell) {
+        if (this.props.params && this.props.params.context &&
+            this.props.params.context.detachGridCell) {
             this.props.params.context.detachGridCell(this.getRecId(), this.getFieldId());
         }
     },
@@ -388,11 +417,11 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
     getInitialState() {
         return {
             rowEditErrors : null
-        }
+        };
     },
 
     updateRowEditErrors(rowEditErrors) {
-        if (rowEditErrors != this.state.rowEditErrors) {
+        if (rowEditErrors !== this.state.rowEditErrors) {
             this.setState({rowEditErrors: rowEditErrors});
         }
     },

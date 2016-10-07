@@ -184,7 +184,7 @@ export let ReportContent = React.createClass({
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
         if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            return this.handleRecordSaveClicked(afterRecId);
+            this.handleRecordSaveClicked(afterRecId);
         } else {
             flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
         }
@@ -193,11 +193,8 @@ export let ReportContent = React.createClass({
 
 
     /**
-     * User wants to save changes to a record. First we do client side validation
-     * and if validation is successful we initiate the save action for the new or existing record
-     * if validation if not ok we stay in edit mode and show the errors (TBD)
+     * User wants to save changes to a record.
      * @param id
-     * @returns {boolean}
      */
     handleRecordSaveClicked(id) {
         //signal record save action, server will validate and if ok update an existing records with changed values

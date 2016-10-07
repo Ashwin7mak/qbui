@@ -101,7 +101,7 @@ let AGGrid = React.createClass({
         return {
             editingRowNode: null, // which ag-grid row node object is being edited
             rowEditErrors: null, // the current edit row errors found
-            currentEditRid: null// not editing
+            currentEditRid: null // the record id currently inline editing, null when editing
         };
     },
 
@@ -379,27 +379,48 @@ let AGGrid = React.createClass({
     getAppUsers() {
         return this.props.appUsers;
     },
-
+    /**
+     * cellComponentsMounted - an hash of records and fieldcells in the record
+     *  this is place to keep references to the rendered cell components so
+     *  error state can be pushed to them from server request invalidation failures
+     */
     cellComponentsMounted: {},
+    /**
+     * adds a cell component reference to the list of rendered cells
+     * @param component - the mounted cellRenderer component
+     * @param recId - the record id of the row
+     * @param fid - the field id of the cell
+     */
     attachGridCell(component, recId, fid) {
         if (typeof this.cellComponentsMounted[recId] === 'undefined') {
             this.cellComponentsMounted[recId] = {};
         }
         this.cellComponentsMounted[recId][fid] = component;
     },
-
+    /**
+     * removes a cell component reference to the list of rendered cells
+     * also removes the record hash once there are no more mounted cells in the rec/row
+     * @param recId - the record id of the row unmounted from
+     * @param fid - the field id of the unmounted cell
+     */
     detachGridCell(recId, fid) {
-        if (typeof this.cellComponentsMounted[recId][fid] !== 'undefined') {
+        if (typeof this.cellComponentsMounted[recId] !== 'undefined' &&
+            typeof this.cellComponentsMounted[recId][fid] !== 'undefined') {
             delete this.cellComponentsMounted[recId][fid];
-            if (Object.keys(this.cellComponentsMounted[recId]).length === 0){
+            if (Object.keys(this.cellComponentsMounted[recId]).length === 0) {
                 delete this.cellComponentsMounted[recId];
             }
         }
     },
-
-    updateErrors(props) {
+    /**
+     * for each field error get it's cellRender component
+     * and call onValidated to set the error state which will rerender it
+     * this is needed so the whole table is not redrawn when there is an invalid
+     * input in the inline edit cells in response to save to server
+     * @param props - has the new editError
+     */
+    updateCellErrors(props) {
         this.gridOptions.context.rowEditErrors = props.editErrors;
-        //for each field error get the cellRender component and call its onValidated
         if (_.has(props, 'editErrors.errors')) {
             //edit row components
             let editRowComponents = this.cellComponentsMounted[this.state.currentEditRid];
@@ -435,8 +456,8 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
         this.gridOptions.context.keyField = this.props.keyField;
-        this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
+        this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
         this.gridOptions.context.attachGridCell = this.attachGridCell;
         this.gridOptions.context.detachGridCell = this.detachGridCell;
         this.gridOptions.context.getAppUsers = this.getAppUsers;
@@ -481,7 +502,6 @@ let AGGrid = React.createClass({
             });
         }
     },
-
     // Performance improvement - only update the component when certain state/props change
     // Since this is a heavy component we dont want this updating all times.
     shouldComponentUpdate(nextProps) {
@@ -498,9 +518,13 @@ let AGGrid = React.createClass({
         if (!_.isEqual(nextProps.isInlineEditOpen, this.props.isInlineEditOpen) && !nextProps.isInlineEditOpen) {
             return true;
         }
+        // if we are still editing and there are new errors
+        // update the errors on the table an appropriate cells
+        // necessary hack to update just the cell components with errors
+        // instead of whole table because AgGrid is not real react
         if (!_.isEqual(nextProps.editErrors, this.props.editErrors) && nextProps.isInlineEditOpen) {
             this.setState({rowEditErrors: nextProps.editErrors}, () => {
-                this.updateErrors(nextProps);
+                this.updateCellErrors(nextProps);
             });
             return false;
         }
@@ -557,11 +581,10 @@ let AGGrid = React.createClass({
     },
 
     startEditRow(id, node) {
-        this.setState({currentEditRid: id})
+        this.setState({currentEditRid: id}); // note which record is being edited used index into cellComponentsMounted
         this.props.onEditRecordStart(id);
         this.editRow(node);
     },
-
     /**
      * Capture the row-click event. Send to record view on row-click
      * @param params
@@ -634,6 +657,7 @@ let AGGrid = React.createClass({
             // force grid to edit the newly edited row
             rowsToRefresh.push(node);
         } else {
+            // we stopped editing clear the current edit row record id
             this.setState({currentEditRid : null});
         }
 
@@ -704,7 +728,6 @@ let AGGrid = React.createClass({
         this.editRow(); // edit nothing
     },
 
-
     handleFieldChange(change) {
         if (!this.props.onFieldChange) {
             return;
@@ -729,8 +752,8 @@ let AGGrid = React.createClass({
                 //update state, edit tool column
                 this.setState({rowEditErrors: newErrors}, () => {
                     this.gridOptions.context.rowEditErrors = newErrors;
-                    this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
                     this.props.onFieldChange(change);
+                    this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
                 });
             }
         }
@@ -743,11 +766,11 @@ let AGGrid = React.createClass({
         }
         let validation = this.props.onRecordSaveClicked(id);
         if (validation && !validation.ok) {
-                //keep in edit and show error
-                this.setState({rowEditErrors: validation}, () => {
-                    this.gridOptions.context.rowEditErrors = validation;
-                    this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
-                });
+            //keep in edit and show error
+            this.setState({rowEditErrors: validation}, () => {
+                this.gridOptions.context.rowEditErrors = validation;
+                this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
+            });
         }
     },
 
@@ -760,7 +783,8 @@ let AGGrid = React.createClass({
 
         // find any existing error on the field
         if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
-            found = this.state.rowEditErrors.errors.findIndex((err) => err.def.fieldDef.id === status.def.fieldDef.id);
+            found = this.state.rowEditErrors.errors.findIndex((err) =>
+                err.def.fieldDef.id === status.def.fieldDef.id);
         }
 
         // if field was in error
@@ -793,9 +817,9 @@ let AGGrid = React.createClass({
                 newErrors.ok = true;
             }
         }
-        //update state
+        //update state of errors in the grid
         if (newErrors !== undefined && !_.isEqual(origErrors, newErrors)) {
-                this.setState({rowEditErrors: newErrors}, () => {
+            this.setState({rowEditErrors: newErrors}, () => {
                     this.gridOptions.context.rowEditErrors = newErrors;
                 });
         }
@@ -811,7 +835,6 @@ let AGGrid = React.createClass({
         // we can just loop thru the cells and validate each
         this.props.validateRecord(arguments);
     },
-
 
     handleRecordNewBlank(id) {
         let validation = this.props.onRecordNewBlank(id);

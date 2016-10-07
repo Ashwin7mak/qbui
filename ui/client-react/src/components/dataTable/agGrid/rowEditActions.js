@@ -61,7 +61,14 @@ const RowEditActions = React.createClass({
 
     render: function() {
         let errorMessage = "editErrors";
-        let validRow = !this.props.params.context.rowEditErrors || this.props.params.context.rowEditErrors.ok;
+        let validRow = true;
+        if (this.props &&
+            _.has(this.props, 'params') &&
+            _.has(this.props.params, 'data') &&
+            _.has(this.props.params, 'context.rowEditErrors.ok') &&
+            !_.isUndefined(this.props.params.context.rowEditErrors.ok)) {
+            validRow = this.props.params.context.rowEditErrors.ok;
+        }
 
         return (
             <span className="editTools">

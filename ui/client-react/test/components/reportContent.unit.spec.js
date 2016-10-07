@@ -971,7 +971,7 @@ describe('ReportContent functions', () => {
             }
         };
 
-        spyOn(flux.actions, 'recordPendingEditsChangeField');
+        spyOn(flux.actions, 'saveNewRecord');
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 appId="123"
@@ -985,7 +985,7 @@ describe('ReportContent functions', () => {
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let result = component.handleRecordSaveClicked({value: SchemaConsts.UNSAVED_RECORD_ID});
-        expect(result.ok).toEqual(true);
+        expect(flux.actions.saveNewRecord).toHaveBeenCalled();
     });
 
 
