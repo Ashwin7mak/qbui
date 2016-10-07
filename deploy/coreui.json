@@ -23,14 +23,24 @@
         "prod"
       ]
     },
-    "paramELBPort": {
+    "paramELBSSLPort": {
       "Type": "Number",
       "Default": "443",
       "Description": "The port for ELB inbound access"
     },
-    "paramInstancePort": {
+    "paramSSLInstancePort": {
       "Type": "Number",
       "Default": "9443",
+      "Description": "The listening port of the instance"
+    },
+    "paramELBNonSSLPort": {
+      "Type": "Number",
+      "Default": "80",
+      "Description": "The port for ELB inbound access"
+    },
+    "paramNonSSLInstancePort": {
+      "Type": "Number",
+      "Default": "9000",
       "Description": "The listening port of the instance"
     },
     "paramVPC": {
@@ -41,7 +51,7 @@
     },
     "paramELBSubnets": {
       "Type": "CommaDelimitedList",
-      "Default": "subnet-972af7ce, subnet-872e90f0",
+      "Default": "subnet-992e90ee, subnet-932af7ca",
       "Description": "Subnets for the ELB"
     },
     "paramInstanceSubnets": {
@@ -139,13 +149,18 @@
         "SecurityGroups": [{"Ref": "ElbSecurityGroup"}, {"Ref": "paramNatSecurityGroupID"}],
         "Listeners": [
           {
-            "LoadBalancerPort": {"Ref": "paramELBPort"},
-            "InstancePort": {"Ref": "paramInstancePort"},
+            "LoadBalancerPort": {"Ref": "paramELBSSLPort"},
+            "InstancePort": {"Ref": "paramSSLInstancePort"},
+            "Protocol": "TCP"
+          },
+          {
+            "LoadBalancerPort": {"Ref": "paramELBNonSSLPort"},
+            "InstancePort": {"Ref": "paramNonSSLInstancePort"},
             "Protocol": "TCP"
           }
         ],
         "HealthCheck": {
-          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramInstancePort"}, "/api/v1/health" ] ]},
+          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramSSLInstancePort"}, "/api/v1/health" ] ]},
           "HealthyThreshold": "2",
           "UnhealthyThreshold": "2",
           "Interval": "5",
@@ -171,7 +186,8 @@
         "VpcId": {"Ref": "paramVPC"},
         "SecurityGroupIngress": [
           {"IpProtocol": "tcp", "FromPort": "22",   "ToPort": "22",   "CidrIp": {"Ref": "paramBastionCIDRBlock"}},
-          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramInstancePort"}, "ToPort": {"Ref": "paramInstancePort"}, "SourceSecurityGroupId": {"Ref": "ElbSecurityGroup"}}
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramSSLInstancePort"}, "ToPort": {"Ref": "paramSSLInstancePort"}, "SourceSecurityGroupId": {"Ref": "ElbSecurityGroup"}},
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramNonSSLInstancePort"}, "ToPort": {"Ref": "paramNonSSLInstancePort"}, "SourceSecurityGroupId": {"Ref": "ElbSecurityGroup"}}
         ],
         "SecurityGroupEgress": [
           {"IpProtocol": "-1", "CidrIp": {"Ref": "paramVPCCIDRBlock"}}
