@@ -127,7 +127,8 @@
         "GroupDescription": "Enable HTTP access to ELB",
         "VpcId": {"Ref": "paramVPC"},
         "SecurityGroupIngress": [
-          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBPort"}, "ToPort": {"Ref": "paramELBPort"}, "CidrIp": "0.0.0.0/0"}
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBSSLPort"}, "ToPort": {"Ref": "paramELBSSLPort"}, "CidrIp": "0.0.0.0/0"},
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBNonSSLPort"}, "ToPort": {"Ref": "paramELBNonSSLPort"}, "CidrIp": "0.0.0.0/0"},
         ]
       }
     },
