@@ -68,16 +68,12 @@
 
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
+        let fieldsApi = require('./fieldsApi')(config);
         let routeHelper = require('../../routes/routeHelper');
         var groupFormatter = require('./formatter/groupFormatter');
         var recordFormatter = require('./formatter/recordFormatter')();
         var constants = require('../../../../common/src/constants');
         var url = require('url');
-
-        //Module constants:
-        var APPLICATION_JSON = 'application/json';
-        var CONTENT_TYPE = 'Content-Type';
-        var CONTENT_LENGTH = 'content-length';
 
         var FIELDS = 'fields';
         var RECORD = 'record';
@@ -146,7 +142,7 @@
              */
             fetchSingleRecordAndFields: function(req) {
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
+                    var fetchRequests = [this.fetchRecords(req), fieldsApi.fetchFields(req)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -192,7 +188,7 @@
              */
             fetchRecordsAndFields: function(req) {
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req), this.fetchCountForRecords(req)];
+                    var fetchRequests = [this.fetchRecords(req), fieldsApi.fetchFields(req), this.fetchCountForRecords(req)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -309,7 +305,7 @@
                 //}
 
                 let opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 //  get the request parameters
                 let search = url.parse(req.url).search;
@@ -378,41 +374,11 @@
             },
 
             /**
-             * Fetch the requested field meta data for a table.
-             *
-             * @param req
-             * @returns Promise
-             */
-            fetchFields: function(req) {
-                var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-
-                if (routeHelper.isFieldsRoute(req.url)) {
-                    if (req.params.fieldId) {
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url, req.params.fieldId);
-                    } else {
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
-                    }
-                } else {
-                    //  not a fields route; set to return all fields for the given table
-                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
-                }
-
-                //  any request parameters to append?
-                let search = url.parse(req.url).search;
-                if (search) {
-                    opts.url += search;
-                }
-
-                return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
-            },
-
-            /**
              * Fetch the count of all records that match a user query
              */
             fetchCountForRecords: function(req) {
                 let opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsCountRoute(req.url);
                 // Set the query parameter
@@ -434,7 +400,7 @@
                 let errors = _validateChanges(req);
                 if (errors.length === 0) {
                     var opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts);
                 } else {
@@ -455,7 +421,7 @@
                 let errors = _validateChanges(req);
                 if (errors.length === 0) {
                     var opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts);
                 } else {
@@ -474,7 +440,7 @@
              */
             deleteSingleRecord: function(req) {
                 var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 return requestHelper.executeRequest(req, opts);
             },
 
@@ -486,7 +452,7 @@
              */
             deleteRecordsBulk: function(req) {
                 var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 return requestHelper.executeRequest(req, opts);
             }
 

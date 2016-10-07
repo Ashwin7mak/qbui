@@ -24,8 +24,6 @@
         let routeHelper = require('../../routes/routeHelper');
 
         //Module constants:
-        let APPLICATION_JSON = 'application/json';
-        let CONTENT_TYPE = 'Content-Type';
         let FACETS = 'facets';
 
         /**
@@ -134,7 +132,7 @@
              */
             fetchFacetResults: function(req, reportId) {
                 let opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsFacetRoute(req.url, reportId);
                 return requestHelper.executeRequest(req, opts);
             },
@@ -207,7 +205,7 @@
              */
             fetchReportRecordsCount: function(req) {
                 var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsCountRoute(req.url);
 
                 return new Promise((resolve1, reject1) => {
@@ -341,7 +339,7 @@
              */
             fetchReportMetaData(req, reportId) {
                 let opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url, reportId);
 
                 //  promise to return report meta data
@@ -379,7 +377,7 @@
                     // TODO code hygiene, code below is shared by fetchTableHomepageReport. move to a private function and
                     // share between the two api calls. https://quickbase.atlassian.net/browse/MB-505
                     let opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesDefaultReportHomepageRoute(req.url);
 
                     //  make the api request to get the table homepage report id
