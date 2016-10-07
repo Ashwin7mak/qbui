@@ -23,8 +23,8 @@ describe('Nav Actions functions', () => {
     });
 
     it('test show trowser action', () => {
-        flux.actions.showTrowser();
-        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SHOW_TROWSER);
+        flux.actions.showTrowser("content");
+        expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.SHOW_TROWSER, "content");
     });
 
     it('test hide trouwser action', () => {

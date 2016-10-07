@@ -59,7 +59,7 @@ const RowEditActions = React.createClass({
         this.props.api.deselectAll();
     },
 
-    render: function() {
+    render() {
         let errorMessage = "editErrors";
         let validRow = true;
         if (this.props &&

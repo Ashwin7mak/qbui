@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import MultiChoiceFieldValueEditor  from '../../src/components/fields/multiChoiceFieldValueEditor';
+import * as CompConstants from '../../src/constants/componentConstants';
 
 const listbox_renderWithSelection = {
     choices: [
@@ -160,6 +161,22 @@ describe('MultiChoiceFieldValueEditor functions', () => {
         });
 
         expect(component.state.choice).toEqual("Banana");
+    });
+
+    // For radio group, test click on text selects radio item
+    it('test click on radio button text selects none option', () => {
+        component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor value={'Apricots'} fieldDef={radioBoxData.fieldDefNotRequired} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices}/>);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        var node = ReactDOM.findDOMNode(component);
+        var radioContainerNode = node.getElementsByClassName("multiChoiceRadioContainer");
+        expect(radioContainerNode).toBeDefined();
+
+        var labels = node.querySelectorAll('label');
+        expect(labels.length).toEqual(radioBoxData.choices.length + 1);
+        let input = labels[labels.length - 1].querySelector('input');
+        TestUtils.Simulate.click(input);
+
+        expect(component.state.choice).toEqual(CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE);
     });
 
     // For radio group, ensure prior choice is shown as selected

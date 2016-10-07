@@ -24,9 +24,11 @@ let logger = new Logger();
 let FluxMixin = Fluxxor.FluxMixin(React);
 
 let AddRecordButton = React.createClass({
+
+
     render() {
         return (
-            <a href="#" className="addNewRecord"><QBicon icon="add" /></a>
+            <a href="#" className="addNewRecord" onClick={this.props.onClick}><QBicon icon="add" /></a>
         );
     }
 });
@@ -275,6 +277,17 @@ const ReportToolsAndContent = React.createClass({
         }
         return 0;
     },
+
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    editNewRecord() {
+
+        const flux = this.getFlux();
+
+        flux.actions.editNewRecord();
+    },
     render() {
         let classes = "reportToolsAndContentContainer";
         if (this.props.selectedRows) {
@@ -366,7 +379,7 @@ const ReportToolsAndContent = React.createClass({
                                    gridOptions={this.props.gridOptions}
                                    {...this.props} />
 
-                    {!this.props.scrollingReport && <AddRecordButton />}
+                    {!this.props.scrollingReport && <AddRecordButton onClick={this.editNewRecord}/>}
                 </div>
             );
         }

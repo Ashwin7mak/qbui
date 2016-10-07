@@ -2,9 +2,11 @@
     'use strict';
 
     var constants = require('../../../common/src/constants');
-    var groupTypes = require('../api/groupTypes');
     var moment = require('moment-timezone');
     var emailAddress = require('email-addresses');
+
+    var groups = require('../../../common/src/groupTypes');
+    var groupTypes = groups.GROUP_TYPE;
 
     /**
      * For the given, return the lower and upper range as a string, separated by
@@ -119,6 +121,7 @@
             case constants.NUMERIC:
                 switch (groupType) {
                 case groupTypes.NUMERIC.equals: return true;
+                case groupTypes.NUMERIC.value: return true;
                 case groupTypes.NUMERIC.thousandth: return true;
                 case groupTypes.NUMERIC.hundredth: return true;
                 case groupTypes.NUMERIC.tenth: return true;

@@ -7,7 +7,7 @@ export const sortGroupFieldShape =
         descendOrder:React.PropTypes.bool,
 
         // only applicable for grouping the way groups are determined see
-        // ui/client-react/src/constants/groupTypes.js
+        // common/src/groupTypes.js
         howToGroup: React.PropTypes.string,
 
         // the field id
