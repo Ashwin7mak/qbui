@@ -43,6 +43,12 @@ class FieldFormats {
             case serverTypeConsts.PERCENT :
                 return FieldFormats.PERCENT_FORMAT;
 
+            case serverTypeConsts.URL :
+                return FieldFormats.URL;
+
+            case serverTypeConsts.EMAIL_ADDRESS :
+                return FieldFormats.EMAIL_ADDRESS;
+
             case serverTypeConsts.TEXT :
                 let numLines = 1;
                 if (_.has(datatypeAttributes, 'clientSideAttributes.num_lines')) {
@@ -52,9 +58,6 @@ class FieldFormats {
                     return FieldFormats.MULTI_LINE_TEXT_FORMAT;
                 }
                 return FieldFormats.TEXT_FORMAT;
-
-            case serverTypeConsts.EMAIL_ADDRESS :
-                return FieldFormats.EMAIL_ADDRESS;
 
             default:
                 return FieldFormats.TEXT_FORMAT;
@@ -78,6 +81,7 @@ FieldFormats.RATING_FORMAT = 10;
 FieldFormats.DURATION_FORMAT = 11;
 FieldFormats.PHONE_FORMAT = 12;
 FieldFormats.MULTI_LINE_TEXT_FORMAT = 13;
+FieldFormats.URL = 14;
 FieldFormats.EMAIL_ADDRESS = 15;
 
 export default FieldFormats;

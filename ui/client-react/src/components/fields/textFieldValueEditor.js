@@ -52,11 +52,16 @@ const TextFieldValueEditor = React.createClass({
 
         /**
          * data type attributes for the field */
-        fieldDef: React.PropTypes.object
+        fieldDef: React.PropTypes.object,
+
+        /**
+        * Set the input type to either text, email, or url to allow better mobile keyboards */
+        inputType: React.PropTypes.oneOf(['text', 'email', 'url', 'tel'])
     },
 
     getDefaultProps() {
         return {
+            inputType: 'text'
             isInvalid: false,
             showClearButton: false
         };
@@ -100,10 +105,22 @@ const TextFieldValueEditor = React.createClass({
             classes += ' ' + this.props.classes;
         }
 
+        /*
+            Value is set to display by default because in most cases
+            the user edits the display value and not the raw value.
+            For example, the user edits '$5.50', not '550'.
+            If you need the user to edit the raw value instead of
+            the display value, then remove display from the props before passing
+            to textFieldValueEditor.
+        */
+        let value = this.props.display ? this.props.display : this.props.value;
+        // If it still is null, show as a blank string to avoid React input errors
+        value = (value === null ? '' : value);
+
         let inputBox = <input ref="textInput"
                           className={classes}
-                          value={this.props.display ? this.props.display : this.props.value}
-                          type="text"
+                          value={value}
+                          type={this.props.inputType}
                           key={'inp' + this.props.idKey}
                           placeholder={this.props.placeholder}
                           onChange={this.onChange}
