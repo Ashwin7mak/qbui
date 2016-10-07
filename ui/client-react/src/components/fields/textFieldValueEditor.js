@@ -61,7 +61,7 @@ const TextFieldValueEditor = React.createClass({
 
     getDefaultProps() {
         return {
-            inputType: 'text'
+            inputType: 'text',
             isInvalid: false,
             showClearButton: false
         };
@@ -135,13 +135,15 @@ const TextFieldValueEditor = React.createClass({
                 inputBox
         );
 
-// i18nMessageKey="fields.textField.clear"
         if (this.props.showClearButton) {
             return (
                 <span className="inputDeleteIcon">
                     {inputBoxWithTooltip}
-                    <QBToolTip tipId="clearInput" plainMessage="hello" >
-                        <QBicon onClick={this.clearInput} className="deleteIcon" icon="clear-mini" />
+                    <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
+                        {/* Need to wrap QBicon in a div for tooltip to show */}
+                        <div className="deleteIcon">
+                            <QBicon onClick={this.clearInput} icon="clear-mini" />
+                        </div>
                     </QBToolTip>
                 </span>
             );
