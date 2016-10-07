@@ -68,7 +68,7 @@ const RowEditActions = React.createClass({
         this.props.api.deselectAll();
     },
 
-    render: function() {
+    render() {
         let errorMessage = "editErrors";
         // defer this disabling of save button til server validation story
         //let validRow = !this.props.params.context.rowEditErrors || this.props.params.context.rowEditErrors.ok;

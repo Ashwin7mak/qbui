@@ -27,31 +27,24 @@ def cwd = project.getProjectDir().absolutePath
 //******************************************************
 buildscript {
     ext {
-        nexusRoot = "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/"
+        nexusGroupRoot = "https://nexus1.ci.quickbaserocks.com/nexus/content/groups/"
+        nexusRepoRoot = "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/"
         nexusUser = "developer"
         nexusPassword = "id2ubV8miEVhXtGd"
         quickbaseVersion = "1.0"
     }
     repositories {
         maven {
-            url nexusRoot + "jcenter/"
+            url nexusGroupRoot + "public/"
         }
-        maven {
-            url nexusRoot + "central/"
-        }
-        maven {
-            url nexusRoot + "gradle2/"
-        }
-        maven {
-            url nexusRoot + "snapshots/"
-        }
+
         flatDir name: 'ExternalJars', dirs: '../lib/plugins'
         dependencies {
             classpath 'com.moowork.gradle:gradle-grunt-plugin:0.9'
             classpath 'com.moowork.gradle:gradle-node-plugin:0.9'
             classpath 'com.bmuschko:gradle-cargo-plugin:2.2.1'
             classpath 'org.sonarqube.gradle:gradle-sonarqube-plugin:1.1'
-            classpath 'com.quickbase.gradle:sonar-buildbreak-plugin:0.1.0-SNAPSHOT'
+            classpath 'com.quickbase.gradle:sonar-buildbreak-plugin:1.0.+'
         }
     }
 }

@@ -175,6 +175,14 @@ let CardView = React.createClass({
             this.props.onRowClicked(this.props.data);
         }
     },
+
+    /**
+     * edit card callback
+     */
+    onEditAction() {
+        this.props.onEditAction(this.props.data);
+    },
+
     render() {
         if (this.props.data) {
             let row = this.createRow();
@@ -198,7 +206,7 @@ let CardView = React.createClass({
                 rowActionsClasses += this.state.showActions ? "open" : "closed";
             }
 
-            const isSelected = this.props.isRowSelected(this.props.data);
+            const isSelected = _.has(this.props.data, this.props.uniqueIdentifier) && this.props.isRowSelected(this.props.data[this.props.uniqueIdentifier].value);
 
             return (
                 <Swipeable  className={"swipeable " + (this.state.showActions && !this.state.swipingActions ? "actionsOpen" : "actionsClosed") }
@@ -219,7 +227,7 @@ let CardView = React.createClass({
                     </div>
 
                     <div ref={"actions"} style={actionsStyle} className={rowActionsClasses}>
-                        <RecordActions  {...this.props}/>
+                        <RecordActions  {...this.props} onEditAction={this.onEditAction}/>
                     </div>
                 </Swipeable>
             );

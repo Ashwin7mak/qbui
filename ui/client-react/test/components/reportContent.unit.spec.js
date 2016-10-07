@@ -8,7 +8,7 @@ import {NumericCellRenderer, DateCellRenderer} from '../../src/components/dataTa
 import _ from 'lodash';
 import Locales from '../../src/locales/locales';
 import * as SchemaConsts from '../../src/constants/schema';
-import * as GroupTypes from '../../src/constants/groupTypes';
+import * as GroupTypes from '../../../common/src/groupTypes';
 import LimitConstants from '../../../common/src/limitConstants';
 
 

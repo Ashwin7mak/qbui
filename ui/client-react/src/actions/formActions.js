@@ -5,6 +5,9 @@ import Promise from 'bluebird';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
+import WindowLocationUtils from '../utils/windowLocationUtils';
+import {browserHistory} from 'react-router';
+import * as UrlConsts from "../constants/urlConstants";
 
 let logger = new Logger();
 
@@ -18,19 +21,105 @@ Promise.onPossiblyUnhandledRejection(function(err) {
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
+
+
 let formActions = {
 
-    loadFormAndRecord: function(appId, tblId, recordId, rptId, formType) {
+    /**
+     * edit an existing record
+     * @param recordId
+     */
+    openRecordForEdit(recordId) {
+
+        // add editRec query param and let the router take action
+        WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recordId);
+    },
+
+    /**
+     * start editing a new record
+     */
+    editNewRecord() {
+        // add editRec=new query param and let the router take action
+        WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
+    },
+
+    /**
+     * load form for new record
+     * @param appId
+     * @param tblId
+     * @param rptId
+     * @param formType
+     */
+    loadForm(appId, tblId, rptId, formType, isEdit = false) {
+
+        let loadAction = actions.LOAD_FORM;
+        let successAction = actions.LOAD_FORM_SUCCESS;
+        let failedAction = actions.LOAD_FORM_FAILED;
+        if (isEdit) {
+            loadAction = actions.LOAD_EDIT_FORM;
+            successAction = actions.LOAD_EDIT_FORM_SUCCESS;
+            failedAction = actions.LOAD_EDIT_FORM_FAILED;
+        }
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            if (appId && tblId) {
+                this.dispatch(loadAction);
+
+                let formService = new FormService();
+                formService.getForm(appId, tblId, rptId, formType).then(
+                    (response) => {
+                        resolve();
+
+                        response.data.record = null;
+                        this.dispatch(successAction, response.data);
+                    },
+                    (error) => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        if (error.response.status === 403) {
+                            logger.parseAndLogError(LogLevel.WARN, error.response, 'formService.loadForm:');
+                        } else {
+                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
+                        }
+                        this.dispatch(failedAction, error.response.status);
+                        reject();
+                    }
+                );
+            } else {
+                logger.error('formService.loadFormAndRecord: Missing required input parameters.');
+                reject();
+            }
+        });
+    },
+
+    /**
+     * load form and record data for edit
+     * @param appId
+     * @param tblId
+     * @param recordId
+     * @param rptId
+     * @param formType
+     */
+    loadFormAndRecord(appId, tblId, recordId, rptId, formType, isEdit = false) {
+        let loadAction = actions.LOAD_FORM_AND_RECORD;
+        let successAction = actions.LOAD_FORM_AND_RECORD_SUCCESS;
+        let failedAction = actions.LOAD_FORM_AND_RECORD_FAILED;
+        if (isEdit) {
+            loadAction = actions.LOAD_EDIT_FORM_AND_RECORD;
+            successAction = actions.LOAD_EDIT_FORM_AND_RECORD_SUCCESS;
+            failedAction = actions.LOAD_EDIT_FORM_AND_RECORD_FAILED;
+        }
+
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && recordId) {
-                this.dispatch(actions.LOAD_FORM_AND_RECORD);
+                this.dispatch(loadAction);
 
                 let formService = new FormService();
                 formService.getFormAndRecord(appId, tblId, recordId, rptId, formType).then(
                     (response) => {
                         resolve();
-                        this.dispatch(actions.LOAD_FORM_AND_RECORD_SUCCESS, response.data);
+
+                        this.dispatch(successAction, response.data);
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
@@ -39,7 +128,7 @@ let formActions = {
                         } else {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadFormAndRecord:');
                         }
-                        this.dispatch(actions.LOAD_FORM_AND_RECORD_FAILED, error.response.status);
+                        this.dispatch(failedAction, error.response.status);
                         reject();
                     }
                 );
