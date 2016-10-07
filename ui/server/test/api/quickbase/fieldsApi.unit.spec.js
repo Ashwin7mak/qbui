@@ -37,10 +37,11 @@ describe("Validate fieldsApi", function() {
 
         afterEach(function() {
             executeReqStub.restore();
+            req.params = {};
         });
 
-        it('success return results ', function(done) {
-            req.url = '/apps/1/tables/1/fields?param=1';
+        it('success return select all fields with no parameter ', function(done) {
+            req.url = '/apps/1/tables/1/fields';
             var targetObject = "{'body':[]}";
             executeReqStub.returns(Promise.resolve(targetObject));
             var promise = fieldsApi.fetchFields(req);
@@ -49,11 +50,38 @@ describe("Validate fieldsApi", function() {
                 function(response) {
                     assert.deepEqual(response, targetObject);
                     done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'failure response returned when success expected');
+                    done();
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve /apps/1/tables/1/fields: ' + JSON.stringify(errorMsg)));
             });
 
+        });
+
+        it('success return select field with parameter ', function(done) {
+            req.url = '/apps/123/tables/456/fields/789?show=tell';
+            req.params.fieldId = '789';
+
+            var targetObject = "[{fields: []}]";
+
+            executeReqStub.returns(Promise.resolve(targetObject));
+            var promise = fieldsApi.fetchFields(req);
+
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, targetObject);
+                    done();
+                },
+                function(error) {
+                    assert.fail('fail', 'success', 'failure response returned when success expected');
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
+            });
         });
 
         it('fail return results ', function(done) {
@@ -65,7 +93,7 @@ describe("Validate fieldsApi", function() {
 
             promise.then(
                 function(success) {
-                    assert.fail('Test fail promise error and success promise returned');
+                    assert.fail('success', 'fail', 'Test fail promise error and success promise returned');
                 },
                 function(error) {
                     assert.equal(error, "Error: " + error_message);

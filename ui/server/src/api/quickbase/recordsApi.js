@@ -61,11 +61,6 @@
      */
     var jsonBigNum = require('json-bignum');
 
-    //function isInteger(value) {
-    //    let int = parseInt(value);
-    //    return (typeof int === 'number' && (int % 1) === 0);
-    //}
-
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
         let fieldsApi = require('./fieldsApi')(config);
@@ -134,6 +129,10 @@
                 return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.RAW;
             },
 
+            fetchFields: function(req) {
+                return fieldsApi.fetchFields(req);
+            },
+
             /**
              * Fetch a single record and associated fields meta data from a table.
              *
@@ -142,7 +141,7 @@
              */
             fetchSingleRecordAndFields: function(req) {
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecords(req), fieldsApi.fetchFields(req)];
+                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -188,7 +187,7 @@
              */
             fetchRecordsAndFields: function(req) {
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecords(req), fieldsApi.fetchFields(req), this.fetchCountForRecords(req)];
+                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req), this.fetchCountForRecords(req)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -211,7 +210,7 @@
                                 //  json result that includes grouping.   Client side filtering, grouping and sorting
                                 //  still use the records endpoint as report/results does not yet accept filtering
                                 //  parameters.
-                                if (records.type === 'GROUP') {
+                                if (records.type === constants.RECORD_TYPE.GROUP) {
                                     //  format the records using the server side grouping results
                                     responseObject[GROUPS] = groupFormatter.coreGroup(req, responseObject[FIELDS], records, this.isDisplayFormat(req));
                                 } else {

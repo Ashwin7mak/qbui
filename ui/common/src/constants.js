@@ -88,6 +88,10 @@
         SORT_ORDER: {
             ASC: 'asc',
             DESC: 'desc'
+        },
+        RECORD_TYPE: {
+            GROUP: 'GROUP',
+            TABLE: 'TABLE'
         }
     });
 

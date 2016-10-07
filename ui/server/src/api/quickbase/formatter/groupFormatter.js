@@ -463,7 +463,7 @@
             let groupBy = this.group(req, fields);
             let totalRows = 0;
 
-            if (records && records.type === 'GROUP') {
+            if (records && records.type === constants.RECORD_TYPE.GROUP) {
                 var data = [];
 
                 //  Build a map for quick field information retrieval by id.  The map
