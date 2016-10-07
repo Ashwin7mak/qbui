@@ -117,3 +117,16 @@ $data-font-size: $font-size-p;
   max-width:none;
 }
 
+.inputDeleteIcon {
+    position: relative;
+
+    .deleteIcon {
+        cursor: pointer;
+        position: absolute;
+        right: 2px;
+        font-size: 16px;
+        top: 1px;
+        background-color: $color-black-100;
+        color: $color-black-500;
+    }
+}

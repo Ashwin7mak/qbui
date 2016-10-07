@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
+import QBicon from '../qbIcon/qbIcon';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 
 /**
@@ -36,6 +37,10 @@ const TextFieldValueEditor = React.createClass({
         classes: React.PropTypes.string,
 
         /**
+        * shows a button that will allow a user to clear the field in one click */
+        showClearButton: React.PropTypes.bool,
+
+        /**
          * listen for changes by setting a callback to the onChange prop.  */
         onChange: React.PropTypes.func,
 
@@ -52,13 +57,21 @@ const TextFieldValueEditor = React.createClass({
 
     getDefaultProps() {
         return {
-            isInvalid: false
+            isInvalid: false,
+            showClearButton: false
         };
     },
 
     onChange(ev) {
         if (this.props.onChange) {
             this.props.onChange(ev.target.value);
+        }
+    },
+
+    clearInput(ev) {
+        if (this.props.onChange) {
+            this.props.onChange('');
+            this.refs.mainInput.focus();
         }
     },
 
@@ -86,6 +99,7 @@ const TextFieldValueEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+
         let inputBox = <input ref="textInput"
                           className={classes}
                           value={this.props.display ? this.props.display : this.props.value}
@@ -93,16 +107,30 @@ const TextFieldValueEditor = React.createClass({
                           key={'inp' + this.props.idKey}
                           placeholder={this.props.placeholder}
                           onChange={this.onChange}
-                          onBlur={this.onBlur} />;
+                          onBlur={this.onBlur}
+                          ref="mainInput" />;
 
-
-        return  (this.props.isInvalid ?
+        let inputBoxWithTooltip =  (this.props.isInvalid ?
                 (<QBToolTip location="top" tipId="invalidInput" delayHide={3000}
                             plainMessage={this.props.invalidMessage}>
                     {inputBox}
                 </QBToolTip>) :
                 inputBox
         );
+
+// i18nMessageKey="fields.textField.clear"
+        if (this.props.showClearButton) {
+            return (
+                <span className="inputDeleteIcon">
+                    {inputBoxWithTooltip}
+                    <QBToolTip tipId="clearInput" plainMessage="hello" >
+                        <QBicon onClick={this.clearInput} className="deleteIcon" icon="clear-mini" />
+                    </QBToolTip>
+                </span>
+            );
+        } else {
+            return inputBoxWithTooltip;
+        }
     }
 });
 

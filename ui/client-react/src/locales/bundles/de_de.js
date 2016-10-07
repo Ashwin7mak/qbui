@@ -98,6 +98,9 @@ export default {
             checkbox: {
                 no: 'Nein',
                 yes: 'Ja'
+            },
+            textField: {
+                clear: 'Alle texte löschen'
             }
         },
         form : {
