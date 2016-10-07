@@ -113,7 +113,7 @@ const CellRenderer = React.createClass({
             _.has(this.props.params, 'context.uniqueIdentifier') &&
             !_.isUndefined(this.props.params.data) &&
             !_.isUndefined(this.props.params.context.uniqueIdentifier) &&
-            !_.isUndefined(this.props.params.data[this.props.params.context.uniqueIdentifier]) ) {
+            !_.isUndefined(this.props.params.data[this.props.params.context.uniqueIdentifier])) {
             recIdAnswer = this.props.params.data[this.props.params.context.uniqueIdentifier].value;
         }
         return recIdAnswer;

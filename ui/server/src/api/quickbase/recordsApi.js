@@ -410,7 +410,7 @@
              */
             saveSingleRecord: function(req) {
                 let answer = _validateChanges(req);
-                if (answer.errors.length === 0) {
+                if (answer.length === 0) {
                     var opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                     //input expected in raw form for java
@@ -432,7 +432,7 @@
              */
             createSingleRecord: function(req) {
                 let answer = _validateChanges(req);
-                if (answer.errors.length === 0) {
+                if (answer.length === 0) {
                     var opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                     //input expected in raw form for java
@@ -483,7 +483,6 @@
      */
     function _validateChanges(req) {
         let errors = [];
-        let ok = true;
 
         if (req.body && req.body.length) {
             //look at each change
@@ -492,16 +491,11 @@
                     // validate it
                     let results = ValidationUtils.checkFieldValue(change, change.fieldName, change.value, true);
                     if (results.isInvalid) {
-                        ok = false;
                         errors.push(results);
                     }
                 }
             });
         }
-        return {
-            ok : ok,
-            errors: errors
-        };
-
+        return  errors;
     }
 }());
