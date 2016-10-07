@@ -132,15 +132,20 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
         background-color: $color-black-100;
         color: $color-black-500;
         cursor: pointer;
-        font-size: 14px;
         max-height: 16px;
+        max-width: 16px;
         position: absolute;
         right: 2px;
-        top: 0;
+        top: 49%;
 
-        @include small-breakpoint {
-            font-size: 16px;
-            top: -1px;
+        transform: translateY(-50%);
+
+        .qbIcon {
+            font-size: 14px;
+
+            @include small-breakpoint {
+                font-size: 16px;
+            }
         }
     }
 }
