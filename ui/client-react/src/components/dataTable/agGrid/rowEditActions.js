@@ -70,8 +70,9 @@ const RowEditActions = React.createClass({
             validRow = this.props.params.context.rowEditErrors.ok;
         }
         let addRecordClass = 'addRecord';
-        if (!validRow)
+        if (!validRow) {
             addRecordClass += ' disabled';
+        }
 
         return (
             <span className="editTools">
