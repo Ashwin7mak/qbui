@@ -33,7 +33,9 @@ const QBToolTip = React.createClass({
         let startDelay = this.props.delayShow ? this.props.delayShow : this.defaultDelayShow;
         return (
             <OverlayTrigger placement={this.props.location ? this.props.location : "top"} overlay={itemTip} delayShow={startDelay} {...this.props}>
+                <div style={{cursor: 'not-allowed'}}>
                     {this.props.children}
+                </div>
             </OverlayTrigger>
         );
     }

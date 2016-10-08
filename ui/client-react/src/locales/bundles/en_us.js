@@ -272,7 +272,7 @@ export default {
         placeholder:  {
             email: 'name@domain.com'
         },
-        editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Fix this field}\n other {Fix these # fields}\n} ",
+        editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
         invalidMsg : {
             required: 'Fill in the {fieldName}',
             maxChars: 'Use up to {maxNum} characters',

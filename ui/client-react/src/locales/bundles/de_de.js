@@ -270,7 +270,7 @@ export default {
         placeholder:  {
             email: 'name@domain.com'
         },
-        editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Beheben Sie dieses Feld}\n other {Fix diese # Felder}\n} ",
+        editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
         invalidMsg : {
             required: 'Füllen Sie das {fieldName}',
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',

@@ -633,6 +633,9 @@ $cell-edit-background-edit: #f3f8fe;
                 .qbIcon.addRecord {
                     color:$icon-color;
                 }
+                .qbIcon.disabled.addRecord {
+                    color:$icon-disabled-color;
+                }
             }
         }
     }
