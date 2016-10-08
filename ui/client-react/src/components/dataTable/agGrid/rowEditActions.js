@@ -86,7 +86,7 @@ const RowEditActions = React.createClass({
                     </QBToolTip> :
 
                     <QBToolTip  rootClose={true} location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
-                        <Button><QBIcon icon="alert" className="invalidRecord"/></Button>
+                        <Button><QBIcon icon="alert" onClick={this.onClickSave} className="invalidRecord"/></Button>
                     </QBToolTip>
                 }
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">

@@ -149,10 +149,15 @@ $cell-edit-background-edit: #f3f8fe;
 
     .requiredFlag-layout {
         // to allow for even space above and below the inputbox
-        top: 1px;
+        top: -1px;
         position: absolute;
         left: 3px;
     }
+
+    .textFormat .requiredFlag-layout {
+        top:1;
+    }
+
     .multiLineCellEditWrapper .requiredFlag-layout {
         // otherwise * would appear inside the mulitline box
         top: -14px;
