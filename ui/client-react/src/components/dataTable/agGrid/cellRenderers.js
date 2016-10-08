@@ -139,8 +139,8 @@ const CellRenderer = React.createClass({
      */
     componentWillMount() {
         if (this.props.params && this.props.params.context &&
-            this.props.params.context.attachGridCell) {
-            this.props.params.context.attachGridCell(this, this.getRecId(), this.getFieldId());
+            this.props.params.context.onAttach) {
+            this.props.params.context.onAttach(this, this.getRecId(), this.getFieldId());
         }
     },
     /**
@@ -148,8 +148,8 @@ const CellRenderer = React.createClass({
      */
     componentWillUnmount() {
         if (this.props.params && this.props.params.context &&
-            this.props.params.context.detachGridCell) {
-            this.props.params.context.detachGridCell(this.getRecId(), this.getFieldId());
+            this.props.params.context.onDetach) {
+            this.props.params.context.onDetach(this.getRecId(), this.getFieldId());
         }
     },
     /**
@@ -263,7 +263,8 @@ const CellRenderer = React.createClass({
     },
 
     onBlur(theVals) {
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals)},
+            ()=>{this.cellChanges();});
     },
 
     cellChanges() {
@@ -299,7 +300,8 @@ const CellRenderer = React.createClass({
             display: value
         };
 
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}},
+            ()=>{this.cellChanges();});
     },
 
     /**

@@ -20,7 +20,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
         choices: React.PropTypes.array,
         /**
          * gets the selected value for input box for multi choice */
-        value: React.PropTypes.string,
+        value: React.PropTypes.any,
         /**
          * listen for losing focus by setting a callback to the onBlur prop */
         onBlur: React.PropTypes.func,
@@ -163,7 +163,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
             choice = this.props.value ? this.state.choice : false;
         }
         return (
-            <div className="multiChoiceContainer">
+            <div className="multiChoiceContainer borderOnError">
                 {this.props.showAsRadio ?
                     <div className="multiChoiceRadioContainer">
                         { options }

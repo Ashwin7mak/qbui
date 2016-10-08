@@ -23,7 +23,7 @@
             recordBase: recordBase,
             // Create a realm
             setUp: function() {
-                let defaultBase = config ? config.DOMAIN : 'http://localhost:9000';
+                let defaultBase = config ? config.DOMAIN : 'http://localhost:9001';
                 this.setBaseUrl(typeof browser !== 'undefined' ? browser.baseUrl : defaultBase);
                 this.initialize();
             },

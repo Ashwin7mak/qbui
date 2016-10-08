@@ -27,7 +27,7 @@ consts = require('../../common/src/constants.js');
 
     //Require the e2e base class and constants modules
     var e2eBase = require('../common/e2eBase.js')(config);
-
+    var _ = require('lodash');
     var chance = require('chance').Chance();
 
     var app;
@@ -61,6 +61,7 @@ consts = require('../../common/src/constants.js');
         var table2Name = 'Table 2 ';
         var table3Name = 'Table 3 ';
         var table4Name = 'Table 4 ';
+        var table5Name = 'All Required';
 
         // convenience reusable settings
         var baseNumClientRequiredProps = {
@@ -174,6 +175,45 @@ consts = require('../../common/src/constants.js');
                  allowNew: false,
                  sortAsGiven: false
              }});
+
+
+        tableToFieldToFieldTypeMap[table5Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, "Text MultiChoice",
+            {required:true,
+             dataAttr:{htmlAllowed: true, clientSideAttributes: Object.assign({}, baseTextClientRequiredProps)},
+                multipleChoice: {
+                    choices: _.clone(textChoices),
+                    allowNew: false,
+                    sortAsGiven: true
+                }});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TEXT, "MultiLine",
+            {required:true, dataAttr:{clientSideAttributes: Object.assign({}, baseTextClientRequiredProps, {num_lines : 5})}});
+
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.NUMERIC, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.NUMERIC, "Numeric MultiChoice",
+            {required:true,
+                dataAttr:{clientSideAttributes: baseNumClientRequiredProps},
+                decimalPlaces: 0,
+                treatNullAsZero: true,
+                unitsDescription: "",
+                multipleChoice: {
+                    choices: _.clone(numericChoices),
+                    allowNew: false,
+                    sortAsGiven: false
+                }});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.CURRENCY, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PERCENT, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.RATING, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DATE_TIME, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.TIME_OF_DAY, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.DURATION, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.CHECKBOX, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.PHONE_NUMBER, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.EMAIL_ADDRESS, null, {required:true});
+        addColumn(tableToFieldToFieldTypeMap[table5Name], e2eConsts.dataType.URL, null, {required:true});
+
         return tableToFieldToFieldTypeMap;
     }
 
@@ -188,15 +228,14 @@ consts = require('../../common/src/constants.js');
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE3].name].numRecordsToCreate = 45;
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE4].name] = {};
             recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE4].name].numRecordsToCreate = 100;
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE5].name] = {};
+            recordsConfig.tablesConfig[app.tables[e2eConsts.TABLE5].name].numRecordsToCreate = 3;
             var createdResults = e2eBase.recordsSetUp(app, recordsConfig);
 
             createdResults.then(function(results) {
                 console.log(JSON.stringify(createdResults));
                 // after all the promises in results are done then call done callback to report complete
-                Promise.all(results.allPromises).then(function() {
-                    done();
-                });
-                return createdResults;
+                return Promise.all(results.allPromises);
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
                 // Will appropriately fail the beforeAll method so other tests won't run
@@ -214,14 +253,8 @@ consts = require('../../common/src/constants.js');
         }).then(function() {
             //set table home pages to 1st report
             // Create a default form for each table (uses the app JSON)
-            return e2eBase.formService.createDefaultForms(app);
-        }).then(function() {
-            var theTHPs = [];
-            app.tables.forEach((table) => {
-                // Set default table homepage for Table 1
-                theTHPs.push(e2eBase.tableService.setDefaultTableHomePage(app.id, table.id, 1));
-            });
-            return (Promise.all(theTHPs));
+            e2eBase.formService.createDefaultForms(app);
+            done();
         }).catch(function(error) {
             // Global catch that will grab any errors from chain above
             if (error) {

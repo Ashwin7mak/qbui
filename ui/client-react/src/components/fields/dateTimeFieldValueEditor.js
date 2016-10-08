@@ -171,7 +171,7 @@ const DateTimeFieldValueEditor = React.createClass({
 
     render() {
         let showTimeEditor = true;
-        let dateTimeClass = 'dateTimeField';
+        let dateTimeClass = 'dateTimeField borderOnError';
 
         if (this.props.attributes && this.props.attributes.showTime === false) {
             showTimeEditor = false;

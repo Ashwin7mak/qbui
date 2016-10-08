@@ -246,12 +246,12 @@ export let ReportContent = React.createClass({
     },
 
 
-    handleValidateFieldValue(fieldDef, fieldName, value) {
+    handleValidateFieldValue(fieldDef, fieldName, value, checkRequired) {
         let results;
 
         // check the value against the fieldDef
         if (fieldDef) {
-            results = ValidationUtils.checkFieldValue({fieldDef}, fieldName, value);
+            results = ValidationUtils.checkFieldValue({fieldDef}, fieldName, value, checkRequired);
             if (results.isInvalid) {
                 // format the message for the client
                 results.invalidMessage = ValidationMessage.getMessage(results);

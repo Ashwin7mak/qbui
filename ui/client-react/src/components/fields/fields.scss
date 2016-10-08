@@ -49,8 +49,8 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of input error
-.textField.error [type="text"].input,
-[type="text"].input.error {
+[type="text"].input.error,
+.error .borderOnError{
   border-top: 1px solid $input-text-error-border-color;
   border-right: 1px solid  $input-text-error-border-color;
   border-bottom: 1px solid $input-text-error-border-color;
@@ -59,8 +59,8 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of focus input error
-.textField.error [type="text"]:focus.input,
-[type="text"]:focus.input.error {
+[type="text"]:focus.input.error,
+.error :focus.borderOnError{
   outline: none;
   border-top: 1px solid $input-text-error-border-color;
   border-right: 1px solid  $input-text-error-border-color;

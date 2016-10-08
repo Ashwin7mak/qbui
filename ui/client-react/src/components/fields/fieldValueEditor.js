@@ -18,6 +18,7 @@ import NumericFieldValueEditor from './numericFieldValueEditor';
 import TextFieldValueEditor from './textFieldValueEditor';
 import TimeFieldValueEditor from './timeFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
+import ErrorTipItem from '../qbToolTip/errorTipItem';
 
 /**
  * # FieldValueEditor
@@ -99,11 +100,11 @@ const FieldValueEditor = React.createClass({
 
         /**
          * callback method called when the editor is mounted */
-        attachGridCell: React.PropTypes.func,
+        onAttach: React.PropTypes.func,
 
         /**
          * callback method called when the editor is unmounted */
-        detachGridCell: React.PropTypes.func,
+        onDetach: React.PropTypes.func,
 
         /**
          * how to identify the field input
@@ -243,7 +244,8 @@ const FieldValueEditor = React.createClass({
         //on aggrid redraw, and on qbgrid set state
         if (this.props.validateFieldValue && this.props.onValidated) {
             let fldValue = value ? value : ReactDOM.findDOMNode(this.refs.fieldInput).value;
-            let results = this.props.validateFieldValue(this.props.fieldDef, this.props.fieldName, fldValue);
+            let checkRequired = (this.props.fieldDef && this.props.fieldDef.required && this.props.isInvalid);
+            let results = this.props.validateFieldValue(this.props.fieldDef, this.props.fieldName, fldValue, checkRequired);
             this.props.onValidated(results);
         }
     },
@@ -289,7 +291,10 @@ const FieldValueEditor = React.createClass({
                 {requiredDiv}
 
                 {/* render type specific editor */}
+                <ErrorTipItem isInvalid={this.props.isInvalid}
+                               invalidMessage={this.props.invalidMessage}>
                 {renderedType}
+                </ErrorTipItem>
             </div>
         );
     }

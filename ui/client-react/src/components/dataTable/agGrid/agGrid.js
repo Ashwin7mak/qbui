@@ -403,7 +403,7 @@ let AGGrid = React.createClass({
      * @param recId - the record id of the row
      * @param fid - the field id of the cell
      */
-    attachGridCell(component, recId, fid) {
+    onAttach(component, recId, fid) {
         if (typeof this.cellComponentsMounted[recId] === 'undefined') {
             this.cellComponentsMounted[recId] = {};
         }
@@ -415,7 +415,7 @@ let AGGrid = React.createClass({
      * @param recId - the record id of the row unmounted from
      * @param fid - the field id of the unmounted cell
      */
-    detachGridCell(recId, fid) {
+    onDetach(recId, fid) {
         if (typeof this.cellComponentsMounted[recId] !== 'undefined' &&
             typeof this.cellComponentsMounted[recId][fid] !== 'undefined') {
             delete this.cellComponentsMounted[recId][fid];
@@ -470,8 +470,8 @@ let AGGrid = React.createClass({
         this.gridOptions.context.keyField = this.props.keyField;
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
         this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
-        this.gridOptions.context.attachGridCell = this.attachGridCell;
-        this.gridOptions.context.detachGridCell = this.detachGridCell;
+        this.gridOptions.context.onAttach = this.onAttach;
+        this.gridOptions.context.onDetach = this.onDetach;
         this.gridOptions.context.getAppUsers = this.getAppUsers;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
