@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import ErrorTipItem  from '../../src/components/qbToolTip/errorTipItem';
 
@@ -34,7 +33,6 @@ describe('ErrorTipItem functions', () => {
                         <div>bad news</div>
                     </ErrorTipItem>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        console.log('component.innerHTML:' + ReactDOM.findDOMNode(component).innerHTML);
     });
 
 
