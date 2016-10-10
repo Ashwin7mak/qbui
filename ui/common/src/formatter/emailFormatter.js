@@ -25,7 +25,7 @@
             // same functionality occurs here. To remove, just check if email is
             // blank before adding a default domain. `if (domain && email && !hasDomain(email)) {`
             if (domain && !hasDomain(email)) {
-                email = email + '@' + domain;
+                email = email + (domain.indexOf('@') >= 0 ? domain : '@' + domain);
             }
             return email;
         },
@@ -36,10 +36,12 @@
             }
             //Default behavior is to return the raw value as display
             var baseValue = fieldValue.value;
+
+            // Add a default domain if a default domain exists and a domain is not provided on the email
+            baseValue = this.addDefaultDomain(baseValue, fieldInfo.defaultDomain);
+
             //If there are clientSideAttributes, evaluate format & linkText attributes
             if (fieldInfo && fieldInfo.clientSideAttributes) {
-                baseValue = this.addDefaultDomain(baseValue, fieldInfo.defaultDomain);
-
                 if (fieldInfo.clientSideAttributes.linkText) {
                     //If there is a linkText set, use that
                     baseValue = fieldInfo.clientSideAttributes.linkText;
