@@ -16,9 +16,22 @@ import ReportUtils from '../../../utils/reportUtils';
 import * as SchemaConsts from '../../../constants/schema';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
-import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
-        NumericCellRenderer, DurationCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
-        CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer}  from './cellRenderers';
+import {
+    CellRenderer,
+    DateCellRenderer,
+    DateTimeCellRenderer,
+    TimeCellRenderer,
+    NumericCellRenderer,
+    DurationCellRenderer,
+    TextCellRenderer,
+    UserCellRenderer,
+    CheckBoxCellRenderer,
+    CurrencyCellRenderer,
+    SelectionColumnCheckBoxCellRenderer,
+    PercentCellRenderer,
+    RatingCellRenderer,
+    UrlCellRenderer,
+}  from './cellRenderers';
 
 import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
@@ -966,6 +979,9 @@ let AGGrid = React.createClass({
                                 break;
                             case serverTypeConsts.DURATION :
                                 obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
+                                break;
+                            case serverTypeConsts.URL :
+                                obj.cellRenderer = reactCellRendererFactory(UrlCellRenderer);
                                 break;
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);

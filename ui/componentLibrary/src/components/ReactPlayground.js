@@ -20,6 +20,8 @@ const TextFieldValueEditor = require('../../../client-react/src/components/field
 const TextFieldValueRenderer = require('../../../client-react/src/components/fields/textFieldValueRenderer');
 const TimeFieldValueEditor = require('../../../client-react/src/components/fields/timeFieldValueEditor.js');
 const TimeFieldValueRenderer = require('../../../client-react/src/components/fields/timeFieldValueRenderer.js');
+const UrlFieldValueEditor = require('../../../client-react/src/components/fields/urlFieldValueEditor.js');
+const UrlFieldValueRenderer = require('../../../client-react/src/components/fields/urlFieldValueRenderer.js');
 const UserFieldValueEditor = require('../../../client-react/src/components/fields/userFieldValueEditor');
 const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer');
 
