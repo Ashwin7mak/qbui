@@ -76,7 +76,7 @@ const TextFieldValueEditor = React.createClass({
     clearInput(ev) {
         if (this.props.onChange) {
             this.props.onChange('');
-            this.refs.mainInput.focus();
+            this.refs.textInput.focus();
         }
     },
 
@@ -124,8 +124,7 @@ const TextFieldValueEditor = React.createClass({
                           key={'inp' + this.props.idKey}
                           placeholder={this.props.placeholder}
                           onChange={this.onChange}
-                          onBlur={this.onBlur}
-                          ref="mainInput" />;
+                          onBlur={this.onBlur} />;
 
         let inputBoxWithTooltip =  (this.props.isInvalid ?
                 (<QBToolTip location="top" tipId="invalidInput" delayHide={3000}
