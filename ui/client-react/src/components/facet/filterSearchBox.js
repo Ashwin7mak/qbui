@@ -31,10 +31,10 @@ const FilterSearchBox = React.createClass({
 
     render() {
 
-        let placeMsg = Locale.getMessage("report.searchPlaceHolder") + " " + Locale.getMessage("records.plural") + "...";
+        let placeMsg = Locale.getMessage("report.searchPlaceHolder") + " " + Locale.getMessage("records.plural");
 
         return (<div className="filterSearchBoxContainer">
-                    <SearchBox className="filterSearchBox" key={"filterSearchBox_" + this.props.searchBoxKey}
+                    <SearchBox className="filterSearchBox" searchBoxKey={"filterSearchBox_" + this.props.searchBoxKey}
                                value={this.state.searchStringInput}
                                onChange={this.props.onChange}
                                onClearSearch={this.props.clearSearchString}

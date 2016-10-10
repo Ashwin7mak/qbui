@@ -2,7 +2,7 @@ import React from 'react';
 import TestUtils from 'react-addons-test-utils';
 import ReactDOM from 'react-dom';
 import Fluxxor from 'fluxxor';
-import Nav from '../../src/components/nav/nav';
+import {Nav, __RewireAPI__ as NavRewireAPI} from '../../src/components/nav/nav';
 
 var LeftNavMock = React.createClass({
     render: function() {
@@ -46,6 +46,11 @@ describe('Nav functions', () => {
             return [];
         }
     });
+    let recordPendingEditsStore = Fluxxor.createStore({
+        getState: function() {
+            return [];
+        }
+    });
     let fieldsStore = Fluxxor.createStore({
         getState: function() {
             return [];
@@ -61,6 +66,7 @@ describe('Nav functions', () => {
         AppsStore: new appStore(),
         ReportsStore: new reportsStore(),
         ReportDataStore: new reportDataStore(),
+        RecordPendingEditsStore: new recordPendingEditsStore(),
         FieldsStore : new fieldsStore(),
         FormStore : new formStore()
     };
@@ -73,15 +79,17 @@ describe('Nav functions', () => {
 
 
     beforeEach(() => {
-        Nav.__Rewire__('LeftNav', LeftNavMock);
-        Nav.__Rewire__('Trowser', TrowserMock);
-        Nav.__Rewire__('TopNav', TopNavMock);
+        NavRewireAPI.__Rewire__('LeftNav', LeftNavMock);
+        NavRewireAPI.__Rewire__('RecordTrowser', TrowserMock);
+        NavRewireAPI.__Rewire__('ReportManagerTrowser', TrowserMock);
+        NavRewireAPI.__Rewire__('TopNav', TopNavMock);
     });
 
     afterEach(() => {
-        Nav.__ResetDependency__('LeftNav');
-        Nav.__ResetDependency__('Trowser');
-        Nav.__ResetDependency__('TopNav');
+        NavRewireAPI.__ResetDependency__('LeftNav');
+        NavRewireAPI.__ResetDependency__('RecordTrowser');
+        NavRewireAPI.__ResetDependency__('ReportManagerTrowser');
+        NavRewireAPI.__ResetDependency__('TopNav');
     });
 
     it('test render of component', () => {

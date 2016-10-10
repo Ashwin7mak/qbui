@@ -1,17 +1,18 @@
-@import "../../../src/assets/css/qbVariables";
+@import '../../../src/assets/css/qbVariables';
 
 .gridWrapper {
-    display: flex;
-    flex: 1 1 auto;
-    overflow: auto;
+  display:flex;
+  flex: 1 1 auto;
+  overflow:auto;
 
-    @include not-small-breakpoint {
-        .loadedContent {
-            padding: 0 10px;
-        }
+  @include not-small-breakpoint {
+    .loadedContent {
+      padding: 0 10px;
     }
+  }
 }
 
 .swipeable {
-    position: relative;
+  position: relative;
+  flex: 1 1 auto;
 }

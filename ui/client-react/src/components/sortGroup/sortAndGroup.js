@@ -10,11 +10,11 @@ import './sortAndGroup.scss';
 
 import SortAndGroupDialog from './sortAndGroupDialog';
 import ReportUtils from '../../utils/reportUtils';
-import * as GroupTypes from '../../constants/groupTypes';
 import MockData from '../../mocks/sortGroup';
 import * as query from '../../constants/query';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
-
+import constants from '../../../../common/src/constants';
+import {GROUP_TYPE} from '../../../../common/src/groupTypes';
 import _ from 'lodash';
 import Fluxxor from 'fluxxor';
 
@@ -154,14 +154,13 @@ const SortAndGroup = React.createClass({
                 changedGroupingStyle = false;
             }
         }
-
+        let pageOffset = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : constants.PAGE.DEFAULT_OFFSET;
+        let numRows = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : constants.PAGE.DEFAULT_NUM_ROWS;
         if (changedGroupingStyle) {
-            flux.actions.loadReport(this.props.appId,
-                this.props.tblId,
-                this.props.rptId, true, null, null, sortGroupString);
+            flux.actions.loadReport(this.props.appId, this.props.tblId, this.props.rptId, true, pageOffset, numRows, sortGroupString);
         } else {
             overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, overrideParams);
+            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true, offset: pageOffset, numRows: numRows}, this.props.filter, overrideParams);
         }
     },
 
@@ -269,7 +268,7 @@ const SortAndGroup = React.createClass({
         item.decendOrder = false;
         item.type = type;
         if (type === KIND.GROUP) {
-            item.howToGroup = GroupTypes.COMMON.equals;
+            item.howToGroup = GROUP_TYPE.COMMON.equals;
         }
         item.unparsedVal = this.getUnparsedVal(item, type);
         item.name = field.name;
@@ -349,29 +348,36 @@ const SortAndGroup = React.createClass({
 
     parseGroupItem(originalVal, fields) {
         if (ReportUtils.hasGroupingFids(originalVal)) {
-            let groupItem = {unparsedVal : originalVal};
+            let groupItem = {
+                unparsedVal : originalVal,
+                type: KIND.GROUP,
+                howToGroup: GROUP_TYPE.COMMON.equals  //  default group type
+            };
 
-            //strip off fid part
-            let groupInfo = originalVal.split(ReportUtils.groupDelimiter);
-
-            var justFid = groupInfo[0];
-            let fid = Number(justFid);
-            groupItem.id = Math.abs(fid);
-            groupItem.type = KIND.GROUP;
-
-            // ascending or descending
-            groupItem.descendOrder = fid < 0;
-
-            groupItem.howToGroup = GroupTypes.COMMON.equals; //for default group by equal values
-            if (groupInfo.length > 1) {
-                groupItem.howToGroup = groupInfo[1];
+            // either an object: {fid,sortOrder,groupType} or string: fid:groupType
+            if (typeof originalVal === "string") {
+                let origValParts = originalVal.split(ReportUtils.groupDelimiter);
+                if (origValParts.length === 2) {
+                    let fid = Number(origValParts[0]);
+                    groupItem.id = Math.abs(fid);
+                    groupItem.descendOrder = fid < 0;
+                    groupItem.howToGroup = origValParts[1];
+                }
+            } else {
+                groupItem.id = originalVal.fieldId;
+                groupItem.descendOrder = originalVal.sortOrder === constants.SORT_ORDER.DESC;
+                if (originalVal.groupType) {
+                    groupItem.howToGroup = originalVal.groupType;
+                }
             }
 
             //get field name from fields list
-            let field = this.getField(groupItem.id, fields);
-            if (field) {
-                groupItem.name = field.name;
-                return groupItem;
+            if (groupItem.id) {
+                let field = this.getField(groupItem.id, fields);
+                if (field) {
+                    groupItem.name = field.name;
+                    return groupItem;
+                }
             }
         }
         return null;

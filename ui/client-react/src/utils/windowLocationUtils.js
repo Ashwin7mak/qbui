@@ -1,3 +1,5 @@
+import {browserHistory} from 'react-router';
+
 /**
  * Static class of window url param access functions
  *   extracted for mockability /testability
@@ -33,6 +35,47 @@ class WindowLocationUtils {
      */
     static update(url) {
         window.location.href = url;
+    }
+
+    static getHref() {
+        return window.location.href;
+    }
+
+    static getSubdomain() {
+        return window.location.hostname.split(".")[0];
+    }
+
+    /**
+     * push current url with key=value query param
+     * @param key
+     * @param value
+     */
+    static pushWithQuery(key, value) {
+
+        let urlQueryString = document.location.search;
+        let newParam = key + '=' + value;
+        let params = '?' + newParam;
+
+        // If the "search" string exists, then build params from it
+        if (urlQueryString) {
+            let keyRegex = new RegExp('([\?&])' + key + '[^&]*');
+
+            // If param exists already, update it
+            if (urlQueryString.match(keyRegex) !== null) {
+                params = urlQueryString.replace(keyRegex, "$1" + newParam);
+            } else { // Otherwise, add it to end of query string
+                params = urlQueryString + '&' + newParam;
+            }
+        }
+        browserHistory.push(location.pathname + params);
+    }
+
+    /**
+     * push current url without query params
+     */
+    static pushWithoutQuery() {
+
+        browserHistory.push(location.pathname);
     }
 }
 

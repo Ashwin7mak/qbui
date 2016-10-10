@@ -1,49 +1,53 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
 
 /*
  * Custom css classes for our QBPanel component
 */
 .qbPanel {
-    margin: 2px 2px 6px;
+    margin: 2px 2px 6px 2px;
     font-family: $font-family;
     color: $font-color;
     font-size: $font-size;
-    -webkit-box-shadow: 0 0 2px 2px rgba(72, 108, 143, 0.2);
-    -moz-box-shadow: 0 0 2px 2px rgba(72, 108, 143, 0.2);
-    box-shadow: 0 0 2px 2px rgba(72, 108, 143, 0.2);
-    overflow: hidden;
+    -webkit-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+    -moz-box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+    box-shadow: 0px 0px 2px 2px rgba(72, 108, 143, 0.2);
+
+    &.closed {
+        overflow: hidden;
+    }
+
     .qbPanelHeaderIcon {
         position: absolute;
-        top: 14px;
+        top: 0;
     }
     .iconLeft {
         left: 4px;
     }
     .iconRight {
-        right: 4px;
+        right: 20px;
     }
     .qbPanelHeader {
-        padding: 5px 10px;
+        padding: 20px 0 30px 20px;
         cursor: pointer;
         min-width: 30%;
         background-color: $panel-background-color;
 
         .qbPanelHeaderTitle {
             position: relative;
-            padding: 10px 0;
-            margin: 0;
+
+            margin:0;
             .qbPanelHeaderTitleText {
                 margin-right: 30px;
                 word-wrap: break-word;
             }
             .rotateDown {
-                transition: all 0.25s linear;
+                transition: all .25s linear;
                 transform: rotate(90deg);
                 font-size: 16px;
                 width: auto;
             }
             .rotateUp {
-                transition: all 0.25s linear;
+                transition: all .25s linear;
                 transform: rotate(0deg);
                 font-size: 16px;
                 width: auto;
@@ -51,11 +55,12 @@
         }
     }
     .qbPanelBody {
-        padding: 0 10px;
+        padding: 0 10px 0 10px;
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;
         background-color: $panel-background-color;
+        overflow:auto;
         .qbPanelHeaderIcon {
             color: $panel-header-icon-color;
         }
@@ -71,18 +76,31 @@
             margin-left: 30px;
         }
     }
-
     /*
      * Overwrite the following bootstrap classes in their panel component so we have the proper layout
      * panel, panel-default, panel-body
     */
     .panel {
-        border: 0;
+        border:0;
         border-top-width: 0;
         border-radius: 0;
         margin-bottom: 5px;
     }
     .panel-body {
         padding: 0;
+    }
+
+    /* don't bleed through dropdowns */
+    .input-group .form-control {
+        z-index: inherit;
+    }
+}
+
+/* For mobile phones: */
+@include small-breakpoint {
+    .qbPanel {
+        .qbPanelHeader {
+            padding: 10px 0 20px 10px;
+        }
     }
 }

@@ -15,7 +15,7 @@ var Stage = React.createClass({
     },
 
     getInitialState: function() {
-        return {open: true};
+        return {open: false};
     },
 
     toggleStage: function() {
@@ -23,7 +23,7 @@ var Stage = React.createClass({
         logger.debug('Click event: ' + this.state.stage + ' staging area');
     },
 
-    render: function() {
+    render() {
 
         return (
             <div className="layout-stage">

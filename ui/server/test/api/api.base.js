@@ -35,6 +35,7 @@
         var TABLES_ENDPOINT = '/tables/';
         var TABLE_DEFAULT_HOME_PAGE = '/defaulthomepage';
         var FIELDS_ENDPOINT = '/fields/';
+        var FORMS_ENDPOINT = '/forms/';
         var REPORTS_ENDPOINT = '/reports/';
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
@@ -159,6 +160,13 @@
                 }
                 return tableEndpoint;
             },
+            resolveFormsEndpoint      : function(appId, tableId, formId) {
+                var formEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + FORMS_ENDPOINT;
+                if (formId) {
+                    formEndpoint = formEndpoint + formId;
+                }
+                return formEndpoint;
+            },
             resolveReportsEndpoint      : function(appId, tableId, reportId) {
                 var reportEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
                 if (reportId) {
@@ -266,6 +274,37 @@
                     }
                 });
                 return deferred.promise;
+            },
+
+            //Creates a REST request Object against the instance's realm using the configured javaHost
+            createRequestObject              : function(stringPath, method, body, headers, params) {
+                //if there is a realm & we're not making a ticket request, use the realm subdomain request URL
+                var subdomain = '';
+                if (this.realm) {
+                    subdomain = this.realm.subdomain;
+                }
+                var opts = generateRequestOpts(stringPath, method, subdomain);
+                if (body) {
+                    opts.body = jsonBigNum.stringify(body);
+                }
+                // if we have a GET request and have params to add (since GET requests don't use JSON body values)
+                // we have to add those to the end of the generated URL as ?param=value
+                if (params) {
+                    // remove the trailing slash and add the parameters
+                    opts.url = opts.url.substring(0, opts.url.length - 1) + params;
+                }
+                //Setup headers
+                if (headers) {
+                    opts.headers = headers;
+                } else {
+                    opts.headers = DEFAULT_HEADERS;
+                }
+                if (this.authTicket) {
+                    opts.headers[TICKET_HEADER_KEY] = this.authTicket;
+                }
+                var reqInfo = opts.url;
+                log.debug('About to execute the request: ' + jsonBigNum.stringify(opts));
+                return opts;
             },
 
             //Create a realm for API tests to run against and generates a ticket
@@ -377,15 +416,15 @@
                 });
             },
             //Update Default table home page , calls execute request and returns a promise
-            setDefaultTableHomePage       : function(appId, tableIdReportIdMap) {
+            setDefaultTableHomePage       : function(appId, tableId, reportId) {
                 var self = this;
                 return new promise(function(resolve, reject) {
-                    self.executeRequest(self.resolveTablesEndpoint(appId) + '/defaulthomepage', consts.POST, tableIdReportIdMap).then(function(defaultHPResponse) {
+                    self.executeRequest(self.resolveTablesEndpoint(appId, tableId) + '/defaulthomepage?reportId=' + reportId, consts.POST).then(function(defaultHPResponse) {
                         log.debug('set default table home page response: ' + defaultHPResponse);
                         resolve(defaultHPResponse);
                     }).catch(function(error) {
                         reject(error);
-                        assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(tableIdReportIdMap));
+                        assert(false, 'failed to set default table home page : ' + JSON.stringify(error) + ', report id: ' + JSON.stringify(reportId));
                     });
                 });
             },

@@ -5,8 +5,32 @@ const classNames = require('classnames');
 const React = require('react');
 const ReactDOM = require('react-dom');
 
+const CheckBoxFieldValueEditor = require('../../../client-react/src/components/fields/checkBoxFieldValueEditor');
+const CheckBoxFieldValueRenderer = require('../../../client-react/src/components/fields/checkBoxFieldValueRenderer');
+const DateFieldValueEditor = require('../../../client-react/src/components/fields/dateFieldValueEditor.js');
+const DateTimeFieldValueEditor = require('../../../client-react/src/components/fields/dateTimeFieldValueEditor.js');
+const DateTimeFieldValueRenderer = require('../../../client-react/src/components/fields/dateTimeFieldValueRenderer.js');
+const FieldValueEditor = require('../../../client-react/src/components/fields/fieldValueEditor');
+const FieldValueRenderer = require('../../../client-react/src/components/fields/fieldValueRenderer');
+const MultiChoiceFieldValueEditor = require('../../../client-react/src/components/fields/multiChoiceFieldValueEditor');
+const MultiLineTextFieldValueEditor = require('../../../client-react/src/components/fields/multiLineTextFieldValueEditor');
+const NumericFieldValueEditor = require('../../../client-react/src/components/fields/numericFieldValueEditor');
+const NumericFieldValueRenderer = require('../../../client-react/src/components/fields/numericFieldValueRenderer');
+const TextFieldValueEditor = require('../../../client-react/src/components/fields/textFieldValueEditor');
+const TextFieldValueRenderer = require('../../../client-react/src/components/fields/textFieldValueRenderer');
+const TimeFieldValueEditor = require('../../../client-react/src/components/fields/timeFieldValueEditor.js');
+const TimeFieldValueRenderer = require('../../../client-react/src/components/fields/timeFieldValueRenderer.js');
+const UrlFieldValueEditor = require('../../../client-react/src/components/fields/urlFieldValueEditor.js');
+const UrlFieldValueRenderer = require('../../../client-react/src/components/fields/urlFieldValueRenderer.js');
+const UserFieldValueEditor = require('../../../client-react/src/components/fields/userFieldValueEditor');
+const UserFieldValueRenderer = require('../../../client-react/src/components/fields/userFieldValueRenderer');
+
 const QBicon = require('../../../client-react/src/components/qbIcon/qbIcon');
 const QBPanel = require('../../../client-react/src/components/QBPanel/qbpanel');
+
+// END OF IMPORT STATEMENTS
+// The comment above is used for a grunt task. Please do not delete.
+
 /* eslint-enable */
 import {SafeAnchor, Alert} from 'react-bootstrap';
 

@@ -8,8 +8,10 @@ import FilterSearchBox from '../facet/filterSearchBox';
 import FacetsMenu from '../facet/facetsMenu';
 import FacetSelections from '../facet/facetSelections';
 import RecordsCount from './recordsCount';
+import ReportNavigation from './reportNavigation';
 import SortAndGroup from '../sortGroup/sortAndGroup';
 import mockFacets from '../../mocks/facets';
+import Breakpoints from "../../utils/breakpoints";
 import _ from 'lodash';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -42,6 +44,9 @@ const ReportToolbar = React.createClass({
         onFacetSelect: React.PropTypes.func,
         filterOnSelections: React.PropTypes.func,
         searchTheString: React.PropTypes.func,
+        pageStart: React.PropTypes.number,
+        pageEnd: React.PropTypes.number,
+        recordsCount: React.PropTypes.number,
     },
 
     getDefaultProps() {
@@ -136,26 +141,45 @@ const ReportToolbar = React.createClass({
     },
 
     render() {
+        let isSmall = Breakpoints.isSmallBreakpoint();
+
         if (this.props.fillinMockFacets) {
             this.populateDummyFacets();
         }
 
         this.appendBlanks();
+
         let isLoading = false;
+        let isCountingRecords = false;
+        let isError = false;
+
         let filteredRecordCount = null;
-        let recordCount = null;
+        // This is the count of all records that apply to this report
+        let recordCount = 0;
+        // This indicates a page load
+        let isPageLoaded = false;
+
         let hasFacets = false;
 
         if (this.props.reportData) {
             if (this.props.reportData.loading) {
                 isLoading = this.props.reportData.loading;
             }
+            if (this.props.reportData.countingTotalRecords) {
+                isCountingRecords = this.props.reportData.countingTotalRecords;
+            }
+            if (this.props.reportData.error) {
+                isError = true;
+            }
             if (this.props.reportData.data) {
                 if (this.props.reportData.data.filteredRecords) {
                     filteredRecordCount =  this.props.reportData.data.filteredRecordsCount;
                 }
-                if (this.props.reportData.data.records) {
+                if (!isCountingRecords && this.props.reportData.data.recordsCount) {
                     recordCount = this.props.reportData.data.recordsCount;
+                }
+                if (this.props.reportData.data.records) {
+                    isPageLoaded = true;
                 }
                 if (this.props.reportData.data.facets &&
                     (this.props.reportData.data.facets.length > 0)) {
@@ -163,59 +187,62 @@ const ReportToolbar = React.createClass({
                 }
             }
         }
+        // Conditional marking display of filter box. Show when records have been loaded. This box does not depend on the record counting call
+        let showFilterSearchBox = !isLoading && isPageLoaded && !isError;
 
         let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
+                <div className="leftReportToolbar">
+                    {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */}
 
-                    <div className="leftReportToolbar">
-
-                        {/* Search and grouping icon will go in the toolbar here per discussion with xd-ers */}
-
-                        {/*TODO : check if searchBox is enabled for this report,
-                         if has facets has search too, eg no facets without searchBox */}
-                        {recordCount ?
-                            (<FilterSearchBox onChange={this.handleSearchChange}
-                                             nameForRecords={this.props.nameForRecords}
-                                             searchBoxKey="reportToolBar"
-                                {...this.props} />) :
-                            null
-                        }
-
-                        {recordCount ?
-                            (<SortAndGroup  {...this.props}
-                                filter={{selections: this.props.selections,
-                                        facet: this.props.reportData.facetExpression,
-                                        search: this.props.searchStringForFiltering}}
-                            />) :
-                            null
-                        }
-
-                        {/* check if facets is enabled for this report,
-                         also hide Facets Menu Button if facets disabled  */}
-                        {(recordCount && hasFacets) ?
-                            (<FacetsMenu className="facetMenu"
-                                {...this.props}
-                                         isLoading={isLoading}
-                                         selectedValues={this.props.selections}
-                                         onFacetSelect={this.handleFacetSelect}
-                                         onFacetDeselect={this.handleFacetDeselect}
-                                         onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
-                            />) :
-                            null
-                        }
-                    </div>
-
-
-                    {(!isLoading && recordCount) ?
-                        (<RecordsCount recordCount={recordCount}
-                              isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
-                              filteredRecordCount={filteredRecordCount}
-                              nameForRecords={this.props.nameForRecords}
-                              clearAllFilters={this.props.clearAllFilters}
+                    {/*TODO : check if searchBox is enabled for this report,
+                     if has facets has search too, eg no facets without searchBox */}
+                    {showFilterSearchBox ?
+                        <FilterSearchBox onChange={this.handleSearchChange}
+                                         nameForRecords={this.props.nameForRecords}
+                                         searchBoxKey="reportToolBar"
+                                         {...this.props} /> :
+                        null
+                    }
+                    {!isLoading && !isError ?
+                        <SortAndGroup  {...this.props}
+                                       filter={{selections: this.props.selections,
+                                           facet: this.props.reportData.facetExpression,
+                                           search: this.props.searchStringForFiltering}}/> :
+                        null
+                    }
+                    {/* check if facets is enabled for this report,
+                     also hide Facets Menu Button if facets disabled  */}
+                    {!isLoading && hasFacets && !isError ?
+                        (<FacetsMenu className="facetMenu"
+                                     {...this.props}
+                                     isLoading={isLoading}
+                                     selectedValues={this.props.selections}
+                                     onFacetSelect={this.handleFacetSelect}
+                                     onFacetDeselect={this.handleFacetDeselect}
+                                     onFacetClearFieldSelects={this.handleFacetClearFieldSelects}
                         />) :
                         null
                     }
-
+                </div>
+                <div className="rightReportToolbar">
+                    {!isLoading && !isError ?
+                        <RecordsCount recordCount={recordCount}
+                                      isFiltered={this.isFiltered() && (!_.isUndefined(this.props.reportData))}
+                                      filteredRecordCount={filteredRecordCount}
+                                      clearAllFilters={this.props.clearAllFilters}
+                                      isCounting={this.props.reportData.countingTotalRecords}
+                        /> :
+                        null
+                    }
+                    <ReportNavigation reportData={this.props.reportData}
+                                       pageStart={this.props.pageStart}
+                                       pageEnd={this.props.pageEnd}
+                                       getNextReportPage={this.props.getNextReportPage}
+                                       getPreviousReportPage={this.props.getPreviousReportPage}
+                                       recordsCount={this.props.recordsCount}
+                    />
+                </div>
                 {this.props.pageActions}
 
             </div>

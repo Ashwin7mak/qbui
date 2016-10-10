@@ -6,17 +6,29 @@ import * as query from '../constants/query';
 import ReportService from '../services/reportService';
 import RecordService from '../services/recordService';
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+import constants from '../../../common/src/constants';
 import Promise from 'bluebird';
 import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
+import Locale from '../locales/locales';
+import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
+
 import reportModel from '../models/reportModel';
 
 //  Build the request query parameters needed to properly filter the report request based on the report
 //  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
-function buildRequestQuery(reportMetaData, requiredQueryParams, overrideQueryParams, facetQueryExpression, filter) {
+function buildRequestQuery(response, requiredQueryParams, overrideQueryParams, facetQueryExpression, filter) {
     var queryParams = {};
+    var reportMetaData = {};
+
+    if (response.data && response.data.reportMetaData) {
+        reportMetaData = response.data.reportMetaData;
+    } else {
+        reportMetaData = response;
+    }
 
     //required query params
     queryParams[query.OFFSET_PARAM] = requiredQueryParams[query.OFFSET_PARAM];
@@ -92,63 +104,59 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 let reportDataActions = {
 
     loadReport(appId, tblId, rptId, format, offset, rows, sortList) {
-
         //  promise is returned in support of unit testing only
-        return new Promise(function(resolve, reject) {
-
+        return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId});
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
+                this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT, {});
                 let reportService = new ReportService();
 
-                //  query for the report meta data
-                //  TODO: refactor by having just 1 network call to node to retrieve a report...
-                //  TODO: leverage how homepage report is loaded..
-                reportService.getReport(appId, tblId, rptId).then(
-                    (reportMetaData) => {
-                        let requiredParams = {};
-                        requiredParams[query.FORMAT_PARAM] = format;
-                        requiredParams[query.OFFSET_PARAM] = offset;
-                        requiredParams[query.NUMROWS_PARAM] = rows;
-                        let overrideQueryParams = {};
-                        if (sortList !== undefined) {
-                            overrideQueryParams[query.SORT_LIST_PARAM] = sortList;
+                reportService.getReport(appId, tblId, rptId, format, offset, rows, sortList).then(
+                    (response) => {
+                        // We only need to check for reportData. The metadata will be fetched
+                        // and parsed in the node call.
+                        if (response.data.reportMetaData && response.data.reportData) {
+                            var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
+                            _.extend(model, {sortList: sortList});
+                            this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                            resolve();
                         }
-
-                        var queryParams = buildRequestQuery(reportMetaData, requiredParams, overrideQueryParams);
-
-                        reportService.getReportDataAndFacets(appId, tblId, rptId, queryParams).then(
-                            function(reportData) {
-                                logger.debug('ReportDataAndFacets service call successful');
-                                var model = reportModel.set(reportMetaData, reportData);
-                                _.extend(model, {sortList: sortList});
-                                this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                                resolve();
-                            }.bind(this),
-                            function(error) {
-                                logger.error('ReportDataAndFacets service call error:' + JSON.stringify(error));
-                                this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
-                                reject();
-                            }.bind(this)
-                        );
                     },
-                    (error) => {
-                        logger.error('Report service call error when querying for report meta data:' + JSON.stringify(error));
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                    error => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReport:');
+                        this.dispatch(actions.LOAD_REPORT_FAILED, error.response.status);
                         reject();
                     }
-                ).catch(
-                    function(ex) {
-                        logger.error('Unexpected Report service call exception:', ex);
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
+                ).catch(ex => {
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
+                    reject();
+                });
+
+                reportService.getReportRecordsCount(appId, tblId, rptId).then(
+                    response => {
+                        if (response.data) {
+                            logger.debug('ReportRecordsCount service call successful');
+                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data);
+                        }
+                    },
+                    error => {
+                        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReportRecordsCount:');
+                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error.response.status);
                         reject();
-                    }.bind(this)
-                );
+                    }
+                ).catch(ex => {
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, 500);
+                    reject();
+                });
             } else {
-                logger.error('Missing one or more required input parameters to reportDataActions.loadReport.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                this.dispatch(actions.LOAD_REPORT_FAILED);
+                logger.error('reportDataActions.loadReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                 reject();
             }
-        }.bind(this));
+        });
     },
 
     filterSelectionsPending(selections) {
@@ -168,17 +176,12 @@ let reportDataActions = {
     },
 
     /**
-     * add a new record (EMPOWER)
+     * setup a a new record not yet saved to the database
      */
-    addReportRecord() {
-        this.dispatch(actions.ADD_REPORT_RECORD);
+    newBlankReportRecord(appId, tblId, afterRecId) {
+        this.dispatch(actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId});
     },
-    /**
-     * delete a record (EMPOWER)
-     */
-    deleteReportRecord(id) {
-        this.dispatch(actions.DELETE_REPORT_RECORD, id);
-    },
+
 
     /* Action called to get a new set of records given a report.
      * Override params can override report's sortlist/query etc
@@ -192,16 +195,15 @@ let reportDataActions = {
      * @param filter: {facet, search}
      * @param overrideQueryParams: {columns, sortlist, query}
      */
-
-
     getFilteredRecords(appId, tblId, rptId, requiredQueryParams, filter, overrideQueryParams) {
-
         //  promise is returned in support of unit testing only
-        return new Promise(function(resolve, reject) {
+        return new Promise((resolve, reject) => {
 
             if (appId && tblId && rptId) {
                 let sortList = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
-                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, sortList: sortList});
+                let offset = requiredQueryParams && requiredQueryParams[query.OFFSET_PARAM] ? requiredQueryParams[query.OFFSET_PARAM] : constants.PAGE.DEFAULT_OFFSET;
+                let numRows = requiredQueryParams && requiredQueryParams[query.NUMROWS_PARAM] ? requiredQueryParams[query.NUMROWS_PARAM] : constants.PAGE.DEFAULT_NUM_ROWS;
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, offset: offset, numRows: numRows, sortList: sortList});
 
                 let reportService = new ReportService();
                 let recordService = new RecordService();
@@ -218,51 +220,76 @@ let reportDataActions = {
                 }
 
                 Promise.all(promises).then(
-                    (response) => {
+                    response => {
                         var queryParams = buildRequestQuery(response[0], requiredQueryParams, overrideQueryParams, response[1], filter);
 
                         //  Get the filtered records
                         recordService.getRecords(appId, tblId, queryParams).then(
-                            (recordResponse) => {
+                            recordResponse => {
                                 logger.debug('Filter Report Records service call successful');
                                 var model = reportModel.set(null, recordResponse);
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
+                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, recordResponse);
                                 resolve();
                             },
-                            (error) => {
-                                logger.error('Filter Report Records service call error:', JSON.stringify(error));
-                                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
+                            error => {
+                                //  axios upgraded to an error.response object in 0.13.x
+                                logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.getRecords:');
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, error.response.status);
+                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, error.response.status);
                                 reject();
                             }
                         ).catch(
-                            function(ex) {
-                                logger.error('Get Filtered Records- Records service call exception:', ex);
-                                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: ex});
+                            ex => {
+                                logger.logException(ex);
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
                                 reject();
-                            }.bind(this)
+                            }
                         );
                     },
-                    (error) => {
-                        logger.error('Filter Report service call error:', error);
-                        this.dispatch(actions.LOAD_RECORDS_FAILED, {error: error});
+                    error => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.getRecords');
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, error.response.status);
                         reject();
                     }
                 ).catch(
-                    function(ex) {
-                        logger.error('Get Filtered Records- service calls exception:', ex);
-                        this.dispatch(actions.LOAD_RECORDS_FAILED, {exception: ex});
+                    ex => {
+                        logger.logException(ex);
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
                         reject();
-                    }.bind(this)
+                    }
                 );
             } else {
-                var errMessage = 'Missing one or more required input parameters to reportDataActions.getFilteredRecords. AppId:' +
-                    appId + '; TblId:' + tblId + '; RptId:' + rptId;
-                logger.error(errMessage);
-                this.dispatch(actions.LOAD_RECORDS_FAILED, {error: errMessage});
+                logger.error('reportDataActions.getFilteredRecords: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
                 reject();
             }
-        }.bind(this));
+        });
     },
+
+    /**
+     * navigate to previous record after opening record from report
+     * @param recId
+     */
+    showPreviousRecord(recId) {
+        this.dispatch(actions.SHOW_PREVIOUS_RECORD, {recId});
+    },
+    /**
+     * navigate to next record after opening record from report
+     * @param recId
+     */
+    showNextRecord(recId) {
+        this.dispatch(actions.SHOW_NEXT_RECORD, {recId});
+    },
+    /**
+     * open record from report (i.e. drill-down)
+     * @param recId
+     */
+    openingReportRow(recId) {
+        this.dispatch(actions.OPEN_REPORT_RECORD, {recId});
+    },
+
 };
 
 export default reportDataActions;

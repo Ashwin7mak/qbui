@@ -1,10 +1,13 @@
 // action creators
 import * as actions from '../constants/actions';
 import TableService from '../services/tableService';
+import ReportService from '../services/reportService';
 import Promise from 'bluebird';
 import reportModel from '../models/reportModel';
 
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+
 let logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -19,31 +22,53 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let tableActions = {
 
-    loadTableHomePage: function(appId, tblId) {
+    loadTableHomePage: function(appId, tblId, offset, numRows) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
                 let tableService = new TableService();
-                tableService.getHomePage(appId, tblId).then(
+                let reportService = new ReportService();
+
+                tableService.getHomePage(appId, tblId, offset, numRows).then(
                     (response) => {
                         var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
+                        reportService.getReportRecordsCount(appId, tblId, model.rptId).then(
+                            response1 => {
+                                if (response1.data) {
+                                    logger.debug('ReportRecordsCount service call successful');
+                                    this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response1.data);
+                                    resolve();
+                                }
+                            },
+                            error1 => {
+                                logger.parseAndLogError(LogLevel.ERROR, error1, 'reportService.getReportRecordsCount:');
+                                this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error1.response.status);
+                                reject();
+                            }
+                        ).catch(ex => {
+                            logger.logException(ex);
+                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, 500);
+                            reject();
+                        });
+
+                        //  not waiting for the records count..fire off the load report events
                         this.dispatch(actions.LOAD_REPORT, {appId, tblId, "rptId": model.rptId});
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                        resolve();
                     },
                     (error) => {
-                        logger.debug('TableService getHomePage error:' + JSON.stringify(error));
-                        this.dispatch(actions.LOAD_REPORT_FAILED, {error: error});
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.getHomePage:');
+                        this.dispatch(actions.LOAD_REPORT_FAILED, error.response.status);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.debug('TableService getHomePage exception:' + JSON.stringify(ex));
-                    this.dispatch(actions.LOAD_REPORT_FAILED, {exception: ex});
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                     reject();
                 });
             } else {
-                logger.error('Missing required input parameters for tableService.getHomePage.');
-                this.dispatch(actions.LOAD_REPORT_FAILED);
+                logger.error('tableService.getHomePage: Missing required input parameters');
+                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                 reject();
             }
         });

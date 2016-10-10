@@ -1,11 +1,12 @@
-/* stylelint-disable media-feature-no-missing-punctuation */
 /* This file should contain all shared variables for QuickBase styling. */
-@import "customVariables";
-@import "qbColorVariables";
+@import 'customVariables';
+@import 'qbColorVariables';
+@import 'qbMixins';
 
-$font-family: "Open Sans", sans-serif;  /* default font face */
+$font-family: Lato, 'Open Sans', Helvetica, Arial, sans-serif;  /* default font face stack */
 
 $font-size:               $font-size-base;          /* base/default body font size */
+
 $font-color:              $color11;                 /* default font color */
 
 $top-nav-height:40px;
@@ -21,27 +22,47 @@ $large-breakpoint-width: 1440px;
         @content;
     }
 }
-
 @mixin medium-breakpoint {
     @media (min-width: #{$small-breakpoint-width + 1px}) and (max-width: #{$medium-breakpoint-width}) {
         @content;
     }
 }
-
 @mixin large-breakpoint {
     @media (min-width: #{$medium-breakpoint-width + 1px}) and (max-width: #{$large-breakpoint-width}) {
         @content;
     }
 }
-
 @mixin xlarge-breakpoint {
     @media (min-width: #{$large-breakpoint-width + 1px}) {
         @content;
     }
 }
-
 @mixin not-small-breakpoint {
     @media (min-width: #{$small-breakpoint-width + 1px}) {
         @content;
     }
 }
+
+// font sizes from http://quickbase.design/typography/
+$font-size-h1: 36px;
+$font-size-h2: 30px;
+$font-size-h3: 24px;
+$font-size-h4: 18px;
+$font-size-h5: 14px;
+$font-size-h6: 12px;
+$font-size-p: 14px;
+$font-size-button: 14px;
+$font-size-placeholder: 14px; //aka ghost text
+
+@include small-breakpoint {
+    $font-size-h1:            30px;
+    $font-size-h2:            24px;
+    $font-size-h3:            20px;
+    $font-size-h4:            18px;
+    $font-size-h5:            16px;
+    $font-size-h6:            14px;
+    $font-size-p:             16px;
+    $font-size-button:        16px;
+    $font-size-placeholder:   16px; //aka ghost text
+}
+

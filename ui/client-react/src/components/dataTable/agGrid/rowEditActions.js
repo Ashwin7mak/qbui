@@ -1,70 +1,97 @@
 import React from 'react';
+import * as SchemaConsts from "../../../constants/schema";
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBIcon from '../../qbIcon/qbIcon';
 import {NotificationManager} from 'react-notifications';
+import {I18nMessage} from '../../../utils/i18nMessage';
+import FieldUtils from '../../../utils/fieldUtils';
+import QBToolTip from '../../qbToolTip/qbToolTip';
 
 /**
  * editing tools for the currently edited row
  */
 const RowEditActions = React.createClass({
+    displayName: 'RowEditActions',
 
     propTypes: {
         api: React.PropTypes.object,
         flux: React.PropTypes.object,
     },
-    onClickSave() {
-        this.props.api.deselectAll();
 
-        // EMPOWER
-        setTimeout(()=> {
-            NotificationManager.success('Record saved', 'Success', 1500);
-        }, 1000);
+
+    onClickSave() {
+        //get the current record id
+        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        this.props.params.context.onRecordSaveClicked(id);
+        // commented code below deferred client side validation before save
+        // till reactabular implemented
+        /*
+        // validate each cell
+        Object.keys(this.props.params.context.cells[id.value]).forEach((cellId) => {
+             //let currentValue = this.props.params.context.cells[id.value][cellId].refs.cellInput.getDOMNode().value;
+            this.props.params.context.cells[id.value][cellId].onExitField();
+        })
+        ;*/
+        this.props.api.deselectAll();
     },
 
     /**
      * delete icon is not included but may come back shortly
      */
     onClickDelete() {
-        const id = this.props.data["Record ID#"];
+        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
         this.props.api.deselectAll();
 
-        this.props.flux.actions.deleteReportRecord(id);
+        this.props.flux.actions.deleteRecord(id);
         setTimeout(()=> {
             NotificationManager.info('Record deleted', 'Deleted', 1500);
         }, 1000);
     },
     onClickCancel() {
+        //get the original unchanged values in data to rerender
+        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+
+        if (this.props.params.node) {
+            //ag-grid
+            this.props.params.api.refreshCells([this.props.params.node], Object.keys(this.props.params.node.data));
+        }
+
         this.props.api.deselectAll();
         this.props.flux.actions.selectedRows([]);
+        this.props.params.context.onEditRecordCancel(id);
     },
 
-    /**
-     * EMPOWER - add a new empty record to the store
-     */
     onClickAdd() {
+        //get the current record id
+        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        this.props.params.context.onRecordNewBlank(id);
         this.props.api.deselectAll();
-        this.props.flux.actions.addReportRecord();
-
-        setTimeout(()=> {
-            NotificationManager.success('Record created', 'Success', 1500);
-        }, 1000);
     },
 
-    render: function() {
+    render() {
+        let errorMessage = "editErrors";
+        // defer this disabling of save button til server validation story
+        //let validRow = !this.props.params.context.rowEditErrors || this.props.params.context.rowEditErrors.ok;
+        let validRow = true;
+
         return (
             <span className="editTools">
+                <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
+                    <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
+                </QBToolTip>
 
-                 <OverlayTrigger  placement="bottom" overlay={<Tooltip id="cancelSelection">Cancel changes</Tooltip>}>
-                     <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
-                 </OverlayTrigger>
+                {validRow ?
+                    <QBToolTip tipId="saveRecord" location="bottom" i18nMessageKey="pageActions.saveRecord">
+                        <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
+                    </QBToolTip> :
 
-                <OverlayTrigger  placement="bottom" overlay={<Tooltip id="saveRecord">Save changes</Tooltip>}>
-                    <Button onClick={this.onClickSave}><QBIcon icon="check" className="saveRecord"/></Button>
-                </OverlayTrigger>
-
-                <OverlayTrigger placement="bottom" overlay={<Tooltip id="addRecord" >Add new record</Tooltip>}>
-                    <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
-                </OverlayTrigger>
+                    <QBToolTip  rootClose={true} location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
+                        <Button><QBIcon icon="alert" className="invalidRecord"/></Button>
+                    </QBToolTip>
+                }
+                <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
+                  <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
+                </QBToolTip>
 
             </span>);
     }

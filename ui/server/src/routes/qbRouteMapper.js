@@ -8,30 +8,46 @@
     var perfLogger = require('../perfLogger');
     var routeConsts = require('./routeConstants');
     var request = require('request');
+
     var requestHelper;
+
+    var formsApi;
     var recordsApi;
     var reportsApi;
+    var appsApi;
+
     var routeGroupMapper = require('./qbRouteGroupMapper');
     var routeGroup;
+
     var simpleStringify = require('./../../../common/src/simpleStringify.js');
     var queryFormatter = require('../api/quickbase/formatter/queryFormatter');
 
     module.exports = function(config) {
         requestHelper = require('../api/quickbase/requestHelper')(config);
+        routeGroup = config.routeGroup;
+
+        formsApi = require('../api/quickbase/formsApi')(config);
         recordsApi = require('../api/quickbase/recordsApi')(config);
         reportsApi = require('../api/quickbase/reportsApi')(config);
-        routeGroup = config.routeGroup;
+        appsApi = require('../api/quickbase/appsApi')(config);
 
         /* internal data */
         /*
          * routeToGetFunction maps each route to the proper function associated with that route for a GET request
          */
         var routeToGetFunction = {};
+        routeToGetFunction[routeConsts.APP_USERS] = getAppUsers;
+
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
+
+        routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
+        routeToGetFunction[routeConsts.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
+        routeToGetFunction[routeConsts.REPORT] = fetchReport;
         routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
+        routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
         routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
         routeToGetFunction[routeConsts.SWAGGER_API] = fetchSwagger;
@@ -41,24 +57,28 @@
         routeToGetFunction[routeConsts.HEALTH_CHECK] = forwardApiRequest;
 
         /*
-         * routeToGetFunction maps each route to the proper function associated with that route for a POST request
+         * routeToPostFunction maps each route to the proper function associated with that route for a POST request
          */
         var routeToPostFunction = {};
+        routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
 
         /*
-         * routeToGetFunction maps each route to the proper function associated with that route for a PUT request
+         * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
          */
         var routeToPutFunction = {};
 
         /*
-         * routeToGetFunction maps each route to the proper function associated with that route for a PATCH request
+         * routeToPatchFunction maps each route to the proper function associated with that route for a PATCH request
          */
         var routeToPatchFunction = {};
+        routeToPatchFunction[routeConsts.RECORD] = saveSingleRecord;
 
         /*
-         * routeToGetFunction maps each route to the proper function associated with that route for a DELETE request
+         * routeToDeleteFunction maps each route to the proper function associated with that route for a DELETE request
          */
         var routeToDeleteFunction = {};
+        routeToDeleteFunction[routeConsts.RECORD] = deleteSingleRecord;
+        routeToDeleteFunction[routeConsts.RECORDS_BULK] = deleteRecordsBulk;
 
         /*
          * routeToAllFunction maps each route to the proper function associated with the route for all HTTP verb requests
@@ -94,7 +114,7 @@
             },
 
             /**
-             * For a given route, return the POST function associated with this route or group of routes
+             * For a given route, return the PUT function associated with this route or group of routes
              * @param route
              */
             fetchPutFunctionForRoute: function(route) {
@@ -146,6 +166,7 @@
         if (req) {
             filtered.method = req.method;
             filtered.url = req.url;
+            filtered.userId = req.userId;
             if (req.headers) {
                 filtered.headers = {
                     tid: req.headers.tid,
@@ -199,6 +220,36 @@
             modifyRequestPathForApi(req);
             returnFunction(req, res);
         }
+    }
+
+    /**
+     * This is the function for getting all users for an app
+     * @param req
+     * @param res
+     */
+    /*eslint no-shadow:0 */
+    function getAppUsers(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Get App Users', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            appsApi.getAppUsers(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Get App Users');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Get App Users');
+
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
     }
 
     /**
@@ -295,6 +346,91 @@
     }
 
     /**
+     * Fetch form meta data and record data for a record.
+     *
+     * @param req
+     * @param res
+     */
+    function fetchFormComponents(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            formsApi.fetchFormComponents(req, false).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Form Components');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Form Components');
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+    /**
+     * Fetch form meta data and record data for a record.
+     *
+     * @param req
+     * @param res
+     */
+    function fetchFormAndRecordComponents(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Form Components', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            formsApi.fetchFormComponents(req, true).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Form Components');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Form Components');
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Fetch report meta data, report data and facets (if any) for the report.
+     *
+     * @param req
+     * @param res
+     */
+    function fetchReport(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Report', {req: filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            reportsApi.fetchReportMetaDataAndContent(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Report');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Report');
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
      * This is the function for fetching a completely hydrated report from the reportssApi endpoint.
      * Currently, a hydrated report means report data plus facet information.
      *
@@ -316,6 +452,34 @@
                     logApiFailure(req, response, perfLog, 'Fetch Report Components');
 
                     //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * Fetch the count of total records in a report.
+     *
+     * @param req
+     * @param res
+     */
+    function fetchReportRecordsCount(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Report records count', {req:filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            reportsApi.fetchReportRecordsCount(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Report records count');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Report records count');
                     if (response && response.statusCode) {
                         res.status(response.statusCode).send(response);
                     } else {
@@ -368,6 +532,94 @@
                 function(response) {
                     res.send(response);
                     perfLog.log();
+                }
+            );
+        });
+    }
+
+    function saveSingleRecord(req, res) {
+        let activityName = 'Save Record';
+        let perfLog = perfLogger.getInstance();
+        perfLog.init(activityName, {req:filterNodeReq(req)});
+        recordsApi.saveSingleRecord(req).then(
+            function(response) {
+                res.send(response);
+                logApiSuccess(req, response, perfLog, activityName);
+            },
+            function(response) {
+                logApiFailure(req, response, perfLog, activityName);
+                //  client is waiting for a response..make sure one is always returned
+                if (response && response.statusCode) {
+                    res.status(response.statusCode).send(response);
+                } else {
+                    res.status(500).send(response);
+                }
+            }
+        );
+    }
+
+    function createSingleRecord(req, res) {
+        let activityName = 'Add Record';
+        let perfLog = perfLogger.getInstance();
+        perfLog.init(activityName, {req:filterNodeReq(req)});
+        recordsApi.createSingleRecord(req).then(
+            function(response) {
+                res.send(response);
+                logApiSuccess(req, response, perfLog, activityName);
+            },
+            function(response) {
+                logApiFailure(req, response, perfLog, activityName);
+                //  client is waiting for a response..make sure one is always returned
+                if (response && response.statusCode) {
+                    res.status(response.statusCode).send(response);
+                } else {
+                    res.status(500).send(response);
+                }
+            }
+        );
+    }
+
+    function deleteSingleRecord(req, res) {
+        let activityName = 'Delete a Record';
+        let perfLog = perfLogger.getInstance();
+        perfLog.init(activityName, {req:filterNodeReq(req)});
+        processRequest(req, res, function(req, res) {
+            recordsApi.deleteSingleRecord(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, activityName);
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, activityName);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    function deleteRecordsBulk(req, res) {
+        let activityName = 'Delete Records Bulk';
+        let perfLog = perfLogger.getInstance();
+        perfLog.init(activityName, {req:filterNodeReq(req)});
+        processRequest(req, res, function(req, res) {
+            recordsApi.deleteRecordsBulk(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, activityName);
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, activityName);
+                    //  client is waiting for a response..make sure one is always returned
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
                 }
             );
         });

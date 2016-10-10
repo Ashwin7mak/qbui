@@ -33,13 +33,17 @@ export default {
     TABLES              : 'tables',
     FIELDS              : 'fields',
     FACETS              : 'facets',
+    FORMS               : 'forms',
     LOG                 : 'log',
     LOG_PERF            : 'clientPerf',
+    USERS               : 'users',
 
     // API Entity actions
-    FORMANDRECORD       : 'formAndRecord',
+    FORMCOMPONENTS      : 'formComponents',
     HOMEPAGE            : 'homePage',
     REPORTCOMPONENTS    : 'reportComponents',
+    RECORDSCOUNT        : 'recordsCount',
     RESULTS             : 'results',
-    PARSE               : 'parse'
+    PARSE               : 'parse',
+    BULK                : 'bulk'
 };

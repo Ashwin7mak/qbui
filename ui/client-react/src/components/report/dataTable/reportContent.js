@@ -2,41 +2,256 @@ import React from "react";
 import ReactIntl from "react-intl";
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
+import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
 import Logger from "../../../utils/logger";
+import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
 import Fluxxor from "fluxxor";
-import * as DataTypes from "../../../constants/schema";
-import * as GroupTypes from "../../../constants/groupTypes";
+import * as SchemaConsts from "../../../constants/schema";
+import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
 import Locales from "../../../locales/locales";
+import ReportFooter from '../reportFooter';
+import ValidationUtils from "../../../utils/validationUtils";
+import _ from 'lodash';
+import {withRouter} from 'react-router';
 
 let logger = new Logger();
 
 let IntlMixin = ReactIntl.IntlMixin;
 let FluxMixin = Fluxxor.FluxMixin(React);
 
-let ReportContent = React.createClass({
+export let ReportContent = React.createClass({
     mixins: [FluxMixin, IntlMixin],
-
-    contextTypes: {
-        history: React.PropTypes.object
-    },
-
-    getInitialState: function() {
-        return {
-            showSelectionColumn: false
-        };
-    },
 
     // row was clicked once, navigate to record
     openRow(data) {
+        const {appId, tblId, rptId} = this.props;
 
-        const appId = this.props.appId;
-        const tblId = this.props.tblId;
         var recId = data[this.props.uniqueIdentifier].value;
-        //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/record/${recId}`;
 
-        this.props.history.pushState(null, link);
+        // let flux know we've drilled-down into a record so we can navigate back and forth
+        let flux = this.getFlux();
+        flux.actions.openingReportRow(recId);
+
+        //create the link we want to send the user to and then send them on their way
+        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        if (this.props.router) {
+            this.props.router.push(link);
+        }
+    },
+
+    /**
+     * Given a record id get the original values from the report.
+     * @param recid
+     * @returns {*}
+     */
+    getOrigRec(recid) {
+        let orig = {names:{}, fids:{}};
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+        let uniqueIdentifier =  this.props.uniqueIdentifier;
+        recs.find(function(rec) {
+            var keys = Object.keys(rec);
+            keys.find((col) => {
+                if (col === uniqueIdentifier && rec[col].value === recid) {
+                    orig.names = rec;
+                    var fids = {};
+                    var recKeys = Object.keys(rec);
+                    // have fid lookup hash
+                    recKeys.forEach(function(item) {
+                        fids[rec[item].id] = rec[item];
+                    });
+                    orig.fids = fids;
+                    return true;
+                }
+            });
+        });
+        return _.cloneDeep(orig);
+    },
+
+    /**
+     * Client side validation of array of changes to a record
+     * placeholder method implementation TBD
+     * @param changes
+     * @returns {ok: boolean, errors: Array} result object {{ok: boolean, errors: Array}}
+     */
+    validateRecord(changes) {
+        let statuses = [];
+        let ok = true;
+        // FOR M7 we will validate the record on server side
+        //validate each change
+        // Object.keys(changes).forEach((fieldId) => {
+        //     let def = this.props.reportData.data.fieldsMap.get(+fieldId);
+        //     let status = ValidationUtils.checkFieldValue(def, changes[fieldId].value, true);
+        //     if (status.isInvalid) {
+        //         ok = false;
+        //         statuses.push(status);
+        //     }
+        // });
+        //we will let the server validate these unchanged items not the client
+        // //validate constrained fields that haven't changed, there constraints might have
+        // let constrainedFieldValues = [];
+        // this.getConstrainedUnchangedValues(changes, constrainedFieldValues);
+        // constrainedFieldValues.forEach((data) => {
+        //     let def = this.props.reportData.data.fieldsMap.get(data.id);
+        //     let status = ValidationUtils.checkFieldValue(def, data.value, true);
+        //     if (status.isInvalid) {
+        //         ok = false;
+        //         statuses.push(status);
+        //     }
+        // });
+
+        // return validation errors changed or constrained values in record
+        return {
+            ok : ok,
+            errors: statuses
+        };
+    },
+
+    /**
+     * When entering inline edit on a record, if it's an existing (already stored) record keep note
+     * its originalRecord values (for later undo/audit?)
+     * if it's a new (unsaved) record note all it's non null values as changes to the new record
+     * to be saved.
+     * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
+     * was one or changes if it's a new record
+     * @param recId
+     */
+    handleEditRecordStart(recId) {
+        const flux = this.getFlux();
+        let origRec = null;
+        let changes = {};
+        if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
+            origRec = this.getOrigRec(recId);
+        } else {
+            //add each non null value as to the new record as a change
+            let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
+                return rec[this.props.uniqueIdentifier].value === recId;
+            });
+            if (newRec) {
+                changes = {};
+                // loop thru the values in the new rec add any non nulls to change set
+                // so it will be treated as dirty/not saved
+                Object.keys(newRec).forEach((key) => {
+                    let field = newRec[key];
+                    if (field.value !== null) {
+                        let change = {
+                            //the + before field.id is needed turn the field id from string into a number
+                            oldVal: {value: null, id: +field.id},
+                            newVal: {value: field.value},
+                            fieldName: key
+                        };
+                        changes[field.id] = change;
+                    }
+                });
+            }
+        }
+        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes);
+    },
+
+    /**
+     * When an inline edit is canceled
+     * Initiate a recordPendingEditsCancel action the the app/table/recid
+     * @param recId
+     */
+    handleEditRecordCancel(recId) {
+        const flux = this.getFlux();
+        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, recId);
+    },
+
+    /**
+     * Initiate recordPendingEditsChangeField action to hold the unsaved field value change
+     * @param change - {fid:fieldid, values : {oldVal :{}, newVal:{}, fieldName:name}
+     */
+    handleFieldChange(change) {
+
+        // call action to hold the field value change
+
+        const flux = this.getFlux();
+        flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, change.recId, change);
+    },
+
+    /**
+     *  When inline edit mode and user wants to add a new record
+     *  if there are pending edits or this record is not yet saved
+     *  try save instead of adding new one
+     *  otherwise if there are no unsaved changes add a blank new unsaved record after the
+     *  record specified
+     * @param afterRecId
+     */
+    handleRecordNewBlank(afterRecId) {
+        const flux = this.getFlux();
+        // if there are pending edits or this record is not saved
+        // try save instead of adding new one
+        if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
+            return this.handleRecordSaveClicked(afterRecId);
+        } else {
+            flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+        }
+        return null;
+    },
+
+
+    /**
+     * User wants to save changes to a record. First we do client side validation
+     * and if validation is successful we initiate the save action for the new or existing record
+     * if validation if not ok we stay in edit mode and show the errors (TBD)
+     * @param id
+     * @returns {boolean}
+     */
+    handleRecordSaveClicked(id) {
+        //validate changed values
+        //get pending changes
+        let validationResult = this.validateRecord(this.props.pendEdits.recordChanges);
+        if (validationResult.ok) {
+            //signal record save action, will update an existing records with changed values
+            // or add a new record
+            let changes = null;
+            if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
+                changes = this.handleRecordAdd(this.props.pendEdits.recordChanges);
+            } else {
+                changes = this.handleRecordChange(id);
+            }
+        }
+        return validationResult;
+    },
+
+    /**
+     * User wants to delete a record
+     *
+     * @param record
+     */
+    handleRecordDelete(record) {
+        const flux = this.getFlux();
+        var recId = record[SchemaConsts.DEFAULT_RECORD_KEY].value;
+        //this.props.nameForRecords
+        flux.actions.deleteRecord(this.props.appId, this.props.tblId, recId, this.props.nameForRecords);
+    },
+
+    /**
+     * Save a new record
+     * @param recordChanges
+     * @returns {Array} of field values for the new record
+     */
+    handleRecordAdd(recordChanges) {
+        const flux = this.getFlux();
+        let fields = {};
+        if (_.has(this.props, 'fields.fields.data')) {
+            fields = this.props.fields.fields.data;
+        }
+        flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields);
+    },
+
+    /**
+     * Save changes to an existing record
+     * @param recId
+     * @returns {Array}
+     */
+    handleRecordChange(recId) {
+        const flux = this.getFlux();
+        if (_.has(this.props, 'fields.fields.data')) {
+            flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
+            flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data);
+        }
     },
 
     /**
@@ -65,15 +280,15 @@ let ReportContent = React.createClass({
     },
 
     isNumericDataType(dataType) {
-        return dataType === DataTypes.NUMERIC ||
-            dataType === DataTypes.CURRENCY ||
-            dataType === DataTypes.PERCENT ||
-            dataType === DataTypes.RATING;
+        return dataType === SchemaConsts.NUMERIC ||
+            dataType === SchemaConsts.CURRENCY ||
+            dataType === SchemaConsts.PERCENT ||
+            dataType === SchemaConsts.RATING;
     },
 
     isDateDataType(dataType) {
-        return dataType === DataTypes.DATE_TIME ||
-               dataType === DataTypes.DATE;
+        return dataType === SchemaConsts.DATE_TIME ||
+               dataType === SchemaConsts.DATE;
     },
 
     parseTimeOfDay(timeOfDay) {
@@ -156,7 +371,7 @@ let ReportContent = React.createClass({
                     if (this.isNumericDataType(groupField.datatypeAttributes.type)) {
                         //
                         //  Check if the numeric is a range, with a lower and upper value.
-                        let range = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
+                        let range = groupData.group.split(GROUP_TYPE.delimiter);
                         if (range.length > 1) {
                             //  For ranges,no symbol is used in the header..just localized the number
                             let localizedRange = {
@@ -166,12 +381,12 @@ let ReportContent = React.createClass({
                             groupData.group = Locales.getMessage('groupHeader.numeric.range', localizedRange);
                         } else {
                             /*eslint no-lonely-if:0*/
-                            if (groupType === GroupTypes.COMMON.equals) {
+                            if (groupType === GROUP_TYPE.COMMON.equals) {
                                 //  Currency and percent symbols are added only when group type is equals.
-                                if (groupField.datatypeAttributes.type === DataTypes.CURRENCY) {
+                                if (groupField.datatypeAttributes.type === SchemaConsts.CURRENCY) {
                                     groupData.group = this.localizeNumber(range[0], {style: 'currency', currency: Locales.getCurrencyCode()});
                                 } else {
-                                    if (groupField.datatypeAttributes.type === DataTypes.PERCENT) {
+                                    if (groupField.datatypeAttributes.type === SchemaConsts.PERCENT) {
                                         groupData.group = this.localizeNumber(range[0], {style: 'percent'});
                                     } else {
                                         groupData.group = this.localizeNumber(range[0]);
@@ -189,18 +404,18 @@ let ReportContent = React.createClass({
                     if (this.isDateDataType(groupField.datatypeAttributes.type)) {
                         //
                         //  Based on grouping option, dates may contain 2 pieces of data or just a single value.
-                        let datePart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
+                        let datePart = groupData.group.split(GROUP_TYPE.delimiter);
                         if (datePart.length > 1) {
                             switch (groupType) {
-                            case GroupTypes.GROUP_TYPE.date.month:
+                            case GROUP_TYPE.DATE.month:
                                 let month = Locales.getMessage('month.' + datePart[0].toLowerCase());
                                 groupData.group = Locales.getMessage('groupHeader.date.month', {month: month, year: datePart[1]});
                                 break;
-                            case GroupTypes.GROUP_TYPE.date.quarter:
+                            case GROUP_TYPE.DATE.quarter:
                                 let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
                                 groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter: abbrQuarter, year: datePart[1]});
                                 break;
-                            case GroupTypes.GROUP_TYPE.date.fiscalQuarter:
+                            case GROUP_TYPE.DATE.fiscalQuarter:
                                 let abbrFiscalQtr = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
                                 let abbrFiscalYr = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[1];
                                 groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter: abbrFiscalQtr, year: abbrFiscalYr});
@@ -208,18 +423,18 @@ let ReportContent = React.createClass({
                             }
                         } else {
                             switch (groupType) {
-                            case GroupTypes.GROUP_TYPE.date.fiscalYear:
+                            case GROUP_TYPE.DATE.fiscalYear:
                                 groupData.group = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[0];
                                 break;
-                            case GroupTypes.GROUP_TYPE.date.week:
+                            case GROUP_TYPE.DATE.week:
                                 groupData.group = Locales.getMessage('groupHeader.date.week', {date: this.localizeDate(datePart[0])});
                                 break;
-                            case GroupTypes.GROUP_TYPE.date.day:
+                            case GROUP_TYPE.DATE.day:
                                 groupData.group = this.localizeDate(datePart[0]);
                                 break;
-                            case GroupTypes.GROUP_TYPE.date.equals:
+                            case GROUP_TYPE.DATE.equals:
                                 let opts = null;
-                                if (groupField.datatypeAttributes.type === DataTypes.DATE_TIME) {
+                                if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME) {
                                     opts = {
                                         year: 'numeric', month: 'numeric', day: 'numeric',
                                         hour: 'numeric', minute: 'numeric'
@@ -228,7 +443,7 @@ let ReportContent = React.createClass({
                                 groupData.group = this.localizeDate(datePart[0], opts);
 
                                 //  i18n-react appends a comma after the date for en-us --> 07/22/2015, 09:44 AM -- Replace with space
-                                if (groupField.datatypeAttributes.type === DataTypes.DATE_TIME && Locales.getLocale() === 'en-us') {
+                                if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME && Locales.getLocale() === 'en-us') {
                                     groupData.group = groupData.group.replace(',', ' ');
                                 }
 
@@ -240,31 +455,31 @@ let ReportContent = React.createClass({
                         continue;
                     }
 
-                    if (groupField.datatypeAttributes.type === DataTypes.TIME_OF_DAY) {
+                    if (groupField.datatypeAttributes.type === SchemaConsts.TIME_OF_DAY) {
 
                         let timeOfDay = null;
 
                         switch (groupType) {
-                        case GroupTypes.GROUP_TYPE.timeOfDay.equals:
-                        case GroupTypes.GROUP_TYPE.timeOfDay.second:
+                        case GROUP_TYPE.TIME_OF_DAY.equals:
+                        case GROUP_TYPE.TIME_OF_DAY.second:
                             timeOfDay = this.parseTimeOfDay(groupData.group);
                             if (timeOfDay) {
                                 groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric', second: 'numeric'});
                             }
                             break;
-                        case GroupTypes.GROUP_TYPE.timeOfDay.minute:
+                        case GROUP_TYPE.TIME_OF_DAY.minute:
                             timeOfDay = this.parseTimeOfDay(groupData.group);
                             if (timeOfDay) {
                                 groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
                             }
                             break;
-                        case GroupTypes.GROUP_TYPE.timeOfDay.hour:
+                        case GROUP_TYPE.TIME_OF_DAY.hour:
                             timeOfDay = this.parseTimeOfDay(groupData.group);
                             if (timeOfDay) {
                                 groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
                             }
                             break;
-                        case GroupTypes.GROUP_TYPE.timeOfDay.am_pm:
+                        case GROUP_TYPE.TIME_OF_DAY.am_pm:
                             timeOfDay = this.parseTimeOfDay(groupData.group);
                             if (timeOfDay) {
                                 groupData.group = (timeOfDay.getHours() < 12 ? Locales.getMessage('groupHeader.am') : Locales.getMessage('groupHeader.pm'));
@@ -276,11 +491,11 @@ let ReportContent = React.createClass({
                         continue;
                     }
 
-                    if (groupField.datatypeAttributes.type === DataTypes.DURATION) {
+                    if (groupField.datatypeAttributes.type === SchemaConsts.DURATION) {
                         //  With duration of equals, the group value contains 2 pieces of information;
                         //  the 1st is the duration value; the 2nd is the group type.
-                        if (groupType === GroupTypes.GROUP_TYPE.duration.equals) {
-                            let durationPart = groupData.group.split(GroupTypes.GROUP_TYPE.delimiter);
+                        if (groupType === GROUP_TYPE.DURATION.equals) {
+                            let durationPart = groupData.group.split(GROUP_TYPE.delimiter);
                             if (durationPart.length > 1) {
                                 groupData.group = durationPart[0];
                                 //  reset the groupType to the duration dimension
@@ -290,19 +505,19 @@ let ReportContent = React.createClass({
 
                         let messageKey = '';
                         switch (groupType) {
-                        case GroupTypes.GROUP_TYPE.duration.second:
+                        case GROUP_TYPE.DURATION.second:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.second' : 'groupHeader.duration.seconds';
                             break;
-                        case GroupTypes.GROUP_TYPE.duration.minute:
+                        case GROUP_TYPE.DURATION.minute:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.minute' : 'groupHeader.duration.minutes';
                             break;
-                        case GroupTypes.GROUP_TYPE.duration.hour:
+                        case GROUP_TYPE.DURATION.hour:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.hour' : 'groupHeader.duration.hours';
                             break;
-                        case GroupTypes.GROUP_TYPE.duration.week:
+                        case GROUP_TYPE.DURATION.week:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.week' : 'groupHeader.duration.weeks';
                             break;
-                        case GroupTypes.GROUP_TYPE.duration.day:
+                        case GROUP_TYPE.DURATION.day:
                             messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.day' : 'groupHeader.duration.days';
                             break;
                         }
@@ -354,7 +569,10 @@ let ReportContent = React.createClass({
         }
     },
 
-    //when report changed from not loading to loading start measure of components performance
+    /**
+     * when report changed from not loading to loading start measure of components performance
+     *  @param nextProps
+     */
     startPerfTiming(nextProps) {
         if (_.has(this.props, 'reportData.loading') &&
                 !this.props.reportData.loading &&
@@ -364,7 +582,10 @@ let ReportContent = React.createClass({
         }
     },
 
-    //when report changed from loading to loaded finish measure of components performance
+    /**
+     * when report changed from loading to loaded finish measure of components performance
+     * @param prevProps
+     */
     capturePerfTiming(prevProps) {
         let timingContextData = {numReportCols:0, numReportRows:0};
         let flux = this.getFlux();
@@ -392,49 +613,124 @@ let ReportContent = React.createClass({
         this.capturePerfTiming(prevProps);
     },
 
-    /* TODO: paging component that has "next and previous tied to callbacks from the store to get new data set*/
-    render: function() {
-        let isTouch = this.context.touch;
 
-        let recordCount = 0;
-        if (this.props.reportData) {
-            let reportData = this.props.reportData.data;
-            if (reportData) {
-                recordCount = reportData.filteredRecordsCount ? reportData.filteredRecordsCount : reportData.recordsCount;
-                this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
-            }
+    render() {
+
+        let isSmall = Breakpoints.isSmallBreakpoint();
+        let recordsCount = 0;
+        let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
+        if (this.props.keyField) {
+            keyField = this.props.keyField;
+        } else if (this.props.fields && this.props.fields.keyField && this.props.fields.keyField.name) {
+            keyField = this.props.fields.keyField.name;
         }
-        return (<div className="loadedContent">
+
+        if (this.props.reportData && this.props.reportData.data) {
+            let reportData = this.props.reportData.data;
+            recordsCount = reportData.filteredRecordsCount ? reportData.filteredRecordsCount : reportData.recordsCount;
+            this.localizeGroupingHeaders(reportData.groupFields, reportData.filteredRecords, 0);
+        }
+
+        // Hide the footer if any rows are selected and for small breakpoint.
+        const selectedRows = this.props.selectedRows;
+        let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
+        let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
+
+        const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
+        return (
+                <div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <div className="reportContent">
-                        {!isTouch ?
-                            <AGGrid loading={this.props.reportData.loading}
-                                    records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
-                                    columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                    uniqueIdentifier="Record ID#"
-                                    appId={this.props.reportData.appId}
-                                    tblId={this.props.reportData.tblId}
-                                    rptId={this.props.reportData.rptId}
-                                    reportHeader={this.props.reportHeader}
-                                    pageActions={this.props.pageActions}
-                                    selectionActions={<ReportActions />}
-                                    onScroll={this.onScrollRecords}
-                                    onRowClick={this.openRow}
-                                    showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                                    recordCount={recordCount}
-                                    groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
-                                    groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
-                                    sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
-                                    filter={{selections: this.props.reportData.selections,
+                    <div className={isInlineEditOpen ? "reportContent inlineEditing" : "reportContent"}>
+
+                        {!isSmall && this.props.reactabular &&
+                        <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
+                                columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
+                                uniqueIdentifier={this.props.uniqueIdentifier ||  SchemaConsts.DEFAULT_RECORD_KEY}
+                                keyField={this.props.keyField}
+                                selectedRows={this.props.selectedRows}
+                                onRowClick={this.openRow}
+                                onEditRecordStart={this.handleEditRecordStart}
+                                onEditRecordCancel={this.handleEditRecordCancel}
+                                onFieldChange={this.handleFieldChange}
+                                onRecordChange={this.handleRecordChange}
+                                appUsers={this.props.appUsers}
+                                appId={this.props.reportData.appId}
+                                tblId={this.props.reportData.tblId}
+                                rptId={this.props.reportData.rptId}
+                                isInlineEditOpen={isInlineEditOpen}
+                                showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
+                                recordsCount={recordsCount}
+                                groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
+                                groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
+                                sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+                                filter={{selections: this.props.reportData.selections,
                                         facet: this.props.reportData.facetExpression,
-                                        search: this.props.reportData.searchStringForFiltering}} /> :
-                            <CardViewListHolder reportData={this.props.reportData}
-                                uniqueIdentifier="Record ID#"
+                                        search: this.props.reportData.searchStringForFiltering}}
+                        />}
+                        {!isSmall && !this.props.reactabular &&
+                        <AGGrid loading={this.props.reportData.loading}
+                                editingIndex={this.props.reportData.editingIndex}
+                                editingId={this.props.reportData.editingId}
+                                records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
+                                columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
+                                uniqueIdentifier={this.props.uniqueIdentifier || SchemaConsts.DEFAULT_RECORD_KEY}
+                                keyField={keyField}
+                                appId={this.props.reportData.appId}
+                                appUsers={this.props.appUsers}
+                                isInlineEditOpen={isInlineEditOpen}
+                                onRecordDelete={this.handleRecordDelete}
+                                onEditRecordStart={this.handleEditRecordStart}
+                                onEditRecordCancel={this.handleEditRecordCancel}
+                                onFieldChange={this.handleFieldChange}
+                                onRecordChange={this.handleRecordChange}
+                                onRecordAdd={this.handleRecordAdd}
+                                onRecordNewBlank={this.handleRecordNewBlank}
+                                onRecordSaveClicked={this.handleRecordSaveClicked}
+                                validateRecord={this.validateRecord}
+                                validateFieldValue={ValidationUtils.checkFieldValue}
+                                getOrigRec={this.getOrigRec}
+                                getPendingChanges={this.getPendingChanges}
+                                tblId={this.props.reportData.tblId}
+                                rptId={this.props.reportData.rptId}
                                 reportHeader={this.props.reportHeader}
-                                selectionActions={<ReportActions />}
+                                reportFooter={this.props.reportFooter}
+                                pageActions={this.props.pageActions}
+                                selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}
                                 onScroll={this.onScrollRecords}
-                                selectedRows={this.props.selectedRows}/>
+                                onRowClick={this.openRow}
+                                showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
+                                recordsCount={recordsCount}
+                                groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
+                                groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
+                                sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+                                filter={{selections: this.props.reportData.selections,
+                                        facet: this.props.reportData.facetExpression,
+                                        search: this.props.reportData.searchStringForFiltering}}/>
+                        }
+                        {showFooter &&
+                        <ReportFooter
+                            reportData={this.props.reportData}
+                            getNextReportPage={this.props.reportFooter.props.getNextReportPage}
+                            getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}
+                            pageStart={this.props.reportFooter.props.pageStart}
+                            pageEnd={this.props.reportFooter.props.pageEnd}
+                            recordsCount={this.props.reportFooter.props.recordsCount}/>
+                        }
+                        {isSmall &&
+                        <CardViewListHolder reportData={this.props.reportData}
+                                            appUsers={this.props.appUsers}
+                                            uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                            keyField={keyField}
+                                            reportHeader={this.props.reportHeader}
+                                            selectionActions={<ReportActions selection={this.props.selectedRows}/>}
+                                            onScroll={this.onScrollRecords}
+                                            onRowClicked={this.openRow}
+                                            selectedRows={this.props.selectedRows}
+                                            pageStart={this.props.cardViewPagination.props.pageStart}
+                                            pageEnd={this.props.cardViewPagination.props.pageEnd}
+                                            getNextReportPage={this.props.cardViewPagination.props.getNextReportPage}
+                                            getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}/>
                         }
                     </div>
                 }
@@ -448,4 +744,9 @@ ReportContent.contextTypes = {
     touch: React.PropTypes.bool
 };
 
-export default ReportContent;
+ReportContent.propTypes = {
+    pendEdits: React.PropTypes.object.isRequired
+};
+
+export let ReportContentWithRouter = withRouter(ReportContent);
+export default ReportContentWithRouter;

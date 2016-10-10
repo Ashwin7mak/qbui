@@ -12,6 +12,9 @@
     var chance = require('chance').Chance();
     var FIELD_TYPE_CONST = 'fieldType';
     var DATA_TYPE_CONST = 'dataType';
+    var DATA_ATTR_CONST = 'dataAttr';
+    var MULTICHOICE_CONST = 'multipleChoice';
+    var REQUIRED_CONST = 'required';
 
     //The max number of fields we will generate at random
     var maxRandomFields = 10;
@@ -266,7 +269,10 @@
          *  field1 : { fieldType: SCALAR, dataType: CHECKBOX},
          *  field2 : { fieldType: SCALAR, dataType: NUMERIC},
          *  iLoveEmail : { fieldType: SCALAR, dataType: EMAIL_ADDRESS},
-         *  youCanToo : { fieldType: SCALAR, dataType: EMAIL_ADDRESS}
+         *  youCanToo : { fieldType: SCALAR, dataType: EMAIL_ADDRESS, dataAttr: {unique: true}}
+         *  rosesAreRed : { fieldType: SCALAR, dataType: TEXT, dataAttr: {required: true, clientSideAttributes: {word_wrap: true}}}
+         *
+         *  the dataAttr property is optional
          * }
      * </p>
      * We will then return a table with fields of those names and types
@@ -286,11 +292,38 @@
             var fieldBuilder = fieldGenerator.getFieldBuilder();
             var dataTypeAttributeBuilder = fieldGenerator.getDataTypeBuilder();
             var dataTypeAttributes = dataTypeAttributeBuilder.withType(dataType).build();
+            var multiChoice = null;
+            if (fieldNameToTypeMap[fieldName][DATA_ATTR_CONST]) {
+                console.log(`dataTypeAttributes for ${fieldName} before=${JSON.stringify(dataTypeAttributes)} adding ${JSON.stringify(fieldNameToTypeMap[fieldName][DATA_ATTR_CONST])}`);
+                dataTypeAttributes = Object.assign({}, dataTypeAttributes, fieldNameToTypeMap[fieldName][DATA_ATTR_CONST]);
+                console.log(`dataTypeAttributes for ${fieldName} after=${JSON.stringify(dataTypeAttributes)}`);
+            }
+            if (fieldNameToTypeMap[fieldName][MULTICHOICE_CONST]) {
+                multiChoice = Object.assign({}, fieldNameToTypeMap[fieldName][MULTICHOICE_CONST]);
+            }
+
+            var requiredSetting;
+            if (fieldNameToTypeMap[fieldName][REQUIRED_CONST]) {
+                requiredSetting = fieldNameToTypeMap[fieldName][REQUIRED_CONST];
+            }
+
             if (fieldName.includes('User')) {
-                field = fieldBuilder.withName(fieldName).withFieldType(fieldType).withDataTypeAttributes(dataTypeAttributes).build();
+                field = fieldBuilder.withName(fieldName).withFieldType(fieldType)
+                    .withDataTypeAttributes(dataTypeAttributes)
+                    .build();
                 field.indexed = true;
+            } else if (multiChoice !== null) {
+                field = fieldBuilder.withName(fieldName).withFieldType(fieldType)
+                    .withDataTypeAttributes(dataTypeAttributes)
+                    .withMultiChoice(multiChoice)
+                    .build();
             } else {
-                field = fieldBuilder.withName(fieldName).withFieldType(fieldType).withDataTypeAttributes(dataTypeAttributes).build();
+                field = fieldBuilder.withName(fieldName).withFieldType(fieldType)
+                    .withDataTypeAttributes(dataTypeAttributes)
+                    .build();
+            }
+            if (requiredSetting !== undefined) {
+                field.required = requiredSetting;
             }
             builderInstance.withField(field);
         });

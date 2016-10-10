@@ -46,7 +46,10 @@ let TablesList = React.createClass({
      * check for table name matching search text
      */
     searchMatches(name) {
-        return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
+        if (name !== undefined) {
+            return name.toLowerCase().indexOf(this.state.searchText.toLowerCase()) !== -1;
+        }
+        return true;
     },
     /**
      * toggle search tables list
@@ -131,7 +134,7 @@ let TablesList = React.createClass({
                              secondaryIcon={"search"}
                              onClick={this.onClickTables} open={true} />
                     <li className={this.state.searching ? "search open" : "search"}>
-                        <SearchBox ref="tablesSearchBox" key="tablesSearchBox"
+                        <SearchBox ref="tablesSearchBox" searchBoxKey="tablesSearchBox"
                                    value={this.state.searchText}
                                    onChange={this.onChangeSearch}
                                    onClearSearch={this.onClearSearch}

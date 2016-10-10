@@ -1,21 +1,24 @@
-// Test on CI specific configuration
+// Test on CI specific configuration. Currently used in CI try jobs.
 // ===========================
 
 (function() {
     'use strict';
 
     //var path = require('path');
-    var dateUtils = require('../../components/utility/dateUtils');
+    var dateUtils = require('../../utility/dateUtils');
     var envConsts = require('./environmentConstants');
     var routeGroups = require('../../routes/routeGroups');
     var clientConsts = require('./clientConsts');
 
     var client = clientConsts.REACT;
 
-    //we need to determine dynamically what port was opened with route53 shell script in core during jenkins build
-    //so we add 8080 + exectutor number (which is what the shell script does to ensure uniqueness)
+    // we need to determine dynamically what port was opened with route53 shell script in core during jenkins build
+    // so we add 8080 + executor number (which is what the shell script does to ensure uniqueness)
     var javaHostPort = 8080 + Number(process.env.EXECUTOR_NUMBER);
     var javaHost = 'http://quickbase-dev.com:' + javaHostPort;
+    // same thing with node so we don't have colliding ports
+    var nodeHostPort = 9000 + Number(process.env.EXECUTOR_NUMBER);
+    var nodeHost = 'http://quickbase-dev.com:' + nodeHostPort;
 
     // For the e2e try job we want to connect to an integration instance of Tomcat. If we set the env var in Jenkins
     // then use that otherwise default to the above
@@ -48,7 +51,7 @@
         //},
 
         // allow for override of default ports
-        port   : 9000,
+        port   : nodeHostPort,
         sslPort: 9443,
 
         //REST endpoint (protocol,server,port)
@@ -57,7 +60,7 @@
 
         //Express Server
         //DOMAIN: 'https://quickbase-dev.com:9443'
-        DOMAIN: 'http://quickbase-dev.com:9000',
+        DOMAIN: nodeHost,
 
         //Node understanding of RuntimeEnvironment
         env       : envConsts.TEST,

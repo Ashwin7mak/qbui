@@ -82,12 +82,12 @@
                 },
                 {
                     message: 'Query Is before Operator',
-                    Query: "{'7'.BF.'01-12-2016'}",
+                    Query: "{'7'.BF.'2016-01-12'}",
                     count:'1'
                 },
                 {
                     message: 'Query Is On or After Operator',
-                    Query: "{'7'.OAF.'04-12-2015'}",
+                    Query: "{'7'.OAF.'2015-04-12'}",
                     count:'3'
                 },
                 {

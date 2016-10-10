@@ -1,4 +1,4 @@
-@import "../../../../src/assets/css/qbVariables";
+@import '../../../../src/assets/css/qbVariables';
 
 $header-cell-border: $color5;
 $header-cell-border-bottom: $color6;
@@ -8,7 +8,7 @@ $header-cell-color: $color8;
 $row-background-color-hover: $color1;
 $row-cell-border-color: $color4;
 
-$grid-font-size: $font-size - 2;
+$grid-font-size: $font-size-p;
 
 $grid-group-row-header-bkgrd-color: $color1;
 $grid-group-row-header-border-top: $color7;
@@ -19,6 +19,7 @@ $grid-default-group-padding: 2px;
 $grid-default-cell-padding: 8px;
 
 $row-bg-color: #fff;
+$row-non-editable-bg-color: $color-black-200;
 $row-border-color: #ddd;
 $row-box-shadow-color: #dcdcdc;
 $cell-edit-background-edit: #f3f8fe;
@@ -29,61 +30,95 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 .reportTable {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
 }
 
+.inlineEditing .agGrid .ag-body-container {
+    margin-bottom: 330px;
+}
+
+.ag-pinned-left-cols-viewport {
+    height: auto !important;
+}
 .agGrid {
     flex: 1 1 auto;
     font-family: $font-family;
     color: $font-color;
     font-size: $grid-font-size;
     -webkit-font-smoothing: antialiased;
-    width: 100%;
+    width:100%;
 
     .ag-body-container {
         background-color: $color2;
+        margin-bottom:0;
     }
-
     /* prevent clipping of actions and dropdowns in 1st column */
     .ag-pinned-left-cols-viewport {
-        overflow: visible;
+        overflow:visible;
     }
     .gridHeaderCell {
         color: $header-cell-color;
-        font-size: 12px;
+        font-size: $grid-font-size;
         font-weight: bold;
         -webkit-font-smoothing: antialiased;
         border-color: $header-cell-border;
         background-color: $header-cell-background-color;
         text-align: left;
 
+        .dropdownToggle {
+            padding:0;
+            border:0;
+            background-color:inherit;
+        }
         .collapser {
             position: absolute;
-            left: 18px;
+            left: 22px;
         }
-        .ag-header-cell-label {
-            padding: 4px $grid-default-cell-padding 3px $grid-default-cell-padding;
-        }
+
         &.selected {
             background-color: $color5;
             .ag-header-cell-menu-button {
-                opacity: 1 !important;
+                opacity: 1!important;
                 display: block;
             }
         }
-    }
-
-    .ag-header-cell-menu-button {
-        display: none;
-        padding: 4px 0 3px;
-    }
-    .ag-header-cell:hover {
-        .ag-header-cell-menu-button {
+        .subHeader {
+            text-align: right;
             display: block;
         }
+    }
+    .ag-header {
+        overflow:visible;
+    }
+    .ag-header-viewport {
+        overflow:visible;
+    }
+    .ag-header-cell-menu-button>.dropdown {
+        padding-top:1px;
+    }
+    .ag-header-cell-menu-button button {
+        opacity: .2;
+    }
+    .ag-header-cell-menu-button .dropdown-menu {
+        font-size: 12px;
+        margin-top:0;
+        padding-top:0;
+    }
+    .ag-header-cell:hover {
+        .ag-header-cell-menu-button button {
+            opacity: 1;
+        }
+    }
+    .ag-header-cell-text {
+        padding-right:4px;
+        padding-left:4px;
+        padding-top: 4px;
+        display:inline-block;
+        float:left;
+        width: calc(100% - 20px); /* expand to enable right alignment but allow room for dropdown icon */
     }
 
     .gridCell {
@@ -101,42 +136,53 @@ $cell-edit-background-edit: #f3f8fe;
         border-bottom: 1px solid $row-cell-border-color;
     }
     .ag-row-group .gridCell {
-        border-right: 0;
+        border-right: 0px;
     }
 
     .ag-row:hover {
         background-color: $row-background-color-hover;
-        cursor: pointer;
+        cursor:pointer;
     }
     .gridCell.Bold {
         font-weight: bold;
     }
+
+    .requiredFlag-layout {
+        // to allow for even space above and below the inputbox
+        top: -2px;
+        position: absolute;
+        left: 3px;
+    }
+
     .NoWrap {
         white-space: nowrap;
     }
     .gridHeaderCell.AlignRight, .gridCell.AlignRight {
         text-align: right;
     }
+    .gridHeaderCell.AlignCenter, .gridCell.AlignCenter {
+        text-align: center;
+    }
     .gridCell.selectionCell {
-        overflow: visible;
+        overflow:visible;
         .ag-cell-value {
             padding: 0;
             position: absolute;
             left: 30px;
             top: 1px;
-            height: 100%;
+            height:100%;
 
             .iconActions {
 
                 line-height: inherit;
                 .dropdown-menu a {
 
-                    padding-left: 4px;
+                    padding-left:4px;
                     .qbIcon {
-                        margin-right: 6px;
-                        vertical-align: middle;
-                        width: 28px;
-                        padding: 4px;
+                        margin-right:6px;
+                        vertical-align:middle;
+                        width:28px;
+                        padding:4px;
                     }
 
                     &:hover {
@@ -158,12 +204,14 @@ $cell-edit-background-edit: #f3f8fe;
                     }
                 }
                 .iconActionButton {
-                    opacity: 0.2;
+                    opacity: .2;
                     transition: opacity 200ms ease-in-out;
-
+                    border:0;
                     height: 30px;
                     width: auto;
                     background: inherit;
+                    color: $topnav-icon-color;
+                    padding:0;
                     &:hover {
                         color: $topnav-icon-color;
                     }
@@ -184,7 +232,7 @@ $cell-edit-background-edit: #f3f8fe;
         }
         &:hover .ag-cell-value .iconActions .iconActionButton {
             transition: opacity 200ms ease-in-out;
-            opacity: 1;
+            opacity:1;
         }
     }
 
@@ -200,7 +248,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .ag-row-level-0 .ag-group-cell-entire-row {
         border-top: 4px solid $grid-group-row-header-border-top;
-        padding-top: 0;
+        padding-top: 0px;
     }
     .ag-row-group {
         &:first-of-type {
@@ -210,7 +258,7 @@ $cell-edit-background-edit: #f3f8fe;
             }
         }
     }
-    .ag-group-cell-entire-row:before {
+    .ag-group-cell-entire-row::before {
         border-top: 1px solid $grid-group-row-header-divider;
         position: absolute;
         top: -1px;
@@ -227,9 +275,9 @@ $cell-edit-background-edit: #f3f8fe;
     }
     //assuming that we can have upto 6 group levels
     @for $i from 1 through 6 {
-        .ag-row-level-#{$i} {
+        .ag-row-level-#{$i}{
             .ag-group-cell-entire-row {
-                padding-left: 18 + $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size) !important;
+                padding-left: 18 + $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size)!important;
             }
         }
     }
@@ -239,16 +287,15 @@ $cell-edit-background-edit: #f3f8fe;
         height: 30px;
     }
     .selectAllCheckbox {
-        margin: 0;
+        margin: 0px;
         height: 20px;
-    }
-    .selectAllCheckbox {
         position: absolute;
-        left: $grid-default-group-padding - $grid-default-group-padding;
+        left: 4px;
+        top: -2px;
     }
     .ag-selection-checkbox {
         position: absolute;
-        margin: 0;
+        margin:0;
         left: $grid-default-cell-padding;
         top: $grid-default-cell-padding;
     }
@@ -272,35 +319,42 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-menu-option-icon {
         padding: 0 5px;
     }
-    .qbIcon.iconssturdy-check {
+    .saveRecord.qbIcon.iconTableUISturdy-check {
         font-size: $grid-font-size + 2;
         width: $grid-font-size + 2;
         vertical-align: middle;
         color: $color22;
     }
     .ag-menu {
-        top: 24px !important;
-        -webkit-box-shadow: 0 4px 15px 0 rgba(70, 66, 66, 0.15);
-        -moz-box-shadow: 0 4px 15px 0 rgba(70, 66, 66, 0.15);
-        box-shadow: 0 4px 15px 0 rgba(70, 66, 66, 0.15);
+        top: 24px!important;
+        -webkit-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+        -moz-box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
+        box-shadow: 0px 4px 15px 0px rgba(70,66,66,0.15);
     }
     .ag-tab-selected {
         display: none;
+    }
+
+    /* Buttons in a grid are smaller for the urlField */
+    .urlField .btn {
+        margin-top: -5px;
+        padding: 1px 10px;
     }
 }
 
 //Temporary hack - opened an issue with ag-grid
 #centerRow {
-    height: 100% !important;
+    height: 100%!important;
 }
 
 .tableActionsContainer {
     position: relative;
 }
-
 .tableActionsContainer.toolsMenuOpen {
-    overflow: visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */
+    overflow:visible; /* hidden for css transitions but need overflow:visible to prevent clipping of facets menu etc. */
 }
+
+
 
 .swipeable {
     position: relative;
@@ -317,22 +371,22 @@ $cell-edit-background-edit: #f3f8fe;
 
     .recordActions {
         padding: 0;
-        height: 100%;
-        width: 200px;
+        height:100%;
+        width:200px;
 
         .actionIcons {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-            height: 100%;
+            display:flex;
+            flex-direction:row;
+            width:100%;
+            height:100%;
 
             .iconLink {
-                flex: 1 1 auto;
-                height: 100%;
+                flex:1 1 auto;
+                height:100%;
 
-                position: relative;
+                position:relative;
                 .qbIcon {
-                    position: absolute;
+                    position:absolute;
                     top: calc(50% - 10px);
                     left: 12px;
                 }
@@ -352,182 +406,258 @@ $cell-edit-background-edit: #f3f8fe;
 
 /* hide row editing tools by default */
 .editTools {
-    display: none;
-}
-
-/* hide datepicker if it's been opened but we're not over that cell */
-.ag-row.editing .cellEdit.dateTimeField:not(:hover) .bootstrap-datetimepicker-widget {
-    display: none !important;
+    display:none;
 }
 
 .emptyCell {
-    visibility: hidden;
+    visibility:hidden;
 }
 
 .ag-body-container {
-    background-color: inherit !important;
+    background-color:inherit !important;
+}
+.ag-row .gridCell .cellWrapper {
+
+    .cellData {
+        .textCell {
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .checkbox {
+            text-align: center;
+
+            .checkbox-unchecked {
+                margin-left: 5px;
+            }
+        }
+        flex: 1 1 auto;
+    }
+    > :not(.cellData) {
+        display: none;
+    }
+    &.numberFormat,  &.currencyFormat, &.percentFormat{
+        text-align: right;
+    }
 }
 
-.ag-row .gridCell .cellWrapper > :not(.cellData) {
-    display: none;
-}
 
 .reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .iconActions {
-    display: none;
+    display:none;
+}
+
+
+.reportToolsAndContentContainer .ag-pinned-left-cols-container .ag-row.editing {
+    box-shadow: none;
 }
 
 .reportToolsAndContentContainer .ag-row.editing {
 
-    box-shadow: 0 0 14px $row-box-shadow-color;
+    box-shadow: 0px 0px 14px $row-box-shadow-color;
+    height : 58px !important;
+    margin-top: -13px;
 
+    &[row='0'] { //top row in table would clip required star so move down and be shorter
+      margin-top: 0px;
+      height: 51px !important;
+    }
     .ag-cell.gridCell {
-        overflow: visible;
+
+        overflow:visible;
         padding: 0;
         margin: 0;
 
         border-right: 1px solid $row-border-color;
-        > .cellWrapper, .ag-cell-wrapper {
-            padding: 2px;
+        > .cellWrapper.textFormat {
+            align-items:flex-start;
+            padding-top: 0;
+            textarea {
+                resize: none;
+                overflow:hidden;
+            }
+        }
+        > .cellWrapper,.ag-cell-wrapper {
+            padding:3px;
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            align-items:center;
+            top:0px;
+            left:0px;
+            right:0px;
+            bottom:0px;
             background-color: $cell-edit-background-edit;
+            display:flex;
 
-            z-index: 1;
-            display: flex;
-
-            .cellData {
-                display: none;
+            .cellData:not(.nonEditable) {
+                display:none;
+            }
+            .cellData.nonEditable {
+                display: block;
+                padding-top: 5.5px;
+                cursor: not-allowed;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+            .cellEditWrapper {
+                display:flex;
+                flex-direction: row;
+                position: relative;
+                height: 100%;
+                width: 100%;
+                align-items: center;
+                justify-content: center;
+            }
+            .multiLineCellEditWrapper {
+                display:flex;
+                flex-direction: row;
+                position: relative;
+                height: 32px;
+                width: 100%;
+                margin-top: 6px;
+                justify-content: center;
             }
             .cellEdit {
-                display: inline-block;
-                border: 1px solid $row-border-color;
-
-                background: $row-bg-color;
-                flex: 1 1 auto;
-                padding: 0 0 0 2px;
-                margin-right: 2px;
-
-                &.dateTimeField > * {
-                    border: 0;
-                    .input-group.date input.form-control {
-                        border: 0;
-                        padding: 0;
-                        font-size: 12px;
-                        height: 25px;
-                        border-radius: \]0;
-                    }
-                    .input-group.date .input-group-addon {
-                        background: #fff;
-                        height: 21px;
-                        padding: 0;
-                        border: 0;
-                        color: $icon-color;
-
-                    }
-                }
+                display:inline-block;
+                background-color: $input-bg-color;
                 &.input-group {
                     flex: 1 1 auto;
-                    display: flex;
+                    display:flex;
                     flex-direction: row;
-                    margin-right: 0;
-                    padding-right: 0;
-                    border-right: 0;
+                    margin-right:0;
+                    padding-right:0;
+                    border-right:0;
 
-                    > input {
-                        flex: 1 1 auto;
-                        border-radius: 0;
-                        border: 0;
-                        height: 21px;
-                        margin-right: 1px;
+                    >input {
+                        flex:1 1 auto;
+                        border-radius:0;
+                        border:0;
+                        height:20px;
+                        margin-right:1px;
                         font-size: 12px;
-                        padding-left: 2px;
+                        padding-left:2px;
                     }
-                    > span.dropdown {
-                        flex: 0 0 auto;
+                    >span.dropdown {
+                        flex:0 0 auto;
                         width: 20px;
                         button {
-                            padding-left: 4px;
-                            padding-top: 0;
+                            padding-left:4px;
+                            padding-top:0;
                             height: 21px;
-                            width: 20px;
-                            border-radius: 0;
+                            width:20px;
+                            border-radius:0;
                         }
                     }
                 }
             }
 
+            //  edit mode styles for a date/time field combination within the grid
+            .cellEdit.dateTimeField {
+                width: 94px;
+                vertical-align: middle;
 
+                //  dateCell styles for date/time combo
+                &.dateCell {
+                    margin-right: 2px;
+                    .input-group.date input.form-control {
+                        font-size: 12px;
+                    }
+                }
+
+                //  timeCell styles for date/time combo
+                &.timeCell {
+                    .Select-option {
+                        font-size: 12px;
+                    }
+                    .Select-placeholder {
+                        font-size: 12px;
+                    }
+                    .Select-input {
+                        font-size: 12px;
+                    }
+                    .Select-value {
+                        padding-right: 20px !important;
+                        font-size: 12px;
+                    }
+                }
+            }
         }
         > .ag-cell-wrapper:first-child {
-            border-left: 1px solid $row-border-color;
-            left: 0;
+            border-left:1px solid $row-border-color;
+            left:0;
         }
     }
 
     .gridCell {
+
         .editTools {
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
+            z-index:1;
+            display:flex;
+            flex-direction:column;
             flex: 0 0 auto;
-            background-color: $cell-edit-background-edit;
-            box-shadow: -2px 2px 8px $row-box-shadow-color;
-            position: absolute;
-            top: -26px;
-            left: 18px;
-            border-left: 1px solid $row-border-color;
-            border-bottom: 1px solid $row-border-color;
+            background-color:$cell-edit-background-edit;
+            box-shadow: -6px 0px 14px $row-box-shadow-color;
+
+            position:absolute;
+            top:-21px;
+            left:-29px;
+            padding: 0 24px;
+
+            border: 1px solid $row-border-color;
             button {
                 flex: 0 0 auto;
-                border: 0;
-                background-color: $cell-edit-background-edit;
-                margin-right: 2px;
-                padding: 6px 4px;
+                border:0;
+                background-color:$cell-edit-background-edit;
+                margin-right:2px;
+                padding:6px 4px;
 
                 .qbIcon:hover {
-                    opacity: 1;
+                    opacity:1;
                 }
                 .qbIcon {
-                    opacity: 0.7;
-                    width: 20px;
+                    opacity:.7;
+                    width:20px;
                     font-size: 16px;
-                    vertical-align: top;
+                    vertical-align:top;
                 }
                 .qbIcon.saveRecord {
-                    color: #00ff00;
-                    font-size: 18px;
+                    color:green;
+                    font-size:18px;
+                }
+                .qbIcon.invalidRecord {
+                    color:$tootip-error-color;
+                    font-size:18px;
+                    cursor: default;
                 }
                 .qbIcon.cancelSelection {
-                    color: $icon-color;
+                    color:$icon-color;
                 }
                 .qbIcon.deleteRecord {
-                    color: #ff0000;
+                    color:red;
                 }
                 .qbIcon.addRecord {
-                    color: $icon-color;
+                    color:$icon-color;
                 }
             }
         }
     }
 }
 
-/* ensure that group labels are visible with pinned left column */
+  /* ensure that group labels are visible with pinned left column */
 
 .ag-pinned-left-cols-container {
-    z-index: 999;
+    z-index:999;
 }
 
 .reportToolsAndContentContainer.singleSelection .ag-pinned-left-cols-container .ag-row.ag-row-selected.ag-row.ag-row-selected {
     .ag-cell.gridCell > .ag-cell-wrapper {
-        border-left: 0;
+        border-left:0;
     }
-    box-shadow: 0;
+    box-shadow:0;
 }
 
 .ag-group-cell-entire-row {
     overflow: visible;
 }
 
+/* right justify menu on last column */
+.ag-row .ag-cell:last-child .Select-menu-outer {
+    right:0;
+}

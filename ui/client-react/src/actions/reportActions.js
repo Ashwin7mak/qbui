@@ -4,6 +4,8 @@ import ReportService from '../services/reportService';
 import Promise from 'bluebird';
 
 import Logger from '../utils/logger';
+import LogLevel from '../utils/logLevels';
+
 let logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -18,7 +20,7 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let reportActions = {
 
-    loadReports: function(appId, tblId) {
+    loadReports(appId, tblId) {
 
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
@@ -33,18 +35,19 @@ let reportActions = {
                         resolve();
                     },
                     (error) => {
-                        logger.debug('ReportService getReports error:' + JSON.stringify(error));
-                        this.dispatch(actions.LOAD_REPORTS_FAILED);
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReports:');
+                        this.dispatch(actions.LOAD_REPORTS_FAILED, error.response.status);
                         reject();
                     }
                 ).catch((ex) => {
-                    logger.debug('ReportService getReports exception:' + JSON.stringify(ex));
-                    this.dispatch(actions.LOAD_REPORTS_FAILED);
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORTS_FAILED, 500);
                     reject();
                 });
             } else {
-                logger.error('Missing required input parameters for reportService.getReports.');
-                this.dispatch(actions.LOAD_REPORTS_FAILED);
+                logger.error('reportService.getReports: Missing required input parameters.');
+                this.dispatch(actions.LOAD_REPORTS_FAILED, 500);
                 reject();
             }
         });

@@ -3,10 +3,6 @@
 (function() {
     'use strict';
     var baseE2EPath = '../../../e2e/';
-    // Needed for Protractor's DriverProvider to be able to run it's updateJob function
-    // to let Sauce Labs know when the tests have completed (for use in AWS pipeline job)
-    var HttpsProxyAgent = require('https-proxy-agent');
-    var agent = new HttpsProxyAgent('http://egressproxy.quickbaserocks.com:80');
     // Global properties file with params common to all Sauce lab config files
     module.exports = {
         // A callback function called once configs are read but before any environment
@@ -18,10 +14,6 @@
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
         allScriptsTimeout: 300000,
-        // A base URL for your application under test will be passed in via grunt config so that we can use whatever url we please
-        baseUrl: process.env.DOMAIN,
-        // Pass the proxy agent down into Protractor's DriverProvider
-        sauceAgent: agent,
         // The sauce user and access key allow us to run our browser tests remotely on a SauceLabs VM
         sauceUser           : 'QuickBaseNS',
         sauceKey            : process.env.SAUCE_KEY,
@@ -29,11 +21,15 @@
         sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
-            baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'
         ],
         // Patterns to exclude.
-        exclude: [baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'],
+        exclude: [
+            baseE2EPath + 'qbapp/tests/reports/reportGroupingSortingViaIcon.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportGroupingViaColumnHeader.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/tableHomePage.e2e.spec.js'
+        ],
         // ----- The test framework -----
         //
         // Jasmine and Cucumber are fully supported as a test and assertion framework.
@@ -62,35 +58,48 @@
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
         onPrepare: function() {
-            //Method to initialize all Page Objects
+            // Initialize all Page Objects
             global.requirePO = function(relativePath) {
                 return require(baseE2EPath + 'qbapp/pages/' + relativePath + '.po.js');
             };
 
-            //Method to initialize all Common Files
+            // Initialize all Common Files
             global.requireCommon = function(relativePath) {
                 return require(baseE2EPath + relativePath + '.js');
             };
 
             // Read the base classes
             global.e2eBase = requireCommon('common/e2eBase')();
-            global.consts = require('../../../common/src/constants');
             global.e2eConsts = requireCommon('common/e2eConsts');
+            global.e2eUtils = requireCommon('common/e2eUtils')();
+            global.consts = require('../../../common/src/constants');
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
-
-            // Maximizes the browser window (known bug with Chrome)
-            browser.driver.manage().window().maximize();
-
-            // Add jasmine spec reporter
-            var SpecReporter = require('jasmine-spec-reporter');
-            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
 
             // Grab the browser name to use in spec files
             browser.getCapabilities().then(function(cap) {
                 global.browserName = cap.get('browserName');
             });
+
+            // Grab the browser settings from the processed config and set the browser size
+            browser.getProcessedConfig().then(function(config) {
+                var browserDimensions = e2eUtils.getBrowserBreakpointDimensions(config.capabilities.breakpointSize);
+                global.breakpointSize = browserDimensions.breakpointSize;
+                global.browserWidth = browserDimensions.browserWidth;
+                global.browserHeight = browserDimensions.browserHeight;
+
+                console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
+                browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
+            });
+
+            // Third party library that lets us retry webdriver commands
+            global.e2eRetry = require('webdriverjs-retry');
+            e2eRetry.setDefaultTimeout(25000);
+
+            // Add jasmine spec reporter
+            var SpecReporter = require('jasmine-spec-reporter');
+            jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
         }
     };
 }());

@@ -75,7 +75,8 @@ let IconActions = React.createClass({
                     <Button key={action.msg}
                        tabIndex="0"
                        className={className}
-                       onClick={action.onClick}>
+                       onClick={action.onClick}
+                       disabled={action.disabled ? true : false} >
                             <QBicon icon={action.icon}/>
                     </Button>
                 </OverlayTrigger>);
@@ -110,7 +111,7 @@ let IconActions = React.createClass({
                 <Dropdown.Menu >
                     {this.props.actions.map((action, index) => {
                         if (index >= this.props.maxButtonsBeforeMenu) {
-                            return <MenuItem key={action.msg} href="#">
+                            return <MenuItem key={action.msg} href="#" onSelect={action.onClick} >
                                       {this.props.menuIcons && <QBicon className={action.className} icon={action.icon}/>}
                                         {action.rawMsg ? action.msg : <I18nMessage message={action.msg} />}
                                    </MenuItem>;

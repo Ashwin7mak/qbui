@@ -283,11 +283,11 @@
 
             // Date in current year
             var currentYearInput = [{id: fid, value: dateCurrentYear}];
-            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12'};
+            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12'};
 
             // Date in different year
             var diffYearInput = [{id: fid, value: dateDiffYear}];
-            var expectedDiffYearRecord = {id: fid, value: dateDiffYear, display: 'Wednesday, Apr-12-2000'};
+            var expectedDiffYearRecord = {id: fid, value: dateDiffYear, display: 'Wednesday, Apr 12, 2000'};
 
             // Null date
             var nullInput = [{id: fid, value: null}];
@@ -390,11 +390,11 @@
 
             // Date in current year
             var currentYearInput = [{id: fid, value: dateCurrentYear}];
-            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: testDateHelper.dayOfWeekAprilTwelve + ', Apr-12'};
+            var expectedCurrentYearRecord = {id: fid, value: dateCurrentYear, display: testDateHelper.dayOfWeekAprilTwelve + ', Apr 12'};
 
             // Date in different year
             var diffYearInput = [{id: fid, value: dateDiffYear}];
-            var expectedDiffYearRecord = {id: fid, value: dateDiffYear, display: 'Wednesday, Apr-12-00'};
+            var expectedDiffYearRecord = {id: fid, value: dateDiffYear, display: 'Wednesday, Apr 12, 00'};
 
             // Null date
             var nullInput = [{id: fid, value: null}];

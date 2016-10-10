@@ -45,6 +45,72 @@ class Logger {
     }
 
     /**
+     * Helper method to examine an error object, extract
+     * a consistently formated message from the response
+     * body and log a message at the request log level.
+     *
+     * @param level
+     * @param error
+     * @param prefixTxt
+     */
+    parseAndLogError(level, error, prefixTxt) {
+        let msg = '';
+
+        if (error) {
+            try {
+                if (error.data) {
+                    if (error.data.body) {
+                        //  if their is a body object, it's coming from node..
+                        msg = JSON.parse(error.data.body);
+                    } else if (Array.isArray(error.data)) {
+                        msg = error.data[0];
+                    } else {
+                        msg = error.data;
+                    }
+                    //  make sure the outputted msg is a json string
+                    msg = JSON.stringify(msg);
+                }
+            } catch (e) {
+                this.warn(e);
+            }
+            if (!msg) {
+                msg = 'Status:' + error.status + ';Msg:' + error.statusText;
+            }
+        }
+
+        //  prepend the prefix test...if any
+        if (prefixTxt) {
+            msg = '' + prefixTxt + msg;
+        }
+
+        //  log at requested level; if invalid or none defined, will log as error
+        if (level) {
+            if (level.id === LogLevel.DEBUG.id) {
+                this.debug(msg);
+            } else if (level.id === LogLevel.INFO.id) {
+                this.info(msg);
+            } else if (level.id === LogLevel.WARN.id) {
+                this.warn(msg);
+            } else {
+                this.error(msg);
+            }
+        } else {
+            this.error(msg);
+        }
+
+    }
+
+    /**
+     * Helper method to consistently log an unexpected exception.
+     *
+     * @param ex
+     * @param prefix
+     */
+    logException(ex, prefix) {
+        this.error(prefix + JSON.stringify(ex), ex);
+    }
+
+    /**
      * Log a message to the console and/or server
      *
      * @param logging level
@@ -62,7 +128,8 @@ class Logger {
             }
 
             if (this.logToConsole === true) {
-                console.log(level.name + ': ' + msg + exceptionMessage);
+                let consoleMethod = level.bunyanLevel || 'log';
+                console[consoleMethod](level.name + ': ' + msg + exceptionMessage);
             }
             if (this.logToServer === true) {
                 if (exception) {

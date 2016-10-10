@@ -1,32 +1,26 @@
 import React from 'react';
-import ReactIntl from 'react-intl';
-import {I18nMessage, I18nDate} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-
-import {MenuItem, Dropdown} from 'react-bootstrap';
-
+import Fluxxor from "fluxxor";
 import ActionIcon from './actionIcon';
 import EmailReportLink from './emailReportLink';
 
 import './reportActions.scss';
 
+let FluxMixin = Fluxxor.FluxMixin(React);
+
 /**
  * report-level actions
  */
 let ReportActions = React.createClass({
+    mixins: [FluxMixin],
 
     propTypes: {
         selection: React.PropTypes.array,
-        report: React.PropTypes.object,
-        app: React.PropTypes.object,
-        table: React.PropTypes.object
-    },
-    getDefaultProps() {
-        return {
-            report: {name: 'report name'},
-            table: {name: 'table name'},
-            app: {name: 'app name'},
-        };
+        rptId: React.PropTypes.string,
+        appId: React.PropTypes.string,
+        tblId: React.PropTypes.string,
+        nameForRecords: React.PropTypes.string,
+        onEditSelected: React.PropTypes.func
     },
 
     getEmailSubject() {
@@ -49,6 +43,26 @@ let ReportActions = React.createClass({
     },
 
     /**
+     * this.props.selection has the current selected rows with the unique identifier as the value in the array
+     */
+    handleBulkDelete() {
+        const flux = this.getFlux();
+        flux.actions.deleteRecordBulk(this.props.appId, this.props.tblId, this.props.selection, this.props.nameForRecords);
+    },
+
+    /**
+     * edit icon was clicked
+     */
+    onEditClicked() {
+
+        if (this.props.selection && this.props.selection.length === 1) {
+            const flux = this.getFlux();
+
+            const recordId = this.props.selection[0];
+            flux.actions.openRecordForEdit(recordId);
+        }
+    },
+    /**
      * render the actions, omitting 'edit' if we have multiple selections
      */
     render() {
@@ -59,7 +73,9 @@ let ReportActions = React.createClass({
                 <div>
                     {<span className="selectedRowsLabel">{this.props.selection.length}</span>}
                     <div className="actionIcons">
-                        {this.props.selection.length === 1 && <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit")}/>}
+                        {this.props.selection.length === 1 &&
+                            <ActionIcon icon="edit" onClick={this.onEditClicked} tip={this.getSelectionTip("selection.edit")}/>
+                        }
                         <ActionIcon icon="print" tip={this.getSelectionTip("selection.print")}/>
 
                         <EmailReportLink tip={this.getSelectionTip("selection.email")}
@@ -67,30 +83,8 @@ let ReportActions = React.createClass({
                                          body={this.getEmailBody()}/>
 
                         <ActionIcon icon="duplicate" tip={this.getSelectionTip("selection.copy")}/>
-                        <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")}/>
+                        <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")} onClick={this.handleBulkDelete}/>
 
-                        {/* custom actions later
-                         {this.props.customActions &&
-                         <div className="actionButtons">
-                         {this.props.customActions.map((action) => {
-                         return (<a key={action}><Button bsStyle="primary">{action}</Button></a>);
-                         })}
-
-                         </div>}
-
-
-                        <Dropdown id="extraActionsMenu">
-
-                            <ActionIcon icon="pickles" bsRole="toggle" tip={Locale.getMessage('selection.more')}/>
-
-                            <Dropdown.Menu>
-                                <MenuItem eventKey="1">Extra 1 goes here</MenuItem>
-                                <MenuItem eventKey="2">Extra 2 goes here</MenuItem>
-                                <MenuItem eventKey="3">Extra 3 goes here</MenuItem>
-                            </Dropdown.Menu>
-
-                        </Dropdown>
-                         */}
                     </div>
 
                 </div>

@@ -37,6 +37,9 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000; //10 minutes max allows for adding ma
                 //Create a report with facets in table 3
                 return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
             }).then(function() {
+                //set report home page
+                return e2eBase.tableService.setDefaultTableHomePage(app.id, app.tables[e2eConsts.TABLE1].id);
+            }).then(function() {
                 done();
             }).catch(function(error) {
                 // Global catch that will grab any errors from chain above
@@ -53,6 +56,11 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000; //10 minutes max allows for adding ma
             var appId = app.id;
             var table1Id = app.tables[0].id;
             var table2Id = app.tables[1].id;
+
+            // Protractor tests will launch node at port 9001 by default so do a replace to the default local.js port
+            var ticketEndpointRequest = e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint).replace('9001', '9000');
+            var appEndpointRequest = e2eBase.getRequestAppsPageEndpoint(realmName).replace('9001', '9000');
+
             console.log('\nHere is your generated test data: \n' +
                 'realmName: ' + realmName + '\n' +
                 'realmId: ' + realmId + '\n' +
@@ -60,9 +68,9 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 600000; //10 minutes max allows for adding ma
                 'table1Id: ' + table1Id + '\n' +
                 'table2Id: ' + table2Id + '\n' +
                 'To generate a session ticket for your realm paste this into your browser: \n' +
-                    e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint) + '\n' +
+                ticketEndpointRequest + '\n' +
                 'Access your test app here (must have generated a ticket first): \n' +
-                    e2eBase.getRequestAppsPageEndpoint(realmName) + '\n'
+                appEndpointRequest + '\n'
             );
         });
     });

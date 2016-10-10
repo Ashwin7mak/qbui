@@ -74,7 +74,7 @@
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //TODO: Assert report icon has been highlighted to indicate which table you are on
                 // Assert the record count
-                expect(reportServicePage.reportRecordsCount.getAttribute('innerText')).toBe('10 Records');
+                expect(reportServicePage.reportRecordsCount.getText()).toBe('10 Records');
                 // Assert column headers
                 reportServicePage.getReportColumnHeaders().then(function(resultArray) {
                     // UI is currently using upper case to display the field names in columns
@@ -93,40 +93,45 @@
          * Test Method.
          */
         it('Should allow you to edit records in the report', function(done) {
-            // Wait until the table has loaded
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                // Open the edit menu for the first record in the report
-                reportServicePage.openRecordEditMenu(0);
-                // Check that the edit menu is displayed
-                reportServicePage.waitForElement(reportServicePage.agGridEditRecordMenu).then(function() {
-                    // Check the edit buttons
-                    reportServicePage.agGridEditRecordButtons.then(function(buttons) {
-                        expect(buttons.length).toBe(3);
-                    });
-                    // Edit the Text Field
-                    reportServicePage.getRecordRowInputCells(reportServicePage.agGridRecordElList.first()).then(function(inputCells) {
-                        var textFieldInput = inputCells[1];
-                        textFieldInput.clear().then(function() {
-                            textFieldInput.sendKeys('My new text').then(function() {
-                                // Save the edit
-                                reportServicePage.agGridSaveRecordButton.click();
-                                // Check that the edit notification is displayed
-                                reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
-                                // Check that the edit menu is no longer displayed
-                                reportServicePage.waitForElementToBeInvisible(reportServicePage.agGridEditRecordMenu).then(function() {
-                                    // Check that the edit persisted
-                                    var firstRecord = reportServicePage.agGridRecordElList.first();
-                                    reportServicePage.getRecordRowCells(firstRecord).then(function(cells) {
-                                        var textFieldCell = cells[1];
-                                        expect(textFieldCell.getText()).toBe('My new text');
-                                        done();
+            if (browserName === 'chrome') {
+                // Wait until the table has loaded
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    // Open the edit menu for the first record in the report
+                    reportServicePage.openRecordEditMenu(0).then(function() {
+                        // Check that the edit menu is displayed
+                        reportServicePage.waitForElementToBePresent(reportServicePage.agGridEditRecordMenu).then(function() {
+                            // Check the edit buttons
+                            reportServicePage.agGridEditRecordButtons.then(function(buttons) {
+                                expect(buttons.length).toBe(3);
+                            });
+                            // Edit the Text Field
+                            reportServicePage.getRecordRowInputCells(reportServicePage.agGridRecordElList).then(function(inputCells) {
+                                var textFieldInput = inputCells[0];
+                                textFieldInput.clear().then(function() {
+                                    textFieldInput.sendKeys('My new text').then(function() {
+                                        // Save the edit
+                                        reportServicePage.clickSaveButtonForEditMenu(reportServicePage.agGridRowActionsElList);
+                                        // Check that the edit notification is displayed
+                                        reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
+                                        // Check that the edit menu is no longer displayed
+                                        reportServicePage.waitForElementToBeInvisible(reportServicePage.agGridEditRecordMenu).then(function() {
+                                            // Check that the edit persisted
+                                            var firstRecord = reportServicePage.agGridRecordElList.first();
+                                            reportServicePage.getRecordRowCells(firstRecord).then(function(cells) {
+                                                var textFieldCell = cells[1];
+                                                expect(textFieldCell.getText()).toBe('My new text');
+                                                done();
+                                            });
+                                        });
                                     });
                                 });
                             });
                         });
                     });
                 });
-            });
+            } else {
+                done();
+            }
         });
 
         /**

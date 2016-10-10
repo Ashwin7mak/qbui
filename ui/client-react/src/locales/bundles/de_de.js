@@ -21,7 +21,9 @@ export default {
             print: "Drucken",
             copy: "Kopieren",
             delete: "Löschen",
-            more: "Mehr..."
+            more: "Mehr...",
+            placeholder: 'Wählen...',
+            notFound: "Nicht gefunden"
         },
         footer: {
             copyright: "{year} QuickBase, Inc. Alle Rechte vorbehalten."
@@ -39,6 +41,10 @@ export default {
             searchRecordsPlaceholder: "Suche...",
             backToReport: "Zurück zu melden"
         },
+        field: {
+            search: "Suche",
+            searchNoMatch: "Keine Benutzer gefunden"
+        },
         grid: {
             no_data: "Es liegen keine Daten zum Anzeigen."
         },
@@ -50,6 +56,9 @@ export default {
         },
         pageActions: {
             addRecord: "Datensatz hinzufügen",
+            saveRecord: "Änderungen speichern",
+            saveAndAddRecord: "Speichern und fügen Sie eine neue Zeile",
+            cancelSelection: "Abbrechen Änderungen",
             favorite: "Favorit",
             gridEdit: "Gitter bearbeiten",
             edit: "Bearbeiten",
@@ -65,6 +74,14 @@ export default {
             return: "Zurück zu berichten",
             next: "Nächster"
         },
+        recordNotifications: {
+            recordAdded: "Die Bilanz hinzugefügt",
+            recordNotAdded :"Nehmen Sie nicht hinzugefügt",
+            recordSaved : "Datensatz gespeichert",
+            recordNotSaved :"Nehmen Sie nicht gespeichert",
+            deleted : "gelöscht",
+            notDeleted : "nicht gelöscht"
+        },
         header: {
             menu: {
                 locale: {
@@ -77,6 +94,19 @@ export default {
             }
 
         },
+        fields: {
+            checkbox: {
+                no: 'Nein',
+                yes: 'Ja'
+            }
+        },
+        form : {
+            tab : 'Tab',
+            error: {
+                403: "Sie sind nicht dieses Formular für den Zugriff auf autorisierte",
+                500: "Unerwarteter Fehler macht dieses Formular"
+            }
+        },
         report : {
             blank : "leer",
             facets :{
@@ -84,27 +114,40 @@ export default {
                 seeMore : "weitere...",
                 tooManyValues: "Zu viele Werte für die Filterung zu verwenden",
                 noCheck : "Nein",
-                yesCheck : "Ja"
+                yesCheck : "Ja",
+                clearFacet: "Filter {facet} zurücksetzen",
+                clearFacetSelection: "Klicken Sie auf diese Filter zu löschen"
             },
-            filteredRecordCount :
-                "{filteredRecordCount} von {recordCount} {nameForRecords} ",
+            filteredRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnungen",
+            filteredSingleRecordCount : "{filteredRecordCount} von {recordCount} aufzeichnen",
             newReport: "Neu",
             organizeReports: "Organisieren",
-            recordCount : "{recordCount} {nameForRecords} ",
+            recordCount : "{recordCount} aufzeichnungen",
+            singleRecordCount : "{recordCount} aufzeichnen",
+            recordCountPlaceHolder : "Zählen aufzeichnungen...",
+            cardViewCountPlaceHolder : "Zählen...",
+            reportNavigationBar : "{pageStart} - {pageEnd}",
             searchPlaceHolder:  "Suchen Sie diese",
+            previousToolTip: "Zurück",
+            nextToolTip: "Nächster",
+            previousPage: "Früher",
+            nextPage: "Nächster",
+            previousPageLoadingOnSwipe: "Erste vorherige...",
+            nextPageLoadingOnSwipe: "immer Mehr...",
             sortAndGroup : {
                 addField: "Feld hinzufügen",
                 by: "nach",
-                changeOrder: "Austausch bestellen",
+                changeGroupOrder: "Gruppe wechseln bestellen",
+                changeSortOrder: "Reihenfolge ändern",
                 chooseFields :  {
-                    group: "Wählen Sie Feld für die Gruppierung",
-                    sort: "Wählen Sie für die Sortierung"
+                    group: "Wählen Sie ein Feld zu einer Gruppe von",
+                    sort: "Wählen Sie ein Feld zu sortieren, indem Sie"
                 },
                 group: "Gruppen",
                 header : "Sortieren & Gruppen",
                 moreFields : "mehr Felder ...",
                 reset: "Zurückstellen",
-                resetTip : "Verlassen und Wiederherstellung des ursprünglichen Berichts zu sortieren und zu Gruppeneinstellungen",
+                resetTip : "Verlassen und Wiederherstellung des ursprünglichen Art und Gruppeneinstellungen",
                 sort:   "Sortieren",
                 stopGroupingBy: "Stoppen Gruppierung von",
                 stopSortingBy: "Stoppen die Sortierung nach",
@@ -221,7 +264,17 @@ export default {
         cancel: "Stornieren",
         cancelTip: "Beenden und verwerfen alle Änderungen",
         apply: "Anwenden",
-        applyTip: "Beenden und gelten alle Änderungen"
-
+        applyTip: "Beenden und gelten alle Änderungen",
+        success: "Erfolg",
+        failed: "Gescheitert",
+        placeholder:  {
+            email: 'name@domain.com'
+        },
+        editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Beheben Sie dieses Feld}\n other {Fix diese # Felder}\n} ",
+        invalidMsg : {
+            required: 'Füllen Sie das {fieldName}',
+            maxChars: 'Verwenden Sie bis zu {num} Zeichen',
+        },
+        noneOption: "\<Keiner\>"
     }
 };

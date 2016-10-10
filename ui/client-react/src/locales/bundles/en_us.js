@@ -24,7 +24,9 @@ export default {
             print: "Print",
             copy: "Copy",
             delete: "Delete",
-            more: "More..."
+            more: "More...",
+            placeholder: "Select...",
+            notFound: "Not Found"
         },
         footer: {
             copyright: "{year} QuickBase, Inc. All rights reserved."
@@ -42,6 +44,10 @@ export default {
             searchRecordsPlaceholder: "Search...",
             backToReport: "Back to the report"
         },
+        field: {
+            search: "Search",
+            searchNoMatch: "No users found"
+        },
         grid: {
             no_data: "There is no data to display."
         },
@@ -53,6 +59,9 @@ export default {
         },
         pageActions: {
             addRecord: "Add a record",
+            saveRecord: "Save changes",
+            saveAndAddRecord: "Save and add a new row",
+            cancelSelection: "Cancel changes",
             favorite: "Favorite",
             gridEdit: "Grid Edit",
             edit: "Edit",
@@ -68,6 +77,14 @@ export default {
             return: "Return to report",
             next: "Next"
         },
+        recordNotifications: {
+            recordAdded : "Record added",
+            recordNotAdded :"Record not added",
+            recordSaved : "Record saved",
+            recordNotSaved :"Record not saved",
+            deleted : "deleted",
+            notDeleted : "not deleted",
+        },
         header: {
             menu: {
                 locale: {
@@ -79,34 +96,60 @@ export default {
                 sign_out: "Sign out"
             }
         },
+        fields: {
+            checkbox: {
+                no: 'No',
+                yes: 'Yes'
+            }
+        },
+        form : {
+            tab : 'Tab',
+            error: {
+                403: "You are not authorized to access this form",
+                500: "Unexpected error rendering this form"
+            },
+        },
         report : {
             blank : "blank",
-            facets :{
+            facets : {
                 noFacets : "No values",
                 seeMore : "more...",
                 tooManyValues : "Too many values to use for filtering.",
                 noCheck : "No",
-                yesCheck : "Yes"
+                yesCheck : "Yes",
+                clearFacet: "Clear {facet} filter",
+                clearFacetSelection: "Click to clear this filter"
             },
-            filteredRecordCount :
-                "{filteredRecordCount} of {recordCount} {nameForRecords} ",
+            filteredRecordCount : "{filteredRecordCount} of {recordCount} records",
+            filteredSingleRecordCount : "{filteredRecordCount} of {recordCount} record",
             newReport: "New",
             organizeReports: "Organize",
-            recordCount : "{recordCount} {nameForRecords} ",
+            recordCount : "{recordCount} records",
+            singleRecordCount : "{recordCount} record",
+            recordCountPlaceHolder : "Counting records...",
+            cardViewCountPlaceHolder : "Counting...",
+            reportNavigationBar : "{pageStart} - {pageEnd}",
+            previousToolTip: "Back",
+            nextToolTip: "Next",
+            previousPage: "Previous",
+            nextPage: "Next",
+            previousPageLoadingOnSwipe: "Getting previous...",
+            nextPageLoadingOnSwipe: "Getting more...",
             searchPlaceHolder:  "Search these",
             sortAndGroup : {
                 addField: "Add a field",
                 by: "by",
-                changeOrder: "Change order",
+                changeGroupOrder: "Change group order",
+                changeSortOrder: "Change sort order",
                 chooseFields :  {
-                    group: "Choose Field for grouping",
-                    sort: "Choose Field for sorting"
+                    group: "Choose a field to group by",
+                    sort: "Choose a field to sort by"
                 },
                 group: "Group",
                 header : "Sort & Group",
                 moreFields : "more fields...",
                 reset: "Reset",
-                resetTip : "Exit and restore to original report sort and group settings",
+                resetTip : "Exit and restore to original sort and group settings",
                 sort:   "Sort",
                 stopGroupingBy: "Stop grouping by",
                 stopSortingBy: "Stop sorting by",
@@ -223,6 +266,17 @@ export default {
         cancel: "Cancel",
         cancelTip: "Exit and discard any changes",
         apply: "Apply",
-        applyTip: "Exit and apply any changes"
+        applyTip: "Exit and apply any changes",
+        success: "Success",
+        failed: "Failed",
+        placeholder:  {
+            email: 'name@domain.com'
+        },
+        editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Fix this field}\n other {Fix these # fields}\n} ",
+        invalidMsg : {
+            required: 'Fill in the {fieldName}',
+            maxChars: 'Use up to {num} characters',
+        },
+        noneOption: "\<None\>"
     }
 };

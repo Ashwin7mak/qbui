@@ -13,7 +13,11 @@ export const OFFSET_PARAM = "offset";
 export const NUMROWS_PARAM = "numRows";
 
 // FORM API PARAMETERS
-export const FORM_TYPE = "type";
+export const REPORT_ID_PARAM = "reportId";
+export const FORM_TYPE_PARAM = "formType";
+export const VIEW_FORM_TYPE = "view";
+export const ADD_FORM_TYPE = "add";
+export const EDIT_FORM_TYPE = "edit";
 
 //  NODE API PARAMETERS
 export const FORMAT_PARAM = "format";

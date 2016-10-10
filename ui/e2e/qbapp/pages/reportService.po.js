@@ -73,7 +73,11 @@
         this.topNavGlobalActionsListEl = this.topNavGlobalActionsListUlEl.all(by.className('link'));
         this.topNavUserGlobActEl = this.topNavGlobalActionsListEl.get(0);
         this.topNavHelpGlobActEl = this.topNavGlobalActionsListEl.get(1);
-        this.topNavElipsesGlobActEl = this.topNavGlobalActionsListEl.get(2);
+        this.topNavEllipsesGlobActEl = this.topNavRightDivEl.element(by.id('nav-right-dropdown'));
+        // Preferences dropdown
+        this.topNavPreferenceContainer = this.topNavRightDivEl.element(by.css('.dropdown .dropdown-menu'));
+        this.topNavLangEnglish = this.topNavPreferenceContainer.element(by.css('.localeLink [title="en-us"]'));
+        this.topNavLangGerman = this.topNavPreferenceContainer.element(by.css('.localeLink [title="de-de"]'));
 
         // Report Container
         this.mainContentEl = element(by.className('mainContent'));
@@ -82,6 +86,9 @@
         this.reportStageContentEl = this.reportContainerEl.element(by.className('layout-stage '));
         this.reportStageBtn = this.reportContainerEl.element(by.className('toggleStage'));
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
+
+        //stage heading
+        this.stageHeadLine = this.reportStageContentEl.element(by.className('stageHeadline'));
 
         // Report tools and content container
         this.reportToolsAndContentEl = this.reportContainerEl.element(by.className('reportToolsAndContentContainer'));
@@ -94,7 +101,7 @@
         // Report toolbar
         this.reportsToolBar = element(by.className('reportToolbar'));
         // Report records count
-        this.reportRecordsCount = element(by.className('recordsCount'));
+        this.reportRecordsCount = element(by.className('recordsCount')).element(by.tagName('SPAN'));
         // Report filter search Box
         this.reportFilterSearchBox = this.reportsToolBar.element(by.className('searchInput'));
         // Table actions container
@@ -108,15 +115,21 @@
         // All column headers from agGrid including first checkbox and last hidden actions column
         this.agGridColHeaderElList = this.agGridHeaderEl.all(by.className('ag-header-cell'));
         this.agGridLastColHeaderEl = this.agGridColHeaderElList.last();
+
+        // agGrid is divided up into two columns, one is the actions column and the second is the record data
+        // this will get you every record in the record data column
         this.agGridRecordElList = this.agGridBodyEl.all(by.className('ag-row')).filter(function(elem) {
             // Return records that are being shown in the grid
             return elem.getCssValue('visibility').then(function(visible) {
                 return visible === 'visible';
             });
         });
+        // this will get you every row of the actions column
+        this.agGridRowActionsElList = element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-row'));
+
         // Edit Record Menu
         //TODO: We render an editTools element per row so create a element locator functions for that
-        this.agGridEditRecordMenu = element(by.className('ag-body')).all(by.className('editTools')).first();
+        this.agGridEditRecordMenu = element(by.className('ag-pinned-left-cols-container')).all(by.className('editTools')).first();
         this.agGridEditRecordButtons = this.agGridEditRecordMenu.all(by.tagName('button'));
         this.agGridSaveRecordButton = this.agGridEditRecordMenu.element(by.className('saveRecord'));
         this.agGridCancelSelectionButton = this.agGridEditRecordMenu.element(by.className('cancelSelection'));
@@ -135,19 +148,112 @@
         };
 
         /**
+         * Given a record element that is being viewed in agGrid, return the value of that cell
+         * @param recordCellElement
+         */
+        this.getRecordCellValue = function(recordCellElement) {
+            // Check to see if the cell element has an sub element of input type checkbox
+            // See http://www.protractortest.org/#/api?view=ElementFinder.prototype.isElementPresent
+            return recordCellElement.element(by.className(' cellData')).isElementPresent(by.className('checkbox')).then(function(result) {
+                // If cell element is a checkbox field do special handling to get the value
+                if (result === true) {
+                    // See http://www.protractortest.org/#/api?view=webdriver.WebElement.prototype.isSelected for getting the checkbox value
+                    return recordCellElement.element(by.className(' cellData')).isElementPresent(by.className('checked'));
+                } else {
+                    // Otherwise just grab the innerText value
+                    return recordCellElement.getAttribute('innerText');
+                }
+            });
+        };
+
+        /**
+         * Given a record element that is being viewed in agGrid, return the value of the specified cell number
+         * If no cellNumber defined, function will return all values from all the cells
+         * @param recordRowElement, recordCellNumber
+         */
+        this.getRecordValues = function(recordRowElement, recordCellNumber) {
+            var self = this;
+
+            return self.getRecordRowCells(recordRowElement).then(function(cells) {
+                // Return all record values if no cell number supplied
+                if (typeof recordCellNumber === 'undefined') {
+                    var fetchCellValuesPromises = [];
+                    for (var i = 0; i < cells.length; i++) {
+                        fetchCellValuesPromises.push(self.getRecordCellValue(cells[i]));
+                    }
+                    return Promise.all(fetchCellValuesPromises).then(function(results) {
+                        // Do post processing
+                        for (var j = 0; j < results.length; j++) {
+                            results[j] = self.formatRecordValue(results[j]);
+                        }
+                        return results;
+                    });
+                } else {
+                    // Get the value for a specific cell number
+                    return self.getRecordCellValue(cells[recordCellNumber]).then(function(result) {
+                        // Do post processing
+                        return self.formatRecordValue(result);
+                    });
+                }
+            });
+        };
+
+        /**
+         * Helper function to format record values returned from Protractor get functions
+         * Returns a string value
+         * @param rawRecordValue
+         */
+        this.formatRecordValue = function(rawRecordValue) {
+            if (typeof rawRecordValue === 'boolean') {
+                // Handle the checkbox field
+                return rawRecordValue.toString();
+            } else {
+                // Remove whitespace and any newline characters
+                return rawRecordValue.trim();
+            }
+        };
+
+        /**
          * Given a record element in agGrid, click on the selection checkbox for that record to open the edit menu
          * @param recordRowElement
          */
         this.openRecordEditMenu = function(recordRowIndex) {
-            return element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-row')).get(recordRowIndex).element(by.className('ag-selection-checkbox')).click();
+            //TODO: Doesn't work for Safari and Firefox, need to find workaround
+            var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
+            browser.actions().doubleClick(rowElement).perform();
+            return e2ePageBase.waitForElementToBePresent(this.agGridEditRecordMenu);
         };
 
         /**
-         * Given a record element that is being edited in agGrid, return the input cells for that row
-         * @param recordRowElement
+         * Given a list of record elements in agGrid, return the input cells for the record being edited
+         * @param recordRowElements
          */
-        this.getRecordRowInputCells = function(recordRowElement) {
-            return recordRowElement.all(by.tagName('input'));
+        this.getRecordRowInputCells = function(recordRowElements) {
+            return recordRowElements.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].all(by.tagName('input'));
+            });
+        };
+
+        /**
+         * Given a list of action rows in agGrid, find and click the save button for the record being edited
+         * @param recordRowElements
+         */
+        this.clickSaveButtonForEditMenu = function(recordRowElements) {
+            return recordRowElements.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(1).click();
+            });
         };
 
         /**
@@ -192,7 +298,7 @@
 
             // Find and select the report based on name
             //TODO: Break this filter out into a separate function
-            this.reportGroupElList.filter(function(elem) {
+            return this.reportGroupElList.filter(function(elem) {
                 // Return the element or elements
                 return elem.element(by.className('qbPanelHeaderTitleText')).getText().then(function(text) {
                     // Match the text
@@ -207,7 +313,7 @@
                     });
                 }).then(function(reportLinkElements) {
                     return reportLinkElements[0].click().then(function() {
-                        e2ePageBase.waitForElementToBeInvisible(self.reportTrowserContent);
+                        e2ePageBase.waitForElement(self.agGridContainerEl);
                     });
                 });
             });
@@ -221,12 +327,7 @@
             this.agGridColHeaderElList.then(function(elements) {
                 var fetchTextPromises = [];
                 for (var i = 0; i < elements.length; i++) {
-                    // Firefox has innerHTML instead of innerText so use that instead
-                    if (browserName === 'firefox') {
-                        fetchTextPromises.push(elements[i].getAttribute('innerHTML'));
-                    } else {
-                        fetchTextPromises.push(elements[i].getAttribute('innerText'));
-                    }
+                    fetchTextPromises.push(elements[i].getAttribute('colid'));
                 }
                 return Promise.all(fetchTextPromises);
             }).then(function(colHeaders) {

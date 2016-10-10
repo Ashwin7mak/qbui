@@ -1,0 +1,122 @@
+@import '../../../src/assets/css/qbVariables';
+
+$data-font-size: $font-size-p;
+
+@mixin text-input-focus {
+    outline: none;
+    border: solid 1px $input-text-focus-border-color;
+    //Added border-color for multi choice text box
+    border-color: $input-text-focus-border-color !important;
+    @include focus-shadow();
+}
+
+// plain user data
+.data {
+  color : $data-color;
+  font-family: $font-family;
+  font-size: $data-font-size;
+  -webkit-font-smoothing: antialiased;
+}
+
+// inline edit of a cell
+.cellEdit {
+  border: solid 1px $input-text-normal-border-color;
+  box-shadow: none;
+  border-radius: 2px;
+}
+
+// visual style of input userdata
+[type="text"],
+[type="url"],
+[type="email"] {
+    &.input {
+        background-color: $input-bg-color;
+    }
+
+    // layout of input userdata in an inline edit table
+    .reportTable &.input {
+        margin: 0 0 0 1px;
+        padding: 0 0 0 2px;
+        width: inherit;
+        height:  30px;
+    }
+
+    &:focus.input {
+        @include text-input-focus;
+    }
+
+    // visual style of input error
+    .textField.error &.input, &.input.error {
+        border-top: 1px solid $input-text-error-border-color;
+        border-right: 1px solid  $input-text-error-border-color;
+        border-bottom: 1px solid $input-text-error-border-color;
+        border-left: 5px solid $input-text-error-border-color;
+        box-shadow: none;
+    }
+
+    // visual style of focus input error
+    .textField.error &:focus.input, &:focus.input.error {
+        outline: none;
+        border-top: 1px solid $input-text-error-border-color;
+        border-right: 1px solid  $input-text-error-border-color;
+        border-bottom: 1px solid $input-text-error-border-color;
+        border-left: 5px solid $input-text-error-border-color;
+        @include focus-shadow($input-text-error-border-color);
+    }
+}
+
+textarea:focus, .is-focused:not(.is-open)>.Select-control {
+    @include text-input-focus;
+}
+
+.invalidRecord.tooltip >.tooltip-arrow,
+.invalidInput.tooltip >.tooltip-arrow {
+  border-bottom-color: $tootip-error-color;
+  border-top-color: $tootip-error-color;
+}
+.invalidRecord.tooltip,
+.invalidRecord.tooltip .tooltip-inner,
+.invalidInput.tooltip,
+.invalidInput.tooltip .tooltip-inner {
+  background-color:  $tootip-error-color;
+}
+
+.invalidRecord.tooltip .tooltip-arrow {
+  top: -5px;
+}
+.invalidInput.tooltip.top .tooltip-arrow {
+  bottom: -5px;
+}
+// visual style of required field indicator
+.requiredFlag {
+  color: $field-label-normal-color;
+  font-size: 17px;
+}
+
+.requiredFlag-layout {
+  display: block;
+  padding-left: 2px;
+}
+
+.textFormat .cellData .textField {
+  word-break: break-word;
+  white-space: normal;
+}
+.textFormat .cellData.NoWrap .textField {
+  white-space: nowrap;
+}
+
+.userDisplayValue {
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.cellData.NoWrap {
+  white-space: nowrap;
+}
+
+/* allow wide tooltips */
+.tooltip-inner {
+  max-width:none;
+}
+

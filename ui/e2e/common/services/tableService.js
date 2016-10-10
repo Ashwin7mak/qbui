@@ -5,7 +5,10 @@
 (function() {
     'use strict';
     // TODO: Will need to add in recordBase as a parameter here when we need it in future functions
-    module.exports = function() {
+    // Field generator module
+    var fieldGenerator = require('../../../test_generators/field.generator.js');
+
+    module.exports = function(recordBase) {
         var tableService = {
             /**
              * Given a table JSON object check for and return an array containing the non built-in fields
@@ -18,6 +21,12 @@
                     }
                 });
                 return nonBuiltInFields;
+            },
+            generateChoices : function(type, numChoices, options) {
+                return fieldGenerator.generateChoices(type, numChoices, options);
+            },
+            setDefaultTableHomePage : function(appId, tableId, reportId) {
+                return recordBase.apiBase.setDefaultTableHomePage(appId, tableId, reportId);
             }
         };
         return tableService;

@@ -1,36 +1,35 @@
-@import "../../../../src/assets/css/qbVariables";
+@import '../../../../src/assets/css/qbVariables';
 
 $margin-spacer: 10px;
 $grid-default-cell-padding: 10px;
 $grid-group-expand-icon-size: 18px;
-$grid-default-group-padding: 0;
+$grid-default-group-padding: 0px;
 $table-actions-container-bg: #fff;
 
 .tableLoaderContainer {
     flex: 1 1 auto;
-    overflow-y: scroll;
+    overflow-y:auto;
 }
 
 .reportTable .cardViewListHolder {
-    position: absolute;
-    transform: translate3d(-40px, 0, 0);
-    -webkit-transform: translate3d(-40px, 0, 0);
+    transform: translate3d(-40px,0,0);
+    -webkit-transform: translate3d(-40px,0,0);
     //transition: transform 2000ms;
     width: calc(100% + 40px) !important;
+    position: relative;
 
     &.allowCardSelection {
-        transform: translate3d(0, 0, 0);
-        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0,0,0);
         .custom-row-card .card-expander {
-            display: none;
+            display:none;
         }
     }
 }
-
 .cardViewList {
     display: block !important;
     width: inherit !important;
-    margin-bottom: $margin-spacer;
+    margin-bottom: 0px;
 
     .group-header {
         line-height: 30px;
@@ -43,26 +42,93 @@ $table-actions-container-bg: #fff;
         }
     }
     .group-level--1 {
-        > .group-header {
+        >.group-header {
             display: none;
         }
     }
     .qbIcon {
-        &.iconssturdy-caret-filled-down,
-        &.iconssturdy-icon_caretfilledright {
+        &.iconTableUISturdy-caret-filled-down,
+        &.iconTableUISturdy-caret-filled-right {
             font-size: $grid-group-expand-icon-size;
         }
     }
     .group-level-0 {
-        > .group-header {
+        >.group-header{
             background-color: $color5;
         }
     }
 
+    .cardViewHeader {
+        width: 100%;
+
+        display:flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        min-height: 45px;
+
+        font-family: "Lato", sans-serif;
+        font-size: 14px;
+        color: $pagination-mobile-panel-text-color;
+
+        .fetchPreviousButton {
+            text-decoration: none;
+            border: 1px solid $pagination-mobile-panel-border-color;
+            background: $pagination-mobile-panel-background-color;
+            width:100%;
+            height:45px;
+
+            .fetchPreviousArrow {
+                padding-right:10px;
+            }
+        }
+    }
+
+    .cardViewFooter {
+        width: 100%;
+
+        display:flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        min-height: 45px;
+
+        font-family: "Lato", sans-serif;
+        font-size: 14px;
+        color: $pagination-mobile-panel-text-color;
+
+        .fetchNextButton {
+            text-decoration: none;
+            width:100%;
+            height:45px;
+            border: 1px solid $pagination-mobile-panel-border-color;
+            background: $pagination-mobile-panel-background-color;
+
+            .fetchNextArrow {
+                padding-right:10px;
+            }
+        }
+    }
+
+    .headerLoadingIndicator, .footerLoadingIndicator {
+        width: 100%;
+        min-height: 45px;
+
+        font-family: "Lato", sans-serif;
+        font-size: 14px;
+        color: $pagination-mobile-panel-text-color;
+
+        display: none;
+        position:relative;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
     @for $i from 0 through 5 {
-        .group-level-#{$i} {
+        .group-level-#{$i}{
             position: relative;
-            > .group-header {
+            >.group-header {
                 border-top: 1px solid #dcdcdc;
                 padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) !important;
             }
@@ -71,9 +137,9 @@ $table-actions-container-bg: #fff;
                 padding-left: $grid-default-cell-padding + 2 + $grid-group-expand-icon-size + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) !important;
                 margin-bottom: 0;
                 &.expanded {
-                    box-shadow: none;
-                    -webkit-box-shadow: none;
-                    -moz-box-shadow: none;
+                  box-shadow: none;
+                  -webkit-box-shadow: none;
+                  -moz-box-shadow: none;
                 }
             }
         }
@@ -83,7 +149,6 @@ $table-actions-container-bg: #fff;
 .tableActionsContainer {
     flex: 0 0 auto;
     position: relative;
-
     @include small-breakpoint {
         background-color: $table-actions-container-bg;
         &:not(.selectionActionsOpen) {

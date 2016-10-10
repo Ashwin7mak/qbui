@@ -1,4 +1,4 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
 
 .reportContainer {
     display: flex;
@@ -9,8 +9,9 @@
     @include not-small-breakpoint {
         background: $report-container-bg;
     }
+
     .layout-stage {
-        flex: 0 0 auto;
+        flex:0 0 auto;
     }
     margin-top: 0;
     margin-left: 0;
@@ -29,21 +30,23 @@
         a:hover {
             text-decoration: none;
         }
-
     }
 }
 
 .reportToolsAndContentContainer {
-    display: flex;
+    display:flex;
     flex: 1 1 auto;
-    flex-direction: column;
+    flex-direction:column;
+    position:relative;
+    //min-height is required in order for the scrollbar to work in firefox
+    min-height: 0;
 
     .tableActionsContainer {
         position: relative;
         padding-left: 10px;
 
         @include small-breakpoint {
-            padding-top: 0; /* no stage so to need add space after */
+            padding-top: 0px; // no stage so to need add space after
             &:not(.selectionActionsOpen) {
                 background-color: $secondary-bar-bg;
             }
@@ -63,22 +66,73 @@
             justify-content: flex-start;
         }
 
-        > .pageActions {
-            line-height: 40px;
-            align-self: stretch;
+        >.pageActions {
+            line-height:40px;
+            align-self:stretch;
         }
+
         .leftReportToolbar {
+            width:50%;
             display: flex;
             flex-direction: row;
             flex: 1 1 auto;
             align-items: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
         }
-        .recordsCount {
-            flex: 0 0 auto;
-            margin-left: 5px;
+
+        .rightReportToolbar {
+            width:50%;
+            display: flex;
+            flex-direction: row;
+            flex: 1 1 auto;
+            justify-content: flex-end;
+            color: $pagination-iconfont-normal-color;
+
+            .recordsCountLoaderContainer {
+                flex-grow: 1;
+                display:flex;
+                justify-content: flex-end;
+                align-items: center;
+                width: 50%;
+
+                .loadedContent {
+                    display:block;
+                    width:100%;
+                }
+
+                .loader {
+                    position: relative;
+                    width:8%;
+                }
+
+                .recordsCount {
+                    text-align: right;
+                    font-family: "Lato", Sans-Serif;
+                    font-size: 14px;
+
+                    @include small-breakpoint {
+                        color: $pagination-mobile-topbar-text-color;
+                        white-space: nowrap;
+                        margin-left: 15px;
+                    }
+                }
+            }
+
+            .reportNavigation {
+                flex-grow: 1;
+                display:flex;
+                align-items: center;
+                width: 50%;
+            }
+            .spacer {
+                min-width:1px;
+                flex-grow: 1;
+            }
+            .loadedContent {
+                flex-grow: 1;
+                flex-shrink: 0;
+            }
         }
+
         .filterSearchBoxContainer {
             flex-shrink: 0;
             .filterSearchBox {
@@ -86,31 +140,58 @@
                 max-width: 190px;
             }
         }
-        > .facetsMenuContainer {
+        >.facetsMenuContainer {
             flex-shrink: 1;
+
+            .facetsMenuButton {
+                .withoutSelections {
+                    margin-top: 0px;
+                    margin-bottom: 0px;
+                }
+            }
         }
 
         .clearAllFacets {
             display: inline-block;
-            margin-right: 0.5rem;
-            margin-left: 0.5rem;
+            margin-right: .5rem;
+            margin-left: .5rem;
             vertical-align: top;
             font-size: 16px;
             cursor: pointer;
         }
+    }
 
-        .recordsCount {
-            margin-right: 1rem;
+    .reportFooter {
+        display: flex;
+        flex-direction: row;
+        justify-content:flex-end;
+        align-items: center;
+        flex: 0 1 auto;
+
+        color:$pagination-iconfont-normal-color;
+
+        .leftReportFooter {
+            width: 50%;
+        }
+        .rightReportFooter {
+            position: relative;
+            width: 50%;
+            margin-left: 50%;
+        }
+
+        .hidden {
+            display:none;
         }
     }
 
     .loadedContent {
-        display: flex;
+        display:flex;
         flex: 1 1 auto;
-        width: 100%;
-        position: relative;
+        width:100%;
+        position:relative;
+        //min-height is required in order for the scrollbar to work in firefox
+        min-height: 0;
     }
-
 }
 
 @include small-breakpoint {
@@ -143,9 +224,12 @@
 }
 
 .reportContent {
-    width: 100%;
-    flex: 1 1 auto;
-    display: flex;
+    width:100%;
+    flex:1 1 auto;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    overflow:auto;
 }
 
 
@@ -153,30 +237,25 @@
     width: 100%;
 
 }
-
 .noData {
     padding-left: 1.5rem;
 
 }
-
 .addNewRecord {
-    display: none;
+    display:none;
 }
 
 .sortAndGroupPopoverContainer {
     margin-left: 10px;
 }
 
-.sortButtonSpan {
+.sortButtonSpan  {
     display: inline-block;
     cursor: pointer;
-    margin-top: 13px;
-    margin-bottom: 4px;
     color: $icon-color;
-
-    @include small-breakpoint {
-        color: $secondary-bar-fg;
-    }
+        @include small-breakpoint {
+            color:$secondary-bar-fg;
+        }
 
     .sortButton {
         font-size: 20px;
@@ -186,34 +265,96 @@
     }
 }
 
+.reportNavigation {
+    float: left;
+    color: $pagination-iconfont-normal-color;
+    font-family: "Lato", sans-serif;
+    font-size: 14px;
+    display:flex;
+    align-items:center;
+
+    .navigationButton {
+        text-decoration: none;
+        padding-top:10px;
+        .disabled {
+            pointer-events: none;
+        }
+    }
+
+    .previousButton {
+        &.qbIcon {
+            display: inline;
+            font-size: 24px;
+            color: $pagination-iconfont-normal-color;
+            &.disabled {
+                color: $pagination-iconfont-disabled-color;
+            }
+        }
+        &:hover {
+            color: $pagination-iconfont-hover-color;
+        }
+    }
+
+    .pageNumbers {
+        display:inline;
+        padding-left:3px;
+        padding-right:3px;
+        white-space:nowrap;
+    }
+
+    .nextButton {
+        &.qbIcon {
+            display: inline;
+            font-size: 24px;
+            color: $pagination-iconfont-normal-color;
+            &.disabled {
+                color: $pagination-iconfont-disabled-color;
+            }
+        }
+        &:hover {
+            color: $pagination-iconfont-hover-color;
+        }
+    }
+}
+.navigationButton {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+
 $add-record-fg: #fff;
 $add-record-bg: #a52363;
 $add-record-radius: 20px;
 
 @include small-breakpoint {
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
-        color: $secondary-bar-fg;
-        justify-content: space-between;
+        color:$secondary-bar-fg;
+        justify-content:space-between;
 
         .popover-content {
-            color: $icon-color;
+            color:$icon-color;
             max-height: 100%;
         }
     }
     .reportContainer .reportToolsAndContentContainer .loadedContent {
-        margin: 0;
-        width: 100%;
+        margin:0;
+        width:100%;
     }
     .addNewRecord {
-        display: inline-block;
-        position: fixed;
-        right: 24px;
-        bottom: 24px;
-        font-size: 24px;
+        display:inline-block;
+        position:fixed;
+        right:24px;
+        bottom:24px;
+        font-size:24px;
+
         color: $add-record-fg;
         background-color: $add-record-bg;
         vertical-align: middle;
-        text-align: center;
+        text-align:center;
         width: $add-record-radius * 2;
         height: $add-record-radius * 2;
         -moz-border-radius: $add-record-radius;
@@ -226,7 +367,8 @@ $add-record-radius: 20px;
             color: $add-record-fg;
         }
         &:focus {
-            color: $add-record-fg;
+            color:$add-record-fg;
         }
     }
 }
+

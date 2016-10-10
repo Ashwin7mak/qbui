@@ -9,6 +9,7 @@
     var authentication = require('./components/authentication');
     var log = require('./logger').getLogger();
     var _ = require('lodash');
+    var httpStatusCodes = require('./constants/httpStatusCodes');
     var mixins = require('./../../common/src/lodashMixins');
 
     require('./logger').getLogger();
@@ -17,6 +18,7 @@
 
         var requestHelper = require('./api/quickbase/requestHelper')();
         var routeConstants = require('./routes/routeConstants');
+        var routeMapper = require('./routes/qbRouteMapper')(config);
 
         /*
          *  Route to log a message. Only a post request is supported.
@@ -30,7 +32,7 @@
                 sendOutLogMessage(req, res, req.body.level, 'CLIENT', req.body.msg);
                 // ...route terminates...logging a client side message only
             } else {
-                res.status(405).send('Method not supported');
+                res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send('Method not supported');
             }
         });
 
@@ -45,15 +47,43 @@
             if (requestHelper.isPost(req)) {
                 // serialize all the params for message output
                 let stats = req.body;
-                stats.browser = req.useragent.browser;
-                stats.browserVersion = req.useragent.version;
+                if (req.useragent) {
+                    stats.browser = req.useragent.browser ? req.useragent.browser : 'unspecified';
+                    stats.browserVersion = req.useragent.browser ? req.useragent.version : 'unspecified';
+                }
                 let msg = "Client Perf stats (ms): " +
                     JSON.stringify(_.sortKeysBy(stats, (val, key) => key.toLowerCase()));
                 sendOutLogMessage(req, res, 'info', 'CLIENT_PERF', msg);
             } else {
-                res.status(405).send('Method not supported');
+                res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send('Method not supported');
             }
             // ...route terminates...logging a client side message only
+        });
+
+        /*
+         * intercept all record bulk requests because express can't route them properly. We need to handle them manually
+         */
+        app.all(routeConstants.RECORDS_BULK, function(req, res, next) {
+            //be awesome
+            if (requestHelper.isDelete(req)) {
+                var recordBulkDelete = routeMapper.fetchDeleteFunctionForRoute(routeConstants.RECORDS_BULK);
+                if (recordBulkDelete !== null) {
+                    recordBulkDelete(req, res);
+                } else {
+                    //the method doesn't exist, we can't execute this request, log an error!
+                    res.status(httpStatusCodes.NOT_IMPLEMENTED).send('Method not implemented!');
+                }
+            } else if (requestHelper.isPost(req)) {
+                /*
+                 * TODO: MB-421 (https://quickbase.atlassian.net/browse/MB-421) this is a stop gap for integration tests.
+                 * UI Integration tests use the Bulk Create currently, but through the node layer
+                 * UI Integration tests need to be updated to use the Java end point when creating data
+                 */
+                return next();
+            } else {
+                //the verb requested for this rest endpoint is not implemented yet, log an error!
+                res.status(httpStatusCodes.METHOD_NOT_ALLOWED).send('Method not supported');
+            }
         });
 
 
@@ -64,8 +94,6 @@
             log.info({req: req}, 'Router');
             next();
         });
-
-        var routeMapper = require('./routes/qbRouteMapper')(config);
 
         require('./routes/qbClientRoutes')(app, config);
         require('./routes/qbApiRoutes')(app, config, routeMapper);
@@ -78,25 +106,25 @@
 
         // unauthorized
         app.route('/unauthorized*')
-            .get(errors[401]);
+            .get(errors[httpStatusCodes.UNAUTHORIZED]);
 
         // forbidden
         app.route('/forbidden*')
-            .get(errors[403]);
+            .get(errors[httpStatusCodes.FORBIDDEN]);
 
         app.route('/pageNotFound*')
-                .get(errors[404]);
+                .get(errors[httpStatusCodes.NOT_FOUND]);
 
         app.route('/internalServerError*')
-                .get(errors[500]);
+                .get(errors[httpStatusCodes.INTERNAL_SERVER_ERROR]);
 
         // All undefined asset or api routes should return a 404
         app.route('/:url(api|auth|components|app|bower_components|assets)/*')
-                .get(errors[404]);
+                .get(errors[httpStatusCodes.NOT_FOUND]);
 
         //  Unknown page
         app.route('/*')
-                .get(errors[404]);
+                .get(errors[httpStatusCodes.NOT_FOUND]);
 
 
         function isClientLogEnabled() {
@@ -174,15 +202,15 @@
                         args.push({type:msgType, req: req}, clientMsg);
 
                         fn.apply(null, args);
-                        res.status(200).send('OK');
+                        res.status(httpStatusCodes.OK).send('OK');
                     } else {
-                        res.status(400).send('Bad Request');
+                        res.status(httpStatusCodes.BAD_REQUEST).send('Bad Request');
                     }
                 } else {
-                    res.status(400).send('Bad Request');
+                    res.status(httpStatusCodes.BAD_REQUEST).send('Bad Request');
                 }
             } else {
-                res.status(200).send('OK');
+                res.status(httpStatusCodes.OK).send('OK');
             }
         }
 

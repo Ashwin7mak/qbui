@@ -106,7 +106,7 @@
                 init.then(function() {
                     apiBase.executeRequest(recordsEndpoint, consts.POST, record)
                             .then(function(recordIdResponse) {
-                                var getEndpoint = recordsEndpoint + JSON.parse(recordIdResponse.body).id;
+                                var getEndpoint = recordsEndpoint + JSON.parse(JSON.parse(recordIdResponse.body).body).id;
                                 if (params) {
                                     getEndpoint += params;
                                 }
@@ -117,8 +117,12 @@
                                               }).catch(function(error) {
                                                   fetchRecordDeferred.reject(error);
                                               });
-                            }).catch(function(currError) {log.error(JSON.stringify(currError));});
-                }).catch(function(err) {log.error(JSON.stringify(err));});
+                            }).catch(function(currError) {
+                                log.error(JSON.stringify(currError));
+                            });
+                }).catch(function(err) {
+                    log.error(JSON.stringify(err));
+                });
                 return fetchRecordDeferred.promise;
             },
             // Creates a record, returning a promise that is resolved or rejected on successful
@@ -150,7 +154,6 @@
                     records.forEach(function(object) {
                         recordObjects.push(object.record);
                     });
-
                     apiBase.executeRequest(recordBulkEndpoint, consts.POST, recordObjects)
                             .then(function(recordBulkResponse) {
                                 var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
@@ -162,6 +165,27 @@
 
                                 fetchRecordDeferred.resolve(recordIdList);
                             }).catch(function(currError) {log.error(JSON.stringify(currError));});
+                }).catch(function(err) {log.error(JSON.stringify(err));});
+                return fetchRecordDeferred.promise;
+            },
+            // Creates a list of records using the bulk record endpoint, returning a promise that is resolved or rejected on successful
+            createBulkRecords: function(recordsEndpoint, records) {
+                log.debug('Records to create: ' + JSON.stringify(records));
+                var fetchRecordDeferred = promise.pending();
+                init.then(function() {
+                    var recordBulkEndpoint = recordsEndpoint + 'bulk';
+
+                    apiBase.executeRequest(recordBulkEndpoint, consts.POST, records)
+                        .then(function(recordBulkResponse) {
+                            var parsedRecordIdList = JSON.parse(recordBulkResponse.body);
+
+                            var recordIdList = [];
+                            parsedRecordIdList.forEach(function(jsonObj) {
+                                recordIdList.push(jsonObj.id);
+                            });
+
+                            fetchRecordDeferred.resolve(recordIdList);
+                        }).catch(function(currError) {log.error(JSON.stringify(currError));});
                 }).catch(function(err) {log.error(JSON.stringify(err));});
                 return fetchRecordDeferred.promise;
             },
@@ -210,6 +234,18 @@
                     genRecords.push(generatedRecord);
                 }
                 return genRecords;
+            },
+            /**
+             * Uses the generators in the test_generators package to generate a list of empty record objects based on the
+             * given list of fields and number of records. This list can then be passed into the addRecords function.
+             */
+            generateEmptyRecords: function(fields, numRecords) {
+                var generatedEmptyRecords = [];
+                for (var i = 0; i < numRecords; i++) {
+                    var generatedRecord = recordGenerator.generateEmptyRecord(fields);
+                    generatedEmptyRecords.push(generatedRecord);
+                }
+                return generatedEmptyRecords;
             },
             /**
              * Given an already created app and table, create a list of generated record JSON objects via the API.

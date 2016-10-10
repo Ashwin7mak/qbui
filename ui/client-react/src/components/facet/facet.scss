@@ -1,240 +1,243 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
+
 
 .facetsMenuContainer {
-    margin-left: 10px;
+  margin-left: 10px;
 
-    //under the generated wrapper on facetMenuPopup
-    > div:not(.facetsMenuButton) > div.facetsRelativePos {
-        position: relative;
-    }
+  //under the generated wrapper on facetMenuPopup
+  > div:not(.facetsMenuButton) > div.facetsRelativePos {
+    position: relative;
+  }
 }
 
 .facetsMenuButton {
-    display: inline-block;
-    cursor: pointer;
-    &.withoutSelections {
-        margin-top: 14px;
-        margin-bottom: 4px;
-    }
-    .facetButtons {
-        color: $icon-color;
+  display: inline-block;
+  cursor: pointer;
+  &.withoutSelections {
+    margin-bottom: 4px;
+  }
+  .facetButtons {
+    color: $icon-color;
+      @include small-breakpoint {
+          color:$secondary-bar-fg;
+      }
+  }
 
-        @include small-breakpoint {
-            color: $secondary-bar-fg;
-        }
+  &.popoverShown,
+  .facetButtons:hover {
+    color: $icon-color-hover;
+    @include small-breakpoint {
+        color: $secondary-bar-fg;
     }
-
-    &.popoverShown,
-    .facetButtons:hover {
-        color: $icon-color-hover;
-
-        @include small-breakpoint {
-            color: $secondary-bar-fg;
-        }
+  }
+  .filterButton {
+    font-size: 20px;
+    &.qbIcon {
+      display: inline;
     }
-    .filterButton {
-        font-size: 20px;
-        &.qbIcon {
-            display: inline;
-        }
-    }
-    .filterButtonCaret {
-        font-size: 16px;
-    }
+  }
+  .filterButtonCaret {
+    font-size: 16px;
+  }
 }
 
 .facetsMenuContainer .facetMenuPopup.popover {
     border-radius: 3px;
-    border-color: $facetMenu-BorderColor;
+    border-color : $facetMenu-BorderColor;
     width: 300px;
     position: absolute;
     margin-left: -29px;
     > .arrow {
-        left: 13% !important;
+      left: 13% !important;
     }
 
 
     .popover-content {
-        padding: 0;
-        margin: 0;
-        max-height: 500px;
-        overflow-y: auto;
+      padding: 0;
+      margin: 0;
+      max-height: 500px;
+      overflow-y: auto;
     }
 
     .panel > .list-group .list-group-item,
     .panel > .panel-collapse > .list-group .list-group-item {
-        border: none;
+      border: none;
     }
 
     .notActionable {
-        cursor: not-allowed;
+      cursor : not-allowed;
     }
 
     .noOptions {
-        margin-left: 19px;
-        color: $facetMenu-NoOptionsColor;
-        font-family: "Lato", sans-serif;
-        padding-top: 0.5em;
+      margin-left: 19px;
+      color: $facetMenu-NoOptionsColor;
+      font-family: "Lato", sans-serif;
+      padding-top: .5em;
     }
 
     .panel {
-        margin-bottom: 0;
-        border-radius: 0;
+      margin-bottom: 0;
+      border-radius: 0;
     }
 
     .facetMenu.panel {
-        border: none;
+      border: none;
     }
 
     .facetMenu.panel:last-child {
-        border-bottom: none;
+      border-bottom: none;
     }
 
     .panel-default > .panel-heading {
-        background-color: $facetMenu-backgroundColor;
-        border: none;
-        box-shadow: none;
-        border-top: 1px solid $facetMenu-BorderColor;
-        padding: 0;
-        border-radius: 0;
+      background-color: $facetMenu-backgroundColor;
+      border: none;
+      box-shadow: none;
+      border-top:  1px solid $facetMenu-BorderColor;
+      padding: 0;
+      border-radius: 0;
 
-        &:hover {
-            background-color: $facetMenu-itemHoverColor;
-        }
+      &:hover {
+          background-color: $facetMenu-itemHoverColor;
+      }
     }
 
     .panel-default:first-child > .panel-heading {
-        border-top: none;
+      border-top:none;
     }
 
     .panel-default > .panel-heading .panel-title a {
-        text-decoration: none;
+      text-decoration:none;
     }
 
     .panel-default > .panel-heading .panel-title .facetName {
-        font-size: 16px;
-        margin: 0;
-        padding: 10px 15px;
+      font-size: 16px;
+      margin: 0;
+      padding: 10px 15px 10px 15px;
     }
-
     .selectionInfo.small {
-        opacity: 0.7;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding-left: 15px;
-        padding-right: 5px;
+      opacity: 0.7;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-left: 15px;
+      padding-right: 5px;
     }
 
     .panel-default {
-        border: none;
-        box-shadow: none;
-        margin-bottom: 0 !important;
+      border: none;
+      box-shadow: none;
+      margin-bottom: 0 !important;
     }
 
     .list-group-item {
-        font-family: $font-family;
-        padding-top: 4px;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: flex-start;
+      font-family: $font-family;
+      padding-top: 4px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-start
     }
 
     .list-group-item:hover {
-        background-color: $facetMenu-itemHoverColor;
+      background-color: $facetMenu-itemHoverColor;
     }
 
     .list-group-item:focus {
-        outline: none;
-        background-color: $facetMenu-backgroundColor;
+      outline: none;
+      background-color: $facetMenu-backgroundColor;
     }
 
     .listMore {
-        color: $facetMenu-showMoreColor;
-        padding-left: 2.4em;
-        cursor: pointer;
+      color: $facetMenu-showMoreColor;
+      padding-left: 2.4em;
+      cursor: pointer;
     }
 
     .noFacetValues {
-        padding: 1em;
+      padding : 1em;
     }
 
     .checkMark {
-        color: transparent;
-        padding-right: 5px;
+      color: transparent;
+      padding-right: 5px;
     }
 
     .checkMark-selected {
-        color: $selected-check-color;
-        padding-right: 5px;
+      color: $selected-check-color;
+      padding-right: 5px;
+    }
+
+    .clearFacetContainer {
+      float: right;
     }
 
     .clearFacet {
-        float: right;
-        color: $facetMenu-backgroundColor;
-        cursor: pointer;
+      color: $facetMenu-backgroundColor;
+      cursor: pointer;
     }
 
     .selections .clearFacet {
-        color: $facetMenu-clearButtonColor;
+      color: $facetMenu-clearButtonColor;
     }
 }
 
 .selectedFacets {
-    display: inline;
+  display: inline;
 }
-
 .facetToken {
-    display: inline-block;
+    display : inline-block;
     padding: 3px;
 
-    .facetNameToken {
-        margin-right: 0.5em;
-        display: block;
-        font-size: 85%;
+  .facetNameToken {
+    margin-right: .5em;
+    display: block;
+    font-size: 85%;
+  }
+
+  .selectedToken {
+    margin-right:10px;
+    margin-top: 2px;
+    border-radius: 12px;
+    font-size:10px;
+    font-weight:500;
+    background-color: $facetMenu-facetTokenBackgroundColor;
+    color: $facetMenu-facetTokenTextColor;
+    display: inline-block;
+
+    .selectedTokenName {
+      white-space: normal;
+      padding: 2px 3px;
+      cursor: pointer;
+
+      span {
+        white-space: nowrap;
+        padding-left: .5em;
+      }
+      .clearFacet {
+        cursor: pointer;
+      }
     }
-
-    .selectedToken {
-        margin-right: 10px;
-        margin-top: 2px;
-        border-radius: 12px;
-        font-size: 10px;
-        font-weight: 500;
-        background-color: $facetMenu-facetTokenBackgroundColor;
-        color: $facetMenu-facetTokenTextColor;
-        display: inline-block;
-
-        .selectedTokenName {
-            white-space: normal;
-            padding: 2px 3px;
-            cursor: pointer;
-
-            span {
-                white-space: nowrap;
-                padding-left: 0.5em;
-            }
-            .clearFacet {
-                cursor: pointer;
-            }
-        }
-    }
+  }
 }
+
 
 @include medium-breakpoint {
-    .filterSearchBoxContainer .searchInputBox .searchInput {
-        padding-right: 5px;
-        width: 111px;
-    }
+  .filterSearchBoxContainer .searchInputBox .searchInput {
+    padding-right: 5px;
+    width: 111px;
+  }
 }
+
+
 
 @include small-breakpoint {
     .selectedFacets {
-        display: none;
+        display:none;
     }
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
-        height: 40px;
+
+        height:40px;
         input {
             color: $search-input-fg;
         }
@@ -245,19 +248,22 @@
             display: block;
             min-width: 150px;
             max-width: 232px;
-            margin-left: 0;
+            margin-left: 0px;
         }
+
         .facetsMenuContainer {
             flex: 0 0 auto;
         }
+
         .filterSearchBoxContainer {
-            display: none;
+            display:none;
         }
         .facetsMenuButton.withoutSelections {
-            margin: 0; // no search box to effect centered height in small
+            margin:0; // no search box to effect centered height in small
         }
         .popover.bottom > .arrow {
             display: none;
         }
+
     }
 }

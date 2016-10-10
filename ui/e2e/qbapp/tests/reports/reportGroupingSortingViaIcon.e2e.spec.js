@@ -130,7 +130,7 @@
         });
 
         /*
-         * Funstion to get the sorted/grouped table results
+         * Function to get the sorted/grouped table results
          * @Param:groupArrayLength (no of group fields)
          */
         var verifyTableResults = function(sortedResults, expectedResults) {
@@ -147,7 +147,7 @@
                         if (elmClass.indexOf('ag-row-group') === -1) {
                             row.all(by.className('cellData')).then(function(cells) {
                                 cells.forEach(function(cell) {
-                                    cell.getAttribute('innerText').then(function(text) {
+                                    cell.getAttribute('textContent').then(function(text) {
                                         // innerText is adding a return character to the end of the text
                                         data.push(text.replace(/(\r\n|\n|\r)/gm, ''));
                                     });
@@ -176,16 +176,7 @@
             });
         };
 
-        /*
-         * XLARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No-Facets No-Groups/Sorts Yes-Fids setup in reports
-         */
-        describe('XLARGE: Report Settings: No-Facets No-Groups/Sorts Yes-Fids', function() {
-
-            beforeAll(function(done) {
-                e2eBase.resizeBrowser(e2eConsts.XLARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    done();
-                });
-            });
+        describe('Report Settings: No-Facets No-Groups/Sorts Yes-Fids', function() {
 
             beforeEach(function(done) {
                 //go to report page directly
@@ -272,7 +263,7 @@
                     reportSortingPage.clickSortAndGroupIcon();
                 }).then(function() {
                     //Verify the title
-                    expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                    expect(reportSortingPage.reportSortAndGroupTitle.getAttribute('textContent')).toEqual('Sort & Group');
                     //Verify title of groupBy
                     expect(reportSortingPage.reportGroupByContainerTitle.getText()).toEqual('Group');
                 }).then(function() {
@@ -311,44 +302,38 @@
             it('Verify you can add not more than 3 fields in GrpBy and not more than 5 in SortBy', function(done) {
                 var grpFields = ["Project Phase", "% Completed", "more fields...", "Date Created"];
                 var sortFields = ["Start Date", "Finish Date", "Duration Taken", "Task Name", "User Name"];
-                reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
-                    //click on sort/grp Icon
-                    reportSortingPage.clickSortAndGroupIcon();
-                }).then(function() {
-                    //Select group By items
-                    for (var i = 0; i < grpFields.length; i++) {
-                        reportSortingPage.selectGroupByItems(grpFields[i]);
-                    }
-                }).then(function() {
-                    //Select sort By items
-                    for (var i = 0; i < sortFields.length; i++) {
-                        reportSortingPage.selectSortByItems(sortFields[i]);
-                    }
-                }).then(function() {
-                    //Verify no more fields can be added after 3 fields in GrpBy
-                    reportSortingPage.reportGroupByContainer.all(by.className('empty')).then(function(grpItems) {
-                        expect(grpItems.length).toBe(0);
-                    });
-                }).then(function() {
-                    //Verify no more fields can be added after 3 fields in sortBy
-                    reportSortingPage.reportSortByContainer.all(by.className('empty')).then(function(sortItems) {
-                        expect(sortItems.length).toBe(0);
-                        done();
+
+                e2eRetry.run(function() {
+                    reportServicePage.waitForElementToBeClickable(reportSortingPage.reportSortAndGroupBtn).then(function() {
+                        //click on sort/grp Icon
+                        reportSortingPage.clickSortAndGroupIcon();
+                    }).then(function() {
+                        //Select group By items
+                        for (var i = 0; i < grpFields.length; i++) {
+                            reportSortingPage.selectGroupByItems(grpFields[i]);
+                        }
+                    }).then(function() {
+                        //Select sort By items
+                        for (var i = 0; i < sortFields.length; i++) {
+                            reportSortingPage.selectSortByItems(sortFields[i]);
+                        }
+                    }).then(function() {
+                        //Verify no more fields can be added after 3 fields in GrpBy
+                        reportSortingPage.reportGroupByContainer.all(by.className('empty')).then(function(grpItems) {
+                            expect(grpItems.length).toBe(0);
+                        });
+                    }).then(function() {
+                        //Verify no more fields can be added after 3 fields in sortBy
+                        reportSortingPage.reportSortByContainer.all(by.className('empty')).then(function(sortItems) {
+                            expect(sortItems.length).toBe(0);
+                            done();
+                        });
                     });
                 });
             });
-        }); //XLARGE describe block
+        });
 
-        /*
-         * LARGE BREAKPOINT - Grouping/Sorting Via PopUp Test Cases using No-Facets No-Groups/Sorts Yes-Fids setup in reports
-         */
-        describe('LARGE : Report Settings : No-Facets No-Groups/Sorts Yes-Fids ', function() {
-            beforeAll(function(done) {
-                e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    done();
-                });
-            });
-
+        describe('Report Settings : No-Facets No-Groups/Sorts Yes-Fids ', function() {
             beforeEach(function(done) {
                 //go to report page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '2'));
@@ -446,7 +431,6 @@
                 });
             });
 
-
             it('Report Settings: with sortLists no Facets : Verify the Sort & Group popup respects the report settings', function(done) {
                 //go to report with sortLists page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '3'));
@@ -481,22 +465,9 @@
                     });
                 });
             });
+        });
 
-
-        }); //large breakpoints describe block end
-
-        /*
-         * MEDIUM BREAKPOINT - Use Report with facets - deleteIcon Via PopUp Test Cases
-         */
-
-        describe('MEDIUM: Report Settings: with Facets and sortLists: ', function() {
-
-            beforeAll(function(done) {
-                e2eBase.resizeBrowser(e2eConsts.MEDIUM_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                    done();
-                });
-            });
-
+        describe('Report Settings: with Facets and sortLists: ', function() {
             beforeEach(function(done) {
                 //go to report with facets page directly
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '4'));
@@ -617,20 +588,14 @@
                     });
                 });
             });
-        }); //medium breakpoints describe block end
+        });
 
-        /*
-         * SMALL BREAKPOINT - Use Reports without facets or sortLists
-         */
-
-        xdescribe('SMALL: Report Settings: No Facets No sortLists', function() {
+        xdescribe('Report Settings: No Facets No sortLists', function() {
 
             beforeAll(function(done) {
-                e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     //go to report page directly
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
-                    done();
-                });
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, '1'));
+                done();
             });
 
             beforeEach(function(done) {

@@ -18,7 +18,7 @@
             {"id":3, "value":1, "display":"1"},
             {"id":6, "value":"abcdef", "display":"abcdef"},
             {"id":7, "value":"2016-04-12", "display":"04-12-2016"},
-            {"id":8, "value":"2016-04-12T05:51:19Z[UTC]", "display":"04-11-2016 10:51 PM"},
+            {"id":8, "value":"2016-04-12T05:51:19Z[UTC]", "display":"04-11-2016 10:51 pm"},
             {"id":9, "value":"first_name_last_name@quickbase.com", "display":"first_name_last_name@quickbase.com"},
             {"id":10, "value":true, "display":true},
             {"id":11, "value":null, "display":""},
@@ -34,10 +34,15 @@
         function verifyRecords(reportResults) {
             var actualReportResults = [];
             var expectedReportRecords = [];
-            //For each report record results push to an array.
-            for (var i in reportResults.records) {
-                actualReportResults.push(reportResults.records[i]);
+
+            var records = reportResults;
+            if (!Array.isArray(records)) {
+                records = reportResults.records;
             }
+            records.forEach(function(record) {
+                actualReportResults.push(record);
+            });
+
             //Push the expected records to an array.
             for (var j in expectedRecords) {
                 expectedReportRecords.push(expectedRecords[j]);
@@ -153,7 +158,7 @@
                     facetFId: [6, 7, 8],
                     expectedFacets: '[{"id":6,"name":"Text Field","type":"TEXT","values":[{"value":"abcdef"}],"hasBlanks":false},' +
                     '{"id":7,"name":"Date Field","type":"DATE","values":[{"value":{"min":"04-12-2016","max":"04-12-2016"}}],"hasBlanks":false},' +
-                    '{"id":8,"name":"Date Time Field","type":"DATE_TIME","values":[{"value":{"min":"04-11-2016 10:51 PM","max":"04-11-2016 10:51 PM"}}],"hasBlanks":false}]'
+                    '{"id":8,"name":"Date Time Field","type":"DATE_TIME","values":[{"value":{"min":"04-11-2016 10:51 pm","max":"04-11-2016 10:51 pm"}}],"hasBlanks":false}]'
                 },
                 {
                     message: 'Facet with 1 Text record and 1 Empty Record',
@@ -181,10 +186,7 @@
                     expectedFacets: '[{"id":11,"name":"Null Text Field","type":"TEXT","values":[{"value":""}],"hasBlanks":true},{"id":12,"name":"Empty Text Field","type":"TEXT","values":[{"value":""}],"hasBlanks":true},{"id":6,"name":"Text Field","type":"TEXT","values":[{"value":"abcdef"}],"hasBlanks":false}]'
                 }
             ];
-
-
         }
-
 
         facetTestCases().forEach(function(testcase) {
             it('Test case: ' + testcase.message, function(done) {

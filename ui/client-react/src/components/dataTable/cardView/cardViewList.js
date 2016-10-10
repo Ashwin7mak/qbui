@@ -25,6 +25,15 @@ let CardViewList = React.createClass({
         };
     },
 
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    onEditRecord(data) {
+
+        this.props.onEditRecord(data[this.props.uniqueIdentifier].value);
+    },
+
     getRows() {
         let childNodes;
         if (this.props.node.children) {
@@ -34,18 +43,23 @@ let CardViewList = React.createClass({
                     groupId = this.props.groupId + "." + index;
                 }
                 let groupLevel = groupId.split(".").length - 1;
-                return <CardViewList key={index} groupId={groupId} groupLevel={groupLevel} node={node}
-                                         allowCardSelection={this.props.allowCardSelection}
-                                         onToggleCardSelection={this.props.onToggleCardSelection}
-                                         onRowSelected={this.props.onRowSelected}
-                                         onRowClicked={this.props.onRowClicked}
-                                         isRowSelected={this.props.isRowSelected}
-                                         onSwipe={this.props.onSwipe}/>;
+                return <CardViewList key={index}
+                                     groupId={groupId}
+                                     groupLevel={groupLevel}
+                                     node={node}
+                                     uniqueIdentifier={this.props.uniqueIdentifier}
+                                     allowCardSelection={this.props.allowCardSelection}
+                                     onToggleCardSelection={this.props.onToggleCardSelection}
+                                     onRowSelected={this.props.onRowSelected}
+                                     onRowClicked={this.props.onRowClicked}
+                                     isRowSelected={this.props.isRowSelected}
+                                     onEditRecord={this.props.onEditRecord}
+                                     onSwipe={this.props.onSwipe}/>;
             });
         }
 
         let className = "cardViewList group-level-" + this.props.groupLevel;
-        let groupIcon = this.state.open ? "caret-filled-down" : "icon_caretfilledright";
+        let groupIcon = this.state.open ? "caret-filled-down" : "caret-filled-right";
         return (
             <div>
                 {this.props.node.group || this.props.node.children && this.props.node.children.length ?
@@ -62,15 +76,16 @@ let CardViewList = React.createClass({
                         </Collapse>
                     </div> :
                     <CardView key={this.props.node[this.props.uniqueIdentifier]}
-                              rowId={this.props.node[this.props.uniqueIdentifier]}
+                              rowId={this.props.node[this.props.uniqueIdentifier] ? this.props.node[this.props.uniqueIdentifier].value : null}
                               data={this.props.node}
+                              uniqueIdentifier={this.props.uniqueIdentifier}
                               allowCardSelection={this.props.allowCardSelection}
                               onToggleCardSelection={this.props.onToggleCardSelection}
                               onRowSelected={this.props.onRowSelected}
                               onRowClicked={this.props.onRowClicked}
                               isRowSelected={this.props.isRowSelected}
-                              onSwipe={this.props.onSwipe}>
-                    </CardView>
+                              onSwipe={this.props.onSwipe}
+                              onEditAction={this.onEditRecord} />
                 }
             </div>
         );

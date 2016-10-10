@@ -7,11 +7,15 @@
     var ReportServicePage = requirePO('reportService');
     var reportServicePage = new ReportServicePage();
 
+    // Lodash utility library
+    var _ = require('lodash');
+
 
     var ReportSortingPage = function() {
 
         // Report sorting grouping Menu Container
         this.reportSortingGroupingContainer = element(by.className('sortAndGroupContainer'));
+        this.reportSortButton = element(by.className('sortButton'));
         // Report sorting grouping button
         this.reportSortAndGroupBtn = this.reportSortingGroupingContainer.element(by.className('sortAndGroupButton '));
         //sorting/grouping popup
@@ -21,7 +25,7 @@
         //resest button
         this.sortAndGrpDialogueResetBtn = this.reportSortAndGroupDialogue.all(by.className('reset')).first();
         //sorting/grouping popup title
-        this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.all(by.className('overlayTitle')).first();
+        this.reportSortAndGroupTitle = this.reportSortingGroupingContainer.all(by.tagName('H5')).first();
         //sorting/grouping close button
         this.reportSortAndGroupCloseBtn = this.reportSortingGroupingContainer.all(by.className('overlayRight')).first();
         //Small breakpoint sorting/grouping close button
@@ -103,25 +107,17 @@
         this.openColumnHeaderMenu = function(columnName) {
             var columns = reportServicePage.agGridColHeaderElList;
             return columns.filter(function(elm) {
-                return elm.getAttribute('innerText').then(function(text) {
+                return elm.getAttribute('colid').then(function(text) {
                     var columnHeader = text.replace(/(\r\n|\n|\r)/gm, '');
                     return columnHeader === columnName;
                 });
-            }).then(function(filteredColumn) {
-                var scrollToElm1 = filteredColumn[0].scrollIntoView;
-                e2eBase.sleep(browser.params.smallSleep);
-                e2ePageBase.waitForElementToBeClickable(filteredColumn[0]).then(function() {
-                    return filteredColumn[0].click();
-                }).then(function() {
-                    var scrollToElm2 = filteredColumn[0].element(by.className('ag-header-cell-menu-button')).scrollIntoView;
-                    e2eBase.sleep(browser.params.smallSleep);
-                    e2ePageBase.waitForElementToBeClickable(filteredColumn[0].element(by.className('ag-header-cell-menu-button'))).then(function() {
-                        return filteredColumn[0].element(by.className('ag-header-cell-menu-button')).click();
-                    });
+            }).then(function(filteredColumns) {
+                return e2ePageBase.waitForElementToBeClickable(filteredColumns[0].element(by.className('dropdownToggle'))).then(function() {
+                    return filteredColumns[0].element(by.className('dropdownToggle')).click();
                 }).then(function() {
                     // Verify the popup menu is displayed
-                    return e2ePageBase.waitForElement(element(by.className('ag-menu-list'))).then(function() {
-                        return expect(element(by.className('ag-menu-list')).isDisplayed()).toBeTruthy();
+                    return e2ePageBase.waitForElement(filteredColumns[0].element(by.className('dropdown-menu'))).then(function() {
+                        return expect(filteredColumns[0].element(by.className('dropdown-menu')).isDisplayed()).toBeTruthy();
                     });
                 });
             });
@@ -153,17 +149,16 @@
          * Function will select the Item passed in parameter from the column header popup menu
          */
         this.selectItems = function(itemToSelect) {
-            var items = reportServicePage.agGridContainerEl.all(by.className('ag-menu-option'));
+            var items = reportServicePage.agGridContainerEl.all(by.className('open')).all(by.tagName('li'));
             return items.filter(function(elm) {
-                return elm.element(by.className('ag-menu-option-text')).getText().then(function(text) {
+                return elm.getText().then(function(text) {
                     return text === itemToSelect;
                 });
             }).then(function(filteredElement) {
-                filteredElement[0].click().then(function() {
-                    return e2ePageBase.waitForElement(reportServicePage.reportRecordsCount);
+                return filteredElement[0].element(by.tagName('a')).click().then(function() {
+                    return e2ePageBase.waitForElement(reportServicePage.loadedContentEl);
                 });
             });
-
         };
 
         /*
@@ -175,12 +170,39 @@
                 //open the Column Header PopUp Menu
                 return self.openColumnHeaderMenu(columnName);
             }).then(function() {
-                return e2ePageBase.waitForElement(element(by.className('ag-menu-list'))).then(function() {
-                    //Select the sort order Item to be Ascending (eg:A to Z , small to Large, lower to highest etc)
-                    return self.selectItems(itemToSelect);
-                });
+                //Select the sort order Item to be Ascending (eg:A to Z , small to Large, lower to highest etc)
+                return self.selectItems(itemToSelect);
             });
         };
+
+        /*
+         * Function will Expand the Column header Menu and select the Item passed in parameter
+         */
+        this.expandColumnHeaderMenuAndVerifySelectedItem = function(columnName, itemToVerifySelected) {
+            var self = this;
+            return e2ePageBase.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                //open the Column Header PopUp Menu
+                return self.openColumnHeaderMenu(columnName);
+            }).then(function() {
+                //Verify the sort order Item and checkmark beside it
+                return self.verifyItemSelected(itemToVerifySelected);
+            });
+        };
+
+        /*
+         * Function will select the Item passed in parameter from the column header popup menu
+         */
+        this.verifyItemSelected = function(itemToVerify) {
+            var items = reportServicePage.agGridContainerEl.all(by.className('open')).all(by.tagName('li'));
+            return items.filter(function(elm) {
+                return elm.getText().then(function(text) {
+                    return text === itemToVerify;
+                });
+            }).then(function(filteredElement) {
+                expect(filteredElement[0].element(by.className('iconTableUISturdy-check')).isDisplayed()).toBeTruthy();
+            });
+        };
+
 
         /*
          * Function to verify ascending of column Records
@@ -267,6 +289,53 @@
         };
 
         /*
+         * This function gets the value in the record parameter (array of field value pairs), where id matches the fid specified in the parameter
+         * Function is a custom sort function used by lodash from within the sortRecords function
+         * @Returns The value that lodash should sort on
+         */
+        this.getSortValue = function(record, fid) {
+            // By default returns nothing if not found
+            var val = [];
+            // loop through the columns (fields) in the record
+            record.forEach(function(col) {
+                // find the column we are sorting on and return its value
+                if (col.id === fid) {
+                    val.push(col.value);
+                }
+            });
+            return val;
+        };
+
+        /*
+         * Function to sort Records using loDash _.orderBy
+         */
+        this.sortRecords = function(recordsToSort, columnListToSort, sortOrder) {
+            // sorts the list of records passed in specified sort order for a given fid.
+            var sortedRecords = _.orderBy(recordsToSort, columnListToSort, sortOrder);
+
+            return sortedRecords;
+        };
+
+        /*
+         * Function to verify records are in ascending or descending order
+         */
+        this.verifyRecordsSortOrder = function(records, sortOrder) {
+            //verify records are in descending order
+            _.every(records, function(value, index, array) {
+                // either it is the first element, or otherwise this element should
+                // not be greater than the previous element.
+                // spec requires string conversion
+                if (sortOrder === 'desc') {
+                    //verify records are in descending order
+                    return index === 0 || String(array[index - 1]) >= String(value);
+                } else {
+                    //verify records are in ascending order
+                    return index === 0 || String(array[index - 1]) <= String(value);
+                }
+            });
+        };
+
+        /*
          * Function to select group By Items
          */
         this.selectGroupByItems = function(itemsToSelect) {
@@ -279,7 +348,7 @@
                     return self.reportGroupByIcon.click().then(function() {
                         return e2ePageBase.waitForElement(self.GroupByFieldPanel).then(function() {
                             //verify the title of groupBy list
-                            expect(self.GroupByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for grouping');
+                            expect(self.GroupByFieldPanelHeader.getText()).toContain('Cancel');
                             //select the groupBy item
                             var items = self.GroupByFieldPanel.all(by.className('list-group-item'));
                             return items.filter(function(elm) {
@@ -295,7 +364,7 @@
                                             e2eBase.sleep(browser.params.smallSleep);
                                             //Click cancel button and verify the panel not displayed
                                             return self.GroupByCancelBtn.click().then(function() {
-                                                expect(self.reportSortAndGroupTitle.getAttribute('innerText')).toEqual('Sort & Group');
+                                                expect(self.reportSortAndGroupTitle.getAttribute('textContent')).toEqual('Sort & Group');
                                             });
                                         });
                                     });
@@ -316,8 +385,8 @@
          */
         this.clickSortAndGroupIcon = function() {
             var self = this;
-            return self.reportSortAndGroupBtn.click().then(function() {
-               // Sleep needed for animation of drop down
+            return self.reportSortButton.click().then(function() {
+                // Sleep needed for animation of drop down
                 e2eBase.sleep(browser.params.smallSleep);
                 return e2ePageBase.waitForElement(self.sortAndGrpDialogueApplyBtn);
             });
@@ -433,7 +502,7 @@
                     return self.reportSortByIcon.click().then(function() {
                         return e2ePageBase.waitForElement(self.SortByFieldPanel).then(function() {
                             //verify the title of groupBy list
-                            expect(self.SortByFieldPanelHeader.getText()).toEqual('Cancel\nChoose Field for sorting');
+                            expect(self.SortByFieldPanelHeader.getText()).toContain('Cancel');
                             //select the groupBy item
                             var items = self.SortByFieldPanel.all(by.className('list-group-item'));
                             return items.filter(function(elm) {

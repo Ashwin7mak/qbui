@@ -1,9 +1,8 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
 
 .record-content {
     padding: 0 10px;
 }
-
 .recordContainer {
     width: 100%;
     background-image: linear-gradient(to top, $color13 0%, $color14 100%);
@@ -11,25 +10,14 @@
     display: flex;
     flex-direction: column;
 
-    .recordStageHeadline {
-        height: 70px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        .linkBack {
 
-            font-size: 12px;
-            color: $text-link-color;
-            line-height: 24px;
-            .qbIcon {
-                width: auto;
-                color: $text-link-color;
-                font-size: 10px;
-            }
-        }
-        .stageHeadline .breadCrumbs {
-            padding-left: 5px;
-        }
+    .recordStageHeadline {
+
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+
+
     }
     .recordActionsContainer {
         display: flex;
@@ -42,13 +30,60 @@
             flex: 0 0 auto;
         }
     }
+    .qbFormContainer {
+        flex:1 1 auto;
+        position:relative;
+        overflow:auto;
+
+    }
     .formContainer {
         overflow: auto;
+        position:absolute;
+        width:100%;
     }
 }
 
+
 @include small-breakpoint {
     .secondaryBar .iconActions.pageActions .iconActionButton.addRecord {
-        display: none; // hide on small, use a floating add button
+        display:none; /* hide on small, use a floating add button */
     }
+}
+
+.next-enter {
+    left:100%;
+}
+
+.next-enter.next-enter-active {
+    left: 0;
+    transition: all 200ms linear;
+}
+
+.next-leave {
+    left: 0;
+    opacity:1;
+}
+
+.next-leave.next-leave-active {
+    left: -100%;
+    opacity:.1;
+    transition: all 200ms linear;
+}
+
+.previous-enter {
+    left:-100%;
+}
+
+.previous-enter.previous-enter-active {
+    left: 0;
+    transition: all 200ms linear;
+}
+
+.previous-leave {
+    left: 0;
+}
+
+.previous-leave.previous-leave-active {
+    left: 100%;
+    transition: all 200ms linear;
 }

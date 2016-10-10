@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import SortAndGroup  from '../../src/components/sortGroup/sortAndGroup';
 import WindowLocationUtils from '../../src/utils/windowLocationUtils';
 import MockData from '../../src/mocks/sortGroup';
+import constants from '../../../common/src/constants';
+import {GROUP_TYPE} from '../../../common/src/groupTypes';
 
 import TestUtils from 'react-addons-test-utils';
 
@@ -115,7 +117,11 @@ describe('SortAndGroup functions', () => {
     let reportData = {
         data: {
             originalMetaData: {
-                sortList: ['5', '4', '3:V']
+                sortList: [{fieldId: 5, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
+                    {fieldId: 4, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
+                    {fieldId: 3, sortOrder: constants.SORT_ORDER.ASC, groupType: GROUP_TYPE.COMMON.equals}],
+                pageOffset: 0,
+                numRows: 20
             },
         }
     };
@@ -123,10 +129,12 @@ describe('SortAndGroup functions', () => {
     let reportDataWithEdits = {
         data: {
             originalMetaData: {
-                sortList: ['5', '4', '3:V']
+                sortList: [{fieldId: 5, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
+                    {fieldId: 4, sortOrder: constants.SORT_ORDER.ASC, groupType: null},
+                    {fieldId: 3, sortOrder: constants.SORT_ORDER.ASC, groupType: GROUP_TYPE.COMMON.equals}]
             },
-            sortList: ['-3'],
-            groupEls: ['6:V', '-4:V']
+            sortList: [{fieldId: 5, sortOrder: constants.SORT_ORDER.DESC, groupType: null}],
+            groupEls: [{fieldId: 6, sortOrder: constants.SORT_ORDER.ASC, groupType: GROUP_TYPE.COMMON.equals}, {fieldId: 4, sortOrder: constants.SORT_ORDER.DESC, groupType: GROUP_TYPE.COMMON.equals}]
         }
     };
 
@@ -342,7 +350,7 @@ describe('SortAndGroup functions', () => {
             expect(groupState).toBeTruthy();
             expect(groupState.length).toBe(1);
             expect(groupState[0].id).toBe(aField.id);
-            expect(groupState[0].howToGroup).toBe("V");
+            expect(groupState[0].howToGroup).toBe(GROUP_TYPE.COMMON.equals);
             expect(component.state.dirty).toBeTruthy();
             expect(reportDataEmpty.data.originalMetaData.sortList.length).toBe(0);
             let sortState = component.getSortState();
@@ -428,7 +436,7 @@ describe('SortAndGroup functions', () => {
             expect(groupState).toBeTruthy();
             expect(groupState.length).toBe(2);
             expect(groupState[1].id).toBe(aField.id);
-            expect(groupState[0].howToGroup).toBe("V");
+            expect(groupState[0].howToGroup).toBe(GROUP_TYPE.COMMON.equals);
             expect(component.state.dirty).toBeTruthy();
             expect(reportDataEmpty.data.originalMetaData.sortList.length).toBe(0);
             let sortState = component.getSortState();

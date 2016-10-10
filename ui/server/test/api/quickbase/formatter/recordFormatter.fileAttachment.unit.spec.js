@@ -13,8 +13,8 @@ describe('FileAttachment record formatter unit test', function() {
      */
     function fileAttachmentDataProvider() {
 
-        var localFile = 'c:/local/package/file/batFile.bat';
-        var urlFile = 'www.intuit.com/some/file/zipFile.zip';
+        var localFile = 'file://c:/local/package/file/batFile.bat';
+        var urlFile = 'http://www.intuit.com/some/file/zipFile.zip';
         var httpsURLFile = 'https://www.intuit.com/some/file/zipFile.zip';
         var linkText = 'some link text';
 

@@ -1,13 +1,107 @@
-/* This file should contain ALL the colors used in QuickBase. This may be used to create themes in future.
- * per our discussion around color we will keep the 2 levels of indirection on color. So that if we change the value
- * of $colorx we are replacing every use of it with a new color(i.e colorblind can't see $colorx, or for theme usage).
+/* This file should contain ALL the colors used in QuickBase. This may be used to create themes in future. */
+/* per our discussion around color we will keep the 2 levels of indirection on color. So that if we change the value
+ * of $color-x we are replacing every use of it with a new color(i.e colorblind can't see $color-x, or for theme usage).
  * If we want to modify a category of colors use we will change the semantic category
- * ie from $icon_background: $colorx to $icon_background:$colory
+ * ie from $icon_background: $color-x to $icon_background:$color-y
  * and the scss for color will refer to the semantic category not the color number
- * see http://quickbase.design/colors/ */
+*/
+/* see http://quickbase.design/colors/ */
 
+
+
+//== Blacks and Greys - for General UI & Backgrounds
+$color-black-800: #000000; //Semi-transparent overlays behind modals
+$color-black-700: #404040; //Text on light backgrounds
+$color-black-600: #969696; //Small tertiary type
+$color-black-500: #b8b8b8; //Placeholder / Ghost text in form fields
+$color-black-400: #c7c7c7; //Gray icons (disabled), Blackout dates, modals...
+$color-black-300: #dcdcdc; //Track of scrollbar, horizontal and vertical dividers
+$color-black-250: #edf0f3; //Global header, left navigation, token background
+$color-black-200: #f5f5f5; //Shadows, backgrounds and environmental accents
+$color-black-100: #ffffff; //Form fields, backgrounds, stage background
+
+
+//== Blues - for Nav background, and table elements, dividers
+$color-blue-800: #131f2b; //Tooltip background
+$color-blue-700: #193048; //Trowser footer
+$color-blue-600: #486c8f; //Numerical badges, Secondary buttons on Trowser Footer
+$color-blue-500: #7090ab; //All icons on deep-sea or white
+$color-blue-400: #c0d0e4; //Dividers in table headers, Sort by column, date picker hover
+$color-blue-300: #e3eaf3; //Table row inline edit selection state
+$color-blue-200: #f3f8fe; //Table row hover state, Bottom gradient color in stage background
+$color-blue-100: #fafbfc; //page background
+
+
+//== Teals - for Custom Theming, accents, insights
+$color-teal-800: #007e89;
+$color-teal-700: #009aad;
+$color-teal-600: #00b0c2; //Date picker header & selected/todays date or time
+$color-teal-500: #00c4d8;
+$color-teal-400: #13dbf1;
+$color-teal-300: #95edf6;
+$color-teal-200: #caf6fb;
+$color-teal-100: #effcfe;
+
+
+//== Indigo
+$color-indigo-800: #2544a7; //Hit states (checkmarks, buttons, radio buttons)
+$color-indigo-700: #365ebf; //QuickBase blue, Primary buttons, active state stroke on fields, link
+
+
+//== Cyan
+$color-cyan-800: #254a6d; //Table header labels, flyouts header background, disabled primary button
+$color-cyan-700: #007da9; //Page action icons, Field labels (view & edit mode)
+$color-cyan-600: #0098cd; //Hover states for nav & nav icon
+$color-cyan-500: #00abf4; //Selected state for nav, selected nav table icon
+$color-cyan-300: #b2e6fc;
+$color-cyan-100: #e5f6fe; //Table header background
+
+
+//== Green — for confirmation, success, insights
+$color-green-800: #356a2e;
+$color-green-700: #2ca01c; //confirmation text, field validation success stroke
+$color-green-600: #56b349; //confirmation icon
+$color-green-500: #92ce85; //confirmation notification stroke
+$color-green-200: #e1eed3; //confirmation notification background, field validation success glow
+
+
+//== Orange — for warnings, alerts, insights
+$color-orange-800: #ece5500;
+$color-orange-700: #e77700;
+$color-orange-600: #e59200; //Base of 1 of 6 highlight themes
+$color-orange-500: #f2b835;
+$color-orange-200: #fbe0a3;
+
+
+//== Red - for errors, overdue, insights
+$color-red-800: #a9282d;
+$color-red-700: #d93b42; // error icon, field label if in error, validation error
+$color-red-600: #ec6466;
+$color-red-500: #f87878;
+$color-red-200: #fbbbbb; //glow of field level error validation (50%)
+
+
+//== Pink - for guidance, insights
+$color-pink-800: #871b45;
+$color-pink-700: #a32763; //WalkMe (guidance bar background, launcher)
+$color-pink-600: #c72f79;
+
+
+//----- semantic color usage
+$text-color: $color-black-700;
+$data-color: $color-black-700;
+$input-bg-color:$color-black-100;
+$input-text-focus-border-color:   $color-indigo-800;
+$input-border-focus-color:        $color-indigo-700;
+$input-text-normal-border-color:  $color-black-400;
+$input-text-error-border-color:   $color-red-700;
+$tootip-error-color:              $color-red-700;
+$input-email-normal-text-color:   $color-cyan-500;
+$field-label-normal-color:        $color-blue-600;
+
+//-- TBD: update usages to reference colors above
 $color1:    #f3f8fe; // wispy-water
-$color2:    #fff; // white
+$color2:    #ffffff; // white
 $color3:    #486c8f;
 $color4:    #dcdcdc; // rabbit
 $color5:    #c0d0e4; // periwinkle
@@ -15,7 +109,7 @@ $color6:    #d2dce7;
 $color7:    #e3eaf3; // clear-day
 $color8:    #486c8f;
 $color9:    #969696; // walrus
-$color10:   #243f7f;
+$color10:   #243F7F;
 $color11:   #404040; // charcoal
 $color12:   #f5f5f5; // kitten
 $color13:   #f6f8fb;
@@ -23,14 +117,14 @@ $color14:   #f9fafb;
 $color15:   #f0f3f9;
 $color16:   #2ca01c; // lazy-lizard
 $color17:   #f3f5f8;
-$color18:   #ccc;
+$color18:   #cccccc;
 $color19:   #c7c7c7; // porpoise
 $color20:   #486c8f; // dull-sapphire
 $color21:   #b8b8b8; //ghost
 $color22:   #56b349; //fiddlehead
 $color23:   #7090ab; // dragon-foot
 $color24:   #002b48;
-$color25:   #555;
+$color25:   #555555;
 $color26:   #254a6d;
 $color27:   #00b0c2;
 $color28:   #264a6d;
@@ -41,13 +135,18 @@ $color32:   #131f2b;
 $color33:   #365ebf; //big-leaf
 $color34:   #00b0c2; //waterpebble
 
+
+
+//================
+
 $left-nav-bg: $color30; // deep-sea
 $icon-color: $color23;
 $icon-color-hover: #0098cd; // caribbean
 $topnav-icon-color: $icon-color;
+$page-actions-icon-color: $color-cyan-700;
 
 $header-bg: $color7;
-$nav-hover-bg: #0097cd;
+$nav-hover-bg: #0097CD;
 $nav-hover-fg: $color2;
 $nav-link-fg: $color2;
 $nav-border: $color18;
@@ -67,14 +166,21 @@ $icon-pickles-color: #404040;
 $selection-badge-color: $color20;
 
 $text-link-color: #337ab7;
+$link-text-normal-color: $color-indigo-700;
+$link-text-hover-color: $color-cyan-700;
 $selected-check-color:  $color16;
 
 //== Stage
 $stage-backgroundColor:           $color2;
-$stage-headline-icon-color: #009aad;
+$stage-headline-icon-color: $color-cyan-500;
+$stage-headline-color: $color-black-700;
 
 //== Report
 $report-backgroundColor:          $color13;
+$pagination-iconfont-normal-color: $color-cyan-700;
+$pagination-iconfont-disabled-color: $color-black-400;
+$pagination-iconfont-hover-color: $color-cyan-300;
+$pagination-text-normal-color: $color-black-700;
 
 //== Report grouped headers
 $grid-group-row-header-bkgrd-color: $color1;
@@ -85,6 +191,12 @@ $grid-group-row-header-divider: $color21;
 $toolBar-borderColor:              $color7;
 $toolBar-backgroundColor:          $color15;
 $toolBar-input-borderColor:        $color4;
+
+//==CardView
+$pagination-mobile-panel-background-color: $color-black-200;
+$pagination-mobile-panel-border-color: $color-black-400;
+$pagination-mobile-panel-text-color: $color-blue-500;
+$pagination-mobile-topbar-text-color: $color-black-100;
 
 //==Facet list
 $facetMenu-backgroundColor:             $color2;
@@ -114,21 +226,61 @@ $report-icon-map-color: #00c4d8;
 $search-input-fg: $color25;
 $popup-fg: #404040;
 
-$top-nav-title-icon-color: #009aae;
+$top-nav-title-icon-color: #009AAE;
 $secondary-bar-fg: #fff;
-$secondary-bar-bg: #009aae;
-$secondary-bar-page-actions-bg: #476b90;
+$secondary-bar-bg: #009AAE;
+$secondary-bar-page-actions-bg: #476B90;
+
+@mixin focus-shadow($color:$input-border-focus-color) {
+  box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
+  outline: none;
+}
 
 //== Field labels used on report card view and forms
 $fieldLabel-color: $color3;
 
+$required-asterisk-color: $color-cyan-700;
+$error-color: $color-red-700;
+
+//== Fields
+$checkbox-background-checked-color: $color-cyan-500;
+$checkbox-background-unchecked-color: $color-black-100;
+$checkbox-border-color: $color-black-500;
+$checkbox-checkmark-editable-color: $color-black-100;
+$checkbox-checkmark-readonly-color: $color-cyan-500;
 
 $datepicker-header-bg: $color34;
 $datepicker-header-fg: $color2;
-$datepicker-date-hover-bg: $color5;
+$datepicker-date-hover-bg: $color-blue-300;
 $datepicker-select-button-fg: $color3;
-$datepicker-select-button-bg: $color5;
+$datepicker-select-button-bg: $color7;
+$datepicker-select-active: $color-cyan-500;
 $datepicker-bg: $color2;
+$datepicker-bg-today: $color-orange-500;
+
+// UrlField
+$urlButton-background-normal-colorstop1-color: $color-black-200;
+$urlButton-background-normal-colorstop2-color: $color-black-100;
+@mixin urlButtonBackgroundGradient() {
+    background: linear-gradient(to top, $urlButton-background-normal-colorstop1-color, $urlButton-background-normal-colorstop2-color);
+}
+@mixin urlButtonDisabled() {
+    opacity: .4;
+}
+$urlButton-background-focus-colorstop1-color: $color-black-800;
+$urlButton-background-focus-colorstop2-color: $color-black-100;
+@mixin urlButtonBackgroundFocusGradient() {
+    background: linear-gradient(to top, rgba($urlButton-background-focus-colorstop1-color, 0.05), rgba($urlButton-background-focus-colorstop2-color, 0.05));
+}
+$urlButton-border-focus-color: $color-indigo-800;
+$urlButton-border-color: $color-black-300;
+$urlButton-background-hover-color: $color-black-100;
+$urlButton-background-focus-colorstop1-color: $color-black-800;
+$urlButton-background-focus-colorstop2-color: $color-black-100;
+
+$user-picker-deactivated-label-fg: $color-black-600;
+$user-picker-user-label-fg: $color-black-700;
+$user-picker-email-label-fg: $color-black-600;
 
 //== QBPanel
 $panel-border-color: $color4;

@@ -27,31 +27,24 @@ def cwd = project.getProjectDir().absolutePath
 //******************************************************
 buildscript {
     ext {
-        nexusRoot = "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/"
+        nexusGroupRoot = "https://nexus1.ci.quickbaserocks.com/nexus/content/groups/"
+        nexusRepoRoot = "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/"
         nexusUser = "developer"
         nexusPassword = "id2ubV8miEVhXtGd"
         quickbaseVersion = "1.0"
     }
     repositories {
         maven {
-            url nexusRoot + "jcenter/"
+            url nexusGroupRoot + "public/"
         }
-        maven {
-            url nexusRoot + "central/"
-        }
-        maven {
-            url nexusRoot + "gradle2/"
-        }
-        maven {
-            url nexusRoot + "snapshots/"
-        }
+
         flatDir name: 'ExternalJars', dirs: '../lib/plugins'
         dependencies {
             classpath 'com.moowork.gradle:gradle-grunt-plugin:0.9'
             classpath 'com.moowork.gradle:gradle-node-plugin:0.9'
             classpath 'com.bmuschko:gradle-cargo-plugin:2.2.1'
             classpath 'org.sonarqube.gradle:gradle-sonarqube-plugin:1.1'
-            classpath 'com.quickbase.gradle:sonar-buildbreak-plugin:0.1.0-SNAPSHOT'
+            classpath 'com.quickbase.gradle:sonar-buildbreak-plugin:1.0.+'
         }
     }
 }
@@ -99,6 +92,7 @@ def executorId = System.getenv("EXECUTOR_NUMBER");
 def sauceURL = "http://quickbase-dev.com:9000";
 def sauceKey = System.getenv("SAUCE_KEY");
 def sauceJobName = "JENKINS_UI_E2E_" + System.getenv("BUILD_NUMBER");
+def sauceProdJobName = "JENKINS_UI_E2E_PROD_SMOKETEST" + System.getenv("BUILD_NUMBER");
 def tunnelIdentifier = "JENKINS_TUNNEL_E2E_" + System.getenv("BUILD_NUMBER");
 
 // TODO: Pull the code below out into a separate groovy class - QBSE-19142
@@ -251,6 +245,7 @@ task zip(type: Zip) {
 
     archiveName = getProjectArchive()
     destinationDir = file("$buildDir/distributions/")
+    zip64 = true
 
     from ('dist') {
         into('dist')
@@ -442,11 +437,19 @@ task gruntCiE2ETestsNoColor(type: GruntTask) {
     finalizedBy stopTomcat
 }
 
-//browser tests in AWS
+//browser tests in AWS running in sauce labs against a candidate build
 task gruntE2EAWSSauce(type: GruntTask) {
     doFirst {
         tasks.invokeInstallSauceLabs.execute()
-        args = ["test:e2eAWSSauce", "--baseUrl", sauceURL, "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
+        args = ["test:e2eAWSSauce", "--sauceKey", sauceKey, "--sauceJobName", sauceJobName, "--tunnelIdentifier", tunnelIdentifier]
+    }
+}
+
+//browser tests in AWS that run on Sauce labs against production
+task gruntE2EProdSauce(type: GruntTask) {
+    doFirst {
+        tasks.invokeInstallSauceLabs.execute()
+        args = ["test:e2eProdSauce", "--sauceKey", sauceKey, "--sauceJobName", sauceProdJobName, "--tunnelIdentifier", tunnelIdentifier]
     }
 }
 
@@ -562,13 +565,13 @@ sonarqube {
         property "sonar.coverage.exclusions", "**/*.spec.js"
         property "client-react.sonar.projectName", "${user}:ui:${branchName}:client"
         property "client-react.sonar.sources", "${projectDir}/client-react/src"
-        property "client-react.sonar.exclusions", "**/assets/**,**/constants/**,**/locales/bundles/**"
+        property "client-react.sonar.exclusions", "**/assets/**,**/components/node/**,**/constants/**,**/locales/bundles/**,**/mocks/**"
 
         //  import the ui LCOV coverage report
         property "client-react.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/client/coverage/lcov.info"
 
         property "server.sonar.projectName", "${user}:ui:${branchName}:server"
-        property "server.sonar.sources", "${projectDir}/server"
+        property "server.sonar.sources", "${projectDir}/server,${projectDir}/common"
         property "server.sonar.exclusions", "**/test/**,**/config/environment/**,**/mockserver/**"
         //  import the ui LCOV coverage report
         property "server.sonar.javascript.lcov.reportPath","${projectDir}/build/reports/server/coverage/lcov.info"

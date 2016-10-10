@@ -1,5 +1,7 @@
 @import "../../assets/css/qbVariables";
 
+$edit-field-padding: 5px;
+
 .formContainer {
     padding: 10px;
 }
@@ -7,46 +9,159 @@
 .formSection {
     display: block;
 
+    .formTable {
+        margin-left: 10px;
+
+        /* Fields in cardview span the width of the small device */
+        @include small-breakpoint {
+            width: 100%;
+        }
+    }
+    .qbPanelHeader {
+        padding: 15px 0 15px 20px;
+        .qbPanelHeaderIcon {
+            top: 4px;
+        }
+    }
+    &.closed {
+        .qbPanelHeader {
+            // if the section doesnt have a header, when its collapsed the height should be same as others
+            min-height: 54px;
+        }
+    }
+    &.nonCollapsible {
+        .qbPanelHeaderIcon {
+            display: none;
+        }
+    }
     .fieldRow {
-        display: flex;
-        flex-direction: row;
-        align-items: stretch;
-        flex-wrap: wrap;
+
         padding: 5px 0;
 
+        td {
+            vertical-align:top;
+            padding-bottom: 25px;
+        }
+        tr:last-child td {
+            padding-bottom:0;
+        }
+
         .formElement {
-            margin: 0 35px 20px 0;
             word-wrap: break-word;
             max-width: 100%;
             display: flex;
-            .fieldLabel {
-                display: block;
-                color: $fieldLabel-color;
-                padding-bottom: 2px;
+            flex-direction: column;
+            margin-right:15px;
+        }
+
+        /* separate field label td left of field */
+        .fieldLabel {
+            text-align:right;
+            display: block;
+            color: $fieldLabel-color;
+            max-width: 10em;
+            span {
+                display: inline-block;
+                vertical-align:top;
             }
-            &.labelAbove {
-                flex-direction: column;
+            .requiredFlag-layout {
+                padding-right: 2px;
             }
-            &.labelLeft {
-                .fieldLabel {
-                    padding-right: 5px;
-                }
+        }
+
+        /* field label in field td */
+        .field .fieldLabel {
+            max-width: 20em;
+            text-align:left;
+            margin-bottom: $edit-field-padding;
+        }
+
+        .field {
+            margin-right: 40px;
+
+            .dateCell {
+                white-space:nowrap;
             }
+        }
+
+        td:last-child .field {
+            margin-right: 0;
         }
     }
 }
 
+.editForm {
+    .fieldLabel {
+        margin-top: $edit-field-padding;
+    }
+    .field .fieldLabel {
+        margin-top: 0;
+    }
+    .formElement.field .viewElement {
+        padding: $edit-field-padding;
+    }
+    .fieldValueEditor {
+        width: 280px;
+        &.fieldInputWidth {
+            width: inherit;
+        }
+        .checkbox {
+            margin-top: $edit-field-padding;
+        }
+    }
+    [type="text"].input, textarea.cellEdit {
+        padding: $edit-field-padding;
+    }
+    [type="text"].input {
+        width: 100%;
+    }
+    /* don't bleed through dropdowns */
+    .input-group .form-control {
+        z-index: inherit;
+    }
+    .cellEdit.dateTimeField {
+        width: calc(50% - 1px);
+        vertical-align: middle;
+
+        //  dateCell styles for date/time combo
+        &.dateCell {
+            margin-right: 2px;
+        }
+
+        //  timeCell styles for date/time combo
+        &.timeCell {
+            .Select-value {
+                padding-right: 20px !important;
+            }
+        }
+    }
+}
 /* For mobile phones: */
 @include small-breakpoint {
-    .qbPanelBody {
-        .field {
-            max-width: 100%;
-            .fieldLabel {
-                font-size: $font-size-small;
+    .formSection {
+        display: block;
+
+        .formTable {
+            margin-left: 0px;
+        }
+
+        .fieldRow {
+            td {
+                padding-bottom: 20px;
             }
-            .fieldValue {
-                font-size: $font-size-small;
+            .field {
+                max-width: 100%;
+                .fieldLabel {
+                    font-size: $font-size-small;
+                    margin-bottom: 0px;
+                }
+                .fieldValue {
+                    font-size: $font-size-small;
+                }
             }
+        }
+        .fieldValueEditor, textarea.cellEdit{
+            width: 100%;
         }
     }
 }

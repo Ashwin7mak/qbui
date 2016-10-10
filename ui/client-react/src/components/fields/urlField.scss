@@ -1,0 +1,69 @@
+@import '../../../src/assets/css/qbVariables';
+
+.urlField {
+    &, a {
+        color: $link-text-normal-color;
+    }
+
+    &:hover:not(.disabled), a:hover {
+        text-decoration: underline;
+
+        .urlIcon {
+            opacity: 1;
+        }
+    }
+
+    .btn {
+        &.btn-default {
+            @include urlButtonBackgroundGradient();
+            color: $link-text-normal-color;
+        }
+
+        &.btn-default:hover {
+            background: $urlButton-background-hover-color;
+            color: $link-text-normal-color;
+            text-decoration: none;
+        }
+
+        &.btn-default:focus {
+            @include focus-shadow();
+            @include urlButtonBackgroundFocusGradient();
+            color: $link-text-normal-color;
+            border-color: $urlButton-border-focus-color;
+        }
+
+        &.btn-default.disabled {
+            @include urlButtonDisabled();
+        }
+    }
+
+    .disabled {
+        color: $text-color;
+    }
+
+    .urlIcon {
+        display: inline;
+        float: none;
+        margin-left: 10px;
+        opacity: 0;
+        text-decoration: none;
+
+        transition: opacity .2s ease-in-out;
+
+        @include small-breakpoint {
+            float: right;
+            margin-left: 0;
+            opacity: 1;
+        }
+
+        .qbIcon {
+            font-size: $font-size-p;
+        }
+
+        /* Mail Icon is a slightly different size and needs to be adjusted */
+        .iconTableUISturdy-mail {
+            position: relative;
+            top: 2px;
+        }
+    }
+}

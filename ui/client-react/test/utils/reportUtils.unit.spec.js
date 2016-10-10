@@ -1,4 +1,5 @@
 import ReportUtils from '../../src/utils/reportUtils';
+import constants from '../../../common/src/constants';
 
 describe('ReportUtils - test getSortList', () => {
     var dataProvider = [
@@ -36,8 +37,10 @@ describe('ReportUtils - test getSortFids', () => {
         {test:'null input', input:null, output: []},
         {test:'valid input with sort', input:'3.-4', output: ['3', '-4']},
         {test:'valid input with group', input:'3:V.-4', output: ['3', '-4']},
-        {test:'valid input with sort- array input', input:['3', '-4'], output: ['3', '-4']},
-        {test:'valid input with group- array input', input:['3:V', '-4'], output: ['3', '-4']}
+        {test:'valid input with sort- integer array input', input:['3', '-4'], output: ['3', '-4']},
+        {test:'valid input with group- integer array input', input:['3:V', '-4'], output: ['3', '-4']},
+        {test:'valid input with sort- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: null}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['3', '-4']},
+        {test:'valid input with group- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['3', '-4']}
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
@@ -50,10 +53,10 @@ describe('ReportUtils - test getSortFidsOnly', () => {
     var dataProvider = [
         {test:'empty input', input:'', output: []},
         {test:'null input', input:null, output: []},
-        {test:'valid input with sort- string input', input:'3.-4', output: ['3', '-4']},
-        {test:'valid input with group- string input', input:'3:V.-4', output: ['-4']},
-        {test:'valid input with sort- array input', input:['3', '-4'], output: ['3', '-4']},
-        {test:'valid input with group- array input', input:['3:V', '-4'], output: ['-4']}
+        {test:'valid input with sort- integer array input', input:['3', '-4'], output: ['3', '-4']},
+        {test:'valid input with group- integer array input', input:['3:V', '-4'], output: ['-4']},
+        {test:'valid input with sort- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: null}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['3', '-4']},
+        {test:'valid input with group- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['-4']}
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
@@ -68,8 +71,11 @@ describe('ReportUtils - test getGroupElements', () => {
         {test:'null input', input:null, output: []},
         {test:'valid input with sort', input:'3.-4', output: []},
         {test:'valid input with group', input:'3:V.-4', output: ['3:V']},
-        {test:'valid input with sort- array input', input:['3', '-4'], output: []},
-        {test:'valid input with group- array input', input:['3:V', '-4'], output: ['3:V']}
+        {test:'valid input with sort- integer array input', input:['3', '-4'], output: []},
+        {test:'valid input with group- negative integer array input', input:['-3:V', '-4'], output: ['-3:V']},
+        {test:'valid input with sort- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: null}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: []},
+        {test:'valid input with group- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['3:V']},
+        {test:'valid input with desc sort- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.DESC, groupType: "V"}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['-3:V']}
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
@@ -84,10 +90,10 @@ describe('ReportUtils - test doesSortListIncludeGrouping', () => {
         {test:'null input', input:null, output: false},
         {test:'empty array input', input:[], output: false},
         {test:'non array input', input:'5', output: false},
-        {test:'valid input', input:'3.-4', output: false},
-        {test:'valid input 2', input:'3.-4', output: false},
-        {test:'valid input with grouping', input:'3:V.-4:I', output: true},
-        {test:'valid input with grouping 2', input:'3.-4:I', output: true}
+        {test:'valid input', input:'3', output: false},
+        {test:'valid input with grouping', input:'3:V', output: true},
+        {test:'valid input - object', input:{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: null}, output: false},
+        {test:'valid input with group- object', input:{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}, output: true}
     ];
     dataProvider.forEach(function(data) {
         it(data.test, function() {
@@ -161,5 +167,3 @@ describe('ReportUtils - test getGListString', () => {
         });
     });
 });
-
-

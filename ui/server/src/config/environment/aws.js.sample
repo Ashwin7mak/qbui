@@ -6,7 +6,7 @@
     'use strict';
 
     //var path = require('path');
-    var dateUtils = require('../../components/utility/dateUtils');
+    var dateUtils = require('../../utility/dateUtils');
     var clientConsts = require('./clientConsts');
 
     var client = clientConsts.REACT;

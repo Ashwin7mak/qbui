@@ -5,8 +5,8 @@
 (function() {
     'use strict';
     var chance = require('chance').Chance();
+    const randomWord = require('./words/word.generator');
     var appConsts = require('./app.constants');
-
     var SUBDOMAIN_CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
     chance.mixin({
@@ -19,7 +19,6 @@
 
             return timeZone;
         },
-
         appDateFormat: function(options) {
             var dateFormat = options.dateFormat;
 
@@ -63,7 +62,20 @@
                 'T' + chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + ':' + chance.pad(seconds, 2) +
                 '.' + millis + 'Z[UTC]';
         },
+        apiFormattedTime: function(options) {
+            var date = chance.date(options);
 
+            // date.getHours() returns 1-12;
+            // Date time and Time of day fields both allow 0-23
+            var hour = chance.hour({twentyfour: true}) - 1;
+            var minute = date.getMinutes();
+            var seconds = date.getSeconds();
+            var millis = date.getMilliseconds();
+
+            // see comment for apiFormattedDate
+            return chance.pad(hour, 2) + ':' + chance.pad(minute, 2) + ':' + chance.pad(seconds, 2) +
+                '.' + millis + 'Z';
+        },
         userId: function(options) {
             return options.userIds ? chance.pick(options.userIds) : 1000000;
         }
@@ -77,12 +89,87 @@
             return chance.string({pool: SUBDOMAIN_CHARS, length: 32});
         },
 
+        generateTextChoice: function(options) {
+            options = options || {capitalize: true, wordType:'realEnglishNouns', numWords: 1, randNumWords: false};
+
+            let value = this.generateWords(options);
+            return {
+                coercedValue: {
+                    value: value
+                },
+                displayValue: value
+            };
+        },
+
+        generateNumericChoice: function(options) {
+            options = options || {int: true};
+            let min, max;
+            min = options.min;
+            max = options.max;
+            let num =  options.int ? this.generateInt(min, max) : this.generateDouble(min, max);
+            return {
+                coercedValue: {
+                    value: num
+                },
+                displayValue: num // TBD does num need formatting?
+            };
+        },
+
+
+        generateWords: function(options) {
+            let answer = '';
+            // get number of words to create
+            let wordsToGen = options.numWords || 1;
+            if (options.randNumWords) {
+                wordsToGen = chance.integer({min: 1, max: wordsToGen});
+            }
+            // loop down the count of words to generate
+            let numWords = wordsToGen;
+
+            //options for random letter words
+            let wordOptions = {};
+            if (options.wordLength) {
+                wordOptions.length = options.wordLength;
+            }
+            if (options.syllables) {
+                wordOptions.syllables = options.syllables;
+            }
+
+            while (numWords--) {
+                // generate a word or get an real english word
+                var word;
+                if (options.wordType === this.WORD_TYPES.realEnglishNouns) {
+                    word = randomWord.noun();
+                } else if (options.wordType === this.WORD_TYPES.realEnglishWords) {
+                    word = randomWord.word();
+                } else {
+                    word = chance.word(wordOptions);
+                }
+
+                //capitalize first word if capitalize set
+                if (options.capitalize && numWords === wordsToGen - 1) {
+                    word = chance.capitalize(word);
+                }
+                //append to space answer after the first word
+                if (answer.length !== 0) {
+                    answer += ' ';
+                }
+                //append the next word
+                answer += word;
+            }
+            return answer;
+        },
+
         //Generates and returns a psuedo-random char string of specified length
         generateString: function() {
             //return chance.string({length: length, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'});
             return this.generateEntityName();
         },
 
+        //Generates and returns a psuedo-random char string of specified length
+        generateStringWithFixLength: function(length) {
+            return chance.string({length: length, pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'});
+        },
 
         //Generates and returns a psuedo-random char string of specified length
         generateEntityName: function(options) {
@@ -118,7 +205,7 @@
         //Generates and returns a time that can be sent to the api
         generateTime: function() {
             // month is 0-indexed
-            return chance.apiFormattedDateTime({year: 1970, month: 0, day: 1});
+            return chance.apiFormattedTime({year: 1970, month: 0, day: 1});
         },
 
         //Generates and returns a psuedo-random us phone number
@@ -129,7 +216,8 @@
             } else {
                 phoneNumber = chance.phone();
             }
-            return phoneNumber;
+            //the phone number should not contain any braces, spaces or dashes.
+            return phoneNumber.replace(/[- )(]/g, '');
         },
 
         //Generates and returns a psuedo-random us phone number
@@ -150,7 +238,7 @@
             return chance.floating({min: min, max: max});
         },
 
-        //Generates and returns a psuedo-random integer
+        //Generates and returns a psuedo-random integers
         generateInt: function(min, max) {
             return chance.integer({min: min, max: max});
         },
@@ -170,7 +258,13 @@
 
         pickUserIdFromList: function(userIds) {
             return chance.userId({userIds: userIds});
-        }
+        },
+        WORD_TYPES: {
+            'realEnglishNouns' : 'realEnglishNouns',
+            'realEnglishWords' : 'realEnglishWords',
+            'randomLetters' : 'randomLetters',
+        },
+
     };
 
 

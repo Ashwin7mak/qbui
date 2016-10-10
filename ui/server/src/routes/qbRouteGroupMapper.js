@@ -14,11 +14,16 @@
      * routeGroupDisabled maps each enumerated route group to the routes that are disabled for a route/method combination
      */
     var routeGroupDisabled = {};
-    routeGroupDisabled[routeGroups.DEBUG] = [];
+    routeGroupDisabled[routeGroups.DEBUG] = [
+        {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]}];
     routeGroupDisabled[routeGroups.LH_V1] = [
-        {route: routeConsts.RECORD, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
-        {route: routeConsts.RECORDS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.APP_USERS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.FORM_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.REPORT_COMPONENTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.REPORT_RESULTS, methods: [constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
+        {route: routeConsts.RECORD, methods: [constants.POST, constants.PUT]}, //get, delete and patch allowed
+        {route: routeConsts.RECORDS, methods: [constants.DELETE, constants.PATCH, constants.PUT]}, //get and post allowed
+        {route: routeConsts.RECORDS_BULK, methods: [constants.POST, constants.GET, constants.PATCH, constants.PUT]}, //delete allowed
         {route: routeConsts.SWAGGER_API, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_RESOURCES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},
         {route: routeConsts.SWAGGER_IMAGES, methods: [constants.GET, constants.POST, constants.DELETE, constants.PATCH, constants.PUT]},

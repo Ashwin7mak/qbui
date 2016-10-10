@@ -10,6 +10,8 @@
     var Promise = require('bluebird');
 
     var e2ePageBase = require('./../../common/e2ePageBase');
+    var ReportServicePage = requirePO('reportService');
+    var reportServicePage = new ReportServicePage();
     var SHOW_POPUP_LIST_LIMIT = 5;
 
     var ReportFacetsPage = function() {
@@ -52,39 +54,42 @@
          * Function will get you all the facet selections (buttons) for a facet group element
          */
         this.getAvailableFacetGroupSelections = function(facetGroupElement) {
-            return facetGroupElement.all(by.className('list-group-item'));
+            return this.waitForReportReady().then(function() {
+                return facetGroupElement.all(by.className('list-group-item'));
+            });
         };
-
 
         /*
          * Function will return you the facet group element by name
          */
         this.getFacetGroupElement = function(facetGroupName) {
             var self = this;
-            return e2ePageBase.waitForElementToBeClickable(this.reportFacetPopUpMenu).then(function() {
-                // First look through unselected facet groups
-                return self.unselectedFacetGroupsElList.filter(function(elem) {
-                    // Return the element or elements
-                    return e2ePageBase.waitForElementToBeClickable(elem.element(by.className('panel-heading'))).then(function() {
-                        return elem.element(by.className('panel-heading')).getText().then(function(text) {
-                            // Match the text
-                            return text.indexOf(facetGroupName) > -1;
-                        });
-                    });
-                }).then(function(filteredElements) {
-                    // If we didn't find it look through the selected groups
-                    if (filteredElements.length === 0) {
-                        return self.selectedFacetGroupsElList.filter(function(elem) {
-                            // Return the element or elements
-                            return elem.element(by.className('panel-heading')).getText().then(function(text) {
+            return self.waitForReportReady().then(function() {
+                return e2ePageBase.waitForElementToBeClickable(self.reportFacetPopUpMenu).then(function() {
+                    // First look through unselected facet groups
+                    return self.unselectedFacetGroupsElList.filter(function(elem) {
+                        // Return the element or elements
+                        return e2ePageBase.waitForElementToBeClickable(elem.element(by.className('panel-heading'))).then(function() {
+                            return elem.element(by.className('panel-heading')).getAttribute('textContent').then(function(text) {
                                 // Match the text
                                 return text.indexOf(facetGroupName) > -1;
                             });
-                        }).then(function(filteredElements2) {
-                            return filteredElements2[0];
                         });
-                    }
-                    return filteredElements[0];
+                    }).then(function(filteredElements) {
+                        // If we didn't find it look through the selected groups
+                        if (filteredElements.length === 0) {
+                            return self.selectedFacetGroupsElList.filter(function(elem) {
+                                // Return the element or elements
+                                return elem.element(by.className('panel-heading')).getAttribute('textContent').then(function(text) {
+                                    // Match the text
+                                    return text.indexOf(facetGroupName) > -1;
+                                });
+                            }).then(function(filteredElements2) {
+                                return filteredElements2[0];
+                            });
+                        }
+                        return filteredElements[0];
+                    });
                 });
             });
         };
@@ -94,19 +99,21 @@
          */
         this.clickFacetGroupElement = function(facetGroupName) {
             var self = this;
-            return self.getFacetGroupElement(facetGroupName).then(function(facetGroupElement) {
-                return e2ePageBase.waitForElementToBeClickable(facetGroupElement).then(function() {
-                    // Only click if the panel is collapsed
-                    return facetGroupElement.element(by.className('panel-collapse')).getAttribute('offsetHeight').then(function(height) {
-                        if (height === '0') {
-                            return e2ePageBase.waitForElement(facetGroupElement).then(function() {
-                                return facetGroupElement.click().then(function() {
-                                    return facetGroupElement;
+            return self.waitForReportReady().then(function() {
+                return self.getFacetGroupElement(facetGroupName).then(function(facetGroupElement) {
+                    return e2ePageBase.waitForElementToBeClickable(facetGroupElement).then(function() {
+                        // Only click if the panel is collapsed
+                        return facetGroupElement.element(by.className('panel-collapse')).getAttribute('offsetHeight').then(function(height) {
+                            if (height === '0') {
+                                return e2ePageBase.waitForElement(facetGroupElement).then(function() {
+                                    return facetGroupElement.element(by.className('facetName')).click().then(function() {
+                                        return facetGroupElement;
+                                    });
                                 });
-                            });
-                        } else {
-                            return facetGroupElement;
-                        }
+                            } else {
+                                return facetGroupElement;
+                            }
+                        });
                     });
                 });
             });
@@ -119,22 +126,28 @@
             var self = this;
             //select the items
             facetIndexes.forEach(function(facetIndex) {
-                var items = self.unselectedFacetGroupsElList.all(by.className('list-group-item'));
-                return items.filter(function(elm, index) {
-                    return index === facetIndex;
-                }).then(function(filteredElement) {
-                    if (facetIndex >= SHOW_POPUP_LIST_LIMIT) {
-                        // Click on more fields link
-                        expect(filteredElement[0].getText()).toEqual('more...');
-                        return filteredElement[0].click();
-                    }
-                    e2ePageBase.waitForElementToBeClickable(filteredElement[0]).then(function() {
-                        filteredElement[0].element(by.className('checkMark-selected')).isPresent().then(function(present) {
-                            if (!present) {
-                                return filteredElement[0].click().then(function() {
-                                    expect(present).toBeFalsy();
-                                });
-                            }
+                return self.waitForReportReady().then(function() {
+                    var items = self.unselectedFacetGroupsElList.all(by.className('list-group-item'));
+                    return items.filter(function(elm, index) {
+                        return index === facetIndex;
+                    }).then(function(filteredElement) {
+                        if (facetIndex >= SHOW_POPUP_LIST_LIMIT) {
+                            // Click on more fields link
+                            expect(filteredElement[0].getText()).toEqual('more...');
+                            return filteredElement[0].click().then(function() {
+                                return e2eBase.sleep(browser.params.smallSleep);
+                            });
+                        }
+                        e2ePageBase.waitForElementToBeClickable(filteredElement[0]).then(function() {
+                            filteredElement[0].element(by.className('checkMark-selected')).isPresent().then(function(present) {
+                                if (!present) {
+                                    return filteredElement[0].click().then(function() {
+                                        return e2eBase.sleep(browser.params.smallSleep).then(function() {
+                                            expect(present).toBeFalsy();
+                                        });
+                                    });
+                                }
+                            });
                         });
                     });
                 });
@@ -173,23 +186,46 @@
 
         /**
          * Function that will clear all the facet tokens from the container.
-         *
          */
         this.clearFacetTokensFromContainer = function() {
+            var self = this;
             return e2ePageBase.waitForElement(element(by.className('facetSelections'))).then(function() {
-                element.all(by.className('selectedToken')).then(function(items) {
-                    for (var i = (items.length) - 1; i >= 0; --i) {
-                        e2eBase.sleep(browser.params.smallSleep);
-                        items[i].element(by.className('clearFacet')).click().then(function() {
-                            //TODO: Figure out how to handle with sleeps (waiting for element to be stale doesn't seem to work)
-                            e2eBase.sleep(browser.params.smallSleep);
+                return e2eRetry.run(function() {
+                    return element.all(by.className('selectedToken')).then(function(items) {
+                        items.forEach(function(item) {
+                            item.element(by.className('clearFacet')).click();
+                            return self.waitForReportReady().then(function() {
+                                return self.waitForFacetsPopupReady().then(function() {
+                                    return self.waitForReportReady();
+                                });
+                            });
                         });
-                    }
+                    });
                 });
             });
         };
 
+        /**
+         * Adding and removing facets refreshes the displayed report quite often.
+         * Function will wait for the loaded report content to refresh. Helps with stability of tests.
+         */
+        this.waitForReportReady = function() {
+            if (breakpointSize !== 'small') {
+                return e2ePageBase.waitForElement(reportServicePage.loadedContentEl);
+            } else {
+                return e2ePageBase.waitForElement(reportServicePage.agGridBodyEl);
+            }
+        };
+
+        /**
+         * Function will wait for the facet popup menu to refresh. Helps with stability of tests.
+         */
+        this.waitForFacetsPopupReady = function() {
+            return e2ePageBase.waitForElement(this.reportFacetPopUpMenu);
+        };
+
     };
+
     ReportFacetsPage.prototype = e2ePageBase;
     module.exports = ReportFacetsPage;
 }());

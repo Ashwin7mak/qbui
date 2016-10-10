@@ -34,14 +34,26 @@
         HEALTH_CHECK            : baseUrl.QUICKBASE_2 + '/health',
         //  These routes are configured in qbRouteMapper to call node modules which perform
         //  additional processing either pre/post the API call.
-        RECORD                  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
-        RECORDS                 : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
-        REPORT_COMPONENTS       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/reportComponents',
-        REPORT_RESULTS          : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
-        TABLE_HOMEPAGE_REPORT   : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
+        //
+        //  TABLE ENDPOINTS for FORM, RECORD and REPORT
+        FORM_AND_RECORD_COMPONENTS  : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId/formComponents',
+        FORM_COMPONENTS             : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/formComponents',
+        RECORD                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/:recordId',
+        RECORDS                     : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
+        RECORDS_BULK                : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/bulk',
+
+        REPORT                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId',
+        REPORT_COMPONENTS           : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/reportComponents',
+        REPORT_RESULTS              : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
+        REPORT_RECORDS_COUNT        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',
+        TABLE_HOMEPAGE_REPORT       : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/homePage',
+
+        //  APP ENDPOINTS for USERS
+        APP_USERS                   : baseUrl.QUICKBASE + '/apps/:appId/users',
+
         // No need to explicitly declare other endpoints as there is no special pre-processing required.  qbRouteMapper
         // is configured to act as proxy and pass the request directly to the server side resource.
-        TOMCAT_ALL              : baseUrl.QUICKBASE + '/*'
+        TOMCAT_ALL                  : baseUrl.QUICKBASE + '/*'
     };
 
     /**

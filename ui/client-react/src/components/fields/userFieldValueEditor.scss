@@ -1,0 +1,70 @@
+@import '../../assets/css/qbVariables';
+@import './selectCommon';
+
+.userFormat.Select {
+
+    .Select-control {
+        border:0;
+
+        .Select-input {
+            height:28px;
+            padding-left:2px;
+            padding-top:0;
+            padding-bottom:0;
+        }
+        .Select-value {
+            padding-right: 40px;
+            padding-left:5px;
+            line-height: 28px;
+        }
+        .Select-placeholder {
+            line-height: 28px;
+            padding-left: 3px;
+            font-style: italic;
+        }
+    }
+    .Select-menu-outer {
+
+        .Select-menu {
+
+            .Select-option {
+                padding-left:3px;
+                padding-top:4px;
+                padding-bottom:4px;
+
+                .qbIcon {
+                    left: 0;
+                    top: 1px;
+                    font-size: 16px;
+                }
+
+                &.is-selected {
+                    .userLabel {
+                        color: $selected-choice-color;
+                    }
+                }
+                .deactivatedLabel {
+                    font-size: 12px;
+                    color: $user-picker-deactivated-label-fg;
+                    font-style: italic;
+                }
+                .userOption {
+                    position:relative;
+                }
+                .userLabel,.email {
+                    margin-left:19px;
+                }
+                .userLabel {
+                    font-size:14px;
+                    color: $user-picker-user-label-fg;
+                }
+                .email {
+                    font-size: 12px;
+                    color: $user-picker-email-label-fg;
+                }
+            }
+        }
+    }
+}
+
+

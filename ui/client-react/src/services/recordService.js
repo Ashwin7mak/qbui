@@ -11,7 +11,12 @@ class RecordService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_RECORD  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`
+            GET_RECORD         : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
+            PATCH_RECORD       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
+            CREATE_RECORD      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
+            DELETE_RECORD      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
+            DELETE_RECORD_BULK : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/${constants.BULK}`
+
         };
     }
 
@@ -54,6 +59,89 @@ class RecordService extends BaseService {
         let url = super.constructUrl(this.API.GET_RECORD, [appId, tableId]);
         return super.get(url, {params:params});
     }
+
+    /**
+     * replace user objects in value property with user IDs
+     * @param changes record or changes containing objects with value keys
+     * @returns copy of changes with user objects replaced with user ID strings
+     */
+    convertUserValueObjectsToIds(changes) {
+
+        const fixedChanges = _.cloneDeep(changes);
+
+        // patching user fields expects user ID only on server not the user object we got originally
+
+        if (_.isArray(fixedChanges)) {
+            fixedChanges.forEach(change => {
+                if (change.field && change.field.type === "USER") {
+                    change.value = change.value ? change.value.userId : "";
+                }
+            });
+        }
+
+        return fixedChanges;
+    }
+
+    /**
+     * Save changes to a record
+     *
+     * @param appId
+     * @param tableId
+     * @param recordId
+     * @param changes
+     * @returns promise
+     */
+    saveRecord(appId, tableId, recordId, changes) {
+
+        const fixedChanges = this.convertUserValueObjectsToIds(changes);
+
+        let url = super.constructUrl(this.API.PATCH_RECORD, [appId, tableId, recordId]);
+        return super.patch(url, fixedChanges);
+    }
+
+
+    /**
+     * Create a record
+     *
+     * @param appId
+     * @param tableId
+     * @param record
+     * @returns promise
+     */
+    createRecord(appId, tableId, record) {
+        let url = super.constructUrl(this.API.CREATE_RECORD, [appId, tableId]);
+
+        const fixedRecord = this.convertUserValueObjectsToIds(record);
+
+        return super.post(url, fixedRecord);
+    }
+
+    /**
+     * Delete a record
+     *
+     * @param appId
+     * @param tableId
+     * @param recordId
+     * @returns promise
+     */
+    deleteRecord(appId, tableId, recordId) {
+        let url = super.constructUrl(this.API.DELETE_RECORD, [appId, tableId, recordId]);
+        return super.delete(url);
+    }
+
+    /**
+     * Delete records in bulk
+     *
+     * @param appId
+     * @param tableId
+     * @param recordIds
+     * @returns promise
+     */
+    deleteRecordBulk(appId, tableId, recordIds) {
+        let url = super.constructUrl(this.API.DELETE_RECORD_BULK, [appId, tableId]);
+        return super.deleteBulk(url, {data: recordIds});
+    }
+
 }
 
 export default RecordService;

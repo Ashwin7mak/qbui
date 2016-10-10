@@ -87,6 +87,9 @@
                 req = {};
                 if (reqInfo) {
                     if (idsOnly === true) {
+                        if (reqInfo.userId) {
+                            req.userId = reqInfo.userId;
+                        }
                         if (reqInfo.headers) {
                             req.headers = {};
                             if (reqInfo.headers.sid) {

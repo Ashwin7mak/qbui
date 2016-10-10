@@ -3,6 +3,7 @@
 var path = require("path");
 var webpack = require('webpack');
 var nodeModulesPath = path.resolve(__dirname, "node_modules");
+var nodeComponentsPath = path.resolve(__dirname, "client-react/src/components/node");
 
 module.exports = function(config) {
     "use strict";
@@ -22,9 +23,10 @@ module.exports = function(config) {
         exclude: [],
 
         // add webpack as the preprocessor
+        // code coverage against all client react code EXCEPT node modules that we have privately forked
         preprocessors: {
             "tests.webpack.js": ["webpack", "sourcemap"],
-            "client-react/src/**/*.js" : ["coverage"]
+            "client-react/src/!(components/node)/**/*.js" : ["coverage"]
         },
 
         webpack: {
@@ -40,7 +42,7 @@ module.exports = function(config) {
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "componentLibrary/test")
                         ],
-                        exclude: [nodeModulesPath],
+                        exclude: [nodeModulesPath, nodeComponentsPath],
                         loader: "babel-loader",
                         query: {
                             plugins: ['babel-plugin-rewire', 'babel-plugin-rewire-ignore-coverage']
@@ -54,7 +56,7 @@ module.exports = function(config) {
                             path.resolve(__dirname, "componentLibrary/src"),
                             path.resolve(__dirname, "node_modules/ag-grid"),
                             path.resolve(__dirname, "node_modules/react-notifications"),
-                            path.resolve(__dirname, "node_modules/react-bootstrap-datetimepicker")
+                            path.resolve(__dirname, 'node_modules/react-select')
                         ],
                         loader: "style!css"
                     },
@@ -75,7 +77,7 @@ module.exports = function(config) {
                         include: [
                             path.resolve(__dirname, "client-react/src"),
                             path.resolve(__dirname, "componentLibrary/src")
-                        ],
+                        ]
                     },
                     {
                         test   : /\.woff|\.woff2|\.svg|.eot|\.ttf/,
@@ -84,7 +86,7 @@ module.exports = function(config) {
                     {
                         include: /\.json$/,
                         loaders: ["json-loader"]
-                    },
+                    }
                 ],
                 postLoaders: [
                     { //delays coverage til after tests are run, fixing transpiled source coverage error
@@ -95,6 +97,7 @@ module.exports = function(config) {
                         ],
                         exclude: [
                             nodeModulesPath,
+                            nodeComponentsPath,
                             path.resolve(__dirname, "client-react/test"),
                             path.resolve(__dirname, "componentLibrary/test")
                         ],
@@ -126,8 +129,18 @@ module.exports = function(config) {
         // - Safari (only Mac)
         // - PhantomJS
         // - IE (only Windows)
-        browsers: ["PhantomJS"],
-
+        browsers: ["PhantomJS_Desktop"],
+        customLaunchers: {
+            'PhantomJS_Desktop': {
+                base: 'PhantomJS',
+                options: {
+                    viewportSize: {
+                        width: 1440,
+                        height: 900
+                    }
+                }
+            }
+        },
         reporters: ["progress", "mocha", "coverage", "junit"],
 
         //  define where the coverage reports live for the client code
@@ -151,7 +164,7 @@ module.exports = function(config) {
         // browser activity settings
         browserDisconnectTimeout : 5000,    // default 2000
         browserNoActivityTimeout : 5000,    // default 10000
-        browserDisconnectTolerance : 1,     // default 0
+        browserDisconnectTolerance : 99,     // default 0
 
         colors: true,
         singleRun: false,
@@ -170,5 +183,6 @@ module.exports = function(config) {
         client: {
             captureConsole: true
         }
+
     });
 };

@@ -12,11 +12,11 @@
 // jshint sub: true
 // jscs:disable requireDotNotation
 
+e2eConsts = require('../common/e2eConsts');
+consts = require('../../common/src/constants.js');
 
 (function() {
     'use strict';
-    var tableOneNumberOfRecords = 10;  // change value to how many records you want to generate for table 1
-    var tableTwoNumberOfRecords = 10; // change value to how many records you want to generate for table 2
     var realmToUse = 'localhost';       // change this to a string i.e. "myRealm" of an existing realm to use
                                        // if you leave realmToUse null it will randomly generated a new realm name
 
@@ -27,100 +27,95 @@
 
     //Require the e2e base class and constants modules
     var e2eBase = require('../common/e2eBase.js')(config);
-    var consts = require('../../common/src/constants.js');
 
-    var promise = require('bluebird');
     var chance = require('chance').Chance();
 
     var app;
+    var recordList;
+
     e2eBase.setBaseUrl(config.DOMAIN);
     e2eBase.initialize();
 
-    generateData();
+    generateNewData(() => {
+        createdRecs();
+    });
 
-    /**
-     *  Generates JSON for an app, a table, a set of records and a report. Then creates them via the REST API.
-     */
-    function generateData() {
-        //Create the table schema (map object) to pass into the app generator
-        /*eslint-disable dot-notation */
-        var tableToFieldToFieldTypeMap = {};
-        var table1Name = chance.capitalize(chance.word({syllables: 1}));
-        var table2Name = chance.capitalize(chance.word({syllables: 1}));
-        tableToFieldToFieldTypeMap[table1Name] = {};
-        tableToFieldToFieldTypeMap[table1Name]['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
-        tableToFieldToFieldTypeMap[table1Name]['Numeric'] = {fieldType: consts.SCALAR, dataType: consts.NUMERIC};
-        tableToFieldToFieldTypeMap[table1Name]['Currency'] = {fieldType: consts.SCALAR, dataType : consts.CURRENCY};
-        tableToFieldToFieldTypeMap[table1Name]['Percent'] = {fieldType: consts.SCALAR, dataType: consts.PERCENT};
-        tableToFieldToFieldTypeMap[table1Name]['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-        tableToFieldToFieldTypeMap[table1Name]['Date Field'] = {fieldType: consts.SCALAR, dataType : consts.DATE};
-        tableToFieldToFieldTypeMap[table1Name]['Date Time Field'] = {fieldType: consts.SCALAR, dataType : consts.DATE_TIME};
-        tableToFieldToFieldTypeMap[table1Name]['Time of Day Field'] = {fieldType: consts.SCALAR, dataType : consts.TIME_OF_DAY};
-        tableToFieldToFieldTypeMap[table1Name]['Duration'] = {fieldType: consts.SCALAR, dataType : consts.DURATION};
-        tableToFieldToFieldTypeMap[table1Name]['Checkbox Field'] = {fieldType: consts.SCALAR, dataType : consts.CHECKBOX};
-        tableToFieldToFieldTypeMap[table1Name]['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-        tableToFieldToFieldTypeMap[table1Name]['Email'] = {fieldType: consts.SCALAR, dataType : consts.EMAIL_ADDRESS};
-        tableToFieldToFieldTypeMap[table1Name]['Url'] = {fieldType: consts.SCALAR, dataType: consts.URL};
-        tableToFieldToFieldTypeMap[table2Name] = {};
-
-        tableToFieldToFieldTypeMap[table2Name]['Text Field'] = {fieldType: consts.SCALAR, dataType: consts.TEXT};
-        tableToFieldToFieldTypeMap[table2Name]['Rating Field'] = {fieldType: consts.SCALAR, dataType : consts.RATING};
-        tableToFieldToFieldTypeMap[table2Name]['Phone Number Field'] = {fieldType: consts.SCALAR, dataType : consts.PHONE_NUMBER};
-        //Call the basic app setup function
-        createAnApp(tableToFieldToFieldTypeMap, tableOneNumberOfRecords).then(function(results) {
-            //Set your global objects to use in the test functions
-            app = results[0];
-            //Check that your setup completed properly
-            //There's no fail fast option using beforeAll yet in Jasmine to prevent other tests from running
-            //This will fail the test if setup did not complete properly so at least it doesn't run
-            if (!app) {
-                throw new Error('test app / recordList was not created properly during setup');
-            }
-            //Get the appropriate fields out of the second table
-            var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[1]);
-            //Generate the record JSON objects
-            var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, tableTwoNumberOfRecords);
-            //Via the API create the records, a new report
-            //This is a promise chain since we need these actions to happen sequentially
-            e2eBase.recordService.addRecords(app, app.tables[1], generatedRecords).then(function() {
-                var reportName = chance.capitalize(chance.word({syllables: 2})) + " for table-" +
-                    app.tables[1].name + "- app-" + app.name;
-                e2eBase.reportService.createReport(app.id, app.tables[1].id, undefined, reportName).then(function() {
-                    createdRecs();
-                });
-            });
-        });
+    function addColumn(table, type) {
+        table[type.columnName] = {
+            fieldType: consts.SCALAR,
+            dataType: type.name
+        };
     }
 
-    function createAnApp(tableToFieldToFieldTypeMap, numberOfRecords) {
-        var deferred = promise.pending();
-        //Generate the app JSON object
-        var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
-        //Create the app via the API
-        e2eBase.appService.createApp(generatedApp).then(function(createdApp) {
-            //Get the appropriate fields out of the Create App response (specifically the created field Ids)
-            var nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
-            //Generate the record JSON objects
-            var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, numberOfRecords);
-            //Via the API create the records, a new report, then run the report.
-            //This is a promise chain since we need these actions to happen sequentially
-            e2eBase.recordService.addRecords(createdApp, createdApp.tables[0], generatedRecords).then(function() {
-                var reportName = chance.capitalize(chance.word({syllables: 2})) + " for table-" +
-                    createdApp.tables[0].name + "- app" + createdApp.name;
-                e2eBase.reportService.createReport(createdApp.id, createdApp.tables[0].id, undefined, reportName).then(function(reportId) {
-                    e2eBase.reportService.runReport(createdApp.id, createdApp.tables[0].id, reportId).then(function(reportRecords) {
-                        //Return back the created app and records
-                        //Pass it back in an array as promise.resolve can only send back one object
-                        var appAndRecords = [createdApp, reportRecords];
-                        deferred.resolve(appAndRecords);
-                    }).catch(function(error) {
-                        console.error(JSON.stringify(error));
-                        deferred.reject(error);
-                    });
-                });
-            });
+    function makeAppMap() {
+        var table1Name = 'Table 1 '; // or random name  chance.capitalize(chance.word({syllables: 4}));
+        var table2Name = 'Table 2 '; // or random name  chance.capitalize(chance.word({syllables: 4}));
+        var table3Name = 'Table 3 '; // or random name  chance.capitalize(chance.word({syllables: 3}));
+        var table4Name = 'Table 4 '; // or random name  chance.capitalize(chance.word({syllables: 3}));
+
+        // Create the table schema (map object) to pass into the app generator
+        var tableToFieldToFieldTypeMap = {};
+        tableToFieldToFieldTypeMap[table1Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TEXT);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.NUMERIC);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CURRENCY);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.PERCENT);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.RATING);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.DATE);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.DATE_TIME);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.TIME_OF_DAY);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.DURATION);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.CHECKBOX);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.PHONE_NUMBER);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.EMAIL_ADDRESS);
+        addColumn(tableToFieldToFieldTypeMap[table1Name], e2eConsts.dataType.URL);
+
+        tableToFieldToFieldTypeMap[table2Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.TEXT);
+        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.DATE);
+        addColumn(tableToFieldToFieldTypeMap[table2Name], e2eConsts.dataType.PHONE_NUMBER);
+
+        tableToFieldToFieldTypeMap[table3Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.TEXT);
+        addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.DATE);
+        addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.DATE_TIME);
+        addColumn(tableToFieldToFieldTypeMap[table3Name], e2eConsts.dataType.CHECKBOX);
+
+        tableToFieldToFieldTypeMap[table4Name] = {};
+        addColumn(tableToFieldToFieldTypeMap[table4Name], e2eConsts.dataType.TEXT);
+
+        return tableToFieldToFieldTypeMap;
+    }
+
+    function generateNewData(done) {
+        var nonBuiltInFields;
+        e2eBase.reportsBasicSetUp(makeAppMap()).then(function(appAndRecords) {
+            // Set your global objects to use in the test functions
+            app = appAndRecords[0];
+            recordList = appAndRecords[1];
+            // Get the appropriate fields out of the third table
+            nonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(app.tables[e2eConsts.TABLE3]);
+            // Generate the record JSON objects
+            var generatedRecords = e2eBase.recordService.generateRecords(nonBuiltInFields, 5);
+            // Via the API create some records
+            return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedRecords);
+        }).then(function() {
+            // Generate 1 empty record
+            var generatedEmptyRecords = e2eBase.recordService.generateEmptyRecords(nonBuiltInFields, 1);
+            return e2eBase.recordService.addRecords(app, app.tables[e2eConsts.TABLE3], generatedEmptyRecords);
+        }).then(function() {
+            //Create a report with facets in table 3
+            return e2eBase.reportService.createReportWithFacets(app.id, app.tables[e2eConsts.TABLE3].id, [6, 7, 8, 9]);
+        }).then(function() {
+            //set report home page
+            return e2eBase.tableService.setDefaultTableHomePage(app.id, app.tables[e2eConsts.TABLE1].id);
+        }).then(function() {
+            done();
+        }).catch(function(error) {
+            // Global catch that will grab any errors from chain above
+            // Will appropriately fail the beforeAll method so other tests won't run
+            console.log('Error during setup  ' + error.message);
         });
-        return deferred.promise;
     }
 
     /**
@@ -130,21 +125,25 @@
         var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
         var realmId = e2eBase.recordBase.apiBase.realm.id;
         var appId = app.id;
-        var table1Id = app.tables[0].id;
-        var table2Id = app.tables[1].id;
+        // Protractor tests will launch node at port 9001 by default so do a replace to the default local.js port
+        var ticketEndpointRequest = e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint).replace('9001', '9000');
+        var appEndpointRequest = e2eBase.getRequestAppsPageEndpoint(realmName).replace('9001', '9000');
+
+        var tableNames = '';
+        app.tables.forEach((table, index) => {
+            tableNames += 'table' + index + 1 + 'Id:' + table.id + '\n';
+            tableNames += 'table' + index + 1 + 'Name:' + table.name + '\n';
+        });
         console.log('\nHere is your generated test data: \n' +
             'realmName: ' + realmName + '\n' +
             'realmId: ' + realmId + '\n' +
             'appId: ' + appId + '\n' +
             'appName: ' +  app.name + '\n' +
-            'table1Id: ' + table1Id + '\n' +
-            'table1Name: ' + app.tables[0].name + '\n' +
-            'table2Id: ' + table2Id + '\n' +
-            'table2Name: ' + app.tables[1].name + '\n' +
+            tableNames +
             'To generate a session ticket for your realm paste this into your browser: \n' +
-                e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint) + '\n' +
+            ticketEndpointRequest + '\n' +
             'Access your test app here (must have generated a ticket first): \n' +
-                e2eBase.getRequestAppsPageEndpoint(realmName) + '\n'
+            appEndpointRequest + '\n'
         );
     }
 }());

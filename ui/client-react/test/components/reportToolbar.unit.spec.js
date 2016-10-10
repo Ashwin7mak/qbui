@@ -126,8 +126,20 @@ describe('ReportToolbar functions', () => {
         callBacks.filterOnSelections.calls.reset();
     });
 
+    const fakeReportData_no_records = {
+        loading: false,
+        countingTotalRecords: false,
+        data: {
+            recordsCount: 0,
+            pageEnd:0,
+            pageStart:1,
+            numRows:20
+        }
+    };
+
     const fakeReportData_simple = {
         loading: false,
+        countingTotalRecords: false,
         data: {
             name: "testReportToolbar",
             records: [
@@ -173,7 +185,11 @@ describe('ReportToolbar functions', () => {
 
     it('test render reportToolbar no records', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
+                                                                reportData={fakeReportData_no_records}
                                                                 pageActions={pageActions}
+                                                                pageStart={1}
+                                                                pageEnd={0}
+                                                                recordsCount={0}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
@@ -185,7 +201,9 @@ describe('ReportToolbar functions', () => {
         let facetButtons = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetButtons");
         expect(facetButtons.length).toEqual(0);
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
-        expect(recordsCount.length).toEqual(0);
+        expect(recordsCount.length).toEqual(1);
+        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
+        expect(reportNavigation.length).toEqual(0);
     });
 
 
@@ -193,10 +211,12 @@ describe('ReportToolbar functions', () => {
         component = TestUtils.renderIntoDocument(<ReportToolbar flux={flux}
                                                                 reportData={fakeReportData_simple}
                                                                 pageActions={pageActions}
+                                                                pageStart={1}
+                                                                pageEnd={3}
+                                                                recordsCount={3}
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
-
         expect(filterSearchBox.length).toEqual(1);
         let facetsMenuContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "facetsMenuContainer");
         expect(facetsMenuContainer.length).toEqual(1);
@@ -206,7 +226,8 @@ describe('ReportToolbar functions', () => {
         expect(facetButtons.length).toEqual(1);
         let recordsCount = TestUtils.scryRenderedDOMComponentsWithClass(component, "recordsCount");
         expect(recordsCount.length).toEqual(1);
-
+        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
+        expect(reportNavigation.length).toEqual(0);
     });
 
     it('test render reportToolbar with no facets', () => {
@@ -219,7 +240,7 @@ describe('ReportToolbar functions', () => {
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         // empty filter icon is no shown
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-filter-tool");
+        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconTableUISturdy-filter-tool");
         expect(filterIcon.length).toEqual(0);
 
     });
@@ -234,7 +255,7 @@ describe('ReportToolbar functions', () => {
         />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         // empty filter icon is shown
-        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconssturdy-filter-tool");
+        let filterIcon = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconTableUISturdy-filter-tool");
         expect(filterIcon.length).toEqual(1);
 
     });

@@ -7,6 +7,8 @@
     let defaultRequest = require('request');
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');
+    let url = require('url');
+    var consts = require('../../../../common/src/constants');
 
     module.exports = function(config) {
         let request = defaultRequest;
@@ -33,15 +35,18 @@
             isSecure       : function(req) {
                 return req.protocol ? req.protocol.toLowerCase() === 'https' : false;
             },
+            getRequestJavaHost: function() {
+                return config ? config.javaHost : '';
+            },
             getRequestUrl  : function(req) {
-                return config.javaHost + req.url;
+                return config ? config.javaHost + req.url : '';
             },
             getAgentOptions: function(req) {
                 var agentOptions = {
                     rejectUnauthorized: false
                 };
 
-                if (this.isSecure(req)) {
+                if (this.isSecure(req) && config) {
                     //  we're on https..include the certs
                     agentOptions = {
                         strictSSL         : true,
@@ -68,15 +73,15 @@
             },
 
             /**
-             * Add rawBody data to the submitted options object for put and post requests
+             * Add rawBody data to the submitted options object for put, post, patch and delete requests
              *
              * @param req
              * @param opts
              * @returns {*}
              */
             setBodyOption: function(req, opts) {
-                //  body header option only valid for put and post
-                if (this.isPut(req) || this.isPatch(req) || this.isPost(req)) {
+                //  body header option valid for all verbs EXCEPT 'get'.
+                if (!this.isGet(req)) {
                     opts.body = req.rawBody;
                 }
                 return opts;
@@ -99,14 +104,16 @@
                     headers     : req.headers
                 };
 
-                if (config.isMockServer) {
-                    opts.gzip = false;
-                    opts.headers["accept-encoding"] = "";
-                }
-                if (config.proxyHost) {
-                    opts.host = config.proxyHost;
-                    if (config.proxyPort) {
-                        opts.port  = config.proxyPort;
+                if (config) {
+                    if (config.isMockServer) {
+                        opts.gzip = false;
+                        opts.headers["accept-encoding"] = "";
+                    }
+                    if (config.proxyHost) {
+                        opts.host = config.proxyHost;
+                        if (config.proxyPort) {
+                            opts.port = config.proxyPort;
+                        }
                     }
                 }
 
@@ -160,6 +167,19 @@
                     }
                 }
 
+                //get back json unless already specified
+                if (typeof opts === 'undefined') {
+                    opts = {};
+                }
+                if (typeof opts.headers === 'undefined') {
+                    opts.headers = {};
+                }
+                if (typeof opts.headers[consts.ACCEPT] === 'undefined') {
+
+                    opts.headers[consts.ACCEPT] = consts.APPLICATION_JSON;
+                }
+
+                req.headers = Object.assign({}, req.headers);
                 return new Promise((resolve, reject) =>{
                     if (immediatelyResolve) {
                         resolve();
@@ -192,6 +212,94 @@
                     log.error("Caught unexpected error in " + func + "; Error Message: " + error.message + (includeStackTrace ? "; Stack Trace:" + error.stack : ''));
                 } else {
                     log.error("Caught unexpected error in " + func + "\nError Message: Unknown error...no error object defined");
+                }
+            },
+
+            /**
+             * Method to take a parameter value and name and add to the request.
+             *
+             * A parameter is appended only if both a parameter name and value are defined
+             * and it is not already on the request with the exact value.
+             *
+             * @param req
+             * @param parameterName
+             * @param parameterValue
+             */
+            addQueryParameter: function(req, parameterName, parameterValue) {
+
+                if (parameterName) {
+                    //  does the parameter already exist
+                    if (this.hasQueryParameter(req, parameterName)) {
+                        // nothing to do if the parameter is already on the request
+                        if (this.getQueryParameterValue(req, parameterName) === parameterValue) {
+                            return;
+                        } else {
+                            // have a different value to use; remove the one on the request
+                            this.removeRequestParameter(req, parameterName);
+                        }
+                    }
+
+                    //  add the parameter
+                    let search = url.parse(req.url).search;
+                    if (search) {
+                        req.url += '&';
+                    } else {
+                        req.url += '?';
+                    }
+
+                    //  append the query parameter to the url
+                    req.url += parameterName + '=' + parameterValue;
+                }
+            },
+
+            /**
+             * Does the request query have the supplied query parameter.  Return
+             * true if found; otherwise false.
+             *
+             * @param req
+             * @param parameterName
+             * @returns {*}
+             */
+            hasQueryParameter: function(req, parameterName) {
+                if (!req || !parameterName) {
+                    return false;
+                }
+                let query = url.parse(req.url, true).query;
+                return (query && query.hasOwnProperty(parameterName));
+            },
+
+            /**
+             * Examine the request url for the supplied query parameter name and
+             * return the value if found.  If not found, null is returned.
+             *
+             * @param req
+             * @param parameterName
+             * @returns {*}
+             */
+            getQueryParameterValue: function(req, parameterName) {
+                if (!req || !parameterName) {
+                    return null;
+                }
+                let query = url.parse(req.url, true).query;
+                return (query && query.hasOwnProperty(parameterName)) ? query[parameterName] : null;
+            },
+
+            /**
+             * Remove the parameter from the request.  If the parameter is not found, the
+             * url is unchanged.
+             *
+             * @param req
+             * @param parameterName
+             */
+            removeRequestParameter: function(req, parameterName) {
+                if (this.hasQueryParameter(req, parameterName)) {
+                    let startingIndex = req.url.indexOf(parameterName);
+                    let endingIndex = req.url.indexOf('&', startingIndex);
+                    if (endingIndex === -1) {
+                        req.url = req.url.substr(0, startingIndex - 1);
+                    } else {
+                        req.url = req.url.substr(0, startingIndex) + req.url.substr(endingIndex + 1);
+                    }
                 }
             }
         };

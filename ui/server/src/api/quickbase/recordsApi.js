@@ -39,10 +39,13 @@
 (function() {
     'use strict';
 
-    var Promise = require('bluebird');
-    var defaultRequest = require('request');
-    var log = require('../../logger').getLogger();
-    var perfLogger = require('../../perfLogger');
+    let Promise = require('bluebird');
+    let defaultRequest = require('request');
+    let _ = require('lodash');
+    let log = require('../../logger').getLogger();
+    let perfLogger = require('../../perfLogger');
+    let dataErrs = require('../../../../common/src/dataEntryErrorCodes');
+    var httpStatusCodes = require('../../constants/httpStatusCodes');
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -58,23 +61,29 @@
      */
     var jsonBigNum = require('json-bignum');
 
+    //function isInteger(value) {
+    //    let int = parseInt(value);
+    //    return (typeof int === 'number' && (int % 1) === 0);
+    //}
+
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
+        let routeHelper = require('../../routes/routeHelper');
         var groupFormatter = require('./formatter/groupFormatter');
         var recordFormatter = require('./formatter/recordFormatter')();
         var constants = require('../../../../common/src/constants');
+        var url = require('url');
 
         //Module constants:
         var APPLICATION_JSON = 'application/json';
         var CONTENT_TYPE = 'Content-Type';
+        var CONTENT_LENGTH = 'content-length';
 
         var FIELDS = 'fields';
         var RECORD = 'record';
         var RECORDS = 'records';
-        var REPORTS = 'reports';
         var GROUPS = 'groups';
-        var REPORTCOMPONENTS = 'reportcomponents';
-        var RESULTS = 'results';
+        var FILTERED_RECORDS_COUNT = 'filteredCount';
         var request = defaultRequest;
 
         //Given an array of records and array of fields, remove any fields
@@ -122,11 +131,11 @@
             },
 
             isDisplayFormat: function(req) {
-                return req.param(constants.REQUEST_PARAMETER.FORMAT) === 'display';
+                return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.DISPLAY;
             },
 
             isRawFormat: function(req) {
-                return req.param(constants.REQUEST_PARAMETER.FORMAT) === 'raw';
+                return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.RAW;
             },
 
             /**
@@ -136,7 +145,6 @@
              * @returns Promise
              */
             fetchSingleRecordAndFields: function(req) {
-
                 return new Promise(function(resolve, reject) {
                     var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
 
@@ -183,15 +191,20 @@
              * @returns Promise
              */
             fetchRecordsAndFields: function(req) {
-
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req)];
+                    var fetchRequests = [this.fetchRecords(req), this.fetchFields(req), this.fetchCountForRecords(req)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
                             var responseObject;
 
                             var records = jsonBigNum.parse(response[0].body);
+
+                            //  report/results result is an object
+                            if (!Array.isArray(records)) {
+                                records = records.records;
+                            }
+
                             var groupedRecords;
 
                             //  return raw undecorated record values due to flag format=raw
@@ -231,9 +244,11 @@
                                     responseObject[RECORDS] = records;
                                 }
                             }
+                            if (response[2]) {
+                                responseObject[FILTERED_RECORDS_COUNT] = response[2].body;
+                            }
 
                             resolve(responseObject);
-
                         }.bind(this),
                         function(response) {
                             reject(response);
@@ -243,7 +258,6 @@
                         reject(error);
                     });
                 }.bind(this));
-
             },
 
             /**
@@ -253,24 +267,93 @@
              * @returns Promise
              */
             fetchRecords: function(req) {
-                var opts = requestHelper.setOptions(req);
+                // TODO: ENFORCE a row limit on all requests.  Check for offset and numOfRows query parameters and if both
+                // are not supplied OR invalid, will set to default values.
+                //
+                // TODO: if invalid parameters, consider throwing an exception vs setting to defaults
+                //
+                //let rowLimitsValid = requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET) &&
+                //    requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                //
+                //if (rowLimitsValid) {
+                //    //  we have row limit parameters..now ensure they are integers
+                //    let reqOffset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
+                //    let reqNumRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                //    rowLimitsValid = isInteger(reqOffset) && isInteger(reqNumRows);
+                //
+                //    //  if the max number of records to query exceeds limit, throw exception
+                //    if (rowLimitsValid) {
+                //        // TODO: look at getting smarter about max row limit...the number of columns on the report should also be considered..
+                //        if (parseInt(reqNumRows) > constants.PAGE.MAX_NUM_ROWS) {
+                //            let errorMsg = constants.REQUEST_PARAMETER.NUM_ROWS + '=' + reqNumRows + ' request parameter is greater than maximum request limit of ' + constants.PAGE.MAX_NUM_ROWS;
+                //            throw errorMsg;
+                //        }
+                //    }
+                //}
+                //
+                ////  if we don't have valid row limits, then add the default offset and max number of rows.
+                //if (!rowLimitsValid) {
+                //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, constants.PAGE.DEFAULT_OFFSET);
+                //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, constants.PAGE.DEFAULT_NUM_ROWS);
+                //}
+
+                let opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
 
-                let inputUrl = opts.url; //JAVA api is case sensitive so dont loose camel case here.
-                let inputUrl_toLower = opts.url.toLowerCase(); // but for convinience of string matches convert to lower case
+                //  get the request parameters
+                let search = url.parse(req.url).search;
 
-                //the request came in for report/{reportId}/results.
-                // Convert that to report/{reportId}/facets/results to get facets data
-                if (inputUrl_toLower.indexOf(REPORTCOMPONENTS) !== -1) {
-                    // this bypass is for grouping but in ag-grid
-                    // change url from .../reports/<id>/reportcomponents?sortList=..
-                    // to .../records?sortList=.. because /reports/results api does not support sortList param.
-                    if (inputUrl_toLower.indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
-                        let reportIndex = inputUrl_toLower.indexOf(REPORTS);
-                        let paramsIndex = inputUrl_toLower.indexOf("?"); // get the index for url params starting after ?
-                        opts.url = inputUrl.substring(0, reportIndex) + RECORDS + inputUrl.substring(paramsIndex);
+                if (routeHelper.isRecordsRoute(req.url)) {
+                    if (req.params.recordId) {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url, req.params.recordId);
                     } else {
-                        opts.url = inputUrl.substring(0, inputUrl_toLower.indexOf(REPORTCOMPONENTS)) + RESULTS;
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
+                    }
+                } else {
+                    //  if not a records route, check to see if it is a request for reportComponents
+                    /*eslint no-lonely-if:0 */
+                    if (routeHelper.isReportComponentRoute(req.url)) {
+                        //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
+                        //  parameter list to retrieve the data; otherwise use the report/results endpoint.  This is
+                        //  necessary as the reports endpoint does not accept request parameters like sortlist.
+                        if (search && search.toLowerCase().indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
+                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
+                        } else {
+                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
+                        }
+                    } else {
+                        //  not an expected route; set to return all records for the given table
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
+                    }
+                }
+
+                //  any request parameters to append?
+                if (search) {
+                    opts.url += search;
+                }
+
+                // TEMPORARY to get grouping to work with core changes...this removes the grouping tags
+                // AND paging tags from the opts.url rest request so that core doesn't group.  Grouping
+                // is still done in the node layer but since paging is in place, complex grouping will fail.
+                // Given the report meta data doesn't have default grouping on prod/pre-prod, and the UI
+                // only groups using equals, this should be fine for the interim until a complete solution
+                // is implemented.
+                let query = url.parse(opts.url, true).query;
+                if (query && query.hasOwnProperty(constants.REQUEST_PARAMETER.SORT_LIST)) {
+                    let sList = query[constants.REQUEST_PARAMETER.SORT_LIST];
+                    if (sList) {
+                        let sListArr = sList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+
+                        let sortList = [];
+                        sListArr.forEach((sort) => {
+                            var sortEl = sort.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
+                            sortList.push(sortEl[0]);
+                        });
+                        if (sortList.length > 0) {
+                            requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.SORT_LIST);
+                            let sortListStr = sortList.join(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                            opts.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=' + sortListStr;
+                        }
                     }
                 }
 
@@ -286,20 +369,147 @@
             fetchFields: function(req) {
                 var opts = requestHelper.setOptions(req);
                 opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                var inputUrl = opts.url.toLowerCase();
 
-                //If the endpoint provided is the records or report execution endpoint,
-                // replace records or reports with the /fields path
-                if (inputUrl.indexOf(RECORDS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(RECORDS)) + FIELDS;
-                } else if (inputUrl.indexOf(REPORTS) !== -1) {
-                    opts.url = inputUrl.substring(0, inputUrl.indexOf(REPORTS)) + FIELDS;
+                if (routeHelper.isFieldsRoute(req.url)) {
+                    if (req.params.fieldId) {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url, req.params.fieldId);
+                    } else {
+                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
+                    }
+                } else {
+                    //  not a fields route; set to return all fields for the given table
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
                 }
 
-                //TODO: why do we immediately resolve if the format is raw?
+                //  any request parameters to append?
+                let search = url.parse(req.url).search;
+                if (search) {
+                    opts.url += search;
+                }
+
                 return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
+            },
+
+            /**
+             * Fetch the count of all records that match a user query
+             */
+            fetchCountForRecords: function(req) {
+                let opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsCountRoute(req.url);
+                // Set the query parameter
+                if (requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.QUERY)) {
+                    let queryParam = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
+                    opts.url += '?' + constants.REQUEST_PARAMETER.QUERY + '=' + queryParam;
+                }
+
+                return requestHelper.executeRequest(req, opts);
+            },
+
+            /**
+             * Save a single record data to a table.
+             *
+             * @param req
+             * @returns Promise
+             */
+            saveSingleRecord: function(req) {
+                let errors = _validateChanges(req);
+                if (errors.length === 0) {
+                    var opts = requestHelper.setOptions(req);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    //input expected in raw form for java
+                    return requestHelper.executeRequest(req, opts);
+                } else {
+                    //return error
+                    let errCode = httpStatusCodes.INVALID_INPUT;
+                    return Promise.reject({response:{message:'validation error', status:errCode, errors: errors}}
+                    );
+                }
+            },
+
+            /**
+             * Create a single record data add to a table.
+             *
+             * @param req
+             * @returns Promise
+             */
+            createSingleRecord: function(req) {
+                let errors = _validateChanges(req);
+                if (errors.length === 0) {
+                    var opts = requestHelper.setOptions(req);
+                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    //input expected in raw form for java
+                    return requestHelper.executeRequest(req, opts);
+                } else {
+                    //return error
+                    let errCode = httpStatusCodes.INVALID_INPUT;
+                    return Promise.reject({response:{message:'validation error', status:errCode, errors: errors}}
+                    );
+                }
+            },
+
+            /**
+             * Delete a single record on a table
+             *
+             * @param req
+             * @returns Promise
+             */
+            deleteSingleRecord: function(req) {
+                var opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                return requestHelper.executeRequest(req, opts);
+            },
+
+            /**
+             * Delete record or records in bulk on a table
+             *
+             * @param req
+             * @returns Promise
+             */
+            deleteRecordsBulk: function(req) {
+                var opts = requestHelper.setOptions(req);
+                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                return requestHelper.executeRequest(req, opts);
             }
+
         };
         return recordsApi;
     };
+
+    /**
+     * Validate changes to a record  basic checks for boundaries/types etc
+     *
+     * @param req
+     * @returns {Array}
+     * @private
+     */
+    function _validateChanges(req) {
+        let errors = [];
+        if (req.body && req.body.length) {
+            //look at each change
+            req.body.forEach((change, index) => {
+                if (change && change.field) {
+                    let field = change.field;
+
+                    //text field length limit
+                    if (field.type === "TEXT") {
+                        // within max chars?
+                        if (field.clientSideAttributes && field.clientSideAttributes.max_chars &&
+                            field.clientSideAttributes.max_chars > 0 &&
+                            change.value && change.value.length &&
+                            change.value.length > field.clientSideAttributes.max_chars) {
+                            errors.push({field, type: dataErrs.MAX_LEN_EXCEEDED, hadLength: change.value.length});
+                        }
+                    }
+                    // required field has value?
+                    if (field.required && (change.value === undefined || change.value === null || change.value === "" || change.value === false)) {
+                        errors.push({field, type: dataErrs.REQUIRED_FIELD_EMPTY});
+                    }
+                }
+
+            });
+        }
+        return errors;
+    }
 }());

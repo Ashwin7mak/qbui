@@ -1,68 +1,104 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {AgGridReact} from 'ag-grid-react';
-import {AgGridEnterprise} from 'ag-grid-enterprise';
+import {Button, Dropdown, MenuItem} from 'react-bootstrap';
+import QBicon from '../../qbIcon/qbIcon';
+import IconActions from '../../actions/iconActions';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import ReportActions from '../../actions/reportActions';
-import RecordActions from '../../actions/recordActions';
 import Locale from '../../../locales/locales';
 import _ from 'lodash';
 import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
+import * as SchemaConsts from '../../../constants/schema';
+import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
-import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
-        NumericCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
-        CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer}  from './cellRenderers';
+import {
+    CellRenderer,
+    DateCellRenderer,
+    DateTimeCellRenderer,
+    TimeCellRenderer,
+    NumericCellRenderer,
+    DurationCellRenderer,
+    TextCellRenderer,
+    UserCellRenderer,
+    CheckBoxCellRenderer,
+    CurrencyCellRenderer,
+    SelectionColumnCheckBoxCellRenderer,
+    PercentCellRenderer,
+    RatingCellRenderer,
+    UrlCellRenderer,
+}  from './cellRenderers';
 
-import * as GroupTypes from '../../../constants/groupTypes';
-
-let FluxMixin = Fluxxor.FluxMixin(React);
+import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
 import '../../../../../node_modules/ag-grid/dist/styles/ag-grid.css';
 import './agGrid.scss';
 import '../gridWrapper.scss';
+import Logger from "../../../utils/logger";
+
+
+let logger = new Logger();
 
 const serverTypeConsts = require('../../../../../common/src/constants');
 
+let FluxMixin = Fluxxor.FluxMixin(React);
 function buildIconElement(icon) {
-    return "<span class='qbIcon iconssturdy-" + icon + "'></span>";
+    return "<span class='qbIcon iconTableUISturdy-" + icon + "'></span>";
 }
 let gridIcons = {
     groupExpanded: buildIconElement("caret-filled-down"),
-    groupContracted: buildIconElement("icon_caretfilledright"),
+    groupContracted: buildIconElement("caret-filled-right"),
     menu: buildIconElement("caret-filled-down"),
-    check: buildIconElement("check")
+    check: buildIconElement("check"),
+    error: buildIconElement("alert")
 };
 let consts = {
     GROUP_HEADER_HEIGHT: 24,
+    DEFAULT_HEADER_HEIGHT: 24,
+    HEADER_WITH_SUB_HEIGHT: 42,
     ROW_HEIGHT: 32,
     DEFAULT_CHECKBOX_COL_WIDTH: 80,
     GROUP_ICON_PADDING: 4,
     DEFAULT_CELL_PADDING: 8,
     FONT_SIZE: 20,
-    HIDDEN_LAST_ROW_HEIGHT:270 // tall enough to accomodate date pickers etc.
+    HIDDEN_LAST_ROW_HEIGHT:270 // tall enough to accommodate date pickers etc.
 };
 
 let AGGrid = React.createClass({
     mixins: [FluxMixin],
+    rowHeight: consts.DEFAULT_HEADER_HEIGHT,
 
     propTypes: {
         uniqueIdentifier: React.PropTypes.string,
         selectionActions: React.PropTypes.element,
         reportHeader: React.PropTypes.element,
+        reportFooter: React.PropTypes.element,
         columns: React.PropTypes.array,
         loading: React.PropTypes.bool,
+        isInlineEditOpen: React.PropTypes.bool,
         records: React.PropTypes.array,
+        appUsers:React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
-        onRowClick: React.PropTypes.func
+        rptId: React.PropTypes.string,
+        validateRecord: React.PropTypes.func,
+        validateFieldValue: React.PropTypes.func,
+        onRowClick: React.PropTypes.func,
+        onFieldChange: React.PropTypes.func,
+        onRecordChange: React.PropTypes.func,
+        onRecordSaveClicked: React.PropTypes.func,
+        onRecordAdd: React.PropTypes.func,
+        onRecordNewBlank: React.PropTypes.func,
+        onEditRecordStart: React.PropTypes.func,
+        onEditRecordCancel: React.PropTypes.func,
+        OnRecordDelete: React.PropTypes.func
     },
     contextTypes: {
         touch: React.PropTypes.bool,
-        history: React.PropTypes.object,
         flux: React.PropTypes.object
     },
 
@@ -75,7 +111,8 @@ let AGGrid = React.createClass({
 
     getInitialState() {
         return {
-            editingRowNode: null // which ag-grid row node object is being edited
+            editingRowNode: null, // which ag-grid row node object is being edited
+            rowEditErrors: null // the current edit row errors found
         };
     },
 
@@ -83,6 +120,73 @@ let AGGrid = React.createClass({
         this.api = params.api;
         this.columnApi = params.columnApi;
         this.onMenuClose();
+        this.installHeaderMenus();
+        this.api.setHeaderHeight(this.rowHeight);
+    },
+
+    /**
+     * create a column header menu
+     * @param columnIndex
+     * @param pullRight position from right side to avoid clipping
+     * @returns JSX column header dropdown
+     */
+    createHeaderMenu(columnIndex, pullRight) {
+
+        const colDef = this.props.columns[columnIndex];
+
+        let isSortedAsc = true;
+
+        const isFieldSorted = _.find(this.props.sortFids, fid => {
+            if (Math.abs(fid) === colDef.id) {
+                isSortedAsc = fid > 0;
+                return true;
+            }
+        });
+
+        const sortAscText = this.getSortAscText(colDef, "sort");
+        const sortDescText = this.getSortDescText(colDef, "sort");
+        const groupAscText = this.getSortAscText(colDef, "group");
+        const groupDescText = this.getSortDescText(colDef, "group");
+
+        return (<Dropdown bsStyle="default" noCaret id="dropdown-no-caret" pullRight={pullRight}>
+            <Button tabIndex="0" bsRole="toggle" className={"dropdownToggle iconActionButton"}>
+                <QBicon icon="caret-filled-down"/>
+            </Button>
+
+            <Dropdown.Menu>
+                <MenuItem onSelect={() => this.sortReport(colDef, true, isFieldSorted && isSortedAsc)}>
+                    {isFieldSorted && isSortedAsc && <QBicon icon="check"/>} {sortAscText}
+                </MenuItem>
+                <MenuItem onSelect={() => this.sortReport(colDef, false, isFieldSorted && !isSortedAsc)}>
+                    {isFieldSorted && !isSortedAsc && <QBicon icon="check"/>} {sortDescText}
+                </MenuItem>
+                <MenuItem divider/>
+                <MenuItem onSelect={() => this.groupReport(colDef, true)}> {groupAscText}</MenuItem>
+                <MenuItem onSelect={() => this.groupReport(colDef, false)}> {groupDescText}</MenuItem>
+                <MenuItem divider/>
+                <MenuItem><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
+                <MenuItem><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
+                <MenuItem><I18nMessage message="report.menu.hideColumn"/></MenuItem>
+                <MenuItem divider/>
+                <MenuItem><I18nMessage message="report.menu.newTable"/></MenuItem>
+                <MenuItem divider/>
+                <MenuItem><I18nMessage message="report.menu.columnProps"/></MenuItem>
+                <MenuItem><I18nMessage message="report.menu.fieldProps"/></MenuItem>
+            </Dropdown.Menu>
+        </Dropdown>);
+    },
+
+    /**
+     * mount the react header menus into the dom placeholders (ag-header-cell-menu-button class)
+     */
+    installHeaderMenus() {
+        const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
+
+        // convert nodelist to array then iterate to render each menu
+        Array.from(headers).map((header, index) => {
+            const pullRight = index === headers.length - 1;
+            ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
+        });
     },
     /**
      * Build the menu items for sort/group
@@ -126,6 +230,7 @@ let AGGrid = React.createClass({
      * On selection of sort option from menu fire off the action to sort the data
      * @param column
      * @param asc
+     * @param alreadySorted
      */
     sortReport(column, asc, alreadySorted) {
         if (alreadySorted) {
@@ -155,28 +260,28 @@ let AGGrid = React.createClass({
 
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
         let sortFid = column.id.toString();
-        let groupString = ReportUtils.getGroupString(sortFid, asc, GroupTypes.GROUP_TYPE.text.equals);
+        let groupString = ReportUtils.getGroupString(sortFid, asc, GROUP_TYPE.TEXT.equals);
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
-        let sortList_param = ReportUtils.prependSortFidToList(sortList, groupString);
+        let sortListParam = ReportUtils.prependSortFidToList(sortList, groupString);
 
-        /** AG-grid has a bug where on re-render it doesnt call groupRenderer
-         And hence doesnt render group headers.
+        /** AG-grid has a bug where on re-render it doesn't call groupRenderer
+         And hence doesn't render group headers.
          To get around that, on grouping rebuild the whole report
          If the report was grouped on the previous render then groupRender was already called so no need to re-load everything.
          So optimize for that case..
         */
         if (this.props.groupEls.length) {
             let queryParams = {};
-            queryParams[query.SORT_LIST_PARAM] = sortList_param;
+            queryParams[query.SORT_LIST_PARAM] = sortListParam;
             flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, queryParams);
         } else {
             flux.actions.loadReport(this.props.appId,
                 this.props.tblId,
-                this.props.rptId, true, null, null, sortList_param);
+                this.props.rptId, true, null, null, sortListParam);
         }
     },
     /**
-     * AG-grid doesnt fire any events or add any classes to the column for which menu has been opened
+     * AG-grid doesn't fire any events or add any classes to the column for which menu has been opened
      * This makes the menu look like its detached from the header. The following is a hack to handle this.
      * When a menu opens store the selectedColumn and then on DonNodeRemoved event if menu has been closed then
      * remove the class from selectedColumn
@@ -195,49 +300,17 @@ let AGGrid = React.createClass({
             if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
                 if (this.selectedColumnId.length) {
                     let toRemove = this.selectedColumnId[0];
-                    let occurences = _.filter(this.selectedColumnId, (column) => {
+                    let occurrences = _.filter(this.selectedColumnId, (column) => {
                         return column === toRemove;
                     });
                     this.selectedColumnId = this.selectedColumnId.splice(1, this.selectedColumnId.length);
                     let columnHeader = document.querySelectorAll('div.ag-header-cell[colId="' + toRemove + '"]');
-                    if (occurences.length <= 1) {
+                    if (occurrences.length <= 1) {
                         columnHeader[0].classList.remove("selected");
                     }
                 }
             }
         });
-    },
-    /**
-     * Build the column menu. This gets called every time menu is opened
-     * @param params
-     * @returns {*[]}
-     */
-    getMainMenuItems(params) {
-        this.selectColumnHeader(params.column.colDef);
-        let isSortedAsc = true;
-        let isFieldSorted = _.find(this.props.sortFids, (fid) => {
-            if (Math.abs(fid) === params.column.colDef.id) {
-                isSortedAsc = fid > 0;
-                return true;
-            }
-        });
-        let menuItems = [
-            {"name": this.getSortAscText(params.column.colDef, "sort"), "icon": isFieldSorted && isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, true, isFieldSorted && isSortedAsc)},
-            {"name": this.getSortDescText(params.column.colDef, "sort"), "icon": isFieldSorted && !isSortedAsc ? gridIcons.check : "", action: () => this.sortReport(params.column.colDef, false, isFieldSorted && !isSortedAsc)}];
-        menuItems.push("separator");
-        menuItems.push({"name": this.getSortAscText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, true)},
-            {"name": this.getSortDescText(params.column.colDef, "group"), action: () => this.groupReport(params.column.colDef, false)});
-        menuItems.push("separator");
-        menuItems.push({"name": Locale.getMessage("report.menu.addColumnBefore")},
-            {"name": Locale.getMessage("report.menu.addColumnAfter")},
-            {"name": Locale.getMessage("report.menu.hideColumn")}
-        );
-        menuItems.push("separator");
-        menuItems.push({"name": Locale.getMessage("report.menu.newTable")});
-        menuItems.push("separator");
-        menuItems.push({"name": Locale.getMessage("report.menu.columnProps")},
-            {"name": Locale.getMessage("report.menu.fieldProps")});
-        return menuItems;
     },
 
     /**
@@ -261,7 +334,7 @@ let AGGrid = React.createClass({
     },
     getRowHeight(rowItem) {
         if (rowItem.data.isHiddenLastRow) {
-            // in in selection mode set the height of the hidden last row to make space for datepickers etc.
+            // in in selection mode set the height of the hidden last row to make space for date-pickers etc.
             return consts.HIDDEN_LAST_ROW_HEIGHT;
         } else if (rowItem.node.field === "group") {
             return consts.GROUP_HEADER_HEIGHT;
@@ -286,19 +359,80 @@ let AGGrid = React.createClass({
      * @param params ag row data
      */
     getRowClass(params) {
-
         return (params.node === this.state.editingRowNode) ? "editing" : "";
     },
 
+    /**
+     * user has tabbed out of a cell, move the edit row if necessary
+     * @param colDef
+     */
+    onCellTab(colDef) {
+
+        const lastColumn = this.props.columns[this.props.columns.length - 1];
+        if (colDef.field === lastColumn.field) {
+            // tabbed out of last column
+            const currentIndex = this.state.editingRowNode.childIndex;
+            const allRows = this.api.getModel().allRows;
+
+            if (currentIndex < allRows.length - 1) {
+                this.editRow(allRows[currentIndex + 1]); // edit next row
+            } else if (allRows.length > 1) {
+                this.editRow(allRows[0]); // on last row, edit 1st row
+            }
+        }
+    },
+
+    /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    openRecordForEdit(data) {
+
+        const recordId = data[this.props.uniqueIdentifier].value;
+
+        const flux = this.getFlux();
+
+        flux.actions.openRecordForEdit(recordId);
+    },
+
+    /**
+     * get list of users for this app
+     *
+     * @returns app user objects
+     */
+    getAppUsers() {
+        return this.props.appUsers;
+    },
+
+    // Careful about setting things in context, they do not update when the related prop updates
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
-        this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
+        this.gridOptions.context.defaultActionCallback = this.openRecordForEdit;
+        this.gridOptions.context.cellTabCallback = this.onCellTab;
+        this.gridOptions.context.onRecordChange = this.props.onRecordChange;
+        this.gridOptions.context.onRecordAdd = this.props.onRecordAdd;
+        this.gridOptions.context.onEditRecordStart = this.props.onEditRecordStart;
+        this.gridOptions.context.onRecordSaveClicked = this.handleRecordSaveClicked; // does local method, then calls prop method
+        this.gridOptions.context.onRecordNewBlank = this.handleRecordNewBlank; // does local method, then calls prop method
+        this.gridOptions.context.onFieldChange = this.handleFieldChange;// does local method, then calls prop method
+        this.gridOptions.context.onEditRecordCancel = this.handleEditRecordCancel; // does local method, then calls prop method
+        this.gridOptions.context.getPendingChanges = this.props.getPendingChanges;
+        this.gridOptions.context.validateRecord = this.handleValidateRecord;
+        this.gridOptions.context.validateFieldValue = this.handleValidateFieldValue;
+        this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
+
+        this.gridOptions.context.keyField = this.props.keyField;
+        this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
+
+        this.gridOptions.context.getAppUsers = this.getAppUsers;
+
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
         this.gridOptions.getRowClass = this.getRowClass;
 
         this.refs.gridWrapper.addEventListener("scroll", this.props.onScroll);
 
     },
+
     componentWillUnmount() {
         this.refs.gridWrapper.removeEventListener("scroll", this.props.onScroll);
     },
@@ -309,10 +443,27 @@ let AGGrid = React.createClass({
             flux.actions.mark('component-AgGrid start');
         }
     },
-    componentDidUpdate() {
+    componentDidUpdate(prevProps,  prevState) {
         if (!this.props.loading) {
             let flux = this.getFlux();
             flux.actions.measure('component-AgGrid', 'component-AgGrid start');
+        }
+        if (!this.props.isInlineEditOpen && prevProps.isInlineEditOpen) {
+            // done saving close the edit
+            this.editRow();
+            logger.debug('edit completed');
+        }
+        // we have a new inserted row put it in edit mode
+        if (typeof (this.props.editingIndex) !== 'undefined' && this.props.editingIndex !== null) {
+            //get the node at editingIndex
+            let atIndex = 0;
+            this.api.forEachNode((node) => {
+                if (atIndex === this.props.editingIndex + 1)  {
+                    //edit the record at specified index
+                    this.startEditRow(this.props.editingId, node);
+                }
+                atIndex++;
+            });
         }
     },
     // Performance improvement - only update the component when certain state/props change
@@ -328,13 +479,16 @@ let AGGrid = React.createClass({
         if (!_.isEqual(nextProps.columns, this.props.columns)) {
             return true;
         }
+        if (!_.isEqual(nextProps.isInlineEditOpen, this.props.isInlineEditOpen) && !nextProps.isInlineEditOpen) {
+            return true;
+        }
         return false;
     },
     /**
      * Helper method to auto-resize all columns to the content's width. This is not called anywhere right now - more design is needed on sizing.
      */
     autoSizeAllColumns() {
-        var allColumnIds = [];
+        const allColumnIds = [];
         if (this.columnApi) {
             if (this.props.columns) {
                 this.props.columns.forEach(columnDef => {
@@ -361,12 +515,40 @@ let AGGrid = React.createClass({
         flux.actions.selectedRows([]);
     },
     /**
+     * is an element inside the edit-mode grid cell?
+     * @param elem
+     * @returns {boolean}
+     */
+    isEditChild(elem) {
+
+        let parent = elem.parentNode;
+        while (parent) {
+            if (parent.classList.contains("editing")) {
+                return true;
+            }
+            if (parent.classList.contains("ag-row") || parent.classList.contains("agGrid")) {
+                return false;
+            }
+            parent = parent.parentNode; // traverse up the DOM
+        }
+        return false;
+    },
+
+    startEditRow(id, node) {
+        this.props.onEditRecordStart(id);
+        this.editRow(node);
+    },
+    /**
      * Capture the row-click event. Send to record view on row-click
      * @param params
      */
     onRowClicked(params) {
 
         const target = params.event.target;
+
+        if (this.isEditChild(target.parentNode)) {
+            return;
+        }
 
         //For click on group, expand/collapse the group.
         if (params.node.field === "group") {
@@ -394,8 +576,7 @@ let AGGrid = React.createClass({
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            this.editRow(params.node);
-
+            this.startEditRow(params.data[this.props.uniqueIdentifier].value, params.node);
             return;
         }
         if (this.clickTimeout) {
@@ -406,7 +587,7 @@ let AGGrid = React.createClass({
         this.clickTimeout = setTimeout(() => {
             // navigate to record if timeout wasn't canceled by 2nd click
             this.clickTimeout = null;
-            if (this.props.onRowClick && (this.api.getSelectedRows().length === 0)) {
+            if (this.props.onRowClick && (!this.state.editingRowNode)) {
                 this.props.onRowClick(params.data);
             }
         }, 500);
@@ -422,7 +603,7 @@ let AGGrid = React.createClass({
         const rowsToRefresh = [];
 
         if (currentRow) {
-            // force grid to rerender the previously edited row
+            // force grid to re-render the previously edited row
             rowsToRefresh.push(currentRow);
         }
         if (node) {
@@ -431,18 +612,18 @@ let AGGrid = React.createClass({
         }
 
         // the refresh needs the new state so refresh in the setState callback
-        this.setState({editingRowNode: node}, () => {
+        this.setState({editingRowNode: node, rowEditErrors: null}, () => {
+            this.gridOptions.context.rowEditErrors = null;
             this.api.refreshRows(rowsToRefresh);
         });
     },
 
     /**
      * Capture the row-selection/deselection change events.
-     * For some reason this doesnt seem to fire on deselectAll but doesnt matter for us.
+     * For some reason this doesn't seem to fire on deselectAll but doesn't matter for us.
      */
     onSelectionChanged() {
         let flux = this.getFlux();
-
         flux.actions.selectedRows(this.getSelectedRows());
     },
 
@@ -456,7 +637,7 @@ let AGGrid = React.createClass({
     },
     /**
      * Capture the event if all-select checkbox is clicked.
-     * We want to make sure if all-checkbox is clicked then the event doesnt propagate to all rows in turn.
+     * We want to make sure if all-checkbox is clicked then the event doesn't propagate to all rows in turn.
      * Use selectAllClicked state variable to keep track of this.
      */
     allCheckBoxSelected() {
@@ -480,14 +661,143 @@ let AGGrid = React.createClass({
     getSelectedRows() {
         let rows = [];
         if (this.api) {
-            this.api.getSelectedRows().forEach((row) => {
-                if (row[this.props.uniqueIdentifier]) {
-                    rows.push(row[this.props.uniqueIdentifier]);
+            this.api.getSelectedRows().forEach(row => {
+                if (row[SchemaConsts.DEFAULT_RECORD_KEY]) {
+                    rows.push(row[SchemaConsts.DEFAULT_RECORD_KEY].value);
                 }
             });
         }
         return rows;
     },
+
+    handleEditRecordCancel(id) {
+        if (!this.props.onEditRecordCancel) {
+            return;
+        }
+        this.props.onEditRecordCancel(id);
+        this.editRow(); // edit nothing
+    },
+
+
+    handleFieldChange(change) {
+        if (!this.props.onFieldChange) {
+            return;
+        }
+
+        // if field was in error remove error
+        if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
+            // is the field being changed currently in error state if so remove error
+            // and it will get re-validated on blur or save
+            let found = this.state.rowEditErrors.errors.findIndex((err) => err.id === change.fid);
+            if (found !== -1) {
+                let newErrors = _.cloneDeep(this.state.rowEditErrors);
+
+                // remove the error from the array of errors
+                newErrors.errors.splice(found, 1);
+                // was it last error? whole row is ok now
+                if (newErrors.errors.length === 0) {
+                    newErrors.errors = [];
+                    newErrors.ok = true;
+                }
+
+                //update state, edit tool column
+                this.setState({rowEditErrors: newErrors}, () => {
+                    this.gridOptions.context.rowEditErrors = newErrors;
+                    this.props.onFieldChange(change);
+                    this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
+                });
+            }
+        }
+        this.props.onFieldChange(change);
+    },
+
+    handleRecordSaveClicked(id) {
+        if (!this.props.onRecordSaveClicked) {
+            return;
+        }
+        let validation = this.props.onRecordSaveClicked(id);
+        if (validation && !validation.ok) {
+            //keep in edit and show error
+            this.setState({rowEditErrors: validation}, () => {
+                this.gridOptions.context.rowEditErrors = validation;
+                this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
+            });
+        }
+    },
+
+
+    handleValidateFieldValue(def, value, checkRequired) {
+        let status = this.props.validateFieldValue(def, value, checkRequired);
+        let origErrors = this.state.rowEditErrors;
+        let newErrors;
+        let found = -1;
+
+        // find any existing error on the field
+        if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
+            found = this.state.rowEditErrors.errors.findIndex((err) => err.id === status.id);
+        }
+
+        // if field was in error
+        if (status.isInvalid) {
+            // has exiting error update it
+            if (found !== -1) {
+                newErrors = _.cloneDeep(this.state.rowEditErrors);
+                newErrors.errors[found] = status;
+            } else {
+                // add into to list of errors in the row
+                newErrors = {
+                    ok : false,
+                    errors: []
+                };
+                if (this.state.rowEditErrors) {
+                    _.cloneDeep(this.state.rowEditErrors);
+                }
+                newErrors.errors.push(status);
+            }
+            newErrors.ok = false;
+        } else if (found !== -1) {
+            // not invalid error, remove from list if its there.
+            // remove the error from the array of errors
+            newErrors = _.cloneDeep(this.state.rowEditErrors);
+            newErrors.errors.splice(found, 1);
+
+            // was it last one? row is ok now
+            if (newErrors.errors.length === 0) {
+                newErrors.errors = [];
+                newErrors.ok = true;
+            }
+        }
+        //update state
+        if (newErrors !== undefined && !_.isEqual(origErrors, newErrors)) {
+            this.setState({rowEditErrors: newErrors}, () => {
+                this.gridOptions.context.rowEditErrors = newErrors;
+                this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
+            });
+        }
+        return status;
+    },
+
+    handleValidateRecord() {
+        if (!this.props.validateRecord) {
+            return;
+        }
+        // in the aggrid record validate so we have
+        // the current state and its node/row
+        // we can just loop thru the cells and validate each
+        this.props.validateRecord(arguments);
+    },
+
+    handleRecordNewBlank(id) {
+        let validation = this.props.onRecordNewBlank(id);
+        if (validation && !validation.ok) {
+            //keep in edit and show error
+            this.setState({rowEditErrors: validation}, () => {
+                this.gridOptions.context.rowEditErrors = validation;
+                this.api.refreshRows([this.state.editingRowNode]);
+            });
+        }
+    },
+
 
     /**
      * Callback - what to do when the master group expand/collapse is clicked
@@ -510,33 +820,25 @@ let AGGrid = React.createClass({
 
     getCheckBoxColumnGroupedHeaderWidth() {
         // this is a weird calculation but this is because we want the checkbox to always show based on number of grouping levels
-        // for now this is being calulated as num_groups*(font size + padding) + num_checkboxes*(size of checkbox + padding)
+        // for now this is being calculated as num_groups*(font size + padding) + num_checkboxes*(size of checkbox + padding)
         // 3px error is because icons need to be fixed, so that'll be removed.
-        const checkbox_size = 12;
+        const checkboxSize = 12;
         return consts.DEFAULT_CELL_PADDING +
             this.props.groupLevel * (consts.FONT_SIZE + consts.GROUP_ICON_PADDING) +
-            checkbox_size + consts.DEFAULT_CELL_PADDING - 3;
+            checkboxSize + consts.DEFAULT_CELL_PADDING - 3;
     },
+
     /**
-     * Builder for "checkbox" column for the grid
-     * Also contains grouping expand/collpase icon if grouping is turned on
+     * checkbox column header element
+     * (also contains grouping expand/collapse icon if grouping is turned on)
+     * @returns {Element} the DOM checkbox header element
      */
-    getCheckBoxColumn() {
-        //Add checkbox column
-        let checkBoxCol = {};
-        checkBoxCol.field = "checkbox";
-        var checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.className = "selectAllCheckbox";
-        checkbox.checked = this.allRowsSelected();
-        checkbox.onclick = (event) => {
-            this.allCheckBoxSelected(event);
-        };
-        var headerCell = document.createElement("div");
+    getCheckBoxColumnHeader() {
+        let headerCell = document.createElement("div");
         headerCell.className = "checkboxHolder";
 
         if (this.props.showGrouping) {
-            var collapser = document.createElement("span");
+            let collapser = document.createElement("span");
             collapser.className = "collapser";
             collapser.setAttribute("state", "open");
             collapser.innerHTML = gridIcons.groupExpanded;
@@ -546,11 +848,27 @@ let AGGrid = React.createClass({
             headerCell.appendChild(collapser);
         }
 
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "selectAllCheckbox";
+        checkbox.checked = this.allRowsSelected();
+        checkbox.onclick = this.allCheckBoxSelected;
+
         headerCell.appendChild(checkbox);
-        //ag-grid doesnt seem to allow react components sent into headerCellRender.
-        checkBoxCol.headerCellRenderer = () => {
-            return headerCell;
-        };
+
+        return headerCell;
+    },
+    /**
+     * Builder for "checkbox" column for the grid
+     */
+    getCheckBoxColumn() {
+        //Add checkbox column
+        let checkBoxCol = {};
+        checkBoxCol.field = "checkbox";
+
+        //ag-grid doesn't seem to allow react components sent into headerCellRender.
+        checkBoxCol.headerCellRenderer = this.getCheckBoxColumnHeader;
+
         checkBoxCol.checkboxSelection = true;
         checkBoxCol.headerClass = "gridHeaderCell";
         checkBoxCol.cellClass = "gridCell selectionCell";
@@ -562,12 +880,12 @@ let AGGrid = React.createClass({
             checkBoxCol.width = consts.DEFAULT_CHECKBOX_COL_WIDTH;
         }
         checkBoxCol.cellRenderer = reactCellRendererFactory(SelectionColumnCheckBoxCellRenderer);
-
         checkBoxCol.pinned = 'left';
+
         return checkBoxCol;
     },
 
-    setCSSClass_helper: function(obj, classname) {
+    setCSSClass_helper(obj, classname) {
         if (typeof (obj.cellClass) === 'undefined') {
             obj.cellClass = classname;
         } else {
@@ -579,55 +897,92 @@ let AGGrid = React.createClass({
             obj.headerClass += " " + classname;
         }
     },
-    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
-    getColumnProps: function() {
-        let columns = this.props.columns;
 
+    /**
+     * ag-grid template for field column headers
+     * @param column
+     * @returns {Element}
+     */
+    getHeaderCellTemplate(column) {
+
+        let {headerName} = column;
+        //if any of the columns has a units description add that in paratheses in a new line and raise the header height
+        let headerSubscript = column.datatypeAttributes && column.datatypeAttributes.unitsDescription ? '(' + column.datatypeAttributes.unitsDescription + ')' : null;
+        let headerSubscriptHTML = "";
+
+        if (headerSubscript) {
+            this.rowHeight = consts.HEADER_WITH_SUB_HEIGHT;
+            headerSubscriptHTML = `<span class="subHeader">${headerSubscript}</span>`;
+        }
+
+        let cell = document.createElement('div');
+        cell.className = "ag-header-cell";
+
+        cell.innerHTML = `<div class="ag-header-cell-text">${headerName}${headerSubscriptHTML}</div>
+            <span class="ag-header-icon ag-header-cell-menu-button "></span>`;
+
+        return cell;
+    },
+    /* for each field attribute that has some presentation effect convert that to a css class before passing to the grid.*/
+    getColumnProps() {
+        let columns = this.props.columns;
 
         if (columns) {
             let columnsData = columns.map((obj, index) => {
+
+                let {datatypeAttributes} = obj;
+
                 obj.headerClass = "gridHeaderCell";
+                obj.headerCellTemplate = this.getHeaderCellTemplate(obj);
                 obj.cellClass = "gridCell";
                 obj.suppressResize = true;
                 obj.minWidth = 100;
 
-                if (obj.datatypeAttributes) {
-                    var datatypeAttributes = obj.datatypeAttributes;
+                if (datatypeAttributes) {
                     for (let attr in datatypeAttributes) {
                         switch (attr) {
 
                         case 'type': {
                             switch (datatypeAttributes[attr]) {
 
-                            case serverTypeConsts.NUMERIC:
-                                this.setCSSClass_helper(obj, "AlignRight");
+                            case serverTypeConsts.NUMERIC :
+                                obj.headerClass += " AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(NumericCellRenderer);
                                 break;
                             case serverTypeConsts.DATE :
                                 obj.cellRenderer = reactCellRendererFactory(DateCellRenderer);
                                 break;
-                            case serverTypeConsts.DATE_TIME:
+                            case serverTypeConsts.DATE_TIME :
                                 obj.cellRenderer = reactCellRendererFactory(DateTimeCellRenderer);
                                 break;
                             case serverTypeConsts.TIME_OF_DAY :
                                 obj.cellRenderer = reactCellRendererFactory(TimeCellRenderer);
                                 break;
                             case serverTypeConsts.CHECKBOX :
+                                obj.headerClass += " AlignCenter";
                                 obj.cellRenderer = reactCellRendererFactory(CheckBoxCellRenderer);
                                 break;
                             case serverTypeConsts.USER :
                                 obj.cellRenderer = reactCellRendererFactory(UserCellRenderer);
                                 break;
                             case serverTypeConsts.CURRENCY :
+                                obj.headerClass += " AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(CurrencyCellRenderer);
                                 break;
                             case serverTypeConsts.RATING :
+                                obj.headerClass += " AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(RatingCellRenderer);
                                 break;
                             case serverTypeConsts.PERCENT :
+                                obj.headerClass += " AlignRight";
                                 obj.cellRenderer = reactCellRendererFactory(PercentCellRenderer);
                                 break;
-
+                            case serverTypeConsts.DURATION :
+                                obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
+                                break;
+                            case serverTypeConsts.URL :
+                                obj.cellRenderer = reactCellRendererFactory(UrlCellRenderer);
+                                break;
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
                                 break;
@@ -636,16 +991,12 @@ let AGGrid = React.createClass({
                         }
                     }
 
+                    // todo: this really be be done in the cell renderers instead
                     if (datatypeAttributes.clientSideAttributes) {
-                        var clientSideAttributes = datatypeAttributes.clientSideAttributes;
-                        for (var cattr in clientSideAttributes) {
+                        let clientSideAttributes = datatypeAttributes.clientSideAttributes;
+                        for (let cattr in clientSideAttributes) {
                             switch (cattr) {
-                            case 'bold':
-                                if (clientSideAttributes[cattr]) {
-                                    this.setCSSClass_helper(obj, "Bold");
-                                }
-                                break;
-                            case 'word-wrap':
+                            case 'word_wrap':
                                 if (clientSideAttributes[cattr]) {
                                     this.setCSSClass_helper(obj, "NoWrap");
                                 }
@@ -668,7 +1019,6 @@ let AGGrid = React.createClass({
     getColumns() {
         let columnProps = this.getColumnProps();
 
-
         let columns = columnProps.slice(0);
 
         //This should be based on perms -- something like if(this.props.allowMultiSelection)
@@ -676,15 +1026,14 @@ let AGGrid = React.createClass({
 
         return columns;
     },
-
     render() {
         let columnDefs = this.getColumns();
         let gridWrapperClasses = this.getSelectedRows().length ? "gridWrapper selectedRows" : "gridWrapper";
+
         return (
             <div className="reportTable">
-
                 <div className={gridWrapperClasses} ref="gridWrapper">
-                    <Loader loaded={!this.props.loading}>
+                    <Loader loaded={!this.props.loading} options={SpinnerConfigurations.LARGE_BREAKPOINT_REPORT}>
                         {this.props.records && this.props.records.length > 0 ?
                             <div className="agGrid">
                                 <AgGridReact
@@ -697,6 +1046,17 @@ let AGGrid = React.createClass({
                                     // binding to array properties
                                     columnDefs={columnDefs}
                                     rowData={this.props.records}
+                                    //handlers on col or row changes
+                                    onFieldChange={this.handleFieldChange}
+                                    onRecordChange={this.props.onRecordChange}
+                                    onRecordSaveClicked={this.handleRecordSaveClicked}
+                                    onRecordAdd={this.props.onRecordAdd}
+                                    onRecordNewBlank={this.props.onRecordNewBlank}
+                                    validateRecord={this.props.validateRecord}
+                                    validateFieldValue={this.handleValidateFieldValue}
+                                    onEditRecordStart={this.props.onEditRecordStart}
+                                    onEditRecordCancel={this.handleEditRecordCancel}
+                                    onRecordDelete={this.props.onRecordDelete}
 
                                     //default behavior properties
                                     rowSelection="multiple"
@@ -708,7 +1068,6 @@ let AGGrid = React.createClass({
                                     suppressCellSelection="true"
 
                                     //column menus
-                                    getMainMenuItems={this.getMainMenuItems}
                                     suppressMenuFilterPanel="true"
                                     suppressMenuColumnPanel="true"
                                     suppressContextMenu="true"
@@ -729,6 +1088,7 @@ let AGGrid = React.createClass({
                         this.props.loading ? <div className="loadedContent"></div> : null
                     }
                 </div>
+
             </div>
         );
     }

@@ -13,9 +13,11 @@
         APPLICATION_JSON: 'application/json',
         APPLICATION_XML : 'application/xml',
         TEXT_HTML       : 'text/html',
+        ACCEPT          : 'Accept',
+        // Timezones
         UTC_TIMEZONE    : 'Universal',
-        EST_TIMEZONE    : 'US/Eastern',
-        PST_TIMEZONE    : 'US/Pacific',
+        EST_TIMEZONE    : 'America/New_York',
+        PST_TIMEZONE    : 'America/Los_Angeles',
         CET_TIMEZONE    : 'Europe/Berlin',
         JST_TIMEZONE    : 'Asia/Tokyo',
         //Field types
@@ -42,6 +44,11 @@
         USER            : 'USER',
         FILE_ATTACHMENT : 'FILE_ATTACHMENT',
 
+        NUMERIC_SEPARATOR: {
+            PERIOD: '.',
+            COMMA: ','
+        },
+
         //Query expressions
         QUERY_AND       : 'AND',
         QUERY_OR        : 'OR',
@@ -61,12 +68,25 @@
             OFFSET: 'offset',
             NUM_ROWS: 'numRows'
         },
+        FORMAT : {
+            DISPLAY: 'display',
+            RAW: 'raw'
+        },
         MILLI : {
             ONE_SECOND: 1000,
             ONE_MINUTE: 1000 * 60,
             ONE_HOUR: 1000 * 60 * 60,
             ONE_DAY: 1000 * 60 * 60 * 24,
             ONE_WEEK: 1000 * 60 * 60 * 24 * 7
+        },
+        PAGE : {
+            DEFAULT_OFFSET : 0,
+            DEFAULT_NUM_ROWS: 20,
+            MAX_NUM_ROWS: 1000
+        },
+        SORT_ORDER: {
+            ASC: 'asc',
+            DESC: 'desc'
         }
     });
 

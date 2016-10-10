@@ -1,10 +1,7 @@
 import constants from './constants';
 import BaseService from './baseService';
-import NumberUtils from '../utils/numberUtils';
-import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
 import Promise from 'bluebird';
-import {sampleFormJSON} from '../components/QBForm/fakeData.js';
 
 class FormService extends BaseService {
 
@@ -13,35 +10,63 @@ class FormService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_FORM_AND_RECORD  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMANDRECORD}`
+            GET_FORM_COMPONENTS  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}/${constants.FORMCOMPONENTS}`,
+            GET_FORM_COMPONENTS_ONLY  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.FORMCOMPONENTS}`
+
         };
     }
 
     /**
-     * Get all records filtered optionally by query, clist, slist, offset, numRows.
+     * Get form meta and record data
      *
      * @param appId
      * @param tableId
-     * @param optionalParams may contain the any of the following -
-     *  formatted - is output formatted for UI display or raw data
-     *  query - unparsed expression to filter records by
-     *  clist - columns to query
-     *  slist - sortby columns
-     *  glist - groupBy columns
-     *  offset - zero based row offset
-     *  numRows - number of rows to return on the request
+     * @param recordId
+     * @param formType
      */
-    getFormAndRecord(appId, tableId, recordId, formType) {
+    getFormAndRecord(appId, tableId, recordId, rptId, formType) {
         let params = {};
 
-        if (formType) {
-            params[query.FORM_TYPE] = formType;
+        //  report id is optional
+        if (rptId) {
+            params[query.REPORT_ID_PARAM] = rptId;
         }
 
-        return Promise.resolve({data: sampleFormJSON});
-        //TODO add a node end point.
-        //let url = super.constructUrl(this.API.GET_FORM_AND_RECORD, [appId, tableId]);
-        //return super.get(url, {params:params});
+        //  if no form type specified, will default to VIEW
+        if (formType) {
+            params[query.FORM_TYPE_PARAM] = formType;
+        } else {
+            params[query.FORM_TYPE_PARAM] = query.VIEW_FORM_TYPE;
+        }
+
+        //  always want formatted data
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+
+        let url = super.constructUrl(this.API.GET_FORM_COMPONENTS, [appId, tableId, recordId]);
+        return super.get(url, {params:params});
+    }
+
+    getForm(appId, tableId, rptId, formType) {
+        let params = {};
+
+        //  report id is optional
+        if (rptId) {
+            params[query.REPORT_ID_PARAM] = rptId;
+        }
+
+        //  if no form type specified, will default to VIEW
+        if (formType) {
+            params[query.FORM_TYPE_PARAM] = formType;
+        } else {
+            params[query.FORM_TYPE_PARAM] = query.VIEW_FORM_TYPE;
+        }
+
+        //  always want formatted data
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+
+        let url = super.constructUrl(this.API.GET_FORM_COMPONENTS_ONLY, [appId, tableId]);
+
+        return super.get(url, {params:params});
     }
 }
 

@@ -12,9 +12,11 @@
      * Integration test for TimeOfDay field formatting
      */
     describe('API - TimeOfDay record test cases - ', function() {
-        var earlyTOD = '1970-01-01T09:00:00Z[UTC]';
-        var lateTOD = '1970-01-01T15:00:00Z[UTC]';
-
+        // The Java API is only accepting time in/out for Time of Day fields
+        var earlyTODIn = '09:00:00';
+        var lateTODIn = '15:00:00';
+        var earlyTODOut = '09:00:00';
+        var lateTODOut = '15:00:00';
 
         var appWithNoFlags = {
             name  : 'TimeOfDay App - no flags',
@@ -74,12 +76,12 @@
          */
         function noFlagsTimeOfDayDataProvider(fid) {
             // TimeOfDay in morning
-            var earlyTODInput = [{id: fid, value: earlyTOD}];
-            var expectedEarlyTODRecord = {id: fid, value: earlyTOD, display: '9:00 AM'};
+            var earlyTODInput = [{id: fid, value: earlyTODIn}];
+            var expectedEarlyTODRecord = {id: fid, value: earlyTODOut, display: '9:00 am'};
 
             // TimeOfDay in afternoon
-            var lateTODInput = [{id: fid, value: lateTOD}];
-            var expectedLateTODRecord = {id: fid, value: lateTOD, display: '3:00 PM'};
+            var lateTODInput = [{id: fid, value: lateTODIn}];
+            var expectedLateTODRecord = {id: fid, value: lateTODOut, display: '3:00 pm'};
 
             // Null date
             var nullInput = [{id: fid, value: null}];
@@ -180,12 +182,12 @@
         function allFlagsTimeOfDayDataProvider_HH_MM(fid) {
 
             // TimeOfDay in early
-            var earlyTODInput = [{id: fid, value: earlyTOD}];
-            var expectedEarlyTODRecord = {id: fid, value: earlyTOD, display: '09:00'};
+            var earlyTODInput = [{id: fid, value: earlyTODIn}];
+            var expectedEarlyTODRecord = {id: fid, value: earlyTODOut, display: '09:00'};
 
             // TimeOfDay in different year
-            var lateTODInput = [{id: fid, value: lateTOD}];
-            var expectedLateTODRecord = {id: fid, value: lateTOD, display: '15:00'};
+            var lateTODInput = [{id: fid, value: lateTODIn}];
+            var expectedLateTODRecord = {id: fid, value: lateTODOut, display: '15:00'};
 
             // Null date
             var nullInput = [{id: fid, value: null}];
@@ -286,12 +288,12 @@
         function allFlagsTimeOfDayDataProvider_HH_MM_SS(fid) {
 
             // TimeOfDay in early
-            var earlyTODInput = [{id: fid, value: earlyTOD}];
-            var expectedEarlyTODRecord = {id: fid, value: earlyTOD, display: '09:00:00'};
+            var earlyTODInput = [{id: fid, value: earlyTODIn}];
+            var expectedEarlyTODRecord = {id: fid, value: earlyTODOut, display: '09:00:00'};
 
             // TimeOfDay in different year
-            var lateTODInput = [{id: fid, value: lateTOD}];
-            var expectedLateTODRecord = {id: fid, value: lateTOD, display: '15:00:00'};
+            var lateTODInput = [{id: fid, value: lateTODIn}];
+            var expectedLateTODRecord = {id: fid, value: lateTODOut, display: '15:00:00'};
 
             // Null date
             var nullInput = [{id: fid, value: null}];
