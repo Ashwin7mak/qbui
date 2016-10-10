@@ -21,14 +21,18 @@ const EmailFieldValueEditor = React.createClass({
 
         disabled: PropTypes.bool,
 
-        readOnly: PropTypes.bool
+        readOnly: PropTypes.bool,
+
+        /* optional prop to pass in placeholder text. Defaults to: 'name@dimain.com'. */
+        placeholder: PropTypes.string
     },
     getDefaultProps() {
         return {
             value: '',
             invalid: false,
             disabled: false,
-            readOnly: false
+            readOnly: false,
+            placeholder: 'name@domain.com'
         };
     },
     onBlur(newValue) {
@@ -47,15 +51,15 @@ const EmailFieldValueEditor = React.createClass({
         }
     },
     render() {
-        let {onChange, onBlur, display, value, ...otherProps} = this.props;
+        let {onChange, onBlur, display, ...otherProps} = this.props;
         return <TextFieldValueEditor onBlur={this.onBlur}
                                      onChange={this.onChange}
                                      value={this.props.value}
-                                     placeholder='name@domain.com'
-                                     inputType='email'
+                                     placeholder={this.props.placeholder}
+                                     inputType="email"
                                      invalidMessage={(this.props.invalidMessage || 'Email is required')}
                                      showClearButton={true}
-                                     {...otherProps} />
+                                     {...otherProps} />;
     }
 });
 

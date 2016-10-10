@@ -4,7 +4,7 @@ const EmailFieldValueEditorExample = React.createClass({
     getInitialState() {
         return {
             value: ''
-        }
+        };
     },
     onChange(newValue) {
         this.setState({value: newValue});
