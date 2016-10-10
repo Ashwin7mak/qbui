@@ -14,35 +14,50 @@
         }
     }
 
-    a:focus {
+    a:focus, a:active {
         /* Don't show focus state on the whole link. Should be on link and icon separately */
         border: none;
         box-shadow: none;
         outline: none;
     }
 
-    a .link:focus, a .urlIcon:focus {
-        outline: none;
-        @include text-input-focus-with-rounding;
-        padding: 2px;
+    a .link, a .urlIcon {
+        /* Set a padding so the element doesn't move when focused (with border) */
+        padding: 2px 4px;
     }
 
-    a .urlIcon:focus {
-        padding-left: 4px;
-        padding-right: 3px;
+    a .link:focus,
+    a .link:active,
+    a .urlIcon:focus,
+    a .urlIcon:active {
+        background-color: $stage-backgroundColor;
+        outline: none;
+        padding: 1px 3px;
+        @include text-input-focus-with-rounding;
     }
 
     .btn {
+        .link, .urlIcon {
+            & {
+                padding: 0;
+            }
+
+            &:active, &:focus {
+                border: none;
+                box-shadow: none;
+            }
+
+        }
         &.btn-default {
             @include urlButtonBackgroundGradient();
             color: $link-text-normal-color;
         }
 
-        &.btn-default:focus {
+        &.btn-default:focus, &.btn-default:active {
             @include focus-shadow();
             @include urlButtonBackgroundFocusGradient();
             color: $link-text-normal-color;
-            border-color: $urlButton-border-focus-color;
+            border: 1px solid $urlButton-border-focus-color;
         }
 
         &.btn-default:hover {
@@ -70,9 +85,9 @@
         transition: opacity .2s ease-in-out;
 
         @include small-breakpoint {
-            float: right;
-            margin-left: 0;
             opacity: 1;
+            position: absolute;
+            right: 2px;
         }
 
         .qbIcon {
