@@ -10,7 +10,7 @@ const EmailFieldValueEditorExample = React.createClass({
         this.setState({value: newValue});
     },
     render() {
-        return(
+        return (
             <div>
                 <dt>Default: </dt>
                 <dd>

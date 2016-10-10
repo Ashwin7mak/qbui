@@ -27,7 +27,7 @@ const EmailFieldValueRenderer = React.createClass({
         return {
             display: '',
             value: null
-        }
+        };
     },
     render() {
         // Remove value from props to be replaced by the formatted email
@@ -38,7 +38,7 @@ const EmailFieldValueRenderer = React.createClass({
         let emailLink = UrlFileAttachmentReportLinkFormatter.addProtocol(value, 'mailto:');
 
         return (
-            <UrlFieldValueRenderer value={emailLink} {...otherProps} inputType='email' />
+            <UrlFieldValueRenderer value={emailLink} {...otherProps} inputType="email" />
         );
     }
 });
