@@ -43,7 +43,7 @@ function buildMockParent(options = {disabled: false, readOnly: false, initialVal
 
 let component, domComponent;
 
-fdescribe('EmailFieldValueEditor', () => {
+describe('EmailFieldValueEditor', () => {
     it('has placeholder text', () => {
         component = TestUtils.renderIntoDocument(React.createElement(buildMockParent()));
         domComponent = ReactDOM.findDOMNode(component).querySelector('input');
