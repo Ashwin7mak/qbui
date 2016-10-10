@@ -1,11 +1,11 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
 
 .reportHeader {
-    display: flex;
-    flex-direction: row;
-    line-height: 40px;
-    order: 0;
-    font-size: 13px;
+    display:flex;
+    flex-direction:row;
+    line-height:40px;
+    order:0;
+    font-size:13px;
     flex: 0 0 auto;
     flex-basis: $top-nav-height;
     justify-content: space-between;
@@ -13,34 +13,34 @@
     background-color: #fff !important;
 
     .iconLink {
-        font-size: 22px;
+        font-size:22px;
     }
     .textLink {
         border-left: 1px solid #ccc;
         padding-left: 4px;
     }
     .textLink, .iconLink {
-        margin-right: 4px;
+        margin-right:4px;
         &:hover {
             text-decoration: none;
         }
 
     }
     .qbIcon {
-        width: auto;
+        width:auto;
         padding: 0 4px;
         color: $icon-color;
     }
 
     .left {
         flex: 0 0 auto;
-        margin-left: 5px;
+        margin-left:5px;
     }
     .center {
-        font-size: 18px;
-        display: flex;
+        font-size:18px;
+        display:flex;
         flex-direction: row;
-        align-items: center;
+        align-items:center;
         flex: 1 1 auto;
     }
     .center.title {
@@ -55,40 +55,40 @@
         .reportLabel {
             flex: 0 1 auto;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            overflow:hidden;
+            text-overflow:ellipsis;
         }
     }
     .center.searchElements {
         font-size: 14px;
-        width: 100%;
+        width:100%;
 
     }
     .right {
-        display: flex;
-        align-items: center;
+        display:flex;
+        align-items:center;
         flex: 0 0 auto;
     }
 
     .searchElements {
-        display: none;
+        display:none;
     }
     &.searching {
         .left, .right {
-            display: none;
+            display:none;
         }
         .center.title {
-            display: none;
+            display:none;
         }
         .center.searchElements {
-            display: flex;
-            flex-direction: row;
+            display:flex;
+            flex-direction:row;
             .filterSearchBoxContainer {
-                flex: 1 1 auto;
-                margin-right: 8px;
+                flex:1 1 auto;
+                margin-right:8px;
             }
             a.iconLink {
-                flex: 0 0 auto;
+                flex:0 0 auto;
             }
 
         }
@@ -98,6 +98,6 @@
 
 @include not-small-breakpoint {
     .reportHeader {
-        display: none;
+        display:none;
     }
 }

@@ -1,13 +1,10 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
 
 .touch .recordActions {
-    padding: 0;
-    width: 240px;
-    height: 100%;
-    font-size: 16px;
-
+    width: 40px;
+    height: 40px;
     a.iconLink {
-        text-decoration: none;
+        text-decoration:none;
     }
     a.iconLink.icon-badge {
         background-color: $icon-badge-color;
@@ -30,8 +27,14 @@
     a.iconLink.icon-pickles {
         background-color: $icon-pickles-color;
     }
+
     a.iconLink {
         color: #fff;
     }
+
+    font-size:16px;
+    padding: 0;
+    height: 100%;
+    width: 240px;
 }
 

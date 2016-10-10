@@ -1,4 +1,4 @@
-@import "../../../src/assets/css/qbVariables";
+@import '../../../src/assets/css/qbVariables';
 
 $search-bar-bg: #5f8ba7;
 $report-group-bg: #fff;
@@ -6,14 +6,14 @@ $report-icon-color: #f87878;
 $report-link-color: #404040;
 
 .reportsList {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
+    display:flex;
+    flex-direction:column;
+    flex:1 1 auto;
 }
 
 .reportsContainer {
-    display: flex;
-    flex-direction: column;
+    display:flex;
+    flex-direction:column;
     flex: 1 1 auto;
     .reportsTop {
         background-color: $search-bar-bg;
@@ -23,34 +23,34 @@ $report-link-color: #404040;
 }
 
 .reportGroups {
-    flex: 1 1 auto;
-    padding: 16px;
-    overflow: auto;
+    flex:1 1 auto;
+    padding:16px;
+    overflow:auto;
     -webkit-overflow-scrolling: touch;
     .qbPanel {
-        width: 100%;
+        width:100%;
     }
     .reportGroup {
 
-        margin-bottom: 16px;
+        margin-bottom:16px;
         background-color: $report-group-bg;
 
         .reportItems {
-            display: flex;
+            display:flex;
             flex-wrap: wrap;
             flex-direction: row;
             justify-content: flex-start;
         }
 
         .reportLink {
-            display: flex;
-            align-items: baseline;
-            text-overflow: ellipsis;
-            overflow: hidden;
+            display:flex;
+            align-items:baseline;
+            text-overflow:ellipsis;
+            overflow:hidden;
             color: $report-link-color;
             .qbIcon {
                 flex: 0 0 auto;
-                width: 22px;
+                width:22px;
             }
             .iconTableUISturdy-report-table {
                 color: $report-icon-table-color;
@@ -75,10 +75,10 @@ $report-link-color: #404040;
             }
             margin-right: 20px;
             margin-bottom: 10px;
-            flex: 0 0 200px;
-            cursor: pointer;
+            flex:0 0 200px;
+            cursor:pointer;
 
-            &:hover, &:focus {
+            &:hover,&:focus {
                 text-decoration: none;
             }
         }

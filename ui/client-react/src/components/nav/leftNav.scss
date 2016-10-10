@@ -1,6 +1,6 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
 
-/* left nav vars */
+/*left nav vars */
 $left-nav-padding: 15px;
 $left-nav-fg: $color2;
 $left-nav-link-fg: $color23;
@@ -23,7 +23,7 @@ $left-nav-horizontal-icon-border-color: $color32;
 }
 
 .leftNav {
-    a, a:hover, a:focus {
+    a,a:hover,a:focus {
         text-decoration: none;
     }
     .leftNavLabel {
@@ -66,21 +66,21 @@ $left-nav-horizontal-icon-border-color: $color32;
 @include medium-breakpoint {
     .leftNav.expanded {
         width: 200px;
-        transition: width 100ms ease;
+        transition:width 100ms ease;
     }
 }
 
 @include large-breakpoint {
     .leftNav.expanded {
         width: 220px;
-        transition: width 100ms ease;
+        transition:width 100ms ease;
     }
 }
 
 @include xlarge-breakpoint {
     .leftNav.expanded {
         width: 300px;
-        transition: width 100ms ease;
+        transition:width 100ms ease;
     }
 }
 
@@ -97,7 +97,7 @@ $left-nav-horizontal-icon-border-color: $color32;
             .qbIcon {
                 display: inline-block;
                 width: auto;
-                padding-right: 4px;
+                padding-right:4px;
             }
         }
     }
@@ -114,12 +114,15 @@ div.leftNavTooltip {
     }
 }
 
+
+
 /* collapsed nav overrides */
 @include not-small-breakpoint {
     .leftNav.collapsed {
         width: 40px;
-        transition: width 100ms ease;
+        transition:width 100ms ease;
         .branding {
+
             .logo, .appsToggle .navLabel, .appsToggleIcon {
                 display: none;
             }
@@ -128,7 +131,7 @@ div.leftNavTooltip {
         li.horizontal, .globalActions {
             ul {
                 li {
-                    border-right: 0;
+                    border-right:0;
                 }
                 flex-direction: column;
             }
@@ -148,17 +151,17 @@ div.leftNavTooltip {
         }
 
         .heading {
-            display: none;
+            display:none;
         }
         li.search {
             display: none;
         }
         .leftNavLabel {
-            display: none;
+            display:none;
         }
 
         .transitionGroup .tablesHeadingAndList .tablesList {
-            overflow: visible;
+            overflow:visible;
         }
     }
 }
@@ -207,16 +210,16 @@ div.leftNavTooltip {
             text-overflow: ellipsis;
         }
         button.appsToggle {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            padding-right: 25px;
+            text-overflow:ellipsis;
+            overflow:hidden;
+            padding-right:25px;
             color: $left-nav-fg;
-            height: 40px;
+            height:40px;
             border: 0;
-            border-radius: 0;
-            margin: 0;
-            text-align: left;
-            width: 100%;
+            border-radius:0;
+            margin:0;
+            text-align:left;
+            width:100%;
             padding-left: 8px;
             position: relative;
             white-space: nowrap;
@@ -250,7 +253,7 @@ div.leftNavTooltip {
         color: $search-input-fg;
         overflow: hidden;
         height: 0;
-        visibility: hidden;
+        visibility:hidden;
         transition: all 250ms ease;
     }
     .search.open {
@@ -272,7 +275,7 @@ div.leftNavTooltip {
                 font-size: 16px;
                 position: absolute;
                 right: 8px;
-                width: auto;
+                width:auto;
                 top: 10px;
             }
         }
@@ -281,24 +284,24 @@ div.leftNavTooltip {
         flex: 1 1 auto;
         overflow: visible;
         z-index: 1;
-        display: flex;
+        display:flex;
         .appsList {
-            width: 100%;
+            width:100%;
         }
         .tablesHeadingAndList {
-            flex: 1 1 auto;
+            flex:1 1 auto;
             width: 100%;
-            display: flex;
-            flex-direction: column;
+            display:flex;
+            flex-direction:column;
 
             .tablesHeading {
-                width: 100%;
+                width:100%;
                 flex: 0 0 auto;
             }
             .tablesList {
                 flex: 1 1 auto;
                 width: 100%;
-                overflow: auto;
+                overflow:auto;
             }
         }
 
@@ -311,15 +314,15 @@ div.leftNavTooltip {
         list-style-image: initial;
     }
 
-    ul.globalActionsList > li {
-        height: auto;
+    ul.globalActionsList>li {
+        height:auto;
     }
     ul.topLinks, ul.tablesHeading, ul.tablesList, ul.appsList, ul.globalActionsList {
         padding: 0;
         margin: 0;
         > li {
             position: relative;
-            a.leftNavLink, a.right, .hoverComponent > a, .globalActionLink {
+            a.leftNavLink, a.right, .hoverComponent>a, .globalActionLink {
                 line-height: 40px;
                 padding-left: 8px;
                 color: $left-nav-link-fg;
@@ -349,13 +352,14 @@ div.leftNavTooltip {
 
     ul.tablesList, ul.tablesHeading {
 
-        li {
+         li {
+
             a.right {
                 opacity: 0;
                 position: absolute;
                 right: 0;
                 &:focus {
-                    opacity: 1;
+                    opacity:1;
                 }
             }
             .hoverComponent {
@@ -392,9 +396,8 @@ div.leftNavTooltip {
 }
 
 .leftNav.expanded li.horizontal ul li {
-    height: auto;
+    height:auto;
 }
-
 .leftNav li.horizontal, .leftNav .globalActions {
     height: auto;
     > ul {
@@ -407,9 +410,9 @@ div.leftNavTooltip {
                 padding: 5px 0;
                 text-align: center;
                 line-height: 20px;
-                border-radius: 0;
-                border: 0;
-                background-color: inherit;
+                border-radius:0;
+                border:0;
+                background-color:inherit;
                 .qbIcon, .navLabel, .dropup {
                     display: block;
                     width: 100%;
@@ -444,13 +447,12 @@ div.leftNavTooltip {
         border-left: 0;
     }
 }
-
 @include small-breakpoint {
     .leftNav {
         margin: 0;
         height: 100%;
         width: 0;
-        transition: width 100ms ease;
+        transition:width 100ms ease;
         z-index: 9999;
 
         .branding {
@@ -515,7 +517,7 @@ $travel-distance: 15;
     margin-top: #{$travel-distance}px;
 }
 
-.leftNavList-enter-active.tablesList li, .leftNavList-enter-active.tablesHeading li {
+.leftNavList-enter-active.tablesList li, .leftNavList-enter-active.tablesHeading li  {
     margin-top: 0;
     transition: all $transition-time ease-in;
 }
@@ -523,3 +525,7 @@ $travel-distance: 15;
 .leftNav.appsListOpen .branding .qbIcon.iconTableUISturdy-caret-filled-up {
     transform: rotate(0deg);
 }
+
+
+
+
