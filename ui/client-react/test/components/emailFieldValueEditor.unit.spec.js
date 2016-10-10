@@ -79,7 +79,7 @@ describe('EmailFieldValueEditor', () => {
         let mockParentElement = buildMockParent({initialValue: initialValue});
         component = TestUtils.renderIntoDocument(React.createElement(mockParentElement));
         domComponent = ReactDOM.findDOMNode(component);
-        let clearButton = domComponent.querySelector('.deleteIcon span:first-child');
+        let clearButton = domComponent.querySelector('.clearIcon span:first-child');
 
         Simulate.click(clearButton, {});
 
