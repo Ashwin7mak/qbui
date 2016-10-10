@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import EmailFormatter from '../../../../common/src/formatter/emailFormatter';
+import EmailFieldValueRenderer from './emailFieldValueRenderer';
 import TextFieldValueEditor from './textFieldValueEditor';
 
 /**
@@ -51,10 +52,15 @@ const EmailFieldValueEditor = React.createClass({
         }
     },
     render() {
-        let {onChange, onBlur, display, ...otherProps} = this.props;
+        let {onChange, onBlur, disabled, readOnly, ...otherProps} = this.props;
+
+        if (disabled || readOnly) {
+            // Return a read only email
+            return <EmailFieldValueRenderer {...otherProps} />;
+        }
+
         return <TextFieldValueEditor onBlur={this.onBlur}
                                      onChange={this.onChange}
-                                     value={this.props.value}
                                      placeholder={this.props.placeholder}
                                      inputType="email"
                                      invalidMessage={(this.props.invalidMessage || 'Email is required')}
