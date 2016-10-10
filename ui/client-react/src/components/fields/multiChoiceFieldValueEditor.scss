@@ -56,7 +56,7 @@ $multi-choice-field-box-height: 32px;
 
         .errorBar {
             height: 100%;
-            background-color: $tootip-error-color;
+            background-color: $error-color;
             width: 6px;
             position: absolute;
         }
@@ -80,7 +80,7 @@ $multi-choice-field-box-height: 32px;
                     content: '';
                     border-radius: 100%;
                     top: 2px;
-                    left: 0px;
+                    left: -5px;
                     margin: auto;
                     width: 16px;
                     height: 16px;
@@ -101,7 +101,7 @@ $multi-choice-field-box-height: 32px;
                     height: 16px;
                     width: 16px;
                     top: -5px;
-                    left: 0px;
+                    left: -5px;
                     margin: auto;
                 }
                 input[type=radio]:checked ~ .check {
@@ -127,5 +127,11 @@ $multi-choice-field-box-height: 32px;
                 }
             }
         }
+    }
+}
+
+.fieldValueEditor.error {
+    .check, .check::before {
+        left: 0;
     }
 }

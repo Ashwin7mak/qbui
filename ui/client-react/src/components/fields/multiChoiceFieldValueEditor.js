@@ -7,7 +7,6 @@ import QbIcon from '../qbIcon/qbIcon';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import {I18nMessage} from '../../utils/i18nMessage';
 import * as CompConstants from '../../constants/componentConstants';
-import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
 import ValidationWrapper from './ValidatedFieldWrapper';
 /**
@@ -42,7 +41,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
-        if (this.props.showAsRadio || Breakpoints.isSmallBreakpoint()) {
+        if (this.props.showAsRadio) {
             // For radio render
             let val = this.props.value ? this.props.value : "";
             return {
@@ -62,22 +61,21 @@ const MultiChoiceFieldValueEditor = React.createClass({
      * @param choice
      */
     selectChoice(event) {
+        let value = null;
         if (event.target) {
-            this.setState({
-                choice: event.target.value
-            });
-            this.props.onChange(event.target.value);
+            value = event.target.value;
         } else {
-            this.setState({
-                choice: {label: event.value.coercedValue.value}
-            });
-            this.props.onChange(event.value.coercedValue.value);
+            value = {label: event.value.coercedValue.value};
+        }
+        this.setState({choice: value});
+        if (this.props.onChange) {
+            this.props.onChange(value);
         }
     },
 
     onBlur() {
         let theVals;
-        if (this.props.showAsRadio || Breakpoints.isSmallBreakpoint()) {
+        if (this.props.showAsRadio) {
             theVals = {
                 value: this.state.choice,
                 display: this.state.choice
@@ -94,12 +92,14 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     renderOption(choice) {
+        let isSelected = this.state.choice.label !== '' && this.state.choice.label === choice.label;
+        let classes = 'choiceLabel';
+        classes += isSelected ? ' selected' : '';
         return (
             <div>
-                {this.state.choice.label !== '' ?
-                this.state.choice.label === choice.label && <QbIcon className="choiceQBIcon" icon="check-reversed"/> :
+                {isSelected ? <QbIcon className="choiceQBIcon" icon="check-reversed"/> :
                     null}
-                <div className="choiceLabel">{choice.value.displayValue}</div>
+                <div className={classes}>{choice.value.displayValue}</div>
             </div>);
     },
 
@@ -143,7 +143,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
     getReactSelect(options) {
         const placeHolderMessage = <I18nMessage message="selection.placeholder"/>;
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
-        const emptyOptionText = '\u00a0'; //Non breaking space
+        const emptyOptionText = 'Select';//'\u00a0'; //Non breaking space
 
         let choices = this.props.choices;
         let selectedValue = this.state.choice ? this.state.choice : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
@@ -152,7 +152,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
          * This gives the user the ability to select an empty space as an input
          * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
          */
-        if (this.props.fieldDef.required === false) {
+        if (this.props.fieldDef && this.props.fieldDef.required === false) {
             choices = ([{coercedValue: {value: CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}, displayValue: emptyOptionText}]).concat(choices);
         }
         choices = choices ?
@@ -177,7 +177,6 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getFieldElement() {
-        let touch = Breakpoints.isSmallBreakpoint();
         if (this.props.showAsRadio) {
             return this.getRadioElement();
         } else {

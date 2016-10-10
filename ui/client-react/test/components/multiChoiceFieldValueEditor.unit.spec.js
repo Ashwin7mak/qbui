@@ -66,7 +66,7 @@ describe('MultiChoiceFieldValueEditor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var node = ReactDOM.findDOMNode(component);
-        TestUtils.Simulate.click(node);
+        //TestUtils.Simulate.click(node);
         var placeHolderNode = node.getElementsByClassName("Select-placeholder");
         var spanNode = placeHolderNode[0].childNodes[0];
         expect(spanNode.innerHTML).toEqual("Select...");
@@ -114,47 +114,49 @@ describe('MultiChoiceFieldValueEditor functions', () => {
         component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor value={radioBoxData.value} fieldDef={radioBoxData.fieldDefNotRequired} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         var node = ReactDOM.findDOMNode(component);
-        var radioContainerNode = node.getElementsByClassName("multiChoiceRadioContainer")[0];
-        expect(radioContainerNode).toBeDefined();
+        var radioButtons = node.getElementsByClassName("choiceText");
+        expect(radioButtons.length).toEqual(radioBoxData.choices.length + 1);
 
-        var radioText1 = radioContainerNode.childNodes[0].childNodes[2].textContent;
-        var radioText2 = radioContainerNode.childNodes[1].childNodes[2].textContent;
-        var radioText3 = radioContainerNode.childNodes[2].childNodes[2].textContent;
-        var radioText4 = radioContainerNode.childNodes[3].childNodes[1].childNodes[0].textContent;
-
-        expect(radioText1).toEqual("Apples");
-        expect(radioText2).toEqual("Apricots");
-        expect(radioText3).toEqual("Bananas");
-        expect(radioText4).toEqual("\<None\>");
+        expect(radioButtons[0].innerHTML).toEqual("Apples");
+        expect(radioButtons[1].innerHTML).toEqual("Apricots");
+        expect(radioButtons[2].innerHTML).toEqual("Bananas");
+        expect(radioButtons[3].innerHTML).toEqual("<span>&lt;None&gt;</span>");
     });
 
     it('For radio group, test non-display of none option when field is set to required', () => {
         component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor value={radioBoxData.value} fieldDef={radioBoxData.fieldDefRequired} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         var node = ReactDOM.findDOMNode(component);
-        var radioContainerNode = node.getElementsByClassName("multiChoiceRadioContainer")[0];
-        expect(radioContainerNode).toBeDefined();
+        var radioButtons = node.getElementsByClassName("choiceText");
+        expect(radioButtons.length).toEqual(radioBoxData.choices.length);
 
-        var radioText1 = radioContainerNode.childNodes[0].childNodes[2].textContent;
-        var radioText2 = radioContainerNode.childNodes[1].childNodes[2].textContent;
-        var radioText3 = radioContainerNode.childNodes[2].childNodes[2].textContent;
-
-        expect(radioContainerNode.childNodes.length).toEqual(3);
-        expect(radioText1).toEqual("Apples");
-        expect(radioText2).toEqual("Apricots");
-        expect(radioText3).toEqual("Bananas");
+        expect(radioButtons[0].innerHTML).toEqual("Apples");
+        expect(radioButtons[1].innerHTML).toEqual("Apricots");
+        expect(radioButtons[2].innerHTML).toEqual("Bananas");
     });
 
     // For radio group, test click on text selects radio item
     it('test click on radio button text selects radio button', () => {
-        component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor value={'Apricots'} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        var node = ReactDOM.findDOMNode(component);
+        const TestParent = React.createFactory(React.createClass({
+            // wrap the grid in a container with styles needed to render editing UI
+            render() {
+                return (TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor ref="test" value={'Apricots'} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices}/>));
+            }
+        }));
+
+        const parent = TestUtils.renderIntoDocument(TestParent());
+        var node = ReactDOM.findDOMNode(parent);
+
+
+
+        //component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor value={'Apricots'} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices}/>);
+        //expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        //var node = ReactDOM.findDOMNode(component);
         var radioContainerNode = node.getElementsByClassName("multiChoiceRadioContainer");
         expect(radioContainerNode).toBeDefined();
 
-        var labels = node.querySelectorAll('label');
-        TestUtils.Simulate.click(labels[2], {
+        var inputs = node.querySelectorAll('input');
+        TestUtils.Simulate.click(inputs[2], {
             target: {
                 value: 'Banana'
             }
