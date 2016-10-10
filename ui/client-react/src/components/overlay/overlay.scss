@@ -1,10 +1,10 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
 
 .overlayDialogHeader {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content : space-between;
     color: $icon-color;
 
     .btn.btn-default.action {
@@ -25,8 +25,8 @@
         flex: 0 0 auto;
     }
     .btn.btn-default {
-        border: none;
-        padding: 0;
+        border:none;
+        padding:0;
         color: $icon-color;
     }
     .btn.btn-default:hover {
@@ -48,3 +48,8 @@
         }
     }
 }
+
+
+
+
+

@@ -10,7 +10,7 @@ import closeOnEscape from '../hoc/catchEscapeKey';
 import QBToolTip from '../qbToolTip/qbToolTip';
 
 import './sortAndGroup.scss';
-import '../../assets/css/vendor/animate.min.css';
+import '../../assets/css/animate.min.css';
 
 var SortAndGroupDialog = React.createClass({
 
