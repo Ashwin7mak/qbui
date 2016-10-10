@@ -131,6 +131,7 @@ const FieldValueEditor = React.createClass({
             required: (this.props.fieldDef ? this.props.fieldDef.required : false),
             readOnly: (this.props.fieldDef ? !this.props.fieldDef.userEditableValue : false),
             invalid: this.props.isInvalid,
+            invalidMessage: this.props.invalidMessage,
             fieldDef: this.props.fieldDef
         };
 
@@ -175,9 +176,6 @@ const FieldValueEditor = React.createClass({
                 return <NumericFieldValueEditor {...commonProps}
                     key={'nfve-' + this.props.idKey}
                     onChange={this.props.onChange ? this.props.onChange : ()=>{}}
-                    isInvalid={this.props.isInvalid}
-                    invalidMessage={this.props.invalidMessage}
-                    onValidated={this.props.onValidated}
                     classes="cellEdit"
                 />;
             }
@@ -201,9 +199,6 @@ const FieldValueEditor = React.createClass({
             } else {
                 return <TextFieldValueEditor {...commonProps}
                                             onChange={this.props.onChange ? this.props.onChange : ()=>{}}
-                                            isInvalid={this.props.isInvalid}
-                                            invalidMessage={this.props.invalidMessage}
-                                            onValidated={this.props.onValidated}
                                             key={'tfve-' + this.props.idKey}
                                             classes="cellEdit"
                     />;

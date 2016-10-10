@@ -9,7 +9,7 @@ const ValidatedFieldWrapper = (FieldComponent) => {
         render() {
             let isSmall = Breakpoints.isSmallBreakpoint();
 
-            if (this.props.isInvalid) {
+            if (this.props.invalid) {
                 return (
                     isSmall ? <div className="errorContainer">
                                 <FieldComponent {...this.props}/>

@@ -27,10 +27,10 @@ const TextFieldValueEditor = React.createClass({
 
         /**
          * renders with red border if true */
-        isInvalid: React.PropTypes.bool,
+        invalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         * message to display in the tool tip when invalid */
         invalidMessage: React.PropTypes.string,
 
         /**
@@ -54,7 +54,7 @@ const TextFieldValueEditor = React.createClass({
 
     getDefaultProps() {
         return {
-            isInvalid: false
+            invalid: false
         };
     },
 
@@ -82,7 +82,7 @@ const TextFieldValueEditor = React.createClass({
     render() {
         let classes = 'input textField';
         // error state css class
-        if (this.props.isInvalid) {
+        if (this.props.invalid) {
             classes += ' error';
         }
         if (this.props.classes) {
@@ -98,8 +98,8 @@ const TextFieldValueEditor = React.createClass({
                           onBlur={this.onBlur} />;
 
 
-        return  (inputBox);
+        return  inputBox;
     }
 });
 
-export default ValidatedFieldWrapper(TextFieldValueEditor);
+export default TextFieldValueEditor;

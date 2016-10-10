@@ -29,10 +29,10 @@ const NumericFieldValueEditor = React.createClass({
 
         /**
          * renders with red border if true */
-        isInvalid: React.PropTypes.bool,
+        invalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         * message to display in the tool tip when invalid */
         invalidMessage: React.PropTypes.string,
 
         /**
@@ -54,7 +54,7 @@ const NumericFieldValueEditor = React.createClass({
 
     getDefaultProps() {
         return {
-            isInvalid: false
+            invalid: false
         };
     },
     onChange(ev) {
@@ -124,7 +124,7 @@ const NumericFieldValueEditor = React.createClass({
 
         let classes = 'input numericField';
         // error state css class
-        if (this.props.isInvalid) {
+        if (this.props.invalid) {
             classes += ' error';
         }
         if (this.props.classes) {
