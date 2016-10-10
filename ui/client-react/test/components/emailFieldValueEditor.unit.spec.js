@@ -8,12 +8,6 @@ import EmailFieldValueEditor from '../../src/components/fields/emailFieldValueEd
 let placeholderText = 'name@domain.com';
 let defaultDomain = 'quickbase.com';
 
-let I18nMessageMock = React.createClass({
-    render() {
-        return <span>Clear text</span>;
-    }
-});
-
 function buildMockParent(options = {disabled: false, readOnly: false, initialValue: null}) {
     return React.createClass({
         getInitialState() {
