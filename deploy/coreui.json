@@ -113,11 +113,6 @@
       "Description": "The Security Group ID allowing select outbound Internet traffic",
       "Type": "String",
       "Default": "sg-f5264793"
-    },
-    "paramNatSecurityGroupID": {
-      "Description": "The Security Group ID allowing traffic from our NAT EIPs",
-      "Type": "String",
-      "Default": "sg-4bdabc2d"
     }
   },
   "Resources": {
