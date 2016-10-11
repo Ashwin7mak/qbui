@@ -37,7 +37,7 @@ const ValidatedField = (FieldComponent) => {
                     newClasses += classes;
                 }
 
-                let tooltip = <Tooltip className="invalidRecord qbTooltip">WTF is going on</Tooltip>
+                let tooltip = <Tooltip className="invalidRecord qbTooltip">{this.props.invalidMsg}</Tooltip>
                 return (
                     <div style={{position: 'relative' }}>
                         <FieldComponent tabIndex={1} ref="target" classes={newClasses} {...rest} onFocus={this.onFocus} onBlur={this.onBlur}/>

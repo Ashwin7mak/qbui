@@ -17,6 +17,7 @@ import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
 import NumericFieldValueEditor from './numericFieldValueEditor';
 import TextFieldValueEditor from './textFieldValueEditor';
 import TimeFieldValueEditor from './timeFieldValueEditor';
+import UrlFieldValueEditor from './urlFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
 
 /**
@@ -58,6 +59,7 @@ const FieldValueEditor = React.createClass({
          * - DURATION_FORMAT = 11;
          * - PHONE_FORMAT = 12;
          * - MULTI_LINE_TEXT_FORMAT = 13;
+         * - URL = 14;
          **/
         type: React.PropTypes.number,
 
@@ -131,6 +133,7 @@ const FieldValueEditor = React.createClass({
             required: (this.props.fieldDef ? this.props.fieldDef.required : false),
             readOnly: (this.props.fieldDef ? !this.props.fieldDef.userEditableValue : false),
             invalid: this.props.isInvalid,
+            invalidMessage: this.props.invalidMessage,
             fieldDef: this.props.fieldDef
         };
 
@@ -175,9 +178,6 @@ const FieldValueEditor = React.createClass({
                 return <NumericFieldValueEditor {...commonProps}
                     key={'nfve-' + this.props.idKey}
                     onChange={this.props.onChange ? this.props.onChange : ()=>{}}
-                    isInvalid={this.props.isInvalid}
-                    invalidMessage={this.props.invalidMessage}
-                    onValidated={this.props.onValidated}
                     classes="cellEdit"
                 />;
             }
@@ -190,6 +190,9 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
             return <MultiLineTextFieldValueEditor {...commonProps} showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
         }
+        case FieldFormats.URL: {
+            return <UrlFieldValueEditor {...commonProps} />;
+        }
         case FieldFormats.TEXT_FORMAT:
         default: {
 
@@ -201,9 +204,6 @@ const FieldValueEditor = React.createClass({
             } else {
                 return <TextFieldValueEditor {...commonProps}
                                             onChange={this.props.onChange ? this.props.onChange : ()=>{}}
-                                            isInvalid={this.props.isInvalid}
-                                            invalidMessage={this.props.invalidMessage}
-                                            onValidated={this.props.onValidated}
                                             key={'tfve-' + this.props.idKey}
                                             classes="cellEdit"
                     />;

@@ -109,12 +109,14 @@ const MultiLineTextFieldValueEditor = React.createClass({
         }
         let rows = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.num_lines') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.num_lines : 1;
         let style = this.props.showScrollForMultiLine ? this.state.style : {};
+        let classes = 'cellEdit';
+        classes += this.props.invalid ? ' error' : '';
         return <textarea ref="textarea" style={style}
                                         onChange={this.onChange}
                                         onBlur={this.onBlur}
                                         tabIndex="0"
                                         onKeyUp={this.onKeyUp}
-                                        className="cellEdit"
+                                        className={classes}
                                         rows={rows}
                                         cols={cols}
                                         value={this.props.display ? this.props.display : this.props.value}

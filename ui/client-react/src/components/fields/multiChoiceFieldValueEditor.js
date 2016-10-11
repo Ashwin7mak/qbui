@@ -7,7 +7,6 @@ import QbIcon from '../qbIcon/qbIcon';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import {I18nMessage} from '../../utils/i18nMessage';
 import * as CompConstants from '../../constants/componentConstants';
-import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
 import ValidationWrapper from './ValidatedFieldWrapper';
 /**
@@ -42,7 +41,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     getInitialState() {
-        if (this.props.showAsRadio || Breakpoints.isSmallBreakpoint()) {
+        if (this.props.showAsRadio) {
             // For radio render
             let val = this.props.value ? this.props.value : "";
             return {
@@ -62,86 +61,21 @@ const MultiChoiceFieldValueEditor = React.createClass({
      * @param choice
      */
     selectChoice(event) {
+        let value = null;
         if (event.target) {
-            this.setState({
-                choice: event.target.value
-            });
+            value = event.target.value;
         } else {
-            this.setState({
-                choice: {label: event.value.displayValue}
-            });
+            value = {label: event.value.coercedValue.value};
         }
-    },
-    /**
-     * Populate items for component render
-     * @returns {Array}
-     */
-    getSelectItems() {
-        let touch = Breakpoints.isSmallBreakpoint();
-        let choices = this.props.choices;
-        let selectedValue = this.state.choice ? this.state.choice : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
-        if (this.props.showAsRadio) {
-            choices = choices ?
-                choices.map(choice => {
-                    return (<label key={choice.coercedValue.value}
-                                   className="multiChoiceRadioOption"
-                                   onClick={this.selectChoice}
-                                   onBlur={this.onBlur}>
-                        <input type="radio" name={this.props.radioGroupName}
-                               value={choice.coercedValue.value}
-                               checked={selectedValue === choice.coercedValue.value}
-                               onChange={this.onClick}/>
-                        {choice.displayValue}
-                    </label>);
-                }) : [];
-            // Add none option if the field is not required
-            if (this.props.fieldDef && this.props.fieldDef.required === false) {
-                choices.push(<label key={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
-                                    className="multiChoiceRadioOption"
-                                    onClick={this.selectChoice}
-                                    onBlur={this.onBlur}>
-                    <input type="radio" name={this.props.radioGroupName}
-                           value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
-                           onChange={this.onClick}
-                           checked={selectedValue === CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
-                    <I18nMessage message={"noneOption"} />
-                </label>);
-            }
-            return choices;
-        } else if (touch) {
-            if (choices) {
-                let placeholder =  Locale.getMessage('selection.placeholder');
-                choices = choices.map(choice => {
-                    return (<option value={choice.coercedValue.value}>{choice.displayValue}</option>);
-                });
-                // Add the placeholder/none option to the top of the array
-                if (this.props.fieldDef && this.props.fieldDef.required === false) {
-                    choices.unshift(<option value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}>{placeholder}</option>);
-                }
-            }
-            return choices;
-        } else {
-            /**
-             *This is commented out right now, because the current Schema in core does not accept/save null inputs
-             * This gives the user the ability to select an empty space as an input
-             * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
-             */
-            // if (this.props.fieldDef.required === false) {
-            //     choices = ([{coercedValue: {value: ""}, displayValue: ""}]).concat(choices);
-            // }
-            return choices ?
-                choices.map(choice => {
-                    return {
-                        value: choice,
-                        label: choice.displayValue
-                    };
-                }) : [];
+        this.setState({choice: value});
+        if (this.props.onChange) {
+            this.props.onChange(value);
         }
     },
 
     onBlur() {
         let theVals;
-        if (this.props.showAsRadio || Breakpoints.isSmallBreakpoint()) {
+        if (this.props.showAsRadio) {
             theVals = {
                 value: this.state.choice,
                 display: this.state.choice
@@ -158,67 +92,102 @@ const MultiChoiceFieldValueEditor = React.createClass({
     },
 
     renderOption(choice) {
+        let isSelected = this.state.choice.label !== '' && this.state.choice.label === choice.label;
+        let classes = 'choiceLabel';
+        classes += isSelected ? ' selected' : '';
         return (
             <div>
-                {this.state.choice.label !== '' ?
-                this.state.choice.label === choice.label && <QbIcon className="choiceQBIcon" icon="check-reversed"/> :
+                {isSelected ? <QbIcon className="choiceQBIcon" icon="check-reversed"/> :
                     null}
-                <div className="choiceLabel">{choice.value.displayValue}</div>
+                <div className={classes}>{choice.value.displayValue}</div>
             </div>);
     },
 
-    render() {
-        const options = this.getSelectItems();
+    getRadioElement() {
+        let choices = this.props.choices;
+        let selectedValue = this.state.choice ? this.state.choice : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
+        choices = choices ?
+            choices.map(choice => {
+                return (<label key={choice.coercedValue.value}
+                               className="multiChoiceRadioOption"
+                               onClick={this.selectChoice}
+                               onBlur={this.onBlur}>
+                    <input type="radio" name={this.props.radioGroupName}
+                           value={choice.coercedValue.value}
+                           checked={selectedValue === choice.coercedValue.value}
+                           onChange={this.onClick} onBlur={this.onBlur}></input><span className="choiceText">{choice.displayValue}</span>
+                    <div className="check"><div className="inside"></div></div>
+                </label>);
+            }) : [];
+        // Add none option if the field is not required
+        if (this.props.fieldDef && this.props.fieldDef.required === false) {
+            choices.push(<label key={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
+                                className="multiChoiceRadioOption"
+                                onClick={this.selectChoice}
+                                onBlur={this.onBlur}>
+                <input type="radio" name={this.props.radioGroupName}
+                       value={CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}
+                       onChange={this.onClick} onBlur={this.onBlur}
+                       checked={selectedValue === CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}/>
+                        <div className="check"><div className="inside"></div></div>
+                <span className="choiceText"><I18nMessage message={"noneOption"}/></span>
+            </label>);
+        }
 
+        return (<div className="multiChoiceRadioContainer">
+                {this.props.invalid ? <div className="errorBar"></div> : ''}
+                <div className="multiChoiceRadioOptionContainer">{ choices }</div>
+        </div>);
+    },
+
+    getReactSelect(options) {
         const placeHolderMessage = <I18nMessage message="selection.placeholder"/>;
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
+        const emptyOptionText = 'Select';//'\u00a0'; //Non breaking space
 
-        let choice;
+        let choices = this.props.choices;
+        let selectedValue = this.state.choice ? this.state.choice : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
+        /**
+         *This is commented out right now, because the current Schema in core does not accept/save null inputs
+         * This gives the user the ability to select an empty space as an input
+         * Claire talked with Sam, and he is having someone update core, once core is updated, we can uncomment this line
+         */
+        if (this.props.fieldDef && this.props.fieldDef.required === false) {
+            choices = ([{coercedValue: {value: CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE}, displayValue: emptyOptionText}]).concat(choices);
+        }
+        choices = choices ?
+            choices.map(choice => {
+                return {
+                    value: choice,
+                    label: choice.displayValue
+                };
+            }) : [];
+
+        return <Select
+            tabIndex="0"
+            value={selectedValue}
+            optionRenderer={this.renderOption}
+            options={choices}
+            onChange={this.selectChoice}
+            placeholder={placeHolderMessage}
+            noResultsText={notFoundMessage}
+            autosize={false}
+            clearable={false}
+            onBlur={this.onBlur} />;
+    },
+
+    getFieldElement() {
         if (this.props.showAsRadio) {
-            choice = this.props.value ? this.state.choice : '';
+            return this.getRadioElement();
         } else {
-            choice = this.props.value ? this.state.choice : false;
+            return this.getReactSelect();
         }
-        let touch = Breakpoints.isSmallBreakpoint();
-        let editElement = null;
-        if (this.props.showAsRadio) {
-            editElement = <div className="multiChoiceRadioContainer">
-                {this.props.isInvalid ? <div className="errorBar"></div> : ''}
-                <div className="multiChoiceRadioOptionContainer">{ options }</div></div>;
-        } else if (touch) {
-            let selectedValue = this.state.choice ? this.state.choice : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
-            editElement = <select className="select" value={selectedValue} onChange={this.selectChoice}
-                                  onBlur={this.onBlur}>{options}</select>;
-        } else {
-            editElement = <Select
-                    tabIndex="0"
-                    value={choice}
-                    optionRenderer={this.renderOption}
-                    options={options}
-                    onChange={this.selectChoice}
-                    placeholder={placeHolderMessage}
-                    noResultsText={notFoundMessage}
-                    autosize={false}
-                    clearable={false}
-                    onBlur={this.onBlur} />;
-        }
+    },
 
-        editElement = <div className="multiChoiceContainer">{editElement}</div>;
-
-        if (this.props.isInvalid) {
-            return (
-                touch ? <div className="errorContainer">
-                            {editElement}
-                            <div className="errorText">{this.props.invalidMessage}</div>
-                        </div> :
-                    <QBToolTip location="top" tipId="invalidInput" delayHide={3000}
-                               plainMessage={"test"}>
-                        {editElement}
-                    </QBToolTip>);
-        } else {
-            return {editElement};
-        }
+    render() {
+        let editElement = this.getFieldElement();
+        return <div className="multiChoiceContainer">{editElement}</div>;
     }
 });
 
-export default MultiChoiceFieldValueEditor;
+export default ValidationWrapper(MultiChoiceFieldValueEditor);
