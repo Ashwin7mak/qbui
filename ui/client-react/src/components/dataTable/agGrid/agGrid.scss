@@ -343,6 +343,12 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-tab-selected {
         display: none;
     }
+
+    /* Buttons in a grid are smaller for the urlField */
+    .urlField .btn {
+        margin-top: -5px;
+        padding: 1px 10px;
+    }
 }
 
 //Temporary hack - opened an issue with ag-grid
