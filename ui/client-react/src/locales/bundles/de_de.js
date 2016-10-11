@@ -268,12 +268,14 @@ export default {
         success: "Erfolg",
         failed: "Gescheitert",
         placeholder:  {
-            email: 'name@domain.com'
+            email: 'name@domain.com',
+            maxLength :"bis zu {maxLength} Zeichen"
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
         invalidMsg : {
             required: 'Füllen Sie das {fieldName}',
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
+            choiceMaxLength :"Wählen Sie eine Wahl mit {maxLength} Zeichen oder weniger"
         },
         noneOption: "\<Keiner\>"
     }

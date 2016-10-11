@@ -126,8 +126,8 @@ const FieldValueEditor = React.createClass({
      */
     getEditorForType(type) {
         let placeholder = undefined;
-        if (_.has(this.props, 'fieldDef.placeholder')) {
-            placeholder = this.props.fieldDef.placeholder;
+        if (_.has(this.props, 'placeholder')) {
+            placeholder = this.props.placeholder;
         }
 
         let commonProps = {

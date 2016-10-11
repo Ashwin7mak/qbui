@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './fields.scss';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
+import FieldUtils from '../../utils/fieldUtils';
 
 /**
  * # TextFieldValueEditor
@@ -85,11 +86,13 @@ const TextFieldValueEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
 
         return (<input ref="textInput"
                        className={classes}
                        value={this.props.display ? this.props.display : this.props.value}
                        type="text"
+                       maxLength={maxLength}
                        key={'inp' + this.props.idKey}
                        placeholder={this.props.placeholder}
                        onChange={this.onChange}

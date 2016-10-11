@@ -58,6 +58,7 @@ const CellEditor = React.createClass({
                               value={this.props.value}
                               fieldDef={this.props.colDef.fieldDef}
                               fieldName={this.props.colDef.field}
+                              placeholder={this.props.colDef.placeholder}
                               indicateRequired={true}
                               onChange={this.props.onChange}
                               onBlur={this.props.onBlur}
