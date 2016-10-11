@@ -611,4 +611,105 @@ describe('Validate ReportsApi unit tests', function() {
             );
         });
     });
+
+    /**
+     * Unit test fetchReport api
+     */
+    describe('validate fetchReport api', function() {
+        var req = {
+            headers: {
+                'tid': 'tid'
+            },
+            'Content-Type': 'content-type',
+            'url': '/testurl.com?format=display',
+            'method': 'get'
+        };
+        reportsApi.setRecordsApi(recordsApi);
+        var expectedSuccessResponse = {
+            records: [],
+            fields: [],
+            groups: [],
+            filteredCount: '1'
+        };
+
+        var fetchReportGroupingResultsPromise = Promise.resolve({'body': '{"records":null, "type":"GROUP", "groups":[{"records":[[{"id":1, "value":"VP Operations"}, {"id":2, "value":1}]]}]}'});
+        var fetchReportResultsPromise = Promise.resolve({'body': '[[ {"id":1, "value": 1234525} ], [ {"id":2, "value": 1234567} ]]'});
+        var fetchFieldsPromise = Promise.resolve({'body': '[{ "id":1, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'});
+
+        var fetchCountPromise = Promise.resolve({body:'1'});
+
+        afterEach(function() {
+            reportsApi.fetchReportRecordsCount.restore();
+            reportsApi.fetchFields.restore();
+            requestHelper.executeRequest.restore();
+        });
+        it('Test success', function(done) {
+            //var getReportResults = sinon.stub(reportsApi, "fetchReportResult");
+            reportsApi.setRequestHelper(requestHelper);
+            var getReportResults = sinon.stub(requestHelper, "executeRequest");
+
+            var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
+            var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+
+            getReportResults.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("error"));
+                }
+            );
+        });
+        it('Test success with grouping', function(done) {
+            //var getReportResults = sinon.stub(reportsApi, "fetchReportResult");
+            reportsApi.setRequestHelper(requestHelper);
+            var getReportResults = sinon.stub(requestHelper, "executeRequest");
+
+            var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
+            var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+
+            getReportResults.returns(fetchReportGroupingResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("error"));
+                }
+            );
+        });
+        it('Test error', function(done) {
+            //var getReportResults = sinon.stub(reportsApi, "fetchReportResult");
+            reportsApi.setRequestHelper(requestHelper);
+            var getReportResults = sinon.stub(requestHelper, "executeRequest");
+
+            var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
+            var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+
+            getReportResults.returns(Promise.reject(new Error("error")));
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return with test error from reportResults"));
+                },
+                function(error) {
+                    done();
+                    assert.deepEqual(error, new Error("error"));
+                }
+            );
+        });
+
+    });
 });
