@@ -28,7 +28,7 @@ region=$(get_aws_region)
 
 SECRETS_BUCKET="iss-${accountId}-${region}"
 
-java -jar /opt/secrets-cli-${SECRETS_CLI_VERSION}.jar get --region ${region} --secret-name ${STACKNAME}/${SECRET} --kms-cmk-id ${CMK_ID} --s3-bucket ${SECRETS_BUCKET} --output ${secret_file} > /dev/null
+secrets get --region ${region} --secret-name ${STACKNAME}/${SECRET} --kms-cmk-id ${CMK_ID} --s3-bucket ${SECRETS_BUCKET} --output ${secret_file} > /dev/null
 cat ${secret_file}
 
 rm -f ${secret_file}
