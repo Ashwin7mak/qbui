@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.scss';
+import './style.css';
 
 /**
  * an icon using a new qb icon font (from Lisa)
