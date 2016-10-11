@@ -20,6 +20,12 @@ describe('emailValidator', () => {
                 expectation: false
             },
             {
+                name: 'does not validate an empty string',
+                email: '',
+                validationType: null,
+                expectation: true
+            },
+            {
                 name: 'can optionally only check the domain',
                 email: '@domain.com',
                 validationType: emailValidator.ONLY_VALIDATE_DOMAIN,
