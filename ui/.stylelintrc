@@ -3,12 +3,13 @@ module.exports = {
         "stylelint-scss",
         "stylelint-declaration-use-variable"
     ],
+    defaultSeverity: "warning",
     "rules": {
         // See rules here
         // https://github.com/stylelint/stylelint/blob/master/docs/user-guide/rules.md
         "scss/selector-no-redundant-nesting-selector": [true, {"severity": "warning"}],
         "scss/dollar-variable-pattern": ["^[a-z-0-9]+$", {"severity": "warning"}],
-        "declaration-use-variable": [
+        "sh-waqar/declaration-use-variable": [
             [
                 "/(^[^$].*(color).*|^color)/",
                 "z-index",
@@ -80,13 +81,11 @@ module.exports = {
         "media-query-list-comma-newline-after": "always-multi-line",
         "media-query-list-comma-space-after": "always-single-line",
         "media-query-list-comma-space-before": "never",
-        "media-query-parentheses-space-inside": "never",
         "no-descending-specificity": [true, {"severity": "warning"}],
         "no-duplicate-selectors": [true, {"severity": "warning"}],
         "no-eol-whitespace": true,
         "no-extra-semicolons": true,
         "no-invalid-double-slash-comments": true,
-        "no-missing-eof-newline": true,
         // This is set to the same option collection of browsers that Autoprefixer uses.
         "no-unsupported-browser-features": [
             true,
