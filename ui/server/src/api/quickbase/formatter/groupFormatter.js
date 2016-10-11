@@ -479,18 +479,18 @@
                         }
                     }
 
-                    let groupedRecords = group.records;
+                    let groupRecords = group.records;
+                    let map = new Map();
 
                     //  do we need to format the raw data for display
                     if (requestHelper.isDisplayFormat(req)) {
                         //  Build a map for quick field information retrieval by id.  The map
                         //  key is the field.id; the map value is the field object.
-                        let map = new Map();
                         fields.forEach((field) => {
                             map.set(field.id, field);
                         });
 
-                        let groupRecords = recordFormatter.formatRecords(group.records, fields);
+                        groupRecords = recordFormatter.formatRecords(group.records, fields);
                     }
 
                     let children = [];
