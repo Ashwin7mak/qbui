@@ -362,7 +362,7 @@ describe('Validate GroupFormatter unit tests', function() {
                 var groupSetup = setupGroupedRecords(testCase.numFields, testCase.numRecords, numberOfGroups, testCase.dataType, testCase.gList);
 
                 var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
-                var coreGroupData = groupFormatter.coreGroup(groupSetup.req, groupSetup.fields, groupSetup.records, format);
+                var coreGroupData = groupFormatter.organizeGroupingData(groupSetup.req, groupSetup.fields, groupSetup.records, format);
 
                 assert.equal(groupData.hasGrouping, true);
                 assert.equal(coreGroupData.hasGrouping, true);

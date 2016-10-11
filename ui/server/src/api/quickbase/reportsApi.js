@@ -275,7 +275,7 @@
             },
 
             /**
-             * Fetch report content
+             * Fetch report content.  Use report result endpoint to fetch a report.
              *
              * @param req
              * @returns Promise
@@ -302,14 +302,14 @@
                                 responseObject[GROUPS] = [];
                                 responseObject[FILTERED_RECORDS_COUNT] = reportRecordCount;
 
-                                //  Is core return an object that is grouped
+                                //  Is core returning a report object that is grouped
                                 if (report.type === constants.RECORD_TYPE.GROUP) {
                                     //  the fetchFields response includes all fields on the table. Want to populate the
                                     //  response object fields entry to only include those fields on the report
                                     responseObject[FIELDS] = getFieldsOnReport(report.groups[0].records, fields);
 
                                     //  Organize the grouping data for the client
-                                    responseObject[GROUPS] = groupFormatter.coreGroup(req, responseObject[FIELDS], report);
+                                    responseObject[GROUPS] = groupFormatter.organizeGroupingData(req, responseObject[FIELDS], report);
                                 } else {
                                     //  the fetchFields response includes all fields on the table. Want to populate the
                                     //  response object fields entry to only include those fields on the report

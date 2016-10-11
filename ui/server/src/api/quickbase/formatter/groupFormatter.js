@@ -447,7 +447,7 @@
          * Take result set from core that include grouping information and return object that
          * the client will consume.
          *
-         * TODO: temporary function name -- will be properly named once core grouping is implement fully
+         * TODO: temporary function name -- will be properly named once core grouping is implemented fully
          * TODO: and client-side grouping is removed.
          *
          * @param req
@@ -456,7 +456,7 @@
          * @param formatForDisplay
          * @returns {*|{hasGrouping: boolean, fields: Array, gridColumns: Array, gridData: Array, totalRows: number}}
          */
-        coreGroup: function(req, fields, report) {
+        organizeGroupingData: function(req, fields, report) {
             let perfLog = perfLogger.getInstance();
             perfLog.init("Build GroupList using core group result");
 
@@ -466,17 +466,10 @@
             if (report && report.type === constants.RECORD_TYPE.GROUP) {
                 var data = [];
 
-                //  Build a map for quick field information retrieval by id.  The map
-                //  key is the field.id; the map value is the field object.
-                let map = new Map();
-                fields.forEach((field) => {
-                    map.set(field.id, field);
-                });
-
                 report.groups.forEach((group) => {
                     var node = {
                         children: [],
-                        group: 'No group name'
+                        group: ''
                     };
 
                     if (group.summaryRef) {
@@ -486,7 +479,19 @@
                         }
                     }
 
-                    let groupRecords = requestHelper.isDisplayFormat(req) ? recordFormatter.formatRecords(group.records, fields) : group.records;
+                    let groupedRecords = group.records;
+
+                    //  do we need to format the raw data for display
+                    if (requestHelper.isDisplayFormat(req)) {
+                        //  Build a map for quick field information retrieval by id.  The map
+                        //  key is the field.id; the map value is the field object.
+                        let map = new Map();
+                        fields.forEach((field) => {
+                            map.set(field.id, field);
+                        });
+
+                        let groupRecords = recordFormatter.formatRecords(group.records, fields);
+                    }
 
                     let children = [];
                     groupRecords.forEach((record) => {
@@ -625,10 +630,6 @@
                         }
                     });
 
-                    //  TODO: remove below block once grouping is fully supported on core
-
-                    // we have grouping if there are fields in groupBy.fields array.  Set the grouping flag
-                    // to true and populate the grid columns and data arrays.
                     if (groupBy.fields.length > 0) {
                         fields.forEach(function(field) {
                             //  Business rule is to not include grouped fields in the grid.  So, add to the gridColumns
@@ -638,6 +639,7 @@
                             }
                         });
 
+                        //  client side group is executed if their are supplied records
                         if (records) {
                             groupBy.hasGrouping = true;
                             groupBy.gridData = createGroupDataGrid(groupBy.fields, sortBy.fields, fields, records);

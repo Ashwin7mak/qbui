@@ -23,7 +23,7 @@
     let REGEX_RECORDS_FORMS_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/records\/.*\/formcomponents(.*)?$/i;
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/reportcomponents(.*)?$/i;
-    let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homePage(.*)?$/i;
+    let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
 
     /**
      * Private function to extract the root url for the given type.
