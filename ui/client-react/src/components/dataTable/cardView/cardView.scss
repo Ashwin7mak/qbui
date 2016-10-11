@@ -31,8 +31,8 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
     padding: 5px 5px 15px 10px;
     background: $card-expanded-background-color;
     margin-bottom: 5px;
-    overflow:hidden;
-    cursor:pointer;
+    overflow: hidden;
+    cursor: pointer;
     .card {
         flex: 1 1 auto;
         width: 100%;
@@ -64,7 +64,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         font-size: $fieldLabel-font-size;
         cursor: pointer;
         .field {
-            position:relative;
+            position: relative;
         }
     }
     .fieldRow {
@@ -93,11 +93,11 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         }
     }
     .card-expander {
-        position:absolute;
-        right:0;
-        top:0;
+        position: absolute;
+        right: 0;
+        top: 0;
         .qbPanelHeaderIcon {
-            top:0;
+            top: 0;
         }
         .rotateDown {
             transition: all .25s linear;
@@ -128,7 +128,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         .field {
             flex-basis: 100%;
             display: block;
-            max-width:100%;
+            max-width: 100%;
             &:nth-child(n+3) {
                 .fieldValue {
                     white-space: nowrap;
@@ -154,7 +154,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
     flex: 0 0 auto;
     input {
         height: 100%;
-        display:inline-block;
+        display: inline-block;
         position: absolute;
     }
 }

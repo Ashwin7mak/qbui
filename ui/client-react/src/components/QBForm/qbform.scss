@@ -39,11 +39,11 @@ $edit-field-padding: 5px;
         padding: 5px 0;
 
         td {
-            vertical-align:top;
+            vertical-align: top;
             padding-bottom: 25px;
         }
         tr:last-child td {
-            padding-bottom:0;
+            padding-bottom: 0;
         }
 
         .formElement {
@@ -51,18 +51,18 @@ $edit-field-padding: 5px;
             max-width: 100%;
             display: flex;
             flex-direction: column;
-            margin-right:15px;
+            margin-right: 15px;
         }
 
         /* separate field label td left of field */
         .fieldLabel {
-            text-align:right;
+            text-align: right;
             display: block;
             color: $fieldLabel-color;
             max-width: 10em;
             span {
                 display: inline-block;
-                vertical-align:top;
+                vertical-align: top;
             }
             .requiredFlag-layout {
                 padding-right: 2px;
@@ -72,7 +72,7 @@ $edit-field-padding: 5px;
         /* field label in field td */
         .field .fieldLabel {
             max-width: 20em;
-            text-align:left;
+            text-align: left;
             margin-bottom: $edit-field-padding;
         }
 
@@ -80,7 +80,7 @@ $edit-field-padding: 5px;
             margin-right: 40px;
 
             .dateCell {
-                white-space:nowrap;
+                white-space: nowrap;
             }
         }
 

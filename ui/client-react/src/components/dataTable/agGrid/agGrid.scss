@@ -30,10 +30,10 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 .reportTable {
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    flex:1 1 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
 }
 
 .inlineEditing .agGrid .ag-body-container {
@@ -49,15 +49,15 @@ $cell-edit-background-edit: #f3f8fe;
     color: $font-color;
     font-size: $grid-font-size;
     -webkit-font-smoothing: antialiased;
-    width:100%;
+    width: 100%;
 
     .ag-body-container {
         background-color: $color2;
-        margin-bottom:0;
+        margin-bottom: 0;
     }
     /* prevent clipping of actions and dropdowns in 1st column */
     .ag-pinned-left-cols-viewport {
-        overflow:visible;
+        overflow: visible;
     }
     .gridHeaderCell {
         color: $header-cell-color;
@@ -69,9 +69,9 @@ $cell-edit-background-edit: #f3f8fe;
         text-align: left;
 
         .dropdownToggle {
-            padding:0;
-            border:0;
-            background-color:inherit;
+            padding: 0;
+            border: 0;
+            background-color: inherit;
         }
         .collapser {
             position: absolute;
@@ -91,21 +91,21 @@ $cell-edit-background-edit: #f3f8fe;
         }
     }
     .ag-header {
-        overflow:visible;
+        overflow: visible;
     }
     .ag-header-viewport {
-        overflow:visible;
+        overflow: visible;
     }
     .ag-header-cell-menu-button>.dropdown {
-        padding-top:1px;
+        padding-top: 1px;
     }
     .ag-header-cell-menu-button button {
         opacity: .2;
     }
     .ag-header-cell-menu-button .dropdown-menu {
         font-size: 12px;
-        margin-top:0;
-        padding-top:0;
+        margin-top: 0;
+        padding-top: 0;
     }
     .ag-header-cell:hover {
         .ag-header-cell-menu-button button {
@@ -113,11 +113,11 @@ $cell-edit-background-edit: #f3f8fe;
         }
     }
     .ag-header-cell-text {
-        padding-right:4px;
-        padding-left:4px;
+        padding-right: 4px;
+        padding-left: 4px;
         padding-top: 4px;
-        display:inline-block;
-        float:left;
+        display: inline-block;
+        float: left;
         width: calc(100% - 20px); /* expand to enable right alignment but allow room for dropdown icon */
     }
 
@@ -141,7 +141,7 @@ $cell-edit-background-edit: #f3f8fe;
 
     .ag-row:hover {
         background-color: $row-background-color-hover;
-        cursor:pointer;
+        cursor: pointer;
     }
     .gridCell.Bold {
         font-weight: bold;
@@ -164,25 +164,25 @@ $cell-edit-background-edit: #f3f8fe;
         text-align: center;
     }
     .gridCell.selectionCell {
-        overflow:visible;
+        overflow: visible;
         .ag-cell-value {
             padding: 0;
             position: absolute;
             left: 30px;
             top: 1px;
-            height:100%;
+            height: 100%;
 
             .iconActions {
 
                 line-height: inherit;
                 .dropdown-menu a {
 
-                    padding-left:4px;
+                    padding-left: 4px;
                     .qbIcon {
-                        margin-right:6px;
-                        vertical-align:middle;
-                        width:28px;
-                        padding:4px;
+                        margin-right: 6px;
+                        vertical-align: middle;
+                        width: 28px;
+                        padding: 4px;
                     }
 
                     &:hover {
@@ -206,12 +206,12 @@ $cell-edit-background-edit: #f3f8fe;
                 .iconActionButton {
                     opacity: .2;
                     transition: opacity 200ms ease-in-out;
-                    border:0;
+                    border: 0;
                     height: 30px;
                     width: auto;
                     background: inherit;
                     color: $topnav-icon-color;
-                    padding:0;
+                    padding: 0;
                     &:hover {
                         color: $topnav-icon-color;
                     }
@@ -232,7 +232,7 @@ $cell-edit-background-edit: #f3f8fe;
         }
         &:hover .ag-cell-value .iconActions .iconActionButton {
             transition: opacity 200ms ease-in-out;
-            opacity:1;
+            opacity: 1;
         }
     }
 
@@ -295,7 +295,7 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .ag-selection-checkbox {
         position: absolute;
-        margin:0;
+        margin: 0;
         left: $grid-default-cell-padding;
         top: $grid-default-cell-padding;
     }
@@ -371,22 +371,22 @@ $cell-edit-background-edit: #f3f8fe;
 
     .recordActions {
         padding: 0;
-        height:100%;
-        width:200px;
+        height: 100%;
+        width: 200px;
 
         .actionIcons {
-            display:flex;
-            flex-direction:row;
-            width:100%;
-            height:100%;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100%;
 
             .iconLink {
                 flex:1 1 auto;
-                height:100%;
+                height: 100%;
 
-                position:relative;
+                position: relative;
                 .qbIcon {
-                    position:absolute;
+                    position: absolute;
                     top: calc(50% - 10px);
                     left: 12px;
                 }
@@ -406,11 +406,11 @@ $cell-edit-background-edit: #f3f8fe;
 
 /* hide row editing tools by default */
 .editTools {
-    display:none;
+    display: none;
 }
 
 .emptyCell {
-    visibility:hidden;
+    visibility: hidden;
 }
 
 .ag-body-container {
@@ -420,8 +420,8 @@ $cell-edit-background-edit: #f3f8fe;
 
     .cellData {
         .textCell {
-            overflow:hidden;
-            text-overflow:ellipsis;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .checkbox {
             text-align: center;
@@ -442,7 +442,7 @@ $cell-edit-background-edit: #f3f8fe;
 
 
 .reportToolsAndContentContainer.activeSelection .gridCell.selectionCell .iconActions {
-    display:none;
+    display: none;
 }
 
 
@@ -462,32 +462,32 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .ag-cell.gridCell {
 
-        overflow:visible;
+        overflow: visible;
         padding: 0;
         margin: 0;
 
         border-right: 1px solid $row-border-color;
         > .cellWrapper.textFormat {
-            align-items:flex-start;
+            align-items: flex-start;
             padding-top: 0;
             textarea {
                 resize: none;
-                overflow:hidden;
+                overflow: hidden;
             }
         }
         > .cellWrapper,.ag-cell-wrapper {
-            padding:3px;
+            padding: 3px;
             position: absolute;
-            align-items:center;
-            top:0px;
-            left:0px;
-            right:0px;
-            bottom:0px;
+            align-items: center;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
             background-color: $cell-edit-background-edit;
-            display:flex;
+            display: flex;
 
             .cellData:not(.nonEditable) {
-                display:none;
+                display: none;
             }
             .cellData.nonEditable {
                 display: block;
@@ -497,7 +497,7 @@ $cell-edit-background-edit: #f3f8fe;
                 padding-right: 5px;
             }
             .cellEditWrapper {
-                display:flex;
+                display: flex;
                 flex-direction: row;
                 position: relative;
                 height: 100%;
@@ -506,7 +506,7 @@ $cell-edit-background-edit: #f3f8fe;
                 justify-content: center;
             }
             .multiLineCellEditWrapper {
-                display:flex;
+                display: flex;
                 flex-direction: row;
                 position: relative;
                 height: 32px;
@@ -515,34 +515,34 @@ $cell-edit-background-edit: #f3f8fe;
                 justify-content: center;
             }
             .cellEdit {
-                display:inline-block;
+                display: inline-block;
                 background-color: $input-bg-color;
                 &.input-group {
                     flex: 1 1 auto;
-                    display:flex;
+                    display: flex;
                     flex-direction: row;
-                    margin-right:0;
-                    padding-right:0;
-                    border-right:0;
+                    margin-right: 0;
+                    padding-right: 0;
+                    border-right: 0;
 
                     >input {
                         flex:1 1 auto;
-                        border-radius:0;
-                        border:0;
-                        height:20px;
-                        margin-right:1px;
+                        border-radius: 0;
+                        border: 0;
+                        height: 20px;
+                        margin-right: 1px;
                         font-size: 12px;
-                        padding-left:2px;
+                        padding-left: 2px;
                     }
                     >span.dropdown {
                         flex:0 0 auto;
                         width: 20px;
                         button {
-                            padding-left:4px;
-                            padding-top:0;
+                            padding-left: 4px;
+                            padding-top: 0;
                             height: 21px;
-                            width:20px;
-                            border-radius:0;
+                            width: 20px;
+                            border-radius: 0;
                         }
                     }
                 }
@@ -580,60 +580,60 @@ $cell-edit-background-edit: #f3f8fe;
             }
         }
         > .ag-cell-wrapper:first-child {
-            border-left:1px solid $row-border-color;
-            left:0;
+            border-left: 1px solid $row-border-color;
+            left: 0;
         }
     }
 
     .gridCell {
 
         .editTools {
-            z-index:1;
-            display:flex;
-            flex-direction:column;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
             flex: 0 0 auto;
-            background-color:$cell-edit-background-edit;
+            background-color: $cell-edit-background-edit;
             box-shadow: -6px 0px 14px $row-box-shadow-color;
 
-            position:absolute;
-            top:-21px;
-            left:-29px;
+            position: absolute;
+            top: -21px;
+            left: -29px;
             padding: 0 24px;
 
             border: 1px solid $row-border-color;
             button {
                 flex: 0 0 auto;
-                border:0;
-                background-color:$cell-edit-background-edit;
-                margin-right:2px;
-                padding:6px 4px;
+                border: 0;
+                background-color: $cell-edit-background-edit;
+                margin-right: 2px;
+                padding: 6px 4px;
 
                 .qbIcon:hover {
-                    opacity:1;
+                    opacity: 1;
                 }
                 .qbIcon {
-                    opacity:.7;
-                    width:20px;
+                    opacity: .7;
+                    width: 20px;
                     font-size: 16px;
-                    vertical-align:top;
+                    vertical-align: top;
                 }
                 .qbIcon.saveRecord {
-                    color:green;
-                    font-size:18px;
+                    color: green;
+                    font-size: 18px;
                 }
                 .qbIcon.invalidRecord {
-                    color:$tootip-error-color;
-                    font-size:18px;
+                    color: $tootip-error-color;
+                    font-size: 18px;
                     cursor: default;
                 }
                 .qbIcon.cancelSelection {
-                    color:$icon-color;
+                    color: $icon-color;
                 }
                 .qbIcon.deleteRecord {
-                    color:red;
+                    color: red;
                 }
                 .qbIcon.addRecord {
-                    color:$icon-color;
+                    color: $icon-color;
                 }
             }
         }
@@ -643,14 +643,14 @@ $cell-edit-background-edit: #f3f8fe;
   /* ensure that group labels are visible with pinned left column */
 
 .ag-pinned-left-cols-container {
-    z-index:999;
+    z-index: 999;
 }
 
 .reportToolsAndContentContainer.singleSelection .ag-pinned-left-cols-container .ag-row.ag-row-selected.ag-row.ag-row-selected {
     .ag-cell.gridCell > .ag-cell-wrapper {
-        border-left:0;
+        border-left: 0;
     }
-    box-shadow:0;
+    box-shadow: 0;
 }
 
 .ag-group-cell-entire-row {
@@ -659,5 +659,5 @@ $cell-edit-background-edit: #f3f8fe;
 
 /* right justify menu on last column */
 .ag-row .ag-cell:last-child .Select-menu-outer {
-    right:0;
+    right: 0;
 }

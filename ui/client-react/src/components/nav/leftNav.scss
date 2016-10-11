@@ -97,7 +97,7 @@ $left-nav-horizontal-icon-border-color: $color32;
             .qbIcon {
                 display: inline-block;
                 width: auto;
-                padding-right:4px;
+                padding-right: 4px;
             }
         }
     }
@@ -120,7 +120,7 @@ div.leftNavTooltip {
 @include not-small-breakpoint {
     .leftNav.collapsed {
         width: 40px;
-        transition:width 100ms ease;
+        transition: width 100ms ease;
         .branding {
 
             .logo, .appsToggle .navLabel, .appsToggleIcon {
@@ -131,7 +131,7 @@ div.leftNavTooltip {
         li.horizontal, .globalActions {
             ul {
                 li {
-                    border-right:0;
+                    border-right: 0;
                 }
                 flex-direction: column;
             }
@@ -151,17 +151,17 @@ div.leftNavTooltip {
         }
 
         .heading {
-            display:none;
+            display: none;
         }
         li.search {
             display: none;
         }
         .leftNavLabel {
-            display:none;
+            display: none;
         }
 
         .transitionGroup .tablesHeadingAndList .tablesList {
-            overflow:visible;
+            overflow: visible;
         }
     }
 }
@@ -210,16 +210,16 @@ div.leftNavTooltip {
             text-overflow: ellipsis;
         }
         button.appsToggle {
-            text-overflow:ellipsis;
-            overflow:hidden;
-            padding-right:25px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding-right: 25px;
             color: $left-nav-fg;
-            height:40px;
+            height: 40px;
             border: 0;
-            border-radius:0;
-            margin:0;
-            text-align:left;
-            width:100%;
+            border-radius: 0;
+            margin: 0;
+            text-align: left;
+            width: 100%;
             padding-left: 8px;
             position: relative;
             white-space: nowrap;
@@ -253,7 +253,7 @@ div.leftNavTooltip {
         color: $search-input-fg;
         overflow: hidden;
         height: 0;
-        visibility:hidden;
+        visibility: hidden;
         transition: all 250ms ease;
     }
     .search.open {
@@ -275,7 +275,7 @@ div.leftNavTooltip {
                 font-size: 16px;
                 position: absolute;
                 right: 8px;
-                width:auto;
+                width: auto;
                 top: 10px;
             }
         }
@@ -284,24 +284,24 @@ div.leftNavTooltip {
         flex: 1 1 auto;
         overflow: visible;
         z-index: 1;
-        display:flex;
+        display: flex;
         .appsList {
-            width:100%;
+            width: 100%;
         }
         .tablesHeadingAndList {
-            flex:1 1 auto;
+            flex: 1 1 auto;
             width: 100%;
-            display:flex;
-            flex-direction:column;
+            display: flex;
+            flex-direction: column;
 
             .tablesHeading {
-                width:100%;
+                width: 100%;
                 flex: 0 0 auto;
             }
             .tablesList {
                 flex: 1 1 auto;
                 width: 100%;
-                overflow:auto;
+                overflow: auto;
             }
         }
 
@@ -315,7 +315,7 @@ div.leftNavTooltip {
     }
 
     ul.globalActionsList>li {
-        height:auto;
+        height: auto;
     }
     ul.topLinks, ul.tablesHeading, ul.tablesList, ul.appsList, ul.globalActionsList {
         padding: 0;
@@ -359,7 +359,7 @@ div.leftNavTooltip {
                 position: absolute;
                 right: 0;
                 &:focus {
-                    opacity:1;
+                    opacity: 1;
                 }
             }
             .hoverComponent {
@@ -396,7 +396,7 @@ div.leftNavTooltip {
 }
 
 .leftNav.expanded li.horizontal ul li {
-    height:auto;
+    height: auto;
 }
 .leftNav li.horizontal, .leftNav .globalActions {
     height: auto;
@@ -410,9 +410,9 @@ div.leftNavTooltip {
                 padding: 5px 0;
                 text-align: center;
                 line-height: 20px;
-                border-radius:0;
-                border:0;
-                background-color:inherit;
+                border-radius: 0;
+                border: 0;
+                background-color: inherit;
                 .qbIcon, .navLabel, .dropup {
                     display: block;
                     width: 100%;
