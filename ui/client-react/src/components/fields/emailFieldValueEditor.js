@@ -26,12 +26,20 @@ const EmailFieldValueEditor = React.createClass({
 
         readOnly: PropTypes.bool,
 
-        /* optional prop to pass in placeholder text. Defaults to: 'name@dimain.com'. */
-        placeholder: PropTypes.string
+        /* Optional prop to pass in placeholder text. Defaults to: 'name@dimain.com'. */
+        placeholder: PropTypes.string,
+
+        /* Flag to turn on and off email validation. `onValidated` function must also be supplied */
+        validate: PropTypes.bool,
+
+        /* Function used to pass validation results to the parent component. `validate` prop must also be true */
+        onValidated: PropTypes.func
+
     },
     getDefaultProps() {
         return {
             value: '',
+            validate: true,
             invalid: false,
             disabled: false,
             readOnly: false,
@@ -39,7 +47,7 @@ const EmailFieldValueEditor = React.createClass({
         };
     },
     validateEmail(email) {
-        if (this.props.onValidated) {
+        if (this.props.validate && this.props.onValidated) {
             var isInvalid = EmailValidator.isInvalid(email);
 
             this.props.onValidated({
