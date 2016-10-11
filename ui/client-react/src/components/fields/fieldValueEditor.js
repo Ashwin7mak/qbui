@@ -17,6 +17,7 @@ import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
 import NumericFieldValueEditor from './numericFieldValueEditor';
 import TextFieldValueEditor from './textFieldValueEditor';
 import TimeFieldValueEditor from './timeFieldValueEditor';
+import UrlFieldValueEditor from './urlFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
 
 /**
@@ -58,6 +59,7 @@ const FieldValueEditor = React.createClass({
          * - DURATION_FORMAT = 11;
          * - PHONE_FORMAT = 12;
          * - MULTI_LINE_TEXT_FORMAT = 13;
+         * - URL = 14;
          **/
         type: React.PropTypes.number,
 
@@ -194,6 +196,9 @@ const FieldValueEditor = React.createClass({
 
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
             return <MultiLineTextFieldValueEditor {...commonProps} showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
+        }
+        case FieldFormats.URL: {
+            return <UrlFieldValueEditor {...commonProps} />;
         }
         case FieldFormats.TEXT_FORMAT:
         default: {
