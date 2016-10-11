@@ -46,8 +46,8 @@
                 border: none;
                 box-shadow: none;
             }
-
         }
+
         &.btn-default {
             @include urlButtonBackgroundGradient();
             color: $link-text-normal-color;

@@ -1,4 +1,4 @@
-(function(){
+(function() {
     // Maintains parity with Core validation - EmailAddressAttributes.java lines 31-45
     var EMAIL_ADDRESS_DOMAIN_VALIDATION_REGEX = "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])";
     var MAILBOX_REGEX = "[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*";
