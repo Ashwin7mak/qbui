@@ -44,6 +44,9 @@ class FieldFormats {
             case serverTypeConsts.PERCENT :
                 return FieldFormats.PERCENT_FORMAT;
 
+            case serverTypeConsts.URL :
+                return FieldFormats.URL;
+
             case serverTypeConsts.TEXT :
                 let numLines = 1;
                 if (_.has(datatypeAttributes, 'clientSideAttributes.num_lines')) {
@@ -76,6 +79,6 @@ FieldFormats.RATING_FORMAT = 10;
 FieldFormats.DURATION_FORMAT = 11;
 FieldFormats.PHONE_FORMAT = 12;
 FieldFormats.MULTI_LINE_TEXT_FORMAT = 13;
+FieldFormats.URL = 14;
 
 export default FieldFormats;
-

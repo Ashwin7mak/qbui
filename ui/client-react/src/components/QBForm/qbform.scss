@@ -11,6 +11,11 @@ $edit-field-padding: 5px;
 
     .formTable {
         margin-left: 10px;
+
+        /* Fields in cardview span the width of the small device */
+        @include small-breakpoint {
+            width: 100%;
+        }
     }
     .qbPanelHeader {
         padding: 15px 0 15px 20px;
@@ -22,6 +27,11 @@ $edit-field-padding: 5px;
         .qbPanelHeader {
             // if the section doesnt have a header, when its collapsed the height should be same as others
             min-height: 54px;
+        }
+    }
+    &.nonCollapsible {
+        .qbPanelHeaderIcon {
+            display: none;
         }
     }
     .fieldRow {
@@ -108,6 +118,22 @@ $edit-field-padding: 5px;
     /* don't bleed through dropdowns */
     .input-group .form-control {
         z-index: inherit;
+    }
+    .cellEdit.dateTimeField {
+        width: calc(50% - 1px);
+        vertical-align: middle;
+
+        //  dateCell styles for date/time combo
+        &.dateCell {
+            margin-right: 2px;
+        }
+
+        //  timeCell styles for date/time combo
+        &.timeCell {
+            .Select-value {
+                padding-right: 20px !important;
+            }
+        }
     }
 }
 /* For mobile phones: */

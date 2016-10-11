@@ -26,7 +26,7 @@ const UserFieldValueEditor = React.createClass({
         /**
          * the currently selected user
          */
-        value: React.PropTypes.object,
+        value: React.PropTypes.any,
         /**
          * data type attributes for the field */
         fieldDef: React.PropTypes.object.isRequired,
@@ -166,7 +166,6 @@ const UserFieldValueEditor = React.createClass({
      * user picker wrapper on react-select component
      */
     render() {
-
         return (
             <Select
                 className="cellEdit userFormat"

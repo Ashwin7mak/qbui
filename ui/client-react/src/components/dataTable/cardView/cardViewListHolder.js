@@ -60,7 +60,8 @@ let CardViewListHolder = React.createClass({
      * is row selected callback
      */
     isRowSelected(row) {
-        return this.props.selectedRows.indexOf(row[this.props.uniqueIdentifier]) !== -1;
+
+        return this.props.selectedRows.indexOf(row) !== -1;
     },
 
     /**
@@ -71,13 +72,13 @@ let CardViewListHolder = React.createClass({
 
         const flux = this.getFlux();
 
-        const id = row[this.props.uniqueIdentifier];
+        const id = row[this.props.uniqueIdentifier].value;
 
         let selectedRows = this.props.selectedRows;
 
         if (selectedRows.indexOf(id) === -1) {
             // not already selected, add to selectedRows
-            selectedRows.push(row[this.props.uniqueIdentifier]);
+            selectedRows.push(id);
         } else {
             // already selected, remove from selectedRows
             selectedRows = _.without(selectedRows, id);
@@ -259,7 +260,6 @@ let CardViewListHolder = React.createClass({
             };
         }
 
-
         return (<Swipeable className="swipeable"
                        onSwipingUp={(ev, delta) => {this.swiping(ev.target, delta, true);}}
                        onSwipingDown={(ev, delta) => {this.swiping(ev.target, delta, false);}}
@@ -275,6 +275,7 @@ let CardViewListHolder = React.createClass({
                         }
 
                         <CardViewList ref="cardViewList" node={recordNodes}
+                                      uniqueIdentifier={this.props.uniqueIdentifier}
                                       groupId=""
                                       groupLevel={-1}
                                       allowCardSelection={this.allowCardSelection}
@@ -282,6 +283,7 @@ let CardViewListHolder = React.createClass({
                                       onRowSelected={this.onCardRowSelected}
                                       onRowClicked={this.props.onRowClicked}
                                       isRowSelected={this.isRowSelected}
+                                      onEditRecord={this.openRecordForEdit}
                                       onSwipe={this.onSwipe} />
 
                         {showNextButton ?
@@ -306,6 +308,16 @@ let CardViewListHolder = React.createClass({
         this.refs.cardViewListWrapper.removeEventListener("scroll", this.props.onScroll);
     },
 
+    /**
+     * card edit action callbac, edit in trowser
+     * @param recordId
+     */
+    openRecordForEdit(recordId) {
+
+        const flux = this.getFlux();
+
+        flux.actions.openRecordForEdit(recordId);
+    },
     render() {
         let results = this.props.reportData && this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
 

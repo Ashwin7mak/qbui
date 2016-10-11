@@ -82,7 +82,7 @@
 
             // No Proto URL
             var noProtoInput = [{id: fid, value: noProtoURL}];
-            var expectedNoProtoRecord = {id: fid, value: noProtoURL, display: noProtoURL};
+            var expectedNoProtoRecord = {id: fid, value: noProtoURL, display: 'http://' + noProtoURL};
 
             // Null URL
             var nullInput = [{id: fid, value: null}];

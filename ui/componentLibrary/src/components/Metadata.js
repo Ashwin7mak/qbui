@@ -15,6 +15,8 @@ import TextFieldValueEditorMetadata from 'component-metadata!../../../client-rea
 import TextFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/textFieldValueRenderer.js';
 import TimeFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/timeFieldValueEditor.js';
 import TimeFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/timeFieldValueRenderer.js';
+import UrlFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/urlFieldValueEditor.js';
+import UrlFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/urlFieldValueRenderer.js';
 import UserFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueEditor.js';
 import UserFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/userFieldValueRenderer.js';
 
@@ -40,6 +42,8 @@ var Metadata = _.merge(
     TextFieldValueRendererMetadata,
     TimeFieldValueEditorMetadata,
     TimeFieldValueRendererMetadata,
+    UrlFieldValueEditorMetadata,
+    UrlFieldValueRendererMetadata,
     UserFieldValueEditorMetadata,
     UserFieldValueRendererMetadata,
     QBIconMetadata,

@@ -9,6 +9,7 @@ import NumericFieldValueRenderer from './numericFieldValueRenderer';
 import TextFieldValueRenderer from './textFieldValueRenderer';
 import TimeFieldValueRenderer from './timeFieldValueRenderer';
 import UserFieldValueRenderer from './userFieldValueRenderer';
+import UrlFieldValueRenderer from './urlFieldValueRenderer';
 
 /**
  * # FieldValueRenderer
@@ -47,6 +48,7 @@ const FieldValueRenderer = React.createClass({
          * - DURATION_FORMAT = 11;
          * - PHONE_FORMAT = 12;
          * - MULTI_LINE_TEXT_FORMAT = 13;
+         * - URL = 14;
          **/
         type: React.PropTypes.number,
 
@@ -117,6 +119,13 @@ const FieldValueRenderer = React.createClass({
                                                      key={'mltfvr-' + this.props.idKey}
                                                  {...commonProperties}/>
                 );
+        case FieldFormats.URL:
+            let {open_in_new_window, show_as_button} = this.props.attributes.clientSideAttributes;
+            return <UrlFieldValueRenderer value={this.props.value}
+                                          display={this.props.display}
+                                          openInNewWindow={open_in_new_window}
+                                          showAsButton={show_as_button}
+                                          {...commonProperties} />;
 
         case FieldFormats.TEXT_FORMAT:
         case FieldFormats.PERCENT_FORMAT:

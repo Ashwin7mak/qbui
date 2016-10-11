@@ -7,8 +7,6 @@ import IconActions from '../../actions/iconActions';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
-import ReportActions from '../../actions/reportActions';
-import RecordActions from '../../actions/recordActions';
 import Locale from '../../../locales/locales';
 import _ from 'lodash';
 import Loader  from 'react-loader';
@@ -18,9 +16,22 @@ import ReportUtils from '../../../utils/reportUtils';
 import * as SchemaConsts from '../../../constants/schema';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
-import {CellRenderer, DateCellRenderer, DateTimeCellRenderer, TimeCellRenderer,
-        NumericCellRenderer, DurationCellRenderer, TextCellRenderer, UserCellRenderer, CheckBoxCellRenderer,
-        CurrencyCellRenderer, SelectionColumnCheckBoxCellRenderer, PercentCellRenderer, RatingCellRenderer}  from './cellRenderers';
+import {
+    CellRenderer,
+    DateCellRenderer,
+    DateTimeCellRenderer,
+    TimeCellRenderer,
+    NumericCellRenderer,
+    DurationCellRenderer,
+    TextCellRenderer,
+    UserCellRenderer,
+    CheckBoxCellRenderer,
+    CurrencyCellRenderer,
+    SelectionColumnCheckBoxCellRenderer,
+    PercentCellRenderer,
+    RatingCellRenderer,
+    UrlCellRenderer,
+}  from './cellRenderers';
 
 import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
 
@@ -73,6 +84,7 @@ let AGGrid = React.createClass({
         appUsers:React.PropTypes.array,
         appId: React.PropTypes.string,
         tblId: React.PropTypes.string,
+        rptId: React.PropTypes.string,
         validateRecord: React.PropTypes.func,
         validateFieldValue: React.PropTypes.func,
         onRowClick: React.PropTypes.func,
@@ -371,6 +383,19 @@ let AGGrid = React.createClass({
     },
 
     /**
+     * edit the selected record in the trowser
+     * @param data row record data
+     */
+    openRecordForEdit(data) {
+
+        const recordId = data[this.props.uniqueIdentifier].value;
+
+        const flux = this.getFlux();
+
+        flux.actions.openRecordForEdit(recordId);
+    },
+
+    /**
      * get list of users for this app
      *
      * @returns app user objects
@@ -382,7 +407,7 @@ let AGGrid = React.createClass({
     // Careful about setting things in context, they do not update when the related prop updates
     componentDidMount() {
         this.gridOptions.context.flux = this.getFlux();
-        this.gridOptions.context.defaultActionCallback = this.props.onRowClick;
+        this.gridOptions.context.defaultActionCallback = this.openRecordForEdit;
         this.gridOptions.context.cellTabCallback = this.onCellTab;
         this.gridOptions.context.onRecordChange = this.props.onRecordChange;
         this.gridOptions.context.onRecordAdd = this.props.onRecordAdd;
@@ -954,6 +979,9 @@ let AGGrid = React.createClass({
                                 break;
                             case serverTypeConsts.DURATION :
                                 obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
+                                break;
+                            case serverTypeConsts.URL :
+                                obj.cellRenderer = reactCellRendererFactory(UrlCellRenderer);
                                 break;
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
