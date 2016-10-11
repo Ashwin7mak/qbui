@@ -476,8 +476,15 @@
                 report.groups.forEach((group) => {
                     var node = {
                         children: [],
-                        group: Array.isArray(group.summaryRef) && group.summaryRef.length > 0 ? group.summaryRef[0] : 'No group name'
+                        group: 'No group name'
                     };
+
+                    if (group.summaryRef) {
+                        var summaries = group.summaryRef.summaries;
+                        if (Array.isArray(summaries) && summaries.length > 0) {
+                            node.group = summaries[0];
+                        }
+                    }
 
                     let groupRecords = requestHelper.isDisplayFormat(req) ? recordFormatter.formatRecords(group.records, fields) : group.records;
 

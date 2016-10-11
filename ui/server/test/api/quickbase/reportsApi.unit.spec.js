@@ -632,7 +632,7 @@ describe('Validate ReportsApi unit tests', function() {
             filteredCount: '1'
         };
 
-        var fetchReportGroupingResultsPromise = Promise.resolve({'body': '{"records":null, "type":"GROUP", "groups":[{"records":[[{"id":1, "value":"VP Operations"}, {"id":2, "value":1}]]}]}'});
+        var fetchReportGroupingResultsPromise = Promise.resolve({'body': '{"records":null, "type":"GROUP", "groups":[{"summaryRef":{"summaries":["groupName"]}, "records":[[{"id":1, "value":"VP Operations"}, {"id":2, "value":1}]]}]}'});
         var fetchReportResultsPromise = Promise.resolve({'body': '[[ {"id":1, "value": 1234525} ], [ {"id":2, "value": 1234567} ]]'});
         var fetchFieldsPromise = Promise.resolve({'body': '[{ "id":1, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'});
 
