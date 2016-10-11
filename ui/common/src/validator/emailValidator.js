@@ -16,6 +16,11 @@
          * @returns {boolean}
          */
         validate: function(email, validation_option) {
+            // Don't validate empty strings
+            if (!email) {
+                return true;
+            }
+
             var regex;
             switch (validation_option) {
             case this.ONLY_VALIDATE_DOMAIN :
@@ -30,6 +35,10 @@
             }
 
             return regex.test(email);
+        },
+        // Helper method for React property isInvalid on many components. Returns opposite value of validate
+        isInvalid: function(email, validation_option) {
+            return !this.validate(email, validation_option);
         }
     };
 }());

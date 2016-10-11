@@ -279,6 +279,7 @@ export default {
         invalidMsg : {
             required: 'Fill in the {fieldName}',
             maxChars: 'Use up to {num} characters',
+            email: 'Format the {fieldName} like name@domain.com'
         },
         noneOption: "\<None\>"
     }

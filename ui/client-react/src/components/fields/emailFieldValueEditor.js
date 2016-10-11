@@ -1,5 +1,7 @@
 import React, {PropTypes} from 'react';
 import EmailFormatter from '../../../../common/src/formatter/emailFormatter';
+import EmailValidator from '../../../../common/src/validator/emailValidator';
+
 import EmailFieldValueRenderer from './emailFieldValueRenderer';
 import TextFieldValueEditor from './textFieldValueEditor';
 
@@ -36,8 +38,20 @@ const EmailFieldValueEditor = React.createClass({
             placeholder: 'name@domain.com'
         };
     },
+    validateEmail(email) {
+        if (this.props.onValidated) {
+            var isInvalid = EmailValidator.isInvalid(email);
+
+            this.props.onValidated({
+                isInvalid: isInvalid,
+                invalidMessage: 'Format email like name@domain.com'
+            });
+        }
+    },
     onBlur(newValue) {
         let datatypeAttributes = (this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : {});
+
+        this.validateEmail(newValue.value);
 
         if (this.props.onBlur) {
             this.props.onBlur({

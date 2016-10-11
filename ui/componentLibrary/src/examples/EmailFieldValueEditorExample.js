@@ -3,18 +3,27 @@
 const EmailFieldValueEditorExample = React.createClass({
     getInitialState() {
         return {
-            value: ''
+            value: '',
+            isInvalid: false,
+            invalidMessage: ''
         };
     },
     onChange(newValue) {
         this.setState({value: newValue});
+    },
+    onValidated(result) {
+        this.setState({isInvalid: result.isInvalid, invalidMessage: result.invalidMessage});
     },
     render() {
         return (
             <div>
                 <dt>Default: </dt>
                 <dd>
-                    <EmailFieldValueEditor value={this.state.value} onChange={this.onChange} />
+                    <EmailFieldValueEditor value={this.state.value}
+                                           onChange={this.onChange}
+                                           onValidated={this.onValidated}
+                                           isInvalid={this.state.isInvalid}
+                                           invalidMessage={this.state.invalidMessage} />
                 </dd>
 
                 <dt>Invalid: </dt>

@@ -1,6 +1,7 @@
 'use strict';
 
 var assert = require('assert');
+var sinon = require('sinon');
 var emailValidator = require('../../src/validator/emailValidator');
 
 describe('emailValidator', () => {
@@ -37,6 +38,17 @@ describe('emailValidator', () => {
                 var result = emailValidator.validate(testCase.email, testCase.validationType);
                 assert.equal(result, testCase.expectation, 'Validator did not return the correct result: ' + result + ' (actual) is not ' + testCase.expectation);
             });
+        });
+    });
+
+    describe('isInvalid', () => {
+        it('is a helper method to match the React property isInvalid (returns opposite result of validate)', () => {
+            sinon.spy(emailValidator, 'validate');
+
+            var result = emailValidator.isInvalid('test@quickbase.com');
+
+            assert.equal(result, false);
+            assert(emailValidator.validate.calledOnce);
         });
     });
 });
