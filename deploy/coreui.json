@@ -56,8 +56,8 @@
     },
     "paramInstanceSubnets": {
       "Type": "CommaDelimitedList",
-      "Default": "subnet-9c2e90eb, subnet-952af7cc",
-      "Description": "Subnets for the instances"
+      "Default": "subnet-932af7ca, subnet-992e90ee",
+      "Description": "Subnets for the instances. Defaults are PrivateWebSubnet AZ1 and AZ2"
     },
     "paramServerCapacity": {
       "Default": 1,
