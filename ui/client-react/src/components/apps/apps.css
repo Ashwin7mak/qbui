@@ -7,13 +7,13 @@
 }
 
 .apps-container .apps li {
-    font-size: 13px;
-    font-weight: bold;
+    font-size:13px;
+    font-weight:bold;
 }
 
 .apps-container .apps .tables li {
-    font-size: 12px;
-    cursor: pointer;
+    font-size:12px;
+    cursor:pointer;
     text-decoration: underline;
     color: -webkit-link;
     list-style-type: square;
