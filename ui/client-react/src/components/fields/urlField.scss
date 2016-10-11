@@ -1,4 +1,4 @@
-@import '../../../src/assets/css/qbVariables';
+@import "../../../src/assets/css/qbVariables";
 
 .urlField {
     &, a {
@@ -48,7 +48,7 @@
         opacity: 0;
         text-decoration: none;
 
-        transition: opacity .2s ease-in-out;
+        transition: opacity 0.2s ease-in-out;
 
         @include small-breakpoint {
             float: right;

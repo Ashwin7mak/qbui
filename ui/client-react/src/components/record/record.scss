@@ -1,8 +1,9 @@
-@import '../../assets/css/qbVariables';
+@import "../../assets/css/qbVariables";
 
 .record-content {
     padding: 0 10px;
 }
+
 .recordContainer {
     width: 100%;
     background-image: linear-gradient(to top, $color13 0%, $color14 100%);
@@ -66,7 +67,7 @@
 
 .next-leave.next-leave-active {
     left: -100%;
-    opacity: .1;
+    opacity: 0.1;
     transition: all 200ms linear;
 }
 

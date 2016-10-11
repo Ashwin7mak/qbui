@@ -1,6 +1,6 @@
 @import '../../assets/css/qbVariables';
 
-$breadCrumbsSeparatorColor: #c7c7c7;
+$bread-crumb-separator-color: #c7c7c7;
 
 .stageHeader {
     display: flex;
@@ -69,7 +69,7 @@ $breadCrumbsSeparatorColor: #c7c7c7;
                 text-overflow: ellipsis;
             }
             .breadCrumbsSeparator {
-                color: $breadCrumbsSeparatorColor;
+                color: $bread-crumb-separator-color;
             }
         }
 
@@ -84,10 +84,11 @@ $breadCrumbsSeparatorColor: #c7c7c7;
         padding-top: 20px;
         flex: 0 0 auto;
         .iconActionButton {
-            color: $page-actions-icon-color
+            color: $page-actions-icon-color;
         }
     }
 }
+
 .layout-stage {
     border-bottom: 1px solid $header-bg;
     position: relative;
@@ -95,7 +96,6 @@ $breadCrumbsSeparatorColor: #c7c7c7;
     background-color: $color2;
 
     .toggleStage {
-
         cursor: pointer;
         position: absolute;
         bottom: -24px;
@@ -112,10 +112,7 @@ $breadCrumbsSeparatorColor: #c7c7c7;
         background-color: $color2;
         border: 0 none transparent;
         margin: 0;
-        padding: 0 0 10px 0;
+        padding: 0 0 10px;
         box-shadow: none;
     }
 }
-
-
-

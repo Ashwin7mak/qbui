@@ -1,4 +1,4 @@
-@import '../../../src/assets/css/qbVariables';
+@import "../../../src/assets/css/qbVariables";
 
 $search-bar-bg: #5f8ba7;
 $report-group-bg: #fff;
@@ -78,7 +78,7 @@ $report-link-color: #404040;
             flex: 0 0 200px;
             cursor: pointer;
 
-            &:hover,&:focus {
+            &:hover, &:focus {
                 text-decoration: none;
             }
         }
