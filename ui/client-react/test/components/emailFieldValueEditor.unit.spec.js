@@ -35,23 +35,23 @@ function buildMockParent(options = {disabled: false, readOnly: false, initialVal
     });
 }
 
-let component, domComponent;
+let component, domComponent, emailInput;
 
 describe('EmailFieldValueEditor', () => {
     it('has placeholder text', () => {
         component = TestUtils.renderIntoDocument(React.createElement(buildMockParent()));
-        domComponent = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
 
-        expect(domComponent.placeholder).toEqual(placeholderText);
+        expect(emailInput.placeholder).toEqual(placeholderText);
     });
 
     it('is editable', () => {
         let updatedEmail = 'test@quickbase.com';
 
         component = TestUtils.renderIntoDocument(React.createElement(buildMockParent()));
-        domComponent = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
 
-        Simulate.change(domComponent, {
+        Simulate.change(emailInput, {
             target: {value: updatedEmail}
         });
 
@@ -64,9 +64,9 @@ describe('EmailFieldValueEditor', () => {
 
         let mockParentElement = buildMockParent({initialValue: initialValue});
         component = TestUtils.renderIntoDocument(React.createElement(mockParentElement));
-        domComponent = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
 
-        Simulate.blur(domComponent, {
+        Simulate.blur(emailInput, {
             value: initialValue
         });
 
@@ -89,16 +89,45 @@ describe('EmailFieldValueEditor', () => {
     it('shows only text when disabled', () => {
         let mockParentElement = buildMockParent({disabled: true});
         component = TestUtils.renderIntoDocument(React.createElement(mockParentElement));
-        domComponent = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
 
-        expect(domComponent).toBeNull();
+        expect(emailInput).toBeNull();
     });
 
     it('shows only text when readOnly', () => {
         let mockParentElement = buildMockParent({readOnly: true});
         component = TestUtils.renderIntoDocument(React.createElement(mockParentElement));
-        domComponent = ReactDOM.findDOMNode(component).querySelector('input');
+        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
 
-        expect(domComponent).toBeNull();
+        expect(emailInput).toBeNull();
+    });
+
+    it('validates an email if validateFieldValue is enabled', () => {
+        let email = 'test@email.com';
+        let mockParent = {
+            onValidated(result) {
+                return result;
+            }
+        };
+        let fieldDef = {
+            headerName: 'email'
+        };
+
+        spyOn(mockParent, 'onValidated');
+
+        component = TestUtils.renderIntoDocument(<EmailFieldValueEditor value={email}
+                                                                        fieldDef={fieldDef}
+                                                                        onValidated={mockParent.onValidated}
+                                                                        validateFieldValue={true} />);
+        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
+
+        Simulate.blur(emailInput, {
+            value: email
+        });
+
+        expect(mockParent.onValidated).toHaveBeenCalledWith({
+            isInvalid: false,
+            invalidMessage: 'Format the email like name@domain.com'
+        });
     });
 });

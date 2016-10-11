@@ -1,4 +1,6 @@
 import React, {PropTypes} from 'react';
+import Locales from "../../locales/locales";
+
 import EmailFormatter from '../../../../common/src/formatter/emailFormatter';
 import EmailValidator from '../../../../common/src/validator/emailValidator';
 
@@ -46,13 +48,22 @@ const EmailFieldValueEditor = React.createClass({
             placeholder: 'name@domain.com'
         };
     },
+    /**
+     * Validation for the email field occurs here because it is specific to this field.
+     * Generic validators occur within validationUtils.js
+     */
     validateEmail(email) {
         if (this.props.validateFieldValue && this.props.onValidated) {
+            var fieldName = 'Email';
+            if (this.props.fieldDef && this.props.fieldDef.headerName) {
+                fieldName = this.props.fieldDef.headerName;
+            }
+
             var isInvalid = EmailValidator.isInvalid(email);
 
             this.props.onValidated({
                 isInvalid: isInvalid,
-                invalidMessage: 'Format email like name@domain.com'
+                invalidMessage: Locales.getMessage('invalidMsg.email', {fieldName: 'email'})
             });
         }
     },
