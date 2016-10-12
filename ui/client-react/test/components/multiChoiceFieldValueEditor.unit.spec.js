@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import TestUtils from 'react-addons-test-utils';
 import MultiChoiceFieldValueEditor  from '../../src/components/fields/multiChoiceFieldValueEditor';
 import * as CompConstants from '../../src/constants/componentConstants';
+import Select from 'react-select';
 
 const listbox_renderWithSelection = {
     choices: [
@@ -201,5 +202,24 @@ describe('MultiChoiceFieldValueEditor functions', () => {
 
         var inputNode = node.querySelectorAll('label')[1].childNodes[0];
         expect(inputNode.checked).toBeTruthy();
+    });
+
+    it('test onBlur for drop down', () => {
+        var TestParent = React.createFactory(React.createClass({
+            getInitialState() {
+                return {value: "Apricots"};
+            },
+            onBlur(val) {
+                this.setState({value: val});
+            },
+            render() {
+                return <MultiChoiceFieldValueEditor ref="field" value={this.state.value} choices={radioBoxData.choices} onBlur={this.onBlur}/>;
+            }
+        }));
+
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        component = parent.refs.field;
+        component.onBlur();
+        expect(parent.state.value).toEqual(undefined);
     });
 });

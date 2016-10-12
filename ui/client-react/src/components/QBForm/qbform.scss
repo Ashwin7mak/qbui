@@ -104,6 +104,9 @@ $edit-field-padding: 5px;
         width: 280px;
         &.fieldInputWidth {
             width: inherit;
+            .input {
+                width: inherit;
+            }
         }
         .checkbox {
             top: $edit-field-padding;

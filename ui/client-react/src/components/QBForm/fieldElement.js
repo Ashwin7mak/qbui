@@ -66,6 +66,8 @@ const FieldElement = React.createClass({
         let indicateRequiredOnField = !this.props.indicateRequiredOnLabel;
 
         //if the field prop has a width defined this affected the element's layout so add the class to indicate
+        // TODO: this needs to be fixed on core to NOT send 50 for defaults. Defaults should be only set on client side.
+        // So for now if an element doesnt have the default width respect it otherwise not.
         let classes = '';
         if (_.has(this.props, 'relatedField.datatypeAttributes.clientSideAttributes.width') && this.props.relatedField.datatypeAttributes.clientSideAttributes.width !== DEFAULT_FIELD_WIDTH) {
             classes = 'fieldInputWidth';

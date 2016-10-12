@@ -70,6 +70,12 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
     @include text-input-focus;
 }
 
+.Select {
+    &.is-open .Select-control{
+      @include text-input-focus;
+  }
+}
+
 .fieldValueEditor.error {
   .Select {
     .Select-control {
@@ -77,7 +83,6 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
       box-shadow: none;
     }
     &.is-open .Select-control{
-      @include text-input-focus;
       @include focus-shadow($input-text-error-border-color);
     }
   }

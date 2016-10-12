@@ -82,9 +82,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
                 display: this.state.choice.label
             };
         }
-        if (theVals.value === CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE) {
-            theVals.value = null;
-        }
+
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
         }
