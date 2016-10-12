@@ -72,7 +72,7 @@ describe('RecordTrowser functions', () => {
 
         const form = {editFormData: {}};
 
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{recordChanges: {}}} flux={flux} recId={null} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}}} flux={flux} recId={null} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -88,7 +88,7 @@ describe('RecordTrowser functions', () => {
 
         const form = {editFormData: {}};
 
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{recordChanges: {}}} flux={flux} recId={"1"} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}}} flux={flux} recId={"1"} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
