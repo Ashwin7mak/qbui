@@ -366,19 +366,7 @@
                     var fids = [TEXT_FID, NUMERIC_FID, DATE_FID, CHECKBOX_FID];
                     // TODO: Going to have to extend this for grouping once implementation is complete
                     // Second level sort, first ascending on the Text field and then descending on the Numeric field
-                    var sortByRecordId = [
-                        {
-                            "fieldId": 3,
-                            "sortOrder": "asc",
-                            "groupType": null
-                        },
-                    ];
                     var sortList = [
-                        {
-                            "fieldId": 3,
-                            "sortOrder": "asc",
-                            "groupType": null
-                        },
                         {
                             "fieldId": TEXT_FID,
                             "sortOrder": "asc",
@@ -396,13 +384,13 @@
 
                     //TODO: Had issue using promise.all here, it wasn't creating all the reports even though was getting responses from all 4 calls
                     // Create report with fids
-                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, sortByRecordId, null, null).then(function(rid1) {
+                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null).then(function(rid1) {
                         reportIds.push(rid1);
                         // Create report with sortList
                         return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null).then(function(rid2) {
                             reportIds.push(rid2);
                             // Create report with facetFids
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, sortByRecordId, facetFids, null).then(function(rid3) {
+                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null).then(function(rid3) {
                                 reportIds.push(rid3);
                                 // Create report with all params defined
                                 return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null).then(function(rid4) {

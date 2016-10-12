@@ -206,12 +206,24 @@
                 var deferred = promise.pending();
                 var printableSortList = [];
 
+
                 if (sortList) {
                     sortList.forEach(function(sortObj) {
                         printableSortList.push(JSON.stringify(sortObj));
+                        //Also add to sort by record Id first
+                        printableSortList.unshift(JSON.stringify({
+                            "fieldId": 3,
+                            "sortOrder": "asc",
+                            "groupType": null
+                        }));
                     });
                 } else {
-                    printableSortList.push('');
+                    //We need the report to be sorted by record Id by default.
+                    printableSortList.push(JSON.stringify({
+                        "fieldId": 3,
+                        "sortOrder": "asc",
+                        "groupType": null
+                    }));
                 }
 
                 var reportJSON = {
