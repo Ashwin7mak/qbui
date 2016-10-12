@@ -7,6 +7,7 @@ import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBicon from "../qbIcon/qbIcon";
 import TableIcon from "../qbTableIcon/qbTableIcon";
 import ValidationUtils from "../../utils/validationUtils";
+import Loader from 'react-loader';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
 import {browserHistory} from 'react-router';
@@ -36,14 +37,16 @@ let RecordTrowser = React.createClass({
     getTrowserContent() {
 
         return (this.props.visible &&
-            <Record appId={this.props.appId}
-                tblId={this.props.tblId}
-                recId={this.props.recId}
-                appUsers={this.props.appUsers}
-                errorStatus={this.props.form && this.props.form.editFormErrorStatus ? this.props.form.editFormErrorStatus : null}
-                pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
-                formData={this.props.form ? this.props.form.editFormData : null}
-                edit={true} />);
+            <Loader loaded={!this.props.form.editFormLoading && !this.props.form.editFormSaving} >
+                <Record appId={this.props.appId}
+                    tblId={this.props.tblId}
+                    recId={this.props.recId}
+                    appUsers={this.props.appUsers}
+                    errorStatus={this.props.form && this.props.form.editFormErrorStatus ? this.props.form.editFormErrorStatus : null}
+                    pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
+                    formData={this.props.form ? this.props.form.editFormData : null}
+                    edit={true} />
+            </Loader>);
     },
     /**
      *  get actions element for bottome center of trowser (placeholders for now)
@@ -69,16 +72,23 @@ let RecordTrowser = React.createClass({
         };
 
         if (validationResult.ok) {
+            const flux = this.getFlux();
+
             //signal record save action, will update an existing records with changed values
             // or add a new record
             let promise;
+
+            flux.actions.savingForm();
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then(() => {
+                flux.actions.saveFormSuccess();
                 this.hideTrowser();
+            }, (errorStatus) => {
+                flux.actions.saveFormFailed(errorStatus);
             });
         }
         return validationResult;
@@ -100,16 +110,23 @@ let RecordTrowser = React.createClass({
         };
 
         if (validationResult.ok) {
+            const flux = this.getFlux();
+
             //signal record save action, will update an existing records with changed values
             // or add a new record
             let promise;
+
+            flux.actions.savingForm();
             if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
                 promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
             promise.then(() => {
+                flux.actions.saveFormSuccess();
                 this.nextRecord();
+            }, (errorStatus) => {
+                flux.actions.saveFormFailed(errorStatus);
             });
         }
         return validationResult;

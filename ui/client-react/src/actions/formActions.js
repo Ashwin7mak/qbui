@@ -49,6 +49,15 @@ let formActions = {
         WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
     },
 
+    savingForm() {
+        this.dispatch(actions.SAVE_FORM);
+    },
+    saveFormFailed(errorStatus) {
+        this.dispatch(actions.SAVE_FORM_FAILED, errorStatus);
+    },
+    saveFormSuccess() {
+        this.dispatch(actions.SAVE_FORM_SUCCESS);
+    },
     /**
      * load form for new record
      * @param appId
