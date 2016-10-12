@@ -127,6 +127,7 @@ const CellRenderer = React.createClass({
         case FieldFormats.TEXT_FORMAT:            return "textFormat";
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: return "multiLineTextFormat";
         case FieldFormats.USER_FORMAT:            return "userFormat";
+        case FieldFormats.URL:                    return "urlFormat";
         default:                                  return "textFormat";
         }
     },
@@ -340,6 +341,13 @@ export const CheckBoxCellRenderer = React.createClass({
     displayName: 'CheckBoxCellRenderer',
     render() {
         return CellRendererFactory.makeCellRenderer(FieldFormats.CHECKBOX_FORMAT, this.props);
+    }
+});
+
+export const UrlCellRenderer = React.createClass({
+    displayName: 'UrlCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.URL, this.props);
     }
 });
 
