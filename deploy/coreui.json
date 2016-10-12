@@ -20,6 +20,8 @@
         "dev",
         "qual",
         "int",
+        "trunk",
+        "demo",
         "prod"
       ]
     },
