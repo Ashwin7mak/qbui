@@ -120,4 +120,4 @@ const TextFieldValueEditor = React.createClass({
     }
 });
 
-export default TextFieldValueEditor;
+export default ValidatedFieldWrapper(TextFieldValueEditor);

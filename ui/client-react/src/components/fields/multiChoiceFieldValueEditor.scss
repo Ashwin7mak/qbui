@@ -29,6 +29,8 @@ $multi-choice-field-box-height: 32px;
         border-bottom-right-radius: 2px;
         border-bottom-left-radius: 2px;
         z-index: 3;
+        border-top: none;
+        margin-top: .2px;
 
         .Select-menu {
             .Select-option {
@@ -43,6 +45,12 @@ $multi-choice-field-box-height: 32px;
                     font-size: 16px;
                     padding: 0 7px;
                 }
+            }
+            .choiceLabel.selected {
+                color: $selected-color;
+            }
+            &.is-focused {
+                background-color: $hover-color;
             }
         }
     }

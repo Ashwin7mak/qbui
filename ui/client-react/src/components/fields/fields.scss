@@ -26,6 +26,13 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of input userdata
+@mixin error-border() {
+  border: 1px solid $input-text-error-border-color;
+  border-left-width: 5px;
+  box-shadow: none;
+}
+
+
 [type="text"],
 [type="url"],
 [type="email"] {
@@ -47,26 +54,33 @@ $data-font-size: $font-size-p;
 
     // visual style of input error
     .textField.error &.input, &.input.error {
-        border-top: 1px solid $input-text-error-border-color;
-        border-right: 1px solid  $input-text-error-border-color;
-        border-bottom: 1px solid $input-text-error-border-color;
-        border-left: 5px solid $input-text-error-border-color;
+        @include error-border;
         box-shadow: none;
     }
 
     // visual style of focus input error
     .textField.error &:focus.input, &:focus.input.error {
         outline: none;
-        border-top: 1px solid $input-text-error-border-color;
-        border-right: 1px solid  $input-text-error-border-color;
-        border-bottom: 1px solid $input-text-error-border-color;
-        border-left: 5px solid $input-text-error-border-color;
+        @include error-border;
         @include focus-shadow($input-text-error-border-color);
     }
 }
 
 textarea:focus, .is-focused:not(.is-open)>.Select-control {
     @include text-input-focus;
+}
+
+.fieldValueEditor.error {
+  .Select {
+    .Select-control {
+      @include error-border;
+      box-shadow: none;
+    }
+    &.is-open .Select-control{
+      @include text-input-focus;
+      @include focus-shadow($input-text-error-border-color);
+    }
+  }
 }
 
 .invalidRecord.tooltip >.tooltip-arrow,
@@ -84,8 +98,9 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
 .invalidRecord.tooltip .tooltip-arrow {
   top: -5px;
 }
-.invalidInput.tooltip.top .tooltip-arrow {
+.invalidRecord.tooltip.top .tooltip-arrow {
   bottom: -5px;
+  top: initial;
 }
 // visual style of required field indicator
 .requiredFlag {
@@ -113,6 +128,10 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
 
 .cellData.NoWrap {
   white-space: nowrap;
+}
+
+.tooltip {
+  z-index: 1;
 }
 
 /* allow wide tooltips */

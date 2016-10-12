@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import QBToolTip from '../qbToolTip/qbToolTip';
 import {OverlayTrigger, Overlay, Tooltip} from 'react-bootstrap';
 
 const ValidatedField = (FieldComponent) => {
@@ -9,26 +8,38 @@ const ValidatedField = (FieldComponent) => {
 
 
         getInitialState() {
-            return {hasFocus: false};
+            return {show: false};
         },
 
         onFocus(val) {
-            this.setState({hasFocus: true});
+            this.setState({show: false});
 
             if (this.props.onFocus) {
                 this.props.onFocus(val);
             }
         },
         onBlur(val) {
-            this.setState({hasFocus: false});
+            this.setState({show: false});
 
             if (this.props.onBlur) {
                 this.props.onBlur(val);
             }
         },
 
+        onMouseEnterHandler() {
+            var self = this;
+            window.setTimeout(function() {
+                self.setState({show: true});
+            }, 300);
+        },
+        onMouseLeaveHandler() {
+            var self = this;
+            window.setTimeout(function() {
+                self.setState({show: false});
+            }, 300);
+        },
         render() {
-            if (this.props.isInvalid) {
+            if (this.props.invalid) {
 
                 let newClasses = "error ";
                 let {classes, ...rest} = this.props;
@@ -37,17 +48,19 @@ const ValidatedField = (FieldComponent) => {
                     newClasses += classes;
                 }
 
-                let tooltip = <Tooltip className="invalidRecord qbTooltip">{this.props.invalidMsg}</Tooltip>
+                let tooltip = <Tooltip className="invalidRecord qbTooltip">{this.props.invalidMessage}</Tooltip>;
                 return (
-                    <div style={{position: 'relative' }}>
-                        <FieldComponent tabIndex={1} ref="target" classes={newClasses} {...rest} onFocus={this.onFocus} onBlur={this.onBlur}/>
+                    <div style={{position: 'relative'}}
+                         onMouseEnter={this.onMouseEnterHandler}
+                         onMouseLeave={this.onMouseLeaveHandler}
+                         onFocus={this.onFocus} >
+                        <FieldComponent tabIndex={1} ref="target" classes={newClasses} {...rest} onBlur={this.onBlur}/>
                         <Overlay
-                            show={!this.state.hasFocus}
+                            show={this.state.show}
                             placement="top"
                             container={this}
                             overlay={tooltip}
-                            target={() => ReactDOM.findDOMNode(this.refs.target)}
-                            trigger="hover">
+                            target={() => ReactDOM.findDOMNode(this.refs.target)} >
                             {tooltip}
                         </Overlay>
                     </div>);

@@ -8,7 +8,7 @@ import QBToolTip from '../qbToolTip/qbToolTip';
 import {I18nMessage} from '../../utils/i18nMessage';
 import * as CompConstants from '../../constants/componentConstants';
 import Locale from '../../locales/locales';
-import ValidationWrapper from './ValidatedFieldWrapper';
+import ValidatedFieldWrapper from './ValidatedFieldWrapper';
 /**
  * # MultiChoiceFieldValueEditor
  * A multi-choice field value editor that uses react select, allows a user to select a single option from a drop down box.
@@ -48,13 +48,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
                 choice: val
             };
         }
-        return {
-            // React select expects an object
-            choice: {
-                label: this.props.value
-            }
-        };
-
+        // React select expects an object
+        return this.props.value ? {choice: {label: this.props.value}} : {choice: ""};
     },
     /**
      * Set the user selection to component state
@@ -62,6 +57,7 @@ const MultiChoiceFieldValueEditor = React.createClass({
      */
     selectChoice(event) {
         let value = null;
+
         if (event.target) {
             value = event.target.value;
         } else {
@@ -85,6 +81,9 @@ const MultiChoiceFieldValueEditor = React.createClass({
                 value: this.state.choice.label,
                 display: this.state.choice.label
             };
+        }
+        if (theVals.value === CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE) {
+            theVals.value = null;
         }
         if (this.props.onBlur) {
             this.props.onBlur(theVals);
@@ -140,10 +139,10 @@ const MultiChoiceFieldValueEditor = React.createClass({
         </div>);
     },
 
-    getReactSelect(options) {
-        const placeHolderMessage = <I18nMessage message="selection.placeholder"/>;
+    getReactSelect() {
+        const placeHolderMessage = Locale.getMessage("selection.placeholder");
         const notFoundMessage = <I18nMessage message="selection.notFound"/>;
-        const emptyOptionText = 'Select';//'\u00a0'; //Non breaking space
+        const emptyOptionText = '\u00a0'; //Non breaking space
 
         let choices = this.props.choices;
         let selectedValue = this.state.choice ? this.state.choice : CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE;
@@ -190,4 +189,4 @@ const MultiChoiceFieldValueEditor = React.createClass({
     }
 });
 
-export default ValidationWrapper(MultiChoiceFieldValueEditor);
+export default ValidatedFieldWrapper(MultiChoiceFieldValueEditor);

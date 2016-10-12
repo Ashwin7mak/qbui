@@ -3,7 +3,7 @@ import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
 import * as numericFormatter from '../../../../common/src/formatter/numericFormatter';
 import * as consts from '../../../../common/src/constants';
-import ValidationWrapper from './ValidatedFieldWrapper';
+import ValidatedFieldWrapper from './ValidatedFieldWrapper';
 
 /**
  * # NumericFieldValueEditor
@@ -147,4 +147,4 @@ const NumericFieldValueEditor = React.createClass({
     }
 });
 
-export default ValidationWrapper(NumericFieldValueEditor);
+export default ValidatedFieldWrapper(NumericFieldValueEditor);

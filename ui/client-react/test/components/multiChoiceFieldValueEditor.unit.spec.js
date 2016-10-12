@@ -68,8 +68,7 @@ describe('MultiChoiceFieldValueEditor functions', () => {
         var node = ReactDOM.findDOMNode(component);
         //TestUtils.Simulate.click(node);
         var placeHolderNode = node.getElementsByClassName("Select-placeholder");
-        var spanNode = placeHolderNode[0].childNodes[0];
-        expect(spanNode.innerHTML).toEqual("Select...");
+        expect(placeHolderNode[0].innerHTML).toEqual("Select...");
 
     });
 
@@ -137,21 +136,21 @@ describe('MultiChoiceFieldValueEditor functions', () => {
 
     // For radio group, test click on text selects radio item
     it('test click on radio button text selects radio button', () => {
-        const TestParent = React.createFactory(React.createClass({
-            // wrap the grid in a container with styles needed to render editing UI
+        var TestParent = React.createFactory(React.createClass({
+            getInitialState() {
+                return {value: "Apricots"};
+            },
+            onChange(val) {
+                this.setState({value: val});
+            },
             render() {
-                return (TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor ref="test" value={'Apricots'} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices}/>));
+                return <MultiChoiceFieldValueEditor ref="field" value={this.state.value} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices} onChange={this.onChange}/>;
             }
         }));
 
-        const parent = TestUtils.renderIntoDocument(TestParent());
-        var node = ReactDOM.findDOMNode(parent);
-
-
-
-        //component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor value={'Apricots'} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices}/>);
-        //expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
-        //var node = ReactDOM.findDOMNode(component);
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        component = parent.refs.field;
+        var node = ReactDOM.findDOMNode(component);
         var radioContainerNode = node.getElementsByClassName("multiChoiceRadioContainer");
         expect(radioContainerNode).toBeDefined();
 
@@ -162,13 +161,25 @@ describe('MultiChoiceFieldValueEditor functions', () => {
             }
         });
 
-        expect(component.state.choice).toEqual("Banana");
+        expect(parent.state.value).toEqual("Banana");
     });
 
     // For radio group, test click on text selects radio item
     it('test click on radio button text selects none option', () => {
-        component = TestUtils.renderIntoDocument(<MultiChoiceFieldValueEditor value={'Apricots'} fieldDef={radioBoxData.fieldDefNotRequired} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices}/>);
-        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        var TestParent = React.createFactory(React.createClass({
+            getInitialState() {
+                return {value: "Apricots"};
+            },
+            onChange(val) {
+                this.setState({value: val});
+            },
+            render() {
+                return <MultiChoiceFieldValueEditor ref="field" fieldDef={radioBoxData.fieldDefNotRequired} value={this.state.value} radioGroupName={"myRadioGroupName"} showAsRadio={true} choices={radioBoxData.choices} onChange={this.onChange}/>;
+            }
+        }));
+
+        var parent = TestUtils.renderIntoDocument(TestParent());
+        component = parent.refs.field;
         var node = ReactDOM.findDOMNode(component);
         var radioContainerNode = node.getElementsByClassName("multiChoiceRadioContainer");
         expect(radioContainerNode).toBeDefined();
@@ -178,7 +189,7 @@ describe('MultiChoiceFieldValueEditor functions', () => {
         let input = labels[labels.length - 1].querySelector('input');
         TestUtils.Simulate.click(input);
 
-        expect(component.state.choice).toEqual(CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE);
+        expect(parent.state.value).toEqual(CompConstants.MULTICHOICE_RADIOGROUP.NONE_OPTION_VALUE);
     });
 
     // For radio group, ensure prior choice is shown as selected
