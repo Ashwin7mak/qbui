@@ -42,7 +42,11 @@ export default {
             searchTablesPlaceholder: "Search tables...",
             searchReportsPlaceholder: "Search reports...",
             searchRecordsPlaceholder: "Search...",
-            backToReport: "Back to the report"
+            backToReport: "Back to the report",
+            nextRecord: "Next Record",
+            previousRecord: "Previous Record",
+            save: "Save",
+            saveAndNext: "Save & Next"
         },
         field: {
             search: "Search",

@@ -76,12 +76,10 @@ let Record = React.createClass({
 
     render() {
 
-        return <Loader loaded={!this.props.formData || !this.props.formData.loading}>
-            <QBForm {...this.props}
+        return <QBForm {...this.props}
                     key={"qbf-" + this.props.recId}
                     idKey={"qbf-" + this.props.recId}
-                    onFieldChange={this.handleFieldChange}/>
-        </Loader>;
+                    onFieldChange={this.handleFieldChange}/>;
     }
 });
 
