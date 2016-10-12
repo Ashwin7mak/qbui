@@ -20,11 +20,8 @@
          * Use the service method in e2eBase to get this URL for the realm/app
          */
         this.get = function(requestAppsPageEndPoint) {
-            return browser.get(requestAppsPageEndPoint).then(function() {
-                // Wait for the leftNav to load
-                return reportServicePage.waitForElement(reportServicePage.appsListDivEl);
-            });
-        };
+            return browser.get(requestAppsPageEndPoint);
+        }
     };
     module.exports = new RequestAppsPage();
 }());
