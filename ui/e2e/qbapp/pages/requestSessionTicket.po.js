@@ -17,7 +17,7 @@
          * Use the service method in e2eBase to get the proper endpoint
          */
         this.get = function(sessionTicketRequest) {
-            browser.get(sessionTicketRequest);
+            return browser.get(sessionTicketRequest);
         };
     };
     module.exports = new RequestSessionTicketPage();
