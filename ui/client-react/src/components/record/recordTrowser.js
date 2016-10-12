@@ -190,10 +190,10 @@ let RecordTrowser = React.createClass({
             <h4>
                 {(showBack || showNext) &&
                 <div className="iconActions">
-                    <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
+                    <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev"><I18nMessage message="nav.previousRecord"/></Tooltip>}>
                         <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>
                     </OverlayTrigger>
-                    <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
+                    <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev"><I18nMessage message="nav.nextRecord"/></Tooltip>}>
                         <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                     </OverlayTrigger>
                 </div> }
@@ -206,9 +206,9 @@ let RecordTrowser = React.createClass({
 
         return (
             <div className="saveButtons">
-                <Button bsStyle="primary" onClick={this.saveClicked}>Save</Button>
+                <Button bsStyle="primary" onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
                 {showNext &&
-                    <Button bsStyle="primary" onClick={this.saveAndNextClicked}>Save & Next</Button>
+                    <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
                 }
             </div>);
     },
