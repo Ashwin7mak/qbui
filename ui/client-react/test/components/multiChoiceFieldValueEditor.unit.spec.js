@@ -66,7 +66,6 @@ describe('MultiChoiceFieldValueEditor functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         var node = ReactDOM.findDOMNode(component);
-        //TestUtils.Simulate.click(node);
         var placeHolderNode = node.getElementsByClassName("Select-placeholder");
         expect(placeHolderNode[0].innerHTML).toEqual("Select...");
 

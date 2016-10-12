@@ -23,9 +23,6 @@ $edit-field-padding: 5px;
             top: 4px;
         }
     }
-    .qbPanelBody {
-        overflow: hidden;
-    }
     &.closed {
         .qbPanelHeader {
             // if the section doesnt have a header, when its collapsed the height should be same as others
