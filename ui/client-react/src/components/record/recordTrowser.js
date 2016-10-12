@@ -60,7 +60,7 @@ let RecordTrowser = React.createClass({
      * @param id
      * @returns {boolean}
      */
-    handleRecordSaveClicked() {
+    saveClicked() {
         //validate changed values -- this is skipped for now
         //get pending changes
         let validationResult = {
@@ -79,6 +79,37 @@ let RecordTrowser = React.createClass({
             }
             promise.then(() => {
                 this.hideTrowser();
+            });
+        }
+        return validationResult;
+    },
+
+    /**
+     * User wants to save changes to a record. First we do client side validation
+     * and if validation is successful we initiate the save action for the new or existing record
+     * if validation if not ok we stay in edit mode and show the errors (TBD)
+     * @param id
+     * @returns {boolean}
+     */
+    saveAndNextClicked() {
+        //validate changed values -- this is skipped for now
+        //get pending changes
+        let validationResult = {
+            ok : true,
+            errors: []
+        };
+
+        if (validationResult.ok) {
+            //signal record save action, will update an existing records with changed values
+            // or add a new record
+            let promise;
+            if (this.props.recId === SchemaConsts.UNSAVED_RECORD_ID) {
+                promise = this.handleRecordAdd(this.props.pendEdits.recordChanges);
+            } else {
+                promise = this.handleRecordChange(this.props.recId);
+            }
+            promise.then(() => {
+                this.nextRecord();
             });
         }
         return validationResult;
@@ -158,8 +189,10 @@ let RecordTrowser = React.createClass({
 
         return (
             <div className="saveButtons">
-                <Button bsStyle="primary" onClick={this.handleRecordSaveClicked}>Save</Button>
-                {showNext && <Button bsStyle="primary" onClick={this.handleRecordSaveAndNextClicked}>Save & Next</Button>}
+                <Button bsStyle="primary" onClick={this.saveClicked}>Save</Button>
+                {showNext &&
+                    <Button bsStyle="primary" onClick={this.saveAndNextClicked}>Save & Next</Button>
+                }
             </div>);
     },
 

@@ -114,15 +114,17 @@ export let Nav = React.createClass({
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
-        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && oldRecId !== editRec) {
+        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && (!this.state.nav.trowserOpen || oldRecId !== editRec)) {
 
             const flux = this.getFlux();
 
             if (editRec === UrlConsts.NEW_RECORD_VALUE) {
+
                 flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             } else {
+
                 flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
@@ -147,6 +149,7 @@ export let Nav = React.createClass({
         if (editRecordId === UrlConsts.NEW_RECORD_VALUE) {
             editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
         }
+
         return (<div className={classes}>
 
             {this.props.params && this.props.params.appId &&

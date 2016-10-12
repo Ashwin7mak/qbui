@@ -157,7 +157,7 @@ export let RecordRoute = React.createClass({
 
         const flux = this.getFlux();
 
-        flux.actions.openRecordForEdit(this.props.params.recordId);
+        flux.actions.openRecordForEdit(parseInt(this.props.params.recordId));
     },
     /**
      * edit the selected record in the trowser
