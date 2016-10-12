@@ -114,6 +114,7 @@ export let Nav = React.createClass({
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
+        // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
         if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && (!this.state.nav.trowserOpen || oldRecId !== editRec)) {
 
             const flux = this.getFlux();
@@ -134,6 +135,7 @@ export let Nav = React.createClass({
 
     componentDidUpdate(prevProps) {
 
+        // component updated, update the record trowser content if necessary
         this.updateRecordTrowser(prevProps.location.query.editRec);
     },
 

@@ -43,21 +43,34 @@ let formActions = {
      */
     editNewRecord() {
 
-        this.dispatch(actions.EDIT_REPORT_RECORD, {"recId":"new"});
+        this.dispatch(actions.EDIT_REPORT_RECORD, {"recId":UrlConsts.NEW_RECORD_VALUE});
 
         // add editRec=new query param and let the router take action
         WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
     },
 
+    /**
+     * save form has been initiated (actual saving is done via record action)
+     */
     savingForm() {
         this.dispatch(actions.SAVE_FORM);
     },
+
+    /**
+     * save form failed
+     * @param errorStatus
+     */
     saveFormFailed(errorStatus) {
         this.dispatch(actions.SAVE_FORM_FAILED, errorStatus);
     },
+
+    /**
+     * save form succeeded
+     */
     saveFormSuccess() {
         this.dispatch(actions.SAVE_FORM_SUCCESS);
     },
+
     /**
      * load form for new record
      * @param appId

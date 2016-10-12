@@ -21,6 +21,7 @@ describe('RecordTrowser functions', () => {
             recordPendingEditsCancel() {},
             saveRecord() {return Promise.resolve({});},
             saveNewRecord() {return Promise.resolve({});},
+            savingForm() {},
             hideTrowser() {}
         }
     };

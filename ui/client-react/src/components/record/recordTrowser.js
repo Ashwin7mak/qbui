@@ -37,7 +37,7 @@ let RecordTrowser = React.createClass({
     getTrowserContent() {
 
         return (this.props.visible &&
-            <Loader loaded={!this.props.form.editFormLoading && !this.props.form.editFormSaving} >
+            <Loader loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)} >
                 <Record appId={this.props.appId}
                     tblId={this.props.tblId}
                     recId={this.props.recId}
