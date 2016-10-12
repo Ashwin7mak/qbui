@@ -26,7 +26,7 @@
             return builderInstance;
         },
 
-        generateSingleTabAndSecForm: function(app) {
+        generateFormProperties: function(app, formTabWithDisplayOptions) {
             var tables = app[appConsts.TABLES];
             var tableIndex = 0;
 
@@ -43,99 +43,24 @@
                 builderInstance.withIncludeBuiltIns(rawValueGenearator.generateBool());
                 builderInstance.withWrapElements(rawValueGenearator.generateBool());
                 builderInstance.withNewFieldAction('DO_NOTHING');
-                builderInstance.withTab(formTabGeneator.generateDefaultSingleTab(table));
+                builderInstance.withTab(formTabWithDisplayOptions(table));
 
                 singleTabAndSectionForm[tableIndex] = builderInstance.build();
                 tableIndex++;
             });
 
             return singleTabAndSectionForm;
+        },
+
+        generateSingleTabAndSecForm: function(app) {
+            var self = this;
+            return self.generateFormProperties(app, formTabGeneator.generateDefaultSingleTab);
         },
 
         generateSingleTabAndSecFormWithAddAndEdit: function(app) {
-            var tables = app[appConsts.TABLES];
-            var tableIndex = 0;
-
-            _.forEach(tables, function(table) {
-                var builderInstance = formBuilder.builder();
-                var appId = table[tableConsts.APP_ID];
-                var tableId = table[tableConsts.ID];
-
-                builderInstance.withAppId(appId);
-                builderInstance.withTableId(tableId);
-                builderInstance.withName(rawValueGenearator.generateStringWithFixLength(10));
-                builderInstance.withDescription(rawValueGenearator.generateStringWithFixLength(20));
-                builderInstance.withWrapLabel(rawValueGenearator.generateBool());
-                builderInstance.withIncludeBuiltIns(rawValueGenearator.generateBool());
-                builderInstance.withWrapElements(rawValueGenearator.generateBool());
-                builderInstance.withNewFieldAction('DO_NOTHING');
-                builderInstance.withTab(formTabGeneator.generateDefaultSingleTabWithAddAndEdit(table));
-
-                singleTabAndSectionForm[tableIndex] = builderInstance.build();
-                tableIndex++;
-            });
-
-            return singleTabAndSectionForm;
+            var self = this;
+            return self.generateFormProperties(app, formTabGeneator.generateDefaultSingleTabWithAddAndEdit);
         },
 
-        generateSingleTabAndSecCreateForm: function(table) {
-            var builderInstance = formBuilder.builder();
-            var appId = table[tableConsts.APP_ID];
-            var tableId = table[tableConsts.ID];
-
-            builderInstance.withAppId(appId);
-            builderInstance.withTableId(tableId);
-            builderInstance.withName(rawValueGenearator.generateStringWithFixLength(10));
-            builderInstance.withDescription(rawValueGenearator.generateStringWithFixLength(20));
-            builderInstance.withWrapLabel(rawValueGenearator.generateBool());
-            builderInstance.withIncludeBuiltIns(rawValueGenearator.generateBool());
-            builderInstance.withWrapElements(rawValueGenearator.generateBool());
-            builderInstance.withNewFieldAction('DO_NOTHING');
-            builderInstance.withTab(formTabGeneator.generateDefaultSingleTab(table));
-
-            singleTabAndSectionCreateForm[singleTabAndSectionCreateForm.size++] = builderInstance.build();
-
-            return singleTabAndSectionCreateForm;
-        },
-
-        generateSingleTabAndSecEditForm: function(table) {
-            var builderInstance = formBuilder.builder();
-            var appId = table[tableConsts.APP_ID];
-            var tableId = table[tableConsts.ID];
-
-            builderInstance.withAppId(appId);
-            builderInstance.withTableId(tableId);
-            builderInstance.withName(rawValueGenearator.generateStringWithFixLength(10));
-            builderInstance.withDescription(rawValueGenearator.generateStringWithFixLength(20));
-            builderInstance.withWrapLabel(rawValueGenearator.generateBool());
-            builderInstance.withIncludeBuiltIns(rawValueGenearator.generateBool());
-            builderInstance.withWrapElements(rawValueGenearator.generateBool());
-            builderInstance.withNewFieldAction('DO_NOTHING');
-            builderInstance.withTab(formTabGeneator.generateDefaultSingleTab(table));
-
-            singleTabAndSectionEditForm[singleTabAndSectionEditForm.size++] = builderInstance.build();
-
-            return singleTabAndSectionEditForm;
-        },
-
-        generateSingleTabAndSecViewForm: function(table) {
-            var builderInstance = formBuilder.builder();
-            var appId = table[tableConsts.APP_ID];
-            var tableId = table[tableConsts.ID];
-
-            builderInstance.withAppId(appId);
-            builderInstance.withTableId(tableId);
-            builderInstance.withName(rawValueGenearator.generateStringWithFixLength(10));
-            builderInstance.withDescription(rawValueGenearator.generateStringWithFixLength(20));
-            builderInstance.withWrapLabel(rawValueGenearator.generateBool());
-            builderInstance.withIncludeBuiltIns(rawValueGenearator.generateBool());
-            builderInstance.withWrapElements(rawValueGenearator.generateBool());
-            builderInstance.withNewFieldAction('DO_NOTHING');
-            builderInstance.withTab(formTabGeneator.generateDefaultSingleTab(table));
-
-            singleTabAndSectionCreateForm[singleTabAndSectionCreateForm.size++] = builderInstance.build();
-
-            return singleTabAndSectionCreateForm;
-        },
     };
 }());

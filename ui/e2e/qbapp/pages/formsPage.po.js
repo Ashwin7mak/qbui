@@ -70,6 +70,7 @@
         };
 
         this.enterFormValues = function(fieldLabel) {
+            //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
             if (fieldLabel === 'dateCell') {
                 //enter date fields
                 return this.formTable.all(by.className(fieldLabel)).filter(function(elm) {
@@ -92,13 +93,11 @@
                     return elm.clear().sendKeys(sNumeric);
                 });
             } else if (fieldLabel === 'checkbox') {
-                //select checkbod field
+                //select checkboxd field
                 return this.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                     return elm;
                 }).map(function(elm) {
-                    //if (!elm.element(by.className('label')).isSelected()) {
                     return elm.element(by.className('label')).click();
-                    //}
                 });
             } else if (fieldLabel === 'timeCell') {
                 //enter time of day fields

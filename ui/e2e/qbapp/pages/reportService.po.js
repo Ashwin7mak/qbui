@@ -283,7 +283,12 @@
          *
          */
         this.clickAddRecordOnStage = function() {
-            return this.reportAddRecordBtn.click();
+            var self = this;
+            return e2ePageBase.waitForElementToBeClickable(self.reportAddRecordBtn).then(function() {
+                return self.reportAddRecordBtn.click().then(function() {
+                    e2ePageBase.waitForElement(element(by.className('editForm')));
+                });
+            });
         };
 
         /**

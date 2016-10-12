@@ -13,7 +13,7 @@
              * Given a created app object (returned via the API), generate default forms JSON for each table in the app based on it's table schema
              */
             generateForms: function(app) {
-                var generatedForms = formGenerator.generateSingleTabAndSecForm(app);
+                var generatedForms = formGenerator.generateSingleTabAndSecViewOnlyForm(app);
                 return generatedForms;
             },
 
@@ -28,7 +28,7 @@
             /**
              * Given a created app object (returned via the API), create default forms for each table in the app based on it's property
              */
-            createDefaultForms: function(app) {
+            createViewOnlyForm: function(app) {
                 var generatedForms = this.generateForms(app);
                 var appId = app.id;
                 var createdFormIds = [];
@@ -49,7 +49,7 @@
             /**
              * Given a created app object (returned via the API), create default forms for each table in the app based on it's property
              */
-            createDefaultFormsWithAddAndEdit: function(app) {
+            createDefaultForms: function(app) {
                 var generatedForms = this.generateFormsWithAddEditDisplayOptions(app);
                 var appId = app.id;
                 var createdFormIds = [];

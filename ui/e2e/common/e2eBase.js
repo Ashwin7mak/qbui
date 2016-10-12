@@ -328,7 +328,7 @@
                         //TODO: Custom table homepage based on role
                     }
                     // Create a default form for each table (uses the app JSON)
-                    createAppPromises.push(e2eBase.formService.createDefaultFormsWithAddAndEdit(createdApp));
+                    createAppPromises.push(e2eBase.formService.createDefaultForms(createdApp));
 
                     // Send all requests via Promise.all
                     return Promise.all(createAppPromises);
