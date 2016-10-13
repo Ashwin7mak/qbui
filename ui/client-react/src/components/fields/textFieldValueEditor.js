@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './fields.scss';
-import QBToolTip from '../qbToolTip/qbToolTip';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
+import FieldUtils from '../../utils/fieldUtils';
 
 /**
  * # TextFieldValueEditor
@@ -83,7 +83,7 @@ const TextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'input textField';
+        let classes = 'input textField borderOnError';
         // error state css class
         if (this.props.isInvalid) {
             classes += ' error';
@@ -91,6 +91,7 @@ const TextFieldValueEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
 
         /*
             Value is set to display by default because in most cases
@@ -104,23 +105,15 @@ const TextFieldValueEditor = React.createClass({
         // If it still is null, show as a blank string to avoid React input errors
         value = (value === null ? '' : value);
 
-        let inputBox = <input ref="textInput"
-                          className={classes}
-                          value={value}
-                          type={this.props.inputType}
-                          key={'inp' + this.props.idKey}
-                          placeholder={this.props.placeholder}
-                          onChange={this.onChange}
-                          onBlur={this.onBlur} />;
-
-
-        return  (this.props.isInvalid ?
-                (<QBToolTip location="top" tipId="invalidInput" delayHide={3000}
-                            plainMessage={this.props.invalidMessage}>
-                    {inputBox}
-                </QBToolTip>) :
-                inputBox
-        );
+        return (<input ref="textInput"
+                       className={classes}
+                       value={value}
+                       type={this.props.inputType}
+                       maxLength={maxLength}
+                       key={'inp' + this.props.idKey}
+                       placeholder={this.props.placeholder}
+                       onChange={this.onChange}
+                       onBlur={this.onBlur} />);
     }
 });
 

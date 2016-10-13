@@ -65,7 +65,7 @@ if (__QB_LOCAL__) {
         logger: {
             logLevel: LogLevel.DEBUG,
             logToConsole: true,
-            logToServer: true
+            logToServer: false
         },
         unauthorizedRedirect: '/unauthorized'
     });

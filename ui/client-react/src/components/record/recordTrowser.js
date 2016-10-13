@@ -6,7 +6,6 @@ import {I18nMessage} from "../../utils/i18nMessage";
 import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBicon from "../qbIcon/qbIcon";
 import TableIcon from "../qbTableIcon/qbTableIcon";
-import ValidationUtils from "../../utils/validationUtils";
 import Loader from 'react-loader';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";

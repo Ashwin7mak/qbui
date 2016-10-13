@@ -101,6 +101,58 @@ const CellRenderer = React.createClass({
     },
 
     /**
+     * get row uniqueIdentifier value that this cells is rendered in (usually record id)
+     * @returns value primitive
+     */
+    getRecId() {
+        let recIdAnswer = null;
+        if (this.props &&
+            _.has(this.props, 'params') &&
+            _.has(this.props.params, 'data') &&
+            _.has(this.props.params, 'context') &&
+            _.has(this.props.params, 'context.uniqueIdentifier') &&
+            !_.isUndefined(this.props.params.data) &&
+            !_.isUndefined(this.props.params.context.uniqueIdentifier) &&
+            !_.isUndefined(this.props.params.data[this.props.params.context.uniqueIdentifier])) {
+            recIdAnswer = this.props.params.data[this.props.params.context.uniqueIdentifier].value;
+        }
+        return recIdAnswer;
+    },
+    /**
+     * get this cells field id
+     * @returns id - field number number
+     */
+    getFieldId() {
+        let fieldIdAnswer = null;
+        if (this.props &&
+            _.has(this.props, 'colDef') &&
+            _.has(this.props.colDef, 'fieldDef') &&
+            _.has(this.props.colDef, 'fieldDef.id') &&
+            !_.isUndefined(this.props.colDef.fieldDef.id)) {
+            fieldIdAnswer = this.props.colDef.fieldDef.id;
+        }
+        return fieldIdAnswer;
+    },
+    /**
+     * register this component
+     *  if form/parent needs to call component to setState in in or call its methods
+     */
+    componentWillMount() {
+        if (this.props.params && this.props.params.context &&
+            this.props.params.context.onAttach) {
+            this.props.params.context.onAttach(this, this.getRecId(), this.getFieldId());
+        }
+    },
+    /**
+     * unregister this component
+     */
+    componentWillUnmount() {
+        if (this.props.params && this.props.params.context &&
+            this.props.params.context.onDetach) {
+            this.props.params.context.onDetach(this.getRecId(), this.getFieldId());
+        }
+    },
+    /**
      * inform the grid that we've tabbed out of an editor
      */
     onTabColumn() {
@@ -136,18 +188,26 @@ const CellRenderer = React.createClass({
         let isEditable = true;
 
         // built in fields are not editable
-        if (typeof this.props.colDef.builtIn !== 'undefined' &&  this.props.colDef.builtIn) {
+        if (typeof this.props.colDef.fieldDef !== 'undefined' &&
+            typeof this.props.colDef.fieldDef.builtIn !== 'undefined' &&  this.props.colDef.fieldDef.builtIn) {
             isEditable = false;
         }
-        // field must be scalar
-        if (typeof this.props.colDef.type !== 'undefined' &&  this.props.colDef.type !== consts.SCALAR) {
+        // field must be scalar (a non-generated field value)
+        if (typeof this.props.colDef.fieldType !== 'undefined' &&  this.props.colDef.fieldType !== consts.SCALAR) {
             isEditable = false;
         }
         // field must be editable i.e. user editable not a restricted value
-        if (typeof this.props.colDef.userEditableValue !== 'undefined' && !this.props.colDef.userEditableValue) {
+        if (typeof this.props.colDef.fieldDef !== 'undefined' &&
+            typeof this.props.colDef.fieldDef.userEditableValue !== 'undefined' && !this.props.colDef.fieldDef.userEditableValue) {
             isEditable = false;
         }
 
+
+        let attributes = null;
+        if (typeof this.props.colDef.fieldDef !== 'undefined' &&
+            typeof this.props.colDef.fieldDef.datatypeAttributes !== 'undefined') {
+            attributes = this.props.colDef.fieldDef.datatypeAttributes;
+        }
 
         let key = CellRendererFactory.getCellKey(this.props);
 
@@ -194,7 +254,7 @@ const CellRenderer = React.createClass({
                                        key={key + '-dsp'}
                                        idKey={key + '-dsp'}
                                        display={this.state.valueAndDisplay.display}
-                                       attributes={this.props.colDef.datatypeAttributes}/>
+                                       attributes={attributes}/>
                 }
             </span>);
     },
@@ -204,7 +264,8 @@ const CellRenderer = React.createClass({
     },
 
     onBlur(theVals) {
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals)},
+            ()=>{this.cellChanges();});
     },
 
     cellChanges() {
@@ -223,7 +284,8 @@ const CellRenderer = React.createClass({
                 },
                 recId: this.props.params.data[uniqueIdentifier].value,
                 fid: +this.props.params.colDef.id,
-                fieldName: this.props.params.column.colId
+                fieldName: this.props.params.column.colId,
+                fieldDef: this.props.params.colDef.fieldDef
             };
             this.props.params.context.onFieldChange(change);
         }
@@ -239,7 +301,8 @@ const CellRenderer = React.createClass({
             display: value
         };
 
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}},
+            ()=>{this.cellChanges();});
     },
 
     /**
@@ -259,10 +322,10 @@ export const TextCellRenderer = React.createClass({
     render() {
         let format = FieldFormats.TEXT_FORMAT;
         if (this.props.params && this.props.params.column && this.props.params.column.colDef &&
-            this.props.params.column.colDef.datatypeAttributes &&
-            this.props.params.column.colDef.datatypeAttributes.clientSideAttributes &&
-            this.props.params.column.colDef.datatypeAttributes.clientSideAttributes.num_lines &&
-            this.props.params.column.colDef.datatypeAttributes.clientSideAttributes.num_lines > 1) {
+            this.props.params.column.colDef.fieldDef &&  this.props.params.column.colDef.fieldDef.datatypeAttributes &&
+            this.props.params.column.colDef.fieldDef.datatypeAttributes.clientSideAttributes &&
+            this.props.params.column.colDef.fieldDef.datatypeAttributes.clientSideAttributes.num_lines &&
+            this.props.params.column.colDef.fieldDef.datatypeAttributes.clientSideAttributes.num_lines > 1) {
             format = FieldFormats.MULTI_LINE_TEXT_FORMAT;
         }
         return CellRendererFactory.makeCellRenderer(format, this.props);
@@ -361,6 +424,18 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
         }
     },
 
+    getInitialState() {
+        return {
+            rowEditErrors : null
+        };
+    },
+
+    updateRowEditErrors(rowEditErrors) {
+        if (rowEditErrors !== this.state.rowEditErrors) {
+            this.setState({rowEditErrors: rowEditErrors});
+        }
+    },
+
     /**
      * placeholder for deleting a record
      */
@@ -384,6 +459,7 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
             <RowEditActions flux={this.props.params.context.flux}
                             api={this.props.params.api}
                             data={this.props.params.data}
+                            rowEditErrors={this.state.rowEditErrors}
                             params={this.props.params}
             />
             <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />

@@ -19,6 +19,7 @@ import TextFieldValueEditor from './textFieldValueEditor';
 import TimeFieldValueEditor from './timeFieldValueEditor';
 import UrlFieldValueEditor from './urlFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
+import ErrorTipItem from '../qbToolTip/errorTipItem';
 
 /**
  * # FieldValueEditor
@@ -64,8 +65,12 @@ const FieldValueEditor = React.createClass({
         type: React.PropTypes.number,
 
         /**
-         * a field definition see swagger field & coldef */
+         * a field definition see swagger field */
         fieldDef: React.PropTypes.object,
+
+        /**
+         * a  name to use for this field */
+        fieldName: React.PropTypes.string,
 
         /**
          * listen for changes by setting a callback to the onChange prop.  */
@@ -96,6 +101,14 @@ const FieldValueEditor = React.createClass({
         invalidMessage: React.PropTypes.string,
 
         /**
+         * callback method called when the editor is mounted */
+        onAttach: React.PropTypes.func,
+
+        /**
+         * callback method called when the editor is unmounted */
+        onDetach: React.PropTypes.func,
+
+        /**
          * how to identify the field input
          */
         idKey : React.PropTypes.any
@@ -115,8 +128,8 @@ const FieldValueEditor = React.createClass({
      */
     getEditorForType(type) {
         let placeholder = undefined;
-        if (_.has(this.props, 'fieldDef.placeholder')) {
-            placeholder = this.props.fieldDef.placeholder;
+        if (_.has(this.props, 'placeholder')) {
+            placeholder = this.props.placeholder;
         }
 
         let commonProps = {
@@ -133,7 +146,8 @@ const FieldValueEditor = React.createClass({
             required: (this.props.fieldDef ? this.props.fieldDef.required : false),
             readOnly: (this.props.fieldDef ? !this.props.fieldDef.userEditableValue : false),
             invalid: this.props.isInvalid,
-            fieldDef: this.props.fieldDef
+            fieldDef: this.props.fieldDef,
+            fieldName: this.props.fieldName
         };
 
         // Only allow the Record ID field to be a renderer, not an editor
@@ -235,10 +249,12 @@ const FieldValueEditor = React.createClass({
         //on aggrid redraw, and on qbgrid set state
         if (this.props.validateFieldValue && this.props.onValidated) {
             let fldValue = value ? value : ReactDOM.findDOMNode(this.refs.fieldInput).value;
-            let results = this.props.validateFieldValue(this.props.fieldDef, fldValue);
+            let checkRequired = (this.props.fieldDef && this.props.fieldDef.required && this.props.isInvalid);
+            let results = this.props.validateFieldValue(this.props.fieldDef, this.props.fieldName, fldValue, checkRequired);
             this.props.onValidated(results);
         }
     },
+
 
     render() {
         // the css classes
@@ -280,7 +296,10 @@ const FieldValueEditor = React.createClass({
                 {requiredDiv}
 
                 {/* render type specific editor */}
+                <ErrorTipItem isInvalid={this.props.isInvalid}
+                               invalidMessage={this.props.invalidMessage}>
                 {renderedType}
+                </ErrorTipItem>
             </div>
         );
     }

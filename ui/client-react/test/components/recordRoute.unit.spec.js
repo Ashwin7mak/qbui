@@ -114,7 +114,7 @@ describe('RecordRoute functions', () => {
                         id:1,
                         field:"Record ID#",
                         headerName:"Record ID#",
-                        datatypeAttributes: {type:"NUMERIC"}
+                        fieldDef: {datatypeAttributes: {type:"NUMERIC"}}
                     }
                 ]
             }
