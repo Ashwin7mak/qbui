@@ -473,9 +473,9 @@
 
                 //  loop though each group and push the records into a single array.
                 //
-                //  NOTE: no re-ordering of the data is required as the server should be
-                //  returning the records based on the grouping and sorting requirements
-                //  of the request.
+                //  NOTE: no re-ordering of the data is necessary as the server should be
+                //  returning the records in the proper order, which is based on the
+                //  grouping and sorting requirements of the request.
                 let records = [];
                 if (report.groups) {
                     report.groups.forEach((group) => {
