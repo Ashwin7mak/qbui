@@ -314,15 +314,8 @@
 
                         // Via the API create records
                         createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[i], generatedRecords));
-                        var sortList = [
-                            {
-                                "fieldId": 3,
-                                "sortOrder": "asc",
-                                "groupType": null
-                            },
-                        ];
                         // Create a list all report for the table
-                        createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[i].id, 'Table ' + (i + 1) + ' List All Report', null, sortList, null, null));
+                        createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[i].id, 'Table ' + (i + 1) + ' List All Report', null, null, null, null));
 
                         //TODO: Users Roles and Permissions
                         //TODO: Custom table homepage based on role
