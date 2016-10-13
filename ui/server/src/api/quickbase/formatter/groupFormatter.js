@@ -444,8 +444,9 @@
     module.exports = {
 
         /**
-         * For each group summarization returned by the server, reorganize to the json structure
-         * expected by the react client to allow for optimal processesing and rendering of the data.
+         * For each group returned by the server, reorganize to the json structure expected by
+         * the react client.  This is done to allow for optimal processing and rendering of the data
+         * in the browser.
          *
          * @param req
          * @param fields
@@ -470,8 +471,11 @@
                     });
                 }
 
-                //  loop though the report data and for each group, push the records into
-                //  an array.
+                //  loop though each group and push the records into a single array.
+                //
+                //  NOTE: no re-ordering of the data is required as the server should be
+                //  returning the records based on the grouping and sorting requirements
+                //  of the request.
                 let records = [];
                 if (report.groups) {
                     report.groups.forEach((group) => {

@@ -51,7 +51,11 @@
             },
 
             /**
-             * Remove any fields not records in the records
+             * For each field in the given array of fields, search the records array and
+             * include in the returned fields array if the field is contained in the records
+             * array.  If the field is not in the records array, it will not be included in
+             * the returned list.
+             *
              * @param array of records
              * @param array of fields
              * @returns array of fields where the field element is found in one of the records
