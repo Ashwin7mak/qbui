@@ -84,14 +84,15 @@ const ReportRoute = React.createClass({
 
 
     getStageHeadline() {
-        let reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
-
+        const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
+        const {appId, tblId} = this.props.params;
+        const tableLink = `/app/${appId}/table/${tblId}`;
         return (
             <div className="reportStageHeadline">
 
                 <div className="navLinks">
                     {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
-                    {this.props.selectedTable && this.props.selectedTable.name}
+                    {this.props.selectedTable && <Link to={tableLink}>{this.props.selectedTable.name}</Link>}
                 </div>
 
                 <div className="stageHeadline">
