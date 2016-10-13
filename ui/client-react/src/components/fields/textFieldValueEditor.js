@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import './fields.scss';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import FieldUtils from '../../utils/fieldUtils';
-import ValidatedFieldWrapper from './ValidatedFieldWrapper';
-
 
 /**
  * # TextFieldValueEditor
@@ -85,7 +83,11 @@ const TextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'input textField';
+        let classes = 'input textField borderOnError';
+        // error state css class
+        if (this.props.invalid) {
+            classes += ' error';
+        }
 
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
@@ -104,19 +106,16 @@ const TextFieldValueEditor = React.createClass({
         // If it still is null, show as a blank string to avoid React input errors
         value = (value === null ? '' : value);
 
-        let inputBox = <input ref="textInput"
-                          className={classes}
-                          value={value}
-                          maxLength={maxLength}
-                          type={this.props.inputType}
-                          key={'inp' + this.props.idKey}
-                          placeholder={this.props.placeholder}
-                          onChange={this.onChange}
-                          onBlur={this.onBlur} />;
-
-
-        return  inputBox;
+        return  <input ref="textInput"
+                       className={classes}
+                       value={value}
+                       maxLength={maxLength}
+                       type={this.props.inputType}
+                       key={'inp' + this.props.idKey}
+                       placeholder={this.props.placeholder}
+                       onChange={this.onChange}
+                       onBlur={this.onBlur} />;
     }
 });
 
-export default ValidatedFieldWrapper(TextFieldValueEditor);
+export default TextFieldValueEditor;

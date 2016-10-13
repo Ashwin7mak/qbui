@@ -104,10 +104,14 @@ textarea:focus,
   }
 }
 
+.invalidInput.tooltip {
+  z-index: 9999;
+}
 .invalidRecord.tooltip >.tooltip-arrow,
 .invalidInput.tooltip >.tooltip-arrow {
   border-bottom-color: $tootip-error-color;
   border-top-color: $tootip-error-color;
+  top: 100%;
 }
 .invalidRecord.tooltip,
 .invalidRecord.tooltip .tooltip-inner,

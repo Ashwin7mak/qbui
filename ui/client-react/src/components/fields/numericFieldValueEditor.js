@@ -3,7 +3,6 @@ import './fields.scss';
 
 import * as numericFormatter from '../../../../common/src/formatter/numericFormatter';
 import * as consts from '../../../../common/src/constants';
-import ValidatedFieldWrapper from './ValidatedFieldWrapper';
 
 /**
  * # NumericFieldValueEditor
@@ -132,19 +131,17 @@ const NumericFieldValueEditor = React.createClass({
         }
         let width = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.width : null;
 
-        let inputBox = <input ref="textInput"
-                          className={classes}
-                          value={this.props.display ? this.props.display : this.props.value}
-                          type="text"
-                          key={'inp' + this.props.idKey}
-                          placeholder={placeholder}
-                          onChange={this.onChange}
-                          onBlur={this.onBlur}
-                          size={width}/>;
 
-
-        return  (inputBox);
+        return <input ref="textInput"
+                      className={classes}
+                      value={this.props.display ? this.props.display : this.props.value}
+                      type="text"
+                      key={'inp' + this.props.idKey}
+                      placeholder={placeholder}
+                      onChange={this.onChange}
+                      onBlur={this.onBlur}
+                      size={width}/>;
     }
 });
 
-export default ValidatedFieldWrapper(NumericFieldValueEditor);
+export default NumericFieldValueEditor;

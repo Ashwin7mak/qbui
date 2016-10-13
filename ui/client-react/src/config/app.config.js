@@ -1,5 +1,6 @@
 import LogLevel from "../utils/logLevels";
 import uuid from "uuid";
+import _ from "lodash";
 
 
 //
@@ -33,7 +34,7 @@ let defaultConfig = {
 
 if (__QB_PROD__) {
 
-    configuration = Object.assign({}, defaultConfig, {
+    configuration = _.assign({}, defaultConfig, {
         env: 'PROD',
         logger: {
             logLevel: LogLevel.WARN,
@@ -46,7 +47,7 @@ if (__QB_PROD__) {
 
 /* istanbul ignore if */
 if (__QB_TEST__) {
-    configuration = Object.assign({}, defaultConfig, {
+    configuration = _.assign({}, defaultConfig, {
         env: 'TEST',
         logger: {
             logLevel: LogLevel.DEBUG,
@@ -59,7 +60,7 @@ if (__QB_TEST__) {
 
 /* istanbul ignore if */
 if (__QB_LOCAL__) {
-    configuration = Object.assign({}, defaultConfig, {
+    configuration = _.assign({}, defaultConfig, {
         env: 'LOCAL',
         logger: {
             logLevel: LogLevel.DEBUG,

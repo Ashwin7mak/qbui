@@ -6,9 +6,13 @@ $edit-field-padding: 5px;
     padding: 10px;
 }
 
+
 .formSection {
     display: block;
 
+    &.noWrapLabels .formElement.fieldLabel {
+        white-space: nowrap;
+    }
     .formTable {
         margin-left: 10px;
 
