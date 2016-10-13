@@ -446,7 +446,7 @@ let AGGrid = React.createClass({
      */
     updateCellErrors(props) {
         this.gridOptions.context.rowEditErrors = props.editErrors;
-        if (_.has(props, 'editErrors.errors') && _.has(props, 'editErrors.errors.length')) {
+        if (this.state.editingRowNode !== null && _.has(props, 'editErrors.errors') && _.has(props, 'editErrors.errors.length')) {
             //edit row components
             let editRowComponents = this.cellComponentsMounted[this.state.currentEditRid];
             props.editErrors.errors.forEach(errorField => {
