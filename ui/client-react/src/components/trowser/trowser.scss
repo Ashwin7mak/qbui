@@ -49,20 +49,18 @@ $action-separator-color: #486c8f;
                 text-overflow:ellipsis;
             }
         }
+
+        button {
+            height:40px;
+            font-size: 18px;
+            color: #fff;
+            background-color: $trowser-header-bg;
+            border-radius: 0;
+            border: 0;
+
+        }
         .rightIcons {
             flex: 0 0 auto;
-            button {
-                height:40px;
-                font-size: 18px;
-                color: #fff;
-                background-color: $trowser-header-bg;
-                border-radius: 0;
-                border: 0;
-            }
-            button:hover {
-                background-color: $nav-hover-bg;
-                color: $nav-hover-fg;
-            }
         }
     }
     .trowserChildren {
@@ -148,7 +146,7 @@ $action-separator-color: #486c8f;
 @include small-breakpoint {
     .trowser .trowserFooter {
         flex-direction:column;
-        flex-basis:80px;
+        flex: 0 1 auto;
 
         .centerActions {
             a {

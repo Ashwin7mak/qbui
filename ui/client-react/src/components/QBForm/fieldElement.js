@@ -47,7 +47,13 @@ const FieldElement = React.createClass({
 
     onBlur(theVals) {
         const flux = this.getFlux();
-        flux.actions.recordPendingValidateField(this.props.relatedField, theVals.value);
+        let fieldLabel = '';
+        if (this.props.element.useAlternateLabel) {
+            fieldLabel = this.props.element.displayText;
+        } else {
+            fieldLabel = this.props.relatedField ? this.props.relatedField.name : "";
+        }
+        flux.actions.recordPendingValidateField(this.props.relatedField, fieldLabel, theVals.value);
         let change = this.getChanges(theVals);
         if (this.props.onBlur) {
             this.props.onBlur(change);

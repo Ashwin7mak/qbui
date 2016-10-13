@@ -55,8 +55,14 @@ describe('ReportLink record formatter unit test', function() {
         var expectedNoProtoURL_NoFlags = [[{
             id     : 7,
             value  : noProtoURL,
+            display: 'http://' + noProtoURL
+        }]];
+        var expectedNoProtoURL_DontShowHTTPEnabledFlags = [[{
+            id     : 7,
+            value  : noProtoURL,
             display: noProtoURL
         }]];
+
 
         /**
          * FieldInfo and expectations for enabled flag: displayProtocol = true
@@ -67,7 +73,7 @@ describe('ReportLink record formatter unit test', function() {
         expectedHttpURL_DontShowHTTPEnabled[0][0].display = httpWOProto;
         var expectedHttpsURL_DontShowHTTPEnabled = JSON.parse(JSON.stringify(expectedHttpsURL_NoFlags));
         expectedHttpsURL_DontShowHTTPEnabled[0][0].display = httpsWOProto;
-        var expectedNoProtoURL_DontShowHTTPEnabled = JSON.parse(JSON.stringify(expectedNoProtoURL_NoFlags));
+        var expectedNoProtoURL_DontShowHTTPEnabled = JSON.parse(JSON.stringify(expectedNoProtoURL_DontShowHTTPEnabledFlags));
 
         /**
          * FieldInfo and expectations for disabled flag: displayProtocol = false

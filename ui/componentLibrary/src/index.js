@@ -34,9 +34,10 @@ import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
 import TextFieldValueRendererDoc from './docs/textFieldValueRenderer';
 import TimeFieldValueEditorDoc from './docs/timeFieldValueEditor.js';
 import TimeFieldValueRendererDoc from './docs/timeFieldValueRenderer.js';
-import UserFieldRendererDoc from './docs/userFieldValueRenderer';
+import UrlFieldValueEditorDoc from './docs/urlFieldValueEditor.js';
+import UrlFieldValueRendererDoc from './docs/urlFieldValueRenderer.js';
 import UserFieldEditorDoc from './docs/userFieldValueEditor';
-
+import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
 
@@ -62,6 +63,8 @@ render((
             <Route path="textFieldValueRenderer" component={TextFieldValueRendererDoc} />
             <Route path="timeFieldValueEditor" component={TimeFieldValueEditorDoc} />
             <Route path="timeFieldValueRenderer" component={TimeFieldValueRendererDoc} />
+            <Route path="urlFieldValueEditor" component={UrlFieldValueEditorDoc} />
+            <Route path="urlFieldValueRenderer" component={UrlFieldValueRendererDoc} />
             <Route path="userFieldRenderer" component={UserFieldRendererDoc} />
             <Route path="userFieldEditor" component={UserFieldEditorDoc} />
             <Route path="qbpanel" component={QBPanelDoc} />

@@ -149,9 +149,18 @@ $cell-edit-background-edit: #f3f8fe;
 
     .requiredFlag-layout {
         // to allow for even space above and below the inputbox
-        top: -2px;
+        top: -1px;
         position: absolute;
         left: 3px;
+    }
+
+    .textFormat .requiredFlag-layout {
+        top:1;
+    }
+
+    .multiLineCellEditWrapper .requiredFlag-layout {
+        // otherwise * would appear inside the mulitline box
+        top: -14px;
     }
 
     .NoWrap {
@@ -333,6 +342,12 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .ag-tab-selected {
         display: none;
+    }
+
+    /* Buttons in a grid are smaller for the urlField */
+    .urlField .btn {
+        margin-top: -5px;
+        padding: 1px 10px;
     }
 }
 
@@ -628,6 +643,9 @@ $cell-edit-background-edit: #f3f8fe;
                 }
                 .qbIcon.addRecord {
                     color:$icon-color;
+                }
+                .qbIcon.disabled.addRecord {
+                    color:$icon-disabled-color;
                 }
             }
         }

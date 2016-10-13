@@ -168,7 +168,7 @@ const UserFieldValueEditor = React.createClass({
     render() {
         return (
             <Select
-                className="cellEdit userFormat"
+                className="cellEdit userFormat borderOnError"
                 tabIndex="0"
                 filterOption={this.filterOption}
                 value={this.state.selectedUserId}

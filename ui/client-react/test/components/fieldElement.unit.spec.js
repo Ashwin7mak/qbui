@@ -151,6 +151,6 @@ describe('FieldElement functions', () => {
 
         TestUtils.Simulate.blur(input[0]);
         expect(parent.state.value).toEqual(expectedCallBackArgs);
-        expect(flux.actions.recordPendingValidateField).toHaveBeenCalledWith(relatedField, "new");
+        expect(flux.actions.recordPendingValidateField).toHaveBeenCalledWith(relatedField, "field", "new");
     });
 });

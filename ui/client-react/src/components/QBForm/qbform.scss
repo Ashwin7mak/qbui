@@ -11,6 +11,11 @@ $edit-field-padding: 5px;
 
     .formTable {
         margin-left: 10px;
+
+        /* Fields in cardview span the width of the small device */
+        @include small-breakpoint {
+            width: 100%;
+        }
     }
     .qbPanelHeader {
         padding: 15px 0 15px 20px;

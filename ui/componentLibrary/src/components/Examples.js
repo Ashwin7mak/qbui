@@ -9,10 +9,12 @@ import MultiChoiceFieldValueEditorExample from 'raw!../examples/MultiChoiceField
 import MultiLineTextFieldValueEditorExample from 'raw!../examples/MultiLineTextFieldValueEditorExample.js';
 import NumericFieldValueEditorExample from 'raw!../examples/NumericFieldValueEditorExample.js';
 import NumericFieldValueRendererExample from 'raw!../examples/NumericFieldValueRendererExample.js';
-import TimeFieldValueEditorExample from 'raw!../examples/TimeFieldValueEditorExample.js';
-import TimeFieldValueRendererExample from 'raw!../examples/TimeFieldValueRendererExample.js';
 import TextFieldValueEditorExample from 'raw!../examples/TextFieldValueEditorExample.js';
 import TextFieldValueRendererExample from 'raw!../examples/TextFieldValueRendererExample.js';
+import TimeFieldValueEditorExample from 'raw!../examples/TimeFieldValueEditorExample.js';
+import TimeFieldValueRendererExample from 'raw!../examples/TimeFieldValueRendererExample.js';
+import UrlFieldValueEditorExample from 'raw!../examples/UrlFieldValueEditorExample.js';
+import UrlFieldValueRendererExample from 'raw!../examples/UrlFieldValueRendererExample.js';
 import UserFieldValueEditorExample from 'raw!../examples/UserFieldValueEditorExample.js';
 import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendererExample.js';
 
@@ -38,6 +40,8 @@ export default {
     TextFieldValueRenderer: TextFieldValueRendererExample,
     TimeFieldValueEditor: TimeFieldValueEditorExample,
     TimeFieldValueRenderer: TimeFieldValueRendererExample,
+    UrlFieldValueEditor: UrlFieldValueEditorExample,
+    UrlFieldValueRenderer: UrlFieldValueRendererExample,
     UserFieldValueEditor: UserFieldValueEditorExample,
     UserFieldValueRenderer: UserFieldValueRendererExample,
 
