@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './fields.scss';
-import QBToolTip from '../qbToolTip/qbToolTip';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
+import FieldUtils from '../../utils/fieldUtils';
 import ValidatedFieldWrapper from './ValidatedFieldWrapper';
 
 
@@ -85,7 +85,7 @@ const TextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'input textField';
+        let classes = 'input textField borderOnError';
         // error state css class
         if (this.props.invalid) {
             classes += ' error';
@@ -93,6 +93,7 @@ const TextFieldValueEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
 
         /*
             Value is set to display by default because in most cases

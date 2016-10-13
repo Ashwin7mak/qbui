@@ -63,9 +63,9 @@ const DateFieldValueEditor = React.createClass({
         };
     },
 
-    onChange(newValue) {
+    onChange(newValue, enteredValue) {
         if (this.props.onChange || this.props.onDateTimeChange) {
-            if (newValue === null || newValue) {
+            if (newValue === null || newValue || enteredValue === '') {
                 let formattedDate = null;
                 if (newValue !== null && moment(newValue, DATE_INPUT).isValid()) {
                     formattedDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
@@ -105,7 +105,7 @@ const DateFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'cellEdit dateCell';
+        let classes = 'cellEdit dateCell borderOnError place';
 
         // error state css class
         if (this.props.isInvalid) {

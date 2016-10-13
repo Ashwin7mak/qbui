@@ -53,23 +53,49 @@ $data-font-size: $font-size-p;
     }
 
     // visual style of input error
-    .textField.error &.input, &.input.error {
-        @include error-border;
+    .textField.error &.input, &.input.error,
+    .error .borderOnError,
+    .error .error.borderOnError {
+        border-top: 1px solid $input-text-error-border-color;
+        border-right: 1px solid  $input-text-error-border-color;
+        border-bottom: 1px solid $input-text-error-border-color;
+        border-left: 5px solid $input-text-error-border-color;
+        border-color: $input-text-error-border-color !important;
         box-shadow: none;
     }
 
     // visual style of focus input error
-    .textField.error &:focus.input, &:focus.input.error {
+    .textField.error &:focus.input,
+    &:focus.input.error,
+    .error :focus.borderOnError,
+    .error &:focus.error.borderOnError {
         outline: none;
         @include error-border;
         @include focus-shadow($input-text-error-border-color);
     }
 }
 
-textarea:focus, .is-focused:not(.is-open)>.Select-control {
+textarea:focus,
+.is-focused:not(.is-open)>.Select-control {
     @include text-input-focus;
 }
 
+.error .borderOnError {
+  border-top: 1px solid $input-text-error-border-color;
+  border-right: 1px solid  $input-text-error-border-color;
+  border-bottom: 1px solid $input-text-error-border-color;
+  border-left: 5px solid $input-text-error-border-color;
+  box-shadow: none;
+}
+
+.error :focus.borderOnError {
+  outline: none;
+  border-top: 1px solid $input-text-error-border-color;
+  border-right: 1px solid  $input-text-error-border-color;
+  border-bottom: 1px solid $input-text-error-border-color;
+  border-left: 5px solid $input-text-error-border-color;
+  @include focus-shadow($input-text-error-border-color);
+}
 .Select {
     &.is-open .Select-control{
       @include text-input-focus;
@@ -107,6 +133,7 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
   bottom: -5px;
   top: initial;
 }
+
 // visual style of required field indicator
 .requiredFlag {
   color: $field-label-normal-color;
@@ -124,6 +151,14 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
 }
 .textFormat .cellData.NoWrap .textField {
   white-space: nowrap;
+}
+
+.multiLineCellEditWrapper .cellEdit {
+  min-height: 28px;
+}
+.multiLineCellEditWrapper.error .tipChildWrapper,
+.multiLineCellEditWrapper.error .tipChildWrapper textarea {
+  height: 28px !important;
 }
 
 .userDisplayValue {

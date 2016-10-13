@@ -17,6 +17,7 @@ let FormStore = Fluxxor.createStore({
 
         this.editFormData = {};
         this.editFormLoading = false;
+        this.editFormSaving = false;
         this.editFormErrorStatus = null;
 
         this.bindActions(
@@ -30,7 +31,11 @@ let FormStore = Fluxxor.createStore({
 
             actions.LOAD_EDIT_FORM_AND_RECORD, this.onLoadEditForm,
             actions.LOAD_EDIT_FORM_AND_RECORD_SUCCESS, this.onLoadEditFormSuccess,
-            actions.LOAD_EDIT_FORM_AND_RECORD_FAILED, this.onLoadEditFormFailed
+            actions.LOAD_EDIT_FORM_AND_RECORD_FAILED, this.onLoadEditFormFailed,
+
+            actions.SAVE_FORM, this.onSaveEditForm,
+            actions.SAVE_FORM_SUCCESS, this.onSaveEditFormSuccess,
+            actions.SAVE_FORM_FAILED, this.onSaveEditFormFailed
         );
 
         this.logger = new Logger();
@@ -69,6 +74,21 @@ let FormStore = Fluxxor.createStore({
         this.editFormErrorStatus = null;
         this.emit('change');
     },
+    onSaveEditForm() {
+        this.editFormSaving = true;
+        this.editFormErrorStatus = null;
+        this.emit("change");
+    },
+    onSaveEditFormFailed(errorStatus) {
+        this.editFormSaving = false;
+        this.editFormErrorStatus = errorStatus;
+        this.emit("change");
+    },
+    onSaveEditFormSuccess() {
+        this.editFormSaving = false;
+        this.editFormErrorStatus = null;
+        this.emit('change');
+    },
     getState() {
         return {
             formData: this.formData,
@@ -77,6 +97,7 @@ let FormStore = Fluxxor.createStore({
 
             editFormData: this.editFormData,
             editFormLoading: this.editFormLoading,
+            editFormSaving: this.editFormSaving,
             editFormErrorStatus: this.editFormErrorStatus,
         };
     },

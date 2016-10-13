@@ -16,22 +16,13 @@ const RowEditActions = React.createClass({
     propTypes: {
         api: React.PropTypes.object,
         flux: React.PropTypes.object,
+        rowEditErrors: React.PropTypes.object
     },
-
 
     onClickSave() {
         //get the current record id
         const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
         this.props.params.context.onRecordSaveClicked(id);
-        // commented code below deferred client side validation before save
-        // till reactabular implemented
-        /*
-        // validate each cell
-        Object.keys(this.props.params.context.cells[id.value]).forEach((cellId) => {
-             //let currentValue = this.props.params.context.cells[id.value][cellId].refs.cellInput.getDOMNode().value;
-            this.props.params.context.cells[id.value][cellId].onExitField();
-        })
-        ;*/
         this.props.api.deselectAll();
     },
 
@@ -70,9 +61,18 @@ const RowEditActions = React.createClass({
 
     render() {
         let errorMessage = "editErrors";
-        // defer this disabling of save button til server validation story
-        //let validRow = !this.props.params.context.rowEditErrors || this.props.params.context.rowEditErrors.ok;
         let validRow = true;
+        if (this.props &&
+            _.has(this.props, 'params') &&
+            _.has(this.props.params, 'data') &&
+            _.has(this.props.params, 'context.rowEditErrors.ok') &&
+            !_.isUndefined(this.props.params.context.rowEditErrors.ok)) {
+            validRow = this.props.params.context.rowEditErrors.ok;
+        }
+        let addRecordClass = 'addRecord';
+        if (!validRow) {
+            addRecordClass += ' disabled';
+        }
 
         return (
             <span className="editTools">
@@ -86,11 +86,11 @@ const RowEditActions = React.createClass({
                     </QBToolTip> :
 
                     <QBToolTip  rootClose={true} location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
-                        <Button><QBIcon icon="alert" className="invalidRecord"/></Button>
+                        <Button><QBIcon icon="alert" onClick={this.onClickSave} className="invalidRecord"/></Button>
                     </QBToolTip>
                 }
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                  <Button onClick={this.onClickAdd}><QBIcon icon="add" className="addRecord"/></Button>
+                  <Button onClick={validRow ? this.onClickAdd : null}><QBIcon icon="add" className={addRecordClass}/></Button>
                 </QBToolTip>
 
             </span>);

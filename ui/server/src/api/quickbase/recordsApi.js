@@ -46,6 +46,7 @@
     let perfLogger = require('../../perfLogger');
     let dataErrs = require('../../../../common/src/dataEntryErrorCodes');
     var httpStatusCodes = require('../../constants/httpStatusCodes');
+    var ValidationUtils = require('../../../../common/src/validationUtils');
 
     /*
      * We can't use JSON.parse() with records because it is possible to lose decimal precision as a
@@ -414,16 +415,17 @@
              * @returns Promise
              */
             saveSingleRecord: function(req) {
-                let errors = _validateChanges(req);
-                if (errors.length === 0) {
+                let answer = _validateChanges(req);
+                if (answer.length === 0) {
                     var opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts);
                 } else {
-                    //return error
+                    //log & return error
+                    log.warn('Invalid input saving record:' + JSON.stringify(answer));
                     let errCode = httpStatusCodes.INVALID_INPUT;
-                    return Promise.reject({response:{message:'validation error', status:errCode, errors: errors}}
+                    return Promise.reject({response:{message:'validation error', status:errCode, errors: answer}}
                     );
                 }
             },
@@ -435,16 +437,17 @@
              * @returns Promise
              */
             createSingleRecord: function(req) {
-                let errors = _validateChanges(req);
-                if (errors.length === 0) {
+                let answer = _validateChanges(req);
+                if (answer.length === 0) {
                     var opts = requestHelper.setOptions(req);
                     opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts);
                 } else {
-                    //return error
+                    //log & return error
+                    log.warn('Invalid input saving record:' + JSON.stringify(answer));
                     let errCode = httpStatusCodes.INVALID_INPUT;
-                    return Promise.reject({response:{message:'validation error', status:errCode, errors: errors}}
+                    return Promise.reject({response:{message:'validation error', status:errCode, errors: answer}}
                     );
                 }
             },
@@ -486,30 +489,19 @@
      */
     function _validateChanges(req) {
         let errors = [];
+
         if (req.body && req.body.length) {
             //look at each change
-            req.body.forEach((change, index) => {
-                if (change && change.field) {
-                    let field = change.field;
-
-                    //text field length limit
-                    if (field.type === "TEXT") {
-                        // within max chars?
-                        if (field.clientSideAttributes && field.clientSideAttributes.max_chars &&
-                            field.clientSideAttributes.max_chars > 0 &&
-                            change.value && change.value.length &&
-                            change.value.length > field.clientSideAttributes.max_chars) {
-                            errors.push({field, type: dataErrs.MAX_LEN_EXCEEDED, hadLength: change.value.length});
-                        }
-                    }
-                    // required field has value?
-                    if (field.required && (change.value === undefined || change.value === null || change.value === "" || change.value === false)) {
-                        errors.push({field, type: dataErrs.REQUIRED_FIELD_EMPTY});
+            req.body.forEach((change) => {
+                if (change && change.fieldDef) {
+                    // validate it
+                    let results = ValidationUtils.checkFieldValue(change, change.fieldName, change.value, true);
+                    if (results.isInvalid) {
+                        errors.push(results);
                     }
                 }
-
             });
         }
-        return errors;
+        return  errors;
     }
 }());
