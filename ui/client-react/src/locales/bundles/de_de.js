@@ -39,7 +39,11 @@ export default {
             searchTablesPlaceholder: "Suche tische...",
             searchReportsPlaceholder: "Suche berichte...",
             searchRecordsPlaceholder: "Suche...",
-            backToReport: "Zurück zu melden"
+            backToReport: "Zurück zu melden",
+            nextRecord: "nächsten Rekord",
+            previousRecord: "bisherigen Rekord",
+            save: "Speichern",
+            saveAndNext: "speichern und Nächster"
         },
         field: {
             search: "Suche",
