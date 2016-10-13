@@ -113,7 +113,7 @@ let AGGrid = React.createClass({
         return {
             editingRowNode: null, // which ag-grid row node object is being edited
             rowEditErrors: null, // the current edit row errors found
-            currentEditRid: null // the record id currently inline editing, null when editing
+            currentEditRid: null // the record id currently inline editing, null when not editing
         };
     },
 
@@ -446,7 +446,7 @@ let AGGrid = React.createClass({
      */
     updateCellErrors(props) {
         this.gridOptions.context.rowEditErrors = props.editErrors;
-        if (_.has(props, 'editErrors.errors')) {
+        if (_.has(props, 'editErrors.errors') && _.has(props, 'editErrors.errors.forEach')) {
             //edit row components
             let editRowComponents = this.cellComponentsMounted[this.state.currentEditRid];
             props.editErrors.errors.forEach(errorField => {
@@ -544,9 +544,9 @@ let AGGrid = React.createClass({
             return true;
         }
         // if we are still editing and there are new errors
-        // update the errors on the table an appropriate cells
-        // necessary hack to update just the cell components with errors
-        // instead of whole table because AgGrid is not real react
+        // update the errors on the table and appropriate cells
+        // WARNING: this necessary hack is to update just the cell component errors
+        // instead of redrawing the whole table because AgGrid is not using real react dom diffing
         if (!_.isEqual(nextProps.editErrors, this.props.editErrors) && nextProps.isInlineEditOpen) {
             this.setState({rowEditErrors: nextProps.editErrors}, () => {
                 this.updateCellErrors(nextProps);
@@ -606,7 +606,7 @@ let AGGrid = React.createClass({
     },
 
     startEditRow(id, node) {
-        this.setState({currentEditRid: id}); // note which record is being edited used index into cellComponentsMounted
+        this.setState({currentEditRid: id}); // note which record is being edited used to index into cellComponentsMounted
         this.props.onEditRecordStart(id);
         this.editRow(node);
     },
@@ -682,7 +682,7 @@ let AGGrid = React.createClass({
             // force grid to edit the newly edited row
             rowsToRefresh.push(node);
         } else {
-            // we stopped editing clear the current edit row record id
+            // we stopped editing, so clear the current edit row record id
             this.setState({currentEditRid : null});
         }
 

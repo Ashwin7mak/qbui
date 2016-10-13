@@ -59,8 +59,11 @@
                 fieldDef.datatypeAttributes.clientSideAttributes.max_chars > 0 &&
                 value !== undefined && _.has(value, 'length') &&
                 value.length > fieldDef.datatypeAttributes.clientSideAttributes.max_chars) {
-                results.isInvalid = true;
                 results.error.messageId = 'invalidMsg.maxChars';
+                if (_.has(fieldDef, 'multipleChoice.choices')) {
+                    results.error.messageId = 'invalidMsg.choiceMaxLength';
+                }
+                results.isInvalid = true;
                 results.error.code = dataErrs.MAX_LEN_EXCEEDED;
                 results.error.data = {
                     fieldId: fieldDef.id,
@@ -74,6 +77,9 @@
                 //max input length is LimitConstants. maxTextFieldValueLength
                 results.isInvalid = true;
                 results.error.messageId  = 'invalidMsg.maxChars';
+                if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
+                    results.error.messageId = 'invalidMsg.choiceMaxLength';
+                }
                 results.error.code = dataErrs.MAX_LEN_EXCEEDED;
                 results.error.data = {
                     fieldId: fieldDef.id,

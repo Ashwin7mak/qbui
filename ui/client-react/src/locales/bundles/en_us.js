@@ -275,9 +275,10 @@ export default {
         },
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
         invalidMsg : {
+            unknown: 'Invalid unknown type. Results: ',
             required: 'Fill in the {fieldName}',
             maxChars: 'Use up to {maxNum} characters',
-            choiceMaxLength :"Select a choice with {maxLength} characters or less"
+            choiceMaxLength :"Select a choice with {maxNum} characters or less"
         },
         noneOption: "\<None\>"
     }
