@@ -138,7 +138,19 @@ $edit-field-padding: 5px;
             }
         }
     }
-
+    .cellEdit.timeCell {
+        .Select, .Select-control, .Select-input {
+            height: 30px;
+        }
+        .Select-value, .Select-placeholder {
+            line-height: 30px;
+        }
+    }
+    .dateCell.cellEdit > * {
+        .input-group.date input.form-control {
+            height: 30px;
+        }
+    }
     /* Dont want to form section to get a scroll bar when the react select menu expands so remove the position absolute -
      this automatically adds height to the section container */
     .Select-menu-outer {
