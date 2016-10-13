@@ -277,13 +277,16 @@ let QBForm = React.createClass({
 
         const collapsible = !(section.pseudo || (isFirstSection && (!sectionTitle.length || !Object.keys(section.elements).length)));
 
+        const wrapLabels = !_.has(this.props, "formData.formMeta.wrapLabel") || this.props.formData.formMeta.wrapLabel;
+
         return (
             <QBPanel className="formSection"
                      title={sectionTitle}
                      key={"section" + section.orderIndex}
                      isOpen={true}
                      panelNum={section.orderIndex}
-                     collapsible={collapsible}>
+                     collapsible={collapsible}
+                     wrapLabels={wrapLabels}>
                 <table className="formTable">
                     <tbody>
                         {this.createSectionTableRows(section, singleColumn)}

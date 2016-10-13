@@ -32,6 +32,7 @@ class QBPanel extends React.Component {
         className += this.state.open ? "open " : "closed ";
         className += this.props.collapsible ? "" : "nonCollapsible ";
         className += this.props.iconRight ? "iconRight " : "iconLeft ";
+        className += this.props.wrapLabels ? "" : "noWrapLabels ";
         className += this.props.className ? this.props.className : "";
 
         return (
@@ -79,7 +80,8 @@ QBPanel.defaultProps = {
     isOpen: false,
     key: -1,
     iconRight: true,
-    collapsible: true
+    collapsible: true,
+    wrapLabels: true
 };
 
 export default QBPanel;
