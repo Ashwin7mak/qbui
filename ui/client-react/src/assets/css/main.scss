@@ -1,10 +1,10 @@
 //$icon-font-path: "../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
 //@import "node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import 'qbVariables';
-@include font-face(Lato, "/src/assets/fonts/Lato/Lato-Regular", null, normal, woff2 woff ttf);
-@include font-face(Lato, "/src/assets/fonts/Lato/Lato-Italic", null, italic, woff2 woff ttf);
-@include font-face(Lato, "/src/assets/fonts/Lato/Lato-Bold", bold, normal, woff2 woff ttf);
-@include font-face(Lato, "/src/assets/fonts/Lato/Lato-BoldItalic", bold, italic, woff2 woff ttf);
+@include font-face(Lato, "fonts/Lato/Lato-Regular", null, normal, woff2 woff ttf);
+@include font-face(Lato, "fonts/Lato/Lato-Italic", null, italic, woff2 woff ttf);
+@include font-face(Lato, "fonts/Lato/Lato-Bold", bold, normal, woff2 woff ttf);
+@include font-face(Lato, "fonts/Lato/Lato-BoldItalic", bold, italic, woff2 woff ttf);
 
 
 h1, .h1{

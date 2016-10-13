@@ -42,7 +42,11 @@ export default {
             searchTablesPlaceholder: "Search tables...",
             searchReportsPlaceholder: "Search reports...",
             searchRecordsPlaceholder: "Search...",
-            backToReport: "Back to the report"
+            backToReport: "Back to the report",
+            nextRecord: "Next Record",
+            previousRecord: "Previous Record",
+            save: "Save",
+            saveAndNext: "Save & Next"
         },
         field: {
             search: "Search",
@@ -270,12 +274,15 @@ export default {
         success: "Success",
         failed: "Failed",
         placeholder:  {
-            email: 'name@domain.com'
+            email: 'name@domain.com',
+            maxLength :"up to {maxLength} characters"
         },
-        editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Fix this field}\n other {Fix these # fields}\n} ",
+        editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
         invalidMsg : {
+            unknown: 'Invalid unknown type. Results: ',
             required: 'Fill in the {fieldName}',
-            maxChars: 'Use up to {num} characters',
+            maxChars: 'Use up to {maxNum} characters',
+            choiceMaxLength :"Select a choice with {maxNum} characters or less"
         },
         noneOption: "\<None\>"
     }

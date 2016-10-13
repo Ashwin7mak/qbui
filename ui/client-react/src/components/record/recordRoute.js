@@ -112,7 +112,9 @@ export let RecordRoute = React.createClass({
 
     getStageHeadline() {
         if (this.props.params) {
-            const {rptId, recordId} = this.props.params;
+            const {appId, tblId, rptId, recordId} = this.props.params;
+
+            const tableLink = `/app/${appId}/table/${tblId}`;
 
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
             const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
@@ -123,8 +125,9 @@ export let RecordRoute = React.createClass({
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <TableIcon icon={this.props.selectedTable.icon}/> }
-                    {this.props.selectedTable && this.props.selectedTable.name && <span>{this.props.selectedTable.name}&nbsp;&gt;&nbsp;</span>}
+                    {this.props.selectedTable && <TableIcon icon={this.props.selectedTable.icon}/>}
+                    {this.props.selectedTable && <Link to={tableLink}>{this.props.selectedTable.name}</Link>}
+                    {this.props.selectedTable && <span>&nbsp;&gt;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
 
@@ -157,7 +160,7 @@ export let RecordRoute = React.createClass({
 
         const flux = this.getFlux();
 
-        flux.actions.openRecordForEdit(this.props.params.recordId);
+        flux.actions.openRecordForEdit(parseInt(this.props.params.recordId));
     },
     /**
      * edit the selected record in the trowser
@@ -222,18 +225,13 @@ export let RecordRoute = React.createClass({
                     {this.getPageActions()}
                 </div>
                 <div className="qbFormContainer">
-                    <ReactCSSTransitionGroup transitionName={nextOrPreviousTransitionName}
-                                             transitionEnterTimeout={200}
-                                             transitionLeaveTimeout={200}>
-                        <Record appId={this.props.params.appId}
-                                tblId={this.props.params.tblId}
-                                recId={this.props.params.recordId}
-                                errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
-                                formData={this.props.form ? this.props.form.formData : null}
-                                appUsers={this.props.appUsers}
-                                edit={false}></Record>
-
-                    </ReactCSSTransitionGroup>
+                    <Record appId={this.props.params.appId}
+                            tblId={this.props.params.tblId}
+                            recId={this.props.params.recordId}
+                            errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
+                            formData={this.props.form ? this.props.form.formData : null}
+                            appUsers={this.props.appUsers}
+                    />
                 </div>
             </div>);
         }

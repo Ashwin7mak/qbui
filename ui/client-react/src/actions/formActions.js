@@ -29,18 +29,46 @@ let formActions = {
      * edit an existing record
      * @param recordId
      */
-    openRecordForEdit(recordId) {
+    openRecordForEdit(recId) {
+
+        // let flux know we're editing a record so we can navigate back and forth
+        this.dispatch(actions.EDIT_REPORT_RECORD, {recId});
 
         // add editRec query param and let the router take action
-        WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recordId);
+        WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
     },
 
     /**
      * start editing a new record
      */
     editNewRecord() {
+
+        this.dispatch(actions.EDIT_REPORT_RECORD, {"recId":UrlConsts.NEW_RECORD_VALUE});
+
         // add editRec=new query param and let the router take action
         WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
+    },
+
+    /**
+     * save form has been initiated (actual saving is done via record action)
+     */
+    savingForm() {
+        this.dispatch(actions.SAVE_FORM);
+    },
+
+    /**
+     * save form failed
+     * @param errorStatus
+     */
+    saveFormFailed(errorStatus) {
+        this.dispatch(actions.SAVE_FORM_FAILED, errorStatus);
+    },
+
+    /**
+     * save form succeeded
+     */
+    saveFormSuccess() {
+        this.dispatch(actions.SAVE_FORM_SUCCESS);
     },
 
     /**

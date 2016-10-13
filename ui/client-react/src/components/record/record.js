@@ -1,7 +1,6 @@
 import React from 'react';
 import Fluxxor from "fluxxor";
 import QBForm from '../QBForm/qbform';
-import ValidationUtils from "../../utils/validationUtils";
 import Loader  from 'react-loader';
 import * as SchemaConsts from "../../constants/schema";
 
@@ -76,12 +75,10 @@ let Record = React.createClass({
 
     render() {
 
-        return <Loader loaded={!this.props.formData || !this.props.formData.loading}>
-            <QBForm {...this.props}
+        return <QBForm {...this.props}
                     key={"qbf-" + this.props.recId}
                     idKey={"qbf-" + this.props.recId}
-                    onFieldChange={this.handleFieldChange}/>
-        </Loader>;
+                    onFieldChange={this.handleFieldChange}/>;
     }
 });
 

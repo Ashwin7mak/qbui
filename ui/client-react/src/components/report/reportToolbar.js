@@ -51,7 +51,7 @@ const ReportToolbar = React.createClass({
 
     getDefaultProps() {
         return {
-            fillinMockFacets : window.location.search.includes('mockFilter'),
+            fillinMockFacets : _.includes(window.location.search, 'mockFilter'),
             selections:new FacetSelections(),
             searchStringForFiltering: ""
         };

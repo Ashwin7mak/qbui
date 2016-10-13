@@ -1,0 +1,568 @@
+{
+  "Description": "CoreUI Deployment",
+  "Parameters": {
+    "KeyName": {
+      "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "Default": "development-preprod",
+      "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+    },
+    "paramServiceName": {
+      "Description": "The name of the service being deployed",
+      "Default": "CoreUI",
+      "Type": "String"
+    },
+    "paramEnvironment": {
+      "Description": "The environment name (prod, qual, int, etc)",
+      "Type": "String",
+      "AllowedValues": [
+        "dev",
+        "qual",
+        "int",
+        "perf",
+        "prod"
+      ]
+    },
+    "paramELBSSLPort": {
+      "Type": "Number",
+      "Default": "443",
+      "Description": "The port for ELB inbound access"
+    },
+    "paramSSLInstancePort": {
+      "Type": "Number",
+      "Default": "9443",
+      "Description": "The listening port of the instance"
+    },
+    "paramELBNonSSLPort": {
+      "Type": "Number",
+      "Default": "80",
+      "Description": "The port for ELB inbound access"
+    },
+    "paramNonSSLInstancePort": {
+      "Type": "Number",
+      "Default": "9000",
+      "Description": "The listening port of the instance"
+    },
+    "paramVPC": {
+      "Description": "The VPC to use for instance",
+      "Type": "String",
+      "Default": "vpc-c16fefa4",
+      "ConstraintDescription": "must be the id of an existing VPC"
+    },
+    "paramELBSubnets": {
+      "Type": "CommaDelimitedList",
+      "Default": "subnet-992e90ee, subnet-932af7ca",
+      "Description": "Subnets for the ELB"
+    },
+    "paramInstanceSubnets": {
+      "Type": "CommaDelimitedList",
+      "Default": "subnet-932af7ca, subnet-992e90ee",
+      "Description": "Subnets for the instances. Defaults are PrivateWebSubnet AZ1 and AZ2"
+    },
+    "paramServerCapacity": {
+      "Default": 1,
+      "Description": "The number of EC2 instances",
+      "Type": "Number",
+      "MinValue": "1",
+      "MaxValue": "5",
+      "ConstraintDescription": "must be between 1 and 5 EC2 instances"
+    },
+    "paramEC2ImageAMI": {
+      "Type": "String",
+      "Description": "The AMI to use"
+    },
+    "paramInstanceType": {
+      "Description": "EC2 instance type",
+      "Type": "String",
+      "Default": "c4.large"
+    },
+    "paramBastionCIDRBlock": {
+      "Description": "The IP address range of the bastion subnets.",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "10.82.144.64/26",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    },
+    "paramDomainName": {
+      "Description": "The root domain",
+      "Type": "String",
+      "Default": "newstack.quickbaserocks.com"
+    },
+    "paramSecretsKMSKey": {
+      "Description": "The KMS Key ID for Secrets CLI",
+      "Type": "String",
+      "Default": "79461a25-ffdc-4fbf-ac4f-febb847dcb9b"
+    },
+    "paramConnectionDrainingTimeout": {
+      "Description": "ELB Connection Draining Timeout in seconds",
+      "Type": "String",
+      "Default": "30"
+    },
+    "paramVPCCIDRBlock": {
+      "Description": "The IP address range of the VPC",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "10.82.144.0/21",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    },
+    "paramInternetAccessSecurityGroupID": {
+      "Description": "The Security Group ID allowing select outbound Internet traffic",
+      "Type": "String",
+      "Default": "sg-f5264793"
+    }
+  },
+  "Resources": {
+    "ElbSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable HTTP access to ELB",
+        "VpcId": {"Ref": "paramVPC"},
+        "SecurityGroupIngress": [
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBSSLPort"}, "ToPort": {"Ref": "paramELBSSLPort"}, "CidrIp": {"Ref": "paramVPCCIDRBlock"}},
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramELBNonSSLPort"}, "ToPort": {"Ref": "paramELBNonSSLPort"}, "CidrIp": {"Ref": "paramVPCCIDRBlock"}},
+        ]
+      }
+    },
+    "ElasticLoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "AccessLoggingPolicy": {
+          "EmitInterval": 5,
+          "Enabled": "true",
+          "S3BucketName": {"Fn::Join": [ "-", ["quickbase-elb-logs", {"Ref": "AWS::AccountId"}, {"Ref": "AWS::Region"} ]]}
+        },
+        "LoadBalancerName": {"Ref": "AWS::StackName"},
+        "CrossZone": "true",
+        "Scheme": "internal",
+        "ConnectionDrainingPolicy": {
+          "Enabled": "true",
+          "Timeout": {"Ref": "paramConnectionDrainingTimeout"}
+        },
+        "SecurityGroups": [{"Ref": "ElbSecurityGroup"}],
+        "LBCookieStickinessPolicy": [
+          {
+            "PolicyName": "CookieBasedPolicy",
+            "CookieExpirationPeriod": "30"
+          }
+        ],
+        "Listeners": [
+          {
+            "LoadBalancerPort": {"Ref": "paramELBSSLPort"},
+            "InstancePort": {"Ref": "paramSSLInstancePort"},
+            "SSLCertificateId" : { "Fn::Join" : [ "", [ "arn:aws:iam::", { "Ref" : "AWS::AccountId" }, ":server-certificate/", {"Ref": "AWS::StackName"} ] ] },
+            "Protocol": "HTTPS",
+            "InstanceProtocol": "HTTPS"
+          },
+          {
+            "LoadBalancerPort": {"Ref": "paramELBNonSSLPort"},
+            "InstancePort": {"Ref": "paramNonSSLInstancePort"},
+            "Protocol": "HTTP",
+            "InstanceProtocol": "HTTP"
+          }
+        ],
+        "HealthCheck": {
+          "Target": {"Fn::Join" : [ "", [ "HTTPS:", {"Ref": "paramSSLInstancePort"}, "/api/v1/health" ] ]},
+          "HealthyThreshold": "2",
+          "UnhealthyThreshold": "5",
+          "Interval": "10",
+          "Timeout": "5"
+        },
+        "Subnets": {"Ref": "paramELBSubnets"},
+        "Tags": [
+          {
+            "Key": "Environment",
+            "Value": {"Ref": "paramEnvironment"}
+          },
+          {
+            "Key": "ServiceName",
+            "Value": {"Ref": "paramServiceName"}
+          },
+          {
+            "Key": "Environment",
+            "Value": { "Ref": "paramEnvironment" }
+          }
+        ]
+      }
+    },
+    "InstanceSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "SSH from Bastion on 22; web access from ELB",
+        "VpcId": {"Ref": "paramVPC"},
+        "SecurityGroupIngress": [
+          {"IpProtocol": "tcp", "FromPort": "22",   "ToPort": "22",   "CidrIp": {"Ref": "paramBastionCIDRBlock"}},
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramSSLInstancePort"}, "ToPort": {"Ref": "paramSSLInstancePort"}, "SourceSecurityGroupId": {"Ref": "ElbSecurityGroup"}},
+          {"IpProtocol": "tcp", "FromPort": {"Ref": "paramNonSSLInstancePort"}, "ToPort": {"Ref": "paramNonSSLInstancePort"}, "SourceSecurityGroupId": {"Ref": "ElbSecurityGroup"}}
+        ],
+        "SecurityGroupEgress": [
+          {"IpProtocol": "-1", "CidrIp": {"Ref": "paramVPCCIDRBlock"}}
+        ]
+      }
+    },
+    "InstanceProfile" : {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [ { "Ref": "InstanceRole" } ]
+      }
+    },
+    "InstanceRole" : {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [ {
+            "Effect": "Allow",
+            "Principal": {
+              "Service": [ "ec2.amazonaws.com" ]
+            },
+            "Action": [ "sts:AssumeRole" ]
+          } ]
+        },
+        "Path": "/",
+        "Policies" : [
+          {
+            "PolicyName": "describe-instance-health-policy",
+            "PolicyDocument": {
+              "Statement": [{
+                "Effect": "Allow",
+                "Action": [ "elasticloadbalancing:DescribeInstanceHealth" ],
+                "Resource": "*"
+              }]
+            }
+          },
+          {
+            "PolicyName": "secrets-cli-access-policy",
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:ListBucket",
+                    "s3:ListBucketVersions",
+                    "s3:Get*"
+                  ],
+                  "Resource": [
+                    {"Fn::Join": ["", ["arn:aws:s3:::iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}, "/*"]]},
+                    {"Fn::Join": ["", ["arn:aws:s3:::iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}]]}
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "kms:Decrypt",
+                    "kms:Encrypt",
+                    "kms:ReEncrypt",
+                    "kms:GenerateDataKey",
+                    "kms:GenerateDataKeyWithoutPlaintext",
+                    "kms:CreateGrant",
+                    "kms:ListGrants",
+                    "kms:RevokeGrant",
+                    "kms:DescribeKey"
+                  ],
+                  "Resource": {"Fn::Join": ["", ["arn:aws:kms:", {"Ref": "AWS::Region"}, ":", {"Ref": "AWS::AccountId"}, ":key/", {"Ref": "paramSecretsKMSKey"}]]}
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "AutoScalingGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "LaunchConfigurationName": {"Ref": "LaunchConfig"},
+        "MinSize": "1",
+        "MaxSize": "5",
+        "DesiredCapacity": {"Ref": "paramServerCapacity"},
+        "LoadBalancerNames": [{"Ref": "ElasticLoadBalancer"}],
+        "VPCZoneIdentifier": {"Ref": "paramInstanceSubnets"},
+        "HealthCheckType": "ELB",
+        "HealthCheckGracePeriod": 600,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {"Ref": "AWS::StackName"},
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Environment",
+            "Value": {"Ref": "paramEnvironment"},
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "ServiceName",
+            "Value": {"Ref": "paramServiceName"},
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "HostingProvider",
+            "Value": "AWS",
+            "PropagateAtLaunch": "true"
+          },
+          {
+            "Key": "Location",
+            "Value": {"Ref": "AWS::Region"},
+            "PropagateAtLaunch": "true"
+          }
+        ]
+      },
+      "CreationPolicy": {
+        "ResourceSignal": {
+          "Timeout": "PT10M"
+        }
+      },
+      "UpdatePolicy": {
+        "AutoScalingRollingUpdate": {
+          "MinInstancesInService": "1",
+          "MaxBatchSize": "1",
+          "PauseTime": "PT10M",
+          "WaitOnResourceSignals": "true"
+        }
+      }
+    },
+    "LaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Metadata": {
+        "AWS::CloudFormation::Init": {
+          "configSets": {
+            "default": [
+              "run_chef",
+              "verify_instance_health"
+            ]
+          },
+          "run_chef": {
+            "files": {
+              "/dev/shm/chef-attributes-perf.json": {
+                "content": {
+                  "splunk": {
+                    "forwarder": {
+                      "index": "quickbase-ppdidx",
+                      "logs_to_index": {
+                        "default": {
+                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
+                        },
+                        "monitor:///var/log/qbase": {
+                          "disabled": "0",
+                          "index": "quickbase-ppdidx",
+                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                        }
+                      }
+                    }
+                  },
+                  "nodejs": {
+                    "app_deploy": {
+                      "app_name": "coreui"
+                    },
+                    "reconfig": {
+                      "node_internal_env": "PRE_PROD",
+                      "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
+                      "route_group": "LH_V1",
+                      "stack_name": "coreui-perf1"
+                    }
+                  }
+                }
+              },
+              "/dev/shm/chef-attributes-dev.json": {
+                "content": {
+                  "splunk": {
+                    "forwarder": {
+                      "index": "quickbase-ppdidx",
+                      "logs_to_index": {
+                        "default": {
+                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
+                        },
+                        "monitor:///var/log/qbase": {
+                          "disabled": "0",
+                          "index": "quickbase-ppdidx",
+                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                        }
+                      }
+                    }
+                  },
+                  "nodejs": {
+                    "app_deploy": {
+                      "app_name": "coreui"
+                    },
+                    "reconfig": {
+                      "node_internal_env": "PRE_PROD",
+                      "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
+                      "route_group": "LH_V1",
+                      "stack_name": "coreui-dev1"
+                    }
+                  }
+                }
+              },
+              "/dev/shm/chef-attributes-qual.json": {
+                "content": {
+                  "splunk": {
+                    "forwarder": {
+                      "index": "quickbase-ppdidx",
+                      "logs_to_index": {
+                        "default": {
+                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
+                        },
+                        "monitor:///var/log/qbase": {
+                          "disabled": "0",
+                          "index": "quickbase-ppdidx",
+                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                        }
+                      }
+                    }
+                  },
+                  "nodejs": {
+                    "app_deploy": {
+                      "app_name": "coreui"
+                    },
+                    "reconfig": {
+                      "node_internal_env": "PRE_PROD",
+                      "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
+                      "route_group": "LH_V1",
+                      "stack_name": "coreui-qual1"
+                    }
+                  }
+                }
+              },
+              "/dev/shm/chef-attributes-int.json": {
+                "content": {
+                  "splunk": {
+                    "forwarder": {
+                      "index": "quickbase-ppdidx",
+                      "logs_to_index": {
+                        "default": {
+                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
+                        },
+                        "monitor:///var/log/qbase": {
+                          "disabled": "0",
+                          "index": "quickbase-ppdidx",
+                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                        }
+                      }
+                    }
+                  },
+                  "nodejs": {
+                    "app_deploy": {
+                      "app_name": "coreui"
+                    },
+                    "reconfig": {
+                      "node_internal_env": "PRE_PROD",
+                      "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
+                      "route_group": "LH_V1",
+                      "stack_name": "coreui-int1"
+                    }
+                  }
+                }
+              },
+              "/dev/shm/chef-attributes-prod.json": {
+                "content": {
+                  "splunk": {
+                    "forwarder": {
+                      "index": "quickbase-prdidx",
+                      "logs_to_index": {
+                        "default": {
+                          "_meta": { "Fn::Join": ["", ["aws_stack_name::", {"Ref": "AWS::StackName"} ]] }
+                        },
+                        "monitor:///var/log/qbase": {
+                          "disabled": "0",
+                          "index": "quickbase-prdidx",
+                          "blacklist": "\\.(gz|bz2|z|zip|tmp)$"
+                        }
+                      }
+                    }
+                  },
+                  "nodejs": {
+                    "app_deploy": {
+                      "app_name": "coreui"
+                    },
+                    "reconfig": {
+                      "secrets_s3_bucket": {"Fn::Join": ["", ["iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}]]},
+                      "node_internal_env": "PRODUCTION",
+                      "rest_endpoint": "https://t.tomcat.PROD1.newstack.quickbase.com:8443",
+                      "route_group": "LH_V1",
+                      "stack_name": "coreui-prod1"
+                    }
+                  }
+                }
+              }
+            },
+            "commands": {
+              "01_set_splunk_hostname": {
+                "command": "/opt/splunkforwarder/bin/splunk set default-hostname $(hostname) -auth admin:changeme"
+              },
+              "02_run_chef": {
+                "command": { "Fn::Join": [ "", [ "chef-client -z -o nodejs::reconfig -j /dev/shm/chef-attributes-", { "Ref": "paramEnvironment" }, ".json" ] ] },
+                "cwd": "/var/packer/coreui/chef"
+              },
+              "03_enable_and_start_splunk": {
+                "command": "systemctl enable splunk && systemctl start splunk"
+              }
+            }
+          },
+          "verify_instance_health": {
+            "commands": {
+              "ELBHealthCheck": {
+                "command": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "until [ \"$state\" == \"\\\"InService\\\"\" ]; do ",
+                      "  state=$(aws --region $(cat /tmp/region) elb describe-instance-health ",
+                      "              --load-balancer-name ",
+                      {
+                        "Ref": "ElasticLoadBalancer"
+                      },
+                      "              --instances $(cat /tmp/instance-id) ",
+                      "              --query InstanceStates[0].State); ",
+                      "  sleep 10; ",
+                      "done"
+                    ]
+                  ]
+                }
+              }
+            }
+          }
+        }
+    },
+      "Properties": {
+        "ImageId": {"Ref": "paramEC2ImageAMI"},
+        "InstanceType": {"Ref": "paramInstanceType"},
+        "SecurityGroups": [{"Ref": "InstanceSecurityGroup"}, {"Ref": "paramInternetAccessSecurityGroupID"}],
+        "KeyName": {"Ref": "KeyName"},
+        "IamInstanceProfile": {"Ref": "InstanceProfile"},
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#cloud-config\n",
+                "bootcmd:\n",
+                " - curl \"http://169.254.169.254/latest/meta-data/instance-id\" -o /tmp/instance-id\n",
+                " - echo \"", {"Ref": "AWS::StackName"}, "\" > /tmp/stack-name\n",
+                " - echo \"", {"Ref": "AWS::Region"}, "\" > /tmp/region\n",
+                " - echo \"iss-", {"Ref": "AWS::AccountId"}, "-", {"Ref": "AWS::Region"}, "\" > /tmp/secrets-bucket\n",
+                " - systemctl stop splunk; systemctl disable splunk\n",
+                "runcmd:\n",
+                " - cfn-init -v -s $(cat /tmp/stack-name) -r LaunchConfig --region $(cat /tmp/region); cfn-signal -e $? --stack $(cat /tmp/stack-name) --resource AutoScalingGroup --region $(cat /tmp/region)\n"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "Route53Alias": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "AliasTarget": {
+          "HostedZoneId": { "Fn::GetAtt": ["ElasticLoadBalancer", "CanonicalHostedZoneNameID"] },
+          "DNSName": { "Fn::GetAtt": ["ElasticLoadBalancer", "DNSName"] }
+        },
+        "HostedZoneName": { "Fn::Join": ["", [{ "Ref": "paramDomainName" }, "."]] },
+        "Name": { "Fn::Join": ["", ["*.nodejs.", { "Ref": "AWS::StackName" }, ".", { "Ref": "paramDomainName" }, "."]] },
+        "Type": "A"
+      }
+    }
+  }
+}

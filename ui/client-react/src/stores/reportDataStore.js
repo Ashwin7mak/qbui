@@ -1,6 +1,7 @@
 import * as actions from '../../src/constants/actions';
 import FacetSelections from '../components/facet/facetSelections';
 import ReportUtils from '../utils/reportUtils';
+import FieldUtils from '../utils/fieldUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 import Locale from '../locales/locales';
@@ -42,6 +43,22 @@ let reportModel = {
 
     /**
      * Given the field list format the columnDefinition as needed by data grid.
+     *
+     * ReportDataStore has columns array with one column object for each column in a grid. ag-Grid expects the coldef to have
+     * a certain properties some of these are part of the field information and some part of the report definition.
+     *
+     * For ease of code reuse and ag-Grid agnostic the field definition associated with the column from the report's table field
+     * structure is retained as a property on the column object as a whole in the `fieldDef` property.
+     * This property mirrors the server field structure and can be used with the common validation utility on the node server
+     * side as well as client side validation for report inline editing and possibly form field validation.
+     *
+     * Beside the fieldDef object we add the `field` member to column object which is the name of the property to use
+     * to access that columns data from the data rows hash for ag-Grid. ag-Grid also needs `headerName` to title the column
+     * header in the grid header row. The `order` property is the index sequence of the column
+     *
+     * Some other values from fieldDef are elevated for convenience to column definition
+     * level also `id, fieldType, fieldName, defaultValue, choices`
+     *
      * @param fields
      * @param hasGrouping
      * @returns {Array}
@@ -50,37 +67,36 @@ let reportModel = {
         let columns = [];
 
         if (fields) {
-            fields.forEach((field, index) => {
+            fields.forEach((fieldDef, index) => {
                 let groupedField = _.find(this.model.groupEls, function(el) {
-                    return el.split(groupDelimiter)[0] === field.id;
+                    return el.split(groupDelimiter)[0] === fieldDef.id;
                 });
-                if (!groupedField && this.model.fids.length && (this.model.fids.indexOf(field.id) === -1)) {
-                    //skip this field since its not on report's column list or on group list
+                if (!groupedField && this.model.fids.length && (this.model.fids.indexOf(fieldDef.id) === -1)) {
+                    //skip this fieldDef since its not on report's column list or on group list
                 } else {
                     let column = {};
                     column.order = index;
-                    column.id = field.id;
-                    column.headerName = field.name;
-                    column.field = field.name;
-                    column.fieldType = field.type;
-                    column.builtIn = field.builtIn;
-                    column.unique = field.unique;
-                    column.userEditableValue = field.userEditableValue;
-                    column.dataIsCopyable = field.dataIsCopyable;
-                    column.required = field.required;
+                    column.id = fieldDef.id;
+                    column.headerName = fieldDef.name;//
+                    column.field = fieldDef.name; //name needed for aggrid
+                    column.fieldDef = fieldDef; //fieldDef props below tobe refactored to just get info from fieldObj property instead.
+                    column.fieldType = fieldDef.type;
                     column.defaultValue = null;
-                    if (field.defaultValue && field.defaultValue.coercedValue) {
-                        column.defaultValue = {value: field.defaultValue.coercedValue.value, display: field.defaultValue.displayValue};
+                    if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
+                        column.defaultValue = {value: fieldDef.defaultValue.coercedValue.value, display: fieldDef.defaultValue.displayValue};
                     }
 
-                    if (field.multipleChoice && field.multipleChoice.choices) {
+                    if (fieldDef.multipleChoice && fieldDef.multipleChoice.choices) {
                         column.multipleChoice = {};
-                        column.multipleChoice.choices = field.multipleChoice.choices;
+                        column.multipleChoice.choices = fieldDef.multipleChoice.choices;
                     }
                     //  client side attributes..
-                    column.datatypeAttributes = field.datatypeAttributes;
-                    column.placeholder = (field.datatypeAttributes && field.datatypeAttributes.type && field.datatypeAttributes.type === serverTypeConsts.EMAIL_ADDRESS) ?
+                    column.placeholder = (fieldDef.datatypeAttributes && fieldDef.datatypeAttributes.type && fieldDef.datatypeAttributes.type === serverTypeConsts.EMAIL_ADDRESS) ?
                         Locale.getMessage('placeholder.email') : '';
+                    let maxLength = FieldUtils.getMaxLength(fieldDef);
+                    if (maxLength) {
+                        column.placeholder = Locale.getMessage('placeholder.maxLength', {maxLength : maxLength});
+                    }
                     columns.push(column);
                 }
             });
@@ -171,7 +187,8 @@ let reportModel = {
         }
 
         this.model.fields = recordData.fields || [];
-        // map of fields by field id for fast lookup
+        // map of fields by field id for fast lookup, any type for key,
+        // see http://stackoverflow.com/questions/18541940/map-vs-object-in-javascript
         let map = new Map();
         if (recordData.fields) {
             recordData.fields.forEach((field) => {
@@ -449,6 +466,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.previousRecordId = null;
         this.nextOrPrevious = "";
 
+        this.currentEditRecordId = null;
+        this.nextEditRecordId = null;
+        this.previousEditRecordId = null;
+        this.nextOrPreviousEdit = "";
+
+
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
@@ -482,7 +505,11 @@ let ReportDataStore = Fluxxor.createStore({
 
             actions.OPEN_REPORT_RECORD, this.onOpenRecord,
             actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
-            actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord
+            actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord,
+
+            actions.EDIT_REPORT_RECORD, this.onEditRecord,
+            actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
+            actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord
 
         );
     },
@@ -864,6 +891,33 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.emit("change");
     },
+    /**
+     * the displayed record has changed, update the previous/next record IDs
+     * @param recId
+     */
+    updateEditRecordNavContext(recId, nextOrPrevious = "") {
+
+        const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
+
+        let index = -1;
+        if (filteredRecords) {
+            index = filteredRecords.findIndex(rec => rec[keyField.name] && rec[keyField.name].value === recId);
+        }
+
+        // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
+
+        this.currentEditRecordId = recId;
+
+        if (recId === "new" || index === -1) {
+            this.nextEditRecordId = this.previousEditRecordId = null;
+        } else {
+            this.nextEditRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
+            this.previousEditRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
+        }
+        this.nextOrPreviousEdit = nextOrPrevious;
+
+        this.emit("change");
+    },
 
     /**
      * drilldown into record from report
@@ -884,6 +938,27 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onShowNextRecord(payload) {
         this.updateRecordNavContext(payload.recId, "next");
+    },
+
+    /**
+     * drilldown into record from report
+     *
+     * @param payload
+     */
+    onEditRecord(payload) {
+        this.updateEditRecordNavContext(payload.recId);
+    },
+    /**
+     * update prev/next props after displaying previous record
+     */
+    onEditPreviousRecord(payload) {
+        this.updateEditRecordNavContext(payload.recId, "previous");
+    },
+    /**
+     * update prev/next props after displaying next record
+     */
+    onEditNextRecord(payload) {
+        this.updateEditRecordNavContext(payload.recId, "next");
     },
     /**
      * gets the state of a reportData
@@ -910,7 +985,11 @@ let ReportDataStore = Fluxxor.createStore({
             currentRecordId: this.currentRecordId,
             nextRecordId: this.nextRecordId,
             previousRecordId: this.previousRecordId,
-            nextOrPrevious: this.nextOrPrevious
+            nextOrPrevious: this.nextOrPrevious,
+            currentEditRecordId: this.currentEditRecordId,
+            nextEditRecordId: this.nextEditRecordId,
+            previousEditRecordId: this.previousEditRecordId,
+            nextOrPreviousEdit: this.nextOrPreviousEdit
         };
     }
 });

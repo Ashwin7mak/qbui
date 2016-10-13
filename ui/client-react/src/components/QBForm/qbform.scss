@@ -6,9 +6,13 @@ $edit-field-padding: 5px;
     padding: 10px;
 }
 
+
 .formSection {
     display: block;
 
+    &.noWrapLabels .formElement.fieldLabel {
+        white-space: nowrap;
+    }
     .formTable {
         margin-left: 10px;
 
@@ -35,9 +39,6 @@ $edit-field-padding: 5px;
         }
     }
     .fieldRow {
-
-        padding: 5px 0;
-
         td {
             vertical-align:top;
             padding-bottom: 25px;
@@ -88,6 +89,9 @@ $edit-field-padding: 5px;
             margin-right: 0;
         }
     }
+    .errorText {
+        color: $tootip-error-color !important;
+    }
 }
 
 .editForm {
@@ -104,15 +108,18 @@ $edit-field-padding: 5px;
         width: 280px;
         &.fieldInputWidth {
             width: inherit;
+            .input {
+                width: inherit;
+            }
         }
         .checkbox {
-            margin-top: $edit-field-padding;
+            top: $edit-field-padding;
         }
     }
-    [type="text"].input, textarea.cellEdit {
+    .input, textarea.cellEdit {
         padding: $edit-field-padding;
     }
-    [type="text"].input {
+    .input, .select {
         width: 100%;
     }
     /* don't bleed through dropdowns */
@@ -135,6 +142,25 @@ $edit-field-padding: 5px;
             }
         }
     }
+    .cellEdit.timeCell {
+        .Select, .Select-control, .Select-input {
+            height: 30px;
+        }
+        .Select-value, .Select-placeholder {
+            line-height: 30px;
+        }
+    }
+    .dateCell.cellEdit > * {
+        .input-group.date input.form-control {
+            height: 30px;
+        }
+    }
+    /* Dont want to form section to get a scroll bar when the react select menu expands so remove the position absolute -
+     this automatically adds height to the section container */
+    .Select-menu-outer {
+        position: relative !important;
+        top: auto !important;
+    }
 }
 /* For mobile phones: */
 @include small-breakpoint {
@@ -143,6 +169,7 @@ $edit-field-padding: 5px;
 
         .formTable {
             margin-left: 0px;
+            width: 100%;
         }
 
         .fieldRow {
@@ -163,5 +190,12 @@ $edit-field-padding: 5px;
         .fieldValueEditor, textarea.cellEdit{
             width: 100%;
         }
+        .errorText {
+            font-size: $font-size-small;
+        }
     }
+}
+
+.tooltip {
+    z-index: 1;
 }

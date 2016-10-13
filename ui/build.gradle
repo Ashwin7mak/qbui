@@ -1,6 +1,5 @@
 import com.quickbase.utils.OracleSqlConnectInfo
 import com.quickbase.utils.Utils
-import java.text.SimpleDateFormat
 //
 //  MOVE TO Root project FOLDER ONCE gradle-grunt-plugin IS UPDATED TO ALLOW
 //  FOR GruntFile.js to be located in a folder other than where the gradle
@@ -19,6 +18,7 @@ apply plugin: 'com.moowork.node'
 apply plugin: 'org.sonarqube'
 apply plugin: 'sonarBuildBreak'
 apply plugin: 'com.bmuschko.cargo'
+apply plugin: 'maven'
 
 //grab the current working directory to use later on
 def cwd = project.getProjectDir().absolutePath
@@ -150,7 +150,6 @@ if (isCIBuild()) {
     rootProject.ext.CISystemUser = getCiSystemUser()
     rootProject.ext.releasePrefix = getReleasePrefix();
 }
-rootProject.ext.buildTime = "." + getBuildTime();
 
 println("cwd " + cwd )
 
@@ -203,59 +202,24 @@ cargo {
     }
 }
 
-
 node {
     // Version of node to use.
-    //version = '0.10.31'
     version = '4.2.3'
 
     npmVersion = '2.14.10'
     // Base URL for fetching node distributions (change if you have a mirror).
-    //distBaseUrl = 'http://nodejs.org/dist'
-    // full URL is http://nodejs.org/dist/v0.10.31/node-v0.10.31-darwin-x64.tar.gz
-
-    // We use the local Cloud9 repository the file URL will be
-    // http://pppdc9prd0t4:8081/nexus/service/local/repositories/phoenix/content/nodejs/node/v0.10.31/node-v0.10.31-darwin-x64.tar
-    // to update the file, upload a new node.js binary for each supported OS in Nexus with:
-    // group: nodejs
-    // artifact: node
-    // version: v0.10.35  // put in the new version
-    // packaging: gz
-    // filename:  (filled in by upload)
-    // classifier: darwin-x64  // use whatever is in that section of the original file name for the OS
-    // extension: gz
-
-    //distBaseUrl = 'http://pppdc9prd0t4:8081/nexus/service/local/repositories/phoenix/content/nodejs/node'
     distBaseUrl = 'http://nodejs.org/dist'
-
 
     // Download node if running a CI build; otherwise use globally installed node.
     download = isCIBuild()
 
     // Set the work directory for unpacking node...can't be under build directory as the clean task will wipe out the directory
     workDir = file("$projectDir/nodejs")
-
 }
 
 //******************************************************
 //  Gradle tasks
 //******************************************************
-
-task zip(type: Zip) {
-
-    archiveName = getProjectArchive()
-    destinationDir = file("$buildDir/distributions/")
-    zip64 = true
-
-    from ('dist') {
-        into('dist')
-    }
-}
-
-zip.doFirst {
-    println( "Assembling: " + getProjectArchive() )
-    println( "Branch : " + getProjectArchive() )
-}
 
 task clean_dist_node_modules(type: Delete) {
     delete 'dist/node_modules'
@@ -466,77 +430,72 @@ task installExpress(type: NpmTask) {
     args = ['install', 'express', '--save-dev']
 }
 
+task zip(type: Zip) {
+    def branchName;
+    if (System.getProperty("GIT_BRANCH") != null) {
+        branchName = System.getProperty("GIT_BRANCH")
+    } else if (System.getenv("GIT_BRANCH") != null) {
+        branchName = System.getenv("GIT_BRANCH")
+    } else {
+        // indicate the branch is associated with an individual user
+        branchName = "user"
+    }
+
+    branchName = branchName.replaceAll("origin\\/", "");
+    if (!branchName.equals("master")) {
+        project.version = project.version + "-SNAPSHOT"
+    }
+
+    project.ext.zipArchiveName = project.name + "-" + project.version + ".zip"
+    destinationDir = file("$buildDir/distributions/")
+    zip64 = true
+
+    from ('dist') {
+        into('dist')
+    }
+}
+
 //******************************************************
 //  Define task dependencies
 //******************************************************
-
 zip.dependsOn clean, npmInstallProduction
 build.dependsOn clean, grunt_build
 clean.dependsOn grunt_clean, cleanBuildDir
 test.dependsOn clean, gruntUnitTestsNoColor
 npmInstallProduction.dependsOn grunt_build, dumpSys
 
-
-// the directory for nightly builds used to release from
-project.group = "build_rpms"
 artifacts {
-    archives file: file("build/distributions/" + getProjectArchive()),
-        name: "${project.name}",
-        type: "zip",
-        builtBy: zip
+    archives file: file("build/distributions/" + project.ext.zipArchiveName),
+            name: "service",
+            type: "zip",
+            builtBy: zip
 }
 
-def ivyPasswd = System.getProperty("ivyPasswd", "");         // The IVY password for the Nexus repository
-def ivyUser = System.getProperty("ivyUser", "qbbuilds");     // By default use the qbbuilds user, password needs to be provided
-def paramBranch =  System.getProperty("GIT_BRANCH", "");
 
-/*
- Push the zip file with the build to the Nexus Repository.
- The repo is located at
-http://pppdc9prd0t4:8081/nexus/index.html#welcome
-
-username is admin
-pw -- ask OPS or Agave
-
-The zips go to the Phoenix repository under QuickBase/ui/ if they are versioned, and to the Snapshots repository if
-they are not versioned.
-
- */
 uploadArchives {
-    def uploadUrl = "https://nexus1.ci.quickbaserocks.com/nexus/content/repositories/"
-    def layoutStr = "[organisation]/[module]/[revision]/[artifact]-[revision](.[ext])"
-    // release archives vs dev  have different archive path on repo server dev builds go to nonrelease snapshot dir
-    // repo server policy for snapshots(update-able rpms) cannot live on release repo dirs
-    // organisation - Project.getGroup(): build_rpms
-    // module - Project.getName(): ui
-    // revision - Project.getVersion(): phoenix-1.0
-    if (isCIBuild()) {
-        uploadUrl += "/phoenix/"
-        layoutStr = getArchiveLayoutStr(false)
-    } else {
-        uploadUrl += "/snapshots/"
-        layoutStr = getArchiveLayoutStr(true)
-    }
     repositories {
-        ivy {
-            credentials {
-                username "${ivyUser}"
-                password "${ivyPasswd}"
+        mavenDeployer {
+            repository(url: project.ext.nexusRepoRoot + "continuous-releases/") {
+                authentication(userName: project.ext.nexusUser, password: project.ext.nexusPassword)
             }
-            url "${uploadUrl}"
-            layout 'pattern' , {
-                artifact "${layoutStr}"
+            snapshotRepository(url: project.ext.nexusRepoRoot + "continuous-snapshots/") {
+                authentication(userName: project.ext.nexusUser, password: project.ext.nexusPassword)
             }
+
+            addFilter('service') {artifact, file ->
+                artifact.name == 'service'
+            }
+
+            pom('service').groupId = project.group
+            pom('service').artifactId = project.name
+            pom('service').version = project.version
         }
     }
 }
 
-
 //******************************************************
 // Sonar task that performs coverage and analysis of the ui project
 //******************************************************
-
-// sonarRunner is being depricated and sonarqube is the replacement
 sonarqube {
     //Resolve the executing user's name
     def user = System.getProperty("user.name")
@@ -545,11 +504,6 @@ sonarqube {
     proc.waitFor()
     def branchName = proc.in.text.replace("\n", "").replace("\r", "").trim()
     println 'branchName:' + branchName;
-
-    if (paramBranch) {
-        println 'paramBranch:' + paramBranch;
-        branchName = paramBranch;
-    }
 
     properties {
         // the user name becomes part of the project key, this way Jenkins builds are separated from the commoners, meaning you...
@@ -606,26 +560,6 @@ def getReleasePrefix() {
     return prefix
 }
 
-def getProjectArchive() {
-    return "${project.name}-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.zip"
-}
-
-def getArchiveLayoutStr(useBuildTime) {
-    def base = "[organisation]/[module]/[revision]/[artifact]-${getReleasePrefix()}_${getRpmVersion()}"
-    if (useBuildTime) {
-        base += getBuildTime()
-    } else {
-        base += "-${getRelease()}"
-    }
-    return "${base}(.[ext])"
-}
-
-def getBuildTime() {
-    def df = new SimpleDateFormat("yyyyMMdd:HHmmss")
-    df.setTimeZone(TimeZone.getTimeZone("UTC"))
-    return df.format(new Date())
-}
-
 def getRelease() {
     return System.getProperty("releaseNumber", "SNAPSHOT")
 }
@@ -638,14 +572,11 @@ def isCIBuild() {
     return getReleasePrefix().equals(getServicePrefix())
 }
 
-//  TODO: the following methods are temporary as we ultimately want to retrieve the war from a nexus repository and not have to build
-//  TODO: it from the QuickBase folder structure on every CI run.  When a nexus repo is updated to include the latest war, this
-//  TODO: code should be refactored to pull from nexus and the CI build configuration task that builds the war should be deleted.
-//
 //  return the folder where the allServices war is located
 def getAllServicesWar(cwd) {
     return "${cwd}/../../quickbase/allServices/build/libs/allServices-${getReleasePrefix()}_${getRpmVersion()}-${getRelease()}.war"
 }
+
 //  return the folder where the coherenceCommon resources are located
 def getCommonCoherenceResources(cwd) {
     return "${cwd}/../../quickbase/coherenceCommon/src/main/resources"
