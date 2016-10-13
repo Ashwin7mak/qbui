@@ -16,12 +16,10 @@
       "Description": "The environment name (prod, qual, int, etc)",
       "Type": "String",
       "AllowedValues": [
-        "try",
         "dev",
         "qual",
         "int",
-        "trunk",
-        "demo",
+        "perf",
         "prod"
       ]
     },
