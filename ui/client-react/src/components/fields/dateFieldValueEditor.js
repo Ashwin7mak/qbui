@@ -19,6 +19,8 @@ import moment from 'moment';
  * An editable rendering of a date field. The component can be supplied a value or not. Used within a FieldValueEditor
  *
  */
+
+//  NOTE: change to the date_input format will require an update in the Date component onKeyPress function for the quickbase 't' shortcut
 const DATE_INPUT = 'MM-DD-YYYY';
 const DATE_FORMATTED = 'YYYY-MM-DD';
 
