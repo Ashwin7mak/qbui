@@ -21,7 +21,7 @@
          */
         this.get = function(requestAppsPageEndPoint) {
             return browser.get(requestAppsPageEndPoint);
-        }
+        };
     };
     module.exports = new RequestAppsPage();
 }());

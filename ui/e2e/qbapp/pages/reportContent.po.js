@@ -242,6 +242,7 @@
 
         /**
          * Function returns the date input cells for the record being edited in agGrid
+         * @returns An array of element locators
          */
         //TODO: Extend for editing multiple records at a time
         this.getDateFieldInputCells = function() {
@@ -275,6 +276,23 @@
         this.getDateRowForSelectedDate = function(selectedDateEl) {
             return selectedDateEl.element(by.xpath('..'));
         };
+
+        /**
+         * Function returns the date-time input cells for the record being edited in agGrid
+         * @returns An array of element locators
+         */
+        this.getDateTimeFieldInputCells = function() {
+            return this.agGridRecordElList.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].all(by.css('.cellEdit.timeCell.dateTimeField'));
+            });
+        };
+
 
         this.advanceCurrentlySelectedDate = function(dateFieldInputCellEl) {
             var self = this;

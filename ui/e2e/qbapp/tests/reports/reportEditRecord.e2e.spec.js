@@ -4,12 +4,10 @@
  */
 (function() {
     'use strict';
-
     //Load the page Objects
     var NewStackAuthPage = requirePO('newStackAuth');
     var ReportServicePage = requirePO('reportService');
     var ReportContentPage = requirePO('reportContent');
-
     var newStackAuthPage = new NewStackAuthPage();
     var reportServicePage = new ReportServicePage();
     var reportContentPage = new ReportContentPage();
@@ -40,7 +38,6 @@
                 });
             });
         });
-
         /**
          * Before each test starts just make sure the report has loaded with records visible
          */
@@ -71,7 +68,6 @@
             var textToEnter = 'My new text';
             var dateToEnter = '03-11-1985';
             var dateToExpect = '03-12-1985';
-
             // Open the in-line edit menu for the first record in the report
             reportContentPage.openRecordEditMenu(0).then(function() {
                 //TODO: Figure out the type of field and edit accordingly
@@ -82,18 +78,19 @@
                         textFieldInput.sendKeys(textToEnter);
                     });
                 });
+            }).then(function() {
+                //Scroll to Date Time Field (so we know Date Field is visible on the page)
+                reportContentPage.getDateTimeFieldInputCells().then(function(dateTimeInputCells) {
+                    var dateTimeFieldCell = dateTimeInputCells[0];
+                    browser.executeScript("arguments[0].scrollIntoView();", dateTimeFieldCell.getWebElement());
+                });
+            }).then(function() {
                 // Edit the Date Field
                 reportContentPage.getDateFieldInputCells().then(function(inputCells) {
                     var dateFieldCell = inputCells[0];
-
-                    //Scroll to Date Field
-                    var elm = reportContentPage.getDateFieldInputBoxEl(dateFieldCell);
-                    browser.executeScript("arguments[0].scrollIntoView();", elm.getWebElement());
-
-                    // First set the field value so it sets the Date Picker for us
+                    // Set the value of the input box so the calendar widget will be set
                     reportContentPage.getDateFieldInputBoxEl(dateFieldCell).clear();
                     reportContentPage.getDateFieldInputBoxEl(dateFieldCell).sendKeys(dateToEnter);
-
                     // Open the calendar widget
                     reportContentPage.getDateFieldCalendarIconEl(dateFieldCell).click();
                     // Advance the date ahead 1 day
