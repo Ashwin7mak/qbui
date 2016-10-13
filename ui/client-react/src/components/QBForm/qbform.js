@@ -269,22 +269,21 @@ let QBForm = React.createClass({
             sectionTitle = section.headerElement.FormHeaderElement.displayText;
         }
 
-        let classes = 'formSection';
         /*
         A section is marked as pseudo if its the user did not select a set of elements to be part of a section but for uniformity of structure core
         adds a section around these elements. In this case the interface is similar to a section except for collapsible behavior.
         A section is also treated non-collapsible if its the first section and has no elements or no header
          */
-        if (section.pseudo || (isFirstSection && (!sectionTitle.length || !Object.keys(section.elements).length))) {
-            classes += ' nonCollapsible';
-        }
+
+        const collapsible = !(section.pseudo || (isFirstSection && (!sectionTitle.length || !Object.keys(section.elements).length)));
 
         return (
-            <QBPanel className={classes}
+            <QBPanel className="formSection"
                      title={sectionTitle}
                      key={"section" + section.orderIndex}
                      isOpen={true}
-                     panelNum={section.orderIndex}>
+                     panelNum={section.orderIndex}
+                     collapsible={collapsible}>
                 <table className="formTable">
                     <tbody>
                         {this.createSectionTableRows(section, singleColumn)}

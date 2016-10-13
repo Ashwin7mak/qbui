@@ -30,14 +30,16 @@ class QBPanel extends React.Component {
         let iconClass = (this.state.open ? "qbPanelHeaderIcon rotateDown " : "qbPanelHeaderIcon rotateUp ") + icon;
         let className = "qbPanel ";
         className += this.state.open ? "open " : "closed ";
+        className += this.props.collapsible ? "" : "nonCollapsible ";
         className += this.props.iconRight ? "iconRight " : "iconLeft ";
         className += this.props.className ? this.props.className : "";
+
         return (
             <div className={className} id={panelId}>
-                <div className="qbPanelHeader" >
+                <div className="qbPanelHeader" onClick={this.props.collapsible && this.toggleOpen} >
                     <h3 className="qbPanelHeaderTitle">
                         <div className="qbPanelHeaderTitleText">{this.props.title}</div>
-                        <QBicon icon="caret-right" onClick={this.toggleOpen} className={iconClass}/>
+                        <QBicon icon="caret-right" className={iconClass}/>
                     </h3>
                 </div>
                 <Collapse in={this.state.open}>
@@ -62,6 +64,10 @@ QBPanel.propTypes = {
     */
     isOpen: React.PropTypes.bool,
     /**
+     * allow user to collapse content
+     */
+    collapsible: React.PropTypes.bool,
+    /**
      * creates a unique id for each panel object (helps with accessibility)
      */
     panelNum: React.PropTypes.number,
@@ -72,7 +78,8 @@ QBPanel.defaultProps = {
     title: "Untitled",
     isOpen: false,
     key: -1,
-    iconRight: true
+    iconRight: true,
+    collapsible: true
 };
 
 export default QBPanel;
