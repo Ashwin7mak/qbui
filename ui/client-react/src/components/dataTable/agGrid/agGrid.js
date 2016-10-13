@@ -112,7 +112,8 @@ let AGGrid = React.createClass({
     getInitialState() {
         return {
             editingRowNode: null, // which ag-grid row node object is being edited
-            rowEditErrors: null // the current edit row errors found
+            rowEditErrors: null, // the current edit row errors found
+            currentEditRid: null // the record id currently inline editing, null when not editing
         };
     },
 
@@ -403,6 +404,64 @@ let AGGrid = React.createClass({
     getAppUsers() {
         return this.props.appUsers;
     },
+    /**
+     * cellComponentsMounted - an hash of records and fieldcells in the record
+     *  this is place to keep references to the rendered cell components so
+     *  error state can be pushed to them from server request invalidation failures
+     */
+    cellComponentsMounted: {},
+    /**
+     * adds a cell component reference to the list of rendered cells
+     * @param component - the mounted cellRenderer component
+     * @param recId - the record id of the row
+     * @param fid - the field id of the cell
+     */
+    onAttach(component, recId, fid) {
+        if (typeof this.cellComponentsMounted[recId] === 'undefined') {
+            this.cellComponentsMounted[recId] = {};
+        }
+        this.cellComponentsMounted[recId][fid] = component;
+    },
+    /**
+     * removes a cell component reference to the list of rendered cells
+     * also removes the record hash once there are no more mounted cells in the rec/row
+     * @param recId - the record id of the row unmounted from
+     * @param fid - the field id of the unmounted cell
+     */
+    onDetach(recId, fid) {
+        if (typeof this.cellComponentsMounted[recId] !== 'undefined' &&
+            typeof this.cellComponentsMounted[recId][fid] !== 'undefined') {
+            delete this.cellComponentsMounted[recId][fid];
+            if (Object.keys(this.cellComponentsMounted[recId]).length === 0) {
+                delete this.cellComponentsMounted[recId];
+            }
+        }
+    },
+    /**
+     * for each field error get it's cellRender component
+     * and call onValidated to set the error state which will rerender it
+     * this is needed so the whole table is not redrawn when there is an invalid
+     * input in the inline edit cells in response to save to server
+     * @param props - has the new editError
+     */
+    updateCellErrors(props) {
+        this.gridOptions.context.rowEditErrors = props.editErrors;
+        if (_.has(props, 'editErrors.errors') && _.has(props, 'editErrors.errors.length')) {
+            //edit row components
+            let editRowComponents = this.cellComponentsMounted[this.state.currentEditRid];
+            props.editErrors.errors.forEach(errorField => {
+                //get the component
+                let fieldComponent = editRowComponents[errorField.id];
+                let fieldResult = {
+                    isInvalid : errorField.isInvalid,
+                    invalidMessage : errorField.invalidMessage
+                };
+                fieldComponent.onValidated(fieldResult);
+            });
+        }
+        this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
+    },
+
 
     // Careful about setting things in context, they do not update when the related prop updates
     componentDidMount() {
@@ -423,7 +482,9 @@ let AGGrid = React.createClass({
 
         this.gridOptions.context.keyField = this.props.keyField;
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
-
+        this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
+        this.gridOptions.context.onAttach = this.onAttach;
+        this.gridOptions.context.onDetach = this.onDetach;
         this.gridOptions.context.getAppUsers = this.getAppUsers;
 
         this.gridOptions.getNodeChildDetails = this.getNodeChildDetails;
@@ -482,6 +543,16 @@ let AGGrid = React.createClass({
         if (!_.isEqual(nextProps.isInlineEditOpen, this.props.isInlineEditOpen) && !nextProps.isInlineEditOpen) {
             return true;
         }
+        // if we are still editing and there are new errors
+        // update the errors on the table and appropriate cells
+        // WARNING: this necessary hack is to update just the cell component errors
+        // instead of redrawing the whole table because AgGrid is not using real react dom diffing
+        if (!_.isEqual(nextProps.editErrors, this.props.editErrors) && nextProps.isInlineEditOpen) {
+            this.setState({rowEditErrors: nextProps.editErrors}, () => {
+                this.updateCellErrors(nextProps);
+            });
+            return false;
+        }
         return false;
     },
     /**
@@ -535,6 +606,7 @@ let AGGrid = React.createClass({
     },
 
     startEditRow(id, node) {
+        this.setState({currentEditRid: id}); // note which record is being edited used to index into cellComponentsMounted
         this.props.onEditRecordStart(id);
         this.editRow(node);
     },
@@ -609,6 +681,9 @@ let AGGrid = React.createClass({
         if (node) {
             // force grid to edit the newly edited row
             rowsToRefresh.push(node);
+        } else {
+            // we stopped editing, so clear the current edit row record id
+            this.setState({currentEditRid : null});
         }
 
         // the refresh needs the new state so refresh in the setState callback
@@ -678,7 +753,6 @@ let AGGrid = React.createClass({
         this.editRow(); // edit nothing
     },
 
-
     handleFieldChange(change) {
         if (!this.props.onFieldChange) {
             return;
@@ -688,7 +762,7 @@ let AGGrid = React.createClass({
         if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
             // is the field being changed currently in error state if so remove error
             // and it will get re-validated on blur or save
-            let found = this.state.rowEditErrors.errors.findIndex((err) => err.id === change.fid);
+            let found = this.state.rowEditErrors.errors.findIndex((err) => err.def.fieldDef.id === change.fid);
             if (found !== -1) {
                 let newErrors = _.cloneDeep(this.state.rowEditErrors);
 
@@ -734,7 +808,8 @@ let AGGrid = React.createClass({
 
         // find any existing error on the field
         if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
-            found = this.state.rowEditErrors.errors.findIndex((err) => err.id === status.id);
+            found = this.state.rowEditErrors.errors.findIndex((err) =>
+                err.def.fieldDef.id === status.def.fieldDef.id);
         }
 
         // if field was in error
@@ -767,11 +842,10 @@ let AGGrid = React.createClass({
                 newErrors.ok = true;
             }
         }
-        //update state
+        //update state of errors in the grid
         if (newErrors !== undefined && !_.isEqual(origErrors, newErrors)) {
             this.setState({rowEditErrors: newErrors}, () => {
                 this.gridOptions.context.rowEditErrors = newErrors;
-                this.gridOptions.api.refreshCells([this.state.editingRowNode], ['checkbox']);
             });
         }
         return status;
@@ -937,8 +1011,8 @@ let AGGrid = React.createClass({
                 obj.minWidth = 100;
 
                 let datatypeAttributes;
-                if (typeof obj.fieldDef !== 'undefined' &&
-                    typeof obj.fieldDef.datatypeAttributes !== 'undefined') {
+                if (_.has(obj, 'fieldDef.datatypeAttributes') &&
+                    obj.fieldDef.datatypeAttributes) {
                     datatypeAttributes = obj.fieldDef.datatypeAttributes;
                 }
                 if (datatypeAttributes) {

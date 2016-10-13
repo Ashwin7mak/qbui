@@ -81,7 +81,7 @@ describe('FieldValueEditor functions', () => {
 
     it('test render of component with placeholder', () => {
         let ghostText = 'Enter here';
-        component = TestUtils.renderIntoDocument(<FieldValueEditor type={FieldFormats.TEXT_FORMAT} fieldDef={{placeholder:ghostText}}/>);
+        component = TestUtils.renderIntoDocument(<FieldValueEditor type={FieldFormats.TEXT_FORMAT} placeholder={ghostText}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(TestUtils.isElementOfType(component, 'input').toBeTruthy);
         let input = TestUtils.scryRenderedDOMComponentsWithClass(component, "input");

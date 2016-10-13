@@ -1,6 +1,8 @@
 import React from 'react';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import Breakpoints from "../../utils/breakpoints";
+import FieldUtils from '../../utils/fieldUtils';
+
 /**
  * # MultiLineTextFieldValueEditor
  * A multi-line text editor that dynamically changes its height. The text editor will not exceed
@@ -16,6 +18,9 @@ const MultiLineTextFieldValueEditor = React.createClass({
         /**
          * the type for the textarea box is text */
         type: React.PropTypes.number,
+        /**
+         * optional string to display when input is empty aka ghost text */
+        placeholder: React.PropTypes.string,
         /**
          *listen for changes by setting a callback to the onChange prop */
         onChange: React.PropTypes.func,
@@ -109,12 +114,17 @@ const MultiLineTextFieldValueEditor = React.createClass({
         }
         let rows = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.num_lines') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.num_lines : 1;
         let style = this.props.showScrollForMultiLine ? this.state.style : {};
+
+        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
+
         return <textarea ref="textarea" style={style}
                                         onChange={this.onChange}
                                         onBlur={this.onBlur}
                                         tabIndex="0"
+                                        maxLength={maxLength}
                                         onKeyUp={this.onKeyUp}
-                                        className="cellEdit"
+                                        placeholder={this.props.placeholder}
+                                        className="cellEdit borderOnError"
                                         rows={rows}
                                         cols={cols}
                                         value={this.props.display ? this.props.display : this.props.value}

@@ -184,7 +184,7 @@ export let ReportContent = React.createClass({
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
         if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            return this.handleRecordSaveClicked(afterRecId);
+            this.handleRecordSaveClicked(afterRecId);
         } else {
             flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
         }
@@ -193,27 +193,17 @@ export let ReportContent = React.createClass({
 
 
     /**
-     * User wants to save changes to a record. First we do client side validation
-     * and if validation is successful we initiate the save action for the new or existing record
-     * if validation if not ok we stay in edit mode and show the errors (TBD)
+     * User wants to save changes to a record.
      * @param id
-     * @returns {boolean}
      */
     handleRecordSaveClicked(id) {
-        //validate changed values
-        //get pending changes
-        let validationResult = this.validateRecord(this.props.pendEdits.recordChanges);
-        if (validationResult.ok) {
-            //signal record save action, will update an existing records with changed values
-            // or add a new record
-            let changes = null;
-            if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
-                changes = this.handleRecordAdd(this.props.pendEdits.recordChanges);
-            } else {
-                changes = this.handleRecordChange(id);
-            }
+        //signal record save action, server will validate and if ok update an existing records with changed values
+        // or add a new record
+        if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
+            this.handleRecordAdd(this.props.pendEdits.recordChanges);
+        } else {
+            this.handleRecordChange(id);
         }
-        return validationResult;
     },
 
     /**
@@ -246,7 +236,6 @@ export let ReportContent = React.createClass({
     /**
      * Save changes to an existing record
      * @param recId
-     * @returns {Array}
      */
     handleRecordChange(recId) {
         const flux = this.getFlux();
@@ -256,12 +245,13 @@ export let ReportContent = React.createClass({
         }
     },
 
-    handleValidateFieldValue(fieldDef, fieldName, value) {
+
+    handleValidateFieldValue(fieldDef, fieldName, value, checkRequired) {
         let results;
 
         // check the value against the fieldDef
         if (fieldDef) {
-            results = ValidationUtils.checkFieldValue({fieldDef}, fieldName, value);
+            results = ValidationUtils.checkFieldValue({fieldDef}, fieldName, value, checkRequired);
             if (results.isInvalid) {
                 // format the message for the client
                 results.invalidMessage = ValidationMessage.getMessage(results);
@@ -653,6 +643,7 @@ export let ReportContent = React.createClass({
         let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
         const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
+        const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
         return (
                 <div className="loadedContent">
                 {this.props.reportData.error ?
@@ -675,6 +666,8 @@ export let ReportContent = React.createClass({
                                 tblId={this.props.reportData.tblId}
                                 rptId={this.props.reportData.rptId}
                                 isInlineEditOpen={isInlineEditOpen}
+                                pendEdits={this.props.pendEdits}
+                                editErrors={editErrors}
                                 showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
                                 recordsCount={recordsCount}
                                 groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
@@ -695,6 +688,8 @@ export let ReportContent = React.createClass({
                                 appId={this.props.reportData.appId}
                                 appUsers={this.props.appUsers}
                                 isInlineEditOpen={isInlineEditOpen}
+                                pendEdits={this.props.pendEdits}
+                                editErrors={editErrors}
                                 onRecordDelete={this.handleRecordDelete}
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}

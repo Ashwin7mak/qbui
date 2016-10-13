@@ -1,6 +1,7 @@
 import * as actions from '../../src/constants/actions';
 import FacetSelections from '../components/facet/facetSelections';
 import ReportUtils from '../utils/reportUtils';
+import FieldUtils from '../utils/fieldUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 import Locale from '../locales/locales';
@@ -92,6 +93,10 @@ let reportModel = {
                     //  client side attributes..
                     column.placeholder = (fieldDef.datatypeAttributes && fieldDef.datatypeAttributes.type && fieldDef.datatypeAttributes.type === serverTypeConsts.EMAIL_ADDRESS) ?
                         Locale.getMessage('placeholder.email') : '';
+                    let maxLength = FieldUtils.getMaxLength(fieldDef);
+                    if (maxLength) {
+                        column.placeholder = Locale.getMessage('placeholder.maxLength', {maxLength : maxLength});
+                    }
                     columns.push(column);
                 }
             });

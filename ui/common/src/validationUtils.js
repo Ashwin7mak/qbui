@@ -11,6 +11,7 @@
 
     var LimitConstants = require('./limitConstants');
     var dataErrs = require('./dataEntryErrorCodes');
+    var constants = require('./constants');
     var _ = require('lodash');
 
     module.exports = {
@@ -58,8 +59,11 @@
                 fieldDef.datatypeAttributes.clientSideAttributes.max_chars > 0 &&
                 value !== undefined && _.has(value, 'length') &&
                 value.length > fieldDef.datatypeAttributes.clientSideAttributes.max_chars) {
-                results.isInvalid = true;
                 results.error.messageId = 'invalidMsg.maxChars';
+                if (_.has(fieldDef, 'multipleChoice.choices')) {
+                    results.error.messageId = 'invalidMsg.choiceMaxLength';
+                }
+                results.isInvalid = true;
                 results.error.code = dataErrs.MAX_LEN_EXCEEDED;
                 results.error.data = {
                     fieldId: fieldDef.id,
@@ -68,11 +72,14 @@
                 };
 
             // check system limit text chars
-            } else if (value !== undefined && _.has(value, 'length') &&
-                value.length > LimitConstants.maxTextFieldValueLength) {
+            } else if (value !== undefined && typeof value === 'string' &&
+                _.has(value, 'length') && value.length > LimitConstants.maxTextFieldValueLength) {
                 //max input length is LimitConstants. maxTextFieldValueLength
                 results.isInvalid = true;
                 results.error.messageId  = 'invalidMsg.maxChars';
+                if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
+                    results.error.messageId = 'invalidMsg.choiceMaxLength';
+                }
                 results.error.code = dataErrs.MAX_LEN_EXCEEDED;
                 results.error.data = {
                     fieldId: fieldDef.id,

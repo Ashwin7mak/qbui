@@ -42,12 +42,23 @@ const CellEditor = React.createClass({
         } else {
             classes = "cellEditWrapper";
         }
+        let fieldDef;
+        let fieldName;
+        if (_.has(this.props, 'colDef.fieldDef') &&
+            this.props.colDef.fieldDef) {
+            fieldDef = this.props.colDef.fieldDef;
+        }
+        if (_.has(this.props, 'colDef.field') &&
+            this.props.colDef.field) {
+            fieldName = this.props.colDef.field;
+        }
         return (<FieldValueEditor  classes={classes}
                               type={this.props.type}
                               display={this.props.display}
                               value={this.props.value}
                               fieldDef={this.props.colDef.fieldDef}
                               fieldName={this.props.colDef.field}
+                              placeholder={this.props.colDef.placeholder}
                               indicateRequired={true}
                               onChange={this.props.onChange}
                               onBlur={this.props.onBlur}

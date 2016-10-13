@@ -101,6 +101,58 @@ const CellRenderer = React.createClass({
     },
 
     /**
+     * get row uniqueIdentifier value that this cells is rendered in (usually record id)
+     * @returns value primitive
+     */
+    getRecId() {
+        let recIdAnswer = null;
+        if (this.props &&
+            _.has(this.props, 'params') &&
+            _.has(this.props.params, 'data') &&
+            _.has(this.props.params, 'context') &&
+            _.has(this.props.params, 'context.uniqueIdentifier') &&
+            !_.isUndefined(this.props.params.data) &&
+            !_.isUndefined(this.props.params.context.uniqueIdentifier) &&
+            !_.isUndefined(this.props.params.data[this.props.params.context.uniqueIdentifier])) {
+            recIdAnswer = this.props.params.data[this.props.params.context.uniqueIdentifier].value;
+        }
+        return recIdAnswer;
+    },
+    /**
+     * get this cells field id
+     * @returns id - field number number
+     */
+    getFieldId() {
+        let fieldIdAnswer = null;
+        if (this.props &&
+            _.has(this.props, 'colDef') &&
+            _.has(this.props.colDef, 'fieldDef') &&
+            _.has(this.props.colDef, 'fieldDef.id') &&
+            !_.isUndefined(this.props.colDef.fieldDef.id)) {
+            fieldIdAnswer = this.props.colDef.fieldDef.id;
+        }
+        return fieldIdAnswer;
+    },
+    /**
+     * register this component
+     *  if form/parent needs to call component to setState in in or call its methods
+     */
+    componentWillMount() {
+        if (this.props.params && this.props.params.context &&
+            this.props.params.context.onAttach) {
+            this.props.params.context.onAttach(this, this.getRecId(), this.getFieldId());
+        }
+    },
+    /**
+     * unregister this component
+     */
+    componentWillUnmount() {
+        if (this.props.params && this.props.params.context &&
+            this.props.params.context.onDetach) {
+            this.props.params.context.onDetach(this.getRecId(), this.getFieldId());
+        }
+    },
+    /**
      * inform the grid that we've tabbed out of an editor
      */
     onTabColumn() {
@@ -212,7 +264,8 @@ const CellRenderer = React.createClass({
     },
 
     onBlur(theVals) {
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals)},
+            ()=>{this.cellChanges();});
     },
 
     cellChanges() {
@@ -248,7 +301,8 @@ const CellRenderer = React.createClass({
             display: value
         };
 
-        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}}, ()=>{this.cellChanges();});
+        this.setState({valueAndDisplay : Object.assign({}, theVals), validationStatus: {}},
+            ()=>{this.cellChanges();});
     },
 
     /**
@@ -370,6 +424,18 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
         }
     },
 
+    getInitialState() {
+        return {
+            rowEditErrors : null
+        };
+    },
+
+    updateRowEditErrors(rowEditErrors) {
+        if (rowEditErrors !== this.state.rowEditErrors) {
+            this.setState({rowEditErrors: rowEditErrors});
+        }
+    },
+
     /**
      * placeholder for deleting a record
      */
@@ -393,6 +459,7 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
             <RowEditActions flux={this.props.params.context.flux}
                             api={this.props.params.api}
                             data={this.props.params.data}
+                            rowEditErrors={this.state.rowEditErrors}
                             params={this.props.params}
             />
             <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
