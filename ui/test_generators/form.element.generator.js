@@ -53,10 +53,11 @@
             var elements = {};
             var elementIndex = 0;
 
-            _.forEach(fields, function(field) {
+            //Excluding builtin fields
+            for (var i = 5; i < fields.length; i++) {
                 var builderInstance = formElementBuilder.builder();
 
-                builderInstance.withFieldId(field[fieldConsts.fieldKeys.ID]);
+                builderInstance.withFieldId(fields[i][fieldConsts.fieldKeys.ID]);
                 builderInstance.withOrderIndex(elementIndex);
                 builderInstance.withPositionSameRow(rawValue.generateBool()); //all fields displays in same row if we comment out this
                 builderInstance.withDisplayText(rawValue.generateString());
@@ -66,7 +67,7 @@
 
                 elements[elementIndex] = {"FormFieldElement": builderInstance.build()};
                 elementIndex++;
-            });
+            }
 
             return elements;
         }

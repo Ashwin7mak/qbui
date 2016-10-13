@@ -55,7 +55,7 @@
 
         it('Add a record from the form', function(done) {
             //TODO textField.Right now even phone no field says textField. Sp coudnt enter values and save record
-            var fieldTypeClassNames = ['timeCell', 'dateCell', 'numericField', 'checkbox'];
+            var fieldTypeClassNames = ['numericField', 'dateCell', 'timeCell', 'checkbox'];
             formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                 //click on add record button
                 reportServicePage.clickAddRecordOnStage();

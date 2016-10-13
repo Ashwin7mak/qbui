@@ -46,7 +46,6 @@
         // TODO add method for calendar picker
         //TODO add method for time picker
 
-
         this.clickFormSaveBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
@@ -70,44 +69,49 @@
         };
 
         this.enterFormValues = function(fieldLabel) {
+            var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
             if (fieldLabel === 'dateCell') {
                 //enter date fields
-                return this.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                     return elm;
                 }).map(function(elm) {
-                    return elm.element(by.tagName('input')).clear().sendKeys(sDate);
+                    //Do the click below to make it user editable
+                    return elm.element(by.className('date')).click().then(function() {
+                        return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
+                    });
                 });
             } else if (fieldLabel === 'textField') {
                 //enter text fields
-                return this.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                     return elm;
                 }).map(function(elm) {
                     return elm.clear().sendKeys(sText);
                 });
             } else if (fieldLabel === 'numericField') {
                 //enter numeric fields
-                return this.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                     return elm;
                 }).map(function(elm) {
                     return elm.clear().sendKeys(sNumeric);
                 });
             } else if (fieldLabel === 'checkbox') {
-                //select checkboxd field
-                return this.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                //select checkbox field
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                     return elm;
                 }).map(function(elm) {
                     return elm.element(by.className('label')).click();
                 });
             } else if (fieldLabel === 'timeCell') {
                 //enter time of day fields
-                return this.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                     return elm;
                 }).map(function(elm) {
-                    elm.element(by.className('Select-control')).element(by.className('glyphicon-time')).click();
-                    // Let the drop down animate
-                    e2eBase.sleep(browser.params.smallSleep);
-                    return elm.element(by.tagName('input')).sendKeys(sTime, protractor.Key.ENTER);
+                    //Do the click below to make it user editable
+                    return elm.element(by.className('Select-control')).click().then(function() {
+                        e2eBase.sleep(browser.params.smallSleep);
+                        browser.actions().sendKeys(sTime, protractor.Key.ENTER).perform();
+                    });
                 });
             }
         };

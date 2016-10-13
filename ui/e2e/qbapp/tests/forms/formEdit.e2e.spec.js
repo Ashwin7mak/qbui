@@ -39,8 +39,7 @@
         });
 
         it('Edit a record via recordActions edit pencil using basic report', function(done) {
-            //var fieldTypeClassNames = ['dateCell','textField', 'numericField', 'checkbox'];
-            var fieldTypeClassNames = ['numericField'];
+            var fieldTypeClassNames = ['dateCell', 'timeCell', 'numericField'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
@@ -74,7 +73,7 @@
         });
 
         it('Edit a record via stage pageActions edit pencil using report with sorting', function(done) {
-            var fieldTypeClassNames = ['numericField'];
+            var fieldTypeClassNames = ['dateCell', 'timeCell', 'numericField'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "3"));
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
@@ -108,7 +107,7 @@
         });
 
         it('Edit a record from the tableActions Container using report with facets', function(done) {
-            var fieldTypeClassNames = ['numericField'];
+            var fieldTypeClassNames = ['dateCell', 'timeCell', 'numericField'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "4"));
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
