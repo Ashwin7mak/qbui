@@ -259,6 +259,15 @@
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url, reportId);
 
+                //  if set, need to include the offset and num row parameters.
+                let query = url.parse(req.url, true).query;
+                if (query) {
+                    if (query.hasOwnProperty(constants.REQUEST_PARAMETER.OFFSET) && query.hasOwnProperty(constants.REQUEST_PARAMETER.NUM_ROWS)) {
+                        opts.url += '?' + constants.REQUEST_PARAMETER.OFFSET + '=' + query[constants.REQUEST_PARAMETER.OFFSET];
+                        opts.url += '&' + constants.REQUEST_PARAMETER.NUM_ROWS + '=' + query[constants.REQUEST_PARAMETER.NUM_ROWS];
+                    }
+                }
+
                 return new Promise((resolve1, reject1) => {
                     requestHelper.executeRequest(req, opts).then(
                         (result) => {
@@ -282,7 +291,7 @@
              */
             fetchReport: function(req, reportId) {
                 return new Promise(function(resolve, reject) {
-                    var fetchRequests = [this.fetchReportResult(req, reportId), this.fetchFields(req), this.fetchReportRecordsCount(req, reportId)];
+                    let fetchRequests = [this.fetchReportResult(req, reportId), this.fetchFields(req), this.fetchReportRecordsCount(req, reportId)];
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -309,7 +318,7 @@
                                     responseObject[FIELDS] = getFieldsOnReport(report.groups[0].records, fields);
 
                                     //  Organize the grouping data for the client
-                                    responseObject[GROUPS] = groupFormatter.organizeGroupingData(req, responseObject[FIELDS], report);
+                                    responseObject[GROUPS] = groupFormatter.groupData(req, responseObject[FIELDS], report);
                                 } else {
                                     //  the fetchFields response includes all fields on the table. Want to populate the
                                     //  response object fields entry to only include those fields on the report
@@ -479,7 +488,7 @@
             fetchTableHomePageReport: function(req) {
                 //  report object returned to the client;  gets populated in the success workflow, otherwise
                 //  is returned uninitialized if no report home page is found.
-                var reportObj = {
+                let reportObj = {
                     reportMetaData: {
                         data: ''
                     },

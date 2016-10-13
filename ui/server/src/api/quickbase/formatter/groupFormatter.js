@@ -52,15 +52,10 @@
         if (groupFields && fields && records) {
 
             let map = new Map();
-            let groupMap = new Map();
             let reportData = [];
 
             fields.forEach((field) => {
                 map.set(field.id, field);
-            });
-
-            groupFields.forEach((groupField) => {
-                groupMap.set(groupField.field.id, groupField.field);
             });
 
             //  Some prep work to organize the report data: for each row,
@@ -363,78 +358,83 @@
         let data = [];
         let numericGroupTypeIdx = null;
 
-        let groupField = groupFields[idx].field;
-        //  get the groupType and field from the input array
-        let groupType = groupFields[idx].groupType;
+        if (groupFields.length > idx) {
+            //  get the group field element
+            let groupField = groupFields[idx].field;
+            //  get the groupType
+            let groupType = groupFields[idx].groupType;
 
-        //  Group the data based on the field dataType and grouping type
-        let groupedData = lodash.groupBy(reportData, function(record) {
+            //  Group the data based on the field dataType and grouping type
+            let groupedData = lodash.groupBy(reportData, function(record) {
 
-            //  the data value to group by
-            let dataValue = record[groupField.name].display;
-            let rawDataValue = record[groupField.name].value;
-            let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
-            //  Convert empty strings into null as both are treated the same by the client.
-            if (groupedValue === '') {
-                groupedValue = null;
-            }
+                //  the data value to group by
+                let rawDataValue = record[groupField.name].value;
+                //  if no display value in obj, then use the raw
+                let dataValue = record[groupField.name].display === undefined ? rawDataValue : record[groupField.name].display;
 
-            //  for non-null headers, convert into a string
-            if (groupedValue !== null) {
-                groupedValue = groupedValue.toString();
-            }
+                let groupedValue = extractGroupedField(groupType, groupField, dataValue, rawDataValue);
+                //  Convert empty strings into null as both are treated the same by the client.
+                if (groupedValue === '') {
+                    groupedValue = null;
+                }
 
-            //  The lodash groupBy function uses the groupedValue as the key to an
-            //  associative array.  If the groupedValue is numeric, javascript adds
-            //  the entry as an index(this is expected behavior), which means it
-            //  inserts that entry at the index and not as the next entry in the array.
-            //  This causes problems when requesting a descending order sort.  To
-            //  workaround this problem, we'll create a simple object with a key element,
-            //  stringify it into JSON, and use that as the named key value.  This ensures
-            //  we'll have no numeric key values added to the array.
-            return JSON.stringify({key:groupedValue});
+                //  for non-null headers, convert into a string
+                if (groupedValue !== null) {
+                    groupedValue = groupedValue.toString();
+                }
 
-        });
+                //  The lodash groupBy function uses the groupedValue as the key to an
+                //  associative array.  If the groupedValue is numeric, javascript adds
+                //  the entry as an index(this is expected behavior), which means it
+                //  inserts that entry at the index and not as the next entry in the array.
+                //  This causes problems when requesting a descending order sort.  To
+                //  workaround this problem, we'll create a simple object with a key element,
+                //  stringify it into JSON, and use that as the named key value.  This ensures
+                //  we'll have no numeric key values added to the array.
+                return JSON.stringify({key: groupedValue});
 
-        //  We've grouped the data for this field based on it's grouping requirement.  To support
-        //  multi-level grouping, we need to group each element returned in outputted list
-        //  against the next grouping level(if any).  This continues until all grouping levels
-        //  have been processed.
-        for (let group in groupedData) {
-            let children = [];
+            });
 
-            //  Check to determine if we have additional grouping levels to process.
-            if (idx < groupFields.length - 1) {
+            //  We've grouped the data for this field based on it's grouping requirement.  To support
+            //  multi-level grouping, we need to group each element returned in outputted list
+            //  against the next grouping level(if any).  This continues until all grouping levels
+            //  have been processed.
+            for (let group in groupedData) {
+                let children = [];
 
-                //  Do we have any sorting requirements to perform on the next group
-                if (secondarySort.required === true) {
-                    if (secondarySort.groupFieldIndex <= idx) {
-                        let offset = idx - secondarySort.groupFieldIndex;
-                        if (secondarySort.groupFieldNames.length > offset) {
-                            groupedData[group] = reOrderGroupData(groupedData[group], [secondarySort.groupFieldNames[offset]], [secondarySort.groupFieldOrder[offset]]);
+                //  Check to determine if we have additional grouping levels to process.
+                if (idx < groupFields.length - 1) {
+
+                    //  Do we have any sorting requirements to perform on the next group
+                    if (secondarySort.required === true) {
+                        if (secondarySort.groupFieldIndex <= idx) {
+                            let offset = idx - secondarySort.groupFieldIndex;
+                            if (secondarySort.groupFieldNames.length > offset) {
+                                groupedData[group] = reOrderGroupData(groupedData[group], [secondarySort.groupFieldNames[offset]], [secondarySort.groupFieldOrder[offset]]);
+                            }
                         }
                     }
-                }
 
-                //  Recursive call to get the next group node in the groupFields list.  Continue until we get to
-                //  the last to the last grouping field where we populate the final group node with the child data.
-                //
-                children = groupTheData(groupFields, secondarySort, groupedData[group], idx + 1);
-            } else {
-                //  No more grouping levels to process.  Do we have any final sorting requirements to perform on the child data.
-                if (secondarySort.required === true) {
-                    if (secondarySort.sortFieldNames.length > 0) {
-                        groupedData[group] = reOrderGroupData(groupedData[group], secondarySort.sortFieldNames, secondarySort.sortFieldOrder);
+                    //  Recursive call to get the next group node in the groupFields list.  Continue until we get to
+                    //  the last to the last grouping field where we populate the final group node with the child data.
+                    //
+                    children = groupTheData(groupFields, secondarySort, groupedData[group], idx + 1);
+                } else {
+                    //  No more grouping levels to process.  Do we have any final sorting requirements to perform on the child data.
+                    if (secondarySort.required === true) {
+                        if (secondarySort.sortFieldNames.length > 0) {
+                            groupedData[group] = reOrderGroupData(groupedData[group], secondarySort.sortFieldNames, secondarySort.sortFieldOrder);
+                        }
                     }
+
+                    children = groupedData[group];
                 }
 
-                children = groupedData[group];
+                //  the groups are JSON, which is known only to this function.  Parse into an object and
+                //  extract out the key, which is the grouping data that we want to expose to the client.
+                let obj = JSON.parse(group);
+                data.push({group: obj.key, children: children});
             }
-
-            //  the groups are JSON, which is known only to this function.  Parse into an object and
-            //  extract out the key, which is the grouping data that we want to expose to the client.
-            let obj = JSON.parse(group);
-            data.push({group: obj.key, children: children});
         }
 
         return data;
@@ -444,11 +444,8 @@
     module.exports = {
 
         /**
-         * Take result set from core that include grouping information and return object that
-         * the client will consume.
-         *
-         * TODO: temporary function name -- will be properly named once core grouping is implemented fully
-         * TODO: and client-side grouping is removed.
+         * For each group summarization returned by the server, reorganize to the json structure
+         * expected by the react client to allow for optimal processesing and rendering of the data.
          *
          * @param req
          * @param fields
@@ -456,70 +453,42 @@
          * @param formatForDisplay
          * @returns {*|{hasGrouping: boolean, fields: Array, gridColumns: Array, gridData: Array, totalRows: number}}
          */
-        organizeGroupingData: function(req, fields, report) {
+        groupData: function(req, fields, report) {
+
             let perfLog = perfLogger.getInstance();
             perfLog.init("Build GroupList using core group result");
 
-            let groupBy = this.group(req, fields);
-            let totalRows = 0;
+            let groupBy = {};
 
             if (report && report.type === constants.RECORD_TYPE.GROUP) {
-                var data = [];
+                let fieldsMap = new Map();
+                let reportData = [];
 
-                report.groups.forEach((group) => {
-                    var node = {
-                        children: [],
-                        group: ''
-                    };
-
-                    if (group.summaryRef) {
-                        var summaries = group.summaryRef.summaries;
-                        if (Array.isArray(summaries) && summaries.length > 0) {
-                            node.group = summaries[0];
-                        }
-                    }
-
-                    let groupRecords = group.records;
-                    let map = new Map();
-
-                    //  do we need to format the raw data for display
-                    if (requestHelper.isDisplayFormat(req)) {
-                        //  Build a map for quick field information retrieval by id.  The map
-                        //  key is the field.id; the map value is the field object.
-                        fields.forEach((field) => {
-                            map.set(field.id, field);
-                        });
-
-                        groupRecords = recordFormatter.formatRecords(group.records, fields);
-                    }
-
-                    let children = [];
-                    groupRecords.forEach((record) => {
-                        let columns = {};
-                        record.forEach((column) => {
-                            let fld = map.get(column.id);
-                            if (fld !== undefined) {
-                                columns[fld.name] = {
-                                    id: fld.id,
-                                    value: column.value
-                                };
-                                if (requestHelper.isDisplayFormat(req)) {
-                                    columns[fld.name].display = column.display;
-                                }
-                            }
-                        });
-
-                        totalRows++;
-                        node.children.push(columns);
+                if (fields) {
+                    fields.forEach((field) => {
+                        fieldsMap.set(field.id, field);
                     });
+                }
 
-                    data.push(node);
+                //  loop though the report data and for each group, push the records into
+                //  an array.
+                let records = [];
+                if (report.groups) {
+                    report.groups.forEach((group) => {
+                        let groupRecords = group.records;
+                        if (requestHelper.isDisplayFormat(req)) {
+                            groupRecords = recordFormatter.formatRecords(group.records, fields);
+                        }
+                        groupRecords.forEach((record) => {
+                            records.push(record);
+                        });
+                    });
+                }
 
-                });
-
-                groupBy.gridData = data;
-                groupBy.hasGrouping = true;
-                groupBy.totalRows = totalRows;
+                groupBy = this.group(req, fields, records);
+            } else {
+                log.warn("Attempting to group a result set that is not of type GROUP.  No grouping information returned");
+                groupBy = this.group();   // returns empty groupBy object
             }
 
             //  log performance data
@@ -557,7 +526,7 @@
                 fields: []
             };
 
-            if (fields) {
+            if (fields && records) {
                 //
                 // Is there a grouping parameter included on the request.  The format of the parameter
                 // is 'fid1:groupType1.fid2:groupType2...fidN:groupTypeN'.
@@ -639,15 +608,12 @@
                             }
                         });
 
-                        //  client side group is executed if their are supplied records
-                        if (records) {
-                            groupBy.hasGrouping = true;
-                            groupBy.gridData = createGroupDataGrid(groupBy.fields, sortBy.fields, fields, records);
+                        groupBy.hasGrouping = true;
+                        groupBy.gridData = createGroupDataGrid(groupBy.fields, sortBy.fields, fields, records);
 
-                            //  TODO: with paging, this is flawed...
-                            if (groupBy.gridData.length > 0) {
-                                groupBy.totalRows = records.length;
-                            }
+                        //  TODO: with paging, this is flawed...
+                        if (groupBy.gridData.length > 0) {
+                            groupBy.totalRows = records.length;
                         }
                     }
                 }

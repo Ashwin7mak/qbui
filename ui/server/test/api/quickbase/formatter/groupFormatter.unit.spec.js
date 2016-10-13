@@ -110,7 +110,9 @@ describe('Validate GroupFormatter unit tests', function() {
 
             var groupRecords = {
                 records: [],
-                summaryRef: ['Group Name ' + group]
+                summaryRef: {
+                    summaries: ['Group Name ' + group]
+                }
             };
             for (var x = 1; x <= numOfRecords; x++) {
                 var record = [];
@@ -362,7 +364,7 @@ describe('Validate GroupFormatter unit tests', function() {
                 var groupSetup = setupGroupedRecords(testCase.numFields, testCase.numRecords, numberOfGroups, testCase.dataType, testCase.gList);
 
                 var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
-                var coreGroupData = groupFormatter.organizeGroupingData(groupSetup.req, groupSetup.fields, groupSetup.records, format);
+                var coreGroupData = groupFormatter.groupData(groupSetup.req, groupSetup.fields, groupSetup.records, format);
 
                 assert.equal(groupData.hasGrouping, true);
                 assert.equal(coreGroupData.hasGrouping, true);

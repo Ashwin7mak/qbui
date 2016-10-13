@@ -1,6 +1,7 @@
 import Fluxxor from 'fluxxor';
 import reportDataActions from '../../src/actions/reportDataActions';
 import * as actions from '../../src/constants/actions';
+import constants from '../../../common/src/constants';
 import Promise from 'bluebird';
 
 let errorStatus = 404;
@@ -25,8 +26,8 @@ let filterReportInputs = {
         facet: 'abc',
         search: ''
     },
-    offset: 0,
-    numRows: 20,
+    offset: constants.PAGE.DEFAULT_OFFSET,
+    numRows: constants.PAGE.DEFAULT_NUM_ROWS,
     sortList: ""
 };
 
@@ -110,6 +111,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
     });
 
     it('test filter report fail on get records', (done) => {
+
         class mockReportService {
             constructor() { }
             getReport() {
@@ -128,7 +130,8 @@ describe('Report Data Actions -- Filter report Negative', () => {
         }
         reportDataActions.__Rewire__('ReportService', mockReportService);
         reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted, offset:0, numRows:20}, inputs.filter, {}).then(
+
+        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted, offset:constants.PAGE.DEFAULT_OFFSET, numRows:constants.PAGE.DEFAULT_NUM_ROWS}, inputs.filter, {}).then(
             () => {
                 expect(true).toBe(false);
                 done();
