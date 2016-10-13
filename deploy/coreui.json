@@ -336,7 +336,7 @@
           },
           "run_chef": {
             "files": {
-              "/dev/shm/chef-attributes-try.json": {
+              "/dev/shm/chef-attributes-perf.json": {
                 "content": {
                   "splunk": {
                     "forwarder": {
@@ -361,7 +361,7 @@
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
                       "route_group": "LH_V1",
-                      "stack_name": "coreui-try1"
+                      "stack_name": "coreui-perf1"
                     }
                   }
                 }
