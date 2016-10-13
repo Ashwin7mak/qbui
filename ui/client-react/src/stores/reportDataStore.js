@@ -461,6 +461,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.previousRecordId = null;
         this.nextOrPrevious = "";
 
+        this.currentEditRecordId = null;
+        this.nextEditRecordId = null;
+        this.previousEditRecordId = null;
+        this.nextOrPreviousEdit = "";
+
+
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
@@ -494,7 +500,11 @@ let ReportDataStore = Fluxxor.createStore({
 
             actions.OPEN_REPORT_RECORD, this.onOpenRecord,
             actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
-            actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord
+            actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord,
+
+            actions.EDIT_REPORT_RECORD, this.onEditRecord,
+            actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
+            actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord
 
         );
     },
@@ -876,6 +886,33 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.emit("change");
     },
+    /**
+     * the displayed record has changed, update the previous/next record IDs
+     * @param recId
+     */
+    updateEditRecordNavContext(recId, nextOrPrevious = "") {
+
+        const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
+
+        let index = -1;
+        if (filteredRecords) {
+            index = filteredRecords.findIndex(rec => rec[keyField.name] && rec[keyField.name].value === recId);
+        }
+
+        // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
+
+        this.currentEditRecordId = recId;
+
+        if (recId === "new" || index === -1) {
+            this.nextEditRecordId = this.previousEditRecordId = null;
+        } else {
+            this.nextEditRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
+            this.previousEditRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
+        }
+        this.nextOrPreviousEdit = nextOrPrevious;
+
+        this.emit("change");
+    },
 
     /**
      * drilldown into record from report
@@ -896,6 +933,27 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onShowNextRecord(payload) {
         this.updateRecordNavContext(payload.recId, "next");
+    },
+
+    /**
+     * drilldown into record from report
+     *
+     * @param payload
+     */
+    onEditRecord(payload) {
+        this.updateEditRecordNavContext(payload.recId);
+    },
+    /**
+     * update prev/next props after displaying previous record
+     */
+    onEditPreviousRecord(payload) {
+        this.updateEditRecordNavContext(payload.recId, "previous");
+    },
+    /**
+     * update prev/next props after displaying next record
+     */
+    onEditNextRecord(payload) {
+        this.updateEditRecordNavContext(payload.recId, "next");
     },
     /**
      * gets the state of a reportData
@@ -922,7 +980,11 @@ let ReportDataStore = Fluxxor.createStore({
             currentRecordId: this.currentRecordId,
             nextRecordId: this.nextRecordId,
             previousRecordId: this.previousRecordId,
-            nextOrPrevious: this.nextOrPrevious
+            nextOrPrevious: this.nextOrPrevious,
+            currentEditRecordId: this.currentEditRecordId,
+            nextEditRecordId: this.nextEditRecordId,
+            previousEditRecordId: this.previousEditRecordId,
+            nextOrPreviousEdit: this.nextOrPreviousEdit
         };
     }
 });

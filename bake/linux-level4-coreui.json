@@ -1,0 +1,53 @@
+{
+  "variables": {
+    "ami_name": null,
+    "ami_version": null,
+    "aws_instance_size": null,
+    "aws_subnet_id": null,
+    "aws_vpc_id": null,
+    "service_version": null,
+    "source_ami": null
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "ami_name": "{{user `ami_name`}}.v{{user `ami_version`}}",
+      "instance_type": "{{user `aws_instance_size`}}",
+      "region": "us-west-2",
+      "source_ami": "{{user `source_ami`}}",
+      "ssh_username": "ec2-user",
+      "subnet_id": "{{user `aws_subnet_id`}}",
+      "vpc_id": "{{user `aws_vpc_id`}}",
+      "tags": {
+        "AMI Source": "{{user `source_ami`}}",
+        "AMI Version": "{{user `ami_version`}}",
+        "Layer": "4",
+        "Service": "CoreUI",
+        "Service Version": "{{user `service_version`}}"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "chef",
+      "destination": "/tmp/chef"
+    },
+    {
+      "type": "shell",
+      "inline": ["sudo mkdir -p /var/packer/coreui"]
+    },
+    {
+      "type": "shell",
+      "inline": ["sudo mv /tmp/chef /var/packer/coreui/chef"]
+    },
+    {
+      "type": "shell",
+      "inline": ["sudo chmod -R 755 /var/packer/coreui"]
+    },
+    {
+      "type": "shell",
+      "script": "scripts/chef_run.sh"
+    }
+  ]
+}

@@ -179,6 +179,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
+        this.recordChanges = {};
         this.emit('change');
 
     },
@@ -231,6 +232,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
+        this.recordChanges = {};
         this.emit('change');
 
     },
