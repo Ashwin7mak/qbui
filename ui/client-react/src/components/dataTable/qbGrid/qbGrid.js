@@ -245,7 +245,7 @@ const QBGrid = React.createClass({
      */
     getSortAscText(column, prependText) {
         let message = " ";
-        switch (column.datatypeAttributes.type) {
+        switch (column.fieldDef.datatypeAttributes.type) {
         case "CHECKBOX": message =  "uncheckedToChecked"; break;
         case "TEXT":
         case "URL":
@@ -261,7 +261,7 @@ const QBGrid = React.createClass({
     },
     getSortDescText(column, prependText) {
         let message = " ";
-        switch (column.datatypeAttributes.type) {
+        switch (column.fieldDef.datatypeAttributes.type) {
         case "CHECKBOX": message =  "checkedToUnchecked"; break;
         case "TEXT":
         case "URL":
@@ -370,7 +370,7 @@ const QBGrid = React.createClass({
 
             const editing = rowIndex === this.state.editRow;
 
-            switch (colDef.datatypeAttributes.type) {
+            switch (colDef.fieldDef.datatypeAttributes.type) {
             case serverTypeConsts.NUMERIC:      return <NumericCellRenderer  qbGrid={true} params={params} editing={editing}/>;
             case serverTypeConsts.DATE:         return <DateCellRenderer     qbGrid={true} params={params} editing={editing}/>;
             case serverTypeConsts.DATE_TIME:    return <DateTimeCellRenderer qbGrid={true} params={params} editing={editing}/>;

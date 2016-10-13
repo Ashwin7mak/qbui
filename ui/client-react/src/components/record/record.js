@@ -1,7 +1,6 @@
 import React from 'react';
 import Fluxxor from "fluxxor";
 import QBForm from '../QBForm/qbform';
-import ValidationUtils from "../../utils/validationUtils";
 import Loader  from 'react-loader';
 import * as SchemaConsts from "../../constants/schema";
 
