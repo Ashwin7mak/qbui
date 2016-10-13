@@ -62,23 +62,14 @@
      */
     var jsonBigNum = require('json-bignum');
 
-    //function isInteger(value) {
-    //    let int = parseInt(value);
-    //    return (typeof int === 'number' && (int % 1) === 0);
-    //}
-
     module.exports = function(config) {
         var requestHelper = require('./requestHelper')(config);
+        let fieldsApi = require('./fieldsApi')(config);
         let routeHelper = require('../../routes/routeHelper');
         var groupFormatter = require('./formatter/groupFormatter');
         var recordFormatter = require('./formatter/recordFormatter')();
         var constants = require('../../../../common/src/constants');
         var url = require('url');
-
-        //Module constants:
-        var APPLICATION_JSON = 'application/json';
-        var CONTENT_TYPE = 'Content-Type';
-        var CONTENT_LENGTH = 'content-length';
 
         var FIELDS = 'fields';
         var RECORD = 'record';
@@ -86,32 +77,6 @@
         var GROUPS = 'groups';
         var FILTERED_RECORDS_COUNT = 'filteredCount';
         var request = defaultRequest;
-
-        //Given an array of records and array of fields, remove any fields
-        //not referenced in the records
-        function removeUnusedFields(record, fields) {
-            var returnFields = fields;
-            if (record && fields && record.length !== fields.length) {
-                returnFields = [];
-                for (var idx = 0; idx < record.length; idx++) {
-                    var f = findFieldById(record[idx].id, fields);
-                    if (f !== null) {
-                        returnFields.push(f);
-                    }
-                }
-            }
-            return returnFields;
-        }
-
-        //Given a field id and collection of fields, find and return the field ID
-        function findFieldById(fieldId, fields) {
-            for (var idx = 0; idx < fields.length; idx++) {
-                if (fields[idx].id === fieldId) {
-                    return fields[idx];
-                }
-            }
-            return null;
-        }
 
         //TODO: only application/json is supported for content type.  Need a plan to support XML
         var recordsApi = {
@@ -131,12 +96,8 @@
                 requestHelper = requestHelperOverride;
             },
 
-            isDisplayFormat: function(req) {
-                return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.DISPLAY;
-            },
-
-            isRawFormat: function(req) {
-                return requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.FORMAT) === constants.FORMAT.RAW;
+            fetchFields: function(req) {
+                return fieldsApi.fetchFields(req);
             },
 
             /**
@@ -155,14 +116,14 @@
                             var responseObject;
 
                             //return raw undecorated record values due to flag format=raw
-                            if (this.isRawFormat(req)) {
+                            if (requestHelper.isRawFormat(req)) {
                                 responseObject = record;
                             } else {
                                 //response object will include a fields meta data block plus record values
-                                var fields = removeUnusedFields(record, JSON.parse(response[1].body));
+                                var fields = fieldsApi.removeUnusedFields(record, JSON.parse(response[1].body));
 
                                 //format records for display if requested with the flag format=display
-                                if (this.isDisplayFormat(req)) {
+                                if (requestHelper.isDisplayFormat(req)) {
                                     record = recordFormatter.formatRecords([record], fields)[0];
                                 }
 
@@ -173,7 +134,7 @@
 
                             resolve(responseObject);
 
-                        }.bind(this),
+                        },
                         function(response) {
                             reject(response);
                         }
@@ -197,60 +158,74 @@
 
                     Promise.all(fetchRequests).then(
                         function(response) {
-                            var responseObject;
+                            var responseObject = {};
 
                             var records = jsonBigNum.parse(response[0].body);
 
-                            //  report/results result is an object
-                            if (!Array.isArray(records)) {
-                                records = records.records;
-                            }
-
-                            var groupedRecords;
-
                             //  return raw undecorated record values due to flag format=raw
-                            if (this.isRawFormat(req)) {
+                            if (requestHelper.isRawFormat(req)) {
                                 responseObject = records;
                             } else {
-                                //  response object will include a fields meta data block plus record values
-                                var fields = removeUnusedFields(records[0], JSON.parse(response[1].body));
-
-                                if (this.isDisplayFormat(req)) {
-                                    //  initialize perfLogger
-                                    let perfLog = perfLogger.getInstance();
-                                    perfLog.init("Format Display Records", {req:req, idsOnly:true});
-
-                                    //  format records for display and log perf stats
-                                    records = recordFormatter.formatRecords(records, fields);
-                                    perfLog.log();
-
-                                    //  re-init perfLogger
-                                    perfLog.init("Build GroupList");
-
-                                    //  if grouping, return a data structure organized according to the
-                                    //  grouping requirements and log perf stats
-                                    groupedRecords = groupFormatter.group(req, fields, records);
-                                    perfLog.log();
-                                }
-
-                                responseObject = {};
-                                responseObject[FIELDS] = fields;
+                                //  build empty response object array elements to return
                                 responseObject[RECORDS] = [];
                                 responseObject[GROUPS] = [];
+                                responseObject[FILTERED_RECORDS_COUNT] = null;
 
-                                //  if we are grouping our results, no need to send the flat result set.
-                                if (groupedRecords && groupedRecords.hasGrouping === true) {
-                                    responseObject[GROUPS] = groupedRecords;
+                                //
+                                //  Just the home page currently calls report/result endpoint, which has the refactored
+                                //  json result that includes grouping.   Client side filtering, grouping and sorting
+                                //  still use the records endpoint as report/results does not yet accept filtering
+                                //  parameters.
+                                if (records.type === constants.RECORD_TYPE.GROUP) {
+                                    //  format the records using the server side grouping results
+                                    responseObject[FIELDS] = fieldsApi.removeUnusedFields(records.groups[0].records[0], JSON.parse(response[1].body));
+                                    responseObject[GROUPS] = groupFormatter.coreGroup(req, responseObject[FIELDS], records);
                                 } else {
-                                    responseObject[RECORDS] = records;
+                                    //  NEED to support records api and reports api json output, so output may be
+                                    //  an array or an object...this is temporary and will get removed once all
+                                    //  report endpoint processing is moved into reportsApi
+                                    if (!Array.isArray(records)) {
+                                        records = records.records;
+                                    }
+
+                                    if (requestHelper.isDisplayFormat(req)) {
+                                        responseObject[FIELDS] = fieldsApi.removeUnusedFields(records[0], JSON.parse(response[1].body));
+
+                                        //  initialize perfLogger
+                                        let perfLog = perfLogger.getInstance();
+                                        perfLog.init("RecordsApi..Format Display Records", {req: req, idsOnly: true});
+
+                                        records = recordFormatter.formatRecords(records, responseObject[FIELDS]);
+                                        perfLog.log();
+
+                                        //  re-init perfLogger
+                                        perfLog.init("Build GroupList");
+
+                                        //  REMOVE once all grouping is no longer associated with a records
+                                        //  api request.  Want grouping to be a report centric operation, so only
+                                        //  reportsApi should know about it...
+                                        //
+                                        //  NOTE: client side grouping is dependent on records being formatted for display
+                                        var groupedRecords = groupFormatter.group(req, responseObject[FIELDS], records);
+                                        perfLog.log();
+                                    }
+
+                                    //  if we are grouping our results, no need to send the flat result set.
+                                    if (groupedRecords && groupedRecords.hasGrouping === true) {
+                                        responseObject[GROUPS] = groupedRecords;
+                                    } else {
+                                        responseObject[RECORDS] = records;
+                                    }
                                 }
-                            }
-                            if (response[2]) {
-                                responseObject[FILTERED_RECORDS_COUNT] = response[2].body;
+
+                                if (response[2]) {
+                                    responseObject[FILTERED_RECORDS_COUNT] = response[2].body;
+                                }
+
                             }
 
                             resolve(responseObject);
-                        }.bind(this),
+                        },
                         function(response) {
                             reject(response);
                         }
@@ -299,10 +274,11 @@
                 //}
 
                 let opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 //  get the request parameters
                 let search = url.parse(req.url).search;
+                let query = url.parse(opts.url, true).query;
 
                 if (routeHelper.isRecordsRoute(req.url)) {
                     if (req.params.recordId) {
@@ -311,7 +287,7 @@
                         opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                     }
                 } else {
-                    //  if not a records route, check to see if it is a request for reportComponents
+                    //  if not a records route, check to see if it is a request for reportComponents or report home page
                     /*eslint no-lonely-if:0 */
                     if (routeHelper.isReportComponentRoute(req.url)) {
                         //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
@@ -339,7 +315,6 @@
                 // Given the report meta data doesn't have default grouping on prod/pre-prod, and the UI
                 // only groups using equals, this should be fine for the interim until a complete solution
                 // is implemented.
-                let query = url.parse(opts.url, true).query;
                 if (query && query.hasOwnProperty(constants.REQUEST_PARAMETER.SORT_LIST)) {
                     let sList = query[constants.REQUEST_PARAMETER.SORT_LIST];
                     if (sList) {
@@ -362,41 +337,11 @@
             },
 
             /**
-             * Fetch the requested field meta data for a table.
-             *
-             * @param req
-             * @returns Promise
-             */
-            fetchFields: function(req) {
-                var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-
-                if (routeHelper.isFieldsRoute(req.url)) {
-                    if (req.params.fieldId) {
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url, req.params.fieldId);
-                    } else {
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
-                    }
-                } else {
-                    //  not a fields route; set to return all fields for the given table
-                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getFieldsRoute(req.url);
-                }
-
-                //  any request parameters to append?
-                let search = url.parse(req.url).search;
-                if (search) {
-                    opts.url += search;
-                }
-
-                return requestHelper.executeRequest(req, opts, this.isRawFormat(req));
-            },
-
-            /**
              * Fetch the count of all records that match a user query
              */
             fetchCountForRecords: function(req) {
                 let opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsCountRoute(req.url);
                 // Set the query parameter
@@ -418,7 +363,7 @@
                 let answer = _validateChanges(req);
                 if (answer.length === 0) {
                     var opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts);
                 } else {
@@ -440,7 +385,7 @@
                 let answer = _validateChanges(req);
                 if (answer.length === 0) {
                     var opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     //input expected in raw form for java
                     return requestHelper.executeRequest(req, opts);
                 } else {
@@ -460,7 +405,7 @@
              */
             deleteSingleRecord: function(req) {
                 var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 return requestHelper.executeRequest(req, opts);
             },
 
@@ -472,7 +417,7 @@
              */
             deleteRecordsBulk: function(req) {
                 var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 return requestHelper.executeRequest(req, opts);
             }
 

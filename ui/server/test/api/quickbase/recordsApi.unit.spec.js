@@ -32,18 +32,24 @@ describe("Validate recordsApi", function() {
         }
     };
 
+    var executeReqStub = null;
+    var fieldsApiStub = null;
+
+    beforeEach(function() {
+        executeReqStub = sinon.stub(requestHelper, "executeRequest");
+        recordsApi.setRequestHelperObject(requestHelper);
+
+        fieldsApiStub = sinon.stub(recordsApi, "fetchFields");
+        fieldsApiStub.returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
+    });
+
+    afterEach(function() {
+        executeReqStub.restore();
+        fieldsApiStub.restore();
+        req.params = {};
+    });
+
     describe("when fetchRecords is called", function() {
-        var executeReqStub = null;
-
-        beforeEach(function() {
-            executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
-        });
-
-        afterEach(function() {
-            executeReqStub.restore();
-            req.params = {};
-        });
 
         it('success return results for all records', function(done) {
             req.url = '/apps/123/tables/456/records';
@@ -154,97 +160,7 @@ describe("Validate recordsApi", function() {
         });
     });
 
-    describe("when fetchFields is called", function() {
-        var executeReqStub = null;
-
-        beforeEach(function() {
-            executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
-        });
-
-        afterEach(function() {
-            executeReqStub.restore();
-            req.params = {};
-        });
-
-        it('success return select field with parameter ', function(done) {
-            req.url = '/apps/123/tables/456/fields/789?show=tell';
-            req.params.fieldId = '789';
-
-            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
-
-            executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.fetchFields(req);
-
-            promise.then(
-                function(response) {
-                    assert.deepEqual(response, targetObject);
-                    done();
-                },
-                function(error) {
-                    assert.fail('fail', 'success', 'failure response returned when success expected');
-                    done();
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
-            });
-        });
-
-        it('success return fields array', function(done) {
-            req.url = '/apps/123/tables/456/fields';
-
-            var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
-
-            executeReqStub.returns(Promise.resolve(targetObject));
-            var promise = recordsApi.fetchFields(req);
-
-            promise.then(
-                function(response) {
-                    assert.deepEqual(response, targetObject);
-                    done();
-                },
-                function(error) {
-                    assert.fail('fail', 'success', 'failure response returned when success expected');
-                    done();
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
-            });
-        });
-
-        it('fail return fields with non-fields request url', function(done) {
-            req.url = '/reports/2/records';
-            var error_message = "fail unit test case execution";
-
-            executeReqStub.returns(Promise.reject(new Error(error_message)));
-            var promise = recordsApi.fetchFields(req);
-
-            promise.then(
-                function(error) {
-                    assert.fail('success', 'fail', 'success response returned when fail expected');
-                    done();
-                },
-                function(error) {
-                    assert.equal(error, "Error: " + error_message);
-                    done();
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
-            });
-        });
-    });
-
     describe("when fetchSingleRecordAndFields is called", function() {
-        var executeReqStub = null;
-
-        beforeEach(function() {
-            executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
-        });
-
-        afterEach(function() {
-            executeReqStub.restore();
-        });
 
         it('success return records array with raw parameter type', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=raw';
@@ -265,7 +181,6 @@ describe("Validate recordsApi", function() {
         it('success return records array with display parameter type', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=display';
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[{ "id":2, "value": 1234525}, { "id":2, "value": 1234525}]'}));
-            executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
             var promise = recordsApi.fetchSingleRecordAndFields(req);
             promise.then(
                 function(response) {
@@ -280,24 +195,14 @@ describe("Validate recordsApi", function() {
     });
 
     describe("when fetchRecordsAndFields is called", function() {
-        var executeReqStub = null;
-
-        beforeEach(function() {
-            executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
-        });
-
-        afterEach(function() {
-            executeReqStub.restore();
-        });
 
         it('success return records array with display parameter type and no grouping', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=display';
             req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:' + groupTypes.COMMON.equals;
 
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
-            executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
-            executeReqStub.onCall(2).returns(Promise.resolve({'body': '10'}));
+            //fetch fields is already stubbed
+            executeReqStub.onCall(1).returns(Promise.resolve({'body': '10'}));
             var promise = recordsApi.fetchRecordsAndFields(req);
             promise.then(
                 function(response) {
@@ -315,7 +220,6 @@ describe("Validate recordsApi", function() {
         it('success return records array with raw parameter type', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=raw';
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
-            executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
             var promise = recordsApi.fetchRecordsAndFields(req);
             promise.then(
                 function(response) {
@@ -336,7 +240,6 @@ describe("Validate recordsApi", function() {
             req.url = '/apps/1/tables/2/records/3?format=display';
             req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=2:' + groupTypes.COMMON.equals;
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
-            executeReqStub.onCall(1).returns(Promise.resolve({'body': '[{ "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'}));
             var promise = recordsApi.fetchRecordsAndFields(req);
             promise.then(
                 function(response) {
@@ -354,16 +257,6 @@ describe("Validate recordsApi", function() {
     });
 
     describe("when fetchCountForRecords is called", function() {
-        var executeReqStub = null;
-
-        beforeEach(function() {
-            executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
-        });
-
-        afterEach(function() {
-            executeReqStub.restore();
-        });
 
         it('success return count when no query parameter is set', function(done) {
             req.url = '/apps/1/tables/2/records/countQuery';
@@ -396,16 +289,6 @@ describe("Validate recordsApi", function() {
     });
 
     describe("when saveSingleRecord is called", function() {
-        var executeReqStub = null;
-
-        beforeEach(function() {
-            executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
-        });
-
-        afterEach(function() {
-            executeReqStub.restore();
-        });
 
         it('success return results ', function(done) {
             req.url = '/records/2';
@@ -446,16 +329,6 @@ describe("Validate recordsApi", function() {
         });
     });
     describe("when saveSingleRecord with body to validate is called", function() {
-        var executeReqStub = null;
-
-        beforeEach(function() {
-            executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
-        });
-
-        afterEach(function() {
-            executeReqStub.restore();
-        });
 
         it('success return results ', function(done) {
             req.url = '/records/2';
@@ -514,16 +387,6 @@ describe("Validate recordsApi", function() {
         });
     });
     describe("when createSingleRecord is called", function() {
-        var executeReqStub = null;
-
-        beforeEach(function() {
-            executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
-        });
-
-        afterEach(function() {
-            executeReqStub.restore();
-        });
 
         it('success return results ', function(done) {
             req.url = '/records/';
@@ -565,16 +428,6 @@ describe("Validate recordsApi", function() {
     });
 
     describe("when deleteSingleRecord is called", function() {
-        var executeReqStub = null;
-
-        beforeEach(function() {
-            executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
-        });
-
-        afterEach(function() {
-            executeReqStub.restore();
-        });
 
         it('success return results ', function(done) {
             req.url = '/record/';
@@ -616,16 +469,6 @@ describe("Validate recordsApi", function() {
     });
 
     describe("when deleteRecordsBulk is called", function() {
-        var executeReqStub = null;
-
-        beforeEach(function() {
-            executeReqStub = sinon.stub(requestHelper, "executeRequest");
-            recordsApi.setRequestHelperObject(requestHelper);
-        });
-
-        afterEach(function() {
-            executeReqStub.restore();
-        });
 
         it('success return results ', function(done) {
             req.url = '/records/bulk/';

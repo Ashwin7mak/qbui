@@ -23,6 +23,7 @@
     let REGEX_RECORDS_FORMS_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/records\/.*\/formcomponents(.*)?$/i;
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
     let REGEX_REPORT_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/reportcomponents(.*)?$/i;
+    let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
 
     /**
      * Private function to extract the root url for the given type.
@@ -366,6 +367,19 @@
         isReportComponentRoute(url) {
             if (typeof url === 'string') {
                 return REGEX_REPORT_COMPONENT_ROUTE.test(url);
+            }
+            return false;
+        },
+
+        /**
+         * Is the route a request for the table homepage
+         *
+         * @param url
+         * @returns {boolean}
+         */
+        isTableHomePageRoute(url) {
+            if (typeof url === 'string') {
+                return REGEX_TABLE_HOMEPAGE_ROUTE.test(url);
             }
             return false;
         },
