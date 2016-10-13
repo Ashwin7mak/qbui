@@ -24,5 +24,16 @@
             sections[singleSection] = builderInstance.build();
             return sections;
         },
+        generateDefaultSingleSectionWithAddAndEdit: function(table) {
+            var builderInstance = formSectionBuilder.builder();
+            builderInstance.withOrderIndex(singleSection);
+            builderInstance.withHeaderElement(formElementGenerator.generateDefaultHeaderElement());
+            builderInstance.withIsPeusdo(rawValue.generateBool());
+            var elements = formElementGenerator.generateDefaultElementsWithAddAndEdit(table[tableConsts.FIELDS]);
+            builderInstance.withElements(elements);
+
+            sections[singleSection] = builderInstance.build();
+            return sections;
+        },
     };
 }());
