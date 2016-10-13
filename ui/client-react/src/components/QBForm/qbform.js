@@ -71,11 +71,12 @@ let QBForm = React.createClass({
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
         }
         if (element.FormFieldElement) {
+            let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
             // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
             if (labelPosition === QBForm.LABEL_LEFT) {
-                cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, colSpan));
+                cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus));
             }
-            cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, labelPosition === QBForm.LABEL_ABOVE, colSpan));
+            cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, labelPosition === QBForm.LABEL_ABOVE, colSpan, validationStatus));
         }
         return cells;
     },
@@ -124,14 +125,14 @@ let QBForm = React.createClass({
      * @param sectionIndex
      * @returns {XML}
      */
-    createFieldLabelCell(element, sectionIndex) {
+    createFieldLabelCell(element, sectionIndex, validationStatus) {
 
         let relatedField = this.getRelatedField(element.fieldId);
 
         let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
         return (
             <td key={key}>
-                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={this.props.edit} />
+                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={this.props.edit} isInvalid={validationStatus.isInvalid}/>
             </td>);
     },
 
@@ -155,13 +156,11 @@ let QBForm = React.createClass({
      * @param colSpan
      * @returns {XML}
      */
-    createFieldElementCell(element, sectionIndex, includeLabel, colSpan) {
+    createFieldElementCell(element, sectionIndex, includeLabel, colSpan, validationStatus) {
 
         let relatedField = this.getRelatedField(element.fieldId);
 
         let fieldRecord = this.getFieldRecord(element.fieldId);
-
-        let validationStatus =  this.getFieldValidationStatus(element.fieldId);
 
         let key = "field" + sectionIndex + "-" + element.orderIndex;
 

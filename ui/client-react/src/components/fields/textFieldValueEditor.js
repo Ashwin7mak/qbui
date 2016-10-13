@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './fields.scss';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import FieldUtils from '../../utils/fieldUtils';
+import ValidatedFieldWrapper from './ValidatedFieldWrapper';
+
 
 /**
  * # TextFieldValueEditor
@@ -25,10 +27,10 @@ const TextFieldValueEditor = React.createClass({
 
         /**
          * renders with red border if true */
-        isInvalid: React.PropTypes.bool,
+        invalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         * message to display in the tool tip when invalid */
         invalidMessage: React.PropTypes.string,
 
         /**
@@ -56,7 +58,7 @@ const TextFieldValueEditor = React.createClass({
 
     getDefaultProps() {
         return {
-            isInvalid: false,
+            invalid: false,
             inputType: 'text'
         };
     },
@@ -83,11 +85,8 @@ const TextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'input textField borderOnError';
-        // error state css class
-        if (this.props.isInvalid) {
-            classes += ' error';
-        }
+        let classes = 'input textField';
+
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
@@ -105,16 +104,18 @@ const TextFieldValueEditor = React.createClass({
         // If it still is null, show as a blank string to avoid React input errors
         value = (value === null ? '' : value);
 
-        return (<input ref="textInput"
-                       className={classes}
-                       value={value}
-                       type={this.props.inputType}
-                       maxLength={maxLength}
-                       key={'inp' + this.props.idKey}
-                       placeholder={this.props.placeholder}
-                       onChange={this.onChange}
-                       onBlur={this.onBlur} />);
+        let inputBox = <input ref="textInput"
+                          className={classes}
+                          value={value}
+                          type={this.props.inputType}
+                          key={'inp' + this.props.idKey}
+                          placeholder={this.props.placeholder}
+                          onChange={this.onChange}
+                          onBlur={this.onBlur} />;
+
+
+        return  inputBox;
     }
 });
 
-export default TextFieldValueEditor;
+export default ValidatedFieldWrapper(TextFieldValueEditor);
