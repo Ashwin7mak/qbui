@@ -32,7 +32,8 @@ const FieldElement = React.createClass({
                 newVal: {value: theVals.value, display: theVals.display}
             },
             fid: +fid,
-            fieldName: this.props.relatedField.name
+            fieldName: this.props.relatedField.name,
+            fieldDef: this.props.relatedField
         };
         return change;
     },

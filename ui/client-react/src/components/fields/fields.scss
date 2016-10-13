@@ -85,6 +85,7 @@ textarea:focus,
   border-right: 1px solid  $input-text-error-border-color;
   border-bottom: 1px solid $input-text-error-border-color;
   border-left: 5px solid $input-text-error-border-color;
+  border-color: $input-text-error-border-color !important;
   box-shadow: none;
 }
 
@@ -94,6 +95,7 @@ textarea:focus,
   border-right: 1px solid  $input-text-error-border-color;
   border-bottom: 1px solid $input-text-error-border-color;
   border-left: 5px solid $input-text-error-border-color;
+  border-color: $input-text-error-border-color !important;
   @include focus-shadow($input-text-error-border-color);
 }
 .Select {

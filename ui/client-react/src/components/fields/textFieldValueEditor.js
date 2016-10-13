@@ -109,6 +109,7 @@ const TextFieldValueEditor = React.createClass({
         return  <input ref="textInput"
                        className={classes}
                        value={value}
+                       maxLength={maxLength}
                        type={this.props.inputType}
                        key={'inp' + this.props.idKey}
                        placeholder={this.props.placeholder}
