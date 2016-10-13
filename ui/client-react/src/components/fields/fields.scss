@@ -47,25 +47,34 @@ $data-font-size: $font-size-p;
 
     // visual style of input error
     .textField.error &.input, &.input.error,
-    .error .borderOnError {
+    .error .borderOnError,
+    .error .error.borderOnError {
         border-top: 1px solid $input-text-error-border-color;
         border-right: 1px solid  $input-text-error-border-color;
         border-bottom: 1px solid $input-text-error-border-color;
         border-left: 5px solid $input-text-error-border-color;
+        border-color: $input-text-error-border-color !important;
         box-shadow: none;
     }
 
     // visual style of focus input error
     .textField.error &:focus.input,
     &:focus.input.error,
-    .error :focus.borderOnError {
+    .error :focus.borderOnError,
+    .error &:focus.error.borderOnError {
         outline: none;
         border-top: 1px solid $input-text-error-border-color;
         border-right: 1px solid  $input-text-error-border-color;
         border-bottom: 1px solid $input-text-error-border-color;
         border-left: 5px solid $input-text-error-border-color;
-        @include focus-shadow($input-text-error-border-color);
+        border-color: $input-text-error-border-color !important;
+      @include focus-shadow($input-text-error-border-color);
     }
+}
+
+textarea:focus,
+.is-focused:not(.is-open)>.Select-control {
+    @include text-input-focus;
 }
 
 .error .borderOnError {
@@ -84,12 +93,6 @@ $data-font-size: $font-size-p;
   border-left: 5px solid $input-text-error-border-color;
   @include focus-shadow($input-text-error-border-color);
 }
-
-textarea:focus,
-.is-focused:not(.is-open)>.Select-control {
-    @include text-input-focus;
-}
-
 .invalidRecord.tooltip >.tooltip-arrow,
 .invalidInput.tooltip >.tooltip-arrow {
   border-bottom-color: $tootip-error-color;
