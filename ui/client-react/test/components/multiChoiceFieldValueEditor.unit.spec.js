@@ -219,7 +219,10 @@ describe('MultiChoiceFieldValueEditor functions', () => {
 
         var parent = TestUtils.renderIntoDocument(TestParent());
         component = parent.refs.field;
+        component.selectChoice({
+            value: {coercedValue : {value: 'Banana'}}
+        });
         component.onBlur();
-        expect(parent.state.value).toEqual(undefined);
+        expect(parent.state.value).toEqual({value: 'Banana', display: 'Banana'});
     });
 });

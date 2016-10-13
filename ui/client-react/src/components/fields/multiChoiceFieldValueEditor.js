@@ -8,7 +8,7 @@ import QBToolTip from '../qbToolTip/qbToolTip';
 import {I18nMessage} from '../../utils/i18nMessage';
 import * as CompConstants from '../../constants/componentConstants';
 import Locale from '../../locales/locales';
-import ValidatedFieldWrapper from './ValidatedFieldWrapper';
+
 /**
  * # MultiChoiceFieldValueEditor
  * A multi-choice field value editor that uses react select, allows a user to select a single option from a drop down box.
@@ -183,10 +183,8 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
     render() {
         let editElement = this.getFieldElement();
-        let classes = 'multiChoiceContainer';
-        classes += this.props.classes ? ' ' + this.props.classes : '';
-        return <div className={classes}>{editElement}</div>;
+        return <div className="multiChoiceContainer borderOnError">{editElement}</div>;
     }
 });
 
-export default ValidatedFieldWrapper(MultiChoiceFieldValueEditor);
+export default MultiChoiceFieldValueEditor;
