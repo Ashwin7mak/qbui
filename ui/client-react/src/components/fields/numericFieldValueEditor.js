@@ -3,6 +3,7 @@ import './fields.scss';
 
 import * as numericFormatter from '../../../../common/src/formatter/numericFormatter';
 import * as consts from '../../../../common/src/constants';
+import ValidatedFieldWrapper from './ValidatedFieldWrapper';
 
 /**
  * # NumericFieldValueEditor
@@ -28,10 +29,10 @@ const NumericFieldValueEditor = React.createClass({
 
         /**
          * renders with red border if true */
-        isInvalid: React.PropTypes.bool,
+        invalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         * message to display in the tool tip when invalid */
         invalidMessage: React.PropTypes.string,
 
         /**
@@ -53,7 +54,7 @@ const NumericFieldValueEditor = React.createClass({
 
     getDefaultProps() {
         return {
-            isInvalid: false
+            invalid: false
         };
     },
     onChange(ev) {
@@ -123,7 +124,7 @@ const NumericFieldValueEditor = React.createClass({
 
         let classes = 'input numericField borderOnError';
         // error state css class
-        if (this.props.isInvalid) {
+        if (this.props.invalid) {
             classes += ' error';
         }
         if (this.props.classes) {
@@ -131,18 +132,19 @@ const NumericFieldValueEditor = React.createClass({
         }
         let width = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.width : null;
 
-        return (
-            <input ref="textInput"
-                   className={classes}
-                   value={this.props.display ? this.props.display : this.props.value}
-                   type="text"
-                   key={'inp' + this.props.idKey}
-                   placeholder={placeholder}
-                   onChange={this.onChange}
-                   onBlur={this.onBlur}
-                   size={width}/>
-        );
+        let inputBox = <input ref="textInput"
+                          className={classes}
+                          value={this.props.display ? this.props.display : this.props.value}
+                          type="text"
+                          key={'inp' + this.props.idKey}
+                          placeholder={placeholder}
+                          onChange={this.onChange}
+                          onBlur={this.onBlur}
+                          size={width}/>;
+
+
+        return  (inputBox);
     }
 });
 
-export default NumericFieldValueEditor;
+export default ValidatedFieldWrapper(NumericFieldValueEditor);

@@ -213,7 +213,7 @@ let recordActions = {
                 _fields.forEach((field) => {
                     if (changes[field.id] === undefined) {
                         if (!field.builtIn && (field.required || field.unique)) {
-                            if (_pendEdits.originalRecord.fids[field.id]) {
+                            if (_pendEdits.originalRecord && _pendEdits.originalRecord.fids && _pendEdits.originalRecord.fids[field.id]) {
                                 let newValue = _pendEdits.originalRecord.fids[field.id].value;
                                 if (newValue === null) {
                                     newValue = "";
