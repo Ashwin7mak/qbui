@@ -41,7 +41,7 @@ const ValidatedField = (FieldComponent) => {
         render() {
             if (this.props.invalid) {
 
-                let newClasses = "error ";
+                let newClasses = "borderOnError ";
                 let {classes, ...rest} = this.props;
 
                 if (classes) {

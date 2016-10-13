@@ -13,6 +13,7 @@ $multi-choice-field-box-height: 32px;
     .Select-control, .select {
         height: $multi-choice-field-box-height;
         border: solid 1px $input-text-normal-border-color;
+        border-radius: 0;
         box-shadow: none;
         outline: none;
         .Select-input {

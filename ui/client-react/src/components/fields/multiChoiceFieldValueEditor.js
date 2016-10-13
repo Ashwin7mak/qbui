@@ -183,7 +183,9 @@ const MultiChoiceFieldValueEditor = React.createClass({
 
     render() {
         let editElement = this.getFieldElement();
-        return <div className="multiChoiceContainer">{editElement}</div>;
+        let classes = 'multiChoiceContainer';
+        classes += this.props.classes ? ' ' + this.props.classes : '';
+        return <div className={classes}>{editElement}</div>;
     }
 });
 
