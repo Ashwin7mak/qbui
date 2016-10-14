@@ -23,6 +23,10 @@
         "prod"
       ]
     },
+    "paramSwimlane": {
+      "Description": "The Swimlane ID",
+      "Type": "String"
+    },
     "paramELBSSLPort": {
       "Type": "Number",
       "Default": "443",
@@ -560,7 +564,7 @@
           "DNSName": { "Fn::GetAtt": ["ElasticLoadBalancer", "DNSName"] }
         },
         "HostedZoneName": { "Fn::Join": ["", [{ "Ref": "paramDomainName" }, "."]] },
-        "Name": { "Fn::Join": ["", ["*.nodejs.", { "Ref": "AWS::StackName" }, ".", { "Ref": "paramDomainName" }, "."]] },
+        "Name": { "Fn::Join": ["", ["*.nodejs.", { "Ref": "paramSwimlane" }, ".", { "Ref": "paramDomainName" }, "."]] },
         "Type": "A"
       }
     }
