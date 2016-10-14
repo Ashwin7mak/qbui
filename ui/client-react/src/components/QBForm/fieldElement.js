@@ -71,6 +71,10 @@ const FieldElement = React.createClass({
         let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
             this.props.relatedField.datatypeAttributes : {};
         let fieldType = FieldFormats.getFormatType(fieldDatatypeAttributes);
+        let className = 'formElement field'
+        if (fieldType === FieldFormats.CHECKBOX_FORMAT){
+            className += ' checkbox-field';
+        }
 
         //catch the non-implemented pieces.
         let fieldDisplayValue = this.props.fieldRecord ? this.props.fieldRecord.display : "";
@@ -122,8 +126,8 @@ const FieldElement = React.createClass({
         }
 
         return (
-            <div className="formElement field">
-                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} isInvalid={this.props.isInvalid}/> }
+            <div className={className}>
+                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} /> }
 
                 <span className="cellWrapper">
                     { fieldElement }
