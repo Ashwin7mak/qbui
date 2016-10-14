@@ -248,18 +248,30 @@ $checkbox-font-size-mobile: 16px;
     flex-direction: row;
 
     .fieldLabel {
-        order: 10;
-        margin: 5px 0 0 10px;
+        order: 10; // checkbox label is to the right of the input
+        margin-top: 1px;
+        margin-left: 10px;
         @include small-breakpoint {
+            margin-top: 5px;
             margin-left: 4px;
+            .editForm & {
+                margin-top: 8px;
+            }
         }
 
-        .editForm & {
-            margin-top: 8px;
+        @include not-small-breakpoint {
+            .editForm & {
+                margin-top: 4px;
+            }
         }
     }
 
     .cellWrapper {
-        order: 1;
+        order: 1; // checkbox inpul is to the left of the label
+    }
+
+    // reduce the size of the div containing the checkbox
+    .fieldValueEditor {
+        max-width: 24px;
     }
 }
