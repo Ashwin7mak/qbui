@@ -460,6 +460,7 @@
             perfLog.init("Build GroupList using core group result");
 
             let groupBy = {};
+            let records = [];
 
             if (report && report.type === constants.RECORD_TYPE.GROUP) {
                 let fieldsMap = new Map();
@@ -476,7 +477,6 @@
                 //  NOTE: no re-ordering of the data is necessary as the server should be
                 //  returning the records in the proper order, which is based on the
                 //  grouping and sorting requirements of the request.
-                let records = [];
                 if (report.groups) {
                     report.groups.forEach((group) => {
                         let groupRecords = group.records;
@@ -489,10 +489,16 @@
                     });
                 }
 
+                //  group the records for rendering in the client
                 groupBy = this.group(req, fields, records);
             } else {
                 log.warn("Attempting to group a result set that is not of type GROUP.  No grouping information returned");
                 groupBy = this.group();   // returns empty groupBy object
+            }
+
+            // if for some reason there is no grouping, return the records
+            if (!groupBy.hasGrouping) {
+                groupBy.records = records;
             }
 
             //  log performance data
@@ -581,10 +587,10 @@
                                 } else {
                                     //  Once we find a sortList entry defined without grouping, any subsequent grouping fid
                                     //  found in the groupList parameter is ignored as far as grouping is concerned.  For example:
-                                    //      7.8:V.9:V      ==>  no grouping as 1st element is a sort only fid
-                                    //      7:V.8:V        ==>  group by fid 7, then fid 8
-                                    //      7:V.8.9.10:V   ==>  group by fid 7 only as 2nd element is a sort only fid
-                                    //      7:V.8:V.9.10:V ==>  group by fid 7, fid 8 only as 3rd element is a sort only fid
+                                    //      7.8:EQUALS.9:EQUALS             ==>  no grouping as 1st element is a sort only fid
+                                    //      7:EQUALS.8:EQUALS               ==>  group by fid 7, then fid 8
+                                    //      7:EQUALS.8.9.10:EQUALS          ==>  group by fid 7 only as 2nd element is a sort only fid
+                                    //      7:EQUALS.8:EQUALS.9.10:EQUALS   ==>  group by fid 7, fid 8 only as 3rd element is a sort only fid
                                     //
                                     //  NOTE: The builder on the new stack UI should restrict the possibility of this
                                     //  behavior, but we could run into this scenario when migrating old stack data.
@@ -620,6 +626,8 @@
                             groupBy.totalRows = records.length;
                         }
                     }
+                } else {
+                    log.warn("Attempting to group records when no grouping requirements defined on the request.  Req.url=" + req.url);
                 }
             }
 

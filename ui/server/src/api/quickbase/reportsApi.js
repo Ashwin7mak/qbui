@@ -318,7 +318,14 @@
                                     responseObject[FIELDS] = getFieldsOnReport(report.groups[0].records, fields);
 
                                     //  Organize the grouping data for the client
-                                    responseObject[GROUPS] = groupFormatter.groupData(req, responseObject[FIELDS], report);
+                                    let groupBy = groupFormatter.groupData(req, responseObject[FIELDS], report);
+
+                                    //  If for some reason there is no grouping returned, will return the records
+                                    if (groupBy.hasGrouping) {
+                                        responseObject[GROUPS] = groupBy;
+                                    } else {
+                                        responseObject[RECORDS] = groupBy.records;
+                                    }
                                 } else {
                                     //  the fetchFields response includes all fields on the table. Want to populate the
                                     //  response object fields entry to only include those fields on the report
