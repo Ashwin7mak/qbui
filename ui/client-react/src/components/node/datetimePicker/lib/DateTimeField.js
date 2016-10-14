@@ -112,6 +112,7 @@ var DateTimeField = (function (_Component) {
      *  CUSTOMIZED...add onBlur event handling
      *
      *  Handle various MomentJS quickbase shortcut keys for dates.
+     *
      *  NOTE: NOT locale saavy
      *
      * @param event
@@ -147,7 +148,9 @@ var DateTimeField = (function (_Component) {
             //
             //  Month/Day/Year formats
             //
-            var monthDayYrFormats = ['MMM D YYYY', 'MMMM D YYYY', 'MMM-D-YYYY', 'M-D-YYYY', 'M D YYYY', 'M/D/YYYY'];
+            var monthDayYrFormats = [
+              'MMM D YYYY', 'MMMM D YYYY', 'MMM D, YYYY', 'MMMM D, YYYY', 'MMM-D-YYYY', 'M-D-YYYY', 'M D YYYY', 'M/D/YYYY',
+              'MMM D YY', 'MMMM D YY', 'MMM D, YY', 'MMMM D, YY', 'MMM-D-YY', 'M-D-YY', 'M D YY', 'M/D/YY'];
             if ((0, _moment2["default"])(dateTemplate, monthDayYrFormats, true).isValid()) {
               value = (0, _moment2["default"])(dateTemplate, monthDayYrFormats, true).format(_this.state.inputFormat);
             }
@@ -172,6 +175,14 @@ var DateTimeField = (function (_Component) {
      */
     this.onChange = function (event) {
       var value = event.target == null ? event : event.target.value;
+
+      //  Quickbase shortcut for dates; set the value to today's date.  This conditional
+      //  gets triggered only when the date is highlighted/selected (ie: ctrl-a) and the user
+      //  types in the letter 't'.  Other scenarios for handling the 't' shortcut is
+      //  handled in the onKeyPress event.
+      if (value === 't') {
+        value = (0, _moment2["default"])().format(_this.state.inputFormat);
+      }
 
       if ((0, _moment2["default"])(value, _this.state.inputFormat, true).isValid()) {
         _this.setState({
