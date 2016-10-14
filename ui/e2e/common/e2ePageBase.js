@@ -59,6 +59,19 @@
             });
         };
 
+        /**
+         * Helper method that will scroll element into view on the page if it's not visible
+         * @param Element locator for the element you want to scroll to
+         * @returns A Promise
+         */
+        this.scrollElementIntoView = function(elementLocator) {
+            return elementLocator.isDisplayed().then(function(result) {
+                if (!result) {
+                    return browser.executeScript("arguments[0].scrollIntoView();", elementLocator.getWebElement());
+                }
+            });
+        };
+
         /*
          * Wrapper functions for Protractor's ExpectedConditions feature which allows you to wait for non-Angular elements
          */

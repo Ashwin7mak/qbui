@@ -244,7 +244,7 @@
          * Given a list of action rows in agGrid, find and click the save button for the record being edited
          * @param recordRowElements
          */
-        this.clickSaveButtonForEditMenu = function(recordRowElements) {
+        this.clickEditMenuSaveButton = function(recordRowElements) {
             return recordRowElements.filter(function(elem) {
                 // Return only the row with 'editing' in the class
                 return elem.getAttribute('class').then(function(elmClass) {

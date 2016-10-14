@@ -206,7 +206,6 @@
          */
         this.openRecordEditMenu = function(recordRowIndex) {
             this.waitForReportContent();
-            //TODO: Doesn't work for Safari and Firefox, need to find workaround
             if (browserName === 'chrome') {
                 var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
                 browser.actions().doubleClick(rowElement).perform();
@@ -227,7 +226,6 @@
         /**
          * Function returns the input cells for the record being edited in agGrid
          */
-        //TODO: Extend for editing multiple records at a time
         this.getRecordRowInputCells = function() {
             return this.agGridRecordElList.filter(function(elem) {
                 // Return only the row with 'editing' in the class
@@ -237,6 +235,70 @@
             }).then(function(rowElem) {
                 expect(rowElem.length).toBe(1);
                 return rowElem[0].all(by.tagName('input'));
+            });
+        };
+
+        /**
+         * Function returns the date input cells for the record being edited in agGrid
+         * @returns An array of element locators
+         */
+        this.getTextFieldInputCells = function() {
+            return this.agGridRecordElList.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].all(by.css('.input.textField'));
+            });
+        };
+
+        this.editTextField = function(textFieldIndex, textToEnter) {
+            return this.getTextFieldInputCells().then(function(textInputCells) {
+                var textFieldInput = textInputCells[textFieldIndex];
+                e2ePageBase.scrollElementIntoView(textFieldInput);
+                textFieldInput.clear();
+                textFieldInput.sendKeys(textToEnter);
+            });
+        };
+
+        this.editDateField = function(dateFieldIndex, dateToEnter) {
+            var self = this;
+            return self.getDateFieldInputCells().then(function(inputCells) {
+                var dateFieldCell = inputCells[dateFieldIndex];
+                e2ePageBase.scrollElementIntoView(dateFieldCell);
+                self.getDateFieldInputBoxEl(dateFieldCell).clear();
+                self.getDateFieldInputBoxEl(dateFieldCell).sendKeys(dateToEnter);
+            });
+        };
+
+        this.openDateFieldCalWidget = function(dateFieldIndex) {
+            var self = this;
+            return self.getDateFieldInputCells().then(function(inputCells) {
+                var dateFieldCell = inputCells[dateFieldIndex];
+                // Open the calendar widget
+                e2ePageBase.scrollElementIntoView(dateFieldCell);
+                //TODO: Safari is having an issue opening this widget (it works manually of course)
+                self.getDateFieldCalendarIconEl(dateFieldCell).click();
+                return dateFieldCell;
+            });
+        };
+
+        /**
+         * Function returns the date input cells for the record being edited in agGrid
+         * @returns An array of element locators
+         */
+        //TODO: Extend for editing multiple records at a time
+        this.getNumericFieldInputCells = function() {
+            return this.agGridRecordElList.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].all(by.css('.input.numericField.cellEdit'));
             });
         };
 
@@ -261,6 +323,7 @@
             return dateFieldInputCellEl.all(by.tagName('input')).first();
         };
 
+        //TODO: Move to Calendar Widget PO
         this.getDateFieldCalendarIconEl = function(dateFieldInputCellEl) {
             return dateFieldInputCellEl.element(by.css('.glyphicon.glyphicon-calendar'));
         };
@@ -276,23 +339,6 @@
         this.getDateRowForSelectedDate = function(selectedDateEl) {
             return selectedDateEl.element(by.xpath('..'));
         };
-
-        /**
-         * Function returns the date-time input cells for the record being edited in agGrid
-         * @returns An array of element locators
-         */
-        this.getDateTimeFieldInputCells = function() {
-            return this.agGridRecordElList.filter(function(elem) {
-                // Return only the row with 'editing' in the class
-                return elem.getAttribute('class').then(function(elmClass) {
-                    return elmClass.indexOf('editing') !== -1;
-                });
-            }).then(function(rowElem) {
-                expect(rowElem.length).toBe(1);
-                return rowElem[0].all(by.css('.cellEdit.timeCell.dateTimeField'));
-            });
-        };
-
 
         this.advanceCurrentlySelectedDate = function(dateFieldInputCellEl) {
             var self = this;
@@ -317,23 +363,103 @@
             });
         };
 
-
         /**
-         * Given a list of action rows in agGrid, find and click the save button for the record being edited
+         * Function returns the date-time input cells for the record being edited in agGrid
+         * @returns An array of element locators
          */
-        //TODO: Extend for editing multiple records at a time
-        this.clickSaveButtonForEditMenu = function() {
-            return this.agGridRowActionsElList.filter(function(elem) {
+        this.getTimeOfDayFieldInputCells = function() {
+            return this.agGridRecordElList.filter(function(elem) {
                 // Return only the row with 'editing' in the class
                 return elem.getAttribute('class').then(function(elmClass) {
                     return elmClass.indexOf('editing') !== -1;
                 });
             }).then(function(rowElem) {
                 expect(rowElem.length).toBe(1);
-                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(1).click();
+                return rowElem[0].all(by.css('.cellEdit.timeCell'));
             });
         };
 
+        //TODO: Functions to get Input and Time Widget Icon for TOD field
+
+        /**
+         * Function returns the date-time input cells for the record being edited in agGrid
+         * @returns An array of element locators
+         */
+        this.getDateTimeFieldInputCells = function() {
+            return this.agGridRecordElList.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].all(by.css('.cellEdit.timeCell.dateTimeField'));
+            });
+        };
+
+        //TODO: Functions to get the inputs and widgets for Date Time fields
+
+        /**
+         * Function returns the date-time input cells for the record being edited in agGrid
+         * @returns An array of element locators
+         */
+        this.getCheckboxFieldInputCells = function() {
+            return this.agGridRecordElList.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].all(by.css('input[type="checkbox"]'));
+            });
+        };
+
+        //TODO: Function to select checkbox input field
+
+        //TODO: getUserFieldInputCells()
+
+        /**
+         * Find and click the save button for the record being edited
+         */
+        this.clickEditMenuSaveButton = function() {
+            var self = this;
+            return self.agGridRowActionsElList.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(1).click().then(function() {
+                    // Check that the edit notification is displayed
+                    self.waitForElement(self.editSuccessPopup);
+                    // Check that the edit menu is no longer displayed
+                    self.waitForElementToBeInvisible(self.agGridEditRecordMenu);
+                    // Wait for the report to update
+                    self.waitForReportContent();
+                });
+            });
+        };
+
+        /**
+         * Find and click the cancel button for the record being edited
+         */
+        this.clickEditMenuCancelButton = function() {
+            var self = this;
+            return self.agGridRowActionsElList.filter(function(elem) {
+                // Return only the row with 'editing' in the class
+                return elem.getAttribute('class').then(function(elmClass) {
+                    return elmClass.indexOf('editing') !== -1;
+                });
+            }).then(function(rowElem) {
+                expect(rowElem.length).toBe(1);
+                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(0).click().then(function() {
+                    // Wait for the report to be ready
+                    self.waitForReportContent();
+                });
+            });
+        };
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
          * @returns A promise that will resolve after waiting for the report records to be displayed
