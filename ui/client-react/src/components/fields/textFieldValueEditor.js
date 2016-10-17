@@ -113,12 +113,11 @@ const TextFieldValueEditor = React.createClass({
         return (
             <span className="inputDeleteIcon">
                 {inputBox}
-                <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
-                    {/* Need to wrap QBicon in a div for tooltip to show */}
-                    <div className="clearIcon">
+                <div className="clearIcon">
+                    <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
                         <QBicon onClick={this.clearInput} icon="clear-mini" />
-                    </div>
-                </QBToolTip>
+                    </QBToolTip>
+                </div>
             </span>
         );
     },

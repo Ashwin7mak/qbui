@@ -6,6 +6,11 @@
         color: $link-text-normal-color;
     }
 
+    /* Align url icons with flex instead of absolute positioning */
+    a {
+        display: flex;
+    }
+
     &:hover:not(.disabled), a:hover {
         text-decoration: underline;
 
@@ -21,11 +26,6 @@
         outline: none;
     }
 
-    a .link, a .urlIcon {
-        /* Set a padding so the element doesn't move when focused (with border) */
-        padding: 2px 4px;
-    }
-
     a .link:focus,
     a .link:active,
     a .urlIcon:focus,
@@ -37,6 +37,9 @@
     }
 
     .btn {
+        /* Turn off flex positioning for buttons */
+        display: inline-block;
+
         .link, .urlIcon {
             & {
                 padding: 0;
@@ -86,8 +89,7 @@
 
         @include small-breakpoint {
             opacity: 1;
-            position: absolute;
-            right: 2px;
+            margin-left: auto;
         }
 
         .qbIcon {
