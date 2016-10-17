@@ -72,6 +72,12 @@ const FieldElement = React.createClass({
 
         let indicateRequiredOnField = !this.props.indicateRequiredOnLabel;
 
+        // Is the form element has showAsRadio prop - pass it down as a part of fieldDef
+        let relatedField = this.props.relatedField;
+        if (this.props.element.showAsRadio) {
+            relatedField.showAsRadio = true;
+        }
+
         //if the field prop has a width defined this affected the element's layout so add the class to indicate
         // TODO: this needs to be fixed on core to NOT send 50 for defaults. Defaults should be only set on client side.
         // So for now if an element doesnt have the default width respect it otherwise not.
@@ -86,7 +92,7 @@ const FieldElement = React.createClass({
                                              value={fieldRawValue}
                                              display={fieldDisplayValue}
                                              attributes={fieldDatatypeAttributes}
-                                             fieldDef = {this.props.relatedField}
+                                             fieldDef = {relatedField}
                                              indicateRequired={indicateRequiredOnField}
                                              onChange={this.onChange}
                                              onBlur={this.onBlur}
