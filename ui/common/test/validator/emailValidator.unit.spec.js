@@ -41,7 +41,7 @@ describe('emailValidator', () => {
 
         testCases.forEach((testCase) => {
             it(testCase.name, () => {
-                var result = emailValidator.validate(testCase.email, testCase.validationType);
+                var result = emailValidator.isValid(testCase.email, testCase.validationType);
                 assert.equal(result, testCase.expectation, 'Validator did not return the correct result: ' + result + ' (actual) is not ' + testCase.expectation);
             });
         });
@@ -49,12 +49,12 @@ describe('emailValidator', () => {
 
     describe('isInvalid', () => {
         it('is a helper method to match the React property isInvalid (returns opposite result of validate)', () => {
-            sinon.spy(emailValidator, 'validate');
+            sinon.spy(emailValidator, 'isValid');
 
             var result = emailValidator.isInvalid('test@quickbase.com');
 
             assert.equal(result, false);
-            assert(emailValidator.validate.calledOnce);
+            assert(emailValidator.isValid.calledOnce);
         });
     });
 });

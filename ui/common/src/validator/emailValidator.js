@@ -15,7 +15,7 @@
          * @param [validation_option=VALIDATE_FULL_ADDRESS] - The type of validation required (whole email, mailbox only, or domain only)
          * @returns {boolean}
          */
-        validate: function(email, validation_option) {
+        isValid: function(email, validation_option) {
             // Don't validate empty strings
             if (!email) {
                 return true;
@@ -38,7 +38,7 @@
         },
         // Helper method for React property isInvalid on many components. Returns opposite value of validate
         isInvalid: function(email, validation_option) {
-            return !this.validate(email, validation_option);
+            return !this.isValid(email, validation_option);
         }
     };
 }());
