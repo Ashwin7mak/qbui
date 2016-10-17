@@ -95,6 +95,11 @@ module.exports = function(grunt) {
             commonDir   : 'common',
             distPublic: 'dist/public'
         },
+        bldinfo : {
+            JOB_NAME : (process.env.JOB_NAME ? (process.env.JOB_NAME + '.') : ''),
+            GIT_BRANCH : (process.env.GIT_BRANCH ? (process.env.GIT_BRANCH + '.') : ''),
+            BUILD_NUMBER : (process.env.BUILD_NUMBER ? (process.env.BUILD_NUMBER + '.') : ''),
+        },
         vendorDir : 'vendor',
         express  : {
             root   : 'server',
@@ -618,9 +623,9 @@ module.exports = function(grunt) {
                     'git rev-parse --verify HEAD --short >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
                     //'git status --porcelain -b -s  >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
                     'echo <%= grunt.template.today("dddd, mmmm dS, yyyy, h:MM:ss TT") %>  >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
-                    ' [[ "$JOB_NAME" ]] && echo "JOB_NAME:$JOB_NAME" ||: >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
-                    ' [[ "$GIT_BRANCH" ]] && echo "GIT_BRANCH:$GIT_BRANCH"  ||: >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
-                    ' [[ "$BUILD_NUMBER" ]] && echo "BUILD_NUMBER:$BUILD_NUMBER"  ||: >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
+                    ' [[ "<%= bldinfo.JOB_NAME %>" ]] && echo "JOB_NAME:<%= bldinfo.JOB_NAME %>" ||: >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
+                    ' [[ "<%= bldinfo.GIT_BRANCH %>" ]] && echo "GIT_BRANCH:<%= bldinfo.GIT_BRANCH %>"  ||: >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
+                    ' [[ "<%= bldinfo.BUILD_NUMBER %>" ]] && echo "BUILD_NUMBER:<%= bldinfo.BUILD_NUMBER %>"  ||: >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
                     ' cat <%= quickbase.client.gen %>/buildBranchInfo.txt'
                 ].join('&&')
             },
