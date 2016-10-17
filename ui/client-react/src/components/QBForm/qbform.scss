@@ -53,6 +53,10 @@ $edit-field-padding: 5px;
             display: flex;
             flex-direction: column;
             margin-right:15px;
+
+            .clearIcon {
+                right: 4px;
+            }
         }
 
         /* separate field label td left of field */
