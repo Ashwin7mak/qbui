@@ -15,10 +15,6 @@ $urlIcon-margin-left: 10px;
 
     &:hover:not(.disabled), a:hover {
         text-decoration: underline;
-
-        .urlIcon {
-            opacity: 1;
-        }
     }
 
     a:focus, a:active {
@@ -120,4 +116,14 @@ $urlIcon-margin-left: 10px;
             top: 2px;
         }
     }
+}
+
+// Always show the URL icon on Forms
+.formElement .urlField .urlIcon {
+    opacity: 1;
+}
+
+// Never show the URL icon on Reports
+.cellData .urlField .urlIcon {
+    opacity: 0;
 }
