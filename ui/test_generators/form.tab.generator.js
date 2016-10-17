@@ -23,5 +23,15 @@
             tabs[singleTab] = builderInstance.build();
             return tabs;
         },
+        generateDefaultSingleTabWithAddAndEdit: function(table) {
+            var builderInstance = formTabBuilder.builder();
+            builderInstance.withOrderIndex(singleTab);
+            builderInstance.withTitle(rawValueGenearator.generateStringWithFixLength(22));
+            var section = formSectionGenearator.generateDefaultSingleSectionWithAddAndEdit(table);
+            builderInstance.withSection(section);
+
+            tabs[singleTab] = builderInstance.build();
+            return tabs;
+        },
     };
 }());

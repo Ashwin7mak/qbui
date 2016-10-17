@@ -9,7 +9,8 @@ const FieldLabelElement = React.createClass({
     propTypes: {
         element: React.PropTypes.object, // FormFieldElement from form API
         relatedField: React.PropTypes.object, // field from Form data
-        indicateRequiredOnLabel: React.PropTypes.bool
+        indicateRequiredOnLabel: React.PropTypes.bool,
+        isInvalid: React.PropTypes.bool
     },
 
     getDefaultProps() {
@@ -29,10 +30,13 @@ const FieldLabelElement = React.createClass({
         if (this.props.element.useAlternateLabel) {
             fieldLabel += this.props.element.displayText;
         } else {
-            fieldLabel += this.props.relatedField ? this.props.relatedField.name : "";
+            fieldLabel += this.props.relatedField ? this.props.relatedField.name : '';
         }
 
-        return <div className="formElement fieldLabel">{fieldLabel}</div>;
+        let classes = 'formElement fieldLabel';
+        classes += this.props.isInvalid ? ' errorText' : '';
+
+        return <div className={classes}>{fieldLabel}</div>;
     }
 });
 

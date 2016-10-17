@@ -111,12 +111,19 @@ describe('CheckBoxFieldValueEditor', () => {
         expect(component.state.value).toBe(false);
     });
 
-    it('displays an asterisk if the checkbox is required', () => {
-        component = TestUtils.renderIntoDocument(<CheckBoxFieldValueEditor required={true} />);
+    it('displays an asterisk if the checkbox is required and there is a label', () => {
+        component = TestUtils.renderIntoDocument(<CheckBoxFieldValueEditor required={true} label="show it"/>);
 
         let asterisk = findElements('.required-symbol');
         expect(asterisk.length).toBe(1);
         expect(asterisk[0].textContent).toBe(requiredSymbol);
+    });
+
+    it('does not display an asterisk if the checkbox is required and there is no label', () => {
+        component = TestUtils.renderIntoDocument(<CheckBoxFieldValueEditor required={true}/>);
+
+        let asterisk = findElements('.required-symbol');
+        expect(asterisk.length).toBe(0);
     });
 
     it('asterisk is hidden when a checkbox is not required', () => {
