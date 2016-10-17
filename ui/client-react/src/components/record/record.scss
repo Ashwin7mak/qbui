@@ -13,9 +13,9 @@
 
     .recordStageHeadline {
 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
 
 
     }
@@ -31,27 +31,27 @@
         }
     }
     .qbFormContainer {
-        flex: 1 1 auto;
-        position: relative;
-        overflow: auto;
+        flex:1 1 auto;
+        position:relative;
+        overflow:auto;
 
     }
     .formContainer {
         overflow: auto;
-        position: absolute;
-        width: 100%;
+        position:absolute;
+        width:100%;
     }
 }
 
 
 @include small-breakpoint {
     .secondaryBar .iconActions.pageActions .iconActionButton.addRecord {
-        display: none; /* hide on small, use a floating add button */
+        display:none; /* hide on small, use a floating add button */
     }
 }
 
 .next-enter {
-    left: 100%;
+    left:100%;
 }
 
 .next-enter.next-enter-active {
@@ -61,17 +61,17 @@
 
 .next-leave {
     left: 0;
-    opacity: 1;
+    opacity:1;
 }
 
 .next-leave.next-leave-active {
     left: -100%;
-    opacity: .1;
+    opacity:.1;
     transition: all 200ms linear;
 }
 
 .previous-enter {
-    left: -100%;
+    left:-100%;
 }
 
 .previous-enter.previous-enter-active {

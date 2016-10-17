@@ -9,17 +9,17 @@ $select-control-height: 28px;
     width: 100%;
 
     .Select-control {
-        height: $select-control-height;
+        height:$select-control-height;
 
         .Select-input {
-            height: $select-control-height;
-            padding-left: 2px;
-            padding-top: 0;
-            padding-bottom: 0;
+            height:$select-control-height;
+            padding-left:2px;
+            padding-top:0;
+            padding-bottom:0;
         }
         .Select-value {
             padding-right: 40px;
-            padding-left: 3px;
+            padding-left:3px;
             line-height: $select-control-height;
         }
         .Select-placeholder {
@@ -32,12 +32,12 @@ $select-control-height: 28px;
     .Select-menu-outer {
         max-height: 340px; // shouldn't be taller than bottom margin on grid or it will clip
         min-width: 100%;
-        width: auto;
+        width:auto;
 
         .Select-menu {
             max-height: 338px;
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow-y:auto;
+            overflow-x:hidden;
 
             .Select-option {
                 position: relative;

@@ -1,6 +1,6 @@
 @import '../../assets/css/qbVariables';
 
-$icon-action-icon-color: #fff;
+$icon-action-icon-color:#fff;
 $page-actions-background-color: #486c8f;
 
 @include not-small-breakpoint {
@@ -34,8 +34,8 @@ $page-actions-background-color: #486c8f;
             }
         }
         &.pageActions .addRecord {
-            border-radius: 20px;
-            -webkit-border-radius: 20px;
+            border-radius:20px;
+            -webkit-border-radius:20px;
             background-color: $color-green-600;
             color: $color2;
             margin-right: 30px;
@@ -48,10 +48,10 @@ $page-actions-background-color: #486c8f;
         display: flex;
         flex-direction: row;
         flex: 0 0 auto;
-        justify-content: space-between;
-        height: 40px;
+        justify-content:space-between;
+        height:40px;
         background-color: $secondary-bar-bg;
-        width: 100%;
+        width:100%;
         .iconActions {
             flex: 0 0 auto;
             line-height: 40px;
@@ -59,11 +59,11 @@ $page-actions-background-color: #486c8f;
 
 
             .iconActionButton {
-                border: 0;
-                border-radius: 0;
+                border:0;
+                border-radius:0;
                 padding: 0;
-                padding-right: 6px;
-                padding-left: 6px;
+                padding-right:6px;
+                padding-left:6px;
                 display: inline-block;
                 vertical-align: middle;
                 text-align: center;

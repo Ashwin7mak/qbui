@@ -7,10 +7,10 @@
     /* the button that switches between views */
     .picker-switch {
         color: $datepicker-select-button-fg;
-        background-color: $datepicker-bg;
-        border-radius: 0;
+        background-color:$datepicker-bg;
+        border-radius:0;
         &:hover {
-            background-color: $datepicker-date-hover-bg;
+            background-color:$datepicker-date-hover-bg;
         }
     }
 
@@ -24,8 +24,8 @@
 
     /* the table cells (day, year etc)   */
     button, .month, .day, .year, .minute, .timepicker-minute, .timepicker-hour {
-        border: 0;
-        border-radius: 0;
+        border:0;
+        border-radius:0;
         &:hover {
             background-color: $datepicker-date-hover-bg;
         }
@@ -35,7 +35,7 @@
     }
     .btn-primary, .active  {
         background-color: $datepicker-select-active;
-        font-weight: bold;
+        font-weight:bold;
     }
 
     //  show a circle for today's date
@@ -63,13 +63,13 @@
     .table-condensed {
 
         td,th {
-            border-radius: 0;
+            border-radius:0;
             padding: 4px;
         }
 
         /* the title bar with prev/next/date etc */
         thead {
-            font-size: 14px;
+            font-size:14px;
             background-color: $datepicker-bg;
             tr:first-child {
                 th.switch,th.prev,th.next {
@@ -111,10 +111,10 @@
 
         tbody tr {
             background-color: $datepicker-bg;
-            line-height: 20px;
+            line-height:20px;
             th {
-                border: 0;
-                padding: 5px;
+                border:0;
+                padding:5px;
             }
         }
     }
@@ -139,7 +139,7 @@
             color: $datepicker-select-button-fg;
         }
         th.next {
-            padding-bottom: 0;
+            padding-bottom:0;
         }
         th.prev {
             /* flip the next icon around */
@@ -150,12 +150,12 @@
 
 /* hide datepicker if it's been opened but we're not over that cell */
 .dateCell.cellEdit:not(:hover) .bootstrap-datetimepicker-widget {
-    display: none !important;
+    display:none !important;
 }
 
 //  edit styles for a time cell
 .timeCell.cellEdit {
-    display: inline-block;
+    display:inline-block;
     margin-bottom: 3px;
     width: 100%;
     .Select {
@@ -211,7 +211,7 @@
 
 //  edit mode styles for a date cell
 .dateCell.cellEdit {
-    display: inline-block;
+    display:inline-block;
     margin-bottom: 3px;
     vertical-align: middle;
     width: 100%;

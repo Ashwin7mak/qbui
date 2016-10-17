@@ -2,23 +2,22 @@
 
 $trowser-fg: #000;
 $trowser-icons-color: #fff;
-$trowser-header-bg: #486c8f;
+$trowser-header-bg:#486c8f;
 $trowser-footer-bg: #193048;
 $action-separator-color: #486c8f;
 
 .trowser  {
-    position: absolute;
-    z-index: 9999;
-    left: 0;
-    right: 0;
-    height: 100%;
+    position:absolute;
+    z-index:9999;
+    left:0;right:0;
+    height:100%;
     color: $trowser-fg;
-    max-height: 100%;
-    overflow: hidden;
+    max-height:100%;
+    overflow:hidden;
     transition: .5s;
     transition-timing-function: ease-in-out;
     transform: translateY(-100%);
-    padding: 0;
+    padding:0;
 
     &.visible {
         transform: translateY(0);
@@ -29,31 +28,31 @@ $action-separator-color: #486c8f;
     }
 
     .trowserHeader {
-        flex: 0 0 auto;
-        flex-basis: 40px;
+        flex:0 0 auto;
+        flex-basis:40px;
         color: #fff;
         background-color: $trowser-header-bg;
-        display: flex;
-        align-items: center;
+        display:flex;
+        align-items:center;
         .qbIcon {
-            font-size: 15px;
+            font-size:15px;
             vertical-align: baseline;
             margin-left: 10px;
             margin-right: 10px;
         }
         .breadcrumbs {
-            flex: 1 1 auto;
-            overflow: hidden;
-            white-space: nowrap;
+            flex:1 1 auto;
+            overflow:hidden;
+            white-space:nowrap;
             h4 {
-                overflow: hidden;
-                text-overflow: ellipsis;
+                overflow:hidden;
+                text-overflow:ellipsis;
             }
         }
         .rightIcons {
             flex: 0 0 auto;
             button {
-                height: 40px;
+                height:40px;
                 font-size: 18px;
                 color: #fff;
                 background-color: $trowser-header-bg;
@@ -67,26 +66,26 @@ $action-separator-color: #486c8f;
         }
     }
     .trowserChildren {
-        display: flex;
-        flex-direction: column;
+        display:flex;
+        flex-direction:column;
         flex: 1 1 auto;
-        overflow: auto;
+        overflow:auto;
     }
     .trowserFooter {
         color: #fff;
-        flex: 0 0 auto;
-        flex-basis: 54px;
-        display: flex;
+        flex:0 0 auto;
+        flex-basis:54px;
+        display:flex;
         flex-direction: row;
         background-color: $trowser-footer-bg;
         .leftActions {
-            flex: 0 0 auto;
+            flex:0 0 auto;
         }
         .centerActions {
-            display: flex;
-            flex: 1 1 auto;
-            justify-content: center;
-            align-items: center;
+            display:flex;
+            flex:1 1 auto;
+            justify-content:center;
+            align-items:center;
             a {
                 display: flex;
                 height: 23px;
@@ -94,7 +93,7 @@ $action-separator-color: #486c8f;
                 padding: 0 30px;
                 color: #fff;
                 border-left: 1px solid $action-separator-color;
-                text-decoration: none;
+                text-decoration:none;
                 align-items: center;
                 .qbIcon {
                     font-size: 16px;
@@ -106,50 +105,50 @@ $action-separator-color: #486c8f;
             }
         }
         .rightIcons {
-            flex: 0 0 auto;
-            align-self: center;
+            flex:0 0 auto;
+            align-self:center;
             button {
                 margin: 4px 10px 4px 4px;
             }
         }
     }
     .trowserContent {
-        display: flex;
+        display:flex;
         flex-direction: column;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        background-color: #F2F9FE;
-        opacity: 1;
-        max-width: 1440px;
+        position:absolute;
+        left:0;
+        right:0;
+        top:0;
+        bottom:0;
+        margin:auto;
+        background-color:#F2F9FE;
+        opacity:1;
+        max-width:1440px;
 
     }
     .trowserBackground {
-        position: absolute;
-        top: 0;
-        width: 100%;
-        bottom: 0;
-        opacity: .4;
+        position:absolute;
+        top:0;
+        width:100%;
+        bottom:0;
+        opacity:.4;
         background: black;
     }
 }
 
 .trowser.top {
-    top: 0;
+    top:0;
 }
 
 .trowser.bottom {
-    bottom: 0;
+    bottom:0;
 }
 
 /* 2 rows on small breakpoint */
 @include small-breakpoint {
     .trowser .trowserFooter {
-        flex-direction: column;
-        flex-basis: 80px;
+        flex-direction:column;
+        flex-basis:80px;
 
         .centerActions {
             a {
@@ -158,18 +157,18 @@ $action-separator-color: #486c8f;
                 justify-content: center;
             }
             a:first-child {
-                border-left: 0;
+                border-left:0;
             }
             a:last-child {
-                border-right: 0;
+                border-right:0;
             }
         }
         .rightIcons {
-            text-align: center;
-            width: 100%;
+            text-align:center;
+            width:100%;
             button {
                 width: 90%;
-                margin-bottom: 10px;
+                margin-bottom:10px;
             }
         }
     }

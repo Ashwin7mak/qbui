@@ -56,7 +56,7 @@ $top-nav-color: #193048;
     .link {
         cursor: pointer;
         > a {
-            display: inline-block;
+            display:inline-block;
             color: $topnav-icon-color;
             padding: 0 8px;
 
@@ -100,20 +100,20 @@ $top-nav-color: #193048;
 }
 
 .topNav .topTitle {
-    display: none;
+    display:none;
 }
 
 @include small-breakpoint {
     .navShell .main .topNav.hideSmall {
-        display: none;
+        display:none;
     }
     .topNav .globalActions {
         display: none; /* shown on left nav */
     }
     .topNav .topTitle {
-        display: inline-block;
+        display:inline-block;
         .qbIcon {
-            vertical-align: middle;
+            vertical-align:middle;
             color: $top-nav-title-icon-color;
         }
         .qbIcon+span {
@@ -121,16 +121,16 @@ $top-nav-color: #193048;
         }
     }
     .topNav .top .navGroup.left {
-        display: flex;
-        flex-direction: row;
+        display:flex;
+        flex-direction:row;
         .navItem {
             flex: 0 0 auto;
         }
         .topTitle {
-            display: flex;
+            display:flex;
             flex: 1 1 auto;
-            justify-content: center;
-            align-items: center;
+            justify-content:center;
+            align-items:center;
         }
     }
 }

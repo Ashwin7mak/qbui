@@ -35,7 +35,7 @@
         .qbPanelHeaderTitle {
             position: relative;
 
-            margin: 0;
+            margin:0;
             .qbPanelHeaderTitleText {
                 margin-right: 30px;
                 word-wrap: break-word;
@@ -60,7 +60,7 @@
         flex-wrap: wrap;
         flex-direction: column;
         background-color: $panel-background-color;
-        overflow: auto;
+        overflow:auto;
         .qbPanelHeaderIcon {
             color: $panel-header-icon-color;
         }
@@ -81,7 +81,7 @@
      * panel, panel-default, panel-body
     */
     .panel {
-        border: 0;
+        border:0;
         border-top-width: 0;
         border-radius: 0;
         margin-bottom: 5px;

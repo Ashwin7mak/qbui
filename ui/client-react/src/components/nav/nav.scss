@@ -59,11 +59,11 @@ body.touch {
     -webkit-transition: transform ease 250ms;
 
     .main {
-        position: relative;
+        position:relative;
         display: flex;
         flex-direction: column;
         flex: 1 1 auto;
-        min-width: 0px; //wtf?
+        min-width:0px; //wtf?
         .topNav {
             min-width: 200px;
             flex: 0 0 auto;
@@ -87,8 +87,8 @@ body.touch {
             @include small-breakpoint {
                 .navGroup.left {
                     flex: 1 1 auto;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
+                    overflow:hidden;
+                    text-overflow:ellipsis;
                 }
             }
             .navGroup.center {
@@ -109,14 +109,14 @@ body.touch {
             .btn-group {
                 height: 40px;
                 button {
-                    width: 40px;
+                    width:40px;
                     color: $topnav-icon-color;
                     border-radius: 0;
-                    padding: 0;
+                    padding:0;
                     height: $top-nav-height;
-                    text-align: center;
+                    text-align:center;
                     &.dropdownToggle {
-                        width: 20px;
+                        width:20px;
                     }
                 }
                 button:hover .hi {
@@ -165,7 +165,7 @@ body:not(.touch) .navShell .main .topNav .iconLink:hover {
 
 @include small-breakpoint {
     .layout-stage {
-        display: none;
+        display:none;
     }
 
 }

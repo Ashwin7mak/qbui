@@ -107,8 +107,8 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
 }
 
 .userDisplayValue {
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .cellData.NoWrap {
@@ -117,6 +117,6 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
 
 /* allow wide tooltips */
 .tooltip-inner {
-  max-width: none;
+  max-width:none;
 }
 
