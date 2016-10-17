@@ -1,11 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './fields.scss';
-<<<<<<< HEAD
 import QBToolTip from '../qbToolTip/qbToolTip';
 import QBicon from '../qbIcon/qbIcon';
-=======
->>>>>>> master
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
 import FieldUtils from '../../utils/fieldUtils';
 
@@ -100,27 +96,31 @@ const TextFieldValueEditor = React.createClass({
     },
 
     renderInputBox(classes) {
-        let inputBox = <input ref="textInput"
-                              className={classes}
-                              value={this.getValue()}
-                              type={this.props.inputType}
-                              key={'inp' + this.props.idKey}
-                              placeholder={this.props.placeholder}
-                              onChange={this.onChange}
-                              onBlur={this.onBlur} />;
+        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
 
-        if (this.props.isInvalid) {
-            return (
-                <QBToolTip location="top"
-                           tipId="invalidInput"
-                           delayHide={3000}
-                           plainMessage={this.props.invalidMessage} >
-                    {inputBox}
+        return <input ref="textInput"
+                      className={classes}
+                      value={this.getValue()}
+                      maxLength={maxLength}
+                      type={this.props.inputType}
+                      key={'inp' + this.props.idKey}
+                      placeholder={this.props.placeholder}
+                      onChange={this.onChange}
+                      onBlur={this.onBlur} />;
+    },
+
+    addClearButtonTo(inputBox) {
+        return (
+            <span className="inputDeleteIcon">
+                {inputBox}
+                <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
+                    {/* Need to wrap QBicon in a div for tooltip to show */}
+                    <div className="clearIcon">
+                        <QBicon onClick={this.clearInput} icon="clear-mini" />
+                    </div>
                 </QBToolTip>
-            );
-        } else {
-            return inputBox;
-        }
+            </span>
+        );
     },
 
     //send up the chain an object with value and formatted display value
@@ -148,37 +148,14 @@ const TextFieldValueEditor = React.createClass({
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
-        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
 
         let inputBox = this.renderInputBox(classes);
 
-<<<<<<< HEAD
         if (this.props.showClearButton) {
-            return (
-                <span className="inputDeleteIcon">
-                    {inputBox}
-                    <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
-                        {/* Need to wrap QBicon in a div for tooltip to show */}
-                        <div className="clearIcon">
-                            <QBicon onClick={this.clearInput} icon="clear-mini" />
-                        </div>
-                    </QBToolTip>
-                </span>
-            );
+            return this.addClearButtonTo(inputBox);
         } else {
             return inputBox;
         }
-=======
-        return  <input ref="textInput"
-                       className={classes}
-                       value={value}
-                       maxLength={maxLength}
-                       type={this.props.inputType}
-                       key={'inp' + this.props.idKey}
-                       placeholder={this.props.placeholder}
-                       onChange={this.onChange}
-                       onBlur={this.onBlur} />;
->>>>>>> master
     }
 });
 
