@@ -1,6 +1,8 @@
 @import '../../../src/assets/css/qbVariables';
 @import './fields';
 
+$urlIcon-margin-left: 10px;
+
 .urlField {
     &, a {
         color: $link-text-normal-color;
@@ -34,6 +36,20 @@
         outline: none;
         padding: 1px 3px;
         @include text-input-focus-with-rounding;
+        margin-top: -2px;
+    }
+
+    /* Move the margin so that the extra border from the focus does not move the element. */
+    a .link:focus,
+    a .link:active {
+        margin-left: -4px;
+        margin-right: -4px;
+    }
+
+    /* Move the margin so that the extra border form the focus does not move the element */
+    a .urlIcon:focus,
+    a .urlIcon:active {
+        margin-left: ($urlIcon-margin-left - 4);
     }
 
     .btn {
@@ -81,7 +97,7 @@
     .urlIcon {
         display: inline;
         float: none;
-        margin-left: 10px;
+        margin-left: $urlIcon-margin-left;
         opacity: 0;
         text-decoration: none;
 
