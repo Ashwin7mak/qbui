@@ -618,9 +618,10 @@ module.exports = function(grunt) {
                     'git rev-parse --verify HEAD --short >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
                     //'git status --porcelain -b -s  >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
                     'echo <%= grunt.template.today("dddd, mmmm dS, yyyy, h:MM:ss TT") %>  >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
-                    'echo $JOB_NAME >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
-                    'echo $BUILD_NUMBER >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
-                    'cat <%= quickbase.client.gen %>/buildBranchInfo.txt'
+                    ' [[ "$JOB_NAME" ]] && echo "JOB_NAME:$JOB_NAME" ||: >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
+                    ' [[ "$GIT_BRANCH" ]] && echo "GIT_BRANCH:$GIT_BRANCH"  ||: >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
+                    ' [[ "$BUILD_NUMBER" ]] && echo "BUILD_NUMBER:$BUILD_NUMBER"  ||: >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
+                    ' cat <%= quickbase.client.gen %>/buildBranchInfo.txt'
                 ].join('&&')
             },
             options: {
