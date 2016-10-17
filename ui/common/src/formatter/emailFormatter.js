@@ -16,7 +16,11 @@
     SUPPORTED_FORMATS[UP_TO_AT_SIGN] = true;
 
     function hasDomain(email) {
-        return email.indexOf('@') >= 0;
+        if (email && typeof email === 'string') {
+            return email.indexOf('@') >= 0;
+        } else {
+            return false;
+        }
     }
 
     module.exports = {
