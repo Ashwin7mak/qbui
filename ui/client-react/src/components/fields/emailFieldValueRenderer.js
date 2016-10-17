@@ -38,7 +38,7 @@ const EmailFieldValueRenderer = React.createClass({
         let emailLink = UrlFileAttachmentReportLinkFormatter.addProtocol(value, 'mailto:');
 
         return (
-            <UrlFieldValueRenderer value={emailLink} {...otherProps} inputType="email" />
+            <UrlFieldValueRenderer value={emailLink} openInNewWindow={false} {...otherProps} inputType="email" />
         );
     }
 });
