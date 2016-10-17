@@ -73,7 +73,7 @@ class RecordService extends BaseService {
 
         if (_.isArray(fixedChanges)) {
             fixedChanges.forEach(change => {
-                if (change.field && change.field.type === "USER") {
+                if (_.has(change, 'fieldDef.datatypeAttributes.type') && change.fieldDef.datatypeAttributes.type === "USER") {
                     change.value = change.value ? change.value.userId : "";
                 }
             });

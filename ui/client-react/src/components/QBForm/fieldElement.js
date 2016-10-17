@@ -32,7 +32,8 @@ const FieldElement = React.createClass({
                 newVal: {value: theVals.value, display: theVals.display}
             },
             fid: +fid,
-            fieldName: this.props.relatedField.name
+            fieldName: this.props.relatedField.name,
+            fieldDef: this.props.relatedField
         };
         return change;
     },
@@ -47,7 +48,13 @@ const FieldElement = React.createClass({
 
     onBlur(theVals) {
         const flux = this.getFlux();
-        flux.actions.recordPendingValidateField(this.props.relatedField, theVals.value);
+        let fieldLabel = '';
+        if (this.props.element.useAlternateLabel) {
+            fieldLabel = this.props.element.displayText;
+        } else {
+            fieldLabel = this.props.relatedField ? this.props.relatedField.name : "";
+        }
+        flux.actions.recordPendingValidateField(this.props.relatedField, fieldLabel, theVals.value);
         let change = this.getChanges(theVals);
         if (this.props.onBlur) {
             this.props.onBlur(change);
@@ -66,6 +73,8 @@ const FieldElement = React.createClass({
         let indicateRequiredOnField = !this.props.indicateRequiredOnLabel;
 
         //if the field prop has a width defined this affected the element's layout so add the class to indicate
+        // TODO: this needs to be fixed on core to NOT send 50 for defaults. Defaults should be only set on client side.
+        // So for now if an element doesnt have the default width respect it otherwise not.
         let classes = '';
         if (_.has(this.props, 'relatedField.datatypeAttributes.clientSideAttributes.width') && this.props.relatedField.datatypeAttributes.clientSideAttributes.width !== DEFAULT_FIELD_WIDTH) {
             classes = 'fieldInputWidth';
@@ -102,7 +111,7 @@ const FieldElement = React.createClass({
 
         return (
             <div className="formElement field">
-                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} /> }
+                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} isInvalid={this.props.isInvalid}/> }
 
                 <span className="cellWrapper">
                     { fieldElement }

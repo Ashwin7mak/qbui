@@ -216,7 +216,8 @@ var DateTimeField = (function (_Component) {
       var ASCII_RIGHT_BRACKET = 93;
 
       if (event.charCode === ASCII_T) {
-        if (!event.target.value) {
+        //  if the date input is empty or the ghost text
+        if (!event.target.value || event.target.value === 'mm-dd-yyyy') {
           value = (0, _moment2["default"])().format(_this.state.inputFormat);
         }
       } else {

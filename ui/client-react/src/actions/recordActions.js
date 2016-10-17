@@ -33,16 +33,12 @@ let recordActions = {
             //save changes in record
             let payload = [];
             // columns id and new values array
-            //[{"id":6, "value":"Claire"}]
+            //[{"id":6, "value":"Claire", fieldDef:{}}]
             if (_recordChanges) {
                 Object.keys(_recordChanges).forEach((recKey) => {
                     //get each columns matching field description
-                    let matchingField = null;
-                    if (_fields) {
-                        matchingField = _.find(_fields, (field) => {
-                            return field.id === +recKey;
-                        });
-                    }
+                    let matchingField = _recordChanges[recKey].fieldDef;
+
                     // only post the non built in fields values
                     if (matchingField && matchingField.builtIn === false) {
                         let newValue = _recordChanges[recKey].newVal.value;
@@ -53,10 +49,7 @@ let recordActions = {
                         colChange.id = +recKey;
                         colChange.value = _.cloneDeep(newValue);
                         colChange.display = _.cloneDeep(newDisplay);
-                        colChange.field = matchingField.datatypeAttributes;
-                        if (colChange.field) {
-                            colChange.field.required = matchingField.required;
-                        }
+                        colChange.fieldDef = matchingField;
                         payload.push(colChange);
                     }
                 });
@@ -206,10 +199,7 @@ let recordActions = {
             colChange.id = +field.id;
             colChange.value = _.cloneDeep(value);
             colChange.display = _.cloneDeep(display);
-            colChange.field = field.datatypeAttributes;
-            if (colChange.field) {
-                colChange.field.required = field.required;
-            }
+            colChange.fieldDef = field;
             payload.push(colChange);
         }
 
@@ -223,7 +213,7 @@ let recordActions = {
                 _fields.forEach((field) => {
                     if (changes[field.id] === undefined) {
                         if (!field.builtIn && (field.required || field.unique)) {
-                            if (_pendEdits.originalRecord.fids[field.id]) {
+                            if (_pendEdits.originalRecord && _pendEdits.originalRecord.fids && _pendEdits.originalRecord.fids[field.id]) {
                                 let newValue = _pendEdits.originalRecord.fids[field.id].value;
                                 if (newValue === null) {
                                     newValue = "";
@@ -259,12 +249,8 @@ let recordActions = {
                 if (_.has(_pendEdits, 'originalRecord.fids')) {
                     if (newValue !== _pendEdits.originalRecord.fids[key].value) {
                         //get each columns matching field description
-                        if (_fields) {
-                            let matchingField = _.find(_fields, (field) => {
-                                return field.id === +key;
-                            });
-                            createColChange(newValue, newDisplay, matchingField, payload);
-                        }
+                        let matchingField = changes[key].fieldDef;
+                        createColChange(newValue, newDisplay, matchingField, payload);
                     }
                 }
             });

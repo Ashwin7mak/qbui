@@ -99,7 +99,7 @@ const CheckBoxFieldValueEditor = React.createClass({
     renderRequiredSymbol() {
         let requiredSymbol = null;
 
-        if (this.props.required) {
+        if (this.props.required && this.hasLabel()) {
             let requiredSymbolClasses = 'required-symbol';
             requiredSymbolClasses += (this.isInvalid() ? ' invalid' : '');
             requiredSymbol = <span className={requiredSymbolClasses}>{this.props.requiredSymbol}</span>;

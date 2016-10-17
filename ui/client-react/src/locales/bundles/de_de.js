@@ -39,7 +39,11 @@ export default {
             searchTablesPlaceholder: "Suche tische...",
             searchReportsPlaceholder: "Suche berichte...",
             searchRecordsPlaceholder: "Suche...",
-            backToReport: "Zurück zu melden"
+            backToReport: "Zurück zu melden",
+            nextRecord: "nächsten Rekord",
+            previousRecord: "bisherigen Rekord",
+            save: "Speichern",
+            saveAndNext: "speichern und Nächster"
         },
         field: {
             search: "Suche",
@@ -271,13 +275,16 @@ export default {
         success: "Erfolg",
         failed: "Gescheitert",
         placeholder:  {
-            email: 'name@domain.com'
+            email: 'name@domain.com',
+            maxLength :"bis zu {maxLength} Zeichen"
         },
-        editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Beheben Sie dieses Feld}\n other {Fix diese # Felder}\n} ",
+        editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
         invalidMsg : {
+            unknown: 'Ungültige unbekannte Art. Befund: ',
             required: 'Füllen Sie das {fieldName}',
-            maxChars: 'Verwenden Sie bis zu {num} Zeichen',
-            email: 'Formatieren Sie die {fieldName} wie name@domain.com'
+            email: 'Formatieren Sie die {fieldName} wie name@domain.com',
+            maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
+            choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },
         noneOption: "\<Keiner\>"
     }

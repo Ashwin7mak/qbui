@@ -58,26 +58,26 @@ const fakeReportData_before = {
                 id:1,
                 field: "col_text",
                 headerName: "col_text",
-                datatypeAttributes: {type:"TEXT"}
+                fieldDef: {datatypeAttributes: {type:"TEXT"}}
             },
             {
                 id: 2,
                 field: "col_num",
                 headerName: "col_num",
-                datatypeAttributes: {type:"NUMERIC"}
+                fieldDef: {datatypeAttributes: {type:"NUMERIC"}}
             },
             {
                 // Skip 3 because that ID is reserved for Record ID#
                 id:4,
                 field: "col_date",
                 headerName: "col_date",
-                datatypeAttributes: {type:"DATE"}
+                fieldDef: {datatypeAttributes: {type:"DATE"}}
             },
             {
                 id:5,
                 field: "col_checkbox",
                 headerName: "col_check",
-                datatypeAttributes: {type:"CHECKBOX"}
+                fieldDef: {datatypeAttributes: {type:"CHECKBOX"}}
             }]
     }
 };
@@ -95,19 +95,19 @@ const fakeReportData_after = {
                 id: 1,
                 field: "col_num1",
                 headerName: "col_num",
-                datatypeAttributes: {type:"NUMERIC"}
+                fieldDef: {datatypeAttributes: {type:"NUMERIC"}}
             },
             {
                 id: 2,
                 field: "col_text1",
                 headerName: "col_text",
-                datatypeAttributes: {type:"TEXT"}
+                fieldDef: {datatypeAttributes: {type:"TEXT"}}
             },
             {
                 id: 3,
                 field: "col_date1",
                 headerName: "col_date",
-                datatypeAttributes: {type:"DATE"}
+                fieldDef: {datatypeAttributes: {type:"DATE"}}
             }]
     }
 };
@@ -140,7 +140,7 @@ function getUneditableFieldTestData(options) {
         id: (options.recordId ? 3 : 6),
         field: 'Record ID#',
         headerName: "record_id",
-        datatypeAttributes: {type:"NUMERIC"},
+        fieldDef: {datatypeAttributes: {type:"NUMERIC"}},
         userEditableValue: options.userEditableValue
     });
 
@@ -333,7 +333,7 @@ describe('AGGrid functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let numericcol = _.find(fakeReportData_before.data.columns, function(col) {
-            return col.datatypeAttributes.type === "NUMERIC";
+            return col.fieldDef.datatypeAttributes.type === "NUMERIC";
         });
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
@@ -360,7 +360,7 @@ describe('AGGrid functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let textcol = _.find(fakeReportData_before.data.columns, function(col) {
-            return col.datatypeAttributes.type === "TEXT";
+            return col.fieldDef.datatypeAttributes.type === "TEXT";
         });
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
@@ -385,7 +385,7 @@ describe('AGGrid functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let dateColIndex = _.findIndex(fakeReportData_before.data.columns, function(col) {
-            return col.datatypeAttributes.type === "DATE";
+            return col.fieldDef.datatypeAttributes.type === "DATE";
         });
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
@@ -410,7 +410,7 @@ describe('AGGrid functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let checkColIndex = _.findIndex(fakeReportData_before.data.columns, function(col) {
-            return col.datatypeAttributes.type === "CHECKBOX";
+            return col.fieldDef.datatypeAttributes.type === "CHECKBOX";
         });
 
         let gridElement = TestUtils.scryRenderedDOMComponentsWithClass(component, "agGrid");
@@ -629,7 +629,7 @@ describe('AGGrid functions', () => {
             id: 3,
             field: 'Employee ID',
             headerName: 'employee_id',
-            datatypeAttributes: {type: 'Numeric'},
+            fieldDef: {datatypeAttributes: {type: 'Numeric'}},
             userEditableValue: false
         });
         testData.data.records[0].col_record_id = {

@@ -12,6 +12,7 @@
     var _ = require('lodash');
 
     const formElementDisplayOptions = ['ADD', 'EDIT', 'VIEW'];
+    const formElementDisplayOptionsAddAndEdit = ['ADD', 'EDIT', 'VIEW'];
 
     module.exports = {
         generateDefaultHeaderElement: function() {
@@ -36,7 +37,7 @@
                 builderInstance.withRequired(rawValue.generateBool());
                 builderInstance.withFieldId(field[fieldConsts.fieldKeys.ID]);
                 builderInstance.withOrderIndex(elementIndex);
-                builderInstance.withPositionSameRow(rawValue.generateBool());
+                builderInstance.withPositionSameRow(rawValue.generateBool()); //all fields displays in same row if we comment out this
                 builderInstance.withDisplayText(rawValue.generateString());
                 builderInstance.withDisplayOptions(formElementDisplayOptions);
                 builderInstance.withLabelPosition('LEFT');
@@ -45,6 +46,28 @@
                 elements[elementIndex] = {"FormFieldElement": builderInstance.build()};
                 elementIndex++;
             });
+
+            return elements;
+        },
+        generateDefaultElementsWithAddAndEdit: function(fields) {
+            var elements = {};
+            var elementIndex = 0;
+
+            //Excluding builtin fields
+            for (var i = 5; i < fields.length; i++) {
+                var builderInstance = formElementBuilder.builder();
+
+                builderInstance.withFieldId(fields[i][fieldConsts.fieldKeys.ID]);
+                builderInstance.withOrderIndex(elementIndex);
+                builderInstance.withPositionSameRow(rawValue.generateBool()); //all fields displays in same row if we comment out this
+                builderInstance.withDisplayText(rawValue.generateString());
+                builderInstance.withDisplayOptions(formElementDisplayOptionsAddAndEdit);
+                builderInstance.withLabelPosition('LEFT');
+                builderInstance.withType('FIELD');
+
+                elements[elementIndex] = {"FormFieldElement": builderInstance.build()};
+                elementIndex++;
+            }
 
             return elements;
         }

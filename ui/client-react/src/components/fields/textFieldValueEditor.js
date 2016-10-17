@@ -1,9 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './fields.scss';
+<<<<<<< HEAD
 import QBToolTip from '../qbToolTip/qbToolTip';
 import QBicon from '../qbIcon/qbIcon';
+=======
+>>>>>>> master
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
+import FieldUtils from '../../utils/fieldUtils';
 
 /**
  * # TextFieldValueEditor
@@ -26,10 +30,10 @@ const TextFieldValueEditor = React.createClass({
 
         /**
          * renders with red border if true */
-        isInvalid: React.PropTypes.bool,
+        invalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         * message to display in the tool tip when invalid */
         invalidMessage: React.PropTypes.string,
 
         /**
@@ -135,17 +139,20 @@ const TextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'input textField';
+        let classes = 'input textField borderOnError';
         // error state css class
-        if (this.props.isInvalid) {
+        if (this.props.invalid) {
             classes += ' error';
         }
+
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
+        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
 
         let inputBox = this.renderInputBox(classes);
 
+<<<<<<< HEAD
         if (this.props.showClearButton) {
             return (
                 <span className="inputDeleteIcon">
@@ -161,6 +168,17 @@ const TextFieldValueEditor = React.createClass({
         } else {
             return inputBox;
         }
+=======
+        return  <input ref="textInput"
+                       className={classes}
+                       value={value}
+                       maxLength={maxLength}
+                       type={this.props.inputType}
+                       key={'inp' + this.props.idKey}
+                       placeholder={this.props.placeholder}
+                       onChange={this.onChange}
+                       onBlur={this.onBlur} />;
+>>>>>>> master
     }
 });
 

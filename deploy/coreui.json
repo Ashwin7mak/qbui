@@ -16,12 +16,16 @@
       "Description": "The environment name (prod, qual, int, etc)",
       "Type": "String",
       "AllowedValues": [
-        "try",
         "dev",
         "qual",
         "int",
+        "perf",
         "prod"
       ]
+    },
+    "paramSwimlane": {
+      "Description": "The Swimlane ID",
+      "Type": "String"
     },
     "paramELBSSLPort": {
       "Type": "Number",
@@ -336,7 +340,7 @@
           },
           "run_chef": {
             "files": {
-              "/dev/shm/chef-attributes-try.json": {
+              "/dev/shm/chef-attributes-perf.json": {
                 "content": {
                   "splunk": {
                     "forwarder": {
@@ -361,7 +365,7 @@
                       "node_internal_env": "PRE_PROD",
                       "rest_endpoint": "https://t.tomcat.TRUNK.newstack.quickbaserocks.com:8443",
                       "route_group": "LH_V1",
-                      "stack_name": "coreui-try1"
+                      "stack_name": "coreui-perf1"
                     }
                   }
                 }
@@ -560,7 +564,7 @@
           "DNSName": { "Fn::GetAtt": ["ElasticLoadBalancer", "DNSName"] }
         },
         "HostedZoneName": { "Fn::Join": ["", [{ "Ref": "paramDomainName" }, "."]] },
-        "Name": { "Fn::Join": ["", ["*.nodejs.", { "Ref": "AWS::StackName" }, ".", { "Ref": "paramDomainName" }, "."]] },
+        "Name": { "Fn::Join": ["", ["*.nodejs.", { "Ref": "paramSwimlane" }, ".", { "Ref": "paramDomainName" }, "."]] },
         "Type": "A"
       }
     }

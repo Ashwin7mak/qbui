@@ -31,6 +31,13 @@ $data-font-size: $font-size-p;
 }
 
 // visual style of input userdata
+@mixin error-border() {
+  border: 1px solid $input-text-error-border-color;
+  border-left-width: 5px;
+  box-shadow: none;
+}
+
+
 [type="text"],
 [type="url"],
 [type="email"] {
@@ -51,33 +58,65 @@ $data-font-size: $font-size-p;
     }
 
     // visual style of input error
-    .textField.error &.input, &.input.error {
+    .textField.error &.input, &.input.error,
+    .error .borderOnError,
+    .error .error.borderOnError {
         border-top: 1px solid $input-text-error-border-color;
         border-right: 1px solid  $input-text-error-border-color;
         border-bottom: 1px solid $input-text-error-border-color;
         border-left: 5px solid $input-text-error-border-color;
+        border-color: $input-text-error-border-color !important;
         box-shadow: none;
     }
 
     // visual style of focus input error
-    .textField.error &:focus.input, &:focus.input.error {
+    .textField.error &:focus.input,
+    &:focus.input.error,
+    .error :focus.borderOnError,
+    .error &:focus.error.borderOnError {
         outline: none;
-        border-top: 1px solid $input-text-error-border-color;
-        border-right: 1px solid  $input-text-error-border-color;
-        border-bottom: 1px solid $input-text-error-border-color;
-        border-left: 5px solid $input-text-error-border-color;
+        @include error-border;
         @include focus-shadow($input-text-error-border-color);
     }
 }
 
-textarea:focus, .is-focused:not(.is-open)>.Select-control {
+textarea:focus,
+.is-focused:not(.is-open)>.Select-control {
     @include text-input-focus;
 }
 
+.error .borderOnError {
+  border-top: 1px solid $input-text-error-border-color;
+  border-right: 1px solid  $input-text-error-border-color;
+  border-bottom: 1px solid $input-text-error-border-color;
+  border-left: 5px solid $input-text-error-border-color;
+  border-color: $input-text-error-border-color !important;
+  box-shadow: none;
+}
+
+.error :focus.borderOnError {
+  outline: none;
+  border-top: 1px solid $input-text-error-border-color;
+  border-right: 1px solid  $input-text-error-border-color;
+  border-bottom: 1px solid $input-text-error-border-color;
+  border-left: 5px solid $input-text-error-border-color;
+  border-color: $input-text-error-border-color !important;
+  @include focus-shadow($input-text-error-border-color);
+}
+.Select {
+    &.is-open .Select-control{
+      @include text-input-focus;
+  }
+}
+
+.invalidInput.tooltip {
+  z-index: 9999;
+}
 .invalidRecord.tooltip >.tooltip-arrow,
 .invalidInput.tooltip >.tooltip-arrow {
   border-bottom-color: $tootip-error-color;
   border-top-color: $tootip-error-color;
+  top: 100%;
 }
 .invalidRecord.tooltip,
 .invalidRecord.tooltip .tooltip-inner,
@@ -89,9 +128,11 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
 .invalidRecord.tooltip .tooltip-arrow {
   top: -5px;
 }
-.invalidInput.tooltip.top .tooltip-arrow {
+.invalidRecord.tooltip.top .tooltip-arrow {
   bottom: -5px;
+  top: initial;
 }
+
 // visual style of required field indicator
 .requiredFlag {
   color: $field-label-normal-color;
@@ -111,6 +152,14 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
   white-space: nowrap;
 }
 
+.multiLineCellEditWrapper .cellEdit {
+  min-height: 28px;
+}
+.multiLineCellEditWrapper.error .tipChildWrapper,
+.multiLineCellEditWrapper.error .tipChildWrapper textarea {
+  height: 28px !important;
+}
+
 .userDisplayValue {
   overflow:hidden;
   text-overflow:ellipsis;
@@ -118,6 +167,10 @@ textarea:focus, .is-focused:not(.is-open)>.Select-control {
 
 .cellData.NoWrap {
   white-space: nowrap;
+}
+
+.tooltip {
+  z-index: 1;
 }
 
 /* allow wide tooltips */
