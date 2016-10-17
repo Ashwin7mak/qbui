@@ -85,7 +85,8 @@ const EmailFieldValueEditor = React.createClass({
         }
     },
     render() {
-        let {onChange, onBlur, disabled, readOnly, ...otherProps} = this.props;
+        // Remove some properties before passing to TextFieldValueEditor
+        let {onChange, onBlur, display, disabled, readOnly, ...otherProps} = this.props;
 
         if (disabled || readOnly) {
             // Return a read only email
