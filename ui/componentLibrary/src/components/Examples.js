@@ -21,6 +21,7 @@ import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendere
 import QBPanelExample from 'raw!../examples/QBPanelExample.js';
 import QBIconExample from 'raw!../examples/QBIconExample.js';
 
+import TrowserExample from 'raw!../examples/TrowserExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -46,7 +47,8 @@ export default {
     UserFieldValueRenderer: UserFieldValueRendererExample,
 
     QBPanel: QBPanelExample,
-    QBIcon: QBIconExample
+    QBIcon: QBIconExample,
+    Trowser: TrowserExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };
