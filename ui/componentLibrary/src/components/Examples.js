@@ -22,6 +22,8 @@ import UserFieldValueRendererExample from 'raw!../examples/UserFieldValueRendere
 
 import QBPanelExample from 'raw!../examples/QBPanelExample.js';
 import QBIconExample from 'raw!../examples/QBIconExample.js';
+
+import TrowserExample from 'raw!../examples/TrowserExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -31,6 +33,8 @@ export default {
     DateFieldValueEditor: DateFieldValueEditorExample,
     DateTimeFieldValueEditor: DateTimeFieldValueEditorExample,
     DateTimeFieldValueRenderer: DateTimeFieldValueRendererExample,
+    EmailFieldValueEditor: EmailFieldValueEditorExample,
+    EmailFieldValueRenderer: EmailFieldValueRendererExample,
     FieldValueEditor: FieldValueEditorExample,
     FieldValueRenderer: FieldValueRendererExample,
     MultiChoiceFieldValueEditor: MultiChoiceFieldValueEditorExample,
@@ -41,14 +45,13 @@ export default {
     TextFieldValueRenderer: TextFieldValueRendererExample,
     TimeFieldValueEditor: TimeFieldValueEditorExample,
     TimeFieldValueRenderer: TimeFieldValueRendererExample,
+    Trowser: TrowserExample,
     UrlFieldValueEditor: UrlFieldValueEditorExample,
     UrlFieldValueRenderer: UrlFieldValueRendererExample,
     UserFieldValueEditor: UserFieldValueEditorExample,
     UserFieldValueRenderer: UserFieldValueRendererExample,
     QBPanel: QBPanelExample,
     QBIcon: QBIconExample,
-    EmailFieldValueEditor: EmailFieldValueEditorExample,
-    EmailFieldValueRenderer: EmailFieldValueRendererExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };
