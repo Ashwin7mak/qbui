@@ -158,6 +158,8 @@ let formActions = {
                         } else {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadFormAndRecord:');
                         }
+
+                        // remove the editRec query string since we are not successfully editing the form
                         WindowLocationUtils.pushWithoutQuery();
                         this.dispatch(failedAction, error.response.status);
 
