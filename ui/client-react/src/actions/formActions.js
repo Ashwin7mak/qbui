@@ -160,7 +160,13 @@ let formActions = {
                         }
                         WindowLocationUtils.pushWithoutQuery();
                         this.dispatch(failedAction, error.response.status);
-                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
+
+                        if (error.response.status === 403) {
+                            NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'), 1500);
+                        } else {
+                            NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
+                        }
+
                         reject();
                     }
                 );
