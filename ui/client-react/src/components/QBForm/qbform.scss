@@ -1,4 +1,4 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
 
 $edit-field-padding: 5px;
 
@@ -115,7 +115,6 @@ $edit-field-padding: 5px;
     [type="text"].input {
         width: 100%;
     }
-
     /* don't bleed through dropdowns */
     .input-group .form-control {
         z-index: inherit;
@@ -137,14 +136,13 @@ $edit-field-padding: 5px;
         }
     }
 }
-
 /* For mobile phones: */
 @include small-breakpoint {
     .formSection {
         display: block;
 
         .formTable {
-            margin-left: 0;
+            margin-left: 0px;
         }
 
         .fieldRow {
@@ -155,14 +153,14 @@ $edit-field-padding: 5px;
                 max-width: 100%;
                 .fieldLabel {
                     font-size: $font-size-small;
-                    margin-bottom: 0;
+                    margin-bottom: 0px;
                 }
                 .fieldValue {
                     font-size: $font-size-small;
                 }
             }
         }
-        .fieldValueEditor, textarea.cellEdit {
+        .fieldValueEditor, textarea.cellEdit{
             width: 100%;
         }
     }

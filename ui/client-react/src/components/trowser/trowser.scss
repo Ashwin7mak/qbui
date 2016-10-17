@@ -1,4 +1,4 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
 
 $trowser-fg: #000;
 $trowser-icons-color: #fff;
@@ -6,7 +6,7 @@ $trowser-header-bg: #486c8f;
 $trowser-footer-bg: #193048;
 $action-separator-color: #486c8f;
 
-.trowser {
+.trowser  {
     position: absolute;
     z-index: 9999;
     left: 0;
@@ -15,7 +15,7 @@ $action-separator-color: #486c8f;
     color: $trowser-fg;
     max-height: 100%;
     overflow: hidden;
-    transition: 0.5s;
+    transition: .5s;
     transition-timing-function: ease-in-out;
     transform: translateY(-100%);
     padding: 0;
@@ -31,7 +31,7 @@ $action-separator-color: #486c8f;
     .trowserHeader {
         flex: 0 0 auto;
         flex-basis: 40px;
-        color: $color-black-100;
+        color: #fff;
         background-color: $trowser-header-bg;
         display: flex;
         align-items: center;
@@ -55,7 +55,7 @@ $action-separator-color: #486c8f;
             button {
                 height: 40px;
                 font-size: 18px;
-                color: $color-black-100;
+                color: #fff;
                 background-color: $trowser-header-bg;
                 border-radius: 0;
                 border: 0;
@@ -73,7 +73,7 @@ $action-separator-color: #486c8f;
         overflow: auto;
     }
     .trowserFooter {
-        color: $color-black-100;
+        color: #fff;
         flex: 0 0 auto;
         flex-basis: 54px;
         display: flex;
@@ -92,7 +92,7 @@ $action-separator-color: #486c8f;
                 height: 23px;
                 line-height: 23px;
                 padding: 0 30px;
-                color: $color-black-100;
+                color: #fff;
                 border-left: 1px solid $action-separator-color;
                 text-decoration: none;
                 align-items: center;
@@ -102,7 +102,7 @@ $action-separator-color: #486c8f;
                 }
             }
             a:last-child {
-                border-right: 1px solid $action-separator-color;
+                border-right:1px solid $action-separator-color;
             }
         }
         .rightIcons {
@@ -122,7 +122,7 @@ $action-separator-color: #486c8f;
         top: 0;
         bottom: 0;
         margin: auto;
-        background-color: #f2f9fe;
+        background-color: #F2F9FE;
         opacity: 1;
         max-width: 1440px;
 
@@ -132,8 +132,8 @@ $action-separator-color: #486c8f;
         top: 0;
         width: 100%;
         bottom: 0;
-        opacity: 0.4;
-        background: $color-black-800;
+        opacity: .4;
+        background: black;
     }
 }
 

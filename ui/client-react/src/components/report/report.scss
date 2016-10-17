@@ -1,4 +1,4 @@
-@import "../../assets/css/qbVariables";
+@import '../../assets/css/qbVariables';
 
 .reportContainer {
     display: flex;
@@ -11,7 +11,7 @@
     }
 
     .layout-stage {
-        flex: 0 0 auto;
+        flex:0 0 auto;
     }
     margin-top: 0;
     margin-left: 0;
@@ -46,7 +46,7 @@
         padding-left: 10px;
 
         @include small-breakpoint {
-            padding-top: 0; // no stage so to need add space after
+            padding-top: 0px; // no stage so to need add space after
             &:not(.selectionActionsOpen) {
                 background-color: $secondary-bar-bg;
             }
@@ -66,7 +66,7 @@
             justify-content: flex-start;
         }
 
-        > .pageActions {
+        >.pageActions {
             line-height: 40px;
             align-self: stretch;
         }
@@ -140,21 +140,21 @@
                 max-width: 190px;
             }
         }
-        > .facetsMenuContainer {
+        >.facetsMenuContainer {
             flex-shrink: 1;
 
             .facetsMenuButton {
                 .withoutSelections {
-                    margin-top: 0;
-                    margin-bottom: 0;
+                    margin-top: 0px;
+                    margin-bottom: 0px;
                 }
             }
         }
 
         .clearAllFacets {
             display: inline-block;
-            margin-right: 0.5rem;
-            margin-left: 0.5rem;
+            margin-right: .5rem;
+            margin-left: .5rem;
             vertical-align: top;
             font-size: 16px;
             cursor: pointer;
@@ -237,12 +237,10 @@
     width: 100%;
 
 }
-
 .noData {
     padding-left: 1.5rem;
 
 }
-
 .addNewRecord {
     display: none;
 }
@@ -251,13 +249,13 @@
     margin-left: 10px;
 }
 
-.sortButtonSpan {
+.sortButtonSpan  {
     display: inline-block;
     cursor: pointer;
     color: $icon-color;
-    @include small-breakpoint {
-        color: $secondary-bar-fg;
-    }
+        @include small-breakpoint {
+            color: $secondary-bar-fg;
+        }
 
     .sortButton {
         font-size: 20px;
