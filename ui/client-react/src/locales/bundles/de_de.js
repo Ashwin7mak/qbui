@@ -84,7 +84,8 @@ export default {
             recordSaved : "Datensatz gespeichert",
             recordNotSaved :"Nehmen Sie nicht gespeichert",
             deleted : "gelöscht",
-            notDeleted : "nicht gelöscht"
+            notDeleted : "nicht gelöscht",
+            cannotLoad : "Kann nicht Datensatz laden"
         },
         header: {
             menu: {

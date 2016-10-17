@@ -8,6 +8,8 @@ import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import {browserHistory} from 'react-router';
 import * as UrlConsts from "../constants/urlConstants";
+import Locale from '../locales/locales';
+import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
 
@@ -156,7 +158,9 @@ let formActions = {
                         } else {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadFormAndRecord:');
                         }
+                        WindowLocationUtils.pushWithoutQuery();
                         this.dispatch(failedAction, error.response.status);
+                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
                         reject();
                     }
                 );
