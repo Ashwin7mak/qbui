@@ -278,7 +278,6 @@ let reportModel = {
                 }
             }
         });
-        }
     },
 
     updateRecordsCount: function(recordsCountData) {
