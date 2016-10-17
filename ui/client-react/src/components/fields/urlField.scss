@@ -44,6 +44,8 @@ $urlIcon-margin-left: 10px;
     a .link:active {
         margin-left: -4px;
         margin-right: -4px;
+        // Make sure underline shows up if user is tabbing through elements
+        text-decoration: underline;
     }
 
     /* Move the margin so that the extra border form the focus does not move the element */
