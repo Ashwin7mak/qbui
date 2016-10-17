@@ -111,6 +111,7 @@ const FieldValueRenderer = React.createClass({
                     <CheckBoxFieldValueRenderer value={this.props.value}
                                                 key={'inp-' + this.props.idKey}
                                                 hideUncheckedCheckbox={this.props.hideUncheckedCheckbox}
+                                                label={this.props.label}
                                                 {...commonProperties} />
                 );
 

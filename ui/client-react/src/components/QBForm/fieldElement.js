@@ -67,6 +67,14 @@ const FieldElement = React.createClass({
         }
     },
 
+    getLabel() {
+        if (this.props.element.useAlternateLabel) {
+            return this.props.element.displayText;
+        } else {
+            return this.props.relatedField ? this.props.relatedField.name : "";
+        }
+    },
+
     render() {
         let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
             this.props.relatedField.datatypeAttributes : {};
@@ -113,7 +121,9 @@ const FieldElement = React.createClass({
                                              idKey={'fve-' + this.props.idKey}
                                              invalidMessage={this.props.invalidMessage}
                                              classes={classes}
-                                             appUsers={this.props.appUsers}/>;
+                                             appUsers={this.props.appUsers}
+                                             label={this.getLabel()}
+            />;
         } else if (fieldDisplayValue !== null || fieldRawValue !== null) { //if there is no value do not render the field
             fieldElement = <FieldValueRenderer type={fieldType}
                                                key={'fvr-' + this.props.idKey}
@@ -122,6 +132,7 @@ const FieldElement = React.createClass({
                                                display={fieldDisplayValue}
                                                attributes={fieldDatatypeAttributes}
                                                fieldDef={this.props.relatedField}
+                                               label={this.getLabel()}
             />;
         }
 
