@@ -43,6 +43,31 @@ $large-breakpoint-width: 1440px;
     }
 }
 
+$small-breakpoint-height: 640px;
+$medium-breakpoint-height: 900px;
+$large-breakpoint-height: 1200px;
+
+@mixin height-small-breakpoint {
+    @media (max-height: #{$small-breakpoint-height}) {
+        @content;
+    }
+}
+@mixin height-medium-breakpoint {
+    @media (min-height: #{$small-breakpoint-height + 1px}) and (max-height: #{$medium-breakpoint-height}) {
+        @content;
+    }
+}
+@mixin height-large-breakpoint {
+    @media (min-height: #{$medium-breakpoint-height + 1px}) and (max-height: #{$large-breakpoint-height}) {
+        @content;
+    }
+}
+@mixin height-xlarge-breakpoint {
+    @media (min-height: #{$large-breakpoint-height + 1px}) {
+        @content;
+    }
+}
+
 // font sizes from http://quickbase.design/typography/
 $font-size-h1: 36px;
 $font-size-h2: 30px;
@@ -65,4 +90,3 @@ $font-size-placeholder: 14px; //aka ghost text
     $font-size-button:        16px;
     $font-size-placeholder:   16px; //aka ghost text
 }
-
