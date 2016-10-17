@@ -130,4 +130,16 @@ describe('EmailFieldValueEditor', () => {
             invalidMessage: 'Format the email like name@domain.com'
         });
     });
+
+    it('uses the value (not the display) for editing', () => {
+        // The TextFieldValueEditor defaults to display if both display and value are provided
+        // Due to the formatting that occurs on display, it is better for the user to edit the underlying value
+        let value = 'value';
+        let display = 'display';
+
+        component = TestUtils.renderIntoDocument(<EmailFieldValueEditor value={value} display={display} />);
+        emailInput = ReactDOM.findDOMNode(component).querySelector('input');
+
+        expect(emailInput.value).toEqual(value);
+    });
 });

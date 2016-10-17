@@ -86,6 +86,7 @@ const EmailFieldValueEditor = React.createClass({
     },
     render() {
         // Remove some properties before passing to TextFieldValueEditor
+        // TextFieldValueEditor uses the display value by default, so it cannot be passed in for Email and URL
         let {onChange, onBlur, display, disabled, readOnly, ...otherProps} = this.props;
 
         if (disabled || readOnly) {
