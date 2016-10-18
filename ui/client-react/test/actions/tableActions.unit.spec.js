@@ -2,6 +2,7 @@ import Fluxxor from 'fluxxor';
 import tableActions from '../../src/actions/tableActions';
 import * as actions from '../../src/constants/actions';
 import Constants from '../../../common/src/constants';
+import reportModel from '../../src/models/reportModel';
 
 import Promise from 'bluebird';
 
@@ -14,11 +15,8 @@ describe('Table Actions functions', () => {
     let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
 
     let responseData = {
-        reportMetaData: {data: {id: 3}},
-        reportData: {}
-    };
-    let responseRecordCount = {
-        data: 1
+        reportMetaData: {data: {id: '2'}},
+        reportData: {data:{filteredCount: 1}}
     };
 
     let stores = {};
@@ -31,23 +29,16 @@ describe('Table Actions functions', () => {
             return Promise.resolve({data: responseData});
         }
     }
-    class mockReportService {
-        constructor() { }
-        getReportRecordsCount() {
-            return Promise.resolve({data: responseRecordCount.data});
-        }
-    }
+
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockTableService.prototype, 'getHomePage').and.callThrough();
-        spyOn(mockReportService.prototype, 'getReportRecordsCount').and.callThrough();
         tableActions.__Rewire__('TableService', mockTableService);
-        tableActions.__Rewire__('ReportService', mockReportService);
     });
 
     afterEach(() => {
         tableActions.__ResetDependency__('TableService');
-        tableActions.__ResetDependency__('ReportService');
+        flux.dispatchBinder.dispatch.calls.reset();
     });
 
     var tableActionsTests = [
@@ -58,19 +49,16 @@ describe('Table Actions functions', () => {
         it(test.name, function(done) {
             flux.actions.loadTableHomePage(test.appId, test.tblId, test.offset, test.numRows).then(
                 () => {
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId: '3'}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, {
-                        metaData: {id: 3},
-                        recordData: {},
-                        rptId: '3'
-                    }]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, responseRecordCount.data]);
                     done();
+                    let model = reportModel.set(responseData.reportMetaData, responseData.reportData);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId: responseData.reportMetaData.data.id}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, model]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, responseData.reportData.data.filteredCount]);
                 },
                 () => {
-                    expect(false).toBe(true);
                     done();
+                    expect(false).toBe(true);
                 }
             );
         });

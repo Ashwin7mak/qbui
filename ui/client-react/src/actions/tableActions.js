@@ -1,7 +1,6 @@
 // action creators
 import * as actions from '../constants/actions';
 import TableService from '../services/tableService';
-import ReportService from '../services/reportService';
 import Promise from 'bluebird';
 import reportModel from '../models/reportModel';
 
@@ -20,7 +19,7 @@ Promise.onPossiblyUnhandledRejection(function(err) {
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
-const DEFAULT_HOMEPAGE_ID = 0;
+const DEFAULT_HOMEPAGE_ID = '0';
 
 let tableActions = {
 
@@ -36,7 +35,6 @@ let tableActions = {
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
                 let tableService = new TableService();
-                let reportService = new ReportService();
 
                 //  even though we don't yet know the home page report id, want a spinner to display,
                 //  so dispatch the LOAD_REPORT event.

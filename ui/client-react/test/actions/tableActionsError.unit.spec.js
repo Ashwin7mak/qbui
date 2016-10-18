@@ -57,8 +57,8 @@ describe('Table Actions table negative tests(1) -- ', () => {
             },
             () => {
                 expect(mockTableService.prototype.getHomePage).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED, errorStatus]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED, errorStatus]);
                 done();
             }
         );
@@ -89,6 +89,7 @@ describe('Table Actions table negative tests(2) -- ', () => {
 
     afterEach(() => {
         tableActions.__ResetDependency__('TableService');
+        flux.dispatchBinder.dispatch.calls.reset();
     });
 
 
@@ -100,8 +101,8 @@ describe('Table Actions table negative tests(2) -- ', () => {
             },
             () => {
                 expect(mockTableService.prototype.getHomePage).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT_FAILED, exStatus]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED, exStatus]);
                 done();
             }
         );
