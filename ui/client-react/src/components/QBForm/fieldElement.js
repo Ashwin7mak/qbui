@@ -72,7 +72,7 @@ const FieldElement = React.createClass({
 
         let indicateRequiredOnField = !this.props.indicateRequiredOnLabel;
 
-        // Is the form element has showAsRadio prop - pass it down as a part of fieldDef
+        // If the form element has showAsRadio prop - pass it down as a part of fieldDef
         let relatedField = this.props.relatedField;
         if (this.props.element && this.props.element.showAsRadio) {
             relatedField.showAsRadio = true;
