@@ -198,3 +198,7 @@ $edit-field-padding: 5px;
 .tooltip {
     z-index: 1;
 }
+
+.fieldLabel.hidden {
+    visibility: hidden;
+}

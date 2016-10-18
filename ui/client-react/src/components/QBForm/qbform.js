@@ -74,6 +74,9 @@ let QBForm = React.createClass({
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
             // checkbox should not have a separate field label
             if (this.getRelatedField(element.FormFieldElement.fieldId).name === 'Checkbox') {
+                if (labelPosition === QBForm.LABEL_LEFT) {
+                    cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus, true));
+                }
                 cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, false, colSpan, validationStatus));
             } else {
                 // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
@@ -140,16 +143,25 @@ let QBForm = React.createClass({
      * create a TD with a field label
      * @param element
      * @param sectionIndex
+     * @param validationStatus
+     * @param isHidden
      * @returns {XML}
      */
-    createFieldLabelCell(element, sectionIndex, validationStatus) {
+    createFieldLabelCell(element, sectionIndex, validationStatus, isHidden) {
 
         let relatedField = this.getRelatedField(element.fieldId);
 
         let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
+
         return (
             <td key={key}>
-                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={this.props.edit} isInvalid={validationStatus.isInvalid}/>
+                <FieldLabelElement
+                    element={element}
+                    relatedField={relatedField}
+                    indicateRequiredOnLabel={this.props.edit}
+                    isInvalid={validationStatus.isInvalid}
+                    isHidden={isHidden}
+                />
             </td>);
     },
 
