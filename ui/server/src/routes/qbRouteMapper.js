@@ -45,8 +45,9 @@
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
         routeToGetFunction[routeConsts.REPORT] = fetchReport;
-        routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
-        routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportData;
+        routeToGetFunction[routeConsts.REPORT_META] = fetchReportMeta;
+        //routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
+        routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportResults;
         routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
         routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
 
@@ -438,29 +439,29 @@
      * @param res
      */
     /*eslint no-shadow:0 */
-    function fetchReportComponents(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Fetch Report Components', {req:filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportComponents(req).then(
-                function(response) {
-                    res.send(response);
-                    logApiSuccess(req, response, perfLog, 'Fetch Report Components');
-                },
-                function(response) {
-                    logApiFailure(req, response, perfLog, 'Fetch Report Components');
-
-                    //  client is waiting for a response..make sure one is always returned
-                    if (response && response.statusCode) {
-                        res.status(response.statusCode).send(response);
-                    } else {
-                        res.status(500).send(response);
-                    }
-                }
-            );
-        });
-    }
+    //function fetchReportComponents(req, res) {
+    //    let perfLog = perfLogger.getInstance();
+    //    perfLog.init('Fetch Report Components', {req:filterNodeReq(req)});
+    //
+    //    processRequest(req, res, function(req, res) {
+    //        reportsApi.fetchReportComponents(req).then(
+    //            function(response) {
+    //                res.send(response);
+    //                logApiSuccess(req, response, perfLog, 'Fetch Report Components');
+    //            },
+    //            function(response) {
+    //                logApiFailure(req, response, perfLog, 'Fetch Report Components');
+    //
+    //                //  client is waiting for a response..make sure one is always returned
+    //                if (response && response.statusCode) {
+    //                    res.status(response.statusCode).send(response);
+    //                } else {
+    //                    res.status(500).send(response);
+    //                }
+    //            }
+    //        );
+    //    });
+    //}
 
     /**
      * Fetch the count of total records in a report.
@@ -491,26 +492,54 @@
     }
 
     /**
-     * This is the function for fetching data records for a report from the reportsApi endpoint.
-     * This endpoint is intended to be used primarily when a client needs to refresh the data for
-     * a report.   Report paging is one use case.
+     * Fetch report meta data.
+     *
+     * @param req
+     * @param res
+     */
+    function fetchReportMeta(req, res) {
+        let perfLog = perfLogger.getInstance();
+        perfLog.init('Fetch Report Meta', {req: filterNodeReq(req)});
+
+        processRequest(req, res, function(req, res) {
+            reportsApi.fetchReportMetaData(req).then(
+                function(response) {
+                    res.send(response);
+                    logApiSuccess(req, response, perfLog, 'Fetch Report Meta');
+                },
+                function(response) {
+                    logApiFailure(req, response, perfLog, 'Fetch Report Meta');
+                    if (response && response.statusCode) {
+                        res.status(response.statusCode).send(response);
+                    } else {
+                        res.status(500).send(response);
+                    }
+                }
+            );
+        });
+    }
+
+    /**
+     * This is the function for fetching the report results from the reportsApi endpoint.
+     * This endpoint is intended to be used when a client is initially loading a report
+     * as the report meta data is used.
      *
      * @param req
      * @param res
      */
     /*eslint no-shadow:0 */
-    function fetchReportData(req, res) {
+    function fetchReportResults(req, res) {
         let perfLog = perfLogger.getInstance();
-        perfLog.init('Fetch Report Data', {req:filterNodeReq(req)});
+        perfLog.init('Fetch Report Results', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportResults(req).then(
+            reportsApi.fetchReport(req, req.params.reportId).then(
                 function(response) {
                     res.send(response);
-                    logApiSuccess(req, response, perfLog, 'Fetch Report Data');
+                    logApiSuccess(req, response, perfLog, 'Fetch Report Results');
                 },
                 function(response) {
-                    logApiFailure(req, response, perfLog, 'Fetch Report Data');
+                    logApiFailure(req, response, perfLog, 'Fetch Report Results');
 
                     //  client is waiting for a response..make sure one is always returned
                     if (response && response.statusCode) {

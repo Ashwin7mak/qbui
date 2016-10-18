@@ -103,62 +103,6 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let reportDataActions = {
 
-    loadReport(appId, tblId, rptId, format, offset, rows, sortList) {
-        //  promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
-            if (appId && tblId && rptId) {
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
-                this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT, {});
-                let reportService = new ReportService();
-
-                reportService.getReport(appId, tblId, rptId, format, offset, rows, sortList).then(
-                    (response) => {
-                        // We only need to check for reportData. The metadata will be fetched
-                        // and parsed in the node call.
-                        if (response.data.reportMetaData && response.data.reportData) {
-                            var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
-                            _.extend(model, {sortList: sortList});
-                            this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                            resolve();
-                        }
-                    },
-                    error => {
-                        //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReport:');
-                        this.dispatch(actions.LOAD_REPORT_FAILED, error.response.status);
-                        reject();
-                    }
-                ).catch(ex => {
-                    logger.logException(ex);
-                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
-                    reject();
-                });
-
-                reportService.getReportRecordsCount(appId, tblId, rptId).then(
-                    response => {
-                        if (response.data) {
-                            logger.debug('ReportRecordsCount service call successful');
-                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data);
-                        }
-                    },
-                    error => {
-                        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReportRecordsCount:');
-                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error.response.status);
-                        reject();
-                    }
-                ).catch(ex => {
-                    logger.logException(ex);
-                    this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, 500);
-                    reject();
-                });
-            } else {
-                logger.error('reportDataActions.loadReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
-                reject();
-            }
-        });
-    },
-
     filterSelectionsPending(selections) {
         this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
     },
@@ -182,6 +126,87 @@ let reportDataActions = {
         this.dispatch(actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId});
     },
 
+    /**
+     * Load a report based on it's meta data definition.
+     *
+     * @param appId
+     * @param tblId
+     * @param rptId
+     * @param format
+     * @param offset
+     * @param rows
+     * @param sortList
+     */
+    loadReport(appId, tblId, rptId, format, offset, rows, sortList) {
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && rptId) {
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
+                let reportService = new ReportService();
+
+                //format, offset, rows, sortList
+                let optionalParams = {
+                    format: format,
+                    offset: offset,
+                    rows: rows
+                };
+
+                var promises = [];
+                promises.push(reportService.getReportMetaData(appId, tblId, rptId));
+                promises.push(reportService.getReportResults(appId, tblId, rptId, optionalParams));
+
+                Promise.all(promises).then(
+                    (response) => {
+                        var model = reportModel.set(response[0], response[1]);
+
+                        //  ..fire off the load report and record count events
+                        this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, {body: model.recordData.filteredCount});
+                        resolve();
+
+                        //if (response.data.reportMetaData && response.data.reportData) {
+                        //    var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
+                        //    _.extend(model, {sortList: sortList});
+                        //    this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                        //    resolve();
+                        //}
+                    },
+                    error => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReport:');
+                        this.dispatch(actions.LOAD_REPORT_FAILED, error.response.status);
+                        reject();
+                    }
+                ).catch(ex => {
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
+                    reject();
+                });
+
+                //reportService.getReportRecordsCount(appId, tblId, rptId).then(
+                //    response => {
+                //        if (response.data) {
+                //            logger.debug('ReportRecordsCount service call successful');
+                //            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data);
+                //        }
+                //    },
+                //    error => {
+                //        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReportRecordsCount:');
+                //        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error.response.status);
+                //        reject();
+                //    }
+                //).catch(ex => {
+                //    logger.logException(ex);
+                //    this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, 500);
+                //    reject();
+                //});
+            } else {
+                logger.error('reportDataActions.loadReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
+                reject();
+            }
+        });
+    },
 
     /* Action called to get a new set of records given a report.
      * Override params can override report's sortlist/query etc

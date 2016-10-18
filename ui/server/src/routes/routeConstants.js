@@ -42,7 +42,8 @@
         RECORDS                     : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records',
         RECORDS_BULK                : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/records/bulk',
 
-        REPORT                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId',
+        REPORT_META                 : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId',
+        REPORT                      : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/temp',
         REPORT_COMPONENTS           : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/reportComponents',
         REPORT_RESULTS              : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/results',
         REPORT_RECORDS_COUNT        : baseUrl.QUICKBASE + '/apps/:appId/tables/:tableId/reports/:reportId/recordsCount',

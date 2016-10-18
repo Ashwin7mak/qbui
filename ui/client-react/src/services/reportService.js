@@ -17,7 +17,9 @@ class ReportService extends BaseService {
 
         //  Report service API endpoints
         this.API = {
-            GET_REPORT                  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            GET_REPORT_META             : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
+            GET_REPORT                  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/temp`,
+
             GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
             GET_REPORTS                 : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
             GET_REPORT_COMPONENTS       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.REPORTCOMPONENTS}`,
@@ -77,6 +79,20 @@ class ReportService extends BaseService {
      */
     _getCache() {
         return cachedReportRequest;
+    }
+
+    /**
+     * Return the report meta data for a given table
+     *
+     * @param appId
+     * @param tableId
+     * @param reportId
+     * @returns promise
+     */
+    getReportMetaData(appId, tableId, reportId) {
+        // TODO cache meta data
+        let url = super.constructUrl(this.API.GET_REPORT_META, [appId, tableId, reportId]);
+        return super.get(url);
     }
 
     /**
@@ -152,6 +168,24 @@ class ReportService extends BaseService {
         return super.get(url);
     }
 
+    getReportResults(appId, tableId, reportId, optionalparams) {
+        let params = {};
+
+        //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
+        if (optionalparams) {
+            if (optionalparams[query.FORMAT_PARAM] === true) {
+                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+            }
+            if (NumberUtils.isInt(optionalparams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalparams[query.NUMROWS_PARAM])) {
+                params[query.OFFSET_PARAM] = optionalparams[query.OFFSET_PARAM];
+                params[query.NUMROWS_PARAM] = optionalparams[query.NUMROWS_PARAM];
+            }
+        }
+
+        let url = super.constructUrl(this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
+        return super.get(url, {params:params});
+    }
+
     /**
      * Return a completely hydrated report.  This is defined as the report data, report
      * facet data and other report data used by the UI.
@@ -169,9 +203,9 @@ class ReportService extends BaseService {
      *   glist - grouping data
      * @returns promise
      */
-    getReportDataAndFacets(appId, tableId, reportId, queryParams) {
-        return this.getReportData(appId, tableId, reportId, queryParams, true);
-    }
+    //getReportDataAndFacets(appId, tableId, reportId, queryParams) {
+    //    return this.getReportData(appId, tableId, reportId, queryParams, true);
+    //}
 
     /**
      * Return the data records for a given report.
@@ -187,32 +221,32 @@ class ReportService extends BaseService {
      * @param includeFacets - include facet data in result
      * @returns promise
      */
-    getReportData(appId, tableId, reportId, optionalparams, includeFacets) {
-        let params = {};
-
-        //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
-        if (optionalparams) {
-            if (optionalparams[query.FORMAT_PARAM] === true) {
-                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-            }
-            if (StringUtils.isNonEmptyString(optionalparams[query.QUERY_PARAM])) {
-                params[query.QUERY_PARAM] = optionalparams[query.QUERY_PARAM];
-            }
-            if (StringUtils.isNonEmptyString(optionalparams[query.COLUMNS_PARAM])) {
-                params[query.COLUMNS_PARAM] = optionalparams[query.COLUMNS_PARAM];
-            }
-            if (StringUtils.isNonEmptyString(optionalparams[query.SORT_LIST_PARAM])) {
-                params[query.SORT_LIST_PARAM] = optionalparams[query.SORT_LIST_PARAM];
-            }
-            if (NumberUtils.isInt(optionalparams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalparams[query.NUMROWS_PARAM])) {
-                params[query.OFFSET_PARAM] = optionalparams[query.OFFSET_PARAM];
-                params[query.NUMROWS_PARAM] = optionalparams[query.NUMROWS_PARAM];
-            }
-        }
-
-        let url = super.constructUrl(includeFacets === true ? this.API.GET_REPORT_COMPONENTS : this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
-        return super.get(url, {params:params});
-    }
+    //getReportData(appId, tableId, reportId, optionalparams, includeFacets) {
+    //    let params = {};
+    //
+    //    //  is the result set returned formatted/organized for UI display or in 'raw' un-edited format
+    //    if (optionalparams) {
+    //        if (optionalparams[query.FORMAT_PARAM] === true) {
+    //            params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+    //        }
+    //        if (StringUtils.isNonEmptyString(optionalparams[query.QUERY_PARAM])) {
+    //            params[query.QUERY_PARAM] = optionalparams[query.QUERY_PARAM];
+    //        }
+    //        if (StringUtils.isNonEmptyString(optionalparams[query.COLUMNS_PARAM])) {
+    //            params[query.COLUMNS_PARAM] = optionalparams[query.COLUMNS_PARAM];
+    //        }
+    //        if (StringUtils.isNonEmptyString(optionalparams[query.SORT_LIST_PARAM])) {
+    //            params[query.SORT_LIST_PARAM] = optionalparams[query.SORT_LIST_PARAM];
+    //        }
+    //        if (NumberUtils.isInt(optionalparams[query.OFFSET_PARAM]) && NumberUtils.isInt(optionalparams[query.NUMROWS_PARAM])) {
+    //            params[query.OFFSET_PARAM] = optionalparams[query.OFFSET_PARAM];
+    //            params[query.NUMROWS_PARAM] = optionalparams[query.NUMROWS_PARAM];
+    //        }
+    //    }
+    //
+    //    let url = super.constructUrl(includeFacets === true ? this.API.GET_REPORT_COMPONENTS : this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
+    //    return super.get(url, {params:params});
+    //}
 
     /**
      * Parse a facet Expression to a queryString.

@@ -60,6 +60,7 @@ let reportActions = {
             }
         });
     }
+
 };
 
 export default reportActions;
