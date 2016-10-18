@@ -74,7 +74,7 @@ const FieldElement = React.createClass({
 
         // Is the form element has showAsRadio prop - pass it down as a part of fieldDef
         let relatedField = this.props.relatedField;
-        if (this.props.element.showAsRadio) {
+        if (this.props.element && this.props.element.showAsRadio) {
             relatedField.showAsRadio = true;
         }
 

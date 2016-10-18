@@ -102,28 +102,32 @@ let QBForm = React.createClass({
      * @returns the record entry from formdata record array with the field ID
      */
     getFieldRecord(field) {
-        const fieldId = field.id;
-        if (_.has(this.props, 'pendEdits.recordChanges') && this.props.pendEdits.recordChanges[fieldId]) {
-            let vals = {};
-            vals.id = fieldId;
-            vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
-            vals.display = this.props.pendEdits.recordChanges[fieldId].newVal.display;
-            return vals;
-        }
-
-        let record = this.props.formData.record || [];
-
-        let fieldRecord = _.find(record, val => {
-            if (val.id === fieldId) {
-                return true;
+        if (field) {
+            const fieldId = field.id;
+            if (_.has(this.props, 'pendEdits.recordChanges') && this.props.pendEdits.recordChanges[fieldId]) {
+                let vals = {};
+                vals.id = fieldId;
+                vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
+                vals.display = this.props.pendEdits.recordChanges[fieldId].newVal.display;
+                return vals;
             }
-        });
 
-        if (fieldRecord.value) {
-            return fieldRecord;
-        } else if (field.defaultValue && field.defaultValue.coercedValue) {
-            fieldRecord.display = field.defaultValue.displayValue;
-            fieldRecord.value = field.defaultValue.coercedValue.value;
+            let record = this.props.formData.record || [];
+
+            let fieldRecord = _.find(record, val => {
+                if (val.id === fieldId) {
+                    return true;
+                }
+            });
+
+            if (fieldRecord && fieldRecord.value) {
+                return fieldRecord;
+            } else if (field.defaultValue && field.defaultValue.coercedValue) {
+                fieldRecord = {};
+                fieldRecord.display = field.defaultValue.displayValue;
+                fieldRecord.value = field.defaultValue.coercedValue.value;
+                return fieldRecord;
+            }
         }
     },
 
