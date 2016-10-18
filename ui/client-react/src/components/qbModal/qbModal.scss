@@ -2,10 +2,23 @@
   width: 350px
 }
 
+.modal-body {
+  padding: 0px;
+  height: 94px;
+}
+
 #buttonStay {
   margin-right: 140px;
 }
 
+#modalText {
+  padding-bottom: 100px;
+}
+
 .alert{
+  font-size: 44px;
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-bottom: 20px;
   color: orange;
 }

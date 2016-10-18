@@ -42,7 +42,7 @@ const QBModals = React.createClass({
         return <div>
             <Modal show={this.state.showModal} onHide={this.close}>
                     <Modal.Body>
-                        <QbIcon className="alert" icon="alert"/> Save changes before leaving?
+                        <QbIcon className="alert" icon="alert"/><span id="modalText">Save changes before leaving?</span>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button id="buttonStay" onClick={this.close}>Stay and keep working</Button>
