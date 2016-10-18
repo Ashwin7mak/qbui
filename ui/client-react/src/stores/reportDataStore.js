@@ -265,13 +265,13 @@ let reportModel = {
                 //format value for display
                 this.formatFieldValue(change);
             }
-            if (record) {
+            if (record && record[change.fieldName]) {
                 record[change.fieldName].value = change.value;
                 if (change.display !== undefined) {
                     record[change.fieldName].display = change.display;
                 }
             }
-            if (filtRecord) {
+            if (filtRecord && filtRecord[change.fieldName]) {
                 filtRecord[change.fieldName].value = change.value;
                 if (change.display !== undefined) {
                     filtRecord[change.fieldName].display = change.display;
