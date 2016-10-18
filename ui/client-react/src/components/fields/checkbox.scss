@@ -255,11 +255,6 @@ $checkbox-font-size-mobile: 16px;
     }
 }
 
-// as per specs, checkbos should not display the label in a separate node on left/top of element
-.formElement.checkbox-field .formElement.fieldLabel {
-    display: none;
-}
-
 @include small-breakpoint {
     .checkbox.renderer {
         .checked, .checkbox-unchecked {

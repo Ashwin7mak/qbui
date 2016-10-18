@@ -74,7 +74,7 @@ let QBForm = React.createClass({
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
             // checkbox should not have a separate field label
             if (this.getRelatedField(element.FormFieldElement.fieldId).name === 'Checkbox') {
-                cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, true, colSpan, validationStatus));
+                cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, false, colSpan, validationStatus));
             } else {
                 // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
                 if (labelPosition === QBForm.LABEL_LEFT) {
