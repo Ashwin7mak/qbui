@@ -232,16 +232,13 @@ export let RecordRoute = React.createClass({
                                              transitionAppearTimeout={200}
                                              transitionEnterTimeout={200}
                                              transitionLeaveTimeout={200}>
-                        <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null } loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)} >
-                            <Record
+                        <Record key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
                                     appId={this.props.params.appId}
                                     tblId={this.props.params.tblId}
                                     recId={this.props.params.recordId}
                                     errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
                                     formData={this.props.form ? this.props.form.formData : null}
-                                    appUsers={this.props.appUsers}
-                            />
-                        </Loader>
+                                    appUsers={this.props.appUsers} />
                     </ReactCSSTransitionGroup>
                 </div>);
         }
