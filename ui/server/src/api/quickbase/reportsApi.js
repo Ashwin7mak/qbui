@@ -259,13 +259,12 @@
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url, reportId);
 
-                //  if set, need to include the offset and num row parameters.
-                let query = url.parse(req.url, true).query;
-                if (query) {
-                    if (query.hasOwnProperty(constants.REQUEST_PARAMETER.OFFSET) && query.hasOwnProperty(constants.REQUEST_PARAMETER.NUM_ROWS)) {
-                        opts.url += '?' + constants.REQUEST_PARAMETER.OFFSET + '=' + query[constants.REQUEST_PARAMETER.OFFSET];
-                        opts.url += '&' + constants.REQUEST_PARAMETER.NUM_ROWS + '=' + query[constants.REQUEST_PARAMETER.NUM_ROWS];
-                    }
+                //  Include the offset and num row parameters to opts.url if found on original req
+                let offset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
+                let numRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                if (offset !== null && numRows !== null) {
+                    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.OFFSET, offset);
+                    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS, numRows);
                 }
 
                 return new Promise((resolve1, reject1) => {
