@@ -621,7 +621,11 @@ module.exports = function(grunt) {
                 command: [
                     //'git rev-parse --abbrev-ref HEAD > <%= quickbase.client.gen %>/buildBranchInfo.txt',
                     //'git status --porcelain -b -s  >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
-                    ' printf "<%= grunt.template.today("dddd, mmmm dS, yyyy, h:MM:ss TT") %>\n"  > <%= quickbase.client.gen %>/buildBranchInfo.txt git status --porcelain -b -S',
+                    //Tuesday, October 18th, 2016, 6:06:56 PM
+                    ' printf "<%= grunt.template.today("dddd, mmmm d yyyy, hh:MM:ss TT Z") %>\n"  > <%= quickbase.client.gen %>/buildBranchInfo.txt git status --porcelain -b -S',
+                    ' [[ $(date +%Z) != E* ]] && TZ=":America/New_York" date "+%A, %B %d %Y, %I:%M:%S %p %Z" >> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
+                    ' printf "GIT Revision: "  >> <%= quickbase.client.gen %>/buildBranchInfo.txt ',
+
                     ' [[ "<%= bldinfo.JOB_NAME %>" ]] && printf "Job Name: <%= bldinfo.JOB_NAME %>\n" >> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
                     ' [[ "<%= bldinfo.BUILD_NUMBER %>" ]] && printf   "BUILD_NUMBER: <%= bldinfo.BUILD_NUMBER %> \n">> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
                     ' [[ "<%= bldinfo.GIT_BRANCH %>" ]] && printf  "GIT_BRANCH: <%= bldinfo.GIT_BRANCH %>\n" >> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
