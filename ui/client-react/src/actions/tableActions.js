@@ -20,8 +20,17 @@ Promise.onPossiblyUnhandledRejection(function(err) {
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
+const DEFAULT_HOMEPAGE_ID = 0;
+
 let tableActions = {
 
+    /**
+     * Fetch the table home page report and total record count for the report
+     * @param appId
+     * @param tblId
+     * @param offset
+     * @param numRows
+     */
     loadTableHomePage: function(appId, tblId, offset, numRows) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
@@ -29,31 +38,25 @@ let tableActions = {
                 let tableService = new TableService();
                 let reportService = new ReportService();
 
+                //  even though we don't yet know the home page report id, want a spinner to display,
+                //  so dispatch the LOAD_REPORT event.
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId:DEFAULT_HOMEPAGE_ID});
+
+                //  Fetch the home page.  The response will include the report data, report fields
+                //  and record count.
                 tableService.getHomePage(appId, tblId, offset, numRows).then(
                     (response) => {
                         var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
-                        reportService.getReportRecordsCount(appId, tblId, model.rptId).then(
-                            response1 => {
-                                if (response1.data) {
-                                    logger.debug('ReportRecordsCount service call successful');
-                                    this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response1.data);
-                                    resolve();
-                                }
-                            },
-                            error1 => {
-                                logger.parseAndLogError(LogLevel.ERROR, error1, 'reportService.getReportRecordsCount:');
-                                this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error1.response.status);
-                                reject();
-                            }
-                        ).catch(ex => {
-                            logger.logException(ex);
-                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, 500);
-                            reject();
-                        });
 
-                        //  not waiting for the records count..fire off the load report events
-                        this.dispatch(actions.LOAD_REPORT, {appId, tblId, "rptId": model.rptId});
+                        //  now that we know the report id, re-init the load report event to
+                        //  ensure the reportId is set in the store.
+                        if (model.rptId !== DEFAULT_HOMEPAGE_ID) {
+                            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId: model.rptId});
+                        }
+
+                        //  ..fire off the load report and record count events
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, {body: model.recordData.filteredCount});
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x

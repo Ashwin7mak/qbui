@@ -20,6 +20,14 @@ Promise.onPossiblyUnhandledRejection(function(err) {
 
 let reportActions = {
 
+    /**
+     * Retrieve a list of reports for the given app/table.  This function is called primarily when
+     * populating the left hand navigation window with the list of reports and when displaying a
+     * trowser window that displays all of the reports for a table.
+     *
+     * @param appId
+     * @param tblId
+     */
     loadReports(appId, tblId) {
 
         //  promise is returned in support of unit testing only
