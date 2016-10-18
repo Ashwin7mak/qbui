@@ -33,6 +33,9 @@ $checkbox-font-size-mobile: 16px;
 
     //clear out the default margins
     margin: 0;
+    display: flex;
+    align-items: center;
+
     label {
         min-height: 12px;
         min-width: 12px;
@@ -67,6 +70,7 @@ $checkbox-font-size-mobile: 16px;
             /* .1s delay is for check animation */
             transition: border .25s, background-color .25s, font-size .20s .1s, width .20s .1s, height .20s .1s, top .20s .1s, left .20s .1s;
             z-index: 1;
+            margin-top: 2px;
         }
 
         // Focus state
@@ -183,7 +187,6 @@ $checkbox-font-size-mobile: 16px;
         }
 
         .label {
-            display: inline;
             border: 2px solid transparent;
         }
 
@@ -205,6 +208,17 @@ $checkbox-font-size-mobile: 16px;
             }
         }
 
+        .checked, .checkbox-unchecked {
+            align-self: flex-start;
+        }
+
+        .checked {
+            margin-top: 4px;
+            @include small-breakpoint {
+                margin-top: 6px;
+            }
+        }
+
         .checkbox-unchecked {
             @include unchecked-checkbox;
             display: inline-flex;
@@ -216,6 +230,7 @@ $checkbox-font-size-mobile: 16px;
             @include small-breakpoint {
                 height: $checkbox-size-mobile;
                 width: $checkbox-size-mobile;
+                margin-top: 4px;
             }
         }
 
@@ -236,6 +251,23 @@ $checkbox-font-size-mobile: 16px;
 
         &.invalid {
             color: $error-color;
+        }
+    }
+}
+
+// as per specs, checkbos should not display the label in a separate node on left/top of element
+.formElement.checkbox-field .formElement.fieldLabel {
+    display: none;
+}
+
+@include small-breakpoint {
+    .checkbox.renderer {
+        .checked, .checkbox-unchecked {
+            padding: 0;
+        }
+        .checkbox-unchecked {
+            height: 24px;
+            width: 24px;
         }
     }
 }
