@@ -14,7 +14,12 @@ $urlIcon-margin-left: 10px;
     }
 
     &:hover:not(.disabled), a:hover {
+        color: $link-text-hover-color;
         text-decoration: underline;
+
+        .urlIcon {
+            color: $link-text-hover-color;
+        }
     }
 
     a:focus, a:active {
