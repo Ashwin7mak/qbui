@@ -25,6 +25,7 @@ export let RecordRoute = React.createClass({
 
     loadRecord(appId, tblId, recordId, rptId, formType) {
         const flux = this.getFlux();
+        flux.actions.syncingForm();
         flux.actions.selectTableId(tblId);
         flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, formType);
     },
@@ -37,11 +38,23 @@ export let RecordRoute = React.createClass({
             this.loadRecord(appId, tblId, recordId, rptId);
         }
     },
-    componentDidMount: function() {
+    componentDidMount() {
         let flux = this.getFlux();
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
+
         this.loadRecordFromParams(this.props.params);
+    },
+
+    componentDidUpdate(prev) {
+
+        if (this.props.params.appId !== prev.params.appId ||
+            this.props.params.tblId !== prev.params.tblId ||
+            this.props.params.recId !== prev.params.recId ||
+            (this.props.form && this.props.form.syncLoadedForm)) {
+
+            this.loadRecordFromParams(this.props.params);
+        }
     },
 
     getSecondaryBar() {
@@ -128,7 +141,7 @@ export let RecordRoute = React.createClass({
                 <div className="navLinks">
                     {this.props.selectedTable && <TableIcon icon={this.props.selectedTable.icon}/>}
                     {this.props.selectedTable && <Link to={tableLink}>{this.props.selectedTable.name}</Link>}
-                    {this.props.selectedTable && <span>&nbsp;&gt;&nbsp;</span>}
+                    {this.props.selectedTable && rptId && <span>&nbsp;&gt;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
 
@@ -189,7 +202,8 @@ export let RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        return !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
+        return this.props.form.syncLoadedForm ||
+            !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits);
     },
 
@@ -228,8 +242,6 @@ export let RecordRoute = React.createClass({
                     </div>
                     <ReactCSSTransitionGroup className="qbFormContainer"
                                              transitionName={nextOrPreviousTransitionName}
-                                             transitionAppear={true}
-                                             transitionAppearTimeout={200}
                                              transitionEnterTimeout={200}
                                              transitionLeaveTimeout={200}>
                         <Record key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }

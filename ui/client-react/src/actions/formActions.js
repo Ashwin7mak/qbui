@@ -72,6 +72,10 @@ let formActions = {
         this.dispatch(actions.SAVE_FORM_SUCCESS);
     },
 
+    syncingForm() {
+        this.dispatch(actions.SYNCING_FORM);
+    },
+
     /**
      * load form for new record
      * @param appId

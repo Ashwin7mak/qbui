@@ -55,6 +55,17 @@ let RecordTrowser = React.createClass({
     },
 
     /**
+     * navigate to new record if appropriate
+     */
+    navigateToNewRecord(recId) {
+
+        if (this.props.reportData && this.props.reportData.navigateAfterSave) {
+            let {appId,tblId} = this.props;
+            this.props.router.push(`/app/${appId}/table/${tblId}/record/${recId}`);
+        }
+    },
+
+    /**
      * User wants to save changes to a record. First we do client side validation
      * and if validation is successful we initiate the save action for the new or existing record
      * if validation if not ok we stay in edit mode and show the errors (TBD)
@@ -82,11 +93,12 @@ let RecordTrowser = React.createClass({
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
-            promise.then((result) => {
+            promise.then((recId) => {
                 flux.actions.saveFormSuccess();
 
-
                 this.hideTrowser();
+                this.navigateToNewRecord(recId);
+
             }, (errorStatus) => {
                 flux.actions.saveFormFailed(errorStatus);
             });
