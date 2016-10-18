@@ -6,7 +6,6 @@ import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
-import {browserHistory} from 'react-router';
 import * as UrlConsts from "../constants/urlConstants";
 import Locale from '../locales/locales';
 import {NotificationManager} from 'react-notifications';
@@ -43,9 +42,9 @@ let formActions = {
     /**
      * start editing a new record
      */
-    editNewRecord() {
+    editNewRecord(navigateAfterSave = false) {
 
-        this.dispatch(actions.EDIT_REPORT_RECORD, {"recId":UrlConsts.NEW_RECORD_VALUE});
+        this.dispatch(actions.EDIT_REPORT_RECORD, {recId:UrlConsts.NEW_RECORD_VALUE, navigateAfterSave});
 
         // add editRec=new query param and let the router take action
         WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);

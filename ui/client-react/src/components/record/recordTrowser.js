@@ -9,7 +9,6 @@ import TableIcon from "../qbTableIcon/qbTableIcon";
 import Loader from 'react-loader';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
-import {browserHistory} from 'react-router';
 
 import './recordTrowser.scss';
 
@@ -83,8 +82,10 @@ let RecordTrowser = React.createClass({
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
-            promise.then(() => {
+            promise.then((result) => {
                 flux.actions.saveFormSuccess();
+
+
                 this.hideTrowser();
             }, (errorStatus) => {
                 flux.actions.saveFormFailed(errorStatus);
@@ -210,10 +211,10 @@ let RecordTrowser = React.createClass({
 
         return (
             <div className="saveButtons">
-                <Button bsStyle="primary" disabled={!canSave} onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
                 {showNext &&
                     <Button bsStyle="primary" disabled={!canSave} onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
                 }
+                <Button bsStyle="primary" disabled={!canSave} onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
             </div>);
     },
 

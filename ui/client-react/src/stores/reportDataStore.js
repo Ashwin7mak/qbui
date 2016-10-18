@@ -471,6 +471,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.previousEditRecordId = null;
         this.nextOrPreviousEdit = "";
 
+        this.navigateAfterSave = false;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -895,7 +896,7 @@ let ReportDataStore = Fluxxor.createStore({
      * the displayed record has changed, update the previous/next record IDs
      * @param recId
      */
-    updateEditRecordNavContext(recId, nextOrPrevious = "") {
+    updateEditRecordNavContext(recId, nextOrPrevious = "", navigateAfterSave = false) {
 
         const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
 
@@ -915,6 +916,7 @@ let ReportDataStore = Fluxxor.createStore({
             this.previousEditRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
         }
         this.nextOrPreviousEdit = nextOrPrevious;
+        this.navigateAfterSave = navigateAfterSave;
 
         this.emit("change");
     },
@@ -946,7 +948,7 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload
      */
     onEditRecord(payload) {
-        this.updateEditRecordNavContext(payload.recId);
+        this.updateEditRecordNavContext(payload.recId, "", payload.navigateAfterSave);
     },
     /**
      * update prev/next props after displaying previous record
@@ -989,7 +991,8 @@ let ReportDataStore = Fluxxor.createStore({
             currentEditRecordId: this.currentEditRecordId,
             nextEditRecordId: this.nextEditRecordId,
             previousEditRecordId: this.previousEditRecordId,
-            nextOrPreviousEdit: this.nextOrPreviousEdit
+            nextOrPreviousEdit: this.nextOrPreviousEdit,
+            navigateAfterSave: this.navigateAfterSave
         };
     }
 });

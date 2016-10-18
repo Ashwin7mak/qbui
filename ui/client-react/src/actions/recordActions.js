@@ -71,7 +71,7 @@ let recordActions = {
                                 let resJson = JSON.parse(response.data.body);
                                 this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
                                 NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
-                                resolve();
+                                resolve(resJson.id);
                             } else {
                                 logger.error('RecordService createRecord call error: no response data value returned');
                                 this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
