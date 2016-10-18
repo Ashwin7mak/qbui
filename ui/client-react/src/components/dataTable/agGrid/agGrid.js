@@ -6,7 +6,6 @@ import QBicon from '../../qbIcon/qbIcon';
 import IconActions from '../../actions/iconActions';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import Locale from '../../../locales/locales';
 import _ from 'lodash';
 import Loader  from 'react-loader';

@@ -12,6 +12,7 @@ import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import {withRouter} from 'react-router';
 import Locale from '../../locales/locales';
+import Loader from 'react-loader';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
 import './record.scss';
@@ -212,28 +213,37 @@ export let RecordRoute = React.createClass({
 
             const nextOrPreviousTransitionName = this.props.reportData && this.props.reportData.nextOrPrevious ? this.props.reportData.nextOrPrevious : "";
 
-            return (<div id={this.props.params.recordId} className="recordContainer">
-                <Stage stageHeadline={this.getStageHeadline()}
-                       pageActions={this.getPageActions()}>
+            return (
+                <div className="recordContainer">
+                    <Stage stageHeadline={this.getStageHeadline()}
+                           pageActions={this.getPageActions()}>
 
-                    <div className="record-content">
+                        <div className="record-content">
+                        </div>
+                    </Stage>
+
+                    <div className="recordActionsContainer secondaryBar">
+                        {this.getSecondaryBar()}
+                        {this.getPageActions()}
                     </div>
-                </Stage>
-
-                <div className="recordActionsContainer secondaryBar">
-                    {this.getSecondaryBar()}
-                    {this.getPageActions()}
-                </div>
-                <div className="qbFormContainer">
-                    <Record appId={this.props.params.appId}
-                            tblId={this.props.params.tblId}
-                            recId={this.props.params.recordId}
-                            errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
-                            formData={this.props.form ? this.props.form.formData : null}
-                            appUsers={this.props.appUsers}
-                    />
-                </div>
-            </div>);
+                    <ReactCSSTransitionGroup className="qbFormContainer"
+                                             transitionName={nextOrPreviousTransitionName}
+                                             transitionAppear={true}
+                                             transitionAppearTimeout={200}
+                                             transitionEnterTimeout={200}
+                                             transitionLeaveTimeout={200}>
+                        <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null } loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)} >
+                            <Record
+                                    appId={this.props.params.appId}
+                                    tblId={this.props.params.tblId}
+                                    recId={this.props.params.recordId}
+                                    errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
+                                    formData={this.props.form ? this.props.form.formData : null}
+                                    appUsers={this.props.appUsers}
+                            />
+                        </Loader>
+                    </ReactCSSTransitionGroup>
+                </div>);
         }
     }
 });

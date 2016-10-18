@@ -149,6 +149,8 @@ let formActions = {
                     (response) => {
                         resolve();
 
+                        // store record id since form component needs it and it's not in the response
+                        response.data.recordId = recordId;
                         this.dispatch(successAction, response.data);
                     },
                     (error) => {
