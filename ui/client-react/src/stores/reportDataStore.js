@@ -210,6 +210,7 @@ let reportModel = {
      * @returns the found record or undefined
      */
     findRecordById(records, recId) {
+        recId = recId ? +recId : recId;
         return records.find(rec => rec[this.model.keyField.name].value === recId);
     },
 
@@ -223,6 +224,20 @@ let reportModel = {
         return records.findIndex(rec => rec[this.model.keyField.name].value === recId);
     },
 
+    findARecord(recId) {
+        if (this.model.records) {
+            return this.findRecordById(this.model.records, recId);
+        }
+        return null;
+    },
+
+    findAFilteredRecord(recId) {
+        if (this.model.filteredRecords) {
+            return this.findRecordById(this.model.filteredRecords, recId);
+        }
+        return null;
+    },
+
     /**
      * updates a record in the model inplace, for inline edits with changes
      * per xd user will not get reload of sort/group/filtered effects of the
@@ -232,39 +247,37 @@ let reportModel = {
      * @param changes - the changes to make to the record form is [{id: fieldid, display: dispVal, value: raw, fieldName: name}, ...]
      */
     updateARecord(oldRecId, newRecId, changes) {
-        if (this.model.records && this.model.filteredRecords) {
-            let record = this.findRecordById(this.model.records, oldRecId);
-            let filtRecord = this.findRecordById(this.model.filteredRecords, oldRecId);
+        let record = this.findARecord(oldRecId);
+        let filtRecord = this.findAFilteredRecord(oldRecId);
 
-            // update with new recid
-            if (newRecId !== null) {
-                if (record) {
-                    record[this.model.keyField.name].value = newRecId;
-                }
-                if (filtRecord) {
-                    filtRecord[this.model.keyField.name].value = newRecId;
+        // update with new recid
+        if (newRecId !== null) {
+            if (record) {
+                record[this.model.keyField.name].value = newRecId;
+            }
+            if (filtRecord) {
+                filtRecord[this.model.keyField.name].value = newRecId;
+            }
+        }
+        // change the data values
+        changes.forEach(change => {
+            if (change.display === undefined) {
+                //format value for display
+                this.formatFieldValue(change);
+            }
+            if (record && record[change.fieldName]) {
+                record[change.fieldName].value = change.value;
+                if (change.display !== undefined) {
+                    record[change.fieldName].display = change.display;
                 }
             }
-            // change the data values
-            changes.forEach(change => {
-                if (change.display === undefined) {
-                    //format value for display
-                    this.formatFieldValue(change);
+            if (filtRecord && filtRecord[change.fieldName]) {
+                filtRecord[change.fieldName].value = change.value;
+                if (change.display !== undefined) {
+                    filtRecord[change.fieldName].display = change.display;
                 }
-                if (record) {
-                    record[change.fieldName].value = change.value;
-                    if (change.display !== undefined) {
-                        record[change.fieldName].display = change.display;
-                    }
-                }
-                if (filtRecord) {
-                    filtRecord[change.fieldName].value = change.value;
-                    if (change.display !== undefined) {
-                        filtRecord[change.fieldName].display = change.display;
-                    }
-                }
-            });
-        }
+            }
+        });
     },
 
     updateRecordsCount: function(recordsCountData) {
@@ -661,20 +674,11 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    /**
-     * adds a new blank record to the list of records
-     *
-     * @param payload parameter contains
-     *  payload.afterRecId : {value:id} of record to add the new blank record after
-     *  (its not sorted/group till next reload from server)
-     *
-     */
-    onAddReportRecord(payload) {
+    createNewRecord(afterRecId) {
         const model = this.reportModel.get();
 
         if (model.filteredRecords.length > 0) {
             //find record to add after
-            let afterRecId = payload.afterRecId;
 
             let afterRecIndex = -1;
             if (afterRecId && afterRecId.value !== undefined) {
@@ -688,10 +692,10 @@ let ReportDataStore = Fluxxor.createStore({
                 let theCorrespondingField = _.find(model.fields, (item) => item.id === obj.id);
                 //set the default values in the answer for each field
                 if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
-                    valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id} ;
+                    valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id};
                 } else {
                     //TBD : type specific values
-                    valueAnswer = {value:null, id:obj.id} ;
+                    valueAnswer = {value: null, id: obj.id};
                 }
                 return valueAnswer;
             });
@@ -717,7 +721,7 @@ let ReportDataStore = Fluxxor.createStore({
             } else {
                 this.editingIndex = newFilteredRecords.length;
                 this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
-                newFilteredRecords.push(newRecord);
+                newFilteredRecords.unshift(newRecord);
             }
 
             model.filteredRecords = newFilteredRecords;
@@ -732,13 +736,23 @@ let ReportDataStore = Fluxxor.createStore({
             } else {
                 this.editingIndex = newRecords.length;
                 this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
-                newRecords.push(newRecord);
+                newRecords.unshift(newRecord);
             }
             model.records = newRecords;
             model.recordsCount++;
-
-            this.emit('change');
         }
+    },
+    /**
+     * adds a new blank record to the list of records
+     *
+     * @param payload parameter contains
+     *  payload.afterRecId : {value:id} of record to add the new blank record after
+     *  (its not sorted/group till next reload from server)
+     *
+     */
+    onAddReportRecord(payload) {
+        this.createNewRecord(payload.afterRecId);
+        this.emit('change');
     },
 
     /**
@@ -819,6 +833,12 @@ let ReportDataStore = Fluxxor.createStore({
     onAddRecordSuccess(payload) {
         // update the  record values
         this.editingIndex = null;
+        let record = this.reportModel.findARecord(payload.recId);
+        let filtRecord = this.reportModel.findAFilteredRecord(payload.recId);
+        if (record === undefined && filtRecord === undefined) {
+            // add record was called without creating an empty record probably from a trowser so create one here
+            this.createNewRecord();
+        }
         this.reportModel.updateARecord(SchemaConsts.UNSAVED_RECORD_ID, payload.recId, payload.record);
 
         this.emit("change");
