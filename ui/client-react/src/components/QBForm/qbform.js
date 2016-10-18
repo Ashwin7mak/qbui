@@ -78,7 +78,7 @@ let QBForm = React.createClass({
             } else {
                 // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
                 if (labelPosition === QBForm.LABEL_LEFT) {
-                    cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, colSpan));
+                    cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus));
                 }
                 cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, labelPosition === QBForm.LABEL_ABOVE, colSpan, validationStatus));
             }
