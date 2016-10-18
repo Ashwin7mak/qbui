@@ -19,7 +19,8 @@ describe('RecordRoute functions', () => {
         loadFormAndRecord() {return;},
         openingReportRow() {return;},
         showPreviousRecord() {return;},
-        showNextRecord() {return;}
+        showNextRecord() {return;},
+        syncingForm() {return;}
     };
 
     beforeEach(() => {

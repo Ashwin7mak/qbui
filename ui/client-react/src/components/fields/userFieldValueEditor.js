@@ -92,12 +92,7 @@ const UserFieldValueEditor = React.createClass({
             current.showEmail = appUserItems.reduce((count, user) => count + (user.label === current.label ? 1 : 0), 0) > 1;
         });
 
-        // if a field is not required, include a blank selection at the beginning of the list
-        if (!this.props.fieldDef.required) {
-            return  [{value:null, label:""}].concat(appUserItems);
-        }
-
-        return appUserItems;
+        return  [{value:null, label:""}].concat(appUserItems);
     },
 
     /**

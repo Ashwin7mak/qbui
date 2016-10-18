@@ -60,7 +60,7 @@ let RecordTrowser = React.createClass({
     navigateToNewRecord(recId) {
 
         if (this.props.reportData && this.props.reportData.navigateAfterSave) {
-            let {appId,tblId} = this.props;
+            let {appId, tblId} = this.props;
             this.props.router.push(`/app/${appId}/table/${tblId}/record/${recId}`);
         }
     },
