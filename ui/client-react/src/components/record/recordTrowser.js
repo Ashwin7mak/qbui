@@ -7,6 +7,7 @@ import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBicon from "../qbIcon/qbIcon";
 import TableIcon from "../qbTableIcon/qbTableIcon";
 import Loader from 'react-loader';
+import QBErrorMessag from "../QBErrorMessage/qbErrorMessage";
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
 import {browserHistory} from 'react-router';
@@ -28,12 +29,14 @@ let RecordTrowser = React.createClass({
         visible: React.PropTypes.bool,
         form: React.PropTypes.object,
         pendEdits: React.PropTypes.object,
-        reportData: React.PropTypes.object
+        reportData: React.PropTypes.object,
+        errorPopupHidden: React.PropTypes.bool,
     },
     /**
      * get trowser content (report nav for now)
      */
     getTrowserContent() {
+        var message = ["Saab", "Volvo", "BMW"];
 
         return (this.props.visible &&
             <Loader loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)} >
@@ -45,6 +48,7 @@ let RecordTrowser = React.createClass({
                     pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
                     formData={this.props.form ? this.props.form.editFormData : null}
                     edit={true} />
+                <QBErrorMessag message={message} hidden={this.props.errorPopupHidden} onCancel={this.dismissErrorDialog}/>
             </Loader>);
     },
     /**
@@ -233,6 +237,11 @@ let RecordTrowser = React.createClass({
         WindowLocationUtils.pushWithoutQuery();
 
         flux.actions.hideTrowser();
+    },
+    dismissErrorDialog() {
+        //WindowLocationUtils.pushWithoutQuery();
+        let flux = this.getFlux();
+        flux.actions.hideErrorMsgDialog();
     },
     /**
      * trowser to wrap report manager

@@ -21,7 +21,8 @@ let NavStore = Fluxxor.createStore({
             trowserContent: TrowserConsts.TROWSER_EDIT_RECORD,
             topTitle: null,
             scrollingReport: false,
-            filterReportsName: ''
+            filterReportsName: '',
+            errorMsgHide: false,
         };
 
         this.setLocaleBundle();
@@ -39,7 +40,9 @@ let NavStore = Fluxxor.createStore({
             actions.HIDE_TOP_NAV, this.onHideTopNav,
             actions.SET_TOP_TITLE, this.onSetTopTitle,
             actions.SCROLLING_REPORT, this.onScrollingReport,
-            actions.FILTER_REPORTS_BY_NAME, this.onFilterReportsByName
+            actions.FILTER_REPORTS_BY_NAME, this.onFilterReportsByName,
+            actions.SHOW_ERROR_MSG_DIALOG, this.onShowErrorMsgDialog,
+            actions.HIDE_ERROR_MSG_DIALOG, this.onHideErrorMsgDialog,
         );
     },
 
@@ -129,7 +132,15 @@ let NavStore = Fluxxor.createStore({
 
     setLocaleBundle() {
         this.state.i18n = Locale.getI18nBundle();
-    }
+    },
+    onShowErrorMsgDialog() {
+        this.state.errorMsgHide = false;
+        this.emit('change');
+    },
+    onHideErrorMsgDialog() {
+        this.state.errorMsgHide = true;
+        this.emit('change');
+    },
 });
 
 export default NavStore;

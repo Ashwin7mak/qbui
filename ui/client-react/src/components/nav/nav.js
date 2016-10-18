@@ -165,7 +165,8 @@ export let Nav = React.createClass({
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
                                selectedTable={this.getSelectedTable()}
-                               reportData={this.state.reportData}/>
+                               reportData={this.state.reportData}
+                               errorPopupHidden={this.state.nav.errorMsgHide}/>
             }
             {this.props.params && this.props.params.appId &&
                 <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}

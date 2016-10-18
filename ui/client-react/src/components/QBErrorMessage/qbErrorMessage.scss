@@ -1,0 +1,63 @@
+@import '../../assets/css/qbVariables';
+
+.qbErrorMessage{
+  line-height: 140%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: $errorMessage-border-color;
+  position: fixed;
+  bottom: 54px;
+  right: 0px;
+  max-width: 450px;
+  width: 90%;
+  text-align: left;
+  z-index: 99999;
+  margin: 0 auto;
+
+  div {
+    padding: 2px;
+
+    &.qbErrorMessageHeader {
+      background-color: $errorMessage-header-background;
+      color: $errorMessage-header-text-color;
+      display: flex;
+      justify-content: space-between;
+      .leftIcons {
+        display: flex;
+        font-size: 26px;
+      }
+      .rightIcons {
+        flex: 0 0 auto;
+        button {
+          height:40px;
+          font-size: 16px;
+          color: #fff;
+          background-color: $errorMessage-header-background;
+          border-radius: 0;
+          border: 0;
+        }
+      }
+    }
+
+    &.qbErrorMessageContent {
+      background-color: $errorMessage-content-background;
+      padding-bottom: 15px;
+      padding-top: 15px;
+      text-align:left;
+      color: $errorMessage-content-text-color;
+      flex-direction: column;
+      display: flex;
+
+      .qbErrorMessageItem {
+        margin-left: 40px;
+      }
+    }
+
+    span {
+      margin-left: 2px;
+      margin-right: 10px;
+      margin-top: 8px;
+    }
+
+  }
+}
