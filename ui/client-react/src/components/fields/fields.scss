@@ -17,24 +17,24 @@ $data-font-size: $font-size-p;
 
 // plain user data
 .data {
-  color : $data-color;
-  font-family: $font-family;
-  font-size: $data-font-size;
-  -webkit-font-smoothing: antialiased;
+    color : $data-color;
+    font-family: $font-family;
+    font-size: $data-font-size;
+    -webkit-font-smoothing: antialiased;
 }
 
 // inline edit of a cell
 .cellEdit {
-  border: solid 1px $input-text-normal-border-color;
-  box-shadow: none;
-  border-radius: 2px;
+    border: solid 1px $input-text-normal-border-color;
+    box-shadow: none;
+    border-radius: 2px;
 }
 
 // visual style of input userdata
 @mixin error-border() {
-  border: 1px solid $input-text-error-border-color;
-  border-left-width: 5px;
-  box-shadow: none;
+    border: 1px solid $input-text-error-border-color;
+    border-left-width: 5px;
+    box-shadow: none;
 }
 
 
@@ -86,122 +86,126 @@ textarea:focus,
 }
 
 .error .borderOnError {
-  border-top: 1px solid $input-text-error-border-color;
-  border-right: 1px solid  $input-text-error-border-color;
-  border-bottom: 1px solid $input-text-error-border-color;
-  border-left: 5px solid $input-text-error-border-color;
-  border-color: $input-text-error-border-color !important;
-  box-shadow: none;
+    border-top: 1px solid $input-text-error-border-color;
+    border-right: 1px solid  $input-text-error-border-color;
+    border-bottom: 1px solid $input-text-error-border-color;
+    border-left: 5px solid $input-text-error-border-color;
+    border-color: $input-text-error-border-color !important;
+    box-shadow: none;
 }
 
 .error :focus.borderOnError {
-  outline: none;
-  border-top: 1px solid $input-text-error-border-color;
-  border-right: 1px solid  $input-text-error-border-color;
-  border-bottom: 1px solid $input-text-error-border-color;
-  border-left: 5px solid $input-text-error-border-color;
-  border-color: $input-text-error-border-color !important;
-  @include focus-shadow($input-text-error-border-color);
+    outline: none;
+    border-top: 1px solid $input-text-error-border-color;
+    border-right: 1px solid  $input-text-error-border-color;
+    border-bottom: 1px solid $input-text-error-border-color;
+    border-left: 5px solid $input-text-error-border-color;
+    border-color: $input-text-error-border-color !important;
+    @include focus-shadow($input-text-error-border-color);
 }
 .Select {
     &.is-open .Select-control{
-      @include text-input-focus;
-  }
+        @include text-input-focus;
+    }
 }
 
 .invalidInput.tooltip {
-  z-index: 9999;
+    z-index: 9999;
 }
 .invalidRecord.tooltip >.tooltip-arrow,
 .invalidInput.tooltip >.tooltip-arrow {
-  border-bottom-color: $tootip-error-color;
-  border-top-color: $tootip-error-color;
-  top: 100%;
+    border-bottom-color: $tootip-error-color;
+    border-top-color: $tootip-error-color;
+    top: 100%;
 }
 .invalidRecord.tooltip,
 .invalidRecord.tooltip .tooltip-inner,
 .invalidInput.tooltip,
 .invalidInput.tooltip .tooltip-inner {
-  background-color:  $tootip-error-color;
+    background-color:  $tootip-error-color;
 }
 
 .invalidRecord.tooltip .tooltip-arrow {
-  top: -5px;
+    top: -5px;
 }
 .invalidRecord.tooltip.top .tooltip-arrow {
-  bottom: -5px;
-  top: initial;
+    bottom: -5px;
+    top: initial;
 }
 
 // visual style of required field indicator
 .requiredFlag {
-  color: $field-label-normal-color;
-  font-size: 17px;
+    color: $field-label-normal-color;
+    font-size: 17px;
 }
 
 .requiredFlag-layout {
-  display: block;
-  padding-left: 2px;
+    display: block;
+    padding-left: 2px;
 }
 
 .textFormat .cellData .textField {
-  word-break: break-word;
-  white-space: normal;
+    word-break: break-word;
+    white-space: normal;
 }
 .textFormat .cellData.NoWrap .textField {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 .multiLineCellEditWrapper .cellEdit {
-  min-height: 28px;
+    min-height: 28px;
 }
 .multiLineCellEditWrapper.error .tipChildWrapper,
 .multiLineCellEditWrapper.error .tipChildWrapper textarea {
-  height: 28px !important;
+    height: 28px !important;
 }
 
 .userDisplayValue {
-  overflow:hidden;
-  text-overflow:ellipsis;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .cellData.NoWrap {
-  white-space: nowrap;
+    white-space: nowrap;
 }
 
 .tooltip {
-  z-index: 1;
+    z-index: 1;
 }
 
 /* allow wide tooltips */
 .tooltip-inner {
-  max-width:none;
+    max-width:none;
 }
 
 .inputDeleteIcon {
     position: relative;
     width: inherit;
 
+    input {
+        transition: padding .3s ease-in-out;
+    }
+
     .clearIcon {
-        background-color: $color-black-100;
+        background-color: transparent;
         color: $clearmini-normal-color;
         max-height: 16px;
         max-width: 16px;
         opacity: 0;
         position: absolute;
-        right: 2px;
+        right: -4px;
         top: 50%;
 
-        transform: translateY(-50%);
-        transition: opacity .2s ease-in-out;
+        transform: translateY(-50%) rotate(115deg);
+        transition: opacity .2s ease-in-out, transform .3s ease-in-out, right .3s ease-in-out;
 
-      &:hover {
+        &:hover {
             color: $clearmini-hover-color;
         }
 
         .qbIcon {
-          cursor: pointer;
-          font-size: 14px;
+            cursor: pointer;
+            font-size: 14px;
 
             @include small-breakpoint {
                 font-size: 16px;
@@ -209,8 +213,19 @@ textarea:focus,
         }
     }
 
-    // Show the clear icon on hover
-    &:hover .clearIcon {
-      opacity: 1;
+    @include small-breakpoint {
+        input:focus {
+            padding-right: 22px;
+
+            & + .clearIcon {
+                opacity: 1;
+                right: 4px;
+                transform: translateY(-50%) rotate(0deg);
+            }
+        }
+
     }
+
+
+
 }

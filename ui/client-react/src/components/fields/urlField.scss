@@ -5,7 +5,8 @@ $urlIcon-margin-left: 10px;
 
 .urlField {
     &, a {
-        color: $link-text-normal-color;
+        color: $link-normal-color;
+        text-decoration: none;
     }
 
     /* Align url icons with flex instead of absolute positioning */
@@ -13,14 +14,28 @@ $urlIcon-margin-left: 10px;
         display: flex;
     }
 
-    &:hover:not(.disabled), a:hover {
-        color: $link-text-hover-color;
-        text-decoration: underline;
+    &:not(.disabled) {
+        a:hover, a:active {
+            text-decoration: underline;
+        }
 
-        .urlIcon {
-            color: $link-text-hover-color;
+        a:hover {
+            color: $link-hover-color;
+
+            .urlIcon {
+                color: $link-hover-color;
+            }
+        }
+
+        a:active {
+            color: $link-press-color;
+
+            .urlIcon {
+                color: $link-press-color;
+            }
         }
     }
+
 
     a:focus, a:active {
         /* Don't show focus state on the whole link. Should be on link and icon separately */
@@ -72,19 +87,19 @@ $urlIcon-margin-left: 10px;
 
         &.btn-default {
             @include urlButtonBackgroundGradient();
-            color: $link-text-normal-color;
+            color: $link-normal-color;
         }
 
         &.btn-default:focus, &.btn-default:active {
             @include focus-shadow();
             @include urlButtonBackgroundFocusGradient();
-            color: $link-text-normal-color;
+            color: $link-normal-color;
             border: 1px solid $urlButton-border-focus-color;
         }
 
         &.btn-default:hover {
             background: $urlButton-background-hover-color;
-            color: $link-text-normal-color;
+            color: $link-normal-color;
             text-decoration: none;
         }
 
