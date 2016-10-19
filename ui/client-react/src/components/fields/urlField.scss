@@ -44,10 +44,8 @@ $urlIcon-margin-left: 10px;
         outline: none;
     }
 
-    a .link:focus,
-    a .link:active,
-    a .urlIcon:focus,
-    a .urlIcon:active {
+    a .link:focus:not(:active),
+    a .urlIcon:focus:not(:active) {
         background-color: $stage-backgroundColor;
         outline: none;
         padding: 1px 3px;
@@ -56,8 +54,8 @@ $urlIcon-margin-left: 10px;
     }
 
     /* Move the margin so that the extra border from the focus does not move the element. */
-    a .link:focus,
-    a .link:active {
+    a .link:focus:not(:active) {
+        margin-bottom: -4px;
         margin-left: -4px;
         margin-right: -4px;
         // Make sure underline shows up if user is tabbing through elements
@@ -65,9 +63,20 @@ $urlIcon-margin-left: 10px;
     }
 
     /* Move the margin so that the extra border form the focus does not move the element */
-    a .urlIcon:focus,
-    a .urlIcon:active {
+    a .urlIcon:focus {
         margin-left: ($urlIcon-margin-left - 4);
+
+        @include small-breakpoint {
+            margin-left: auto;
+        }
+    }
+
+    /* Remove border when pressing */
+    a .link:active,
+    a .urlIcon:active {
+        box-shadow: none;
+        border: none;
+        outline: none;
     }
 
     .btn {

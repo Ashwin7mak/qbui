@@ -193,11 +193,11 @@ textarea:focus,
         max-width: 16px;
         opacity: 0;
         position: absolute;
-        right: -4px;
+        right: -3px;
         top: 50%;
 
-        transform: translateY(-50%) rotate(115deg);
-        transition: opacity .2s ease-in-out, transform .3s ease-in-out, right .3s ease-in-out;
+        transform: translateY(-50%) rotate(130deg);
+        transition: opacity .2s linear, transform .3s ease-in-out, right .3s ease-in-out;
 
         &:hover {
             color: $clearmini-hover-color;
