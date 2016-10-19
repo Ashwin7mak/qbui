@@ -1,8 +1,16 @@
+@import '../../assets/css/_qbVariables';
+
 .modal-content {
   border-top: none;
   border-bottom: none;
   border-left: 30px white solid;
   border-right: 30px white solid;
+
+  @include small-breakpoint {
+    border-left: 10px white solid;
+    border-right: 10px white solid;
+    border-radius: 0px;
+  }
 }
 
 .modal-footer {
@@ -16,6 +24,11 @@
 .modal-dialog {
   margin: 200px auto;
   width: 450px;
+
+  @include small-breakpoint {
+    margin: 0px auto;
+    width: 100%;
+  }
 }
 
 .modal-body {
@@ -23,6 +36,11 @@
   margin-top: -15px;
   height: 44px;
   margin-left: 60px;
+
+  @include small-breakpoint {
+    margin-top: -15px;
+    height: 54px;
+  }
 }
 
 #buttonStay {
@@ -44,6 +62,33 @@
 
 .alert{
   margin-left: -15px;
+  font-size: 44px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  color: orange;
+}
+
+#smallButtonStay {
+  width: 100%;
+  margin-left: 0px;
+}
+
+#smallDoNotSaveButton{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 0px;
+  width: 100%;
+}
+
+#smallSaveButton{
+  width: 100%;
+}
+
+#smallModalText {
+  padding-bottom: 100px;
+}
+
+.smallAlert{
   font-size: 44px;
   padding-top: 30px;
   padding-bottom: 20px;

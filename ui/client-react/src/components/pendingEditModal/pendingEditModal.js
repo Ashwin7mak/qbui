@@ -1,6 +1,7 @@
 import React from 'react';
 import QbIcon from '../qbIcon/qbIcon';
 import './pendingEditModal.scss';
+import './pendingEditModalSmallBreakpoint.scss';
 import QBModal from '../qbModal/qbModal';
 import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -28,10 +29,15 @@ const PendingEditModal = React.createClass({
     stayOnCurrentPage() {},
     doNotSaveAndRedirect() {},
     render() {
+        let modal;
+        let isSmall = Breakpoints.isSmallBreakpoint();
+        console.log('isSmall: ', isSmall);
         const modalI18BodyMessage = <I18nMessage message="pendingEditModal.modalBodyMessage"/>;
         const modalI18StayButton = <I18nMessage message="pendingEditModal.modalStayButton"/>;
         const modalI18DoNotSaveButton = <I18nMessage message="pendingEditModal.modalDoNotSaveButton"/>;
         const modalI18SaveButton = <I18nMessage message="pendingEditModal.modalSaveButton"/>;
+        /**
+        * The below consts are set for large breakpoint modal*/
         const modalBodyMessage = [
             <span id="modalText"><h4>{modalI18BodyMessage}</h4></span>
         ];
@@ -45,12 +51,43 @@ const PendingEditModal = React.createClass({
             <Button id="doNotSaveButton">{modalI18DoNotSaveButton}</Button>,
             <Button id="saveButton" bsStyle="primary">{modalI18SaveButton}</Button>
         ];
-        return <QBModal
+        /**
+         * The below consts are for small breakpoint modal*/
+        const smallModalBodyMessage = [
+            <span id="smallModalText"><h4>{modalI18BodyMessage}</h4></span>
+        ];
+        const smallModalBodyQBIcon = [
+            <QbIcon className="smallAlert" icon="alert"/>
+        ];
+        const smallButtonArrayLeft = [
+            <Button id="smallSaveButton" bsStyle="primary">{modalI18SaveButton}</Button>
+        ];
+        const smallButtonArrayRight = [
+            <Button id="smallDoNotSaveButton">{modalI18DoNotSaveButton}</Button>,
+            <Button id="smallButtonStay" onClick={this.close}>{modalI18StayButton}</Button>
+        ];
+        if (!isSmall) {
+            modal = [
+                <QBModal
                 bool={this.props.bool}
                 buttonArrayLeft={buttonArrayLeft}
                 buttonArrayRight={buttonArrayRight}
                 modalBodyMessage={modalBodyMessage}
-                modalBodyQBIcon={modalBodyQBIcon}/>;
+                modalBodyQBIcon={modalBodyQBIcon}/>
+            ];
+        } else {
+            modal = [
+                <QBModal
+                    bool={this.props.bool}
+                    buttonArrayLeft={smallButtonArrayLeft}
+                    buttonArrayRight={smallButtonArrayRight}
+                    modalBodyMessage={smallModalBodyMessage}
+                    modalBodyQBIcon={smallModalBodyQBIcon}/>
+            ];
+        }
+        return <div>
+            {modal}
+            </div>;
     }
 });
 
