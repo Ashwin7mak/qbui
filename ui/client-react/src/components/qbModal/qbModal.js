@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 
 const QBModals = React.createClass({
     propTypes: {
@@ -12,6 +12,10 @@ const QBModals = React.createClass({
          */
         modalBodyMessage: React.PropTypes.string,
         /**
+         *This is the QBIcon for the modal body
+         */
+        modalBodyQBIcon: React.PropTypes.array,
+        /**
          *This is an array of buttons for the left side of the footer
          */
         buttonArrayLeft: React.PropTypes.array,
@@ -21,10 +25,11 @@ const QBModals = React.createClass({
         buttonArrayRight: React.PropTypes.array
     },
     render() {
-        // console.log('this.props.buttonArrayLeft:', this.props.buttonArrayLeft);
-        // console.log('this.props.buttonArrayRight: ', this.props.buttonArrayRight);
         return <div>
             <Modal show={this.props.bool} onHide={this.close}>
+                    <Modal.Title>
+                        {this.props.modalBodyQBIcon}
+                    </Modal.Title>
                     <Modal.Body>
                         {this.props.modalBodyMessage}
                     </Modal.Body>

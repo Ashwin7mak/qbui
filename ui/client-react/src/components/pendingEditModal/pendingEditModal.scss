@@ -1,22 +1,41 @@
 .modal-content {
+  border-top: none;
+  border-bottom: none;
   border-left: 30px white solid;
   border-right: 30px white solid;
 }
 
+.modal-footer {
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.modal-title{
+ height: 50px;
+}
+.modal-dialog {
+  margin: 200px auto;
+  width: 400px;
+}
+
 .modal-body {
   padding: 0px;
-  height: 94px;
+  margin-top: -15px;
+  height: 44px;
+  margin-left: 60px;
 }
 
 #buttonStay {
   float: left;
+  margin-left: -15px;
 }
 
 #doNotSaveButton{
-  margin-right: 15px;
+  margin-right: 5px;
 }
 
 #saveButton{
+  margin-right: -15px;
 }
 
 #modalText {
@@ -24,6 +43,7 @@
 }
 
 .alert{
+  margin-left: -15px;
   font-size: 44px;
   padding-top: 30px;
   padding-bottom: 20px;

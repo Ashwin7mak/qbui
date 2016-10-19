@@ -2,6 +2,7 @@ import React from 'react';
 import QbIcon from '../qbIcon/qbIcon';
 import './pendingEditModal.scss';
 import QBModal from '../qbModal/qbModal';
+import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Breakpoints from "../../utils/breakpoints";
 
@@ -28,20 +29,24 @@ const PendingEditModal = React.createClass({
     doNotSaveAndRedirect() {},
     render() {
         const modalBodyMessage = [
-            <div><QbIcon className="alert" icon="alert"/><span id="modalText">Save changes before leaving?</span></div>
+            <span id="modalText"><h4>Save changes before leaving?</h4></span>
+        ];
+        const modalBodyQBIcon = [
+            <QbIcon className="alert" icon="alert"/>
         ];
         const buttonArrayLeft = [
-            <div  id="buttonStay"><button onClick={this.close}>Stay and keep working</button></div>
+            <div  id="buttonStay"><Button onClick={this.close}>Stay and keep working</Button></div>
         ];
         const buttonArrayRight = [
-            <button id="doNotSaveButton">Don't Save</button>,
-            <button id="saveButton">Save</button>
+            <Button id="doNotSaveButton">Don't Save</Button>,
+            <Button id="saveButton" bsStyle="primary">Save</Button>
         ];
         return <QBModal
                 bool={this.props.bool}
                 buttonArrayLeft={buttonArrayLeft}
                 buttonArrayRight={buttonArrayRight}
-                modalBodyMessage={modalBodyMessage} />;
+                modalBodyMessage={modalBodyMessage}
+                modalBodyQBIcon={modalBodyQBIcon}/>;
     }
 });
 
