@@ -66,13 +66,10 @@
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
-            }).then(function(testValues) {
+            }).then(function() {
                 //Save the form
-                formsPage.clickAddFormSaveBtn();
-            }).then(function(testValues) {
-                //close the form
-                formsPage.clickFormCloseBtn();
-            }).then(function(testValues) {
+                formsPage.clickFormSaveBtn();
+            }).then(function() {
                 //reload the report to verify the row edited
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                 return formsPage.waitForElement(reportServicePage.loadedContentEl).then(function() {

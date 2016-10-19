@@ -9,6 +9,8 @@
     var rawValueGenerator = require('./../../../test_generators/rawValue.generator');
     var ReportServicePage = requirePO('reportService');
     var reportServicePage = new ReportServicePage();
+    var ReportCardViewPage = requirePO('reportCardView');
+    var reportCardViewPage = new ReportCardViewPage();
 
     var date = new Array();
     date = new Date().toJSON().slice(0, 10).split('-');
@@ -19,19 +21,21 @@
     var sDate = date[1] + '-' + date[2] + '-' + date[0];
 
     var FormsPage = function() {
-        this.formTrowserHeader = element(by.className('trowserHeader'));
+        this.formTrowserHeader = element(by.className('recordTrowser')).element(by.className('trowserHeader'));
         //form help button
         this.formHelpBtn = this.formTrowserHeader.element(by.className('iconTableUISturdy-help'));
         //form close button
         this.formCloseBtn = this.formTrowserHeader.element(by.className('iconTableUISturdy-close'));
 
-        this.formTrowserFooter = element(by.className('trowserFooter'));
+        this.formTrowserFooter = element(by.className('recordTrowser')).element(by.className('trowserFooter'));
         //save button
         this.formSaveBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.tagName('button'));
+        //save button
+        this.formSaveAndNextBtn = this.formTrowserFooter.element(by.className('rightIcons')).all(by.tagName('button')).last();
 
         this.formBodyEl = element(by.tagName('body'));
         //form container
-        this.formContainerEl = element(by.className('formContainer'));
+        this.formContainerEl = element(by.className('recordTrowser')).element(by.className('formContainer'));
         //view form
         this.formViewContainerEl = this.formContainerEl.element(by.className('viewForm'));
         //edit Form
@@ -56,11 +60,13 @@
             });
         };
 
-        this.clickAddFormSaveBtn = function() {
+        this.clickFormSaveAndNextBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
-                //TODO talking to Drew on Monday. I dont see record saved mesage after hiting save for Add form. I see some console errors but record is getting added to UI.
-                return self.formSaveBtn.click();
+                return self.formSaveAndNextBtn.click().then(function() {
+                    // Check that the edit notification is displayed
+                    reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
+                });
             });
         };
 
@@ -143,6 +149,26 @@
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 10)).toBe('true');
                 }
             });
+        };
+
+        this.verifyFieldValuesInReportTableSmallBP = function(fieldType) {
+            var self = this;
+            reportCardViewPage.formTable.all(by.className(fieldType)).map(function(elm) {
+                return elm.getAttribute('textContent').then(function(text) {
+                    if (fieldType === 'numericField') {
+                        expect(text.replace(/[!@#$%^&*]/g, "")).toBe(sNumeric.toString());
+                    }
+                    if (fieldType === 'checkbox') {
+                        expect(elm.element(by.className('iconTableUISturdy-check')).isPresent()).toBeTruthy();
+                    }
+                });
+            }).then(function() {
+                //finally return to report table page
+                return reportCardViewPage.recordFormActionReturnToReportBtn.click().then(function() {
+                    reportCardViewPage.waitForReportReady();
+                });
+            });
+
         };
 
     };

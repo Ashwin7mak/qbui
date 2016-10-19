@@ -27,6 +27,19 @@
 
         this.reportTableLoadedContent = this.reportTable.element(by.className('tableLoaderContainer')).element(by.className('loadedContent'));
 
+        //record container
+        this.recordContainerEl = element(by.className('recordContainer'));
+        //record actions container
+        this.recordActionsContainer = this.recordContainerEl.element(by.className('recordActionsContainer'));
+        //record form actions
+        this.recordFormActionPreviousBtn = this.recordActionsContainer.element(by.className('secondaryFormActions')).element(by.className('iconTableUISturdy-caret-left'));
+        this.recordFormActionReturnToReportBtn = this.recordActionsContainer.element(by.className('secondaryFormActions')).element(by.className(' qbIcon iconTableUISturdy-return'));
+        this.recordFormActionNextBtn = this.recordActionsContainer.element(by.className('secondaryFormActions')).element(by.className('iconTableUISturdy-caret-right'));
+
+        //record page actions
+        //record edit button
+        this.recordEditBtn = this.recordActionsContainer.element(by.className('pageActions')).element(by.className('iconTableUISturdy-edit'));
+
         //card View List
         this.reportCardViewListHolder = this.reportTable.element(by.className('cardViewListHolder'));
         //card Rows
@@ -63,6 +76,11 @@
         //Add Record Button
         this.addNewRecordBtn = this.reportToolsAndContentEl.element(by.className('addNewRecord'));
 
+        //form container
+        this.reportFormContainerEl = element(by.className('formContainer'));
+        //form table
+        this.formTable = this.reportFormContainerEl.element(by.className('formTable'));
+
         /*
          * Generic interaction function for clicking on paging nav buttons
          * @param Any paging button element that you want to click
@@ -73,6 +91,46 @@
                 return pagingButtonElement.click().then(function() {
                     // Wait for the report to load before proceeding with control flow
                     return self.waitForReportReady();
+                });
+            });
+        };
+
+        /**
+         * Click Add Record button on Loaded Report Content for small BP
+         *
+         */
+        this.clickAddRecord = function() {
+            var self = this;
+            return e2ePageBase.waitForElementToBeClickable(self.addNewRecordBtn).then(function() {
+                return self.addNewRecordBtn.click().then(function() {
+                    e2ePageBase.waitForElement(element(by.className('editForm')));
+                });
+            });
+        };
+
+        /**
+         * Click on record in a table to open up in record view mode
+         *
+         */
+        this.clickRecord = function(recordId) {
+            var self = this;
+            self.reportCards.all(by.className('top-card-row')).then(function(records) {
+                return records[recordId - 1].click().then(function() {
+                    e2ePageBase.waitForElement(self.recordEditBtn);
+                    //card-expander
+                });
+            });
+        };
+
+        /**
+         * Click Edit Record button on record content pageActions
+         *
+         */
+        this.clickEditRecord = function() {
+            var self = this;
+            return e2ePageBase.waitForElementToBeClickable(self.recordEditBtn).then(function() {
+                return self.recordEditBtn.click().then(function() {
+                    e2ePageBase.waitForElement(element(by.className('editForm')));
                 });
             });
         };
