@@ -7,7 +7,7 @@ import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBicon from "../qbIcon/qbIcon";
 import TableIcon from "../qbTableIcon/qbTableIcon";
 import Loader from 'react-loader';
-import QBErrorMessag from "../QBErrorMessage/qbErrorMessage";
+import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
 import {browserHistory} from 'react-router';
@@ -55,7 +55,7 @@ let RecordTrowser = React.createClass({
                     pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
                     formData={this.props.form ? this.props.form.editFormData : null}
                     edit={true} />
-                <QBErrorMessag message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
+                <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);
     },
     /**
