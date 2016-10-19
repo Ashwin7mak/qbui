@@ -6,6 +6,12 @@ export default {
         apps: {
             header: "Anwendungen"
         },
+        pendingEditModal: {
+            modalBodyMessage: 'Speichern Sie die Änderungen vor dem Verlassen?',
+            modalStayButton: 'Bleiben Sie und halten Sie arbeiten',
+            modalDoNotSaveButton: 'Nicht speichern',
+            modalSaveButton: 'sparen'
+        },
         reports : {
             emailReportTooltip: "Teilen Sie diese Datensätze mit einer anderen Person",
             emailSubject: "'{reportName}' bericht der QuickBase app '{appName}'",
