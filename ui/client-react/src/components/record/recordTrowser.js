@@ -9,7 +9,6 @@ import TableIcon from "../qbTableIcon/qbTableIcon";
 import Loader from 'react-loader';
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
-import {browserHistory} from 'react-router';
 
 import './recordTrowser.scss';
 

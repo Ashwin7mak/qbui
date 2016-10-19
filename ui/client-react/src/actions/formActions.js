@@ -6,7 +6,6 @@ import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
-import {browserHistory} from 'react-router';
 import * as UrlConsts from "../constants/urlConstants";
 
 let logger = new Logger();
