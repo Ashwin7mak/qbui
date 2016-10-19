@@ -22,7 +22,7 @@ let NavStore = Fluxxor.createStore({
             topTitle: null,
             scrollingReport: false,
             filterReportsName: '',
-            errorMsgHide: false,
+            errorMsgHide: true,
         };
 
         this.setLocaleBundle();

@@ -30,19 +30,23 @@ let QBErrorMessage = React.createClass({
         return this.props.message.map(
             function(msg, i) {
                 return (
-                    <span className={"qbErrorMessageItem"} key={i}>{msg}</span>
+                    <span className={"qbErrorMessageItem"} key={msg.id}>{msg.invalidMessage}</span>
                 );
             }
         );
     },
 
     render() {
+        let errorNum = 0;
+        if (this.props.message) {
+            errorNum = this.props.message.length;
+        }
         return (
             <div className={"qbErrorMessage"} hidden={this.props.hidden}>
                 <div className={"qbErrorMessageHeader"}>
                     <div className={"leftIcons"}>
                         <QBicon icon={"alert"}/>
-                        <h4>Please fix these {this.props.message.length} fields</h4>
+                        <h4>Please fix these {errorNum} fields</h4>
                     </div>
                     <div className={"rightIcons"}>
                         <Button onClick={this.props.onCancel}><QBicon icon={"x-secondary"}/></Button>
