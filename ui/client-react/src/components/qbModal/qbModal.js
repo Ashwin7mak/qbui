@@ -1,8 +1,4 @@
 import React from 'react';
-import QbIcon from '../qbIcon/qbIcon';
-import './qbModal.scss';
-import {I18nMessage} from '../../utils/i18nMessage';
-import Breakpoints from "../../utils/breakpoints";
 import {Modal, Button} from 'react-bootstrap';
 
 const QBModals = React.createClass({
@@ -12,42 +8,29 @@ const QBModals = React.createClass({
          */
         bool: React.PropTypes.boolean,
         /**
-         * optional string to display when input is empty aka ghost text */
-        placeholder: React.PropTypes.string,
+         *This is the message for the modal body
+         */
+        modalBodyMessage: React.PropTypes.string,
         /**
-         *listen for changes by setting a callback to the onChange prop */
-        onChange: React.PropTypes.func,
+         *This is an array of buttons for the left side of the footer
+         */
+        buttonArrayLeft: React.PropTypes.array,
         /**
-         * listen for losing focus by setting a callback to the onBlur prop */
-    },
-    getInitialState() {
-        let tempBool = false;
-        if (this.props.bool) {
-            tempBool = this.props.bool;
-        }
-        return {showModal: tempBool};
-    },
-
-    close() {
-        this.setState({showModal: false});
-        console.log('close: ', this.setState);
-    },
-
-    open() {
-        this.setState({showModal: true});
+         *This is an array of buttons for the right side of the footer
+         */
+        buttonArrayRight: React.PropTypes.array
     },
     render() {
-        console.log('this.props.bool: ', this.props.bool);
-        console.log('this.state.showModal: ', this.state.showModal);
+        // console.log('this.props.buttonArrayLeft:', this.props.buttonArrayLeft);
+        // console.log('this.props.buttonArrayRight: ', this.props.buttonArrayRight);
         return <div>
-            <Modal show={this.state.showModal} onHide={this.close}>
+            <Modal show={this.props.bool} onHide={this.close}>
                     <Modal.Body>
-                        <QbIcon className="alert" icon="alert"/><span id="modalText">Save changes before leaving?</span>
+                        {this.props.modalBodyMessage}
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button id="buttonStay" onClick={this.close}>Stay and keep working</Button>
-                        <Button class="buttonDoNotSave" onClick={this.close}>Don't Save</Button>
-                        <Button class="buttonSave" bsStyle="primary" onClick={this.close}>Save</Button>
+                        {this.props.buttonArrayLeft}
+                        {this.props.buttonArrayRight}
                     </Modal.Footer>
             </Modal>
         </div>;
