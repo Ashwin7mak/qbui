@@ -2,6 +2,7 @@ import * as actions from '../constants/actions';
 
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
+import _ from 'lodash';
 var logger = new Logger();
 
 
@@ -50,7 +51,7 @@ let FieldsStore = Fluxxor.createStore({
     getKeyField() {
         let answer;
         if (typeof this.fields.data !== 'undefined') {
-            answer = this.fields.data.find(field => (field.keyField && field.keyField === true));
+            answer = _.find(this.fields.data, field => field.keyField && field.keyField === true);
         }
         return answer;
     },

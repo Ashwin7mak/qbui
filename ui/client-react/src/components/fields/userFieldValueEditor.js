@@ -3,6 +3,7 @@ import Select from 'react-select';
 import QbIcon from '../qbIcon/qbIcon';
 import Locale from '../../locales/locales';
 import * as userFormatter from '../../../../common/src/formatter/userFormatter';
+import _ from 'lodash';
 import 'react-select/dist/react-select.min.css';
 import './userFieldValueEditor.scss';
 
@@ -32,6 +33,13 @@ const UserFieldValueEditor = React.createClass({
         fieldDef: React.PropTypes.object.isRequired,
 
         /**
+         * renders with red border if true */
+        invalid: React.PropTypes.bool,
+
+        /**
+         * message to display in the tool tip when invalid */
+        invalidMessage: React.PropTypes.string,
+        /**
          * callback when the user editor loses focus
          */
         onBlur: React.PropTypes.func
@@ -43,14 +51,7 @@ const UserFieldValueEditor = React.createClass({
      */
     getInitialState() {
 
-        let selectedUserId = this.props.value ? this.props.value.userId : null;
-
-        // select the first user if the value was not set but is required
-        if (selectedUserId === null && this.props.fieldDef.required && this.props.appUsers.length > 0) {
-            selectedUserId = this.props.appUsers[0].userId;
-        }
-
-        return {selectedUserId};
+        return {selectedUserId: this.props.value ? this.props.value.userId : null};
     },
 
     /**
@@ -69,7 +70,7 @@ const UserFieldValueEditor = React.createClass({
      * @returns {T}
      */
     getAppUser(id) {
-        return this.props.appUsers.find(user => user.userId === id);
+        return _.find(this.props.appUsers, user => user.userId === id);
     },
 
     /**
@@ -151,19 +152,29 @@ const UserFieldValueEditor = React.createClass({
         filter = filter.toLowerCase();
 
         return user.value === null ||
-            user.email      && user.email.toLowerCase().startsWith(filter) ||
-            user.firstName  && user.firstName.toLowerCase().startsWith(filter) ||
-            user.lastName   && user.lastName.toLowerCase().startsWith(filter) ||
-            user.screenName && user.screenName.toLowerCase().startsWith(filter);
+            user.email      && user.email.toLowerCase().indexOf(filter) === 0 ||
+            user.firstName  && user.firstName.toLowerCase().indexOf(filter) === 0 ||
+            user.lastName   && user.lastName.toLowerCase().indexOf(filter) === 0 ||
+            user.screenName && user.screenName.toLowerCase().indexOf(filter) === 0;
     },
 
     /**
      * user picker wrapper on react-select component
      */
     render() {
+        let classes = "cellEdit userFormat borderOnError";
+
+        // error state css class
+        if (this.props.invalid) {
+            classes += ' error';
+        }
+
+        if (this.props.classes) {
+            classes += ' ' + this.props.classes;
+        }
         return (
             <Select
-                className="cellEdit userFormat borderOnError"
+                className={classes}
                 tabIndex="0"
                 filterOption={this.filterOption}
                 value={this.state.selectedUserId}

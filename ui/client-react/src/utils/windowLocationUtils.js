@@ -14,7 +14,7 @@ class WindowLocationUtils {
      * @returns {boolean}
      */
     static searchIncludes(lookFor) {
-        return window.location.search.includes(lookFor);
+        return window.location.search.indexOf(lookFor) !== -1;
     }
 
     /**

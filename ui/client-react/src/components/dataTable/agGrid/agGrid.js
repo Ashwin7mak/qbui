@@ -181,9 +181,8 @@ let AGGrid = React.createClass({
      */
     installHeaderMenus() {
         const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
-
         // convert nodelist to array then iterate to render each menu
-        Array.from(headers).map((header, index) => {
+        _.map(headers, (header, index) => {
             const pullRight = index === headers.length - 1;
             ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
         });
@@ -761,7 +760,7 @@ let AGGrid = React.createClass({
         if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
             // is the field being changed currently in error state if so remove error
             // and it will get re-validated on blur or save
-            let found = this.state.rowEditErrors.errors.findIndex((err) => err.def.fieldDef.id === change.fid);
+            let found = _.findIndex(this.state.rowEditErrors.errors, err => err.def.fieldDef.id === change.fid);
             if (found !== -1) {
                 let newErrors = _.cloneDeep(this.state.rowEditErrors);
 
@@ -807,7 +806,7 @@ let AGGrid = React.createClass({
 
         // find any existing error on the field
         if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
-            found = this.state.rowEditErrors.errors.findIndex((err) =>
+            found = _.findIndex(this.state.rowEditErrors.errors, err =>
                 err.def.fieldDef.id === status.def.fieldDef.id);
         }
 

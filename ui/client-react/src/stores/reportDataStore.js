@@ -13,6 +13,7 @@ import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormat
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
 import * as userFormatter from '../../../common/src/formatter/userFormatter';
+import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
 
@@ -196,7 +197,7 @@ let reportModel = {
             });
         }
         this.model.fieldsMap = map;
-        this.model.keyField =  this.model.fields.find(field => field.keyField);
+        this.model.keyField = _.find(this.model.fields, field => field.keyField);
 
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
@@ -221,7 +222,7 @@ let reportModel = {
      * @returns {number|*}
      */
     findRecordIndexById(records, recId) {
-        return records.findIndex(rec => rec[this.model.keyField.name].value === recId);
+        return _.findIndex(records, rec => rec[this.model.keyField.name].value === recId);
     },
 
     findARecord(recId) {
@@ -900,7 +901,7 @@ let ReportDataStore = Fluxxor.createStore({
 
         const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
 
-        const index = filteredRecords.findIndex(rec => rec[keyField.name] && rec[keyField.name].value === recId);
+        const index = _.findIndex(filteredRecords, rec => rec[keyField.name] && rec[keyField.name].value === recId);
 
         // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
         this.currentRecordId = recId;
@@ -922,7 +923,7 @@ let ReportDataStore = Fluxxor.createStore({
 
         let index = -1;
         if (filteredRecords) {
-            index = filteredRecords.findIndex(rec => rec[keyField.name] && rec[keyField.name].value === recId);
+            index = _.findIndex(filteredRecords, rec => rec[keyField.name] && rec[keyField.name].value === recId);
         }
 
         // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)

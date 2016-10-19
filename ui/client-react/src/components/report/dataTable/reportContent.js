@@ -50,7 +50,7 @@ export let ReportContent = React.createClass({
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
         let uniqueIdentifier =  this.props.uniqueIdentifier;
-        recs.find(function(rec) {
+        _.find(recs, rec => {
             var keys = Object.keys(rec);
             keys.find((col) => {
                 if (col === uniqueIdentifier && rec[col].value === recid) {
