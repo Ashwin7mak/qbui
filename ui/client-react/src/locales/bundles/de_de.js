@@ -10,7 +10,7 @@ export default {
             modalBodyMessage: 'Speichern Sie die Änderungen vor dem Verlassen?',
             modalStayButton: 'Bleiben Sie und halten Sie arbeiten',
             modalDoNotSaveButton: 'Nicht speichern',
-            modalSaveButton: 'sparen'
+            modalSaveButton: 'Sparen'
         },
         reports : {
             emailReportTooltip: "Teilen Sie diese Datensätze mit einer anderen Person",
