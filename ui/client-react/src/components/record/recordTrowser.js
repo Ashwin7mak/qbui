@@ -11,6 +11,7 @@ import QBErrorMessag from "../QBErrorMessage/qbErrorMessage";
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
 import {browserHistory} from 'react-router';
+import _ from 'lodash';
 
 import './recordTrowser.scss';
 
@@ -32,11 +33,17 @@ let RecordTrowser = React.createClass({
         reportData: React.PropTypes.object,
         errorPopupHidden: React.PropTypes.bool,
     },
+
     /**
      * get trowser content (report nav for now)
      */
     getTrowserContent() {
-        const hideErrorMessage = this.props.errorPopupHidden || (this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length === 0);
+        let hideErrorMessage = this.props.errorPopupHidden;
+        let errorMessage = [];
+        if (this.props.pendEdits !== null && _.has(this.props, 'pendEdits.editErrors.errors')) {
+            hideErrorMessage = hideErrorMessage || (this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length === 0);
+            errorMessage = this.props.pendEdits.editErrors.errors;
+        }
 
         return (this.props.visible &&
             <Loader loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)} >
@@ -48,7 +55,7 @@ let RecordTrowser = React.createClass({
                     pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
                     formData={this.props.form ? this.props.form.editFormData : null}
                     edit={true} />
-                <QBErrorMessag message={this.props.pendEdits.editErrors.errors} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
+                <QBErrorMessag message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);
     },
     /**
@@ -207,7 +214,7 @@ let RecordTrowser = React.createClass({
 
     },
     getTrowserRightIcons() {
-        const errorFlg = this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
+        const errorFlg = this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
 
         const canSave = this.props.pendEdits && this.props.pendEdits.isPendingEdit;
 

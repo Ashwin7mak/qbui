@@ -22,7 +22,8 @@ describe('RecordTrowser functions', () => {
             saveRecord() {return Promise.resolve({});},
             saveNewRecord() {return Promise.resolve({});},
             savingForm() {},
-            hideTrowser() {}
+            hideTrowser() {},
+            hideErrorMsgDialog() {},
         }
     };
 
@@ -36,6 +37,7 @@ describe('RecordTrowser functions', () => {
         spyOn(flux.actions, 'saveRecord').and.callThrough();
         spyOn(flux.actions, 'saveNewRecord').and.callThrough();
         spyOn(flux.actions, 'hideTrowser');
+        spyOn(flux.actions, 'hideErrorMsgDialog');
     });
 
     afterEach(() => {
@@ -46,6 +48,7 @@ describe('RecordTrowser functions', () => {
         flux.actions.saveRecord.calls.reset();
         flux.actions.saveNewRecord.calls.reset();
         flux.actions.hideTrowser.calls.reset();
+        flux.actions.hideErrorMsgDialog.calls.reset();
     });
 
     it('test render of loading component', () => {
@@ -98,5 +101,60 @@ describe('RecordTrowser functions', () => {
         TestUtils.Simulate.click(saveButton[0]);
 
         expect(flux.actions.saveRecord).toHaveBeenCalled();
+    });
+
+    it('test saving new record which has server side error in the trowser', () => {
+
+        const form = {editFormData: {}};
+
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1"}]}}} flux={flux} recId={null} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let errorMessageDialog = ReactDOM.findDOMNode(component).querySelectorAll(".qbErrorMessage");
+        expect(errorMessageDialog.length).toBe(1);
+    });
+
+    it('test saving existing record which has server side error in the trowser', () => {
+
+        const form = {editFormData: {}};
+
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1"}]}}} flux={flux} recId={"1"} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let errorMessageDialog = ReactDOM.findDOMNode(component).querySelectorAll(".qbErrorMessage");
+        expect(errorMessageDialog.length).toBe(1);
+    });
+
+    it('test saving record which has server side error in the trowser, and error state icon displayed in trowser Footer', () => {
+
+        const form = {editFormData: {}};
+
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1"}]}}} flux={flux} recId={"1"} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .saveAlert");
+        expect(errorMessageAlertIcon.length).toBe(1);
+    });
+
+    it('test dismiss error message popup in trowser', () => {
+
+        const form = {editFormData: {}};
+
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1"}]}}} flux={flux} recId={null} visible={true}/>);
+
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        let errorMessageDialog = ReactDOM.findDOMNode(component).querySelectorAll(".qbErrorMessage");
+        expect(errorMessageDialog.length).toBe(1);
+
+        let errorMessageCloseButton = ReactDOM.findDOMNode(component).querySelectorAll(".qbErrorMessageHeader .rightIcons .btn");
+        expect(errorMessageCloseButton.length).toBe(1);
+
+        TestUtils.Simulate.click(errorMessageCloseButton[0]);
+
+        expect(flux.actions.hideErrorMsgDialog).toHaveBeenCalled();
     });
 });
