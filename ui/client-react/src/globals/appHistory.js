@@ -1,5 +1,6 @@
 import {useRouterHistory} from "react-router";
-import {createHistory, useBeforeUnload} from 'history';
+import createHistory from 'history/lib/createBrowserHistory';
+import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
 
 // Uses singleton pattern
@@ -8,6 +9,10 @@ import {UNSAVED_RECORD_ID} from '../constants/schema';
 // Better than a global variable because a singleton can be scoped and only used when imported
 let self = null; // eslint-disable-line
 
+/**
+ * This singleton class maintains the current customized broswerHistory that includes event listeners
+ * for when a route changes. This helps us detect if there are pending edits to a form before redirecting.
+ */
 class AppHistory {
     constructor() {
         if (!self) {
@@ -74,6 +79,7 @@ class AppHistory {
         this.appId = this.pendEdits.currentEditingAppId;
         this.tableId = this.pendEdits.currentEditingTableId;
         this.recordId = this.pendEdits.currentEditingRecordId;
+
         this.fields = this.flux.store('FieldsStore').getState().fields.data;
 
         if (this.pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
