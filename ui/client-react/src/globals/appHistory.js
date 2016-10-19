@@ -60,10 +60,11 @@ class AppHistory {
         });
 
         // Setup listener for route changes outside of the app (e.g., pasting in a new url)
-        this.history.listenBeforeUnload(() => {
+        this.history.listenBeforeUnload(event => {
             this._checkForFlux();
 
             if (this.pendEdits.isPendingEdit) {
+                event.returnValue = 'DONT LEAVE ME!!!';
                 return 'DONT LEAVE ME!!';
             }
         });
