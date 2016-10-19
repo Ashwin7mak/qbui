@@ -110,7 +110,17 @@ $action-separator-color: #486c8f;
             align-self:center;
             button {
                 margin: 4px 10px 4px 4px;
-            }
+            };
+            display: flex;
+        }
+        .saveAlert {
+            font-size: 26px;
+            align-self:center;
+            margin-right: 10px;
+            color: $color-red-700;
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
         }
     }
     .trowserContent {

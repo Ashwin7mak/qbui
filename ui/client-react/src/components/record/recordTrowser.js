@@ -36,6 +36,8 @@ let RecordTrowser = React.createClass({
      * get trowser content (report nav for now)
      */
     getTrowserContent() {
+        const hideErrorMessage = this.props.errorPopupHidden || (this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length === 0);
+
         return (this.props.visible &&
             <Loader loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)} >
                 <Record appId={this.props.appId}
@@ -46,7 +48,7 @@ let RecordTrowser = React.createClass({
                     pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
                     formData={this.props.form ? this.props.form.editFormData : null}
                     edit={true} />
-                <QBErrorMessag message={this.props.pendEdits.editErrors.errors} hidden={this.props.errorPopupHidden} onCancel={this.dismissErrorDialog}/>
+                <QBErrorMessag message={this.props.pendEdits.editErrors.errors} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);
     },
     /**
@@ -205,12 +207,7 @@ let RecordTrowser = React.createClass({
 
     },
     getTrowserRightIcons() {
-        let errorFlg = false;
-        if (this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0) {
-            errorFlg = true;
-        }
-
-        console.log("recordTrowser.getTrowserRigthIcons: " + errorFlg);
+        const errorFlg = this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
 
         const canSave = this.props.pendEdits && this.props.pendEdits.isPendingEdit;
 
@@ -218,6 +215,7 @@ let RecordTrowser = React.createClass({
 
         return (
             <div className="saveButtons">
+                {errorFlg && <div className="saveAlert"><QBicon icon={"alert"}/></div>}
                 <Button bsStyle="primary" disabled={!canSave} onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
                 {showNext &&
                     <Button bsStyle="primary" disabled={!canSave} onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
@@ -233,11 +231,8 @@ let RecordTrowser = React.createClass({
     },
 
     cancelEditing() {
-
         const flux = this.getFlux();
-        if (this.props.recId) {
-            flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
-        }
+        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
 
         flux.actions.hideTrowser();

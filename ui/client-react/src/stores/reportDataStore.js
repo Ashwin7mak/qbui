@@ -853,7 +853,7 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onRecordEditCancel(payload) {
         //remove record if its new unsaved
-        if (payload.recId.value === SchemaConsts.UNSAVED_RECORD_ID) {
+        if (payload.recId && payload.recId.value === SchemaConsts.UNSAVED_RECORD_ID) {
             const model = this.reportModel.get();
             //make a copy
             const newFilteredRecords = model.filteredRecords.slice(0);
