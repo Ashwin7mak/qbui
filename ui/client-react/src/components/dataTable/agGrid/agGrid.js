@@ -271,15 +271,18 @@ let AGGrid = React.createClass({
          If the report was grouped on the previous render then groupRender was already called so no need to re-load everything.
          So optimize for that case..
         */
-        if (this.props.groupEls.length) {
-            let queryParams = {};
-            queryParams[query.SORT_LIST_PARAM] = sortListParam;
-            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, queryParams);
-        } else {
-            flux.actions.loadReport(this.props.appId,
-                this.props.tblId,
-                this.props.rptId, true, null, null, sortListParam);
-        }
+        //if (this.props.groupEls.length) {
+        let queryParams = {};
+        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
+        queryParams[query.SORT_LIST_PARAM] = sortListParam;
+        //flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, queryParams);
+        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
+        //} else {
+        //    flux.actions.loadReport(this.props.appId,
+        //        this.props.tblId,
+        //        this.props.rptId, true, null, null, sortListParam);
+        //}
     },
     /**
      * AG-grid doesn't fire any events or add any classes to the column for which menu has been opened

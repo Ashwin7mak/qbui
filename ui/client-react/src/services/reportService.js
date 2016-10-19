@@ -257,7 +257,9 @@ class ReportService extends BaseService {
     parseFacetExpression(facetExpression) {
         let params = {};
         if (facetExpression) {
-            params[query.FACET_EXPRESSION] = facetExpression;
+            if (facetExpression !== '' && facetExpression.length) {
+                params[query.FACET_EXPRESSION] = facetExpression;
+            }
         }
 
         return super.get(this.API.PARSE_FACET_EXPR, {params: params});

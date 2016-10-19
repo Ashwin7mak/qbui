@@ -143,7 +143,7 @@ const SortAndGroup = React.createClass({
 
     updateRecords(sortGroupString) {
         let flux = this.getFlux();
-        let overrideParams = {};
+        let queryParams = {};
         //if report was grouped in the last render and is grouped in this render
         // or was ungrouped in last and this render no need to re-load report.
         let groupKeys = _.map(this.state.newSelectionsGroup, 'unparsedVal');
@@ -154,14 +154,17 @@ const SortAndGroup = React.createClass({
                 changedGroupingStyle = false;
             }
         }
-        let pageOffset = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : constants.PAGE.DEFAULT_OFFSET;
-        let numRows = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : constants.PAGE.DEFAULT_NUM_ROWS;
-        if (changedGroupingStyle) {
-            flux.actions.loadReport(this.props.appId, this.props.tblId, this.props.rptId, true, pageOffset, numRows, sortGroupString);
-        } else {
-            overrideParams[query.SORT_LIST_PARAM] = sortGroupString;
-            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true, offset: pageOffset, numRows: numRows}, this.props.filter, overrideParams);
-        }
+
+        //if (changedGroupingStyle) {
+        //    flux.actions.loadReport(this.props.appId, this.props.tblId, this.props.rptId, true, pageOffset, numRows, sortGroupString);
+        //} else {
+        queryParams[query.SORT_LIST_PARAM] = sortGroupString;
+        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : constants.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : constants.PAGE.DEFAULT_NUM_ROWS;
+
+        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
+        //flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true, offset: pageOffset, numRows: numRows}, this.props.filter, overrideParams);
+        //}
     },
 
     applyChanges() {

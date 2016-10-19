@@ -208,6 +208,71 @@ let reportDataActions = {
         });
     },
 
+    loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && rptId) {
+
+                if (!queryParams) {
+                    queryParams = {};
+                }
+
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, offset:queryParams[query.OFFSET_PARAM], numRows:queryParams[query.NUMROWS_PARAM], sortList: queryParams[query.SORT_LIST_PARAM]});
+
+                let reportService = new ReportService();
+
+                // The filter parameter may contain a facetExpression
+                let facetExpression = filter ? filter.facet : '';
+                reportService.parseFacetExpression(facetExpression).then(
+                    (response) => {
+                        let filterQueries = [];
+
+                        //  add the facet expression
+                        if (response.data) {
+                            filterQueries.push(response.data);
+                        }
+
+                        if (filter && filter.search) {
+                            filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
+                        }
+
+                        queryParams = queryParams || {};
+                        queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
+
+                        reportService.runDynamicReport(appId, tblId, rptId, queryParams).then (
+                            (response) => {
+
+                            },
+                            (error) => {
+
+                            }
+                        )
+
+                        var model = reportModel.set(null, null);
+
+                        //  ..fire off the load report and record count events
+                        this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, {body: model.recordData.filteredCount});
+                        resolve();
+                    },
+                    (error) => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportDataActions.parseFacetExpression');
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, error.response.status);
+                        reject();
+                    }
+                ).catch((ex) => {
+                    logger.logException(ex);
+                    this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
+                    reject();
+                });
+            } else {
+                logger.error('reportDataActions.getFilteredRecords: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
+                reject();
+            }
+        });
+    },
+
     /* Action called to get a new set of records given a report.
      * Override params can override report's sortlist/query etc
      *
