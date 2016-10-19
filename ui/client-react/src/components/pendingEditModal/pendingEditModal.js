@@ -31,11 +31,11 @@ const PendingEditModal = React.createClass({
             <div><QbIcon className="alert" icon="alert"/><span id="modalText">Save changes before leaving?</span></div>
         ];
         const buttonArrayLeft = [
-            <button id="buttonStay" onClick={this.close}>Stay and keep working</button>
+            <div  id="buttonStay"><button onClick={this.close}>Stay and keep working</button></div>
         ];
         const buttonArrayRight = [
-            <button>Don't Save</button>,
-            <button>Save</button>
+            <button id="doNotSaveButton">Don't Save</button>,
+            <button id="saveButton">Save</button>
         ];
         return <QBModal
                 bool={this.props.bool}

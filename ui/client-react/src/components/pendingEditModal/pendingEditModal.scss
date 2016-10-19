@@ -1,5 +1,6 @@
-.model-content {
-  width: 350px
+.modal-content {
+  border-left: 30px white solid;
+  border-right: 30px white solid;
 }
 
 .modal-body {
@@ -8,7 +9,14 @@
 }
 
 #buttonStay {
-  margin-right: 140px;
+  float: left;
+}
+
+#doNotSaveButton{
+  margin-right: 15px;
+}
+
+#saveButton{
 }
 
 #modalText {
@@ -18,7 +26,6 @@
 .alert{
   font-size: 44px;
   padding-top: 30px;
-  padding-left: 30px;
   padding-bottom: 20px;
   color: orange;
 }
