@@ -68,7 +68,7 @@ const FieldElement = React.createClass({
     },
 
     getLabel() {
-        if (this.props.element.useAlternateLabel) {
+        if (this.props.element && this.props.element.useAlternateLabel) {
             return this.props.element.displayText;
         } else {
             return this.props.relatedField ? this.props.relatedField.name : "";

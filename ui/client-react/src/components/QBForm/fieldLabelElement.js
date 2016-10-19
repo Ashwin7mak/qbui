@@ -27,22 +27,24 @@ const FieldLabelElement = React.createClass({
             requiredIndication = '*';
         }
 
-        let fieldLabel = requiredIndication + ' ';
+        let fieldLabel = '';
         if (this.props.element.useAlternateLabel) {
-            fieldLabel += this.props.element.displayText;
-        } else {
-            fieldLabel += this.props.relatedField ? this.props.relatedField.name : '';
+            fieldLabel = this.props.element.displayText;
+        } else if (this.props.relatedField) {
+            fieldLabel = this.props.relatedField.name;
         }
 
-        let classes = 'formElement fieldLabel';
-        classes += this.props.isInvalid ? ' errorText' : '';
+        let classes = ['formElement', 'fieldLabel'];
+        if (this.props.isInvalid) {
+            classes.push('errorText');
+        }
 
         if (this.props.isHidden) {
-            classes += ' hidden';
+            classes.push('hidden');
             fieldLabel = '';
         }
 
-        return <div className={classes}>{fieldLabel}</div>;
+        return <div className={classes.join(' ')}>{`${requiredIndication} ${fieldLabel}`}</div>;
     }
 });
 

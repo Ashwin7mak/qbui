@@ -66,14 +66,14 @@ let QBForm = React.createClass({
         const colSpan = isLast ? 100 : 1;
 
         const cells = [];
-
         if (element.FormTextElement) {
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
         }
         if (element.FormFieldElement) {
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
             // checkbox should not have a separate field label
-            if (this.getRelatedField(element.FormFieldElement.fieldId).name === 'Checkbox') {
+            const relatedField = this.getRelatedField(element.FormFieldElement.fieldId);
+            if (relatedField && relatedField.name === 'Checkbox') {
                 if (labelPosition === QBForm.LABEL_LEFT) {
                     cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus, true));
                 }
