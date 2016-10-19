@@ -10,7 +10,7 @@ const QBModals = React.createClass({
         /**
          *This is the message for the modal body
          */
-        modalBodyMessage: React.PropTypes.string,
+        modalBodyMessage: React.PropTypes.array,
         /**
          *This is the QBIcon for the modal body
          */

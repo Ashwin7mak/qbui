@@ -28,18 +28,22 @@ const PendingEditModal = React.createClass({
     stayOnCurrentPage() {},
     doNotSaveAndRedirect() {},
     render() {
+        const modalI18BodyMessage = <I18nMessage message="pendingEditModal.modalBodyMessage"/>;
+        const modalI18StayButton = <I18nMessage message="pendingEditModal.modalStayButton"/>;
+        const modalI18DoNotSaveButton = <I18nMessage message="pendingEditModal.modalDoNotSaveButton"/>;
+        const modalI18SaveButton = <I18nMessage message="pendingEditModal.modalSaveButton"/>;
         const modalBodyMessage = [
-            <span id="modalText"><h4>Save changes before leaving?</h4></span>
+            <span id="modalText"><h4>{modalI18BodyMessage}</h4></span>
         ];
         const modalBodyQBIcon = [
             <QbIcon className="alert" icon="alert"/>
         ];
         const buttonArrayLeft = [
-            <div  id="buttonStay"><Button onClick={this.close}>Stay and keep working</Button></div>
+            <div id="buttonStay"><Button onClick={this.close}>{modalI18StayButton}</Button></div>
         ];
         const buttonArrayRight = [
-            <Button id="doNotSaveButton">Don't Save</Button>,
-            <Button id="saveButton" bsStyle="primary">Save</Button>
+            <Button id="doNotSaveButton">{modalI18DoNotSaveButton}</Button>,
+            <Button id="saveButton" bsStyle="primary">{modalI18SaveButton}</Button>
         ];
         return <QBModal
                 bool={this.props.bool}
