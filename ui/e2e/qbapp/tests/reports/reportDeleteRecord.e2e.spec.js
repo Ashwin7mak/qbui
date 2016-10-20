@@ -77,9 +77,7 @@
             it('Delete a Record and check for the success message', function (done) {
 
                 // Step 1: Selecting the first record for the deletion and checking for the success messages
-                //reportContentPage.recordCheckBoxes.get(rowToBeDeleted).click();
                 reportContentPage.reportRowSelected(rowToBeDeleted);
-                // reportContentPage.recordCheckBoxes.first().click();
                 reportContentPage.clickSelectedRecordDeleteIcon();
                 reportContentPage.assertDeleteMessageSuccess(successMessage);
                 reportContentPage.waitForReportContent();
@@ -103,7 +101,6 @@
                 // Step 5. Checking for the delete functionality on the second page
                 reportPagingPage.pagingToolbarNextButton.click();
                 reportContentPage.waitForReportContent();
-                //reportContentPage.recordCheckBoxes.get(2).click();
                 reportContentPage.reportRowSelected(rowToBeDeleted);
                 reportContentPage.clickSelectedRecordDeleteIcon();
                 reportContentPage.assertDeleteMessageSuccess(successMessage);
