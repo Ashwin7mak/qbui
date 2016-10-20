@@ -70,24 +70,7 @@
 
                 var recordCountBefore;
                 var deletedRecord;
-                var recordCountAfter;
-
-                //Getting record count before Delete
-                //  recordCountBefore = reportContentPage.getRecordCountFromPaginationNumber();
-                //
-                // recordCountBefore = reportServicePage.reportRecordsCount.getText();
-
-
-                // reportServicePage.reportRecordsCount.getText().then(function (text) {
-                //     recordCountBefore = text;
-                //     console.log("the records count is: " + recordCountBefore);
-                // });
-
-
-                // //Getting account to be deleted
-                // reportContentPage.getRecordValues(0).then(function (fieldValues) {
-                //     deletedRecord = fieldValues;
-                // });
+                var recordCountAfter
 
                 // Step 1: Selecting the first record for the deletion and checking for the success messages
                 reportContentPage.recordCheckBoxes.first().click();
@@ -106,7 +89,6 @@
             // Step 3. Checking for the recordCount that it has reduced after deletion
             it('Checking for the recordCount that it has reduced after deletion', function (done) {
                 expect(reportServicePage.reportRecordsCount.getText()).toContain("26 records");
-                //reportContentPage.checkForRecordCountReducedAfterDeletion(recordCountBefore);
                 done();
             });
 

@@ -502,7 +502,6 @@
 
                 for (var i = 0; i < recordsNo.length; i++) {
                     self.getRecordValues(i).then(function (fieldValues) {
-                        console.log("hello" + fieldValues[1] + "   " + fieldValues[2]);
                         expect(deletedRecord).not.toEqual(fieldValues);
                     });
                 }
