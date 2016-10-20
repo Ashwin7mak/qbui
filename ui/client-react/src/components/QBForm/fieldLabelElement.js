@@ -11,7 +11,6 @@ const FieldLabelElement = React.createClass({
         relatedField: React.PropTypes.object, // field from Form data
         indicateRequiredOnLabel: React.PropTypes.bool,
         isInvalid: React.PropTypes.bool,
-        isHidden: React.PropTypes.bool,
     },
 
     getDefaultProps() {
@@ -39,8 +38,9 @@ const FieldLabelElement = React.createClass({
             classes.push('errorText');
         }
 
-        if (this.props.isHidden) {
-            classes.push('hidden');
+        if (this.props.relatedField && this.props.relatedField.name === 'Checkbox') {
+            classes.push('checkbox-field-label');
+            requiredIndication = '';
             fieldLabel = '';
         }
 

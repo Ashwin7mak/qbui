@@ -114,10 +114,6 @@ const FieldValueEditor = React.createClass({
          * how to identify the field input
          */
         idKey : React.PropTypes.any,
-
-        /**
-         * Label used by checkBoxFieldValueEditor */
-        label: React.PropTypes.string,
     },
 
     getDefaultProps() {

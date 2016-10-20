@@ -259,3 +259,9 @@ $checkbox-font-size-mobile: 16px;
 .cellData .checkbox.renderer {
     display: block;
 }
+
+@include small-breakpoint {
+    .formElement.fieldLabel.checkbox-field-label {
+        display: none;
+    }
+}

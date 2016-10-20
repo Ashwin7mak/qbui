@@ -71,20 +71,11 @@ let QBForm = React.createClass({
         }
         if (element.FormFieldElement) {
             let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
-            // checkbox should not have a separate field label
-            const relatedField = this.getRelatedField(element.FormFieldElement.fieldId);
-            if (relatedField && relatedField.name === 'Checkbox') {
-                if (labelPosition === QBForm.LABEL_LEFT) {
-                    cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus, true));
-                }
-                cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, false, colSpan, validationStatus));
-            } else {
-                // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
-                if (labelPosition === QBForm.LABEL_LEFT) {
-                    cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus));
-                }
-                cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, labelPosition === QBForm.LABEL_ABOVE, colSpan, validationStatus));
+            // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
+            if (labelPosition === QBForm.LABEL_LEFT) {
+                cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus));
             }
+            cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, labelPosition === QBForm.LABEL_ABOVE, colSpan, validationStatus));
         }
         return cells;
     },
@@ -144,10 +135,9 @@ let QBForm = React.createClass({
      * @param element
      * @param sectionIndex
      * @param validationStatus
-     * @param isHidden
      * @returns {XML}
      */
-    createFieldLabelCell(element, sectionIndex, validationStatus, isHidden) {
+    createFieldLabelCell(element, sectionIndex, validationStatus) {
 
         let relatedField = this.getRelatedField(element.fieldId);
 
@@ -160,7 +150,6 @@ let QBForm = React.createClass({
                     relatedField={relatedField}
                     indicateRequiredOnLabel={this.props.edit}
                     isInvalid={validationStatus.isInvalid}
-                    isHidden={isHidden}
                 />
             </td>);
     },
