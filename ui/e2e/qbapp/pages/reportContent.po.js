@@ -477,7 +477,7 @@
         };
 
         /* Delete Page */
-        this.recordCountEle = element(by.className('recordsCount')).element(by.tagName('span'));
+        this.recordCountEl = element(by.className('recordsCount')).element(by.tagName('span'));
         //This gives you all the record checkboxes of the report page
         this.recordCheckBoxes = element.all(by.className('ag-selection-checkbox'));
 
@@ -486,12 +486,16 @@
 
 
         //Click on the Delete Icon and Checking for the success Message
-        this.clickOnDeleteIconAndCheckForSuccessMessageWindow = function(successMessage){
+        this.clickSelectedRecordDeleteIcon = function(){
             var self = this;
             this.deleteIcon.click();
+        }
+
+        //
+        this.assertDeleteMessageSuccess = function(successMessage){
+            var self = this;
             this.waitForElement(self.successDeleteWindow).then(function(){
                 expect(self.successDeleteWindow.getText()).toMatch(successMessage.toString());
-                self.waitForReportContent();
             });
         }
 
@@ -508,6 +512,13 @@
             });
 
         }
+
+        //Record Row to be selected:
+
+        this.reportRowSelected = function(recordRow){
+            this.recordCheckBoxes.get(recordRow).click();
+        }
+
     };
     ReportContentPage.prototype = e2ePageBase;
     module.exports = ReportContentPage;

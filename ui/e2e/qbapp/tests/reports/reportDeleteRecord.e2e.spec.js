@@ -47,6 +47,9 @@
         describe('Single Record Delete Tests', function () {
 
             var deletedRecord;
+            var rowToBeDeleted = 2;
+            var successMessage = "1 Records deleted";
+            var reportCount = "26 records";
             /**
              * Before each test starts just make sure the report has loaded with records visible
              */
@@ -55,66 +58,67 @@
                 reportContentPage.waitForReportContent();
 
                 //Getting deleted Record
-                reportContentPage.getRecordValues(0).then(function (fieldValues) {
+                reportContentPage.getRecordValues(rowToBeDeleted).then(function (fieldValues) {
                     deletedRecord = fieldValues;
                 });
 
                 done();
             });
 
+            beforeEach(function(done) {
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPage.waitForReportContent();
+                done();
+            });
 
             /**
              * Test Method.
              */
             it('Delete a Record and check for the success message', function (done) {
 
-                var recordCountBefore;
-                var deletedRecord;
-                var recordCountAfter
-
                 // Step 1: Selecting the first record for the deletion and checking for the success messages
-                reportContentPage.recordCheckBoxes.first().click();
-                reportContentPage.clickOnDeleteIconAndCheckForSuccessMessageWindow("1 Records deleted");
-                done();
-            });
+                //reportContentPage.recordCheckBoxes.get(rowToBeDeleted).click();
+                reportContentPage.reportRowSelected(rowToBeDeleted);
+                // reportContentPage.recordCheckBoxes.first().click();
+                reportContentPage.clickSelectedRecordDeleteIcon();
+                reportContentPage.assertDeleteMessageSuccess(successMessage);
+                reportContentPage.waitForReportContent();
 
-            // Step 2. Checking for the deleted record on the first page
-            it('Checking for the deleted record on the first page', function (done) {
-
+                // Step 2. Checking for the deleted record on the first page
                 reportContentPage.checkForTheDeletedRecordOnTheCurrentPage(deletedRecord);
-                done();
-            });
 
+                // Step 3. Checking for the recordCount that it has reduced after deletion
+                expect(reportServicePage.reportRecordsCount.getText()).toContain(reportCount);
 
-            // Step 3. Checking for the recordCount that it has reduced after deletion
-            it('Checking for the recordCount that it has reduced after deletion', function (done) {
-                expect(reportServicePage.reportRecordsCount.getText()).toContain("26 records");
-                done();
-            });
-
-
-            // Step 4. Checking for the deleted record on the 2nd page page
-            it('Checking for the deleted record on the 2nd page page', function (done) {
+                // Step 4.  Checking for the deleted record on the 2nd page page
                 reportPagingPage.pagingToolbarNextButton.click(); //Click on the next page button
                 reportContentPage.waitForReportContent();//Wait for the content to load
                 reportContentPage.checkForTheDeletedRecordOnTheCurrentPage(deletedRecord);
                 done();
             });
-            // Step 5. Checking for the delete functionality on the second page
-            it('Checking for the delete functionality on the second page', function (done) {
-                reportContentPage.recordCheckBoxes.first().click();
-                reportContentPage.clickOnDeleteIconAndCheckForSuccessMessageWindow("1 Records deleted");
+
+
+            it('Checking for the deleted functionality on the 2nd page page', function (done) {
+
+                // Step 5. Checking for the delete functionality on the second page
+                reportPagingPage.pagingToolbarNextButton.click();
+                reportContentPage.waitForReportContent();
+                //reportContentPage.recordCheckBoxes.get(2).click();
+                reportContentPage.reportRowSelected(rowToBeDeleted);
+                reportContentPage.clickSelectedRecordDeleteIcon();
+                reportContentPage.assertDeleteMessageSuccess(successMessage);
+                reportContentPage.waitForReportContent();
                 done();
             });
 
         });
 
-        /**
-             * After all tests are done, run the cleanup function in the base class
-             */
-            afterAll(function (done) {
-                e2eBase.cleanup(done);
-            });
+        //Todo: Add bulk delete test
+
+        /* After all tests are done, run the cleanup function in the base class */
+        afterAll(function (done) {
+            e2eBase.cleanup(done);
         });
+    });
 
 }());
