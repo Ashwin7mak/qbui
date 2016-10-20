@@ -154,7 +154,7 @@ export let Nav = React.createClass({
         }
 
         return (<div className={classes}>
-
+            <NotificationContainer/>
             {this.props.params && this.props.params.appId &&
                 <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
@@ -197,7 +197,6 @@ export let Nav = React.createClass({
                         showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
-                        <NotificationContainer/>
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
                             key: this.props.location ? this.props.location.pathname : "",
