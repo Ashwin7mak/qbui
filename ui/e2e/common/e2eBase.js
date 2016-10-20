@@ -266,6 +266,8 @@
              */
             defaultAppSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
+                var MIN_RECORDSCOUNT = 11;
+
                 // Use map of tables passed in or create default
                 if (!tableToFieldToFieldTypeMap) {
                     tableToFieldToFieldTypeMap  = e2eConsts.createDefaultTableMap();
@@ -312,8 +314,15 @@
                         // Add the empty record back in to create via API
                         generatedRecords.push(generatedEmptyRecord);
 
-                        // Via the API create records
-                        createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        // Build create record promises
+                        if (numberOfRecords < MIN_RECORDSCOUNT) {
+                            // Via the API create the records
+                            createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        } else {
+                            // Via the API create the bulk records
+                            createAppPromises.push(e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        }
+
                         // Create a list all report for the table
                         createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[i].id, 'Table ' + (i + 1) + ' List All Report', null, null, null, null));
 

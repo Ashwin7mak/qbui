@@ -110,7 +110,7 @@
                                 textFieldInput.clear().then(function() {
                                     textFieldInput.sendKeys('My new text').then(function() {
                                         // Save the edit
-                                        reportServicePage.clickSaveButtonForEditMenu(reportServicePage.agGridRowActionsElList);
+                                        reportServicePage.clickEditMenuSaveButton(reportServicePage.agGridRowActionsElList);
                                         // Check that the edit notification is displayed
                                         reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
                                         // Check that the edit menu is no longer displayed
