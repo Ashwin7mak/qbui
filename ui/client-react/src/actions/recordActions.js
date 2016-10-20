@@ -59,40 +59,40 @@ let recordActions = {
             // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             let record = getRecord(recordChanges, fields);
+
+            // convert record array to object with fid keys (recordChanges format)
+            let changes = record.reduce((obj,val) => {obj[val.id] = val; return obj;}, {});
+
             if (appId && tblId && record.length) {
-                this.dispatch(actions.ADD_RECORD, {appId, tblId, record});
+
+                this.dispatch(actions.ADD_RECORD, {appId, tblId, changes});
+
                 let recordService = new RecordService();
 
                 // save the changes to the record
                 recordService.createRecord(appId, tblId, record).then(
-                        response => {
-                            logger.debug('RecordService createRecord success:' + JSON.stringify(response));
-                            if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
-                                let resJson = JSON.parse(response.data.body);
-                                this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
-                                NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
-                                resolve(resJson.id);
-                            } else {
-                                logger.error('RecordService createRecord call error: no response data value returned');
-                                this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
-                                NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
-                                reject();
-                            }
-                        },
-                        error => {
-                            //  axios upgraded to an error.response object in 0.13.x
-                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
-                            this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
+                    response => {
+                        logger.debug('RecordService createRecord success:' + JSON.stringify(response));
+                        if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
+                            let resJson = JSON.parse(response.data.body);
+                            this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
+                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                            resolve(resJson.id);
+                        } else {
+                            logger.error('RecordService createRecord call error: no response data value returned');
+                            this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
                             NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
                             reject();
                         }
-                    ).catch(
-                        ex => {
-                            logger.logException(ex);
-                            this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: ex});
-                            reject();
-                        }
-                    );
+                    },
+                    error => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
+                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
+                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                        reject();
+                    }
+                );
             } else {
                 var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
                         appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
