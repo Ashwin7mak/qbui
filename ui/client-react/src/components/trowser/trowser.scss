@@ -72,7 +72,6 @@ $action-separator-color: #486c8f;
     .trowserFooter {
         color: #fff;
         flex:0 0 auto;
-        flex-basis:54px;
         display:flex;
         flex-direction: row;
         background-color: $trowser-footer-bg;
@@ -106,7 +105,7 @@ $action-separator-color: #486c8f;
             flex:0 0 auto;
             align-self:center;
             button {
-                margin: 4px 10px 4px 4px;
+                margin: 10px 10px 10px 4px;
             }
         }
     }
@@ -163,10 +162,10 @@ $action-separator-color: #486c8f;
         }
         .rightIcons {
             text-align:center;
-            width:100%;
+            width:90%;
             button {
-                width: 90%;
-                margin-bottom:10px;
+                flex: 1;
+                width: 100%;
             }
         }
     }
