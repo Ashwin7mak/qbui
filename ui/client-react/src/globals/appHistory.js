@@ -18,14 +18,22 @@ class AppHistory {
         if (!self) {
             self = this;
 
+            // A custom browser history object that can be used by React Router
             this.history = useRouterHistory(useBeforeUnload(createHistory))();
 
+            // The instance of flux (to get stores and call actions)
             this.flux = null;
+
+            // Properties needed to save records with pending edits
             this.appId = null;
             this.tableId = null;
             this.recordId = null;
             this.pendEdits = null;
             this.fields = null;
+
+            // Keep track of the event listeners so they can be canceled
+            this.cancelListenBefore = null;
+            this.cancelListenBeforeUnload = null;
         }
 
         return self;
@@ -46,9 +54,12 @@ class AppHistory {
     }
 
     /**
-     * Clears the AppHistory singleton
+     * Clears the AppHistory singleton and event listeners
      */
     reset() {
+        if (this.cancelListenBefore) {this.cancelListenBefore();}
+        if (this.cancelListenBeforeUnload) {this.cancelListenBeforeUnload();}
+
         self = null; // eslint-disable-line
     }
 
@@ -58,39 +69,24 @@ class AppHistory {
      */
     _setupHistoryListeners() {
         // Setup listener for route changes within the app
-        this.history.listenBefore((location, callback) => {
-            this._checkForFlux();
-
+        this.cancelListenBefore = this.history.listenBefore((location, callback) => {
             this.callback = callback;
             this.pendEdits = this.flux.store('RecordPendingEditsStore').getState();
 
             if (this.pendEdits.isPendingEdit) {
-                // window.confirm('hello world');
                 this._saveChanges();
             } else {
-                return this.callback();
+                return this._continueToDestination();
             }
         });
 
         // Setup listener for route changes outside of the app (e.g., pasting in a new url)
-        this.history.listenBeforeUnload(event => {
-            this._checkForFlux();
-
+        this.cancelListenBeforeUnload = this.history.listenBeforeUnload(event => {
             if (this.pendEdits.isPendingEdit) {
                 event.returnValue = 'DONT LEAVE ME!!!';
                 return 'DONT LEAVE ME!!';
             }
         });
-    }
-
-    /**
-     * Make sure that flux has been passed in, otherwise we cannot check for pending edits.
-     * @private
-     */
-    _checkForFlux() {
-        if (!this.flux) {
-            throw new Error('Flux instance was not provided during setup. Please run setup on AppHistory before using in a router.');
-        }
     }
 
     _saveChanges() {
@@ -126,10 +122,11 @@ class AppHistory {
         this._haltRouteChange();
     }
 
-    _discardChanges() {
-        this.flux.actions.recordPendingEditsCancel(this.appId, this.tableId, this.recordId);
-        this._continueToDestination();
-    }
+    // Turn this back on once the user is asked if they want to cancel with a modal
+    // _discardChanges() {
+    //     this.flux.actions.recordPendingEditsCancel(this.appId, this.tableId, this.recordId);
+    //     this._continueToDestination();
+    // }
 
     _continueToDestination() {
         this.callback();
