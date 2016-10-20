@@ -113,6 +113,8 @@ $cell-edit-background-edit: #f3f8fe;
         }
     }
     .ag-header-cell-text {
+        overflow:hidden;
+        text-overflow:ellipsis;
         padding-right:4px;
         padding-left:4px;
         padding-top: 4px;
