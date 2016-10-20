@@ -3,7 +3,7 @@ import EmailFormatter from '../../../../common/src/formatter/emailFormatter';
 import UrlFileAttachmentReportLinkFormatter from '../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import UrlFieldValueRenderer from './urlFieldValueRenderer';
 /**
- * # UrlFieldValueRenderer
+ * # EmailFieldValueRenderer
  *
  * Renders emails as links
  * A small wrapper for UrlFieldValueRenderer specifically for Emails

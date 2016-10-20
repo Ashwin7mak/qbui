@@ -28,7 +28,7 @@ const EmailFieldValueEditor = React.createClass({
 
         readOnly: PropTypes.bool,
 
-        /** Optional prop to pass in placeholder text. Defaults to: 'name@dimain.com'. */
+        /** Optional prop to pass in placeholder text. Defaults to: 'name@domain.com'. */
         placeholder: PropTypes.string,
 
         /** Flag to turn on and off email validation. `onValidated` function must also be supplied */
