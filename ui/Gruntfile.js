@@ -619,20 +619,24 @@ module.exports = function(grunt) {
             },
             gitState : {
                 command: [
-                    //'git rev-parse --abbrev-ref HEAD > <%= quickbase.client.gen %>/buildBranchInfo.txt',
-                    //'git status --porcelain -b -s  >> <%= quickbase.client.gen %>/buildBranchInfo.txt',
-                    //Tuesday, October 18th, 2016, 6:06:56 PM
-                    ' printf "<%= grunt.template.today("dddd, mmmm d yyyy, hh:MM:ss TT Z") %>\n"  > <%= quickbase.client.gen %>/buildBranchInfo.txt git status --porcelain -b -S',
+                    //print out  the time of this build, include eastern time for convenience
+                    ' printf "<%= grunt.template.today("dddd, mmmm d yyyy, hh:MM:ss TT Z") %>\n"  > <%= quickbase.client.gen %>/buildBranchInfo.txt ',
                     ' [[ $(date +%Z) != E* ]] && TZ=":America/New_York" date "+%A, %B %d %Y, %I:%M:%S %p %Z" >> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
+
+                    //print out the CI Job name and build number if available
                     ' [[ "<%= bldinfo.JOB_NAME %>" ]] && printf "Job Name: <%= bldinfo.JOB_NAME %>\n" >> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
-                    ' [[ "<%= bldinfo.BUILD_NUMBER %>" ]] && printf   "BUILD_NUMBER: <%= bldinfo.BUILD_NUMBER %> \n">> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
-                    ' [[ "<%= bldinfo.GIT_BRANCH %>" ]] && printf  "GIT_BRANCH: <%= bldinfo.GIT_BRANCH %>\n" >> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
-                    ' [[ ! "<%= bldinfo.GIT_BRANCH %>" ]] && printf  "GIT_BRANCH: ">> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
-                    ' [[ ! "<%= bldinfo.GIT_BRANCH %>" ]] && git rev-parse --abbrev-ref HEAD >> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
+                    ' [[ "<%= bldinfo.BUILD_NUMBER %>" ]] && printf "BUILD_NUMBER: <%= bldinfo.BUILD_NUMBER %> \n">> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
+
+                    //print out the git branch name from env var or use git rev-parse if none
+                    ' printf "GIT_BRANCH: " >> <%= quickbase.client.gen %>/buildBranchInfo.txt ',
+                    ' [[ "<%= bldinfo.GIT_BRANCH %>" ]] && printf "<%= bldinfo.GIT_BRANCH %>\n" >> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
+                    ' [[ !"<%= bldinfo.GIT_BRANCH %>" ]] && git rev-parse --abbrev-ref HEAD >> <%= quickbase.client.gen %>/buildBranchInfo.txt ||: ',
+
+                    //print out the current git revision short id
                     ' printf "GIT Revision: "  >> <%= quickbase.client.gen %>/buildBranchInfo.txt ',
                     ' git rev-parse --verify HEAD --short >> <%= quickbase.client.gen %>/buildBranchInfo.txt ',
 
-
+                    //console log whats went into the buildBranchInfo.txt file
                     ' cat <%= quickbase.client.gen %>/buildBranchInfo.txt'
                 ].join('&&')
             },
