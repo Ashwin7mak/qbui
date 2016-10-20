@@ -11,7 +11,7 @@
         sectionKeys         : {
             ORDER_INDEX             : 'orderIndex',
             HEADER_ELEMENT          : 'headerElement',
-            IS_PEUSDO               : 'pseudo',
+            IS_PEUSDO               : 'isPeusdo',
             ELEMENTS                : 'elements',
         },
     });
