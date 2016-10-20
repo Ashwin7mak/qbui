@@ -85,6 +85,7 @@ export default {
             recordNotSaved :"Enregistrement non enregistré",
             deleted : "supprimé",
             notDeleted : "non supprimés",
+            cannotLoad : "Impossible de charger la fiche"
         },
         header: {
             menu: {
