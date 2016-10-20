@@ -1,5 +1,6 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
+import './qbModal.scss';
 
 const QBModals = React.createClass({
     propTypes: {
@@ -11,6 +12,10 @@ const QBModals = React.createClass({
          *This is the message for the modal body
          */
         modalBodyMessage: React.PropTypes.array,
+        /**
+         *This is the title for the modal title
+         */
+        title: React.PropTypes.string,
         /**
          *This is the QBIcon for the modal body
          */
@@ -24,18 +29,56 @@ const QBModals = React.createClass({
          */
         buttonArrayRight: React.PropTypes.array
     },
+    qbIconFunction() {
+        //This function checks to see if there is a QBIcon
+            //if there is a QBIcon then it will be placed on the page according to XD specs
+            //if there is not a QBIcon then it will not render anything to the page
+        if (this.props.modalBodyQBIcon) {
+            return <div className="modalQBIcon">
+                {this.props.modalBodyQBIcon}
+            </div>;
+        }
+        return null;
+    },
+    titleAndBodyFunction() {},
+    buttonFunction() {
+        //This functions checks to see how many buttons the modal has
+            //It will place and style the buttons based off of the total button count
+        if (this.props.buttonArrayLeft && this.props.buttonArrayRight) {
+            if (this.props.buttonArrayLeft.length + this.props.buttonArrayRight.length === 3) {
+                return <div>
+                    <div id="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+                    <div id="secondaryButton">{this.props.buttonArrayRight[0]}</div>
+                    <div id="primaryButton" >{this.props.buttonArrayRight[1]}</div>
+                </div>;
+            }
+            if (this.props.buttonArrayLeft.length + this.props.buttonArrayRight.length === 2) {
+                return <div>
+                    <div id="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+                    <div id="primaryButton">{this.props.buttonArrayRight[0]}</div>
+                </div>;
+            }
+        }
+        return <div id="singlePrimaryButton">
+            {this.props.buttonArrayRight[0]}
+        </div>;
+    },
     render() {
         return <div>
             <Modal show={this.props.bool} onHide={this.close}>
-                    <Modal.Title>
-                        {this.props.modalBodyQBIcon}
-                    </Modal.Title>
-                    <Modal.Body>
-                        {this.props.modalBodyMessage}
-                    </Modal.Body>
+                <div>
+                    {this.qbIconFunction()}
+                    <div className="modalTitleAndBody">
+                        <Modal.Title>
+                            {this.props.title}
+                        </Modal.Title>
+                        <Modal.Body>
+                            {this.props.modalBodyMessage}
+                        </Modal.Body>
+                    </div>
+                </div>
                     <Modal.Footer>
-                        {this.props.buttonArrayLeft}
-                        {this.props.buttonArrayRight}
+                        {this.buttonFunction()}
                     </Modal.Footer>
             </Modal>
         </div>;

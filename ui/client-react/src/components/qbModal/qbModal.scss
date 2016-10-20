@@ -1,0 +1,59 @@
+@import '../../assets/css/_qbVariables';
+@import '../../assets/css/_qbColorVariables';
+
+.modal-backdrop.in {
+  opacity: 0.5;
+}
+
+.modal-backdrop {
+  background-color: $color-black-800;
+}
+
+.modal-footer {
+  padding-bottom: 20px;
+  padding-top: 20px;
+  border-top: 1px solid $color-black-300;
+}
+
+.modalQBIcon {
+  height: 44px;
+  width: 50px;
+  display: inline-block;
+}
+
+.modalTitleAndBody {
+  display: inline-block;
+}
+
+#tertiaryButton {
+  float: left;
+  margin-left: -15px;
+  @include small-breakpoint {
+    width: 100%;
+    margin-left: 0px;
+  }
+}
+
+#secondaryButton{
+  margin-right: 5px;
+  display: inline-block;
+  @include small-breakpoint {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    width: 100%;
+  }
+}
+
+#primaryButton{
+  margin-right: -15px;
+  display: inline-block;
+  @include small-breakpoint {
+    width: 100%;
+    margin-right: 0px;
+  }
+}
+
+#singlePrimaryButton {
+  text-align: center;
+}
