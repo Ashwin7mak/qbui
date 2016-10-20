@@ -1,6 +1,7 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import './qbModal.scss';
+import QbIcon from '../qbIcon/qbIcon';
 
 const QBModals = React.createClass({
     propTypes: {
@@ -15,9 +16,9 @@ const QBModals = React.createClass({
         /**
          *This is the title for the modal title
          */
-        title: React.PropTypes.string,
+        modalTitle: React.PropTypes.string,
         /**
-         *This is the QBIcon for the modal body
+         *This is the QBIcon for the modal
          */
         modalBodyQBIcon: React.PropTypes.array,
         /**
@@ -40,7 +41,24 @@ const QBModals = React.createClass({
         }
         return null;
     },
-    titleAndBodyFunction() {},
+    titleFunction() {
+        if (this.props.modalTitle) {
+            return <div id="modalTitle">
+                {this.props.modalTitle[0]}
+                </div>;
+        }
+        return null;
+    },
+    bodyFunction() {
+        if (this.props.modalTitle) {
+            return <div id="modalTextWithTitle ">
+                {this.props.modalBodyMessage[0]}
+            </div>;
+        }
+        return <div id="modalText">
+            {this.props.modalBodyMessage[0]}
+            </div>;
+    },
     buttonFunction() {
         //This functions checks to see how many buttons the modal has
             //It will place and style the buttons based off of the total button count
@@ -64,16 +82,20 @@ const QBModals = React.createClass({
         </div>;
     },
     render() {
+        let modalTitleAndBody = "modalTitleAndBody";
+        if (this.props.modalTitle && this.props.modalBodyQBIcon) {
+            modalTitleAndBody = "modalTitleAndBodyAndQBIcon";
+        }
         return <div>
             <Modal show={this.props.bool} onHide={this.close}>
                 <div>
                     {this.qbIconFunction()}
-                    <div className="modalTitleAndBody">
+                    <div className={modalTitleAndBody}>
                         <Modal.Title>
-                            {this.props.title}
+                            {this.titleFunction()}
                         </Modal.Title>
                         <Modal.Body>
-                            {this.props.modalBodyMessage}
+                            {this.bodyFunction()}
                         </Modal.Body>
                     </div>
                 </div>

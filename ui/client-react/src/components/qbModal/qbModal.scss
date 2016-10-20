@@ -13,19 +13,56 @@
   padding-bottom: 20px;
   padding-top: 20px;
   border-top: 1px solid $color-black-300;
+  @include small-breakpoint {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+
+#modalTitle {
+  font-size: $font-size-h2;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.modal-body {
+  padding: 0px;
+  margin-top: -5px;
+  height: 44px;
+}
+
+#modalText {
+  font-size: $font-size-h4;
+  position: fixed;
+  margin-top: 15px;
+  @include small-breakpoint{
+    font-size: $font-size-h4;
+    padding-bottom: 100px;
+  }
+}
+
+#modalTextWithTitle {
+  font-size: $font-size-p;
 }
 
 .modalQBIcon {
   height: 44px;
   width: 50px;
   display: inline-block;
+  margin-right: 10px;
 }
 
 .modalTitleAndBody {
   display: inline-block;
 }
 
-#tertiaryButton {
+.modalTitleAndBodyAndQBIcon {
+  display: inline-block;
+  margin-left: 60px;
+  margin-top: 15px;
+}
+
+#tertiaryButton .btn {
   float: left;
   margin-left: -15px;
   @include small-breakpoint {
@@ -34,7 +71,7 @@
   }
 }
 
-#secondaryButton{
+#secondaryButton .btn {
   margin-right: 5px;
   display: inline-block;
   @include small-breakpoint {
@@ -45,7 +82,7 @@
   }
 }
 
-#primaryButton{
+#primaryButton .btn {
   margin-right: -15px;
   display: inline-block;
   @include small-breakpoint {
@@ -54,6 +91,6 @@
   }
 }
 
-#singlePrimaryButton {
+#singlePrimaryButton .btn {
   text-align: center;
 }

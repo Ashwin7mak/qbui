@@ -24,13 +24,6 @@
   }
 }
 
-.modal-body {
-  padding: 0px;
-  margin-top: -5px;
-  height: 44px;
-  margin-left: 10px;
-}
-
 #modalText {
   font-size: $font-size-h4;
 }
@@ -50,26 +43,26 @@
   }
 }
 
-#smallButtonStay {
-  width: 100%;
-  margin-left: 0px;
-}
+//#smallButtonStay {
+//  width: 100%;
+//  margin-left: 0px;
+//}
 
-#smallDoNotSaveButton{
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 0px;
-  width: 100%;
-}
+//#smallDoNotSaveButton{
+//  margin-top: 10px;
+//  margin-bottom: 10px;
+//  margin-left: 0px;
+//  width: 100%;
+//}
 
-#smallSaveButton{
-  width: 100%;
-}
+//#smallSaveButton{
+//  width: 100%;
+//}
 
-#smallModalText {
-  font-size: $font-size-h4;
-  padding-bottom: 100px;
-}
+//#smallModalText {
+//  font-size: $font-size-h4;
+//  padding-bottom: 100px;
+//}
 
 .smallAlert{
   font-size: 44px;

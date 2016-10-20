@@ -38,7 +38,7 @@ const PendingEditModal = React.createClass({
         /**
         * The below consts are set for large breakpoint modal*/
         const modalBodyMessage = [
-            <div id="modalText">{modalI18BodyMessage}</div>
+            <div>{modalI18BodyMessage}</div>
         ];
         const modalBodyQBIcon = [
             <QbIcon className="alert" icon="alert"/>
@@ -65,14 +65,15 @@ const PendingEditModal = React.createClass({
             <Button id="smallDoNotSaveButton">{modalI18DoNotSaveButton}</Button>,
             <Button id="smallButtonStay" onClick={this.close}>{modalI18StayButton}</Button>
         ];
+        let modalTitle = [<div>I am a title!</div>];
         if (!isSmall) {
             modal = [
                 <QBModal
                 bool={this.props.bool}
+                modalTitle={modalTitle}
                 buttonArrayLeft={buttonArrayLeft}
                 buttonArrayRight={buttonArrayRight}
-                modalBodyMessage={modalBodyMessage}
-                modalBodyQBIcon={modalBodyQBIcon}/>
+                modalBodyMessage={modalBodyMessage} />
             ];
         } else {
             modal = [
