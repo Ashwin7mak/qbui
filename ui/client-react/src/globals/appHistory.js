@@ -45,6 +45,17 @@ class AppHistory {
         return self;
     }
 
+    /**
+     * Clears the AppHistory singleton
+     */
+    reset() {
+        self = null; // eslint-disable-line
+    }
+
+    /**
+     * Add the global listeners to route changes
+     * @private
+     */
     _setupHistoryListeners() {
         // Setup listener for route changes within the app
         this.history.listenBefore((location, callback) => {
@@ -72,6 +83,10 @@ class AppHistory {
         });
     }
 
+    /**
+     * Make sure that flux has been passed in, otherwise we cannot check for pending edits.
+     * @private
+     */
     _checkForFlux() {
         if (!this.flux) {
             throw new Error('Flux instance was not provided during setup. Please run setup on AppHistory before using in a router.');
