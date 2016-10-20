@@ -2,9 +2,10 @@ import React from 'react';
 import Fluxxor from 'fluxxor';
 import Trowser from "../trowser/trowser";
 import Record from "./record";
-import {I18nMessage} from "../../utils/i18nMessage";
+import {I18nMessage} from '../../utils/i18nMessage';
 import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBicon from "../qbIcon/qbIcon";
+import QBToolTip from '../qbToolTip/qbToolTip';
 import TableIcon from "../qbTableIcon/qbTableIcon";
 import Loader from 'react-loader';
 import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
@@ -222,7 +223,11 @@ let RecordTrowser = React.createClass({
 
         return (
             <div className="saveButtons">
-                {errorFlg && <div className="saveAlert"><QBicon icon={"alert"}/></div>}
+                {errorFlg &&
+                    <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip" style={{zIndex:9999}}>{this.props.errorPopupHidden ? "Show error list" : "Hide error list"}</Tooltip>}>
+                        <Button className="saveAlertButton" onClick={this.toggleErrorDialog}><QBicon icon={"alert"}/></Button>
+                    </OverlayTrigger>
+                }
                 <Button bsStyle="primary" disabled={!canSave} onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
                 {showNext &&
                     <Button bsStyle="primary" disabled={!canSave} onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
@@ -243,6 +248,18 @@ let RecordTrowser = React.createClass({
         WindowLocationUtils.pushWithoutQuery();
 
         flux.actions.hideTrowser();
+    },
+    toggleErrorDialog() {
+        let flux = this.getFlux();
+        if (this.props.errorPopupHidden) {
+            flux.actions.showErrorMsgDialog();
+        } else {
+            flux.actions.hideErrorMsgDialog();
+        }
+    },
+    showErrorDialog() {
+        let flux = this.getFlux();
+        flux.actions.showErrorMsgDialog();
     },
     dismissErrorDialog() {
         let flux = this.getFlux();
