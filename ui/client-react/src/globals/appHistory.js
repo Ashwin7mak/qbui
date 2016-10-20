@@ -10,7 +10,7 @@ import {UNSAVED_RECORD_ID} from '../constants/schema';
 let self = null; // eslint-disable-line
 
 /**
- * This singleton class maintains the current customized broswerHistory that includes event listeners
+ * This singleton class maintains the current customized browserHistory that includes event listeners
  * for when a route changes. This helps us detect if there are pending edits to a form before redirecting.
  */
 class AppHistory {
@@ -33,6 +33,8 @@ class AppHistory {
 
     /**
      * Setups the singleton for use with flux outside of React. Needs to be run before history can be used.
+     * Flux currently has to be passed in because it is difficult to use Fluxxor outside of React. Once we
+     * move to Redux, this may not be necessary.
      * @param flux
      */
     setup(flux) {
@@ -102,20 +104,23 @@ class AppHistory {
     }
 
     _onRecordSaved() {
-        this.callback();
-    };
+        this._continueToDestination();
+    }
 
     _onRecordSavedError() {
-        console.log('THERE WAS A PROBLEM SAVING THE RECORD');
-        this.callback(false);
+        this._haltRouteChange();
     }
 
     _discardChanges() {
         this.flux.actions.recordPendingEditsCancel(this.appId, this.tableId, this.recordId);
+        this._continueToDestination();
+    }
+
+    _continueToDestination() {
         this.callback();
     }
 
-    _cancel() {
+    _haltRouteChange() {
         this.callback(false);
     }
 }
