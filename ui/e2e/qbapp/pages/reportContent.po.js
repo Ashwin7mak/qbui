@@ -331,6 +331,40 @@
                 return Promise.reject(new Error('Error waiting for reportContent (are there records showing on the report?): ' + e.message));
             });
         };
+
+        /* Delete Page */
+        this.recordCountEle = element(by.className('recordsCount')).element(by.tagName('span'));
+        //This gives you all the record checkboxes of the report page
+        this.recordCheckBoxes = element.all(by.className('ag-selection-checkbox'));
+
+        this.deleteIcon = element(by.className('iconLink icon-delete')).element(by.className('qbIcon iconTableUISturdy-delete'));
+        this.successDeleteWindow = element(by.className('notification notification-success')).element(by.className('notification-message')).element(by.className('message'));
+
+
+        //Click on the Delete Icon and Checking for the success Message
+        this.clickOnDeleteIconAndCheckForSuccessMessageWindow = function(successMessage){
+            var self = this;
+            this.deleteIcon.click();
+            this.waitForElement(self.successDeleteWindow).then(function(){
+                expect(self.successDeleteWindow.getText()).toMatch(successMessage.toString());
+                self.waitForReportContent();
+            });
+        }
+
+        // Checking for the deleted record on the first page
+        this.checkForTheDeletedRecordOnTheCurrentPage = function(deletedRecord){
+            var self = this;
+            self.agGridRecordElList.then(function (recordsNo) {
+
+                for (var i = 0; i < recordsNo.length; i++) {
+                    self.getRecordValues(i).then(function (fieldValues) {
+                        console.log("hello" + fieldValues[1] + "   " + fieldValues[2]);
+                        expect(deletedRecord).not.toEqual(fieldValues);
+                    });
+                }
+            });
+
+        }
     };
     ReportContentPage.prototype = e2ePageBase;
     module.exports = ReportContentPage;
