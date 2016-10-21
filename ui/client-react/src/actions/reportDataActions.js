@@ -137,7 +137,7 @@ let reportDataActions = {
      * @param rows
      * @param sortList
      */
-    loadReport(appId, tblId, rptId, format, offset, rows, sortList) {
+    loadReport(appId, tblId, rptId, format, offset, rows) {
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {

@@ -291,11 +291,13 @@ let reportModel = {
             this.model.filteredRecords = recordData.groups.gridData;
             this.model.filteredRecordsCount = recordData.groups.totalRows;
             this.model.groupFields = recordData.groups.fields;
+            this.model.hasGrouping = recordData.groups.hasGrouping;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
             this.model.filteredRecordsCount = recordData.records.length;
             this.model.groupFields = null;
+            this.model.hasGrouping = false;
         }
 
     },

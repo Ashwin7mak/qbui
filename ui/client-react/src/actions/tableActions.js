@@ -54,7 +54,7 @@ let tableActions = {
 
                         //  ..fire off the load report and record count events
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, {body: model.recordCount});
+                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, model);
                         resolve();
                     },
                     (error) => {
