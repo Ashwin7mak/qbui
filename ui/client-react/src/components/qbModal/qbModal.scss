@@ -113,7 +113,7 @@
     color: $color-orange-500;
 
     @include small-breakpoint {
-      font-size: 44px;
+      font-size: 40px;
       padding-top: 30px;
       padding-bottom: 20px;
       color: $color-orange-500;
@@ -131,22 +131,35 @@
   }
 
   .leftButton {
+    color: $color-indigo-700;
+    background-color: $color-black-300;
+    stroke: $color-black-300;
     float: left;
     margin-left: -15px;
   }
 
   .middleButton {
+    color: $color-indigo-700;
+    background-color: $color-black-300;
+    stroke: $color-black-300;
     margin-right: 5px;
     display: inline-block;
   }
 
   .primaryButton {
+    color: $color-black-100;
+    background-color: $color-indigo-700;
     margin-right: -15px;
     display: inline-block;
   }
 
-  .singlePrimaryButton {
+  .singlePrimaryButtonContainer {
     text-align: center;
+  }
+
+  .singlePrimaryButton {
+    color: $color-black-100;
+    background-color: $color-indigo-700;
   }
 
   .smallPrimaryButton .btn {

@@ -89,27 +89,27 @@ const QBModal = React.createClass({
             //It will place and style the buttons based off of the total button count
         if (isSmall) {
             return <div>
-                <div className="smallPrimaryButton" ><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
+                <div className="smallPrimaryButton"><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
                 <div className="smallMiddleButton"><Button onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button></div>
                 <div className="smallLeftButton"><Button onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button></div>
             </div>;
         }
         if (this.props.leftButtonName && this.props.primaryButtonName && this.props.middleButtonName) {
             return <div>
-                <div className="leftButton"><Button onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button></div>
-                <div className="middleButton"><Button onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button></div>
-                <div className="primaryButton"><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
+                <Button className="leftButton" onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>
+                <Button className="middleButton" onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>
+                <Button className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
             </div>;
         }
         if (this.props.leftButtonName && this.props.primaryButtonName) {
             return <div>
-                <div className="leftButton"><Button onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button></div>
-                <div className="primaryButton"><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
+                <Button className="leftButton" onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>
+                <Button className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
             </div>;
         }
-        return <div className="singlePrimaryButton">
-            <Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
-        </div>;
+        return <div className="singlePrimaryButtonContainer">
+            <Button className="singlePrimaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
+            </div>;
     },
     render() {
         let titleAndBody = "titleAndBody";
