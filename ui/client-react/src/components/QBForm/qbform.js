@@ -101,22 +101,34 @@ let QBForm = React.createClass({
      * @param fieldId
      * @returns the record entry from formdata record array with the field ID
      */
-    getFieldRecord(fieldId) {
-        if (_.has(this.props, 'pendEdits.recordChanges') && this.props.pendEdits.recordChanges[fieldId]) {
-            let vals = {};
-            vals.id = fieldId;
-            vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
-            vals.display = this.props.pendEdits.recordChanges[fieldId].newVal.display;
-            return vals;
-        }
-
-        let record = this.props.formData.record || [];
-
-        return _.find(record, val => {
-            if (val.id === fieldId) {
-                return true;
+    getFieldRecord(field) {
+        if (field) {
+            const fieldId = field.id;
+            if (_.has(this.props, 'pendEdits.recordChanges') && this.props.pendEdits.recordChanges[fieldId]) {
+                let vals = {};
+                vals.id = fieldId;
+                vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
+                vals.display = this.props.pendEdits.recordChanges[fieldId].newVal.display;
+                return vals;
             }
-        });
+
+            let record = this.props.formData.record || [];
+
+            let fieldRecord = _.find(record, val => {
+                if (val.id === fieldId) {
+                    return true;
+                }
+            });
+
+            if (fieldRecord && fieldRecord.value) {
+                return fieldRecord;
+            } else if (field.defaultValue && field.defaultValue.coercedValue) {
+                fieldRecord = {};
+                fieldRecord.display = field.defaultValue.displayValue;
+                fieldRecord.value = field.defaultValue.coercedValue.value;
+                return fieldRecord;
+            }
+        }
     },
 
     /**
@@ -141,9 +153,14 @@ let QBForm = React.createClass({
             isInvalid : false,
             invalidMessage: ""
         };
-        if (_.has(this.props, 'pendEdits.editErrors') && this.props.pendEdits.editErrors[fieldId]) {
-            validationResult.isInvalid = this.props.pendEdits.editErrors[fieldId].isInvalid;
-            validationResult.invalidMessage = this.props.pendEdits.editErrors[fieldId].invalidMessage;
+        if (_.has(this.props, 'pendEdits.editErrors.errors') && this.props.pendEdits.editErrors.errors.length) {
+            let relatedError = _.find(this.props.pendEdits.editErrors.errors, (error) =>{
+                return error.id === fieldId;
+            });
+            if (relatedError) {
+                validationResult.isInvalid = relatedError.isInvalid;
+                validationResult.invalidMessage = relatedError.invalidMessage;
+            }
         }
         return validationResult;
     },
@@ -160,7 +177,7 @@ let QBForm = React.createClass({
 
         let relatedField = this.getRelatedField(element.fieldId);
 
-        let fieldRecord = this.getFieldRecord(element.fieldId);
+        let fieldRecord = this.getFieldRecord(relatedField);
 
         let key = "field" + sectionIndex + "-" + element.orderIndex;
 

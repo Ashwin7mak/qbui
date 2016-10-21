@@ -186,7 +186,7 @@ const FieldValueEditor = React.createClass({
             if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
                 return (
                     <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
-                        {...commonProps} />
+                        {...commonProps} showAsRadio={this.props.fieldDef.showAsRadio}/>
                 );
             } else {
                 return <NumericFieldValueEditor {...commonProps}
@@ -213,7 +213,7 @@ const FieldValueEditor = React.createClass({
             if (_.has(this.props, 'fieldDef.multipleChoice.choices')) {
                 return (
                         <MultiChoiceFieldValueEditor choices={this.props.fieldDef.multipleChoice.choices}
-                                             {...commonProps}/>
+                                             {...commonProps} showAsRadio={this.props.fieldDef.showAsRadio}/>
                     );
             } else {
                 return <TextFieldValueEditor {...commonProps}

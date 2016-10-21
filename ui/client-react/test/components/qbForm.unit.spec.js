@@ -130,7 +130,7 @@ const fakeQBFormData = {
         }
     },
     record:[{id:2, value: "field value"}],
-    fields: [{id: 2, name: "field name", datatypeAttributes: {type: "TEXT"}}]
+    fields: [{id: 6, name: "field 6", datatypeAttributes: {type: "TEXT"}}, {id: 2, name: "field 2", datatypeAttributes: {type: "TEXT"}}]
 };
 
 const emptyQBFormData = {
@@ -294,10 +294,13 @@ describe('QBForm functions', () => {
                 }
             },
             editErrors: {
-                6: {
-                    isInvalid: true,
-                    invalidMessage: "invalid"
-                }
+                errors: [
+                    {
+                        id: 6,
+                        isInvalid: true,
+                        invalidMessage: "invalid"
+                    }
+                ]
             }
         };
         component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} pendEdits={edits}></QBForm>);

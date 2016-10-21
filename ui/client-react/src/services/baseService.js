@@ -6,6 +6,9 @@ import Configuration from '../config/app.config';
 import StringUtils from '../utils/stringUtils';
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import uuid from 'uuid';
+import Promise from 'bluebird';
+
+window.Promise = Promise; // set global Promise to Bluebird promise (axios has dependency on Promises which are not in IE 11)
 
 class BaseService {
 

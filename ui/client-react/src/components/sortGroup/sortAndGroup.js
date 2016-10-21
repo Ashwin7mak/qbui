@@ -324,7 +324,7 @@ const SortAndGroup = React.createClass({
 
 
     getField(fid, fields) {
-        return fields.find((field) => (field.id === fid));
+        return _.find(fields, field => (field.id === fid));
     },
 
 
