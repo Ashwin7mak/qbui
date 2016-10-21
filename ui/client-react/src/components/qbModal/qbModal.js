@@ -22,11 +22,11 @@ const QBModals = React.createClass({
          */
         modalQBIcon: React.PropTypes.array,
         /**
-         *This is an array of buttons for the left side of the footer
+         *This is an array of buttons for the left sclassNamee of the footer
          */
         buttonArrayLeft: React.PropTypes.array,
         /**
-         *This is an array of buttons for the right side of the footer
+         *This is an array of buttons for the right sclassNamee of the footer
          */
         buttonArrayRight: React.PropTypes.array
     },
@@ -43,7 +43,7 @@ const QBModals = React.createClass({
     },
     renderTitle() {
         if (this.props.modalTitle) {
-            return <div id="modalTitle">
+            return <div className="modalTitle">
                 {this.props.modalTitle[0]}
                 </div>;
         }
@@ -51,11 +51,11 @@ const QBModals = React.createClass({
     },
     renderBody() {
         if (this.props.modalTitle) {
-            return <div id="modalTextWithTitle ">
+            return <div className="modalTextWithTitle ">
                 {this.props.modalBodyMessage[0]}
             </div>;
         }
-        return <div id="modalText">
+        return <div className="modalText">
             {this.props.modalBodyMessage[0]}
             </div>;
     },
@@ -65,27 +65,27 @@ const QBModals = React.createClass({
             //It will place and style the buttons based off of the total button count
         if (isSmall) {
             return <div>
-                <div id="smallPrimaryButton" >{this.props.buttonArrayRight[1]}</div>
-                <div id="smallSecondaryButton">{this.props.buttonArrayRight[0]}</div>
-                <div id="smallTertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+                <div className="smallPrimaryButton" >{this.props.buttonArrayRight[1]}</div>
+                <div className="smallSecondaryButton">{this.props.buttonArrayRight[0]}</div>
+                <div className="smallTertiaryButton">{this.props.buttonArrayLeft[0]}</div>
             </div>;
         }
         if (this.props.buttonArrayLeft && this.props.buttonArrayRight) {
             if (this.props.buttonArrayLeft.length + this.props.buttonArrayRight.length === 3) {
                 return <div>
-                    <div id="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
-                    <div id="secondaryButton">{this.props.buttonArrayRight[0]}</div>
-                    <div id="primaryButton" >{this.props.buttonArrayRight[1]}</div>
+                    <div className="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+                    <div className="secondaryButton">{this.props.buttonArrayRight[0]}</div>
+                    <div className="primaryButton" >{this.props.buttonArrayRight[1]}</div>
                 </div>;
             }
             if (this.props.buttonArrayLeft.length + this.props.buttonArrayRight.length === 2) {
                 return <div>
-                    <div id="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
-                    <div id="primaryButton">{this.props.buttonArrayRight[0]}</div>
+                    <div className="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+                    <div className="primaryButton">{this.props.buttonArrayRight[0]}</div>
                 </div>;
             }
         }
-        return <div id="singlePrimaryButton">
+        return <div className="singlePrimaryButton">
             {this.props.buttonArrayRight[0]}
         </div>;
     },
@@ -96,7 +96,7 @@ const QBModals = React.createClass({
         }
         return (
             <div>
-                <Modal className="qbModal" show={this.props.bool} onHide={this.close}>
+                <Modal className="qbModal" show={this.props.bool} onHclassNamee={this.close}>
                     <div className="bodyContainer">
                         {this.renderQBIcon()}
                         <div className={modalTitleAndBody}>
