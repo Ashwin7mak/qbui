@@ -70,8 +70,10 @@ var BasicQBModalExample = React.createClass({
                 {/*Default Modal*/}
                 <div>
                     <QBModal
-                        bool={this.state.defaultQBModalOpen}
+                        show={this.state.defaultQBModalOpen}
                         buttonArrayLeft={buttonArrayLeft}
+                        primaryButtonName="Primary Button"
+                        primaryButtonOnClick={this.closeAll}
                         buttonArrayRight={buttonArrayRight}
                         modalBodyMessage={modalBodyMessage}
                         modalTitle={modalTitle} />
@@ -79,15 +81,20 @@ var BasicQBModalExample = React.createClass({
                 {/*Critical Alert Modal*/}
                 <div>
                     <QBModal
-                        bool={this.state.criticalAlertQBModalOpen}
+                        show={this.state.criticalAlertQBModalOpen}
                         buttonArrayLeft={buttonArrayLeft}
+                        primaryButtonName="Primary Button"
+                        primaryButtonOnClick={this.closeAll}
                         buttonArrayRight={buttonArrayRight}
-                        modalBodyMessage={modalBodyMessage}/>
+                        modalBodyMessage={modalBodyMessage}
+                        QBIconName="alert" />
                 </div>
                 {/*Single Button Modal*/}
                 <div>
                     <QBModal
-                        bool={this.state.singleButtonQBModal}
+                        show={this.state.singleButtonQBModal}
+                        primaryButtonName="Primary Button"
+                        primaryButtonOnClick={this.closeAll}
                         buttonArrayRight={singleButton}
                         modalBodyMessage={modalBodyMessage}/>
                 </div>

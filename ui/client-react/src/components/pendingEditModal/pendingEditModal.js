@@ -1,5 +1,4 @@
 import React from 'react';
-import QbIcon from '../qbIcon/qbIcon';
 import QBModal from '../qbModal/qbModal';
 import {Button} from 'react-bootstrap';
 import {I18nMessage} from '../../utils/i18nMessage';
@@ -25,9 +24,7 @@ const PendingEditModal = React.createClass({
         const modalBodyMessage = [
             <div>{modalI18BodyMessage}</div>
         ];
-        const modalQBIcon = [
-            <QbIcon icon="alert"/>
-        ];
+        const modalQBIcon = 'alert';
         const buttonArrayLeft = [
             <Button>{modalI18StayButton}</Button>
         ];
@@ -37,7 +34,7 @@ const PendingEditModal = React.createClass({
         ];
 
         return <QBModal
-                bool={this.props.bool}
+                show={this.props.bool}
                 buttonArrayLeft={buttonArrayLeft}
                 buttonArrayRight={buttonArrayRight}
                 modalBodyMessage={modalBodyMessage}
