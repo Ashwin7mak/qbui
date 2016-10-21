@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import './qbModal.scss';
-import QbIcon from '../qbIcon/qbIcon';
+import Breakpoints from "../../utils/breakpoints";
 
 const QBModals = React.createClass({
     propTypes: {
@@ -20,7 +20,7 @@ const QBModals = React.createClass({
         /**
          *This is the QBIcon for the modal
          */
-        modalBodyQBIcon: React.PropTypes.array,
+        modalQBIcon: React.PropTypes.array,
         /**
          *This is an array of buttons for the left side of the footer
          */
@@ -34,9 +34,9 @@ const QBModals = React.createClass({
         //This function checks to see if there is a QBIcon
             //if there is a QBIcon then it will be placed on the page according to XD specs
             //if there is not a QBIcon then it will not render anything to the page
-        if (this.props.modalBodyQBIcon) {
+        if (this.props.modalQBIcon) {
             return <div className="modalQBIcon">
-                {this.props.modalBodyQBIcon}
+                {this.props.modalQBIcon}
             </div>;
         }
         return null;
@@ -60,8 +60,16 @@ const QBModals = React.createClass({
             </div>;
     },
     buttonFunction() {
+        let isSmall = Breakpoints.isSmallBreakpoint();
         //This functions checks to see how many buttons the modal has
             //It will place and style the buttons based off of the total button count
+        if (isSmall) {
+            return <div>
+                <div id="smallPrimaryButton" >{this.props.buttonArrayRight[1]}</div>
+                <div id="smallSecondaryButton">{this.props.buttonArrayRight[0]}</div>
+                <div id="smallTertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+            </div>;
+        }
         if (this.props.buttonArrayLeft && this.props.buttonArrayRight) {
             if (this.props.buttonArrayLeft.length + this.props.buttonArrayRight.length === 3) {
                 return <div>
@@ -83,27 +91,29 @@ const QBModals = React.createClass({
     },
     render() {
         let modalTitleAndBody = "modalTitleAndBody";
-        if (this.props.modalTitle && this.props.modalBodyQBIcon) {
+        if (this.props.modalTitle && this.props.modalQBIcon) {
             modalTitleAndBody = "modalTitleAndBodyAndQBIcon";
         }
-        return <div>
-            <Modal show={this.props.bool} onHide={this.close}>
-                <div>
-                    {this.qbIconFunction()}
-                    <div className={modalTitleAndBody}>
-                        <Modal.Title>
-                            {this.titleFunction()}
-                        </Modal.Title>
-                        <Modal.Body>
-                            {this.bodyFunction()}
-                        </Modal.Body>
+        return (
+            <div>
+                <Modal className="qbModal" show={this.props.bool} onHide={this.close}>
+                    <div className="bodyContainer">
+                        {this.qbIconFunction()}
+                        <div className={modalTitleAndBody}>
+                            <Modal.Title>
+                                {this.titleFunction()}
+                            </Modal.Title>
+                            <Modal.Body>
+                                {this.bodyFunction()}
+                            </Modal.Body>
+                        </div>
                     </div>
-                </div>
                     <Modal.Footer>
                         {this.buttonFunction()}
                     </Modal.Footer>
-            </Modal>
-        </div>;
+                </Modal>
+            </div>
+        );
     }
 });
 
