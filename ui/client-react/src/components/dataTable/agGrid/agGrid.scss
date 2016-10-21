@@ -36,8 +36,15 @@ $cell-edit-background-edit: #f3f8fe;
     flex:1 1 auto;
 }
 
+
 .inlineEditing .agGrid .ag-body-container {
     margin-bottom: 330px;
+}
+
+.inlineEditing .agGrid .selectAllCheckbox,
+.inlineEditing .agGrid .ag-selection-checkbox
+{
+    display:none;
 }
 
 .ag-pinned-left-cols-viewport {
