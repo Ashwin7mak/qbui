@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactBootstrap from 'react-bootstrap';
+import {I18nMessage} from '../../utils/i18nMessage';
 import Button from 'react-bootstrap/lib/Button';
 import QBicon from '../qbIcon/qbIcon';
 import './qbErrorMessage.scss';
@@ -23,23 +24,20 @@ let QBErrorMessage = React.createClass({
         ]).isRequired,
 
         // function to control display/hide the error message popup
-        onCancel: React.PropTypes.func,
+        onCancel: React.PropTypes.func
     },
 
     renderErrorMessages() {
         return this.props.message.map(
-            function(msg, i) {
-                return (
-                    <span className={"qbErrorMessageItem"} key={msg.id} id={msg.id}>{msg.invalidMessage}</span>
-                );
-            }
+            msg => <span className={"qbErrorMessageItem"} key={msg.id}>{msg.invalidMessage}</span>
         );
     },
 
     render() {
         const errorNum = this.props.message ? this.props.message.length : 0;
-        const headerMessage = errorNum === 1 ? "Please fix this field" : "Please fix these" + errorNum + "fields";
-
+        const headerMessage = errorNum === 1 ?
+            <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.singleErrorLabel"/> :
+            <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelPrefix"/> + errorNum + <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelSuffix"/>;
         return (
             <div className={"qbErrorMessage"} hidden={this.props.hidden}>
                 <div className={"qbErrorMessageHeader"}>

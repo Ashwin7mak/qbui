@@ -6,6 +6,10 @@ $trowser-header-bg:#486c8f;
 $trowser-footer-bg: #193048;
 $action-separator-color: #486c8f;
 
+#alertIconTooltip {
+    z-index:99999;
+}
+
 .trowser  {
     position:absolute;
     z-index:9999;

@@ -22,7 +22,7 @@ let NavStore = Fluxxor.createStore({
             topTitle: null,
             scrollingReport: false,
             filterReportsName: '',
-            errorMsgHide: true,
+            errorPopupHidden: true
         };
 
         this.setLocaleBundle();
@@ -42,7 +42,7 @@ let NavStore = Fluxxor.createStore({
             actions.SCROLLING_REPORT, this.onScrollingReport,
             actions.FILTER_REPORTS_BY_NAME, this.onFilterReportsByName,
             actions.SHOW_ERROR_MSG_DIALOG, this.onShowErrorMsgDialog,
-            actions.HIDE_ERROR_MSG_DIALOG, this.onHideErrorMsgDialog,
+            actions.HIDE_ERROR_MSG_DIALOG, this.onHideErrorMsgDialog
         );
     },
 
@@ -134,11 +134,11 @@ let NavStore = Fluxxor.createStore({
         this.state.i18n = Locale.getI18nBundle();
     },
     onShowErrorMsgDialog() {
-        this.state.errorMsgHide = false;
+        this.state.errorPopupHidden = false;
         this.emit('change');
     },
     onHideErrorMsgDialog() {
-        this.state.errorMsgHide = true;
+        this.state.errorPopupHidden = true;
         this.emit('change');
     },
 });

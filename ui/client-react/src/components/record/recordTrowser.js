@@ -32,7 +32,7 @@ let RecordTrowser = React.createClass({
         form: React.PropTypes.object,
         pendEdits: React.PropTypes.object,
         reportData: React.PropTypes.object,
-        errorPopupHidden: React.PropTypes.bool,
+        errorPopupHidden: React.PropTypes.bool
     },
 
     /**
@@ -41,7 +41,7 @@ let RecordTrowser = React.createClass({
     getTrowserContent() {
         let hideErrorMessage = this.props.errorPopupHidden;
         let errorMessage = [];
-        if (this.props.pendEdits !== null && _.has(this.props, 'pendEdits.editErrors.errors')) {
+        if (_.has(this.props, 'pendEdits.editErrors.errors')) {
             hideErrorMessage = hideErrorMessage || (this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length === 0);
             errorMessage = this.props.pendEdits.editErrors.errors;
         }
@@ -238,7 +238,7 @@ let RecordTrowser = React.createClass({
         return (
             <div className="saveButtons">
                 {errorFlg &&
-                    <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip" style={{zIndex:9999}}>{this.props.errorPopupHidden ? "Show error list" : "Hide error list"}</Tooltip>}>
+                    <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip">{this.props.errorPopupHidden ? <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.showErrorPopup"/> : <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.closeErrorPopup"/>}</Tooltip>}>
                         <Button className="saveAlertButton" onClick={this.toggleErrorDialog}><QBicon icon={"alert"}/></Button>
                     </OverlayTrigger>
                 }
@@ -264,11 +264,10 @@ let RecordTrowser = React.createClass({
         flux.actions.hideTrowser();
     },
     toggleErrorDialog() {
-        let flux = this.getFlux();
         if (this.props.errorPopupHidden) {
-            flux.actions.showErrorMsgDialog();
+            this.showErrorDialog();
         } else {
-            flux.actions.hideErrorMsgDialog();
+            this.dismissErrorDialog();
         }
     },
     showErrorDialog() {
