@@ -159,8 +159,8 @@ describe('Record actions - Edit Record functions -- success', () => {
                 () => {
                     expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                    //expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD,
-                    //    {appId, tblId, record:newRec}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD,
+                        {appId, tblId, changes:newRec}]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_RECORD_SUCCESS,
                         jasmine.any(Object)]);
                     done();

@@ -243,7 +243,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingRecordId = null;
         this.recordChanges = payload.record;
         logger.debug('saving added record: ' + JSON.stringify(payload));
-        this.emit('change');
     },
 
     /**
