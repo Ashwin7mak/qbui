@@ -90,9 +90,7 @@ let reportModel = {
                         column.multipleChoice = {};
                         column.multipleChoice.choices = fieldDef.multipleChoice.choices;
                     }
-                    //  client side attributes..
-                    column.placeholder = (fieldDef.datatypeAttributes && fieldDef.datatypeAttributes.type && fieldDef.datatypeAttributes.type === serverTypeConsts.EMAIL_ADDRESS) ?
-                        Locale.getMessage('placeholder.email') : '';
+                    //  client side attributes
                     let maxLength = FieldUtils.getMaxLength(fieldDef);
                     if (maxLength) {
                         column.placeholder = Locale.getMessage('placeholder.maxLength', {maxLength : maxLength});

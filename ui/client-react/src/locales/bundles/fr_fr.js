@@ -275,13 +275,14 @@ export default {
         failed: "Échoué",
         placeholder:  {
             email: "nom@domaine.com",
-            maxLength :"jusqu'à {maxLength} caractères"
+            maxLength :"jusqu'à {maxLength} caractères",
+            url: 'www.exemple.fr'
         },
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {S'il vous plaît fixer 1 champ}\n other {S'il vous plaît corriger ces # champs}\n} ",
         invalidMsg : {
             unknown: 'Type inconnu non valide. Résultats: ',
             required: 'Remplissez {fieldName}',
-            email: 'Formater la {fieldName} comme name@domain.com',
+            email: 'Formater la {fieldName} comme prénom@domaine.fr',
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
         },

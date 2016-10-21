@@ -28,7 +28,7 @@ const EmailFieldValueEditor = React.createClass({
 
         readOnly: PropTypes.bool,
 
-        /** Optional prop to pass in placeholder text. Defaults to: 'name@domain.com'. */
+        /** Optional prop to pass in placeholder text. Defaults to: 'name@domain.com' (internationalized). */
         placeholder: PropTypes.string,
 
         /** Flag to turn on and off email validation. `onValidated` function must also be supplied */
@@ -45,7 +45,6 @@ const EmailFieldValueEditor = React.createClass({
             invalid: false,
             disabled: false,
             readOnly: false,
-            placeholder: 'name@domain.com'
         };
     },
     /**
@@ -87,7 +86,7 @@ const EmailFieldValueEditor = React.createClass({
     render() {
         // Remove some properties before passing to TextFieldValueEditor
         // TextFieldValueEditor uses the display value by default, so it cannot be passed in for Email and URL
-        let {onChange, onBlur, display, disabled, readOnly, ...otherProps} = this.props;
+        let {onChange, onBlur, display, placeholder, disabled, readOnly, ...otherProps} = this.props;
 
         if (disabled || readOnly) {
             // Return a read only email
@@ -96,7 +95,7 @@ const EmailFieldValueEditor = React.createClass({
 
         return <TextFieldValueEditor onBlur={this.onBlur}
                                      onChange={this.onChange}
-                                     placeholder={this.props.placeholder}
+                                     placeholder={(this.props.placeholder || Locales.getMessage('placeholder.email'))}
                                      inputType="email"
                                      invalidMessage={(this.props.invalidMessage || 'Email is required')}
                                      showClearButton={true}

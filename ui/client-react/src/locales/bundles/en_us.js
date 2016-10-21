@@ -278,7 +278,8 @@ export default {
         failed: "Failed",
         placeholder:  {
             email: 'name@domain.com',
-            maxLength :"up to {maxLength} characters"
+            maxLength :"up to {maxLength} characters",
+            url: 'www.example.com'
         },
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
         invalidMsg : {

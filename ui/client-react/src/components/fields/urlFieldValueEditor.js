@@ -1,10 +1,11 @@
 import React, {PropTypes} from 'react';
+import Locales from "../../locales/locales";
 
 import UrlFileAttachmentReportLinkFormatter from '../../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
 import TextFieldValueEditor from './textFieldValueEditor';
 
 /**
- * # UrlFieldValueRenderer
+ * # UrlFieldValueEditor
  *
  * A wrapper for textFieldValueEditor with settings to help edit (and format edited) URLs.
  *
@@ -18,7 +19,10 @@ const UrlFieldValueEditor = React.createClass({
         * **Note:** The display prop is set dynamically based on the value. */
         value: PropTypes.string,
 
-        onBlur: PropTypes.func
+        onBlur: PropTypes.func,
+
+        /** Optional prop to pass in placeholder text. Defaults to: 'name@domain.com' (internationalized). */
+        placeholder: PropTypes.string
     },
     getDefaultProps() {
         return {
@@ -27,17 +31,17 @@ const UrlFieldValueEditor = React.createClass({
     },
     onBlur(updatedValues) {
         // Format the displayed url before passing up to the parent
-        updatedValues.display = UrlFileAttachmentReportLinkFormatter.format(updatedValues, this.props.fieldDef.datatypeAttributes);
+        updatedValues.display = UrlFileAttachmentReportLinkFormatter.format(updatedValues, (this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : null));
         if (this.props.onBlur) {
             this.props.onBlur(updatedValues);
         }
     },
     render() {
-        let {value, display, onBlur, ...otherProps} = this.props;
+        let {value, display, onBlur, placeholder, ...otherProps} = this.props;
 
         return <TextFieldValueEditor inputType="url"
                                      value={value}
-                                     placeholder="www.example.com"
+                                     placeholder={(this.props.placeholder || Locales.getMessage('placeholder.url'))}
                                      onBlur={this.onBlur}
                                      {...otherProps} />;
     }
