@@ -4,6 +4,15 @@
     var Promise = require('bluebird');
 
     var e2ePageBase = require('./../../common/e2ePageBase');
+    var rawValueGenerator = require('./../../../test_generators/rawValue.generator');
+
+    var date = new Array();
+    date = new Date().toJSON().slice(0, 10).split('-');
+    var sText = rawValueGenerator.generateString(10);
+    var sNumeric = rawValueGenerator.generateInt(1, 100);
+    var sTime = "12:00 am";
+
+    var sDate = date[1] + '-' + date[2] + '-' + date[0];
 
     var ReportCardView = function() {
         this.reportContainerEl = element(by.className('reportContainer'));
@@ -114,10 +123,12 @@
          */
         this.clickRecord = function(recordId) {
             var self = this;
-            self.reportCards.all(by.className('top-card-row')).then(function(records) {
-                return records[recordId - 1].click().then(function() {
-                    e2ePageBase.waitForElement(self.recordEditBtn);
-                    //card-expander
+            e2ePageBase.waitForElement(self.loadedContentEl).then(function() {
+                self.reportCards.all(by.className('top-card-row')).then(function(records) {
+                    return records[recordId - 1].click().then(function() {
+                        e2ePageBase.waitForElement(self.recordEditBtn);
+                        //card-expander
+                    });
                 });
             });
         };
@@ -133,6 +144,83 @@
                     e2ePageBase.waitForElement(element(by.className('editForm')));
                 });
             });
+        };
+
+        /**
+         * Enter field values on small breakpoint form
+         *
+         */
+        this.enterFormValues = function(fieldLabel) {
+            var self = this;
+            //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
+            if (fieldLabel === 'dateCell') {
+                //enter date fields
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    //Do the click below to make it user editable
+                    return elm.element(by.tagName('input')).click().then(function() {
+                        //return elm.element(by.tagName('input')).clear().sendKeys(sDate);
+                        browser.actions().sendKeys(sDate, protractor.Key.ENTER).perform();
+                    });
+                });
+            } else if (fieldLabel === 'textField') {
+                //enter text fields
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    return elm.clear().sendKeys(sText);
+                });
+            } else if (fieldLabel === 'numericField') {
+                //enter numeric fields
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    return elm.clear().sendKeys(sNumeric);
+                });
+            } else if (fieldLabel === 'checkbox') {
+                //select checkbox field
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    return elm.element(by.className('label')).click();
+                });
+            } else if (fieldLabel === 'timeCell') {
+                //enter time of day fields
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    //Do the click below to make it user editable
+                    return elm.element(by.tagName('input')).click().then(function() {
+                        e2eBase.sleep(browser.params.smallSleep);
+                        browser.actions().sendKeys(sTime, protractor.Key.ENTER).perform();
+                    });
+                });
+            }
+        };
+
+        /**
+         * Verify field values on small breakpoint report table
+         *
+         */
+        this.verifyFieldValuesInReportTableSmallBP = function(fieldType) {
+            var self = this;
+            self.formTable.all(by.className(fieldType)).map(function(elm) {
+                return elm.getAttribute('textContent').then(function(text) {
+                    if (fieldType === 'numericField') {
+                        expect(text.replace(/[!@#$%^&*]/g, "")).toBe(sNumeric.toString());
+                    }
+                    if (fieldType === 'checkbox') {
+                        expect(elm.element(by.className('iconTableUISturdy-check')).isPresent()).toBeTruthy();
+                    }
+                });
+            }).then(function() {
+                //finally return to report table page
+                return self.recordFormActionReturnToReportBtn.click().then(function() {
+                    self.waitForReportReady();
+                });
+            });
+
         };
 
         /**

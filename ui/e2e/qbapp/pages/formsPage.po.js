@@ -31,7 +31,7 @@
         //save button
         this.formSaveBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.tagName('button'));
         //save button
-        this.formSaveAndNextBtn = this.formTrowserFooter.element(by.className('rightIcons')).all(by.tagName('button')).last();
+        this.formSaveAndNextBtn = this.formTrowserFooter.element(by.className('rightIcons')).all(by.tagName('button')).first();
 
         this.formBodyEl = element(by.tagName('body'));
         //form container
@@ -149,26 +149,6 @@
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 10)).toBe('true');
                 }
             });
-        };
-
-        this.verifyFieldValuesInReportTableSmallBP = function(fieldType) {
-            var self = this;
-            reportCardViewPage.formTable.all(by.className(fieldType)).map(function(elm) {
-                return elm.getAttribute('textContent').then(function(text) {
-                    if (fieldType === 'numericField') {
-                        expect(text.replace(/[!@#$%^&*]/g, "")).toBe(sNumeric.toString());
-                    }
-                    if (fieldType === 'checkbox') {
-                        expect(elm.element(by.className('iconTableUISturdy-check')).isPresent()).toBeTruthy();
-                    }
-                });
-            }).then(function() {
-                //finally return to report table page
-                return reportCardViewPage.recordFormActionReturnToReportBtn.click().then(function() {
-                    reportCardViewPage.waitForReportReady();
-                });
-            });
-
         };
 
     };

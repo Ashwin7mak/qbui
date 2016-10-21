@@ -31,7 +31,10 @@
                 RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
                 RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-                done();
+                return e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
+                    e2eBase.sleep(browser.params.smallSleep);
+                    done();
+                });
             });
         });
 
@@ -39,14 +42,11 @@
          * Before each test starts just make sure the report has loaded
          */
             //Set the browser size to card View before running tests
-        beforeAll(function(done) {
-            return e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
-                e2eBase.sleep(browser.params.smallSleep);
-                //go to report page directly.
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-                return reportServicePage.waitForElement(reportCardViewPage.loadedContentEl).then(function() {
-                    done();
-                });
+        beforeEach(function(done) {
+            //go to report page directly.
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+            return reportServicePage.waitForElement(reportCardViewPage.loadedContentEl).then(function() {
+                done();
             });
         });
 
@@ -57,20 +57,16 @@
         it('Verify Add button on stage not displayed', function(done) {
             //Verify reports stage and add button on stage not present for small BP.
             expect(reportServicePage.reportAddRecordBtn.isDisplayed()).toBeFalsy();
-            done();
-        });
-
-        it('Verify Add Record button displayed on loaded report content at the bottom', function(done) {
-            //Verify reports stage and add button on stage not present for small BP.
+            //Verify add button is present in bottom of loaded content
             expect(reportCardViewPage.addNewRecordBtn.isDisplayed()).toBeTruthy();
             done();
         });
 
         it('Add a record from the form', function(done) {
             //TODO textField.Right now even phone no field says textField. So can't enter values and save record
-            //TODO 'dateCell', 'timeCell' in small breakpoints dosent show date picker and time picker. assigned to next sprint
+            //TODO 'dateCell', 'timeCell' in small breakpoints dosent work typing in date and time.
             var fieldTypeClassNames = ['numericField', 'checkbox'];
-            formsPage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            formsPage.waitForElement(reportCardViewPage.loadedContentEl).then(function() {
                 //click on add record button
                 reportCardViewPage.clickAddRecord();
                 // Check that the add form container is displayed
@@ -78,7 +74,7 @@
             }).then(function() {
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
+                    reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
                 }
             }).then(function() {
                 //Save the form
@@ -101,7 +97,7 @@
             return reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
+                    reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
                 }
             }).then(function() {
                 //Save the form
@@ -115,7 +111,7 @@
                 expect(reportCardViewPage.reportRecordsCount.getText()).toContain('8 records');
                 reportCardViewPage.clickRecord(1);
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
+                    reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
                 }
                 done();
             });
@@ -129,7 +125,7 @@
             return reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
+                    reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
                 }
             }).then(function() {
                 //Save the form
@@ -137,7 +133,7 @@
             }).then(function() {
                 //verify you are in edit mode for next record after hiting save and next
                 return reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
-                   //reload the report to verify the row edited
+                    //reload the report to verify the row edited
                     RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                     //verify the edited record
                     reportCardViewPage.waitForReportReady();
@@ -146,7 +142,7 @@
                 expect(reportCardViewPage.reportRecordsCount.getText()).toContain('8 records');
                 reportCardViewPage.clickRecord(4);
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
+                    reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
                 }
                 done();
             });
