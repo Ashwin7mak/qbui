@@ -535,7 +535,8 @@
         perfLog.init('Fetch Report Results', {req:filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReport(req, req.params.reportId).then(
+            //  include facet information if a get request to fetch the report results
+            reportsApi.fetchReport(req, req.params.reportId, requestHelper.isGet(req)).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Results');

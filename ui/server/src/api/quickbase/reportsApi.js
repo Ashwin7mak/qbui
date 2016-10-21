@@ -167,19 +167,40 @@
                 recordsApi = requestOverride;
             },
 
-            /** Returns a promise that is resolved with the facets data or rejected
-             *  with an error code
+            /** Returns a promise that is always resolved with either facets data or
+             *  an object with error information.
              *
              * @param req
              * @param reportId
              * @returns {*}
              */
-            fetchFacetResults: function(req, reportId) {
+            fetchReportFacets: function(req, reportId) {
                 let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsFacetRoute(req.url, reportId);
 
-                return requestHelper.executeRequest(req, opts);
+                // NOTE:  if an error occurs while fetching the faceting information, we still want the promise to
+                // resolve with the faceting data or an error object.
+                return new Promise((resolve, reject) => {
+                    requestHelper.executeRequest(req, opts).then(
+                        (facetResponse) => {
+                            resolve(facetResponse);
+                        },
+                        (error) => {
+                            var facetError = JSON.parse(error.body)[0];
+                            var errorObj = {
+                                id: null,
+                                errorCode: facetError && facetError.code ? facetError.code : errorCodes.UNKNOWN
+                            };
+                            log.error("Error getting facets in fetchReportComponents.  Facet Error Code: " + errorObj.errorCode);
+                            resolve(errorObj);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('reportsAPI..fetchFacetResults in fetchReportComponents', ex, true);
+                        var errorObj = {id: null, errorCode: errorCodes.UNKNOWN};
+                        resolve(errorObj);
+                    });
+                });
             },
 
             /**
@@ -434,9 +455,12 @@
              * @param req
              * @returns Promise
              */
-            fetchReport: function(req, reportId) {
+            fetchReport: function(req, reportId, includeFacets) {
                 return new Promise(function(resolve, reject) {
                     let fetchRequests = [this.fetchReportResult(req, reportId), this.fetchFields(req), this.fetchReportRecordsCount(req, reportId)];
+                    if (includeFacets === true) {
+                        fetchRequests.push(this.fetchReportFacets(req, reportId));
+                    }
 
                     Promise.all(fetchRequests).then(
                         function(response) {
@@ -455,6 +479,7 @@
                                 responseObject[RECORDS] = [];
                                 responseObject[GROUPS] = [];
                                 responseObject[FILTERED_RECORDS_COUNT] = reportRecordCount;
+                                responseObject[FACETS] = [];
 
                                 //  Is core returning a report object that is grouped
                                 if (report.type === constants.RECORD_TYPE.GROUP) {
@@ -483,6 +508,25 @@
                                         perfLog.log();
                                     } else {
                                         responseObject[RECORDS] = report.records;
+                                    }
+                                }
+
+                                //  add any faceting data to the response
+                                //  NOTE: this conditional block must run after responseObject[FIELDS] is set.
+                                if (includeFacets === true) {
+                                    /*eslint no-lonely-if:0 */
+                                    let facets = response[3];
+                                    //  if a facet error, return the error object to the client in the facet response.
+                                    if (facets.errorCode) {
+                                        responseObject[FACETS].push(facets);
+                                    } else {
+                                        //  Parse the facet response and format into an object that the client can consume and process
+                                        //  IE: Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
+                                        if (facets.body && facets.body.length > 0) {
+                                            //  jsonBigNum.parse throws exception if the input is empty array
+                                            let facetRecords = jsonBigNum.parse(facets.body);
+                                            responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, responseObject[FIELDS]);
+                                        }
                                     }
                                 }
                             }
@@ -672,7 +716,7 @@
                                         let reportMetaData = JSON.parse(metaDataResult.body);
                                         addReportMetaQueryParameters(req, reportMetaData, false);
 
-                                        this.fetchReport(req, homepageReportId).then(
+                                        this.fetchReport(req, homepageReportId, true).then(
                                             (reportData) => {
                                                 //  return the metadata and report content
                                                 reportObj.reportMetaData = reportMetaData;
