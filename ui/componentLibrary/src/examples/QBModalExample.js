@@ -63,11 +63,11 @@ var BasicQBModalExample = React.createClass({
                 </div>
                 {/*Show qbIcon Title bodyMessage*/}
                 <div style={{paddingTop:"12px"}}>
-                    <button onClick={this.qbIconTitleBodyMessage}>Show qbIcon Title bodyMessage</button>
+                    <button onClick={this.qbIconTitleBodyMessage}>Show qbIcon Title bodyMessage Modal</button>
                 </div>
                 {/*Show Title bodyMessage Two Buttons*/}
                 <div style={{paddingTop:"12px"}}>
-                    <button onClick={this.titleBodyMessageTwoButtons}>Show Title bodyMessage Two Buttons</button>
+                    <button onClick={this.titleBodyMessageTwoButtons}>Show Title bodyMessage Two Buttons Modal</button>
                 </div>
                 {/*Default Modal*/}
                 <div>

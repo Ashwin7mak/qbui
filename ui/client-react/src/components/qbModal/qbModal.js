@@ -24,7 +24,7 @@ const QBModal = React.createClass({
          */
         qbIconName: React.PropTypes.string,
         /**
-         *This is primary button
+         *This is the name for the primary button
          */
         primaryButtonName: React.PropTypes.string,
         /**
@@ -32,7 +32,7 @@ const QBModal = React.createClass({
          */
         primaryButtonOnClick: React.PropTypes.func,
         /**
-         *This is the middle button
+         *This is the name for the middle button
          */
         middleButtonName: React.PropTypes.string,
         /**
@@ -40,11 +40,11 @@ const QBModal = React.createClass({
          */
         middleButtonOnClick: React.PropTypes.func,
         /**
-         *This is the middle button
+         *This is the name for the left button
          */
         leftButtonName: React.PropTypes.string,
         /**
-         *This is the middle button onClick function
+         *This is the left button onClick function
          */
         leftButtonOnClick: React.PropTypes.func,
     },
@@ -113,7 +113,7 @@ const QBModal = React.createClass({
     },
     render() {
         let titleAndBody = "titleAndBody";
-        if (this.props.title && this.props.QBIconName) {
+        if (this.props.title && this.props.qbIconName) {
             titleAndBody = "titleAndBodyAndQBIcon";
         }
         return (
