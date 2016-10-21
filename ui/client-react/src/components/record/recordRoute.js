@@ -204,7 +204,7 @@ export let RecordRoute = React.createClass({
     shouldComponentUpdate(nextProps) {
         return this.props.form.syncLoadedForm ||
             !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
-            !_.isEqual(this.props.form.formLoading, nextProps.form.formLoading)
+            !_.isEqual(this.props.form.formLoading, nextProps.form.formLoading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits);
     },
 
@@ -241,14 +241,13 @@ export let RecordRoute = React.createClass({
                     <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
                             loaded={!this.props.form || !this.props.form.formLoading} >
 
-                        {!this.props.form.formLoading &&
                         <Record key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
                                 errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
                                 formData={this.props.form ? this.props.form.formData : null}
-                                appUsers={this.props.appUsers} /> }
+                                appUsers={this.props.appUsers} />
                     </Loader>
                 </div>);
         }
