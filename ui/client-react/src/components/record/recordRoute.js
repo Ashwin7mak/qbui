@@ -204,6 +204,7 @@ export let RecordRoute = React.createClass({
     shouldComponentUpdate(nextProps) {
         return this.props.form.syncLoadedForm ||
             !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
+            !_.isEqual(this.props.form.formLoading, nextProps.form.formLoading)
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits);
     },
 
@@ -223,10 +224,6 @@ export let RecordRoute = React.createClass({
             return null;
         } else {
 
-            // we store "next", "previous" in flux store and pass it down so we know what CSS classes to apply for the animation based on the direction
-
-            const nextOrPreviousTransitionName = this.props.reportData && this.props.reportData.nextOrPrevious ? this.props.reportData.nextOrPrevious : "";
-
             return (
                 <div className="recordContainer">
                     <Stage stageHeadline={this.getStageHeadline()}
@@ -240,18 +237,19 @@ export let RecordRoute = React.createClass({
                         {this.getSecondaryBar()}
                         {this.getPageActions()}
                     </div>
-                    <ReactCSSTransitionGroup className="qbFormContainer"
-                                             transitionName={nextOrPreviousTransitionName}
-                                             transitionEnterTimeout={200}
-                                             transitionLeaveTimeout={200}>
+
+                    <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
+                            loaded={!this.props.form || !this.props.form.formLoading} >
+
+                        {!this.props.form.formLoading &&
                         <Record key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
-                                    appId={this.props.params.appId}
-                                    tblId={this.props.params.tblId}
-                                    recId={this.props.params.recordId}
-                                    errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
-                                    formData={this.props.form ? this.props.form.formData : null}
-                                    appUsers={this.props.appUsers} />
-                    </ReactCSSTransitionGroup>
+                                appId={this.props.params.appId}
+                                tblId={this.props.params.tblId}
+                                recId={this.props.params.recordId}
+                                errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
+                                formData={this.props.form ? this.props.form.formData : null}
+                                appUsers={this.props.appUsers} /> }
+                    </Loader>
                 </div>);
         }
     }
