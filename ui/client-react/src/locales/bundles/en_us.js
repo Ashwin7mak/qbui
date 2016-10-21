@@ -94,6 +94,7 @@ export default {
             recordNotSaved :"Record not saved",
             deleted : "deleted",
             notDeleted : "not deleted",
+            cannotLoad : "Cannot load record"
         },
         header: {
             menu: {

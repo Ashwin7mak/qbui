@@ -241,7 +241,7 @@ describe('Validate FormsApi unit tests', function() {
                 formMeta: JSON.parse(body),
                 tableFields: JSON.parse(bodyFields),
                 record: 'record1',
-                fields: 'field1'
+                fields: JSON.parse('[{"id":2}]')
             };
 
             fetchFormMetaStub.returns(Promise.resolve({body:body}));
@@ -282,7 +282,7 @@ describe('Validate FormsApi unit tests', function() {
                 formMeta: JSON.parse(body),
                 tableFields: JSON.parse(bodyFields),
                 record: 'record1',
-                fields: 'field1'
+                fields: JSON.parse('[{"id":2}]')
             };
 
             fetchFormMetaStub.returns(Promise.resolve({body:body}));

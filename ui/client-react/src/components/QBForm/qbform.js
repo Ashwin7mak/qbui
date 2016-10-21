@@ -153,9 +153,14 @@ let QBForm = React.createClass({
             isInvalid : false,
             invalidMessage: ""
         };
-        if (_.has(this.props, 'pendEdits.editErrors') && this.props.pendEdits.editErrors[fieldId]) {
-            validationResult.isInvalid = this.props.pendEdits.editErrors[fieldId].isInvalid;
-            validationResult.invalidMessage = this.props.pendEdits.editErrors[fieldId].invalidMessage;
+        if (_.has(this.props, 'pendEdits.editErrors.errors') && this.props.pendEdits.editErrors.errors.length) {
+            let relatedError = _.find(this.props.pendEdits.editErrors.errors, (error) =>{
+                return error.id === fieldId;
+            });
+            if (relatedError) {
+                validationResult.isInvalid = relatedError.isInvalid;
+                validationResult.invalidMessage = relatedError.invalidMessage;
+            }
         }
         return validationResult;
     },
