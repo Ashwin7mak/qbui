@@ -127,7 +127,7 @@ describe('RecordTrowser functions', () => {
         expect(errorMessageDialog.length).toBe(1);
     });
 
-    it('test saving record which has server side error in the trowser, and error state icon displayed in trowser Footer', () => {
+    it('test saving record which has server side errors, and error state icon displayed in footer section', () => {
 
         const form = {editFormData: {}};
 
@@ -135,7 +135,7 @@ describe('RecordTrowser functions', () => {
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
-        let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .saveAlert");
+        let errorMessageAlertIcon = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .saveAlertButton");
         expect(errorMessageAlertIcon.length).toBe(1);
     });
 
