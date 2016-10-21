@@ -62,6 +62,7 @@
          */
         var routeToPostFunction = {};
         routeToPostFunction[routeConsts.RECORDS] = createSingleRecord;
+        routeToPostFunction[routeConsts.REPORT_RESULTS] = fetchReportResults;
 
         /*
          * routeToPutFunction maps each route to the proper function associated with that route for a PUT request
@@ -502,7 +503,8 @@
         perfLog.init('Fetch Report Meta', {req: filterNodeReq(req)});
 
         processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportMetaData(req).then(
+            let rptId = req.params.reportId ? req.params.reportId : null;
+            reportsApi.fetchReportMetaData(req, rptId).then(
                 function(response) {
                     res.send(response);
                     logApiSuccess(req, response, perfLog, 'Fetch Report Meta');

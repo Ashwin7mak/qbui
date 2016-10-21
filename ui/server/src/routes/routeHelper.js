@@ -12,6 +12,7 @@
     let REPORTS = 'reports';
     let REPORT_COUNT = 'count';
     let REPORT_RESULTS = 'results';
+    let REPORT_INVOKE = 'invoke';
     let USERS = 'users';
 
     //  regular expressions to determine a url route. The expression is interpreted as:
@@ -355,6 +356,14 @@
             }
 
             //  no url root found; return original url unchanged
+            return url;
+        },
+
+        getDynamicReportsResultsRoute: function(url) {
+            let root = getUrlRoot(url, TABLES);
+            if (root) {
+                return root + '/' + REPORTS + '/' + REPORT_INVOKE;
+            }
             return url;
         },
 

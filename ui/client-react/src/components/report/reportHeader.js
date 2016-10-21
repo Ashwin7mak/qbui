@@ -46,9 +46,12 @@ var ReportHeader = React.createClass({
 
         let queryParams = {};
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
-        this.getFlux().actions.getFilteredRecords(this.props.selectedAppId,
+        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
+        this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
             this.props.routeParams.tblId,
-            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId, {format:true, numRows:this.props.reportData.numRows, offset: this.props.reportData.pageOffset}, filter, queryParams);
+            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
+            true, filter, queryParams);
     },
     handleSearchChange(e) {
         if (this.searchTheString) {

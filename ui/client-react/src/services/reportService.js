@@ -186,6 +186,28 @@ class ReportService extends BaseService {
         return super.get(url, {params:params});
     }
 
+    getDynamicReportResults(appId, tableId, reportId, metaData, queryParams) {
+        let params = {};
+        if (queryParams) {
+            if (queryParams[query.FORMAT_PARAM] === true) {
+                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+            }
+            if (NumberUtils.isInt(queryParams[query.OFFSET_PARAM]) && NumberUtils.isInt(queryParams[query.NUMROWS_PARAM])) {
+                params[query.OFFSET_PARAM] = queryParams[query.OFFSET_PARAM];
+                params[query.NUMROWS_PARAM] = queryParams[query.NUMROWS_PARAM];
+            }
+            if (queryParams.hasOwnProperty(query.SORT_LIST_PARAM)) {
+                params[query.SORT_LIST_PARAM] = queryParams[query.SORT_LIST_PARAM];
+            }
+            if (queryParams.hasOwnProperty(query.QUERY_PARAM)) {
+                params[query.QUERY_PARAM] = queryParams[query.QUERY_PARAM];
+            }
+        }
+
+        let url = super.constructUrl(this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
+        return super.post(url, JSON.stringify(metaData), {params:params});
+    }
+
     /**
      * Return a completely hydrated report.  This is defined as the report data, report
      * facet data and other report data used by the UI.

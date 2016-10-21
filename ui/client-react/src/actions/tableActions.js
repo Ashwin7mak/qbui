@@ -46,15 +46,15 @@ let tableActions = {
                     (response) => {
                         var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
 
-                        //  now that we know the report id, re-init the load report event to
-                        //  ensure the reportId is set in the store.
+                        //  if the report id does not match the default homepage id, re-init the load report
+                        //  event to ensure the reportId is set in the store.
                         if (model.rptId !== DEFAULT_HOMEPAGE_ID) {
                             this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId: model.rptId});
                         }
 
                         //  ..fire off the load report and record count events
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, {body: model.recordData.filteredCount});
+                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, {body: model.recordCount});
                         resolve();
                     },
                     (error) => {

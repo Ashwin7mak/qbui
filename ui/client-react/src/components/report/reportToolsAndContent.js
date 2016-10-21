@@ -137,18 +137,18 @@ const ReportToolsAndContent = React.createClass({
         this.debouncedFilterReport(newSearch, this.props.reportData.selections);
     },
     filterReport(searchString, selections) {
-        let flux = this.getFlux();
-
         const filter = FilterUtils.getFilter(searchString, selections, this.facetFields);
 
         logger.debug('Sending filter action with:' + searchString);
 
         let queryParams = {};
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
-        flux.actions.getFilteredRecords(this.props.selectedAppId,
+        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : Constants.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : Constants.PAGE.DEFAULT_NUM_ROWS;
+        this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
             this.props.routeParams.tblId,
             typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-            {format:true, offset: Constants.PAGE.DEFAULT_OFFSET, numRows: Constants.PAGE.DEFAULT_NUM_ROWS}, filter, queryParams);
+            true, filter, queryParams);
     },
     searchTheString(searchTxt) {
         this.getFlux().actions.filterSearchPending(searchTxt);
@@ -228,36 +228,38 @@ const ReportToolsAndContent = React.createClass({
         let appId = this.props.params.appId;
         let tblId = this.props.params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.params.rptId;
-        let format = true;
-        let numRows = this.props.reportData.numRows;
-        let newOffset = this.props.reportData.pageOffset + (multiplicant * numRows);
-
-        // Set up sort list
+        let filter = {};
+        let queryParams = {};
         let sortList = "";
-        let data = this.props.reportData.data;
-        if (data && data.sortFids && data.sortFids.length > 0) {
-            sortList = ReportUtils.getListString(data.sortFids);
+        let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
+        let offset =  Constants.PAGE.DEFAULT_OFFSET;
+
+        if (this.props.reportData) {
+            if (this.props.reportData.numRows) {
+                numRows = this.props.reportData.numRows;
+            }
+            if (this.props.reportData.pageOffset) {
+                offset = this.props.reportData.pageOffset;
+            }
+
+            filter.selections = this.props.reportData.selections;
+            filter.search = this.props.reportData.searchStringForFiltering;
+            filter.facet = this.props.reportData.facetExpression;
+
+            // Set up sort list.
+            let data = this.props.reportData.data;
+            if (data && data.sortFids && data.sortFids.length > 0) {
+                sortList = ReportUtils.getListString(data.sortFids);
+            }
         }
 
-        let searchString = this.props.reportData.searchStringForFiltering;
-        if (StringUtils.isNonEmptyString(searchString)) {
-            let filter = {
-                selections: this.props.reportData.selections,
-                search: searchString,
-                facet: this.props.reportData.facetExpression
-            };
-            let queryParams =  {
-                format:format,
-                offset:newOffset,
-                numRows:numRows
-            };
-            let overrideQueryParams = {
-                sortList:sortList
-            };
-            this.getFlux().actions.getFilteredRecords(appId, tblId, rptId, queryParams, filter, overrideQueryParams);
-        } else {
-            this.getFlux().actions.loadReport(appId, tblId, rptId, format, newOffset, numRows, sortList);
-        }
+        //send empty sortListParam value so that no sorting is included on the request.
+        queryParams[query.SORT_LIST_PARAM] = sortList;
+        queryParams[query.OFFSET_PARAM] = offset + (multiplicant * numRows);
+        queryParams[query.NUMROWS_PARAM] = numRows;
+
+        this.getFlux().actions.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
+
     },
     /**
      * Returns the count of records for a report.

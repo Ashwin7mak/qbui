@@ -1,9 +1,11 @@
 /**
  * Static class of utility functions related to reports meta data
  */
-const listDelimiter = ".";
-const groupDelimiter = ":";
+
 import constants from '../../../common/src/constants';
+
+const listDelimiter = constants.REQUEST_PARAMETER.LIST_DELIMITER;
+const groupDelimiter = constants.REQUEST_PARAMETER.GROUP_DELIMITER;
 
 class ReportUtils {
 
@@ -216,6 +218,56 @@ class ReportUtils {
             }
         }
         return result;
+    }
+
+    /**
+     * Returns sort/grouping information as a list of objects
+     *
+     * @param sortList -- sortList could be a string like 6.7:EQUALS.-10 or an array ["6", "7:EQUALS", "-10"] or an array of sort objects like [{fieldId: 7, sortOrder: "asc", groupType:"EQUALS"}]
+     * @returns {Array}
+     */
+    static getSortListAsObject(sortList) {
+        let sortListParts = ReportUtils.getSortListPartsHelper(sortList);
+        let sListObj = [];
+        if (sortListParts) {
+            sortListParts.forEach((sort) => {
+                let sortObj = {};
+                if (typeof sort === "string") {
+                    //  format is fid:groupType..split by delimiter(':') to allow us
+                    // to pass in the fid for server side sorting.
+                    var sortEl = sort.split(groupDelimiter, 2);
+                    if (sortEl.length > 1) {
+                        sortObj.groupType = sortEl[1];
+                    }
+                    sortObj.sortOrder = sortEl[0] < 0 ? constants.SORT_ORDER.DESC : constants.SORT_ORDER.ASC;
+                    sortObj.fieldId = Math.abs(sortEl[0]);
+                    sListObj.push(sortObj);
+                } else if (sort && sort.fieldId && sort.sortOrder) {
+                    sListObj.push(sort);
+                }
+            });
+        }
+        return sListObj;
+    }
+
+    /**
+     * Take as input a list of sort list objects and return as a string value, with each entry
+     * separated by the list delimiter(.).
+     *
+     * Example input is an array of sort objects like [{fieldId: 7, sortOrder: "asc", groupType:"EQUALS"}]
+     *
+     * @param sortListObj
+     * @returns {*}
+     */
+    static getSortListFromObject(sortListObj) {
+        if (Array.isArray(sortListObj)) {
+            let sortList = [];
+            sortListObj.forEach((sortEl) => {
+                sortList.push(ReportUtils.getGroupString(sortEl.fieldId, sortEl.sortOrder, sortEl.groupType));
+            });
+            return ReportUtils.getListString(sortList);
+        }
+        return sortListObj;
     }
 }
 

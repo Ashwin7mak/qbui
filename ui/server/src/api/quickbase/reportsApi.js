@@ -15,7 +15,6 @@
     let errorCodes = require('../errorCodes');
     let constants = require('../../../../common/src/constants');
     let collectionUtils = require('../../utility/collectionUtils');
-    let queryUtils = require('../../utility/queryUtils');
 
     module.exports = function(config) {
 
@@ -36,12 +35,57 @@
         let GROUPS = 'groups';
         let FILTERED_RECORDS_COUNT = 'filteredCount';
 
+        function getSortListAsObject(sortList) {
+            let sortListParts = sortList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+            let sListObj = [];
+            if (sortListParts) {
+                sortListParts.forEach((sort) => {
+                    let sortObj = {};
+
+                    //  format is fid:groupType..split by delimiter(':') to allow us
+                    // to pass in the fid for server side sorting.
+                    var sortEl = sort.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER, 2);
+                    if (sortEl.length > 1) {
+                        sortObj.groupType = sortEl[1];
+                    }
+                    sortObj.sortOrder = sortEl[0] < 0 ? constants.SORT_ORDER.DESC : constants.SORT_ORDER.ASC;
+                    sortObj.fieldId = Math.abs(sortEl[0]);
+                    sListObj.push(sortObj);
+                });
+            }
+            return sListObj;
+        }
+
         function getFieldsOnReport(records, fields) {
             let record = null;
             if (Array.isArray(records) && records.length > 0) {
                 record = records[0];
             }
             return fieldsApi.removeUnusedFields(record, fields);
+        }
+
+        function parseSortList(sortList) {
+            let sList = '';
+            if (Array.isArray(sortList)) {
+                //  convert the object in a list of strings of format <+/-|fid|:groupType>
+                let sortListArray = [];
+                sortList.forEach(function(sortObj) {
+                    if (sortObj.fieldId) {
+                        let result = '';
+                        result += (sortObj.sortOrder === constants.SORT_ORDER.DESC ? '-' : '') + sortObj.fieldId;
+                        if (sortObj.groupType) {
+                            result += constants.REQUEST_PARAMETER.GROUP_DELIMITER + sortObj.groupType;
+                        }
+                        sortListArray.push(result);
+                    }
+                });
+
+                //  any entries to convert
+                if (sortListArray.length > 0) {
+                    sList = collectionUtils.convertListToDelimitedString(sortListArray, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                }
+            }
+            return sList;
         }
 
         /**
@@ -81,28 +125,10 @@
 
             // add any sort list requirements
             if (!usingRequestParameterValue(constants.REQUEST_PARAMETER.SORT_LIST)) {
-                //  ReportMetaData sort list is returned as an object.  Need to convert into a string
-                if (Array.isArray(reportMetaData.sortList)) {
-                    //  convert the object in a list of strings of format <+/-|fid|:groupType>
-                    let sortListArray = [];
-                    reportMetaData.sortList.forEach(function(sortObj) {
-                        if (sortObj.fieldId) {
-                            let result = '';
-                            result += (sortObj.sortOrder === constants.SORT_ORDER.DESC ? '-' : '') + sortObj.fieldId;
-                            if (sortObj.groupType) {
-                                result += constants.REQUEST_PARAMETER.GROUP_DELIMITER + sortObj.groupType;
-                            }
-                            sortListArray.push(result);
-                        }
-                    });
-
-                    //  any entries to convert
-                    if (sortListArray.length > 0) {
-                        let sortList = collectionUtils.convertListToDelimitedString(sortListArray, constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                        if (sortList) {
-                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
-                        }
-                    }
+                //  ReportMetaData sort list is returned as an object.  Need to parse into a string
+                let sortList = parseSortList(reportMetaData.sortList);
+                if (sortList) {
+                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
                 }
             }
 
@@ -149,9 +175,10 @@
              * @returns {*}
              */
             fetchFacetResults: function(req, reportId) {
-                let opts = requestHelper.setOptions(req);
+                let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsFacetRoute(req.url, reportId);
+
                 return requestHelper.executeRequest(req, opts);
             },
 
@@ -223,7 +250,7 @@
              * @param req
              */
             fetchReportRecordsCount: function(req, reportId) {
-                let opts = requestHelper.setOptions(req);
+                let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 let reportUrl = reportId ? routeHelper.getReportsRoute(req.url, reportId) : req.url;
@@ -256,31 +283,149 @@
              * @returns {bluebird|exports|module.exports}
              */
             fetchReportResult(req, reportId) {
-                let opts = requestHelper.setOptions(req);
-                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url, reportId);
+                if (requestHelper.isGet(req)) {
+                    //  Use the default report meta data to build and return the report results
+                    return new Promise((resolve1, reject1) => {
+                        this.fetchReportMetaData(req, reportId).then(
+                            (metaDataResult) => {
+                                let opts = requestHelper.setOptions(req, true);
+                                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+                                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url, reportId);
 
-                //  Include the offset and num row parameters to opts.url if found on original req
-                let offset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
-                let numRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
-                if (offset !== null && numRows !== null) {
-                    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.OFFSET, offset);
-                    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS, numRows);
-                }
+                                //  Include the offset and num row parameters to opts.url if found on original req
+                                let offset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
+                                let numRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                                if (offset !== null && numRows !== null) {
+                                    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.OFFSET, offset);
+                                    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS, numRows);
+                                }
 
-                return new Promise((resolve1, reject1) => {
-                    requestHelper.executeRequest(req, opts).then(
-                        (result) => {
-                            resolve1(result);
-                        },
-                        (error) => {
-                            reject1(error);
-                        }
-                    ).catch((ex) => {
-                        requestHelper.logUnexpectedError('reportsAPI..fetchReportResult', ex, true);
-                        reject1(ex);
+                                requestHelper.executeRequest(req, opts).then(
+                                    (result) => {
+                                        //  necessary to ensure if any group result is returned that it can be organized as expected by the client
+                                        let reportMetaData = JSON.parse(metaDataResult.body);
+                                        let sortList = parseSortList(reportMetaData.sortList);
+                                        if (sortList) {
+                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
+                                        }
+                                        resolve1(result);
+                                    },
+                                    (error) => {
+                                        reject1(error);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('reportsAPI..fetchReportResult', ex, true);
+                                    reject1(ex);
+                                });
+                            },
+                            (metaDataError) => {
+                                log.error({req: req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
+                                reject1(metaDataError);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
+                            reject1(ex);
+                        });
                     });
-                });
+                } else {
+                    return new Promise((resolve1, reject1) => {
+                        this.fetchReportMetaData(req, reportId).then(
+                            (metaDataResult) => {
+                                let reportMetaData = JSON.parse(metaDataResult.body);
+
+                                let opts = requestHelper.setOptions(req);
+                                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+                                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getDynamicReportsResultsRoute(req.url);
+
+                                //  Include the offset and num row parameters to opts.url if found on original req
+                                let offset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
+                                let numRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                                if (offset !== null && numRows !== null) {
+                                    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.OFFSET, offset);
+                                    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS, numRows);
+                                }
+
+                                let sList = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.SORT_LIST);
+                                if (sList !== null) {
+                                    if (sList === '') {
+                                        reportMetaData.sortList = null;
+                                    } else {
+                                        reportMetaData.sortList = [];
+                                        let sListObj = getSortListAsObject(sList);
+                                        sListObj.forEach((el) => {
+                                            reportMetaData.sortList.push(el);
+                                        });
+                                    }
+                                }
+
+                                let query = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
+                                if (query !== null) {
+                                    reportMetaData.query = query;
+                                }
+
+                                opts.body = JSON.stringify(reportMetaData);
+                                opts.headers[constants.CONTENT_LENGTH] = opts.body.length;
+
+                                requestHelper.executeRequest(req, opts).then(
+                                    (result) => {
+                                        ////  necessary to ensure if any group result is returned that it can be organized as expected by the client
+                                        //let sortList = parseMetaDataSortList(req, reportMetaData);
+                                        //if (sortList) {
+                                        //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
+                                        //}
+                                        resolve1(result);
+                                    },
+                                    (error) => {
+                                        reject1(error);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('reportsAPI..fetchReportResult', ex, true);
+                                    reject1(ex);
+                                });
+                            },
+                            (metaDataError) => {
+                                log.error({req: req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
+                                reject1(metaDataError);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
+                            reject1(ex);
+                        });
+                    });
+
+                    //  The report meta data to build and return the report results is supplied in the request body
+                    //let opts = requestHelper.setOptions(req);
+                    //opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+                    //opts.url = requestHelper.getRequestJavaHost() + routeHelper.getDynamicReportsResultsRoute(req.url);
+                    //
+                    ////  Include the offset and num row parameters to opts.url if found on original req
+                    //let offset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
+                    //let numRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
+                    //if (offset !== null && numRows !== null) {
+                    //    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.OFFSET, offset);
+                    //    requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS, numRows);
+                    //}
+                    //
+                    //let reportMetaData = JSON.parse(opts.body);
+                    //
+                    //requestHelper.executeRequest(req, opts).then(
+                    //    (result) => {
+                    //        //  necessary to ensure if any group result is returned that it can be organized as expected by the client
+                    //        let sortList = parseMetaDataSortList(req, reportMetaData);
+                    //        if (sortList) {
+                    //            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
+                    //        }
+                    //        resolve1(result);
+                    //    },
+                    //    (error) => {
+                    //        reject1(error);
+                    //    }
+                    //).catch((ex) => {
+                    //    requestHelper.logUnexpectedError('reportsAPI..fetchReportResult', ex, true);
+                    //    reject1(ex);
+                    //});
+
+                }
             },
 
             /**
@@ -469,7 +614,7 @@
              * @returns {bluebird|exports|module.exports}
              */
             fetchReportMetaData(req, reportId) {
-                let opts = requestHelper.setOptions(req);
+                let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url, reportId);
 
@@ -507,7 +652,7 @@
                 return new Promise((resolve, reject) => {
                     // TODO code hygiene, code below is shared by fetchTableHomepageReport. move to a private function and
                     // share between the two api calls. https://quickbase.atlassian.net/browse/MB-505
-                    let opts = requestHelper.setOptions(req);
+                    let opts = requestHelper.setOptions(req, true);
                     opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesDefaultReportHomepageRoute(req.url);
 
@@ -530,8 +675,8 @@
                                         this.fetchReport(req, homepageReportId).then(
                                             (reportData) => {
                                                 //  return the metadata and report content
-                                                reportObj.reportMetaData.data = reportMetaData;
-                                                reportObj.reportData.data = reportData;
+                                                reportObj.reportMetaData = reportMetaData;
+                                                reportObj.reportData = reportData;
                                                 resolve(reportObj);
                                             },
                                             (reportError) => {
