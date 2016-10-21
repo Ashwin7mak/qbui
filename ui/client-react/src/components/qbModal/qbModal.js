@@ -14,11 +14,11 @@ const QBModal = React.createClass({
         /**
          *This is the message for the modal body
          */
-        modalBodyMessage: React.PropTypes.string,
+        bodyMessage: React.PropTypes.string,
         /**
          *This is the title for the modal title
          */
-        modalTitle: React.PropTypes.string,
+        title: React.PropTypes.string,
         /**
          *This is the QBIcon for the modal
          */
@@ -40,13 +40,13 @@ const QBModal = React.createClass({
          */
         middleButtonOnClick: React.PropTypes.func,
         /**
-         *This is an array of buttons for the left side of the footer
+         *This is the middle button
          */
-        buttonArrayLeft: React.PropTypes.string,
+        leftButtonName: React.PropTypes.string,
         /**
-         *This is an array of buttons for the right side of the footer
+         *This is the middle button onClick function
          */
-        buttonArrayRight: React.PropTypes.string
+        leftButtonOnClick: React.PropTypes.func,
     },
     renderQBIcon() {
         let isSmall = Breakpoints.isSmallBreakpoint();
@@ -66,24 +66,24 @@ const QBModal = React.createClass({
         return null;
     },
     renderTitle() {
-        if (this.props.modalTitle) {
+        if (this.props.title) {
             return <div className="modalTitle">
-                {this.props.modalTitle[0]}
+                {this.props.title}
                 </div>;
         }
         return null;
     },
     renderBody() {
-        if (this.props.modalTitle) {
+        if (this.props.title) {
             return <div className="modalTextWithTitle ">
-                {this.props.modalBodyMessage[0]}
+                {this.props.bodyMessage}
             </div>;
         }
         return <div className="modalText">
-            {this.props.modalBodyMessage[0]}
+            {this.props.bodyMessage}
             </div>;
     },
-    renderButton() {
+    renderButtons() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         //This functions checks to see how many buttons the modal has
             //It will place and style the buttons based off of the total button count
@@ -91,19 +91,19 @@ const QBModal = React.createClass({
             return <div>
                 <div className="smallPrimaryButton" ><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
                 <div className="smallMiddleButton"><Button onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button></div>
-                <div className="smallTertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+                <div className="smallLeftButton"><Button onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button></div>
             </div>;
         }
-        if (this.props.buttonArrayLeft && this.props.primaryButtonName && this.props.middleButtonName) {
+        if (this.props.leftButtonName && this.props.primaryButtonName && this.props.middleButtonName) {
             return <div>
-                <div className="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+                <div className="leftButton"><Button onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button></div>
                 <div className="middleButton"><Button onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button></div>
-                <div className="primaryButton" ><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
+                <div className="primaryButton"><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
             </div>;
         }
-        if (this.props.buttonArrayLeft && this.props.primaryButtonName) {
+        if (this.props.leftButtonName && this.props.primaryButtonName) {
             return <div>
-                <div className="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+                <div className="leftButton"><Button onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button></div>
                 <div className="primaryButton"><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
             </div>;
         }
@@ -113,7 +113,7 @@ const QBModal = React.createClass({
     },
     render() {
         let modalTitleAndBody = "modalTitleAndBody";
-        if (this.props.modalTitle && this.props.modalQBIcon) {
+        if (this.props.title && this.props.QBIconName) {
             modalTitleAndBody = "modalTitleAndBodyAndQBIcon";
         }
         return (
@@ -131,7 +131,7 @@ const QBModal = React.createClass({
                         </div>
                     </div>
                     <Modal.Footer>
-                        {this.renderButton()}
+                        {this.renderButtons()}
                     </Modal.Footer>
                 </Modal>
             </div>

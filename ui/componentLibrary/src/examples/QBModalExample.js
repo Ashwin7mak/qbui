@@ -34,25 +34,8 @@ var BasicQBModalExample = React.createClass({
     },
 
     render() {
-        const modalTitle = [
-            <div>Modal Title</div>
-        ];
-        const modalBodyMessage = [
-            <div>Modal Body Message</div>
-        ];
-        // const modalQBIcon = [
-        //     <QbIcon icon="alert"/>
-        // ];
-        const buttonArrayLeft = [
-            <button onClick={this.closeAll}>Tertiary</button>
-        ];
-        const buttonArrayRight = [
-            <button onClick={this.closeAll}>Secondary</button>,
-            <button onClick={this.closeAll} bsStyle="primary">Primary</button>
-        ];
-        const singleButton = [
-            <button onClick={this.closeAll} bsStyle="primary">Primary</button>
-        ];
+        const bodyMessage = "Body Message";
+
         return (
             <div>
                 {/*Toggle Default Modal Button*/}
@@ -71,24 +54,26 @@ var BasicQBModalExample = React.createClass({
                 <div>
                     <QBModal
                         show={this.state.defaultQBModalOpen}
-                        buttonArrayLeft={buttonArrayLeft}
                         primaryButtonName="Primary Button"
                         primaryButtonOnClick={this.closeAll}
                         middleButtonName="Middle Button"
                         middleButtonOnClick={this.closeAll}
-                        modalBodyMessage={modalBodyMessage}
-                        modalTitle={modalTitle} />
+                        leftButtonName="Left Button"
+                        leftButtonOnClick={this.closeAll}
+                        bodyMessage={bodyMessage}
+                        title="Title" />
                 </div>
                 {/*Critical Alert Modal*/}
                 <div>
                     <QBModal
                         show={this.state.criticalAlertQBModalOpen}
-                        buttonArrayLeft={buttonArrayLeft}
                         primaryButtonName="Primary Button"
                         primaryButtonOnClick={this.closeAll}
                         middleButtonName="Middle Button"
                         middleButtonOnClick={this.closeAll}
-                        modalBodyMessage={modalBodyMessage}
+                        leftButtonName="Left Button"
+                        leftButtonOnClick={this.closeAll}
+                        bodyMessage={bodyMessage}
                         QBIconName="alert" />
                 </div>
                 {/*Single Button Modal*/}
@@ -97,8 +82,8 @@ var BasicQBModalExample = React.createClass({
                         show={this.state.singleButtonQBModal}
                         primaryButtonName="Primary Button"
                         primaryButtonOnClick={this.closeAll}
-                        buttonArrayRight={singleButton}
-                        modalBodyMessage={modalBodyMessage}/>
+                        bodyMessage={bodyMessage}
+                        title="Title"/>
                 </div>
             </div>
 
