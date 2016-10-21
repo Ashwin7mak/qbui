@@ -277,10 +277,13 @@ describe('QBForm functions', () => {
                 }
             },
             editErrors: {
-                6: {
-                    isInvalid: true,
-                    invalidMessage: "invalid"
-                }
+                errors: [
+                    {
+                        id: 6,
+                        isInvalid: true,
+                        invalidMessage: "invalid"
+                    }
+                ]
             }
         };
         component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData} pendEdits={edits}></QBForm>);
