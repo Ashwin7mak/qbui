@@ -26,10 +26,6 @@ const CheckBoxFieldValueEditor = React.createClass({
          * Set the label that displays next to the checkbox */
         label: PropTypes.string,
 
-        /**
-         * Set the id of the input for the checkbox */
-        id: PropTypes.string,
-
         invalid: PropTypes.bool,
 
         disabled: PropTypes.bool,
@@ -59,7 +55,7 @@ const CheckBoxFieldValueEditor = React.createClass({
 
     onKeyDown(ev) {
         // Call on change if key press is space bar (for accessibility)
-        if (ev.keyCode === 32) {
+        if (!this.props.disabled && ev.keyCode === 32) {
             this.onChange(ev);
         }
     },
@@ -127,7 +123,6 @@ const CheckBoxFieldValueEditor = React.createClass({
         return (
             <label className="label"
                    onClick={this.onChange}
-                   tabIndex="0"
                    onKeyDown={this.onKeyDown} >
                 {labelText}
             </label>
@@ -143,15 +138,15 @@ const CheckBoxFieldValueEditor = React.createClass({
         }
 
         return (
-            <div className={this.setGeneralClasses()}>
+            <div className={this.setGeneralClasses()} tabIndex="0" onKeyDown={this.onKeyDown}>
                 <input className={this.setCheckBoxClasses()}
                        checked={this.props.value}
                        ref="fieldInput"
                        type="checkbox"
                        onChange={this.onChange}
                        onBlur={this.onBlur}
-                       tabIndex="0"
-                       disabled={this.props.disabled} />
+                       disabled={this.props.disabled}
+                       tabIndex="-1" />
                 {this.renderLabel()}
                 {this.renderRequiredSymbol()}
             </div>
