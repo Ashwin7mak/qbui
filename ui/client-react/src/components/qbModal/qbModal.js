@@ -32,6 +32,14 @@ const QBModal = React.createClass({
          */
         primaryButtonOnClick: React.PropTypes.func,
         /**
+         *This is the middle button
+         */
+        middleButtonName: React.PropTypes.string,
+        /**
+         *This is the middle button onClick function
+         */
+        middleButtonOnClick: React.PropTypes.func,
+        /**
          *This is an array of buttons for the left side of the footer
          */
         buttonArrayLeft: React.PropTypes.string,
@@ -82,24 +90,22 @@ const QBModal = React.createClass({
         if (isSmall) {
             return <div>
                 <div className="smallPrimaryButton" ><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
-                <div className="smallSecondaryButton">{this.props.buttonArrayRight[0]}</div>
+                <div className="smallMiddleButton"><Button onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button></div>
                 <div className="smallTertiaryButton">{this.props.buttonArrayLeft[0]}</div>
             </div>;
         }
-        if (this.props.buttonArrayLeft && this.props.buttonArrayRight) {
-            if (this.props.buttonArrayLeft.length + this.props.buttonArrayRight.length === 3) {
-                return <div>
-                    <div className="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
-                    <div className="secondaryButton">{this.props.buttonArrayRight[0]}</div>
-                    <div className="primaryButton" ><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
-                </div>;
-            }
-            if (this.props.buttonArrayLeft.length + this.props.buttonArrayRight.length === 2) {
-                return <div>
-                    <div className="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
-                    <div className="primaryButton"><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
-                </div>;
-            }
+        if (this.props.buttonArrayLeft && this.props.primaryButtonName && this.props.middleButtonName) {
+            return <div>
+                <div className="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+                <div className="middleButton"><Button onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button></div>
+                <div className="primaryButton" ><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
+            </div>;
+        }
+        if (this.props.buttonArrayLeft && this.props.primaryButtonName) {
+            return <div>
+                <div className="tertiaryButton">{this.props.buttonArrayLeft[0]}</div>
+                <div className="primaryButton"><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
+            </div>;
         }
         return <div className="singlePrimaryButton">
             <Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>

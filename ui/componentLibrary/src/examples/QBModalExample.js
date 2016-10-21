@@ -74,7 +74,8 @@ var BasicQBModalExample = React.createClass({
                         buttonArrayLeft={buttonArrayLeft}
                         primaryButtonName="Primary Button"
                         primaryButtonOnClick={this.closeAll}
-                        buttonArrayRight={buttonArrayRight}
+                        middleButtonName="Middle Button"
+                        middleButtonOnClick={this.closeAll}
                         modalBodyMessage={modalBodyMessage}
                         modalTitle={modalTitle} />
                 </div>
@@ -85,7 +86,8 @@ var BasicQBModalExample = React.createClass({
                         buttonArrayLeft={buttonArrayLeft}
                         primaryButtonName="Primary Button"
                         primaryButtonOnClick={this.closeAll}
-                        buttonArrayRight={buttonArrayRight}
+                        middleButtonName="Middle Button"
+                        middleButtonOnClick={this.closeAll}
                         modalBodyMessage={modalBodyMessage}
                         QBIconName="alert" />
                 </div>
