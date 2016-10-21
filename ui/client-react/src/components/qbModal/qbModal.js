@@ -22,18 +22,24 @@ const QBModals = React.createClass({
          */
         modalQBIcon: React.PropTypes.array,
         /**
-         *This is an array of buttons for the left sclassNamee of the footer
+         *This is an array of buttons for the left side of the footer
          */
         buttonArrayLeft: React.PropTypes.array,
         /**
-         *This is an array of buttons for the right sclassNamee of the footer
+         *This is an array of buttons for the right side of the footer
          */
         buttonArrayRight: React.PropTypes.array
     },
     renderQBIcon() {
+        let isSmall = Breakpoints.isSmallBreakpoint();
         //This function checks to see if there is a QBIcon
             //if there is a QBIcon then it will be placed on the page according to XD specs
             //if there is not a QBIcon then it will not render anything to the page
+        if (this.props.modalQBIcon && this.props.modalTitle && !isSmall) {
+            return <div className="largeModalQBIcon">
+                {this.props.modalQBIcon}
+            </div>;
+        }
         if (this.props.modalQBIcon) {
             return <div className="modalQBIcon">
                 {this.props.modalQBIcon}

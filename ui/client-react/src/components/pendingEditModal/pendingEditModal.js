@@ -41,7 +41,6 @@ const PendingEditModal = React.createClass({
                 buttonArrayLeft={buttonArrayLeft}
                 buttonArrayRight={buttonArrayRight}
                 modalBodyMessage={modalBodyMessage}
-                modalQBIcon={modalQBIcon}
                 modalTitle={modalTitle} />;
     }
 });

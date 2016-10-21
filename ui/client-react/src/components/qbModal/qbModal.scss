@@ -93,6 +93,15 @@
     font-size: $font-size-p;
   }
 
+  .largeModalQBIcon {
+    font-size: 90px;
+    vertical-align: top;
+    width: 30%;
+    color: $color-orange-500;
+    margin-top: 30px;
+    display: inline-block;
+  }
+
   .modalQBIcon{
     height: 44px;
     width: 50px;
@@ -117,6 +126,7 @@
   .modalTitleAndBodyAndQBIcon {
     display: inline-block;
     width: 70%;
+    padding-top: 35px;
   }
 
   .tertiaryButton {
