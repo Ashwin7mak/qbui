@@ -139,8 +139,7 @@ export let RecordRoute = React.createClass({
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <TableIcon icon={this.props.selectedTable.icon}/>}
-                    {this.props.selectedTable && <Link to={tableLink}>{this.props.selectedTable.name}</Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}</Link>}
                     {this.props.selectedTable && rptId && <span>&nbsp;&gt;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
