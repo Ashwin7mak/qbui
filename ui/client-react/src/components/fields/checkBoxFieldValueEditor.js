@@ -121,9 +121,7 @@ const CheckBoxFieldValueEditor = React.createClass({
         let labelText = (this.hasLabel() ? this.props.label : ' ');
 
         return (
-            <label className="label"
-                   onClick={this.onChange}
-                   onKeyDown={this.onKeyDown} >
+            <label className="label">
                 {labelText}
             </label>
         );
@@ -138,7 +136,7 @@ const CheckBoxFieldValueEditor = React.createClass({
         }
 
         return (
-            <div className={this.setGeneralClasses()} tabIndex="0" onKeyDown={this.onKeyDown}>
+            <div className={this.setGeneralClasses()} tabIndex="0" onKeyDown={this.onKeyDown} onClick={this.onChange}>
                 <input className={this.setCheckBoxClasses()}
                        checked={this.props.value}
                        ref="fieldInput"
