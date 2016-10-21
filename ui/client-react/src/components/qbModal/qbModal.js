@@ -22,7 +22,7 @@ const QBModal = React.createClass({
         /**
          *This is the QBIcon for the modal
          */
-        QBIconName: React.PropTypes.string,
+        qbIconName: React.PropTypes.string,
         /**
          *This is primary button
          */
@@ -53,21 +53,21 @@ const QBModal = React.createClass({
         //This function checks to see if there is a QBIcon
             //if there is a QBIcon then it will be placed on the page according to XD specs
             //if there is not a QBIcon then it will not render anything to the page
-        if (this.props.QBIconName && this.props.modalTitle && !isSmall) {
-            return <div className="largeModalQBIcon">
-                <QbIcon icon={this.props.QBIconName} />
+        if (this.props.qbIconName && this.props.title && !isSmall) {
+            return <div className="largeQBIcon">
+                <QbIcon icon={this.props.qbIconName} />
             </div>;
         }
-        if (this.props.QBIconName) {
-            return <div className="modalQBIcon">
-                <QbIcon icon={this.props.QBIconName} />
+        if (this.props.qbIconName) {
+            return <div className="qbIcon">
+                <QbIcon icon={this.props.qbIconName} />
             </div>;
         }
         return null;
     },
     renderTitle() {
         if (this.props.title) {
-            return <div className="modalTitle">
+            return <div className="title">
                 {this.props.title}
                 </div>;
         }
@@ -75,11 +75,11 @@ const QBModal = React.createClass({
     },
     renderBody() {
         if (this.props.title) {
-            return <div className="modalTextWithTitle ">
+            return <div className="textWithTitle ">
                 {this.props.bodyMessage}
             </div>;
         }
-        return <div className="modalText">
+        return <div className="text">
             {this.props.bodyMessage}
             </div>;
     },
@@ -112,16 +112,16 @@ const QBModal = React.createClass({
         </div>;
     },
     render() {
-        let modalTitleAndBody = "modalTitleAndBody";
+        let titleAndBody = "titleAndBody";
         if (this.props.title && this.props.QBIconName) {
-            modalTitleAndBody = "modalTitleAndBodyAndQBIcon";
+            titleAndBody = "titleAndBodyAndQBIcon";
         }
         return (
             <div>
                 <Modal className="qbModal" show={this.props.show} onHclassNamee={this.close}>
                     <div className="bodyContainer">
                         {this.renderQBIcon()}
-                        <div className={modalTitleAndBody}>
+                        <div className={titleAndBody}>
                             <Modal.Title>
                                 {this.renderTitle()}
                             </Modal.Title>

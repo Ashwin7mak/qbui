@@ -9,7 +9,9 @@ var BasicQBModalExample = React.createClass({
         return {
             defaultQBModalOpen: false,
             criticalAlertQBModalOpen: false,
-            singleButtonQBModal: false
+            singleButtonQBModal: false,
+            qbIconTitleBodyMessage: false,
+            titleBodyMessageTwoButtons: false
         };
     },
 
@@ -25,30 +27,47 @@ var BasicQBModalExample = React.createClass({
         this.setState({singleButtonQBModal: !this.state.singleButtonQBModal});
     },
 
+    qbIconTitleBodyMessage() {
+        this.setState({qbIconTitleBodyMessage: !this.state.qbIconTitleBodyMessage});
+    },
+
+    titleBodyMessageTwoButtons() {
+        this.setState({titleBodyMessageTwoButtons: !this.state.titleBodyMessageTwoButtons});
+    },
     closeAll() {
         this.setState({
             defaultQBModalOpen: false,
             criticalAlertQBModalOpen: false,
-            singleButtonQBModal: false
+            singleButtonQBModal: false,
+            qbIconTitleBodyMessage: false,
+            titleBodyMessageTwoButtons: false
         });
     },
 
     render() {
-        const bodyMessage = "Body Message";
+        let longBodyMessage = "Long Body Message Long Body Message Long Body MessageLong Body MessageLong Body MessageLong Body MessageLong Body MessageLong Body MessageLong Body MessageLong Body MessageLong Body Message";
 
         return (
             <div>
-                {/*Toggle Default Modal Button*/}
+                {/*Show Default Modal Button*/}
                 <div>
-                    <button onClick={this.toggleDefaultQBModal}>Toggle Default Modal</button>
+                    <button onClick={this.toggleDefaultQBModal}>Show Default Modal</button>
                 </div>
-                {/*Toggle Critical Alert Button*/}
+                {/*Show Critical Alert Button*/}
                 <div style={{paddingTop:"12px"}}>
-                    <button onClick={this.toggleCriticalAlertQBModal}>Toggle Critical Alert Modal</button>
+                    <button onClick={this.toggleCriticalAlertQBModal}>Show Critical Alert Modal</button>
                 </div>
-                {/*Toggle Single Button Modal*/}
+                {/*Show Single Button Modal*/}
                 <div style={{paddingTop:"12px"}}>
-                    <button onClick={this.singleButtonQBModal}>Toggle Single Button Modal</button>
+                    <button onClick={this.singleButtonQBModal}>Show Single Button Modal</button>
+                </div>
+                {/*Show qbIcon Title bodyMessage*/}
+                <div style={{paddingTop:"12px"}}>
+                    <button onClick={this.qbIconTitleBodyMessage}>Show qbIcon Title bodyMessage</button>
+                </div>
+                {/*Show Title bodyMessage Two Buttons*/}
+                <div style={{paddingTop:"12px"}}>
+                    <button onClick={this.titleBodyMessageTwoButtons}>Show Title bodyMessage Two Buttons</button>
                 </div>
                 {/*Default Modal*/}
                 <div>
@@ -60,7 +79,7 @@ var BasicQBModalExample = React.createClass({
                         middleButtonOnClick={this.closeAll}
                         leftButtonName="Left Button"
                         leftButtonOnClick={this.closeAll}
-                        bodyMessage={bodyMessage}
+                        bodyMessage="Body Message"
                         title="Title" />
                 </div>
                 {/*Critical Alert Modal*/}
@@ -73,8 +92,8 @@ var BasicQBModalExample = React.createClass({
                         middleButtonOnClick={this.closeAll}
                         leftButtonName="Left Button"
                         leftButtonOnClick={this.closeAll}
-                        bodyMessage={bodyMessage}
-                        QBIconName="alert" />
+                        bodyMessage="Body Message"
+                        qbIconName="alert" />
                 </div>
                 {/*Single Button Modal*/}
                 <div>
@@ -82,8 +101,31 @@ var BasicQBModalExample = React.createClass({
                         show={this.state.singleButtonQBModal}
                         primaryButtonName="Primary Button"
                         primaryButtonOnClick={this.closeAll}
-                        bodyMessage={bodyMessage}
+                        bodyMessage="Body Message"
                         title="Title"/>
+                </div>
+                {/*qbIcon Title bodyMessage*/}
+                <div>
+                    <QBModal
+                        show={this.state.qbIconTitleBodyMessage}
+                        primaryButtonName="Primary Button"
+                        primaryButtonOnClick={this.closeAll}
+                        leftButtonName="Left Button"
+                        leftButtonOnClick={this.closeAll}
+                        bodyMessage={longBodyMessage}
+                        qbIconName="check"
+                        title="Title" />
+                </div>
+                {/*Title bodyMessage Two Buttons*/}
+                <div>
+                    <QBModal
+                        show={this.state.titleBodyMessageTwoButtons}
+                        primaryButtonName="Primary Button"
+                        primaryButtonOnClick={this.closeAll}
+                        leftButtonName="Left Button"
+                        leftButtonOnClick={this.closeAll}
+                        bodyMessage={longBodyMessage}
+                        title="Title" />
                 </div>
             </div>
 
