@@ -43,7 +43,8 @@ export default {
             nextRecord: "Prochain enregistrement",
             previousRecord: "Previous enregistrement",
             save: "Sauver",
-            saveAndNext: "Sauver et prochain"
+            saveAndNext: "Sauver et prochain",
+            saveAndAddAnother: "Sauver et ajouter un autre"
         },
         field: {
             search: "Chercher",

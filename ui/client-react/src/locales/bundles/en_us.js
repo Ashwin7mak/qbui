@@ -46,7 +46,8 @@ export default {
             nextRecord: "Next Record",
             previousRecord: "Previous Record",
             save: "Save",
-            saveAndNext: "Save & Next"
+            saveAndNext: "Save & Next",
+            saveAndAddAnother: "Save & add another"
         },
         field: {
             search: "Search",
