@@ -60,8 +60,8 @@ let recordActions = {
         return new Promise((resolve, reject) => {
             let record = getRecord(recordChanges, fields);
 
-            // convert record array to object with fid keys (recordChanges format)
-            let changes = record.reduce((obj,val) => {obj[val.id] = val; return obj;}, {});
+            // map the record array to an object with fids as keys since that's the recordChanges object format
+            let changes = record.reduce((obj, val) => {obj[val.id] = val; return obj;}, {});
 
             if (appId && tblId && record.length) {
 

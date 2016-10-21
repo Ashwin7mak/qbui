@@ -217,16 +217,14 @@ let RecordTrowser = React.createClass({
     },
     getTrowserRightIcons() {
 
-        const canSave = this.props.pendEdits && this.props.pendEdits.isPendingEdit;
-
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
 
         return (
             <div className="saveButtons">
                 {showNext &&
-                    <Button bsStyle="primary" disabled={!canSave} onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
+                    <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
                 }
-                <Button bsStyle="primary" disabled={!canSave} onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
+                <Button bsStyle="primary" onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
             </div>);
     },
 

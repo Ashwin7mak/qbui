@@ -251,23 +251,6 @@ describe('QBForm functions', () => {
         expect(fieldElements.length).toEqual(0);
     });
 
-    it('test render of form with unauthorized error status', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} errorStatus={403} formData={fakeQBFormData}></QBForm>);
-        const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
-        expect(fieldElements.length).toEqual(0);
-
-        const errorSection = TestUtils.scryRenderedDOMComponentsWithClass(component, "errorSection");
-        expect(errorSection.length).toEqual(1);
-    });
-
-    it('test render of form with misc error status', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} errorStatus={500} formData={fakeQBFormData}></QBForm>);
-        const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
-        expect(fieldElements.length).toEqual(0);
-
-        const errorSection = TestUtils.scryRenderedDOMComponentsWithClass(component, "errorSection");
-        expect(errorSection.length).toEqual(1);
-    });
 
     it('test render of form field element with data from pendingEdits', () => {
         let edits = {

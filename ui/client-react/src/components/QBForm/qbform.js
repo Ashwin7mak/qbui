@@ -104,7 +104,7 @@ let QBForm = React.createClass({
     getFieldRecord(field) {
         if (field) {
             const fieldId = field.id;
-            if (this.props.pendEdits.recordChanges && this.props.pendEdits.recordChanges[fieldId]) {
+            if (this.props.pendEdits && this.props.pendEdits.recordChanges && this.props.pendEdits.recordChanges[fieldId]) {
                 let vals = {};
                 vals.id = fieldId;
                 vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
