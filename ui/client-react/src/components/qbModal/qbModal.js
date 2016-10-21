@@ -30,7 +30,7 @@ const QBModals = React.createClass({
          */
         buttonArrayRight: React.PropTypes.array
     },
-    qbIconFunction() {
+    renderQBIcon() {
         //This function checks to see if there is a QBIcon
             //if there is a QBIcon then it will be placed on the page according to XD specs
             //if there is not a QBIcon then it will not render anything to the page
@@ -41,7 +41,7 @@ const QBModals = React.createClass({
         }
         return null;
     },
-    titleFunction() {
+    renderTitle() {
         if (this.props.modalTitle) {
             return <div id="modalTitle">
                 {this.props.modalTitle[0]}
@@ -49,7 +49,7 @@ const QBModals = React.createClass({
         }
         return null;
     },
-    bodyFunction() {
+    renderBody() {
         if (this.props.modalTitle) {
             return <div id="modalTextWithTitle ">
                 {this.props.modalBodyMessage[0]}
@@ -59,7 +59,7 @@ const QBModals = React.createClass({
             {this.props.modalBodyMessage[0]}
             </div>;
     },
-    buttonFunction() {
+    renderButton() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         //This functions checks to see how many buttons the modal has
             //It will place and style the buttons based off of the total button count
@@ -98,18 +98,18 @@ const QBModals = React.createClass({
             <div>
                 <Modal className="qbModal" show={this.props.bool} onHide={this.close}>
                     <div className="bodyContainer">
-                        {this.qbIconFunction()}
+                        {this.renderQBIcon()}
                         <div className={modalTitleAndBody}>
                             <Modal.Title>
-                                {this.titleFunction()}
+                                {this.renderTitle()}
                             </Modal.Title>
                             <Modal.Body>
-                                {this.bodyFunction()}
+                                {this.renderBody()}
                             </Modal.Body>
                         </div>
                     </div>
                     <Modal.Footer>
-                        {this.buttonFunction()}
+                        {this.renderButton()}
                     </Modal.Footer>
                 </Modal>
             </div>
