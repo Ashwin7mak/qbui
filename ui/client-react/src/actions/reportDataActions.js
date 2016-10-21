@@ -162,7 +162,7 @@ let reportDataActions = {
 
                         //  ..fire off the load report and record count events
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, {body: model.recordCount});
+                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, model);
                         resolve();
                     },
                     (reportResponseError) => {
@@ -237,13 +237,14 @@ let reportDataActions = {
                         reportService.getDynamicReportResults(appId, tblId, rptId, metaData, queryParams).then(
                             (reportResultsResponse) => {
                                 var model = reportModel.set(metaData, reportResultsResponse.data);
-                                this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                                this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, {body: model.recordCount});
+                                this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
+                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, model);
                                 resolve();
                             },
                             (reportResultsError) => {
                                 logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportDataActions.loadDynamicReport');
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, reportResultsError.response.status);
+                                //this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, error.response.status);
                             }
                         ).catch((ex) => {
                             logger.logException(ex);

@@ -475,11 +475,11 @@
                                 responseObject = report;
                             } else {
                                 //  response object array elements to return
-                                responseObject[FIELDS] = [];
-                                responseObject[RECORDS] = [];
-                                responseObject[GROUPS] = [];
-                                responseObject[FILTERED_RECORDS_COUNT] = reportRecordCount;
                                 responseObject[FACETS] = [];
+                                responseObject[FIELDS] = [];
+                                responseObject[GROUPS] = [];
+                                responseObject[RECORDS] = [];
+                                responseObject[FILTERED_RECORDS_COUNT] = reportRecordCount;
 
                                 //  Is core returning a report object that is grouped
                                 if (report.type === constants.RECORD_TYPE.GROUP) {

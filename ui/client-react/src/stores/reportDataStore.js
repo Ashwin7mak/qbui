@@ -620,7 +620,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.editingId = null;
 
         this.error = false;
-        this.reportModel.updateFilteredRecordsCount(response.data.filteredCount);
+        this.reportModel.updateFilteredRecordsCount(response.recordCount);
 
         this.emit('change');
     },
@@ -641,7 +641,7 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadReportRecordsCountSuccess(response) {
         this.countingTotalRecords = false;
-        this.reportModel.updateRecordsCount(response.body);
+        this.reportModel.updateRecordsCount(response.recordCount);
         this.emit('change');
     },
 
