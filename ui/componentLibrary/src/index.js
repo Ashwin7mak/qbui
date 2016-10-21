@@ -42,6 +42,7 @@ import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
 
 import TrowserDoc from './docs/trowser.js';
+import QBModalDoc from './docs/qbModal.js';
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
 
@@ -71,6 +72,7 @@ render((
             <Route path="qbpanel" component={QBPanelDoc} />
             <Route path="qbicon" component={QBIconDoc} />
             <Route path="trowser" component={TrowserDoc} />
+            <Route path="qBModal" component={QBModalDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

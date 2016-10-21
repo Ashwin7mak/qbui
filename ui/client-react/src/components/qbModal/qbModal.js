@@ -3,7 +3,7 @@ import {Modal} from 'react-bootstrap';
 import './qbModal.scss';
 import Breakpoints from "../../utils/breakpoints";
 
-const QBModals = React.createClass({
+const QBModal = React.createClass({
     propTypes: {
         /**
          * this boolean sets whether or not the modal should be shown
@@ -16,7 +16,7 @@ const QBModals = React.createClass({
         /**
          *This is the title for the modal title
          */
-        modalTitle: React.PropTypes.string,
+        modalTitle: React.PropTypes.array,
         /**
          *This is the QBIcon for the modal
          */
@@ -123,4 +123,4 @@ const QBModals = React.createClass({
     }
 });
 
-export default QBModals;
+export default QBModal;

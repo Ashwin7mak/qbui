@@ -22,6 +22,7 @@ import QBPanelExample from 'raw!../examples/QBPanelExample.js';
 import QBIconExample from 'raw!../examples/QBIconExample.js';
 
 import TrowserExample from 'raw!../examples/TrowserExample.js';
+import QBModalExample from 'raw!../examples/QBModalExample.js';
 // END OF IMPORT STATEMENTS
 // The comment above is used for a grunt task. Please do not delete.
 
@@ -49,6 +50,7 @@ export default {
     QBPanel: QBPanelExample,
     QBIcon: QBIconExample,
     Trowser: TrowserExample,
+    QBModal: QBModalExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };
