@@ -113,6 +113,8 @@ $cell-edit-background-edit: #f3f8fe;
         }
     }
     .ag-header-cell-text {
+        overflow:hidden;
+        text-overflow:ellipsis;
         padding-right:4px;
         padding-left:4px;
         padding-top: 4px;
@@ -478,7 +480,6 @@ $cell-edit-background-edit: #f3f8fe;
         border-right: 1px solid $row-border-color;
         > .cellWrapper.textFormat {
             align-items:flex-start;
-            padding-top: 0;
             textarea {
                 resize: none;
                 overflow:hidden;
@@ -520,7 +521,6 @@ $cell-edit-background-edit: #f3f8fe;
                 position: relative;
                 height: 32px;
                 width: 100%;
-                margin-top: 6px;
                 justify-content: center;
             }
             .cellEdit {

@@ -20,6 +20,8 @@ let FormStore = Fluxxor.createStore({
         this.editFormSaving = false;
         this.editFormErrorStatus = null;
 
+        this.syncLoadedForm = false;
+
         this.bindActions(
             actions.LOAD_FORM_AND_RECORD, this.onLoadForm,
             actions.LOAD_FORM_AND_RECORD_SUCCESS, this.onLoadFormSuccess,
@@ -35,7 +37,9 @@ let FormStore = Fluxxor.createStore({
 
             actions.SAVE_FORM, this.onSaveEditForm,
             actions.SAVE_FORM_SUCCESS, this.onSaveEditFormSuccess,
-            actions.SAVE_FORM_FAILED, this.onSaveEditFormFailed
+            actions.SAVE_FORM_FAILED, this.onSaveEditFormFailed,
+
+            actions.SYNCING_FORM, this.onSyncingForm
         );
 
         this.logger = new Logger();
@@ -72,6 +76,7 @@ let FormStore = Fluxxor.createStore({
         this.editFormLoading = false;
         this.editFormData = formData;
         this.editFormErrorStatus = null;
+
         this.emit('change');
     },
     onSaveEditForm() {
@@ -87,6 +92,12 @@ let FormStore = Fluxxor.createStore({
     onSaveEditFormSuccess() {
         this.editFormSaving = false;
         this.editFormErrorStatus = null;
+        this.syncLoadedForm = true;
+
+        this.emit('change');
+    },
+    onSyncingForm() {
+        this.syncLoadedForm = false;
         this.emit('change');
     },
     getState() {
@@ -99,6 +110,8 @@ let FormStore = Fluxxor.createStore({
             editFormLoading: this.editFormLoading,
             editFormSaving: this.editFormSaving,
             editFormErrorStatus: this.editFormErrorStatus,
+
+            syncLoadedForm: this.syncLoadedForm
         };
     },
 });

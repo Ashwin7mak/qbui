@@ -26,13 +26,19 @@ const FieldElement = React.createClass({
 
     getChanges(theVals) {
         let fid = this.props.relatedField.id;
+        let fieldLabel = '';
+        if (this.props.element.useAlternateLabel) {
+            fieldLabel = this.props.element.displayText;
+        } else {
+            fieldLabel = this.props.relatedField ? this.props.relatedField.name : "";
+        }
         let change = {
             values: {
                 oldVal: this.props.fieldRecord,
                 newVal: {value: theVals.value, display: theVals.display}
             },
             fid: +fid,
-            fieldName: this.props.relatedField.name,
+            fieldName: fieldLabel,
             fieldDef: this.props.relatedField
         };
         return change;

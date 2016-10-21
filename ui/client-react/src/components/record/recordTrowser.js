@@ -68,6 +68,17 @@ let RecordTrowser = React.createClass({
     },
 
     /**
+     * navigate to new record if appropriate
+     */
+    navigateToNewRecord(recId) {
+
+        if (this.props.reportData && this.props.reportData.navigateAfterSave) {
+            let {appId, tblId} = this.props;
+            this.props.router.push(`/app/${appId}/table/${tblId}/record/${recId}`);
+        }
+    },
+
+    /**
      * User wants to save changes to a record. First we do client side validation
      * and if validation is successful we initiate the save action for the new or existing record
      * if validation if not ok we stay in edit mode and show the errors (TBD)
@@ -95,9 +106,12 @@ let RecordTrowser = React.createClass({
             } else {
                 promise = this.handleRecordChange(this.props.recId);
             }
-            promise.then(() => {
+            promise.then((recId) => {
                 flux.actions.saveFormSuccess();
+
                 this.hideTrowser();
+                this.navigateToNewRecord(recId);
+
             }, (errorStatus) => {
                 flux.actions.saveFormFailed(errorStatus);
             });
@@ -228,10 +242,10 @@ let RecordTrowser = React.createClass({
                         <Button className="saveAlertButton" onClick={this.toggleErrorDialog}><QBicon icon={"alert"}/></Button>
                     </OverlayTrigger>
                 }
-                <Button bsStyle="primary" disabled={!canSave} onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
                 {showNext &&
                     <Button bsStyle="primary" disabled={!canSave} onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
                 }
+                <Button bsStyle="primary" disabled={!canSave} onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
             </div>);
     },
 

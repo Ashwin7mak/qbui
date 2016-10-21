@@ -6,8 +6,9 @@ import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
-import {browserHistory} from 'react-router';
 import * as UrlConsts from "../constants/urlConstants";
+import Locale from '../locales/locales';
+import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
 
@@ -41,9 +42,9 @@ let formActions = {
     /**
      * start editing a new record
      */
-    editNewRecord() {
+    editNewRecord(navigateAfterSave = false) {
 
-        this.dispatch(actions.EDIT_REPORT_RECORD, {"recId":UrlConsts.NEW_RECORD_VALUE});
+        this.dispatch(actions.EDIT_REPORT_RECORD, {recId:UrlConsts.NEW_RECORD_VALUE, navigateAfterSave});
 
         // add editRec=new query param and let the router take action
         WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
@@ -70,6 +71,10 @@ let formActions = {
      */
     saveFormSuccess() {
         this.dispatch(actions.SAVE_FORM_SUCCESS);
+    },
+
+    syncingForm() {
+        this.dispatch(actions.SYNCING_FORM);
     },
 
     /**
@@ -148,6 +153,8 @@ let formActions = {
                     (response) => {
                         resolve();
 
+                        // store record id since form component needs it and it's not in the response
+                        response.data.recordId = recordId;
                         this.dispatch(successAction, response.data);
                     },
                     (error) => {
@@ -157,7 +164,17 @@ let formActions = {
                         } else {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadFormAndRecord:');
                         }
+
+                        // remove the editRec query string since we are not successfully editing the form
+                        WindowLocationUtils.pushWithoutQuery();
                         this.dispatch(failedAction, error.response.status);
+
+                        if (error.response.status === 403) {
+                            NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'), 1500);
+                        } else {
+                            NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
+                        }
+
                         reject();
                     }
                 );

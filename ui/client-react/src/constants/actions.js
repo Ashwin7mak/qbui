@@ -94,6 +94,8 @@ export const SAVE_FORM = 'SAVE_FORM';
 export const SAVE_FORM_SUCCESS = 'SAVE_FORM_SUCCESS';
 export const SAVE_FORM_FAILED = 'SAVE_FORM_FAILED';
 
+export const SYNCING_FORM = 'SYNCING_FORM';
+
 export const MARK_PERF = 'MARK_PERF';
 export const MEASURE_PERF = 'MEASURE_PERF';
 export const NEW_ROUTE_PERF = 'NEW_ROUTE_PERF';
