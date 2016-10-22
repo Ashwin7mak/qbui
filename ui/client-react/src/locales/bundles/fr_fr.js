@@ -186,6 +186,17 @@ export default {
                 fieldProps: "Propriétés de champ"
             }
         },
+        errorMessagePopup: {
+            errorMessagePopupHeader: {
+                singleErrorLabel: "S'il vous plaît corriger ce domaine",
+                multipleErrorLabelPrefix: "S'il vous plaît corriger ces",
+                multipleErrorLabelSuffix: "des champs",
+            },
+            errorAlertIconTooltip: {
+                showErrorPopup: "Afficher la liste des erreurs",
+                closeErrorPopup: "liste d'erreurs Masquer",
+            }
+        },
         month: {
             jan: {
                 short: "Janv",

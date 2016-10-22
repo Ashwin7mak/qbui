@@ -187,6 +187,17 @@ export default {
                 fieldProps: "Feldeigenschaften"
             }
         },
+        errorMessagePopup: {
+            errorMessagePopupHeader: {
+                singleErrorLabel: "Bitte repariere dieses feld",
+                multipleErrorLabelPrefix: "Bitte beheben sie diese",
+                multipleErrorLabelSuffix: "felder",
+            },
+            errorAlertIconTooltip: {
+                showErrorPopup: "Fehlerliste anzeigen",
+                closeErrorPopup: "Fehlerliste ausblenden",
+            }
+        },
         month: {
             jan: {
                 short: "Jän",

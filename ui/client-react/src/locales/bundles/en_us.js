@@ -189,6 +189,17 @@ export default {
                 fieldProps: "Field properties"
             }
         },
+        errorMessagePopup: {
+            errorMessagePopupHeader: {
+                singleErrorLabel: "Please fix this field",
+                multipleErrorLabelPrefix: "Please fix these",
+                multipleErrorLabelSuffix: "fileds",
+            },
+            errorAlertIconTooltip: {
+                showErrorPopup: "Show error list",
+                closeErrorPopup: "Hide error list",
+            }
+        },
         month: {
             jan: {
                 short: "Jan",
