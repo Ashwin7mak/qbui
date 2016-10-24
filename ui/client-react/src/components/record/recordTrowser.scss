@@ -5,14 +5,11 @@
         display: flex;
     }
     .trowserHeader {
-
-        .qbIcon {
-            margin-right: 5px;
-        }
         .iconActions {
             display: inline-block;
-
-            margin-right: 20px;
+            /*this is temporary fix because the icons have built in padding which is incorrect*/
+            margin-left: -10px;
+            margin-right: 10px;
 
             .btn {
                 &:hover {
@@ -25,7 +22,6 @@
                 padding:0;
                 .qbIcon {
                     font-size: 24px;
-                    margin:0;
                 }
             }
         }

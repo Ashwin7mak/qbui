@@ -43,7 +43,8 @@ export default {
             nextRecord: "nächsten Rekord",
             previousRecord: "bisherigen Rekord",
             save: "Speichern",
-            saveAndNext: "speichern und Nächster"
+            saveAndNext: "speichern und Nächster",
+            new: Neu
         },
         field: {
             search: "Suche",

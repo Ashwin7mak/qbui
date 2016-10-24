@@ -1,4 +1,5 @@
 import * as SchemaConsts from '../constants/schema';
+import consts from '../../../common/src/constants';
 
 class FieldUtils {
     /**
@@ -69,6 +70,26 @@ class FieldUtils {
         } else {
             return SchemaConsts.DEFAULT_RECORD_KEY;
         }
+    }
+
+    static isFieldEditable(fieldDef) {
+        let isEditable = true;
+
+        // built in fields are not editable
+        if (typeof fieldDef !== 'undefined' &&
+            typeof fieldDef.builtIn !== 'undefined' &&  fieldDef.builtIn) {
+            isEditable = false;
+        }
+        // field must be scalar (a non-generated field value)
+        if (typeof fieldDef.type !== 'undefined' &&  fieldDef.type !== consts.SCALAR) {
+            isEditable = false;
+        }
+        // field must be editable i.e. user editable not a restricted value
+        if (typeof fieldDef !== 'undefined' &&
+            typeof fieldDef.userEditableValue !== 'undefined' && !fieldDef.userEditableValue) {
+            isEditable = false;
+        }
+        return isEditable;
     }
 }
 

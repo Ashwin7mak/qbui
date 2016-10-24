@@ -34,11 +34,10 @@ $action-separator-color: #486c8f;
         background-color: $trowser-header-bg;
         display:flex;
         align-items:center;
+        padding: 0 10px 0 20px;
         .qbIcon {
             font-size:15px;
             vertical-align: baseline;
-            margin-left: 10px;
-            margin-right: 10px;
         }
         .breadcrumbs {
             flex:1 1 auto;

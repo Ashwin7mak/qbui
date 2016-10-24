@@ -37,6 +37,9 @@ $edit-field-padding: 5px;
         .qbPanelHeaderIcon {
             display: none;
         }
+        .qbPanelHeader {
+            padding-top: 0;
+        }
     }
     .fieldRow {
         td {
@@ -71,7 +74,6 @@ $edit-field-padding: 5px;
 
         /* field label in field td */
         .field .fieldLabel {
-            max-width: 20em;
             text-align:left;
             margin-bottom: $edit-field-padding;
         }
@@ -166,6 +168,10 @@ $edit-field-padding: 5px;
     .formSection {
         display: block;
 
+        .qbPanelHeader {
+            padding: 10px 0 20px 10px;
+        }
+
         .formTable {
             margin-left: 0px;
             width: 100%;
@@ -191,6 +197,14 @@ $edit-field-padding: 5px;
         }
         .errorText {
             font-size: $font-size-small;
+        }
+        .fieldValueEditor {
+            &.fieldInputWidth {
+                width: 100%;
+                .input {
+                    width: 100%;
+                }
+            }
         }
     }
 }

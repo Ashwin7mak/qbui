@@ -141,7 +141,7 @@ export let RecordRoute = React.createClass({
                 <div className="navLinks">
                     {this.props.selectedTable && <TableIcon icon={this.props.selectedTable.icon}/>}
                     {this.props.selectedTable && <Link to={tableLink}>{this.props.selectedTable.name}</Link>}
-                    {this.props.selectedTable && rptId && <span>&nbsp;&gt;&nbsp;</span>}
+                    {this.props.selectedTable && rptId && <span className="color-black-700">&nbsp;&gt;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
 

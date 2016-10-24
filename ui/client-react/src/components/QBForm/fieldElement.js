@@ -5,6 +5,7 @@ import FieldLabelElement from './fieldLabelElement';
 import FieldValueRenderer from '../fields/fieldValueRenderer';
 import FieldValueEditor from '../fields/fieldValueEditor';
 import FieldFormats from '../../utils/fieldFormats';
+import FieldUtils from '../../utils/fieldUtils';
 import './qbform.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -91,9 +92,10 @@ const FieldElement = React.createClass({
         if (_.has(this.props, 'relatedField.datatypeAttributes.clientSideAttributes.width') && this.props.relatedField.datatypeAttributes.clientSideAttributes.width !== DEFAULT_FIELD_WIDTH) {
             classes = 'fieldInputWidth';
         }
+        let isEditable = this.props.edit && FieldUtils.isFieldEditable(this.props.relatedField);
 
         let fieldElement = null;
-        if (this.props.edit) {
+        if (isEditable) {
             fieldElement = <FieldValueEditor type={fieldType}
                                              value={fieldRawValue}
                                              display={fieldDisplayValue}

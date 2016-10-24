@@ -200,6 +200,10 @@ let RecordTrowser = React.createClass({
         const showBack = !!(this.props.reportData && this.props.reportData.previousEditRecordId !== null);
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
 
+        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/>&nbsp;{table ? table.name : ""}</span> :
+            <span>Record #{this.props.recId}</span>;
+
+
         return (
             <h4>
                 {(showBack || showNext) &&
@@ -211,7 +215,7 @@ let RecordTrowser = React.createClass({
                         <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                     </OverlayTrigger>
                 </div> }
-                <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""}
+                <TableIcon icon={table ? table.icon : ""}/> {title}
             </h4>);
 
     },
