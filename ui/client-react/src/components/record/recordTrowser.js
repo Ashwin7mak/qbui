@@ -82,10 +82,10 @@ let RecordTrowser = React.createClass({
      * User wants to save changes to a record. First we do client side validation
      * and if validation is successful we initiate the save action for the new or existing record
      * if validation if not ok we stay in edit mode and show the errors (TBD)
-     * @param id
+     * @param saveAnother if true, keep trowser open after save with a new blank record
      * @returns {boolean}
      */
-    saveClicked() {
+    saveClicked(saveAnother = false) {
         //validate changed values -- this is skipped for now
         //get pending changes
         let validationResult = {
@@ -109,8 +109,12 @@ let RecordTrowser = React.createClass({
             promise.then((recId) => {
                 flux.actions.saveFormSuccess();
 
-                this.hideTrowser();
-                this.navigateToNewRecord(recId);
+                if (saveAnother) {
+                    flux.actions.editNewRecord(false);
+                } else {
+                    this.hideTrowser();
+                    this.navigateToNewRecord(recId);
+                }
 
             }, (errorStatus) => {
                 flux.actions.saveFormFailed(errorStatus);
@@ -231,8 +235,6 @@ let RecordTrowser = React.createClass({
     getTrowserRightIcons() {
         const errorFlg = this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
 
-        const canSave = this.props.pendEdits && this.props.pendEdits.isPendingEdit;
-
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
 
         return (
@@ -243,9 +245,12 @@ let RecordTrowser = React.createClass({
                     </OverlayTrigger>
                 }
                 {showNext &&
-                    <Button bsStyle="primary" disabled={!canSave} onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
+                    <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
                 }
-                <Button bsStyle="primary" disabled={!canSave} onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
+                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
+                {this.props.recId === null &&
+                    <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
+                }
             </div>);
     },
 

@@ -80,7 +80,7 @@ describe('RecordTrowser functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let saveButton = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .btn");
-        expect(saveButton.length).toBe(1);
+        expect(saveButton.length).toBe(2);
 
         TestUtils.Simulate.click(saveButton[0]);
 

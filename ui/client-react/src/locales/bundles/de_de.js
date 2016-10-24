@@ -40,10 +40,11 @@ export default {
             searchReportsPlaceholder: "Suche berichte...",
             searchRecordsPlaceholder: "Suche...",
             backToReport: "Zurück zu melden",
-            nextRecord: "nächsten Rekord",
-            previousRecord: "bisherigen Rekord",
+            nextRecord: "Nächsten Rekord",
+            previousRecord: "Bisherigen Rekord",
             save: "Speichern",
-            saveAndNext: "speichern und Nächster"
+            saveAndNext: "Speichern und Nächster",
+            saveAndAddAnother: "Speichern und fügen Sie ein anderes"
         },
         field: {
             search: "Suche",
