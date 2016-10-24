@@ -1,5 +1,14 @@
 @import '../../assets/css/qbVariables';
 
+@include small-breakpoint {
+    .recordTrowser {
+        .trowserFooter .saveButtons {
+            display: flex;
+            flex: 1;
+        }
+    }
+}
+
 .recordTrowser {
     .trowserFooter .saveButtons {
         display: flex;
