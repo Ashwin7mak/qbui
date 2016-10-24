@@ -85,9 +85,9 @@ class FieldUtils {
      */
     static getFieldLabel(element, relatedField) {
         if (element && element.useAlternateLabel) {
-            return element.displayText;
+            return element.displayText || '';
         } else if (relatedField) {
-            return relatedField.name;
+            return relatedField.name || '';
         } else {
             return '';
         }
