@@ -111,8 +111,6 @@
 
     @include small-breakpoint {
       font-size: 40px;
-      padding-top: 15px;
-      color: $color-orange-500;
     }
   }
 
@@ -126,11 +124,32 @@
     padding-top: 20px;
   }
 
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+
+    @include small-breakpoint {
+      flex-direction: column-reverse;
+
+      .btn {
+        display: block;
+        margin-left: 0;
+        margin-right: 0;
+
+        &:not(:first-child) {
+          margin-bottom: 20px;
+        }
+
+        width: 100%;
+      }
+    }
+  }
+
   .leftButton {
     color: $color-indigo-700;
     background-color: $color-black-300;
     stroke: $color-black-300;
-    float: left;
+    margin-right: auto;
     margin-left: -15px;
   }
 
@@ -151,27 +170,6 @@
 
   .singlePrimaryButtonContainer {
     text-align: center;
-  }
-
-  .singlePrimaryButton {
-    color: $color-black-100;
-    background-color: $color-indigo-700;
-  }
-
-  .smallPrimaryButton .btn {
-    width: 100%;
-    margin-left: 0px;
-  }
-
-  .smallMiddleButton .btn {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 0px;
-    width: 100%;
-  }
-
-  .smallLeftButton .btn {
-    width: 100%;
   }
 
   .smallText {

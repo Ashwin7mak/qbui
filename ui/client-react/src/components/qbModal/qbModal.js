@@ -10,7 +10,7 @@ const QBModal = React.createClass({
         /**
          * this boolean sets whether or not the modal should be shown
          */
-        show: React.PropTypes.boolean,
+        show: React.PropTypes.bool,
         /**
          *This is the message for the modal body
          */
@@ -84,32 +84,23 @@ const QBModal = React.createClass({
             </div>;
     },
     renderButtons() {
-        let isSmall = Breakpoints.isSmallBreakpoint();
-        //This functions checks to see how many buttons the modal has
-            //It will place and style the buttons based off of the total button count
-        if (isSmall) {
-            return <div>
-                <div className="smallPrimaryButton"><Button bsStyle="primary" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></div>
-                <div className="smallMiddleButton"><Button onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button></div>
-                <div className="smallLeftButton"><Button onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button></div>
-            </div>;
+        let buttons = [
+            <Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
+        ];
+
+        if (this.props.middleButtonName) {
+            buttons.unshift(<Button key={buttons.length} className="middleButton" onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
         }
-        if (this.props.leftButtonName && this.props.primaryButtonName && this.props.middleButtonName) {
-            return <div>
-                <Button className="leftButton" onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>
-                <Button className="middleButton" onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>
-                <Button className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
-            </div>;
+
+        if (this.props.leftButtonName) {
+            buttons.unshift(<Button key={buttons.length} className="leftButton" onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>);
         }
-        if (this.props.leftButtonName && this.props.primaryButtonName) {
-            return <div>
-                <Button className="leftButton" onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>
-                <Button className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
-            </div>;
-        }
-        return <div className="singlePrimaryButtonContainer">
-            <Button className="singlePrimaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
-            </div>;
+
+        return (
+            <div className={buttons.length === 1 ? 'singlePrimaryButtonContainer' : 'buttons'}>
+                {buttons}
+            </div>
+        );
     },
     render() {
         let titleAndBody = "titleAndBody";
