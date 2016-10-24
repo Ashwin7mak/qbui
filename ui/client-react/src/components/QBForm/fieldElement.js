@@ -5,6 +5,7 @@ import FieldLabelElement from './fieldLabelElement';
 import FieldValueRenderer from '../fields/fieldValueRenderer';
 import FieldValueEditor from '../fields/fieldValueEditor';
 import FieldFormats from '../../utils/fieldFormats';
+import FieldUtils from '../../utils/fieldUtils';
 import './qbform.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -67,14 +68,6 @@ const FieldElement = React.createClass({
         }
     },
 
-    getLabel() {
-        if (this.props.element && this.props.element.useAlternateLabel) {
-            return this.props.element.displayText;
-        } else {
-            return this.props.relatedField ? this.props.relatedField.name : "";
-        }
-    },
-
     render() {
         let fieldDatatypeAttributes = this.props.relatedField && this.props.relatedField.datatypeAttributes ?
             this.props.relatedField.datatypeAttributes : {};
@@ -118,7 +111,7 @@ const FieldElement = React.createClass({
                                              invalidMessage={this.props.invalidMessage}
                                              classes={classes}
                                              appUsers={this.props.appUsers}
-                                             label={this.getLabel()}
+                                             label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
             />;
         } else if (fieldDisplayValue !== null || fieldRawValue !== null) { //if there is no value do not render the field
             fieldElement = <FieldValueRenderer type={fieldType}
@@ -128,13 +121,20 @@ const FieldElement = React.createClass({
                                                display={fieldDisplayValue}
                                                attributes={fieldDatatypeAttributes}
                                                fieldDef={this.props.relatedField}
-                                               label={this.getLabel()}
+                                               label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
             />;
         }
 
         return (
             <div className="formElement field">
-                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} isInvalid={this.props.isInvalid} /> }
+                {this.props.includeLabel &&
+                    <FieldLabelElement
+                        element={this.props.element}
+                        relatedField={this.props.relatedField}
+                        indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
+                        isInvalid={this.props.isInvalid}
+                        label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
+                    /> }
 
                 <span className="cellWrapper">
                     { fieldElement }

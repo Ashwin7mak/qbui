@@ -70,6 +70,28 @@ class FieldUtils {
             return SchemaConsts.DEFAULT_RECORD_KEY;
         }
     }
+
+    /**
+     * Returns the label to be displayed for a fieldLabelElement.
+     * @param {object} element
+     *     {
+     *         useAlternateLabel: <boolean>,
+     *         displayText: <string>,
+     *     }
+     * @param {object} relatedField
+     *     {
+     *         name: <string>,
+     *     }
+     */
+    static getFieldLabel(element, relatedField) {
+        if (element && element.useAlternateLabel) {
+            return element.displayText;
+        } else if (relatedField) {
+            return relatedField.name;
+        } else {
+            return '';
+        }
+    }
 }
 
 // PRIVATE METHODS

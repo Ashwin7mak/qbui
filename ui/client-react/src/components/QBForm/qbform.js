@@ -5,6 +5,7 @@ import FieldElement from './fieldElement';
 import FieldLabelElement from './fieldLabelElement';
 import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
+import FieldUtils from '../../utils/fieldUtils';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -150,6 +151,7 @@ let QBForm = React.createClass({
                     relatedField={relatedField}
                     indicateRequiredOnLabel={this.props.edit}
                     isInvalid={validationStatus.isInvalid}
+                    label={FieldUtils.getFieldLabel(element, relatedField)}
                 />
             </td>);
     },

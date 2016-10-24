@@ -1,4 +1,8 @@
 import React from 'react';
+import _ from 'lodash';
+
+import FieldFormats from '../../utils/fieldFormats';
+
 import './qbform.scss';
 
 /**
@@ -11,11 +15,13 @@ const FieldLabelElement = React.createClass({
         relatedField: React.PropTypes.object, // field from Form data
         indicateRequiredOnLabel: React.PropTypes.bool,
         isInvalid: React.PropTypes.bool,
+        label: React.PropTypes.string,
     },
 
     getDefaultProps() {
         return {
-            indicateRequiredOnLabel: false
+            indicateRequiredOnLabel: false,
+            label: '',
         };
     },
 
@@ -26,25 +32,18 @@ const FieldLabelElement = React.createClass({
             requiredIndication = '*';
         }
 
-        let fieldLabel = '';
-        if (this.props.element.useAlternateLabel) {
-            fieldLabel = this.props.element.displayText;
-        } else if (this.props.relatedField) {
-            fieldLabel = this.props.relatedField.name;
-        }
-
         let classes = ['formElement', 'fieldLabel'];
         if (this.props.isInvalid) {
             classes.push('errorText');
         }
 
-        if (this.props.relatedField && this.props.relatedField.name === 'Checkbox') {
+        const type = FieldFormats.getFormatType(_.get(this.props, 'relatedField.datatypeAttributes'));
+        if (type === FieldFormats.CHECKBOX_FORMAT) {
             classes.push('checkbox-field-label');
-            requiredIndication = '';
-            fieldLabel = '';
+            return <div className={classes.join(' ')}> </div>;
         }
 
-        return <div className={classes.join(' ')}>{`${requiredIndication} ${fieldLabel}`}</div>;
+        return <div className={classes.join(' ')}>{`${requiredIndication} ${this.props.label}`}</div>;
     }
 });
 
