@@ -102,6 +102,11 @@
                     return this;
                 },
 
+                withEmailLinkText: function(linkText, dataType) {
+                    fieldUnderConstruction[dataTypeConstants[dataType].LINK_TEXT] = linkText;
+                    return this;
+                },
+
                 //FILE ATTACHMENT STUFF
                 withFileLinkText: function(linkText, dataType) {
                     fieldUnderConstruction[dataTypeConstants[dataType].LINK_TEXT] = linkText;

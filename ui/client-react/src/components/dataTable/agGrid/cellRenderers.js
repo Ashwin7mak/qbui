@@ -344,6 +344,13 @@ export const DurationCellRenderer = React.createClass({
     }
 });
 
+export const EmailCellRenderer = React.createClass({
+    displayName: 'EmailCellRenderer',
+    render() {
+        return CellRendererFactory.makeCellRenderer(FieldFormats.EMAIL_ADDRESS, this.props);
+    }
+});
+
 export const PhoneCellRenderer = React.createClass({
     displayName: 'PhoneCellRenderer',
     render() {
