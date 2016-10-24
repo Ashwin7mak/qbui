@@ -149,7 +149,9 @@ let reportModel = {
         this.model.name = reportMetaData.name;
         this.model.description = reportMetaData.description;
         this.model.fids = reportMetaData.fids ? reportMetaData.fids : [];
+
         // in report's meta data sortlist is returned as an array of sort elements
+        this.setSortList(ReportUtils.getSortListFromObject(reportMetaData.sortList));
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
     },
@@ -299,7 +301,6 @@ let reportModel = {
             this.model.groupFields = null;
             this.model.hasGrouping = false;
         }
-
     },
 
     /**
@@ -323,6 +324,14 @@ let reportModel = {
                 }
             }
         }
+    },
+
+    /**
+     * set the sortList order
+     * @param sortList
+     */
+    setSortList(sortList) {
+        this.model.sortList = sortList;
     },
 
     /**
@@ -561,10 +570,13 @@ let ReportDataStore = Fluxxor.createStore({
         reportModel.setOriginalMetaData(response.metaData);
         reportModel.setMetaData(response.metaData);
         reportModel.setRecordData(response.recordData);
-        if (response.sortList !== undefined) {
-            reportModel.setSortFids(response.sortList);
-            reportModel.setGroupElements(response.sortList);
-        }
+
+        //  sortList, if defined is a string
+        //if (response.sortList !== undefined) {
+        //    reportModel.setSortList(response.sortList);
+        //    reportModel.setSortFids(response.sortList);
+        //    reportModel.setGroupElements(response.sortList);
+        //}
         reportModel.setFacetData(response.recordData);
 
         this.emit('change');
@@ -582,6 +594,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.facetExpression = payload.filter.facet;
         this.searchStringForFiltering = payload.filter.search;
 
+        this.reportModel.setSortList(payload.sortList);
         this.reportModel.setSortFids(payload.sortList);
         this.reportModel.setGroupElements(payload.sortList);
 
@@ -602,7 +615,9 @@ let ReportDataStore = Fluxxor.createStore({
         this.editingId = null;
 
         this.error = false;
+
         this.reportModel.updateFilteredRecords(response.recordData);
+        this.reportModel.setMetaData(response.metaData);
 
         this.emit('change');
     },

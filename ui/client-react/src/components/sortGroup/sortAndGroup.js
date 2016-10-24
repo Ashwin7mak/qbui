@@ -146,25 +146,20 @@ const SortAndGroup = React.createClass({
         let queryParams = {};
         //if report was grouped in the last render and is grouped in this render
         // or was ungrouped in last and this render no need to re-load report.
-        let groupKeys = _.map(this.state.newSelectionsGroup, 'unparsedVal');
-        let changedGroupingStyle = true;
-        if (this.props.reportData && this.props.reportData.data && this.props.reportData.data.groupEls) {
-            if ((this.props.reportData.data.groupEls.length && groupKeys.length) || //report was grouped before and after
-                (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0)) { //report was ungrouped before and after
-                changedGroupingStyle = false;
-            }
-        }
+        //let groupKeys = _.map(this.state.newSelectionsGroup, 'unparsedVal');
+        //let changedGroupingStyle = true;
+        //if (this.props.reportData && this.props.reportData.data && this.props.reportData.data.groupEls) {
+        //    if ((this.props.reportData.data.groupEls.length && groupKeys.length) || //report was grouped before and after
+        //        (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0)) { //report was ungrouped before and after
+        //        changedGroupingStyle = false;
+        //    }
+        //}
 
-        //if (changedGroupingStyle) {
-        //    flux.actions.loadReport(this.props.appId, this.props.tblId, this.props.rptId, true, pageOffset, numRows, sortGroupString);
-        //} else {
         queryParams[query.SORT_LIST_PARAM] = sortGroupString;
-        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : constants.PAGE.DEFAULT_OFFSET;
-        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : constants.PAGE.DEFAULT_NUM_ROWS;
+        queryParams[query.OFFSET_PARAM] = constants.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = constants.PAGE.DEFAULT_NUM_ROWS;
 
         flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
-        //flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true, offset: pageOffset, numRows: numRows}, this.props.filter, overrideParams);
-        //}
     },
 
     applyChanges() {
@@ -195,7 +190,7 @@ const SortAndGroup = React.createClass({
     reset() {
         //reload data using report with original sort/group overrides & keep filter settings
         if (_.has(this.props, 'reportData.data.originalMetaData.sortList')) {
-            let sortGroupString = ReportUtils.getGListString(this.props.reportData.data.originalMetaData.sortList);
+            let sortGroupString = ReportUtils.getSortListFromObject(this.props.reportData.data.originalMetaData.sortList);
             this.updateRecords(sortGroupString);
         }
     },

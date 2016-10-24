@@ -18,7 +18,7 @@ class ReportService extends BaseService {
         //  Report service API endpoints
         this.API = {
             GET_REPORT_META             : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}`,
-            GET_REPORT                  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/temp`,
+            //GET_REPORT                  : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/temp`,
 
             GET_REPORT_RECORDS_COUNT    : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}/{2}/${constants.RECORDSCOUNT}`,
             GET_REPORTS                 : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.REPORTS}`,
@@ -103,45 +103,45 @@ class ReportService extends BaseService {
      * @param reportId
      * @returns promise
      */
-    getReport(appId, tableId, reportId, format, offset, rows, sortList) {
-        const existing = this._cached(arguments);
-        if (existing) {
-            // use result promise from prior request
-            return existing;
-        }
-
-        let args = arguments;
-        let url = super.constructUrl(this.API.GET_REPORT, [appId, tableId, reportId]);
-        let request;
-
-        // For report pagination, if format, offset, rows are defined, set parameters.
-        if (format !== undefined && offset !== undefined && rows !== undefined) {
-            let params = {};
-            if (format === true) {
-                params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-            }
-            if (StringUtils.isNonEmptyString(sortList)) {
-                params[query.SORT_LIST_PARAM] = sortList;
-            }
-            if (NumberUtils.isInt(offset) && NumberUtils.isInt(rows)) {
-                params[query.OFFSET_PARAM] = offset;
-                params[query.NUMROWS_PARAM] = rows;
-            }
-            request = super.get(url, {params:params});
-        } else {
-            request = super.get(url);
-        }
-
-        if (request) {
-            request.then((response) => {
-                cachedReportRequest[this._key(args)].resp = response;
-                return response;
-            });
-        }
-
-        // clear old and save a new so that report metadata gets loaded from server whenever app/table/reportId changes
-        return this._cache(request, arguments);
-    }
+    //getReport(appId, tableId, reportId, format, offset, rows, sortList) {
+    //    const existing = this._cached(arguments);
+    //    if (existing) {
+    //        // use result promise from prior request
+    //        return existing;
+    //    }
+    //
+    //    let args = arguments;
+    //    let url = super.constructUrl(this.API.GET_REPORT, [appId, tableId, reportId]);
+    //    let request;
+    //
+    //    // For report pagination, if format, offset, rows are defined, set parameters.
+    //    if (format !== undefined && offset !== undefined && rows !== undefined) {
+    //        let params = {};
+    //        if (format === true) {
+    //            params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+    //        }
+    //        if (StringUtils.isNonEmptyString(sortList)) {
+    //            params[query.SORT_LIST_PARAM] = sortList;
+    //        }
+    //        if (NumberUtils.isInt(offset) && NumberUtils.isInt(rows)) {
+    //            params[query.OFFSET_PARAM] = offset;
+    //            params[query.NUMROWS_PARAM] = rows;
+    //        }
+    //        request = super.get(url, {params:params});
+    //    } else {
+    //        request = super.get(url);
+    //    }
+    //
+    //    if (request) {
+    //        request.then((response) => {
+    //            cachedReportRequest[this._key(args)].resp = response;
+    //            return response;
+    //        });
+    //    }
+    //
+    //    // clear old and save a new so that report metadata gets loaded from server whenever app/table/reportId changes
+    //    return this._cache(request, arguments);
+    //}
 
     /**
      * Get the count of total number of records for the given report
@@ -186,7 +186,7 @@ class ReportService extends BaseService {
         return super.get(url, {params:params});
     }
 
-    getDynamicReportResults(appId, tableId, reportId, metaData, queryParams) {
+    getDynamicReportResults(appId, tableId, reportId, queryParams) {
         let params = {};
         if (queryParams) {
             if (queryParams[query.FORMAT_PARAM] === true) {
@@ -205,7 +205,7 @@ class ReportService extends BaseService {
         }
 
         let url = super.constructUrl(this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
-        return super.post(url, JSON.stringify(metaData), {params:params});
+        return super.post(url, {}, {params:params});
     }
 
     /**

@@ -31,6 +31,7 @@
         let FACETS = 'facets';
         let FIELDS = 'fields';
         let RECORD = 'record';
+        let META = 'metaData';
         let RECORDS = 'records';
         let GROUPS = 'groups';
         let FILTERED_RECORDS_COUNT = 'filteredCount';
@@ -208,62 +209,62 @@
              * page of a report.
              * @param req
              */
-            fetchReportMetaDataAndContent: function(req) {
-                return new Promise((resolve2, reject2) => {
-                    // Make two calls to core to complete this request. First is to fetch
-                    // the report metadata; second is to fetch report data and facets.
-                    let reportId = req.params.reportId;
-
-                    this.fetchReportMetaData(req, reportId).then(
-                        (response) => {
-                            // Define response object
-                            var reportObj = {
-                                reportMetaData: {
-                                    data: ''
-                                },
-                                reportData: {
-                                    data: ''
-                                }
-                            };
-
-                            // parse out the id and use to fetch the report meta data.
-                            // Process the meta data to fetch and return the report content.
-                            if (response.body) {
-                                let reportMetaData = JSON.parse(response.body);
-                                addReportMetaQueryParameters(req, reportMetaData, true);
-
-                                //TODO this is broken
-                                this.fetchReportComponents(req, reportId).then(
-                                    (reportData) => {
-                                        //  return the metadata and report content
-                                        reportObj.reportMetaData.data = reportMetaData;
-                                        reportObj.reportData.data = reportData;
-                                        resolve2(reportObj);
-                                    },
-                                    (reportError) => {
-                                        log.error({req:req}, 'Error fetching report content in fetchReportComponents.');
-                                        reject2(reportError);
-                                    }
-                                ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching report content in fetchReport', ex, true);
-                                    reject2(ex);
-                                });
-                            } else {
-                                //  no report id returned (because one is not defined); return empty report object
-                                log.warn({req:req}, 'Requested report not found.');
-                                resolve2(reportObj);
-                            }
-                        },
-                        (error) => {
-                            log.error({req: req}, "Error getting report in fetchReport.");
-                            reject2(error);
-                        }
-                    ).catch((ex) => {
-                        requestHelper.logUnexpectedError('reportsAPI..fetch report in fetchReport', ex, true);
-                        reject2(ex);
-                    });
-                });
-            },
+            //fetchReportMetaDataAndContent: function(req) {
+            //    return new Promise((resolve2, reject2) => {
+            //        // Make two calls to core to complete this request. First is to fetch
+            //        // the report metadata; second is to fetch report data and facets.
+            //        let reportId = req.params.reportId;
+            //
+            //        this.fetchReportMetaData(req, reportId).then(
+            //            (response) => {
+            //                // Define response object
+            //                var reportObj = {
+            //                    reportMetaData: {
+            //                        data: ''
+            //                    },
+            //                    reportData: {
+            //                        data: ''
+            //                    }
+            //                };
+            //
+            //                // parse out the id and use to fetch the report meta data.
+            //                // Process the meta data to fetch and return the report content.
+            //                if (response.body) {
+            //                    let reportMetaData = JSON.parse(response.body);
+            //                    addReportMetaQueryParameters(req, reportMetaData, true);
+            //
+            //                    //TODO this is broken
+            //                    this.fetchReportComponents(req, reportId).then(
+            //                        (reportData) => {
+            //                            //  return the metadata and report content
+            //                            reportObj.reportMetaData.data = reportMetaData;
+            //                            reportObj.reportData.data = reportData;
+            //                            resolve2(reportObj);
+            //                        },
+            //                        (reportError) => {
+            //                            log.error({req:req}, 'Error fetching report content in fetchReportComponents.');
+            //                            reject2(reportError);
+            //                        }
+            //                    ).catch((ex) => {
+            //                        requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching report content in fetchReport', ex, true);
+            //                        reject2(ex);
+            //                    });
+            //                } else {
+            //                    //  no report id returned (because one is not defined); return empty report object
+            //                    log.warn({req:req}, 'Requested report not found.');
+            //                    resolve2(reportObj);
+            //                }
+            //            },
+            //            (error) => {
+            //                log.error({req: req}, "Error getting report in fetchReport.");
+            //                reject2(error);
+            //            }
+            //        ).catch((ex) => {
+            //            requestHelper.logUnexpectedError('reportsAPI..fetch report in fetchReport', ex, true);
+            //            reject2(ex);
+            //        });
+            //    });
+            //},
 
             /**
              * Returns a promise that resolves with the count of all records for a report,
@@ -304,6 +305,12 @@
              * @returns {bluebird|exports|module.exports}
              */
             fetchReportResult(req, reportId) {
+
+                var responseObj = {
+                    metaData: null,
+                    report: null
+                };
+
                 if (requestHelper.isGet(req)) {
                     //  Use the default report meta data to build and return the report results
                     return new Promise((resolve1, reject1) => {
@@ -329,7 +336,10 @@
                                         if (sortList) {
                                             requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
                                         }
-                                        resolve1(result);
+
+                                        responseObj.metaData = reportMetaData;
+                                        responseObj.report = result;
+                                        resolve1(responseObj);
                                     },
                                     (error) => {
                                         reject1(error);
@@ -389,12 +399,9 @@
 
                                 requestHelper.executeRequest(req, opts).then(
                                     (result) => {
-                                        ////  necessary to ensure if any group result is returned that it can be organized as expected by the client
-                                        //let sortList = parseMetaDataSortList(req, reportMetaData);
-                                        //if (sortList) {
-                                        //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
-                                        //}
-                                        resolve1(result);
+                                        responseObj.metaData = reportMetaData;
+                                        responseObj.report = result;
+                                        resolve1(responseObj);
                                     },
                                     (error) => {
                                         reject1(error);
@@ -466,7 +473,8 @@
                         function(response) {
                             let responseObject = {};
 
-                            let report = jsonBigNum.parse(response[0].body);
+                            let report = jsonBigNum.parse(response[0].report.body);
+                            let metaData = response[0].metaData;  // already parsed..
                             let fields = JSON.parse(response[1].body);
                             let reportRecordCount = response[2].body;
 
@@ -479,6 +487,7 @@
                                 responseObject[FIELDS] = [];
                                 responseObject[GROUPS] = [];
                                 responseObject[RECORDS] = [];
+                                responseObject[META] = metaData;
                                 responseObject[FILTERED_RECORDS_COUNT] = reportRecordCount;
 
                                 //  Is core returning a report object that is grouped
@@ -682,17 +691,6 @@
              * @returns {bluebird|exports|module.exports}
              */
             fetchTableHomePageReport: function(req) {
-                //  report object returned to the client;  gets populated in the success workflow, otherwise
-                //  is returned uninitialized if no report home page is found.
-                let reportObj = {
-                    reportMetaData: {
-                        data: ''
-                    },
-                    reportData: {
-                        data: ''
-                    }
-                };
-
                 return new Promise((resolve, reject) => {
                     // TODO code hygiene, code below is shared by fetchTableHomepageReport. move to a private function and
                     // share between the two api calls. https://quickbase.atlassian.net/browse/MB-505
@@ -709,19 +707,16 @@
                                 let homepageReportId = JSON.parse(response.body);
 
                                 //  have a homepage id; first get the report meta data
-                                this.fetchReportMetaData(req, homepageReportId).then(
-                                    (metaDataResult) => {
+                                //this.fetchReportMetaData(req, homepageReportId).then(
+                                    //(metaDataResult) => {
                                         //  parse the metadata and set the request parameters for the default sortList, fidList and query expression (if defined).
                                         //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
-                                        let reportMetaData = JSON.parse(metaDataResult.body);
-                                        addReportMetaQueryParameters(req, reportMetaData, false);
+                                        //let reportMetaData = JSON.parse(metaDataResult.body);
+                                        //addReportMetaQueryParameters(req, reportMetaData, false);
 
                                         this.fetchReport(req, homepageReportId, true).then(
-                                            (reportData) => {
-                                                //  return the metadata and report content
-                                                reportObj.reportMetaData = reportMetaData;
-                                                reportObj.reportData = reportData;
-                                                resolve(reportObj);
+                                            (reportResponse) => {
+                                                resolve(reportResponse);
                                             },
                                             (reportError) => {
                                                 log.error({req:req}, 'Error fetching table homepage report content in fetchTableHomePageReport.');
@@ -731,19 +726,19 @@
                                             requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
                                             reject(ex);
                                         });
-                                    },
-                                    (metaDataError) => {
-                                        log.error({req:req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
-                                        reject(metaDataError);
-                                    }
-                                ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
-                                    reject(ex);
-                                });
+                                    //},
+                                    //(metaDataError) => {
+                                    //    log.error({req:req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
+                                    //    reject(metaDataError);
+                                    //}
+                                //).catch((ex) => {
+                                //    requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
+                                //    reject(ex);
+                                //});
                             } else {
                                 //  no report id returned (because one is not defined); return empty report object
                                 log.warn({req:req}, 'No report homepage defined for table.');
-                                resolve(reportObj);
+                                resolve({});
                             }
                         },
                         (error) => {

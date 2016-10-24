@@ -18,78 +18,78 @@ let logger = new Logger();
 
 import reportModel from '../models/reportModel';
 
-//  Build the request query parameters needed to properly filter the report request based on the report
-//  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
-function buildRequestQuery(response, requiredQueryParams, overrideQueryParams, facetQueryExpression, filter) {
-    var queryParams = {};
-    var reportMetaData = {};
-
-    if (response.data && response.data.reportMetaData) {
-        reportMetaData = response.data.reportMetaData;
-    } else {
-        reportMetaData = response;
-    }
-
-    //required query params
-    queryParams[query.OFFSET_PARAM] = requiredQueryParams[query.OFFSET_PARAM];
-    queryParams[query.NUMROWS_PARAM] = requiredQueryParams[query.NUMROWS_PARAM];
-    queryParams[query.FORMAT_PARAM] = requiredQueryParams[query.FORMAT_PARAM];
-
-    //for the optional ones, if something is null/undefined pull from report's meta data
-    if (reportMetaData && reportMetaData.data) {
-        overrideQueryParams = overrideQueryParams || {};
-
-        if (overrideQueryParams.hasOwnProperty(query.COLUMNS_PARAM)) {
-            queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
-        } else {
-            if (reportMetaData.data && reportMetaData.data.fids) {
-                queryParams[query.COLUMNS_PARAM] = ReportUtils.getFidListString(reportMetaData.data.fids);
-            }
-        }
-
-        //  Optional parameters used to return a result set in sorted and/or grouped order for
-        //  easier client rendering of the result set data.
-        //
-        //      sortList: ==>  '2.1:V.33:C'
-        //
-        // if the report started out with sort/group settings defined and you removed them via the sort/group popover
-        // to modify the sort/group settings adhoc, it should use the empty sort/group param and not fall
-        // thru to use the original report settings. So here we test for hasOwnProperty since an empty value in the property
-        // means to overide the sort/group with no sort/grouping. if the property is excluded only then do we default to the
-        // original report settings for sort/group
-        if (overrideQueryParams.hasOwnProperty(query.SORT_LIST_PARAM)) {
-            queryParams[query.SORT_LIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
-        } else {
-            /*eslint no-lonely-if:0*/
-            if (reportMetaData.data.sortList) {
-                queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(reportMetaData.data.sortList);
-            }
-        }
-
-        if (overrideQueryParams.hasOwnProperty(query.QUERY_PARAM)) {
-            queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
-        } else {
-            //  Concatenate facet expression(if any) and search filter(if any) into single query expression
-            //  where each individual expression is 'AND'ed with the other.  To optimize query performance,
-            //  order the array elements 1..n in order of significance/most targeted selection as the
-            //  outputted query is built starting at offset 0.
-            let filterQueries = [];
-            if (reportMetaData.data.query) {
-                filterQueries.push(reportMetaData.data.query);
-            }
-            if (facetQueryExpression) {
-                filterQueries.push(facetQueryExpression.data);
-            }
-
-            if (filter && filter.search) {
-                filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
-            }
-            queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
-        }
-    }
-
-    return queryParams;
-}
+////  Build the request query parameters needed to properly filter the report request based on the report
+////  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
+//function buildRequestQuery(response, requiredQueryParams, overrideQueryParams, facetQueryExpression, filter) {
+//    var queryParams = {};
+//    var reportMetaData = {};
+//
+//    if (response.data && response.data.reportMetaData) {
+//        reportMetaData = response.data.reportMetaData;
+//    } else {
+//        reportMetaData = response;
+//    }
+//
+//    //required query params
+//    queryParams[query.OFFSET_PARAM] = requiredQueryParams[query.OFFSET_PARAM];
+//    queryParams[query.NUMROWS_PARAM] = requiredQueryParams[query.NUMROWS_PARAM];
+//    queryParams[query.FORMAT_PARAM] = requiredQueryParams[query.FORMAT_PARAM];
+//
+//    //for the optional ones, if something is null/undefined pull from report's meta data
+//    if (reportMetaData && reportMetaData.data) {
+//        overrideQueryParams = overrideQueryParams || {};
+//
+//        if (overrideQueryParams.hasOwnProperty(query.COLUMNS_PARAM)) {
+//            queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
+//        } else {
+//            if (reportMetaData.data && reportMetaData.data.fids) {
+//                queryParams[query.COLUMNS_PARAM] = ReportUtils.getFidListString(reportMetaData.data.fids);
+//            }
+//        }
+//
+//        //  Optional parameters used to return a result set in sorted and/or grouped order for
+//        //  easier client rendering of the result set data.
+//        //
+//        //      sortList: ==>  '2.1:V.33:C'
+//        //
+//        // if the report started out with sort/group settings defined and you removed them via the sort/group popover
+//        // to modify the sort/group settings adhoc, it should use the empty sort/group param and not fall
+//        // thru to use the original report settings. So here we test for hasOwnProperty since an empty value in the property
+//        // means to overide the sort/group with no sort/grouping. if the property is excluded only then do we default to the
+//        // original report settings for sort/group
+//        if (overrideQueryParams.hasOwnProperty(query.SORT_LIST_PARAM)) {
+//            queryParams[query.SORT_LIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
+//        } else {
+//            /*eslint no-lonely-if:0*/
+//            if (reportMetaData.data.sortList) {
+//                queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(reportMetaData.data.sortList);
+//            }
+//        }
+//
+//        if (overrideQueryParams.hasOwnProperty(query.QUERY_PARAM)) {
+//            queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
+//        } else {
+//            //  Concatenate facet expression(if any) and search filter(if any) into single query expression
+//            //  where each individual expression is 'AND'ed with the other.  To optimize query performance,
+//            //  order the array elements 1..n in order of significance/most targeted selection as the
+//            //  outputted query is built starting at offset 0.
+//            let filterQueries = [];
+//            if (reportMetaData.data.query) {
+//                filterQueries.push(reportMetaData.data.query);
+//            }
+//            if (facetQueryExpression) {
+//                filterQueries.push(facetQueryExpression.data);
+//            }
+//
+//            if (filter && filter.search) {
+//                filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
+//            }
+//            queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
+//        }
+//    }
+//
+//    return queryParams;
+//}
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
@@ -150,15 +150,9 @@ let reportDataActions = {
                 params[query.OFFSET_PARAM] = offset;
                 params[query.NUMROWS_PARAM] = rows;
 
-                let promises = [];
-                promises.push(reportService.getReportMetaData(appId, tblId, rptId));
-                promises.push(reportService.getReportResults(appId, tblId, rptId, params));
-
-                Promise.all(promises).then(
+                reportService.getReportResults(appId, tblId, rptId, params).then(
                     (reportResponse) => {
-                        let metaData = JSON.parse(reportResponse[0].data.body);
-                        let reportData = reportResponse[1].data;
-                        let model = reportModel.set(metaData, reportData);
+                        let model = reportModel.set(reportResponse.data.metaData, reportResponse.data);
 
                         //  ..fire off the load report and record count events
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
@@ -196,22 +190,13 @@ let reportDataActions = {
 
                 let reportService = new ReportService();
 
-                var promises = [];
-
-                // The filter parameter may contain a facetExpression
-                promises.push(reportService.getReportMetaData(appId, tblId, rptId));
-                promises.push(reportService.parseFacetExpression(filter ? filter.facet : ''));
-
-                Promise.all(promises).then(
-                    (reportMetaResponse) => {
+                reportService.parseFacetExpression(filter ? filter.facet : '').then(
+                    (facetResponse) => {
                         let filterQueries = [];
 
-                        //  get the report meta data
-                        let metaData = JSON.parse(reportMetaResponse[0].data.body);
-
                         //  add the facet expression..if any
-                        if (reportMetaResponse[1].data) {
-                            filterQueries.push(reportMetaResponse[1].data);
+                        if (facetResponse.data) {
+                            filterQueries.push(facetResponse.data);
                         }
 
                         //  any search filters
@@ -221,22 +206,16 @@ let reportDataActions = {
 
                         //  override the report query expressions
                         if (filterQueries.length > 0) {
-                        //    metaData.query = QueryUtils.concatQueries(filterQueries);
                             queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
                         }
-                        //
-                        ////  override the report sort list
-                        //if (queryParams.hasOwnProperty(query.SORT_LIST_PARAM)) {
-                        //    let sortList = ReportUtils.getSortListAsObject(queryParams[query.SORT_LIST_PARAM]);
-                        //    metaData.sortList = sortList;
-                        //}
 
                         //  set format query parameter used by the node layer to handle display formatting
                         queryParams[query.FORMAT_PARAM] = format;
 
-                        reportService.getDynamicReportResults(appId, tblId, rptId, metaData, queryParams).then(
-                            (reportResultsResponse) => {
-                                var model = reportModel.set(metaData, reportResultsResponse.data);
+                        //  the sorting, grouping and clist requirements(if any) are expected to be included in the supplied queryParams
+                        reportService.getDynamicReportResults(appId, tblId, rptId, queryParams).then(
+                            (reportResponse) => {
+                                var model = reportModel.set(reportResponse.data.metaData, reportResponse.data);
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
                                 this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, model);
                                 resolve();
@@ -244,6 +223,7 @@ let reportDataActions = {
                             (reportResultsError) => {
                                 logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportDataActions.loadDynamicReport');
                                 this.dispatch(actions.LOAD_RECORDS_FAILED, reportResultsError.response.status);
+                                reject();
                                 //this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, error.response.status);
                             }
                         ).catch((ex) => {

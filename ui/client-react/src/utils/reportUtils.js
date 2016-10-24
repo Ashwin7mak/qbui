@@ -124,7 +124,7 @@ class ReportUtils {
                     if (sortEl.length === 1) {
                         sortFids.push(sortEl[0]);
                     }
-                } else if (sort && sort.groupType === null) {
+                } else if (sort && !sort.groupType) {
                     sortFids.push(sort.sortOrder === constants.SORT_ORDER.DESC ? '-' + sort.fieldId : sort.fieldId);
                 }
             });

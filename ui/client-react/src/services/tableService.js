@@ -17,7 +17,7 @@ class TableService extends BaseService {
     }
 
     /**
-     * Get all data needed to render table home page
+     * Get all data needed to render table home page report
      * @param appId
      * @param tableId
      * @returns {Promise.<{data}>}
@@ -26,6 +26,7 @@ class TableService extends BaseService {
         let url = super.constructUrl(this.API.GET_HOMEPAGE, [appId, tableId]);
 
         let params = {};
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
         params[query.OFFSET_PARAM] = NumberUtils.isInt(offset) ? offset : Constants.PAGE.DEFAULT_OFFSET;
         params[query.NUMROWS_PARAM] = NumberUtils.isInt(numRows) ? numRows : Constants.PAGE.DEFAULT_NUM_ROWS;
 

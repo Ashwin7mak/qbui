@@ -44,7 +44,7 @@ let tableActions = {
                 //  and record count.
                 tableService.getHomePage(appId, tblId, offset, numRows).then(
                     (response) => {
-                        var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
+                        var model = reportModel.set(response.data.metaData, response.data);
 
                         //  if the report id does not match the default homepage id, re-init the load report
                         //  event to ensure the reportId is set in the store.

@@ -235,21 +235,20 @@ const ReportToolsAndContent = React.createClass({
         let offset =  Constants.PAGE.DEFAULT_OFFSET;
 
         if (this.props.reportData) {
-            if (this.props.reportData.numRows) {
-                numRows = this.props.reportData.numRows;
+            let reportData = this.props.reportData;
+            if (reportData.numRows) {
+                numRows = reportData.numRows;
             }
-            if (this.props.reportData.pageOffset) {
-                offset = this.props.reportData.pageOffset;
+            if (reportData.pageOffset) {
+                offset = reportData.pageOffset;
             }
 
-            filter.selections = this.props.reportData.selections;
-            filter.search = this.props.reportData.searchStringForFiltering;
-            filter.facet = this.props.reportData.facetExpression;
+            filter.selections = reportData.selections;
+            filter.search = reportData.searchStringForFiltering;
+            filter.facet = reportData.facetExpression;
 
-            // Set up sort list.
-            let data = this.props.reportData.data;
-            if (data && data.sortFids && data.sortFids.length > 0) {
-                sortList = ReportUtils.getListString(data.sortFids);
+            if (reportData.data && reportData.data.sortList) {
+                sortList = reportData.data.sortList;
             }
         }
 

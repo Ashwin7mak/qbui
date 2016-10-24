@@ -44,7 +44,7 @@
         routeToGetFunction[routeConsts.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
-        routeToGetFunction[routeConsts.REPORT] = fetchReport;
+        //routeToGetFunction[routeConsts.REPORT] = fetchReport;
         routeToGetFunction[routeConsts.REPORT_META] = fetchReportMeta;
         //routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportResults;
@@ -410,27 +410,27 @@
      * @param req
      * @param res
      */
-    function fetchReport(req, res) {
-        let perfLog = perfLogger.getInstance();
-        perfLog.init('Fetch Report', {req: filterNodeReq(req)});
-
-        processRequest(req, res, function(req, res) {
-            reportsApi.fetchReportMetaDataAndContent(req).then(
-                function(response) {
-                    res.send(response);
-                    logApiSuccess(req, response, perfLog, 'Fetch Report');
-                },
-                function(response) {
-                    logApiFailure(req, response, perfLog, 'Fetch Report');
-                    if (response && response.statusCode) {
-                        res.status(response.statusCode).send(response);
-                    } else {
-                        res.status(500).send(response);
-                    }
-                }
-            );
-        });
-    }
+    //function fetchReport(req, res) {
+    //    let perfLog = perfLogger.getInstance();
+    //    perfLog.init('Fetch Report', {req: filterNodeReq(req)});
+    //
+    //    processRequest(req, res, function(req, res) {
+    //        reportsApi.fetchReportMetaDataAndContent(req).then(
+    //            function(response) {
+    //                res.send(response);
+    //                logApiSuccess(req, response, perfLog, 'Fetch Report');
+    //            },
+    //            function(response) {
+    //                logApiFailure(req, response, perfLog, 'Fetch Report');
+    //                if (response && response.statusCode) {
+    //                    res.status(response.statusCode).send(response);
+    //                } else {
+    //                    res.status(500).send(response);
+    //                }
+    //            }
+    //        );
+    //    });
+    //}
 
     /**
      * This is the function for fetching a completely hydrated report from the reportssApi endpoint.
