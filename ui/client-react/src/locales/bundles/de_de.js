@@ -46,10 +46,11 @@ export default {
             searchReportsPlaceholder: "Suche berichte...",
             searchRecordsPlaceholder: "Suche...",
             backToReport: "Zurück zu melden",
-            nextRecord: "nächsten Rekord",
-            previousRecord: "bisherigen Rekord",
+            nextRecord: "Nächsten Rekord",
+            previousRecord: "Bisherigen Rekord",
             save: "Speichern",
-            saveAndNext: "speichern und Nächster"
+            saveAndNext: "Speichern und Nächster",
+            saveAndAddAnother: "Speichern und fügen Sie ein anderes"
         },
         field: {
             search: "Suche",
@@ -109,6 +110,9 @@ export default {
             checkbox: {
                 no: 'Nein',
                 yes: 'Ja'
+            },
+            textField: {
+                clear: 'Alle texte löschen'
             }
         },
         form : {
@@ -191,6 +195,17 @@ export default {
                 newTable: "Neue Tabelle auf dieser Spalte über",
                 columnProps: "Spalteneigenschaften",
                 fieldProps: "Feldeigenschaften"
+            }
+        },
+        errorMessagePopup: {
+            errorMessagePopupHeader: {
+                singleErrorLabel: "Bitte repariere dieses feld",
+                multipleErrorLabelPrefix: "Bitte beheben sie diese",
+                multipleErrorLabelSuffix: "felder",
+            },
+            errorAlertIconTooltip: {
+                showErrorPopup: "Fehlerliste anzeigen",
+                closeErrorPopup: "Fehlerliste ausblenden",
             }
         },
         month: {
@@ -279,13 +294,15 @@ export default {
         success: "Erfolg",
         failed: "Gescheitert",
         placeholder:  {
-            email: 'name@domain.com',
-            maxLength :"bis zu {maxLength} Zeichen"
+            email: 'name@domaine.de',
+            maxLength :"bis zu {maxLength} Zeichen",
+            url: 'www.beispiel.de'
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
         invalidMsg : {
             unknown: 'Ungültige unbekannte Art. Befund: ',
             required: 'Füllen Sie das {fieldName}',
+            email: 'Formatieren Sie die {fieldName} wie name@domaine.de',
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
             choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },

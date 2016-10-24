@@ -1,35 +1,115 @@
 @import '../../../src/assets/css/qbVariables';
+@import './fields';
+
+$urlIcon-margin-left: 10px;
 
 .urlField {
     &, a {
-        color: $link-text-normal-color;
+        color: $link-normal-color;
+        text-decoration: none;
     }
 
-    &:hover:not(.disabled), a:hover {
-        text-decoration: underline;
+    /* Align url icons with flex instead of absolute positioning */
+    a {
+        display: flex;
+    }
 
-        .urlIcon {
-            opacity: 1;
+    &:not(.disabled) {
+        a:hover, a:active {
+            text-decoration: underline;
+        }
+
+        a:hover {
+            color: $link-hover-color;
+
+            .urlIcon {
+                color: $link-hover-color;
+            }
+        }
+
+        a:active {
+            color: $link-press-color;
+
+            .urlIcon {
+                color: $link-press-color;
+            }
         }
     }
 
+
+    a:focus, a:active {
+        /* Don't show focus state on the whole link. Should be on link and icon separately */
+        border: none;
+        box-shadow: none;
+        outline: none;
+    }
+
+    a .link:focus:not(:active),
+    a .urlIcon:focus:not(:active) {
+        background-color: $stage-backgroundColor;
+        outline: none;
+        padding: 1px 3px;
+        @include text-input-focus-with-rounding;
+        margin-top: -2px;
+    }
+
+    /* Move the margin so that the extra border from the focus does not move the element. */
+    a .link:focus:not(:active) {
+        margin-bottom: -4px;
+        margin-left: -4px;
+        margin-right: -4px;
+        // Make sure underline shows up if user is tabbing through elements
+        text-decoration: underline;
+    }
+
+    /* Move the margin so that the extra border form the focus does not move the element */
+    a .urlIcon:focus {
+        margin-left: ($urlIcon-margin-left - 4);
+
+        @include small-breakpoint {
+            margin-left: auto;
+        }
+    }
+
+    /* Remove border when pressing */
+    a .link:active,
+    a .urlIcon:active {
+        box-shadow: none;
+        border: none;
+        outline: none;
+    }
+
     .btn {
+        /* Turn off flex positioning for buttons */
+        display: inline-block;
+
+        .link, .urlIcon {
+            & {
+                padding: 0;
+            }
+
+            &:active, &:focus {
+                border: none;
+                box-shadow: none;
+            }
+        }
+
         &.btn-default {
             @include urlButtonBackgroundGradient();
-            color: $link-text-normal-color;
+            color: $link-normal-color;
+        }
+
+        &.btn-default:focus, &.btn-default:active {
+            @include focus-shadow();
+            @include urlButtonBackgroundFocusGradient();
+            color: $link-normal-color;
+            border: 1px solid $urlButton-border-focus-color;
         }
 
         &.btn-default:hover {
             background: $urlButton-background-hover-color;
-            color: $link-text-normal-color;
+            color: $link-normal-color;
             text-decoration: none;
-        }
-
-        &.btn-default:focus {
-            @include focus-shadow();
-            @include urlButtonBackgroundFocusGradient();
-            color: $link-text-normal-color;
-            border-color: $urlButton-border-focus-color;
         }
 
         &.btn-default.disabled {
@@ -44,16 +124,15 @@
     .urlIcon {
         display: inline;
         float: none;
-        margin-left: 10px;
+        margin-left: $urlIcon-margin-left;
         opacity: 0;
         text-decoration: none;
 
         transition: opacity .2s ease-in-out;
 
         @include small-breakpoint {
-            float: right;
-            margin-left: 0;
             opacity: 1;
+            margin-left: auto;
         }
 
         .qbIcon {
@@ -66,4 +145,14 @@
             top: 2px;
         }
     }
+}
+
+// Always show the URL icon on Forms
+.formElement .urlField .urlIcon {
+    opacity: 1;
+}
+
+// Never show the URL icon on Reports
+.cellData .urlField .urlIcon {
+    opacity: 0;
 }

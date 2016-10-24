@@ -12,6 +12,7 @@ import {DefaultFieldValueEditor} from './fieldValueEditors';
 import CheckBoxFieldValueEditor from './checkBoxFieldValueEditor';
 import DateFieldValueEditor from './dateFieldValueEditor';
 import DateTimeFieldValueEditor from './dateTimeFieldValueEditor';
+import EmailFieldValueEditor from './emailFieldValueEditor';
 import MultiChoiceFieldValueEditor from './multiChoiceFieldValueEditor';
 import MultiLineTextFieldValueEditor from './multiLineTextFieldValueEditor';
 import NumericFieldValueEditor from './numericFieldValueEditor';
@@ -61,6 +62,7 @@ const FieldValueEditor = React.createClass({
          * - PHONE_FORMAT = 12;
          * - MULTI_LINE_TEXT_FORMAT = 13;
          * - URL = 14;
+         * - EMAIL_ADDRESS = 15;
          **/
         type: React.PropTypes.number,
 
@@ -148,7 +150,9 @@ const FieldValueEditor = React.createClass({
             invalid: this.props.isInvalid,
             invalidMessage: this.props.invalidMessage,
             fieldDef: this.props.fieldDef,
-            fieldName: this.props.fieldName
+            fieldName: this.props.fieldName,
+            // add the .cellEdit css class if working inside an agGrid
+            classes: (this.props.classes && this.props.classes.includes('cellEditWrapper') ? 'cellEdit' : '')
         };
 
         // Only allow the Record ID field to be a renderer, not an editor
@@ -204,9 +208,15 @@ const FieldValueEditor = React.createClass({
         case FieldFormats.MULTI_LINE_TEXT_FORMAT: {
             return <MultiLineTextFieldValueEditor {...commonProps} showScrollForMultiLine={this.props.showScrollForMultiLine}/>;
         }
+
         case FieldFormats.URL: {
             return <UrlFieldValueEditor {...commonProps} />;
         }
+
+        case FieldFormats.EMAIL_ADDRESS: {
+            return <EmailFieldValueEditor {...commonProps} />;
+        }
+
         case FieldFormats.TEXT_FORMAT:
         default: {
 
@@ -286,7 +296,7 @@ const FieldValueEditor = React.createClass({
         }
 
         return (
-            <div className={classes}  >
+            <div className={classes}>
                 {/* optionally show required symbol */}
                 {requiredDiv}
 

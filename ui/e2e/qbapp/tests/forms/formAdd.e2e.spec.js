@@ -29,12 +29,7 @@
 
                 // Wait for the leftNav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
-                    //go to report page directly.
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-                    // Make sure the table report has loaded
-                    reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                        done();
-                    });
+                    done();
                 });
             });
         });
@@ -43,6 +38,8 @@
          * Before each test starts just make sure the report has loaded
          */
         beforeEach(function(done) {
+            //go to report page directly.
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
             // Wait until report loaded
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 done();
@@ -66,13 +63,10 @@
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
-            }).then(function(testValues) {
+            }).then(function() {
                 //Save the form
-                formsPage.clickAddFormSaveBtn();
-            }).then(function(testValues) {
-                //close the form
-                formsPage.clickFormCloseBtn();
-            }).then(function(testValues) {
+                formsPage.clickFormSaveBtn();
+            }).then(function() {
                 //reload the report to verify the row edited
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                 return formsPage.waitForElement(reportServicePage.loadedContentEl).then(function() {

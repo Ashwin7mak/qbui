@@ -5,6 +5,8 @@ import CheckBoxFieldValueRendererMetadata from 'component-metadata!../../../clie
 import DateFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/dateFieldValueEditor.js';
 import DateTimeFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/dateTimeFieldValueEditor.js';
 import DateTimeFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/dateTimeFieldValueRenderer.js';
+import EmailFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/emailFieldValueEditor.js';
+import EmailFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/emailFieldValueRenderer.js';
 import FieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/fieldValueEditor.js';
 import FieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/fieldValueRenderer.js';
 import MultiChoiceFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiChoiceFieldValueEditor.js';
@@ -34,6 +36,8 @@ var Metadata = _.merge(
     DateFieldValueEditorMetadata,
     DateTimeFieldValueEditorMetadata,
     DateTimeFieldValueRendererMetadata,
+    EmailFieldValueEditorMetadata,
+    EmailFieldValueRendererMetadata,
     FieldValueEditorMetadata,
     FieldValueRendererMetadata,
     MultiChoiceFieldValueEditorMetadata,
@@ -44,13 +48,13 @@ var Metadata = _.merge(
     TextFieldValueRendererMetadata,
     TimeFieldValueEditorMetadata,
     TimeFieldValueRendererMetadata,
+    TrowserMetadata,
     UrlFieldValueEditorMetadata,
     UrlFieldValueRendererMetadata,
     UserFieldValueEditorMetadata,
     UserFieldValueRendererMetadata,
     QBIconMetadata,
     QBPanelMetadata,
-    TrowserMetadata,
     QBModalMetadata
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete

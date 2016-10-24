@@ -49,7 +49,8 @@ export default {
             nextRecord: "Prochain enregistrement",
             previousRecord: "Previous enregistrement",
             save: "Sauver",
-            saveAndNext: "Sauver et prochain"
+            saveAndNext: "Sauver et prochain",
+            saveAndAddAnother: "Sauver et ajouter un autre"
         },
         field: {
             search: "Chercher",
@@ -108,6 +109,9 @@ export default {
             checkbox: {
                 no: 'Non',
                 yes: 'Oui'
+            },
+            textField: {
+                clear: 'Effacer tout le texte'
             }
         },
         form : {
@@ -190,6 +194,17 @@ export default {
                 newTable: "Nouvelle table basée sur cette colonne",
                 columnProps: "Propriétés de la colonne",
                 fieldProps: "Propriétés de champ"
+            }
+        },
+        errorMessagePopup: {
+            errorMessagePopupHeader: {
+                singleErrorLabel: "S'il vous plaît corriger ce domaine",
+                multipleErrorLabelPrefix: "S'il vous plaît corriger ces",
+                multipleErrorLabelSuffix: "des champs",
+            },
+            errorAlertIconTooltip: {
+                showErrorPopup: "Afficher la liste des erreurs",
+                closeErrorPopup: "liste d'erreurs Masquer",
             }
         },
         month: {
@@ -279,15 +294,16 @@ export default {
         failed: "Échoué",
         placeholder:  {
             email: "nom@domaine.com",
-            maxLength :"jusqu'à {maxLength} caractères"
+            maxLength :"jusqu'à {maxLength} caractères",
+            url: 'www.exemple.fr'
         },
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {S'il vous plaît fixer 1 champ}\n other {S'il vous plaît corriger ces # champs}\n} ",
         invalidMsg : {
             unknown: 'Type inconnu non valide. Résultats: ',
             required: 'Remplissez {fieldName}',
+            email: 'Formater la {fieldName} comme prénom@domaine.fr',
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
-
         },
         noneOption: "\<Aucun\>"
     }

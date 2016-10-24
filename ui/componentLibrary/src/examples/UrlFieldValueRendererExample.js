@@ -1,4 +1,5 @@
 let exampleLink = 'https://www.quickbase.com';
+let exampleLinkWithoutProtocol = 'www.quickbase.com';
 
 const basicUrlFieldValueRendererExample = (
     <div>
@@ -30,6 +31,11 @@ const basicUrlFieldValueRendererExample = (
         <dt>Displays alternate text:</dt>
         <dd>
             <UrlFieldValueRenderer value={exampleLink} display="Click Me!" />
+        </dd>
+
+        <dt>Adds the default protocol (http) if one is not provided:</dt>
+        <dd>
+            <UrlFieldValueRenderer value={exampleLinkWithoutProtocol} display={exampleLinkWithoutProtocol} openInNewWindow={true} />
         </dd>
 
         <dt>Displays an icon for special protocols (on hover for desktop):</dt>
