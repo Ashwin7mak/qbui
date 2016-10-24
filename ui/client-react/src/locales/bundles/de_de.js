@@ -103,6 +103,9 @@ export default {
             checkbox: {
                 no: 'Nein',
                 yes: 'Ja'
+            },
+            textField: {
+                clear: 'Alle texte löschen'
             }
         },
         form : {
@@ -284,13 +287,15 @@ export default {
         success: "Erfolg",
         failed: "Gescheitert",
         placeholder:  {
-            email: 'name@domain.com',
-            maxLength :"bis zu {maxLength} Zeichen"
+            email: 'name@domaine.de',
+            maxLength :"bis zu {maxLength} Zeichen",
+            url: 'www.beispiel.de'
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
         invalidMsg : {
             unknown: 'Ungültige unbekannte Art. Befund: ',
             required: 'Füllen Sie das {fieldName}',
+            email: 'Formatieren Sie die {fieldName} wie name@domaine.de',
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
             choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },

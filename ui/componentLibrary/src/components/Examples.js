@@ -3,6 +3,8 @@ import CheckBoxFieldValueRendererExample from 'raw!../examples/checkBoxFieldValu
 import DateFieldValueEditorExample from 'raw!../examples/DateFieldValueEditorExample.js';
 import DateTimeFieldValueEditorExample from 'raw!../examples/DateTimeFieldValueEditorExample.js';
 import DateTimeFieldValueRendererExample from 'raw!../examples/DateTimeFieldValueRendererExample.js';
+import EmailFieldValueEditorExample from 'raw!../examples/EmailFieldValueEditorExample.js';
+import EmailFieldValueRendererExample from 'raw!../examples/EmailFieldValueRendererExample.js';
 import FieldValueEditorExample from 'raw!../examples/FieldValueEditorExample.js';
 import FieldValueRendererExample from 'raw!../examples/FieldValueRendererExample.js';
 import MultiChoiceFieldValueEditorExample from 'raw!../examples/MultiChoiceFieldValueEditorExample.js';
@@ -31,6 +33,8 @@ export default {
     DateFieldValueEditor: DateFieldValueEditorExample,
     DateTimeFieldValueEditor: DateTimeFieldValueEditorExample,
     DateTimeFieldValueRenderer: DateTimeFieldValueRendererExample,
+    EmailFieldValueEditor: EmailFieldValueEditorExample,
+    EmailFieldValueRenderer: EmailFieldValueRendererExample,
     FieldValueEditor: FieldValueEditorExample,
     FieldValueRenderer: FieldValueRendererExample,
     MultiChoiceFieldValueEditor: MultiChoiceFieldValueEditorExample,
@@ -41,14 +45,13 @@ export default {
     TextFieldValueRenderer: TextFieldValueRendererExample,
     TimeFieldValueEditor: TimeFieldValueEditorExample,
     TimeFieldValueRenderer: TimeFieldValueRendererExample,
+    Trowser: TrowserExample,
     UrlFieldValueEditor: UrlFieldValueEditorExample,
     UrlFieldValueRenderer: UrlFieldValueRendererExample,
     UserFieldValueEditor: UserFieldValueEditorExample,
     UserFieldValueRenderer: UserFieldValueRendererExample,
-
     QBPanel: QBPanelExample,
     QBIcon: QBIconExample,
-    Trowser: TrowserExample,
     // END OF EXPORT
     // The comment above is used for a grunt task. Please do not delete.
 };
