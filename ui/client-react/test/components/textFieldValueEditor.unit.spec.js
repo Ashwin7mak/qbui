@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils, {Simulate} from 'react-addons-test-utils';
 import TextFieldValueEditor  from '../../src/components/fields/textFieldValueEditor';
 
 describe('TextFieldValueEditor functions', () => {
@@ -107,6 +107,26 @@ describe('TextFieldValueEditor', () => {
         let textInput = ReactDOM.findDOMNode(component);
 
         expect(textInput.type).toEqual('tel');
+    });
+
+    it('optionally displays a "clear" icon to remove all entered text from the text field', () => {
+        let mockParent = {
+            onChange(newValue) {
+                return newValue;
+            }
+        };
+        spyOn(mockParent, 'onChange');
+
+
+        let component = TestUtils.renderIntoDocument(<TextFieldValueEditor showClearButton={true}
+                                                                           value="testing 1 2 3"
+                                                                           onChange={mockParent.onChange} />);
+        let clearButton = ReactDOM.findDOMNode(component).querySelector('.clearIcon span');
+
+        Simulate.click(clearButton, {});
+
+        // Expect the onChange to be sent with a new value of blank string
+        expect(mockParent.onChange).toHaveBeenCalledWith('');
     });
 
     let inputValueTestCases = [

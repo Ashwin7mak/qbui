@@ -63,6 +63,7 @@ let formActions = {
      */
     saveFormFailed(errorStatus) {
         this.dispatch(actions.SAVE_FORM_FAILED, errorStatus);
+        this.dispatch(actions.SHOW_ERROR_MSG_DIALOG);
     },
 
     /**
