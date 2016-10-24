@@ -16,8 +16,7 @@
         var realmId;
         var app;
         var recordList;
-        var nonBuiltInFields;
-        var generatedRecord;
+        var RECORDS_COUNT = '8 records';
 
 
         beforeAll(function(done) {
@@ -81,10 +80,10 @@
                 formsPage.clickFormSaveBtn();
             }).then(function() {
                 //reload the report to verify the row edited
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
                 reportCardViewPage.waitForReportReady();
                 //Verify there are 8 records after adding 1
-                expect(reportCardViewPage.reportRecordsCount.getText()).toContain('8 records');
+                expect(reportCardViewPage.reportRecordsCount.getText()).toContain(RECORDS_COUNT);
                 done();
             });
         });
@@ -94,7 +93,7 @@
             //Select record 1
             reportCardViewPage.clickRecord(1);
             reportCardViewPage.clickEditRecord();
-            return reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
+            reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
@@ -104,11 +103,11 @@
                 formsPage.clickFormSaveBtn();
             }).then(function() {
                 //reload the report to verify the row edited
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
                 //verify the edited record
                 reportCardViewPage.waitForReportReady();
             }).then(function() {
-                expect(reportCardViewPage.reportRecordsCount.getText()).toContain('8 records');
+                expect(reportCardViewPage.reportRecordsCount.getText()).toContain(RECORDS_COUNT);
                 reportCardViewPage.clickRecord(1);
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
                     reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
@@ -122,7 +121,7 @@
             //Select record 1
             reportCardViewPage.clickRecord(4);
             reportCardViewPage.clickEditRecord();
-            return reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
+            reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
@@ -134,12 +133,12 @@
                 //verify you are in edit mode for next record after hiting save and next
                 return reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
                     //reload the report to verify the row edited
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
                     //verify the edited record
                     reportCardViewPage.waitForReportReady();
                 });
             }).then(function() {
-                expect(reportCardViewPage.reportRecordsCount.getText()).toContain('8 records');
+                expect(reportCardViewPage.reportRecordsCount.getText()).toContain(RECORDS_COUNT);
                 reportCardViewPage.clickRecord(4);
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
                     reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
