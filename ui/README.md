@@ -48,7 +48,7 @@ Install NVM (Node Version Manager) via Wget:
 Next, install Node.js v4.2.2 and set v4.2.2 as your default version of node (as of 2/1/2016, v5.5.0 is not fully tested with qbui).
 
 ```bash
-    nvm install node 4.2.2 && nvm alias default 4.2.2
+    nvm install 4.2.2 && nvm alias default 4.2.2
 ```
 
 To verify installation enter `nvm list default` which should print:
