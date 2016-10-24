@@ -9,7 +9,7 @@ const UrlFieldValueEditorExample = React.createClass({
         this.setState({value: newValue});
     },
     onChangeInvalidValue(newValue) {
-        this.setState({value: newValue});
+        this.setState({invalidValue: newValue});
     },
     render() {
         return (
@@ -21,7 +21,7 @@ const UrlFieldValueEditorExample = React.createClass({
 
                 <dt>Invalid: </dt>
                 <dd>
-                    <UrlFieldValueEditor isInvalid={true}
+                    <UrlFieldValueEditor invalid={true}
                                          invalidMessage="Invalid url"
                                          value={this.state.invalidValue}
                                          onChange={this.onChangeInvalidValue} />
