@@ -5,6 +5,8 @@ import CheckBoxFieldValueRendererMetadata from 'component-metadata!../../../clie
 import DateFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/dateFieldValueEditor.js';
 import DateTimeFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/dateTimeFieldValueEditor.js';
 import DateTimeFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/dateTimeFieldValueRenderer.js';
+import EmailFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/emailFieldValueEditor.js';
+import EmailFieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/emailFieldValueRenderer.js';
 import FieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/fieldValueEditor.js';
 import FieldValueRendererMetadata from 'component-metadata!../../../client-react/src/components/fields/fieldValueRenderer.js';
 import MultiChoiceFieldValueEditorMetadata from 'component-metadata!../../../client-react/src/components/fields/multiChoiceFieldValueEditor.js';
@@ -23,6 +25,7 @@ import UserFieldValueRendererMetadata from 'component-metadata!../../../client-r
 import QBIconMetadata from 'component-metadata!../../../client-react/src/components/qbIcon/qbIcon.js';
 import QBPanelMetadata from 'component-metadata!../../../client-react/src/components/QBPanel/qbpanel.js';
 
+import TrowserMetadata from 'component-metadata!../../../client-react/src/components/trowser/trowser.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -32,6 +35,8 @@ var Metadata = _.merge(
     DateFieldValueEditorMetadata,
     DateTimeFieldValueEditorMetadata,
     DateTimeFieldValueRendererMetadata,
+    EmailFieldValueEditorMetadata,
+    EmailFieldValueRendererMetadata,
     FieldValueEditorMetadata,
     FieldValueRendererMetadata,
     MultiChoiceFieldValueEditorMetadata,
@@ -42,6 +47,7 @@ var Metadata = _.merge(
     TextFieldValueRendererMetadata,
     TimeFieldValueEditorMetadata,
     TimeFieldValueRendererMetadata,
+    TrowserMetadata,
     UrlFieldValueEditorMetadata,
     UrlFieldValueRendererMetadata,
     UserFieldValueEditorMetadata,

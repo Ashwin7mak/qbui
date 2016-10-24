@@ -50,7 +50,7 @@
             return (protocolMatch === null ? null : protocolMatch[0].split(':')[0]);
         },
         stripProtocol: function(url) {
-            return url.replace(this.protocolRegex, '');
+            return (url ? url.replace(this.protocolRegex, '') : url);
         },
         isLikelyAFilePath: function(url) {
             return /^.:/.test(url);

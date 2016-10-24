@@ -1,7 +1,7 @@
 'use strict';
 
 var assert = require('assert');
-var urlFileAttachmentReportLinkFormatter = require('../src/formatter/urlFileAttachmentReportLinkFormatter');
+var urlFileAttachmentReportLinkFormatter = require('../../src/formatter/urlFileAttachmentReportLinkFormatter');
 
 describe('urlFileAttachmentReportLinkFormatter', () => {
     describe('getProtocol', () => {

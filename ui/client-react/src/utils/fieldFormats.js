@@ -11,7 +11,6 @@ class FieldFormats {
      * @return formatType from formats
      */
     static getFormatType(datatypeAttributes) {
-
         if (datatypeAttributes) {
             switch (datatypeAttributes.type) {
             case serverTypeConsts.NUMERIC:
@@ -47,6 +46,9 @@ class FieldFormats {
             case serverTypeConsts.URL :
                 return FieldFormats.URL;
 
+            case serverTypeConsts.EMAIL_ADDRESS :
+                return FieldFormats.EMAIL_ADDRESS;
+
             case serverTypeConsts.TEXT :
                 let numLines = 1;
                 if (_.has(datatypeAttributes, 'clientSideAttributes.num_lines')) {
@@ -80,5 +82,6 @@ FieldFormats.DURATION_FORMAT = 11;
 FieldFormats.PHONE_FORMAT = 12;
 FieldFormats.MULTI_LINE_TEXT_FORMAT = 13;
 FieldFormats.URL = 14;
+FieldFormats.EMAIL_ADDRESS = 15;
 
 export default FieldFormats;

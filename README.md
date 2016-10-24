@@ -22,11 +22,14 @@ Development environments only.  Please also delete using the instructions below 
 To bring up stack (each new line is a new command to type):
 ```
 . /<Local Path to AWS repo>/aws/bin/functions
-export STACKNAME=<Pick a short stack name>-dev-coreui
+export SLID=<Your Initials followed by a number>
+export STACKNAME=${SLID}-dev-nodejs
 export SSL_CN=*.${STACKNAME}.newstack.quickbaserocks.com
-export AMI=<Pick an AMI ID> OR USE LATEST $(aws ec2 describe-images --owners self --filters "Name=name,Values=centos-7.2-coreui.v* (Encrypted)" --query "sort_by(Images[], &CreationDate) | [-1].ImageId" --output text)
+# This will pick the latest AMI; alternatively specify your own
+export AMI=$(aws ec2 describe-images --owners self --filters "Name=name,Values=centos-7.2-coreui.v* (Encrypted)" --query "sort_by(Images[], &CreationDate) | [-1].ImageId" --output text)
 create_iam_server_cert ${STACKNAME} ${SSL_CN}
 aws cloudformation create-stack --stack-name ${STACKNAME} --template-body file://deploy/coreui.json --parameters \
+  ParameterKey=paramSwimlane,ParameterValue=${SLID} \
   ParameterKey=paramEC2ImageAMI,ParameterValue=${AMI} \
   ParameterKey=paramEnvironment,ParameterValue=dev \
   --capabilities CAPABILITY_IAM
@@ -35,7 +38,8 @@ aws cloudformation create-stack --stack-name ${STACKNAME} --template-body file:/
 To delete stack (each new line is a new command to type):
 ```
 . /<Local Path to AWS repo>/aws/bin/functions
-export STACKNAME=<Previous stack name from above>-dev-coreui
+export SLID=<The SLID you picked above>
+export STACKNAME=${SLID}-dev-nodejs
 aws cloudformation delete-stack --stack-name ${STACKNAME}
 aws cloudformation wait stack-delete-complete --stack-name ${STACKNAME}
 sleep 10

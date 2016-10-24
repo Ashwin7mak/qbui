@@ -10,6 +10,7 @@ import GlobalActions from "../actions/globalActions";
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
 import {withRouter} from 'react-router';
+import _ from 'lodash';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
@@ -74,7 +75,7 @@ export let Nav = React.createClass({
     getSelectedApp() {
         if (this.state.apps.selectedAppId) {
 
-            return this.state.apps.apps.find((a) => a.id === this.state.apps.selectedAppId);
+            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
         }
         return null;
     },
@@ -86,7 +87,7 @@ export let Nav = React.createClass({
         const app = this.getSelectedApp();
 
         if (app && this.state.reportsData.tableId) {
-            return app.tables.find((t) => t.id === this.state.reportsData.tableId);
+            return _.find(app.tables, (t) => t.id === this.state.reportsData.tableId);
         }
         return null;
     },
@@ -165,7 +166,8 @@ export let Nav = React.createClass({
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
                                selectedTable={this.getSelectedTable()}
-                               reportData={this.state.reportData}/>
+                               reportData={this.state.reportData}
+                               errorPopupHidden={this.state.nav.errorPopupHidden}/>
             }
             {this.props.params && this.props.params.appId &&
                 <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}
