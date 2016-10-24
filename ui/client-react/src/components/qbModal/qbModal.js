@@ -103,16 +103,12 @@ const QBModal = React.createClass({
         );
     },
     render() {
-        let titleAndBody = "titleAndBody";
-        if (this.props.title && this.props.qbIconName) {
-            titleAndBody = "titleAndBodyAndQBIcon";
-        }
         return (
             <div>
-                <Modal className="qbModal" show={this.props.show} onHclassNamee={this.close}>
+                <Modal className="qbModal" show={this.props.show}>
                     <div className="bodyContainer">
                         {this.renderQBIcon()}
-                        <div className={titleAndBody}>
+                        <div className={(this.props.qbIconName ? 'hasIcon' : '')}>
                             <Modal.Title>
                                 {this.renderTitle()}
                             </Modal.Title>
