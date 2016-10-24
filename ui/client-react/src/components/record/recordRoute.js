@@ -148,12 +148,16 @@ export let RecordRoute = React.createClass({
                 <div className="stageHeadline iconActions">
 
                     {(showBack || showNext) && <div className="iconActions">
+                        {showBack ?
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
                             <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>
-                        </OverlayTrigger>
+                        </OverlayTrigger> :
+                        <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>}
+                        {showNext ?
                         <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
                             <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
-                        </OverlayTrigger>
+                        </OverlayTrigger> :
+                        <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>}
                     </div> }
 
                     <h3 className="formName">{formName} #{recordId}</h3>

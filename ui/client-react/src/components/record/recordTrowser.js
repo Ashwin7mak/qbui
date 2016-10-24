@@ -218,7 +218,7 @@ let RecordTrowser = React.createClass({
 
 
         return (
-            <h4>
+            <div className="breadcrumbsContent">
                 {(showBack || showNext) &&
                 <div className="iconActions">
                     <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev"><I18nMessage message="nav.previousRecord"/></Tooltip>}>
@@ -228,8 +228,8 @@ let RecordTrowser = React.createClass({
                         <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                     </OverlayTrigger>
                 </div> }
-                <TableIcon icon={table ? table.icon : ""}/> {title}
-            </h4>);
+                <TableIcon classes={"primaryIcon"} icon={table ? table.icon : ""}/>{title}
+            </div>);
 
     },
     getTrowserRightIcons() {

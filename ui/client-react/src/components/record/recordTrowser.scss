@@ -5,23 +5,27 @@
         display: flex;
     }
     .trowserHeader {
-        .iconActions {
-            display: inline-block;
-            /*this is temporary fix because the icons have built in padding which is incorrect*/
-            margin-left: -10px;
-            margin-right: 10px;
+        .breadcrumbs {
+            .iconActions {
+                display: inline-block;
+                /*this is temporary fix because the icons have built in padding which is incorrect*/
+                margin-left: -8px;
+                margin-right: 10px;
 
-            .btn {
-                &:hover {
-                    background-color:#0097CD;
+                .btn {
+                    &:hover {
+                        background-color:#0097CD;
+                        color: #fff;
+                    }
+                    background-color:inherit;
                     color: #fff;
-                }
-                background-color:inherit;
-                color: #fff;
-                width: 32px;
-                padding:0;
-                .qbIcon {
-                    font-size: 24px;
+                    padding:0;
+                    .qbIcon {
+                        font-size: 24px;
+                    }
+                    &.prevRecord, &.nextRecord {
+                        font-size: 30px;
+                    }
                 }
             }
         }
