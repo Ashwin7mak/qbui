@@ -1,8 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './fields.scss';
 import QBToolTip from '../qbToolTip/qbToolTip';
+import QBicon from '../qbIcon/qbIcon';
 import * as textFormatter from '../../../../common/src/formatter/textFormatter';
+import FieldUtils from '../../utils/fieldUtils';
 
 /**
  * # TextFieldValueEditor
@@ -25,15 +26,19 @@ const TextFieldValueEditor = React.createClass({
 
         /**
          * renders with red border if true */
-        isInvalid: React.PropTypes.bool,
+        invalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         * message to display in the tool tip when invalid */
         invalidMessage: React.PropTypes.string,
 
         /**
          * optional additional classes for the input to customize styling */
         classes: React.PropTypes.string,
+
+        /**
+        * shows a button that will allow a user to clear the field in one click */
+        showClearButton: React.PropTypes.bool,
 
         /**
          * listen for changes by setting a callback to the onChange prop.  */
@@ -56,8 +61,9 @@ const TextFieldValueEditor = React.createClass({
 
     getDefaultProps() {
         return {
+            inputType: 'text',
             isInvalid: false,
-            inputType: 'text'
+            showClearButton: false
         };
     },
 
@@ -65,6 +71,55 @@ const TextFieldValueEditor = React.createClass({
         if (this.props.onChange) {
             this.props.onChange(ev.target.value);
         }
+    },
+
+    clearInput(ev) {
+        if (this.props.onChange) {
+            this.props.onChange('');
+            this.refs.textInput.focus();
+        }
+    },
+
+    getValue() {
+        /*
+         Value is set to display by default because in most cases
+         the user edits the display value and not the raw value.
+         For example, the user edits '$5.50', not '550'.
+         If you need the user to edit the raw value instead of
+         the display value, then remove display from the props before passing
+         to textFieldValueEditor.
+         */
+        let value = this.props.display ? this.props.display : this.props.value;
+        // If it still is null, show as a blank string to avoid React input errors
+        value = (value === null ? '' : value);
+        return value;
+    },
+
+    renderInputBox(classes) {
+        let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
+
+        return <input ref="textInput"
+                      className={classes}
+                      value={this.getValue()}
+                      maxLength={maxLength}
+                      type={this.props.inputType}
+                      key={'inp' + this.props.idKey}
+                      placeholder={this.props.placeholder}
+                      onChange={this.onChange}
+                      onBlur={this.onBlur} />;
+    },
+
+    addClearButtonTo(inputBox) {
+        return (
+            <span className="inputDeleteIcon">
+                {inputBox}
+                <div className="clearIcon">
+                    <QBToolTip tipId="clearInput" i18nMessageKey="fields.textField.clear">
+                        <QBicon onClick={this.clearInput} icon="clear-mini" />
+                    </QBToolTip>
+                </div>
+            </span>
+        );
     },
 
     //send up the chain an object with value and formatted display value
@@ -83,44 +138,23 @@ const TextFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'input textField';
+        let classes = 'input textField borderOnError';
         // error state css class
-        if (this.props.isInvalid) {
+        if (this.props.invalid) {
             classes += ' error';
         }
+
         if (this.props.classes) {
             classes += ' ' + this.props.classes;
         }
 
-        /*
-            Value is set to display by default because in most cases
-            the user edits the display value and not the raw value.
-            For example, the user edits '$5.50', not '550'.
-            If you need the user to edit the raw value instead of
-            the display value, then remove display from the props before passing
-            to textFieldValueEditor.
-        */
-        let value = this.props.display ? this.props.display : this.props.value;
-        // If it still is null, show as a blank string to avoid React input errors
-        value = (value === null ? '' : value);
+        let inputBox = this.renderInputBox(classes);
 
-        let inputBox = <input ref="textInput"
-                          className={classes}
-                          value={value}
-                          type={this.props.inputType}
-                          key={'inp' + this.props.idKey}
-                          placeholder={this.props.placeholder}
-                          onChange={this.onChange}
-                          onBlur={this.onBlur} />;
-
-
-        return  (this.props.isInvalid ?
-                (<QBToolTip location="top" tipId="invalidInput" delayHide={3000}
-                            plainMessage={this.props.invalidMessage}>
-                    {inputBox}
-                </QBToolTip>) :
-                inputBox
-        );
+        if (this.props.showClearButton) {
+            return this.addClearButtonTo(inputBox);
+        } else {
+            return inputBox;
+        }
     }
 });
 

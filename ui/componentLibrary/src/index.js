@@ -24,6 +24,8 @@ import CheckBoxFieldValueRendererDoc from './docs/checkBoxFieldValueRenderer';
 import DateFieldValueEditorDoc from './docs/dateFieldValueEditor.js';
 import DateTimeFieldValueEditorDoc from './docs/dateTimeFieldValueEditor.js';
 import DateTimeFieldValueRendererDoc from './docs/dateTimeFieldValueRenderer.js';
+import EmailFieldValueEditorDoc from './docs/emailFieldValueEditor.js';
+import EmailFieldValueRendererDoc from './docs/emailFieldValueRenderer.js';
 import FieldValueEditorDoc from './docs/fieldValueEditor';
 import FieldValueRendererDoc from './docs/fieldValueRenderer';
 import MultiChoiceFieldValueEditorDoc from './docs/multiChoiceFieldValueEditor';
@@ -34,6 +36,7 @@ import TextFieldValueEditorDoc from './docs/textFieldValueEditor';
 import TextFieldValueRendererDoc from './docs/textFieldValueRenderer';
 import TimeFieldValueEditorDoc from './docs/timeFieldValueEditor.js';
 import TimeFieldValueRendererDoc from './docs/timeFieldValueRenderer.js';
+import TrowserDoc from './docs/trowser.js';
 import UrlFieldValueEditorDoc from './docs/urlFieldValueEditor.js';
 import UrlFieldValueRendererDoc from './docs/urlFieldValueRenderer.js';
 import UserFieldEditorDoc from './docs/userFieldValueEditor';
@@ -53,6 +56,8 @@ render((
             <Route path="dateFieldValueEditor" component={DateFieldValueEditorDoc} />
             <Route path="dateTimeFieldValueEditor" component={DateTimeFieldValueEditorDoc} />
             <Route path="dateTimeFieldValueRenderer" component={DateTimeFieldValueRendererDoc} />
+            <Route path="emailFieldValueEditor" component={EmailFieldValueEditorDoc} />
+            <Route path="emailFieldValueRenderer" component={EmailFieldValueRendererDoc} />
             <Route path="fieldValueEditor" component={FieldValueEditorDoc} />
             <Route path="fieldValueRenderer" component={FieldValueRendererDoc} />
             <Route path="multiChoiceFieldValueEditor" component={MultiChoiceFieldValueEditorDoc} />
@@ -63,6 +68,7 @@ render((
             <Route path="textFieldValueRenderer" component={TextFieldValueRendererDoc} />
             <Route path="timeFieldValueEditor" component={TimeFieldValueEditorDoc} />
             <Route path="timeFieldValueRenderer" component={TimeFieldValueRendererDoc} />
+            <Route path="trowser" component={TrowserDoc} />
             <Route path="urlFieldValueEditor" component={UrlFieldValueEditorDoc} />
             <Route path="urlFieldValueRenderer" component={UrlFieldValueRendererDoc} />
             <Route path="userFieldRenderer" component={UserFieldRendererDoc} />

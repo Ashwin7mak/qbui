@@ -146,4 +146,41 @@ describe('FieldUtils', () => {
             expect(field).toBe(SchemaConsts.DEFAULT_RECORD_KEY);
         });
     });
+
+    describe('test getMaxLength', () => {
+        let maxtest = 10;
+        let testCases = [
+            {
+                name: 'no fieldDef provided',
+                data: {},
+                expectation: undefined
+            },
+            {
+                name: 'partial fieldDef provided datatypeAttributes',
+                data: {datatypeAttributes : {}},
+                expectation: undefined
+            },
+            {
+                name: 'partial fieldDef provided clientSideAttributes',
+                data: {datatypeAttributes : {clientSideAttributes : {}}},
+                expectation: undefined
+            },
+            {
+                name: 'max_chars 0 unlimited length',
+                data: {datatypeAttributes : {clientSideAttributes : {max_chars: 0}}},
+                expectation: undefined
+            },
+            {
+                name: 'max_chars ' + maxtest,
+                data: {datatypeAttributes : {clientSideAttributes : {max_chars: maxtest}}},
+                expectation: maxtest
+            },
+        ];
+        testCases.forEach(function(testCase) {
+            it(testCase.name, () => {
+                let max = FieldUtils.getMaxLength(testCase.data);
+                expect(max).toBe(testCase.expectation);
+            });
+        });
+    });
 });

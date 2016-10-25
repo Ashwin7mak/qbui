@@ -8,6 +8,8 @@
 
     let Promise = require('bluebird');
     let log = require('../../logger').getLogger();
+    let perfLogger = require('../../perfLogger');
+
     /* See comment in recordsApi.js */
     let jsonBigNum = require('json-bignum');
     let errorCodes = require('../errorCodes');
@@ -15,18 +17,32 @@
     let collectionUtils = require('../../utility/collectionUtils');
     let queryUtils = require('../../utility/queryUtils');
 
-
     module.exports = function(config) {
 
         let facetRecordsFormatter = require('./formatter/facetRecordsFormatter')();
+        let recordFormatter = require('./formatter/recordFormatter')();
+        let groupFormatter = require('./formatter/groupFormatter');
         let recordsApi = require('./recordsApi')(config);
+        let fieldsApi = require('./fieldsApi')(config);
         let requestHelper = require('./requestHelper')(config);
         let routeHelper = require('../../routes/routeHelper');
+        var url = require('url');
 
         //Module constants:
-        let APPLICATION_JSON = 'application/json';
-        let CONTENT_TYPE = 'Content-Type';
         let FACETS = 'facets';
+        let FIELDS = 'fields';
+        let RECORD = 'record';
+        let RECORDS = 'records';
+        let GROUPS = 'groups';
+        let FILTERED_RECORDS_COUNT = 'filteredCount';
+
+        function getFieldsOnReport(records, fields) {
+            let record = null;
+            if (Array.isArray(records) && records.length > 0) {
+                record = records[0];
+            }
+            return fieldsApi.removeUnusedFields(record, fields);
+        }
 
         /**
          * Function to add query parameters to the request from the report meta data
@@ -134,7 +150,7 @@
              */
             fetchFacetResults: function(req, reportId) {
                 let opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsFacetRoute(req.url, reportId);
                 return requestHelper.executeRequest(req, opts);
             },
@@ -205,10 +221,12 @@
              * or rejects with an error code.
              * @param req
              */
-            fetchReportRecordsCount: function(req) {
-                var opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
-                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsCountRoute(req.url);
+            fetchReportRecordsCount: function(req, reportId) {
+                let opts = requestHelper.setOptions(req);
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+
+                let reportUrl = reportId ? routeHelper.getReportsRoute(req.url, reportId) : req.url;
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsCountRoute(reportUrl);
 
                 return new Promise((resolve1, reject1) => {
                     requestHelper.executeRequest(req, opts).then(
@@ -223,6 +241,110 @@
                         reject1(ex);
                     });
                 });
+            },
+
+            fetchFields: function(req) {
+                return fieldsApi.fetchFields(req);
+            },
+
+            /**
+             * Fetch the report result for a given report id
+             *
+             * @param req
+             * @param opts
+             * @returns {bluebird|exports|module.exports}
+             */
+            fetchReportResult(req, reportId) {
+                let opts = requestHelper.setOptions(req);
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
+                opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url, reportId);
+
+                //  if set, need to include the offset and num row parameters.
+                let query = url.parse(req.url, true).query;
+                if (query) {
+                    if (query.hasOwnProperty(constants.REQUEST_PARAMETER.OFFSET) && query.hasOwnProperty(constants.REQUEST_PARAMETER.NUM_ROWS)) {
+                        opts.url += '?' + constants.REQUEST_PARAMETER.OFFSET + '=' + query[constants.REQUEST_PARAMETER.OFFSET];
+                        opts.url += '&' + constants.REQUEST_PARAMETER.NUM_ROWS + '=' + query[constants.REQUEST_PARAMETER.NUM_ROWS];
+                    }
+                }
+
+                return new Promise((resolve1, reject1) => {
+                    requestHelper.executeRequest(req, opts).then(
+                        (result) => {
+                            resolve1(result);
+                        },
+                        (error) => {
+                            reject1(error);
+                        }
+                    ).catch((ex) => {
+                        requestHelper.logUnexpectedError('reportsAPI..fetchReportResult', ex, true);
+                        reject1(ex);
+                    });
+                });
+            },
+
+            /**
+             * Fetch report content.  Use report result endpoint to fetch a report.
+             *
+             * @param req
+             * @returns Promise
+             */
+            fetchReport: function(req, reportId) {
+                return new Promise(function(resolve, reject) {
+                    let fetchRequests = [this.fetchReportResult(req, reportId), this.fetchFields(req), this.fetchReportRecordsCount(req, reportId)];
+
+                    Promise.all(fetchRequests).then(
+                        function(response) {
+                            let responseObject = {};
+
+                            let report = jsonBigNum.parse(response[0].body);
+                            let fields = JSON.parse(response[1].body);
+                            let reportRecordCount = response[2].body;
+
+                            //  return raw undecorated record values due to flag format=raw
+                            if (requestHelper.isRawFormat(req)) {
+                                responseObject = report;
+                            } else {
+                                //  response object array elements to return
+                                responseObject[FIELDS] = [];
+                                responseObject[RECORDS] = [];
+                                responseObject[GROUPS] = [];
+                                responseObject[FILTERED_RECORDS_COUNT] = reportRecordCount;
+
+                                //  Is core returning a report object that is grouped
+                                if (report.type === constants.RECORD_TYPE.GROUP) {
+                                    //  the fetchFields response includes all fields on the table. Want to populate the
+                                    //  response object fields entry to only include those fields on the report
+                                    responseObject[FIELDS] = getFieldsOnReport(report.groups[0].records, fields);
+
+                                    //  Organize the grouping data for the client
+                                    responseObject[GROUPS] = groupFormatter.groupData(req, responseObject[FIELDS], report);
+                                } else {
+                                    //  the fetchFields response includes all fields on the table. Want to populate the
+                                    //  response object fields entry to only include those fields on the report
+                                    responseObject[FIELDS] = getFieldsOnReport(report.records, fields);
+
+                                    if (requestHelper.isDisplayFormat(req)) {
+                                        let perfLog = perfLogger.getInstance();
+                                        perfLog.init("ReportsApi...Format Display Records", {req: req, idsOnly: true});
+                                        responseObject[RECORDS] = recordFormatter.formatRecords(report.records, responseObject[FIELDS]);
+                                        perfLog.log();
+                                    } else {
+                                        responseObject[RECORDS] = report.records;
+                                    }
+                                }
+                            }
+
+                            resolve(responseObject);
+                        },
+                        function(response) {
+                            reject(response);
+                        }
+                    ).catch(function(error) {
+                        requestHelper.logUnexpectedError('recordsAPI..fetchRecordsAndFields', error, true);
+                        reject(error);
+                    });
+                }.bind(this));
             },
 
             fetchReportResults: function(req) {
@@ -341,7 +463,7 @@
              */
             fetchReportMetaData(req, reportId) {
                 let opts = requestHelper.setOptions(req);
-                opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsRoute(req.url, reportId);
 
                 //  promise to return report meta data
@@ -366,7 +488,7 @@
             fetchTableHomePageReport: function(req) {
                 //  report object returned to the client;  gets populated in the success workflow, otherwise
                 //  is returned uninitialized if no report home page is found.
-                var reportObj = {
+                let reportObj = {
                     reportMetaData: {
                         data: ''
                     },
@@ -379,7 +501,7 @@
                     // TODO code hygiene, code below is shared by fetchTableHomepageReport. move to a private function and
                     // share between the two api calls. https://quickbase.atlassian.net/browse/MB-505
                     let opts = requestHelper.setOptions(req);
-                    opts.headers[CONTENT_TYPE] = APPLICATION_JSON;
+                    opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                     opts.url = requestHelper.getRequestJavaHost() + routeHelper.getTablesDefaultReportHomepageRoute(req.url);
 
                     //  make the api request to get the table homepage report id
@@ -396,10 +518,9 @@
                                         //  parse the metadata and set the request parameters for the default sortList, fidList and query expression (if defined).
                                         //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
                                         let reportMetaData = JSON.parse(metaDataResult.body);
-
                                         addReportMetaQueryParameters(req, reportMetaData, false);
 
-                                        this.fetchReportComponents(req, homepageReportId).then(
+                                        this.fetchReport(req, homepageReportId).then(
                                             (reportData) => {
                                                 //  return the metadata and report content
                                                 reportObj.reportMetaData.data = reportMetaData;

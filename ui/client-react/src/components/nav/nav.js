@@ -10,6 +10,7 @@ import GlobalActions from "../actions/globalActions";
 import Breakpoints from "../../utils/breakpoints";
 import {NotificationContainer} from "react-notifications";
 import {withRouter} from 'react-router';
+import _ from 'lodash';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
 import "../../assets/css/animate.min.css";
@@ -74,7 +75,7 @@ export let Nav = React.createClass({
     getSelectedApp() {
         if (this.state.apps.selectedAppId) {
 
-            return this.state.apps.apps.find((a) => a.id === this.state.apps.selectedAppId);
+            return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
         }
         return null;
     },
@@ -86,7 +87,7 @@ export let Nav = React.createClass({
         const app = this.getSelectedApp();
 
         if (app && this.state.reportsData.tableId) {
-            return app.tables.find((t) => t.id === this.state.reportsData.tableId);
+            return _.find(app.tables, (t) => t.id === this.state.reportsData.tableId);
         }
         return null;
     },
@@ -108,20 +109,24 @@ export let Nav = React.createClass({
     /**
      * open existing or new record in trowser if editRec param exists
      */
-    updateRecordTrowser() {
+    updateRecordTrowser(oldRecId) {
+
         const {appId, tblId, rptId} = this.props.params;
 
         const editRec = this.props.location.query[UrlConsts.EDIT_RECORD_KEY];
 
-        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.nav.trowserOpen && !this.state.form.editFormLoading) {
+        // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
+        if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && (!this.state.nav.trowserOpen || oldRecId !== editRec)) {
 
             const flux = this.getFlux();
 
             if (editRec === UrlConsts.NEW_RECORD_VALUE) {
+
                 flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             } else {
+
                 flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
@@ -129,9 +134,10 @@ export let Nav = React.createClass({
         }
     },
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
 
-        this.updateRecordTrowser();
+        // component updated, update the record trowser content if necessary
+        this.updateRecordTrowser(prevProps.location.query.editRec);
     },
 
     render() {
@@ -146,8 +152,9 @@ export let Nav = React.createClass({
         if (editRecordId === UrlConsts.NEW_RECORD_VALUE) {
             editRecordId = SchemaConsts.UNSAVED_RECORD_ID;
         }
-        return (<div className={classes}>
 
+        return (<div className={classes}>
+            <NotificationContainer/>
             {this.props.params && this.props.params.appId &&
                 <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
@@ -158,7 +165,9 @@ export let Nav = React.createClass({
                                pendEdits={this.state.pendEdits}
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
-                               selectedTable={this.getSelectedTable()} />
+                               selectedTable={this.getSelectedTable()}
+                               reportData={this.state.reportData}
+                               errorPopupHidden={this.state.nav.errorPopupHidden}/>
             }
             {this.props.params && this.props.params.appId &&
                 <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}
@@ -189,7 +198,6 @@ export let Nav = React.createClass({
                         showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
-                        <NotificationContainer/>
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
                             key: this.props.location ? this.props.location.pathname : "",

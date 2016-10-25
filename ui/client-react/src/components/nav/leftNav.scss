@@ -89,8 +89,7 @@ $left-nav-horizontal-icon-border-color: $color32;
         display: block;
     }
     .leftNav.open {
-        max-width: calc(100% - 36px);
-        width: 300px;
+        width: calc(100% - 36px);
         transition: all 100ms ease;
         .topLinks .leftNavLink {
             padding: 10px 0;
@@ -350,6 +349,10 @@ div.leftNavTooltip {
         }
     }
 
+    ul.appsList {
+      overflow: auto;
+    }
+
     ul.tablesList, ul.tablesHeading {
 
          li {
@@ -474,6 +477,7 @@ div.leftNavTooltip {
         }
         .main {
             position: absolute;
+            left: calc(100% - 36px);;
         }
 
         transform: translate3d(300px, 0, 0);
@@ -525,7 +529,3 @@ $travel-distance: 15;
 .leftNav.appsListOpen .branding .qbIcon.iconTableUISturdy-caret-filled-up {
     transform: rotate(0deg);
 }
-
-
-
-

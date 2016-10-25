@@ -234,7 +234,6 @@
                                     //verify report data
                                     var reportData = results.reportData.data;
                                     assert.deepEqual(reportData.groups, []);
-                                    assert.deepEqual(reportData.facets, []);
                                     assert.deepEqual(reportData.records.length, 10);
                                     done();
                                 });

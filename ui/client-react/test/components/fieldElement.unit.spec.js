@@ -100,7 +100,8 @@ describe('FieldElement functions', () => {
                 newVal: {value: "new", display: "new"}
             },
             fid: 6,
-            fieldName: "field"
+            fieldName: "field",
+            fieldDef: relatedField
         };
 
         let input = TestUtils.scryRenderedDOMComponentsWithClass(component, "input");
@@ -143,7 +144,8 @@ describe('FieldElement functions', () => {
                 newVal: {value: "new", display: "new"}
             },
             fid: 6,
-            fieldName: "field"
+            fieldName: "field",
+            fieldDef: relatedField
         };
 
         let input = TestUtils.scryRenderedDOMComponentsWithClass(component, "input");
@@ -151,6 +153,6 @@ describe('FieldElement functions', () => {
 
         TestUtils.Simulate.blur(input[0]);
         expect(parent.state.value).toEqual(expectedCallBackArgs);
-        expect(flux.actions.recordPendingValidateField).toHaveBeenCalledWith(relatedField, "new");
+        expect(flux.actions.recordPendingValidateField).toHaveBeenCalledWith(relatedField, "field", "new");
     });
 });

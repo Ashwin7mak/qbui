@@ -41,7 +41,8 @@ const CellValueRenderer = React.createClass({
                             attributes={this.props.attributes}
                             isEditable={this.props.isEditable}
                             type={this.props.type}
-                            key={"fvr=-" + this.props.idKey}
+                            key={"fvr-" + this.props.idKey}
+                            idKey={"fvr-" + this.props.idKey}
                             // Don't show unchecked checkboxes in the grid
                             hideUncheckedCheckbox={true}
                     />);

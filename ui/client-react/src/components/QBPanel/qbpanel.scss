@@ -26,9 +26,12 @@
     .iconRight {
         right: 20px;
     }
+    &:not(.nonCollapsible) .qbPanelHeader {
+        cursor: pointer;
+    }
     .qbPanelHeader {
         padding: 20px 0 30px 20px;
-        cursor: pointer;
+
         min-width: 30%;
         background-color: $panel-background-color;
 

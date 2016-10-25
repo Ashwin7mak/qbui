@@ -4,16 +4,41 @@ import QBicon from '../qbIcon/qbIcon';
 import './trowser.scss';
 
 /**
- * a transaction browser (like a modal but slides up/down and width & height=100%)
+ * Transaction browser (like a modal but slides up/down and width & height=100%)
  */
 let Trowser = React.createClass({
     propTypes: {
+        /**
+         * should trowser be visible
+         */
         visible: React.PropTypes.bool.isRequired,
+        /**
+         * position ("top" or "bottom")
+         */
         position: React.PropTypes.string, // top or bottom
+        /**
+         * left footer actions
+         */
         leftActions: React.PropTypes.node,
+        /**
+         * center footer actions
+         */
         centerActions: React.PropTypes.node,
+        /**
+         * header content (breadcrumbs)
+         */
         breadcrumbs: React.PropTypes.node,
+        /**
+         * right footer icons
+         */
+        rightIcons: React.PropTypes.node,
+        /**
+         * main content of trowser
+         */
         content: React.PropTypes.node.isRequired,
+        /**
+         * cancel trowser callback (ESC key pressed or X icon clicked)
+         */
         onCancel: React.PropTypes.func,
     },
     defaultProps: {
@@ -42,6 +67,9 @@ let Trowser = React.createClass({
         let trowserClasses = "trowser " + this.props.position;
         if (this.props.visible) {
             trowserClasses += " visible";
+        }
+        if (this.props.className) {
+            trowserClasses += " " + this.props.className;
         }
         return (
             <div className={trowserClasses} >

@@ -10,7 +10,7 @@
     // Add a screenshot reporter for errors when testing locally
     var HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
     var reporter = new HtmlScreenshotReporter({
-        dest: './ui/build/reports/e2e/',
+        dest: './build/reports/e2e/',
         filename: 'e2e-test-report.html',
         ignoreSkippedSpecs: false,
         reportOnlyFailedSpecs: false,
@@ -35,7 +35,7 @@
         // list of files / patterns to load in the browser
         specs: [
             baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
         ],
         // Patterns to exclude.
         exclude: [
@@ -114,8 +114,12 @@
                 return require(baseE2EPath + relativePath + '.js');
             };
 
+            // allow devs to gendata / e2etest to a single known realm not random as needed for tests
+            // by setting realmToUse in e2e.conf file
+            var localConf = require('../../server/src/config/environment');
+
             // Read the base classes
-            global.e2eBase = requireCommon('common/e2eBase')();
+            global.e2eBase = requireCommon('common/e2eBase')(localConf);
             global.e2eConsts = requireCommon('common/e2eConsts');
             global.e2eUtils = requireCommon('common/e2eUtils')();
             global.consts = require('../../common/src/constants');

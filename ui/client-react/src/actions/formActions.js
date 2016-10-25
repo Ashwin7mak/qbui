@@ -6,8 +6,9 @@ import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import WindowLocationUtils from '../utils/windowLocationUtils';
-import {browserHistory} from 'react-router';
 import * as UrlConsts from "../constants/urlConstants";
+import Locale from '../locales/locales';
+import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
 
@@ -29,18 +30,51 @@ let formActions = {
      * edit an existing record
      * @param recordId
      */
-    openRecordForEdit(recordId) {
+    openRecordForEdit(recId) {
+
+        // let flux know we're editing a record so we can navigate back and forth
+        this.dispatch(actions.EDIT_REPORT_RECORD, {recId});
 
         // add editRec query param and let the router take action
-        WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recordId);
+        WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, recId);
     },
 
     /**
      * start editing a new record
      */
-    editNewRecord() {
+    editNewRecord(navigateAfterSave = false) {
+
+        this.dispatch(actions.EDIT_REPORT_RECORD, {recId:UrlConsts.NEW_RECORD_VALUE, navigateAfterSave});
+
         // add editRec=new query param and let the router take action
         WindowLocationUtils.pushWithQuery(UrlConsts.EDIT_RECORD_KEY, UrlConsts.NEW_RECORD_VALUE);
+    },
+
+    /**
+     * save form has been initiated (actual saving is done via record action)
+     */
+    savingForm() {
+        this.dispatch(actions.SAVE_FORM);
+    },
+
+    /**
+     * save form failed
+     * @param errorStatus
+     */
+    saveFormFailed(errorStatus) {
+        this.dispatch(actions.SAVE_FORM_FAILED, errorStatus);
+        this.dispatch(actions.SHOW_ERROR_MSG_DIALOG);
+    },
+
+    /**
+     * save form succeeded
+     */
+    saveFormSuccess() {
+        this.dispatch(actions.SAVE_FORM_SUCCESS);
+    },
+
+    syncingForm() {
+        this.dispatch(actions.SYNCING_FORM);
     },
 
     /**
@@ -119,6 +153,8 @@ let formActions = {
                     (response) => {
                         resolve();
 
+                        // store record id since form component needs it and it's not in the response
+                        response.data.recordId = recordId;
                         this.dispatch(successAction, response.data);
                     },
                     (error) => {
@@ -128,7 +164,17 @@ let formActions = {
                         } else {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadFormAndRecord:');
                         }
+
+                        // remove the editRec query string since we are not successfully editing the form
+                        WindowLocationUtils.pushWithoutQuery();
                         this.dispatch(failedAction, error.response.status);
+
+                        if (error.response.status === 403) {
+                            NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'), 1500);
+                        } else {
+                            NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
+                        }
+
                         reject();
                     }
                 );

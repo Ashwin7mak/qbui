@@ -55,8 +55,20 @@
     .popover-content {
       padding: 0;
       margin: 0;
-      max-height: 500px;
+      max-height: 280px;
       overflow-y: auto;
+
+      @include height-medium-breakpoint {
+        max-height: 420px;
+      }
+
+      @include height-large-breakpoint {
+        max-height: 680px;
+      }
+
+      @include height-xlarge-breakpoint {
+        max-height: 980px;
+      }
     }
 
     .panel > .list-group .list-group-item,

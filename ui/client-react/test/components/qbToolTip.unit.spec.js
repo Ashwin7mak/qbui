@@ -23,12 +23,13 @@ describe('QBToolTip functions', () => {
 
 
     it('test render of component empty', () => {
-        try {
-            let component = TestUtils.renderIntoDocument(<QBToolTip/>);
-            expect(component).toBeFalsy(); // "component was wrapped, despite not passing in child");
-        } catch (e) {
-            expect(e).toBeTruthy();// "expect component was not wrapped");
-        }
+        let component = TestUtils.renderIntoDocument(<QBToolTip/>);
+        expect(component).toBeTruthy();// "expect component was wrapped");
+    });
+
+    it('test render of component several children', () => {
+        let component = TestUtils.renderIntoDocument(<QBToolTip><span>test</span><div>xyz</div></QBToolTip>);
+        expect(component).toBeTruthy();// "expect component was wrapped");
     });
 
     it('test render of component default', () => {

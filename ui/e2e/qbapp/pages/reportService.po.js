@@ -82,10 +82,19 @@
         // Report Container
         this.mainContentEl = element(by.className('mainContent'));
         this.reportContainerEl = element(by.className('reportContainer'));
+        this.recordContainer = element(by.className('recordContainer'));
         // Report Stage
         this.reportStageContentEl = this.reportContainerEl.element(by.className('layout-stage '));
         this.reportStageBtn = this.reportContainerEl.element(by.className('toggleStage'));
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
+
+        //Report page actions on stage
+        this.reportActions = this.reportStageContentEl.element(by.className('pageActions'));
+        //Add record btn
+        this.reportAddRecordBtn = this.reportActions.element(by.className('iconTableUISturdy-add'));
+        //Edit button
+        this.reportEditRecordBtnOnStage = this.recordContainer.element(by.className('layout-stage')).element(by.className('pageActions')).element(by.className('iconTableUISturdy-edit'));
+
 
         //stage heading
         this.stageHeadLine = this.reportStageContentEl.element(by.className('stageHeadline'));
@@ -106,6 +115,9 @@
         this.reportFilterSearchBox = this.reportsToolBar.element(by.className('searchInput'));
         // Table actions container
         this.tableActionsContainerEl = this.loadedContentEl.element(by.className('tableActionsContainer'));
+        //edit button on tableactions
+        this.reportEditRecordBtnOnReportActions = this.reportToolsAndContentEl.element(by.className('reportActions')).element(by.className('actionIcons')).element(by.className('iconTableUISturdy-edit'));
+
         // agGrid table
         this.griddleWrapperEl = element(by.className('gridWrapper'));
         this.agGridContainerEl = this.griddleWrapperEl.all(by.className('agGrid')).first();
@@ -138,6 +150,10 @@
         // Notification Container
         this.notificationContainer = element(by.className('notification-container'));
         this.editSuccessPopup = this.notificationContainer.element(by.className('notification-success'));
+
+        //edit pencil
+        this.agGridEditRecordIcons = element(by.className('ag-pinned-left-cols-container')).all(by.className('iconActions')).first();
+        this.agGridEditRecordEditButton = this.agGridEditRecordIcons.all(by.tagName('button'));
 
         /**
          * Given a record element that is being viewed in agGrid, return the cells for that row
@@ -222,6 +238,61 @@
             var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
             browser.actions().doubleClick(rowElement).perform();
             return e2ePageBase.waitForElementToBePresent(this.agGridEditRecordMenu);
+        };
+
+        /**
+         * Given a record element in agGrid, click on the edit pencil for that record to open the edit form
+         * @param recordRowIndex
+         */
+        this.clickRecordEditPencil = function(recordRowIndex) {
+            var rowElement = element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-cell-last-left-pinned')).get(recordRowIndex).all(by.className('recordActions')).all(by.className('edit'));
+            return rowElement.click();
+        };
+
+        /**
+         * Given a record element in agGrid, click on the record then in view Form click on edit pencil on stage for that record to open the edit form
+         * @param recordRowIndex
+         */
+        this.clickEditPencilOnStage = function(recordRowIndex) {
+            var self = this;
+
+            return element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).click().then(function() {
+                // Let the trowser animate
+                e2eBase.sleep(browser.params.smallSleep);
+                e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnStage).then(function() {
+                    return self.reportEditRecordBtnOnStage.click();
+                });
+            });
+        };
+
+        /**
+         * Given a record element in agGrid, click on the record checkbox to select the record then in table actions container click on edit pencil to open the edit form
+         * @param recordRowIndex
+         */
+        this.clickEditPencilOnReportActions = function(recordRowIndex) {
+            var self = this;
+
+            return element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-cell-last-left-pinned')).get(recordRowIndex).all(by.className('ag-selection-checkbox')).click().then(function() {
+                // Let the trowser animate
+                e2eBase.sleep(browser.params.smallSleep);
+                e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnReportActions).then(function() {
+                    return self.reportEditRecordBtnOnReportActions.click();
+                });
+            });
+
+        };
+
+        /**
+         * Click Add Record button on Stage Container
+         *
+         */
+        this.clickAddRecordOnStage = function() {
+            var self = this;
+            return e2ePageBase.waitForElementToBeClickable(self.reportAddRecordBtn).then(function() {
+                return self.reportAddRecordBtn.click().then(function() {
+                    e2ePageBase.waitForElement(element(by.className('editForm')));
+                });
+            });
         };
 
         /**

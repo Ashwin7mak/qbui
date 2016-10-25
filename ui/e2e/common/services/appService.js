@@ -86,16 +86,17 @@
                             // Via the serices API create the records, a new report and form
                             var reportPromise = services.reportService.createReport(createdApp.id, table.id);
                             var recordsPromise = services.recordService.addBulkRecords(createdApp, table, generatedRecords);
-                            var formPromise = services.formService.createForm(createdApp.id, table.id);
+                            reportPromise.then(function() {
+                                // Set default table homepage for Table
+                                return services.tableService.setDefaultTableHomePage(createdApp.id, table.id, 1);
+                            });
 
                             results.allPromises.push(reportPromise);
                             results.allPromises.push(recordsPromise);
-                            results.allPromises.push(formPromise);
 
                             results.tablePromises[index] = {
                                 reportPromise: reportPromise,
                                 recordsPromise: recordsPromise,
-                                formPromise: formPromise,
                                 nonBuiltInFields: nonBuiltInFields
                             };
                         });
