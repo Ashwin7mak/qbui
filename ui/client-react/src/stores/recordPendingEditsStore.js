@@ -194,6 +194,10 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
         this.recordChanges = {};
+        this.editErrors = {
+            ok: true,
+            errors:[]
+        };
         this.emit('change');
 
     },
@@ -243,6 +247,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingRecordId = null;
         this.recordChanges = payload.record;
         logger.debug('saving added record: ' + JSON.stringify(payload));
+        this.emit('change');
     },
 
     /**
@@ -266,6 +271,10 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
         this.recordChanges = {};
+        this.editErrors = {
+            ok: true,
+            errors:[]
+        };
         this.emit('change');
 
     },

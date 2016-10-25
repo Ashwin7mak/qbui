@@ -111,7 +111,7 @@ export let ReportContent = React.createClass({
     /**
      * When entering inline edit on a record, if it's an existing (already stored) record keep note
      * its originalRecord values (for later undo/audit?)
-     * if it's a new (unsaved) record note all it's non null values as changes to the new record
+     * if it's a new (unsaved) record note all it's values as changes to the new record
      * to be saved.
      * Then initiate the recordPendingEditsStart action with the app/table/recId and originalRec if there
      * was one or changes if it's a new record
@@ -134,15 +134,14 @@ export let ReportContent = React.createClass({
                 // so it will be treated as dirty/not saved
                 Object.keys(newRec).forEach((key) => {
                     let field = newRec[key];
-                    if (field.value !== null) {
-                        let change = {
-                            //the + before field.id is needed turn the field id from string into a number
-                            oldVal: {value: null, id: +field.id},
-                            newVal: {value: field.value},
-                            fieldName: key
-                        };
-                        changes[field.id] = change;
-                    }
+                    let change = {
+                        //the + before field.id is needed turn the field id from string into a number
+                        oldVal: {value: undefined, id: +field.id},
+                        newVal: {value: field.value},
+                        fieldName: key,
+                        fieldDef : this.props.reportData.data.fieldsMap.get(+field.id)
+                    };
+                    changes[field.id] = change;
                 });
             }
         }
@@ -200,7 +199,11 @@ export let ReportContent = React.createClass({
         //signal record save action, server will validate and if ok update an existing records with changed values
         // or add a new record
         if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            this.handleRecordAdd(this.props.pendEdits.recordChanges);
+            let recordChanges = {};
+            if (this.props.pendEdits.recordChanges) {
+                recordChanges = _.cloneDeep(this.props.pendEdits.recordChanges);
+            }
+            this.handleRecordAdd(recordChanges);
         } else {
             this.handleRecordChange(id);
         }

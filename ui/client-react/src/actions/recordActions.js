@@ -60,12 +60,9 @@ let recordActions = {
         return new Promise((resolve, reject) => {
             let record = getRecord(recordChanges, fields);
 
-            // map the record array to an object with fids as keys since that's the recordChanges object format
-            let changes = record.reduce((obj, val) => {obj[val.id] = val; return obj;}, {});
-
             if (appId && tblId && record.length) {
 
-                this.dispatch(actions.ADD_RECORD, {appId, tblId, changes});
+                this.dispatch(actions.ADD_RECORD, {appId, tblId, record:recordChanges});
 
                 let recordService = new RecordService();
 
