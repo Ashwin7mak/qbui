@@ -486,38 +486,38 @@
 
 
         //Click on the Delete Icon and Checking for the success Message
-        this.clickSelectedRecordDeleteIcon = function(){
+        this.clickSelectedRecordDeleteIcon = function() {
             var self = this;
             this.deleteIcon.click();
-        }
+        };
 
         //
-        this.assertDeleteMessageSuccess = function(successMessage){
+        this.assertDeleteMessageSuccess = function(successMessage) {
             var self = this;
-            this.waitForElement(self.successDeleteWindow).then(function(){
+            this.waitForElement(self.successDeleteWindow).then(function() {
                 expect(self.successDeleteWindow.getText()).toMatch(successMessage.toString());
             });
-        }
+        };
 
         // Checking for the deleted record on the first page
-        this.checkForTheDeletedRecordOnTheCurrentPage = function(deletedRecord){
+        this.checkForTheDeletedRecordOnTheCurrentPage = function(deletedRecord) {
             var self = this;
-            self.agGridRecordElList.then(function (recordsNo) {
+            self.agGridRecordElList.then(function(recordsNo) {
 
                 for (var i = 0; i < recordsNo.length; i++) {
-                    self.getRecordValues(i).then(function (fieldValues) {
+                    self.getRecordValues(i).then(function(fieldValues) {
                         expect(deletedRecord).not.toEqual(fieldValues);
                     });
                 }
             });
 
-        }
+        };
 
         //Record Row to be selected:
 
-        this.reportRowSelected = function(recordRow){
+        this.reportRowSelected = function(recordRow) {
             this.recordCheckBoxes.get(recordRow).click();
-        }
+        };
 
     };
     ReportContentPage.prototype = e2ePageBase;
