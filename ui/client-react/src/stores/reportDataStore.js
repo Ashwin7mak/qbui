@@ -69,9 +69,7 @@ let reportModel = {
 
         if (fields) {
             fields.forEach((fieldDef, index) => {
-                let groupedField = _.find(this.model.groupEls, function(el) {
-                    return el.split(groupDelimiter)[0] === fieldDef.id;
-                });
+                let groupedField = _.find(this.model.groupEls, el => el.split(groupDelimiter)[0] === fieldDef.id);
                 if (!groupedField && this.model.fids.length && (this.model.fids.indexOf(fieldDef.id) === -1)) {
                     //skip this fieldDef since its not on report's column list or on group list
                 } else {
@@ -107,7 +105,6 @@ let reportModel = {
      * Using fields and records format the report's data.
      * @param fields
      * @param records
-     * @param hasGrouping
      * @returns {*}
      */
     getReportData(fields, records) {
@@ -279,7 +276,7 @@ let reportModel = {
         });
     },
 
-    updateRecordsCount: function(recordsCountData) {
+    updateRecordsCount(recordsCountData) {
         if (recordsCountData && !isNaN(recordsCountData)) {
             this.model.recordsCount = parseInt(recordsCountData);
         }
@@ -289,7 +286,7 @@ let reportModel = {
      * Update count of filtered records
      * @param recordsCountData
      */
-    updateFilteredRecordsCount: function(count) {
+    updateFilteredRecordsCount(count) {
         this.model.filteredRecordsCount = parseInt(count);
     },
 
@@ -891,51 +888,65 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit("change");
     },
 
-    /**
-     * the displayed record has changed, update the previous/next record IDs
-     * @param recId
-     */
-    updateRecordNavContext(recId, nextOrPrevious = "") {
 
-        const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
+    addGroupedRecords(arr, groups) {
 
-        const index = _.findIndex(filteredRecords, rec => rec[keyField.name] && rec[keyField.name].value === recId);
+        groups.forEach(child => {
 
-        // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
-        this.currentRecordId = recId;
-
-        this.nextRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
-        this.previousRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
-
-        this.nextOrPrevious = nextOrPrevious;
-
-        this.emit("change");
+            if (child.children) {
+                this.addGroupedRecords(arr, child.children);
+            } else {
+                arr.push(child);
+            }
+        });
     },
+
     /**
      * the displayed record has changed, update the previous/next record IDs
-     * @param recId
+     * @param recId record ID to display
+     * @param nextOrPrevious "next", "previous", or "" (direction of record navigation)
+     * @param isEdit are we editing a record
+     * @param navigateAfterSave if editing, do we navigate to the new record after saving?
      */
-    updateEditRecordNavContext(recId, nextOrPrevious = "", navigateAfterSave = false) {
+    updateRecordNavContext(recId, nextOrPrevious = "", isEdit=false, navigateAfterSave = false) {
 
-        const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
+        const {filteredRecords, keyField, hasGrouping} = this.reportModel.get();
 
-        let index = -1;
-        if (filteredRecords) {
-            index = _.findIndex(filteredRecords, rec => rec[keyField.name] && rec[keyField.name].value === recId);
+        let recordsArray;
+
+        // if we are grouped, flatten out the tree into an array of ordered records
+        if (hasGrouping) {
+            recordsArray = [];
+            this.addGroupedRecords(recordsArray, filteredRecords);
+        } else {
+            recordsArray = filteredRecords;
         }
 
-        // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
+        const index = _.findIndex(recordsArray, rec => rec[keyField.name] && rec[keyField.name].value === recId);
 
-        this.currentEditRecordId = recId;
+        let nextRecordId, previousRecordId;
 
         if (recId === "new" || index === -1) {
-            this.nextEditRecordId = this.previousEditRecordId = null;
+            // new record, no prev/next navigation
+            nextRecordId = previousRecordId = null;
         } else {
-            this.nextEditRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
-            this.previousEditRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
+            nextRecordId = (index < recordsArray.length - 1) ? recordsArray[index + 1][keyField.name].value : null;
+            previousRecordId = index > 0 ? recordsArray[index - 1][keyField.name].value : null;
         }
-        this.nextOrPreviousEdit = nextOrPrevious;
-        this.navigateAfterSave = navigateAfterSave;
+
+        // update the view or edit state properties
+        if (isEdit) {
+            this.nextEditRecordId = nextRecordId;
+            this.previousEditRecordId = previousRecordId;
+            this.currentEditRecordId = recId;
+            this.nextOrPreviousEdit = nextOrPrevious;
+            this.navigateAfterSave = navigateAfterSave;
+        } else {
+            this.nextRecordId = nextRecordId;
+            this.previousRecordId = previousRecordId;
+            this.currentRecordId = recId;
+            this.nextOrPrevious = nextOrPrevious;
+        }
 
         this.emit("change");
     },
@@ -967,19 +978,19 @@ let ReportDataStore = Fluxxor.createStore({
      * @param payload
      */
     onEditRecord(payload) {
-        this.updateEditRecordNavContext(payload.recId, "", payload.navigateAfterSave);
+        this.updateRecordNavContext(payload.recId, "", true, payload.navigateAfterSave);
     },
     /**
      * update prev/next props after displaying previous record
      */
     onEditPreviousRecord(payload) {
-        this.updateEditRecordNavContext(payload.recId, "previous");
+        this.updateRecordNavContext(payload.recId, "previous", true);
     },
     /**
      * update prev/next props after displaying next record
      */
     onEditNextRecord(payload) {
-        this.updateEditRecordNavContext(payload.recId, "next");
+        this.updateRecordNavContext(payload.recId, "next", true);
     },
     /**
      * gets the state of a reportData
