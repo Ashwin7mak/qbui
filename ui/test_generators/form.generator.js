@@ -16,13 +16,17 @@
 
     var singleTabAndSectionForm = {};
 
+    var singleTabAndSectionViewForm = {};
+    var singleTabAndSectionEditForm = {};
+    var singleTabAndSectionCreateForm = {};
+
     module.exports = {
         getFormBuilder: function() {
             var builderInstance = formBuilder.builder();
             return builderInstance;
         },
 
-        generateSingleTabAndSecForm: function(app) {
+        generateFormProperties: function(app, formTabWithDisplayOptions) {
             var tables = app[appConsts.TABLES];
             var tableIndex = 0;
 
@@ -39,13 +43,24 @@
                 builderInstance.withIncludeBuiltIns(rawValueGenearator.generateBool());
                 builderInstance.withWrapElements(rawValueGenearator.generateBool());
                 builderInstance.withNewFieldAction('DO_NOTHING');
-                builderInstance.withTab(formTabGeneator.generateDefaultSingleTab(table));
+                builderInstance.withTab(formTabWithDisplayOptions(table));
 
                 singleTabAndSectionForm[tableIndex] = builderInstance.build();
                 tableIndex++;
             });
 
             return singleTabAndSectionForm;
-        }
+        },
+
+        generateSingleTabAndSecForm: function(app) {
+            var self = this;
+            return self.generateFormProperties(app, formTabGeneator.generateDefaultSingleTab);
+        },
+
+        generateSingleTabAndSecFormWithAddAndEdit: function(app) {
+            var self = this;
+            return self.generateFormProperties(app, formTabGeneator.generateDefaultSingleTabWithAddAndEdit);
+        },
+
     };
 }());

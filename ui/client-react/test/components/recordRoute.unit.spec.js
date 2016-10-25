@@ -19,7 +19,8 @@ describe('RecordRoute functions', () => {
         loadFormAndRecord() {return;},
         openingReportRow() {return;},
         showPreviousRecord() {return;},
-        showNextRecord() {return;}
+        showNextRecord() {return;},
+        syncingForm() {return;}
     };
 
     beforeEach(() => {
@@ -114,7 +115,7 @@ describe('RecordRoute functions', () => {
                         id:1,
                         field:"Record ID#",
                         headerName:"Record ID#",
-                        datatypeAttributes: {type:"NUMERIC"}
+                        fieldDef: {datatypeAttributes: {type:"NUMERIC"}}
                     }
                 ]
             }

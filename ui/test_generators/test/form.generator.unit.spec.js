@@ -114,7 +114,7 @@
         describe('test generating a form for a given app', function() {
             formDataProvider().forEach(function(entry) {
                 it('Test case form fields validation ' + entry.message, function(done) {
-                    var forms = formGenerator.generateSingleTabAndSecForm(entry.data);
+                    var forms = formGenerator.generateSingleTabAndSecViewOnlyForm(entry.data);
 
                     var tables = entry.data[appConsts.TABLES];
                     var tableIndex = 0;

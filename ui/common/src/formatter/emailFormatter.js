@@ -15,7 +15,24 @@
     SUPPORTED_FORMATS[UP_TO_UNDERSCORE] = true;
     SUPPORTED_FORMATS[UP_TO_AT_SIGN] = true;
 
+    function hasDomain(email) {
+        if (email && typeof email === 'string') {
+            return email.indexOf('@') >= 0;
+        } else {
+            return false;
+        }
+    }
+
     module.exports = {
+        addDefaultDomain: function(email, domain) {
+            // Core and current stack add a domain to a blank string, so that
+            // same functionality occurs here. To remove, just check if email is
+            // blank before adding a default domain. `if (domain && email && !hasDomain(email)) {`
+            if (domain && !hasDomain(email)) {
+                email = email + (domain.indexOf('@') >= 0 ? domain : '@' + domain);
+            }
+            return email;
+        },
         //Given a email string as input, formats as a email with display preferences applied.
         format: function(fieldValue, fieldInfo) {
             if (!fieldValue || !fieldValue.value) {
@@ -23,6 +40,10 @@
             }
             //Default behavior is to return the raw value as display
             var baseValue = fieldValue.value;
+
+            // Add a default domain if a default domain exists and a domain is not provided on the email
+            baseValue = this.addDefaultDomain(baseValue, fieldInfo.defaultDomain);
+
             //If there are clientSideAttributes, evaluate format & linkText attributes
             if (fieldInfo && fieldInfo.clientSideAttributes) {
                 if (fieldInfo.clientSideAttributes.linkText) {

@@ -33,16 +33,12 @@ let recordActions = {
             //save changes in record
             let payload = [];
             // columns id and new values array
-            //[{"id":6, "value":"Claire"}]
+            //[{"id":6, "value":"Claire", fieldDef:{}}]
             if (_recordChanges) {
                 Object.keys(_recordChanges).forEach((recKey) => {
                     //get each columns matching field description
-                    let matchingField = null;
-                    if (_fields) {
-                        matchingField = _.find(_fields, (field) => {
-                            return field.id === +recKey;
-                        });
-                    }
+                    let matchingField = _recordChanges[recKey].fieldDef;
+
                     // only post the non built in fields values
                     if (matchingField && matchingField.builtIn === false) {
                         let newValue = _recordChanges[recKey].newVal.value;
@@ -53,10 +49,7 @@ let recordActions = {
                         colChange.id = +recKey;
                         colChange.value = _.cloneDeep(newValue);
                         colChange.display = _.cloneDeep(newDisplay);
-                        colChange.field = matchingField.datatypeAttributes;
-                        if (colChange.field) {
-                            colChange.field.required = matchingField.required;
-                        }
+                        colChange.fieldDef = matchingField;
                         payload.push(colChange);
                     }
                 });
@@ -66,40 +59,40 @@ let recordActions = {
             // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             let record = getRecord(recordChanges, fields);
+
+            // map the record array to an object with fids as keys since that's the recordChanges object format
+            let changes = record.reduce((obj, val) => {obj[val.id] = val; return obj;}, {});
+
             if (appId && tblId && record.length) {
-                this.dispatch(actions.ADD_RECORD, {appId, tblId, record});
+
+                this.dispatch(actions.ADD_RECORD, {appId, tblId, changes});
+
                 let recordService = new RecordService();
 
                 // save the changes to the record
                 recordService.createRecord(appId, tblId, record).then(
-                        response => {
-                            logger.debug('RecordService createRecord success:' + JSON.stringify(response));
-                            if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
-                                let resJson = JSON.parse(response.data.body);
-                                this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
-                                NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
-                                resolve();
-                            } else {
-                                logger.error('RecordService createRecord call error: no response data value returned');
-                                this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
-                                NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
-                                reject();
-                            }
-                        },
-                        error => {
-                            //  axios upgraded to an error.response object in 0.13.x
-                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
-                            this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
+                    response => {
+                        logger.debug('RecordService createRecord success:' + JSON.stringify(response));
+                        if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
+                            let resJson = JSON.parse(response.data.body);
+                            this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
+                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                            resolve(resJson.id);
+                        } else {
+                            logger.error('RecordService createRecord call error: no response data value returned');
+                            this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
                             NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
                             reject();
                         }
-                    ).catch(
-                        ex => {
-                            logger.logException(ex);
-                            this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: ex});
-                            reject();
-                        }
-                    );
+                    },
+                    error => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
+                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
+                        NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                        reject();
+                    }
+                );
             } else {
                 var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
                         appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
@@ -206,10 +199,7 @@ let recordActions = {
             colChange.id = +field.id;
             colChange.value = _.cloneDeep(value);
             colChange.display = _.cloneDeep(display);
-            colChange.field = field.datatypeAttributes;
-            if (colChange.field) {
-                colChange.field.required = field.required;
-            }
+            colChange.fieldDef = field;
             payload.push(colChange);
         }
 
@@ -223,7 +213,7 @@ let recordActions = {
                 _fields.forEach((field) => {
                     if (changes[field.id] === undefined) {
                         if (!field.builtIn && (field.required || field.unique)) {
-                            if (_pendEdits.originalRecord.fids[field.id]) {
+                            if (_pendEdits.originalRecord && _pendEdits.originalRecord.fids && _pendEdits.originalRecord.fids[field.id]) {
                                 let newValue = _pendEdits.originalRecord.fids[field.id].value;
                                 if (newValue === null) {
                                     newValue = "";
@@ -259,12 +249,8 @@ let recordActions = {
                 if (_.has(_pendEdits, 'originalRecord.fids')) {
                     if (newValue !== _pendEdits.originalRecord.fids[key].value) {
                         //get each columns matching field description
-                        if (_fields) {
-                            let matchingField = _.find(_fields, (field) => {
-                                return field.id === +key;
-                            });
-                            createColChange(newValue, newDisplay, matchingField, payload);
-                        }
+                        let matchingField = changes[key].fieldDef;
+                        createColChange(newValue, newDisplay, matchingField, payload);
                     }
                 }
             });

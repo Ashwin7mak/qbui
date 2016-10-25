@@ -1,16 +1,21 @@
 
 let editValue1 = 'QuickBase';
 let editValue2 = 'Lorem ipsum dolor sit amet';
+let editValue3 = 'I can be cleared';
 let editValue2Invalid = true;
 
 var BasicTextFieldValueEditor = React.createClass({
     getInitialState() {
         return {
-            inputValue: editValue1
+            inputValue: editValue1,
+            inputValue3: editValue3
         };
     },
     onChange(value) {
         this.setState({inputValue: value});
+    },
+    onChangeInput3(value) {
+        this.setState({inputValue3: value});
     },
     render() {
         return (
@@ -38,6 +43,11 @@ var BasicTextFieldValueEditor = React.createClass({
                         <TextFieldValueEditor isInvalid={editValue2Invalid} invalidMessage="Use up to 15 characters" value={editValue2} />
                     </dd>
 
+                <dt>Text Field Editor with button to clear text:</dt>
+                    <dd>
+                        <TextFieldValueEditor value={this.state.inputValue3} onChange={this.onChangeInput3} showClearButton={true} />
+                    </dd>
+
 
             </div>
         );
@@ -45,4 +55,3 @@ var BasicTextFieldValueEditor = React.createClass({
 });
 
 ReactDOM.render(<BasicTextFieldValueEditor />, mountNode);
-

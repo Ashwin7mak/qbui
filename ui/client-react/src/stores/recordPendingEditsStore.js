@@ -2,7 +2,9 @@ import * as actions from "../constants/actions";
 import Fluxxor from "fluxxor";
 import _ from 'lodash';
 import Logger from '../utils/logger';
-import ValidationUtils from '../utils/validationUtils';
+import ValidationUtils from '../../../common/src/validationUtils';
+import ValidationMessage from "../utils/validationMessage";
+
 var logger = new Logger();
 
 /**
@@ -44,7 +46,10 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = null;
         this.originalRecord = null;
         this.recordChanges = {};
-        this.editErrors = {};
+        this.editErrors = {
+            ok: true,
+            errors:[]
+        };
     },
 
     /**
@@ -72,7 +77,10 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.originalRecord = undefined;
         }
         //TODO when a record gets into edit state it might already have errors so this should be populated with those
-        this.editErrors = {};
+        this.editErrors = {
+            ok: true,
+            errors:[]
+        };
         this.isInlineEditOpen = true;
         this.emit('change');
     },
@@ -94,6 +102,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.recordChanges[payload.changes.fid].oldVal = payload.changes.values.oldVal;
         this.recordChanges[payload.changes.fid].newVal = payload.changes.values.newVal;
         this.recordChanges[payload.changes.fid].fieldName = payload.changes.fieldName;
+        this.recordChanges[payload.changes.fid].fieldDef = payload.changes.fieldDef;
         this.currentEditingAppId = payload.appId;
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = payload.recId;
@@ -110,9 +119,16 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     onRecordEditValidateField(payload) {
         if (!this.editErrors) {
-            this.editErrors = {};
+            this.editErrors = {
+                ok: true,
+                errors:[]
+            };
         }
-        this.editErrors[payload.fieldDef.id] = ValidationUtils.checkFieldValue(payload.fieldDef, payload.value, payload.checkRequired);
+        let results = ValidationUtils.checkFieldValue(payload, payload.fieldLabel, payload.value, payload.checkRequired);
+        if (results.isInvalid) {
+            this.editErrors.ok = false;
+            this.editErrors.errors.push(results);
+        }
         this.emit('change');
     },
 
@@ -177,8 +193,27 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
+        this.recordChanges = {};
         this.emit('change');
 
+    },
+
+    getServerErrs(payload) {
+        // init no errors
+        this.editErrors = {
+            ok: true,
+            errors:[]
+        };
+
+        // get errors from payload if not ok
+        if (_.has(payload, 'error.data.response.errors') && payload.error.data.response.errors.length !== 0) {
+            this.editErrors.errors = payload.error.data.response.errors;
+            this.editErrors.ok = false;
+            // fill in client message
+            this.editErrors.errors.forEach(fieldError => {
+                fieldError.invalidMessage = ValidationMessage.getMessage(fieldError);
+            });
+        }
     },
 
     /**
@@ -192,6 +227,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
             this.commitChanges[entry].status = actions.SAVE_RECORD_FAILED;
         }
+        this.getServerErrs(payload);
         this.isInlineEditOpen = true;
         this.emit('change');
     },
@@ -229,6 +265,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
+        this.recordChanges = {};
         this.emit('change');
 
     },
@@ -248,6 +285,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
             this.commitChanges[entry].status = actions.ADD_RECORD_FAILED;
         }
+        this.getServerErrs(payload);
+
         this.emit('change');
     },
 

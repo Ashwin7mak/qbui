@@ -36,6 +36,20 @@ class FieldUtils {
     }
 
     /**
+     * gets the maxlength from the field def if specified
+     * @param fieldDef - the field definition
+     * @returns maxlenght or undefined
+     */
+    static getMaxLength(fieldDef) {
+        let maxLength;
+        if (fieldDef && _.has(fieldDef, 'datatypeAttributes.clientSideAttributes.max_chars') &&
+            fieldDef.datatypeAttributes.clientSideAttributes.max_chars > 0) {
+            maxLength =  fieldDef.datatypeAttributes.clientSideAttributes.max_chars;
+        }
+        return maxLength;
+    }
+
+    /**
     * Gets the name for the unique identifier row from grid data
     * even if the Record ID # field has been renamed
     * @param {object} rowData

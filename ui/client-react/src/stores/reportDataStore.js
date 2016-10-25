@@ -1,6 +1,7 @@
 import * as actions from '../../src/constants/actions';
 import FacetSelections from '../components/facet/facetSelections';
 import ReportUtils from '../utils/reportUtils';
+import FieldUtils from '../utils/fieldUtils';
 import Fluxxor from 'fluxxor';
 import Logger from '../utils/logger';
 import Locale from '../locales/locales';
@@ -12,6 +13,7 @@ import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormat
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
 import * as userFormatter from '../../../common/src/formatter/userFormatter';
+import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
 
@@ -42,6 +44,22 @@ let reportModel = {
 
     /**
      * Given the field list format the columnDefinition as needed by data grid.
+     *
+     * ReportDataStore has columns array with one column object for each column in a grid. ag-Grid expects the coldef to have
+     * a certain properties some of these are part of the field information and some part of the report definition.
+     *
+     * For ease of code reuse and ag-Grid agnostic the field definition associated with the column from the report's table field
+     * structure is retained as a property on the column object as a whole in the `fieldDef` property.
+     * This property mirrors the server field structure and can be used with the common validation utility on the node server
+     * side as well as client side validation for report inline editing and possibly form field validation.
+     *
+     * Beside the fieldDef object we add the `field` member to column object which is the name of the property to use
+     * to access that columns data from the data rows hash for ag-Grid. ag-Grid also needs `headerName` to title the column
+     * header in the grid header row. The `order` property is the index sequence of the column
+     *
+     * Some other values from fieldDef are elevated for convenience to column definition
+     * level also `id, fieldType, fieldName, defaultValue, choices`
+     *
      * @param fields
      * @param hasGrouping
      * @returns {Array}
@@ -50,37 +68,34 @@ let reportModel = {
         let columns = [];
 
         if (fields) {
-            fields.forEach((field, index) => {
+            fields.forEach((fieldDef, index) => {
                 let groupedField = _.find(this.model.groupEls, function(el) {
-                    return el.split(groupDelimiter)[0] === field.id;
+                    return el.split(groupDelimiter)[0] === fieldDef.id;
                 });
-                if (!groupedField && this.model.fids.length && (this.model.fids.indexOf(field.id) === -1)) {
-                    //skip this field since its not on report's column list or on group list
+                if (!groupedField && this.model.fids.length && (this.model.fids.indexOf(fieldDef.id) === -1)) {
+                    //skip this fieldDef since its not on report's column list or on group list
                 } else {
                     let column = {};
                     column.order = index;
-                    column.id = field.id;
-                    column.headerName = field.name;
-                    column.field = field.name;
-                    column.fieldType = field.type;
-                    column.builtIn = field.builtIn;
-                    column.unique = field.unique;
-                    column.userEditableValue = field.userEditableValue;
-                    column.dataIsCopyable = field.dataIsCopyable;
-                    column.required = field.required;
+                    column.id = fieldDef.id;
+                    column.headerName = fieldDef.name;//
+                    column.field = fieldDef.name; //name needed for aggrid
+                    column.fieldDef = fieldDef; //fieldDef props below tobe refactored to just get info from fieldObj property instead.
+                    column.fieldType = fieldDef.type;
                     column.defaultValue = null;
-                    if (field.defaultValue && field.defaultValue.coercedValue) {
-                        column.defaultValue = {value: field.defaultValue.coercedValue.value, display: field.defaultValue.displayValue};
+                    if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
+                        column.defaultValue = {value: fieldDef.defaultValue.coercedValue.value, display: fieldDef.defaultValue.displayValue};
                     }
 
-                    if (field.multipleChoice && field.multipleChoice.choices) {
+                    if (fieldDef.multipleChoice && fieldDef.multipleChoice.choices) {
                         column.multipleChoice = {};
-                        column.multipleChoice.choices = field.multipleChoice.choices;
+                        column.multipleChoice.choices = fieldDef.multipleChoice.choices;
                     }
-                    //  client side attributes..
-                    column.datatypeAttributes = field.datatypeAttributes;
-                    column.placeholder = (field.datatypeAttributes && field.datatypeAttributes.type && field.datatypeAttributes.type === serverTypeConsts.EMAIL_ADDRESS) ?
-                        Locale.getMessage('placeholder.email') : '';
+                    //  client side attributes
+                    let maxLength = FieldUtils.getMaxLength(fieldDef);
+                    if (maxLength) {
+                        column.placeholder = Locale.getMessage('placeholder.maxLength', {maxLength : maxLength});
+                    }
                     columns.push(column);
                 }
             });
@@ -171,7 +186,8 @@ let reportModel = {
         }
 
         this.model.fields = recordData.fields || [];
-        // map of fields by field id for fast lookup
+        // map of fields by field id for fast lookup, any type for key,
+        // see http://stackoverflow.com/questions/18541940/map-vs-object-in-javascript
         let map = new Map();
         if (recordData.fields) {
             recordData.fields.forEach((field) => {
@@ -179,7 +195,7 @@ let reportModel = {
             });
         }
         this.model.fieldsMap = map;
-        this.model.keyField =  this.model.fields.find(field => field.keyField);
+        this.model.keyField = _.find(this.model.fields, field => field.keyField);
 
         this.model.filteredRecords = this.model.records;
         this.model.filteredRecordsCount = recordData.records ? recordData.records.length : null;
@@ -193,6 +209,7 @@ let reportModel = {
      * @returns the found record or undefined
      */
     findRecordById(records, recId) {
+        recId = recId ? +recId : recId;
         return records.find(rec => rec[this.model.keyField.name].value === recId);
     },
 
@@ -203,7 +220,21 @@ let reportModel = {
      * @returns {number|*}
      */
     findRecordIndexById(records, recId) {
-        return records.findIndex(rec => rec[this.model.keyField.name].value === recId);
+        return _.findIndex(records, rec => rec[this.model.keyField.name].value === recId);
+    },
+
+    findARecord(recId) {
+        if (this.model.records) {
+            return this.findRecordById(this.model.records, recId);
+        }
+        return null;
+    },
+
+    findAFilteredRecord(recId) {
+        if (this.model.filteredRecords) {
+            return this.findRecordById(this.model.filteredRecords, recId);
+        }
+        return null;
     },
 
     /**
@@ -215,39 +246,37 @@ let reportModel = {
      * @param changes - the changes to make to the record form is [{id: fieldid, display: dispVal, value: raw, fieldName: name}, ...]
      */
     updateARecord(oldRecId, newRecId, changes) {
-        if (this.model.records && this.model.filteredRecords) {
-            let record = this.findRecordById(this.model.records, oldRecId);
-            let filtRecord = this.findRecordById(this.model.filteredRecords, oldRecId);
+        let record = this.findARecord(oldRecId);
+        let filtRecord = this.findAFilteredRecord(oldRecId);
 
-            // update with new recid
-            if (newRecId !== null) {
-                if (record) {
-                    record[this.model.keyField.name].value = newRecId;
-                }
-                if (filtRecord) {
-                    filtRecord[this.model.keyField.name].value = newRecId;
+        // update with new recid
+        if (newRecId !== null) {
+            if (record) {
+                record[this.model.keyField.name].value = newRecId;
+            }
+            if (filtRecord) {
+                filtRecord[this.model.keyField.name].value = newRecId;
+            }
+        }
+        // change the data values
+        changes.forEach(change => {
+            if (change.display === undefined) {
+                //format value for display
+                this.formatFieldValue(change);
+            }
+            if (record && record[change.fieldName]) {
+                record[change.fieldName].value = change.value;
+                if (change.display !== undefined) {
+                    record[change.fieldName].display = change.display;
                 }
             }
-            // change the data values
-            changes.forEach(change => {
-                if (change.display === undefined) {
-                    //format value for display
-                    this.formatFieldValue(change);
+            if (filtRecord && filtRecord[change.fieldName]) {
+                filtRecord[change.fieldName].value = change.value;
+                if (change.display !== undefined) {
+                    filtRecord[change.fieldName].display = change.display;
                 }
-                if (record) {
-                    record[change.fieldName].value = change.value;
-                    if (change.display !== undefined) {
-                        record[change.fieldName].display = change.display;
-                    }
-                }
-                if (filtRecord) {
-                    filtRecord[change.fieldName].value = change.value;
-                    if (change.display !== undefined) {
-                        filtRecord[change.fieldName].display = change.display;
-                    }
-                }
-            });
-        }
+            }
+        });
     },
 
     updateRecordsCount: function(recordsCountData) {
@@ -449,6 +478,13 @@ let ReportDataStore = Fluxxor.createStore({
         this.previousRecordId = null;
         this.nextOrPrevious = "";
 
+        this.currentEditRecordId = null;
+        this.nextEditRecordId = null;
+        this.previousEditRecordId = null;
+        this.nextOrPreviousEdit = "";
+
+        this.navigateAfterSave = false;
+
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
             actions.LOAD_REPORT_SUCCESS, this.onLoadReportSuccess,
@@ -482,7 +518,11 @@ let ReportDataStore = Fluxxor.createStore({
 
             actions.OPEN_REPORT_RECORD, this.onOpenRecord,
             actions.SHOW_NEXT_RECORD, this.onShowNextRecord,
-            actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord
+            actions.SHOW_PREVIOUS_RECORD, this.onShowPreviousRecord,
+
+            actions.EDIT_REPORT_RECORD, this.onEditRecord,
+            actions.EDIT_NEXT_RECORD, this.onEditNextRecord,
+            actions.EDIT_PREVIOUS_RECORD, this.onEditPreviousRecord
 
         );
     },
@@ -634,20 +674,11 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    /**
-     * adds a new blank record to the list of records
-     *
-     * @param payload parameter contains
-     *  payload.afterRecId : {value:id} of record to add the new blank record after
-     *  (its not sorted/group till next reload from server)
-     *
-     */
-    onAddReportRecord(payload) {
+    createNewRecord(afterRecId) {
         const model = this.reportModel.get();
 
         if (model.filteredRecords.length > 0) {
             //find record to add after
-            let afterRecId = payload.afterRecId;
 
             let afterRecIndex = -1;
             if (afterRecId && afterRecId.value !== undefined) {
@@ -661,10 +692,10 @@ let ReportDataStore = Fluxxor.createStore({
                 let theCorrespondingField = _.find(model.fields, (item) => item.id === obj.id);
                 //set the default values in the answer for each field
                 if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
-                    valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id} ;
+                    valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id};
                 } else {
                     //TBD : type specific values
-                    valueAnswer = {value:null, id:obj.id} ;
+                    valueAnswer = {value: null, id: obj.id};
                 }
                 return valueAnswer;
             });
@@ -690,7 +721,7 @@ let ReportDataStore = Fluxxor.createStore({
             } else {
                 this.editingIndex = newFilteredRecords.length;
                 this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
-                newFilteredRecords.push(newRecord);
+                newFilteredRecords.unshift(newRecord);
             }
 
             model.filteredRecords = newFilteredRecords;
@@ -705,13 +736,23 @@ let ReportDataStore = Fluxxor.createStore({
             } else {
                 this.editingIndex = newRecords.length;
                 this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
-                newRecords.push(newRecord);
+                newRecords.unshift(newRecord);
             }
             model.records = newRecords;
             model.recordsCount++;
-
-            this.emit('change');
         }
+    },
+    /**
+     * adds a new blank record to the list of records
+     *
+     * @param payload parameter contains
+     *  payload.afterRecId : {value:id} of record to add the new blank record after
+     *  (its not sorted/group till next reload from server)
+     *
+     */
+    onAddReportRecord(payload) {
+        this.createNewRecord(payload.afterRecId);
+        this.emit('change');
     },
 
     /**
@@ -792,6 +833,12 @@ let ReportDataStore = Fluxxor.createStore({
     onAddRecordSuccess(payload) {
         // update the  record values
         this.editingIndex = null;
+        let record = this.reportModel.findARecord(payload.recId);
+        let filtRecord = this.reportModel.findAFilteredRecord(payload.recId);
+        if (record === undefined && filtRecord === undefined) {
+            // add record was called without creating an empty record probably from a trowser so create one here
+            this.createNewRecord();
+        }
         this.reportModel.updateARecord(SchemaConsts.UNSAVED_RECORD_ID, payload.recId, payload.record);
 
         this.emit("change");
@@ -806,7 +853,7 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onRecordEditCancel(payload) {
         //remove record if its new unsaved
-        if (payload.recId.value === SchemaConsts.UNSAVED_RECORD_ID) {
+        if (payload.recId && payload.recId.value === SchemaConsts.UNSAVED_RECORD_ID) {
             const model = this.reportModel.get();
             //make a copy
             const newFilteredRecords = model.filteredRecords.slice(0);
@@ -852,7 +899,7 @@ let ReportDataStore = Fluxxor.createStore({
 
         const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
 
-        const index = filteredRecords.findIndex(rec => rec[keyField.name] && rec[keyField.name].value === recId);
+        const index = _.findIndex(filteredRecords, rec => rec[keyField.name] && rec[keyField.name].value === recId);
 
         // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
         this.currentRecordId = recId;
@@ -861,6 +908,34 @@ let ReportDataStore = Fluxxor.createStore({
         this.previousRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
 
         this.nextOrPrevious = nextOrPrevious;
+
+        this.emit("change");
+    },
+    /**
+     * the displayed record has changed, update the previous/next record IDs
+     * @param recId
+     */
+    updateEditRecordNavContext(recId, nextOrPrevious = "", navigateAfterSave = false) {
+
+        const {filteredRecords, filteredRecordsCount, keyField} = this.reportModel.get();
+
+        let index = -1;
+        if (filteredRecords) {
+            index = _.findIndex(filteredRecords, rec => rec[keyField.name] && rec[keyField.name].value === recId);
+        }
+
+        // store the next and previous record ID relative to recId in the report (or null if we're at the end/beginning)
+
+        this.currentEditRecordId = recId;
+
+        if (recId === "new" || index === -1) {
+            this.nextEditRecordId = this.previousEditRecordId = null;
+        } else {
+            this.nextEditRecordId = (index < filteredRecordsCount - 1) ? filteredRecords[index + 1][keyField.name].value : null;
+            this.previousEditRecordId = index > 0 ? filteredRecords[index - 1][keyField.name].value : null;
+        }
+        this.nextOrPreviousEdit = nextOrPrevious;
+        this.navigateAfterSave = navigateAfterSave;
 
         this.emit("change");
     },
@@ -884,6 +959,27 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onShowNextRecord(payload) {
         this.updateRecordNavContext(payload.recId, "next");
+    },
+
+    /**
+     * drilldown into record from report
+     *
+     * @param payload
+     */
+    onEditRecord(payload) {
+        this.updateEditRecordNavContext(payload.recId, "", payload.navigateAfterSave);
+    },
+    /**
+     * update prev/next props after displaying previous record
+     */
+    onEditPreviousRecord(payload) {
+        this.updateEditRecordNavContext(payload.recId, "previous");
+    },
+    /**
+     * update prev/next props after displaying next record
+     */
+    onEditNextRecord(payload) {
+        this.updateEditRecordNavContext(payload.recId, "next");
     },
     /**
      * gets the state of a reportData
@@ -910,7 +1006,12 @@ let ReportDataStore = Fluxxor.createStore({
             currentRecordId: this.currentRecordId,
             nextRecordId: this.nextRecordId,
             previousRecordId: this.previousRecordId,
-            nextOrPrevious: this.nextOrPrevious
+            nextOrPrevious: this.nextOrPrevious,
+            currentEditRecordId: this.currentEditRecordId,
+            nextEditRecordId: this.nextEditRecordId,
+            previousEditRecordId: this.previousEditRecordId,
+            nextOrPreviousEdit: this.nextOrPreviousEdit,
+            navigateAfterSave: this.navigateAfterSave
         };
     }
 });

@@ -194,7 +194,7 @@ const TimeFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'cellEdit timeCell';
+        let classes = 'cellEdit timeCell borderOnError';
 
         // error state css class
         if (this.props.isInvalid) {

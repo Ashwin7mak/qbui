@@ -76,6 +76,69 @@ describe('Validate GroupFormatter unit tests', function() {
         return setup;
     }
 
+    function setupGroupedRecords(numOfFields, numOfRecords, numOfGroups, dataType, gList) {
+        var setup = {
+            fields: [],
+            records: [],
+            req: {}
+        };
+
+        var groups = [];
+        for (var group = 1; group <= numOfGroups; group++) {
+            var field;
+            for (var idx = 1; idx <= numOfFields; idx++) {
+                field = {
+                    id: idx,
+                    name: 'fieldName_' + idx,
+                    datatypeAttributes: {
+                        type: dataType
+                    }
+                };
+
+                if (dataType === constants.TIME_OF_DAY) {
+                    if (idx === 1) {
+                        field.datatypeAttributes.timeZone = constants.EST_TIMEZONE;
+                    }
+                }
+
+                //  it's the same fields for all the groups, so only add the fields
+                //  to the array when processing the first group.
+                if (group === 1) {
+                    setup.fields.push(field);
+                }
+            }
+
+            var groupRecords = {
+                records: [],
+                summaryRef: {
+                    summaries: ['Group Name ' + group]
+                }
+            };
+            for (var x = 1; x <= numOfRecords; x++) {
+                var record = [];
+                var genData = generateData(dataType);
+                for (var z = 0; z < setup.fields.length; z++) {
+                    field = {
+                        id: setup.fields[z].id,
+                        value: genData
+                    };
+                    record.push(field);
+                }
+                groupRecords.records.push(record);
+            }
+            groups.push(groupRecords);
+        }
+
+        setup.records = {
+            groups: groups,
+            type: 'GROUP'
+        };
+
+        setup.req.url = "?sortList=" + gList;
+
+        return setup;
+    }
+
     describe('test no grouping because of insufficient or invalid input data', function() {
         var groupByEquals = groupTypes.COMMON.equals;
         var testCases = [
@@ -93,7 +156,7 @@ describe('Validate GroupFormatter unit tests', function() {
                 var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
                 var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
                 assert.equal(groupData.hasGrouping, false);
-                assert.equal(groupData.fields.length, 0);
+                assert.equal(groupData.gridData.length, 0);
                 assert.equal(groupData.totalRows, 0);
                 done();
             });
@@ -104,15 +167,15 @@ describe('Validate GroupFormatter unit tests', function() {
         var setup = setupRecords(3, 5, constants.TEXT, '1:' + groupTypes.COMMON.equals);
         var testCases = [
             {message: 'Null fields parameter', req:setup.req, fields:null, records:setup.records},
-            {message: 'Null fields parameter', req:setup.req, fields:setup.fields, records:null},
-            {message: 'Null fields parameter', req:setup.req, fields:null, records:null}
+            {message: 'Null records parameter', req:setup.req, fields:setup.fields, records:null},
+            {message: 'Null field and records parameter', req:setup.req, fields:null, records:null}
         ];
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.message, function(done) {
                 var groupData = groupFormatter.group(testCase.req, testCase.fields, testCase.records);
                 assert.equal(groupData.hasGrouping, false);
-                assert.equal(groupData.fields.length, 0);
+                assert.equal(groupData.gridData.length, 0);
                 assert.equal(groupData.totalRows, 0);
                 done();
             });
@@ -294,10 +357,20 @@ describe('Validate GroupFormatter unit tests', function() {
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.message, function(done) {
+                var numberOfGroups = 2;
+                var format = (testCase.numRecords === 1);
+
                 var setup = setupRecords(testCase.numFields, testCase.numRecords, testCase.dataType, testCase.gList);
+                var groupSetup = setupGroupedRecords(testCase.numFields, testCase.numRecords, numberOfGroups, testCase.dataType, testCase.gList);
+
                 var groupData = groupFormatter.group(setup.req, setup.fields, setup.records);
+                var coreGroupData = groupFormatter.groupData(groupSetup.req, groupSetup.fields, groupSetup.records, format);
+
                 assert.equal(groupData.hasGrouping, true);
+                assert.equal(coreGroupData.hasGrouping, true);
+
                 assert.equal(groupData.totalRows, testCase.numRecords);
+                assert.equal(coreGroupData.totalRows, testCase.numRecords * numberOfGroups);
 
                 //  keep track of how many unique fids are in the gList parameter
                 var map = new Map();
@@ -315,9 +388,11 @@ describe('Validate GroupFormatter unit tests', function() {
 
                 //  number of valid group list elements must match the number of elements in the groupData.fields array
                 assert.equal(groupList.length, groupData.fields.length);
+                assert.equal(groupList.length, coreGroupData.fields.length);
 
                 //  the gridColumns array should not include the fields being grouped
                 assert.equal(testCase.numFields - map.size, groupData.gridColumns.length);
+                assert.equal(testCase.numFields - map.size, coreGroupData.gridColumns.length);
                 done();
             });
         });

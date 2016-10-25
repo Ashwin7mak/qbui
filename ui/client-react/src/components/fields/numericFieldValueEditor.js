@@ -1,6 +1,6 @@
 import React from 'react';
 import './fields.scss';
-import QBToolTip from '../qbToolTip/qbToolTip';
+
 import * as numericFormatter from '../../../../common/src/formatter/numericFormatter';
 import * as consts from '../../../../common/src/constants';
 
@@ -28,10 +28,10 @@ const NumericFieldValueEditor = React.createClass({
 
         /**
          * renders with red border if true */
-        isInvalid: React.PropTypes.bool,
+        invalid: React.PropTypes.bool,
 
         /**
-         * message to display in the tool tip when isInvalid */
+         * message to display in the tool tip when invalid */
         invalidMessage: React.PropTypes.string,
 
         /**
@@ -53,7 +53,7 @@ const NumericFieldValueEditor = React.createClass({
 
     getDefaultProps() {
         return {
-            isInvalid: false
+            invalid: false
         };
     },
     onChange(ev) {
@@ -98,7 +98,7 @@ const NumericFieldValueEditor = React.createClass({
         }
         //if its a percent field the raw value is display value/100
         if (datatypeAttributes.type === consts.PERCENT) {
-            theVals.value = theVals.value ? theVals.value / 100 : 0;
+            theVals.value = theVals.value !== null ? theVals.value / 100 : null;
         }
 
         theVals.display = theVals.value ? numericFormatter.format(theVals, datatypeAttributes) : '';
@@ -121,9 +121,9 @@ const NumericFieldValueEditor = React.createClass({
             placeholder = this.props.fieldDef.datatypeAttributes.clientSideAttributes.symbol;
         }
 
-        let classes = 'input numericField';
+        let classes = 'input numericField borderOnError';
         // error state css class
-        if (this.props.isInvalid) {
+        if (this.props.invalid) {
             classes += ' error';
         }
         if (this.props.classes) {
@@ -131,24 +131,16 @@ const NumericFieldValueEditor = React.createClass({
         }
         let width = _.has(this.props, 'fieldDef.datatypeAttributes.clientSideAttributes.width') ? this.props.fieldDef.datatypeAttributes.clientSideAttributes.width : null;
 
-        let inputBox = <input ref="textInput"
-                          className={classes}
-                          value={this.props.display ? this.props.display : this.props.value}
-                          type="text"
-                          key={'inp' + this.props.idKey}
-                          placeholder={placeholder}
-                          onChange={this.onChange}
-                          onBlur={this.onBlur}
-                          size={width}/>;
 
-
-        return  (this.props.isInvalid ?
-                (<QBToolTip location="top" tipId="invalidInput" delayHide={3000}
-                            plainMessage={this.props.invalidMessage}>
-                    {inputBox}
-                </QBToolTip>) :
-                inputBox
-        );
+        return <input ref="textInput"
+                      className={classes}
+                      value={this.props.display ? this.props.display : this.props.value}
+                      type="text"
+                      key={'inp' + this.props.idKey}
+                      placeholder={placeholder}
+                      onChange={this.onChange}
+                      onBlur={this.onBlur}
+                      size={width}/>;
     }
 });
 

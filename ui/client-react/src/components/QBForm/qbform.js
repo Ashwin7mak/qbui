@@ -71,11 +71,12 @@ let QBForm = React.createClass({
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
         }
         if (element.FormFieldElement) {
+            let validationStatus =  this.getFieldValidationStatus(element.FormFieldElement.fieldId);
             // if we are positioning labels on the left, use a separate TD for the label and value so all columns line up
             if (labelPosition === QBForm.LABEL_LEFT) {
-                cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, colSpan));
+                cells.push(this.createFieldLabelCell(element.FormFieldElement, orderIndex, validationStatus));
             }
-            cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, labelPosition === QBForm.LABEL_ABOVE, colSpan));
+            cells.push(this.createFieldElementCell(element.FormFieldElement, orderIndex, labelPosition === QBForm.LABEL_ABOVE, colSpan, validationStatus));
         }
         return cells;
     },
@@ -100,22 +101,34 @@ let QBForm = React.createClass({
      * @param fieldId
      * @returns the record entry from formdata record array with the field ID
      */
-    getFieldRecord(fieldId) {
-        if (_.has(this.props, 'pendEdits.recordChanges') && this.props.pendEdits.recordChanges[fieldId]) {
-            let vals = {};
-            vals.id = fieldId;
-            vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
-            vals.display = this.props.pendEdits.recordChanges[fieldId].newVal.display;
-            return vals;
-        }
-
-        let record = this.props.formData.record || [];
-
-        return _.find(record, val => {
-            if (val.id === fieldId) {
-                return true;
+    getFieldRecord(field) {
+        if (field) {
+            const fieldId = field.id;
+            if (this.props.pendEdits && this.props.pendEdits.recordChanges && this.props.pendEdits.recordChanges[fieldId]) {
+                let vals = {};
+                vals.id = fieldId;
+                vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
+                vals.display = this.props.pendEdits.recordChanges[fieldId].newVal.display;
+                return vals;
             }
-        });
+
+            let record = this.props.formData.record || [];
+
+            let fieldRecord = _.find(record, val => {
+                if (val.id === fieldId) {
+                    return true;
+                }
+            });
+
+            if (fieldRecord && fieldRecord.value) {
+                return fieldRecord;
+            } else if (field.defaultValue && field.defaultValue.coercedValue) {
+                fieldRecord = {};
+                fieldRecord.display = field.defaultValue.displayValue;
+                fieldRecord.value = field.defaultValue.coercedValue.value;
+                return fieldRecord;
+            }
+        }
     },
 
     /**
@@ -124,14 +137,14 @@ let QBForm = React.createClass({
      * @param sectionIndex
      * @returns {XML}
      */
-    createFieldLabelCell(element, sectionIndex) {
+    createFieldLabelCell(element, sectionIndex, validationStatus) {
 
         let relatedField = this.getRelatedField(element.fieldId);
 
         let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
         return (
             <td key={key}>
-                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={this.props.edit} />
+                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={this.props.edit} isInvalid={validationStatus.isInvalid}/>
             </td>);
     },
 
@@ -140,9 +153,14 @@ let QBForm = React.createClass({
             isInvalid : false,
             invalidMessage: ""
         };
-        if (_.has(this.props, 'pendEdits.editErrors') && this.props.pendEdits.editErrors[fieldId]) {
-            validationResult.isInvalid = this.props.pendEdits.editErrors[fieldId].isInvalid;
-            validationResult.invalidMessage = this.props.pendEdits.editErrors[fieldId].invalidMessage;
+        if (_.has(this.props, 'pendEdits.editErrors.errors') && this.props.pendEdits.editErrors.errors.length) {
+            let relatedError = _.find(this.props.pendEdits.editErrors.errors, (error) =>{
+                return error.id === fieldId;
+            });
+            if (relatedError) {
+                validationResult.isInvalid = relatedError.isInvalid;
+                validationResult.invalidMessage = relatedError.invalidMessage;
+            }
         }
         return validationResult;
     },
@@ -155,13 +173,11 @@ let QBForm = React.createClass({
      * @param colSpan
      * @returns {XML}
      */
-    createFieldElementCell(element, sectionIndex, includeLabel, colSpan) {
+    createFieldElementCell(element, sectionIndex, includeLabel, colSpan, validationStatus) {
 
         let relatedField = this.getRelatedField(element.fieldId);
 
-        let fieldRecord = this.getFieldRecord(element.fieldId);
-
-        let validationStatus =  this.getFieldValidationStatus(element.fieldId);
+        let fieldRecord = this.getFieldRecord(relatedField);
 
         let key = "field" + sectionIndex + "-" + element.orderIndex;
 
@@ -270,22 +286,24 @@ let QBForm = React.createClass({
             sectionTitle = section.headerElement.FormHeaderElement.displayText;
         }
 
-        let classes = 'formSection';
         /*
         A section is marked as pseudo if its the user did not select a set of elements to be part of a section but for uniformity of structure core
         adds a section around these elements. In this case the interface is similar to a section except for collapsible behavior.
         A section is also treated non-collapsible if its the first section and has no elements or no header
          */
-        if (section.pseudo || (isFirstSection && (!sectionTitle.length || !Object.keys(section.elements).length))) {
-            classes += ' nonCollapsible';
-        }
+
+        const collapsible = !(section.pseudo || (isFirstSection && (!sectionTitle.length || !Object.keys(section.elements).length)));
+
+        const wrapLabels = !_.has(this.props, "formData.formMeta.wrapLabel") || this.props.formData.formMeta.wrapLabel;
 
         return (
-            <QBPanel className={classes}
+            <QBPanel className="formSection"
                      title={sectionTitle}
                      key={"section" + section.orderIndex}
                      isOpen={true}
-                     panelNum={section.orderIndex}>
+                     panelNum={section.orderIndex}
+                     collapsible={collapsible}
+                     wrapLabels={wrapLabels}>
                 <table className="formTable">
                     <tbody>
                         {this.createSectionTableRows(section, singleColumn)}
@@ -322,20 +340,8 @@ let QBForm = React.createClass({
     render() {
         const tabChildren = [];
         const singleColumn = Breakpoints.isSmallBreakpoint();
-        let errorMsg = '';
 
-        //  If there is an errorStatus, display the appropriate message based on the error code; otherwise
-        //  render the form with the supplied data(if any).
-        //  TODO: when error handling is implemented beyond forms, the thinking is that an error component
-        //  TODO: should be created to replace the below and handle the locale messaging and rendering of
-        //  TODO: a common error page.
-        if (this.props.errorStatus) {
-            if (this.props.errorStatus === 403) {
-                errorMsg = Locale.getMessage("form.error.403");
-            } else {
-                errorMsg = Locale.getMessage("form.error.500");
-            }
-        } else if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
+        if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
             let tabs = this.props.formData.formMeta.tabs;
 
             Object.keys(tabs).forEach(key => {
@@ -348,7 +354,7 @@ let QBForm = React.createClass({
         return (
             <div className="formContainer">
                 <form className={this.props.edit ? "editForm" : "viewForm"}>
-                    {errorMsg ? <div className="errorSection">{errorMsg}</div> : formContent}
+                    {formContent}
                 </form>
             </div>
         );

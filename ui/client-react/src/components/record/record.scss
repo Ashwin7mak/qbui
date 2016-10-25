@@ -10,14 +10,15 @@
     display: flex;
     flex-direction: column;
 
-
     .recordStageHeadline {
-
         display:flex;
         flex-direction:column;
         justify-content:center;
 
-
+        .tableHomepageLink {
+            display:flex;
+            align-items:center;
+        }
     }
     .recordActionsContainer {
         display: flex;

@@ -12,6 +12,7 @@ import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import {withRouter} from 'react-router';
 import Locale from '../../locales/locales';
+import Loader from 'react-loader';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import _ from 'lodash';
 import './record.scss';
@@ -24,6 +25,7 @@ export let RecordRoute = React.createClass({
 
     loadRecord(appId, tblId, recordId, rptId, formType) {
         const flux = this.getFlux();
+        flux.actions.syncingForm();
         flux.actions.selectTableId(tblId);
         flux.actions.loadFormAndRecord(appId, tblId, recordId, rptId, formType);
     },
@@ -36,11 +38,23 @@ export let RecordRoute = React.createClass({
             this.loadRecord(appId, tblId, recordId, rptId);
         }
     },
-    componentDidMount: function() {
+    componentDidMount() {
         let flux = this.getFlux();
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
+
         this.loadRecordFromParams(this.props.params);
+    },
+
+    componentDidUpdate(prev) {
+
+        if (this.props.params.appId !== prev.params.appId ||
+            this.props.params.tblId !== prev.params.tblId ||
+            this.props.params.recId !== prev.params.recId ||
+            (this.props.form && this.props.form.syncLoadedForm)) {
+
+            this.loadRecordFromParams(this.props.params);
+        }
     },
 
     getSecondaryBar() {
@@ -112,7 +126,9 @@ export let RecordRoute = React.createClass({
 
     getStageHeadline() {
         if (this.props.params) {
-            const {rptId, recordId} = this.props.params;
+            const {appId, tblId, rptId, recordId} = this.props.params;
+
+            const tableLink = `/app/${appId}/table/${tblId}`;
 
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
             const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
@@ -123,8 +139,8 @@ export let RecordRoute = React.createClass({
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && <TableIcon icon={this.props.selectedTable.icon}/> }
-                    {this.props.selectedTable && this.props.selectedTable.name && <span>{this.props.selectedTable.name}&nbsp;&gt;&nbsp;</span>}
+                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}</Link>}
+                    {this.props.selectedTable && rptId && <span>&nbsp;&gt;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
 
@@ -157,7 +173,7 @@ export let RecordRoute = React.createClass({
 
         const flux = this.getFlux();
 
-        flux.actions.openRecordForEdit(this.props.params.recordId);
+        flux.actions.openRecordForEdit(parseInt(this.props.params.recordId), true);
     },
     /**
      * edit the selected record in the trowser
@@ -167,7 +183,7 @@ export let RecordRoute = React.createClass({
 
         const flux = this.getFlux();
 
-        flux.actions.editNewRecord();
+        flux.actions.editNewRecord(true);
     },
     getPageActions() {
 
@@ -185,7 +201,9 @@ export let RecordRoute = React.createClass({
     /**
      * only re-render when our form data has changed */
     shouldComponentUpdate(nextProps) {
-        return !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
+        return this.props.form.syncLoadedForm ||
+            !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
+            !_.isEqual(this.props.form.formLoading, nextProps.form.formLoading) ||
             !_.isEqual(this.props.pendEdits, nextProps.pendEdits);
     },
 
@@ -205,37 +223,32 @@ export let RecordRoute = React.createClass({
             return null;
         } else {
 
-            // we store "next", "previous" in flux store and pass it down so we know what CSS classes to apply for the animation based on the direction
+            return (
+                <div className="recordContainer">
+                    <Stage stageHeadline={this.getStageHeadline()}
+                           pageActions={this.getPageActions()}>
 
-            const nextOrPreviousTransitionName = this.props.reportData && this.props.reportData.nextOrPrevious ? this.props.reportData.nextOrPrevious : "";
+                        <div className="record-content">
+                        </div>
+                    </Stage>
 
-            return (<div id={this.props.params.recordId} className="recordContainer">
-                <Stage stageHeadline={this.getStageHeadline()}
-                       pageActions={this.getPageActions()}>
-
-                    <div className="record-content">
+                    <div className="recordActionsContainer secondaryBar">
+                        {this.getSecondaryBar()}
+                        {this.getPageActions()}
                     </div>
-                </Stage>
 
-                <div className="recordActionsContainer secondaryBar">
-                    {this.getSecondaryBar()}
-                    {this.getPageActions()}
-                </div>
-                <div className="qbFormContainer">
-                    <ReactCSSTransitionGroup transitionName={nextOrPreviousTransitionName}
-                                             transitionEnterTimeout={200}
-                                             transitionLeaveTimeout={200}>
-                        <Record appId={this.props.params.appId}
+                    <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
+                            loaded={!this.props.form || !this.props.form.formLoading} >
+
+                        <Record key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
+                                appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
                                 recId={this.props.params.recordId}
                                 errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
                                 formData={this.props.form ? this.props.form.formData : null}
-                                appUsers={this.props.appUsers}
-                                edit={false}></Record>
-
-                    </ReactCSSTransitionGroup>
-                </div>
-            </div>);
+                                appUsers={this.props.appUsers} />
+                    </Loader>
+                </div>);
         }
     }
 });

@@ -14,7 +14,7 @@ describe('Report functions', () => {
     'use strict';
 
     let component;
-    let reportDataParams = {reportData: {data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+    let reportDataParams = {reportData: {data: {columns: [{field: "col_num", headerName: "col_num", fieldDef: {}}]}}};
 
     let reportParams = {appId:1, tblId:2, rptId:3, format: true, offSet: null, numRows: null};
     let secondaryParams = {appId:4, tblId:5, rptId:6};

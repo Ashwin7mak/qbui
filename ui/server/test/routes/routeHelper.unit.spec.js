@@ -339,4 +339,22 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
+    describe('validate isTableHomePageRoute method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', expectation: false},
+            {name: 'test null url', url: null, expectation: false},
+            {name: 'test invalid url', url: '/apps/123/tables/456/reports/2', expectation: false},
+            {name: 'test valid url - mixed case no leading slash', url: 'apps/123/tables/456/homePage', expectation: true},
+            {name: 'test valid url - mixed case with domain', url: 'https://somedomain/apps/123/tables/456/homepage', expectation: true},
+            {name: 'test valid url - upper case', url: '/APPS/123/TABLES/456/HOMEPAGE', expectation: true}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.isTableHomePageRoute(testCase.url), testCase.expectation);
+                done();
+            });
+        });
+    });
+
 });
