@@ -7,6 +7,7 @@ import _ from 'lodash';
 import FilterUtils from '../../utils/filterUtils';
 import * as query from '../../constants/query';
 import ReportUtils from '../../utils/reportUtils';
+import Header from '../headers/smallHeader';
 import './reportHeader.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -66,7 +67,7 @@ var ReportHeader = React.createClass({
     },
 
     render: function() {
-        const headerClasses = "reportHeader" + (this.state.searching ? " searching" : "");
+        const headerClasses = "reportHeader smallHeader" + (this.state.searching ? " searching" : "");
 
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
 

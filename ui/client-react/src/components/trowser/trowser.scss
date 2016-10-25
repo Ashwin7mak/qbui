@@ -41,7 +41,7 @@ $action-separator-color: #486c8f;
         padding: 0 10px 0 20px;
         .qbIcon {
             font-size:22px;
-            vertical-align: baseline;
+            vertical-align: middle;
         }
         .breadcrumbs {
             flex:1 1 auto;
@@ -179,7 +179,7 @@ $action-separator-color: #486c8f;
 @include small-breakpoint {
     .trowser .trowserFooter {
         flex-direction:column;
-        flex: 0 1 auto;
+        flex: 0 0 auto;
 
         .centerActions {
             a {

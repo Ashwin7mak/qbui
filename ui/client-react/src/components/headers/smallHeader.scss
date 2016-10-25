@@ -1,0 +1,47 @@
+@import '../../assets/css/qbVariables';
+
+.smallHeader {
+    display:flex;
+    flex-direction:row;
+    line-height:40px;
+    order:0;
+    font-size:13px;
+    flex: 0 0 auto;
+    flex-basis: $top-nav-height;
+    justify-content: space-between;
+
+    background-color: #fff !important;
+
+    .left {
+        flex: 0 0 auto;
+        margin-left:5px;
+        .toggleNavButton {
+            font-size: 22px;
+            width: auto;
+            padding: 0 4px;
+            color: #7090ab;
+        }
+    }
+    .center {
+        font-size:18px;
+        display:flex;
+        flex-direction: row;
+        align-items:center;
+        flex: 1 1 auto;
+    }
+    .center.title {
+        overflow: hidden;
+        min-width: 40px;
+        justify-content: center;
+        .qbIcon {
+            flex: 0 0 auto;
+            color: $top-nav-title-icon-color;
+
+        }
+    }
+    .right {
+        display:flex;
+        align-items:center;
+        flex: 0 0 auto;
+    }
+}
