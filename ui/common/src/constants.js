@@ -10,7 +10,7 @@
         PUT             : 'PUT',
         PATCH           : 'PATCH',
         CONTENT_TYPE    : 'Content-Type',
-        CONTENT_LENGTH  : 'Content-length',
+        CONTENT_LENGTH  : 'Content-Length',
         APPLICATION_JSON: 'application/json',
         APPLICATION_XML : 'application/xml',
         TEXT_HTML       : 'text/html',

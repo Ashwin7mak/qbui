@@ -35,11 +35,10 @@ const ReportRoute = React.createClass({
         let tblId = params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
-        //  loading a report..always render the 1st page on initial load
-        let offset =  constants.PAGE.DEFAULT_OFFSET;
-        let numRows = constants.PAGE.DEFAULT_NUM_ROWS;
-
         if (appId && tblId && rptId) {
+            //  loading a report..always render the 1st page on initial load
+            let offset = constants.PAGE.DEFAULT_OFFSET;
+            let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
             this.loadReport(appId, tblId, rptId, offset, numRows);
         }
     },

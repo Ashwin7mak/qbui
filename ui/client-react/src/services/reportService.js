@@ -87,7 +87,6 @@ class ReportService extends BaseService {
      * @returns promise
      */
     getReportMetaData(appId, tableId, reportId) {
-        // TODO consider caching meta data
         let url = super.constructUrl(this.API.GET_REPORT_META, [appId, tableId, reportId]);
         return super.get(url);
     }

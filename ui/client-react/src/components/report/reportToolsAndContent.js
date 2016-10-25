@@ -122,6 +122,7 @@ const ReportToolsAndContent = React.createClass({
             });
         }
     },
+
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add'},
@@ -133,9 +134,11 @@ const ReportToolsAndContent = React.createClass({
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
+
     filterOnSearch(newSearch) {
         this.debouncedFilterReport(newSearch, this.props.reportData.selections);
     },
+
     filterReport(searchString, selections) {
         const filter = FilterUtils.getFilter(searchString, selections, this.facetFields);
 
@@ -150,24 +153,29 @@ const ReportToolsAndContent = React.createClass({
             typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
             true, filter, queryParams);
     },
+
     searchTheString(searchTxt) {
         this.getFlux().actions.filterSearchPending(searchTxt);
         this.filterOnSearch(searchTxt);
     },
+
     filterOnSelections(newSelections) {
         this.getFlux().actions.filterSelectionsPending(newSelections);
         this.debouncedFilterReport(this.props.searchStringForFiltering, newSelections);
     },
+
     clearSearchString() {
         this.getFlux().actions.filterSearchPending('');
         this.filterOnSearch('');
     },
+
     clearAllFilters() {
         let noSelections = new FacetSelections();
         this.getFlux().actions.filterSelectionsPending(noSelections);
         this.getFlux().actions.filterSearchPending('');
         this.debouncedFilterReport('', noSelections);
     },
+
     getReportToolbar() {
         let {appId, tblId, rptId,
             reportData:{selections, ...otherReportData}} = this.props;
@@ -194,6 +202,7 @@ const ReportToolsAndContent = React.createClass({
     getSelectionActions() {
         return (<ReportActions selection={this.props.selectedRows} appId={this.props.params.appId} tblId={this.props.params.tblId} rptId={this.props.params.rptId} nameForRecords={this.props.nameForRecords}/>);
     },
+
     getTableActions() {
         const selectedRows = this.props.selectedRows;
         const hasSelection = !!(selectedRows && selectedRows.length > 0);
@@ -208,6 +217,7 @@ const ReportToolsAndContent = React.createClass({
             {hasSelection ? this.getSelectionActions() : this.getReportToolbar()}
         </div>);
     },
+
     getNextReportPage() {
         if (this.props.reportData) {
             if (this.props.reportData.pageOffset + this.props.reportData.numRows >= this.props.reportData.data.recordsCount) {
@@ -216,6 +226,7 @@ const ReportToolsAndContent = React.createClass({
             this.getPageUsingOffsetMultiplicant(1);
         }
     },
+
     getPreviousReportPage() {
         if (this.props.reportData) {
             if (this.props.reportData.pageOffset === 0) {
@@ -224,6 +235,7 @@ const ReportToolsAndContent = React.createClass({
             this.getPageUsingOffsetMultiplicant(-1);
         }
     },
+
     getPageUsingOffsetMultiplicant(multiplicant) {
         let appId = this.props.params.appId;
         let tblId = this.props.params.tblId;
@@ -252,14 +264,13 @@ const ReportToolsAndContent = React.createClass({
             }
         }
 
-        //send empty sortListParam value so that no sorting is included on the request.
         queryParams[query.SORT_LIST_PARAM] = sortList;
         queryParams[query.OFFSET_PARAM] = offset + (multiplicant * numRows);
         queryParams[query.NUMROWS_PARAM] = numRows;
 
         this.getFlux().actions.loadDynamicReport(appId, tblId, rptId, true, filter, queryParams);
-
     },
+
     /**
      * Returns the count of records for a report.
      * If the report has been filtered or has facets, returns the filtered count. If not, returns the total records count.
@@ -284,11 +295,10 @@ const ReportToolsAndContent = React.createClass({
      * @param data row record data
      */
     editNewRecord() {
-
         const flux = this.getFlux();
-
         flux.actions.editNewRecord();
     },
+
     render() {
         let classes = "reportToolsAndContentContainer";
         if (this.props.selectedRows) {

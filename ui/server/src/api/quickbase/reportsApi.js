@@ -221,7 +221,7 @@
                 // Ensure the offset and numRows request parameter is set to either the supplied value or the defaults
                 let offset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
                 let numRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
-                if (!Number.isInteger(offset) || !Number.isInteger(numRows)) {
+                if (offset === null || numRows === null || !Number.isInteger(+offset) || !Number.isInteger(+numRows)) {
                     offset = constants.PAGE.DEFAULT_OFFSET;
                     numRows = constants.PAGE.DEFAULT_NUM_ROWS;
                 } else {
@@ -295,14 +295,18 @@
                                 //  override the default report meta data setting for sort list
                                 let sList = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.SORT_LIST);
                                 if (sList !== null) {
-                                    if (sList === '') {
-                                        reportMetaData.sortList = null;
-                                    } else {
-                                        reportMetaData.sortList = [];
-                                        let sListObj = getSortListAsObject(sList);
-                                        sListObj.forEach((el) => {
-                                            reportMetaData.sortList.push(el);
-                                        });
+                                    //  we have a sort List parameter; initialize the sort list in the event the parameter value is empty.
+                                    reportMetaData.sortList = [];
+                                    try {
+                                        if (sList !== '') {
+                                            let sListObj = getSortListAsObject(sList);
+                                            sListObj.forEach((el) => {
+                                                reportMetaData.sortList.push(el);
+                                            });
+                                        }
+                                    } catch (e) {
+                                        //  log error and continue on with no sort/grouping
+                                        log.warn('Error parsing request parameter sort list.  SortList: ' + sList + '. Error: ' + e.stack);
                                     }
                                 }
 
@@ -312,7 +316,24 @@
                                     reportMetaData.query = query;
                                 }
 
-                                //  TODO -- add support for column list override
+                                //  override the default report meta data column fid list
+                                let columnFids = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.COLUMNS);
+                                if (columnsFids !== null) {
+                                    //  we have a cList parameter; initialize the fid list in the event the parameter value is empty.
+                                    reportMetaData.fids = [];
+                                    if (columnFids !== '') {
+                                        try {
+                                            //  convert list delimited string into array and ensure the fid id's are integers
+                                            reportMetaData.fids = columnsFids.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                            for (let fid in reportMetaData.fids) {
+                                                reportMetaData.fids[fid] = parseInt(reportMetaData.fids[fid], 10);
+                                            }
+                                        } catch (e) {
+                                            //  log error and continue on with no fid list set..meaning all columns returned
+                                            log.warn('Error parsing request parameter fid list.  FidList: ' + columnFids + '. Error: ' + e.stack);
+                                        }
+                                    }
+                                }
 
                                 //  set the request body to the updated meta data object and the body length
                                 opts.body = JSON.stringify(reportMetaData);

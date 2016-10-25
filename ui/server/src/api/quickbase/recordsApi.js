@@ -207,7 +207,7 @@
              */
             fetchRecords: function(req) {
 
-                let opts = requestHelper.setOptions(req);
+                let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 //  get the request parameters
@@ -230,7 +230,7 @@
                 // Ensure the offset and numRows request parameter is set to either the supplied value or the defaults
                 let offset = requestHelper.getQueryParameterValue(opts, constants.REQUEST_PARAMETER.OFFSET);
                 let numRows = requestHelper.getQueryParameterValue(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
-                if (!Number.isInteger(offset) || !Number.isInteger(numRows)) {
+                if (offset === null || numRows === null || !Number.isInteger(+offset) || !Number.isInteger(+numRows)) {
                     offset = constants.PAGE.DEFAULT_OFFSET;
                     numRows = constants.PAGE.DEFAULT_NUM_ROWS;
                 } else {
@@ -248,7 +248,7 @@
              * Fetch the count of all records that match a user query
              */
             fetchCountForRecords: function(req) {
-                let opts = requestHelper.setOptions(req);
+                let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsCountRoute(req.url);
