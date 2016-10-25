@@ -4,6 +4,10 @@ import './qbModal.scss';
 import Breakpoints from "../../utils/breakpoints";
 import QbIcon from '../qbIcon/qbIcon';
 
+const QB_MODAL_ALERT = 'alert';
+const QB_MODAL_STANDARD = 'standard';
+const QB_MODAL_SUCCESS = 'success';
+const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS];
 
 const QBModal = React.createClass({
     propTypes: {
@@ -20,9 +24,9 @@ const QBModal = React.createClass({
          */
         title: React.PropTypes.string,
         /**
-         *This is the QBIcon for the modal
+         *This is the type of alert (alert or success)
          */
-        qbIconName: React.PropTypes.string,
+        type: React.PropTypes.oneOf(QB_MODAL_TYPES),
         /**
          *This is the name for the primary button
          */
@@ -48,22 +52,45 @@ const QBModal = React.createClass({
          */
         leftButtonOnClick: React.PropTypes.func,
     },
+    getDefaultProps() {
+        return {
+            type: 'standard'
+        };
+    },
+    /**
+     * This function checks to see if there is a QBIcon for the modal
+     * if there is a QBIcon then it will be placed on the page according to XD specs
+     * if there is not a QBIcon then it will not render anything to the page
+     * @returns {*}
+     */
     renderQBIcon() {
+        if (!QB_MODAL_TYPES.includes(this.props.type) || this.props.type === 'standard') {
+            return null;
+        }
+
         let isSmall = Breakpoints.isSmallBreakpoint();
-        //This function checks to see if there is a QBIcon
-            //if there is a QBIcon then it will be placed on the page according to XD specs
-            //if there is not a QBIcon then it will not render anything to the page
+
+        let classes = ['qbIcon'];
+        let icon = 'alert';
+
         if (this.props.qbIconName && this.props.title && !isSmall) {
-            return <div className="largeQBIcon">
-                <QbIcon icon={this.props.qbIconName} />
-            </div>;
+            classes.push('qbIcon--large');
         }
-        if (this.props.qbIconName) {
-            return <div className="qbIcon">
-                <QbIcon icon={this.props.qbIconName} />
-            </div>;
+
+        if (this.props.type === QB_MODAL_ALERT) {
+            classes.push('qbIcon--alert');
         }
-        return null;
+
+        if (this.props.type === QB_MODAL_SUCCESS) {
+            classes.push('qbIcon--success');
+            icon = 'check';
+        }
+
+        return (
+            <div className={classes.join(' ')}>
+                <QbIcon icon={icon} />
+            </div>
+        );
     },
     renderTitle() {
         if (this.props.title) {
@@ -89,15 +116,15 @@ const QBModal = React.createClass({
         ];
 
         if (this.props.middleButtonName) {
-            buttons.unshift(<Button key={buttons.length} className="middleButton" onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
+            buttons.unshift(<Button key={buttons.length} className="secondaryButton middleButton" onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
         }
 
         if (this.props.leftButtonName) {
-            buttons.unshift(<Button key={buttons.length} className="leftButton" onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>);
+            buttons.unshift(<Button key={buttons.length} className="secondaryButton leftButton" onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>);
         }
 
         return (
-            <div className={buttons.length === 1 ? 'singlePrimaryButtonContainer' : 'buttons'}>
+            <div className={buttons.length === 1 ? 'buttons singlePrimaryButtonContainer' : 'buttons'}>
                 {buttons}
             </div>
         );
@@ -108,7 +135,7 @@ const QBModal = React.createClass({
                 <Modal className="qbModal" show={this.props.show}>
                     <div className="bodyContainer">
                         {this.renderQBIcon()}
-                        <div className={(this.props.qbIconName ? 'hasIcon' : '')}>
+                        <div>
                             <Modal.Title>
                                 {this.renderTitle()}
                             </Modal.Title>

@@ -9,6 +9,8 @@ var BasicQBModalExample = React.createClass({
         return {
             defaultQBModalOpen: false,
             criticalAlertQBModalOpen: false,
+            criticalAlertWithLongTextOpen: false,
+            successQBModalOpen: false,
             singleButtonQBModal: false,
             qbIconTitleBodyMessage: false,
             titleBodyMessageTwoButtons: false
@@ -21,6 +23,14 @@ var BasicQBModalExample = React.createClass({
 
     toggleCriticalAlertQBModal() {
         this.setState({criticalAlertQBModalOpen: !this.state.criticalAlertQBModalOpen});
+    },
+
+    toggleCriticalAlertQBModalWithLongText() {
+        this.setState({criticalAlertWithLongTextOpen: !this.state.criticalAlertWithLongTextOpen});
+    },
+
+    toggleSuccessQBModal() {
+        this.setState({successQBModalOpen: !this.state.criticalAlertQBModalOpen});
     },
 
     singleButtonQBModal() {
@@ -38,6 +48,8 @@ var BasicQBModalExample = React.createClass({
         this.setState({
             defaultQBModalOpen: false,
             criticalAlertQBModalOpen: false,
+            criticalAlertWithLongTextOpen: false,
+            successQBModalOpen: false,
             singleButtonQBModal: false,
             qbIconTitleBodyMessage: false,
             titleBodyMessageTwoButtons: false
@@ -56,6 +68,14 @@ var BasicQBModalExample = React.createClass({
                 {/*Show Critical Alert Button*/}
                 <div style={{paddingTop:"12px"}}>
                     <button onClick={this.toggleCriticalAlertQBModal}>Show Critical Alert Modal</button>
+                </div>
+                {/*Show Critical Alert With Long Text*/}
+                <div style={{paddingTop:"12px"}}>
+                    <button onClick={this.toggleCriticalAlertQBModalWithLongText}>Show Critical Alert Modal With Long Text</button>
+                </div>
+                {/*Show Success Button*/}
+                <div style={{paddingTop:"12px"}}>
+                    <button onClick={this.toggleSuccessQBModal}>Show Success Modal</button>
                 </div>
                 {/*Show Single Button Modal*/}
                 <div style={{paddingTop:"12px"}}>
@@ -93,7 +113,33 @@ var BasicQBModalExample = React.createClass({
                         leftButtonName="Left Button"
                         leftButtonOnClick={this.closeAll}
                         bodyMessage="Body Message"
-                        qbIconName="alert" />
+                        type="alert" />
+                </div>
+                {/*Critical Alert Modal With Long Text */}
+                <div>
+                    <QBModal
+                        show={this.state.criticalAlertWithLongTextOpen}
+                        primaryButtonName="Primary Button"
+                        primaryButtonOnClick={this.closeAll}
+                        middleButtonName="Middle Button"
+                        middleButtonOnClick={this.closeAll}
+                        leftButtonName="Left Button"
+                        leftButtonOnClick={this.closeAll}
+                        bodyMessage={longBodyMessage}
+                        type="alert" />
+                </div>
+                {/*Success Modal*/}
+                <div>
+                    <QBModal
+                        show={this.state.successQBModalOpen}
+                        primaryButtonName="Primary Button"
+                        primaryButtonOnClick={this.closeAll}
+                        middleButtonName="Middle Button"
+                        middleButtonOnClick={this.closeAll}
+                        leftButtonName="Left Button"
+                        leftButtonOnClick={this.closeAll}
+                        bodyMessage="Body Message"
+                        type="success" />
                 </div>
                 {/*Single Button Modal*/}
                 <div>
