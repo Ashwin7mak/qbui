@@ -49,13 +49,10 @@ module.exports = function(grunt) {
     //arguments along to sauce-connect-launcher
     var httpProxy = grunt.option('httpProxyHost') !== undefined ? grunt.option('httpProxyHost') + ':80 --proxy-tunnel' : null;
     var useColors = grunt.option('colors') || false;
-    var lintStylesFail = grunt.option('lintStylesFail') || false;
 
     //  webpack is our module builder
     var webpack = require('webpack');
     var webpackConfig = require('./webpack.config.js');
-
-    var stylelint = require('stylelint');
 
     // define the source client(REACT) folder hierarchy...
     function updateClientRoot() {
@@ -684,7 +681,7 @@ module.exports = function(grunt) {
 
     // Load and register custom external grunt scripts
     // All grunt tasks in ../scripts/gruntTasks will be loaded/registered
-    grunt.loadTasks('../scripts/gruntTasks');
+    grunt.loadTasks('./gruntTasks');
 
     // Production build
     grunt.registerTask('webpackbuild', ['webpack:build']);
@@ -970,50 +967,7 @@ module.exports = function(grunt) {
         ]);
     });
 
-    grunt.registerTask('lintStyles', 'Run stylelint on code', function() {
-        var done = this.async();
-        stylelint.lint({
-            configFile: '.stylelintrc',
-            syntax: 'scss',
-            formatter: 'string',
-            files:  'client-react/src/**/*.{scss,css}'
-        })
-        .then(function(data) {
-            var errors = 0;
-            var warnings = 0;
 
-            data.results.forEach(function(cssFile) {
-                cssFile.warnings.forEach(function(item) {
-                    if (item.severity === 'error') {
-                        errors++;
-                    }
-
-                    if (item.severity === 'warning') {
-                        warnings++;
-                    }
-                });
-            });
-
-            if (errors > 0 || warnings > 0) {
-                grunt.log.writeln(data.output);
-                grunt.log.error('Total of ' + errors + ' errors found.');
-                grunt.log.error('Total of ' + warnings + ' warnings found.');
-                grunt.log.error('For details on errors visit:');
-                grunt.log.error('https://github.com/stylelint/stylelint/blob/master/docs/user-guide/rules.md');
-                if (lintStylesFail && errors > 0) {
-                    grunt.fail.fatal('Too many errors');
-                }
-            } else {
-                grunt.log.ok('No stylelint errors found');
-            }
-
-            done();
-        })
-        .catch(function(err) {
-            grunt.log.writeln(err.stack);
-            done();
-        });
-    });
 
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-webpack');

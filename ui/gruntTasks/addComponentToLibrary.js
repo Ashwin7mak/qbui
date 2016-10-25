@@ -134,7 +134,7 @@ module.exports = function(grunt) {
         grunt.file.write(componentData.routesFile, routesFileArray.join("\n"));
     }
 
-    grunt.registerTask('addComponentToLibrary', 'Add a React component to the component library', function(){
+    grunt.registerTask('addComponentToLibrary', 'Add a React component to the component library', function() {
         // Current Component Info
         var componentName = grunt.option('name');
         var componentPath = grunt.option('path');
