@@ -16,7 +16,7 @@
 
     @include small-breakpoint {
       border-left: 10px white solid;
-      border-radius: 0px;
+      border-radius: 0;
       border-right: 10px white solid;
     }
   }
@@ -26,7 +26,7 @@
     width: 450px;
 
     @include small-breakpoint {
-      margin: 0px auto;
+      margin: 0 auto;
       width: 100%;
     }
   }
@@ -57,14 +57,14 @@
     width: 450px;
 
     @include small-breakpoint {
-      margin: 0px auto;
+      margin: 0 auto;
       width: 100%;
     }
   }
 
   .modal-body {
     margin-top: -5px;
-    padding: 0px;
+    padding: 0;
   }
 
   .modal-footer {
@@ -73,8 +73,8 @@
     padding-top: 20px;
 
     @include small-breakpoint {
-      padding-left: 0px;
-      padding-right: 0px;
+      padding-left: 0;
+      padding-right: 0;
     }
   }
 
