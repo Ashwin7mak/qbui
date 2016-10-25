@@ -1,5 +1,6 @@
 import FieldUtils from '../../src/utils/fieldUtils';
 import * as SchemaConsts from '../../src/constants/schema';
+import consts from '../../../common/src/constants';
 
 describe('FieldUtils', () => {
     let testData;
@@ -180,6 +181,42 @@ describe('FieldUtils', () => {
             it(testCase.name, () => {
                 let max = FieldUtils.getMaxLength(testCase.data);
                 expect(max).toBe(testCase.expectation);
+            });
+        });
+    });
+
+    describe('test isFieldEditable', () => {
+        let testCases = [
+            {
+                name: 'no fieldDef provided',
+                data: {},
+                expectation: true
+            },
+            {
+                name: 'partial fieldDef provided builtin',
+                data: {builtIn : true},
+                expectation: false
+            },
+            {
+                name: 'partial fieldDef provided type',
+                data: {type : consts.CONCRETE},
+                expectation: false
+            },
+            {
+                name: 'partial fieldDef provided userEditableValue',
+                data: {userEditableValue : false},
+                expectation: false
+            },
+            {
+                name: 'fieldDef as expected',
+                data: {userEditableValue : true},
+                expectation: true
+            },
+        ];
+        testCases.forEach(function(testCase) {
+            it(testCase.name, () => {
+                let result = FieldUtils.isFieldEditable(testCase.data);
+                expect(result).toBe(testCase.expectation);
             });
         });
     });

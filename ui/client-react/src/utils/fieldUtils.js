@@ -73,23 +73,22 @@ class FieldUtils {
     }
 
     static isFieldEditable(fieldDef) {
-        let isEditable = true;
-
-        // built in fields are not editable
-        if (typeof fieldDef !== 'undefined' &&
-            typeof fieldDef.builtIn !== 'undefined' &&  fieldDef.builtIn) {
-            isEditable = false;
+        if (fieldDef) {
+            // built in fields are not editable
+            if (typeof fieldDef.builtIn !== 'undefined' && fieldDef.builtIn) {
+                return false;
+            }
+            // field must be scalar (a non-generated field value)
+            if (typeof fieldDef.type !== 'undefined' && fieldDef.type !== consts.SCALAR) {
+                return false;
+            }
+            // field must be editable i.e. user editable not a restricted value
+            if (typeof fieldDef.userEditableValue !== 'undefined' && !fieldDef.userEditableValue) {
+                return false;
+            }
+            return true;
         }
-        // field must be scalar (a non-generated field value)
-        if (typeof fieldDef.type !== 'undefined' &&  fieldDef.type !== consts.SCALAR) {
-            isEditable = false;
-        }
-        // field must be editable i.e. user editable not a restricted value
-        if (typeof fieldDef !== 'undefined' &&
-            typeof fieldDef.userEditableValue !== 'undefined' && !fieldDef.userEditableValue) {
-            isEditable = false;
-        }
-        return isEditable;
+        return false;
     }
 }
 

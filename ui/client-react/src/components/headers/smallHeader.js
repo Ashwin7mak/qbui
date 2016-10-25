@@ -26,7 +26,7 @@ var Header = React.createClass({
 
     render: function() {
         let headerClasses = 'smallHeader';
-        headerClasses += this.props.classes ? ' ' + this.props.classes: '';
+        headerClasses += this.props.classes ? ' ' + this.props.classes : '';
 
         return (<div className={headerClasses}>
             <div className="left">

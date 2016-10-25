@@ -19,7 +19,8 @@ let relatedField = {
     datatypeAttributes: {
         type: "TEXT"
     },
-    required: true
+    required: true,
+    userEditableValue: true
 };
 let fieldRecord = {
     display: "display",
@@ -43,7 +44,7 @@ describe('FieldElement functions', () => {
     });
 
     it('test render of editor components', () =>{
-        component = TestUtils.renderIntoDocument(<FieldElement flux={flux} element={element} fieldRecord={fieldRecord} edit={true}/>);
+        component = TestUtils.renderIntoDocument(<FieldElement flux={flux} element={element} relatedField={relatedField} fieldRecord={fieldRecord} edit={true}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         expect(TestUtils.scryRenderedComponentsWithType(component, FieldValueEditor).length).toEqual(1);
     });

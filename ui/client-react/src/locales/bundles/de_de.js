@@ -45,7 +45,7 @@ export default {
             save: "Speichern",
             saveAndNext: "Speichern und Nächster",
             saveAndAddAnother: "Speichern und fügen Sie ein anderes",
-            new: Neu
+            new: "Neu"
         },
         field: {
             search: "Suche",

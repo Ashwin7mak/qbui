@@ -45,7 +45,7 @@ export default {
             save: "Sauver",
             saveAndNext: "Sauver et prochain",
             saveAndAddAnother: "Sauver et ajouter un autre",
-            new: Nouveau
+            new: "Nouveau"
         },
         field: {
             search: "Chercher",
