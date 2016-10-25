@@ -63,6 +63,29 @@
 
             }
             return baseValue;
+        },
+        /**
+         * Formats a list of emails in a string.
+         * Emails can be separated by a semicolon (;), comma (,), or passed in as an array
+         */
+        formatListOfEmails(emails, fieldInfo) {
+            // Abort if emails is null or empty
+            if (!emails || emails.length === 0) {
+                return emails;
+            }
+
+            if (!Array.isArray(emails)) {
+                emails = this.splitEmails(emails);
+            }
+
+            for (var i = 0; i < emails.length; i++) {
+                emails[i] = this.format({value: emails[i]}, fieldInfo);
+            }
+
+            return emails.join(';');
+        },
+        splitEmails: function(emails) {
+            return emails.split(new RegExp('[;,]\s?'));
         }
     };
 }());
