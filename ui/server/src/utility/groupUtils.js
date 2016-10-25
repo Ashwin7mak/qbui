@@ -149,6 +149,13 @@
                 case groupTypes.USER.firstWord: return true;
                 }
                 return false;
+            case constants.PHONE_NUMBER:
+            case constants.CHECKBOX:
+            case constants.URL:
+                switch (groupType) {
+                case groupTypes.COMMON.equals: return true;
+                }
+                return false;
             }
 
             return false;

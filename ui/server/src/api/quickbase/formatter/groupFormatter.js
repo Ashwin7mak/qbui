@@ -303,6 +303,14 @@
                 return groupUtils.getFirstWord(dataValue);
             }
             break;
+        case constants.CHECKBOX:
+        case constants.PHONE_NUMBER:
+        case constants.URL:
+            switch (groupType) {
+            case groupTypes.COMMON.equals:
+                return dataValue;
+            }
+            break;
         default:
             // unsupported data type or grouping option
             log.warn("Unsupported grouping option.  FieldId: " + groupField.id + "; name: " + groupField.name + "; DataType: " + groupField.datatypeAttributes.type + "; GroupType: " + groupType);

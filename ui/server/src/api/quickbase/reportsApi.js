@@ -306,7 +306,7 @@
                                         }
                                     } catch (e) {
                                         //  log error and continue on with no sort/grouping
-                                        log.warn('Error parsing request parameter sort list.  SortList: ' + sList + '. Error: ' + e.stack);
+                                        log.warn('Error parsing request parameter sort list.  SortList: ' + sList + '. Error stack:\n' + e.stack);
                                     }
                                 }
 
@@ -318,7 +318,7 @@
 
                                 //  override the default report meta data column fid list
                                 let columnFids = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.COLUMNS);
-                                if (columnsFids !== null) {
+                                if (columnFids !== null) {
                                     //  we have a cList parameter; initialize the fid list in the event the parameter value is empty.
                                     reportMetaData.fids = [];
                                     if (columnFids !== '') {
@@ -330,7 +330,7 @@
                                             }
                                         } catch (e) {
                                             //  log error and continue on with no fid list set..meaning all columns returned
-                                            log.warn('Error parsing request parameter fid list.  FidList: ' + columnFids + '. Error: ' + e.stack);
+                                            log.warn('Error parsing request parameter fid list.  FidList: ' + columnFids + '. Error stack:\n' + e.stack);
                                         }
                                     }
                                 }
