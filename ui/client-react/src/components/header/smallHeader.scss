@@ -10,7 +10,7 @@
     flex-basis: $top-nav-height;
     justify-content: space-between;
 
-    background-color: #fff !important;
+    background-color: $small-header-bg !important;
 
     .left {
         flex: 0 0 auto;
