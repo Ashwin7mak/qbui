@@ -7,7 +7,7 @@ import _ from 'lodash';
 import FilterUtils from '../../utils/filterUtils';
 import * as query from '../../constants/query';
 import ReportUtils from '../../utils/reportUtils';
-import Header from '../headers/smallHeader';
+import '../header/smallHeader.scss';
 import './reportHeader.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
