@@ -144,16 +144,6 @@ const SortAndGroup = React.createClass({
     updateRecords(sortGroupString) {
         let flux = this.getFlux();
         let queryParams = {};
-        //if report was grouped in the last render and is grouped in this render
-        // or was ungrouped in last and this render no need to re-load report.
-        //let groupKeys = _.map(this.state.newSelectionsGroup, 'unparsedVal');
-        //let changedGroupingStyle = true;
-        //if (this.props.reportData && this.props.reportData.data && this.props.reportData.data.groupEls) {
-        //    if ((this.props.reportData.data.groupEls.length && groupKeys.length) || //report was grouped before and after
-        //        (this.props.reportData.data.groupEls.length === 0 && groupKeys.length === 0)) { //report was ungrouped before and after
-        //        changedGroupingStyle = false;
-        //    }
-        //}
 
         queryParams[query.SORT_LIST_PARAM] = sortGroupString;
         queryParams[query.OFFSET_PARAM] = constants.PAGE.DEFAULT_OFFSET;
