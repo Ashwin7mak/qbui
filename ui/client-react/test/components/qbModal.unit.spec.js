@@ -15,11 +15,14 @@ let testPrimaryText = 'Primary Button';
 let testMiddleText = 'Middle Button';
 let testLeftText = 'Left Button';
 
-let testIcon = 'alert';
-let testIconClassName = `iconTableUISturdy-${testIcon}`;
+let alertType = 'alert';
+let alertIconClass = `iconTableUISturdy-alert`;
+let successType = 'success';
+let successIconClass = `iconTableUISturdy-check`;
+let standardType = 'standard';
 
 
-function buildMockParent(options = {show: false, title: null, bodyMessage: null, icon: null}) {
+function buildMockParent(options = {show: false, title: null, bodyMessage: null, type: null}) {
     return React.createClass({
         getInitialState() {
             return {
@@ -31,7 +34,7 @@ function buildMockParent(options = {show: false, title: null, bodyMessage: null,
         },
         render() {
             return (
-                <QbModal show={this.state.show} title={options.title} bodyMessage={options.bodyMessage} qbIconName={options.icon} />
+                <QbModal show={this.state.show} title={options.title} bodyMessage={options.bodyMessage} type={options.type} />
             );
         }
     });
@@ -143,13 +146,43 @@ describe('QbModal', () => {
         expect(mockParent.onLeftClick).toHaveBeenCalled();
     });
 
-    it('can have an icon', () => {
-        component = buildMockParentComponent({show: true, title: testTitle, icon: testIcon});
+    // Test cases for different modal types
+    let modalTypeTestCases = [
+        {
+            description: 'can show an alert modal type with an alert icon',
+            modalType: alertType,
+            iconClass: alertIconClass
+        },
+        {
+            description: 'can show a success modal type with a check icon',
+            modalType: successType,
+            iconClass: successIconClass
+        },
+        {
+            description: 'can show a default standard type modal with no icon',
+            modalType: standardType,
+            iconClass: null
+        },
+        {
+            description: 'does not display an icon for an invalid/unknown modal type',
+            modalType: 'unknown',
+            iconClass: null
+        }
+    ];
 
-        let alertIcon = document.querySelector(`${qbModalClass} .qbIcon`);
+    modalTypeTestCases.forEach(modalTypeTestCase => {
+        it(modalTypeTestCase.description, () => {
+            component = buildMockParentComponent({show: true, title: testTitle, type: modalTypeTestCase.modalType});
 
-        expect(alertIcon).not.toBeNull();
-        expect(alertIcon.classList).toContain(testIconClassName);
+            let modalIcon = document.querySelector(`${qbModalClass} .qbIcon`);
+
+            if (modalTypeTestCase.iconClass) {
+                expect(modalIcon).not.toBeNull();
+                expect(modalIcon.classList).toContain(modalTypeTestCase.iconClass);
+            } else {
+                expect(modalIcon).toBeNull();
+            }
+        });
     });
 
 });

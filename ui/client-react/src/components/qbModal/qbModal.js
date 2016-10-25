@@ -12,7 +12,7 @@ const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS];
 const QBModal = React.createClass({
     propTypes: {
         /**
-         * this boolean sets whether or not the modal should be shown
+         * This boolean sets whether or not the modal should be shown
          */
         show: React.PropTypes.bool,
         /**
@@ -20,35 +20,35 @@ const QBModal = React.createClass({
          */
         bodyMessage: React.PropTypes.string,
         /**
-         *This is the title for the modal title
+         * This is the title for the modal title
          */
         title: React.PropTypes.string,
         /**
-         *This is the type of alert (alert or success)
+         * This is the type of alert (alert, success, or standard[no icon])
          */
         type: React.PropTypes.oneOf(QB_MODAL_TYPES),
         /**
-         *This is the name for the primary button
+         * This is the name for the primary button
          */
         primaryButtonName: React.PropTypes.string,
         /**
-         *This is the primary button onClick function
+         * This is the primary button onClick function
          */
         primaryButtonOnClick: React.PropTypes.func,
         /**
-         *This is the name for the middle button
+         * This is the name for the middle button
          */
         middleButtonName: React.PropTypes.string,
         /**
-         *This is the middle button onClick function
+         * This is the middle button onClick function
          */
         middleButtonOnClick: React.PropTypes.func,
         /**
-         *This is the name for the left button
+         * This is the name for the left button
          */
         leftButtonName: React.PropTypes.string,
         /**
-         *This is the left button onClick function
+         * This is the left button onClick function
          */
         leftButtonOnClick: React.PropTypes.func,
     },
@@ -64,25 +64,25 @@ const QBModal = React.createClass({
      * @returns {*}
      */
     renderQBIcon() {
-        if (!QB_MODAL_TYPES.includes(this.props.type) || this.props.type === 'standard') {
+        if (QB_MODAL_TYPES.indexOf(this.props.type) < 0 || this.props.type === 'standard') {
             return null;
         }
 
         let isSmall = Breakpoints.isSmallBreakpoint();
 
-        let classes = ['qbIcon'];
+        let classes = ['modalIcon'];
         let icon = 'alert';
 
         if (this.props.qbIconName && this.props.title && !isSmall) {
-            classes.push('qbIcon--large');
+            classes.push('modalIcon--large');
         }
 
         if (this.props.type === QB_MODAL_ALERT) {
-            classes.push('qbIcon--alert');
+            classes.push('modalIcon--alert');
         }
 
         if (this.props.type === QB_MODAL_SUCCESS) {
-            classes.push('qbIcon--success');
+            classes.push('modalIcon--success');
             icon = 'check';
         }
 

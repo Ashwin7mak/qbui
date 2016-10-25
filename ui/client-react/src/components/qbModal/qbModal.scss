@@ -100,28 +100,28 @@
     font-size: $font-size-p;
   }
 
-  .qbIcon {
+  .modalIcon {
     display: inline-block;
     font-size: 44px;
-    padding-top: 5px;
-    padding-right: 5px;
+    padding-top: 10px;
+    padding-right: 10px;
 
     @include small-breakpoint {
       font-size: 40px;
     }
   }
 
-  .qbIcon--large {
+  .modalIcon--large {
     font-size: 90px;
     margin-top: 10px;
     width: 20%;
   }
 
-  .qbIcon--alert {
+  .modalIcon--alert {
     color: $color-orange-500;
   }
 
-  .qbIcon--success {
+  .modalIcon--success {
     color: $color-green-700;
   }
 
