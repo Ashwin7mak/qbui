@@ -71,7 +71,7 @@ let reportDataActions = {
                 let reportService = new ReportService();
 
                 //format, offset, rows, sortList
-                let params = [];
+                let params = {};
                 params[query.OFFSET_PARAM] = offset;
                 params[query.NUMROWS_PARAM] = rows;
 

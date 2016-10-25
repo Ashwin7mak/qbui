@@ -249,12 +249,7 @@ let AGGrid = React.createClass({
         queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
         queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
-        //flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, queryParams);
         flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
-
-        //flux.actions.getFilteredRecords(this.props.appId,
-        //    this.props.tblId,
-        //    this.props.rptId, {format:true}, this.props.filter, queryParams);
     },
     /**
      * On selection of group option from menu fire off the action to group the data
@@ -281,9 +276,6 @@ let AGGrid = React.createClass({
         queryParams[query.NUMROWS_PARAM] = numRows;
         queryParams[query.SORT_LIST_PARAM] = sortListParam;
         flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
-        //} else {
-        //    flux.actions.loadReport(this.props.appId, this.props.tblId, this.props.rptId, true, offset, numRows);
-        //}
     },
 
     /**
