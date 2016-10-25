@@ -6,8 +6,9 @@
  */
 (function() {
     'use strict';
-    // In order to manage the async nature of Protractor with a non-Angular page use the ExpectedConditions feature
-    var EC = protractor.ExpectedConditions;
+    var ReportServicePage = requirePO('reportService');
+    var reportServicePage = new ReportServicePage();
+
     var RequestAppsPage = function() {
         // Page Elements using Locators
         this.appContainerEl = element(by.className('apps-container'));
@@ -19,7 +20,7 @@
          * Use the service method in e2eBase to get this URL for the realm/app
          */
         this.get = function(requestAppsPageEndPoint) {
-            browser.get(requestAppsPageEndPoint);
+            return browser.get(requestAppsPageEndPoint);
         };
     };
     module.exports = new RequestAppsPage();
