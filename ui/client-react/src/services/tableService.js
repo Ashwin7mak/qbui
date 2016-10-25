@@ -18,17 +18,26 @@ class TableService extends BaseService {
 
     /**
      * Get all data needed to render table home page report
+     *
      * @param appId
      * @param tableId
      * @returns {Promise.<{data}>}
      */
     getHomePage(appId, tableId, offset, numRows) {
         let url = super.constructUrl(this.API.GET_HOMEPAGE, [appId, tableId]);
-
         let params = {};
+
+        //  always return data formatted for display
         params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
-        params[query.OFFSET_PARAM] = NumberUtils.isInt(offset) ? offset : Constants.PAGE.DEFAULT_OFFSET;
-        params[query.NUMROWS_PARAM] = NumberUtils.isInt(numRows) ? numRows : Constants.PAGE.DEFAULT_NUM_ROWS;
+
+        // if no/invalid offset or numRows, will set to the defaults.
+        if (NumberUtils.isInt(offset) && NumberUtils.isInt(numRows)) {
+            params[query.OFFSET_PARAM] = offset;
+            params[query.NUMROWS_PARAM] = numRows;
+        } else {
+            params[query.OFFSET_PARAM] =  Constants.PAGE.DEFAULT_OFFSET;
+            params[query.NUMROWS_PARAM] = Constants.PAGE.DEFAULT_NUM_ROWS;
+        }
 
         return super.get(url, {params:params});
     }

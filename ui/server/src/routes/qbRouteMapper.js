@@ -40,13 +40,16 @@
 
         routeToGetFunction[routeConsts.FACET_EXPRESSION_PARSE] = resolveFacets;
 
+        //  form endpoints
         routeToGetFunction[routeConsts.FORM_COMPONENTS] = fetchFormComponents;
         routeToGetFunction[routeConsts.FORM_AND_RECORD_COMPONENTS] = fetchFormAndRecordComponents;
+
+        //  record endpoints
         routeToGetFunction[routeConsts.RECORD] = fetchSingleRecord;
         routeToGetFunction[routeConsts.RECORDS] = fetchAllRecords;
-        //routeToGetFunction[routeConsts.REPORT] = fetchReport;
+
+        //  report endpoints
         routeToGetFunction[routeConsts.REPORT_META] = fetchReportMeta;
-        //routeToGetFunction[routeConsts.REPORT_COMPONENTS] = fetchReportComponents;
         routeToGetFunction[routeConsts.REPORT_RESULTS] = fetchReportResults;
         routeToGetFunction[routeConsts.REPORT_RECORDS_COUNT] = fetchReportRecordsCount;
         routeToGetFunction[routeConsts.TABLE_HOMEPAGE_REPORT] = fetchTableHomePageReport;
@@ -403,66 +406,6 @@
             );
         });
     }
-
-    /**
-     * Fetch report meta data, report data and facets (if any) for the report.
-     *
-     * @param req
-     * @param res
-     */
-    //function fetchReport(req, res) {
-    //    let perfLog = perfLogger.getInstance();
-    //    perfLog.init('Fetch Report', {req: filterNodeReq(req)});
-    //
-    //    processRequest(req, res, function(req, res) {
-    //        reportsApi.fetchReportMetaDataAndContent(req).then(
-    //            function(response) {
-    //                res.send(response);
-    //                logApiSuccess(req, response, perfLog, 'Fetch Report');
-    //            },
-    //            function(response) {
-    //                logApiFailure(req, response, perfLog, 'Fetch Report');
-    //                if (response && response.statusCode) {
-    //                    res.status(response.statusCode).send(response);
-    //                } else {
-    //                    res.status(500).send(response);
-    //                }
-    //            }
-    //        );
-    //    });
-    //}
-
-    /**
-     * This is the function for fetching a completely hydrated report from the reportssApi endpoint.
-     * Currently, a hydrated report means report data plus facet information.
-     *
-     * @param req
-     * @param res
-     */
-    /*eslint no-shadow:0 */
-    //function fetchReportComponents(req, res) {
-    //    let perfLog = perfLogger.getInstance();
-    //    perfLog.init('Fetch Report Components', {req:filterNodeReq(req)});
-    //
-    //    processRequest(req, res, function(req, res) {
-    //        reportsApi.fetchReportComponents(req).then(
-    //            function(response) {
-    //                res.send(response);
-    //                logApiSuccess(req, response, perfLog, 'Fetch Report Components');
-    //            },
-    //            function(response) {
-    //                logApiFailure(req, response, perfLog, 'Fetch Report Components');
-    //
-    //                //  client is waiting for a response..make sure one is always returned
-    //                if (response && response.statusCode) {
-    //                    res.status(response.statusCode).send(response);
-    //                } else {
-    //                    res.status(500).send(response);
-    //                }
-    //            }
-    //        );
-    //    });
-    //}
 
     /**
      * Fetch the count of total records in a report.

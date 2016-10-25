@@ -24,7 +24,8 @@ const DEFAULT_HOMEPAGE_ID = '0';
 let tableActions = {
 
     /**
-     * Fetch the table home page report and total record count for the report
+     * Fetch the table home page report
+     *
      * @param appId
      * @param tblId
      * @param offset
@@ -40,8 +41,12 @@ let tableActions = {
                 //  so dispatch the LOAD_REPORT event.
                 this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId:DEFAULT_HOMEPAGE_ID});
 
-                //  Fetch the home page.  The response will include the report data, report fields
-                //  and record count.
+                //  Fetch the home page.  The response will include:
+                //    - report data/grouping data
+                //    - report meta data
+                //    - report fields
+                //    - report facets
+                //    - report count
                 tableService.getHomePage(appId, tblId, offset, numRows).then(
                     (response) => {
                         var model = reportModel.set(response.data.metaData, response.data);
@@ -52,9 +57,7 @@ let tableActions = {
                             this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId: model.rptId});
                         }
 
-                        //  ..fire off the load report and record count events
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, model);
                         resolve();
                     },
                     (error) => {

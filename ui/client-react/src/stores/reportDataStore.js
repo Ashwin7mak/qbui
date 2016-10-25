@@ -38,7 +38,7 @@ let reportModel = {
         recordsCount: null,
         sortFids: [],
         groupEls: [],
-        originalMetaData: null,
+        originalMetaData: null
     },
 
     /**
@@ -276,14 +276,6 @@ let reportModel = {
     },
 
     /**
-     * Update count of filtered records
-     * @param recordsCountData
-     */
-    updateFilteredRecordsCount: function(count) {
-        this.model.filteredRecordsCount = parseInt(count);
-    },
-
-    /**
      * Update the filtered Records from response.
      * @param recordData
      */
@@ -490,8 +482,6 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_RECORDS, this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
-            actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, this.onFilteredRecordsCountSuccess,
-            actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, this.onFilteredRecordsCountFailed,
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
@@ -570,14 +560,8 @@ let ReportDataStore = Fluxxor.createStore({
         reportModel.setOriginalMetaData(response.metaData);
         reportModel.setMetaData(response.metaData);
         reportModel.setRecordData(response.recordData);
-
-        //  sortList, if defined is a string
-        //if (response.sortList !== undefined) {
-        //    reportModel.setSortList(response.sortList);
-        //    reportModel.setSortFids(response.sortList);
-        //    reportModel.setGroupElements(response.sortList);
-        //}
         reportModel.setFacetData(response.recordData);
+        reportModel.updateRecordsCount(response.recordCount);
 
         this.emit('change');
     },
@@ -623,26 +607,6 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onLoadRecordsFailed() {
-        this.loading = false;
-        this.editingIndex = null;
-        this.editingId = null;
-
-        this.error = true;
-        this.emit('change');
-    },
-
-    onFilteredRecordsCountSuccess(response) {
-        this.loading = false;
-        this.editingIndex = null;
-        this.editingId = null;
-
-        this.error = false;
-        this.reportModel.updateFilteredRecordsCount(response.recordCount);
-
-        this.emit('change');
-    },
-
-    onFilteredRecordsCountFailed() {
         this.loading = false;
         this.editingIndex = null;
         this.editingId = null;

@@ -15,7 +15,7 @@ var RecordsCount = React.createClass({
         recordCount: React.PropTypes.number,
         filteredRecordCount: React.PropTypes.number,
         clearAllFilters: React.PropTypes.func,
-        isCounting: React.PropTypes.bool,
+        isCounting: React.PropTypes.bool
     },
     /**
      * renders the record count
