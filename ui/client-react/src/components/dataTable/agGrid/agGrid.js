@@ -6,7 +6,6 @@ import QBicon from '../../qbIcon/qbIcon';
 import IconActions from '../../actions/iconActions';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
-import ReactCSSTransitionGroup from 'react/lib/ReactCSSTransitionGroup';
 import Locale from '../../../locales/locales';
 import _ from 'lodash';
 import Loader  from 'react-loader';
@@ -18,19 +17,20 @@ import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations
 
 import {
     CellRenderer,
-    DateCellRenderer,
-    DateTimeCellRenderer,
-    TimeCellRenderer,
-    NumericCellRenderer,
-    DurationCellRenderer,
-    TextCellRenderer,
-    UserCellRenderer,
     CheckBoxCellRenderer,
     CurrencyCellRenderer,
-    SelectionColumnCheckBoxCellRenderer,
+    DateCellRenderer,
+    DateTimeCellRenderer,
+    DurationCellRenderer,
+    EmailCellRenderer,
+    NumericCellRenderer,
     PercentCellRenderer,
     RatingCellRenderer,
+    SelectionColumnCheckBoxCellRenderer,
+    TextCellRenderer,
+    TimeCellRenderer,
     UrlCellRenderer,
+    UserCellRenderer,
 }  from './cellRenderers';
 
 import {GROUP_TYPE} from '../../../../../common/src/groupTypes';
@@ -182,9 +182,8 @@ let AGGrid = React.createClass({
      */
     installHeaderMenus() {
         const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
-
         // convert nodelist to array then iterate to render each menu
-        Array.from(headers).map((header, index) => {
+        _.map(headers, (header, index) => {
             const pullRight = index === headers.length - 1;
             ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
         });
@@ -635,12 +634,6 @@ let AGGrid = React.createClass({
             return;
         }
 
-        //Click on checkbox column should select the row instead of going to a form.
-        if (params.event.target && (params.event.target.getAttribute("colid") === "checkbox")) {
-            params.node.setSelected(true, true);
-            return;
-        }
-
         // edit row on doubleclick
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
@@ -759,7 +752,7 @@ let AGGrid = React.createClass({
         if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
             // is the field being changed currently in error state if so remove error
             // and it will get re-validated on blur or save
-            let found = this.state.rowEditErrors.errors.findIndex((err) => err.def.fieldDef.id === change.fid);
+            let found = _.findIndex(this.state.rowEditErrors.errors, err => err.def.fieldDef.id === change.fid);
             if (found !== -1) {
                 let newErrors = _.cloneDeep(this.state.rowEditErrors);
 
@@ -805,7 +798,7 @@ let AGGrid = React.createClass({
 
         // find any existing error on the field
         if (this.state.rowEditErrors && !this.state.rowEditErrors.ok) {
-            found = this.state.rowEditErrors.errors.findIndex((err) =>
+            found = _.findIndex(this.state.rowEditErrors.errors, err =>
                 err.def.fieldDef.id === status.def.fieldDef.id);
         }
 
@@ -1054,9 +1047,15 @@ let AGGrid = React.createClass({
                             case serverTypeConsts.DURATION :
                                 obj.cellRenderer = reactCellRendererFactory(DurationCellRenderer);
                                 break;
+
                             case serverTypeConsts.URL :
                                 obj.cellRenderer = reactCellRendererFactory(UrlCellRenderer);
                                 break;
+
+                            case serverTypeConsts.EMAIL_ADDRESS :
+                                obj.cellRenderer = reactCellRendererFactory(EmailCellRenderer);
+                                break;
+
                             default:
                                 obj.cellRenderer = reactCellRendererFactory(TextCellRenderer);
                                 break;

@@ -90,8 +90,7 @@ const ReportRoute = React.createClass({
             <div className="reportStageHeadline">
 
                 <div className="navLinks">
-                    {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
-                    {this.props.selectedTable && <Link to={tableLink}>{this.props.selectedTable.name}</Link>}
+                    {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}</Link>}
                 </div>
 
                 <div className="stageHeadline">

@@ -22,6 +22,15 @@ $checkbox-font-size-mobile: 16px;
 }
 
 .checkbox {
+    // Handle focus states on the main div because Firefox and Safari do not allow focus on labels
+    &:focus {
+        outline: none;
+
+        label:after {
+            @include focus-shadow;
+        }
+    }
+
     //clear out the default margins
     margin: 0;
     label {
@@ -65,7 +74,9 @@ $checkbox-font-size-mobile: 16px;
             outline: none;
         }
 
-        &:focus + label:after, + label:focus:after, label:focus:after {
+        &:focus + label:after,
+        + label:focus:after,
+        label:focus:after {
             @include focus-shadow;
         }
 

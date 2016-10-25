@@ -1,27 +1,41 @@
 @import '../../assets/css/qbVariables';
 
-.recordTrowser .trowserHeader {
-
-    .qbIcon {
-        margin-right: 5px;
+@include small-breakpoint {
+    .recordTrowser {
+        .trowserFooter .saveButtons {
+            display: flex;
+            flex: 1;
+        }
     }
-    .iconActions {
-        display: inline-block;
+}
 
-        margin-right: 20px;
+.recordTrowser {
+    .trowserFooter .saveButtons {
+        display: flex;
+    }
+    .trowserHeader {
 
-        .btn {
-            &:hover {
-                background-color:#0097CD;
+        .qbIcon {
+            margin-right: 5px;
+        }
+        .iconActions {
+            display: inline-block;
+
+            margin-right: 20px;
+
+            .btn {
+                &:hover {
+                    background-color:#0097CD;
+                    color: #fff;
+                }
+                background-color:inherit;
                 color: #fff;
-            }
-            background-color:inherit;
-            color: #fff;
-            width: 32px;
-            padding:0;
-            .qbIcon {
-                font-size: 24px;
-                margin:0;
+                width: 32px;
+                padding:0;
+                .qbIcon {
+                    font-size: 24px;
+                    margin:0;
+                }
             }
         }
     }

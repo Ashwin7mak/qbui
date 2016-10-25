@@ -77,7 +77,7 @@ $multi-choice-field-box-height: 32px;
                 position: relative;
                 input[type=radio] {
                     position: absolute;
-                    visibility: hidden;
+                    left: -9999px;
                 }
                 .choiceText {
                     display: inline-block;

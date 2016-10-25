@@ -67,7 +67,8 @@
 
                                         //  add the field if defined on the table
                                         if (tableField) {
-                                            fidList.push(fieldId);
+                                            let required = element.FormFieldElement.required;
+                                            fidList.push({id: fieldId, required: required});
                                         } else {
                                             log.warn("Fid " + fieldId + " defined on form " + form.formId + " but not found in table (app:" + form.appId + ";table:" + form.tableId + "). Skipping..");
                                         }
@@ -80,6 +81,18 @@
             }
 
             return fidList;
+        }
+
+        function mergeConstraintsFromFidlist(fields, constraintList) {
+            return fields.map((field) => {
+                let matchingField = lodash.find(constraintList, (constraintField) => {
+                    return field.id === constraintField.id;
+                });
+                if (matchingField) {
+                    field.required = field.required || matchingField.required;
+                }
+                return field;
+            });
         }
 
         let formsApi = {
@@ -158,11 +171,12 @@
 
                                 //  ensure the fid list is ordered
                                 fidList.sort(function(a, b) {
-                                    return a - b;
+                                    return a.id - b.id;
                                 });
+                                let fids = fidList.map(lodash.property('id'));
 
                                 //  convert the fid array into a delimited string that will get added to the request as a query parameter
-                                let columnList = collectionUtils.convertListToDelimitedString(fidList, constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                let columnList = collectionUtils.convertListToDelimitedString(fids, constants.REQUEST_PARAMETER.LIST_DELIMITER);
                                 requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.COLUMNS, columnList);
 
                                 if (fetchRecord) {
@@ -171,6 +185,7 @@
                                         function(resp) {
                                             obj.record = resp.record;
                                             obj.fields = resp.fields;
+                                            obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
                                             resolve(obj);
                                         },
                                         function(err) {
@@ -181,6 +196,7 @@
                                     recordsApi.fetchFields(req).then(
                                         function(resp) {
                                             obj.fields = JSON.parse(resp.body);
+                                            obj.fields = mergeConstraintsFromFidlist(obj.fields, fidList);
                                             resolve(obj);
                                         },
                                         function(err) {

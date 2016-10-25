@@ -159,6 +159,7 @@
         mapToModify.DEFAULT_DOMAIN = 'defaultDomain';
         mapToModify.SORT_BY_DOMAIN = 'sortByDomain';
         mapToModify.SHOW_EMAIL_EVERYONE = 'showEmailEveryone';
+        mapToModify.LINK_TEXT = 'linkText';
     }
 
     /**
