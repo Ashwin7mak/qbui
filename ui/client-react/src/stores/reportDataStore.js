@@ -889,6 +889,12 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
 
+    /**
+     * do a depth first search of the grouped records array, adding records
+     * to arr so we can determine next/prev records
+     * @param arr
+     * @param groups
+     */
     addGroupedRecords(arr, groups) {
 
         groups.forEach(child => {
@@ -908,7 +914,7 @@ let ReportDataStore = Fluxxor.createStore({
      * @param isEdit are we editing a record
      * @param navigateAfterSave if editing, do we navigate to the new record after saving?
      */
-    updateRecordNavContext(recId, nextOrPrevious = "", isEdit=false, navigateAfterSave = false) {
+    updateRecordNavContext(recId, nextOrPrevious = "", isEdit = false, navigateAfterSave = false) {
 
         const {filteredRecords, keyField, hasGrouping} = this.reportModel.get();
 
