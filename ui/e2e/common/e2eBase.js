@@ -264,8 +264,10 @@
              * Setup method that generates an application, table, report and a specified number of records
              * Creates an App, 1 2 Tables with all Field Types, 10 Records, 1 List All Report with all Features and 1 Form to go with it
              */
-            defaultSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
+            defaultAppSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
+                var MIN_RECORDSCOUNT = 11;
+
                 // Use map of tables passed in or create default
                 if (!tableToFieldToFieldTypeMap) {
                     tableToFieldToFieldTypeMap  = e2eConsts.createDefaultTableMap();
@@ -312,8 +314,15 @@
                         // Add the empty record back in to create via API
                         generatedRecords.push(generatedEmptyRecord);
 
-                        // Via the API create records
-                        createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        // Build create record promises
+                        if (numberOfRecords < MIN_RECORDSCOUNT) {
+                            // Via the API create the records
+                            createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        } else {
+                            // Via the API create the bulk records
+                            createAppPromises.push(e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        }
+
                         // Create a list all report for the table
                         createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[i].id, 'Table ' + (i + 1) + ' List All Report', null, null, null, null));
 
@@ -335,7 +344,7 @@
                     return createdApp;
                 }).catch(function(e) {
                     // Catch any errors and reject the promise with it
-                    return Promise.reject(new Error('Error during defaultSetup: ' + e.message));
+                    return Promise.reject(new Error('Error during defaultAppSetup: ' + e.message));
                 });
             },
 
@@ -346,7 +355,7 @@
             fullReportsSetup: function(numRecords) {
                 var createdApp;
 
-                return this.defaultSetup(null, numRecords).then(function(createdAppResponse) {
+                return this.defaultAppSetup(null, numRecords).then(function(createdAppResponse) {
                     createdApp = createdAppResponse;
 
                     var TEXT_FID = 6;
@@ -377,22 +386,23 @@
 
                     //TODO: Had issue using promise.all here, it wasn't creating all the reports even though was getting responses from all 4 calls
                     // Create report with fids
-                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null).then(function(rid1) {
-                        reportIds.push(rid1);
-                        // Create report with sortList
-                        return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null).then(function(rid2) {
+                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null)
+                        .then(function(rid1) {
+                            reportIds.push(rid1);
+                            // Create report with sortList
+                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null);
+                        }).then(function(rid2) {
                             reportIds.push(rid2);
                             // Create report with facetFids
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null).then(function(rid3) {
-                                reportIds.push(rid3);
-                                // Create report with all params defined
-                                return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null).then(function(rid4) {
-                                    reportIds.push(rid4);
-                                    return reportIds;
-                                });
-                            });
+                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null);
+                        }).then(function(rid3) {
+                            reportIds.push(rid3);
+                            // Create report with all params defined
+                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null);
+                        }).then(function(rid4) {
+                            reportIds.push(rid4);
+                            return reportIds;
                         });
-                    });
                 }).then(function(reportIds) {
                     // Return back the list of reportIds
                     return [createdApp, reportIds];
@@ -404,7 +414,7 @@
 
 
             /*
-             * @deprecated Please use defaultSetup or fullReportsSetup going forward
+             * @deprecated Please use defaultAppSetup or fullReportsSetup going forward
              */
 
             // Setup method for the reports spec files. Creates the table / field mapping to be generated by basicSetup
