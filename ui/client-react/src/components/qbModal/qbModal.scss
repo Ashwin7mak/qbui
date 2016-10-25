@@ -103,11 +103,12 @@
   .modalIcon {
     display: inline-block;
     font-size: 44px;
-    padding-top: 10px;
+    padding-top: 12px;
     padding-right: 10px;
 
     @include small-breakpoint {
       font-size: 40px;
+      padding-top: 9px;
     }
   }
 
@@ -122,7 +123,7 @@
   }
 
   .modalIcon--success {
-    color: $color-green-700;
+    color: $color-green-600;
   }
 
   .buttons {
@@ -147,7 +148,7 @@
   }
 
   .secondaryButton {
-    background-color: $color-black-300;
+    background-color: $color-black-200;
     color: $color-indigo-700;
     stroke: $color-black-300;
   }
@@ -170,7 +171,12 @@
   }
 
   .singlePrimaryButtonContainer {
-    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+    .primaryButton {
+      margin-right: 0;
+    }
   }
 
   .smallText {

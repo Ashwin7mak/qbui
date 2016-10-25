@@ -83,7 +83,7 @@ const QBModal = React.createClass({
 
         if (this.props.type === QB_MODAL_SUCCESS) {
             classes.push('modalIcon--success');
-            icon = 'check';
+            icon = 'check-reversed';
         }
 
         return (
