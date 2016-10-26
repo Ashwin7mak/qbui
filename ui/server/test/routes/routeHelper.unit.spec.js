@@ -259,6 +259,23 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
+    describe('validate dynamic getReportsResultsRoute method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', expectation: ''},
+            {name: 'test null url', url: null, expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table id', url: '/apps/123/tables', expectation: '/apps/123/tables'},
+            {name: 'test valid url', url: '/apps/123/tables/456', expectation: '/apps/123/tables/456/reports/invoke'}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.getDynamicReportsResultsRoute(testCase.url, testCase.id), testCase.expectation);
+                done();
+            });
+        });
+    });
+
     describe('validate isReportComponentRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', expectation: false},

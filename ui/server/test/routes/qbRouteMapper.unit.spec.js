@@ -2,9 +2,7 @@
  * A test to test the qbRouteMapper is properly modifying the url to route to a given tomcat api
  * Created by cschneider1 on 7/16/15.
  */
-
 'use strict';
-
 
 var config = require('../../src/config/environment');
 var routeMapper = require('../../src/routes/qbRouteMapper')(config);
