@@ -85,6 +85,11 @@
             return emails.join(';');
         },
         splitEmails: function(emails) {
+            // Can't split if it is empty or null
+            if (!emails) {
+                return emails;
+            }
+
             // The filter removes any blank strings from the final array
             return emails.split(/\s*[;,]\s*/).filter(singleEmail => singleEmail);
         }

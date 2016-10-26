@@ -3,6 +3,7 @@
 var assert = require('assert');
 var sinon = require('sinon');
 var emailValidator = require('../../src/validator/emailValidator');
+var dataErrorCodes = require('../../src/dataEntryErrorCodes');
 
 describe('emailValidator', () => {
     describe('validate', () => {
@@ -100,6 +101,39 @@ describe('emailValidator', () => {
 
             assert.equal(result, false);
             assert(emailValidator.isValid.calledOnce);
+        });
+    });
+
+    describe('validateAndReturnResults', () => {
+        let fieldName = 'email';
+
+        it('returns a result, to be used with validatorUtils, if the email is invalid', () => {
+            let expectedResult = {
+                isInvalid: true,
+                error: {
+                    code: dataErrorCodes.INVALID_ENTRY,
+                    messageId: 'invalidMsg.email',
+                    data: {fieldName: fieldName}
+                }
+            };
+
+            assert.deepEqual(emailValidator.validateAndReturnResults('invalidemail', fieldName), expectedResult);
+        });
+
+        it('passes through the result if the email is valid', () => {
+            let requiredResult = {
+                isInvalid: true,
+                error: {
+                    messageId: 'invalidMsg.required',
+                    code: dataErrorCodes.REQUIRED_FIELD_EMPTY,
+                    data: {
+                        fieldId: 1,
+                        fieldName: fieldName
+                    }
+                }
+            };
+
+            assert.deepEqual(emailValidator.validateAndReturnResults('valid@test.com', fieldName, requiredResult), requiredResult);
         });
     });
 });
