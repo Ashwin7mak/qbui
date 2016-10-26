@@ -253,12 +253,12 @@ $checkbox-font-size-mobile: 16px;
 
     .required-symbol {
         color: $required-asterisk-color;
-        font-size: 18px;
+        font-size: 14px;
         left: 4px;
         position: absolute;
-        top: -6px;
+        top: -8px;
         @include small-breakpoint {
-            top: -4px;
+            top: -6px;
         }
 
         &.invalid {
