@@ -177,7 +177,8 @@
 
                                     records = recordFormatter.formatRecords(records, responseObject[FIELDS]);
                                     perfLog.log();
-                                    //  NOTE: grouping is reporting concept and should not get called from this endpoint
+                                    //  NOTE: grouping is reporting concept and should not called from this endpoint as
+                                    //  output with multiple pages will not page correctly.
                                 }
 
                                 responseObject[RECORDS] = records;

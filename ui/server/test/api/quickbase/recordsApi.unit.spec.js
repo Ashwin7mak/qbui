@@ -198,7 +198,6 @@ describe("Validate recordsApi", function() {
 
         it('success return records array with display parameter type and no grouping', function(done) {
             req.url = '/apps/1/tables/2/records/3?format=display';
-            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:' + groupTypes.COMMON.equals;
 
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
             //fetch fields is already stubbed
@@ -209,7 +208,6 @@ describe("Validate recordsApi", function() {
                     assert.equal(response.fields[0].display, '12-3454');
                     assert.equal(response.records[0][0].display, '1234525');
                     assert.equal(response.filteredCount, '10');
-                    assert.notEqual(response.groups.hasGrouping, true);
                     done();
                 }
             ).catch(function(errorMsg) {
@@ -229,25 +227,6 @@ describe("Validate recordsApi", function() {
                     assert.equal(response.length, 2);
                     assert.equal(response[0][0].id, 2);
                     assert.equal(response[0][0].value, '1234525');
-                    done();
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
-            });
-        });
-
-        it('success return records array with display parameter type with grouping', function(done) {
-            req.url = '/apps/1/tables/2/records/3?format=display';
-            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=2:' + groupTypes.COMMON.equals;
-            executeReqStub.onCall(0).returns(Promise.resolve({'body': '[[ {"id":2, "value": 1234525} ], [ {"id":2, "value": 1234525} ]]'}));
-            var promise = recordsApi.fetchRecordsAndFields(req);
-            promise.then(
-                function(response) {
-                    assert.equal(response.fields[0].display, '12-3454');
-                    assert.equal(response.groups.fields[0].field.display, '12-3454');
-                    assert.equal(response.groups.hasGrouping, true);
-                    assert.equal(response.groups.totalRows, 2);
-                    assert.equal(response.records.length, 0);
                     done();
                 }
             ).catch(function(errorMsg) {
