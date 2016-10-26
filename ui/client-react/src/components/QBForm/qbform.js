@@ -5,6 +5,7 @@ import FieldElement from './fieldElement';
 import FieldLabelElement from './fieldLabelElement';
 import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
+import FieldUtils from '../../utils/fieldUtils';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -66,7 +67,6 @@ let QBForm = React.createClass({
         const colSpan = isLast ? 100 : 1;
 
         const cells = [];
-
         if (element.FormTextElement) {
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
         }
@@ -135,6 +135,7 @@ let QBForm = React.createClass({
      * create a TD with a field label
      * @param element
      * @param sectionIndex
+     * @param validationStatus
      * @returns {XML}
      */
     createFieldLabelCell(element, sectionIndex, validationStatus) {
@@ -142,9 +143,16 @@ let QBForm = React.createClass({
         let relatedField = this.getRelatedField(element.fieldId);
 
         let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
+
         return (
             <td key={key}>
-                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={this.props.edit} isInvalid={validationStatus.isInvalid}/>
+                <FieldLabelElement
+                    element={element}
+                    relatedField={relatedField}
+                    indicateRequiredOnLabel={this.props.edit}
+                    isInvalid={validationStatus.isInvalid}
+                    label={FieldUtils.getFieldLabel(element, relatedField)}
+                />
             </td>);
     },
 
