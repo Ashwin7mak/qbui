@@ -145,7 +145,7 @@ export let RecordRoute = React.createClass({
 
                 <div className="navLinks">
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}</Link>}
-                    {this.props.selectedTable && rptId && <span className="color-black-700">&nbsp;&gt;&nbsp;</span>}
+                    {this.props.selectedTable && rptId && <span className="color-black-700">&nbsp;:&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
                 <div className="stageHeadline iconActions">
@@ -153,14 +153,14 @@ export let RecordRoute = React.createClass({
                     {(showBack || showNext) && <div className="iconActions">
                         {showBack ?
                             <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
-                                <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>
+                                <Button className="iconActionButton prevRecord" onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>
                             </OverlayTrigger> :
-                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>}
+                            <Button className="iconActionButton prevRecord" disabled={true} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>}
                         {showNext ?
                             <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
-                                <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
+                                <Button className="iconActionButton nextRecord" onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                             </OverlayTrigger> :
-                            <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>}
+                            <Button className="iconActionButton nextRecord" disabled={true} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>}
                     </div> }
 
                     {this.getTitle()}

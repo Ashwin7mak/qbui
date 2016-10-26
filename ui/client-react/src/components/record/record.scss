@@ -54,9 +54,19 @@
 }
 
 @include small-breakpoint {
+    .secondaryBar .iconActions.pageActions {
+        padding-left: 6px;
+        .iconActionButton {
+            margin-right: 3px;
+        }
+        .dropdownToggle {
+            margin-left: -4px;
+        }
+    }
     .secondaryBar .iconActions.pageActions .iconActionButton.addRecord {
         display:none; /* hide on small, use a floating add button */
     }
+
     .recordStageHeadline {
         .formName {
             font-size: $font-size-h4;

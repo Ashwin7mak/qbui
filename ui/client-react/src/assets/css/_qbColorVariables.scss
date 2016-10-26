@@ -237,6 +237,9 @@ $secondary-bar-fg: #fff;
 $secondary-bar-bg: #009AAE;
 $secondary-bar-page-actions-bg: #476B90;
 
+//==recordtrowser
+$nav-icon-hover-bg: $color-cyan-800;
+
 @mixin focus-shadow($color:$input-border-focus-color) {
   box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
   outline: none;
