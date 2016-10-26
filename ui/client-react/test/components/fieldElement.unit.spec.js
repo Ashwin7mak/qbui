@@ -37,7 +37,7 @@ describe('FieldElement functions', () => {
     let component;
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<FieldElement flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<FieldElement flux={flux} />);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const field = ReactDOM.findDOMNode(component);
         expect(field).toBeDefined();

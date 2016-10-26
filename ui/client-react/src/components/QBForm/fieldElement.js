@@ -111,7 +111,9 @@ const FieldElement = React.createClass({
                                              idKey={'fve-' + this.props.idKey}
                                              invalidMessage={this.props.invalidMessage}
                                              classes={classes}
-                                             appUsers={this.props.appUsers}/>;
+                                             appUsers={this.props.appUsers}
+                                             label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
+            />;
         } else if (fieldDisplayValue !== null || fieldRawValue !== null) { //if there is no value do not render the field
             fieldElement = <FieldValueRenderer type={fieldType}
                                                key={'fvr-' + this.props.idKey}
@@ -120,12 +122,20 @@ const FieldElement = React.createClass({
                                                display={fieldDisplayValue}
                                                attributes={fieldDatatypeAttributes}
                                                fieldDef={this.props.relatedField}
+                                               label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
             />;
         }
 
         return (
             <div className="formElement field">
-                {this.props.includeLabel && <FieldLabelElement element={this.props.element} relatedField={this.props.relatedField} indicateRequiredOnLabel={this.props.indicateRequiredOnLabel} isInvalid={this.props.isInvalid}/> }
+                {this.props.includeLabel &&
+                    <FieldLabelElement
+                        element={this.props.element}
+                        relatedField={this.props.relatedField}
+                        indicateRequiredOnLabel={this.props.indicateRequiredOnLabel}
+                        isInvalid={this.props.isInvalid}
+                        label={FieldUtils.getFieldLabel(this.props.element, this.props.relatedField)}
+                    /> }
 
                 <span className="cellWrapper">
                     { fieldElement }
