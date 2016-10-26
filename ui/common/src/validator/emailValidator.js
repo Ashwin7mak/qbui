@@ -7,7 +7,6 @@
         /**
          * Validate an email address
          * @param email
-         * @param [validation_option=VALIDATE_FULL_ADDRESS] - The type of validation required (whole email, mailbox only, or domain only)
          * @returns {boolean}
          */
         isValid: function(email) {

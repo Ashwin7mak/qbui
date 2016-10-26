@@ -85,7 +85,8 @@
             return emails.join(';');
         },
         splitEmails: function(emails) {
-            return emails.split(/\s*[;,]\s*/);
+            // The filter removes any blank strings from the final array
+            return emails.split(/\s*[;,]\s*/).filter(singleEmail => singleEmail);
         }
     };
 }());

@@ -5,7 +5,7 @@ var sinon = require('sinon');
 var emailValidator = require('../../src/validator/emailValidator');
 
 describe('emailValidator', () => {
-    describe.only('validate', () => {
+    describe('validate', () => {
         let testCases = [
             {
                 name: 'returns true if an email is valid',

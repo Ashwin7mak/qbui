@@ -72,6 +72,11 @@ describe('EmailFormatter', () => {
                 emails: 'test@test.com ,    test+2@test.com    ; test+3@quickbase.com',
                 expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
             },
+            {
+                name: 'does not add a blank email if the string ends in a delimiter (; or ,)',
+                emails: 'test@test.com;test2@test.com;',
+                expectation: ['test@test.com', 'test2@test.com']
+            }
         ];
 
         testCases.forEach(testCase => {
@@ -81,7 +86,7 @@ describe('EmailFormatter', () => {
         });
     });
 
-    describe.only('formatListOfEmails', () => {
+    describe('formatListOfEmails', () => {
         let fieldInfo = {
             defaultDomain: 'test.com'
         };
