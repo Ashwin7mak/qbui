@@ -47,8 +47,14 @@ $cell-edit-background-edit: #f3f8fe;
     display:none;
 }
 
+//This allows agGrid rows pop up menus to scroll into view instead of being clipped off and inaccessible
 .ag-body {
     overflow: auto;
+}
+
+//This allows .editTools to be on top, when scrolling horizontally
+.ag-scrolls .ag-header-container {
+    z-index: 99;
 }
 
 .ag-pinned-left-cols-viewport {
