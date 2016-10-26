@@ -118,7 +118,6 @@ let AGGrid = React.createClass({
     },
 
     onGridReady(params) {
-        console.log('grid ready');
         this.api = params.api;
         this.columnApi = params.columnApi;
         this.onMenuClose();
