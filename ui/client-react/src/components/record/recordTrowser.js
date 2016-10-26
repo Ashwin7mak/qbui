@@ -232,7 +232,7 @@ let RecordTrowser = React.createClass({
                         <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                     </OverlayTrigger>
                 </div> }
-                <TableIcon classes={"primaryIcon"} icon={table ? table.icon : ""}/>{title}
+                <TableIcon classes="primaryIcon" icon={table ? table.icon : ""}/>{title}
             </div>);
 
     },

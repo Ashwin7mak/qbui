@@ -12,7 +12,7 @@ let FluxMixin = Fluxxor.FluxMixin(React);
  * A header that takes the place of the top nav when viewing a report
  * (visible on small breakpoint currently)
  */
-var RecordHeader = React.createClass({
+let RecordHeader = React.createClass({
     mixins: [FluxMixin],
     propTypes: {
         title: React.PropTypes.object
@@ -23,7 +23,7 @@ var RecordHeader = React.createClass({
         flux.actions.toggleLeftNav();
     },
 
-    render: function() {
+    render() {
         let headerClasses = 'smallHeader recordHeader';
         return (<div className={headerClasses}>
             <div className="left">
