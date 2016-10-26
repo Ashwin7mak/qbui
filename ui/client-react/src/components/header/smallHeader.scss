@@ -28,20 +28,65 @@
         flex-direction: row;
         align-items:center;
         flex: 1 1 auto;
-    }
-    .center.title {
-        overflow: hidden;
-        min-width: 40px;
-        justify-content: center;
-        .qbIcon {
-            flex: 0 0 auto;
-            color: $top-nav-title-icon-color;
+        &.searchElements {
+            font-size: 14px;
+            width:100%;
 
+        }
+        &.title {
+            overflow: hidden;
+            min-width: 40px;
+            justify-content: center;
+            .qbIcon {
+                flex: 0 0 auto;
+                color: $top-nav-title-icon-color;
+
+            }
+        }
+        .cancelButton {
+            padding: 0 4px;
+            border-left: 1px solid #ccc;
         }
     }
     .right {
         display:flex;
         align-items:center;
         flex: 0 0 auto;
+        .iconLink {
+            font-size:22px;
+        }
+        .qbIcon {
+            width:auto;
+            padding: 0 4px;
+            color: $icon-color;
+        }
+    }
+    .searchElements {
+        display:none;
+    }
+    &.searching {
+        .left, .right {
+            display:none;
+        }
+        .center.title {
+            display:none;
+        }
+        .center.searchElements {
+            display:flex;
+            flex-direction:row;
+            .searchInputBox {
+                flex:1 1 auto;
+                .searchInput {
+                    border: none;
+                    border-radius: 0;
+                    padding: 0;
+                    height: inherit;
+                }
+            }
+            a.iconLink {
+                flex:0 0 auto;
+            }
+
+        }
     }
 }
