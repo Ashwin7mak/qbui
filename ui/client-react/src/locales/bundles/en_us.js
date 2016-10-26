@@ -197,7 +197,7 @@ export default {
             errorMessagePopupHeader: {
                 singleErrorLabel: "Please fix this field",
                 multipleErrorLabelPrefix: "Please fix these",
-                multipleErrorLabelSuffix: "fileds",
+                multipleErrorLabelSuffix: "fields",
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Show error list",
