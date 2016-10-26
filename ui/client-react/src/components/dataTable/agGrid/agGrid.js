@@ -118,10 +118,10 @@ let AGGrid = React.createClass({
     },
 
     onGridReady(params) {
+        console.log('grid ready');
         this.api = params.api;
         this.columnApi = params.columnApi;
         this.onMenuClose();
-        this.installHeaderMenus();
         this.api.setHeaderHeight(this.rowHeight);
     },
 
@@ -182,10 +182,14 @@ let AGGrid = React.createClass({
      */
     installHeaderMenus() {
         const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
+
         // convert nodelist to array then iterate to render each menu
         _.map(headers, (header, index) => {
-            const pullRight = index === headers.length - 1;
-            ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
+            if (header.childElementCount === 0) {
+
+                const pullRight = index === headers.length - 1;
+                ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
+            }
         });
     },
     /**
@@ -504,6 +508,7 @@ let AGGrid = React.createClass({
         }
     },
     componentDidUpdate(prevProps,  prevState) {
+        this.installHeaderMenus();
         if (!this.props.loading) {
             let flux = this.getFlux();
             flux.actions.measure('component-AgGrid', 'component-AgGrid start');
