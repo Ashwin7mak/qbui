@@ -4,6 +4,8 @@
  */
 (function() {
     'use strict';
+    var _ = require('lodash');
+
     //Module constants:
     var WHOLE = 'WHOLE';
     var UP_TO_UNDERSCORE = 'UP_TO_UNDERSCORE';
@@ -68,13 +70,13 @@
          * Formats a list of emails in a string.
          * Emails can be separated by a semicolon (;), comma (,), or passed in as an array
          */
-        formatListOfEmails(emails, fieldInfo) {
+        formatListOfEmails: function(emails, fieldInfo) {
             // Abort if emails is null or empty
             if (!emails || emails.length === 0) {
                 return emails;
             }
 
-            if (!Array.isArray(emails)) {
+            if (!_.isArray(emails)) {
                 emails = this.splitEmails(emails);
             }
 
@@ -91,7 +93,7 @@
             }
 
             // The filter removes any blank strings from the final array
-            return emails.split(/\s*[;,]\s*/).filter(singleEmail => singleEmail);
+            return emails.split(/\s*[;,]\s*/).filter(function(singleEmail) {return singleEmail;});
         }
     };
 }());

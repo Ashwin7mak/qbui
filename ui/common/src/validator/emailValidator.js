@@ -29,10 +29,10 @@
             return valid;
         },
         // Helper method for React property isInvalid on many components. Returns opposite value of validate
-        isInvalid: function(email, validation_option) {
-            return !this.isValid(email, validation_option);
+        isInvalid: function(email) {
+            return !this.isValid(email);
         },
-        validateAndReturnResults(email, fieldName, results) {
+        validateAndReturnResults: function(email, fieldName, results) {
             if (this.isInvalid(email)) {
                 if (!results) {
                     results = {
