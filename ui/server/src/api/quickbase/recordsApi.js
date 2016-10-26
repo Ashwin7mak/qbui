@@ -227,13 +227,14 @@
                     requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.FORMAT);
                 }
 
-                // Ensure the offset and numRows request parameter is set to either the supplied value or the defaults
+                // Ensure the offset and numRows request parameter is set to either a supplied value or the defaults if invalid or not supplied
                 let offset = requestHelper.getQueryParameterValue(opts, constants.REQUEST_PARAMETER.OFFSET);
                 let numRows = requestHelper.getQueryParameterValue(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
                 if (offset === null || numRows === null || !Number.isInteger(+offset) || !Number.isInteger(+numRows)) {
                     offset = constants.PAGE.DEFAULT_OFFSET;
                     numRows = constants.PAGE.DEFAULT_NUM_ROWS;
                 } else {
+                    //  make sure the number of rows requested does not exceed the maximum allowed row fetch limit.
                     /*eslint no-lonely-if:0*/
                     if (numRows > constants.PAGE.MAX_NUM_ROWS) {
                         log.warn("Record request number of rows exceeds allowed limit.  Setting to max number of row limit of " + constants.PAGE.MAX_NUM_ROWS);

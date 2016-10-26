@@ -218,13 +218,14 @@
                     report: null
                 };
 
-                // Ensure the offset and numRows request parameter is set to either the supplied value or the defaults
+                // Ensure the offset and numRows request parameter is set to either a supplied value or the defaults if invalid or not supplied
                 let offset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
                 let numRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
                 if (offset === null || numRows === null || !Number.isInteger(+offset) || !Number.isInteger(+numRows)) {
                     offset = constants.PAGE.DEFAULT_OFFSET;
                     numRows = constants.PAGE.DEFAULT_NUM_ROWS;
                 } else {
+                    //  make sure the number of rows requested does not exceed the maximum allowed row fetch limit.
                     /*eslint no-lonely-if:0*/
                     if (numRows > constants.PAGE.MAX_NUM_ROWS) {
                         log.warn("Report results request number of rows exceeds allowed limit.  Setting to max number of row limit of " + constants.PAGE.MAX_NUM_ROWS);
@@ -238,23 +239,19 @@
                     return new Promise((resolve1, reject1) => {
                         this.fetchReportMetaData(req, reportId).then(
                             (metaDataResult) => {
+                                let reportMetaData = JSON.parse(metaDataResult.body);
+
+                                //  Call the report result endpoint as a GET request to get default report
                                 let opts = requestHelper.setOptions(req, true);
                                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url, reportId);
 
-                                //  Add the offset and num row parameters are included on the request
+                                //  Add the offset and num row parameters to the request
                                 requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.OFFSET, offset);
                                 requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS, numRows);
 
                                 requestHelper.executeRequest(req, opts).then(
                                     (result) => {
-                                        //  necessary to ensure if any group result is returned that it can be organized as expected by the client
-                                        let reportMetaData = JSON.parse(metaDataResult.body);
-                                        let sortList = parseSortList(reportMetaData.sortList);
-                                        if (sortList) {
-                                            requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.SORT_LIST, sortList);
-                                        }
-
                                         responseObj.metaData = reportMetaData;
                                         responseObj.report = result;
                                         resolve1(responseObj);
@@ -284,11 +281,14 @@
                             (metaDataResult) => {
                                 let reportMetaData = JSON.parse(metaDataResult.body);
 
+                                //  Call the report result endpoint as a POST request to generate a report that
+                                //  is customized based on the below changes to the report's metadatasortList,
+                                //  columnList and query values are supported.
                                 let opts = requestHelper.setOptions(req);
                                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
                                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getDynamicReportsResultsRoute(req.url);
 
-                                //  Add the offset and num row parameters are included on the request
+                                //  Add the offset and num row parameters to the request
                                 requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.OFFSET, offset);
                                 requestHelper.addQueryParameter(opts, constants.REQUEST_PARAMETER.NUM_ROWS, numRows);
 
@@ -406,7 +406,8 @@
                                     responseObject[FIELDS] = getFieldsOnReport(report.groups[0].records, fields);
 
                                     //  Organize the grouping data for the client
-                                    let groupBy = groupFormatter.groupData(req, responseObject[FIELDS], report);
+                                    let sortList = parseSortList(reportMetaData.sortList);
+                                    let groupBy = groupFormatter.groupData(responseObject[FIELDS], report, sortList, requestHelper.isDisplayFormat(req));
 
                                     //  If for some reason there is no grouping returned, will return the records
                                     if (groupBy.hasGrouping) {
