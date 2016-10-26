@@ -18,9 +18,8 @@ let reportModel = {
                 obj.rptId = reportMeta.id.toString();
             }
 
-            //  for convenience, convert from the meta data any sort/group info (if any)
-            //  into a list delimited string.
-            obj.sortList = ReportUtils.getSortListFromObject(reportMeta.sortList);
+            //  for convenience, convert from the meta data the sort/group info(if any) into a list delimited string.
+            obj.sortList = Array.isArray(reportMeta.sortList) ? ReportUtils.getSortListFromObject(reportMeta.sortList) : '';
         }
 
         //  make available to the client report grid info

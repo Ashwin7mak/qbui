@@ -23,8 +23,8 @@ class ReportUtils {
      * Given arrays of sort fids and group elements combines them into a sortList type string.
      * The grouping fids always go before sort fids
      * @param sortFids array of sort fids ex: [3]
-     * @param groupEls array of group elements ex: [-6:V]
-     * @returns sortList string ex: [-6:V.3]
+     * @param groupEls array of group elements ex: [-6:EQUALS]
+     * @returns sortList string ex: [-6:EQUALS.3]
      */
     static getGListString(sortFids, groupEls) {
         let groupString = ReportUtils.getListString(groupEls);
@@ -109,7 +109,7 @@ class ReportUtils {
     }
     /**
      * Given a sortList string or array pull out sort fids
-     * @param sortList -- sortList could be a string like 6.7:V.-10 or an array ["6", "7:V", "-10"]
+     * @param sortList -- sortList could be a string like 6.7:EQUALS.-10 or an array ["6", "7:EQUALS", "-10"]
      * @returns array of sort fids ( ignores all grouped fids)
      */
     static getSortFidsOnly(sortList) {
@@ -133,7 +133,7 @@ class ReportUtils {
     }
     /**
      * Given a sortList string or array pull out group fids
-     * @param sortList -- sortList could be a string like 6.7:V.-10 or an array ["6", "7:V", "-10"] or an array of sort objects like [{fieldId: 7, sortOrder: "asc", groupType:"V"}]
+     * @param sortList -- sortList could be a string like 6.7:EQUALS.-10 or an array ["6", "7:EQUALS", "-10"] or an array of sort objects like [{fieldId: 7, sortOrder: "asc", groupType:"EQUALS"}]
      * @returns array of group elements ( ignores all sort fids)
      */
     static getGroupElements(sortList) {
@@ -221,36 +221,6 @@ class ReportUtils {
     }
 
     /**
-     * Returns sort/grouping information as a list of objects
-     *
-     * @param sortList -- sortList could be a string like 6.7:EQUALS.-10 or an array ["6", "7:EQUALS", "-10"] or an array of sort objects like [{fieldId: 7, sortOrder: "asc", groupType:"EQUALS"}]
-     * @returns {Array}
-     */
-    static getSortListAsObject(sortList) {
-        let sortListParts = ReportUtils.getSortListPartsHelper(sortList);
-        let sListObj = [];
-        if (sortListParts) {
-            sortListParts.forEach((sort) => {
-                let sortObj = {};
-                if (typeof sort === "string") {
-                    //  format is fid:groupType..split by delimiter(':') to allow us
-                    // to pass in the fid for server side sorting.
-                    var sortEl = sort.split(groupDelimiter, 2);
-                    if (sortEl.length > 1) {
-                        sortObj.groupType = sortEl[1];
-                    }
-                    sortObj.sortOrder = sortEl[0] < 0 ? constants.SORT_ORDER.DESC : constants.SORT_ORDER.ASC;
-                    sortObj.fieldId = Math.abs(sortEl[0]);
-                    sListObj.push(sortObj);
-                } else if (sort && sort.fieldId && sort.sortOrder) {
-                    sListObj.push(sort);
-                }
-            });
-        }
-        return sListObj;
-    }
-
-    /**
      * Take as input a list of sort list objects and return as a string value, with each entry
      * separated by the list delimiter(.).
      *
@@ -263,7 +233,7 @@ class ReportUtils {
         if (Array.isArray(sortListObj)) {
             let sortList = [];
             sortListObj.forEach((sortEl) => {
-                sortList.push(ReportUtils.getGroupString(sortEl.fieldId, sortEl.sortOrder, sortEl.groupType));
+                sortList.push(ReportUtils.getGroupString(sortEl.fieldId, sortEl.sortOrder === constants.SORT_ORDER.ASC, sortEl.groupType));
             });
             return ReportUtils.getListString(sortList);
         }

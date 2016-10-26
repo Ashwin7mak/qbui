@@ -6,7 +6,7 @@ import Promise from 'bluebird';
 let errorStatus = 404;
 let exStatus = 500;
 
-describe('Table Actions table negative tests(1) -- ', () => {
+describe('Table Actions table negative tests -- error conditions', () => {
     'use strict';
 
     let appId = 'appId';
@@ -65,7 +65,7 @@ describe('Table Actions table negative tests(1) -- ', () => {
     });
 });
 
-describe('Table Actions table negative tests(2) -- ', () => {
+describe('Table Actions table negative tests -- exception condition', () => {
     let appId = 'appId';
     let tblId = 'tblId';
 

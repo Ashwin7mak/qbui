@@ -3,6 +3,7 @@ import BaseService from './baseService';
 import NumberUtils from '../utils/numberUtils';
 import StringUtils from '../utils/stringUtils';
 import * as query from '../constants/query';
+import CommonConstants from '../../../common/src/constants';
 
 // a new service is constructed with each actions request..
 // so cachedReportRequest is a global, should be able to keep with reportService
@@ -87,8 +88,26 @@ class ReportService extends BaseService {
      * @returns promise
      */
     getReportMetaData(appId, tableId, reportId) {
+        const existing = this._cached(arguments);
+        if (existing) {
+            // use result promise from prior request
+            return existing;
+        }
+
+        let args = arguments;
         let url = super.constructUrl(this.API.GET_REPORT_META, [appId, tableId, reportId]);
-        return super.get(url);
+        let request = super.get(url);
+
+        if (request) {
+            request.then((response) => {
+                cachedReportRequest[this._key(args)].resp = response;
+                return response;
+            });
+        }
+
+        // clear old and save a new so that report metadata is fetched from
+        // server whenever app/table/reportId is changed.
+        return this._cache(request, arguments);
     }
 
     /**
@@ -137,8 +156,8 @@ class ReportService extends BaseService {
 
         // if no/invalid offset or numRows, will set to the defaults.
         if (!NumberUtils.isInt(params[query.OFFSET_PARAM]) || !NumberUtils.isInt(params[query.NUMROWS_PARAM])) {
-            params[query.OFFSET_PARAM] =  Constants.PAGE.DEFAULT_OFFSET;
-            params[query.NUMROWS_PARAM] = Constants.PAGE.DEFAULT_NUM_ROWS;
+            params[query.OFFSET_PARAM] =  CommonConstants.PAGE.DEFAULT_OFFSET;
+            params[query.NUMROWS_PARAM] = CommonConstants.PAGE.DEFAULT_NUM_ROWS;
         }
 
         let url = super.constructUrl(this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
@@ -168,8 +187,8 @@ class ReportService extends BaseService {
 
         // if no/invalid offset or numRows, will set to the defaults.
         if (!NumberUtils.isInt(params[query.OFFSET_PARAM]) || !NumberUtils.isInt(params[query.NUMROWS_PARAM])) {
-            params[query.OFFSET_PARAM] =  Constants.PAGE.DEFAULT_OFFSET;
-            params[query.NUMROWS_PARAM] = Constants.PAGE.DEFAULT_NUM_ROWS;
+            params[query.OFFSET_PARAM] = CommonConstants.PAGE.DEFAULT_OFFSET;
+            params[query.NUMROWS_PARAM] = CommonConstants.PAGE.DEFAULT_NUM_ROWS;
         }
 
         //  It's expected that the query Parameters will include the custom settings for

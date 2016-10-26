@@ -13,6 +13,7 @@ describe('Table Actions functions', () => {
     let tblId = 'tblId';
     let offset = Constants.PAGE.DEFAULT_OFFSET;
     let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
+    let DEFAULT_HOMEPAGE_ID = '0';
 
     let responseData = {
         reportMetaData: {data: {id: '2'}},
@@ -52,9 +53,9 @@ describe('Table Actions functions', () => {
                     done();
                     let model = reportModel.set(responseData.reportMetaData, responseData.reportData);
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId: DEFAULT_HOMEPAGE_ID}]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId: responseData.reportMetaData.data.id}]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, model]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, responseData.reportData.data.filteredCount]);
                 },
                 () => {
                     done();
