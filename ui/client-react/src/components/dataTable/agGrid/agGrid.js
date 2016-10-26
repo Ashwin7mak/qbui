@@ -120,6 +120,7 @@ let AGGrid = React.createClass({
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
+        this.installHeaderMenus();
         this.onMenuClose();
         this.api.setHeaderHeight(this.rowHeight);
     },
