@@ -94,6 +94,12 @@ class FieldUtils {
         }
     }
 
+    /**
+     * Returns whether a field should be considered editable or now based on fieldDef.
+     * Rules: Built-in fields, non-Scalar fields and fields marked with userEditableValue=false are non-editable
+     * @param fieldDef
+     * @returns {boolean}
+     */
     static isFieldEditable(fieldDef) {
         if (fieldDef) {
             // built in fields are not editable
