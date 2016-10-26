@@ -85,7 +85,7 @@
             return emails.join(';');
         },
         splitEmails: function(emails) {
-            return emails.split(new RegExp('[;,]\s?'));
+            return emails.split(/\s*[;,]\s*/);
         }
     };
 }());

@@ -39,4 +39,75 @@ describe('EmailFormatter', () => {
             });
         });
     });
+
+    describe('splitEmails', () => {
+        let testCases = [
+            {
+                name: 'does not split a single email',
+                emails: 'test@test.com',
+                expectation: ['test@test.com']
+            },
+            {
+                name: 'splits emails separated by a semicolon',
+                emails: 'test@test.com;test+2@test.com;test+3@quickbase.com',
+                expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
+            },
+            {
+                name: 'splits emails separated by a semicolon (with a space)',
+                emails: 'test@test.com; test+2@test.com; test+3@quickbase.com',
+                expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
+            },
+            {
+                name: 'splits emails separated by a comma',
+                emails: 'test@test.com,test+2@test.com,test+3@quickbase.com',
+                expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
+            },
+            {
+                name: 'splits emails separated by a comma (and a space)',
+                emails: 'test@test.com, test+2@test.com, test+3@quickbase.com',
+                expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
+            },
+            {
+                name: 'splits emails separated by a delimiter (; or ,) and multiple spaces',
+                emails: 'test@test.com ,    test+2@test.com    ; test+3@quickbase.com',
+                expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
+            },
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.name, () => {
+                assert.deepEqual(emailFormatter.splitEmails(testCase.emails), testCase.expectation);
+            });
+        });
+    });
+
+    describe.only('formatListOfEmails', () => {
+        let fieldInfo = {
+            defaultDomain: 'test.com'
+        };
+
+        let testCases = [
+            {
+                name: 'formats a single email correctly',
+                emails: 'test',
+                expectation: 'test@test.com'
+            },
+            {
+                name: 'formats multiple emails',
+                emails: 'test;test+2;test3',
+                expectation: 'test@test.com;test+2@test.com;test3@test.com'
+            },
+            {
+                name: 'formats multiple emails even if there are spaces',
+                emails: 'test; test+2; test3',
+                expectation: 'test@test.com;test+2@test.com;test3@test.com'
+            },
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.name, () => {
+                assert.equal(emailFormatter.formatListOfEmails(testCase.emails, fieldInfo), testCase.expectation);
+            });
+        });
+    });
 });
