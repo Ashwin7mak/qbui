@@ -120,8 +120,8 @@ let AGGrid = React.createClass({
     onGridReady(params) {
         this.api = params.api;
         this.columnApi = params.columnApi;
-        this.installHeaderMenus();
         this.onMenuClose();
+        this.installHeaderMenus();
         this.api.setHeaderHeight(this.rowHeight);
     },
 
@@ -186,7 +186,6 @@ let AGGrid = React.createClass({
         // convert nodelist to array then iterate to render each menu
         _.map(headers, (header, index) => {
             if (header.childElementCount === 0) {
-
                 const pullRight = index === headers.length - 1;
                 ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
             }
