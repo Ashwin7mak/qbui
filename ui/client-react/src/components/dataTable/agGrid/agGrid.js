@@ -182,7 +182,6 @@ let AGGrid = React.createClass({
      */
     installHeaderMenus() {
         const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
-
         // convert nodelist to array then iterate to render each menu
         _.map(headers, (header, index) => {
             if (header.childElementCount === 0) {
