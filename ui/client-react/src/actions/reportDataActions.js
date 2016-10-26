@@ -59,7 +59,7 @@ let reportDataActions = {
      * @param appId
      * @param tblId
      * @param rptId
-     * @param format
+     * @param format: should the report output be formatted for display.  If not true, raw data values are returned.
      * @param offset
      * @param rows
      */
@@ -81,6 +81,7 @@ let reportDataActions = {
                 //    - report fields
                 //    - report facets
                 //    - report count
+                //
                 reportService.getReportResults(appId, tblId, rptId, params, format).then(
                     (reportResponse) => {
                         let model = reportModel.set(reportResponse.data.metaData, reportResponse.data);
@@ -106,17 +107,23 @@ let reportDataActions = {
         });
     },
 
-    /* Action called to run a report that overrides the report meta data defaults.
+    /* Run a customized report that optionally allows for dynamically overriding report meta data defaults for
+     * sort/grouping, query and column list settings.
      *
-     * Override params can override report's sortlist/query etc
-     *
-     * Extended filter criteria can be attached to the query -
-     *  Supported filtering options include:
+     * Currently supported query filtering overrides include:
      *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
      *       search : search string
      *
-     * @param queryParams: {offset, numrows, cList, sList, query}
+     * The overrides are expected to be defined in the queryParams parameter.  If no entry is found, then the report meta
+     * data defaults will be used.  NOTE: an empty parameter value is considered valid (clear the default value) and will
+     * be passed to the node layer.
+     *
+     * @param appId
+     * @param tblId
+     * @param rptId
+     * @param format: should the report output be formatted for display.  If not true, raw data values are returned.
      * @param filter: {facet, search}
+     * @param queryParams: {offset, numrows, cList, sList, query}
      */
     loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
         return new Promise((resolve, reject) => {
@@ -133,6 +140,8 @@ let reportDataActions = {
                 this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, offset:offset, numRows:numRows, sortList:sortList});
                 let reportService = new ReportService();
 
+                //  call node to parse the supplied facet expression into a query expression that
+                //  can be included on the request.
                 reportService.parseFacetExpression(filter ? filter.facet : '').then(
                     (facetResponse) => {
                         let filterQueries = [];
@@ -152,13 +161,16 @@ let reportDataActions = {
                             queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
                         }
 
-                        //  the sorting, grouping and clist requirements(if any) are expected to be included in the supplied queryParams
-
                         //  Fetch a report with custom attributes.  The response will include:
                         //    - report data/grouping data
-                        //    - report meta data
+                        //    - report meta data (includes the override settings..if any)
                         //    - report fields
                         //    - report count
+                        //
+                        //  NOTE:
+                        //    - the sorting, grouping and clist requirements(if any) are expected to be included in queryParams
+                        //    - no faceting data is returned..
+                        //
                         reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format).then(
                             (reportResponse) => {
                                 var model = reportModel.set(reportResponse.data.metaData, reportResponse.data);

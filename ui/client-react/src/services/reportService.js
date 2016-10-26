@@ -173,15 +173,17 @@ class ReportService extends BaseService {
         }
 
         //  It's expected that the query Parameters will include the custom settings for
-        //  cList, sList and query.  If none are supplied, then the result of the request
-        //   is no different than calling 'getReportResults' method.
-
+        //  cList, sList and query(if any).  If none are supplied, then the result of the request
+        //  is no different than calling 'getReportResults' method as the default report meta
+        //  data will be used to generate the report.
         let url = super.constructUrl(this.API.GET_REPORT_RESULTS, [appId, tableId, reportId]);
         return super.post(url, {}, {params:params});
     }
 
     /**
      * Parse a facet Expression to a queryString.
+     *
+     * NOTE: this endpoint calls a NODE only endpoint..no core server references are mad.e
      *
      * @param facetExpression looks like [{fid: fid1, fieldtype:'', values: [value1, value2]}, {fid: fid3, fieldtype:'DATE', values: [value3, value4]}, ... ]
      * @returns promise
