@@ -183,4 +183,34 @@ describe('FieldUtils', () => {
             });
         });
     });
+
+    describe(`getFieldLabel retrieves a fieldLabel's 'label' to be displayed`, () => {
+        const relatedField = {
+            id: 6,
+            name: 'field',
+        };
+        const element = {
+            fieldId: 6,
+            type: 'FIELD',
+        };
+        const altElement = Object.assign({
+            useAlternateLabel: true,
+            displayText: 'alternate text',
+        }, element);
+
+        it(`when a label is specified via relatedField's 'name' property`, () => {
+            const label = FieldUtils.getFieldLabel(element, relatedField);
+            expect(label).toEqual(relatedField.name);
+        });
+
+        it(`when an alternate label is specified`, () => {
+            const label = FieldUtils.getFieldLabel(altElement, relatedField);
+            expect(label).toEqual(altElement.displayText);
+        });
+
+        it(`returns an empty string when no label is specified`, () => {
+            const label = FieldUtils.getFieldLabel();
+            expect(label).toEqual('');
+        });
+    });
 });
