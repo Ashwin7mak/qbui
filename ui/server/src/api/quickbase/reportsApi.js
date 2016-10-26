@@ -406,7 +406,7 @@
                                     responseObject[FIELDS] = getFieldsOnReport(report.groups[0].records, fields);
 
                                     //  Organize the grouping data for the client
-                                    let sortList = parseSortList(reportMetaData.sortList);
+                                    let sortList = parseSortList(metaData.sortList);
                                     let groupBy = groupFormatter.groupData(responseObject[FIELDS], report, sortList, requestHelper.isDisplayFormat(req));
 
                                     //  If for some reason there is no grouping returned, will return the records
@@ -431,7 +431,7 @@
                                 }
 
                                 //  add any faceting data to the response
-                                //  NOTE: this conditional block must run after responseObject[FIELDS] is set.
+                                //  NOTE: this conditional block must run AFTER responseObject[FIELDS] is set.
                                 if (includeFacets === true) {
                                     /*eslint no-lonely-if:0 */
                                     let facets = response[3];
