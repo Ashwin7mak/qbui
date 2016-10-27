@@ -88,7 +88,7 @@
         },
         splitEmails: function(emails) {
             // Can't split if it is empty or null
-            if (!emails) {
+            if (!emails || emails.length === 0) {
                 return emails;
             }
 
