@@ -295,6 +295,15 @@ export default {
             url: 'www.example.com'
         },
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
+        errors: {
+            errorLoadingReport: {
+                message: 'Error loading report!',
+                helpText: 'Please try selecting a different report from the Report Menu.',
+                continuedTrouble: 'Still having trouble?',
+                contactSupport: 'Contact Support',
+                supportTeamInfo: 'Some information for the support team:'
+            }
+        },
         invalidMsg : {
             unknown: 'Invalid unknown type. Results: ',
             required: 'Fill in the {fieldName}',

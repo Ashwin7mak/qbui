@@ -292,6 +292,15 @@ export default {
             url: 'www.exemple.fr'
         },
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {S'il vous plaît fixer 1 champ}\n other {S'il vous plaît corriger ces # champs}\n} ",
+        errors: {
+            errorLoadingReport: {
+                message: "Rapport de chargement d'erreur!",
+                helpText: "S'il vous plaît essayez de sélectionner un rapport différent du rapport Menu.",
+                continuedTrouble: 'Encore des problèmes?',
+                contactSupport: 'Contacter le support',
+                supportTeamInfo: "Quelques informations pour l'équipe de soutien:"
+            }
+        },
         invalidMsg : {
             unknown: 'Type inconnu non valide. Résultats: ',
             required: 'Remplissez {fieldName}',

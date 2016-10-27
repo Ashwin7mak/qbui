@@ -293,6 +293,15 @@ export default {
             url: 'www.beispiel.de'
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
+        errors: {
+            errorLoadingReport: {
+                message: 'Fehler beim Laden des Berichts!',
+                helpText: 'Bitte wählen Sie einen anderen Bericht aus dem Berichtsmenü aus.',
+                continuedTrouble: 'Haben Sie noch Schwierigkeiten?',
+                contactSupport: 'Wenden Sie sich an den Support',
+                supportTeamInfo: 'Einige Informationen für das Support-Team:'
+            }
+        },
         invalidMsg : {
             unknown: 'Ungültige unbekannte Art. Befund: ',
             required: 'Füllen Sie das {fieldName}',
