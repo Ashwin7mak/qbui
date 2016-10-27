@@ -3,7 +3,13 @@ import tableActions from '../../src/actions/tableActions';
 import * as actions from '../../src/constants/actions';
 import Promise from 'bluebird';
 
-let errorStatus = 404;
+let errorStatusCode = 404;
+let errorStatus = {
+    response: {
+        message: 'someError',
+        status: errorStatusCode
+    }
+};
 let exStatus = 500;
 
 describe('Table Actions table negative tests(1) -- ', () => {
@@ -20,7 +26,7 @@ describe('Table Actions table negative tests(1) -- ', () => {
         constructor() { }
         getHomePage() {
             var p = Promise.defer();
-            p.reject({response:{message:'someError', status:errorStatus}});
+            p.reject({response:{message:'someError', status:errorStatusCode}});
             return p.promise;
         }
     }
