@@ -765,14 +765,6 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
-    it('test render of error', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                reportData={{error:'ground control to major Tom'}}
-                                                                reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(0);
-    });
-
     it('test show of navigation arrows in footer with paginated report', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_pagedData}
