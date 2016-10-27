@@ -3,7 +3,7 @@ import {I18nMessage} from '../../../utils/i18nMessage';
 
 import './reportContentError.scss';
 
-const supportEmail = 'support@quickbase.com';
+const supportEmail = 'betaprogram@quickbase.com';
 const supportEmailSubject = 'subject=Error%20Loading%20Report';
 
 const ReportContentError = React.createClass({
@@ -23,6 +23,18 @@ const ReportContentError = React.createClass({
     },
     toggleErrorGraphic() {
         this.setState({playingErrorGraphic: !this.state.playingErrorGraphic});
+    },
+    createSupportEmailBody() {
+        let {errorDetails} = this.props;
+
+        let supportEmailBody = 'body=%0D%0A%0D%0A------------------------------------%0D%0APlace additional information above%0D%0A';
+        supportEmailBody += `TID:${errorDetails.tid}%0D%0A`;
+        supportEmailBody += `SID:${errorDetails.sid}`;
+
+        errorDetails.errorMessages.forEach(errorMessage => {
+            supportEmailBody += `%0D%0A${errorMessage.code}-${errorMessage.message}`;
+        });
+        return supportEmailBody;
     },
     render() {
         let {errorDetails} = this.props;
@@ -46,7 +58,7 @@ const ReportContentError = React.createClass({
                 <div className="additionalHelp">
                     <h4><I18nMessage message="errors.errorLoadingReport.continuedTrouble"/></h4>
                     <h5>
-                        <a href={`https://quickbase-493.quickbase.com/qb/support/newcase?subject=newstack+error+loading+report+tid+${errorDetails.tid}`} target="_blank">
+                        <a href={`mailto:${supportEmail}?${supportEmailSubject}&${this.createSupportEmailBody()}`}>
                             <I18nMessage message="errors.errorLoadingReport.contactSupport"/>
                         </a>
                     </h5>
