@@ -241,8 +241,6 @@
   }
 }
 
-
-
 @include small-breakpoint {
     .selectedFacets {
         display:none;
@@ -253,9 +251,7 @@
         input {
             color: $search-input-fg;
         }
-        .popover-content {
-            max-height: 454px;
-        }
+
         .facetMenuPopup {
             display: block;
             min-width: 150px;
@@ -276,6 +272,5 @@
         .popover.bottom > .arrow {
             display: none;
         }
-
     }
 }
