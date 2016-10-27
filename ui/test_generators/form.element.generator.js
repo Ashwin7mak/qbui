@@ -57,6 +57,9 @@
             for (var i = 5; i < fields.length; i++) {
                 var builderInstance = formElementBuilder.builder();
 
+                if (i === 6 || i === 8 || i === 13 || i === 15 || i === 16 || i === 17) {
+                    builderInstance.withRequired(true);
+                }
                 builderInstance.withFieldId(fields[i][fieldConsts.fieldKeys.ID]);
                 builderInstance.withOrderIndex(elementIndex);
                 builderInstance.withPositionSameRow(rawValue.generateBool()); //all fields displays in same row if we comment out this

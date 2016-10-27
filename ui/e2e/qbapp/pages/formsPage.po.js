@@ -14,7 +14,9 @@
 
     var date = new Array();
     date = new Date().toJSON().slice(0, 10).split('-');
-    var sText = rawValueGenerator.generateString(10);
+    var sText = '9782341234';
+    var sEmail = 'abcdefghijkl@gmail.com';
+    var sUrl = 'http://abcdefgh.co.uk/test';
     var sNumeric = rawValueGenerator.generateInt(1, 100);
     var sTime = "12:00 am";
 
@@ -32,6 +34,8 @@
         this.formSaveBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.tagName('button'));
         //save button
         this.formSaveAndNextBtn = this.formTrowserFooter.element(by.className('rightIcons')).all(by.tagName('button')).first();
+        //alert button
+        this.formErrorMsgAlertBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveAlertButton'));
 
         this.formBodyEl = element(by.tagName('body'));
         //form container
@@ -46,6 +50,24 @@
         this.formTableFieldValueElList = this.formEditContainerEl.element(by.className('qbPanelBody')).element(by.className('formTable')).all(by.className('input'));
         //form title
         this.formTitle = this.formContainerEl.element(by.className('qbPanelHeaderTitleText'));
+
+        //form error messages
+        this.formErrorMessage = element.all(by.className('loadedContent')).first().element(by.className('qbErrorMessage'));
+        this.formErrorMessageHeader = this.formErrorMessage.element(by.className('qbErrorMessageHeader'));
+        this.formErrorMessageHeaderCloseBtn = this.formErrorMessageHeader.element(by.className('rightIcons')).element(by.tagName('button'));
+        this.formErrorMessageHeaderAlertBtn = this.formErrorMessageHeader.element(by.className('leftIcons')).element(by.className('iconTableUISturdy-alert'));
+        this.formErrorMessageContent = this.formErrorMessage.element(by.className('qbErrorMessageContent'));
+
+        //Save buttons function
+        this.clickSaveBtnWithName = function(btnName) {
+            this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveButtons')).all(by.tagName('button')).filter(function(elm) {
+                return elm.getAttribute('textContent').then(function(text) {
+                    return text  === btnName;
+                });
+            }).then(function(filteredSaveBtn) {
+                return filteredSaveBtn[0].click();
+            });
+        };
 
         // TODO add method for calendar picker
         //TODO add method for time picker
@@ -67,6 +89,13 @@
                     // Check that the edit notification is displayed
                     reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
                 });
+            });
+        };
+
+        this.clickFormAlertBtn = function() {
+            var self = this;
+            return reportServicePage.waitForElementToBeClickable(self.formErrorMsgAlertBtn).then(function() {
+                return self.formErrorMsgAlertBtn.click();
             });
         };
 
@@ -92,7 +121,13 @@
                 return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                     return elm;
                 }).map(function(elm) {
-                    return elm.clear().sendKeys(sText);
+                    if (elm.getAttribute('type') === 'email') {
+                        return elm.clear().sendKeys(sEmail);
+                    } else if (elm.getAttribute('type') === 'url') {
+                        return elm.clear().sendKeys(sUrl);
+                    } else if (elm.getAttribute('type') === 'text') {
+                        return elm.clear().sendKeys(sText);
+                    }
                 });
             } else if (fieldLabel === 'numericField') {
                 //enter numeric fields
@@ -120,6 +155,40 @@
                     });
                 });
             }
+        };
+
+        this.enterInvalidFormValues = function(fieldLabel) {
+            var self = this;
+            //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
+            if (fieldLabel === 'textField') {
+                //enter text fields
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    return elm.clear().sendKeys("9782311213");
+                });
+            } else if (fieldLabel === 'numericField') {
+                //enter numeric fields
+                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    return elm.clear().sendKeys("@!!^&*%$##@#%%^^");
+                });
+            }
+        };
+
+        this.verifyErrorMessages = function(expectedErrorMessages) {
+            var self = this;
+            var errorMsgs = [];
+            reportServicePage.waitForElement(self.formErrorMessageContent).then(function() {
+                self.formErrorMessageContent.all(by.className('qbErrorMessageItem')).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    return elm.getAttribute('textContent');
+                }).then(function(text) {
+                    expect(text).toEqual(expectedErrorMessages);
+                });
+            });
         };
 
         this.verifyFieldValuesInReportTable = function(recordRowNo, fieldType) {
