@@ -17,8 +17,8 @@ consts = require('../../common/src/constants.js');
 
 (function() {
     'use strict';
-    var realmToUse = 'localhost';       // change this to a string i.e. "myRealm" of an existing realm to use
-                                       // if you leave realmToUse null it will randomly generated a new realm name
+    var realmToUse = null;    // change this to a string i.e. "myRealm" of an existing realm to use
+    // if you leave realmToUse null it will randomly generated a new realm name
 
     var config = require('../../server/src/config/environment');
     if (realmToUse) {
@@ -27,14 +27,10 @@ consts = require('../../common/src/constants.js');
 
     //Require the e2e base class and constants modules
     var e2eBase = require('../common/e2eBase.js')(config);
-
     var chance = require('chance').Chance();
 
     var app;
     var recordList;
-
-    e2eBase.setBaseUrl(config.DOMAIN);
-    e2eBase.initialize();
 
     generateNewData(() => {
         createdRecs();

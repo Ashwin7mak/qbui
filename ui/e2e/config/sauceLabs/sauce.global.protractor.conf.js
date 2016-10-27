@@ -3,6 +3,7 @@
 (function() {
     'use strict';
     var baseE2EPath = '../../../e2e/';
+
     // Global properties file with params common to all Sauce lab config files
     module.exports = {
         // A callback function called once configs are read but before any environment
@@ -68,11 +69,20 @@
                 return require(baseE2EPath + relativePath + '.js');
             };
 
-            // Read the base classes
+            // Initialize the base classes
+            // Get an instance of e2eBase (which gives you an instance of recordApi.base and api.base)
+            // e2eBase then uses the instance of recordApi.base and initializes the services classes with this instance
             global.e2eBase = requireCommon('common/e2eBase')();
-            global.e2eConsts = requireCommon('common/e2eConsts');
+            // api.base will use the DOMAIN param set in your config as the baseUrl if you pass a config object down through the stack
+            // browser is a global object setup by protractor. baseUrl is a param that can be passed in via IntelliJ config or via grunt
+            // since we aren't passing a config object set it here
+            e2eBase.setBaseUrl(browser.baseUrl);
+            // recordApi.base will not initialize itself (and api.base) if you don't pass in a config object
+            // Initialize your recordApi.base (because we aren't passing in a config object in the above call)
+            e2eBase.initialize();
+            global.consts = require('../../common/src/constants');
             global.e2eUtils = requireCommon('common/e2eUtils')();
-            global.consts = require('../../../common/src/constants');
+            global.e2eConsts = requireCommon('common/e2eConsts');
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;
@@ -89,6 +99,7 @@
                 global.browserWidth = browserDimensions.browserWidth;
                 global.browserHeight = browserDimensions.browserHeight;
 
+                //TODO: MB-386 - Need to use the logger wrapper instead of console.log
                 console.log('Setting browser size to ' + global.breakpointSize + ' breakpoint (' + global.browserWidth + ', ' + global.browserHeight + ')');
                 browser.driver.manage().window().setSize(global.browserWidth, global.browserHeight);
             });
@@ -100,6 +111,10 @@
             // Add jasmine spec reporter
             var SpecReporter = require('jasmine-spec-reporter');
             jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all', displaySpecDuration: true}));
+        },
+        // Function will run on completion of test specs. If running in parallel or with multi-capabilities it will run more than once
+        onComplete: function() {
+            return e2eBase.cleanup();
         }
     };
 }());

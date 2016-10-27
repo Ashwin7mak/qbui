@@ -9,7 +9,6 @@
     var reportServicePage = new ReportServicePage();
     var reportSortingPage = new ReportSortingPage();
 
-
     describe('Report Sorting Tests - ', function() {
         var realmName;
         var realmId;
@@ -287,13 +286,6 @@
                     done();
                 });
             });
-        });
-
-        /**
-         * After all tests are done, run the cleanup function in the base class
-         */
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
         });
     });
 }());
