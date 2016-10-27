@@ -74,7 +74,7 @@ const QBModal = React.createClass({
             top: '50%',
             left: '15%',
         }
-        if (!this.props.primaryButtonName) { //switch to look for isBusy type
+        if (this.props.type === QB_MODAL_ISBUSY) { //switch to look for isBusy type
             return <Loader options={options} />;
         }
         if (this.props.type === QB_MODAL_ALERT) {
@@ -106,7 +106,7 @@ const QBModal = React.createClass({
                 {this.props.bodyMessage}
             </div>;
         }
-        if (!this.props.primaryButtonName) { //search of is busy Type
+        if (this.props.type === QB_MODAL_ISBUSY) {
             return <div className="textIsBusy">
                 {this.props.bodyMessage}
             </div>;
