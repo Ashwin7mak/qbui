@@ -7,6 +7,7 @@ import StringUtils from '../utils/stringUtils';
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import uuid from 'uuid';
 import Promise from 'bluebird';
+import QbResponseError from './QbResponseError';
 
 window.Promise = Promise; // set global Promise to Bluebird promise (axios has dependency on Promises which are not in IE 11)
 
@@ -111,7 +112,7 @@ class BaseService {
             },
             error => {
                 self.checkResponseStatus(error);
-                return Promise.reject(error);
+                return Promise.reject(new QbResponseError(error));
             }
         );
     }
