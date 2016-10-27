@@ -73,7 +73,7 @@ const QBModal = React.createClass({
         let options = {
             top: '50%',
             left: '15%',
-        }
+        };
         if (this.props.type === QB_MODAL_ISBUSY) { //switch to look for isBusy type
             return <Loader options={options} />;
         }
