@@ -44,7 +44,7 @@ function buildMockParentComponent(options) {
     return TestUtils.renderIntoDocument(React.createElement(buildMockParent(options)));
 }
 
-describe('QbModal', () => {
+fdescribe('QbModal', () => {
 
     afterEach(() => {
         // Remove modal from the dom after every test to reset
@@ -104,6 +104,16 @@ describe('QbModal', () => {
 
         expect(primaryButton.textContent).toEqual(testPrimaryText);
         expect(mockParent.onPrimaryClick).toHaveBeenCalled();
+    });
+
+    it('can have no buttons', () => {
+
+        component = TestUtils.renderIntoDocument(<QbModal show={true}
+                                                          bodyMessage="testBodyMessage" />);
+
+        let primaryButton = document.querySelector(`${qbModalClass} .primaryButton`);
+
+        expect(primaryButton).toBeNull();
     });
 
     it('can have a middle button', () => {

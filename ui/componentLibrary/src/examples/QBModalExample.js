@@ -13,7 +13,8 @@ var BasicQBModalExample = React.createClass({
             successQBModalOpen: false,
             singleButtonQBModal: false,
             qbIconTitleBodyMessage: false,
-            titleBodyMessageTwoButtons: false
+            titleBodyMessageTwoButtons: false,
+            isBusy: false
         };
     },
 
@@ -44,6 +45,9 @@ var BasicQBModalExample = React.createClass({
     titleBodyMessageTwoButtons() {
         this.setState({titleBodyMessageTwoButtons: !this.state.titleBodyMessageTwoButtons});
     },
+    isBusy() {
+        this.setState({isBusy: !this.state.isBusy});
+    },
     closeAll() {
         this.setState({
             defaultQBModalOpen: false,
@@ -52,7 +56,8 @@ var BasicQBModalExample = React.createClass({
             successQBModalOpen: false,
             singleButtonQBModal: false,
             qbIconTitleBodyMessage: false,
-            titleBodyMessageTwoButtons: false
+            titleBodyMessageTwoButtons: false,
+            isBusy: false
         });
     },
 
@@ -88,6 +93,10 @@ var BasicQBModalExample = React.createClass({
                 {/*Show Title bodyMessage Two Buttons*/}
                 <div style={{paddingTop:"12px"}}>
                     <button onClick={this.titleBodyMessageTwoButtons}>Show Title bodyMessage Two Buttons Modal</button>
+                </div>
+                {/*Show isBusy Modal*/}
+                <div style={{paddingTop:"12px"}}>
+                    <button onClick={this.isBusy}>Show isBusy Modal</button>
                 </div>
                 {/*Default Modal*/}
                 <div>
@@ -159,7 +168,7 @@ var BasicQBModalExample = React.createClass({
                         leftButtonName="Left Button"
                         leftButtonOnClick={this.closeAll}
                         bodyMessage={longBodyMessage}
-                        qbIconName="check"
+                        type="success"
                         title="Title" />
                 </div>
                 {/*Title bodyMessage Two Buttons*/}
@@ -172,6 +181,14 @@ var BasicQBModalExample = React.createClass({
                         leftButtonOnClick={this.closeAll}
                         bodyMessage={longBodyMessage}
                         title="Title" />
+                </div>
+                {/*isBusy Modal*/}
+                <div>
+                    <QBModal
+                        show={this.state.isBusy}
+                        bodyMessage="Is Busy..."
+                        type="success"
+                     />
                 </div>
             </div>
 

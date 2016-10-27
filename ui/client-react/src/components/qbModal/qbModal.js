@@ -1,13 +1,14 @@
 import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import './qbModal.scss';
-import Breakpoints from "../../utils/breakpoints";
 import QbIcon from '../qbIcon/qbIcon';
+import Loader  from 'react-loader';
 
 const QB_MODAL_ALERT = 'alert';
 const QB_MODAL_STANDARD = 'standard';
 const QB_MODAL_SUCCESS = 'success';
-const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS];
+const QB_MODAL_ISBUSY = 'isBusy';
+const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_ISBUSY];
 
 const QBModal = React.createClass({
     propTypes: {
@@ -67,16 +68,15 @@ const QBModal = React.createClass({
         if (QB_MODAL_TYPES.indexOf(this.props.type) < 0 || this.props.type === 'standard') {
             return null;
         }
-
-        let isSmall = Breakpoints.isSmallBreakpoint();
-
         let classes = ['modalIcon'];
         let icon = 'alert';
-
-        if (this.props.qbIconName && this.props.title && !isSmall) {
-            classes.push('modalIcon--large');
+        let options = {
+            top: '50%',
+            left: '15%',
         }
-
+        if (!this.props.primaryButtonName) { //switch to look for isBusy type
+            return <Loader options={options} />;
+        }
         if (this.props.type === QB_MODAL_ALERT) {
             classes.push('modalIcon--alert');
         }
@@ -106,6 +106,11 @@ const QBModal = React.createClass({
                 {this.props.bodyMessage}
             </div>;
         }
+        if (!this.props.primaryButtonName) { //search of is busy Type
+            return <div className="textIsBusy">
+                {this.props.bodyMessage}
+            </div>;
+        }
         return <div className="text">
             {this.props.bodyMessage}
             </div>;
@@ -115,6 +120,9 @@ const QBModal = React.createClass({
             <Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
         ];
 
+        if (!this.props.primaryButtonName) {
+            return null;
+        }
         if (this.props.middleButtonName) {
             buttons.unshift(<Button key={buttons.length} className="secondaryButton middleButton" onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
         }
@@ -124,9 +132,11 @@ const QBModal = React.createClass({
         }
 
         return (
-            <div className={buttons.length === 1 ? 'buttons singlePrimaryButtonContainer' : 'buttons'}>
-                {buttons}
-            </div>
+            <Modal.Footer>
+                <div className={buttons.length === 1 ? 'buttons singlePrimaryButtonContainer' : 'buttons'}>
+                    {buttons}
+                </div>
+            </Modal.Footer>
         );
     },
     render() {
@@ -144,9 +154,7 @@ const QBModal = React.createClass({
                             </Modal.Body>
                         </div>
                     </div>
-                    <Modal.Footer>
-                        {this.renderButtons()}
-                    </Modal.Footer>
+                    {this.renderButtons()}
                 </Modal>
             </div>
         );

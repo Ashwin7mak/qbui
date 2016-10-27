@@ -96,6 +96,14 @@
     }
   }
 
+  .textIsBusy{
+    height: 200px;
+    padding-left: 100px;
+    padding-top: 90px;
+    margin-bottom: 10px;
+    font-size: 44px;
+  }
+
   .textWithTitle {
     font-size: $font-size-p;
   }
@@ -110,12 +118,6 @@
       font-size: 40px;
       padding-top: 9px;
     }
-  }
-
-  .modalIcon--large {
-    font-size: 90px;
-    margin-top: 10px;
-    width: 20%;
   }
 
   .modalIcon--alert {
