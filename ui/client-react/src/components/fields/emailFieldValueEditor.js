@@ -43,10 +43,12 @@ const EmailFieldValueEditor = React.createClass({
     onBlur(newValue) {
         let datatypeAttributes = (this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : {});
 
+        let value = EmailFormatter.addDefaultDomain(newValue.value, datatypeAttributes.defaultDomain);
+
         if (this.props.onBlur) {
             this.props.onBlur({
-                display: EmailFormatter.formatListOfEmails(newValue.value, datatypeAttributes),
-                value: EmailFormatter.addDefaultDomain(newValue.value, datatypeAttributes.defaultDomain)
+                display: EmailFormatter.formatListOfEmails(value, datatypeAttributes),
+                value: value
             });
         }
     },

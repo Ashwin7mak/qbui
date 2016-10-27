@@ -30,6 +30,12 @@ describe('EmailFormatter', () => {
                 email: 'test',
                 domain: '',
                 expectation: 'test'
+            },
+            {
+                name: 'adds the default domain to every email in a list that does not have one',
+                email: 'test;test@hasdomain.com,test2,test3',
+                domain: 'quickbase.com',
+                expectation: 'test@quickbase.com;test@hasdomain.com;test2@quickbase.com;test3@quickbase.com'
             }
         ];
 
@@ -70,6 +76,16 @@ describe('EmailFormatter', () => {
             {
                 name: 'splits emails separated by a delimiter (; or ,) and multiple spaces',
                 emails: 'test@test.com ,    test+2@test.com    ; test+3@quickbase.com',
+                expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
+            },
+            {
+                name: 'splits emails separated by a space (or multiple spaces)',
+                emails: 'test@test.com test+2@test.com    test+3@quickbase.com',
+                expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
+            },
+            {
+                name: 'splits emails separated by a tab',
+                emails: "test@test.com\ttest+2@test.com\ttest+3@quickbase.com",
                 expectation: ['test@test.com', 'test+2@test.com', 'test+3@quickbase.com']
             },
             {

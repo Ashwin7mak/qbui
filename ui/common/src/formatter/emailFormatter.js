@@ -27,13 +27,19 @@
 
     module.exports = {
         addDefaultDomain: function(email, domain) {
-            // Core and current stack add a domain to a blank string, so that
-            // same functionality occurs here. To remove, just check if email is
-            // blank before adding a default domain. `if (domain && email && !hasDomain(email)) {`
-            if (domain && !hasDomain(email)) {
-                email = email + (domain.indexOf('@') >= 0 ? domain : '@' + domain);
-            }
-            return email;
+            // If a string of emails is provided, check the domain for each email
+            var emails = _.map(this.splitEmails(email), function(singleEmail) {
+                // Core and current stack add a domain to a blank string, so that
+                // same functionality occurs here. To remove, just check if email is
+                // blank before adding a default domain. `if (domain && email && !hasDomain(email)) {`
+                if (domain && !hasDomain(singleEmail)) {
+                    singleEmail = singleEmail + (domain.indexOf('@') >= 0 ? domain : '@' + domain);
+                }
+
+                return singleEmail;
+            });
+
+            return emails.join(';');
         },
         //Given a email string as input, formats as a email with display preferences applied.
         format: function(fieldValue, fieldInfo) {
@@ -93,7 +99,7 @@
             }
 
             // The filter removes any blank strings from the final array
-            return emails.split(/\s*[;,]\s*/).filter(function(singleEmail) {return singleEmail;});
+            return emails.split(/\s*[;,\s\t]\s*/).filter(function(singleEmail) {return singleEmail;});
         }
     };
 }());
