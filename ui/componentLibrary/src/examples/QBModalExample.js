@@ -2,7 +2,7 @@
 // This is a basic example for the React playground
 // Please update to include other properties or states for your component
 
-
+let isBusyTimeOut = 2000;
 
 var BasicQBModalExample = React.createClass({
     getInitialState() {
@@ -16,6 +16,11 @@ var BasicQBModalExample = React.createClass({
             titleBodyMessageTwoButtons: false,
             isBusy: false
         };
+    },
+
+    isBusyTimer() {
+        let self = this;
+        setTimeout(function() {self.setState({isBusy: false});}, isBusyTimeOut);
     },
 
     toggleDefaultQBModal() {
@@ -47,6 +52,7 @@ var BasicQBModalExample = React.createClass({
     },
     isBusy() {
         this.setState({isBusy: !this.state.isBusy});
+        this.isBusyTimer();
     },
     closeAll() {
         this.setState({
@@ -187,7 +193,7 @@ var BasicQBModalExample = React.createClass({
                     <QBModal
                         show={this.state.isBusy}
                         bodyMessage="Is Busy..."
-                        type="success"
+                        type="isBusy"
                      />
                 </div>
             </div>

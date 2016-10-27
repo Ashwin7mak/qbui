@@ -25,7 +25,7 @@ const QBModal = React.createClass({
          */
         title: React.PropTypes.string,
         /**
-         * This is the type of alert (alert, success, or standard[no icon])
+         * This is the type of alert (alert, success, or standard[no icon], isBusy)
          */
         type: React.PropTypes.oneOf(QB_MODAL_TYPES),
         /**
