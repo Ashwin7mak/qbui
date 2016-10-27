@@ -301,7 +301,9 @@ export default {
                 helpText: 'Please try selecting a different report from the Report Menu.',
                 continuedTrouble: 'Still having trouble?',
                 contactSupport: 'Contact Support',
-                supportTeamInfo: 'Some information for the support team:'
+                supportTeamInfo: 'Some information for the support team:',
+                playGraphic: 'Show Me How',
+                stopGraphic: 'Stop Playing'
             }
         },
         invalidMsg : {

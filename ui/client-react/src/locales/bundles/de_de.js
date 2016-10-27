@@ -299,7 +299,9 @@ export default {
                 helpText: 'Bitte wählen Sie einen anderen Bericht aus dem Berichtsmenü aus.',
                 continuedTrouble: 'Haben Sie noch Schwierigkeiten?',
                 contactSupport: 'Wenden Sie sich an den Support',
-                supportTeamInfo: 'Einige Informationen für das Support-Team:'
+                supportTeamInfo: 'Einige Informationen für das Support-Team:',
+                playGraphic: 'Zeig mir wie',
+                stopGraphic: 'Hör auf zu spielen'
             }
         },
         invalidMsg : {

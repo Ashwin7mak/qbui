@@ -298,7 +298,9 @@ export default {
                 helpText: "S'il vous plaît essayez de sélectionner un rapport différent du rapport Menu.",
                 continuedTrouble: 'Encore des problèmes?',
                 contactSupport: 'Contacter le support',
-                supportTeamInfo: "Quelques informations pour l'équipe de soutien:"
+                supportTeamInfo: "Quelques informations pour l'équipe de soutien:",
+                playGraphic: 'Me montrer comment',
+                stopGraphic: 'arrête de jouer'
             }
         },
         invalidMsg : {

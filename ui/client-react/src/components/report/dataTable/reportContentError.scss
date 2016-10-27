@@ -8,14 +8,21 @@
     width: 100%;
 
     .errorImage {
-        content: url("./fix_report_error.gif");
-        border: 1px solid $color-black-800;
+        border: 1px solid $color-blue-300;
         border-radius: 5px;
         width: 40%;
 
         @include small-breakpoint {
             width: 75%;
         }
+    }
+
+    .errorImage--still {
+        content: url("./fix_report_error_still_image.png");
+    }
+
+    .errorImage--animation {
+        content: url("./fix_report_error.gif");
     }
 
     .additionalHelp {

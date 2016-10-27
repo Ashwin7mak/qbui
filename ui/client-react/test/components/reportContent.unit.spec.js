@@ -3,6 +3,7 @@ import TestUtils from 'react-addons-test-utils';
 import {ReportContent, __RewireAPI__ as ReportContentRewireAPI} from '../../src/components/report/dataTable/reportContent';
 import {CardViewListHolder} from '../../src/components/dataTable/cardView/cardViewListHolder';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
+import ReportContentError from '../../src/components/report/dataTable/reportContentError';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {NumericCellRenderer, DateCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
 import _ from 'lodash';
