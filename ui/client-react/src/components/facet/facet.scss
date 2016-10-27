@@ -69,6 +69,16 @@
       @include height-xlarge-breakpoint {
         max-height: 980px;
       }
+
+      @include small-breakpoint {
+        @include height-small-breakpoint {
+          max-height: 420px;
+        }
+
+        @include height-medium-breakpoint {
+          max-height: 550px;
+        }
+      }
     }
 
     .panel > .list-group .list-group-item,
