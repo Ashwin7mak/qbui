@@ -1,6 +1,4 @@
 import _ from 'lodash';
-import Locale from '../locales/locales';
-import {NotificationManager} from 'react-notifications';
 
 class QbResponseError {
     constructor(responseError) {
@@ -28,24 +26,6 @@ class QbResponseError {
         }
 
         return this;
-    }
-
-    /**
-     * Display a growl notification
-     * @param messageId The id for the localized message
-     * @param type The type of alert (success or error)
-     * @param duration How long the alert should show
-     */
-    displayMessage(messageId, type = 'failed', duration = 1500) {
-        NotificationManager.success(Locale.getMessage(messageId), Locale.getMessage(type), duration);
-    }
-
-    /**
-     * Display a growl notification of the error
-     * @param messageId The id for the localized message
-     */
-    displayErrorMessage(messageId) {
-        this.displayMessage(messageId, 'failed');
     }
 }
 
