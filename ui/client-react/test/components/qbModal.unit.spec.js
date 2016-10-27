@@ -45,7 +45,7 @@ function buildMockParentComponent(options) {
     return TestUtils.renderIntoDocument(React.createElement(buildMockParent(options)));
 }
 
-fdescribe('QbModal', () => {
+describe('QbModal', () => {
 
     afterEach(() => {
         // Remove modal from the dom after every test to reset
