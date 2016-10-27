@@ -49,6 +49,30 @@ describe('ReportContentError', () => {
         expect(reportErrorContent).not.toBeNull();
     });
 
+    it('plays the errorGraphic when the "Show me how" button is clicked', () => {
+        component = TestUtils.renderIntoDocument(<ReportContentError errorDetails={mockErrorDetails} />);
+        let showMeHowButton = ReactDOM.findDOMNode(component).querySelector('.playReportErrorGraphicButton');
+        let showMeGraphic = ReactDOM.findDOMNode(component).querySelector('.errorImage');
+
+        Simulate.click(showMeHowButton);
+
+        expect(component.state.playingErrorGraphic).toBeTruthy();
+        expect(showMeGraphic.classList).toContain('errorImage--animation');
+    });
+
+    it('stops the errorGraphic when the "Stop" button is clicked', () => {
+        component = TestUtils.renderIntoDocument(<ReportContentError errorDetails={mockErrorDetails} />);
+        component.setState({playingErrorGraphic: true});
+
+        let stopButton = ReactDOM.findDOMNode(component).querySelector('.playReportErrorGraphicButton');
+        let showMeGraphic = ReactDOM.findDOMNode(component).querySelector('.errorImage');
+
+        Simulate.click(stopButton);
+
+        expect(component.state.playingErrorGraphic).toBeFalsy();
+        expect(showMeGraphic.classList).toContain('errorImage--still');
+    });
+
     let contentTestCases = [
         {
             description: 'shows the transaction ID (tid)',
@@ -68,9 +92,6 @@ describe('ReportContentError', () => {
             expect(domComponent.textContent).toContain(contentTestCase.expectedContent);
         });
     });
-
-
-
 });
 
 

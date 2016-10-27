@@ -40,7 +40,7 @@ const ReportContentError = React.createClass({
             <div className="reportContentError">
                 <h3><I18nMessage message="errors.errorLoadingReport.message" /></h3>
                 <p><I18nMessage message="errors.errorLoadingReport.helpText" /></p>
-                <button className="btn btn-link" onClick={this.toggleErrorGraphic}>{playingText}</button>
+                <button className="playReportErrorGraphicButton btn btn-link" onClick={this.toggleErrorGraphic}>{playingText}</button>
                 <img className={errorImageClasses.join(' ')} />
 
                 <div className="additionalHelp">
