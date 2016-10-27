@@ -12,6 +12,10 @@ class QbResponseError {
         this.request = responseError.request;
         this.response = responseError.response;
 
+        if (_.has(this.response, 'data')) {
+            this.data = this.response.data;
+        }
+
         // Obtain the QB provided sid and tid for help with customer troubleshooting
         if (_.has(this.response, 'data.request.headers')) {
             this.sid = this.response.data.request.headers.sid;
@@ -22,6 +26,8 @@ class QbResponseError {
         if (_.has(this.response, 'data.body') && typeof this.response.data.body === 'string') {
             this.errorMessages = JSON.parse(this.response.data.body);
         }
+
+        return this;
     }
 
     /**
