@@ -38,19 +38,24 @@ $action-separator-color: #486c8f;
         background-color: $trowser-header-bg;
         display:flex;
         align-items:center;
+        padding: 0 10px 0 20px;
         .qbIcon {
-            font-size:15px;
-            vertical-align: baseline;
-            margin-left: 10px;
-            margin-right: 10px;
+            font-size:22px;
+            vertical-align: middle;
         }
         .breadcrumbs {
             flex:1 1 auto;
             overflow:hidden;
             white-space:nowrap;
-            h4 {
+            .breadcrumbsContent {
                 overflow:hidden;
                 text-overflow:ellipsis;
+                * {
+                    vertical-align: middle;
+                }
+                .primaryIcon {
+                    margin-right: 10px;
+                }
             }
         }
 
@@ -82,6 +87,7 @@ $action-separator-color: #486c8f;
         display:flex;
         flex-direction: row;
         background-color: $trowser-footer-bg;
+        padding: 3px 0;
         .leftActions {
             flex:0 0 auto;
         }
@@ -172,29 +178,37 @@ $action-separator-color: #486c8f;
 
 /* 2 rows on small breakpoint */
 @include small-breakpoint {
-    .trowser .trowserFooter {
-        flex-direction:column;
-        flex: 0 1 auto;
-
-        .centerActions {
-            a {
-                flex: 1;
-                align-items: center;
-                justify-content: center;
-            }
-            a:first-child {
-                border-left:0;
-            }
-            a:last-child {
-                border-right:0;
+    .trowser {
+        .trowserHeader {
+            padding: 0 10px 0 10px;
+            .rightIcons .btn {
+                margin-top: -3px;
             }
         }
-        .rightIcons {
-            text-align:center;
-            width:90%;
-            button {
-                flex: 1;
-                width: 100%;
+        .trowserFooter {
+            flex-direction: column;
+            flex: 0 0 auto;
+
+            .centerActions {
+                a {
+                    flex: 1;
+                    align-items: center;
+                    justify-content: center;
+                }
+                a:first-child {
+                    border-left: 0;
+                }
+                a:last-child {
+                    border-right: 0;
+                }
+            }
+            .rightIcons {
+                text-align: center;
+                width: 90%;
+                button {
+                    flex: 1;
+                    width: 100%;
+                }
             }
         }
     }

@@ -50,7 +50,8 @@ export default {
             previousRecord: "Bisherigen Rekord",
             save: "Speichern",
             saveAndNext: "Speichern und Nächster",
-            saveAndAddAnother: "Speichern und fügen Sie ein anderes"
+            saveAndAddAnother: "Speichern und fügen Sie ein anderes",
+            new: "Neu"
         },
         field: {
             search: "Suche",

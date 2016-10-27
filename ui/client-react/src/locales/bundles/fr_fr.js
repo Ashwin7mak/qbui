@@ -50,7 +50,8 @@ export default {
             previousRecord: "Previous enregistrement",
             save: "Sauver",
             saveAndNext: "Sauver et prochain",
-            saveAndAddAnother: "Sauver et ajouter un autre"
+            saveAndAddAnother: "Sauver et ajouter un autre",
+            new: "Nouveau"
         },
         field: {
             search: "Chercher",

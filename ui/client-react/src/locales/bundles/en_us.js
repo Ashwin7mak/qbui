@@ -53,7 +53,8 @@ export default {
             previousRecord: "Previous Record",
             save: "Save",
             saveAndNext: "Save & Next",
-            saveAndAddAnother: "Save & add another"
+            saveAndAddAnother: "Save & add another",
+            new: "New"
         },
         field: {
             search: "Search",
@@ -203,7 +204,7 @@ export default {
             errorMessagePopupHeader: {
                 singleErrorLabel: "Please fix this field",
                 multipleErrorLabelPrefix: "Please fix these",
-                multipleErrorLabelSuffix: "fileds",
+                multipleErrorLabelSuffix: "fields",
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Show error list",
