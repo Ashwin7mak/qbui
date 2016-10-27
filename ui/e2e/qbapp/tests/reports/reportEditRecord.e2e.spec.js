@@ -218,12 +218,12 @@
 
             //Step 6 - Goto the second page to check that the record is added at the last row
             reportPagingPO.clickPagingNavButton(reportPagingPO.pagingToolbarNextButton);
-            reportContentPO.reportRowCount().then(function(countRows){
-                reportContentPO.getRecordValues(countRows-1).then(function(fieldValues) {
+            reportContentPO.reportRowCount().then(function(countRows) {
+                reportContentPO.getRecordValues(countRows - 1).then(function(fieldValues) {
                     expect(fieldValues[1]).toBe(textToEnter);
                     expect(fieldValues[6]).toBe(dateToExpect);
                 });
-            })
+            });
             done();
         });
 

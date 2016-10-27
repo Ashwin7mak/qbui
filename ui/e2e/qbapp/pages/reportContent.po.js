@@ -446,8 +446,8 @@
          * Find and click the cancel button for the record being edited
          */
         this.clickEditMenuCancelButton = function() {
-             var self = this;
-             var cancelBtnRow = 0;
+            var self = this;
+            var cancelBtnRow = 0;
             return self.selectInlineMenuButtons(cancelBtnRow);
         };
 
@@ -535,9 +535,9 @@
         };
 
         //Count the number of rows on the report page
-       this.reportRowCount = function(){
-           return this.agGridBodyViewportEl.all(by.className('ag-row')).count();
-       }
+        this.reportRowCount = function() {
+            return this.agGridBodyViewportEl.all(by.className('ag-row')).count();
+        };
     };
 
     ReportContentPage.prototype = e2ePageBase;
