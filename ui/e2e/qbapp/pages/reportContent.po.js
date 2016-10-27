@@ -446,6 +446,21 @@
          * Find and click the cancel button for the record being edited
          */
         this.clickEditMenuCancelButton = function() {
+             var self = this;
+             var cancelBtnRow = 0;
+            return self.selectInlineMenuButtons(cancelBtnRow);
+        };
+
+        //Click inline Edit Menu 'Save and Add a new Row' button
+        this.clickInlineMenuSaveAddNewRowBtn = function() {
+            var self = this;
+            var saveAddnewRowBtnRow = 2;
+            return self.selectInlineMenuButtons(saveAddnewRowBtnRow);
+        };
+
+
+
+        this.selectInlineMenuButtons = function(val) {
             var self = this;
             return self.agGridRowActionsElList.filter(function(elem) {
                 // Return only the row with 'editing' in the class
@@ -454,12 +469,13 @@
                 });
             }).then(function(rowElem) {
                 expect(rowElem.length).toBe(1);
-                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(0).click().then(function() {
+                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(val).click().then(function() {
                     // Wait for the report to be ready
                     self.waitForReportContent();
                 });
             });
         };
+
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
          * @returns A promise that will resolve after waiting for the report records to be displayed
@@ -492,7 +508,7 @@
         };
 
         //
-        this.assertDeleteMessageSuccess = function(successMessage) {
+        this.assertSuccessMessage = function(successMessage) {
             var self = this;
             this.waitForElement(self.successDeleteWindow).then(function() {
                 expect(self.successDeleteWindow.getText()).toMatch(successMessage.toString());
@@ -514,12 +530,16 @@
         };
 
         //Record Row to be selected:
-
         this.reportRowSelected = function(recordRow) {
             this.recordCheckBoxes.get(recordRow).click();
         };
 
+        //Count the number of rows on the report page
+       this.reportRowCount = function(){
+           return this.agGridBodyViewportEl.all(by.className('ag-row')).count();
+       }
     };
+
     ReportContentPage.prototype = e2ePageBase;
     module.exports = ReportContentPage;
 }());
