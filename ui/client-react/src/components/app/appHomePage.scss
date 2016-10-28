@@ -95,14 +95,30 @@
             flex-direction: column;
         }
 
+        h4 {
+            align-self: center;
+        }
+
         .leftContent {
             flex-basis: 45%;
-            margin-right: 150px;
+            margin-right: 50px;
 
             @include small-breakpoint {
                 flex-basis: initial;
                 margin-right: 0;
                 margin-bottom: 30px;
+            }
+
+            .welcomeGuideImage {
+                content: url("Welcome-guide.png");
+            }
+        }
+
+        .rightContent {
+            align-content: center;
+
+            .giveFeedbackImage {
+                content: url("GiveFeedback.png");
             }
         }
 

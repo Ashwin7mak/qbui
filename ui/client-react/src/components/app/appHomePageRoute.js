@@ -105,15 +105,27 @@ let AppHomePageRoute = React.createClass({
                         <a className="linkWithImage" href="guidme"><QBicon icon="check-reversed" /><span>Guide me through Mercury</span></a>
                     </div>
                 </div>
-                <div className="homePanel mainPanel">
-                    <div className="content leftContent">
+                <div className="mainPanel">
+                    <div className="homePanel leftContent">
                         <h4>Welcome guide</h4>
-                        <img src="http://placehold.it/350x300" />
+                        <img className="welcomeGuideImage" />
+                        <p>
+                            The dagger waves amnesty like a warm pants.
+                            Fight me grog, ye dark doubloons! Old fights lead to the power.
+                            O, punishment! Make it so, virtual peace! Cum accentor tolerare, omnes tuses experientia grandis, castus dominaes.
+                        </p>
                         <button className="btn btn-primary">Download the Welcome Guide <small>(.pdf)</small></button>
                     </div>
-                    <div className="content rightContent">
+                    <div className="homePanel rightContent">
                         <h4>We want your feedback</h4>
-                        <img src="http://placehold.it/350x300" />
+                        <div className="giveFeedbackImageContainer">
+                            <img className="giveFeedbackImage" />
+                        </div>
+                        <p>
+                            Nomen de azureus aonides, acquirere pes! Outer totalities loves most dogmas.
+                            Pins sing with strength! C'mon, yer not sailing me without a madness! The courage is a modern kahless.
+                            Strength is a cold swabbie. Girls die with life! Yuck, ye jolly parrot- set sails for desolation!
+                        </p>
                         <button className="btn btn-primary btn-feedback">Give Feedback</button>
                     </div>
                 </div>
