@@ -6,6 +6,27 @@ export default {
         apps: {
             header: "Vos Apps"
         },
+        app: {
+            homepage: {
+                welcomeTitle: "Bienvenue sur Mercury Beta",
+                welcomeText: "Pendant que vous apprenez votre chemin, utilisez cette zone à la place de votre page d'accueil d'application. " +
+                "C'est votre application réelle dans Mercury. Vous ne verrez pas encore la page d'accueil de votre application, mais " +
+                "données sont ici. Les travaux effectués ici s'affichent immédiatement en mode Classique.",
+                launchVideoLink: "Lancez une tournée vidéo",
+                guideMeLink: "Guide-moi par Mercury (2:30)",
+                guideTitle: "Guide d'accueil",
+                guideText: "Apprenez tout sur le programme Mercury Beta. Voyez quelles fonctionnalités sont actuellement disponibles et comment votre équipe peut obtenir le travail plus rapidement, à travers les périphériques, en utilisant Mercury.",
+                guideButton: "Télécharger le guide d'accueil",
+                feedbackTitle: "Nous souhaitons recevoir vos commentaires",
+                feedbackText: "Notre équipe attend vos nouvelles! Nous sommes tellement désireux d'entendre ce que vous pensez de Mercury que nous avons inclus un bouton de commentaires sur chaque page de votre application.",
+                feedbackButton: "Donnez votre avis",
+                tipTitle: "Rien ne s'est passé quand j'ai cliqué...",
+                tipText: "Il s'agit de travaux en cours, donc si vous cliquez sur un bouton et il ne fait rien, pas de soucis. Nous travaillons encore sur cette fonctionnalité.",
+                helpTitle: "Besoin d'aide?",
+                helpText: "Nous voulons que vous réussissiez; C'est pourquoi nous sommes toujours là pour vous aider.",
+                helpLinkPreText: "Veuillez nous contacter au"
+            }
+        },
         reports : {
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
             emailSubject: "'{reportName}' rapport depuis l'application QuickBase '{appName}'",

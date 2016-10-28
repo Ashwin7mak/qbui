@@ -1,12 +1,17 @@
 import React from 'react';
-import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import Breakpoints from '../../utils/breakpoints';
+import {I18nMessage} from '../../utils/i18nMessage';
 
 import './appHomePage.scss';
+
+const supportEmail = 'betaprogram@quickbase.com';
+function i18nKey(subkey) {
+    return `app.homepage.${subkey}`;
+}
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
@@ -91,63 +96,52 @@ let AppHomePageRoute = React.createClass({
 
         let content = (
             <div className="appHomePage">
-                <div className="homePanel topPanel">
-                    <div className="topPanelContent">
-                        <h2>Welcome to Mercury Beta</h2>
-                        <p>
-                            Cum demolitione credere, omnes gemnaes vitare rusticus, peritus nutrixes.
-                            O, break me jolly roger, ye wet hornpipe! The shark trades with passion, hoist the seychelles until it screams.
-                            Break me gibbet, ye evil jack! The wave ransacks with adventure, rob the freighter before it hobbles.
-                        </p>
-                    </div>
-                    <div className="topPanelLinks">
-                        <a className="linkWithImage" href="videotour"><img className="launchTourImage" /><span>Launch Video Tour</span></a>
-                        <a className="linkWithImage" href="guidme"><img className="guideMeImage" /><span>Guide me through Mercury</span></a>
-                    </div>
-                </div>
-                <div className="mainPanel">
-                    <div className="homePanel leftContent">
-                        <h4>Welcome guide</h4>
-                        <img className="welcomeGuideImage" />
-                        <p>
-                            The dagger waves amnesty like a warm pants.
-                            Fight me grog, ye dark doubloons! Old fights lead to the power.
-                            O, punishment! Make it so, virtual peace! Cum accentor tolerare, omnes tuses experientia grandis, castus dominaes.
-                        </p>
-                        <button className="btn btn-primary">Download the Welcome Guide <small>(.pdf)</small></button>
-                    </div>
-                    <div className="homePanel rightContent">
-                        <h4>We want your feedback</h4>
-                        <div className="giveFeedbackImageContainer">
-                            <img className="giveFeedbackImage" />
+                <div className="appHomePageWidthConstraint">
+                    <div className="homePanel topPanel">
+                        <div className="topPanelContent">
+                            <h2><I18nMessage message={i18nKey('welcomeTitle')} /></h2>
+                            <p><I18nMessage message={i18nKey('welcomeText')} /></p>
                         </div>
-                        <p>
-                            Nomen de azureus aonides, acquirere pes! Outer totalities loves most dogmas.
-                            Pins sing with strength! C'mon, yer not sailing me without a madness! The courage is a modern kahless.
-                            Strength is a cold swabbie. Girls die with life! Yuck, ye jolly parrot- set sails for desolation!
-                        </p>
-                        <button className="btn btn-primary btn-feedback">Give Feedback</button>
-                    </div>
-                </div>
-                <div className="bottomPanel">
-                    <div className="homePanel bottomSubPanel leftBottomPanel">
-                        <div className="homePageTipImageContainer">
-                            <img className="homePageTipImage" />
-                        </div>
-                        <div className="leftBottomPanelContent">
-                            <h4>Nothing happened when I clicked...</h4>
-                            <p>This is a work in progress. Belay, black yardarm. go to haiti. Never sail a codfish.</p>
-                            <p>Note: Most unsupported features show up in gray.</p>
+                        <div className="topPanelLinks">
+                            <a className="linkWithImage" href="videotour"><img className="launchTourImage" /><span><I18nMessage message={i18nKey('launchVideoLink')} /></span></a>
+                            <a className="linkWithImage" href="guidme"><img className="guideMeImage" /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>
                         </div>
                     </div>
-                    <div className="homePanel bottomSubPanel rightBottomPanel">
-                        <img className="homePageHelpImage" />
-                        <div className="rightBottomPanelContent">
-                            <h4>Need help?</h4>
-                            <p>We want you to be successful, that's why we're always here to help. Contact us for assistance with your Mercury App.</p>
-                            <div className="supportEmail">
-                                <QBicon icon="mail"/>
-                                <p className="supportEmailText">Please contact us at <a href="mailto:betaprogram@quickbase.com">betaprogram@quickbase.com</a>.</p>
+                    <div className="mainPanel">
+                        <div className="homePanel leftContent">
+                            <h4><I18nMessage message={i18nKey('guideTitle')} /></h4>
+                            <img className="welcomeGuideImage" />
+                            <p><I18nMessage message={i18nKey('guideText')} /></p>
+                            <button className="btn btn-primary"><I18nMessage message={i18nKey('guideButton')} /> <small>(.pdf)</small></button>
+                        </div>
+                        <div className="homePanel rightContent">
+                            <h4><I18nMessage message={i18nKey('feedbackTitle')} /></h4>
+                            <div className="giveFeedbackImageContainer">
+                                <img className="giveFeedbackImage" />
+                            </div>
+                            <p><I18nMessage message={i18nKey('feedbackText')} /></p>
+                            <button className="btn btn-primary btn-feedback"><I18nMessage message={i18nKey('feedbackButton')} /></button>
+                        </div>
+                    </div>
+                    <div className="bottomPanel">
+                        <div className="homePanel bottomSubPanel leftBottomPanel">
+                            <div className="homePageTipImageContainer">
+                                <img className="homePageTipImage" />
+                            </div>
+                            <div className="leftBottomPanelContent">
+                                <h4><I18nMessage message={i18nKey('tipTitle')} /></h4>
+                                <p><I18nMessage message={i18nKey('tipText')} /></p>
+                            </div>
+                        </div>
+                        <div className="homePanel bottomSubPanel rightBottomPanel">
+                            <img className="homePageHelpImage" />
+                            <div className="rightBottomPanelContent">
+                                <h4><I18nMessage message={i18nKey('helpTitle')} /></h4>
+                                <p><I18nMessage message={i18nKey('helpText')} /></p>
+                                <div className="supportEmail">
+                                    <QBicon icon="mail"/>
+                                    <p className="supportEmailText"><I18nMessage message={i18nKey('helpLinkPreText')} /> <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
