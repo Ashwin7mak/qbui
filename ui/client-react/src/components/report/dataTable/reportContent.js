@@ -55,8 +55,8 @@ export let ReportContent = React.createClass({
             keys.find((col) => {
                 if (col === uniqueIdentifier && rec[col].value === recid) {
                     orig.names = rec;
-                    var fids = {};
-                    var recKeys = Object.keys(rec);
+                    let fids = {};
+                    let recKeys = Object.keys(rec);
                     // have fid lookup hash
                     recKeys.forEach(function(item) {
                         fids[rec[item].id] = rec[item];
@@ -66,6 +66,51 @@ export let ReportContent = React.createClass({
                 }
             });
         });
+        return _.cloneDeep(orig);
+
+    },
+
+    /**
+     * recursively search for recid in child recrods
+     * @param node node containing either a record or an array of children
+     * @param recid
+     * @returns {*}
+     */
+    findGroupedRecord(node, recid) {
+
+        if (node[this.props.uniqueIdentifier] && node[this.props.uniqueIdentifier].value === recid) {
+            return node;
+        }
+        if (node.children) {
+            let result = null;
+
+            for (let i = 0;result === null && i < node.children.length;i++) {
+                result = this.findGroupedRecord(node.children[i], recid);
+            }
+            return result;
+        }
+        return null;
+    },
+    /**
+     * Given a record id get the original values from the grouped report.
+     * @param recid
+     * @returns {*}
+     */
+    getOrigGroupedRec(recId) {
+        let orig = {names:{}, fids:{}};
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+
+        let rec = this.findGroupedRecord({children: recs}, recId);
+
+        orig.names = rec;
+        let fids = {};
+
+        let recKeys = Object.keys(rec);
+        // have fid lookup hash
+        recKeys.forEach((item) => {
+            fids[rec[item].id] = rec[item];
+        });
+        orig.fids = fids;
         return _.cloneDeep(orig);
     },
 
@@ -121,8 +166,9 @@ export let ReportContent = React.createClass({
         const flux = this.getFlux();
         let origRec = null;
         let changes = {};
+
         if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
-            origRec = this.getOrigRec(recId);
+            origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
         } else {
             //add each non null value as to the new record as a change
             let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
