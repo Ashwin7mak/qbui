@@ -101,8 +101,8 @@ let AppHomePageRoute = React.createClass({
                         </p>
                     </div>
                     <div className="topPanelLinks">
-                        <a className="linkWithImage" href="videotour"><QBicon icon="check-reversed" /><span>Launch Video Tour</span></a>
-                        <a className="linkWithImage" href="guidme"><QBicon icon="check-reversed" /><span>Guide me through Mercury</span></a>
+                        <a className="linkWithImage" href="videotour"><img className="launchTourImage" /><span>Launch Video Tour</span></a>
+                        <a className="linkWithImage" href="guidme"><img className="guideMeImage" /><span>Guide me through Mercury</span></a>
                     </div>
                 </div>
                 <div className="mainPanel">
