@@ -50,18 +50,18 @@ describe('SmallHeader functions', () => {
         expect(title[0].innerHTML).toEqual("test");
     });
     it('test search renders', () => {
-        var TestParent = React.createFactory(React.createClass({
+        let TestParent = React.createFactory(React.createClass({
             render() {
                 return <SmallHeader ref="header" flux={flux} />;
             }
         }));
-        var parent = TestUtils.renderIntoDocument(TestParent());
-        var header = TestUtils.scryRenderedComponentsWithType(parent.refs.header, SmallHeader);
-        var searchBox = TestUtils.scryRenderedComponentsWithType(header[0], SearchBox);
+        let parent = TestUtils.renderIntoDocument(TestParent());
+        let header = TestUtils.scryRenderedComponentsWithType(parent.refs.header, SmallHeader);
+        let searchBox = TestUtils.scryRenderedComponentsWithType(header[0], SearchBox);
         expect(searchBox.length).toEqual(1);
     });
     it('test search props', () => {
-        var TestParent = React.createFactory(React.createClass({
+        let TestParent = React.createFactory(React.createClass({
             getInitialState() {
                 return {
                     counter: 1
@@ -82,10 +82,10 @@ describe('SmallHeader functions', () => {
                                     searchValue="test"/>;
             }
         }));
-        var parent = TestUtils.renderIntoDocument(TestParent());
-        var header = TestUtils.scryRenderedComponentsWithType(parent.refs.header, SmallHeader);
-        var searchBox = TestUtils.scryRenderedComponentsWithType(header[0], SearchBox);
-        var searchInput = TestUtils.scryRenderedDOMComponentsWithTag(searchBox[0], 'input');
+        let parent = TestUtils.renderIntoDocument(TestParent());
+        let header = TestUtils.scryRenderedComponentsWithType(parent.refs.header, SmallHeader);
+        let searchBox = TestUtils.scryRenderedComponentsWithType(header[0], SearchBox);
+        let searchInput = TestUtils.scryRenderedDOMComponentsWithTag(searchBox[0], 'input');
         expect(searchInput.length).toEqual(1);
         searchInput = searchInput[0];
         expect(searchInput.value).toEqual("test");

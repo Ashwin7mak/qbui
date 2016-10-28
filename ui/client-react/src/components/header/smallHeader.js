@@ -55,7 +55,7 @@ var SmallHeader = React.createClass({
     cancelSearch() {
         this.setState({searching: false});
     },
-    render: function() {
+    render() {
         let headerClasses = 'smallHeader' + (this.state.searching ? ' searching' : '');
         headerClasses += this.props.headerClasses ? ' ' + this.props.headerClasses : '';
 

@@ -18,7 +18,7 @@ let StoreWatchMixin = Fluxxor.StoreWatchMixin;
  * (visible on small breakpoint currently)
  */
 var ReportHeader = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('ReportDataSearchStore')],
+    mixins: [FluxMixin],
     facetFields : {},
 
     propTypes: {
@@ -53,11 +53,6 @@ var ReportHeader = React.createClass({
             this.searchTheString(searchTxt);
         }
     },
-    getStateFromFlux() {
-        let flux = this.getFlux();
-        return flux.store('ReportDataSearchStore').getState();
-    },
-
     render: function() {
         const headerClasses = "reportHeader";
 
@@ -72,7 +67,7 @@ var ReportHeader = React.createClass({
             onSearchChange={this.handleSearchChange}
             onClearSearch={this.clearSearchString}
             searchPlaceHolder={placeMsg}
-            searchValue={this.state.searchStringInput}
+            searchValue={this.props.reportSearchData ? this.props.reportSearchData.searchStringInput : ""}
         />;
     }
 });
