@@ -1,24 +1,24 @@
 @import '../../../assets/css/_qbVariables';
 
 .reportContentError {
+    align-items: center;
+    align-content: center;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    align-items: center;
-    align-content: center;
     height: 100%;
-    width: 100%;
     overflow-y: scroll;
+    width: 100%;
 
     .errorImage {
         border: 1px solid $color-blue-300;
         border-radius: 5px;
-        width: 40%;
         max-width: 600px;
+        width: 40%;
 
         @include small-breakpoint {
-            width: 75%;
             max-width: 100%;
+            width: 75%;
         }
     }
 
@@ -39,6 +39,8 @@
     .errorImage--animation {
         content: url("./fix_report_error.gif");
     }
+
+    /* For Firefox */
     .errorImage--animation:after {
         content: url("./fix_report_error.gif");
     }
