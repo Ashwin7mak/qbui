@@ -82,9 +82,7 @@
 
     .mainPanel {
         display: flex;
-        align-content: flex-start;
-        justify-content: flex-start;
-        padding-bottom: 25px;
+        text-align: center;
 
         @include small-breakpoint {
             flex-direction: column;
@@ -99,9 +97,13 @@
             align-self: center;
         }
 
+        .leftContent p, .rightContent p {
+            margin-top: 20px;
+        }
+
         .leftContent {
-            flex-basis: 45%;
-            margin-right: 50px;
+            flex-basis: 50%;
+            margin-right: 20px;
 
             @include small-breakpoint {
                 flex-basis: initial;
@@ -111,11 +113,13 @@
 
             .welcomeGuideImage {
                 content: url("Welcome-guide.png");
+                max-width: 100%;
             }
         }
 
         .rightContent {
-            align-content: center;
+            align-items: center;
+            flex-basis: 50%;
 
             .giveFeedbackImage {
                 content: url("GiveFeedback.png");
@@ -126,6 +130,7 @@
             align-self: center;
             background-color: $color-indigo-700;
             border-radius: 0;
+            margin-bottom: 20px;
             margin-top: 10px;
 
             &.btn-feedback {
