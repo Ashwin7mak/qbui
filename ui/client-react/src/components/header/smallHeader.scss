@@ -40,7 +40,10 @@
             .qbIcon {
                 flex: 0 0 auto;
                 color: $top-nav-title-icon-color;
-
+                font-size: 19px;
+            }
+            .title > * {
+                vertical-align: middle;
             }
         }
         .cancelButton {
