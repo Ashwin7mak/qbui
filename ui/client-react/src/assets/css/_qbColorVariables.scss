@@ -154,6 +154,7 @@ $nav-hover-bg: #0097CD;
 $nav-hover-fg: $color2;
 $nav-link-fg: $color2;
 $nav-border: $color18;
+$small-header-bg: $color2;
 
 $report-container-bg: $color2;
 //tabs underline color
@@ -236,6 +237,9 @@ $secondary-bar-fg: #fff;
 $secondary-bar-bg: #009AAE;
 $secondary-bar-page-actions-bg: #476B90;
 
+//==recordtrowser
+$nav-icon-hover-bg: $color-cyan-800;
+
 @mixin focus-shadow($color:$input-border-focus-color) {
   box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
   outline: none;
@@ -244,7 +248,7 @@ $secondary-bar-page-actions-bg: #476B90;
 //== Field labels used on report card view and forms
 $fieldLabel-color: $color3;
 
-$required-asterisk-color: $color-cyan-700;
+$required-asterisk-color: $color-blue-500;
 $error-color: $color-red-700;
 
 //== Fields
@@ -302,4 +306,3 @@ $errorMessage-header-background: $color-red-700;
 $errorMessage-content-background: $color-black-100;
 $errorMessage-content-text-color: $color-blue-600;
 $errorMessage-header-text-color: $color-black-100;
-

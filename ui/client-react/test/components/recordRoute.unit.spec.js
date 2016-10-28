@@ -13,7 +13,7 @@ describe('RecordRoute functions', () => {
     let flux = {};
 
     flux.actions = {
-        showTopNav() {return;},
+        hideTopNav() {return;},
         setTopTitle() {return;},
         selectTableId() {return;},
         loadFormAndRecord() {return;},
