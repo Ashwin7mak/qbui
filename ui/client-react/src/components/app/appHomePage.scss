@@ -91,7 +91,7 @@
                 justify-content: left;
                 margin-bottom: 10px;
 
-                img {
+                img, .launchTourImage:after, .guideMeImage:after {
                     height: 40px;
                     margin-right: 10px;
                 }
@@ -103,12 +103,32 @@
             }
         }
 
+        /* For Chrome/Safari */
         .launchTourImage {
             content: url("Launch-tour.png");
         }
 
+        /** For Firefox */
+        .launchTourImage:after {
+            display: inline-block;
+            content: '';
+            background-image: url("Launch-tour.png");
+            background-repeat: no-repeat;
+            background-size: auto 40px;
+            width: 40px;
+        }
+
         .guideMeImage {
             content: url("Guide-me.png");
+        }
+        /** For Firefox */
+        .guideMeImage:after {
+            display: inline-block;
+            content: '';
+            background-image: url("Guide-me.png");
+            background-repeat: no-repeat;
+            background-size: auto 40px;
+            width: 40px;
         }
     }
 
@@ -150,6 +170,9 @@
             .welcomeGuideImage {
                 content: url("Welcome-guide.png");
             }
+            .welcomeGuideImage:after {
+                content: url("Welcome-guide.png");
+            }
         }
 
         .rightContent {
@@ -160,8 +183,10 @@
                 flex-basis: auto;
             }
 
-
             .giveFeedbackImage {
+                content: url("GiveFeedback.png");
+            }
+            .giveFeedbackImage:after {
                 content: url("GiveFeedback.png");
             }
         }
@@ -229,11 +254,17 @@
         .homePageTipImage {
             content: url("Tip.png");
         }
+        .homePageTipImage:after {
+            content: url("Tip.png");
+        }
 
         .homePageHelpImage {
             content: url("Need-help.png");
             margin-left: 20px;
             margin-right: 20px;
+        }
+        .homePageHelpImage:after {
+            content: url("Need-help.png");
         }
 
         .supportEmail {
