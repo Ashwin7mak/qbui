@@ -677,6 +677,7 @@ export let ReportContent = React.createClass({
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}
                         />}
+                        <div>
                         {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
                                 editingIndex={this.props.reportData.editingIndex}
@@ -728,6 +729,7 @@ export let ReportContent = React.createClass({
                             pageEnd={this.props.reportFooter.props.pageEnd}
                             recordsCount={this.props.reportFooter.props.recordsCount}/>
                         }
+                        </div>
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
                                             appUsers={this.props.appUsers}
