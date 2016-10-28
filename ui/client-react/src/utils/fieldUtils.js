@@ -1,4 +1,5 @@
 import * as SchemaConsts from '../constants/schema';
+import consts from '../../../common/src/constants';
 
 class FieldUtils {
     /**
@@ -91,6 +92,31 @@ class FieldUtils {
         } else {
             return '';
         }
+    }
+
+    /**
+     * Returns whether a field should be considered editable or now based on fieldDef.
+     * Rules: Built-in fields, non-Scalar fields and fields marked with userEditableValue=false are non-editable
+     * @param fieldDef
+     * @returns {boolean}
+     */
+    static isFieldEditable(fieldDef) {
+        if (fieldDef) {
+            // built in fields are not editable
+            if (typeof fieldDef.builtIn !== 'undefined' && fieldDef.builtIn) {
+                return false;
+            }
+            // field must be scalar (a non-generated field value)
+            if (typeof fieldDef.type !== 'undefined' && fieldDef.type !== consts.SCALAR) {
+                return false;
+            }
+            // field must be editable i.e. user editable not a restricted value
+            if (typeof fieldDef.userEditableValue !== 'undefined' && !fieldDef.userEditableValue) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 }
 
