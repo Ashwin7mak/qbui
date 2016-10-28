@@ -30,6 +30,16 @@
     overflow: auto;
     padding: 20px;
 
+    .appHomePageWidthConstraint {
+        max-width: 1200px;
+        min-width: 670px;
+        margin: auto;
+
+        @include small-breakpoint {
+            min-width: initial;
+        }
+    }
+
     @include small-breakpoint {
         padding: 20px;
     }
@@ -63,6 +73,11 @@
         .topPanelContent {
             flex-basis: 65%;
             margin-right: 40px;
+
+            @include small-breakpoint {
+                flex-basis: auto;
+                margin-right: 0;
+            }
         }
 
         .topPanelLinks {
@@ -127,7 +142,7 @@
             margin-right: 20px;
 
             @include small-breakpoint {
-                flex-basis: initial;
+                flex-basis: auto;
                 margin-right: 0;
                 margin-bottom: 30px;
             }
@@ -140,6 +155,11 @@
         .rightContent {
             align-items: center;
             flex-basis: 50%;
+
+            @include small-breakpoint {
+                flex-basis: auto;
+            }
+
 
             .giveFeedbackImage {
                 content: url("GiveFeedback.png");
@@ -175,7 +195,7 @@
             flex-basis: 50%;
 
             @include small-breakpoint {
-                flex-basis: 100%;
+                flex-basis: auto;
             }
         }
 
