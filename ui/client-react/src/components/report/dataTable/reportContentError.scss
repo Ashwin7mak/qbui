@@ -3,25 +3,43 @@
 .reportContentError {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     align-items: center;
     align-content: center;
+    height: 100%;
     width: 100%;
+    overflow-y: scroll;
 
     .errorImage {
         border: 1px solid $color-blue-300;
         border-radius: 5px;
         width: 40%;
+        max-width: 600px;
 
         @include small-breakpoint {
             width: 75%;
+            max-width: 100%;
         }
     }
 
+    /* For Firefox */
+    .errorImage:after {
+        display: flex;
+    }
+
+    /* For Chrome/Safari */
     .errorImage--still {
+        content: url("./fix_report_error_still_image.png");
+    }
+    /* For Firefox */
+    .errorImage--still:after {
         content: url("./fix_report_error_still_image.png");
     }
 
     .errorImage--animation {
+        content: url("./fix_report_error.gif");
+    }
+    .errorImage--animation:after {
         content: url("./fix_report_error.gif");
     }
 
@@ -30,9 +48,11 @@
         text-align: center;
     }
 
+    .toggleSupportInfoBtn {
+        margin-top: 20px;
+    }
+
     .additionalInfo {
         align-items: flex-start;
-        align-content: flex-start;
-        margin-top: 30px;
     }
 }

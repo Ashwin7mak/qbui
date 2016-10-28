@@ -6,10 +6,15 @@ import './reportContentError.scss';
 const supportEmail = 'betaprogram@quickbase.com';
 const supportEmailSubject = 'subject=Error%20Loading%20Report';
 
+/**
+ * This is a temporary component that is a stopgap error message for Mercury Beta M5 when
+ * a report cannot be loaded.
+ */
 const ReportContentError = React.createClass({
     getInitialState() {
         return {
-            playingErrorGraphic: false
+            playingErrorGraphic: false,
+            showingSupportContent: false
         };
     },
     getErrorMessages() {
@@ -23,6 +28,9 @@ const ReportContentError = React.createClass({
     },
     toggleErrorGraphic() {
         this.setState({playingErrorGraphic: !this.state.playingErrorGraphic});
+    },
+    toggleSupportContent() {
+        this.setState({showingSupportContent: !this.state.showingSupportContent});
     },
     createSupportEmailBody() {
         let {errorDetails} = this.props;
@@ -48,12 +56,30 @@ const ReportContentError = React.createClass({
             errorImageClasses.push('errorImage--still');
         }
 
+        let additionalInfo = null;
+        let showAdditionalInfoText = <I18nMessage message="errors.errorLoadingReport.showAdditionalInfo" />;
+
+        if (this.state.showingSupportContent) {
+            additionalInfo = (
+                <div>
+                    <p><I18nMessage message="errors.errorLoadingReport.supportTeamInfo"/></p>
+                    <ul>
+                        <li key="0">TID: {errorDetails.tid}</li>
+                        <li key="1">SID: {errorDetails.sid}</li>
+                        {this.getErrorMessages()}
+                    </ul>
+                </div>
+            );
+
+            showAdditionalInfoText = <I18nMessage message="errors.errorLoadingReport.hideAdditionalInfo" />;
+        }
+
         return (
             <div className="reportContentError">
                 <h3><I18nMessage message="errors.errorLoadingReport.message" /></h3>
                 <p><I18nMessage message="errors.errorLoadingReport.helpText" /></p>
                 <button className="playReportErrorGraphicButton btn btn-link" onClick={this.toggleErrorGraphic}>{playingText}</button>
-                <img className={errorImageClasses.join(' ')} />
+                <img className={errorImageClasses.join(' ')} onClick={this.toggleErrorGraphic} />
 
                 <div className="additionalHelp">
                     <h4><I18nMessage message="errors.errorLoadingReport.continuedTrouble"/></h4>
@@ -64,13 +90,9 @@ const ReportContentError = React.createClass({
                     </h5>
                 </div>
 
+                <button className="btn btn-link toggleSupportInfoBtn" onClick={this.toggleSupportContent}>{showAdditionalInfoText}</button>
                 <div className="additionalInfo">
-                    <p><I18nMessage message="errors.errorLoadingReport.supportTeamInfo"/></p>
-                    <ul>
-                        <li key="0">TID: {errorDetails.tid}</li>
-                        <li key="1">SID: {errorDetails.sid}</li>
-                        {this.getErrorMessages()}
-                    </ul>
+                    {additionalInfo}
                 </div>
             </div>
         );
