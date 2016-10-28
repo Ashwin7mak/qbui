@@ -284,10 +284,13 @@ describe('AGGrid cell editor functions', () => {
             },
             column: {
                 colDef: {
-                    type : consts.SCALAR,
-                    datatypeAttributes: {
-                        showTime: true,
-                        dateFormat: "MM-DD-YYYY hh:mm:ss"
+                    fieldDef: {
+                        type: consts.SCALAR,
+                        datatypeAttributes: {
+                            showTime: true,
+                            dateFormat: "MM-DD-YYYY hh:mm:ss"
+                        },
+                        userEditableValue: true
                     }
                 }
             }

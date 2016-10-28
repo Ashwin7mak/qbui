@@ -349,6 +349,10 @@ div.leftNavTooltip {
         }
     }
 
+    ul.appsList {
+      overflow: auto;
+    }
+
     ul.tablesList, ul.tablesHeading {
 
          li {
@@ -525,7 +529,3 @@ $travel-distance: 15;
 .leftNav.appsListOpen .branding .qbIcon.iconTableUISturdy-caret-filled-up {
     transform: rotate(0deg);
 }
-
-
-
-

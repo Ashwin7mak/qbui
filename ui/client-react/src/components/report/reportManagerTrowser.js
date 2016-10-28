@@ -45,10 +45,12 @@ let ReportManagerTrowser = React.createClass({
         const table = this.props.selectedTable;
 
         return (
-            <h4>
-                <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""} <QBicon icon="caret-right"/>
+            <div className="breadcrumbsContent">
+                <TableIcon classes={"primaryIcon"} icon={table ? table.icon : ""}/>
+                <span>{table ? table.name : ""}</span>
+                <span> : </span>
                 <I18nMessage message={'nav.reportsHeading'}/>
-            </h4>);
+            </div>);
 
     },
     /**
