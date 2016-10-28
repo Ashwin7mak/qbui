@@ -76,7 +76,6 @@ let AppHomePageRoute = React.createClass({
     getStageHeadline() {
         return (this.props.selectedApp &&
             <div className="stageHeadline">
-
                 <h3 className="appName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedApp.name}</h3>
             </div>
         );
@@ -89,17 +88,59 @@ let AppHomePageRoute = React.createClass({
     },
     render: function() {
         let isSmall = Breakpoints.isSmallBreakpoint();
-        return (
-            isSmall ?
+
+        let content = (
+            <div className="appHomePage">
+                <div className="homePanel topPanel">
+                    <div className="topPanelContent">
+                        <h2>Welcome to Mercury Beta</h2>
+                        <p>
+                            Cum demolitione credere, omnes gemnaes vitare rusticus, peritus nutrixes.
+                            O, break me jolly roger, ye wet hornpipe! The shark trades with passion, hoist the seychelles until it screams.
+                            Break me gibbet, ye evil jack! The wave ransacks with adventure, rob the freighter before it hobbles.
+                        </p>
+                    </div>
+                    <div className="topPanelLinks">
+                        <a className="linkWithImage" href="videotour"><QBicon icon="check-reversed" /><span>Launch Video Tour</span></a>
+                        <a className="linkWithImage" href="guidme"><QBicon icon="check-reversed" /><span>Guide me through Mercury</span></a>
+                    </div>
+                </div>
+                <div className="homePanel mainPanel">
+                    <div className="content leftContent">
+                        <h4>Welcome guide</h4>
+                        <img src="http://placehold.it/350x300" />
+                        <button className="btn btn-primary">Download the Welcome Guide <small>(.pdf)</small></button>
+                    </div>
+                    <div className="content rightContent">
+                        <h4>We want your feedback</h4>
+                        <img src="http://placehold.it/350x300" />
+                        <button className="btn btn-primary btn-feedback">Give Feedback</button>
+                    </div>
+                </div>
+                <div className="bottomPanel">
+                    <div className="homePanel leftBottomPanel">
+
+                    </div>
+                    <div className="homePanel rightBottomPanel">
+
+                    </div>
+                </div>
+            </div>
+        );
+
+        if (isSmall) {
+            content = (
                 <div className="appHomePageContainer">
                     <div className="appHomePageActionsContainer secondaryBar">
                         {this.getSecondaryBar()}
                         {this.getPageActions(2)}
                     </div>
-                    <div className="appHomePageImageContainer"><img className="appHomePageMobileImage"/></div>
-                </div> :
-                <div className="appHomePageImageContainer"><img className="appHomePageImage"/></div>
-        );
+                    {content}
+                </div>
+            );
+        }
+
+        return content;
     }
 });
 

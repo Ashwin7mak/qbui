@@ -1,19 +1,20 @@
+@import '../../assets/css/qbVariables';
 
 .appHomePageContainer {
-    display:flex;
-    flex-direction:column;
-    flex:1 1 auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
 
     .layout-stage {
         flex: 0 0 auto;
 
         .appName {
-            padding-left:5px;
+            padding-left: 5px;
         }
     }
 
     .app-content {
-        flex:1 1 auto;
+        flex: 1 1 auto;
         padding: 0 10px;
     }
     .secondaryBar {
@@ -21,19 +22,105 @@
     }
 }
 
-.appHomePageImageContainer {
-    display: flex;
-    flex: 1 1 auto;
+.appHomePage {
+    background-color: $color-blue-200;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
     overflow: auto;
-    .appHomePageImage {
-        content: url('./app_homePageR4_1280.png');
-        width: 1280px;
-        height: 1237px;
+    padding: 20px;
+
+    @include small-breakpoint {
+        padding: 20px;
     }
 
-    .appHomePageMobileImage {
-        content: url('./app_homePage_mobile.png');
-        width: 100%;
-        height: 100%;
+    h2 {
+        margin-top: 0;
     }
+
+    .homePanel {
+        background-color: $color-black-100;
+        border: 1px solid $color-cyan-600;
+        padding: 10px 30px;
+        margin-bottom: 20px;
+
+    }
+
+    .topPanel {
+        display: flex;
+
+        @include small-breakpoint {
+            flex-direction: column;
+        }
+
+        .topPanelContent {
+            flex-basis: 65%;
+            margin-right: 40px;
+        }
+
+        .topPanelLinks {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+
+            .linkWithImage {
+                display: flex;
+                align-items: center;
+                justify-content: left;
+                margin-bottom: 10px;
+            }
+
+            .qbIcon {
+                font-size: 40px;
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .mainPanel {
+        display: flex;
+        align-content: flex-start;
+        justify-content: flex-start;
+        padding-bottom: 25px;
+
+        @include small-breakpoint {
+            flex-direction: column;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .leftContent {
+            flex-basis: 45%;
+            margin-right: 150px;
+
+            @include small-breakpoint {
+                flex-basis: initial;
+                margin-right: 0;
+                margin-bottom: 30px;
+            }
+        }
+
+        .btn {
+            align-self: center;
+            background-color: $color-indigo-700;
+            border-radius: 0;
+            margin-top: 10px;
+
+            &.btn-feedback {
+                padding-left: 40px;
+                padding-right: 40px;
+            }
+
+            small {
+                font-size: 70%;
+            }
+        }
+    }
+
+
+
+
 }

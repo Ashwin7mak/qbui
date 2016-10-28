@@ -136,6 +136,7 @@ body.touch {
 
         .mainContent {
             display: flex;
+            flex-direction: column;
             order: 2;
             flex: 1 1 auto;
             min-width: 0;
