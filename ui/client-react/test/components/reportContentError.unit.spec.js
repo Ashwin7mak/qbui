@@ -2,23 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import TestUtils, {Simulate} from 'react-addons-test-utils';
-import Locales from '../../src/locales/locales';
 import {ReportContent, __RewireAPI__ as ReportContentRewireAPI} from '../../src/components/report/dataTable/reportContent';
 
 
 import ReportContentError from '../../src/components/report/dataTable/reportContentError';
-
-var LocalesMock = {
-    getLocale: function() {
-        return 'en-us';
-    },
-    getMessage: function(message) {
-        return message;
-    },
-    getCurrencyCode: function() {
-        return 'usd';
-    }
-};
 
 let mockErrorDetails = {
     tid: '1234',
@@ -32,14 +19,6 @@ let component;
 let domComponent;
 
 describe('ReportContentError', () => {
-    beforeEach(() => {
-        // ReportContentError.__Rewire__('Locales', LocalesMock);
-    });
-
-    afterEach(() => {
-        // ReportContentError.__ResetDependency__('Locales');
-    });
-
     it('displays when report content is in an error state', () => {
         component = TestUtils.renderIntoDocument(
             <ReportContent flux={{}} pendEdits={{}} reportData={{error: true, errorDetails: mockErrorDetails}} />
@@ -88,6 +67,10 @@ describe('ReportContentError', () => {
         it(contentTestCase.description, () => {
             component = TestUtils.renderIntoDocument(<ReportContentError errorDetails={mockErrorDetails} />);
             domComponent = ReactDOM.findDOMNode(component);
+
+            let toggleSupportInfoButton = domComponent.querySelector('.toggleSupportInfoBtn');
+
+            Simulate.click(toggleSupportInfoButton);
 
             expect(domComponent.textContent).toContain(contentTestCase.expectedContent);
         });
