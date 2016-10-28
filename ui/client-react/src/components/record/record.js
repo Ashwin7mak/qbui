@@ -11,7 +11,7 @@ let Record = React.createClass({
 
     componentDidMount() {
         // the first time field change is called recordChanges should be empty. at this time save the original records values to diff later with new values
-        if (_.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges)) {
+        if ((_.has(this.props, 'pendEdits.recordEditOpen') && !this.props.pendEdits.recordEditOpen) && _.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges)) {
             this.handleEditRecordStart(this.props.recId);
         }
     },

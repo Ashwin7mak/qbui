@@ -41,6 +41,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     _initData() {
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
+        this.recordEditOpen = false;
         this.currentEditingRecordId = null;
         this.currentEditingAppId = null;
         this.currentEditingTableId = null;
@@ -81,6 +82,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
+        this.recordEditOpen = true;
         this.isInlineEditOpen = true;
         this.emit('change');
     },
@@ -138,6 +140,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     onRecordEditCancel() {
         // record wasn't saved nothing pending
         this.isInlineEditOpen = false;
+        this.recordEditOpen = false;
         this._initData();
         this.emit('change');
     },
@@ -193,6 +196,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
+        this.recordEditOpen = false;
         this.recordChanges = {};
         this.emit('change');
 
@@ -229,6 +233,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.getServerErrs(payload);
         this.isInlineEditOpen = true;
+        this.recordEditOpen = true;
         this.emit('change');
     },
 
@@ -265,6 +270,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.isPendingEdit = false;
         this.isInlineEditOpen = false;
+        this.recordEditOpen = false;
         this.recordChanges = {};
         this.emit('change');
 
@@ -309,6 +315,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         return {
             isPendingEdit : this.isPendingEdit,
             isInlineEditOpen : this.isInlineEditOpen,
+            recordEditOpen : this.recordEditOpen,
             currentEditingAppId : this.currentEditingAppId,
             currentEditingTableId : this.currentEditingTableId,
             currentEditingRecordId : this.currentEditingRecordId,
