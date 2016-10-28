@@ -295,13 +295,15 @@ export default {
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
         errors: {
             errorLoadingReport: {
-                message: 'Fehler beim Laden des Berichts!',
-                helpText: 'Bitte wählen Sie einen anderen Bericht aus dem Berichtsmenü aus.',
+                message: 'Dieser Bericht ist nicht verfügbar',
+                helpText: 'Bitte wählen Sie einen anderen Bericht aus.',
                 continuedTrouble: 'Haben Sie noch Schwierigkeiten?',
                 contactSupport: 'Wenden Sie sich an den Support',
                 supportTeamInfo: 'Einige Informationen für das Support-Team:',
                 playGraphic: 'Zeig mir wie',
-                stopGraphic: 'Hör auf zu spielen'
+                stopGraphic: 'Hör auf zu spielen',
+                showAdditionalInfo: 'Zusätzliche Supportinformationen anzeigen',
+                hideAdditionalInfo: 'Zusätzliche Supportinformationen ausblenden'
             }
         },
         invalidMsg : {
