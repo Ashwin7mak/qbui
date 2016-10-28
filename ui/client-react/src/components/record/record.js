@@ -9,6 +9,12 @@ let Record = React.createClass({
     mixins: [FluxMixin],
     displayName: 'Record',
 
+    componentDidMount() {
+        // the first time field change is called recordChanges should be empty. at this time save the original records values to diff later with new values
+        if (_.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges)) {
+            this.handleEditRecordStart(this.props.recId);
+        }
+    },
     /**
      * Get the record as {fids, names}
      * fids is a fid lookup hash looks like {6: {id:6, value: <val>, display: <display>}}
@@ -62,10 +68,6 @@ let Record = React.createClass({
      * @param change - {fid:fieldid, values : {oldVal :{}, newVal:{}, fieldName:name}
      */
     handleFieldChange(change) {
-        // the first time field change is called recordChanges should be empty. at this time save the original records values to diff later with new values
-        if (_.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges)) {
-            this.handleEditRecordStart(this.props.recId);
-        }
         change.recId = this.props.recId;
         // call action to hold the field value change
         const flux = this.getFlux();
