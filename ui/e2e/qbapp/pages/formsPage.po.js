@@ -32,8 +32,6 @@
         this.formTrowserFooter = element(by.className('recordTrowser')).element(by.className('trowserFooter'));
         //save button
         this.formSaveBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.tagName('button'));
-        //save button
-        this.formSaveAndNextBtn = this.formTrowserFooter.element(by.className('rightIcons')).all(by.tagName('button')).first();
         //alert button
         this.formErrorMsgAlertBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveAlertButton'));
 
@@ -75,20 +73,18 @@
         this.clickFormSaveBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
-                return self.formSaveBtn.click().then(function() {
+                self.clickSaveBtnWithName('Save');
                     // Check that the edit notification is displayed
-                    reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
-                });
+                return reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
             });
         };
 
         this.clickFormSaveAndNextBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
-                return self.formSaveAndNextBtn.click().then(function() {
+                self.clickSaveBtnWithName('Save & Next');
                     // Check that the edit notification is displayed
-                    reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
-                });
+                return reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
             });
         };
 

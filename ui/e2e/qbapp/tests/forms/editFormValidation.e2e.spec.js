@@ -10,7 +10,7 @@
     var formsPage = new FormsPage();
     var tableGenerator = require('../../../../test_generators/table.generator');
 
-    describe('Add Form Validation Tests', function() {
+    describe('Edit Form Validation Tests', function() {
 
         var realmName;
         var realmId;
@@ -71,9 +71,10 @@
 
         invalidFieldValueTestCases().forEach(function(testcase) {
             it('Save Button - Validate ' + testcase.message, function(done) {
-                formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
-                    //click on add record button
-                    reportServicePage.clickAddRecordOnStage();
+                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                    //click edit record from the grid recordActions
+                    reportServicePage.clickRecordEditPencil(4);
+                    reportServicePage.waitForElement(formsPage.formEditContainerEl);
                     // Check that the add form container is displayed
                     expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
                 }).then(function() {
@@ -81,7 +82,7 @@
                     formsPage.enterInvalidFormValues(testcase.fieldTypeClassNames);
                 }).then(function() {
                     //Save the form
-                    return formsPage.formSaveBtn.click();
+                    formsPage.clickSaveBtnWithName('Save');
                 }).then(function() {
                     //verify validation
                     formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
@@ -100,12 +101,13 @@
             });
         });
 
-        it('Save and add another Button - Validate errors and correct the errors by adding new record', function(done) {
-            var validFieldClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
+        it('Save and Next Button - Validate errors and correct the errors by editing new record', function(done) {
+            var validFieldClassNames = ['textField', 'numericField', 'dateCell', 'timeCell'];
             var expectedNumericErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field'];
-            formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
-                //click on add record button
-                reportServicePage.clickAddRecordOnStage();
+            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                //click edit record from the grid recordActions
+                reportServicePage.clickRecordEditPencil(5);
+                reportServicePage.waitForElement(formsPage.formEditContainerEl);
                 // Check that the add form container is displayed
                 expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
             }).then(function() {
@@ -113,7 +115,7 @@
                 formsPage.enterInvalidFormValues('numericField');
             }).then(function() {
                 //Save the form
-                formsPage.clickSaveBtnWithName('Save & add another');
+                formsPage.clickSaveBtnWithName('Save & Next');
             }).then(function() {
                 //verify validation
                 formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
@@ -126,14 +128,14 @@
                 }
             }).then(function() {
                 //Save the form
-                formsPage.clickSaveBtnWithName('Save & add another');
+                formsPage.clickSaveBtnWithName('Save & Next');
                 reportServicePage.waitForElement(formsPage.formEditContainerEl);
             }).then(function() {
                 //reload the report to verify the row edited
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                 return formsPage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     for (var j = 0; j < validFieldClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(7, validFieldClassNames[j]);
+                        formsPage.verifyFieldValuesInReportTable(5, validFieldClassNames[j]);
                     }
                     done();
                 });
