@@ -296,13 +296,12 @@ export default {
             errorLoadingReport: {
                 message: "Ce rapport n'est pas disponible",
                 helpText: "Essayez de sélectionner un rapport différent.",
-                continuedTrouble: 'Encore des problèmes?',
-                contactSupport: 'Contacter le support',
+                contactSupport: "Rapport à notre équipe de soins",
                 supportTeamInfo: "Quelques informations pour l'équipe de soutien:",
-                playGraphic: 'Me montrer comment',
-                stopGraphic: 'arrête de jouer',
-                showAdditionalInfo: "Afficher les informations d'assistance supplémentaires",
-                hideAdditionalInfo: "Zusätzliche Supportinformationen ausblenden"
+                playGraphic: "Me montrer comment",
+                stopGraphic: "Arrête de jouer",
+                showAdditionalInfo: "Voir les détails",
+                hideAdditionalInfo: "Cacher les détails"
             }
         },
         invalidMsg : {

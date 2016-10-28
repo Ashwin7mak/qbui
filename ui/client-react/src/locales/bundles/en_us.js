@@ -297,15 +297,14 @@ export default {
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
         errors: {
             errorLoadingReport: {
-                message: 'That report is not available',
-                helpText: 'Please try selecting a different report.',
-                continuedTrouble: 'Still having trouble?',
-                contactSupport: 'Contact Support',
-                supportTeamInfo: 'Some information for the support team:',
-                playGraphic: 'Show me how',
-                stopGraphic: 'Stop playing',
-                showAdditionalInfo: 'Show support info',
-                hideAdditionalInfo: 'Hide support info'
+                message: "That report is not available",
+                helpText: "Try selecting a different report.",
+                contactSupport: "Report to our Care team",
+                supportTeamInfo: "Some information for the support team:",
+                playGraphic: "Show me how",
+                stopGraphic: "Stop playing",
+                showAdditionalInfo: "View details",
+                hideAdditionalInfo: "Hide details"
             }
         },
         invalidMsg : {

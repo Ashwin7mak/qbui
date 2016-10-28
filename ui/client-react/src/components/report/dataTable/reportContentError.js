@@ -82,7 +82,6 @@ const ReportContentError = React.createClass({
                 <img className={errorImageClasses.join(' ')} onClick={this.toggleErrorGraphic} />
 
                 <div className="additionalHelp">
-                    <h4><I18nMessage message="errors.errorLoadingReport.continuedTrouble"/></h4>
                     <h5>
                         <a href={`mailto:${supportEmail}?${supportEmailSubject}&${this.createSupportEmailBody()}`}>
                             <I18nMessage message="errors.errorLoadingReport.contactSupport"/>
