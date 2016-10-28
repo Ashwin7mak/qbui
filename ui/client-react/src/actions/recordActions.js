@@ -63,7 +63,7 @@ let recordActions = {
             // map the record array to an object with fids as keys since that's the recordChanges object format
             let changes = record.reduce((obj, val) => {obj[val.id] = val; return obj;}, {});
 
-            if (appId && tblId && record.length) {
+            if (appId && tblId && record) {
 
                 this.dispatch(actions.ADD_RECORD, {appId, tblId, changes});
 

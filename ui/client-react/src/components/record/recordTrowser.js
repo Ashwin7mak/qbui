@@ -216,9 +216,14 @@ let RecordTrowser = React.createClass({
 
         const showBack = !!(this.props.reportData && this.props.reportData.previousEditRecordId !== null);
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
+        const recordName = this.props.selectedTable && this.props.selectedTable.name;
+
+        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{table ? table.name : ""}</span></span> :
+            <span>{recordName} #{this.props.recId}</span>;
+
 
         return (
-            <h4>
+            <div className="breadcrumbsContent">
                 {(showBack || showNext) &&
                 <div className="iconActions">
                     <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev"><I18nMessage message="nav.previousRecord"/></Tooltip>}>
@@ -228,8 +233,8 @@ let RecordTrowser = React.createClass({
                         <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                     </OverlayTrigger>
                 </div> }
-                <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""}
-            </h4>);
+                <TableIcon classes="primaryIcon" icon={table ? table.icon : ""}/>{title}
+            </div>);
 
     },
     getTrowserRightIcons() {

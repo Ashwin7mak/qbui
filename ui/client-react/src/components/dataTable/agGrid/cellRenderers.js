@@ -185,23 +185,7 @@ const CellRenderer = React.createClass({
     },
 
     render() {
-        let isEditable = true;
-
-        // built in fields are not editable
-        if (typeof this.props.colDef.fieldDef !== 'undefined' &&
-            typeof this.props.colDef.fieldDef.builtIn !== 'undefined' &&  this.props.colDef.fieldDef.builtIn) {
-            isEditable = false;
-        }
-        // field must be scalar (a non-generated field value)
-        if (typeof this.props.colDef.fieldType !== 'undefined' &&  this.props.colDef.fieldType !== consts.SCALAR) {
-            isEditable = false;
-        }
-        // field must be editable i.e. user editable not a restricted value
-        if (typeof this.props.colDef.fieldDef !== 'undefined' &&
-            typeof this.props.colDef.fieldDef.userEditableValue !== 'undefined' && !this.props.colDef.fieldDef.userEditableValue) {
-            isEditable = false;
-        }
-
+        let isEditable = FieldUtils.isFieldEditable(this.props.colDef.fieldDef);
 
         let attributes = null;
         if (typeof this.props.colDef.fieldDef !== 'undefined' &&

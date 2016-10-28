@@ -72,8 +72,6 @@ describe('Record actions Edit Record functions -- Negative', () => {
     var saveNewDataProvider = [
         {test:'test saveNewDataProvider with missing appId', appId:null, tblId:2, recordChanges:edits, fields: fields},
         {test:'test saveNewDataProvider with missing tblId', appId:1, tblId:null, recordChanges:edits, fields: fields},
-        {test:'test saveNewDataProvider with missing changes', appId:1, tblId:2, recordChanges:null, fields: fields},
-        {test:'test saveNewDataProvider with missing fields', appId:1, tblId:2, recordChanges:edits, fields: null}
     ];
 
     var deleteDataProvider = [
@@ -251,8 +249,8 @@ describe('Record actions Edit Record functions -- errors / exceptions Negative',
                 done();
             },
             () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD_FAILED,
-                    {error: 'Missing one or more required input parameters to recordActions.addRecord. AppId:' + inputs.appId + '; TblId:' + inputs.tblId + '; recordChanges:{}; fields:{}'}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD,
+                    {appId: inputs.appId, tblId: inputs.tblId, changes: {}}]);
                 done();
             }
         );

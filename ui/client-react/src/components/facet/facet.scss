@@ -144,11 +144,6 @@
     .list-group-item {
       font-family: $font-family;
       padding-top: 4px;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      align-items: center;
-      justify-content: flex-start
     }
 
     .list-group-item:hover {
@@ -158,6 +153,11 @@
     .list-group-item:focus {
       outline: none;
       background-color: $facetMenu-backgroundColor;
+    }
+
+    .list-group-item-inner-wrapper {
+      display: flex;
+      align-items: center;
     }
 
     .listMore {
