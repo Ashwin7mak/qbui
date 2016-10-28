@@ -18,6 +18,7 @@ import FieldUtils from '../../utils/fieldUtils';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
 import * as Constants from "../../../../common/src/constants";
+import ReportContentError from './dataTable/reportContentError';
 
 let logger = new Logger();
 
@@ -317,7 +318,7 @@ const ReportToolsAndContent = React.createClass({
             (_.isUndefined(this.props.params.rptId) && _.isUndefined(this.props.rptId))
         ) {
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
-            return null;
+            return <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
         } else {
             let toolbar = <ReportToolbar appId={this.props.params.appId}
                                          tblId={this.props.params.tblId}

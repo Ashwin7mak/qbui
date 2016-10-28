@@ -556,6 +556,7 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.error = true;
         this.errorDetails = error;
+
         this.emit('change');
     },
 

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
+
+import _ from 'lodash';
 
 import './reportContentError.scss';
 
@@ -11,6 +13,13 @@ const supportEmailSubject = 'subject=Error%20Loading%20Report';
  * a report cannot be loaded.
  */
 const ReportContentError = React.createClass({
+    propTypes: {
+        /** the QbResponseError */
+        errorDetails: PropTypes.object
+    },
+    getDefaultProps() {
+        return {errorDetails: {}};
+    },
     getInitialState() {
         return {
             playingErrorGraphic: false,
@@ -18,13 +27,18 @@ const ReportContentError = React.createClass({
         };
     },
     getErrorMessages() {
-        return this.props.errorDetails.errorMessages.map((errorMessage, currentIndex) => {
-            return (
-                <li key={currentIndex + 2}>
-                    {errorMessage.code} - {errorMessage.message}
-                </li>
-            );
-        });
+        let errorMessages = this.props.errorDetails.errorMessages;
+        if (errorMessages && _.isArray(errorMessages)) {
+            return errorMessages.map((errorMessage, currentIndex) => {
+                return (
+                    <li key={currentIndex + 2}>
+                        {errorMessage.code} - {errorMessage.message}
+                    </li>
+                );
+            });
+        } else {
+            return null;
+        }
     },
     toggleErrorGraphic() {
         this.setState({playingErrorGraphic: !this.state.playingErrorGraphic});
@@ -36,12 +50,20 @@ const ReportContentError = React.createClass({
         let {errorDetails} = this.props;
 
         let supportEmailBody = 'body=%0D%0A%0D%0A------------------------------------%0D%0APlace additional information above%0D%0A';
-        supportEmailBody += `TID:${errorDetails.tid}%0D%0A`;
-        supportEmailBody += `SID:${errorDetails.sid}`;
+        if (errorDetails.tid) {
+            supportEmailBody += `TID:${errorDetails.tid}%0D%0A`;
+        }
 
-        errorDetails.errorMessages.forEach(errorMessage => {
-            supportEmailBody += `%0D%0A${errorMessage.code}-${errorMessage.message}`;
-        });
+        if (errorDetails.sid) {
+            supportEmailBody += `SID:${errorDetails.sid}`;
+        }
+
+        if (errorDetails.errorMessages && _.isArray(errorDetails.errorMessages)) {
+            errorDetails.errorMessages.forEach(errorMessage => {
+                supportEmailBody += `%0D%0A${errorMessage.code}-${errorMessage.message}`;
+            });
+        }
+
         return supportEmailBody;
     },
     render() {

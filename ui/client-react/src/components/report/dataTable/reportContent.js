@@ -647,6 +647,7 @@ export let ReportContent = React.createClass({
         const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
 
         let reportContent;
+
         if (this.props.reportData.error) {
             reportContent = <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
         } else {
