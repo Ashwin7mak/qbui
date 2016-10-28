@@ -77,7 +77,6 @@ $action-separator-color: #486c8f;
         flex-direction:column;
         flex: 1 1 auto;
         overflow:auto;
-        padding-bottom: 340px;
     }
     .trowserLoadedContent {
         position:relative;
@@ -207,8 +206,5 @@ $action-separator-color: #486c8f;
                 text-align: end;
             }
         }
-    }
-    .trowser .trowserChildren {
-        padding-bottom: 200px;
     }
 }
