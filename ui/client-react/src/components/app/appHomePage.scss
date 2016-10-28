@@ -34,7 +34,7 @@
         padding: 20px;
     }
 
-    h2 {
+    h2, h3 {
         margin-top: 0;
     }
 
@@ -43,7 +43,10 @@
         border: 1px solid $color-cyan-600;
         padding: 10px 30px;
         margin-bottom: 20px;
+    }
 
+    .bottomSubPanel {
+        padding: 10px;
     }
 
     .topPanel {
@@ -120,7 +123,72 @@
         }
     }
 
+    .bottomPanel {
+        display: flex;
 
+        @include small-breakpoint {
+            flex-direction: column;
+        }
 
+        .leftBottomPanel, .rightBottomPanel {
+            flex-basis: 50%;
+
+            @include small-breakpoint {
+                flex-basis: 100%;
+            }
+        }
+
+        .leftBottomPanel, .rightBottomPanel {
+            display: flex;
+        }
+
+        .leftBottomPanel {
+            margin-right: 20px;
+
+            @include small-breakpoint {
+                margin-right: 0;
+            }
+        }
+
+        .rightBottomPanel {
+            padding-bottom: 0;
+        }
+
+        .leftBottomPanelContent, .rightBottomPanelContent {
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+
+        .rightBottomPanelContent {
+            @include small-breakpoint {
+                padding-bottom: 10px;
+            }
+        }
+
+        .homePageTipImage {
+            content: url("Tip.png");
+        }
+
+        .homePageHelpImage {
+            content: url("Need-help.png");
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .supportEmail {
+            display: flex;
+            align-items: center;
+
+            .qbIcon {
+                color: $color-indigo-700;
+                font-size: 20px;
+                margin-right: 5px;
+            }
+
+            .supportEmailText {
+                margin-bottom: 0;
+            }
+        }
+    }
 
 }

@@ -118,11 +118,26 @@ let AppHomePageRoute = React.createClass({
                     </div>
                 </div>
                 <div className="bottomPanel">
-                    <div className="homePanel leftBottomPanel">
-
+                    <div className="homePanel bottomSubPanel leftBottomPanel">
+                        <div className="homePageTipImageContainer">
+                            <img className="homePageTipImage" />
+                        </div>
+                        <div className="leftBottomPanelContent">
+                            <h4>Nothing happened when I clicked...</h4>
+                            <p>This is a work in progress. Belay, black yardarm. go to haiti. Never sail a codfish.</p>
+                            <p>Note: Most unsupported features show up in gray.</p>
+                        </div>
                     </div>
-                    <div className="homePanel rightBottomPanel">
-
+                    <div className="homePanel bottomSubPanel rightBottomPanel">
+                        <img className="homePageHelpImage" />
+                        <div className="rightBottomPanelContent">
+                            <h4>Need help?</h4>
+                            <p>We want you to be successful, that's why we're always here to help. Contact us for assistance with your Mercury App.</p>
+                            <div className="supportEmail">
+                                <QBicon icon="mail"/>
+                                <p className="supportEmailText">Please contact us at <a href="mailto:betaprogram@quickbase.com">betaprogram@quickbase.com</a>.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
