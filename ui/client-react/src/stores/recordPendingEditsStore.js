@@ -245,15 +245,14 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingAppId = payload.appId;
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = null;
-        this.recordChanges = payload.record;
+        this.recordChanges = payload.changes;
         logger.debug('saving added record: ' + JSON.stringify(payload));
-        this.emit('change');
     },
 
     /**
      * On successful save of pending changes for a new record
      * notes the committed success and sets pendingEdits to false
-     * @param payload - the recid
+     * @param payload - the recId
      */
     onAddRecordSuccess(payload) {
         this.currentEditingRecordId = payload.recId;

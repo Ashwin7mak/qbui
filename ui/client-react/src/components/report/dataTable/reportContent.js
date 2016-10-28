@@ -134,14 +134,17 @@ export let ReportContent = React.createClass({
                 // so it will be treated as dirty/not saved
                 Object.keys(newRec).forEach((key) => {
                     let field = newRec[key];
-                    let change = {
-                        //the + before field.id is needed turn the field id from string into a number
-                        oldVal: {value: undefined, id: +field.id},
-                        newVal: {value: field.value},
-                        fieldName: key,
-                        fieldDef : this.props.reportData.data.fieldsMap.get(+field.id)
-                    };
-                    changes[field.id] = change;
+                    let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;
+                    if (fieldDef && !fieldDef.builtIn) {
+                        let change = {
+                            //the + before field.id is needed turn the field id from string into a number
+                            oldVal: {value: undefined, id: +field.id},
+                            newVal: {value: field.value},
+                            fieldName: key,
+                            fieldDef : fieldDef
+                        };
+                        changes[field.id] = change;
+                    }
                 });
             }
         }

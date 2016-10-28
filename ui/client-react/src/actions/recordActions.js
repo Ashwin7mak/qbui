@@ -62,7 +62,7 @@ let recordActions = {
 
             if (appId && tblId && record.length) {
 
-                this.dispatch(actions.ADD_RECORD, {appId, tblId, record:recordChanges});
+                this.dispatch(actions.ADD_RECORD, {appId, tblId, changes:recordChanges});
 
                 let recordService = new RecordService();
 
