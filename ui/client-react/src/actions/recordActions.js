@@ -60,7 +60,7 @@ let recordActions = {
         return new Promise((resolve, reject) => {
             let record = getRecord(recordChanges, fields);
 
-            if (appId && tblId && record.length) {
+            if (appId && tblId && record) {
 
                 this.dispatch(actions.ADD_RECORD, {appId, tblId, changes:recordChanges});
 

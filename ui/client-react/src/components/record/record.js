@@ -72,6 +72,12 @@ let Record = React.createClass({
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, this.props.recId, change);
     },
 
+    componentDidUpdate(prevProps,  prevState) {
+        // the first time with no changes on a new record,  since its new consider all fields changed so they get saved
+        if (_.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges) &&  !this.props.recId) {
+            this.handleEditRecordStart(this.props.recId);
+        }
+    },
 
     render() {
 
