@@ -206,6 +206,8 @@
             margin-left: 2px;
         }
     }
+
+    input { width: 100%; }
 }
 
 //  edit mode styles for a date cell
@@ -226,28 +228,31 @@
     .glyphicon-calendar {
         color: $color-black-700;
     }
+
+    input { width: 100% }
+
+    > * {
+        border: 0;
+
+        .input-group.date input.form-control {
+            border: 0;
+            padding: 3px;
+            height: 28px;
+            border-radius: 0;
+        }
+        .input-group.date .input-group-addon {
+            background: #fff;
+            height: 20px;
+            padding: 0;
+            border: 0;
+            color: $icon-color;
+        }
+        .bootstrap-datetimepicker-widget {
+            top: 34px !important;
+        }
+    }
 }
 
-.dateCell.cellEdit>* {
-    border: 0;
-
-    .input-group.date input.form-control {
-        border: 0;
-        padding: 3px;
-        height: 28px;
-        border-radius: 0;
-    }
-    .input-group.date .input-group-addon {
-        background: #fff;
-        height: 20px;
-        padding: 0;
-        border: 0;
-        color: $icon-color;
-    }
-    .bootstrap-datetimepicker-widget {
-        top: 34px !important;
-    }
+.dateTimeFieldValueEditor {
+    display: flex;
 }
-
-
-

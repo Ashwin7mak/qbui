@@ -71,20 +71,28 @@ const DateFieldValueEditor = React.createClass({
     },
 
     onChange(newValue, enteredValue) {
-        if (this.props.onChange || this.props.onDateTimeChange) {
+        console.log(newValue)
+        console.log(enteredValue)
+        const onChange = this.props.onDateTimeChange || this.props.onChange;
+        if (onChange) {
             if (newValue === null || newValue || enteredValue === '') {
                 let formattedDate = null;
                 if (newValue !== null && moment(newValue, DATE_INPUT).isValid()) {
                     formattedDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
                 }
 
-                if (this.props.onDateTimeChange) {
-                    this.props.onDateTimeChange(formattedDate);
-                } else {
-                    this.props.onChange(formattedDate);
-                }
+                onChange(formattedDate);
             }
         }
+    },
+
+    /**
+     * Called via an <input> node.
+     * @param {Event} event the change event
+     */
+    onInputChange(event) {
+        const newValue = event.target && event.target.value;
+        this.onChange(newValue);
     },
 
     //send up the chain an object with value and formatted display value
@@ -138,7 +146,7 @@ const DateFieldValueEditor = React.createClass({
                 <input type="date"
                     name="date-picker"
                     onBlur={this.onBlur}
-                    onChange={this.onChange}/>
+                    onChange={this.onInputChange}/>
             </div> :
             <div className={classes}>
                 <DatePicker

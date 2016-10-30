@@ -143,7 +143,6 @@ const TimeFieldValueEditor = React.createClass({
             //  Otherwise onChange was called from Reacts's Select component and contains a `value`
             //  field
             const newValue = event.target ? event.target.value : event.value;
-
             const onChange = this.props.onDateTimeChange || this.props.onChange;
             onChange(newValue);
         }
