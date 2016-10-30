@@ -71,8 +71,6 @@ const DateFieldValueEditor = React.createClass({
     },
 
     onChange(newValue, enteredValue) {
-        console.log(newValue)
-        console.log(enteredValue)
         const onChange = this.props.onDateTimeChange || this.props.onChange;
         if (onChange) {
             if (newValue === null || newValue || enteredValue === '') {

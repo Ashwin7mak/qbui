@@ -148,7 +148,6 @@ const DateTimeFieldValueEditor = React.createClass({
     },
 
     onTimeBlur(value) {
-
         if (this.props.onBlur) {
             if (value === null || value) {
                 let isoFormat = null;

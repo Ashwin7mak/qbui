@@ -136,16 +136,24 @@ const TimeFieldValueEditor = React.createClass({
         };
     },
 
-    onChange(event) {
+    /**
+     * Passes the new time value up to change callbacks.
+     * @param {String || null} newValue The new time as a string. Expects `null` for a falsy value.
+     */
+    onChange(newValue) {
+        console.log(newValue)
         if (this.props.onChange || this.props.onDateTimeChange) {
-            //  If event.target exists, onChange was called from a native <input> and `event.target`
-            //  should be the input node.
-            //  Otherwise onChange was called from Reacts's Select component and contains a `value`
-            //  field
-            const newValue = event.target ? event.target.value : event.value;
             const onChange = this.props.onDateTimeChange || this.props.onChange;
             onChange(newValue);
         }
+    },
+
+    /**
+     * Called via an <input> node.
+     * @param {Event} event the change event
+     */
+    onInputChange(event) {
+        this.onChange(event.target.value || null);
     },
 
     onBlur(event) {
@@ -267,7 +275,7 @@ const TimeFieldValueEditor = React.createClass({
                 <div className={classes.join(' ')}>
                     <input type="time"
                         name="time-select"
-                        onChange={this.onChange}
+                        onChange={this.onInputChange}
                         onBlur={this.onBlur}
                         value={theTime || ''}
                     />
