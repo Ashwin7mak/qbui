@@ -59,6 +59,11 @@ const DateFieldValueEditor = React.createClass({
         idKey: React.PropTypes.any
     },
 
+
+    contextTypes: {
+        touch: React.PropTypes.bool
+    },
+
     getDefaultProps() {
         return {
             isInvalid: false
@@ -127,8 +132,8 @@ const DateFieldValueEditor = React.createClass({
             classes += ' ghost-text';
         }
 
-        //  TODO: verify small breakpoint once form edit is implemented
-        return (Breakpoints.isSmallBreakpoint() ?
+        // display native input only for smallbreakpoint touch devices
+        return ((Breakpoints.isSmallBreakpoint() && this.context.touch)  /*TODO:remove following*/  || window.thing ?
             <div className={classes}>
                 <input type="date"
                     name="date-picker"

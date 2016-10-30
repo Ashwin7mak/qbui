@@ -126,22 +126,26 @@ const TimeFieldValueEditor = React.createClass({
 
     },
 
+    contextTypes: {
+        touch: React.PropTypes.bool
+    },
+
     getDefaultProps() {
         return {
             isInvalid: false
         };
     },
 
-    onChange(newValue) {
-        if (newValue && (this.props.onChange || this.props.onDateTimeChange)) {
-            //  value of null means the empty option was selected
-            if (newValue.value === null || newValue.value) {
-                if (this.props.onDateTimeChange) {
-                    this.props.onDateTimeChange(newValue.value);
-                } else {
-                    this.props.onChange(newValue.value);
-                }
-            }
+    onChange(event) {
+        if (this.props.onChange || this.props.onDateTimeChange) {
+            //  If event.target exists, onChange was called from a native <input> and `event.target`
+            //  should be the input node.
+            //  Otherwise onChange was called from Reacts's Select component and contains a `value`
+            //  field
+            const newValue = event.target ? event.target.value : event.value;
+
+            const onChange = this.props.onDateTimeChange || this.props.onChange;
+            onChange(newValue);
         }
     },
 
@@ -194,14 +198,16 @@ const TimeFieldValueEditor = React.createClass({
     },
 
     render() {
-        let classes = 'cellEdit timeCell borderOnError';
+        //  display native input only for smallbreakpoint touch devices
+        let useNativeInput = (Breakpoints.isSmallBreakpoint() && this.context.touch) || window.thing;
+        let classes = ['cellEdit', 'timeCell', 'borderOnError'];
 
-        // error state css class
+        //  error state css class
         if (this.props.isInvalid) {
-            classes += ' error';
+            classes.push('error');
         }
         if (this.props.classes) {
-            classes += ' ' + this.props.classes;
+            classes.push(this.props.classes);
         }
 
         //  build the droplist based on how the time element is displayed
@@ -210,9 +216,10 @@ const TimeFieldValueEditor = React.createClass({
 
         let theTime = null;
         let dropListTime = null;
+        let momentTime = null;
         if (this.props.value) {
             let inputValue = this.props.value.replace(/(\[.*?\])/, '');
-            let momentTime = null;
+            //let momentTime = null;
             let timeFormat = null;
 
             if (this.props.type === fieldFormats.TIME_FORMAT) {
@@ -236,6 +243,13 @@ const TimeFieldValueEditor = React.createClass({
                 momentTime = moment(inputValue).isValid() ? momentTz.tz(inputValue, timeZone) : momentTz.tz(inputValue, "MM-DD-YYYY " + timeFormat, timeZone);
             }
 
+            //  Native <input> nodes accept values in form 'HH:mm'
+            //  TODO: confirmed with Chrome, verify all browsers support 'HH:mm'
+            //  TODO: refactor to place value somewhere more generic?
+            if (useNativeInput) {
+                timeFormat = 'HH:mm';
+            }
+
             //  convert the moment time into the appropriate display format
             theTime = momentTime.format(timeFormat);
             dropListTime = momentTime.format(DROPLIST_FORMAT_VALUE);
@@ -246,25 +260,25 @@ const TimeFieldValueEditor = React.createClass({
 
         let placeholder = theTime;
         if (!theTime) {
-            classes += ' ghost-text';
+            classes.push('ghost-text');
             placeholder = this.props.attributes && this.props.attributes.scale ? this.props.attributes.scale.toLowerCase() : 'hh:mm';
         }
 
-        //  TODO: verify small breakpoint once form edit is implemented
-        return (Breakpoints.isSmallBreakpoint() ?
-                <div className={classes}>
+        return (useNativeInput /*TODO:remove following*/  || window.thing ?
+                <div className={classes.join(' ')}>
                     <input type="time"
                         name="time-select"
                         onChange={this.onChange}
-                        value={theTime ? theTime : ''}
+                        onBlur={this.onBlur}
+                        value={theTime || ''}
                     />
                 </div> :
-                <div className={classes}>
+                <div className={classes.join(' ')}>
                     <Select
                         name="time-select"
                         onBlur={this.onBlur}
                         onChange={this.onChange}
-                        value={dropListTime ? dropListTime : ''}
+                        value={dropListTime || ''}
                         options={timeDropList}
                         optionRenderer={this.renderOption}
                         placeholder={placeholder}
