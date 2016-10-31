@@ -57,7 +57,7 @@ p, .p {
   font-size: $font-size-placeholder;
 }
 
-//firefox marks required fields invalid before submit, not what xd wants
+//firefox marks email & url input type fields invalid before submit, not what xd wants
 input:-moz-ui-invalid {
   box-shadow: none;
 }
