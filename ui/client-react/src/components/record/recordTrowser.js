@@ -292,8 +292,9 @@ let RecordTrowser = React.createClass({
      * trowser to wrap report manager
      */
     render() {
+        const errorFlg = this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
         return (
-            <Trowser className="recordTrowser"
+            <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
                      visible={this.props.visible}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
                      centerActions={this.getTrowserActions()}

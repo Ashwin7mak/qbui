@@ -125,14 +125,14 @@ $action-separator-color: #486c8f;
         .saveAlertButton {
             font-size: 26px;
             align-self:center;
-            margin-right: 0px !important;
             color: $color-red-700;
             display: inline-block;
             text-align: center;
             vertical-align: middle;
             background-color: transparent;
             border-color: transparent;
-            margin: 10px 10px 10px 4px;
+            margin: 10px 0px 10px 4px;
+            padding-right: 0px;
         }
     }
     .trowserContent {
@@ -202,7 +202,6 @@ $action-separator-color: #486c8f;
                 }
             }
             .saveAlertButton {
-                padding-right: 8px !important;
                 text-align: end;
             }
         }

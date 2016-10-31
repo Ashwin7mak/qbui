@@ -32,6 +32,9 @@
             }
         }
     }
+}
+
+.recordTrowserErrorPopRes {
     .trowserChildren {
         padding-bottom: 340px;
     }
@@ -44,7 +47,10 @@
             flex: 1;
         }
     }
-    .trowser .trowserChildren {
-        padding-bottom: 200px;
+
+    .recordTrowserErrorPopRes {
+        .trowserChildren {
+            padding-bottom: 200px;
+        }
     }
 }
