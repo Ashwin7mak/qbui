@@ -27,6 +27,12 @@ export default {
                 helpLinkPreText: "Veuillez nous contacter au"
             }
         },
+        pendingEditModal: {
+            modalBodyMessage: "Enregistrer les modifications avant de quitte?",
+            modalStayButton: "Restez et continuer à travailler",
+            modalDoNotSaveButton: "Ne pas enregistrer",
+            modalSaveButton: "Sauvegarder"
+        },
         reports : {
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
             emailSubject: "'{reportName}' rapport depuis l'application QuickBase '{appName}'",

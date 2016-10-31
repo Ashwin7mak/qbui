@@ -13,8 +13,8 @@ export default {
             homepage: {
                 welcomeTitle: "Welcome to Mercury Beta",
                 welcomeText: "While you learn your way around, use this area in place of your app homepage. " +
-                             "This is your real app in Mercury. You won’t see your app homepage yet, but all your " +
-                             "data is here. Work you do here displays immediately in Classic view, too.",
+                "This is your real app in Mercury. You won’t see your app homepage yet, but all your " +
+                "data is here. Work you do here displays immediately in Classic view, too.",
                 launchVideoLink: "Launch video tour",
                 guideMeLink: "Guide me through Mercury (2:30)",
                 guideTitle: "Welcome guide",
@@ -29,6 +29,12 @@ export default {
                 helpText: "We want you to be successful; that’s why we’re always here to help.",
                 helpLinkPreText: "Please contact us at"
             }
+        },
+        pendingEditModal: {
+            modalBodyMessage: "Save changes before leaving?",
+            modalStayButton: "Stay and keep working",
+            modalDoNotSaveButton: "Don\'t Save",
+            modalSaveButton: "Save"
         },
         reports : {
             emailReportTooltip: "Share these records with someone else",

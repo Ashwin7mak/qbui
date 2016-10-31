@@ -1,61 +1,12 @@
 @import '../../assets/css/qbVariables';
 
 .reportHeader {
-    .iconLink {
-        font-size:22px;
-    }
-    .textLink {
-        border-left: 1px solid #ccc;
-        padding-left: 4px;
-    }
-    .textLink, .iconLink {
-        margin-right:4px;
-        &:hover {
-            text-decoration: none;
-        }
-
-    }
     .center.title {
         .reportLabel {
             flex: 0 1 auto;
             white-space: nowrap;
             overflow:hidden;
             text-overflow:ellipsis;
-        }
-    }
-    .center.searchElements {
-        font-size: 14px;
-        width:100%;
-
-    }
-    .right {
-        .qbIcon {
-            width:auto;
-            padding: 0 4px;
-            color: $icon-color;
-        }
-    }
-   .searchElements {
-        display:none;
-    }
-    &.searching {
-        .left, .right {
-            display:none;
-        }
-        .center.title {
-            display:none;
-        }
-        .center.searchElements {
-            display:flex;
-            flex-direction:row;
-            .filterSearchBoxContainer {
-                flex:1 1 auto;
-                margin-right:8px;
-            }
-            a.iconLink {
-                flex:0 0 auto;
-            }
-
         }
     }
 }

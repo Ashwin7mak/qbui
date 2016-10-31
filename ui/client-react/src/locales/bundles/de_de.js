@@ -10,8 +10,8 @@ export default {
             homepage: {
                 welcomeTitle: "Willkommen bei Mercury Beta",
                 welcomeText: "Während Sie Ihren Weg lernen, verwenden Sie diesen Bereich anstelle der App-Homepage. " +
-                             "Dies ist Ihre echte App in Mercury. Sie werden Ihre App-Homepage noch nicht sehen, aber alle Ihre " +
-                             "daten sind hier. Die Arbeit, die Sie hier vornehmen, wird auch in der klassischen Ansicht angezeigt.",
+                "Dies ist Ihre echte App in Mercury. Sie werden Ihre App-Homepage noch nicht sehen, aber alle Ihre " +
+                "daten sind hier. Die Arbeit, die Sie hier vornehmen, wird auch in der klassischen Ansicht angezeigt.",
                 launchVideoLink: "Starten Sie Video-Tour",
                 guideMeLink: "Führ mich durch Quecksilber (2:30)",
                 guideTitle: "Begrüßungsführer",
@@ -26,6 +26,12 @@ export default {
                 helpText: "Wir wollen, dass Sie erfolgreich sind; Deshalb sind wir immer hier, um zu helfen.",
                 helpLinkPreText: "Bitte kontaktieren Sie uns unter"
             }
+        },
+        pendingEditModal: {
+            modalBodyMessage: "Speichern Sie die Änderungen vor dem Verlassen?",
+            modalStayButton: "Bleiben Sie und halten Sie arbeiten",
+            modalDoNotSaveButton: "Nicht speichern",
+            modalSaveButton: "Sparen"
         },
         reports : {
             emailReportTooltip: "Teilen Sie diese Datensätze mit einer anderen Person",
