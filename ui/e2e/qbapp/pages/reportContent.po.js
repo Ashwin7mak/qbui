@@ -498,7 +498,7 @@
         this.recordCheckBoxes = element.all(by.className('ag-selection-checkbox'));
 
         this.deleteIcon = element(by.className('iconLink icon-delete')).element(by.className('qbIcon iconTableUISturdy-delete'));
-        this.successDeleteWindow = element(by.className('notification notification-success')).element(by.className('notification-message')).element(by.className('message'));
+        this.successWindow = element(by.className('notification notification-success')).element(by.className('notification-message')).element(by.className('message'));
 
 
         //Click on the Delete Icon and Checking for the success Message
@@ -510,8 +510,8 @@
         //
         this.assertSuccessMessage = function(successMessage) {
             var self = this;
-            this.waitForElement(self.successDeleteWindow).then(function() {
-                expect(self.successDeleteWindow.getText()).toMatch(successMessage.toString());
+            this.waitForElement(self.successWindow).then(function() {
+                expect(self.successWindow.getText()).toMatch(successMessage.toString());
             });
         };
 
