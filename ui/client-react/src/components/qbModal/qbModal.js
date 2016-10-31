@@ -101,6 +101,8 @@ const QBModal = React.createClass({
         return null;
     },
     renderBody() {
+        //The conditions below dictates the css style for the body message
+            //A QB_MODAL_ISBUSY does not ever have a title
         if (this.props.title) {
             return <div className="textWithTitle ">
                 {this.props.bodyMessage}
