@@ -29,7 +29,7 @@ const QBModal = React.createClass({
          */
         type: React.PropTypes.oneOf(QB_MODAL_TYPES),
         /**
-         * This is the name for the primary button
+         * This is the name for the primary button. The primary button is required in order for any other button to be added to a modal.
          */
         primaryButtonName: React.PropTypes.string,
         /**
@@ -37,7 +37,7 @@ const QBModal = React.createClass({
          */
         primaryButtonOnClick: React.PropTypes.func,
         /**
-         * This is the name for the middle button
+         * This is the name for the middle button. There must be a primary button, in order for there to be a middle button.
          */
         middleButtonName: React.PropTypes.string,
         /**
@@ -45,7 +45,7 @@ const QBModal = React.createClass({
          */
         middleButtonOnClick: React.PropTypes.func,
         /**
-         * This is the name for the left button
+         * This is the name for the left button. There must be a primary button, in order for there to be a left button. 
          */
         leftButtonName: React.PropTypes.string,
         /**
