@@ -187,45 +187,6 @@
             });
         });
 
-        it('Click Save and Add a New Row Button, to add new row \n see that the new added row is added to the top)', function(done) {
-
-            var textToEnter = 'SaveAndAddANewRow';
-            var dateToEnter = '03-11-1985';
-            var dateToExpect = '03-12-1985';
-
-            // Step 1- Click on any row to get inline edit Menu and then 'Save and Add a New Row' button
-            reportContentPO.openRecordEditMenu(3);
-            reportContentPO.clickInlineMenuSaveAddNewRowBtn();
-
-            // Step 2 - Add new row - Text field, date field
-            reportContentPO.editTextField(0, textToEnter);
-            reportContentPO.editDateField(0, dateToEnter);
-
-            // Step 3 - Open the calendar widget and Advance the date ahead 1 day
-            reportContentPO.openDateFieldCalWidget(0).then(function(dateFieldCell) {
-                reportContentPO.advanceCurrentlySelectedDate(dateFieldCell);
-            });
-
-            // Step 4 - Save the new added row
-            reportContentPO.clickEditMenuSaveButton();
-
-            //Step 5 - Check for the success message
-            reportContentPO.assertSuccessMessage('Record added');
-
-            // Step 5 - Reload the report after saving row as the row is added at the last page
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPO.waitForReportContent();
-
-            //Step 6 - Goto the second page to check that the record is added at the last row
-            reportPagingPO.clickPagingNavButton(reportPagingPO.pagingToolbarNextButton);
-            reportContentPO.reportRowCount().then(function(countRows) {
-                reportContentPO.getRecordValues(countRows - 1).then(function(fieldValues) {
-                    expect(fieldValues[1]).toBe(textToEnter);
-                    expect(fieldValues[6]).toBe(dateToExpect);
-                });
-            });
-            done();
-        });
 
         //TODO: Required field test, Need to extend setup data for this
 

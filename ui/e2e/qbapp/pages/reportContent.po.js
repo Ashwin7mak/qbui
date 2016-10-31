@@ -447,20 +447,20 @@
          */
         this.clickEditMenuCancelButton = function() {
             var self = this;
-            var cancelBtnRow = 0;
-            return self.selectInlineMenuButtons(cancelBtnRow);
+            var cancelBtnIndex = 0;
+            return self.selectInlineMenuButtons(cancelBtnIndex);
         };
 
         //Click inline Edit Menu 'Save and Add a new Row' button
         this.clickInlineMenuSaveAddNewRowBtn = function() {
             var self = this;
-            var saveAddnewRowBtnRow = 2;
-            return self.selectInlineMenuButtons(saveAddnewRowBtnRow);
+            var saveAddnewRowBtnIndex = 2;
+            return self.selectInlineMenuButtons(saveAddnewRowBtnIndex);
         };
 
 
 
-        this.selectInlineMenuButtons = function(val) {
+        this.selectInlineMenuButtons = function(buttonIndex) {
             var self = this;
             return self.agGridRowActionsElList.filter(function(elem) {
                 // Return only the row with 'editing' in the class
@@ -469,7 +469,7 @@
                 });
             }).then(function(rowElem) {
                 expect(rowElem.length).toBe(1);
-                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(val).click().then(function() {
+                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(buttonIndex).click().then(function() {
                     // Wait for the report to be ready
                     self.waitForReportContent();
                 });

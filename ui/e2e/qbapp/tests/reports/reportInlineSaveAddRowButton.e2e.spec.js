@@ -1,6 +1,6 @@
 /**
- * E2E tests for Editing Records In-line via the Table Report page
- * Created by klabak on 6/1/15
+ * E2E tests for Inline 'Save and Add new Row' Button Test on Reports page.
+ * Created by aagrawal on 10/29/2016
  */
 (function() {
     'use strict';
@@ -12,7 +12,7 @@
     var reportContentPO = new ReportContentPO();
     var reportPagingPO = new ReportPagingPO();
 
-    describe('Report Page Edit Record Tests', function() {
+    describe('Report Page Inline Save and Add new Row Button Test --', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -45,8 +45,6 @@
          * Before each test starts just make sure the report has loaded with records visible
          */
         beforeEach(function(done) {
-            // browser.get("http://3kgl3th32oimjxwyho8l5kzsw2ab9kxl.localhost:9000/api/api/v1/ticket?uid=10000&realmId=12155876");
-            // browser.get("http://3kgl3th32oimjxwyho8l5kzsw2ab9kxl.localhost:9000/app/0mu89eaaaaab/table/0mu89eaaaaac/report/1");
             e2eBase.reportService.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
             reportContentPO.waitForReportContent();
             done();
@@ -55,11 +53,12 @@
         /**
          * Test Method.
          */
-        it('Click Save and Add a New Row Button, to add new row \n see that the new added row is added to the top)', function(done) {
+        it('Click Save and Add a New Row Button, Add a new Row, \n  See that the new row is added at the last page)', function(done) {
 
             var textToEnter = 'SaveAndAddANewRow';
             var dateToEnter = '03-11-1985';
             var dateToExpect = '03-12-1985';
+            var successMessage = 'Record added';
 
             // Step 1- Click on any row to get inline edit Menu and then 'Save and Add a New Row' button
             reportContentPO.openRecordEditMenu(3);
@@ -75,10 +74,10 @@
             });
 
             // Step 4 - Save the new added row
-            reportContentPO.clickEditMenuSaveButton();
+            reportContentPO.clickInlineMenuSaveAddNewRowBtn();
 
             //Step 5 - Check for the success message
-            reportContentPO.assertSuccessMessage('Record added');
+            reportContentPO.assertSuccessMessage(successMessage);
 
             // Step 5 - Reload the report after saving row as the row is added at the last page
             e2eBase.reportService.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
@@ -97,12 +96,7 @@
 
 
 
-        //TODO: Required field test, Need to extend setup data for this
-
-        //TODO: Invalid input value tests (text in a date field)
-
-        //TODO: Check that record ID isn't editable
-
+        //TODO: Editing a row after pressing 'Save and Add new row' button
         /**
          * After all tests are done, run the cleanup function in the base class
          */
