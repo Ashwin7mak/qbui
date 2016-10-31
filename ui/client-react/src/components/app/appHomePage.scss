@@ -26,7 +26,6 @@
     background-color: $color-blue-200;
     flex-direction: column;
     flex: 1;
-    height: 100%;
     overflow: auto;
     padding: 20px;
 
@@ -272,6 +271,7 @@
             align-items: center;
 
             .qbIcon {
+                // Per design, this color is not in the standard colors
                 color: #94d0ea;
                 font-size: 20px;
                 margin-right: 5px;
