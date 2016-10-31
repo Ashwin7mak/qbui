@@ -51,9 +51,9 @@ describe('Record functions', () => {
         expect(record).toBeDefined();
     });
     it('test field change callback', () => {
-        component = TestUtils.renderIntoDocument(<Record recId={1} flux={flux} pendEdits={{recordChanges: {}}} formData={{}}></Record>);
+        component = TestUtils.renderIntoDocument(<Record recId={1} flux={flux} pendEdits={{recordChanges: {}, recordEditOpen: false}} formData={{}}></Record>);
         component.handleFieldChange({});
-        expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalled();
+        expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
     });
 });
