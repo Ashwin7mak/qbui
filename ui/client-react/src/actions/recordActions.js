@@ -280,12 +280,6 @@ let recordActions = {
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
                         reject();
                     }
-                ).catch(
-                    ex => {
-                        logger.logException(ex);
-                        this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: ex});
-                        reject();
-                    }
                 );
             } else {
                 var errMessage = 'Missing one or more required input parameters to recordActions.saveRecord. AppId:' +

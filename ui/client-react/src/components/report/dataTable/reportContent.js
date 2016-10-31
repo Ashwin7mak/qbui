@@ -6,6 +6,7 @@ import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
 import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
+import ReportUtils from '../../../utils/reportUtils';
 import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
 import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
@@ -55,8 +56,8 @@ export let ReportContent = React.createClass({
             keys.find((col) => {
                 if (col === uniqueIdentifier && rec[col].value === recid) {
                     orig.names = rec;
-                    var fids = {};
-                    var recKeys = Object.keys(rec);
+                    let fids = {};
+                    let recKeys = Object.keys(rec);
                     // have fid lookup hash
                     recKeys.forEach(function(item) {
                         fids[rec[item].id] = rec[item];
@@ -66,6 +67,30 @@ export let ReportContent = React.createClass({
                 }
             });
         });
+        return _.cloneDeep(orig);
+
+    },
+
+    /**
+     * Given a record id get the original values from the grouped report.
+     * @param recid
+     * @returns {*}
+     */
+    getOrigGroupedRec(recId) {
+        let orig = {names:{}, fids:{}};
+        let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
+
+        let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.uniqueIdentifier);
+
+        orig.names = rec;
+        let fids = {};
+
+        let recKeys = Object.keys(rec);
+        // have fid lookup hash
+        recKeys.forEach((item) => {
+            fids[rec[item].id] = rec[item];
+        });
+        orig.fids = fids;
         return _.cloneDeep(orig);
     },
 
@@ -121,8 +146,9 @@ export let ReportContent = React.createClass({
         const flux = this.getFlux();
         let origRec = null;
         let changes = {};
+
         if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
-            origRec = this.getOrigRec(recId);
+            origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
         } else {
             //add each non null value as to the new record as a change
             let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
