@@ -56,3 +56,8 @@ p, .p {
   font-style: italic;
   font-size: $font-size-placeholder;
 }
+
+//firefox marks required fields invalid before submit, not what xd wants
+input:-moz-ui-invalid {
+  box-shadow: none;
+}
