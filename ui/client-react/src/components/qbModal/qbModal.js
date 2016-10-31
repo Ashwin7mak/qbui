@@ -45,7 +45,7 @@ const QBModal = React.createClass({
          */
         middleButtonOnClick: React.PropTypes.func,
         /**
-         * This is the name for the left button. There must be a primary button, in order for there to be a left button. 
+         * This is the name for the left button. There must be a primary button, in order for there to be a left button.
          */
         leftButtonName: React.PropTypes.string,
         /**
@@ -116,13 +116,14 @@ const QBModal = React.createClass({
             </div>;
     },
     renderButtons() {
+        if (!this.props.primaryButtonName) {
+            return null;
+        }
+
         let buttons = [
             <Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
         ];
 
-        if (!this.props.primaryButtonName) {
-            return null;
-        }
         if (this.props.middleButtonName) {
             buttons.unshift(<Button key={buttons.length} className="secondaryButton middleButton" onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
         }
