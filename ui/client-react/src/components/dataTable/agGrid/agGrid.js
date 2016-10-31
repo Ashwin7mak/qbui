@@ -132,7 +132,6 @@ let AGGrid = React.createClass({
      * @returns JSX column header dropdown
      */
     createHeaderMenu(columnIndex, pullRight) {
-
         const colDef = this.props.columns[columnIndex];
 
         let isSortedAsc = true;
@@ -295,7 +294,6 @@ let AGGrid = React.createClass({
         }
     },
     onMenuClose() {
-
         document.addEventListener("DOMNodeRemoved", (ev) => {
             if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
                 if (this.selectedColumnId.length) {
@@ -616,7 +614,7 @@ let AGGrid = React.createClass({
     onRowClicked(params) {
 
         const target = params.event.target;
-
+        console.log('target: ', target);
         if (this.isEditChild(target.parentNode)) {
             return;
         }
@@ -634,6 +632,25 @@ let AGGrid = React.createClass({
             target.tagName === "INPUT" ||
             target.tagName === "A" ||
             target.parentNode.tagName === "A") {
+            console.log('onRowClicked======================================');
+            let tempDomNode = document.getElementsByClassName("dropdown-menu");
+            console.log('tempDomNode: ', tempDomNode);
+            for (let i = 0; i < tempDomNode.length; i++) {
+                console.log("Client Height: ", tempDomNode[i].clientHeight);
+                if (tempDomNode[i].clientHeight > 0) {
+                    let fromTop = tempDomNode[i].getBoundingClientRect().top;
+                    let overlap = fromTop + tempDomNode[i].clientHeight;
+                    if (overlap) {
+                        //32 is the column height, it adjusts the pixels
+                        let extra = overlap - (window.innerHeight - 32);
+                        tempDomNode[i].style.top = "auto";
+                        tempDomNode[i].style.bottom = '"' + extra + "px";
+                        // debugger;
+                    }
+                }
+            }
+            console.log('onRowClicked======================================');
+            // debugger;
             return;
         }
 
