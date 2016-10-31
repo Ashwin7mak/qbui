@@ -88,13 +88,13 @@
                         formsPage.verifyErrorMessages(testcase.expectedErrorMessages);
                     });
                 }).then(function() {
-                    //verify clicking on alert hides the error message popup
-                    formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
-                }).then(function() {
-                    //verify clicking on it again brings up the error message popup
+                    //verify clicking on alert button brings up the error message popup
                     formsPage.clickFormAlertBtn();
                     expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
+                }).then(function() {
+                    //verify clicking on alert again hides the error message popup
+                    formsPage.clickFormAlertBtn();
+                    expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
                     done();
                 });
             });
@@ -119,6 +119,8 @@
                 formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
                     formsPage.verifyErrorMessages(expectedNumericErrorMessages);
                 });
+                // Needed to get around stale element error
+                e2eBase.sleep(browser.params.smallSleep);
             }).then(function() {
                 //correct the errors and add the record
                 for (var i = 0; i < validFieldClassNames.length; i++) {

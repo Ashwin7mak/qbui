@@ -102,75 +102,79 @@
         this.enterFormValues = function(fieldLabel) {
             var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
-            if (fieldLabel === 'dateCell') {
-                //enter date fields
-                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
-                    return elm;
-                }).map(function(elm) {
-                    //Do the click below to make it user editable
-                    return elm.element(by.className('date')).click().then(function() {
-                        return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
+            reportServicePage.waitForElement(self.formEditContainerEl).then(function() {
+                if (fieldLabel === 'dateCell') {
+                    //enter date fields
+                    return self.formTable.all(by.className(fieldLabel)).filter(function (elm) {
+                        return elm;
+                    }).map(function (elm) {
+                        //Do the click below to make it user editable
+                        return elm.element(by.className('date')).click().then(function () {
+                            return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
+                        });
                     });
-                });
-            } else if (fieldLabel === 'textField') {
-                //enter text fields
-                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
-                    return elm;
-                }).map(function(elm) {
-                    if (elm.getAttribute('type') === 'email') {
-                        return elm.clear().sendKeys(sEmail);
-                    } else if (elm.getAttribute('type') === 'url') {
-                        return elm.clear().sendKeys(sUrl);
-                    } else if (elm.getAttribute('type') === 'text') {
-                        return elm.clear().sendKeys(sText);
-                    }
-                });
-            } else if (fieldLabel === 'numericField') {
-                //enter numeric fields
-                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
-                    return elm;
-                }).map(function(elm) {
-                    return elm.clear().sendKeys(sNumeric);
-                });
-            } else if (fieldLabel === 'checkbox') {
-                //select checkbox field
-                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
-                    return elm;
-                }).map(function(elm) {
-                    return elm.element(by.className('label')).click();
-                });
-            } else if (fieldLabel === 'timeCell') {
-                //enter time of day fields
-                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
-                    return elm;
-                }).map(function(elm) {
-                    //Do the click below to make it user editable
-                    return elm.element(by.className('Select-control')).click().then(function() {
-                        e2eBase.sleep(browser.params.smallSleep);
-                        browser.actions().sendKeys(sTime, protractor.Key.ENTER).perform();
+                } else if (fieldLabel === 'textField') {
+                    //enter text fields
+                    return self.formTable.all(by.className(fieldLabel)).filter(function (elm) {
+                        return elm;
+                    }).map(function (elm) {
+                        if (elm.getAttribute('type') === 'email') {
+                            return elm.clear().sendKeys(sEmail);
+                        } else if (elm.getAttribute('type') === 'url') {
+                            return elm.clear().sendKeys(sUrl);
+                        } else if (elm.getAttribute('type') === 'text') {
+                            return elm.clear().sendKeys(sText);
+                        }
                     });
-                });
-            }
+                } else if (fieldLabel === 'numericField') {
+                    //enter numeric fields
+                    return self.formTable.all(by.className(fieldLabel)).filter(function (elm) {
+                        return elm;
+                    }).map(function (elm) {
+                        return elm.clear().sendKeys(sNumeric);
+                    });
+                } else if (fieldLabel === 'checkbox') {
+                    //select checkbox field
+                    return self.formTable.all(by.className(fieldLabel)).filter(function (elm) {
+                        return elm;
+                    }).map(function (elm) {
+                        return elm.element(by.className('label')).click();
+                    });
+                } else if (fieldLabel === 'timeCell') {
+                    //enter time of day fields
+                    return self.formTable.all(by.className(fieldLabel)).filter(function (elm) {
+                        return elm;
+                    }).map(function (elm) {
+                        //Do the click below to make it user editable
+                        return elm.element(by.className('Select-control')).click().then(function () {
+                            e2eBase.sleep(browser.params.smallSleep);
+                            browser.actions().sendKeys(sTime, protractor.Key.ENTER).perform();
+                        });
+                    });
+                }
+            });
         };
 
         this.enterInvalidFormValues = function(fieldLabel) {
             var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
-            if (fieldLabel === 'textField') {
-                //enter text fields
-                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
-                    return elm;
-                }).map(function(elm) {
-                    return elm.clear().sendKeys("9782311213");
-                });
-            } else if (fieldLabel === 'numericField') {
-                //enter numeric fields
-                return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
-                    return elm;
-                }).map(function(elm) {
-                    return elm.clear().sendKeys("@!!^&*%$##@#%%^^");
-                });
-            }
+            reportServicePage.waitForElement(self.formEditContainerEl).then(function() {
+                if (fieldLabel === 'textField') {
+                    //enter text fields
+                    return self.formTable.all(by.className(fieldLabel)).filter(function (elm) {
+                        return elm;
+                    }).map(function (elm) {
+                        return elm.clear().sendKeys("9782311213");
+                    });
+                } else if (fieldLabel === 'numericField') {
+                    //enter numeric fields
+                    return self.formTable.all(by.className(fieldLabel)).filter(function (elm) {
+                        return elm;
+                    }).map(function (elm) {
+                        return elm.clear().sendKeys("@!!^&*%$##@#%%^^");
+                    });
+                }
+            });
         };
 
         this.verifyErrorMessages = function(expectedErrorMessages) {
@@ -183,6 +187,8 @@
                     return elm.getAttribute('textContent');
                 }).then(function(text) {
                     expect(text).toEqual(expectedErrorMessages);
+                    //close the alert
+                    return self.formErrorMessageHeaderCloseBtn.click();
                 });
             });
         };

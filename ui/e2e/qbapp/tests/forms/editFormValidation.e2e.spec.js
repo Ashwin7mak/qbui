@@ -89,20 +89,20 @@
                         formsPage.verifyErrorMessages(testcase.expectedErrorMessages);
                     });
                 }).then(function() {
-                    //verify clicking on alert hides the error message popup
-                    formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
-                }).then(function() {
-                    //verify clicking on it again brings up the error message popup
+                    //verify clicking on alert button brings up the error message popup
                     formsPage.clickFormAlertBtn();
                     expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
+                }).then(function() {
+                    //verify clicking on alert again hides the error message popup
+                    formsPage.clickFormAlertBtn();
+                    expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
                     done();
                 });
             });
         });
 
         it('Save and Next Button - Validate errors and correct the errors by editing new record', function(done) {
-            var validFieldClassNames = ['textField', 'numericField', 'dateCell', 'timeCell'];
+            var validFieldClassNames = ['textField', 'numericField'];
             var expectedNumericErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field'];
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //click edit record from the grid recordActions
