@@ -17,7 +17,7 @@ import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
 
-import AppQbModal from '../qbModal/appQbModal';
+import {AppQbModal} from '../qbModal/appQbModal';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;

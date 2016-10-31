@@ -2,8 +2,7 @@ import {useRouterHistory} from "react-router";
 import createHistory from 'history/lib/createBrowserHistory';
 import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
-import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModal';
-import Locale from '../locales/locales';
+import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
 
 // Uses singleton pattern
 // Only one instance of this class may be instantiated so that the same history can be used
@@ -63,6 +62,7 @@ class AppHistory {
         if (this.cancelListenBeforeUnload) {this.cancelListenBeforeUnload();}
 
         self = null; // eslint-disable-line
+        return new AppHistory();
     }
 
     /**
@@ -86,11 +86,13 @@ class AppHistory {
         this.cancelListenBeforeUnload = this.history.listenBeforeUnload(event => {
             this.pendEdits = this.flux.store('RecordPendingEditsStore').getState();
 
+            // The following text does not need to be internationalized because
+            // it will not actually appear in the modal on evergreen browsers.
             if (this.pendEdits.isPendingEdit) {
                 if (event) {
-                    event.returnValue = Locale.getMessage('pendingEditModal.modalBodyMessage');
+                    event.returnValue = 'Save changes before leaving?';
                 }
-                return Locale.getMessage('pendingEditModal.modalBodyMessage');
+                return 'Save changes before leaving?';
             }
         });
     }
@@ -98,12 +100,12 @@ class AppHistory {
     _showModal() {
         ShowAppModal({
             type: 'alert',
-            message: Locale.getMessage('pendingEditModal.modalBodyMessage'),
-            primaryButtonName: Locale.getMessage('pendingEditModal.modalSaveButton'),
+            messageI18nKey: 'pendingEditModal.modalBodyMessage',
+            primaryButtonI18nKey: 'pendingEditModal.modalSaveButton',
             primaryButtonOnClick: this._saveChanges,
-            middleButtonName: Locale.getMessage('pendingEditModal.modalDoNotSaveButton'),
+            middleButtonI18nKey: 'pendingEditModal.modalDoNotSaveButton',
             middleButtonOnClick: this._discardChanges,
-            leftButtonName: Locale.getMessage('pendingEditModal.modalStayButton'),
+            leftButtonI18nKey: 'pendingEditModal.modalStayButton',
             leftButtonOnClick: this._haltRouteChange
         });
     }

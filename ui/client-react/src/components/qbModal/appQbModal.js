@@ -1,6 +1,6 @@
-import React, {PropTypes} from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import QbModal from './qbModal';
+import Locale from '../../locales/locales';
 
 const SHOW_APP_MODAL_EVENT = 'showAppModal';
 const HIDE_APP_MODAL_EVENT = 'hideAppModal';
@@ -8,14 +8,14 @@ const appModalId = 'appModal';
 
 const blankModal = {
     showModal: false,
-    message: null,
-    title: null,
+    messageI18nKey: null,
+    titleI18nKey: null,
     type: 'standard',
-    primaryButtonName: null,
+    primaryButtonI18nKey: null,
     primaryButtonOnClick: null,
-    middleButtonName: null,
+    middleButtonI18nKey: null,
     middleButtonOnClick: null,
-    leftButtonName: null,
+    leftButtonI18nKey: null,
     leftButtonOnClick: null
 };
 
@@ -31,12 +31,20 @@ const AppQbModal = React.createClass({
         return blankModal;
     },
     componentDidMount() {
-        document.querySelector(`#${appModalId}`).addEventListener(SHOW_APP_MODAL_EVENT, this.showModal);
-        document.querySelector(`#${appModalId}`).addEventListener(HIDE_APP_MODAL_EVENT, this.hideModal);
+        let appModalDomComponent = document.querySelector(`#${appModalId}`);
+
+        if (appModalDomComponent) {
+            document.querySelector(`#${appModalId}`).addEventListener(SHOW_APP_MODAL_EVENT, this.showModal);
+            document.querySelector(`#${appModalId}`).addEventListener(HIDE_APP_MODAL_EVENT, this.hideModal);
+        }
     },
     componentWillUnmount() {
-        document.querySelector(`#${appModalId}`).removeEventListener(SHOW_APP_MODAL_EVENT);
-        document.querySelector(`#${appModalId}`).removeEventListener(HIDE_APP_MODAL_EVENT);
+        let appModalDomComponent = document.querySelector(`#${appModalId}`);
+
+        if (appModalDomComponent) {
+            document.querySelector(`#${appModalId}`).removeEventListener(SHOW_APP_MODAL_EVENT);
+            document.querySelector(`#${appModalId}`).removeEventListener(HIDE_APP_MODAL_EVENT);
+        }
     },
     showModal(evt) {
         this.setState(evt.detail);
@@ -52,40 +60,19 @@ const AppQbModal = React.createClass({
             <div id={appModalId}>
                 <QbModal
                     show={this.state.showModal}
-                    bodyMessage={this.state.message}
-                    title={this.state.title}
+                    bodyMessage={this.state.messageI18nKey ? Locale.getMessage(this.state.messageI18nKey) : null}
+                    title={this.state.titleI18nKey ? Locale.getMessage(this.state.titleI18nKey) : null}
                     type={this.state.type}
-                    primaryButtonName={this.state.primaryButtonName}
+                    primaryButtonName={this.state.primaryButtonI18nKey ? Locale.getMessage(this.state.primaryButtonI18nKey) : null}
                     primaryButtonOnClick={this.state.primaryButtonOnClick}
-                    middleButtonName={this.state.middleButtonName}
+                    middleButtonName={this.state.middleButtonI18nKey ? Locale.getMessage(this.state.middleButtonI18nKey) : null}
                     middleButtonOnClick={this.state.middleButtonOnClick}
-                    leftButtonName={this.state.leftButtonName}
+                    leftButtonName={this.state.leftButtonI18nKey ? Locale.getMessage(this.state.leftButtonI18nKey) : null}
                     leftButtonOnClick={this.state.leftButtonOnClick}
                 />
             </div>
         );
     }
 });
-
-
-/**
- * Shows a modal. Can be used in non-react classes.
- * @param modalDetails The properties of the modal (e.g., title, type, etc.)
- * @constructor
- */
-export function ShowAppModal(modalDetails) {
-    modalDetails = Object.assign(modalDetails, {showModal: true});
-    let showModalEvent = new CustomEvent(SHOW_APP_MODAL_EVENT, {detail: modalDetails});
-    document.querySelector(`#${appModalId}`).dispatchEvent(showModalEvent);
-}
-
-/**
- * Hides a modal. Can be used in non-react classes.
- * @constructor
- */
-export function HideAppModal() {
-    let hideModalEvent = new CustomEvent(HIDE_APP_MODAL_EVENT);
-    document.querySelector(`#${appModalId}`).dispatchEvent(hideModalEvent);
-}
 
 export default AppQbModal;
