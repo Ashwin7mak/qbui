@@ -73,7 +73,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.currentEditingRecordId = undefined;
             this.currentEditingAppId = undefined;
             this.currentEditingTableId = undefined;
-            this.recordChanges = {};
+            this.recordChanges = payload.changes ? _.cloneDeep(payload.changes) : {};
             this.originalRecord = undefined;
         }
         //TODO when a record gets into edit state it might already have errors so this should be populated with those
