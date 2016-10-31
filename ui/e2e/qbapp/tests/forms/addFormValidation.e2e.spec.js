@@ -55,6 +55,28 @@
             e2eBase.cleanup(done);
         });
 
+        it('Validate all required fields by not entering anything into them on form', function(done) {
+            var expectedErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field', 'Fill in the Phone Number Field', 'Fill in the Email Address Field', 'Fill in the URL Field'];
+            formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
+                //click on add record button
+                reportServicePage.clickAddRecordOnStage();
+                // Check that the add form container is displayed
+                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
+            }).then(function() {
+                //Save the form without entering any field values on form
+                return formsPage.formSaveBtn.click();
+            }).then(function() {
+                //verify validation
+                formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
+                    formsPage.verifyErrorMessages(expectedErrorMessages);
+                });
+            }).then(function() {
+                //finally close the form
+                formsPage.clickFormCloseBtn();
+                done();
+            });
+        });
+
         /**
          * Data Provider for reports and faceting results.
          */
@@ -63,9 +85,8 @@
                 {
                     message: 'all numeric fields',
                     fieldTypeClassNames: 'numericField',
-                    expectedErrorMessages: ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field']
+                    expectedErrorMessages : ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field', 'Fill in the Phone Number Field', 'Fill in the Email Address Field', 'Fill in the URL Field']
                 },
-                //TODO validate email, url and phone no fields. Right now we have bugs for these.
             ];
         }
 
@@ -102,7 +123,7 @@
 
         it('Save and add another Button - Validate errors and correct the errors by adding new record', function(done) {
             var validFieldClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
-            var expectedNumericErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field'];
+            var expectedErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field', 'Fill in the Phone Number Field', 'Fill in the Email Address Field', 'Fill in the URL Field'];
             formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                 //click on add record button
                 reportServicePage.clickAddRecordOnStage();
@@ -117,7 +138,7 @@
             }).then(function() {
                 //verify validation
                 formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
-                    formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+                    formsPage.verifyErrorMessages(expectedErrorMessages);
                 });
                 // Needed to get around stale element error
                 e2eBase.sleep(browser.params.smallSleep);
