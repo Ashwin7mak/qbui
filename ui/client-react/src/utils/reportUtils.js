@@ -222,7 +222,7 @@ class ReportUtils {
      * find record in grouped records report
      *
      * @param node node in grouped record tree
-     * @param recid record id to find
+     * @param recId record id to find
      * @param keyName key field name
      */
     static findGroupedRecord(node, recId, keyName) {
