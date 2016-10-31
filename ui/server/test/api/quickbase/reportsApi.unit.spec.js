@@ -444,7 +444,7 @@ describe('Validate ReportsApi unit tests', function() {
         afterEach(function() {
             reportsApi.fetchReportRecordsCount.restore();
             reportsApi.fetchFields.restore();
-            reportsApi.fetchReportMetaData();
+            reportsApi.fetchReportMetaData.restore();
             requestHelper.executeRequest.restore();
             req.url = 'testurl.com?format=display';
         });

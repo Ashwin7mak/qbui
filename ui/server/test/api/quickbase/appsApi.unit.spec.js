@@ -46,7 +46,7 @@ describe("Validate appsApi", function() {
 
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, []);
+                    assert.deepEqual(response, [{"userId":1}]);
                     done();
                 }
             ).catch(function(errorMsg) {
