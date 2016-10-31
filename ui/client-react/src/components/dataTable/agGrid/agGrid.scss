@@ -102,6 +102,10 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .ag-header {
         overflow:visible;
+        .ag-pinned-left-header {
+            position: absolute;
+            z-index: 10;
+        }
     }
     .ag-header-viewport {
         overflow:visible;

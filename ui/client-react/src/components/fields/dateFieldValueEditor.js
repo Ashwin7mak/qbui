@@ -120,6 +120,15 @@ const DateFieldValueEditor = React.createClass({
         }
     },
 
+    /**
+     * Called via an <input> node.
+     * @param {Event} event the change event
+     */
+    onInputBlur(event) {
+        const newValue = event.target.value || null;
+        this.onBlur(newValue);
+    },
+
     render() {
         let classes = 'cellEdit dateCell borderOnError place';
 
@@ -146,7 +155,7 @@ const DateFieldValueEditor = React.createClass({
             <div className={classes}>
                 <input type="date"
                     name="date-picker"
-                    onBlur={this.onBlur}
+                    onBlur={this.onInputBlur}
                     onChange={this.onInputChange}/>
             </div> :
             <div className={classes}>

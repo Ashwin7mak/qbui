@@ -138,13 +138,15 @@ const TimeFieldValueEditor = React.createClass({
 
     /**
      * Passes the new time value up to change callbacks.
-     * @param {String || null} newValue The new time as a string. Expects `null` for a falsy value.
+     * @param {Object} newValue:
+     *     {
+     *          value: <String || null> The new time as a string. Expects `null` for a falsy value.
+     *     }
      */
     onChange(newValue) {
-        console.log(newValue)
         if (this.props.onChange || this.props.onDateTimeChange) {
             const onChange = this.props.onDateTimeChange || this.props.onChange;
-            onChange(newValue);
+            onChange(newValue.value);
         }
     },
 
@@ -153,7 +155,7 @@ const TimeFieldValueEditor = React.createClass({
      * @param {Event} event the change event
      */
     onInputChange(event) {
-        this.onChange(event.target.value || null);
+        this.onChange({value: event.target.value || null});
     },
 
     onBlur(event) {
@@ -252,9 +254,8 @@ const TimeFieldValueEditor = React.createClass({
 
             //  Native <input> nodes accept values in form 'HH:mm'
             //  TODO: confirmed with Chrome, verify all browsers support 'HH:mm'
-            //  TODO: refactor to place value somewhere more generic?
             if (useNativeInput) {
-                timeFormat = 'HH:mm';
+                timeFormat = DROPLIST_FORMAT_VALUE;
             }
 
             //  convert the moment time into the appropriate display format

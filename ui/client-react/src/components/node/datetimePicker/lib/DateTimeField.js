@@ -441,7 +441,7 @@ var DateTimeField = (function (_Component) {
           position: "absolute",
           top: offset.top,
           left: "auto",
-          right: 40
+          right: 0,
         };
         return _this.setState({
           widgetStyle: styles,
