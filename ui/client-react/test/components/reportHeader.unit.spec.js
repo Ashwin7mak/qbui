@@ -86,7 +86,7 @@ describe('ReportHeader functions', () => {
         let toggleNav = TestUtils.findRenderedDOMComponentWithClass(component, "toggleNavButton");
         TestUtils.Simulate.click(toggleNav);
 
-        let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "filterSearchBox");
+        let filterSearchBox = TestUtils.scryRenderedDOMComponentsWithClass(component, "smallHeaderSearchBox");
         expect(filterSearchBox.length).toEqual(1);
     });
 
