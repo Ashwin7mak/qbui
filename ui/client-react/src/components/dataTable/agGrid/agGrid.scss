@@ -42,7 +42,8 @@ $cell-edit-background-edit: #f3f8fe;
 }
 
 .inlineEditing .agGrid .selectAllCheckbox,
-.inlineEditing .agGrid .ag-selection-checkbox
+.inlineEditing .agGrid .ag-selection-checkbox,
+.inlineEditing .agGrid .selectionCell .recordActions
 {
     display:none;
 }
