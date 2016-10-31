@@ -40,8 +40,11 @@ const ReportContentError = React.createClass({
             return null;
         }
     },
-    toggleErrorGraphic() {
-        this.setState({playingErrorGraphic: !this.state.playingErrorGraphic});
+    toggleErrorGraphic(evt) {
+        // Toggle the gif if there is a mouse click or the user presses the space key while focused on the image
+        if (!evt.keyCode || evt.keyCode === 32) {
+            this.setState({playingErrorGraphic: !this.state.playingErrorGraphic});
+        }
     },
     toggleSupportContent() {
         this.setState({showingSupportContent: !this.state.showingSupportContent});
@@ -100,8 +103,14 @@ const ReportContentError = React.createClass({
             <div className="reportContentError">
                 <h3><I18nMessage message="errors.errorLoadingReport.message" /></h3>
                 <p><I18nMessage message="errors.errorLoadingReport.helpText" /></p>
-                <button className="playReportErrorGraphicButton btn btn-link" onClick={this.toggleErrorGraphic}>{playingText}</button>
-                <img className={errorImageClasses.join(' ')} onClick={this.toggleErrorGraphic} />
+
+                <img
+                    className={errorImageClasses.join(' ')}
+                    alt="Clicking a new report"
+                    onClick={this.toggleErrorGraphic}
+                    onKeyDown={this.toggleErrorGraphic}
+                    tabIndex="1"
+                />
 
                 <div className="additionalHelp">
                     <h5>

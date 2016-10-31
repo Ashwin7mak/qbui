@@ -22,6 +22,11 @@
         }
     }
 
+    img:focus {
+        outline: none;
+        @include focus-shadow;
+    }
+
     /* For Firefox */
     .errorImage:after {
         display: flex;
