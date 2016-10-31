@@ -378,7 +378,8 @@ describe('Validate ReportsApi unit tests', function() {
         });
 
         it('Test error on fetch table homepage report id', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
+            getExecuteRequestStub.returns(Promise.resolve({body: 1}));
+            fetchReportStub.returns(Promise.reject('error'));
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
