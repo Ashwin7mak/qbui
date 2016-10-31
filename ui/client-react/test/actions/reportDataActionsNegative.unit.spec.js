@@ -5,6 +5,7 @@ import constants from '../../../common/src/constants';
 import Promise from 'bluebird';
 
 let errorStatus = 404;
+let errorMessage = "someError";
 let exStatus = 500;
 
 let inputs = {
@@ -54,7 +55,7 @@ let mockPromiseSuccess = function(expectedResult) {
 };
 let mockPromiseError = function() {
     var p = Promise.defer();
-    p.reject({response:{message:'someError', status:errorStatus}});
+    p.reject({response:{message: errorMessage, status: errorStatus}});
     return p.promise;
 };
 let mockPromiseException = function() {
@@ -329,7 +330,7 @@ describe('Report Data Actions -- Fetch a report negative', () => {
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(4);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([data.loadReportAct, jasmine.any(Object)]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.loadReportRecordsCountAct, jasmine.any(Object)]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([data.errAct, errorStatus]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([data.errAct, {response: {message: errorMessage, status: errorStatus}}]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(3)).toEqual([data.recordsCountSuccAct, jasmine.any(Object)]);
                     done();
                 }
@@ -377,7 +378,7 @@ describe('Report Data Actions -- Fetch a report with reports count fetch failure
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([data.loadReportAct, jasmine.any(Object)]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.loadReportRecordsCountAct, jasmine.any(Object)]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([data.errAct, errorStatus]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([data.errAct, {response: {message: errorMessage, status: errorStatus}}]);
                     done();
                 }
             );
