@@ -18,7 +18,7 @@ let mockErrorDetails = {
 let component;
 let domComponent;
 
-describe('ReportContentError', () => {
+fdescribe('ReportContentError', () => {
     it('displays when report content is in an error state', () => {
         component = TestUtils.renderIntoDocument(
             <ReportContent flux={{}} pendEdits={{}} reportData={{error: true, errorDetails: mockErrorDetails}} />
@@ -28,28 +28,40 @@ describe('ReportContentError', () => {
         expect(reportErrorContent).not.toBeNull();
     });
 
-    it('plays the errorGraphic when the "Show me how" button is clicked', () => {
+    it('plays the errorGraphic when the errorGraphic image is clicked', () => {
         component = TestUtils.renderIntoDocument(<ReportContentError errorDetails={mockErrorDetails} />);
-        let showMeHowButton = ReactDOM.findDOMNode(component).querySelector('.playReportErrorGraphicButton');
+
         let showMeGraphic = ReactDOM.findDOMNode(component).querySelector('.errorImage');
 
-        Simulate.click(showMeHowButton);
+        Simulate.click(showMeGraphic);
 
         expect(component.state.playingErrorGraphic).toBeTruthy();
         expect(showMeGraphic.classList).toContain('errorImage--animation');
     });
 
-    it('stops the errorGraphic when the "Stop" button is clicked', () => {
+    it('stops the errorGraphic when the errorGraphic image is clicked', () => {
         component = TestUtils.renderIntoDocument(<ReportContentError errorDetails={mockErrorDetails} />);
         component.setState({playingErrorGraphic: true});
 
-        let stopButton = ReactDOM.findDOMNode(component).querySelector('.playReportErrorGraphicButton');
         let showMeGraphic = ReactDOM.findDOMNode(component).querySelector('.errorImage');
 
-        Simulate.click(stopButton);
+        Simulate.click(showMeGraphic);
 
         expect(component.state.playingErrorGraphic).toBeFalsy();
         expect(showMeGraphic.classList).toContain('errorImage--still');
+    });
+
+    it('plays the errorGraphic when the space bar is pressed while focused on the errorGraphic image', () => {
+        component = TestUtils.renderIntoDocument(<ReportContentError errorDetails={mockErrorDetails} />);
+
+        let showMeGraphic = ReactDOM.findDOMNode(component).querySelector('.errorImage');
+
+        Simulate.keyDown(showMeGraphic, {
+            keyCode: 32
+        });
+
+        expect(component.state.playingErrorGraphic).toBeTruthy();
+        expect(showMeGraphic.classList).toContain('errorImage--animation');
     });
 
     let contentTestCases = [
