@@ -84,9 +84,13 @@ class AppHistory {
 
         // Setup listener for route changes outside of the app (e.g., pasting in a new url)
         this.cancelListenBeforeUnload = this.history.listenBeforeUnload(event => {
+            this.pendEdits = this.flux.store('RecordPendingEditsStore').getState();
+
             if (this.pendEdits.isPendingEdit) {
-                event.returnValue = 'DONT LEAVE ME!!!';
-                return 'DONT LEAVE ME!!';
+                if (event) {
+                    event.returnValue = Locale.getMessage('pendingEditModal.modalBodyMessage');
+                }
+                return Locale.getMessage('pendingEditModal.modalBodyMessage');
             }
         });
     }
