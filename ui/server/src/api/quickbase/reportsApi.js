@@ -324,7 +324,7 @@
                                     if (columnFids !== '') {
                                         try {
                                             //  convert list delimited string into array and ensure the fid id's are integers
-                                            reportMetaData.fids = columnsFids.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
+                                            reportMetaData.fids = columnFids.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
                                             for (let fid in reportMetaData.fids) {
                                                 reportMetaData.fids[fid] = parseInt(reportMetaData.fids[fid], 10);
                                             }

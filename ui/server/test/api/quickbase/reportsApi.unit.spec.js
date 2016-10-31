@@ -1,6 +1,6 @@
 'use strict';
 
-var config = {
+let config = {
     javaHost: 'http://javaHost',
     SSL_KEY : {
         private    : 'privateKey',
@@ -8,12 +8,13 @@ var config = {
         requireCert: true
     }
 };
-var sinon = require('sinon');
-var assert = require('assert');
-var requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
-var reportsApi = require('../../../src/api/quickbase/reportsApi')(config);
-var recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
+let sinon = require('sinon');
+let assert = require('assert');
+let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
+let reportsApi = require('../../../src/api/quickbase/reportsApi')(config);
+let recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
 let errorCodes = require('../../../src/api/errorCodes');
+let constants = require('../../../../common/src/constants');
 /**
  * Unit tests for report apis
  */
@@ -63,7 +64,7 @@ describe('Validate ReportsApi unit tests', function() {
             });
         });
         it('Test facets url ', function(done) {
-            req.url = "/reports/2/reportComponents";
+            req.url = "/apps/1/tables/2/reports/1/reportResults";
             var requestStub = sinon.stub();
             requestHelper.setRequestObject(requestStub);
             requestStub.yields(null, {statusCode: 200}, {'body': 'body'});
@@ -75,7 +76,7 @@ describe('Validate ReportsApi unit tests', function() {
                     assert(executeReqSpy.called);
                     var opts = executeReqSpy.args[0][1];
                     assert.equal(opts.headers['Content-Type'], 'application/json');
-                    var indexOfFacetsURL = opts.url.indexOf('reports/2/facets/results');
+                    var indexOfFacetsURL = opts.url.indexOf('reports/1/facets/results');
                     assert.notEqual(indexOfFacetsURL, -1);
                 },
                 function(error) {
@@ -86,21 +87,21 @@ describe('Validate ReportsApi unit tests', function() {
             });
         });
         it('Test failure ', function(done) {
+            req.url = "/apps/1/tables/2/reports/1/reportResults";
             var requestStub = sinon.stub();
             requestHelper.setRequestObject(requestStub);
-            requestStub.yields(new Error("error"));
+            requestStub.yields(null, {body:'[{"code":' + errorCodes.UNKNOWN + '}]'});
             var promise = reportsApi.fetchReportFacets(req, reportId);
             promise.then(
                 function(response) {
                     done();
-                    assert.deepEqual(response, {statusCode: 200});
+                    assert.equal(response.errorCode, errorCodes.UNKNOWN);
                     assert(executeReqSpy.called);
                     var opts = executeReqSpy.args[0][1];
                     assert.equal(opts.headers['Content-Type'], 'application/json');
                 },
                 function(response) {
-                    done();
-                    assert.deepEqual(response, new Error("error"));
+                    done(new Error("Unexpected promise error returned with test failure"));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve test failure: ' + JSON.stringify(errorMsg)));
@@ -161,7 +162,7 @@ describe('Validate ReportsApi unit tests', function() {
     });
 
     /**
-     * Unit test fetchReportResults api
+     * Unit test fetchReportTableHomepage api
      */
     describe('validate fetchReportTableHomepage api', function() {
         var req = {
@@ -174,14 +175,7 @@ describe('Validate ReportsApi unit tests', function() {
             params: null
         };
 
-        var reportObj = {
-            reportMetaData: {
-                data: ''
-            },
-            reportData: {
-                data: ''
-            }
-        };
+        var reportObj = {};
 
         var getExecuteRequestStub;
         var executeReqLogSpy;
@@ -195,9 +189,7 @@ describe('Validate ReportsApi unit tests', function() {
             '"displayNewlyChangedRecords":false,"reportFormat":"","rolesWithGrantedAccess":[12,15,16],"summary":"show"}';
 
         beforeEach(function() {
-            reportObj.reportMetaData.data = '';
-            reportObj.reportData.data = '';
-
+            reportObj = {};
             getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
             executeReqLogSpy = sinon.spy(requestHelper, "logUnexpectedError");
             fetchReportStub = sinon.stub(reportsApi, "fetchReport");
@@ -208,16 +200,14 @@ describe('Validate ReportsApi unit tests', function() {
             fetchReportStub.restore();
         });
         it('Test success ', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
+            getExecuteRequestStub.returns(Promise.resolve({body: 1}));
             fetchReportStub.returns(Promise.resolve('reportData'));
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
                     done();
-                    reportObj.reportMetaData.data = JSON.parse(responseBody);
-                    reportObj.reportData.data = 'reportData' ;
-                    assert.deepEqual(response, reportObj);
+                    assert.deepEqual(response, 'reportData');
                 },
                 function(error) {
                     done(new Error("promise error response returned when testing success"));
@@ -432,7 +422,7 @@ describe('Validate ReportsApi unit tests', function() {
                 'tid': 'tid'
             },
             'Content-Type': 'content-type',
-            'url': '/testurl.com?format=display',
+            'url': 'testurl.com?format=display',
             'method': 'get'
         };
         reportsApi.setRecordsApi(recordsApi);
@@ -444,8 +434,9 @@ describe('Validate ReportsApi unit tests', function() {
         };
 
         var fetchReportGroupingResultsPromise = Promise.resolve({'body': '{"records":null, "type":"GROUP", "groups":[{"summaryRef":{"summaries":["groupName"]}, "records":[[{"id":1, "value":"VP Operations"}, {"id":2, "value":1}]]}]}'});
-        var fetchReportResultsPromise = Promise.resolve({'body': '[[ {"id":1, "value": 1234525} ], [ {"id":2, "value": 1234567} ]]'});
+        var fetchReportResultsPromise = Promise.resolve({'body': '[[ {"id":1, "value": 1234525, "sortList":"1:EQUALS"} ], [ {"id":2, "value": 1234567, "sortList":"1:EQUALS"} ]]'});
         var fetchFieldsPromise = Promise.resolve({'body': '[{ "id":1, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'});
+        var fetchFacetsPromise = Promise.resolve({body:'[[[{"id":142,"value":"2015-08-13"}],[{"id":142,"value":"2015-09-10"}]],[[{"id":7,"value":"Email Received"}],[{"id":7,"value":"Email Sent"}]]]'});
 
         var fetchCountPromise = Promise.resolve({body:'1'});
 
@@ -453,9 +444,11 @@ describe('Validate ReportsApi unit tests', function() {
             reportsApi.fetchReportRecordsCount.restore();
             reportsApi.fetchFields.restore();
             requestHelper.executeRequest.restore();
+            req.url = 'testurl.com?format=display';
         });
-        it('Test success without facets', function(done) {
-            //var getReportResults = sinon.stub(reportsApi, "fetchReportResult");
+
+        it('Test get report success - no facets', function(done) {
+            req.method = 'get';
             reportsApi.setRequestHelper(requestHelper);
             var getReportResults = sinon.stub(requestHelper, "executeRequest");
 
@@ -476,8 +469,58 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test success with grouping and no facets', function(done) {
-            //var getReportResults = sinon.stub(reportsApi, "fetchReportResult");
+
+        it('Test get report success - with facets', function(done) {
+            req.method = 'get';
+            reportsApi.setRequestHelper(requestHelper);
+            var getReportResults = sinon.stub(requestHelper, "executeRequest");
+
+            var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
+            var getFacetsStub = sinon.stub(reportsApi, "fetchReportFacets");
+            var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+
+            getReportResults.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getFacetsStub.returns(fetchFacetsPromise);
+            getCountStub.returns(fetchCountPromise);
+
+            var promise = reportsApi.fetchReport(req, 1, true);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("error"));
+                }
+            );
+        });
+
+        it('Test get report success with max row limit exceeded', function(done) {
+            req.method = 'get';
+            req.url += '&offset=0&numRows=' + (constants.PAGE.MAX_NUM_ROWS + 1);
+            reportsApi.setRequestHelper(requestHelper);
+            var getReportResults = sinon.stub(requestHelper, "executeRequest");
+
+            var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
+            var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+
+            getReportResults.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("error"));
+                }
+            );
+        });
+
+        it('Test get report success with grouping and no facets', function(done) {
+            req.method = 'get';
             reportsApi.setRequestHelper(requestHelper);
             var getReportResults = sinon.stub(requestHelper, "executeRequest");
 
@@ -498,8 +541,8 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test error', function(done) {
-            //var getReportResults = sinon.stub(reportsApi, "fetchReportResult");
+        it('Test get report error', function(done) {
+            req.method = 'get';
             reportsApi.setRequestHelper(requestHelper);
             var getReportResults = sinon.stub(requestHelper, "executeRequest");
 
@@ -521,6 +564,50 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
+        it('Test post dynamic report success without meta data overrides', function(done) {
+            req.method = 'post';
+            reportsApi.setRequestHelper(requestHelper);
+            var getReportResults = sinon.stub(requestHelper, "executeRequest");
 
+            var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
+            var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+
+            getReportResults.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("error"));
+                }
+            );
+        });
+        it('Test post dynamic report success with meta data overrides', function(done) {
+            req.method = 'post';
+            req.url += '&sortList=1:EQUALS&query=1.EX.test&columns=1.2';
+            reportsApi.setRequestHelper(requestHelper);
+            var getReportResults = sinon.stub(requestHelper, "executeRequest");
+
+            var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
+            var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+
+            getReportResults.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("error"));
+                }
+            );
+        });
     });
 });
