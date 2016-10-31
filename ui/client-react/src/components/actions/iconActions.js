@@ -52,7 +52,8 @@ let IconActions = React.createClass({
     },
     getInitialState() {
         return {
-            dropdownOpen: false
+            dropdownOpen: false,
+            dropupOpen: false
         };
     },
     /**
@@ -84,7 +85,39 @@ let IconActions = React.createClass({
 
     /* callback from opening pickle menu */
     onDropdownToggle(open) {
+        let agBody = document.querySelector(".ag-body-container");
+        console.log('agBody: ', agBody);
         this.setState({dropdownOpen: open});
+        if (open) {
+            agBody.classList.add("marginBottomForPopUp");
+            agBody.style.marginBottom = "150px";
+        } else {
+            agBody.style.marginBottom = null;
+            agBody.classList.remove("marginBottomForPopUp");
+        }
+    },
+    componentDidUpdate() {
+        // console.log('this.refs.dropDownMenu: ', this.ref.dropDownMenuG);
+        // console.log('componentDidUpdate========================================');
+        // let tempDomNode = document.getElementsByClassName("dropdown-menu");
+        // console.log('tempDomNode: ', tempDomNode);
+        // for (let i = 0; i < tempDomNode.length; i++) {
+        //     console.log("Client Height: ", tempDomNode[i].clientHeight);
+        //     if (tempDomNode[i].clientHeight > 0) {
+        //         let fromTop = tempDomNode[i].getBoundingClientRect().top;
+        //         let overlap = fromTop + tempDomNode[i].clientHeight;
+        //         if (overlap > window.innerHeight) {
+        //             this.setState({dropdownOpen: false, dropupOpen: true});
+        //             return;
+        //             //32 is the column height, it adjusts the pixels
+        //             // let extra = overlap - (window.innerHeight - 32);
+        //             // tempDomNode[i].style.top = "auto";
+        //             // tempDomNode[i].style.bottom = '"' + extra + "px";
+        //             // debugger;
+        //         }
+        //     }
+        // }
+        // console.log('componentDidUpdate=========================================');
     },
     /**
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
@@ -98,14 +131,14 @@ let IconActions = React.createClass({
             const tooltip = (<Tooltip id="more"><I18nMessage message="selection.more"/></Tooltip>);
 
             dropdownTrigger = <OverlayTrigger bsRole="toggle" key="more" placement="bottom" overlay={tooltip}>
-                <Button tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
+                <Button ref="dropDownMenu" tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
             </OverlayTrigger>;
         } else {
             dropdownTrigger = <Button bsRole="toggle" tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>;
         }
 
         return (
-            <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} onToggle={this.onDropdownToggle} rootClose>
+            <Dropdown ref="dropDownMenuG" className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} onToggle={this.onDropdownToggle}  rootClose>
 
                 {dropdownTrigger}
                 <Dropdown.Menu >
