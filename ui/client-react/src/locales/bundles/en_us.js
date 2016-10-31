@@ -10,10 +10,10 @@ export default {
             header: "Apps"
         },
         pendingEditModal: {
-            modalBodyMessage: 'Save changes before leaving?',
-            modalStayButton: 'Stay and keep working',
-            modalDoNotSaveButton: 'Don\'t Save',
-            modalSaveButton: 'Save'
+            modalBodyMessage: "Save changes before leaving?",
+            modalStayButton: "Stay and keep working",
+            modalDoNotSaveButton: "Don\'t Save",
+            modalSaveButton: "Save"
         },
         reports : {
             emailReportTooltip: "Share these records with someone else",

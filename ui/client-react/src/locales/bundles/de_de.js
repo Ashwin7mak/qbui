@@ -7,10 +7,10 @@ export default {
             header: "Anwendungen"
         },
         pendingEditModal: {
-            modalBodyMessage: 'Speichern Sie die Änderungen vor dem Verlassen?',
-            modalStayButton: 'Bleiben Sie und halten Sie arbeiten',
-            modalDoNotSaveButton: 'Nicht speichern',
-            modalSaveButton: 'Sparen'
+            modalBodyMessage: "Speichern Sie die Änderungen vor dem Verlassen?",
+            modalStayButton: "Bleiben Sie und halten Sie arbeiten",
+            modalDoNotSaveButton: "Nicht speichern",
+            modalSaveButton: "Sparen"
         },
         reports : {
             emailReportTooltip: "Teilen Sie diese Datensätze mit einer anderen Person",
