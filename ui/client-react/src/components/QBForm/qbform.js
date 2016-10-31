@@ -5,6 +5,7 @@ import FieldElement from './fieldElement';
 import FieldLabelElement from './fieldLabelElement';
 import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
+import FieldUtils from '../../utils/fieldUtils';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -66,7 +67,6 @@ let QBForm = React.createClass({
         const colSpan = isLast ? 100 : 1;
 
         const cells = [];
-
         if (element.FormTextElement) {
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
         }
@@ -104,7 +104,7 @@ let QBForm = React.createClass({
     getFieldRecord(field) {
         if (field) {
             const fieldId = field.id;
-            if (_.has(this.props, 'pendEdits.recordChanges') && this.props.pendEdits.recordChanges[fieldId]) {
+            if (this.props.pendEdits && this.props.pendEdits.recordChanges && this.props.pendEdits.recordChanges[fieldId]) {
                 let vals = {};
                 vals.id = fieldId;
                 vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
@@ -135,6 +135,7 @@ let QBForm = React.createClass({
      * create a TD with a field label
      * @param element
      * @param sectionIndex
+     * @param validationStatus
      * @returns {XML}
      */
     createFieldLabelCell(element, sectionIndex, validationStatus) {
@@ -142,9 +143,16 @@ let QBForm = React.createClass({
         let relatedField = this.getRelatedField(element.fieldId);
 
         let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
+
         return (
             <td key={key}>
-                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={this.props.edit} isInvalid={validationStatus.isInvalid}/>
+                <FieldLabelElement
+                    element={element}
+                    relatedField={relatedField}
+                    indicateRequiredOnLabel={this.props.edit}
+                    isInvalid={validationStatus.isInvalid}
+                    label={FieldUtils.getFieldLabel(element, relatedField)}
+                />
             </td>);
     },
 
@@ -340,20 +348,8 @@ let QBForm = React.createClass({
     render() {
         const tabChildren = [];
         const singleColumn = Breakpoints.isSmallBreakpoint();
-        let errorMsg = '';
 
-        //  If there is an errorStatus, display the appropriate message based on the error code; otherwise
-        //  render the form with the supplied data(if any).
-        //  TODO: when error handling is implemented beyond forms, the thinking is that an error component
-        //  TODO: should be created to replace the below and handle the locale messaging and rendering of
-        //  TODO: a common error page.
-        if (this.props.errorStatus) {
-            if (this.props.errorStatus === 403) {
-                errorMsg = Locale.getMessage("form.error.403");
-            } else {
-                errorMsg = Locale.getMessage("form.error.500");
-            }
-        } else if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
+        if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
             let tabs = this.props.formData.formMeta.tabs;
 
             Object.keys(tabs).forEach(key => {
@@ -366,7 +362,7 @@ let QBForm = React.createClass({
         return (
             <div className="formContainer">
                 <form className={this.props.edit ? "editForm" : "viewForm"}>
-                    {errorMsg ? <div className="errorSection">{errorMsg}</div> : formContent}
+                    {formContent}
                 </form>
             </div>
         );

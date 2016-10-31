@@ -36,7 +36,8 @@ export let Nav = React.createClass({
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
-            form: flux.store('FormStore').getState()
+            form: flux.store('FormStore').getState(),
+            reportSearchData: flux.store('ReportDataSearchStore').getState(),
         };
     },
 
@@ -154,7 +155,7 @@ export let Nav = React.createClass({
         }
 
         return (<div className={classes}>
-
+            <NotificationContainer/>
             {this.props.params && this.props.params.appId &&
                 <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
@@ -166,7 +167,8 @@ export let Nav = React.createClass({
                                appUsers={this.state.apps.appUsers}
                                selectedApp={this.getSelectedApp()}
                                selectedTable={this.getSelectedTable()}
-                               reportData={this.state.reportData}/>
+                               reportData={this.state.reportData}
+                               errorPopupHidden={this.state.nav.errorPopupHidden}/>
             }
             {this.props.params && this.props.params.appId &&
                 <ReportManagerTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_REPORTS}
@@ -197,7 +199,6 @@ export let Nav = React.createClass({
                         showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
-                        <NotificationContainer/>
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
                             key: this.props.location ? this.props.location.pathname : "",
@@ -207,6 +208,7 @@ export let Nav = React.createClass({
                             pendEdits:this.state.pendEdits,
                             fields: this.state.fields,
                             form: this.state.form,
+                            reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),
                             scrollingReport: this.state.nav.scrollingReport,

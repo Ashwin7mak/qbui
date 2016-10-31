@@ -2,13 +2,17 @@ import React from 'react';
 import Fluxxor from 'fluxxor';
 import Trowser from "../trowser/trowser";
 import Record from "./record";
-import {I18nMessage} from "../../utils/i18nMessage";
+import {I18nMessage} from '../../utils/i18nMessage';
 import {ButtonGroup, Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBicon from "../qbIcon/qbIcon";
+import QBToolTip from '../qbToolTip/qbToolTip';
 import TableIcon from "../qbTableIcon/qbTableIcon";
 import Loader from 'react-loader';
+import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
+import {browserHistory} from 'react-router';
+import _ from 'lodash';
 
 import './recordTrowser.scss';
 
@@ -27,12 +31,20 @@ let RecordTrowser = React.createClass({
         visible: React.PropTypes.bool,
         form: React.PropTypes.object,
         pendEdits: React.PropTypes.object,
-        reportData: React.PropTypes.object
+        reportData: React.PropTypes.object,
+        errorPopupHidden: React.PropTypes.bool
     },
+
     /**
      * get trowser content (report nav for now)
      */
     getTrowserContent() {
+        let hideErrorMessage = this.props.errorPopupHidden;
+        let errorMessage = [];
+        if (_.has(this.props, 'pendEdits.editErrors.errors')) {
+            hideErrorMessage = hideErrorMessage || (this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length === 0);
+            errorMessage = this.props.pendEdits.editErrors.errors;
+        }
 
         return (this.props.visible &&
             <Loader loaded={!this.props.form || (!this.props.form.editFormLoading && !this.props.form.editFormSaving)} >
@@ -44,6 +56,7 @@ let RecordTrowser = React.createClass({
                     pendEdits={this.props.pendEdits ? this.props.pendEdits : null}
                     formData={this.props.form ? this.props.form.editFormData : null}
                     edit={true} />
+                <QBErrorMessage message={errorMessage} hidden={hideErrorMessage} onCancel={this.dismissErrorDialog}/>
             </Loader>);
     },
     /**
@@ -69,10 +82,10 @@ let RecordTrowser = React.createClass({
      * User wants to save changes to a record. First we do client side validation
      * and if validation is successful we initiate the save action for the new or existing record
      * if validation if not ok we stay in edit mode and show the errors (TBD)
-     * @param id
+     * @param saveAnother if true, keep trowser open after save with a new blank record
      * @returns {boolean}
      */
-    saveClicked() {
+    saveClicked(saveAnother = false) {
         //validate changed values -- this is skipped for now
         //get pending changes
         let validationResult = {
@@ -96,8 +109,12 @@ let RecordTrowser = React.createClass({
             promise.then((recId) => {
                 flux.actions.saveFormSuccess();
 
-                this.hideTrowser();
-                this.navigateToNewRecord(recId);
+                if (saveAnother) {
+                    flux.actions.editNewRecord(false);
+                } else {
+                    this.hideTrowser();
+                    this.navigateToNewRecord(recId);
+                }
 
             }, (errorStatus) => {
                 flux.actions.saveFormFailed(errorStatus);
@@ -199,9 +216,14 @@ let RecordTrowser = React.createClass({
 
         const showBack = !!(this.props.reportData && this.props.reportData.previousEditRecordId !== null);
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
+        const recordName = this.props.selectedTable && this.props.selectedTable.name;
+
+        let title = this.props.recId === SchemaConsts.UNSAVED_RECORD_ID ? <span><I18nMessage message="nav.new"/><span>&nbsp;{table ? table.name : ""}</span></span> :
+            <span>{recordName} #{this.props.recId}</span>;
+
 
         return (
-            <h4>
+            <div className="breadcrumbsContent">
                 {(showBack || showNext) &&
                 <div className="iconActions">
                     <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev"><I18nMessage message="nav.previousRecord"/></Tooltip>}>
@@ -211,22 +233,29 @@ let RecordTrowser = React.createClass({
                         <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
                     </OverlayTrigger>
                 </div> }
-                <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""}
-            </h4>);
+                <TableIcon classes="primaryIcon" icon={table ? table.icon : ""}/>{title}
+            </div>);
 
     },
     getTrowserRightIcons() {
-
-        const canSave = this.props.pendEdits && this.props.pendEdits.isPendingEdit;
+        const errorFlg = this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
 
         const showNext = !!(this.props.reportData && this.props.reportData.nextEditRecordId !== null);
 
         return (
             <div className="saveButtons">
-                {showNext &&
-                    <Button bsStyle="primary" disabled={!canSave} onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
+                {errorFlg &&
+                    <OverlayTrigger placement="top" overlay={<Tooltip id="alertIconTooltip">{this.props.errorPopupHidden ? <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.showErrorPopup"/> : <I18nMessage message="errorMessagePopup.errorAlertIconTooltip.closeErrorPopup"/>}</Tooltip>}>
+                        <Button className="saveAlertButton" onClick={this.toggleErrorDialog}><QBicon icon={"alert"}/></Button>
+                    </OverlayTrigger>
                 }
-                <Button bsStyle="primary" disabled={!canSave} onClick={this.saveClicked}><I18nMessage message="nav.save"/></Button>
+                {showNext &&
+                    <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
+                }
+                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
+                {this.props.recId === null &&
+                    <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
+                }
             </div>);
     },
 
@@ -238,14 +267,26 @@ let RecordTrowser = React.createClass({
     },
 
     cancelEditing() {
-
         const flux = this.getFlux();
-        if (this.props.recId) {
-            flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
-        }
+        flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
 
         flux.actions.hideTrowser();
+    },
+    toggleErrorDialog() {
+        if (this.props.errorPopupHidden) {
+            this.showErrorDialog();
+        } else {
+            this.dismissErrorDialog();
+        }
+    },
+    showErrorDialog() {
+        let flux = this.getFlux();
+        flux.actions.showErrorMsgDialog();
+    },
+    dismissErrorDialog() {
+        let flux = this.getFlux();
+        flux.actions.hideErrorMsgDialog();
     },
     /**
      * trowser to wrap report manager

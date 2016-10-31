@@ -55,8 +55,20 @@
     .popover-content {
       padding: 0;
       margin: 0;
-      max-height: 500px;
+      max-height: 280px;
       overflow-y: auto;
+
+      @include height-medium-breakpoint {
+        max-height: 420px;
+      }
+
+      @include height-large-breakpoint {
+        max-height: 680px;
+      }
+
+      @include height-xlarge-breakpoint {
+        max-height: 980px;
+      }
     }
 
     .panel > .list-group .list-group-item,
@@ -132,11 +144,6 @@
     .list-group-item {
       font-family: $font-family;
       padding-top: 4px;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      align-items: center;
-      justify-content: flex-start
     }
 
     .list-group-item:hover {
@@ -146,6 +153,11 @@
     .list-group-item:focus {
       outline: none;
       background-color: $facetMenu-backgroundColor;
+    }
+
+    .list-group-item-inner-wrapper {
+      display: flex;
+      align-items: center;
     }
 
     .listMore {

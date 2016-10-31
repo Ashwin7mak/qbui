@@ -154,6 +154,7 @@ $nav-hover-bg: #0097CD;
 $nav-hover-fg: $color2;
 $nav-link-fg: $color2;
 $nav-border: $color18;
+$small-header-bg: $color2;
 
 $report-container-bg: $color2;
 //tabs underline color
@@ -169,9 +170,10 @@ $icon-pickles-color: #404040;
 
 $selection-badge-color: $color20;
 
-$text-link-color: #337ab7;
-$link-text-normal-color: $color-indigo-700;
-$link-text-hover-color: $color-cyan-700;
+$link-normal-color: $color-indigo-700;
+$link-hover-color: $color-cyan-600;
+$link-press-color: $color-cyan-600;
+
 $selected-check-color:  $color16;
 
 //== Stage
@@ -235,6 +237,9 @@ $secondary-bar-fg: #fff;
 $secondary-bar-bg: #009AAE;
 $secondary-bar-page-actions-bg: #476B90;
 
+//==recordtrowser
+$nav-icon-hover-bg: $color-cyan-800;
+
 @mixin focus-shadow($color:$input-border-focus-color) {
   box-shadow: 0 0 2px 1.5px rgba($color, 0.25);
   outline: none;
@@ -243,10 +248,13 @@ $secondary-bar-page-actions-bg: #476B90;
 //== Field labels used on report card view and forms
 $fieldLabel-color: $color3;
 
-$required-asterisk-color: $color-cyan-700;
+$required-asterisk-color: $color-blue-500;
 $error-color: $color-red-700;
 
 //== Fields
+$clearmini-normal-color: $color-black-500;
+$clearmini-hover-color: $color-cyan-600;
+
 $checkbox-background-checked-color: $color-cyan-500;
 $checkbox-background-unchecked-color: $color-black-100;
 $checkbox-border-color: $color-black-500;
@@ -291,3 +299,10 @@ $panel-border-color: $color4;
 $panel-background-color: $color2;
 $panel-header-icon-color: $color11;
 $panel-header-icon-hover-color: $icon-color-hover;
+
+//Error message popup
+$errorMessage-border-color: $color-black-400;
+$errorMessage-header-background: $color-red-700;
+$errorMessage-content-background: $color-black-100;
+$errorMessage-content-text-color: $color-blue-600;
+$errorMessage-header-text-color: $color-black-100;
