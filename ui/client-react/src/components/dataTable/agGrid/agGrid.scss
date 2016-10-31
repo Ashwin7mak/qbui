@@ -63,6 +63,7 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-body-container {
         background-color: $color2;
         margin-bottom:0;
+        height: 100%
     }
     /* prevent clipping of actions and dropdowns in 1st column */
     .ag-pinned-left-cols-viewport {
