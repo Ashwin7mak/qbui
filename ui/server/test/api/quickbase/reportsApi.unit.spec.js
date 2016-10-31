@@ -668,12 +668,32 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test post dynamic report with unexpected exception', function(done) {
+        it('Test post dynamic report with unexpected exception processing report results', function(done) {
             req.method = 'post';
             reportsApi.setRequestHelper(requestHelper);
 
             reportResultsStub.returns({body:'bad object structure'});
             getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return with testing unexpected error from post fetchReports"));
+                },
+                function(error) {
+                    assert(executeReqLogSpy.called);
+                    done();
+                }
+            );
+        });
+        it('Test post dynamic report with unexpected exception processing fields within report results', function(done) {
+            req.method = 'post';
+            reportsApi.setRequestHelper(requestHelper);
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns({body:'bad object structure'});
             getCountStub.returns(fetchCountPromise);
             getMetaStub.returns(fetchMetaData);
 
