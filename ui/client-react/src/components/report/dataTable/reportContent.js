@@ -174,7 +174,7 @@ export let ReportContent = React.createClass({
                 });
             }
         }
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes);
+        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
     },
 
     /**

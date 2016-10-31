@@ -43,8 +43,8 @@ $cell-edit-background-edit: #f3f8fe;
 
 .inlineEditing .agGrid .selectAllCheckbox,
 .inlineEditing .agGrid .ag-selection-checkbox,
-.inlineEditing .agGrid .selectionCell .recordActions
-{
+.inlineEditing .agGrid .selectionCell .recordActions,
+.inlineEditing .agGrid .ag-header-icon {
     display:none;
 }
 
