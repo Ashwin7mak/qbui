@@ -75,10 +75,13 @@ const DateFieldValueEditor = React.createClass({
         if (onChange) {
             if (newValue === null || newValue || enteredValue === '') {
                 let formattedDate = null;
-                if (newValue !== null && moment(newValue, DATE_INPUT).isValid()) {
+                if (moment(newValue, DATE_FORMATTED).isValid()) {
+                    formattedDate = newValue;
+                }
+                if (moment(newValue, DATE_INPUT).isValid()) {
                     formattedDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
                 }
-
+                // onChange callbacks expect date in YYYY-MM-DD format
                 onChange(formattedDate);
             }
         }
@@ -89,7 +92,7 @@ const DateFieldValueEditor = React.createClass({
      * @param {Event} event the change event
      */
     onInputChange(event) {
-        const newValue = event.target && event.target.value;
+        const newValue = event.target.value || null;
         this.onChange(newValue);
     },
 
