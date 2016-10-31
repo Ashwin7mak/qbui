@@ -237,7 +237,7 @@ class ReportUtils {
             let result = null;
 
             for (let i = 0;result === null && i < node.children.length;i++) {
-                result = this.findGroupedRecord(node.children[i], recId, keyName);
+                result = ReportUtils.findGroupedRecord(node.children[i], recId, keyName);
             }
             return result;
         }
