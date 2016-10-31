@@ -1,0 +1,91 @@
+import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
+import QbModal from './qbModal';
+
+const SHOW_APP_MODAL_EVENT = 'showAppModal';
+const HIDE_APP_MODAL_EVENT = 'hideAppModal';
+const appModalId = 'appModal';
+
+const blankModal = {
+    showModal: false,
+    message: null,
+    title: null,
+    type: 'standard',
+    primaryButtonName: null,
+    primaryButtonOnClick: null,
+    middleButtonName: null,
+    middleButtonOnClick: null,
+    leftButtonName: null,
+    leftButtonOnClick: null
+};
+
+
+/**
+ * The AppQbModal wraps QbModal in a way that non-react classes and events can
+ * access and display a modal. For example, the AppHistory object lives outside of React
+ * but needs to display a modal based on specific events. The AppHistory can import the
+ * ShowAppModal and HideAppModal functions to show/hide a modal without using React directly.
+ */
+const AppQbModal = React.createClass({
+    getInitialState() {
+        return blankModal;
+    },
+    componentDidMount() {
+        document.querySelector(`#${appModalId}`).addEventListener(SHOW_APP_MODAL_EVENT, this.showModal);
+        document.querySelector(`#${appModalId}`).addEventListener(HIDE_APP_MODAL_EVENT, this.hideModal);
+    },
+    componentWillUnmount() {
+        document.querySelector(`#${appModalId}`).removeEventListener(SHOW_APP_MODAL_EVENT);
+        document.querySelector(`#${appModalId}`).removeEventListener(HIDE_APP_MODAL_EVENT);
+    },
+    showModal(evt) {
+        this.setState(evt.detail);
+    },
+    hideModal() {
+        this.setState(blankModal);
+    },
+    _resetModal() {
+        this.setState(blankModal);
+    },
+    render() {
+        return (
+            <div id={appModalId}>
+                <QbModal
+                    show={this.state.showModal}
+                    bodyMessage={this.state.message}
+                    title={this.state.title}
+                    type={this.state.type}
+                    primaryButtonName={this.state.primaryButtonName}
+                    primaryButtonOnClick={this.state.primaryButtonOnClick}
+                    middleButtonName={this.state.middleButtonName}
+                    middleButtonOnClick={this.state.middleButtonOnClick}
+                    leftButtonName={this.state.leftButtonName}
+                    leftButtonOnClick={this.state.leftButtonOnClick}
+                />
+            </div>
+        );
+    }
+});
+
+
+/**
+ * Shows a modal. Can be used in non-react classes.
+ * @param modalDetails The properties of the modal (e.g., title, type, etc.)
+ * @constructor
+ */
+export function ShowAppModal(modalDetails) {
+    modalDetails = Object.assign(modalDetails, {showModal: true});
+    let showModalEvent = new CustomEvent(SHOW_APP_MODAL_EVENT, {detail: modalDetails});
+    document.querySelector(`#${appModalId}`).dispatchEvent(showModalEvent);
+}
+
+/**
+ * Hides a modal. Can be used in non-react classes.
+ * @constructor
+ */
+export function HideAppModal() {
+    let hideModalEvent = new CustomEvent(HIDE_APP_MODAL_EVENT);
+    document.querySelector(`#${appModalId}`).dispatchEvent(hideModalEvent);
+}
+
+export default AppQbModal;

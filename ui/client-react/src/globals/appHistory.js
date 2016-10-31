@@ -2,6 +2,8 @@ import {useRouterHistory} from "react-router";
 import createHistory from 'history/lib/createBrowserHistory';
 import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
+import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModal';
+import Locale from '../locales/locales';
 
 // Uses singleton pattern
 // Only one instance of this class may be instantiated so that the same history can be used
@@ -74,7 +76,7 @@ class AppHistory {
             this.pendEdits = this.flux.store('RecordPendingEditsStore').getState();
 
             if (this.pendEdits.isPendingEdit) {
-                this._saveChanges();
+                this._showModal();
             } else {
                 return this._continueToDestination();
             }
@@ -89,51 +91,76 @@ class AppHistory {
         });
     }
 
+    _showModal() {
+        ShowAppModal({
+            type: 'alert',
+            message: Locale.getMessage('pendingEditModal.modalBodyMessage'),
+            primaryButtonName: Locale.getMessage('pendingEditModal.modalSaveButton'),
+            primaryButtonOnClick: this._saveChanges,
+            middleButtonName: Locale.getMessage('pendingEditModal.modalDoNotSaveButton'),
+            middleButtonOnClick: this._discardChanges,
+            leftButtonName: Locale.getMessage('pendingEditModal.modalStayButton'),
+            leftButtonOnClick: this._haltRouteChange
+        });
+    }
+
+    _hideModal() {
+        HideAppModal();
+    }
+
+    /*
+    * All functions below reference 'self' instead of 'this' because of a context change
+    * after being called from the modal
+    */
     _saveChanges() {
-        this.appId = this.pendEdits.currentEditingAppId;
-        this.tableId = this.pendEdits.currentEditingTableId;
-        this.recordId = this.pendEdits.currentEditingRecordId;
+        self._hideModal();
 
-        this.fields = this.flux.store('FieldsStore').getState().fields.data;
+        self.appId = self.pendEdits.currentEditingAppId;
+        self.tableId = self.pendEdits.currentEditingTableId;
+        self.recordId = self.pendEdits.currentEditingRecordId;
 
-        if (this.pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
-            this._handleRecordAdd();
+        self.fields = self.flux.store('FieldsStore').getState().fields.data;
+
+        if (self.pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
+            self._handleRecordAdd();
         } else {
-            this._handleRecordChange();
+            self._handleRecordChange();
         }
     }
 
     _handleRecordAdd() {
-        this.flux.actions.saveNewRecord(this.appId, this.tableId, this.pendEdits.recordChanges, this.fields)
-            .then(this._onRecordSaved, this._onRecordSavedError);
+        self.flux.actions.saveNewRecord(self.appId, self.tableId, self.pendEdits.recordChanges, self.fields)
+            .then(self._onRecordSaved, self._onRecordSavedError);
     }
 
     _handleRecordChange() {
-        this.flux.actions.recordPendingEditsCommit(this.appId, this.tableId, this.recordId);
-        this.flux.actions.saveRecord(this.appId, this.tableId, this.recordId, this.pendEdits, this.fields)
-            .then(this._onRecordSaved, this._onRecordSavedError);
+        self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
+        self.flux.actions.saveRecord(self.appId, self.tableId, self.recordId, self.pendEdits, self.fields)
+            .then(self._onRecordSaved, self._onRecordSavedError);
     }
 
     _onRecordSaved() {
-        this._continueToDestination();
+        self._continueToDestination();
     }
 
     _onRecordSavedError() {
-        this._haltRouteChange();
+        self._haltRouteChange();
     }
 
-    // Turn this back on once the user is asked if they want to cancel with a modal
-    // _discardChanges() {
-    //     this.flux.actions.recordPendingEditsCancel(this.appId, this.tableId, this.recordId);
-    //     this._continueToDestination();
-    // }
+    _discardChanges() {
+        self._hideModal();
+
+        self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);
+        self._continueToDestination();
+    }
 
     _continueToDestination() {
-        this.callback();
+        self.callback();
     }
 
     _haltRouteChange() {
-        this.callback(false);
+        self._hideModal();
+        self.callback(false);
     }
 }
 

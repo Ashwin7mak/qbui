@@ -17,6 +17,8 @@ import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
 
+import AppQbModal from '../qbModal/appQbModal';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -199,6 +201,9 @@ export let Nav = React.createClass({
                         showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
+                        {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
+                        <AppQbModal/>
+
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
                             key: this.props.location ? this.props.location.pathname : "",
