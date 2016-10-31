@@ -41,8 +41,7 @@ describe("Validate appsApi", function() {
 
         it('success return results ', function(done) {
             req.url = '/app/1/users';
-            var targetObject = "{'body':[]}";
-            executeReqStub.returns(Promise.resolve(targetObject));
+            executeReqStub.returns(Promise.resolve({'body': '[{"id":1}]'}));
             var promise = appsApi.getAppUsers(req);
 
             promise.then(

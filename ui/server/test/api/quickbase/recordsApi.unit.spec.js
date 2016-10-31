@@ -73,7 +73,7 @@ describe("Validate recordsApi", function() {
         });
 
         it('success return results for record 1', function(done) {
-            req.url = '/apps/123/tables/456/records/1?param=true';
+            req.url = '/apps/123/tables/456/records/1?param=true&offset=0&numRows=' + constants.PAGE.MAX_NUM_ROWS + 1;
             req.params.recordId = 1;
 
             var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
@@ -254,6 +254,7 @@ describe("Validate recordsApi", function() {
         it('success return count when query is set', function(done) {
             req.url = '/apps/1/tables/2/records/countQuery';
             req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:' + groupTypes.COMMON.equals;
+            req.url += '&' + constants.REQUEST_PARAMETER.QUERY + '=1.EX.2';
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '10'}));
             var promise = recordsApi.fetchCountForRecords(req);
             promise.then(
@@ -403,6 +404,25 @@ describe("Validate recordsApi", function() {
                 done(new Error('unable to resolve all records: ' + JSON.stringify(errorMsg)));
             });
 
+        });
+
+        it('fail return results required field', function(done) {
+            let testField =  {datatypeAttributes :{type: "TEXT"}, required : true};
+            req.url = '/records/2';
+            req.body = [{value: "", fieldDef: testField}];
+            var errType = dataErrorCodes.REQUIRED_FIELD_EMPTY;
+            var promise = recordsApi.createSingleRecord(req);
+
+            promise.then(
+                function(error) {
+                },
+                function(error) {
+                    assert.equal(error.response.errors[0].error.code, errType);
+                    done();
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve all tests: ' + JSON.stringify(errorMsg)));
+            });
         });
     });
 

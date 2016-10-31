@@ -437,12 +437,14 @@ describe('Validate ReportsApi unit tests', function() {
         var fetchReportResultsPromise = Promise.resolve({'body': '[[ {"id":1, "value": 1234525, "sortList":"1:EQUALS"} ], [ {"id":2, "value": 1234567, "sortList":"1:EQUALS"} ]]'});
         var fetchFieldsPromise = Promise.resolve({'body': '[{ "id":1, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'});
         var fetchFacetsPromise = Promise.resolve({body:'[[[{"id":142,"value":"2015-08-13"}],[{"id":142,"value":"2015-09-10"}]],[[{"id":7,"value":"Email Received"}],[{"id":7,"value":"Email Sent"}]]]'});
+        var fetchMetaData = Promise.resolve({'body': '{"id":1,"sortList":[{"fieldId":1, "sortOrder":"ASC", "groupType":"EQUALS"},{"fieldId":1, "sortOrder":"DESC"}]}'});
 
         var fetchCountPromise = Promise.resolve({body:'1'});
 
         afterEach(function() {
             reportsApi.fetchReportRecordsCount.restore();
             reportsApi.fetchFields.restore();
+            reportsApi.fetchReportMetaData();
             requestHelper.executeRequest.restore();
             req.url = 'testurl.com?format=display';
         });
@@ -454,10 +456,12 @@ describe('Validate ReportsApi unit tests', function() {
 
             var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
             var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+            var getMetaStub = sinon.stub(reportsApi, "fetchReportMetaData");
 
             getReportResults.returns(fetchReportResultsPromise);
             getFieldsStub.returns(fetchFieldsPromise);
             getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
 
             var promise = reportsApi.fetchReport(req, 1);
             promise.then(
