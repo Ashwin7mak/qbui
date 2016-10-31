@@ -6,6 +6,7 @@ import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
 import Logger from "../../../utils/logger";
 import Breakpoints from "../../../utils/breakpoints";
 import ReportActions from "../../actions/reportActions";
+import ReportUtils from '../utils/reportUtils';
 import Fluxxor from "fluxxor";
 import * as SchemaConsts from "../../../constants/schema";
 import {GROUP_TYPE} from "../../../../../common/src/groupTypes";
@@ -71,27 +72,6 @@ export let ReportContent = React.createClass({
     },
 
     /**
-     * recursively search for recid in child recrods
-     * @param node node containing either a record or an array of children
-     * @param recid
-     * @returns {*}
-     */
-    findGroupedRecord(node, recid) {
-
-        if (node[this.props.uniqueIdentifier] && node[this.props.uniqueIdentifier].value === recid) {
-            return node;
-        }
-        if (node.children) {
-            let result = null;
-
-            for (let i = 0;result === null && i < node.children.length;i++) {
-                result = this.findGroupedRecord(node.children[i], recid);
-            }
-            return result;
-        }
-        return null;
-    },
-    /**
      * Given a record id get the original values from the grouped report.
      * @param recid
      * @returns {*}
@@ -100,7 +80,7 @@ export let ReportContent = React.createClass({
         let orig = {names:{}, fids:{}};
         let recs = this.props.reportData.data ? this.props.reportData.data.filteredRecords : [];
 
-        let rec = this.findGroupedRecord({children: recs}, recId);
+        let rec = ReportUtils.findGroupedRecord(recs, recId, this.props.uniqueIdentifier);
 
         orig.names = rec;
         let fids = {};

@@ -199,28 +199,6 @@ let reportModel = {
     },
 
     /**
-     * find record recursively in record in children
-     * @param node
-     * @param recid
-     * @returns {*}
-     */
-    findGroupedRecord(node, recid) {
-
-        if (node[this.model.keyField.name] && node[this.model.keyField.name].value === recid) {
-            return node;
-        }
-        if (node.children) {
-            let result = null;
-
-            for (let i = 0;result === null && i < node.children.length;i++) {
-                result = this.findGroupedRecord(node.children[i], recid);
-            }
-            return result;
-        }
-        return null;
-    },
-
-    /**
      * finds in model records the record with matching the recId
      * model records are in the form of array [{fieldName1 : {id:4,value:rec1}, fieldName2: {id:5,value:'test'}}, ...]
      * @param records
@@ -231,7 +209,7 @@ let reportModel = {
         recId = recId ? +recId : recId;
 
         if (this.model.hasGrouping) {
-            return this.findGroupedRecord({children: records}, recId);
+            return ReportUtils.findGroupedRecord({children: records}, recId, this.model.keyField.name);
         } else {
             return records.find(rec => rec[this.model.keyField.name].value === recId);
         }
