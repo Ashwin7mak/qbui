@@ -6,16 +6,17 @@ $grid-group-expand-icon-size: 18px;
 $grid-default-group-padding: 0px;
 $table-actions-container-bg: #fff;
 
+$checkbox-width: 40px;
+
 .tableLoaderContainer {
     flex: 1 1 auto;
     overflow-y:auto;
 }
 
 .reportTable .cardViewListHolder {
-    transform: translate3d(-40px,0,0);
-    -webkit-transform: translate3d(-40px,0,0);
-    //transition: transform 2000ms;
-    width: calc(100% + 40px) !important;
+    transform: translate3d(-$checkbox-width,0,0);
+    -webkit-transform: translate3d(-$checkbox-width,0,0);
+    width: calc(100% + #{$checkbox-width}) !important;
     position: relative;
 
     &.allowCardSelection {
@@ -130,11 +131,13 @@ $table-actions-container-bg: #fff;
             position: relative;
             >.group-header {
                 border-top: 1px solid #dcdcdc;
-                padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) !important;
+                padding-left: $grid-default-cell-padding + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) + 40 !important;
             }
             .custom-row-card {
                 border-top: 1px solid #dcdcdc;
-                padding-left: $grid-default-cell-padding + 2 + $grid-group-expand-icon-size + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) !important;
+                .flexRow > .card {
+                    padding-left: $grid-default-cell-padding + 2 + $grid-group-expand-icon-size + $i*($grid-default-group-padding+$grid-group-expand-icon-size/2) - 9 !important;
+                }
                 margin-bottom: 0;
                 &.expanded {
                   box-shadow: none;
