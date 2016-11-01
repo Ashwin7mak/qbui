@@ -200,6 +200,32 @@
         };
 
         /**
+         * Enter Invalid field values on small breakpoint form
+         *
+         */
+        this.enterInvalidFormValues = function(fieldLabel) {
+            var self = this;
+            //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
+            e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
+                if (fieldLabel === 'textField') {
+                    //enter text fields
+                    return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                        return elm;
+                    }).map(function(elm) {
+                        return elm.clear().sendKeys("9782311213");
+                    });
+                } else if (fieldLabel === 'numericField') {
+                    //enter numeric fields
+                    return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
+                        return elm;
+                    }).map(function(elm) {
+                        return elm.clear().sendKeys("@!!^&*%$##@#%%^^");
+                    });
+                }
+            });
+        };
+
+        /**
          * Verify field values on small breakpoint report table
          *
          */
