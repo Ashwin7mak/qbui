@@ -1,6 +1,7 @@
 import AppHistory from '../../src/globals/appHistory';
 import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
 import Promise from 'bluebird';
+import {ShowAppModal, HideAppModal, SHOW_APP_MODAL_EVENT, HIDE_APP_MODAL_EVENT} from '../../src/components/qbModal/appQbModalFunctions';
 
 let currentModalDetails = null;
 let mockActions = {
@@ -257,3 +258,30 @@ describe('AppHistory', () => {
     });
 });
 
+describe('qbAppModalFunctions', () => {
+    let mockModal = {
+        dispatchEvent(event) {}
+    };
+
+    describe('ShowAppModal', () => {
+        it('allows AppHistory to show a React-based modal using javascript custom events', () => {
+            spyOn(document, 'querySelector').and.returnValue(mockModal);
+            spyOn(mockModal, 'dispatchEvent');
+
+            ShowAppModal({});
+
+            expect(mockModal.dispatchEvent).toHaveBeenCalled();
+        });
+    });
+
+    describe('HideAppModal', () => {
+        it('allows AppHistory to hide a React-based modal using javascript custom events', () => {
+            spyOn(document, 'querySelector').and.returnValue(mockModal);
+            spyOn(mockModal, 'dispatchEvent');
+
+            HideAppModal({});
+
+            expect(mockModal.dispatchEvent).toHaveBeenCalled();
+        });
+    });
+});
