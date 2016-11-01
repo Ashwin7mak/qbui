@@ -6,6 +6,8 @@ import Logger from '../../utils/logger';
 import Breakpoints from '../../utils/breakpoints';
 import M5AppHomePage from './m5AppHomePage';
 
+import './appHomePage.scss';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
 /**

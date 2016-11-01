@@ -3,6 +3,7 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import QBicon from '../qbIcon/qbIcon';
 
 import './appHomePage.scss';
+import './m5AppHomePage.scss';
 
 const supportEmail = 'betaprogram@quickbase.com';
 function i18nKey(subkey) {
@@ -12,7 +13,7 @@ function i18nKey(subkey) {
 const M5AppHomePage = React.createClass({
     render() {
         return (
-            <div className="appHomePage">
+            <div className="m5AppHomePage">
                 <div className="appHomePageWidthConstraint">
                     <div className="homePanel topPanel">
                         <div className="topPanelContent">
