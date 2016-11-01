@@ -128,7 +128,7 @@ export let RecordRoute = React.createClass({
     getTitle() {
         const {recordId} = this.props.params;
         const tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
-        return <div className="title">{tableName} # {recordId}</div>;
+        return <div className="title"><TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/><span> {tableName} # {recordId}</span></div>;
     },
 
     getStageHeadline() {

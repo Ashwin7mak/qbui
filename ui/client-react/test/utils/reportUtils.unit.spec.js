@@ -167,3 +167,62 @@ describe('ReportUtils - test getGListString', () => {
         });
     });
 });
+
+describe('ReportUtils - test findGroupedRecord', () => {
+
+    let ungroupedReportData = [
+        {recId: {value:1}, data: 1},
+        {recId: {value:2}, data: 2},
+        {recId: {value:3}, data: 3}
+    ];
+
+    let groupedReportData = [
+            {recId: {value:1}, data: 1},
+            {recId: {value:2}, data: 2},
+            {children: [
+                {recId: {value:3}, data: 3},
+                {recId: {value:4}, data: 4}
+            ]}
+    ];
+
+    // expected use
+    it('finds recId in grouped report', () => {
+        let rec = ReportUtils.findGroupedRecord(groupedReportData, 2, "recId");
+        expect(rec).not.toEqual(null);
+        expect(rec.data).toBe(2);
+
+        // find nested record
+        rec = ReportUtils.findGroupedRecord(groupedReportData, 3, "recId");
+        expect(rec).not.toEqual(null);
+        expect(rec.data).toBe(3);
+    });
+
+    // also works for ungrouped report
+    it('finds recId in ungrouped report', () => {
+        let rec = ReportUtils.findGroupedRecord(ungroupedReportData, 2, "recId");
+        expect(rec).not.toEqual(null);
+        expect(rec.data).toBe(2);
+    });
+
+    // returns null if record not found
+    it('returns null if record not found', () => {
+
+        // record not present
+        let rec = ReportUtils.findGroupedRecord(groupedReportData, 999, "recId");
+        expect(rec).toEqual(null);
+
+        rec = ReportUtils.findGroupedRecord(ungroupedReportData, 999, "recId");
+        expect(rec).toEqual(null);
+
+        // record exists but key field incorrect
+        rec = ReportUtils.findGroupedRecord(ungroupedReportData, 2, "recIdTYPO");
+        expect(rec).toEqual(null);
+
+        // no records, always return null
+        rec = ReportUtils.findGroupedRecord([], 2, "recId");
+        expect(rec).toEqual(null);
+
+        rec = ReportUtils.findGroupedRecord({}, 2, "recId");
+        expect(rec).toEqual(null);
+    });
+});

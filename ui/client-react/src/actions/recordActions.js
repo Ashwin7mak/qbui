@@ -60,12 +60,9 @@ let recordActions = {
         return new Promise((resolve, reject) => {
             let record = getRecord(recordChanges, fields);
 
-            // map the record array to an object with fids as keys since that's the recordChanges object format
-            let changes = record.reduce((obj, val) => {obj[val.id] = val; return obj;}, {});
-
             if (appId && tblId && record) {
 
-                this.dispatch(actions.ADD_RECORD, {appId, tblId, changes});
+                this.dispatch(actions.ADD_RECORD, {appId, tblId, changes:recordChanges});
 
                 let recordService = new RecordService();
 
@@ -280,12 +277,6 @@ let recordActions = {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.saveRecord:');
                         this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error.response});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
-                        reject();
-                    }
-                ).catch(
-                    ex => {
-                        logger.logException(ex);
-                        this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: ex});
                         reject();
                     }
                 );

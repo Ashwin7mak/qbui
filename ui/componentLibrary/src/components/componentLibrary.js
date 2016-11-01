@@ -41,6 +41,7 @@ var ComponentLibraryWrapper = React.createClass({
                             <li><Link to="/components/qbpanel" activeClassName="active">QBPanel</Link></li>
                             <li><Link to="/components/qbicon" activeClassName="active">QBIcon</Link></li>
                             <li><Link to="/components/trowser" activeClassName="active">Trowser</Link></li>
+                            <li><Link to="/components/qBModal" activeClassName="active">QBModal</Link></li>
                         </ul>
                     </nav>
                 </div>

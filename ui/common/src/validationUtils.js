@@ -13,6 +13,7 @@
     var dataErrs = require('./dataEntryErrorCodes');
     var constants = require('./constants');
     var _ = require('lodash');
+    var EmailValidator = require('./validator/emailValidator');
 
     module.exports = {
 
@@ -87,6 +88,18 @@
                     hadNum: value.length
                 };
             }
+
+            // Type specific validators
+            if (_.has(fieldDef, 'datatypeAttributes.type')) {
+                switch (fieldDef.datatypeAttributes.type) {
+                case constants.EMAIL_ADDRESS :
+                    // Uncomment the line below to activate email validation
+                    // results = EmailValidator.validateAndReturnResults(value, name, results);
+                    break;
+                }
+
+            }
+
             return results;
         }
 

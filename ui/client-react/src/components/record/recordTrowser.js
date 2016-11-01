@@ -11,7 +11,6 @@ import Loader from 'react-loader';
 import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
-import {browserHistory} from 'react-router';
 import _ from 'lodash';
 
 import './recordTrowser.scss';
