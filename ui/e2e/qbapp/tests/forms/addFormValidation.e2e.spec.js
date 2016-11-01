@@ -70,9 +70,6 @@
                 formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
                     formsPage.verifyErrorMessages(expectedErrorMessages);
                 });
-            }).then(function() {
-                //finally close the form
-                formsPage.clickFormCloseBtn();
                 done();
             });
         });

@@ -9,7 +9,7 @@
     var FormsPage = requirePO('formsPage');
     var formsPage = new FormsPage();
 
-    describe('Edit Form Tests', function() {
+    describe('Edit a record Via Form Tests', function() {
         var realmName;
         var realmId;
         var app;
@@ -78,7 +78,7 @@
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "3"));
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //click edit record from the grid recordActions
-                reportServicePage.clickEditPencilOnStage(5);
+                reportServicePage.clickEditPencilOnStage(3);
                 reportServicePage.waitForElement(formsPage.formEditContainerEl);
                 // Check that the add form container is displayed
                 expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
@@ -99,7 +99,7 @@
                     e2eBase.sleep(browser.params.smallSleep);
                     expect(reportServicePage.reportRecordsCount.getText()).toContain('7 records');
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(5, fieldTypeClassNames[j]);
+                        formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
                     }
                     done();
                 });

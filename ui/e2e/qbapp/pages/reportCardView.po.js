@@ -8,7 +8,7 @@
 
     var date = new Array();
     date = new Date().toJSON().slice(0, 10).split('-');
-    var sText = rawValueGenerator.generateString(10);
+    var sText = '9782341234';
     var sNumeric = rawValueGenerator.generateInt(1, 100);
     var sTime = "12:00 am";
 
@@ -213,11 +213,6 @@
                     if (fieldType === 'checkbox') {
                         expect(elm.element(by.className('iconTableUISturdy-check')).isPresent()).toBeTruthy();
                     }
-                });
-            }).then(function() {
-                //finally return to report table page
-                return self.recordFormActionReturnToReportBtn.click().then(function() {
-                    self.waitForReportReady();
                 });
             });
 

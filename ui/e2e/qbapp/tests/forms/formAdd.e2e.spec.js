@@ -9,7 +9,7 @@
     var FormsPage = requirePO('formsPage');
     var formsPage = new FormsPage();
 
-    describe('Edit Form Tests', function() {
+    describe('Add a record Via Form Tests', function() {
         var realmName;
         var realmId;
         var app;

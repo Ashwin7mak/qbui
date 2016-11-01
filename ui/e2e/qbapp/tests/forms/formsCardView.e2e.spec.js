@@ -11,7 +11,7 @@
     var formsPage = new FormsPage();
     var reportCardViewPage = new ReportCardViewPage();
 
-    describe('Edit Form Tests', function() {
+    describe('Add and Edit a record via Form in Card View Tests', function() {
         var realmName;
         var realmId;
         var app;
@@ -64,7 +64,7 @@
         it('Add a record from the form', function(done) {
             //TODO textField.Right now even phone no field says textField. So can't enter values and save record
             //TODO 'dateCell', 'timeCell' in small breakpoints dosent work typing in date and time.
-            var fieldTypeClassNames = ['numericField', 'checkbox'];
+            var fieldTypeClassNames = ['textField', 'numericField', 'checkbox'];
             formsPage.waitForElement(reportCardViewPage.loadedContentEl).then(function() {
                 //click on add record button
                 reportCardViewPage.clickAddRecord();
@@ -89,7 +89,7 @@
         });
 
         it('Edit a record from the form and Verify Save Functionality', function(done) {
-            var fieldTypeClassNames = ['numericField'];
+            var fieldTypeClassNames = ['textField', 'numericField'];
             //Select record 1
             reportCardViewPage.clickRecord(1);
             reportCardViewPage.clickEditRecord();
@@ -117,7 +117,7 @@
         });
 
         it('Edit a record from the form and Verify Save And Next functionality', function(done) {
-            var fieldTypeClassNames = ['numericField'];
+            var fieldTypeClassNames = ['textField', 'numericField'];
             //Select record 1
             reportCardViewPage.clickRecord(4);
             reportCardViewPage.clickEditRecord();

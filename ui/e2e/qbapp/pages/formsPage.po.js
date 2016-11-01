@@ -15,8 +15,6 @@
     var date = new Array();
     date = new Date().toJSON().slice(0, 10).split('-');
     var sText = '9782341234';
-    var sEmail = 'abcdefghijkl@gmail.com';
-    var sUrl = 'http://abcdefgh.co.uk/test';
     var sNumeric = rawValueGenerator.generateInt(1, 100);
     var sTime = "12:00 am";
 
@@ -121,13 +119,7 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        if (elm.getAttribute('type') === 'email') {
-                            return elm.clear().sendKeys(sEmail);
-                        } else if (elm.getAttribute('type') === 'url') {
-                            return elm.clear().sendKeys(sUrl);
-                        } else if (elm.getAttribute('type') === 'text') {
-                            return elm.clear().sendKeys(sText);
-                        }
+                        return elm.clear().sendKeys(sText);
                     });
                 } else if (fieldLabel === 'numericField') {
                     //enter numeric fields
