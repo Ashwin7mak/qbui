@@ -19,6 +19,7 @@ const appModalId = 'appModal';
 function ShowAppModal(modalDetails) {
     modalDetails = Object.assign(modalDetails, {showModal: true});
     let showModalEvent = new CustomEvent(SHOW_APP_MODAL_EVENT, {detail: modalDetails});
+    debugger;
     document.querySelector(`#${appModalId}`).dispatchEvent(showModalEvent);
 }
 

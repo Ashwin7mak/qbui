@@ -12,6 +12,7 @@ import QBErrorMessage from "../QBErrorMessage/qbErrorMessage";
 import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
 import _ from 'lodash';
+import AppHistory from '../../globals/appHistory';
 
 import {ShowAppModal, HideAppModal} from '../qbModal/appQbModalFunctions';
 
@@ -285,16 +286,7 @@ let RecordTrowser = React.createClass({
         const flux = this.getFlux();
 
         if (this.props.pendEdits && this.props.pendEdits.isPendingEdit) {
-            ShowAppModal({
-                type: 'alert',
-                messageI18nKey: 'pendingEditModal.modalBodyMessage',
-                primaryButtonI18nKey: 'pendingEditModal.modalSaveButton',
-                primaryButtonOnClick: this.saveAndClose,
-                middleButtonI18nKey: 'pendingEditModal.modalDoNotSaveButton',
-                middleButtonOnClick: this.clearEditsAndClose,
-                leftButtonI18nKey: 'pendingEditModal.modalStayButton',
-                leftButtonOnClick: function() {HideAppModal();}
-            });
+            AppHistory.showPendingEditsConfirmationModal(this.saveAndClose, this.clearEditsAndClose, function() {HideAppModal();});
         } else {
             WindowLocationUtils.pushWithoutQuery();
             flux.actions.hideTrowser();

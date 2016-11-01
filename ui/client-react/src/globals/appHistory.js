@@ -78,7 +78,7 @@ class AppHistory {
             }
 
             if (this.hasPendingEdits()) {
-                this._showModal();
+                this.showPendingEditsConfirmationModal();
             } else {
                 return self._continueToDestination();
             }
@@ -105,16 +105,22 @@ class AppHistory {
         return (self && self.pendEdits && self.pendEdits.isPendingEdit);
     }
 
-    _showModal() {
+    /**
+     * Displays a modal that asks a user about unsaved changes
+     * @param onSave Function that handles if the user wants to save changes and then continue
+     * @param onDisard Function that handles if the user wants to discard changes and then continue
+     * @param onCancel Function that handles if the user wants to cancel navigation
+     */
+    showPendingEditsConfirmationModal(onSave, onDiscard, onCancel) {
         ShowAppModal({
             type: 'alert',
             messageI18nKey: 'pendingEditModal.modalBodyMessage',
             primaryButtonI18nKey: 'pendingEditModal.modalSaveButton',
-            primaryButtonOnClick: self._saveChanges,
+            primaryButtonOnClick: (onSave ? onSave : self._saveChanges),
             middleButtonI18nKey: 'pendingEditModal.modalDoNotSaveButton',
-            middleButtonOnClick: self._discardChanges,
+            middleButtonOnClick: (onDiscard ? onDiscard : self._discardChanges),
             leftButtonI18nKey: 'pendingEditModal.modalStayButton',
-            leftButtonOnClick: self._haltRouteChange
+            leftButtonOnClick: (onCancel ? onCancel : self._haltRouteChange)
         });
     }
 

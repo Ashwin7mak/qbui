@@ -135,6 +135,40 @@ describe('AppHistory', () => {
         });
     });
 
+    describe('showPendingEditsConfirmationModal', () => {
+        it('shows a default confirmation modal for allowing the user to decide what to do if they have unsaved changed', () => {
+            let mockShowAppModal = jasmine.createSpy('ShowAppModal');
+            AppHistory.__Rewire__('ShowAppModal', mockShowAppModal);
+
+
+            AppHistory.showPendingEditsConfirmationModal();
+
+            expect(mockShowAppModal).toHaveBeenCalled();
+        });
+
+        it('accepts alternate functions that will be called when various buttons on the modal are clicked', () => {
+            let mockShowAppModal = jasmine.createSpy('ShowAppModal');
+            AppHistory.__Rewire__('ShowAppModal', mockShowAppModal);
+
+            let fakeSaveFunction = function() {};
+            let fakeDiscardFunction = function() {};
+            let fakeCancelFunction = function() {};
+
+            AppHistory.showPendingEditsConfirmationModal(fakeSaveFunction, fakeDiscardFunction, fakeCancelFunction);
+
+            expect(mockShowAppModal).toHaveBeenCalledWith({
+                type: 'alert',
+                messageI18nKey: 'pendingEditModal.modalBodyMessage',
+                primaryButtonI18nKey: 'pendingEditModal.modalSaveButton',
+                primaryButtonOnClick: fakeSaveFunction,
+                middleButtonI18nKey: 'pendingEditModal.modalDoNotSaveButton',
+                middleButtonOnClick: fakeDiscardFunction,
+                leftButtonI18nKey: 'pendingEditModal.modalStayButton',
+                leftButtonOnClick: fakeCancelFunction
+            });
+        });
+    });
+
     describe('user selects an action when leaving a dirty form', () => {
         afterEach(() => {
             // Reset the singleton after each test
@@ -154,11 +188,11 @@ describe('AppHistory', () => {
         it('displays a modal which allows a user to choose what they want to do with unsaved changes', () => {
             AppHistory.setup(mockFluxWithNewRecord);
 
-            spyOn(AppHistory, '_showModal');
+            spyOn(AppHistory, 'showPendingEditsConfirmationModal');
 
             goToNewPage();
 
-            expect(AppHistory._showModal).toHaveBeenCalled();
+            expect(AppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
         });
 
         it('saves any pending edits before navigating away (existing record)', done => {
