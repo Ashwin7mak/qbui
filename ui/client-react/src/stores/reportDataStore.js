@@ -207,7 +207,12 @@ let reportModel = {
      */
     findRecordById(records, recId) {
         recId = recId ? +recId : recId;
-        return records.find(rec => rec[this.model.keyField.name].value === recId);
+
+        if (this.model.hasGrouping) {
+            return ReportUtils.findGroupedRecord(records, recId, this.model.keyField.name);
+        } else {
+            return records.find(rec => rec[this.model.keyField.name].value === recId);
+        }
     },
 
     /**

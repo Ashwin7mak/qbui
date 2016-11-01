@@ -69,6 +69,16 @@
       @include height-xlarge-breakpoint {
         max-height: 980px;
       }
+
+      @include small-breakpoint {
+        @include height-small-breakpoint {
+          max-height: 420px;
+        }
+
+        @include height-medium-breakpoint {
+          max-height: 550px;
+        }
+      }
     }
 
     .panel > .list-group .list-group-item,
@@ -241,8 +251,6 @@
   }
 }
 
-
-
 @include small-breakpoint {
     .selectedFacets {
         display:none;
@@ -253,9 +261,7 @@
         input {
             color: $search-input-fg;
         }
-        .popover-content {
-            max-height: 454px;
-        }
+
         .facetMenuPopup {
             display: block;
             min-width: 150px;
@@ -276,6 +282,5 @@
         .popover.bottom > .arrow {
             display: none;
         }
-
     }
 }
