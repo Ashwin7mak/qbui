@@ -47,8 +47,10 @@ class FacetsAspect extends Component {
             <ListGroupItem
                            onClick={(e)=>this.props.handleSelectValue(e, this.props.facet, itemValue)}
                            className={this.props.isSelected  ? "selected" : ""}>
-                <QBicon className={this.props.isSelected  ? "checkMark-selected" : "checkMark"} icon="check" />
-                {itemValue}
+                <span className="list-group-item-inner-wrapper">
+                    <QBicon className={this.props.isSelected  ? "checkMark-selected" : "checkMark"} icon="check" />
+                    {itemValue}
+                </span>
             </ListGroupItem>
         );
     }

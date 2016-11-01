@@ -14,6 +14,7 @@ import {withRouter} from 'react-router';
 import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import RecordHeader from './recordHeader';
 import _ from 'lodash';
 import './record.scss';
 
@@ -40,7 +41,7 @@ export let RecordRoute = React.createClass({
     },
     componentDidMount() {
         let flux = this.getFlux();
-        flux.actions.showTopNav();
+        flux.actions.hideTopNav();
         flux.actions.setTopTitle();
 
         this.loadRecordFromParams(this.props.params);
@@ -124,38 +125,45 @@ export let RecordRoute = React.createClass({
         this.navigateToRecord(appId, tblId, rptId, nextRecordId);
     },
 
+    getTitle() {
+        const {recordId} = this.props.params;
+        const tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
+        return <div className="title"><TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/><span> {tableName} # {recordId}</span></div>;
+    },
+
     getStageHeadline() {
         if (this.props.params) {
-            const {appId, tblId, rptId, recordId} = this.props.params;
+            const {appId, tblId, rptId} = this.props.params;
 
             const tableLink = `/app/${appId}/table/${tblId}`;
 
+            const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
             const showNext = !!(this.props.reportData && this.props.reportData.nextRecordId !== null);
-
-            const formName = this.props.form && this.props.form.formData && this.props.form.formData.formMeta && this.props.form.formData.formMeta.name;
-            const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
 
             return (<div className="recordStageHeadline">
 
                 <div className="navLinks">
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}</Link>}
-                    {this.props.selectedTable && rptId && <span>&nbsp;&gt;&nbsp;</span>}
+                    {this.props.selectedTable && rptId && <span className="color-black-700">&nbsp;:&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
-
                 <div className="stageHeadline iconActions">
 
                     {(showBack || showNext) && <div className="iconActions">
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
-                            <Button className="iconActionButton prevRecord" disabled={!showBack} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>
-                        </OverlayTrigger>
-                        <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
-                            <Button className="iconActionButton nextRecord" disabled={!showNext} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
-                        </OverlayTrigger>
+                        {showBack ?
+                            <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Previous Record</Tooltip>}>
+                                <Button className="iconActionButton prevRecord" onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>
+                            </OverlayTrigger> :
+                            <Button className="iconActionButton prevRecord" disabled={true} onClick={this.previousRecord}><QBicon icon="caret-filled-left"/></Button>}
+                        {showNext ?
+                            <OverlayTrigger placement="bottom" overlay={<Tooltip id="prev">Next Record</Tooltip>}>
+                                <Button className="iconActionButton nextRecord" onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>
+                            </OverlayTrigger> :
+                            <Button className="iconActionButton nextRecord" disabled={true} onClick={this.nextRecord}><QBicon icon="caret-filled-right"/></Button>}
                     </div> }
 
-                    <h3 className="formName">{formName} #{recordId}</h3>
+                    {this.getTitle()}
 
                 </div>
             </div>);
@@ -232,6 +240,7 @@ export let RecordRoute = React.createClass({
                         </div>
                     </Stage>
 
+                    <RecordHeader title={this.getTitle()}/>
                     <div className="recordActionsContainer secondaryBar">
                         {this.getSecondaryBar()}
                         {this.getPageActions()}

@@ -239,8 +239,36 @@ class ReportUtils {
         }
         return sortListObj;
     }
+
+    /*
+     * find record in grouped records report
+     *
+     * @param node node in grouped record tree
+     * @param recId record id to find
+     * @param keyName key field name
+     */
+    static findGroupedRecord(node, recId, keyName) {
+
+        if (Array.isArray(node)) {
+            return ReportUtils.findGroupedRecord({children: node}, recId, keyName);
+        }
+        if (node[keyName] && node[keyName].value === recId) {
+            return node;
+        }
+        if (node.children) {
+            let result = null;
+
+            for (let i = 0; result === null && i < node.children.length; i++) {
+                result = ReportUtils.findGroupedRecord(node.children[i], recId, keyName);
+            }
+            return result;
+        }
+        return null;
+    }
+
 }
 
 ReportUtils.listDelimiter = listDelimiter;
 ReportUtils.groupDelimiter = groupDelimiter;
+
 export default ReportUtils;

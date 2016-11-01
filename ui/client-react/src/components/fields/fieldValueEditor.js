@@ -113,7 +113,7 @@ const FieldValueEditor = React.createClass({
         /**
          * how to identify the field input
          */
-        idKey : React.PropTypes.any
+        idKey : React.PropTypes.any,
     },
 
     getDefaultProps() {
@@ -164,7 +164,7 @@ const FieldValueEditor = React.createClass({
 
         switch (type) {
         case FieldFormats.CHECKBOX_FORMAT: {
-            return <CheckBoxFieldValueEditor {...commonProps} />;
+            return <CheckBoxFieldValueEditor {...commonProps} label={this.props.label} />;
         }
 
         case FieldFormats.DATE_FORMAT: {

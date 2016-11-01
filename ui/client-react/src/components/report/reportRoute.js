@@ -54,6 +54,7 @@ const ReportRoute = React.createClass({
         return (
             <ReportHeader reportData={this.props.reportData}
                           nameForRecords={this.nameForRecords}
+                          searchData={this.props.reportSearchData}
                 {...this.props}
             />);
     },

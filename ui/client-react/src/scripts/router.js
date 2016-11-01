@@ -1,7 +1,8 @@
 //these two imports are needed for safari and iOS to work with internationalization
 import React from "react";
 import ReactDOM, {render} from "react-dom";
-import {Router, Route, IndexRoute, browserHistory} from "react-router";
+import {Router, Route, IndexRoute} from "react-router";
+import AppHistory from '../globals/appHistory';
 import Nav from "../components/nav/nav";
 import Fluxxor from "fluxxor";
 import ReportsStore from "../stores/reportsStore";
@@ -169,8 +170,10 @@ let Apps = React.createClass({
     }
 });
 
+let history = AppHistory.setup(flux).history;
+
 render((
-    <Router history={browserHistory}>
+    <Router history={history}>
         <Route path="/" component={Apps} />
 
         <Route path="apps" component={NavWrapper} >

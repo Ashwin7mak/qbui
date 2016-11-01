@@ -6,6 +6,12 @@ export default {
         apps: {
             header: "Vos Apps"
         },
+        pendingEditModal: {
+            modalBodyMessage: "Enregistrer les modifications avant de quitte?",
+            modalStayButton: "Restez et continuer à travailler",
+            modalDoNotSaveButton: "Ne pas enregistrer",
+            modalSaveButton: "Sauvegarder"
+        },
         reports : {
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
             emailSubject: "'{reportName}' rapport depuis l'application QuickBase '{appName}'",
@@ -44,7 +50,8 @@ export default {
             previousRecord: "Previous enregistrement",
             save: "Sauver",
             saveAndNext: "Sauver et prochain",
-            saveAndAddAnother: "Sauver et ajouter un autre"
+            saveAndAddAnother: "Sauver et ajouter un autre",
+            new: "Nouveau"
         },
         field: {
             search: "Chercher",

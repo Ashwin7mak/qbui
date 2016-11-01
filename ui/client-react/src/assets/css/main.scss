@@ -56,3 +56,8 @@ p, .p {
   font-style: italic;
   font-size: $font-size-placeholder;
 }
+
+//firefox marks email & url input type fields invalid before submit, not what xd wants
+input:-moz-ui-invalid {
+  box-shadow: none;
+}
