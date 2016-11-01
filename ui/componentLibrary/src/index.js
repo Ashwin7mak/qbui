@@ -43,6 +43,7 @@ import UserFieldEditorDoc from './docs/userFieldValueEditor';
 import UserFieldRendererDoc from './docs/userFieldValueRenderer';
 import QBPanelDoc from './docs/qbpanel';
 import QBIconDoc from './docs/qbicon';
+import QBModalDoc from './docs/qbModal.js';
 
 // END OF IMPORT STATEMENTS
 // Above comment used for Grunt task. Please do not delete.
@@ -75,6 +76,7 @@ render((
             <Route path="userFieldEditor" component={UserFieldEditorDoc} />
             <Route path="qbpanel" component={QBPanelDoc} />
             <Route path="qbicon" component={QBIconDoc} />
+            <Route path="qBModal" component={QBModalDoc} />
         </Route>
     </Router>
 ), document.getElementById('content'));

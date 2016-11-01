@@ -1,0 +1,188 @@
+@import '../../assets/css/_qbVariables';
+@import '../../assets/css/_qbColorVariables';
+
+.qbModal {
+    .bodyContainer {
+        display: flex;
+        margin-bottom: 10px;
+    }
+
+    .modal-content {
+        border-bottom: none;
+        border-left: 30px white solid;
+        border-radius: 2px;
+        border-right: 30px white solid;
+        border-top: none;
+        padding-top: 10px;
+
+        @include small-breakpoint {
+          border-left: 10px white solid;
+          border-radius: 0;
+          border-right: 10px white solid;
+        }
+    }
+
+    .modal-dialog {
+        margin: 200px auto;
+        width: 450px;
+
+        @include small-breakpoint {
+            margin: 0 auto;
+            width: 100%;
+        }
+    }
+
+    .modal-backdrop.in {
+        opacity: 0.5;
+    }
+
+    .modal-backdrop {
+        background-color: $color-black-800;
+    }
+
+    .modal-content {
+        border-bottom: none;
+        border-left: 30px white solid;
+        border-radius: 2px;
+        border-right: 30px white solid;
+        border-top: none;
+
+        @include small-breakpoint {
+            border-left: 10px white solid;
+            border-radius: 0px;
+            border-right: 10px white solid;
+        }
+    }
+
+    .modal-dialog {
+        margin: 200px auto;
+        width: 450px;
+
+      @include small-breakpoint {
+          margin: 0 auto;
+          width: 100%;
+      }
+    }
+
+    .modal-body {
+        margin-top: -5px;
+        padding: 0;
+    }
+
+    .modal-footer {
+        border-top: 1px solid $color-black-300;
+        padding-bottom: 20px;
+        padding-top: 20px;
+
+      @include small-breakpoint {
+          padding-left: 0;
+          padding-right: 0;
+      }
+    }
+
+    .title {
+        font-size: $font-size-h2;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .text {
+        font-size: $font-size-h4;
+        margin-top: 30px;
+
+        @include small-breakpoint{
+            font-size: $font-size-h4;
+            margin-top: 24px;
+        }
+    }
+
+    .textIsBusy{
+        height: 200px;
+        padding-left: 100px;
+        padding-top: 90px;
+        margin-bottom: 10px;
+        font-size: 44px;
+    }
+
+    .textWithTitle {
+        font-size: $font-size-p;
+    }
+
+    .modalIcon {
+        display: inline-block;
+        font-size: 44px;
+        padding-top: 12px;
+        padding-right: 10px;
+
+        @include small-breakpoint {
+            font-size: 40px;
+            padding-top: 9px;
+        }
+    }
+
+    .modalIcon--alert {
+        color: $color-orange-500;
+    }
+
+    .modalIcon--success {
+        color: $color-green-600;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: flex-end;
+
+        @include small-breakpoint {
+            flex-direction: column-reverse;
+
+            .btn {
+                display: block;
+                margin-left: 0;
+                margin-right: 0;
+                width: 100%;
+
+                // It is first-child (not last-child) because of 'column-reverse' above
+                &:not(:first-child) {
+                  margin-bottom: 20px;
+              }
+            }
+        }
+    }
+
+    .secondaryButton {
+        background-color: $color-black-200;
+        color: $color-indigo-700;
+        stroke: $color-black-300;
+    }
+
+    .leftButton {
+        margin-left: -15px;
+        margin-right: auto;
+    }
+
+    .middleButton {
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    .primaryButton {
+        color: $color-black-100;
+        background-color: $color-indigo-700;
+        display: inline-block;
+        margin-right: -15px;
+    }
+
+    .singlePrimaryButtonContainer {
+        justify-content: center;
+        align-items: center;
+
+      .primaryButton {
+          margin-right: 0;
+      }
+    }
+
+    .smallText {
+        font-size: $font-size-h4;
+        padding-bottom: 100px;
+    }
+}

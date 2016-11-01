@@ -48,22 +48,22 @@ $medium-breakpoint-height: 900px;
 $large-breakpoint-height: 1200px;
 
 @mixin height-small-breakpoint {
-    @media (max-height: #{$small-breakpoint-height}) {
+    @media (max-height: #{$small-breakpoint-height - 1px}) {
         @content;
     }
 }
 @mixin height-medium-breakpoint {
-    @media (min-height: #{$small-breakpoint-height + 1px}) and (max-height: #{$medium-breakpoint-height}) {
+    @media (min-height: #{$small-breakpoint-height}) and (max-height: #{$medium-breakpoint-height - 1px}) {
         @content;
     }
 }
 @mixin height-large-breakpoint {
-    @media (min-height: #{$medium-breakpoint-height + 1px}) and (max-height: #{$large-breakpoint-height}) {
+    @media (min-height: #{$medium-breakpoint-height}) and (max-height: #{$large-breakpoint-height - 1px}) {
         @content;
     }
 }
 @mixin height-xlarge-breakpoint {
-    @media (min-height: #{$large-breakpoint-height + 1px}) {
+    @media (min-height: #{$large-breakpoint-height}) {
         @content;
     }
 }

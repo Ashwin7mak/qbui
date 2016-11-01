@@ -9,6 +9,12 @@ export default {
         apps: {
             header: "Apps"
         },
+        pendingEditModal: {
+            modalBodyMessage: "Save changes before leaving?",
+            modalStayButton: "Stay and keep working",
+            modalDoNotSaveButton: "Don\'t Save",
+            modalSaveButton: "Save"
+        },
         reports : {
             emailReportTooltip: "Share these records with someone else",
             emailSubject: "'{reportName}' report from the QuickBase app '{appName}'",
@@ -47,7 +53,8 @@ export default {
             previousRecord: "Previous Record",
             save: "Save",
             saveAndNext: "Save & Next",
-            saveAndAddAnother: "Save & add another"
+            saveAndAddAnother: "Save & add another",
+            new: "New"
         },
         field: {
             search: "Search",
@@ -197,7 +204,7 @@ export default {
             errorMessagePopupHeader: {
                 singleErrorLabel: "Please fix this field",
                 multipleErrorLabelPrefix: "Please fix these",
-                multipleErrorLabelSuffix: "fileds",
+                multipleErrorLabelSuffix: "fields",
             },
             errorAlertIconTooltip: {
                 showErrorPopup: "Show error list",
