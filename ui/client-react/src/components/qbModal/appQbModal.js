@@ -1,10 +1,7 @@
 import React from 'react';
 import QbModal from './qbModal';
 import Locale from '../../locales/locales';
-
-const SHOW_APP_MODAL_EVENT = 'showAppModal';
-const HIDE_APP_MODAL_EVENT = 'hideAppModal';
-const appModalId = 'appModal';
+import {SHOW_APP_MODAL_EVENT, HIDE_APP_MODAL_EVENT, appModalId} from './appQbModalFunctions';
 
 const blankModal = {
     showModal: false,

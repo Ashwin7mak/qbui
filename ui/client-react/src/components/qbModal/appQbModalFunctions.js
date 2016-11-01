@@ -37,4 +37,4 @@ function HideAppModal() {
     }
 }
 
-export {ShowAppModal, HideAppModal};
+export {ShowAppModal, HideAppModal, SHOW_APP_MODAL_EVENT, HIDE_APP_MODAL_EVENT, appModalId};
