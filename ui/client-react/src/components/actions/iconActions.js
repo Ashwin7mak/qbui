@@ -53,7 +53,6 @@ let IconActions = React.createClass({
     getInitialState() {
         return {
             dropdownOpen: false,
-            dropupOpen: false
         };
     },
     /**
@@ -85,39 +84,15 @@ let IconActions = React.createClass({
 
     /* callback from opening pickle menu */
     onDropdownToggle(open) {
-        let agBody = document.querySelector(".ag-body-container");
-        console.log('agBody: ', agBody);
         this.setState({dropdownOpen: open});
-        if (open) {
-            agBody.classList.add("marginBottomForPopUp");
+        //This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up
+            //it will remove the white space if the menu is close
+        let agBody = document.querySelector(".ag-body-container");
+        if (agBody.style.marginBottom !== "150px") {
             agBody.style.marginBottom = "150px";
         } else {
             agBody.style.marginBottom = null;
-            agBody.classList.remove("marginBottomForPopUp");
         }
-    },
-    componentDidUpdate() {
-        // console.log('this.refs.dropDownMenu: ', this.ref.dropDownMenuG);
-        // console.log('componentDidUpdate========================================');
-        // let tempDomNode = document.getElementsByClassName("dropdown-menu");
-        // console.log('tempDomNode: ', tempDomNode);
-        // for (let i = 0; i < tempDomNode.length; i++) {
-        //     console.log("Client Height: ", tempDomNode[i].clientHeight);
-        //     if (tempDomNode[i].clientHeight > 0) {
-        //         let fromTop = tempDomNode[i].getBoundingClientRect().top;
-        //         let overlap = fromTop + tempDomNode[i].clientHeight;
-        //         if (overlap > window.innerHeight) {
-        //             this.setState({dropdownOpen: false, dropupOpen: true});
-        //             return;
-        //             //32 is the column height, it adjusts the pixels
-        //             // let extra = overlap - (window.innerHeight - 32);
-        //             // tempDomNode[i].style.top = "auto";
-        //             // tempDomNode[i].style.bottom = '"' + extra + "px";
-        //             // debugger;
-        //         }
-        //     }
-        // }
-        // console.log('componentDidUpdate=========================================');
     },
     /**
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
