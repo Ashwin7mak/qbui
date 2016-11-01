@@ -507,7 +507,7 @@
             this.deleteIcon.click();
         };
 
-        //
+        // Success window assertion that comes on delete, add and edit of a row
         this.assertSuccessMessage = function(successMessage) {
             var self = this;
             this.waitForElement(self.successWindow).then(function() {
