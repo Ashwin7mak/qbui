@@ -87,21 +87,7 @@ let AppHomePageRoute = React.createClass({
     render: function() {
         let isSmall = Breakpoints.isSmallBreakpoint();
 
-        let content = <M5AppHomePage />;
-
-        if (isSmall) {
-            content = (
-                <div className="appHomePageContainer">
-                    <div className="appHomePageActionsContainer secondaryBar">
-                        {this.getSecondaryBar()}
-                        {this.getPageActions(2)}
-                    </div>
-                    <M5AppHomePage />
-                </div>
-            );
-        }
-
-        return content;
+        return <M5AppHomePage />;
     }
 });
 
