@@ -13,6 +13,8 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import * as SchemaConsts from "../../constants/schema";
 import _ from 'lodash';
 
+import {ShowAppModal, HideAppModal} from '../qbModal/appQbModalFunctions';
+
 import './recordTrowser.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -188,7 +190,7 @@ let RecordTrowser = React.createClass({
 
         // let flux now we're tranversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
-        flux.actions.recordPendingEditsCancel(appId, tblId, this.props.recId);
+        // flux.actions.recordPendingEditsCancel(appId, tblId, this.props.recId);
         flux.actions.editPreviousRecord(previousEditRecordId);
 
         flux.actions.openRecordForEdit(previousEditRecordId);
@@ -202,7 +204,7 @@ let RecordTrowser = React.createClass({
 
         // let flux now we're tranversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
-        flux.actions.recordPendingEditsCancel(appId, tblId, this.props.recId);
+        // flux.actions.recordPendingEditsCancel(appId, tblId, this.props.recId);
         flux.actions.editNextRecord(nextEditRecordId);
 
         flux.actions.openRecordForEdit(nextEditRecordId);
@@ -265,12 +267,38 @@ let RecordTrowser = React.createClass({
         flux.actions.hideTrowser();
     },
 
-    cancelEditing() {
+    saveAndClose() {
+        HideAppModal();
+        this.saveClicked();
+    },
+
+    clearEditsAndClose() {
         const flux = this.getFlux();
+
+        HideAppModal();
         flux.actions.recordPendingEditsCancel(this.props.appId, this.props.tblId, this.props.recId);
         WindowLocationUtils.pushWithoutQuery();
-
         flux.actions.hideTrowser();
+    },
+
+    cancelEditing() {
+        const flux = this.getFlux();
+
+        if (this.props.pendEdits && this.props.pendEdits.isPendingEdit) {
+            ShowAppModal({
+                type: 'alert',
+                messageI18nKey: 'pendingEditModal.modalBodyMessage',
+                primaryButtonI18nKey: 'pendingEditModal.modalSaveButton',
+                primaryButtonOnClick: this.saveAndClose,
+                middleButtonI18nKey: 'pendingEditModal.modalDoNotSaveButton',
+                middleButtonOnClick: this.clearEditsAndClose,
+                leftButtonI18nKey: 'pendingEditModal.modalStayButton',
+                leftButtonOnClick: function() {HideAppModal();}
+            });
+        } else {
+            WindowLocationUtils.pushWithoutQuery();
+            flux.actions.hideTrowser();
+        }
     },
     toggleErrorDialog() {
         if (this.props.errorPopupHidden) {
