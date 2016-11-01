@@ -147,8 +147,8 @@ const DateFieldValueEditor = React.createClass({
             classes.push(this.props.classes);
         }
 
-        let theDate = null;
-        if (this.props.value !== null) {
+        let theDate = undefined;
+        if (this.props.value && this.props.value !== null) {
             if (useNativeInput) {
                 theDate = moment(this.props.value.replace(/(\[.*?\])/, '')).format(DATE_FORMATTED);
             } else {
