@@ -236,24 +236,24 @@
                     // Get the report data back, check for sortList prop which also contains groupBy
                     recordBase.apiBase.executeRequest(reportEndpoint + r.id, consts.GET).then(function(reportGetResult) {
                         var reportResults = JSON.parse(reportGetResult.body);
+                        var metaData = JSON.parse(reportResults.body);
                         //verify report Meta Data
-                        assert.strictEqual(reportResults.reportMetaData.data.name, reportToCreate.name, 'Unexpected report name returned in reportMetaData');
-                        assert.strictEqual(reportResults.reportMetaData.data.description, reportToCreate.description, 'Unexpected report description returned in reportMetaData');
-                        assert.strictEqual(reportResults.reportMetaData.data.type, reportToCreate.type, 'Unexpected report type returned in reportMetaData');
-                        assert.strictEqual(reportResults.reportMetaData.data.tableId, reportToCreate.tableId, 'Unexpected tableId returned in reportMetaData');
-                        assert.deepStrictEqual(reportResults.reportMetaData.data.sortList, testcase.sortList, 'Unexpected sortList returned in reportMetaData');
-                        assert.deepStrictEqual(reportResults.reportData.data.records.length, records.length, 'Unexpected records returned in reportData');
+                        assert.strictEqual(metaData.name, reportToCreate.name, 'Unexpected report name returned in reportMetaData');
+                        assert.strictEqual(metaData.description, reportToCreate.description, 'Unexpected report description returned in reportMetaData');
+                        assert.strictEqual(metaData.type, reportToCreate.type, 'Unexpected report type returned in reportMetaData');
+                        assert.strictEqual(metaData.tableId, reportToCreate.tableId, 'Unexpected tableId returned in reportMetaData');
+                        assert.deepStrictEqual(metaData.sortList, testcase.sortList, 'Unexpected sortList returned in reportMetaData');
 
                         // Execute a report and check sort order of records
                         // TODO report/results API is not getting the records sorted.So using reportComponents below to verify.
-                        recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents', consts.GET).then(function(reportResult) {
+                        recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results', consts.GET).then(function(reportResult) {
                             var results = JSON.parse(reportResult.body);
                             // Sort the expected records
                             var sortedExpectedRecords = sortRecords(records, testcase.sortFids, testcase.sortOrder);
                             // Verify sorted records
                             verifyRecords(results.records, sortedExpectedRecords);
                             // No grouping
-                            assert.equal(results.records.groups, null, 'Excepted groups object to be null when testing sort only report');
+                            assert.equal(results.groups.length, 0, 'Excepted groups object to be empty when testing sort only report');
                             done();
                         });
                     });
