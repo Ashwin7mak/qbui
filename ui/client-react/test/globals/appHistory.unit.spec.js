@@ -2,23 +2,35 @@ import AppHistory from '../../src/globals/appHistory';
 import {UNSAVED_RECORD_ID} from '../../src/constants/schema';
 import Promise from 'bluebird';
 
-let mockFunctions = {
+let currentModalDetails = null;
+let mockActions = {
     ShowAppModal(modalDetails) {
+        currentModalDetails = modalDetails;
         return modalDetails;
     },
-    HideAppModal(_modalDetails) {return true;}
+    HideAppModal(_modalDetails) {return true;},
+    clickSaveButton() {
+        currentModalDetails.primaryButtonOnClick();
+    },
+    clickStayButton() {
+        currentModalDetails.leftButtonOnClick();
+    },
+    clickDiscardChanges() {
+        currentModalDetails.middleButtonOnClick();
+    }
 };
 
-fdescribe('AppHistory', () => {
+describe('AppHistory', () => {
 
     beforeAll(() => {
-        AppHistory.__Rewire__('ShowAppModal', mockFunctions.ShowAppModal);
-        AppHistory.__Rewire__('HideAppModal', mockFunctions.HideAppModal);
+        AppHistory.__Rewire__('ShowAppModal', mockActions.ShowAppModal);
+        AppHistory.__Rewire__('HideAppModal', mockActions.HideAppModal);
     });
 
     afterAll(() => {
         AppHistory.__ResetDependency__('ShowAppModal');
         AppHistory.__ResetDependency__('HideAppModal');
+        AppHistory.reset();
     });
 
     function goToNewPage() {
@@ -52,6 +64,9 @@ fdescribe('AppHistory', () => {
 
                         if (options.done) {options.done();}
                     });
+                },
+                recordPendingEditsCancel(_appId, _tableId, _recordId) {
+                    if (options.done) {done();}
                 }
             },
             store(storeName) {
@@ -76,14 +91,10 @@ fdescribe('AppHistory', () => {
     let mockFlux = buildMockFlux();
     let mockFluxWithNewRecord = buildMockFlux({isPendingEdit: true, currentEditingRecordId: UNSAVED_RECORD_ID});
 
-    afterEach(() => {
-        // Reset the singleton before each test
-        AppHistory.reset();
-    });
-
     describe('new', () => {
         it('creates a new instance of AppHistory and builds a history object', () => {
             let appHistory = AppHistory;
+
             expect(appHistory.history).not.toBeNull();
             expect(appHistory.flux).toBeNull();
         });
@@ -101,6 +112,7 @@ fdescribe('AppHistory', () => {
     describe('setup', () => {
         it('sets an instance of fluxxor', () => {
             let appHistory = AppHistory;
+
             appHistory.setup(mockFlux);
 
             expect(appHistory.flux).toEqual(mockFlux);
@@ -123,52 +135,92 @@ fdescribe('AppHistory', () => {
         });
     });
 
-    it('routes the user to their specified destination if there are no pending edits', () => {
-        AppHistory.setup(mockFlux);
+    describe('user selects an action when leaving a dirty form', () => {
+        afterEach(() => {
+            // Reset the singleton after each test
+            currentModalDetails = null;
+        });
 
-        spyOn(AppHistory, '_continueToDestination');
+        it('routes the user to their specified destination if there are no pending edits', () => {
+            AppHistory.setup(mockFlux);
 
-        goToNewPage();
+            spyOn(AppHistory, '_continueToDestination');
 
-        expect(AppHistory._continueToDestination).toHaveBeenCalled();
+            goToNewPage();
+
+            expect(AppHistory._continueToDestination).toHaveBeenCalled();
+        });
+
+        it('displays a modal which allows a user to choose what they want to do with unsaved changes', () => {
+            AppHistory.setup(mockFluxWithNewRecord);
+
+            spyOn(AppHistory, '_showModal');
+
+            goToNewPage();
+
+            expect(AppHistory._showModal).toHaveBeenCalled();
+        });
+
+        it('saves any pending edits before navigating away (existing record)', done => {
+            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingAppId: 1, currentEditingRecordId: 1, done: done});
+            AppHistory.setup(mockFluxWithPendingEdit);
+
+            spyOn(mockFluxWithPendingEdit.actions, 'saveRecord').and.callThrough();
+            spyOn(AppHistory, '_continueToDestination').and.callThrough();
+
+            goToNewPage();
+            mockActions.clickSaveButton();
+
+            expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalled();
+            expect(AppHistory._continueToDestination).toHaveBeenCalled();
+        });
+
+        it('halts a route change if there was a problem saving the changes', done => {
+            let mockWithError = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, hasErrorOnSave: true, done: done});
+
+            AppHistory.setup(mockWithError);
+
+            spyOn(AppHistory, '_onRecordSavedError').and.callThrough();
+            spyOn(AppHistory, '_haltRouteChange').and.callThrough();
+
+
+            goToNewPage();
+            mockActions.clickSaveButton();
+
+            expect(AppHistory._onRecordSavedError).toHaveBeenCalled();
+            expect(AppHistory._haltRouteChange).toHaveBeenCalled();
+        });
+
+        it('cancels changes an continues to destination if user chooses to discard changes', () => {
+            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingAppId: 1, currentEditingRecordId: 1});
+            AppHistory.setup(mockFluxWithPendingEdit);
+
+            spyOn(mockFluxWithPendingEdit.actions, 'recordPendingEditsCancel').and.callThrough();
+            spyOn(AppHistory, '_discardChanges').and.callThrough();
+            spyOn(AppHistory, '_continueToDestination').and.callThrough();
+
+
+
+            goToNewPage();
+            mockActions.clickDiscardChanges();
+
+            expect(mockFluxWithPendingEdit.actions.recordPendingEditsCancel).toHaveBeenCalled();
+            expect(AppHistory._discardChanges).toHaveBeenCalled();
+            expect(AppHistory._continueToDestination).toHaveBeenCalled();
+        });
+
+        it('halts route change if uses chooses to stay on the pay', () => {
+            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingAppId: 1, currentEditingRecordId: 1});
+            AppHistory.setup(mockFluxWithPendingEdit);
+
+            spyOn(AppHistory, '_haltRouteChange').and.callThrough();
+
+
+            goToNewPage();
+            mockActions.clickStayButton();
+
+            expect(AppHistory._haltRouteChange).toHaveBeenCalled();
+        });
     });
-
-    it('displays a modal which allows a user to choose what they want to do with unsaved changes', () => {
-        AppHistory.setup(mockFluxWithNewRecord);
-
-        spyOn(AppHistory, '_showModal');
-
-        goToNewPage();
-
-        expect(AppHistory._showModal).toHaveBeenCalled();
-    });
-
-    // it('saves any pending edits before navigating away (existing record)', done => {
-    //     let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingAppId: 1, currentEditingRecordId: 1, done: done});
-    //     let appHistory = AppHistory.setup(mockFluxWithPendingEdit);
-    //
-    //     spyOn(mockFluxWithPendingEdit.actions, 'saveRecord').and.callThrough();
-    //     spyOn(AppHistory, '_continueToDestination').and.callThrough();
-    //
-    //     goToNewPage();
-    //
-    //     expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalled();
-    //     expect(AppHistory._continueToDestination).toHaveBeenCalled();
-    // });
-
-    // it('halts a route change if there was a problem saving the changes', done => {
-    //     let mockWithError = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, hasErrorOnSave: true, done: done});
-    //
-    //     AppHistory.setup(mockWithError);
-    //
-    //     spyOn(AppHistory, '_onRecordSavedError').and.callThrough();
-    //     spyOn(AppHistory, '_haltRouteChange').and.callThrough();
-    //
-    //
-    //     goToNewPage();
-    //
-    //     expect(AppHistory._onRecordSavedError).toHaveBeenCalled();
-    //     expect(AppHistory._haltRouteChange).toHaveBeenCalled();
-    // });
 });
 

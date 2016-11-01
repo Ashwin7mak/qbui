@@ -17,8 +17,6 @@ let self = null; // eslint-disable-line
 class AppHistory {
     constructor() {
         if (!self) {
-            self = this;
-
             // A custom browser history object that can be used by React Router
             this.history = useRouterHistory(useBeforeUnload(createHistory))();
 
@@ -35,6 +33,8 @@ class AppHistory {
             // Keep track of the event listeners so they can be canceled
             this.cancelListenBefore = null;
             this.cancelListenBeforeUnload = null;
+
+            self = this;
         }
 
         return self;
@@ -47,9 +47,9 @@ class AppHistory {
      * @param flux
      */
     setup(flux) {
-        this.flux = flux;
+        self.flux = flux;
 
-        this._setupHistoryListeners();
+        self._setupHistoryListeners();
 
         return self;
     }
@@ -58,11 +58,10 @@ class AppHistory {
      * Clears the AppHistory singleton and event listeners
      */
     reset() {
-        if (this.cancelListenBefore) {this.cancelListenBefore();}
-        if (this.cancelListenBeforeUnload) {this.cancelListenBeforeUnload();}
+        if (self && self.cancelListenBefore) {self.cancelListenBefore();}
+        if (self && self.cancelListenBeforeUnload) {self.cancelListenBeforeUnload();}
 
         self = null; // eslint-disable-line
-        return new AppHistory();
     }
 
     /**
@@ -71,24 +70,29 @@ class AppHistory {
      */
     _setupHistoryListeners() {
         // Setup listener for route changes within the app
-        this.cancelListenBefore = this.history.listenBefore((location, callback) => {
-            this.callback = callback;
-            this.pendEdits = this.flux.store('RecordPendingEditsStore').getState();
+        self.cancelListenBefore = self.history.listenBefore((location, callback) => {
+            self.callback = callback;
 
-            if (this.pendEdits && this.pendEdits.isPendingEdit) {
+            if (self && self.flux) {
+                self.pendEdits = self.flux.store('RecordPendingEditsStore').getState();
+            }
+
+            if (this.hasPendingEdits()) {
                 this._showModal();
             } else {
-                return this._continueToDestination();
+                return self._continueToDestination();
             }
         });
 
         // Setup listener for route changes outside of the app (e.g., pasting in a new url)
-        this.cancelListenBeforeUnload = this.history.listenBeforeUnload(event => {
-            this.pendEdits = this.flux.store('RecordPendingEditsStore').getState();
+        self.cancelListenBeforeUnload = self.history.listenBeforeUnload(event => {
+            if (self && self.flux) {
+                self.pendEdits = self.flux.store('RecordPendingEditsStore').getState();
+            }
 
             // The following text does not need to be internationalized because
             // it will not actually appear in the modal on evergreen browsers.
-            if (this.pendEdits && this.pendEdits.isPendingEdit) {
+            if (this.hasPendingEdits()) {
                 if (event) {
                     event.returnValue = 'Save changes before leaving?';
                 }
@@ -97,16 +101,20 @@ class AppHistory {
         });
     }
 
+    hasPendingEdits() {
+        return (self && self.pendEdits && self.pendEdits.isPendingEdit);
+    }
+
     _showModal() {
         ShowAppModal({
             type: 'alert',
             messageI18nKey: 'pendingEditModal.modalBodyMessage',
             primaryButtonI18nKey: 'pendingEditModal.modalSaveButton',
-            primaryButtonOnClick: this._saveChanges,
+            primaryButtonOnClick: self._saveChanges,
             middleButtonI18nKey: 'pendingEditModal.modalDoNotSaveButton',
-            middleButtonOnClick: this._discardChanges,
+            middleButtonOnClick: self._discardChanges,
             leftButtonI18nKey: 'pendingEditModal.modalStayButton',
-            leftButtonOnClick: this._haltRouteChange
+            leftButtonOnClick: self._haltRouteChange
         });
     }
 
