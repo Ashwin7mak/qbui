@@ -22,14 +22,17 @@ let mockActions = {
 
 describe('AppHistory', () => {
 
-    beforeAll(() => {
+    beforeEach(() => {
         AppHistory.__Rewire__('ShowAppModal', mockActions.ShowAppModal);
         AppHistory.__Rewire__('HideAppModal', mockActions.HideAppModal);
     });
 
-    afterAll(() => {
+    afterEach(() => {
         AppHistory.__ResetDependency__('ShowAppModal');
         AppHistory.__ResetDependency__('HideAppModal');
+    });
+
+    afterAll(() => {
         AppHistory.reset();
     });
 
@@ -171,7 +174,7 @@ describe('AppHistory', () => {
 
     describe('user selects an action when leaving a dirty form', () => {
         afterEach(() => {
-            // Reset the singleton after each test
+            // Reset the currentModalDetails after each test
             currentModalDetails = null;
         });
 
@@ -217,7 +220,6 @@ describe('AppHistory', () => {
             spyOn(AppHistory, '_onRecordSavedError').and.callThrough();
             spyOn(AppHistory, '_haltRouteChange').and.callThrough();
 
-
             goToNewPage();
             mockActions.clickSaveButton();
 
@@ -233,8 +235,6 @@ describe('AppHistory', () => {
             spyOn(AppHistory, '_discardChanges').and.callThrough();
             spyOn(AppHistory, '_continueToDestination').and.callThrough();
 
-
-
             goToNewPage();
             mockActions.clickDiscardChanges();
 
@@ -248,7 +248,6 @@ describe('AppHistory', () => {
             AppHistory.setup(mockFluxWithPendingEdit);
 
             spyOn(AppHistory, '_haltRouteChange').and.callThrough();
-
 
             goToNewPage();
             mockActions.clickStayButton();

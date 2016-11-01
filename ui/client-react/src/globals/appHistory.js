@@ -71,16 +71,20 @@ class AppHistory {
     _setupHistoryListeners() {
         // Setup listener for route changes within the app
         self.cancelListenBefore = self.history.listenBefore((location, callback) => {
-            self.callback = callback;
+            if (self) {
+                self.callback = callback;
 
-            if (self && self.flux) {
-                self.pendEdits = self.flux.store('RecordPendingEditsStore').getState();
-            }
+                if (self.flux) {
+                    self.pendEdits = self.flux.store('RecordPendingEditsStore').getState();
+                }
 
-            if (this.hasPendingEdits()) {
-                this.showPendingEditsConfirmationModal();
+                if (this.hasPendingEdits()) {
+                    this.showPendingEditsConfirmationModal();
+                } else {
+                    self._continueToDestination();
+                }
             } else {
-                return self._continueToDestination();
+                return callback();
             }
         });
 
