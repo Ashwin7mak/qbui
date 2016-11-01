@@ -137,7 +137,7 @@ const TimeFieldValueEditor = React.createClass({
     },
 
     /**
-     * Passes the new time value up to change callbacks.
+     * Passes the new time value up to onChange callbacks.
      * @param {Object} newValue:
      *     {
      *          value: <String || null> The new time as a string. Expects `null` for a falsy value.
@@ -208,7 +208,7 @@ const TimeFieldValueEditor = React.createClass({
 
     render() {
         //  display native input only for smallbreakpoint touch devices
-        let useNativeInput = (Breakpoints.isSmallBreakpoint() && this.context.touch) || window.thing;
+        let useNativeInput = (Breakpoints.isSmallBreakpoint() && this.context.touch);
         let classes = ['cellEdit', 'timeCell', 'borderOnError'];
 
         //  error state css class
@@ -272,8 +272,8 @@ const TimeFieldValueEditor = React.createClass({
             placeholder = this.props.attributes && this.props.attributes.scale ? this.props.attributes.scale.toLowerCase() : 'hh:mm';
         }
 
-        return (useNativeInput /*TODO:remove following*/  || window.thing ?
-                <div className={classes.join(' ')}>
+        return (useNativeInput ?
+                <div className={classes.concat('nativeInput').join(' ')}>
                     <input type="time"
                         name="time-select"
                         onChange={this.onInputChange}

@@ -206,8 +206,6 @@
             margin-left: 2px;
         }
     }
-
-    input { width: 100%; }
 }
 
 //  edit mode styles for a date cell
@@ -227,11 +225,6 @@
     }
     .glyphicon-calendar {
         color: $color-black-700;
-    }
-
-    input {
-        width: 100%;
-        height: 100%;
     }
 
     > * {
@@ -258,4 +251,26 @@
 
 .dateTimeFieldValueEditor {
     display: flex;
+}
+
+.dateCell, .timeCell {
+    height: 32px;
+
+    input {
+        width: 100%;
+        height: 100%;
+        padding: $padding-small-vertical;
+    }
+
+    &.cellEdit.nativeInput {
+        border: 1px solid $input-text-normal-border-color;
+        input {
+            // this allows the input to fill the whole width and look like a regular text field
+            // otherwise the inputs will look like short buttons
+            -webkit-appearance: textfield;
+            -moz-appearance: textfield;
+
+            border: 0;
+        }
+    }
 }
