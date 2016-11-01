@@ -19,8 +19,10 @@ const appModalId = 'appModal';
 function ShowAppModal(modalDetails) {
     modalDetails = Object.assign(modalDetails, {showModal: true});
     let showModalEvent = new CustomEvent(SHOW_APP_MODAL_EVENT, {detail: modalDetails});
-    debugger;
-    document.querySelector(`#${appModalId}`).dispatchEvent(showModalEvent);
+    let modal = document.querySelector(`#${appModalId}`);
+    if (modal) {
+        modal.dispatchEvent(showModalEvent);
+    }
 }
 
 /**
@@ -29,7 +31,10 @@ function ShowAppModal(modalDetails) {
  */
 function HideAppModal() {
     let hideModalEvent = new CustomEvent(HIDE_APP_MODAL_EVENT);
-    document.querySelector(`#${appModalId}`).dispatchEvent(hideModalEvent);
+    let modal = document.querySelector(`#${appModalId}`);
+    if (modal) {
+        modal.dispatchEvent(hideModalEvent);
+    }
 }
 
 export {ShowAppModal, HideAppModal};
