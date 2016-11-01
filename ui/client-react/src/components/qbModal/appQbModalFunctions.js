@@ -3,6 +3,15 @@ const HIDE_APP_MODAL_EVENT = 'hideAppModal';
 const appModalId = 'appModal';
 
 /**
+ * The functions work in conjunction with appQbModal to allow non-react
+ * classes to control a modal on the page.
+ *
+ * These functions are in a separate file for easier unit testing.
+ * When the files were combined as exports with appQbModal, it caused
+ * an error related to module loading during unit tests.
+ */
+
+/**
  * Shows a modal. Can be used in non-react classes.
  * @param modalDetails The properties of the modal (e.g., title, type, etc.)
  * @constructor

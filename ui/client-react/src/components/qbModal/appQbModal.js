@@ -21,6 +21,8 @@ const blankModal = {
 
 
 /**
+ * In most cases, use QbModal. Do not use this component directly.
+ *
  * The AppQbModal wraps QbModal in a way that non-react classes and events can
  * access and display a modal. For example, the AppHistory object lives outside of React
  * but needs to display a modal based on specific events. The AppHistory can import the
