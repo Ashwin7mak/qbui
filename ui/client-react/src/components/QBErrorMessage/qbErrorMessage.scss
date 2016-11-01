@@ -6,13 +6,21 @@
   border-width: 1px;
   border-color: $errorMessage-border-color;
   position: absolute;
-  bottom: 65px;
+  bottom: -100px;
   right: 0px;
   max-width: 450px;
   width: 90%;
   text-align: left;
-  z-index: 9999;
+  z-index: 9998;
   margin: 0 auto;
+
+  visibility:hidden;
+  transition:0.5s ease-in-out;
+
+  &.qbErrorMessageVisible {
+    visibility:visible;
+    bottom: 47px;
+  }
 
   div {
     padding: 2px;

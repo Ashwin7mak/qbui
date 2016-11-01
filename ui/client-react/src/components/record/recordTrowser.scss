@@ -1,6 +1,9 @@
 @import '../../assets/css/qbVariables';
 
 .recordTrowser {
+    .trowserFooter {
+        z-index: 9999;
+    }
     .trowserFooter .saveButtons {
         display: flex;
     }

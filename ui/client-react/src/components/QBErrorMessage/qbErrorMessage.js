@@ -29,7 +29,7 @@ let QBErrorMessage = React.createClass({
 
     renderErrorMessages() {
         return this.props.message.map(
-            msg => <span className="qbErrorMessageItem" key={msg.id}>{msg.invalidMessage}</span>
+            msg => <span className="qbErrorMessageItem" key={msg.id}>{msg.def.fieldName}</span>
         );
     },
 
@@ -39,8 +39,13 @@ let QBErrorMessage = React.createClass({
             <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.singleErrorLabel"/> :
             <div><I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelPrefix"/> {errorNum} <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelSuffix"/></div>;
 
+        let qbErrorMessageClasses = "qbErrorMessage";
+        if (!(this.props.hidden || errorNum === 0)) {
+            qbErrorMessageClasses += " qbErrorMessageVisible";
+        }
+
         return (
-            <div className="qbErrorMessage" hidden={this.props.hidden || errorNum === 0}>
+            <div className={qbErrorMessageClasses}>
                 <div className="qbErrorMessageHeader">
                     <div className="leftIcons">
                         <QBicon icon={"alert"}/>
