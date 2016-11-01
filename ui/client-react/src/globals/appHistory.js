@@ -75,7 +75,7 @@ class AppHistory {
             this.callback = callback;
             this.pendEdits = this.flux.store('RecordPendingEditsStore').getState();
 
-            if (this.pendEdits.isPendingEdit) {
+            if (this.pendEdits && this.pendEdits.isPendingEdit) {
                 this._showModal();
             } else {
                 return this._continueToDestination();
@@ -88,7 +88,7 @@ class AppHistory {
 
             // The following text does not need to be internationalized because
             // it will not actually appear in the modal on evergreen browsers.
-            if (this.pendEdits.isPendingEdit) {
+            if (this.pendEdits && this.pendEdits.isPendingEdit) {
                 if (event) {
                     event.returnValue = 'Save changes before leaving?';
                 }
