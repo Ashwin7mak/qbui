@@ -79,7 +79,7 @@
                 // Step 1: Selecting the first record for the deletion and checking for the success messages
                 reportContentPage.reportRowSelected(rowToBeDeleted);
                 reportContentPage.clickSelectedRecordDeleteIcon();
-                reportContentPage.assertDeleteMessageSuccess(successMessage);
+                reportContentPage.assertSuccessMessage(successMessage);
                 reportContentPage.waitForReportContent();
 
                 // Step 2. Checking for the deleted record on the first page
@@ -103,7 +103,7 @@
                 reportContentPage.waitForReportContent();
                 reportContentPage.reportRowSelected(rowToBeDeleted);
                 reportContentPage.clickSelectedRecordDeleteIcon();
-                reportContentPage.assertDeleteMessageSuccess(successMessage);
+                reportContentPage.assertSuccessMessage(successMessage);
                 reportContentPage.waitForReportContent();
                 done();
             });
