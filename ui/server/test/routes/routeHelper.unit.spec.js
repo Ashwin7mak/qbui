@@ -276,21 +276,21 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
-    describe('validate isReportComponentRoute method', function() {
+    describe('validate isReportResultsRoute method', function() {
         var testCases = [
             {name: 'test empty url', url: '', expectation: false},
             {name: 'test null url', url: null, expectation: false},
             {name: 'test invalid url', url: '/non/parsing/url', expectation: false},
-            {name: 'test valid url - mixed case no leading slash', url: 'apps/123/tables/456/Reports/789/ReportComponents', expectation: true},
-            {name: 'test valid url - mixed case with domain', url: 'https://somedomain/apps/123/tables/456/Reports/789/ReportComponents', expectation: true},
-            {name: 'test valid url - mixed case', url: '/apps/123/tables/456/reports/789/ReportComponents', expectation: true},
-            {name: 'test valid url - lower case', url: '/apps/123/tables/456/reports/789/reportcomponents', expectation: true},
-            {name: 'test valid url - upper case', url: '/apps/123/tables/456/reports/789/REPORTCOMPONENTS', expectation: true}
+            {name: 'test valid url - mixed case no leading slash', url: 'apps/123/tables/456/Reports/789/results', expectation: true},
+            {name: 'test valid url - mixed case with domain', url: 'https://somedomain/apps/123/tables/456/Reports/789/results', expectation: true},
+            {name: 'test valid url - mixed case', url: '/apps/123/tables/456/reports/789/results', expectation: true},
+            {name: 'test valid url - lower case', url: '/apps/123/tables/456/reports/789/Results', expectation: true},
+            {name: 'test valid url - upper case', url: '/apps/123/tables/456/reports/789/RESULTS', expectation: true}
         ];
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.isReportComponentRoute(testCase.url), testCase.expectation);
+                assert.equal(routeHelper.isReportResultsRoute(testCase.url), testCase.expectation);
                 done();
             });
         });

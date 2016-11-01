@@ -94,8 +94,8 @@ describe("Validate recordsApi", function() {
             });
         });
 
-        it('success return results for reportComponents', function(done) {
-            req.url = '/apps/123/tables/456/reports/2/reportComponents';
+        it('success return results for report results', function(done) {
+            req.url = '/apps/123/tables/456/reports/2/results';
 
             var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
             executeReqStub.returns(Promise.resolve(targetObject));
@@ -115,8 +115,8 @@ describe("Validate recordsApi", function() {
             });
         });
 
-        it('success return results for reportComponents with sortList', function(done) {
-            req.url = '/apps/123/tables/456/reports/2/reportComponents?sortList=1';
+        it('success return results for report results with sortList', function(done) {
+            req.url = '/apps/123/tables/456/reports/2/results?sortList=1';
             req.params.sortList = '1';
 
             var targetObject = "[{records: [], fields: []}, {records: [], fields: []}]";
@@ -138,7 +138,7 @@ describe("Validate recordsApi", function() {
         });
 
         it('fail return results ', function(done) {
-            req.url = '/reports/2/reportComponents';
+            req.url = '/reports/2/results';
             var error_message = "fail unit test case execution";
 
             executeReqStub.returns(Promise.reject(new Error(error_message)));

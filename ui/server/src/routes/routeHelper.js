@@ -23,7 +23,7 @@
     let REGEX_FIELDS_ROUTE = /apps\/.*\/tables\/.*\/fields(.*)?$/i;
     let REGEX_RECORDS_FORMS_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/records\/.*\/formcomponents(.*)?$/i;
     let REGEX_RECORDS_ROUTE = /apps\/.*\/tables\/.*\/records(.*)?$/i;
-    let REGEX_REPORT_COMPONENT_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/reportcomponents(.*)?$/i;
+    let REGEX_REPORT_RESULTS_ROUTE = /apps\/.*\/tables\/.*\/reports\/.*\/results(.*)?$/i;
     let REGEX_TABLE_HOMEPAGE_ROUTE = /apps\/.*\/tables\/.*\/homepage(.*)?$/i;
 
     /**
@@ -368,14 +368,14 @@
         },
 
         /**
-         * Is the route a request for report components
+         * Is the route a request for report results
          *
          * @param url
          * @returns {boolean}
          */
-        isReportComponentRoute(url) {
+        isReportResultsRoute(url) {
             if (typeof url === 'string') {
-                return REGEX_REPORT_COMPONENT_ROUTE.test(url);
+                return REGEX_REPORT_RESULTS_ROUTE.test(url);
             }
             return false;
         },

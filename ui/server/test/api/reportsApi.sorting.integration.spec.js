@@ -7,12 +7,8 @@
     var consts = require('../../../common/src/constants');
     var log = require('../../src/logger').getLogger();
     var testConsts = require('./api.test.constants');
-    var testUtils = require('./api.test.Utils');
     var errorCodes = require('../../src/api/errorCodes');
     var request = require('request');
-
-    // Bluebird Promise library
-    var Promise = require('bluebird');
 
     // Lodash utility library
     var _ = require('lodash');
@@ -211,7 +207,7 @@
                             "groupType": null
                         }
                     ]
-                },
+                }
             ];
         }
 
@@ -245,7 +241,7 @@
                         assert.deepStrictEqual(metaData.sortList, testcase.sortList, 'Unexpected sortList returned in reportMetaData');
 
                         // Execute a report and check sort order of records
-                        // TODO report/results API is not getting the records sorted.So using reportComponents below to verify.
+                        // TODO report/results API is not getting the records sorted.So using report results below to verify.
                         recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results', consts.GET).then(function(reportResult) {
                             var results = JSON.parse(reportResult.body);
                             // Sort the expected records
@@ -279,7 +275,7 @@
                     "fieldId": 10,
                     "sortOrder": "desc",
                     "groupType": null
-                }],
+                }]
             };
 
             // Create a report with invalid sortList FID
