@@ -60,13 +60,11 @@ let NavStore = Fluxxor.createStore({
         this.emit('change');
     },
     onToggleRowPopUpMenu(isOpen) {
-        console.log('isOpen: ', isOpen);
         if (isOpen) {
             this.state.openCount++;
         } else {
             this.state.openCount--;
         }
-        console.log('this.stte.openCount: ', this.state.openCount);
         this.state.isRowPopUpMenuOpen = this.state.openCount > 0;
         this.emit('change');
     },

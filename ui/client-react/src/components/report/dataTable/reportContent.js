@@ -643,7 +643,6 @@ export let ReportContent = React.createClass({
 
         let addPadding;
         const isRowPopUpMenuOpen = this.props.isRowPopUpMenuOpen;
-        console.log('isRowPopUpMenuOpen: ', isRowPopUpMenuOpen);
         const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
         if (isInlineEditOpen) {
             addPadding = "reportContent inlineEditing";
