@@ -281,7 +281,7 @@ div.leftNavTooltip {
     }
     .transitionGroup {
         flex: 1 1 auto;
-        overflow: auto;
+        overflow: visible;
         z-index: 1;
         display:flex;
         .appsList {
@@ -305,7 +305,12 @@ div.leftNavTooltip {
         }
 
     }
-
+    /* This is so when you hover over the item, the entire contents shows like a tooltip... but we then cannot scroll when collapsed. Temporary fix */
+    &.expanded {
+      .transitionGroup {
+        overflow: auto;
+      }
+    }
     ul {
         list-style: none;
         list-style-type: none;
