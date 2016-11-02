@@ -8,7 +8,8 @@ const QB_MODAL_ALERT = 'alert';
 const QB_MODAL_STANDARD = 'standard';
 const QB_MODAL_SUCCESS = 'success';
 const QB_MODAL_ISBUSY = 'isBusy';
-const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_ISBUSY];
+const QB_MODAL_DTS_APP_DELETED = 'dtsAppDeleted';
+const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_ISBUSY, QB_MODAL_DTS_APP_DELETED];
 
 const QBModal = React.createClass({
     propTypes: {
@@ -84,6 +85,11 @@ const QBModal = React.createClass({
         if (this.props.type === QB_MODAL_SUCCESS) {
             classes.push('modalIcon--success');
             icon = 'check-reversed';
+        }
+
+        if (this.props.type === QB_MODAL_DTS_APP_DELETED) {
+            classes.push('modalIcon--alert');
+            icon = 'favicon';
         }
 
         return (
