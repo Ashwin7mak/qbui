@@ -256,7 +256,7 @@
 .dateCell, .timeCell {
     height: 32px;
 
-    input {
+    > input {
         width: 100%;
         height: 100%;
         padding: $padding-small-vertical;
@@ -265,7 +265,7 @@
     &.cellEdit.nativeInput {
         border: 0;
         display: flex;
-        input {
+        > input {
             flex-grow: 1;
             border: 1px solid $input-text-normal-border-color;
         }
