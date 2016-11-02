@@ -634,6 +634,7 @@ let AGGrid = React.createClass({
         if (target &&
             target.className.indexOf("qbIcon") !== -1 ||
             target.className.indexOf("iconLink") !== -1 ||
+            target.className.indexOf("iconActionButton") !== -1 ||
             target.tagName === "INPUT" ||
             target.tagName === "A" ||
             target.parentNode.tagName === "A") {

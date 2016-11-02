@@ -116,7 +116,10 @@ $edit-field-padding: 5px;
         .checkbox {
             top: $edit-field-padding;
         }
-
+        .errorDiv {
+            display: flex;
+            flex-direction: column;
+        }
 
     }
     .input, textarea.cellEdit {
