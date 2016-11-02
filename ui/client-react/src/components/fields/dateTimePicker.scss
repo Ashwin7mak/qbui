@@ -157,14 +157,14 @@
 .timeCell.cellEdit {
     display:inline-block;
     width: 100%;
+    border: none;
     .Select {
         height: 28px;
         border: 0;
     }
     .Select-control {
         border-radius: 2px;
-        height: 28px;
-        border: 0;
+        height: 32px;
     }
     .Select-input {
         padding-left: 1px;
@@ -230,7 +230,13 @@
     .glyphicon-calendar {
         color: $text-color;
     }
-
+    .date.is-focused {
+        border: solid 1px $input-text-focus-border-color;
+        //Added border-color for multi choice text box
+        border-color: $input-text-focus-border-color !important;
+        vorder-radius: 2px;
+        @include focus-shadow();
+    }
     > * {
         border: 0;
 
@@ -238,7 +244,9 @@
             border: 0;
             padding: 3px;
             height: 28px;
-            border-radius: 0;
+            // remove browser focus style from the input
+            outline: none;
+            box-shadow: none;
         }
         .input-group.date .input-group-addon {
             background: #fff;
