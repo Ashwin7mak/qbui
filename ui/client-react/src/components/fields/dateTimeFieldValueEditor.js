@@ -179,7 +179,6 @@ const DateTimeFieldValueEditor = React.createClass({
 
         let commonProps = {...this.props};
         commonProps.classes = dateTimeClass;
-
         return <div className="dateTimeFieldValueEditor">
             <DateFieldValueEditor onDateTimeChange={this.onDateChange} onDateTimeBlur={this.onDateBlur} {...commonProps}/>
             {showTimeEditor ?
