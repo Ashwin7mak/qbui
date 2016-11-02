@@ -30,7 +30,8 @@ describe('ReportRoute functions', () => {
         selectTableId() {return;},
         loadReport() {return;},
         loadFields() {return;},
-        hideTopNav() {return;}
+        hideTopNav() {return;},
+        resetRowMenu() {return;}
     };
 
     beforeEach(() => {
