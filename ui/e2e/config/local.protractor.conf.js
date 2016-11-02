@@ -6,6 +6,7 @@
     'use strict';
     var baseE2EPath = '../../e2e/';
     var e2eUtils = require('../common/e2eUtils')();
+    var localConf;
 
     // Add a screenshot reporter for errors when testing locally
     var HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
@@ -27,15 +28,22 @@
         beforeLaunch: function() {
             //Have the tests start an instance of node
             require('../../server/src/app');
+
+            // This setting allow devs to gendata / e2etest to a single known realm not random as needed for testing
+            // by setting realmToUse in e2e.conf file and then supplying the E2E_CUSTOMCONFIG env var
+            if (process.env.E2E_CUSTOMCONFIG === 'true') {
+                localConf = require('../../server/src/config/environment');
+            }
+
             // Setup the results report before any tests start
             return new Promise(function(resolve) {
                 reporter.beforeLaunch(resolve);
             });
         },
-        // list of files / patterns to load in the browser
+        // list of files / patterns to load in the browser.
         specs: [
             baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [
@@ -103,6 +111,7 @@
             ecTimeout: 7500
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
+        // If you run in parallel or use multi capabilities this will run once per test file or capability
         onPrepare: function() {
             // Initialize all Page Objects
             global.requirePO = function(relativePath) {
@@ -114,12 +123,23 @@
                 return require(baseE2EPath + relativePath + '.js');
             };
 
-            // allow devs to gendata / e2etest to a single known realm not random as needed for tests
-            // by setting realmToUse in e2e.conf file
-            var localConf = require('../../server/src/config/environment');
-
-            // Read the base classes
-            global.e2eBase = requireCommon('common/e2eBase')(localConf);
+            // Initialize the base classes
+            if (localConf) {
+                // Pass down your config object to e2eBase -> recordApi.base -> api.base
+                // api.base will use the DOMAIN param set in your config as the baseUrl if you pass a config object down through the stack
+                global.e2eBase = requireCommon('common/e2eBase')(localConf);
+            } else {
+                // Get an instance of e2eBase (which gives you an instance of recordApi.base and api.base)
+                // e2eBase then uses the instance of recordApi.base and initializes the services classes with this instance
+                global.e2eBase = requireCommon('common/e2eBase')();
+                // browser is a global object setup by protractor. baseUrl is a param that can be passed in via IntelliJ config or via grunt
+                // since we aren't passing a config object set it here
+                e2eBase.setBaseUrl(browser.baseUrl);
+                // recordApi.base will not initialize itself (and api.base) if you don't pass in a config object
+                // Initialize your recordApi.base (because we aren't passing in a config object in the above call)
+                // This call creates a your test realm down in api.base
+                e2eBase.initialize();
+            }
             global.e2eConsts = requireCommon('common/e2eConsts');
             global.e2eUtils = requireCommon('common/e2eUtils')();
             global.consts = require('../../common/src/constants');
@@ -154,6 +174,13 @@
 
             // Add protractor-jasmine2-screenshot-reporter
             jasmine.getEnv().addReporter(reporter);
+        },
+        // Function will run on completion of test specs. If running in parallel or with multi-capabilities it will run more than once
+        onComplete: function() {
+            // If you don't supply a custom realm we want to clean up after tests
+            if (!localConf) {
+                return e2eBase.cleanup();
+            }
         },
         // A callback function called once all tests have finished running and the WebDriver instance has been shut down
         afterLaunch: function(exitCode) {

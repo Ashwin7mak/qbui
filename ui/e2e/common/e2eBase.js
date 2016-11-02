@@ -19,20 +19,24 @@
         var formService = require('./services/formService.js');
 
         var e2eBase = {
-            // Delegate to recordBase to initialize
+            // Instantiate recordBase module to use for your tests
             recordBase: recordBase,
-            // Create a realm
-            setUp: function() {
-                let defaultBase = config ? config.DOMAIN : 'http://localhost:9001';
-                this.setBaseUrl(typeof browser !== 'undefined' ? browser.baseUrl : defaultBase);
-                this.initialize();
+            /**
+             * Set the baseUrl we want to use to reach out for testing
+             * Only run this if you do NOT pass in a config object when requiring the e2eBase module (see Protractor config files)
+             * Run this BEFORE initialize function below
+             * @param baseUrl - The url where your nodejs server is running. example: http://localhost:9001 for e2e tests
+             */
+            setBaseUrl: function(baseUrl) {
+                recordBase.setBaseUrl(baseUrl);
             },
+            /**
+             * Initialize recordApi.base.js and api.base.js in the Mocha layer (qbui/server package)
+             * Only run this if you do NOT pass in a config object when requiring the e2eBase module (see Protractor config files)
+             * Make sure to run this AFTER setBaseUrl to avoid authentication errors due to ticket for wrong realm
+             */
             initialize: function() {
                 recordBase.initialize();
-            },
-            // Set the baseUrl we want to use to reach out for testing
-            setBaseUrl: function(baseUrlConfig) {
-                recordBase.setBaseUrl(baseUrlConfig);
             },
             // Initialize the service modules to use the same base class
             appService: appService(recordBase),
@@ -45,7 +49,7 @@
             // Common variables
             ticketEndpoint: recordBase.apiBase.resolveTicketEndpoint(),
             // Checks for any JS errors in the browser, resets the browser window size and cleans up the test realm and app
-            cleanup: function(done) {
+            cleanup: function() {
                 //Checks for any JS errors in the browser console
                 //browser.manage().logs().get('browser').then(function(browserLog) {
                 //    // TODO: Errors in the console need to fix
@@ -55,9 +59,7 @@
                 //    }
                 //});
                 //Cleanup the realm and app
-                e2eBase.recordBase.apiBase.cleanup().then(function() {
-                    done();
-                });
+                return e2eBase.recordBase.apiBase.cleanup();
             },
             // Helper method to get the proper URL for loading the dashboard page containing a list of apps and tables for a realm
             getRequestAppsPageEndpoint: function(realmName) {
@@ -108,7 +110,7 @@
             basicSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
                 var MIN_RECORDSCOUNT = 11;
-                e2eBase.setUp();
+
                 // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
@@ -118,7 +120,7 @@
                     var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
                     // Generate the record JSON objects
                     var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
-                    //Add 1 duplicate record
+                    // Add 1 duplicate record
                     var clonedArray = JSON.parse(JSON.stringify(table1GeneratedRecords));
                     var dupRecord = clonedArray[0];
                     // Edit the numeric field so we can check the second level sort (ex: 6.7)
@@ -278,7 +280,6 @@
                     numberOfRecords  = e2eConsts.MAX_PAGING_SIZE + 5;
                 }
 
-                e2eBase.setUp();
                 // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
@@ -456,7 +457,6 @@
                     return Promise.reject(new Error("no map of tables to build defined"));
                 } else {
                     // Create the app schema via the API
-                    e2eBase.setUp();
                     return e2eBase.appService.createAppSchema(tableToFieldToFieldTypeMap);
                 }
             },
@@ -467,7 +467,7 @@
                     recordService : this.recordService,
                     tableService : this.tableService,
                     reportService : this.reportService,
-                    formService : this.formService,
+                    formService : this.formService
                 };
                 return e2eBase.appService.createRecords(app, recordsConfig, services);
             },

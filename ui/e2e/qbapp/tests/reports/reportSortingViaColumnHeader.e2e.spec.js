@@ -9,7 +9,6 @@
     var reportServicePage = new ReportServicePage();
     var reportSortingPage = new ReportSortingPage();
 
-
     describe('Report Sorting Tests - ', function() {
         var realmName;
         var realmId;
@@ -283,17 +282,11 @@
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     e2eBase.sleep(browser.params.smallSleep);
                     //finally verify item got selected
-                    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Date Field", "Sort newest to oldest");
-                    done();
+                    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Date Field", "Sort newest to oldest").then(function() {
+                        done();
+                    });
                 });
             });
-        });
-
-        /**
-         * After all tests are done, run the cleanup function in the base class
-         */
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
         });
     });
 }());
