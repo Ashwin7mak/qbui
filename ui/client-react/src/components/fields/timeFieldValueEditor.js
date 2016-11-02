@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import QBToolTip from '../qbToolTip/qbToolTip';
+import QbIcon from '../qbIcon/qbIcon';
 
 import Select from "react-select";
 import 'react-select/dist/react-select.css';
@@ -20,7 +21,8 @@ import momentTz from 'moment-timezone';
 
 import lodash from 'lodash';
 
-const DROPLIST_FORMAT_VALUE = 'HH:mm';
+const MILITARY_FORMAT_VALUE = 'HH:mm';
+const DROPLIST_FORMAT_VALUE = MILITARY_FORMAT_VALUE;
 const DROPLIST_FORMAT_LABEL = 'hh:mm a';
 const DROPLIST_FORMAT_LABEL_MILITARY = 'HH:mm';
 
@@ -193,38 +195,11 @@ const TimeFieldValueEditor = React.createClass({
         }
     },
 
-    renderClockIcon() {
-        return (
-            <span className="glyphicon glyphicon-time"></span>
-        );
-    },
-
-    renderOption(option) {
-        if (option.value === null) {
-            return <div>&nbsp;</div>;
-        }
-        return (<div>{option.label}</div>);
-    },
-
-    render() {
-        //  display native input only for smallbreakpoint touch devices
-        let useNativeInput = (Breakpoints.isSmallBreakpoint() && this.context.touch);
-        let classes = ['cellEdit', 'timeCell', 'borderOnError'];
-
-        //  error state css class
-        if (this.props.isInvalid) {
-            classes.push('error');
-        }
-        if (this.props.classes) {
-            classes.push(this.props.classes);
-        }
-
-        //  build the droplist based on how the time element is displayed
-        let showAsMilitaryTime = this.props.attributes && this.props.attributes.use24HourClock;
-        let timeDropList = getTimesInMinutes(30, showAsMilitaryTime);
-
-        let theTime = null;
-        let dropListTime = null;
+    /**
+     * Converts `this.props.value` and returns a MomentJS instance.
+     * @return {Moment}
+     */
+    formatTime() {
         let momentTime = null;
         if (this.props.value) {
             let inputValue = this.props.value.replace(/(\[.*?\])/, '');
@@ -251,18 +226,81 @@ const TimeFieldValueEditor = React.createClass({
                 //  format of the input value if the moment parser can't parse the input value.
                 momentTime = moment(inputValue).isValid() ? momentTz.tz(inputValue, timeZone) : momentTz.tz(inputValue, "MM-DD-YYYY " + timeFormat, timeZone);
             }
+        }
+        return momentTime;
+    },
 
-            //  Native <input> nodes accept values in form 'HH:mm'
-            //  TODO: confirmed with Chrome, verify all browsers support 'HH:mm'
-            if (useNativeInput) {
-                timeFormat = DROPLIST_FORMAT_VALUE;
+    /**
+     * Formats `this.props.value` in the expected format to be displayed in the Select/input node.
+     * @return {string}
+     */
+    getDisplayTime() {
+        let timeFormat = null;
+        if (this.props.value) {
+            if (this.props.type === fieldFormats.TIME_FORMAT) {
+                //  use the TimeFormatter to get the time format
+                timeFormat = timeFormatter.generateFormatterString(this.props.attributes);
+            } else {
+                //  it's a date time object; use the dateTimeFormatter to get the time format
+                timeFormat = dateTimeFormatter.getTimeFormat({showTime:true});
             }
+        }
+        //  convert the moment time into militaryTime
+        let momentTime = this.formatTime();
+        return momentTime && momentTime.format(timeFormat);
+    },
 
-            //  convert the moment time into the appropriate display format
-            theTime = momentTime.format(timeFormat);
-            dropListTime = momentTime.format(DROPLIST_FORMAT_VALUE);
+    /**
+     * Formats `this.props.value` to the expected format used in the Select dropdown.
+     * @return {string}
+     */
+    getMilitaryTime() {
+        let momentTime = this.formatTime();
+        return momentTime && momentTime.format(MILITARY_FORMAT_VALUE);
+    },
 
+    renderClockIcon() {
+        return (
+            <span className="glyphicon glyphicon-time"></span>
+        );
+    },
+
+    renderOption(option) {
+        if (option.value === null) {
+            return <div>&nbsp;</div>;
+        }
+        let dropListTime = this.getMilitaryTime();
+        let isSelected = dropListTime === option.value;
+        return (
+            <div>
+                {isSelected && <QbIcon className="choiceQBIcon" icon="check-reversed"/>}
+                <div>{option.label}</div>
+            </div>);
+    },
+
+    render() {
+        //  display native input only for smallbreakpoint touch devices
+        let useNativeInput = (Breakpoints.isSmallBreakpoint() && this.context.touch);
+        let classes = ['cellEdit', 'timeCell', 'borderOnError'];
+
+        //  error state css class
+        if (this.props.isInvalid) {
+            classes.push('error');
+        }
+        if (this.props.classes) {
+            classes.push(this.props.classes);
+        }
+
+        //  build the droplist based on how the time element is displayed
+        let showAsMilitaryTime = this.props.attributes && this.props.attributes.use24HourClock;
+        let timeDropList = getTimesInMinutes(30, showAsMilitaryTime);
+
+        let theTime = this.getDisplayTime();
+        let dropListTime = this.getMilitaryTime();
+
+        if (this.props.value) {
             //  if the time is not in the droplist, add it
+            let momentTime = this.formatTime();
             insertTimeIntoList(timeDropList, momentTime, showAsMilitaryTime);
         }
 
@@ -278,7 +316,7 @@ const TimeFieldValueEditor = React.createClass({
                         name="time-select"
                         onChange={this.onInputChange}
                         onBlur={this.onBlur}
-                        value={theTime || ''}
+                        value={this.getMilitaryTime() || ''}
                     />
                 </div> :
                 <div className={classes.join(' ')}>

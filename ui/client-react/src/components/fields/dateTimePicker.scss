@@ -183,7 +183,11 @@
     }
     .Select-option {
         color: $color25;
-        padding-top: 1px;
+        padding: 4px 0 4px 32px;
+        .qbIcon {
+            left: 0;
+            padding: 3px 7px;
+        }
     }
     .Select-arrow-zone {
         background-color: $datepicker-bg;

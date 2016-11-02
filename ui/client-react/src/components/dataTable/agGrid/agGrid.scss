@@ -613,7 +613,13 @@ $cell-edit-background-edit: #f3f8fe;
     }
 
     .gridCell {
-
+        .timeCell .Select-option {
+            padding: 2px 0 2px 20px;
+            .qbIcon {
+                font-size: inherit;
+                padding: 3px 4px;
+            }
+        }
         .editTools {
             z-index:1;
             display:flex;
