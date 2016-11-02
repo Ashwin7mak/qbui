@@ -263,19 +263,18 @@ let AGGrid = React.createClass({
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
         let sortFid = column.id.toString();
         let groupString = ReportUtils.getGroupString(sortFid, asc, GROUP_TYPE.TEXT.equals);
+
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
         let sortListParam = ReportUtils.prependSortFidToList(sortList, groupString);
+
         let offset = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
         let numRows = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
-        // AG-grid has a bug where on re-render it doesn't call groupRenderer, which means the group headers don't display.
-        // To circumvent, rebuild the whole report if this is a first time this grouping requirement is getting rendered.
-        // If the report was grouped on the previous render, then groupRender was already called so no need to re-load everything.
-        //if (this.props.groupEls.length) {
         let queryParams = {};
         queryParams[query.OFFSET_PARAM] = offset;
         queryParams[query.NUMROWS_PARAM] = numRows;
         queryParams[query.SORT_LIST_PARAM] = sortListParam;
+
         flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     },
 
@@ -294,7 +293,6 @@ let AGGrid = React.createClass({
         }
     },
     onMenuClose() {
-
         document.addEventListener("DOMNodeRemoved", (ev) => {
             if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
                 if (this.selectedColumnId.length) {

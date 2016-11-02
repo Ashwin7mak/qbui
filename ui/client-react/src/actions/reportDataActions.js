@@ -13,9 +13,6 @@ import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
 import Locale from '../locales/locales';
 import {NotificationManager} from 'react-notifications';
-
-let logger = new Logger();
-
 import reportModel from '../models/reportModel';
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
@@ -25,6 +22,7 @@ import reportModel from '../models/reportModel';
 //  code.  Promises are returned only to support our unit tests, which are expected
 //  to implement the appropriate handlers.
 Promise.onPossiblyUnhandledRejection(function(err) {
+    let logger = new Logger();
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
@@ -64,6 +62,9 @@ let reportDataActions = {
      * @param rows
      */
     loadReport(appId, tblId, rptId, format, offset, rows) {
+
+        let logger = new Logger();
+
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {
@@ -84,7 +85,8 @@ let reportDataActions = {
                 //
                 reportService.getReportResults(appId, tblId, rptId, params, format).then(
                     (reportResponse) => {
-                        let model = reportModel.set(reportResponse.data.metaData, reportResponse.data);
+                        let metaData = reportResponse.data ? reportResponse.data.metaData : null;
+                        let model = reportModel.set(metaData, reportResponse.data);
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
                         resolve();
                     },
@@ -95,8 +97,8 @@ let reportDataActions = {
                         reject();
                     }
                 ).catch(ex => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                     logger.logException(ex);
-                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                     reject();
                 });
             } else {
@@ -126,6 +128,9 @@ let reportDataActions = {
      * @param queryParams: {offset, numrows, cList, sList, query}
      */
     loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
+
+        let logger = new Logger();
+
         return new Promise((resolve, reject) => {
             if (appId && tblId && rptId) {
 
@@ -173,7 +178,8 @@ let reportDataActions = {
                         //
                         reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format).then(
                             (reportResponse) => {
-                                var model = reportModel.set(reportResponse.data.metaData, reportResponse.data);
+                                let metaData = reportResponse.data ? reportResponse.data.metaData : null;
+                                let model = reportModel.set(metaData, reportResponse.data);
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
                                 resolve();
                             },
@@ -183,8 +189,8 @@ let reportDataActions = {
                                 reject();
                             }
                         ).catch((ex) => {
+                            // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                             logger.logException(ex);
-                            this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
                             reject();
                         });
                     },
@@ -195,8 +201,8 @@ let reportDataActions = {
                         reject();
                     }
                 ).catch((ex) => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                     logger.logException(ex);
-                    this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
                     reject();
                 });
             } else {

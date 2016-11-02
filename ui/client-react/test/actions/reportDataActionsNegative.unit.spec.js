@@ -72,16 +72,26 @@ let stores = {};
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportDataActions);
 
+class mockLogger {
+    constructor() {}
+    logException() {}
+    debug() {}
+    warn() {}
+    error() {}
+    parseAndLogError() {}
+}
 
 describe('Report Data Actions -- load a dynamic report that throws errors/exceptions', () => {
     'use strict';
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-
+        spyOn(mockLogger.prototype, 'logException').and.callThrough();
+        reportDataActions.__ResetDependency__('ReportService');
+        reportDataActions.__Rewire__('Logger', mockLogger);
     });
     afterEach(() => {
-        reportDataActions.__ResetDependency__('ReportService');
+        reportDataActions.__ResetDependency__('Logger');
     });
 
     it('test filter report fail on resolve facet', (done) => {
@@ -96,7 +106,6 @@ describe('Report Data Actions -- load a dynamic report that throws errors/except
         }
 
         reportDataActions.__Rewire__('ReportService', mockReportService);
-
         flux.actions.loadDynamicReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, inputs.queryParams).then(
             () => {
                 expect(true).toBe(false);
@@ -111,7 +120,6 @@ describe('Report Data Actions -- load a dynamic report that throws errors/except
     });
 
     it('test filter report error on get results', (done) => {
-
         class mockReportService {
             constructor() { }
             parseFacetExpression() {
@@ -155,7 +163,7 @@ describe('Report Data Actions -- load a dynamic report that throws errors/except
             },
             () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, exStatus]);
+                expect(mockLogger.prototype.logException).toHaveBeenCalled();
                 done();
             }
         );
@@ -180,7 +188,7 @@ describe('Report Data Actions -- load a dynamic report that throws errors/except
             },
             () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, exStatus]);
+                expect(mockLogger.prototype.logException).toHaveBeenCalled();
                 done();
             }
         );

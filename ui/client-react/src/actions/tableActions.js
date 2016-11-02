@@ -7,8 +7,6 @@ import reportModel from '../models/reportModel';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
-let logger = new Logger();
-
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
 //  because the core application code has no logic implemented to handle a rejected
@@ -16,6 +14,7 @@ let logger = new Logger();
 //  code.  Promises are returned only to support our unit tests, which are expected
 //  to implement the appropriate handlers.
 Promise.onPossiblyUnhandledRejection(function(err) {
+    let logger = new Logger();
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
@@ -32,6 +31,9 @@ let tableActions = {
      * @param numRows
      */
     loadTableHomePage: function(appId, tblId, offset, numRows) {
+
+        let logger = new Logger();
+
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
@@ -49,7 +51,8 @@ let tableActions = {
                 //    - report count
                 tableService.getHomePage(appId, tblId, offset, numRows).then(
                     (response) => {
-                        var model = reportModel.set(response.data.metaData, response.data);
+                        let metaData = response.data ? response.data.metaData : null;
+                        let model = reportModel.set(metaData, response.data);
 
                         //  if the report id does not match the default homepage id, re-init the load report
                         //  event to ensure the reportId is set in the store.
@@ -67,8 +70,8 @@ let tableActions = {
                         reject();
                     }
                 ).catch((ex) => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                     logger.logException(ex);
-                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                     reject();
                 });
             } else {

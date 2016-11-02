@@ -77,18 +77,31 @@ describe('Table Actions table negative tests -- exception condition', () => {
         constructor() { }
         getHomePage() {
             var p = Promise.defer();
-            p.resolve(null);
+            p.reject(null);
             return p.promise;
         }
     }
+
+    class mockLogger {
+        constructor() {}
+        logException() {}
+        debug() {}
+        warn() {}
+        error() {}
+        parseAndLogError() {}
+    }
+
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockTableService.prototype, 'getHomePage').and.callThrough();
+        spyOn(mockLogger.prototype, 'logException').and.callThrough();
         tableActions.__Rewire__('TableService', mockTableService);
+        tableActions.__Rewire__('Logger', mockLogger);
     });
 
     afterEach(() => {
         tableActions.__ResetDependency__('TableService');
+        tableActions.__ResetDependency__('Logger');
         flux.dispatchBinder.dispatch.calls.reset();
     });
 
@@ -101,8 +114,9 @@ describe('Table Actions table negative tests -- exception condition', () => {
             },
             () => {
                 expect(mockTableService.prototype.getHomePage).toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_FAILED, exStatus]);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId, tblId, rptId:'0'}]);
+                expect(mockLogger.prototype.logException).toHaveBeenCalled();
                 done();
             }
         );
