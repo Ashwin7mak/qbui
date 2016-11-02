@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ErrorWrapper  from '../../src/components/fields/ErrorWrapper';
+import ErrorWrapper  from '../../src/components/fields/errorWrapper';
 import Breakpoints from '../../src/utils/breakpoints';
 
 class BreakpointsAlwaysSmallMock {
