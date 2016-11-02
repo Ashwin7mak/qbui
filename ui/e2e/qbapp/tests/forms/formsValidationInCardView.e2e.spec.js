@@ -60,7 +60,7 @@
             e2eBase.cleanup(done);
         });
 
-        it('Validate required fields on the form', function(done) {
+        it('Validate all required fields on the form', function(done) {
             //click on add record button
             reportCardViewPage.clickAddRecord();
             // Check that the add form container is displayed
@@ -133,7 +133,7 @@
         it('Save And Next - Validate edit form and Edit a record successfully after errors', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
             //Select record 1
-            reportCardViewPage.clickRecord(4);
+            reportCardViewPage.clickRecord(3);
             reportCardViewPage.clickEditRecord();
 
             //get the fields from the table and generate a record
@@ -161,7 +161,7 @@
             //verify the edited record
             reportCardViewPage.waitForReportReady();
 
-            reportCardViewPage.clickRecord(4);
+            reportCardViewPage.clickRecord(3);
             for (var j = 0; j < fieldTypeClassNames.length; j++) {
                 reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
             }

@@ -73,7 +73,7 @@
             it('Save Button - Validate ' + testcase.message, function(done) {
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     //click edit record from the grid recordActions
-                    reportServicePage.clickRecordEditPencil(4);
+                    reportServicePage.clickRecordEditPencil(2);
 
                     //enter invalid values into fields on form
                     formsPage.enterInvalidFormValues(testcase.fieldTypeClassNames);
@@ -101,7 +101,7 @@
             var expectedNumericErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field'];
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //click edit record from the grid recordActions
-                reportServicePage.clickRecordEditPencil(5);
+                reportServicePage.clickRecordEditPencil(3);
 
                 //get the fields from the table and generate a record
                 formsPage.enterInvalidFormValues('numericField');
@@ -126,7 +126,7 @@
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                 return formsPage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     for (var j = 0; j < validFieldClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(5, validFieldClassNames[j]);
+                        formsPage.verifyFieldValuesInReportTable(3, validFieldClassNames[j]);
                     }
                     done();
                 });

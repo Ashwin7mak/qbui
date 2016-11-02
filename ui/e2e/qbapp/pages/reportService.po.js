@@ -245,9 +245,8 @@
          * @param recordRowIndex
          */
         this.clickRecordEditPencil = function(recordRowIndex) {
-            var rowElement = element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-cell-last-left-pinned')).get(recordRowIndex).all(by.className('recordActions')).all(by.className('edit'));
-            return rowElement.click().then(function() {
-                e2ePageBase.waitForElement(element(by.className('editForm')));
+            return element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-cell-last-left-pinned')).get(recordRowIndex).all(by.className('recordActions')).all(by.className('edit')).click().then(function() {
+                return e2ePageBase.waitForElement(element(by.className('editForm')));
             });
         };
 
@@ -263,7 +262,7 @@
                 e2eBase.sleep(browser.params.smallSleep);
                 e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnStage).then(function() {
                     return self.reportEditRecordBtnOnStage.click().then(function() {
-                        e2ePageBase.waitForElement(element(by.className('editForm')));
+                        return e2ePageBase.waitForElement(element(by.className('editForm')));
                     });
                 });
             });
@@ -281,7 +280,7 @@
                 e2eBase.sleep(browser.params.smallSleep);
                 e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnReportActions).then(function() {
                     return self.reportEditRecordBtnOnReportActions.click().then(function() {
-                        e2ePageBase.waitForElement(element(by.className('editForm')));
+                        return e2ePageBase.waitForElement(element(by.className('editForm')));
                     });
                 });
             });
@@ -296,7 +295,7 @@
             var self = this;
             return e2ePageBase.waitForElementToBeClickable(self.reportAddRecordBtn).then(function() {
                 return self.reportAddRecordBtn.click().then(function() {
-                    e2ePageBase.waitForElement(element(by.className('editForm')));
+                    return e2ePageBase.waitForElement(element(by.className('editForm')));
                 });
             });
         };
@@ -397,8 +396,8 @@
         };
 
         /**
-        * Helper function that will get all of the field column headers from the report. Returns an array of strings.
-        */
+         * Helper function that will get all of the field column headers from the report. Returns an array of strings.
+         */
         this.getReportColumnHeaders = function() {
             var deferred = Promise.pending();
             this.agGridColHeaderElList.then(function(elements) {
