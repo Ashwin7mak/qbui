@@ -9,9 +9,9 @@ import './appNotFound.scss';
 
 const AppNotFound = React.createClass({
     propTypes: {
+        apps: PropTypes.array.isRequired,
         appsLoading: PropTypes.bool.isRequired,
-        selectedAppId: PropTypes.string.isRequired,
-        apps: PropTypes.array.isRequired
+        selectedAppId: PropTypes.string
     },
     componentDidUpdate() {
         this.appExists();
