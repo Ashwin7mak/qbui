@@ -317,7 +317,7 @@
     }
   }
 
-  // On really small devices the layout breaks
+  // On really small devices the layout breaks, this fixes it
   @media (max-width: 355px) {
     & {
       padding: 5px;
@@ -331,5 +331,4 @@
       object-fit: contain;
     }
   }
-
 }
