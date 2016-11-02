@@ -12,6 +12,12 @@
         beforeLaunch: function() {
             //Have the tests start an instance of node
             require('../../server/src/app');
+
+            // This setting allow devs to gendata / e2etest to a single known realm not random as needed for testing
+            // by setting realmToUse in e2e.conf file and then supplying the E2E_CUSTOMCONFIG env var
+            if (process.env.E2E_CUSTOMCONFIG === 'true') {
+                localConf = require('../../server/src/config/environment');
+            }
         },
         // The timeout for each script run on the browser. This should be longer
         // than the maximum time your application needs to stabilize between tasks.
@@ -74,6 +80,7 @@
             ecTimeout: 5000
         },
         // This function is run once before any of the test files. Acts as a global test preparation step
+        // If you run in parallel or use multi capabilities this will run once per test file or capability
         onPrepare: function() {
             // Initialize all Page Objects
             global.requirePO = function(relativePath) {
@@ -86,27 +93,25 @@
             };
 
             // Initialize the base classes
-            // This setting allow devs to gendata / e2etest to a single known realm not random as needed for testing
-            // by setting realmToUse in e2e.conf file
-            //localConf = require('../../server/src/config/environment');
             if (localConf) {
                 // Pass down your config object to e2eBase -> recordApi.base -> api.base
+                // api.base will use the DOMAIN param set in your config as the baseUrl if you pass a config object down through the stack
                 global.e2eBase = requireCommon('common/e2eBase')(localConf);
             } else {
                 // Get an instance of e2eBase (which gives you an instance of recordApi.base and api.base)
                 // e2eBase then uses the instance of recordApi.base and initializes the services classes with this instance
                 global.e2eBase = requireCommon('common/e2eBase')();
-                // api.base will use the DOMAIN param set in your config as the baseUrl if you pass a config object down through the stack
                 // browser is a global object setup by protractor. baseUrl is a param that can be passed in via IntelliJ config or via grunt
                 // since we aren't passing a config object set it here
                 e2eBase.setBaseUrl(browser.baseUrl);
                 // recordApi.base will not initialize itself (and api.base) if you don't pass in a config object
                 // Initialize your recordApi.base (because we aren't passing in a config object in the above call)
+                // This call creates a your test realm down in api.base
                 e2eBase.initialize();
             }
-            global.consts = require('../../common/src/constants');
             global.e2eUtils = requireCommon('common/e2eUtils')();
             global.e2eConsts = requireCommon('common/e2eConsts');
+            global.consts = require('../../common/src/constants');
 
             // Lets Protractor know there is no Angular code to wait for
             browser.ignoreSynchronization = true;

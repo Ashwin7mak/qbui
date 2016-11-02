@@ -79,6 +79,7 @@
             e2eBase.setBaseUrl(browser.baseUrl);
             // recordApi.base will not initialize itself (and api.base) if you don't pass in a config object
             // Initialize your recordApi.base (because we aren't passing in a config object in the above call)
+            // This call creates you your test realm down in api.base
             e2eBase.initialize();
             global.consts = require('../../../common/src/constants');
             global.e2eUtils = requireCommon('common/e2eUtils')();
