@@ -7,7 +7,7 @@ import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
 import FieldUtils from '../../utils/fieldUtils';
 import Constants from '../../../../common/src/constants';
-import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js'
+import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -350,17 +350,15 @@ let QBForm = React.createClass({
     createFormFooter(fields) {
         var msg = [];
         for (var i = 0; i < fields.length; i++) {
-            if(fields[i].type===Constants.USER) {
+            if (fields[i].type === Constants.USER) {
                 let user = {
                     screenName: fields[i].screenName,
                     email: fields[i].email
-                }
-                let display = fields[i].value;
+                };
+                let display = fields[i].value + ". ";
                 msg.push(<span key={i} className="fieldNormalText">{fields[i].name}</span>);
-                msg.push(<span key={i+"a"} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>)
-                // msg.push(<span key={i+"a"} className="fieldLinkText">{fields[i].value + ". "}</span>);
-            }
-            else {
+                msg.push(<span key={i + "a"} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>);
+            } else {
                 msg.push(<span key={i} className="fieldNormalText">{fields[i].name + " " + fields[i].value + ". "}</span>);
             }
 
@@ -379,17 +377,17 @@ let QBForm = React.createClass({
         let fields = this.props.formData.fields;
         let values = this.props.formData.record;
         const result = [];
-        for(var fld in fields) {
-            if (fields[fld].builtIn && fields[fld].name != Constants.BUILTIN_FIELD_NAME.RECORD_ID) {
+        for (var fld in fields) {
+            if (fields[fld].builtIn && fields[fld].name !== Constants.BUILTIN_FIELD_NAME.RECORD_ID) {
                 for (var val in values) {
                     if (values[val].id === fields[fld].id) {
-                        if(fields[fld].name === Constants.BUILTIN_FIELD_NAME.LAST_MODIFIED_BY) {
+                        if (fields[fld].name === Constants.BUILTIN_FIELD_NAME.LAST_MODIFIED_BY) {
                             result.push({name: Locale.getMessage("form.footer.lastUpdatedBy"), value: values[val].display, email: values[val].value.email, screenName: values[val].value.screenName, id:1, type:Constants.USER});
                         }
-                        if(fields[fld].name === Constants.BUILTIN_FIELD_NAME.DATE_CREATED) {
+                        if (fields[fld].name === Constants.BUILTIN_FIELD_NAME.DATE_CREATED) {
                             result.push({name: Locale.getMessage("form.footer.createdOn"), value: values[val].display, id:2, type:Constants.DATE});
                         }
-                        if(fields[fld].name === Constants.BUILTIN_FIELD_NAME.RECORD_OWNER) {
+                        if (fields[fld].name === Constants.BUILTIN_FIELD_NAME.RECORD_OWNER) {
                             result.push({name: Locale.getMessage("form.footer.ownedBy"), value: values[val].display, email: values[val].value.email, screenName: values[val].value.screenName, id:3, type:Constants.USER});
                         }
                         break;
@@ -409,7 +407,10 @@ let QBForm = React.createClass({
     render() {
         const tabChildren = [];
         const singleColumn = Breakpoints.isSmallBreakpoint();
-        const formFooter = this.createFormFooter(this.getBuiltInFieldsForFooter());
+        let formFooter = [];
+        if (this.props.formData.includeBuiltIns) {
+            formFooter = this.createFormFooter(this.getBuiltInFieldsForFooter());
+        }
         if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
             let tabs = this.props.formData.formMeta.tabs;
             Object.keys(tabs).forEach(key => {
