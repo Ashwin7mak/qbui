@@ -41,11 +41,13 @@ $cell-edit-background-edit: #f3f8fe;
     margin-bottom: 330px;
 }
 
-.inlineEditing .agGrid .selectAllCheckbox,
-.inlineEditing .agGrid .ag-selection-checkbox,
-.inlineEditing .agGrid .selectionCell .recordActions,
-.inlineEditing .agGrid .ag-header-icon {
-    display:none;
+.inlineEditing .agGrid {
+    .selectAllCheckbox,
+    .ag-selection-checkbox,
+    .selectionCell .recordActions,
+    .agGrid .ag-header-icon {
+        display: none;
+    }
 }
 
 .ag-pinned-left-cols-viewport {
