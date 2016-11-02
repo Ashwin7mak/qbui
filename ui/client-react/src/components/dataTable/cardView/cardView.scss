@@ -152,6 +152,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
 .checkboxContainer {
     width: 40px;
     flex: 0 0 auto;
+    padding-left: 10px;
     input {
         height: 100%;
         display:inline-block;

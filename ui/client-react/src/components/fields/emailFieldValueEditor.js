@@ -29,52 +29,26 @@ const EmailFieldValueEditor = React.createClass({
         readOnly: PropTypes.bool,
 
         /** Optional prop to pass in placeholder text. Defaults to: 'name@domain.com' (internationalized). */
-        placeholder: PropTypes.string,
-
-        /** Flag to turn on and off email validation. `onValidated` function must also be supplied */
-        validateFieldValue: PropTypes.bool,
-
-        /** Function used to pass validation results to the parent component. `validate` prop must also be true */
-        onValidated: PropTypes.func
-
+        placeholder: PropTypes.string
     },
     getDefaultProps() {
         return {
             value: '',
-            validateFieldValue: false,
+            validateFieldValue: true,
             invalid: false,
             disabled: false,
             readOnly: false,
         };
     },
-    /**
-     * Validation for the email field occurs here because it is specific to this field.
-     * Generic validators occur within validationUtils.js
-     */
-    validateEmail(email) {
-        if (this.props.validateFieldValue && this.props.onValidated) {
-            var fieldName = 'Email';
-            if (this.props.fieldDef && this.props.fieldDef.headerName) {
-                fieldName = this.props.fieldDef.headerName;
-            }
-
-            var isInvalid = EmailValidator.isInvalid(email);
-
-            this.props.onValidated({
-                isInvalid: isInvalid,
-                invalidMessage: Locales.getMessage('invalidMsg.email', {fieldName: 'email'})
-            });
-        }
-    },
     onBlur(newValue) {
         let datatypeAttributes = (this.props.fieldDef ? this.props.fieldDef.datatypeAttributes : {});
 
-        this.validateEmail(newValue.value);
+        let value = EmailFormatter.addDefaultDomain(newValue.value, datatypeAttributes.defaultDomain);
 
         if (this.props.onBlur) {
             this.props.onBlur({
-                display: EmailFormatter.format(newValue, datatypeAttributes),
-                value: EmailFormatter.addDefaultDomain(newValue.value, datatypeAttributes.defaultDomain)
+                display: EmailFormatter.formatListOfEmails(value, datatypeAttributes),
+                value: value
             });
         }
     },

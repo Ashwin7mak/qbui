@@ -36,7 +36,8 @@ export let Nav = React.createClass({
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
-            form: flux.store('FormStore').getState()
+            form: flux.store('FormStore').getState(),
+            reportSearchData: flux.store('ReportDataSearchStore').getState(),
         };
     },
 
@@ -208,6 +209,7 @@ export let Nav = React.createClass({
                             isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
                             fields: this.state.fields,
                             form: this.state.form,
+                            reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),
                             scrollingReport: this.state.nav.scrollingReport,

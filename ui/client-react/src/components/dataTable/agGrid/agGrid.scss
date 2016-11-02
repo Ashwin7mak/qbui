@@ -45,10 +45,13 @@ $cell-edit-background-edit: #f3f8fe;
     margin-bottom: 150px;
 }
 
-.inlineEditing .agGrid .selectAllCheckbox,
-.inlineEditing .agGrid .ag-selection-checkbox
-{
-    display:none;
+.inlineEditing .agGrid {
+    .selectAllCheckbox,
+    .ag-selection-checkbox,
+    .selectionCell .recordActions,
+    .agGrid .ag-header-icon {
+        display: none;
+    }
 }
 
 //This allows .editTools to be on top, when scrolling horizontally
@@ -151,6 +154,9 @@ $cell-edit-background-edit: #f3f8fe;
     .gridCell {
         word-wrap: break-word;
         padding: $grid-default-cell-padding;
+        .fieldValueEditor .tipChildWrapper {
+            width: 100%;
+        }
     }
 
     .ag-header-row .gridHeaderCell {
@@ -491,6 +497,7 @@ $cell-edit-background-edit: #f3f8fe;
     box-shadow: 0px 0px 14px $row-box-shadow-color;
     height : 58px !important;
     margin-top: -13px;
+    z-index: 999;
 
     &[row='0'] { //top row in table would clip required star so move down and be shorter
       margin-top: 0px;

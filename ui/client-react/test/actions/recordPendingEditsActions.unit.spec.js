@@ -16,7 +16,8 @@ describe('Record Pending Edits Actions functions ', () => {
         tblId: tblId,
         recId: recId,
         origRec: origRec,
-        changes:{}
+        changes:{},
+        isInlineEdit: true
     };
     let changeRecInputs = {
         appId: appId,
@@ -49,7 +50,7 @@ describe('Record Pending Edits Actions functions ', () => {
     });
 
     it('test recordPendingEditsStart parameters', () => {
-        flux.actions.recordPendingEditsStart(appId, tblId, recId, origRec, {});
+        flux.actions.recordPendingEditsStart(appId, tblId, recId, origRec, {}, true);
         expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
         expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.RECORD_EDIT_START, startInputs);
     });
