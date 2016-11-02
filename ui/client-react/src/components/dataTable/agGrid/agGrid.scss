@@ -573,6 +573,9 @@ $cell-edit-background-edit: #f3f8fe;
                         }
                     }
                 }
+                .qbIcon {
+                    font-size: $grid-font-size;
+                }
             }
 
             //  edit mode styles for a date/time field combination within the grid
@@ -592,6 +595,11 @@ $cell-edit-background-edit: #f3f8fe;
                 &.timeCell {
                     .Select-option {
                         font-size: 12px;
+                        padding: 2px 0 2px 20px;
+                        .qbIcon {
+                            font-size: inherit;
+                            padding: 3px 4px;
+                        }
                     }
                     .Select-placeholder {
                         font-size: 12px;
@@ -613,13 +621,6 @@ $cell-edit-background-edit: #f3f8fe;
     }
 
     .gridCell {
-        .timeCell .Select-option {
-            padding: 2px 0 2px 20px;
-            .qbIcon {
-                font-size: inherit;
-                padding: 3px 4px;
-            }
-        }
         .editTools {
             z-index:1;
             display:flex;
