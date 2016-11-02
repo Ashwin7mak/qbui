@@ -27,7 +27,8 @@ export default {
                 tipText: "This is work in progress, so if you click a button and it doesn’t do anything, no worries. We’re still working on that feature.",
                 helpTitle: "Need help?",
                 helpText: "We want you to be successful; that’s why we’re always here to help.",
-                helpLinkPreText: "Please contact us at"
+                helpLinkPreText: "Please contact us at",
+                missingWalkMe: "Tutorial is not available."
             }
         },
         pendingEditModal: {

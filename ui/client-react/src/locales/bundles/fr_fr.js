@@ -24,7 +24,8 @@ export default {
                 tipText: "Il s'agit de travaux en cours, donc si vous cliquez sur un bouton et il ne fait rien, pas de soucis. Nous travaillons encore sur cette fonctionnalité.",
                 helpTitle: "Besoin d'aide?",
                 helpText: "Nous voulons que vous réussissiez; C'est pourquoi nous sommes toujours là pour vous aider.",
-                helpLinkPreText: "Veuillez nous contacter au"
+                helpLinkPreText: "Veuillez nous contacter au",
+                missingWalkMe: "Le didacticiel n'est pas disponible"
             }
         },
         pendingEditModal: {

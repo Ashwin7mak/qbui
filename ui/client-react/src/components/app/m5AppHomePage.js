@@ -1,6 +1,8 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
+import Locale from '../../locales/locales';
 import QBicon from '../qbIcon/qbIcon';
+import {NotificationManager} from 'react-notifications';
 
 import './appHomePage.scss';
 import './m5AppHomePage.scss';
@@ -10,7 +12,17 @@ function i18nKey(subkey) {
     return `app.homepage.${subkey}`;
 }
 
+const welcomeGuideLink = 'https://d2qhvajt3imc89.cloudfront.net/customers/QuickBase/Welcome_guide.pdf';
+const feedbackLink = 'https://quickbase.uservoice.com/forums/378045-mercury';
+
 const M5AppHomePage = React.createClass({
+    launchGuideMe() {
+        try {
+            WalkMeAPI.startWalkthruById(228348);
+        } catch (err) {
+            NotificationManager.info(Locale.getMessage(i18nKey('missingWalkMe')), '', 1500);
+        }
+    },
     render() {
         return (
             <div className="m5AppHomePage">
@@ -22,7 +34,7 @@ const M5AppHomePage = React.createClass({
                         </div>
                         <div className="topPanelLinks">
                             <a className="linkWithImage" href="videotour"><img className="launchTourImage" /><span><I18nMessage message={i18nKey('launchVideoLink')} /></span></a>
-                            <a className="linkWithImage" href="guidme"><img className="guideMeImage" /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>
+                            <a className="linkWithImage" onClick={this.launchGuideMe}><img className="guideMeImage" /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>
                         </div>
                     </div>
                     <div className="mainPanel">
@@ -30,7 +42,7 @@ const M5AppHomePage = React.createClass({
                             <h4><I18nMessage message={i18nKey('guideTitle')} /></h4>
                             <img className="welcomeGuideImage" />
                             <p><I18nMessage message={i18nKey('guideText')} /></p>
-                            <button className="btn btn-primary"><I18nMessage message={i18nKey('guideButton')} /> <small>(.pdf)</small></button>
+                            <a className="btn btn-primary" href={welcomeGuideLink} target="_blank"><I18nMessage message={i18nKey('guideButton')} /> <small>(.pdf)</small></a>
                         </div>
                         <div className="homePanel rightContent">
                             <h4><I18nMessage message={i18nKey('feedbackTitle')} /></h4>
@@ -38,7 +50,7 @@ const M5AppHomePage = React.createClass({
                                 <img className="giveFeedbackImage" />
                             </div>
                             <p><I18nMessage message={i18nKey('feedbackText')} /></p>
-                            <button className="btn btn-primary btn-feedback"><I18nMessage message={i18nKey('feedbackButton')} /></button>
+                            <a className="btn btn-primary btn-feedback" href={feedbackLink} target="_blank"><I18nMessage message={i18nKey('feedbackButton')} /></a>
                         </div>
                     </div>
                     <div className="bottomPanel">
