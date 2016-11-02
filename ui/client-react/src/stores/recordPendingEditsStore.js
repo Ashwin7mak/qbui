@@ -83,7 +83,11 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             errors:[]
         };
         this.recordEditOpen = true;
-        this.isInlineEditOpen = true;
+
+        if (payload.isInlineEdit) {
+            this.isInlineEditOpen = true;
+        }
+
         this.emit('change');
     },
 
@@ -139,7 +143,10 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      */
     onRecordEditCancel() {
         // record wasn't saved nothing pending
-        this.isInlineEditOpen = false;
+
+        if (this.isInlineEditOpen) {
+            this.isInlineEditOpen = false;
+        }
         this.recordEditOpen = false;
         this._initData();
         this.emit('change');
@@ -236,7 +243,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.commitChanges[entry].status = actions.SAVE_RECORD_FAILED;
         }
         this.getServerErrs(payload);
-        this.isInlineEditOpen = true;
         this.recordEditOpen = true;
         this.emit('change');
     },
@@ -273,7 +279,10 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.commitChanges[entry].status = actions.ADD_RECORD_SUCCESS;
         }
         this.isPendingEdit = false;
-        this.isInlineEditOpen = false;
+
+        if (this.isInlineEditOpen) {
+            this.isInlineEditOpen = false;
+        }
         this.recordEditOpen = false;
         this.recordChanges = {};
         this.editErrors = {
