@@ -804,7 +804,6 @@ describe('ReportContent functions', () => {
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(0);
     });
-    
     it('test hide of footer on row selection', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_emptyData}
