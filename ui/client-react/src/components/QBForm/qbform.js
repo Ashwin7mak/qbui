@@ -6,6 +6,8 @@ import FieldLabelElement from './fieldLabelElement';
 import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
 import FieldUtils from '../../utils/fieldUtils';
+import Constants from '../../../../common/src/constants';
+import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js'
 
 import './qbform.scss';
 import './tabs.scss';
@@ -343,27 +345,90 @@ let QBForm = React.createClass({
     },
 
     /**
+     * Create a form footer with built-in fields
+     */
+    createFormFooter(fields) {
+        var msg = [];
+        for (var i = 0; i < fields.length; i++) {
+            if(fields[i].type===Constants.USER) {
+                let user = {
+                    screenName: fields[i].screenName,
+                    email: fields[i].email
+                }
+                let display = fields[i].value;
+                msg.push(<span key={i} className="fieldNormalText">{fields[i].name}</span>);
+                msg.push(<span key={i+"a"} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>)
+                // msg.push(<span key={i+"a"} className="fieldLinkText">{fields[i].value + ". "}</span>);
+            }
+            else {
+                msg.push(<span key={i} className="fieldNormalText">{fields[i].name + " " + fields[i].value + ". "}</span>);
+            }
+
+        }
+        return (
+            <div className="formFooter">
+                {msg}
+            </div>
+        );
+    },
+
+    /**
+     * Get built-in type fields from form fields collection
+     */
+    getBuiltInFieldsForFooter() {
+        let fields = this.props.formData.fields;
+        let values = this.props.formData.record;
+        const result = [];
+        for(var fld in fields) {
+            if (fields[fld].builtIn && fields[fld].name != Constants.BUILTIN_FIELD_NAME.RECORD_ID) {
+                for (var val in values) {
+                    if (values[val].id === fields[fld].id) {
+                        if(fields[fld].name === Constants.BUILTIN_FIELD_NAME.LAST_MODIFIED_BY) {
+                            result.push({name: Locale.getMessage("form.footer.lastUpdatedBy"), value: values[val].display, email: values[val].value.email, screenName: values[val].value.screenName, id:1, type:Constants.USER});
+                        }
+                        if(fields[fld].name === Constants.BUILTIN_FIELD_NAME.DATE_CREATED) {
+                            result.push({name: Locale.getMessage("form.footer.createdOn"), value: values[val].display, id:2, type:Constants.DATE});
+                        }
+                        if(fields[fld].name === Constants.BUILTIN_FIELD_NAME.RECORD_OWNER) {
+                            result.push({name: Locale.getMessage("form.footer.ownedBy"), value: values[val].display, email: values[val].value.email, screenName: values[val].value.screenName, id:3, type:Constants.USER});
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        result.sort(function(a, b) {
+            return a.id - b.id;
+        });
+        return result;
+    },
+
+    /**
      * render a form as an set of tabs containing HTML tables (a la legacy QuickBase)
      */
     render() {
         const tabChildren = [];
         const singleColumn = Breakpoints.isSmallBreakpoint();
-
+        const formFooter = this.createFormFooter(this.getBuiltInFieldsForFooter());
         if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
             let tabs = this.props.formData.formMeta.tabs;
-
             Object.keys(tabs).forEach(key => {
                 tabChildren.push(this.createTab(tabs[key], singleColumn));
             });
         }
 
         const formContent = tabChildren.length < 2 ? tabChildren : <Tabs activeKey={this.props.activeTab}>{tabChildren}</Tabs>;
-
+        const user = {
+            screenName: "myScreenName",
+            email: "john.doe@email.com"
+        };
+        const display = "John Doe";
         return (
             <div className="formContainer">
                 <form className={this.props.edit ? "editForm" : "viewForm"}>
                     {formContent}
                 </form>
+                <div>{formFooter}</div>
             </div>
         );
     }

@@ -120,6 +120,11 @@ export default {
             error: {
                 403: "Vous n'êtes pas autorisé à accéder à ce formulaire",
                 500: "Erreur inattendue rendant ce formulaire"
+            },
+            footer: {
+                lastUpdatedBy: "Dernière mise à jour par ",
+                createdOn: "Créé sur ",
+                ownedBy: "Propriétaire "
             }
         },
         report : {
