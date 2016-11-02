@@ -4,6 +4,8 @@
  */
 (function() {
     'use strict';
+    var _ = require('lodash');
+
     //Module constants:
     var WHOLE = 'WHOLE';
     var UP_TO_UNDERSCORE = 'UP_TO_UNDERSCORE';
@@ -25,13 +27,19 @@
 
     module.exports = {
         addDefaultDomain: function(email, domain) {
-            // Core and current stack add a domain to a blank string, so that
-            // same functionality occurs here. To remove, just check if email is
-            // blank before adding a default domain. `if (domain && email && !hasDomain(email)) {`
-            if (domain && !hasDomain(email)) {
-                email = email + (domain.indexOf('@') >= 0 ? domain : '@' + domain);
-            }
-            return email;
+            // If a string of emails is provided, check the domain for each email
+            var emails = _.map(this.splitEmails(email), function(singleEmail) {
+                // Core and current stack add a domain to a blank string, so that
+                // same functionality occurs here. To remove, just check if email is
+                // blank before adding a default domain. `if (domain && email && !hasDomain(email)) {`
+                if (domain && !hasDomain(singleEmail)) {
+                    singleEmail = singleEmail + (domain.indexOf('@') >= 0 ? domain : '@' + domain);
+                }
+
+                return singleEmail;
+            });
+
+            return emails.join(';');
         },
         //Given a email string as input, formats as a email with display preferences applied.
         format: function(fieldValue, fieldInfo) {
@@ -63,6 +71,35 @@
 
             }
             return baseValue;
+        },
+        /**
+         * Formats a list of emails in a string.
+         * Emails can be separated by a semicolon (;), comma (,), or passed in as an array
+         */
+        formatListOfEmails: function(emails, fieldInfo) {
+            // Abort if emails is null or empty
+            if (!emails || emails.length === 0) {
+                return emails;
+            }
+
+            if (!_.isArray(emails)) {
+                emails = this.splitEmails(emails);
+            }
+
+            for (var i = 0; i < emails.length; i++) {
+                emails[i] = this.format({value: emails[i]}, fieldInfo);
+            }
+
+            return emails.join(';');
+        },
+        splitEmails: function(emails) {
+            // Can't split if it is empty or null
+            if (!emails || emails.length === 0) {
+                return emails;
+            }
+
+            // The filter removes any blank strings from the final array
+            return emails.split(/\s*[;,\s\t]\s*/).filter(function(singleEmail) {return singleEmail;});
         }
     };
 }());

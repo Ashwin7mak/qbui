@@ -447,6 +447,21 @@
          */
         this.clickEditMenuCancelButton = function() {
             var self = this;
+            var cancelBtnIndex = 0;
+            return self.selectInlineMenuButtons(cancelBtnIndex);
+        };
+
+        //Click inline Edit Menu 'Save and Add a new Row' button
+        this.clickInlineMenuSaveAddNewRowBtn = function() {
+            var self = this;
+            var saveAddnewRowBtnIndex = 2;
+            return self.selectInlineMenuButtons(saveAddnewRowBtnIndex);
+        };
+
+
+
+        this.selectInlineMenuButtons = function(buttonIndex) {
+            var self = this;
             return self.agGridRowActionsElList.filter(function(elem) {
                 // Return only the row with 'editing' in the class
                 return elem.getAttribute('class').then(function(elmClass) {
@@ -454,12 +469,13 @@
                 });
             }).then(function(rowElem) {
                 expect(rowElem.length).toBe(1);
-                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(0).click().then(function() {
+                return rowElem[0].element(by.className('editTools')).all(by.tagName('button')).get(buttonIndex).click().then(function() {
                     // Wait for the report to be ready
                     self.waitForReportContent();
                 });
             });
         };
+
         /**
          * Helper method to ensure the report has been properly loaded with records. Will throw an error if no records are in the report.
          * @returns A promise that will resolve after waiting for the report records to be displayed
@@ -482,7 +498,7 @@
         this.recordCheckBoxes = element.all(by.className('ag-selection-checkbox'));
 
         this.deleteIcon = element(by.className('iconLink icon-delete')).element(by.className('qbIcon iconTableUISturdy-delete'));
-        this.successDeleteWindow = element(by.className('notification notification-success')).element(by.className('notification-message')).element(by.className('message'));
+        this.successWindow = element(by.className('notification notification-success')).element(by.className('notification-message')).element(by.className('message'));
 
 
         //Click on the Delete Icon and Checking for the success Message
@@ -491,11 +507,11 @@
             this.deleteIcon.click();
         };
 
-        //
-        this.assertDeleteMessageSuccess = function(successMessage) {
+        // Success window assertion that comes on delete, add and edit of a row
+        this.assertSuccessMessage = function(successMessage) {
             var self = this;
-            this.waitForElement(self.successDeleteWindow).then(function() {
-                expect(self.successDeleteWindow.getText()).toMatch(successMessage.toString());
+            this.waitForElement(self.successWindow).then(function() {
+                expect(self.successWindow.getText()).toMatch(successMessage.toString());
             });
         };
 
@@ -514,12 +530,16 @@
         };
 
         //Record Row to be selected:
-
         this.reportRowSelected = function(recordRow) {
             this.recordCheckBoxes.get(recordRow).click();
         };
 
+        //Count the number of rows on the report page
+        this.reportRowCount = function() {
+            return this.agGridBodyViewportEl.all(by.className('ag-row')).count();
+        };
     };
+
     ReportContentPage.prototype = e2ePageBase;
     module.exports = ReportContentPage;
 }());

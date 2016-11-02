@@ -44,6 +44,8 @@
          * Before each test starts just make sure the report has loaded with records visible
          */
         beforeEach(function(done) {
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, testApp.id, testApp.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPO.waitForReportContent();
             done();
         });
 
@@ -191,6 +193,7 @@
                 done();
             });
         });
+
 
         //TODO: Required field test, Need to extend setup data for this
 

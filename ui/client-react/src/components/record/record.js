@@ -9,6 +9,12 @@ let Record = React.createClass({
     mixins: [FluxMixin],
     displayName: 'Record',
 
+    componentDidMount() {
+        // the first time field change is called recordChanges should be empty. at this time save the original records values to diff later with new values
+        if ((_.has(this.props, 'pendEdits.recordEditOpen') && !this.props.pendEdits.recordEditOpen) && _.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges)) {
+            this.handleEditRecordStart(this.props.recId);
+        }
+    },
     /**
      * Get the record as {fids, names}
      * fids is a fid lookup hash looks like {6: {id:6, value: <val>, display: <display>}}
@@ -39,19 +45,49 @@ let Record = React.createClass({
         let changes = {};
         if (this.props.recId) {
             origRec = this.getOrigRec();
+        } else if (this.props.formData && !this.props.formData.record) {
+            let fields = this.props.formData.formMeta.fields;
+            //for the fields on the form
+            fields.forEach((fieldId) => {
+                // get the fields definition
+                let fieldDef = _.find(this.props.formData.fields,
+                    (field => fieldId === field.id));
+                if (fieldDef && !fieldDef.builtIn) {
+                    let value = null;
+                    if (fieldDef.defaultValue && fieldDef.defaultValue.coercedValue) {
+                        // if there is a default value use that as new record changes
+                        value = fieldDef.defaultValue.coercedValue.value;
+                    }
+                    //add as change the field to the changes set
+                    let change = {
+                        //the + before field.id is needed turn the field id from string into a number
+                        oldVal: {value: undefined, id: +fieldDef.id},
+                        newVal: {value: value},
+                        fieldName: fieldDef.name, //or get name of field in form ?
+                        fieldDef: fieldDef
+                    };
+                    changes[fieldDef.id] = change;
+                }
+            });
         } else {
+            // we have the records use its values for changes
             let rec = this.props.formData.record;
             for (var key in rec) {
                 let field = rec[key];
-                if (field.value !== null) {
+                let fieldDef = _.find(this.props.formData.fields,
+                    (item => item.id === field.id));
+                if (fieldDef && !fieldDef.builtIn && field.value !== null) {
                     let change = {
                         //the + before field.id is needed turn the field id from string into a number
                         oldVal: {value: null, id: +field.id},
-                        newVal: {value: field.value}
+                        newVal: {value: field.value},
+                        fieldName: fieldDef.name, //or get name of field in form ?
+                        fieldDef: fieldDef
                     };
                     changes[field.id] = change;
                 }
             }
+
         }
         flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, this.props.recId, origRec, changes);
     },
@@ -62,16 +98,18 @@ let Record = React.createClass({
      * @param change - {fid:fieldid, values : {oldVal :{}, newVal:{}, fieldName:name}
      */
     handleFieldChange(change) {
-        // the first time field change is called recordChanges should be empty. at this time save the original records values to diff later with new values
-        if (_.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges)) {
-            this.handleEditRecordStart(this.props.recId);
-        }
         change.recId = this.props.recId;
         // call action to hold the field value change
         const flux = this.getFlux();
         flux.actions.recordPendingEditsChangeField(this.props.appId, this.props.tblId, this.props.recId, change);
     },
 
+    componentDidUpdate(prevProps,  prevState) {
+        // the first time with no changes on a new record,  since its new consider all fields changed so they get saved
+        if (_.has(this.props, 'pendEdits.recordChanges') && _.isEmpty(this.props.pendEdits.recordChanges) &&  !this.props.recId && !this.props.formData.record) {
+            this.handleEditRecordStart(this.props.recId);
+        }
+    },
 
     render() {
 

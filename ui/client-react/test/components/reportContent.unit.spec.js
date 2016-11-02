@@ -228,10 +228,36 @@ const fakeReportData_pagedData  = {
     }
 };
 
+
+const fakeReportDataFields_unsaved = {
+    fields: {
+        data: [
+            {
+                "datatypeAttributes": {
+                    "type": "TEXT", "clientSideAttributes": {"width": 50, "bold": true, "word_wrap": false, "max_chars": 0},
+                    "htmlAllowed": false
+                }, "id": 5, "name": "abc", "type": "SCALAR", "builtIn": false,
+                "dataIsCopyable": true, "includeInQuickSearch": true, "appearsByDefault": true, "userEditableValue": true,
+                "required": false, "defaultValue": {}, "multiChoiceSourceAllowed": false
+            },
+
+            {
+                "datatypeAttributes": {
+                    "type": "NUMERIC", "clientSideAttributes": {"width": 50, "bold": false, "word_wrap": false},
+                    "decimalPlaces": 0, "treatNullAsZero": true, "unitsDescription": ""
+                }, "id": 7, "name": "Record ID#", "type": "SCALAR",  "builtIn": true,
+                "dataIsCopyable": true, "includeInQuickSearch": true, "appearsByDefault": false, "userEditableValue": false,
+                "required": true, "unique": true, "indexed": true, "keyField": true, "defaultValue": {},
+                "multiChoiceSourceAllowed": false
+            }
+        ]
+    }
+};
+
 const fakeReportData_unsaved = {
     loading: false,
     countingTotalRecords: false,
-    recordsCount:10,
+    recordsCount:1,
     data: {
         name: "test unsaved",
         groupFields: [],
@@ -245,6 +271,13 @@ const fakeReportData_unsaved = {
         }]
     }
 };
+
+
+let map = new Map();
+fakeReportDataFields_unsaved.fields.data.forEach((field) => {
+    map.set(field.id, field);
+});
+fakeReportData_unsaved.data.fieldsMap = map;
 
 const cols_with_numeric_field = [
     {
@@ -875,7 +908,7 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalledWith(
-            appId, tblId, null, null, {5: {oldVal: {value: null, id: 5}, newVal:{value: 'abc'}, fieldName: 'col_text'}}
+            appId, tblId, null, null, {5: {oldVal: {value: undefined, id: 5}, newVal:{value: 'abc'}, fieldName: 'col_text', fieldDef: fakeReportDataFields_unsaved.fields.data[0]}}, true
         );
     });
 
