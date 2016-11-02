@@ -77,12 +77,25 @@
             });
         };
 
+        this.clickFormSaveAndAddAnotherBtn = function() {
+            var self = this;
+            return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
+                self.clickSaveBtnWithName('Save & add another');
+                // Check that the edit notification is displayed
+                return reportServicePage.waitForElement(reportServicePage.editSuccessPopup).then(function() {
+                    return reportServicePage.waitForElement(self.formEditContainerEl);
+                });
+            });
+        };
+
         this.clickFormSaveAndNextBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
                 self.clickSaveBtnWithName('Save & Next');
                     // Check that the edit notification is displayed
-                return reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
+                return reportServicePage.waitForElement(reportServicePage.editSuccessPopup).then(function() {
+                    return reportServicePage.waitForElement(self.formEditContainerEl);
+                });
             });
         };
 
@@ -95,7 +108,7 @@
 
         this.clickFormCloseBtn = function() {
             var self = this;
-            this.formCloseBtn.click().then(function() {
+            return this.formCloseBtn.click().then(function() {
                 return reportServicePage.waitForElement(self.reportAddRecordBtn);
             });
         };
@@ -103,7 +116,7 @@
         this.enterFormValues = function(fieldLabel) {
             var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
-            reportServicePage.waitForElement(self.formEditContainerEl).then(function() {
+            return reportServicePage.waitForElement(self.formEditContainerEl).then(function() {
                 if (fieldLabel === 'dateCell') {
                     //enter date fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
@@ -153,7 +166,7 @@
         this.enterInvalidFormValues = function(fieldLabel) {
             var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
-            reportServicePage.waitForElement(self.formEditContainerEl).then(function() {
+            return reportServicePage.waitForElement(self.formEditContainerEl).then(function() {
                 if (fieldLabel === 'textField') {
                     //enter text fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
@@ -175,15 +188,17 @@
         this.verifyErrorMessages = function(expectedErrorMessages) {
             var self = this;
             var errorMsgs = [];
-            reportServicePage.waitForElement(self.formErrorMessageContent).then(function() {
-                self.formErrorMessageContent.all(by.className('qbErrorMessageItem')).filter(function(elm) {
-                    return elm;
-                }).map(function(elm) {
-                    return elm.getAttribute('textContent');
-                }).then(function(text) {
-                    expect(text).toEqual(expectedErrorMessages);
-                    //close the alert
-                    return self.formErrorMessageHeaderCloseBtn.click();
+            return reportServicePage.waitForElement(self.formErrorMessageContent).then(function() {
+                return reportServicePage.waitForElement(self.formErrorMessage).then(function() {
+                    self.formErrorMessageContent.all(by.className('qbErrorMessageItem')).filter(function(elm) {
+                        return elm;
+                    }).map(function(elm) {
+                        return elm.getAttribute('textContent');
+                    }).then(function(text) {
+                        expect(text).toEqual(expectedErrorMessages);
+                        //close the alert
+                        return self.formErrorMessageHeaderCloseBtn.click();
+                    });
                 });
             });
         };

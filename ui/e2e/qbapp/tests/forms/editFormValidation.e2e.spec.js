@@ -5,12 +5,15 @@
     var ReportServicePage = requirePO('reportService');
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
-    var reportServicePage = new ReportServicePage();
     var FormsPage = requirePO('formsPage');
+    var ReportContentPage = requirePO('reportContent');
+
+    var reportServicePage = new ReportServicePage();
     var formsPage = new FormsPage();
+    var reportContentPage = new ReportContentPage();
     var tableGenerator = require('../../../../test_generators/table.generator');
 
-    describe('Edit Form Validation Tests', function() {
+    describe('Edit Form Validation Tests :', function() {
 
         var realmName;
         var realmId;
@@ -21,9 +24,6 @@
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
-            }).then(function() {
-                //Create a form in table 3 with required fields
-                //return e2eBase.formService.createFormsWithRequiredFields(app);
             }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 // Gather the necessary values to make the requests via the browser
@@ -74,25 +74,20 @@
                 reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     //click edit record from the grid recordActions
                     reportServicePage.clickRecordEditPencil(4);
-                    reportServicePage.waitForElement(formsPage.formEditContainerEl);
-                    // Check that the add form container is displayed
-                    expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-                }).then(function() {
-                    //get the fields from the table and generate a record
+
+                    //enter invalid values into fields on form
                     formsPage.enterInvalidFormValues(testcase.fieldTypeClassNames);
-                }).then(function() {
+
                     //Save the form
                     formsPage.clickSaveBtnWithName('Save');
-                }).then(function() {
+
                     //verify validation
-                    formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
-                        formsPage.verifyErrorMessages(testcase.expectedErrorMessages);
-                    });
-                }).then(function() {
+                    formsPage.verifyErrorMessages(testcase.expectedErrorMessages);
+
                     //verify clicking on alert button brings up the error message popup
                     formsPage.clickFormAlertBtn();
                     expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
-                }).then(function() {
+
                     //verify clicking on alert again hides the error message popup
                     formsPage.clickFormAlertBtn();
                     expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
@@ -107,29 +102,25 @@
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //click edit record from the grid recordActions
                 reportServicePage.clickRecordEditPencil(5);
-                reportServicePage.waitForElement(formsPage.formEditContainerEl);
-                // Check that the add form container is displayed
-                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-            }).then(function() {
+
                 //get the fields from the table and generate a record
                 formsPage.enterInvalidFormValues('numericField');
-            }).then(function() {
+
                 //Save the form
                 formsPage.clickSaveBtnWithName('Save & Next');
-            }).then(function() {
+
                 //verify validation
-                formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
-                    formsPage.verifyErrorMessages(expectedNumericErrorMessages);
-                });
-            }).then(function() {
+                formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+                // Needed to get around stale element error
+                e2eBase.sleep(browser.params.smallSleep);
+
                 //correct the errors and add the record
                 for (var i = 0; i < validFieldClassNames.length; i++) {
                     formsPage.enterFormValues(validFieldClassNames[i]);
                 }
-            }).then(function() {
-                //Save the form
-                formsPage.clickSaveBtnWithName('Save & Next');
-                reportServicePage.waitForElement(formsPage.formEditContainerEl);
+
+                //Save the form by clicking on 'Save and Next' btn
+                formsPage.clickFormSaveAndNextBtn();
             }).then(function() {
                 //reload the report to verify the row edited
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));

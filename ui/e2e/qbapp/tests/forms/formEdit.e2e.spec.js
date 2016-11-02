@@ -9,7 +9,7 @@
     var FormsPage = requirePO('formsPage');
     var formsPage = new FormsPage();
 
-    describe('Edit a record Via Form Tests', function() {
+    describe('Edit a record Via Form Tests :', function() {
         var realmName;
         var realmId;
         var app;
@@ -45,15 +45,12 @@
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //click edit record from the grid recordActions
                 reportServicePage.clickRecordEditPencil(2);
-                reportServicePage.waitForElement(formsPage.formEditContainerEl);
-                // Check that the add form container is displayed
-                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-            }).then(function() {
+
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
-            }).then(function() {
+
                 //Save the form
                 formsPage.clickFormSaveBtn();
             }).then(function() {
@@ -63,7 +60,6 @@
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     //Verify there are 6 records after adding 1
                     e2eBase.sleep(browser.params.smallSleep);
-                    expect(reportServicePage.reportRecordsCount.getText()).toContain('7 records');
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
                         formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
                     }
@@ -79,15 +75,12 @@
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //click edit record from the grid recordActions
                 reportServicePage.clickEditPencilOnStage(3);
-                reportServicePage.waitForElement(formsPage.formEditContainerEl);
-                // Check that the add form container is displayed
-                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-            }).then(function() {
+
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
-            }).then(function() {
+
                 //Save the form
                 formsPage.clickFormSaveBtn();
             }).then(function() {
@@ -97,7 +90,6 @@
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     //Verify there are 6 records after adding 1
                     e2eBase.sleep(browser.params.smallSleep);
-                    expect(reportServicePage.reportRecordsCount.getText()).toContain('7 records');
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
                         formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
                     }
@@ -113,15 +105,12 @@
             return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //click on add record button
                 reportServicePage.clickEditPencilOnReportActions(1);
-                reportServicePage.waitForElement(formsPage.formEditContainerEl);
-                // Check that the add form container is displayed
-                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-            }).then(function() {
+
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
-            }).then(function() {
+
                 //Save the form
                 formsPage.clickFormSaveBtn();
             }).then(function() {
@@ -130,7 +119,6 @@
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     //Verify there are 7 records after editing 1
                     e2eBase.sleep(browser.params.smallSleep);
-                    expect(reportServicePage.reportRecordsCount.getText()).toContain('7 records');
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
                         formsPage.verifyFieldValuesInReportTable(1, fieldTypeClassNames[j]);
                     }

@@ -246,7 +246,9 @@
          */
         this.clickRecordEditPencil = function(recordRowIndex) {
             var rowElement = element(by.className('ag-body')).element(by.className('ag-pinned-left-cols-container')).all(by.className('ag-cell-last-left-pinned')).get(recordRowIndex).all(by.className('recordActions')).all(by.className('edit'));
-            return rowElement.click();
+            return rowElement.click().then(function() {
+                e2ePageBase.waitForElement(element(by.className('editForm')));
+            });
         };
 
         /**
@@ -260,7 +262,9 @@
                 // Let the trowser animate
                 e2eBase.sleep(browser.params.smallSleep);
                 e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnStage).then(function() {
-                    return self.reportEditRecordBtnOnStage.click();
+                    return self.reportEditRecordBtnOnStage.click().then(function() {
+                        e2ePageBase.waitForElement(element(by.className('editForm')));
+                    });
                 });
             });
         };
@@ -276,7 +280,9 @@
                 // Let the trowser animate
                 e2eBase.sleep(browser.params.smallSleep);
                 e2ePageBase.waitForElementToBeClickable(self.reportEditRecordBtnOnReportActions).then(function() {
-                    return self.reportEditRecordBtnOnReportActions.click();
+                    return self.reportEditRecordBtnOnReportActions.click().then(function() {
+                        e2ePageBase.waitForElement(element(by.className('editForm')));
+                    });
                 });
             });
 

@@ -11,12 +11,11 @@
     var formsPage = new FormsPage();
     var reportCardViewPage = new ReportCardViewPage();
 
-    describe('Add and Edit a record via Form in Card View Tests', function() {
+    describe('Add and Edit a record via Form in Card View: ', function() {
         var realmName;
         var realmId;
         var app;
         var recordList;
-        var RECORDS_COUNT = '8 records';
 
 
         beforeAll(function(done) {
@@ -65,27 +64,26 @@
             //TODO textField.Right now even phone no field says textField. So can't enter values and save record
             //TODO 'dateCell', 'timeCell' in small breakpoints dosent work typing in date and time.
             var fieldTypeClassNames = ['textField', 'numericField', 'checkbox'];
-            formsPage.waitForElement(reportCardViewPage.loadedContentEl).then(function() {
-                //click on add record button
-                reportCardViewPage.clickAddRecord();
-                // Check that the add form container is displayed
-                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-            }).then(function() {
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                formsPage.clickFormSaveBtn();
-            }).then(function() {
-                //reload the report to verify the row edited
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
-                reportCardViewPage.waitForReportReady();
-                //Verify there are 8 records after adding 1
-                expect(reportCardViewPage.reportRecordsCount.getText()).toContain(RECORDS_COUNT);
-                done();
-            });
+            //click on add record button
+            reportCardViewPage.clickAddRecord();
+            // Check that the add form container is displayed
+            expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
+
+            //get the fields from the table and generate a record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
+            }
+
+            //Save the form
+            formsPage.clickFormSaveBtn();
+
+            //reload the report to verify the row edited
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
+            reportCardViewPage.waitForReportReady();
+
+            //Verify there are 8 records after adding 1
+            expect(reportCardViewPage.reportRecordsCount.getText()).toBe('8 records');
+            done();
         });
 
         it('Edit a record from the form and Verify Save Functionality', function(done) {
@@ -93,27 +91,27 @@
             //Select record 1
             reportCardViewPage.clickRecord(1);
             reportCardViewPage.clickEditRecord();
-            reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                formsPage.clickFormSaveBtn();
-            }).then(function() {
-                //reload the report to verify the row edited
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
-                //verify the edited record
-                reportCardViewPage.waitForReportReady();
-            }).then(function() {
-                expect(reportCardViewPage.reportRecordsCount.getText()).toContain(RECORDS_COUNT);
-                reportCardViewPage.clickRecord(1);
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
-                }
-                done();
-            });
+
+            //get the fields from the table and generate a record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
+            }
+
+            //Save the form
+            formsPage.clickFormSaveBtn();
+
+            //reload the report to verify the row edited
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
+            //verify the edited record
+            reportCardViewPage.waitForReportReady();
+
+            //Select record 1
+            reportCardViewPage.clickRecord(1);
+
+            for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
+            }
+            done();
         });
 
         it('Edit a record from the form and Verify Save And Next functionality', function(done) {
@@ -121,30 +119,24 @@
             //Select record 1
             reportCardViewPage.clickRecord(4);
             reportCardViewPage.clickEditRecord();
-            reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                formsPage.clickFormSaveAndNextBtn();
-            }).then(function() {
-                //verify you are in edit mode for next record after hiting save and next
-                return reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
-                    //reload the report to verify the row edited
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
-                    //verify the edited record
-                    reportCardViewPage.waitForReportReady();
-                });
-            }).then(function() {
-                expect(reportCardViewPage.reportRecordsCount.getText()).toContain(RECORDS_COUNT);
-                reportCardViewPage.clickRecord(4);
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
-                }
-                done();
-            });
+            //get the fields from the table and generate a record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
+            }
+
+            //Save the form
+            formsPage.clickFormSaveAndNextBtn();
+
+            //reload the report to verify the row edited
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
+            //verify the edited record
+            reportCardViewPage.waitForReportReady();
+
+            reportCardViewPage.clickRecord(4);
+            for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
+            }
+            done();
         });
 
     });

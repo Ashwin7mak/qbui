@@ -17,7 +17,7 @@
     var formsPage = new FormsPage();
     var reportCardViewPage = new ReportCardViewPage();
 
-    describe('Validate Form in Card View Tests', function() {
+    describe('Validate Form in Card View Tests :', function() {
         var realmName;
         var realmId;
         var app;
@@ -61,54 +61,47 @@
         });
 
         it('Validate required fields on the form', function(done) {
-            reportServicePage.waitForElement(reportCardViewPage.loadedContentEl).then(function() {
-                //click on add record button
-                reportCardViewPage.clickAddRecord();
-                // Check that the add form container is displayed
-                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-            }).then(function() {
-                //Save the form without entering any field values on form
-                return formsPage.formSaveBtn.click();
-            }).then(function() {
-                //verify validation
-                formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
-                    formsPage.verifyErrorMessages(expectedErrorMessages);
-                });
-                done();
-            });
+            //click on add record button
+            reportCardViewPage.clickAddRecord();
+            // Check that the add form container is displayed
+            expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
+
+            //Save the form without entering any field values on form
+            formsPage.clickSaveBtnWithName('Save');
+
+            //verify validation
+            formsPage.verifyErrorMessages(expectedErrorMessages);
+            done();
         });
 
         it('Save Btn - Validate Add form', function(done) {
             //TODO 'dateCell', 'timeCell' in small breakpoints dosent work typing in date and time.
             var fieldTypeClassNames = ['numericField'];
-            formsPage.waitForElement(reportCardViewPage.loadedContentEl).then(function() {
-                //click on add record button
-                reportCardViewPage.clickAddRecord();
-                // Check that the add form container is displayed
-                expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-            }).then(function() {
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                return formsPage.formSaveBtn.click();
-            }).then(function() {
-                //verify validation
-                formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
-                    formsPage.verifyErrorMessages(expectedErrorMessages);
-                });
-            }).then(function() {
-                //verify clicking on alert button brings up the error message popup
-                formsPage.clickFormAlertBtn();
-                expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
-            }).then(function() {
-                //verify clicking on alert again hides the error message popup
-                formsPage.clickFormAlertBtn();
-                expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
-                done();
-            });
+            //click on add record button
+            reportCardViewPage.clickAddRecord();
+            // Check that the add form container is displayed
+            expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
+
+            //get the fields from the table and generate a record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+            }
+
+            //Save the form
+            formsPage.clickSaveBtnWithName('Save');
+
+            //verify validation
+            formsPage.verifyErrorMessages(expectedErrorMessages);
+
+            //verify clicking on alert button brings up the error message popup
+            formsPage.clickFormAlertBtn();
+            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
+
+            //verify clicking on alert again hides the error message popup
+            formsPage.clickFormAlertBtn();
+            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
+            done();
+
         });
 
         it('Save Btn -Validate Edit form', function(done) {
@@ -116,29 +109,25 @@
             //Select record 1
             reportCardViewPage.clickRecord(1);
             reportCardViewPage.clickEditRecord();
-            reportServicePage.waitForElement(element(by.className('editForm'))).then(function() {
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                return formsPage.formSaveBtn.click();
-            }).then(function() {
-                //verify validation
-                formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
-                    formsPage.verifyErrorMessages(expectedNumericErrorMessages);
-                });
-            }).then(function() {
-                //verify clicking on alert button brings up the error message popup
-                formsPage.clickFormAlertBtn();
-                expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
-            }).then(function() {
-                //verify clicking on alert again hides the error message popup
-                formsPage.clickFormAlertBtn();
-                expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
-                done();
-            });
+            //get the fields from the table and generate a record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+            }
+            //Save the form
+            formsPage.clickSaveBtnWithName('Save');
+
+            //verify validation
+            formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+
+            //verify clicking on alert button brings up the error message popup
+            formsPage.clickFormAlertBtn();
+            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
+
+            //verify clicking on alert again hides the error message popup
+            formsPage.clickFormAlertBtn();
+            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
+            done();
+
         });
 
         it('Save And Next - Validate edit form and Edit a record successfully after errors', function(done) {
@@ -146,41 +135,37 @@
             //Select record 1
             reportCardViewPage.clickRecord(4);
             reportCardViewPage.clickEditRecord();
-            reportServicePage.waitForElement(element(by.className('editForm'))).then(function() {
-                //get the fields from the table and generate a record
-                reportCardViewPage.enterInvalidFormValues('numericField');
-            }).then(function() {
-                //Save the form
-                formsPage.clickSaveBtnWithName('Save & Next');
-            }).then(function() {
-                //verify validation
-                formsPage.waitForElement(formsPage.formErrorMessage).then(function() {
-                    formsPage.verifyErrorMessages(expectedNumericErrorMessages);
-                });
-            }).then(function() {
-                //correct the errors and add the record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                formsPage.clickSaveBtnWithName('Save & Next');
-                reportServicePage.waitForElement(element(by.className('editForm')));
-            }).then(function() {
-                //verify you are in edit mode for next record after hiting save and next
-                return reportServicePage.waitForElement(formsPage.formEditContainerEl).then(function() {
-                    //reload the report to verify the row edited
-                    RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
-                    //verify the edited record
-                    reportCardViewPage.waitForReportReady();
-                });
-            }).then(function() {
-                reportCardViewPage.clickRecord(4);
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
-                }
-                done();
-            });
+
+            //get the fields from the table and generate a record
+            reportCardViewPage.enterInvalidFormValues('numericField');
+
+            //Save the form
+            formsPage.clickSaveBtnWithName('Save & Next');
+
+            //verify validation
+
+            formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+
+            //correct the errors and add the record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
+            }
+
+            //Save the form
+            formsPage.clickSaveBtnWithName('Save & Next');
+            reportServicePage.waitForElement(element(by.className('editForm')));
+
+
+            //reload the report to verify the row edited
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
+            //verify the edited record
+            reportCardViewPage.waitForReportReady();
+
+            reportCardViewPage.clickRecord(4);
+            for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
+            }
+            done();
         });
 
     });
