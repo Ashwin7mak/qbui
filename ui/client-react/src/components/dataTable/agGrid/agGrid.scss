@@ -629,7 +629,7 @@ $cell-edit-background-edit: #f3f8fe;
     .gridCell {
 
         .editTools {
-            z-index:100;
+            z-index:1;
             display:flex;
             flex-direction:column;
             flex: 0 0 auto;
