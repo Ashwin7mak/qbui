@@ -36,7 +36,8 @@ describe('Report functions', () => {
         selectTableId() {return;},
         getFilteredRecords() {return;},
         hideTopNav() {return;},
-        loadFields() {return;}
+        loadFields() {return;},
+        resetRowMenu() {return;}
     };
 
     let ReportStageMock = React.createClass({
