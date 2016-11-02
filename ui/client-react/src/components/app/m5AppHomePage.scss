@@ -15,9 +15,17 @@
     @include medium-breakpoint {
       min-width: initial;
     }
+
+    @include small-breakpoint {
+      min-width: initial;
+    }
   }
 
   @include medium-breakpoint {
+    padding: 20px;
+  }
+
+  @include small-breakpoint {
     padding: 20px;
   }
 
@@ -43,6 +51,10 @@
       flex-direction: column;
     }
 
+    @include small-breakpoint {
+      flex-direction: column;
+    }
+
     h2 {
       margin-top: 8px;
     }
@@ -52,6 +64,11 @@
       margin-right: 40px;
 
       @include medium-breakpoint {
+        flex-basis: auto;
+        margin-right: 0;
+      }
+
+      @include small-breakpoint {
         flex-basis: auto;
         margin-right: 0;
       }
@@ -117,6 +134,10 @@
       flex-direction: column;
     }
 
+    @include small-breakpoint {
+      flex-direction: column;
+    }
+
     .content {
       display: flex;
       flex-direction: column;
@@ -144,6 +165,12 @@
         margin-bottom: 30px;
       }
 
+      @include small-breakpoint {
+        flex-basis: auto;
+        margin-right: 0;
+        margin-bottom: 30px;
+      }
+
       .welcomeGuideImage {
         content: url("Welcome-guide.png");
       }
@@ -157,6 +184,10 @@
       flex-basis: 50%;
 
       @include medium-breakpoint {
+        flex-basis: auto;
+      }
+
+      @include small-breakpoint {
         flex-basis: auto;
       }
 
@@ -193,10 +224,18 @@
       flex-direction: column;
     }
 
+    @include small-breakpoint {
+      flex-direction: column;
+    }
+
     .leftBottomPanel, .rightBottomPanel {
       flex-basis: 50%;
 
       @include medium-breakpoint {
+          flex-basis: auto;
+      }
+
+      @include small-breakpoint {
         flex-basis: auto;
       }
     }
@@ -209,6 +248,10 @@
       margin-right: 20px;
 
       @include medium-breakpoint {
+          margin-right: 0;
+      }
+
+      @include small-breakpoint {
         margin-right: 0;
       }
     }
@@ -224,6 +267,10 @@
 
     .rightBottomPanelContent {
       @include medium-breakpoint {
+        padding-bottom: 10px;
+      }
+
+      @include small-breakpoint {
         padding-bottom: 10px;
       }
     }
