@@ -15,8 +15,8 @@ export default {
                 welcomeText: "While you learn your way around, use this area in place of your app homepage. " +
                 "This is your real app in Mercury. You won’t see your app homepage yet, but all your " +
                 "data is here. Work you do here displays immediately in Classic view, too.",
-                launchVideoLink: "Launch video tour",
-                guideMeLink: "Guide me through Mercury (2:30)",
+                launchVideoLink: "Launch video tour (3:00)",
+                guideMeLink: "Guide me through Mercury",
                 guideTitle: "Welcome guide",
                 guideText: "Learn all about the Mercury Beta program. See what features are currently available and how your team can get work done faster, across devices, using Mercury.",
                 guideButton: "Download the Welcome guide",

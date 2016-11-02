@@ -12,6 +12,7 @@ function i18nKey(subkey) {
     return `app.homepage.${subkey}`;
 }
 
+const videoTourLink = 'https://d2qhvajt3imc89.cloudfront.net/customers/QuickBase/Mercury_Beta_001.mp4';
 const welcomeGuideLink = 'https://d2qhvajt3imc89.cloudfront.net/customers/QuickBase/Welcome_guide.pdf';
 const feedbackLink = 'https://quickbase.uservoice.com/forums/378045-mercury';
 
@@ -33,7 +34,7 @@ const M5AppHomePage = React.createClass({
                             <p><I18nMessage message={i18nKey('welcomeText')} /></p>
                         </div>
                         <div className="topPanelLinks">
-                            <a className="linkWithImage" href="videotour"><img className="launchTourImage" /><span><I18nMessage message={i18nKey('launchVideoLink')} /></span></a>
+                            <a className="linkWithImage" href={videoTourLink}><img className="launchTourImage" /><span><I18nMessage message={i18nKey('launchVideoLink')} /></span></a>
                             <a className="linkWithImage" onClick={this.launchGuideMe}><img className="guideMeImage" /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>
                         </div>
                     </div>

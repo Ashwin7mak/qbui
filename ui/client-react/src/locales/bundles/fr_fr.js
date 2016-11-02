@@ -12,8 +12,8 @@ export default {
                 welcomeText: "Pendant que vous apprenez votre chemin, utilisez cette zone à la place de votre page d'accueil d'application. " +
                 "C'est votre application réelle dans Mercury. Vous ne verrez pas encore la page d'accueil de votre application, mais " +
                 "données sont ici. Les travaux effectués ici s'affichent immédiatement en mode Classique.",
-                launchVideoLink: "Lancez une tournée vidéo",
-                guideMeLink: "Guide-moi par Mercury (2:30)",
+                launchVideoLink: "Lancez une tournée vidéo (3:00)",
+                guideMeLink: "Guide-moi par Mercury",
                 guideTitle: "Guide d'accueil",
                 guideText: "Apprenez tout sur le programme Mercury Beta. Voyez quelles fonctionnalités sont actuellement disponibles et comment votre équipe peut obtenir le travail plus rapidement, à travers les périphériques, en utilisant Mercury.",
                 guideButton: "Télécharger le guide d'accueil",
