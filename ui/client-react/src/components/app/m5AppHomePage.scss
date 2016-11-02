@@ -12,12 +12,12 @@
     min-width: 670px;
     margin: auto;
 
-    @include small-breakpoint {
+    @include medium-breakpoint {
       min-width: initial;
     }
   }
 
-  @include small-breakpoint {
+  @include medium-breakpoint {
     padding: 20px;
   }
 
@@ -39,7 +39,7 @@
   .topPanel {
     display: flex;
 
-    @include small-breakpoint {
+    @include medium-breakpoint {
       flex-direction: column;
     }
 
@@ -51,7 +51,7 @@
       flex-basis: 65%;
       margin-right: 40px;
 
-      @include small-breakpoint {
+      @include medium-breakpoint {
         flex-basis: auto;
         margin-right: 0;
       }
@@ -113,7 +113,7 @@
     display: flex;
     text-align: center;
 
-    @include small-breakpoint {
+    @include medium-breakpoint {
       flex-direction: column;
     }
 
@@ -138,7 +138,7 @@
       flex-basis: 50%;
       margin-right: 20px;
 
-      @include small-breakpoint {
+      @include medium-breakpoint {
         flex-basis: auto;
         margin-right: 0;
         margin-bottom: 30px;
@@ -156,7 +156,7 @@
       align-items: center;
       flex-basis: 50%;
 
-      @include small-breakpoint {
+      @include medium-breakpoint {
         flex-basis: auto;
       }
 
@@ -189,14 +189,14 @@
   .bottomPanel {
     display: flex;
 
-    @include small-breakpoint {
+    @include medium-breakpoint {
       flex-direction: column;
     }
 
     .leftBottomPanel, .rightBottomPanel {
       flex-basis: 50%;
 
-      @include small-breakpoint {
+      @include medium-breakpoint {
         flex-basis: auto;
       }
     }
@@ -208,7 +208,7 @@
     .leftBottomPanel {
       margin-right: 20px;
 
-      @include small-breakpoint {
+      @include medium-breakpoint {
         margin-right: 0;
       }
     }
@@ -223,7 +223,7 @@
     }
 
     .rightBottomPanelContent {
-      @include small-breakpoint {
+      @include medium-breakpoint {
         padding-bottom: 10px;
       }
     }
