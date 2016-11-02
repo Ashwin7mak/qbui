@@ -73,4 +73,60 @@ describe('UrlUtils', () => {
             expect(UrlUtils.renderIconForUrl('www.quickbase.com')).toEqual(<span />);
         });
     });
+
+    describe('getRealmId', () => {
+        let testRealmId = 'realmId';
+
+        let testCases = [
+            {
+                description: 'returns null if a URL is not provided',
+                url: null,
+                expectation: null
+            },
+            {
+                description: 'returns the realm ID from a url',
+                url: `https://${testRealmId}.quickbase.com`,
+                expectation: testRealmId
+            },
+            {
+                description: 'returns the realm ID from a multipart subdomain',
+                url: `https://${testRealmId}.subdomain.quickbase.com`,
+                expectation: testRealmId
+            }
+        ];
+
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                expect(UrlUtils.getRealmId(testCase.url)).toEqual(testCase.expectation);
+            });
+        });
+    });
+
+    describe('getQuickBaseClassicLink', () => {
+        let testRealmId = 'realmId';
+        let testAppId = 'testAppId';
+        let currentUrl = `https://${testRealmId}.quickbase.com/app/${testAppId}`;
+
+        let testCases = [
+            {
+                description: 'returns the main quickbase classic link if selectedAppId is provided',
+                selectedAppId: null,
+                expectation: `https://${testRealmId}.quickbase.com/db/main`
+            },
+            {
+                description: 'returns the quickbase classic link for the app',
+                selectedAppId: testAppId,
+                expectation: `https://${testRealmId}.quickbase.com/db/${testAppId}`
+            }
+        ];
+
+        testCases.forEach(testCase => {
+            it(testCase.description, () => {
+                spyOn(UrlUtils, '_getCurrentLocation').and.returnValue(currentUrl);
+
+                expect(UrlUtils.getQuickBaseClassicLink(testCase.selectedAppId)).toEqual(testCase.expectation);
+            });
+        });
+    });
 });

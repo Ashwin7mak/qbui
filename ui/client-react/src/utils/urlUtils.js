@@ -38,7 +38,7 @@ const UrlUtils = {
         return url.split('//')[1].split('.')[0];
     },
     getQuickBaseClassicLink(selectedAppId) {
-        let realmId = this.getRealmId(window.location.href);
+        let realmId = this.getRealmId(this._getCurrentLocation());
         let link = `https://${realmId}.quickbase.com/db/`;
 
         if (selectedAppId) {
@@ -48,6 +48,9 @@ const UrlUtils = {
         }
 
         return link;
+    },
+    _getCurrentLocation() {
+        return window.location.href;
     }
 };
 
