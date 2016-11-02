@@ -71,7 +71,7 @@
             },
             // Helper method to get the proper URL for loading the reports page for particular app and particular table for a realm
             getRequestReportsPageEndpoint: function(realmName, appId, tableId, reportId) {
-                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
+                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/app/' + appId + '/table/' + tableId + '/report/' + reportId + '/results');
                 return requestReportsPageEndPoint;
             },
             // Get the proper URL for loading the session ticket page in the browser
