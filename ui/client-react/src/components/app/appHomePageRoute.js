@@ -1,13 +1,13 @@
 import React from 'react';
-import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import Breakpoints from '../../utils/breakpoints';
 
+import AppNotFound from './appNotFound';
+
 import './appHomePage.scss';
-import _ from 'lodash';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
@@ -62,9 +62,6 @@ let AppHomePageRoute = React.createClass({
         this.selectAppFromParams(this.props.params);
         flux.actions.doneRoute();
     },
-    componentDidUpdate() {
-        this.appExists();
-    },
     // Triggered when properties change
     componentWillReceiveProps: function(props) {
         this.selectAppFromParams(props.params, true);
@@ -91,32 +88,28 @@ let AppHomePageRoute = React.createClass({
                 {/* todo */}
             </div>);
     },
-    appExists() {
-        let {selectedAppId, apps} = this.props;
-        let foundAppId = _.find(apps, {id: selectedAppId});
-        return (selectedAppId && foundAppId);
-    },
     render() {
-        if (this.props.appsLoading || this.appExists()) {
-            let isSmall = Breakpoints.isSmallBreakpoint();
-            return (
-                isSmall ?
-                    <div className="appHomePageContainer">
-                        <div className="appHomePageActionsContainer secondaryBar">
-                            {this.getSecondaryBar()}
-                            {this.getPageActions(2)}
-                        </div>
-                        <div className="appHomePageImageContainer"><img className="appHomePageMobileImage"/></div>
-                    </div> :
-                    <div className="appHomePageImageContainer">
-                        <h2>App ID: {this.props.selectedAppId}</h2>
-                        <img className="appHomePageImage"/>
+        let isSmall = Breakpoints.isSmallBreakpoint();
+        let content = (
+            isSmall ?
+                <div className="appHomePageContainer">
+                    <div className="appHomePageActionsContainer secondaryBar">
+                        {this.getSecondaryBar()}
+                        {this.getPageActions(2)}
                     </div>
-            );
-        }
+                    <div className="appHomePageImageContainer"><img className="appHomePageMobileImage"/></div>
+                </div> :
+                <div className="appHomePageImageContainer">
+                    <img className="appHomePageImage"/>
+                </div>
+        );
 
-        return <h1>App Not Found</h1>;
-
+        return (
+            <div>
+                <AppNotFound appsLoading={this.props.appsLoading} selectedAppId={this.props.selectedAppId} apps={this.props.apps} />
+                {content}
+            </div>
+        );
     }
 });
 

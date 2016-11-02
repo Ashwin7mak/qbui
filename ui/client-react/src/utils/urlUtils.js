@@ -28,6 +28,14 @@ const UrlUtils = {
         } else {
             return <span />;
         }
+    },
+    getRealmId(url) {
+        if (!url) {
+            return null;
+        }
+
+        // Return the first part of the subdomain (which is the realm id)
+        return url.split('//')[1].split('.')[0];
     }
 };
 
