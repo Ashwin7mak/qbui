@@ -165,7 +165,7 @@ const emptyQBFormData = {
         }
     },
     record:[{id:2, value: "field value"}, {id:1, value: "built in field value"}],
-    fields: [{id: 2, name: "field name", datatypeAttributes: {type: "TEXT"}}, {"builtIn": true, "datatypeAttributes": { "type": "DATE_TIME" }, "id": 1, "required": false, "type": "SCALAR", "name": "built in field name"}]
+    fields: [{id: 2, name: "field name", datatypeAttributes: {type: "TEXT"}}, {"builtIn": true, "datatypeAttributes": {"type": "DATE_TIME"}, "id": 1, "required": false, "type": "SCALAR", "name": "built in field name"}]
 };
 
 var FieldElementMock = React.createClass({
@@ -184,7 +184,7 @@ class BreakpointsAlwaysSmallMock {
     }
 }
 
-fdescribe('QBForm functions', () => {
+describe('QBForm functions', () => {
     'use strict';
 
     let component;

@@ -87,7 +87,7 @@
             let tableFieldsFidList = [];
             for (let fld in tableFields) {
                 let fldElement = tableFields[fld];
-                if(fldElement.builtIn) {
+                if (fldElement.builtIn) {
                     tableFieldsFidList.push({id: fldElement.id, required: fldElement.required});
                 }
             }
@@ -178,7 +178,7 @@
                             //  for record and fields; otherwise will return just the form meta data and empty
                             //  object for records and fields.
                             let fidList = extractFidsListFromForm(obj.formMeta, obj.tableFields);
-                            if(obj.formMeta.includeBuiltIns) {
+                            if (obj.formMeta.includeBuiltIns) {
                                 let builtInFieldsFids = getBuiltInFieldsFids(obj.tableFields);
                                 fidList.push.apply(fidList, builtInFieldsFids);
                             }
