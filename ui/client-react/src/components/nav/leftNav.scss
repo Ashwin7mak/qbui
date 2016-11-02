@@ -281,7 +281,7 @@ div.leftNavTooltip {
     }
     .transitionGroup {
         flex: 1 1 auto;
-        overflow: visible;
+        overflow: auto;
         z-index: 1;
         display:flex;
         .appsList {
@@ -347,10 +347,6 @@ div.leftNavTooltip {
                 border-left: 1px solid $right-icon-separator-color;
             }
         }
-    }
-
-    ul.appsList {
-      overflow: auto;
     }
 
     ul.tablesList, ul.tablesHeading {
