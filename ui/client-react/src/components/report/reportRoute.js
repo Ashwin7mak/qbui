@@ -87,7 +87,7 @@ const ReportRoute = React.createClass({
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
         const {appId, tblId} = this.props.params;
-        const tableLink = `/app/${appId}/table/${tblId}`;
+        const tableLink = `/qbase/app/${appId}/table/${tblId}`;
         return (
             <div className="reportStageHeadline">
 

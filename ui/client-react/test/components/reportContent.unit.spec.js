@@ -1248,7 +1248,7 @@ describe('ReportContent functions', () => {
                                                                 router={[]}
                                                                 recordsCount={100}/>);
         component.openRow({RecId: {value: 2}});
-        expect(component.props.router).toContain('/app/123/table/456/report/2/record/2');
+        expect(component.props.router).toContain('/qbase/app/123/table/456/report/2/record/2');
     });
 
 });

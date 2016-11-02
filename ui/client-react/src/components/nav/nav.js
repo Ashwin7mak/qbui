@@ -43,8 +43,8 @@ export let Nav = React.createClass({
 
     getTopGlobalActions() {
         const actions = [
-            {msg:'globalActions.user', link:'/user', icon:'user'},
-            {msg:'globalActions.help', link:'/help', icon:'help'}
+            {msg:'globalActions.user', link:'/qbase/user', icon:'user'},
+            {msg:'globalActions.help', link:'/qbase/help', icon:'help'}
         ];
         return (<GlobalActions actions={actions}
                                position={"top"}
@@ -53,7 +53,7 @@ export let Nav = React.createClass({
 
     getLeftGlobalActions() {
         const actions = [
-            {msg:'globalActions.user', link:'/user', icon:'user'}
+            {msg:'globalActions.user', link:'/qbase/user', icon:'user'}
         ];
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}

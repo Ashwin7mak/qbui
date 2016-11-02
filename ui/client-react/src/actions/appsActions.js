@@ -25,7 +25,7 @@ let appsModel = {
         if (apps) {
             //  add a link element to each individual app
             apps.forEach((app) => {
-                app.link = '/app/' + app.id;
+                app.link = '/qbase/app/' + app.id;
             });
         }
         return apps;

@@ -73,7 +73,7 @@ let RecordTrowser = React.createClass({
 
         if (this.props.reportData && this.props.reportData.navigateAfterSave) {
             let {appId, tblId} = this.props;
-            this.props.router.push(`/app/${appId}/table/${tblId}/record/${recId}`);
+            this.props.router.push(`/qbase/app/${appId}/table/${tblId}/record/${recId}`);
         }
     },
 
