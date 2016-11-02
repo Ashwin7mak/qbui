@@ -36,16 +36,7 @@ const AppNotFound = React.createClass({
         }
     },
     renderQuickBaseClassicLink() {
-        let realmId = UrlUtils.getRealmId(window.location.href);
-        let link = `https://${realmId}.quickbase.com/db/`;
-
-        if (this.props.selectedAppId) {
-            link += this.props.selectedAppId;
-        } else {
-            link += 'main';
-        }
-
-        return <a href={link}>Click here</a>
+        return <a href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>Click here</a>;
     },
     render() {
         return (

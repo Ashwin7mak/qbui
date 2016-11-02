@@ -36,6 +36,18 @@ const UrlUtils = {
 
         // Return the first part of the subdomain (which is the realm id)
         return url.split('//')[1].split('.')[0];
+    },
+    getQuickBaseClassicLink(selectedAppId) {
+        let realmId = this.getRealmId(window.location.href);
+        let link = `https://${realmId}.quickbase.com/db/`;
+
+        if (selectedAppId) {
+            link += selectedAppId;
+        } else {
+            link += 'main';
+        }
+
+        return link;
     }
 };
 

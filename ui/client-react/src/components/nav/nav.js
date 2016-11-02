@@ -183,6 +183,7 @@ export let Nav = React.createClass({
                 expanded={this.state.nav.leftNavExpanded}
                 appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
+                appsLoading={this.state.apps.loading}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
                 onSelectReports={this.onSelectTableReports}

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
+import CreateInQuickBaseClassicMessage from './createInQuickBaseClassicMessage';
 
 let AppsList = React.createClass({
 
@@ -48,7 +49,16 @@ let AppsList = React.createClass({
                 () => {setTimeout(() => ReactDOM.findDOMNode(this.refs.appsSearchBox).querySelector("input.searchInput").focus(), 200);});
         }
     },
+    hasNoApps() {
+        return (!this.props.appsLoading && this.props.apps && this.props.apps.length === 0);
+    },
     render() {
+        let apps = this.appList();
+
+        if (this.hasNoApps()) {
+            apps = <CreateInQuickBaseClassicMessage nameOfElements="apps" />;
+        }
+
         return (
             <ul className={"appsList"} >
 
@@ -66,7 +76,7 @@ let AppsList = React.createClass({
                                placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} />
                 </li>
 
-                {this.appList()}
+                {apps}
             </ul>
 
         );

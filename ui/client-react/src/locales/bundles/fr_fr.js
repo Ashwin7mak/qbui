@@ -306,6 +306,12 @@ export default {
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
         },
+        createInQuickBaseClassicMessage: {
+            noTables: "Il n'y a pas tables.",
+            createInQuickBaseClassic: "Créer ",
+            noApps: "Il n'y a pas d'applications dans Mercury.",
+            addApps: "Ajouter des applications en contactant "
+        },
         noneOption: "\<Aucun\>"
     }
 };
