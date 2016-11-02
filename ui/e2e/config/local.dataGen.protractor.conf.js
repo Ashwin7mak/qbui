@@ -7,5 +7,8 @@
     globalLocalConfig.specs = [
         '../qbapp/newDataGen.e2e.spec.js'
     ];
+    globalLocalConfig.onComplete = function() {
+        // We don't want to cleanup generated realms so override the local.protractor.conf.js
+    };
     exports.config = globalLocalConfig;
 }());
