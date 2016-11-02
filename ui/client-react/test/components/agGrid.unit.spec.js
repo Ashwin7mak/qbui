@@ -159,7 +159,8 @@ describe('AGGrid functions', () => {
             rowClicked: ()=>{},
             openRecordForEdit: ()=> {},
             mark: ()=>{},
-            measure: ()=>{}
+            measure: ()=>{},
+            onToggleRowPopUpMenu: ()=>{}
         }
     };
 
@@ -169,6 +170,7 @@ describe('AGGrid functions', () => {
         spyOn(flux.actions, 'getFilteredRecords');
         spyOn(flux.actions, 'rowClicked');
         spyOn(flux.actions, 'openRecordForEdit');
+        spyOn(flux.actions, 'onToggleRowPopUpMenu');
     });
 
     afterEach(() => {
