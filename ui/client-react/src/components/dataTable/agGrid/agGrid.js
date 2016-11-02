@@ -165,14 +165,9 @@ let AGGrid = React.createClass({
                 <MenuItem onSelect={() => this.groupReport(colDef, true)}> {groupAscText}</MenuItem>
                 <MenuItem onSelect={() => this.groupReport(colDef, false)}> {groupDescText}</MenuItem>
                 <MenuItem divider/>
-                <MenuItem><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
-                <MenuItem><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
-                <MenuItem><I18nMessage message="report.menu.hideColumn"/></MenuItem>
-                <MenuItem divider/>
-                <MenuItem><I18nMessage message="report.menu.newTable"/></MenuItem>
-                <MenuItem divider/>
-                <MenuItem><I18nMessage message="report.menu.columnProps"/></MenuItem>
-                <MenuItem><I18nMessage message="report.menu.fieldProps"/></MenuItem>
+                <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
+                <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
+                <MenuItem disabled><I18nMessage message="report.menu.hideColumn"/></MenuItem>
             </Dropdown.Menu>
         </Dropdown>);
     },

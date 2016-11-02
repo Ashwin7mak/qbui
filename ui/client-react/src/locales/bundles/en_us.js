@@ -309,6 +309,10 @@ export default {
             maxChars: 'Use up to {maxNum} characters',
             choiceMaxLength :"Select a choice with {maxNum} characters or less"
         },
-        noneOption: "\<None\>"
+        noneOption: "\<None\>",
+        unimplemented: {
+            search: "Searching is not available yet",
+            favorites: "Accessing Favorites is not available yet"
+        }
     }
 };

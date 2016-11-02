@@ -38,13 +38,6 @@ html body {
 
 }
 
-body.touch {
-
-    .tooltip {
-        display: none !important;
-    }
-}
-
 #content {
     height: 100%;
 }
@@ -119,8 +112,12 @@ body.touch {
                         width:20px;
                     }
                 }
-                button:hover .hi {
+                button:not(.disabled):hover .hi {
                     color: #fff;
+                }
+
+                button.disabled {
+                    opacity: .65;
                 }
             }
 

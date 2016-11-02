@@ -75,7 +75,6 @@ const ReportRoute = React.createClass({
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.favorite', icon:'star'},
-            {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
             {msg: 'pageActions.email', icon:'mail'},
             {msg: 'pageActions.print', icon:'print'},
             {msg: 'pageActions.customizeReport', icon:'settings-hollow'},

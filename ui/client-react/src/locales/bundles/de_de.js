@@ -307,6 +307,10 @@ export default {
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
             choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },
-        noneOption: "\<Keiner\>"
+        noneOption: "\<Keiner\>",
+        unimplemented: {
+            search: "Searching is not available yet",
+            favorites: "Accessing Favorites is not available yet"
+        }
     }
 };

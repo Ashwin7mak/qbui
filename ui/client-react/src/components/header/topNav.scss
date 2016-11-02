@@ -21,9 +21,11 @@ $top-nav-color: #193048;
     background: $header-bg;
     border: 0;
 }
+.topNav  .btn.disabled {
+    background: $header-bg;
+}
 
-
-.topNav .navGroup .btn-group .btn:hover {
+.topNav .navGroup .btn-group .btn:not(.disabled):hover {
     background: $nav-hover-bg;
     span {
         color: $nav-hover-fg;
