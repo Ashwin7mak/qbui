@@ -22,6 +22,12 @@ let navActions = {
         this.dispatch(actions.TOGGLE_ROW_POP_UP_MENU, isOpen);
     },
     /**
+     * Resets onToggleRowPopUpMenu count to 0
+     * */
+    resetRowMenu() {
+        this.dispatch(actions.RESET_ROW_MENU);
+    },
+    /**
      * either toggle the visibility of the left nav or toggle the expanded/collapsed state depending on the breakpoint
      */
     toggleLeftNav(open) {

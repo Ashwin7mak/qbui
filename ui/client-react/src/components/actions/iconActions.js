@@ -85,8 +85,8 @@ let IconActions = React.createClass({
     onDropdownToggle(open) {
         //This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
             //It will remove the white space if the menu is close. The class is added in reportContent.js
-        this.props.flux.actions.onToggleRowPopUpMenu(open);
         this.setState({dropdownOpen: open});
+        this.props.flux.actions.onToggleRowPopUpMenu(open);
     },
     /**
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
