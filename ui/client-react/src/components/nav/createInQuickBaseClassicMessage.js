@@ -12,23 +12,27 @@ const CreateInQuickBaseClassicMessage = React.createClass({
         nameOfElements: PropTypes.oneOf(['tables', 'apps']).isRequired,
         selectedAppId: PropTypes.string.isRequired
     },
-    render() {
-        let quickBaseClassicLink = <a className="quickBaseClassicLink" href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>QuickBase Classic</a>;
-        let supportLink = <a className="quickBaseClassicLink" href={`mailto:${supportEmail}`}>{supportEmail}</a>;
-
-        let createInQuickBaseClassic = (
+    renderQuickBaseClassicLink() {
+        return <a className="quickBaseClassicLink" href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>QuickBase Classic</a>;
+    },
+    renderSupportLink() {
+        return <a className="quickBaseClassicLink" href={`mailto:${supportEmail}`}>{supportEmail}</a>;
+    },
+    renderCreateInQuickBaseClassic() {
+        return (
             <span>
                 <I18nMessage message="createInQuickBaseClassicMessage.createInQuickBaseClassic" />
                 <br/>
-                {quickBaseClassicLink}
+                {this.renderQuickBaseClassicLink()}
             </span>
         );
-
+    },
+    render() {
         let message = (
             <span>
                 <I18nMessage message="createInQuickBaseClassicMessage.noTables" />
                 <br/>
-                {createInQuickBaseClassic}
+                {this.renderCreateInQuickBaseClassic()}
             </span>
         );
 
@@ -38,7 +42,7 @@ const CreateInQuickBaseClassicMessage = React.createClass({
                     <I18nMessage message="createInQuickBaseClassicMessage.noApps" />
                     <br/>
                     <I18nMessage message="createInQuickBaseClassicMessage.addApps"/>
-                    {supportLink}
+                    {this.renderSupportLink()}
                 </span>
             );
         }
