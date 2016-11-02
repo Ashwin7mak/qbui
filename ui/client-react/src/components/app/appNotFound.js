@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import QbIcon from '../qbIcon/qbIcon';
 import UrlUtils from '../../utils/urlUtils';
+import {I18nMessage} from '../../utils/i18nMessage';
 
 import _ from 'lodash';
 
@@ -29,14 +30,20 @@ const AppNotFound = React.createClass({
                 <div className="appNotFound">
                     <QbIcon icon="alert" />
                     <p className="appNotFoundText">
-                        Oops, we can't find your app. {this.renderQuickBaseClassicLink()} for QuickBase Classic.
+                        <I18nMessage message="appNotFoundError.notFound"/>
+                        {this.renderQuickBaseClassicLink()}
+                        <I18nMessage message="appNotFoundError.quickBaseClassic" />
                     </p>
                 </div>
             );
         }
     },
     renderQuickBaseClassicLink() {
-        return <a href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>Click here</a>;
+        return (
+            <a href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>
+                <I18nMessage message="appNotFoundError.clickHere" />
+            </a>
+        );
     },
     render() {
         return (

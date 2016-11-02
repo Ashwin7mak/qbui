@@ -312,6 +312,11 @@ export default {
             noApps: "Il n'y a pas d'applications dans Mercury.",
             addApps: "Ajouter des applications en contactant "
         },
+        appNotFoundError: {
+            notFound: "Oups, nous ne pouvons pas trouver votre application. ",
+            clickHere: "Cliquez ici",
+            quickBaseClassic: " pour QuickBase Classic."
+        },
         noneOption: "\<Aucun\>"
     }
 };
