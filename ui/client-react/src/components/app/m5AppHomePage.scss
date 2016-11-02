@@ -38,6 +38,10 @@
     border: 1px solid $color-blue-300;
     padding: 10px 30px;
     margin-bottom: 20px;
+
+    @include small-breakpoint {
+      padding: 10px 15px;
+    }
   }
 
   .bottomSubPanel {
@@ -214,6 +218,11 @@
       small {
         font-size: 70%;
       }
+
+      @include small-breakpoint {
+        white-space: normal;
+        word-wrap: break-word;
+      }
     }
   }
 
@@ -305,6 +314,21 @@
       .supportEmailText {
         margin-bottom: 0;
       }
+    }
+  }
+
+  // On really small devices the layout breaks
+  @media (max-width: 355px) {
+    & {
+      padding: 5px;
+    }
+
+    .rightBottomPanel {
+      flex-direction: column;
+    }
+
+    .homePageHelpImage {
+      object-fit: contain;
     }
   }
 
