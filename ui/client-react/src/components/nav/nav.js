@@ -205,6 +205,7 @@ export let Nav = React.createClass({
                             reportData: this.state.reportData,
                             appUsers: this.state.apps.appUsers,
                             pendEdits:this.state.pendEdits,
+                            isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
                             fields: this.state.fields,
                             form: this.state.form,
                             selectedApp: this.getSelectedApp(),

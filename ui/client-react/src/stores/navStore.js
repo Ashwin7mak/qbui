@@ -18,6 +18,7 @@ let NavStore = Fluxxor.createStore({
             showTopNav: true,
             searching:false,
             trowserOpen: false,
+            isRowPopUpMenuOpen: false,
             trowserContent: TrowserConsts.TROWSER_EDIT_RECORD,
             topTitle: null,
             scrollingReport: false,
@@ -30,6 +31,7 @@ let NavStore = Fluxxor.createStore({
         this.bindActions(
             actions.SHOW_TROWSER, this.onShowTrowser,
             actions.HIDE_TROWSER, this.onHideTrowser,
+            actions.TOGGLE_ROW_POP_UP_MENU, this.onToggleRowPopUpMenu,
             actions.TOGGLE_LEFT_NAV_VISIBLE, this.onToggleLeftNavVisible,
             actions.TOGGLE_LEFT_NAV_EXPANDED, this.onToggleLeftNavExpanded,
             actions.TOGGLE_APPS_LIST, this.onToggleAppsList,
@@ -54,6 +56,10 @@ let NavStore = Fluxxor.createStore({
     onShowTrowser(content) {
         this.state.trowserOpen = true;
         this.state.trowserContent = content;
+        this.emit('change');
+    },
+    onToggleRowPopUpMenu(isOpen) {
+        this.state.isRowPopUpMenuOpen = isOpen;
         this.emit('change');
     },
     onHideTrowser() {

@@ -123,6 +123,7 @@ const ReportRoute = React.createClass({
                     reportData={this.props.reportData}
                     appUsers={this.props.appUsers}
                     pendEdits={this.props.pendEdits}
+                    isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                     routeParams={this.props.routeParams}
                     selectedAppId={this.props.selectedAppId}
                     fields={this.props.fields}

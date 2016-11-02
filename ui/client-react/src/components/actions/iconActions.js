@@ -25,7 +25,6 @@ import './iconActions.scss';
  */
 
 let IconActions = React.createClass({
-
     // actions don't have any functionality yet...
     propTypes: {
         actions: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -35,6 +34,7 @@ let IconActions = React.createClass({
             onClick: React.PropTypes.function,
             className: React.PropTypes.string
         })).isRequired,
+        flux: React.PropTypes.object,
         maxButtonsBeforeMenu: React.PropTypes.number, // show action in dropdown after this,
         className: React.PropTypes.string,
         pullRight: React.PropTypes.bool, // for dropdowns positioned on right side of the UI
@@ -81,18 +81,12 @@ let IconActions = React.createClass({
                     </Button>
                 </OverlayTrigger>);
     },
-
     /* callback from opening pickle menu */
     onDropdownToggle(open) {
+        //This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
+            //It will remove the white space if the menu is close. The class is added in reportContent.js
+        this.props.flux.actions.onToggleRowPopUpMenu(open);
         this.setState({dropdownOpen: open});
-        //This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up
-            //it will remove the white space if the menu is close
-        let agBody = document.querySelector(".ag-body-container");
-        if (agBody.style.marginBottom !== "150px") {
-            agBody.style.marginBottom = "150px";
-        } else {
-            agBody.style.marginBottom = null;
-        }
     },
     /**
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
