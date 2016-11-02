@@ -136,6 +136,9 @@ $cell-edit-background-edit: #f3f8fe;
     .gridCell {
         word-wrap: break-word;
         padding: $grid-default-cell-padding;
+        .fieldValueEditor .tipChildWrapper {
+            width: 100%;
+        }
     }
 
     .ag-header-row .gridHeaderCell {
