@@ -15,6 +15,7 @@ import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import RecordHeader from './recordHeader';
+import Breakpoints from '../../utils/breakpoints';
 import _ from 'lodash';
 import './record.scss';
 
@@ -127,8 +128,11 @@ export let RecordRoute = React.createClass({
 
     getTitle() {
         const {recordId} = this.props.params;
+        const isSmall = Breakpoints.isSmallBreakpoint();
         const tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
-        return <div className="title"><TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/><span> {tableName} # {recordId}</span></div>;
+        return <div className="title">
+            {isSmall ? <TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/> : null}
+            <span> {tableName} # {recordId}</span></div>;
     },
 
     getStageHeadline() {
@@ -145,7 +149,7 @@ export let RecordRoute = React.createClass({
 
                 <div className="navLinks">
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}</Link>}
-                    {this.props.selectedTable && rptId && <span className="color-black-700">&nbsp;:&nbsp;</span>}
+                    {this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
                 <div className="stageHeadline iconActions">

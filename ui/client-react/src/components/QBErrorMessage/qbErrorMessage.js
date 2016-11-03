@@ -29,7 +29,7 @@ let QBErrorMessage = React.createClass({
 
     renderErrorMessages() {
         return this.props.message.map(
-            msg => <span className={"qbErrorMessageItem"} key={msg.id}>{msg.invalidMessage}</span>
+            msg => <span className="qbErrorMessageItem" key={msg.id}>{msg.def.fieldName}</span>
         );
     },
 
@@ -37,20 +37,25 @@ let QBErrorMessage = React.createClass({
         const errorNum = this.props.message ? this.props.message.length : 0;
         const headerMessage = errorNum <= 1 ?
             <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.singleErrorLabel"/> :
-            <div><I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelPrefix"/>{errorNum} <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelSuffix"/></div>;
+            <div><I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelPrefix"/> {errorNum} <I18nMessage message="errorMessagePopup.errorMessagePopupHeader.multipleErrorLabelSuffix"/></div>;
+
+        let qbErrorMessageClasses = "qbErrorMessage";
+        if (!(this.props.hidden || errorNum === 0)) {
+            qbErrorMessageClasses += " qbErrorMessageVisible";
+        }
 
         return (
-            <div className={"qbErrorMessage"} hidden={this.props.hidden || errorNum === 0}>
-                <div className={"qbErrorMessageHeader"}>
-                    <div className={"leftIcons"}>
+            <div className={qbErrorMessageClasses}>
+                <div className="qbErrorMessageHeader">
+                    <div className="leftIcons">
                         <QBicon icon={"alert"}/>
                         <h4>{headerMessage}</h4>
                     </div>
-                    <div className={"rightIcons"}>
+                    <div className="rightIcons">
                         <Button onClick={this.props.onCancel}><QBicon icon={"x-secondary"}/></Button>
                     </div>
                 </div>
-                <div className={"qbErrorMessageContent"}>
+                <div className="qbErrorMessageContent">
                     {this.renderErrorMessages()}
                 </div>
             </div>

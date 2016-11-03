@@ -497,7 +497,7 @@
                 "command": "/opt/splunkforwarder/bin/splunk set default-hostname $(hostname) -auth admin:changeme"
               },
               "02_run_chef": {
-                "command": { "Fn::Join": [ "", [ "chef-client -z -o nodejs::reconfig -j /dev/shm/chef-attributes-", { "Ref": "paramEnvironment" }, ".json" ] ] },
+                "command": { "Fn::Join": [ "", [ "chef-client -z -o nodejs::reconfig,splunkclouduf::configure -j /dev/shm/chef-attributes-", { "Ref": "paramEnvironment" }, ".json" ] ] },
                 "cwd": "/var/packer/coreui/chef"
               },
               "03_enable_and_start_splunk": {

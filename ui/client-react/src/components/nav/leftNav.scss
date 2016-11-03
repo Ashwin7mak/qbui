@@ -305,7 +305,12 @@ div.leftNavTooltip {
         }
 
     }
-
+    /* This is so when you hover over the item, the entire contents shows like a tooltip... but we then cannot scroll when collapsed. Temporary fix */
+    &.expanded {
+      .transitionGroup {
+        overflow: auto;
+      }
+    }
     ul {
         list-style: none;
         list-style-type: none;
@@ -347,10 +352,6 @@ div.leftNavTooltip {
                 border-left: 1px solid $right-icon-separator-color;
             }
         }
-    }
-
-    ul.appsList {
-      overflow: auto;
     }
 
     ul.tablesList, ul.tablesHeading {
