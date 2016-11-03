@@ -140,18 +140,26 @@ const ReportToolsAndContent = React.createClass({
     },
 
     filterReport(searchString, selections) {
-        const filter = FilterUtils.getFilter(searchString, selections, this.facetFields);
+        // leading and trailing spaces are trimmed..
+        const trimmedSearch = StringUtils.trim(searchString);
+        logger.debug('Sending filter action with:' + trimmedSearch);
 
-        logger.debug('Sending filter action with:' + searchString);
+        //  only perform a search if search value differs from prior search value
+        if (trimmedSearch !== this.props.searchStringForFiltering) {
+            const filter = FilterUtils.getFilter(StringUtils.trim(trimmedSearch), selections, this.facetFields);
 
-        let queryParams = {};
-        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
-        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : Constants.PAGE.DEFAULT_OFFSET;
-        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : Constants.PAGE.DEFAULT_NUM_ROWS;
-        this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
-            this.props.routeParams.tblId,
-            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-            true, filter, queryParams);
+            let queryParams = {};
+            queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
+
+            // new search always resets to 1st page
+            queryParams[query.OFFSET_PARAM] = Constants.PAGE.DEFAULT_OFFSET;
+            queryParams[query.NUMROWS_PARAM] = Constants.PAGE.DEFAULT_NUM_ROWS;
+
+            this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
+                this.props.routeParams.tblId,
+                typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
+                true, filter, queryParams);
+        }
     },
 
     searchTheString(searchTxt) {
@@ -285,7 +293,8 @@ const ReportToolsAndContent = React.createClass({
                 // Report is not filtered, check for facet selections.
                 isReportFiltered = reportData.selections ? reportData.selections.hasAnySelections() : false;
             }
-            return isReportFiltered ? reportData.data.filteredRecordsCount : reportData.data.recordsCount;
+            //return isReportFiltered ? reportData.data.filteredRecordsCount : reportData.data.recordsCount;
+            return reportData.data.recordsCount;
         }
         return 0;
     },

@@ -591,6 +591,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.rptId = payload.rptId;
         this.selections = payload.filter.selections;
         this.facetExpression = payload.filter.facet;
+
         this.searchStringForFiltering = payload.filter.search;
 
         this.reportModel.setSortList(payload.sortList);
@@ -617,6 +618,9 @@ let ReportDataStore = Fluxxor.createStore({
 
         this.reportModel.updateFilteredRecords(response.recordData);
         this.reportModel.setMetaData(response.metaData);
+
+        //  Need to update record count cause may be filtering
+        reportModel.updateRecordsCount(response.recordCount);
 
         this.emit('change');
     },

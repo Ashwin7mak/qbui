@@ -177,6 +177,27 @@
                 });
             },
 
+            fetchRecordsCount: function(req, reportId) {
+                let query = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
+                if (query !== null) {
+                    return new Promise((resolve, reject) => {
+                        recordsApi.fetchCountForRecords(req).then(
+                            (response) => {
+                                resolve(response);
+                            },
+                            (error) => {
+                                reject(error);
+                            }
+                        ).catch((ex) => {
+                            requestHelper.logUnexpectedError('reportsAPI..fetchRecordsCount', ex, true);
+                            reject(ex);
+                        });
+                    });
+                } else {
+                    return this.fetchReportRecordsCount(req, reportId);
+                }
+            },
+
             /**
              * Returns a promise that resolves with the count of all records for a report,
              * or rejects with an error code.
@@ -189,17 +210,17 @@
                 let reportUrl = reportId ? routeHelper.getReportsRoute(req.url, reportId) : req.url;
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsCountRoute(reportUrl);
 
-                return new Promise((resolve1, reject1) => {
+                return new Promise((resolve, reject) => {
                     requestHelper.executeRequest(req, opts).then(
                         (result) => {
-                            resolve1(result);
+                            resolve(result);
                         },
                         (error) => {
-                            reject1(error);
+                            reject(error);
                         }
                     ).catch((ex) => {
                         requestHelper.logUnexpectedError('reportsAPI..fetchReportRecordsCount', ex, true);
-                        reject1(ex);
+                        reject(ex);
                     });
                 });
             },
@@ -373,7 +394,7 @@
              */
             fetchReport: function(req, reportId, includeFacets) {
                 return new Promise(function(resolve, reject) {
-                    let fetchRequests = [this.fetchReportResult(req, reportId), this.fetchFields(req), this.fetchReportRecordsCount(req, reportId)];
+                    let fetchRequests = [this.fetchReportResult(req, reportId), this.fetchFields(req), this.fetchRecordsCount(req, reportId)];
                     if (includeFacets === true) {
                         fetchRequests.push(this.fetchReportFacets(req, reportId));
                     }
@@ -456,7 +477,7 @@
                             reject(response);
                         }
                     ).catch(function(error) {
-                        requestHelper.logUnexpectedError('recordsAPI..fetchRecordsAndFields', error, true);
+                        requestHelper.logUnexpectedError('reportsAPI..fetchRecordsAndFields', error, true);
                         reject(error);
                     });
                 }.bind(this));
