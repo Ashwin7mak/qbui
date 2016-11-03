@@ -13,9 +13,6 @@ const AppNotFound = React.createClass({
         appsLoading: PropTypes.bool.isRequired,
         selectedAppId: PropTypes.string
     },
-    componentDidUpdate() {
-        this.appExists();
-    },
     displayAppNotFound() {
         let {apps, appsLoading, selectedAppId} = this.props;
 
