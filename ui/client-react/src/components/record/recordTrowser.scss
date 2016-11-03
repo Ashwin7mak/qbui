@@ -1,15 +1,9 @@
 @import '../../assets/css/qbVariables';
 
-@include small-breakpoint {
-    .recordTrowser {
-        .trowserFooter .saveButtons {
-            display: flex;
-            flex: 1;
-        }
-    }
-}
-
 .recordTrowser {
+    .trowserFooter {
+        z-index: 9999;
+    }
     .trowserFooter .saveButtons {
         display: flex;
     }
@@ -39,6 +33,26 @@
                     }
                 }
             }
+        }
+    }
+}
+
+.recordTrowserErrorPopRes {
+    .trowserChildren {
+        padding-bottom: 340px;
+    }
+}
+
+@include small-breakpoint {
+    .recordTrowser {
+        .trowserFooter .saveButtons {
+            display: flex;
+        }
+    }
+
+    .recordTrowserErrorPopRes {
+        .trowserChildren {
+            padding-bottom: 200px;
         }
     }
 }

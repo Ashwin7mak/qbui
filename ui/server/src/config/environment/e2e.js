@@ -58,7 +58,9 @@
 
         //Node understanding of RuntimeEnvironment
         env: envConsts.LOCAL,
-        //realmToUse: 'localhost',
+
+        //Custom realm to use either in e2e tests (needs to exist first! use swagger to create)
+        //realmToUse: 'testrealm',
 
         //Node's understanding of a grouping of routes to be enabled/disabled
         routeGroup: routeGroups.DEBUG,

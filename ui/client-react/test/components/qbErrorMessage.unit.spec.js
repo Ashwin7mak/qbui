@@ -18,10 +18,10 @@ describe('QBErrorMessage functions', () => {
 
     it('test render a list of server side messages', () => {
         let errorMessage = [
-            {id: 1, invalidMessage: "error message #1"},
-            {id: 2, invalidMessage: "error message #2"},
-            {id: 3, invalidMessage: "error message #3"},
-            {id: 4, invalidMessage: "error message #4"},
+            {id: 1, invalidMessage: "error message #1", def: {fieldName: "test field 1"}},
+            {id: 2, invalidMessage: "error message #2", def: {fieldName: "test field 2"}},
+            {id: 3, invalidMessage: "error message #3", def: {fieldName: "test field 3"}},
+            {id: 4, invalidMessage: "error message #4", def: {fieldName: "test field 4"}},
         ];
         component = TestUtils.renderIntoDocument(<QBErrorMessage flux={flux} message={errorMessage} hidden={false}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();

@@ -34,10 +34,6 @@
             });
         });
 
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
-
         it('Edit a record via recordActions edit pencil using basic report', function(done) {
             var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
             //Open the report

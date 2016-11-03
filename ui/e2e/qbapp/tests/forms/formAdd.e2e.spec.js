@@ -46,10 +46,6 @@
             });
         });
 
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
-
         it('Add a record from the form', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
             formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {

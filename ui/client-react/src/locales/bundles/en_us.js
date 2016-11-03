@@ -53,7 +53,7 @@ export default {
             previousRecord: "Previous Record",
             save: "Save",
             saveAndNext: "Save & Next",
-            saveAndAddAnother: "Save & add another",
+            saveAndAddAnother: "Save & Add Another",
             new: "New"
         },
         field: {

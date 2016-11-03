@@ -48,10 +48,6 @@
             });
         });
 
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
-
         it('Verify Add button on stage not displayed', function(done) {
             //Verify reports stage and add button on stage not present for small BP.
             expect(reportServicePage.reportAddRecordBtn.isDisplayed()).toBeFalsy();
