@@ -509,46 +509,43 @@
                         (response) => {
                             // parse out the id and use to fetch the report meta data.  Process the meta data
                             // to fetch and return the report content.
-                            if (response.body) {
-                                let homepageReportId = JSON.parse(response.body);
-
-                                //  have a homepage id; first get the report meta data
-                                this.fetchReportMetaData(req, homepageReportId).then(
-                                    (metaDataResult) => {
-                                        //  parse the metadata and set the request parameters for the default sortList, fidList and query expression (if defined).
-                                        //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
-                                        let reportMetaData = JSON.parse(metaDataResult.body);
-                                        addReportMetaQueryParameters(req, reportMetaData, false);
-
-                                        this.fetchReport(req, homepageReportId).then(
-                                            (reportData) => {
-                                                //  return the metadata and report content
-                                                reportObj.reportMetaData.data = reportMetaData;
-                                                reportObj.reportData.data = reportData;
-                                                resolve(reportObj);
-                                            },
-                                            (reportError) => {
-                                                log.error({req:req}, 'Error fetching table homepage report content in fetchTableHomePageReport.');
-                                                reject(reportError);
-                                            }
-                                        ).catch((ex) => {
-                                            requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
-                                            reject(ex);
-                                        });
-                                    },
-                                    (metaDataError) => {
-                                        log.error({req:req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
-                                        reject(metaDataError);
-                                    }
-                                ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
-                                    reject(ex);
-                                });
-                            } else {
-                                //  no report id returned (because one is not defined); return empty report object
-                                log.warn({req:req}, 'No report homepage defined for table.');
-                                resolve(reportObj);
+                            let homepageReportId = "1"; // assume 1st report
+                            if (response.body) { //if had a default report defined use that
+                                homepageReportId = JSON.parse(response.body);
                             }
+
+                            //  have a homepage id; first get the report meta data
+                            this.fetchReportMetaData(req, homepageReportId).then(
+                                (metaDataResult) => {
+                                    //  parse the metadata and set the request parameters for the default sortList, fidList and query expression (if defined).
+                                    //  NOTE:  this always overrides any incoming request parameters that may be set by the caller.
+                                    let reportMetaData = JSON.parse(metaDataResult.body);
+                                    addReportMetaQueryParameters(req, reportMetaData, false);
+
+                                    this.fetchReport(req, homepageReportId).then(
+                                        (reportData) => {
+                                            //  return the metadata and report content
+                                            reportObj.reportMetaData.data = reportMetaData;
+                                            reportObj.reportData.data = reportData;
+                                            resolve(reportObj);
+                                        },
+                                        (reportError) => {
+                                            log.error({req:req}, 'Error fetching table homepage report content in fetchTableHomePageReport.');
+                                            reject(reportError);
+                                        }
+                                    ).catch((ex) => {
+                                        requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
+                                        reject(ex);
+                                    });
+                                },
+                                (metaDataError) => {
+                                    log.error({req:req}, 'Error fetching table homepage report metaData in fetchTableHomePageReport.');
+                                    reject(metaDataError);
+                                }
+                            ).catch((ex) => {
+                                requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report metaData in fetchTableHomePageReport', ex, true);
+                                reject(ex);
+                            });
                         },
                         (error) => {
                             log.error({req: req}, "Error getting table homepage reportId in fetchTableHomePageReport");

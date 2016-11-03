@@ -353,6 +353,8 @@ describe('Validate ReportsApi unit tests', function() {
             fetchReportStub.returns(Promise.resolve('reportData'));
             fetchReportComponentsStub.returns(Promise.resolve('reportData'));
 
+            reportsApi.setRequestHelper(requestHelper);
+
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
@@ -370,17 +372,30 @@ describe('Validate ReportsApi unit tests', function() {
         });
 
         it('Test report table homepage not defined ', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body: ''}));
+            getExecuteRequestStub.restore();
+            getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest", function(req, opts){
+                if (opts.url.endsWith("defaulthomepage")) {
+                    // setup case of no homepage defined
+                    return Promise.resolve({body: ''});
+                } else {
+                    // results of report meta data
+                    return Promise.resolve({body: responseBody});
+                }
+            });
+            fetchReportStub.returns(Promise.resolve('reportData'));
             fetchReportComponentsStub.returns(Promise.resolve('reportData'));
+            reportsApi.setRequestHelper(requestHelper);
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
                     done();
+                    reportObj.reportMetaData.data = JSON.parse(responseBody);
+                    reportObj.reportData.data = 'reportData' ;
                     assert.deepEqual(response, reportObj);
                 },
                 function(error) {
-                    done(new Error("promise error response returned when testing undefined table homepage"));
+                    done(new Error("promise error response returned when testing undefined table homepage " +JSON.stringify(error)));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve fetchTableHomePageReport success when testing undefined table homepage: ' + JSON.stringify(errorMsg)));
