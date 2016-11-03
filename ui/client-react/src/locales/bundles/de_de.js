@@ -309,8 +309,11 @@ export default {
         },
         noneOption: "\<Keiner\>",
         unimplemented: {
-            search: "Searching is not available yet",
-            favorites: "Accessing Favorites is not available yet"
+            search: "Die Suche ist noch nicht verfügbar",
+            favorites: "Der Zugriff auf Favoriten ist noch nicht verfügbar",
+            makeFavorite: "Kennzeichnung als Favorit ist noch nicht verfügbar",
+            print: "Der Druck ist noch nicht verfügbar",
+            copy: "Kopieren ist noch nicht verfügbar"
         }
     }
 };
