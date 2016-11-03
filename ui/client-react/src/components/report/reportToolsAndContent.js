@@ -49,11 +49,11 @@ const ReportToolsAndContent = React.createClass({
         callbacks :  React.PropTypes.object,
         selectedRows: React.PropTypes.array,
         pageStart: React.PropTypes.number,
-        pageEnd: React.PropTypes.number,
+        pageEnd: React.PropTypes.number
     },
     getDefaultProps() {
         return {
-            selections:null,
+            selections:null
         };
     },
     getInitialState: function() {
