@@ -46,13 +46,21 @@ describe('ReportActions functions', () => {
         expect(actionIcons[0].props.icon).not.toEqual("edit");
     });
 
-    //it('test onClick event for delete', () => {
-    //    let selection = [1, 2, 3];
-    //    component = TestUtils.renderIntoDocument(<ReportActions selection={selection} rptId={rptId} appId={appId} tblId={tblId} flux={flux}/>);
-    //    let actionIcons = TestUtils.scryRenderedComponentsWithType(component, ActionIcon);
-    //    var node = ReactDOM.findDOMNode(actionIcons[2]);
-    //    TestUtils.Simulate.click(node);
-    //
-    //    expect(flux.actions.deleteRecordBulk).toHaveBeenCalled();
-    //});
+    it('test onClick event for delete', () => {
+        let selection = [1, 2, 3];
+        component = TestUtils.renderIntoDocument(<ReportActions selection={selection} rptId={rptId} appId={appId} tblId={tblId} flux={flux}/>);
+        let actionIcons = TestUtils.scryRenderedComponentsWithType(component, ActionIcon);
+        let node = ReactDOM.findDOMNode(actionIcons[2]);
+        TestUtils.Simulate.click(node);
+
+        // no longer delete before confirmation
+        expect(flux.actions.deleteRecordBulk).not.toHaveBeenCalled();
+
+        // confirm via the modal dialog
+        const confirmButton = document.querySelector(".qbModal .primaryButton");
+        expect(confirmButton).not.toBe(null);
+        TestUtils.Simulate.click(confirmButton);
+        expect(flux.actions.deleteRecordBulk).toHaveBeenCalled();
+    });
+
 });

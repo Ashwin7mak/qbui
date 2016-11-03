@@ -101,7 +101,7 @@ let ReportActions = React.createClass({
                 primaryButtonOnClick={this.handleBulkDelete}
                 leftButtonName={Locale.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelBulkDelete}
-                title={`Delete ${this.props.selection.length} ${records}?`}
+                bodyMessage={`Delete ${this.props.selection.length} ${records}?`}
                 type="alert"/>);
     },
     /**
