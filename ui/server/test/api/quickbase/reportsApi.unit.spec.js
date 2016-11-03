@@ -249,6 +249,59 @@ describe('Validate ReportsApi unit tests', function() {
     });
 
     /**
+     * Unit test fetchReportCount method
+     */
+    describe('validate fetchReportCount method', function() {
+        var defaultUrl = '/testurl.com';
+        var req = {
+            headers: {
+                'tid': 'tid'
+            },
+            'Content-Type': 'content-type',
+            'url': defaultUrl,
+            'method': 'get'
+        };
+
+        var countResult = {count:1};
+        var reportId = 1;
+
+        var getReportCountStub;
+        var getRecordCountStub;
+
+        reportsApi.setRecordsApi(recordsApi);
+        beforeEach(function() {
+            getReportCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+            getRecordCountStub = sinon.stub(recordsApi, "fetchCountForRecords");
+        });
+        afterEach(function() {
+            getReportCountStub.restore();
+            getRecordCountStub.restore();
+            req.url = defaultUrl;
+        });
+
+        var testCases = [
+            {name:'call records count', query:'1.EX.test', expectation: {recordsSpy: true, reportSpy: false}},
+            {name:'call reports count', query:null, expectation: {recordsSpy: false, reportSpy: true}}
+        ];
+
+        testCases.forEach((test) => {
+            it(test.name, function(done) {
+                getReportCountStub.returns(Promise.resolve('1'));
+                getRecordCountStub.returns(Promise.resolve('2'));
+
+                if (test.query) {
+                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, test.query);
+                }
+                reportsApi.fetchReportCount(req, reportId);
+                assert.equal(getRecordCountStub.called, test.expectation.recordsSpy);
+                assert.equal(getReportCountStub.called, test.expectation.reportSpy);
+                done();
+            });
+        });
+    });
+
+
+    /**
      * Unit test fetchReportTableHomepage api
      */
     describe('validate fetchReportTableHomepage api', function() {
@@ -455,7 +508,7 @@ describe('Validate ReportsApi unit tests', function() {
         beforeEach(function() {
             getFieldsStub = sinon.stub(reportsApi, "fetchFields");
             getFacetsStub = sinon.stub(reportsApi, "fetchReportFacets");
-            getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+            getCountStub = sinon.stub(reportsApi, "fetchReportCount");
             getMetaStub = sinon.stub(reportsApi, "fetchReportMetaData");
             reportResultsStub = sinon.stub(requestHelper, "executeRequest");
             executeReqLogSpy = sinon.spy(requestHelper, "logUnexpectedError");
