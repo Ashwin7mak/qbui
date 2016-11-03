@@ -90,7 +90,7 @@ let AppHomePageRoute = React.createClass({
     },
     render() {
         return (
-            <div>
+            <div className="appHomePageContainer">
                 <AppNotFound appsLoading={this.props.appsLoading} selectedAppId={this.props.selectedAppId} apps={this.props.apps} />
                 <M5AppHomePage />
             </div>
