@@ -75,12 +75,12 @@ const DateFieldValueEditor = React.createClass({
         if (onChange) {
             if (newValue === null || newValue || enteredValue === '') {
                 let formattedDate = null;
-                if (moment(newValue, DATE_FORMATTED).isValid()) {
-                    // newValue was passed in via <input>, no need to change
-                    formattedDate = newValue;
-                } else if (moment(newValue, DATE_INPUT).isValid()) {
+                if (moment(newValue, DATE_INPUT).isValid()) {
                     // format newValue passed in from the DatePicker component
                     formattedDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
+                } else if (moment(newValue, DATE_FORMATTED).isValid()) {
+                    // newValue was passed in via <input>, no need to change
+                    formattedDate = newValue;
                 }
                 // onChange callbacks expect date in YYYY-MM-DD format
                 onChange(formattedDate);

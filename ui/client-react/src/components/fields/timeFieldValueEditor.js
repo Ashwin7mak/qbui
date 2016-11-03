@@ -146,9 +146,15 @@ const TimeFieldValueEditor = React.createClass({
      *     }
      */
     onChange(newValue) {
-        if (this.props.onChange || this.props.onDateTimeChange) {
-            const onChange = this.props.onDateTimeChange || this.props.onChange;
-            onChange(newValue.value);
+        if (newValue && (this.props.onChange || this.props.onDateTimeChange)) {
+            //  value of null means the empty option was selected
+            if (newValue.value === null || newValue.value) {
+                if (this.props.onDateTimeChange) {
+                    this.props.onDateTimeChange(newValue.value);
+                } else {
+                    this.props.onChange(newValue.value);
+                }
+            }
         }
     },
 
@@ -203,7 +209,6 @@ const TimeFieldValueEditor = React.createClass({
         let momentTime = null;
         if (this.props.value) {
             let inputValue = this.props.value.replace(/(\[.*?\])/, '');
-            //let momentTime = null;
             let timeFormat = null;
 
             if (this.props.type === fieldFormats.TIME_FORMAT) {
