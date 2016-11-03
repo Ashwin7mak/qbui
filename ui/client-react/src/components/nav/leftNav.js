@@ -10,6 +10,7 @@ import AppsList from './appsList';
 import TablesList from './tablesList';
 import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
+import AppUtils from '../../utils/appUtils';
 
 let LeftNav = React.createClass({
 
@@ -71,15 +72,19 @@ let LeftNav = React.createClass({
         if (this.props.appsListOpen) {
             classes += " appsListOpen";
         }
+
+        let list = <TablesList key={"tables"} expanded={this.props.expanded} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables} {...this.props} />;
+        // Show the apps list if the apps list is open or if the currently selected app does not exist (So a user can choose a different app)
+        if (this.props.appsListOpen || (!this.props.appsLoading && !AppUtils.appExists(this.props.selectedAppId, this.props.apps))) {
+            list = <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  />;
+        }
+
         return (
             <Swipeable className={classes} onSwipedLeft={this.swipedLeft}>
                 {this.createBranding()}
 
                 <div className={"transitionGroup"}>
-                    {!this.props.selectedAppId || this.props.appsListOpen ?
-                        <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  /> :
-                        <TablesList key={"tables"} expanded={this.props.expanded} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables} {...this.props} /> }
-
+                    {list}
                 </div>
 
                 {this.props.globalActions}

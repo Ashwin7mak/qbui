@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import QbIcon from '../qbIcon/qbIcon';
+import AppUtils from '../../utils/appUtils';
 import UrlUtils from '../../utils/urlUtils';
 import {I18nMessage} from '../../utils/i18nMessage';
 
@@ -17,13 +18,10 @@ const AppNotFound = React.createClass({
     componentDidUpdate() {
         this.appExists();
     },
-    appExists() {
-        let {selectedAppId, apps} = this.props;
-        let foundAppId = _.find(apps, {id: selectedAppId});
-        return (selectedAppId && foundAppId);
-    },
     displayAppNotFound() {
-        if (this.props.appsLoading || this.appExists()) {
+        let {apps, appsLoading, selectedAppId} = this.props;
+
+        if (appsLoading || AppUtils.appExists(selectedAppId, apps)) {
             return null;
         } else {
             return (
