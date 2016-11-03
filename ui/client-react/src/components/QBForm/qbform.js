@@ -347,7 +347,8 @@ let QBForm = React.createClass({
     /**
      * Create a form footer with built-in fields
      */
-    createFormFooter(fields) {
+    createFormFooter() {
+        let fields = this.getBuiltInFieldsForFooter();
         var msg = [];
         for (var i = 0; i < fields.length; i++) {
             if (fields[i].type === Constants.USER) {
@@ -355,7 +356,7 @@ let QBForm = React.createClass({
                     screenName: fields[i].screenName,
                     email: fields[i].email
                 };
-                let display = fields[i].value + ". ";
+                let display = fields[i].screenName + ". ";
                 msg.push(<span key={i} className="fieldNormalText">{fields[i].name}</span>);
                 msg.push(<span key={i + "a"} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>);
             } else {
@@ -408,8 +409,9 @@ let QBForm = React.createClass({
         const tabChildren = [];
         const singleColumn = Breakpoints.isSmallBreakpoint();
         let formFooter = [];
-        if (this.props.formData.includeBuiltIns) {
-            formFooter = this.createFormFooter(this.getBuiltInFieldsForFooter());
+        let frm = this.props.formData;
+        if (frm.formMeta.includeBuiltIns && frm.fields) {
+            formFooter = this.createFormFooter();
         }
         if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
             let tabs = this.props.formData.formMeta.tabs;
@@ -417,13 +419,7 @@ let QBForm = React.createClass({
                 tabChildren.push(this.createTab(tabs[key], singleColumn));
             });
         }
-
         const formContent = tabChildren.length < 2 ? tabChildren : <Tabs activeKey={this.props.activeTab}>{tabChildren}</Tabs>;
-        const user = {
-            screenName: "myScreenName",
-            email: "john.doe@email.com"
-        };
-        const display = "John Doe";
         return (
             <div className="formContainer">
                 <form className={this.props.edit ? "editForm" : "viewForm"}>

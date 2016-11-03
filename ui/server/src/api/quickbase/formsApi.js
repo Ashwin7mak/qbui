@@ -85,12 +85,9 @@
 
         function getBuiltInFieldsFids(tableFields) {
             let tableFieldsFidList = [];
-            for (let fld in tableFields) {
-                let fldElement = tableFields[fld];
-                if (fldElement.builtIn) {
-                    tableFieldsFidList.push({id: fldElement.id, required: fldElement.required});
-                }
-            }
+            _.forEach(tableFields, function(item) {
+                tableFieldsFidList.push({id: fldElement.id, required: fldElement.required});
+            });
             return tableFieldsFidList;
         }
 

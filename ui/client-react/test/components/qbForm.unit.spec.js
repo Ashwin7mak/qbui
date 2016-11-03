@@ -198,7 +198,7 @@ describe('QBForm functions', () => {
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData="{fakeQBFormData}"></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const qbForm = ReactDOM.findDOMNode(component);
         expect(qbForm).toBeDefined();
