@@ -4,7 +4,20 @@ $edit-field-padding: 5px;
 
 .formContainer {
     padding: 10px;
-}
+    .formFooter {
+        display: inline;
+        margin: 15px 0 15px 1px;
+        font-size: $font-size-small;
+        .fieldNormalText {
+            color: $color-black-600;
+        }
+        .fieldLinkText {
+            color: $color-indigo-700
+        }
+        .div {
+            display: inline;
+        }
+    }
 
 
 .formSection {
@@ -240,4 +253,6 @@ $edit-field-padding: 5px;
 
         }
     }
+}
+
 }

@@ -143,6 +143,11 @@ export default {
             error: {
                 403: "Sie sind nicht dieses Formular für den Zugriff auf autorisierte",
                 500: "Unerwarteter Fehler macht dieses Formular"
+            },
+            footer: {
+                lastUpdatedBy: "Zuletzt aktualisiert von ",
+                createdOn: "Erstellt am ",
+                ownedBy: "gehört "
             }
         },
         report : {

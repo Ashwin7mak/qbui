@@ -92,6 +92,12 @@
         RECORD_TYPE: {
             GROUP: 'GROUP',
             TABLE: 'TABLE'
+        },
+        BUILTIN_FIELD_NAME: {
+            RECORD_ID: 'Record ID#',
+            LAST_MODIFIED_BY: "Last Modified By",
+            DATE_CREATED: "Date Created",
+            RECORD_OWNER: "Record Owner"
         }
     });
 
