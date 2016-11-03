@@ -29,7 +29,7 @@ const CreateInQuickBaseClassicMessage = React.createClass({
     },
     render() {
         let message = (
-            <span>
+            <span className="noTables">
                 <I18nMessage message="createInQuickBaseClassicMessage.noTables" />
                 <br/>
                 {this.renderCreateInQuickBaseClassic()}
@@ -38,7 +38,7 @@ const CreateInQuickBaseClassicMessage = React.createClass({
 
         if (this.props.nameOfElements === 'apps') {
             message = (
-                <span>
+                <span className="noApps">
                     <I18nMessage message="createInQuickBaseClassicMessage.noApps" />
                     <br/>
                     <I18nMessage message="createInQuickBaseClassicMessage.addApps"/>
