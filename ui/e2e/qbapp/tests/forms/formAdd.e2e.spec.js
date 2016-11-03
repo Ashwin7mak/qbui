@@ -46,10 +46,6 @@
             });
         });
 
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
-
         it('Add a record from the form', function(done) {
             //TODO textField.Right now even phone no field says textField. Sp coudnt enter values and save record
             var fieldTypeClassNames = ['numericField', 'dateCell', 'timeCell', 'checkbox'];
