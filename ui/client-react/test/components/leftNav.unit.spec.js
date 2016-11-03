@@ -1,6 +1,5 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReactDOM from 'react-dom';
 import LeftNav from '../../src/components/nav/leftNav';
 import NavItem from '../../src/components/nav/navItem';
 
@@ -100,5 +99,43 @@ describe('Left Nav functions', () => {
                                                           items={navItemsTestData}/>);
 
     });
+});
 
+describe('LeftNav', () => {
+    let component;
+    let validAppId = 'app1';
+    let invalidAppId = 'doesnotexist';
+
+    it('renders the apps list if an app is not selected', () => {
+        component = TestUtils.renderIntoDocument(<LeftNav open={false}
+                                                          appsListOpen={false}
+                                                          apps={appsTestData}
+                                                          selectedAppId={null}
+                                                          items={navItemsTestData}/>);
+
+        TestUtils.findRenderedDOMComponentWithClass(component, 'appsList');
+        expect(TestUtils.scryRenderedDOMComponentsWithTag(component, 'tablesList').length).toEqual(0);
+    });
+
+    it('renders the tables list if a valid app is currently selected', () => {
+        component = TestUtils.renderIntoDocument(<LeftNav open={false}
+                                                          appsListOpen={false}
+                                                          apps={appsTestData}
+                                                          selectedAppId={validAppId}
+                                                          items={navItemsTestData}/>);
+
+        TestUtils.findRenderedDOMComponentWithClass(component, 'tablesList');
+        expect(TestUtils.scryRenderedDOMComponentsWithTag(component, 'appsList').length).toEqual(0);
+    });
+
+    it('renders the apps list if an invalid/non-existing app is currently selected', () => {
+        component = TestUtils.renderIntoDocument(<LeftNav open={false}
+                                                          appsListOpen={true}
+                                                          apps={appsTestData}
+                                                          selectedAppId={invalidAppId}
+                                                          items={navItemsTestData}/>);
+
+        TestUtils.findRenderedDOMComponentWithClass(component, 'appsList');
+        expect(TestUtils.scryRenderedDOMComponentsWithTag(component, 'tablesList').length).toEqual(0);
+    });
 });
