@@ -589,10 +589,10 @@ let ReportDataStore = Fluxxor.createStore({
         this.appId = payload.appId;
         this.tblId = payload.tblId;
         this.rptId = payload.rptId;
-        this.selections = payload.filter.selections;
-        this.facetExpression = payload.filter.facet;
 
-        this.searchStringForFiltering = payload.filter.search;
+        this.selections = payload.filter ? payload.filter.selections : '';
+        this.facetExpression = payload.filter ? payload.filter.facet : '';
+        this.searchStringForFiltering = payload.filter ? payload.filter.search : '';
 
         this.reportModel.setSortList(payload.sortList);
         this.reportModel.setSortFids(payload.sortList);
@@ -620,7 +620,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.reportModel.setMetaData(response.metaData);
 
         //  Need to update record count cause may be filtering
-        reportModel.updateRecordsCount(response.recordCount);
+        this.reportModel.updateRecordsCount(response.recordCount);
 
         this.emit('change');
     },
@@ -753,10 +753,9 @@ let ReportDataStore = Fluxxor.createStore({
     /**
      * removes the record with the matching value in the keyfield from the
      * models filteredRecord list
-     * @param id
+     * @param recId
      */
     onDeleteReportRecordSuccess(recId) {
-        const model = this.reportModel.get();
         this.reportModel.deleteRecordsFromLists(recId);
         this.emit('change');
     },
@@ -783,7 +782,6 @@ let ReportDataStore = Fluxxor.createStore({
      * @param recIds
      */
     onDeleteReportRecordBulkSuccess(recIds) {
-        const model = this.reportModel.get();
         for (var i = 0; i < recIds.length; i++) {
             this.reportModel.deleteRecordsFromLists(recIds[i]);
         }
@@ -870,7 +868,6 @@ let ReportDataStore = Fluxxor.createStore({
     /**
      * Cancels an record edit
      * the id and index of a record to render in inline edit id is cleared
-     * @param payload - none
      */
     onClearEdit() {
         this.editingIndex = null;

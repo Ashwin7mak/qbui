@@ -139,12 +139,12 @@ const ReportToolsAndContent = React.createClass({
         this.debouncedFilterReport(newSearch, this.props.reportData.selections);
     },
 
-    filterReport(searchString, selections) {
+    filterReport(searchString, selections, alwaysRunReport) {
         // leading and trailing spaces are trimmed..
         const trimmedSearch = StringUtils.trim(searchString);
 
-        //  only perform a search if search value differs from prior search value
-        if (trimmedSearch !== this.props.searchStringForFiltering) {
+        //  only generate a report if search value differs from prior search value OR alwaysRunReport is set to true
+        if (trimmedSearch !== this.props.searchStringForFiltering || alwaysRunReport === true) {
             logger.debug('Sending filter action with:' + trimmedSearch);
 
             const filter = FilterUtils.getFilter(StringUtils.trim(trimmedSearch), selections, this.facetFields);
@@ -170,7 +170,7 @@ const ReportToolsAndContent = React.createClass({
 
     filterOnSelections(newSelections) {
         this.getFlux().actions.filterSelectionsPending(newSelections);
-        this.debouncedFilterReport(this.props.searchStringForFiltering, newSelections);
+        this.debouncedFilterReport(this.props.searchStringForFiltering, newSelections, true);
     },
 
     clearSearchString() {
@@ -182,7 +182,7 @@ const ReportToolsAndContent = React.createClass({
         let noSelections = new FacetSelections();
         this.getFlux().actions.filterSelectionsPending(noSelections);
         this.getFlux().actions.filterSearchPending('');
-        this.debouncedFilterReport('', noSelections);
+        this.debouncedFilterReport('', noSelections, true);
     },
 
     getReportToolbar() {

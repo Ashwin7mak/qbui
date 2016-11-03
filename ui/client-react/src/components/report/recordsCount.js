@@ -36,7 +36,7 @@ var RecordsCount = React.createClass({
 
         let dbl = null;
 
-        if (this.props.isFiltered) {
+        if (this.props.isFiltered && this.props.recordCount !== this.props.filteredRecordCount) {
             dbl = this.props.clearAllFilters;
             message = (this.props.recordCount === 1) ? "report.filteredSingleRecordCount" : "report.filteredRecordCount";
         }
