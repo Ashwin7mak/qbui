@@ -1,10 +1,10 @@
 import React from 'react';
-import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import Breakpoints from '../../utils/breakpoints';
+import M5AppHomePage from './m5AppHomePage';
 
 import './appHomePage.scss';
 
@@ -76,7 +76,6 @@ let AppHomePageRoute = React.createClass({
     getStageHeadline() {
         return (this.props.selectedApp &&
             <div className="stageHeadline">
-
                 <h3 className="appName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedApp.name}</h3>
             </div>
         );
@@ -89,17 +88,8 @@ let AppHomePageRoute = React.createClass({
     },
     render: function() {
         let isSmall = Breakpoints.isSmallBreakpoint();
-        return (
-            isSmall ?
-                <div className="appHomePageContainer">
-                    <div className="appHomePageActionsContainer secondaryBar">
-                        {this.getSecondaryBar()}
-                        {this.getPageActions(2)}
-                    </div>
-                    <div className="appHomePageImageContainer"><img className="appHomePageMobileImage"/></div>
-                </div> :
-                <div className="appHomePageImageContainer"><img className="appHomePageImage"/></div>
-        );
+
+        return <M5AppHomePage />;
     }
 });
 
