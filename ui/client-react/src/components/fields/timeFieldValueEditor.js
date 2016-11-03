@@ -142,18 +142,15 @@ const TimeFieldValueEditor = React.createClass({
      * Passes the new time value up to onChange callbacks.
      * @param {Object} newValue:
      *     {
-     *          value: <String || null> The new time as a string. Expects `null` for a falsy value.
+     *          value: <String || null> The new time as a string. Expects `null` for a falsy value,
+     *                                  such as when the empty option was selected.
      *     }
      */
     onChange(newValue) {
-        if (newValue && (this.props.onChange || this.props.onDateTimeChange)) {
-            //  value of null means the empty option was selected
-            if (newValue.value === null || newValue.value) {
-                if (this.props.onDateTimeChange) {
-                    this.props.onDateTimeChange(newValue.value);
-                } else {
-                    this.props.onChange(newValue.value);
-                }
+        if (newValue && (newValue.value === null || newValue.value)) {
+            const onChange = this.props.onDateTimeChange || this.props.onChange;
+            if (onChange) {
+                onChange(newValue.value);
             }
         }
     },
