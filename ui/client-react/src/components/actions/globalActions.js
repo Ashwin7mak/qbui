@@ -44,9 +44,16 @@ let GlobalActions = React.createClass({
         onSelect: React.PropTypes.func,
         position: React.PropTypes.string.isRequired,
         actions: React.PropTypes.arrayOf(actionPropType),
-        dropdownIcon: React.PropTypes.string.isRequired,
-        dropdownMsg: React.PropTypes.string.isRequired,
+        dropdownIcon: React.PropTypes.string,
+        dropdownMsg: React.PropTypes.string,
         startTabIndex: React.PropTypes.number.isRequired
+    },
+
+    getDefaultProps() {
+        return {
+            dropdownIcon: 'fries',
+            dropdownMsg: ''
+        };
     },
 
     changeLocale: function(locale) {
