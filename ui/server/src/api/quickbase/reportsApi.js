@@ -177,7 +177,17 @@
                 });
             },
 
-            fetchRecordsCount: function(req, reportId) {
+            /**
+             * Wrapper function that calls either the reports get record count endpoint or
+             * the records count endpoint.  Returns a promise that resolves with the count
+             * of all records for the given report request.
+             *
+             * @param req
+             * @param reportId
+             */
+            fetchReportCount: function(req, reportId) {
+                //  if there is a query parameter (ie: filter), need to query for the count using
+                //  the records endpoint; otherwise can use the reports endpoint to get the count.
                 let query = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
                 if (query !== null) {
                     return new Promise((resolve, reject) => {
@@ -394,7 +404,7 @@
              */
             fetchReport: function(req, reportId, includeFacets) {
                 return new Promise(function(resolve, reject) {
-                    let fetchRequests = [this.fetchReportResult(req, reportId), this.fetchFields(req), this.fetchRecordsCount(req, reportId)];
+                    let fetchRequests = [this.fetchReportResult(req, reportId), this.fetchFields(req), this.fetchReportCount(req, reportId)];
                     if (includeFacets === true) {
                         fetchRequests.push(this.fetchReportFacets(req, reportId));
                     }

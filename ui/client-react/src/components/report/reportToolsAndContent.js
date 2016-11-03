@@ -142,10 +142,11 @@ const ReportToolsAndContent = React.createClass({
     filterReport(searchString, selections) {
         // leading and trailing spaces are trimmed..
         const trimmedSearch = StringUtils.trim(searchString);
-        logger.debug('Sending filter action with:' + trimmedSearch);
 
         //  only perform a search if search value differs from prior search value
         if (trimmedSearch !== this.props.searchStringForFiltering) {
+            logger.debug('Sending filter action with:' + trimmedSearch);
+
             const filter = FilterUtils.getFilter(StringUtils.trim(trimmedSearch), selections, this.facetFields);
 
             let queryParams = {};
@@ -281,22 +282,9 @@ const ReportToolsAndContent = React.createClass({
 
     /**
      * Returns the count of records for a report.
-     * If the report has been filtered or has facets, returns the filtered count. If not, returns the total records count.
      */
     getReportRecordsCount(reportData) {
-        if (reportData.data) {
-            let isReportFiltered = false;
-                // check if report filtered?
-            if (reportData.searchStringForFiltering && StringUtils.trim(reportData.searchStringForFiltering).length !== 0) {
-                isReportFiltered = true;
-            } else {
-                // Report is not filtered, check for facet selections.
-                isReportFiltered = reportData.selections ? reportData.selections.hasAnySelections() : false;
-            }
-            //return isReportFiltered ? reportData.data.filteredRecordsCount : reportData.data.recordsCount;
-            return reportData.data.recordsCount;
-        }
-        return 0;
+        return reportData && reportData.data ? reportData.data.recordsCount : 0;
     },
 
     /**
