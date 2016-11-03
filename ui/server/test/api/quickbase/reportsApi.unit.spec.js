@@ -373,7 +373,7 @@ describe('Validate ReportsApi unit tests', function() {
 
         it('Test report table homepage not defined ', function(done) {
             getExecuteRequestStub.restore();
-            getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest", function(req, opts){
+            getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest", function(stubReq, opts) {
                 if (opts.url.endsWith("defaulthomepage")) {
                     // setup case of no homepage defined
                     return Promise.resolve({body: ''});
@@ -395,7 +395,7 @@ describe('Validate ReportsApi unit tests', function() {
                     assert.deepEqual(response, reportObj);
                 },
                 function(error) {
-                    done(new Error("promise error response returned when testing undefined table homepage " +JSON.stringify(error)));
+                    done(new Error("promise error response returned when testing undefined table homepage " + JSON.stringify(error)));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve fetchTableHomePageReport success when testing undefined table homepage: ' + JSON.stringify(errorMsg)));
