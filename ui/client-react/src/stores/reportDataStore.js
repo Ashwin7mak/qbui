@@ -683,8 +683,14 @@ let ReportDataStore = Fluxxor.createStore({
             //find record to add after
 
             let afterRecIndex = -1;
-            if (afterRecId && afterRecId.value !== undefined) {
-                afterRecIndex = this.reportModel.findRecordIndexById(model.filteredRecords, afterRecId.value);
+
+            // If afterRecId is an object, get the id value
+            if (_.has(afterRecId, 'value')) {
+                afterRecId = afterRecId.value;
+            }
+
+            if (afterRecId) {
+                afterRecIndex = this.reportModel.findRecordIndexById(model.filteredRecords, afterRecId);
             }
 
             // use 1st record to create newRecord

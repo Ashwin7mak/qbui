@@ -270,7 +270,7 @@ let recordActions = {
                         logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, changes});
                         NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
-                        resolve();
+                        resolve(recId);
                     },
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x

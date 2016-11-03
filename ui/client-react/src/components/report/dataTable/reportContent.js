@@ -209,16 +209,27 @@ export let ReportContent = React.createClass({
      */
     handleRecordNewBlank(afterRecId) {
         const flux = this.getFlux();
+
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
         if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            this.handleRecordSaveClicked(afterRecId);
+            let saveRecordPromise = this.handleRecordSaveClicked(afterRecId);
+
+            // After saving the record successfully, then add the new row
+            // Don't do anything if the record wasn't saved successfully or a promise was not returned
+            if (saveRecordPromise) {
+                saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
+            }
         } else {
             flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
         }
         return null;
     },
 
+    addNewRowAfterRecordSaveSuccess(afterRecId) {
+        const flux = this.getFlux();
+        flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+    },
 
     /**
      * User wants to save changes to a record.
@@ -232,9 +243,9 @@ export let ReportContent = React.createClass({
             if (this.props.pendEdits.recordChanges) {
                 recordChanges = _.cloneDeep(this.props.pendEdits.recordChanges);
             }
-            this.handleRecordAdd(recordChanges);
+            return this.handleRecordAdd(recordChanges);
         } else {
-            this.handleRecordChange(id);
+            return this.handleRecordChange(id);
         }
     },
 
@@ -262,7 +273,7 @@ export let ReportContent = React.createClass({
         if (_.has(this.props, 'fields.fields.data')) {
             fields = this.props.fields.fields.data;
         }
-        flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields);
     },
 
     /**
@@ -273,7 +284,7 @@ export let ReportContent = React.createClass({
         const flux = this.getFlux();
         if (_.has(this.props, 'fields.fields.data')) {
             flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-            flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data);
+            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data);
         }
     },
 
