@@ -11,6 +11,8 @@ import TablesList from './tablesList';
 import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
 import AppUtils from '../../utils/appUtils';
+import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
+
 
 let LeftNav = React.createClass({
 
@@ -66,7 +68,7 @@ let LeftNav = React.createClass({
 
     renderNavContent() {
         // Show the apps list if the apps list is open or if the currently selected app does not exist (So a user can choose a different app)
-        if (this.props.appsListOpen || (!this.props.appsLoading && !AppUtils.appExists(this.props.selectedAppId, this.props.apps))) {
+        if (this.props.appsListOpen || !AppUtils.appExists(this.props.selectedAppId, this.props.apps)) {
             return <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  />;
         } else {
             return <TablesList key={"tables"} expanded={this.props.expanded} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables} {...this.props} />;
@@ -82,14 +84,14 @@ let LeftNav = React.createClass({
             classes += " appsListOpen";
         }
 
-
-
         return (
             <Swipeable className={classes} onSwipedLeft={this.swipedLeft}>
                 {this.createBranding()}
 
                 <div className={"transitionGroup"}>
-                    {this.renderNavContent()}
+                    <Loader loaded={!this.props.appsLoading} options={SpinnerConfigurations.LEFT_NAV_BAR}>
+                        {this.renderNavContent()}
+                    </Loader>
                 </div>
 
                 {this.props.globalActions}

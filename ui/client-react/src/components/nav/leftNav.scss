@@ -530,3 +530,17 @@ $travel-distance: 15;
 .leftNav.appsListOpen .branding .qbIcon.iconTableUISturdy-caret-filled-up {
     transform: rotate(0deg);
 }
+
+.leftNav .loader {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    position: relative;
+
+    .spinner {
+        // Requires important flags because the react-loader puts styles inline on the elements
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+    }
+}
