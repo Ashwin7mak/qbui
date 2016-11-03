@@ -43,22 +43,23 @@ export let Nav = React.createClass({
 
     getTopGlobalActions() {
         const actions = [
-            {msg:'globalActions.user', link:'/user', icon:'user'},
             {msg:'globalActions.help', link:'/help', icon:'help'}
         ];
         return (<GlobalActions actions={actions}
                                position={"top"}
+                               dropdownIcon="user"
+                               dropdownMsg="globalActions.user"
                                startTabIndex={4}/>);
     },
 
     getLeftGlobalActions() {
         const actions = [
-            {msg:'globalActions.user', link:'/user', icon:'user'}
+            {msg:'globalActions.help', link:'/help', icon:'help'}
         ];
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
-                               dropdownIcon="help"
-                               dropdownMsg="globalActions.help"
+                               dropdownIcon="user"
+                               dropdownMsg="globalActions.user"
                                startTabIndex={100}
                                position={"left"}/>);
     },

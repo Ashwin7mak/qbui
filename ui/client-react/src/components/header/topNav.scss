@@ -43,6 +43,7 @@ $top-nav-color: #193048;
         display: inline-block;
         cursor: pointer;
         color: $topnav-icon-color;
+        padding: 0 8px;
     }
     a.dropdownToggle:hover {
         background-color: $nav-hover-bg;
@@ -57,7 +58,7 @@ $top-nav-color: #193048;
 
     .link {
         cursor: pointer;
-        > a {
+        > a, >div>a {
             display:inline-block;
             color: $topnav-icon-color;
             padding: 0 8px;

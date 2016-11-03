@@ -108,9 +108,6 @@ html body {
                     padding:0;
                     height: $top-nav-height;
                     text-align:center;
-                    &.dropdownToggle {
-                        width:20px;
-                    }
                 }
                 button:not(.disabled):hover .hi {
                     color: #fff;
