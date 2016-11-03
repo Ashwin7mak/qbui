@@ -625,10 +625,12 @@ let AGGrid = React.createClass({
             this.api.onGroupExpandedOrCollapsed();
             return;
         }
+
         //For click on record action icons or input fields or links or link child elements do nothing
         if (target &&
             target.className.indexOf("qbIcon") !== -1 ||
             target.className.indexOf("iconLink") !== -1 ||
+            target.className.indexOf("dropdown") !== -1 ||
             target.tagName === "INPUT" ||
             target.tagName === "A" ||
             target.parentNode.tagName === "A") {

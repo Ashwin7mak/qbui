@@ -312,7 +312,10 @@ export default {
         noneOption: "\<None\>",
         unimplemented: {
             search: "Searching is not available yet",
-            favorites: "Accessing Favorites is not available yet"
+            favorites: "Accessing favorites is not available yet",
+            makeFavorite: "Marking as a favorite is not available yet",
+            print: "Printing is not available yet",
+            copy: "Copying is not available yet"
         }
     }
 };

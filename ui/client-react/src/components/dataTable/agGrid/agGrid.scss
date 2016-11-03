@@ -45,7 +45,7 @@ $cell-edit-background-edit: #f3f8fe;
     .selectAllCheckbox,
     .ag-selection-checkbox,
     .selectionCell .recordActions,
-    .agGrid .ag-header-icon {
+    .ag-header-icon {
         display: none;
     }
 }
@@ -207,6 +207,10 @@ $cell-edit-background-edit: #f3f8fe;
                         vertical-align:middle;
                         width:28px;
                         padding:4px;
+
+                        &.disabled {
+                            color: $icon-disabled-color;
+                        }
                     }
 
                     &:hover {

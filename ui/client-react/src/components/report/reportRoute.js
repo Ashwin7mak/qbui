@@ -35,7 +35,6 @@ const ReportRoute = React.createClass({
         let tblId = params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
-
         let offset = NumberUtils.getNumericPropertyValue(this.props.reportData, 'pageOffset');
         let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows');
 
@@ -74,12 +73,11 @@ const ReportRoute = React.createClass({
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
-            {msg: 'pageActions.favorite', icon:'star'},
+            {msg: 'unimplemented.makeFavorite', icon:'star', disabled:true},
             {msg: 'pageActions.email', icon:'mail'},
-            {msg: 'pageActions.print', icon:'print'},
-            {msg: 'pageActions.customizeReport', icon:'settings-hollow'},
+            {msg: 'unimplemented.print', icon:'print', disabled:true}
         ];
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
+        return (<IconActions className="pageActions" actions={actions} />);
     },
 
 

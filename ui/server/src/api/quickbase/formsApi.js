@@ -154,7 +154,6 @@
                     var fetchRequests = [this.fetchFormMetaData(req), this.fetchTableFields(req)];
                     Promise.all(fetchRequests).then(
                         function(response) {
-                            reject("fake error")
                             //  create return object with the form meta data
                             let obj = {
                                 formMeta: JSON.parse(response[0].body),
