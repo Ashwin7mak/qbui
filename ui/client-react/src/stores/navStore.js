@@ -60,6 +60,8 @@ let NavStore = Fluxxor.createStore({
         this.emit('change');
     },
     onToggleRowPopUpMenu(isOpen) {
+        //Originally if a user opens up one menu then opened up a second menu, the padding would be removed from the page, and the row menu pop up would be clipped
+            //by keeping track of the count, makes sure padding remains at the bottom of the page, even if a user clicks on one menu and then clicks on a separate menu
         if (isOpen) {
             this.state.openCount++;
         } else {
