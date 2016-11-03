@@ -1,3 +1,9 @@
+/**
+ * Created by skamineni on 11/1/16.
+ */
+/**
+ * Created by skamineni on 11/1/16.
+ */
 (function() {
     'use strict';
 
@@ -11,12 +17,14 @@
     var formsPage = new FormsPage();
     var reportCardViewPage = new ReportCardViewPage();
 
-    describe('Add and Edit a record via Form in Card View: ', function() {
+    describe('Validate Form in Card View Tests :', function() {
         var realmName;
         var realmId;
         var app;
         var recordList;
-
+        var RECORDS_COUNT = '8 records';
+        var expectedErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field', 'Fill in the Phone Number Field', 'Fill in the Email Address Field', 'Fill in the URL Field'];
+        var expectedNumericErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field'];
 
         beforeAll(function(done) {
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
@@ -48,18 +56,27 @@
             });
         });
 
-        it('Verify Add button on stage not displayed', function(done) {
-            //Verify reports stage and add button on stage not present for small BP.
-            expect(reportServicePage.reportAddRecordBtn.isDisplayed()).toBeFalsy();
-            //Verify add button is present in bottom of loaded content
-            expect(reportCardViewPage.addNewRecordBtn.isDisplayed()).toBeTruthy();
+        afterAll(function(done) {
+            e2eBase.cleanup(done);
+        });
+
+        it('Validate all required fields on the form', function(done) {
+            //click on add record button
+            reportCardViewPage.clickAddRecord();
+            // Check that the add form container is displayed
+            expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
+
+            //Save the form without entering any field values on form
+            formsPage.clickSaveBtnWithName('Save');
+
+            //verify validation
+            formsPage.verifyErrorMessages(expectedErrorMessages);
             done();
         });
 
-        it('Add a record from the form', function(done) {
-            //TODO textField.Right now even phone no field says textField. So can't enter values and save record
+        it('Save Btn - Validate Add form', function(done) {
             //TODO 'dateCell', 'timeCell' in small breakpoints dosent work typing in date and time.
-            var fieldTypeClassNames = ['textField', 'numericField', 'checkbox'];
+            var fieldTypeClassNames = ['numericField'];
             //click on add record button
             reportCardViewPage.clickAddRecord();
             // Check that the add form container is displayed
@@ -67,68 +84,84 @@
 
             //get the fields from the table and generate a record
             for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
+                reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
             }
 
             //Save the form
-            formsPage.clickFormSaveBtn();
+            formsPage.clickSaveBtnWithName('Save');
 
-            //reload the report to verify the row edited
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
-            reportCardViewPage.waitForReportReady();
+            //verify validation
+            formsPage.verifyErrorMessages(expectedErrorMessages);
 
-            //Verify there are 8 records after adding 1
-            expect(reportCardViewPage.reportRecordsCount.getText()).toBe('8 records');
+            //verify clicking on alert button brings up the error message popup
+            formsPage.clickFormAlertBtn();
+            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
+
+            //verify clicking on alert again hides the error message popup
+            formsPage.clickFormAlertBtn();
+            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
             done();
+
         });
 
-        it('Edit a record from the form and Verify Save Functionality', function(done) {
-            var fieldTypeClassNames = ['textField', 'numericField'];
+        it('Save Btn -Validate Edit form', function(done) {
+            var fieldTypeClassNames = ['numericField'];
             //Select record 1
             reportCardViewPage.clickRecord(1);
             reportCardViewPage.clickEditRecord();
+            //get the fields from the table and generate a record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+            }
+            //Save the form
+            formsPage.clickSaveBtnWithName('Save');
+
+            //verify validation
+            formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+
+            //verify clicking on alert button brings up the error message popup
+            formsPage.clickFormAlertBtn();
+            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
+
+            //verify clicking on alert again hides the error message popup
+            formsPage.clickFormAlertBtn();
+            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
+            done();
+
+        });
+
+        it('Save And Next - Validate edit form and Edit a record successfully after errors', function(done) {
+            var fieldTypeClassNames = ['textField', 'numericField'];
+            //Select record 1
+            reportCardViewPage.clickRecord(3);
+            reportCardViewPage.clickEditRecord();
 
             //get the fields from the table and generate a record
+            reportCardViewPage.enterInvalidFormValues('numericField');
+
+            //Save the form
+            formsPage.clickSaveBtnWithName('Save & Next');
+
+            //verify validation
+
+            formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+
+            //correct the errors and add the record
             for (var i = 0; i < fieldTypeClassNames.length; i++) {
                 reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
             }
 
             //Save the form
-            formsPage.clickFormSaveBtn();
+            formsPage.clickSaveBtnWithName('Save & Next');
+            reportServicePage.waitForElement(element(by.className('editForm')));
+
 
             //reload the report to verify the row edited
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
             //verify the edited record
             reportCardViewPage.waitForReportReady();
 
-            //Select record 1
-            reportCardViewPage.clickRecord(1);
-
-            for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
-            }
-            done();
-        });
-
-        it('Edit a record from the form and Verify Save And Next functionality', function(done) {
-            var fieldTypeClassNames = ['textField', 'numericField'];
-            //Select record 1
-            reportCardViewPage.clickRecord(4);
-            reportCardViewPage.clickEditRecord();
-            //get the fields from the table and generate a record
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
-            }
-
-            //Save the form
-            formsPage.clickFormSaveAndNextBtn();
-
-            //reload the report to verify the row edited
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
-            //verify the edited record
-            reportCardViewPage.waitForReportReady();
-
-            reportCardViewPage.clickRecord(4);
+            reportCardViewPage.clickRecord(3);
             for (var j = 0; j < fieldTypeClassNames.length; j++) {
                 reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
             }

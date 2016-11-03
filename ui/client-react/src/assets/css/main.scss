@@ -42,6 +42,10 @@ p, .p {
   font-weight: 400;
 }
 
+a {
+  cursor: pointer;
+}
+
 .button-text {
   font-size: $font-size-button;
   font-weight: 700;
