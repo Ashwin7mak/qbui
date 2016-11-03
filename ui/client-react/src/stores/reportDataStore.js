@@ -617,12 +617,13 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onLoadRecordsFailed() {
+    onLoadRecordsFailed(error) {
         this.loading = false;
         this.editingIndex = null;
         this.editingId = null;
 
         this.error = true;
+        this.errorDetails = error;
         this.emit('change');
     },
 
@@ -637,12 +638,13 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onFilteredRecordsCountFailed() {
+    onFilteredRecordsCountFailed(error) {
         this.loading = false;
         this.editingIndex = null;
         this.editingId = null;
 
         this.error = true;
+        this.errorDetails = error;
         this.emit('change');
     },
 

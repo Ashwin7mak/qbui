@@ -6,6 +6,11 @@ import Promise from 'bluebird';
 
 let errorStatus = 404;
 let errorMessage = "someError";
+let errorObject = {
+    message: errorMessage,
+    status: errorStatus
+};
+
 let exStatus = 500;
 
 let inputs = {
@@ -105,7 +110,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
             },
             () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, jasmine.any(Object)]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, errorStatus]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, {response: errorObject}]);
                 done();
             }
         );
@@ -139,7 +144,7 @@ describe('Report Data Actions -- Filter report Negative', () => {
             },
             () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, errorStatus]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, {response: errorObject}]);
                 done();
             }
         );
@@ -378,7 +383,7 @@ describe('Report Data Actions -- Fetch a report with reports count fetch failure
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([data.loadReportAct, jasmine.any(Object)]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.loadReportRecordsCountAct, jasmine.any(Object)]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([data.errAct, {response: {message: errorMessage, status: errorStatus}}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([data.errAct, {response: errorObject}]);
                     done();
                 }
             );
@@ -433,7 +438,7 @@ describe('Report Data Actions -- ', () => {
                     expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([data.loadAct, jasmine.any(Object)]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.errAct, errorStatus]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.errAct, {response: errorObject}]);
                     done();
                 }
             );
@@ -488,7 +493,7 @@ describe('Report Data Actions -- ', () => {
                     expect(mockReportService.prototype.getReport).toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([data.loadAct, jasmine.any(Object)]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.errAct, errorStatus]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.errAct, {response: errorObject}]);
                     done();
                 }
             );

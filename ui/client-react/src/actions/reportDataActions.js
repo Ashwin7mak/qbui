@@ -235,8 +235,8 @@ let reportDataActions = {
                             error => {
                                 //  axios upgraded to an error.response object in 0.13.x
                                 logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.getRecords:');
-                                this.dispatch(actions.LOAD_RECORDS_FAILED, error.response.status);
-                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, error.response.status);
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, error);
+                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, error);
                                 reject();
                             }
                         ).catch(
@@ -250,7 +250,7 @@ let reportDataActions = {
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.getRecords');
-                        this.dispatch(actions.LOAD_RECORDS_FAILED, error.response.status);
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, error);
                         reject();
                     }
                 ).catch(
