@@ -49,6 +49,7 @@ export default {
             print: "Drucken",
             copy: "Kopieren",
             delete: "Löschen",
+            dontDelete: "Nicht löschen",
             more: "Mehr...",
             placeholder: 'Wählen...',
             notFound: "Nicht gefunden"

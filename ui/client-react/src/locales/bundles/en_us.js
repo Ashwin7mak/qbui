@@ -52,6 +52,7 @@ export default {
             print: "Print",
             copy: "Copy",
             delete: "Delete",
+            dontDelete: "Don't delete",
             more: "More...",
             placeholder: "Select...",
             notFound: "Not Found"
