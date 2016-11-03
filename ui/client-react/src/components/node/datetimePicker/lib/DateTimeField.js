@@ -537,7 +537,7 @@ var DateTimeField = (function (_Component) {
                 onKeyPress: this.onKeyPress,
                 onBlur: this.onBlur,
                 onChange: this.onChange,
-                onFocus: (event) => this.setState({isFocused: true}),
+                onFocus: (function() {this.setState({isFocused: true})}).bind(this),
                 type: "text",
                 value: this.state.inputValue
             }, this.props.inputProps)),

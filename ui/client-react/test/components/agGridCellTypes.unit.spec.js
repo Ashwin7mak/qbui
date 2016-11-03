@@ -277,7 +277,7 @@ describe('AGGrid cell editor functions', () => {
         expect(timeEditInputs[0].value).toBe("02:33");
     });
 
-    it('test DateTimeFormatter edit - quickbase shortcuts', () => {
+    it('test DateTimeFormatter edit - quickbase shortcuts increment date', () => {
         const params = {
             value: {
                 value: "2015-09-03T09:33:03.777Z"
@@ -315,7 +315,7 @@ describe('AGGrid cell editor functions', () => {
 
     });
 
-    it('test DateTimeFormatter edit - quickbase shortcuts2', () => {
+    it('test DateTimeFormatter edit - quickbase shortcuts decrement date', () => {
         const params = {
             value: {
                 value: "2015-09-03T09:33:03.777Z"

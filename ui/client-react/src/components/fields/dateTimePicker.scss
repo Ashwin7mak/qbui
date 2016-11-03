@@ -234,7 +234,7 @@
         border: solid 1px $input-text-focus-border-color;
         //Added border-color for multi choice text box
         border-color: $input-text-focus-border-color !important;
-        vorder-radius: 2px;
+        border-radius: 2px;
         @include focus-shadow();
     }
     > * {
