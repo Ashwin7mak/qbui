@@ -51,10 +51,6 @@
             });
         });
 
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
-
         /**
          * Data Provider for reports and faceting results.
          */
@@ -63,7 +59,7 @@
                 {
                     message: 'all numeric fields',
                     fieldTypeClassNames: 'numericField',
-                    expectedErrorMessages: ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field']
+                    expectedErrorMessages: ['Numeric Field', 'Numeric Percent Field', 'Duration Field']
                 },
                 //TODO validate email, url and phone no fields. Right now we have bugs for these.
             ];
@@ -86,11 +82,11 @@
 
                     //verify clicking on alert button brings up the error message popup
                     formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
+                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
 
                     //verify clicking on alert again hides the error message popup
                     formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
+                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
                     done();
                 });
             });
@@ -98,7 +94,7 @@
 
         it('Save and Next Button - Validate errors and correct the errors by editing new record', function(done) {
             var validFieldClassNames = ['textField', 'numericField'];
-            var expectedNumericErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field'];
+            var expectedNumericErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field'];
             reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                 //click edit record from the grid recordActions
                 reportServicePage.clickRecordEditPencil(3);
