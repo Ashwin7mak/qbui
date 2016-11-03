@@ -377,28 +377,20 @@ let QBForm = React.createClass({
     getBuiltInFieldsForFooter() {
         let fields = this.props.formData.fields;
         let values = this.props.formData.record;
+        let biFields = _.filter(fields, function(fld) {return fld.builtIn && fld.name !== Constants.BUILTIN_FIELD_NAME.RECORD_ID;});
         const result = [];
-        for (var fld in fields) {
-            if (fields[fld].builtIn && fields[fld].name !== Constants.BUILTIN_FIELD_NAME.RECORD_ID) {
-                for (var val in values) {
-                    if (values[val].id === fields[fld].id) {
-                        if (fields[fld].name === Constants.BUILTIN_FIELD_NAME.LAST_MODIFIED_BY) {
-                            result.push({name: Locale.getMessage("form.footer.lastUpdatedBy"), value: values[val].display, email: values[val].value.email, screenName: values[val].value.screenName, id:1, type:Constants.USER});
-                        }
-                        if (fields[fld].name === Constants.BUILTIN_FIELD_NAME.DATE_CREATED) {
-                            result.push({name: Locale.getMessage("form.footer.createdOn"), value: values[val].display, id:2, type:Constants.DATE});
-                        }
-                        if (fields[fld].name === Constants.BUILTIN_FIELD_NAME.RECORD_OWNER) {
-                            result.push({name: Locale.getMessage("form.footer.ownedBy"), value: values[val].display, email: values[val].value.email, screenName: values[val].value.screenName, id:3, type:Constants.USER});
-                        }
-                        break;
-                    }
-                }
+        for (var fld in biFields) {
+            let fldVal = _.find(values, ['id', biFields[fld].id]);
+            if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.LAST_MODIFIED_BY) {
+                result.push({name: Locale.getMessage("form.footer.lastUpdatedBy"), value: fldVal.display, email: fldVal.value.email, screenName: fldVal.value.screenName, id:1, type:Constants.USER});
+            }
+            if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.DATE_CREATED) {
+                result.push({name: Locale.getMessage("form.footer.createdOn"), value: fldVal.display, id:2, type:Constants.DATE});
+            }
+            if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.RECORD_OWNER) {
+                result.push({name: Locale.getMessage("form.footer.ownedBy"), value: fldVal.display, email: fldVal.value.email, screenName: fldVal.value.screenName, id:3, type:Constants.USER});
             }
         }
-        result.sort(function(a, b) {
-            return a.id - b.id;
-        });
         return result;
     },
 
@@ -409,10 +401,14 @@ let QBForm = React.createClass({
         const tabChildren = [];
         const singleColumn = Breakpoints.isSmallBreakpoint();
         let formFooter = [];
-        let frm = this.props.formData;
-        if (frm.formMeta.includeBuiltIns && frm.fields) {
+        if (this.props.formData && this.props.formData.formMeta.includeBuiltIns) {
+            let frm = this.props.formData;
             formFooter = this.createFormFooter();
         }
+
+        // if (frm && <frm className="formMeta includeBuiltIns"></frm>) {
+        //     formFooter = this.createFormFooter();
+        // }
         if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
             let tabs = this.props.formData.formMeta.tabs;
             Object.keys(tabs).forEach(key => {
