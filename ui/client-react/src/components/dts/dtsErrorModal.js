@@ -2,24 +2,27 @@ import React from 'react';
 import QBModal from '../qbModal/qbModal';
 
 
-const DTSAppDeleted = React.createClass({
+const DTSErrorModal = React.createClass({
     getInitialState() {
         return {
-            isOpen: true
+            isOpen: false
         };
     },
-    dtsErrorReceived(error) {
-        //this will open the modal if an dts sync error is recieved
-        if (this.props.error) {
-            this.setState({
-                isOpen: true
-            });
-        }
+    componentWillReceiveProps() {
+        // this.dtsErrorReceived(this.props.show);
+        this.setState({
+            isOpen: true
+        });
     },
-    toggleOpen() {
+    // dtsErrorReceived(show) {
+    //     //this will open the modal if an dts sync error is received
+    //
+    //     }
+    // },
+    close() {
         //this will close and reroute to classic
         this.setState({
-            isOpen: !this.state.isOpen
+            isOpen: false
         });
     },
     render() {
@@ -32,12 +35,13 @@ const DTSAppDeleted = React.createClass({
             <br/> <br/>
             Transaction ID: xxxxxx</p>;
         const primaryButtonName = "Open my app in Classic";
+        console.log('this.props.showDTSErrorModal', this.props.show);
         return (
             <QBModal
                 show={this.state.isOpen}
                 size="large"
                 primaryButtonName={primaryButtonName}
-                primaryButtonOnClick={this.toggleOpen}
+                primaryButtonOnClick={this.close}
                 title={title}
                 bodyMessage={errorMessage}
                 type="dtsAppDeleted" />
@@ -45,4 +49,4 @@ const DTSAppDeleted = React.createClass({
     }
 });
 
-export default DTSAppDeleted;
+export default DTSErrorModal;

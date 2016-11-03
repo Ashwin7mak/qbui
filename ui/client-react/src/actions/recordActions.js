@@ -73,6 +73,8 @@ let recordActions = {
                         if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
                             let resJson = JSON.parse(response.data.body);
                             this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
+                            // //===========================================================================================================================================================================
+                            this.dispatch(actions.DTS_ERROR_MODAL, {appId, tblId, record, recId: resJson.id});
                             NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
                             resolve(resJson.id);
                         } else {
@@ -86,6 +88,8 @@ let recordActions = {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
                         this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
+                        //===========================================================================================================================================================================
+                        this.dispatch(actions.DTS_ERROR_MODAL, {appId, tblId, record, error: error.response});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
                         reject();
                     }

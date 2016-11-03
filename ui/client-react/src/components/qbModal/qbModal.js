@@ -155,12 +155,14 @@ const QBModal = React.createClass({
     componentDidMount() {
         //This sets the size of the modal, if no size is given it defaults to small
         let modalDialog = document.querySelector(".modal-dialog") ;
-        if (this.props.size === "small") {
-            modalDialog.classList.add("small");
-        } else if (this.props.size === "medium") {
-            modalDialog.classList.add("medium");
-        } else {
-            modalDialog.classList.add("large");
+        if (modalDialog) {
+            if (this.props.size === "small") {
+                modalDialog.classList.add("small");
+            } else if (this.props.size === "medium") {
+                modalDialog.classList.add("medium");
+            } else {
+                modalDialog.classList.add("large");
+            }
         }
     },
     render() {

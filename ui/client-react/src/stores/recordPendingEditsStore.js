@@ -26,7 +26,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
             actions.ADD_RECORD, this.onSaveAddedRecord,
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
-            actions.ADD_RECORD_FAILED, this.onAddRecordFailed
+            actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
+            actions.DTS_ERROR_MODAL, this.onDTSErrorModal
         );
         this._initData();
         this.commitChanges = [];
@@ -47,6 +48,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = null;
         this.originalRecord = null;
         this.recordChanges = {};
+        this.showDTSErrorModal = false;
         this.editErrors = {
             ok: true,
             errors:[]
@@ -266,6 +268,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * @param payload - the recId
      */
     onAddRecordSuccess(payload) {
+        console.log('onAddRecordSuccess');
         this.currentEditingRecordId = payload.recId;
         let entry = this._getEntryKey();
         if (typeof (this.commitChanges[entry]) === 'undefined') {
@@ -312,6 +315,12 @@ let RecordPendingEditsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
+    onDTSErrorModal() {
+        //fill in
+        console.log('onDTSErrorModal');
+        this.showDTSErrorModal = true;
+        this.emit('change');
+    },
 
     /**
      * create a key for pending edit commitChanges map from the current context
@@ -339,7 +348,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             originalRecord : this.originalRecord,
             recordChanges : this.recordChanges,
             commitChanges : this.commitChanges,
-            editErrors: this.editErrors
+            editErrors: this.editErrors,
+            showDTSErrorModal: this.showDTSErrorModal
         };
     },
 });
