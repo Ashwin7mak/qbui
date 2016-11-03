@@ -23,13 +23,29 @@
     }
 
     .modal-dialog {
-        margin: 200px auto;
-        width: 450px;
-
+        //width: 100%;
+        //height: 100%;
         @include small-breakpoint {
             margin: 0 auto;
             width: 100%;
         }
+    }
+
+    .small {
+        //margin: 200px auto;
+        height: 165px;
+        width: 350px;
+    }
+
+    .medium {
+        //margin: 200px auto;
+        width: 450px;
+    }
+
+    .large {
+        //margin: 200px auto;
+        height: 404px;
+        width: 687px !important;
     }
 
     .modal-backdrop.in {
