@@ -24,9 +24,9 @@ var SmallHeader = React.createClass({
         /* optional key for searchbox */
         searchBoxKey: React.PropTypes.string,
         /* callback for search text */
-        onSearchChange: React.PropTypes.function,
+        onSearchChange: React.PropTypes.func,
         /* callback for clear search text */
-        onClearSearch: React.PropTypes.function,
+        onClearSearch: React.PropTypes.func,
         /* pre-populated value for search text */
         searchValue: React.PropTypes.string
     },

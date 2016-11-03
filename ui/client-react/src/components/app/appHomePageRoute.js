@@ -4,6 +4,7 @@ import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import Breakpoints from '../../utils/breakpoints';
+import M5AppHomePage from './m5AppHomePage';
 
 import AppNotFound from './appNotFound';
 
@@ -77,7 +78,6 @@ let AppHomePageRoute = React.createClass({
     getStageHeadline() {
         return (this.props.selectedApp &&
             <div className="stageHeadline">
-
                 <h3 className="appName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedApp.name}</h3>
             </div>
         );
@@ -89,25 +89,10 @@ let AppHomePageRoute = React.createClass({
             </div>);
     },
     render() {
-        let isSmall = Breakpoints.isSmallBreakpoint();
-        let content = (
-            isSmall ?
-                <div className="appHomePageContainer">
-                    <div className="appHomePageActionsContainer secondaryBar">
-                        {this.getSecondaryBar()}
-                        {this.getPageActions(2)}
-                    </div>
-                    <div className="appHomePageImageContainer"><img className="appHomePageMobileImage"/></div>
-                </div> :
-                <div className="appHomePageImageContainer">
-                    <img className="appHomePageImage"/>
-                </div>
-        );
-
         return (
             <div>
                 <AppNotFound appsLoading={this.props.appsLoading} selectedAppId={this.props.selectedAppId} apps={this.props.apps} />
-                {content}
+                <M5AppHomePage />
             </div>
         );
     }
