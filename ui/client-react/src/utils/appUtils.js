@@ -2,8 +2,12 @@ import _ from 'lodash';
 
 const AppUtils = {
     appExists(selectedAppId, apps) {
-        let foundAppId = _.find(apps, {id: selectedAppId});
-        return (selectedAppId && foundAppId);
+        if (!selectedAppId || !apps || apps.length === 0) {
+            return false;
+        }
+
+        let foundApp = _.find(apps, {id: selectedAppId});
+        return (foundApp ? foundApp : false);
     }
 };
 
