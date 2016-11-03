@@ -212,7 +212,8 @@ export let RecordRoute = React.createClass({
         return this.props.form.syncLoadedForm ||
             !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
             !_.isEqual(this.props.form.formLoading, nextProps.form.formLoading) ||
-            !_.isEqual(this.props.pendEdits, nextProps.pendEdits);
+            !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
+            !_.isEqual(this.props.selectedTable, nextProps.selectedTable);
     },
 
     /**
