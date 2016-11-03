@@ -52,7 +52,7 @@ let IconActions = React.createClass({
     },
     getInitialState() {
         return {
-            dropdownOpen: false,
+            dropdownOpen: false
         };
     },
     /**
