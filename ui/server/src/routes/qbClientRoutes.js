@@ -57,44 +57,44 @@ var lodash = require('lodash');
         getBaseOpts(config);
         var compBundleFileName = config.isProduction ? 'componentLibrary.min.js' : 'componentLibrary.js';
 
-        app.route('/app/:appId/table/:tblId/report/:rptId').get(function(req, res) {
+        app.route('/qbase/app/:appId/table/:tblId/report/:rptId').get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/app/:appId/table/:tblId/report/:rptId/record/:recordId').get(function(req, res) {
+        app.route('/qbase/app/:appId/table/:tblId/report/:rptId/record/:recordId').get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
+        app.route('/qbase/app/:appId/table/:tblId/record/:recordId').get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/app/:appId/table/:tblId/reports').get(function(req, res) {
+        app.route('/qbase/app/:appId/table/:tblId/reports').get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/app/:appId/table/:tblId').get(function(req, res) {
+        app.route('/qbase/app/:appId/table/:tblId').get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/app/:appId').get(function(req, res) {
+        app.route('/qbase/app/:appId').get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/apps').get(function(req, res) {
+        app.route('/qbase/apps').get(function(req, res) {
             renderIndex(req, res);
         });
 
-        app.route('/components').get(function(req, res) {
+        app.route('/qbase/components').get(function(req, res) {
             renderIndex(req, res, {bundleFileName: compBundleFileName});
         });
 
-        app.route('/components/:componentName').get(function(req, res) {
+        app.route('/qbase/components/:componentName').get(function(req, res) {
             renderIndex(req, res, {bundleFileName: compBundleFileName});
         });
 
         //  default application dashboard
-        app.route('/').get(function(req, res) {
+        app.route('/qbase/').get(function(req, res) {
             renderIndex(req, res);
         });
 
