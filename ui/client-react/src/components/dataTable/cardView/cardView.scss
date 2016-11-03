@@ -76,13 +76,16 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         .field {
             flex: 1 1 50%;
             padding: 0 0 10px 0;
+            width: 50%;
             .fieldLabel {
                 color: $fieldLabel-color;
                 padding-bottom: 2px;
                 display: block;
             }
-            .fieldValue {
+            .fieldValue, .fieldLabel {
+                display: block;
                 overflow: hidden;
+                text-overflow: ellipsis;
                 white-space: nowrap;
             }
             &:nth-child(n+3) {
