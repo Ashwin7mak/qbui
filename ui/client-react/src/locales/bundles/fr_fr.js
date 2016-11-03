@@ -313,9 +313,9 @@ export default {
             addApps: "Ajouter des applications en contactant "
         },
         appNotFoundError: {
-            notFound: "Oups, nous ne pouvons pas trouver votre application. ",
-            clickHere: "Cliquez ici",
-            quickBaseClassic: " pour QuickBase Classic."
+            notFound: "L'application est pas disponible dans Mercury en ce moment. ",
+            quickBaseClassic: "Ouvrez l'application dans QuickBase Classic. ",
+            clickHere: "Ouvrez l'application"
         },
         noneOption: "\<Aucun\>"
     }

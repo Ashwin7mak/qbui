@@ -31,8 +31,8 @@ const AppNotFound = React.createClass({
                     <QbIcon icon="alert" />
                     <p className="appNotFoundText">
                         <I18nMessage message="appNotFoundError.notFound"/>
-                        {this.renderQuickBaseClassicLink()}
                         <I18nMessage message="appNotFoundError.quickBaseClassic" />
+                        {this.renderQuickBaseClassicLink()}
                     </p>
                 </div>
             );

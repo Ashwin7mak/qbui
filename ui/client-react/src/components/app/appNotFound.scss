@@ -1,11 +1,11 @@
 @import '../../assets/css/_qbVariables.scss';
 
-$error-background-color: rgba($error-color, 0.15);
+$error-background-color: $color-black-100;
 
 .appNotFound {
     border: 1px solid $error-color;
     background-color: $error-background-color;
-    border-radius: 5px;
+    border-radius: 2px;
     color: $error-color;
     margin: 5px 5px;
     padding: 15px 15px;
