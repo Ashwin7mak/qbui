@@ -5,8 +5,6 @@ import AppUtils from '../../utils/appUtils';
 import UrlUtils from '../../utils/urlUtils';
 import {I18nMessage} from '../../utils/i18nMessage';
 
-import _ from 'lodash';
-
 import './appNotFound.scss';
 
 const AppNotFound = React.createClass({
@@ -29,8 +27,8 @@ const AppNotFound = React.createClass({
                     <QbIcon icon="alert" />
                     <p className="appNotFoundText">
                         <I18nMessage message="appNotFoundError.notFound"/>
-                        <I18nMessage message="appNotFoundError.quickBaseClassic" />
                         {this.renderQuickBaseClassicLink()}
+                        <I18nMessage message="appNotFoundError.quickBaseClassic" />
                     </p>
                 </div>
             );

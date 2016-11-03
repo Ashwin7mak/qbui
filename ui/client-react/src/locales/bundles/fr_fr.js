@@ -336,7 +336,7 @@ export default {
         },
         appNotFoundError: {
             notFound: "L'application est pas disponible dans Mercury en ce moment. ",
-            quickBaseClassic: "Ouvrez l'application dans QuickBase Classic. ",
+            quickBaseClassic: " dans QuickBase Classic. ",
             clickHere: "Ouvrez l'application"
         },
         noneOption: "\<Aucun\>"
