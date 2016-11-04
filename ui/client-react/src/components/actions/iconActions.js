@@ -25,7 +25,6 @@ import './iconActions.scss';
  */
 
 let IconActions = React.createClass({
-
     // actions don't have any functionality yet...
     propTypes: {
         actions: React.PropTypes.arrayOf(React.PropTypes.shape({
@@ -36,6 +35,7 @@ let IconActions = React.createClass({
             className: React.PropTypes.string,
             disabled: React.PropTypes.bool
         })).isRequired,
+        flux: React.PropTypes.object,
         maxButtonsBeforeMenu: React.PropTypes.number, // show action in dropdown after this,
         className: React.PropTypes.string,
         pullRight: React.PropTypes.bool, // for dropdowns positioned on right side of the UI
@@ -86,10 +86,14 @@ let IconActions = React.createClass({
                 </OverlayTrigger>);
     },
 
-
     /* callback from opening pickle menu */
     onDropdownToggle(open) {
+        //This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
+            //It will remove the white space if the menu is close. The class is added in reportContent.js
         this.setState({dropdownOpen: open});
+        if (this.props.flux) {
+            this.props.flux.actions.onToggleRowPopUpMenu(open);
+        }
     },
     /**
      * get dropdown containing remaining actions (after maxButtonsBeforeMenu index)
@@ -103,7 +107,7 @@ let IconActions = React.createClass({
             const tooltip = (<Tooltip id="more"><I18nMessage message="selection.more"/></Tooltip>);
 
             dropdownTrigger = <OverlayTrigger bsRole="toggle" key="more" placement="bottom" overlay={tooltip}>
-                <Button tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
+                <Button ref="dropDownMenu" tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
             </OverlayTrigger>;
         } else {
             dropdownTrigger = <Button bsRole="toggle" tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>;

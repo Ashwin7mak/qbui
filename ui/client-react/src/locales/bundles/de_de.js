@@ -49,6 +49,8 @@ export default {
             print: "Drucken",
             copy: "Kopieren",
             delete: "Löschen",
+            dontDelete: "Nicht löschen",
+            deleteThisRecord: "Löschen Sie diesen Datensatz?",
             more: "Mehr...",
             placeholder: 'Wählen...',
             notFound: "Nicht gefunden"

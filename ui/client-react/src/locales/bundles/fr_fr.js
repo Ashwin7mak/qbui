@@ -49,6 +49,8 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
+            dontDelete: "Ne pas supprimer",
+            deleteThisRecord: "Supprimer cet enregistrement?",
             more: "Plus...",
             placeholder: "Sélectionner...",
             notFound: "Pas trouvé"
