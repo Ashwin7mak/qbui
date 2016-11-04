@@ -509,10 +509,11 @@
                         (response) => {
                             // parse out the id and use to fetch the report meta data.  Process the meta data
                             // to fetch and return the report content.
-                            let homepageReportId = '1'; // assume 1st report - List All
-                            if (response.body && ('0' !== JSON.parse(response.body))) {
+                            let homepageReportId = '1'; // assume 1st report List All
+                            let responseBodyParsed;
+                            if (response.body && ('0' !== (responseBodyParsed = JSON.parse(response.body)))) {
                                 //if had a default report defined use that
-                                homepageReportId = JSON.parse(response.body);
+                                homepageReportId = responseBodyParsed;
                             }
 
                             //  have a homepage id; first get the report meta data
