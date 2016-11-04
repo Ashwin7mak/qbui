@@ -91,7 +91,7 @@ var SmallHeader = React.createClass({
                 <OverlayTrigger placement="left"
                                 trigger={['hover', 'click']}
                                 overlay={unimplementedFavoritesTip}>
-                    <a className="iconLink" href="#">
+                    <a className="iconLink" href="#" disabled>
                         <QBicon icon="star-full" />
                     </a>
                 </OverlayTrigger>
