@@ -1,5 +1,6 @@
 import ReportUtils from '../../src/utils/reportUtils';
 import constants from '../../../common/src/constants';
+import _ from 'lodash';
 
 describe('ReportUtils - test getSortList', () => {
     var dataProvider = [
@@ -253,5 +254,198 @@ describe('ReportUtils - test findGroupedRecord', () => {
 
         rec = ReportUtils.findGroupedRecord({}, 2, "recId");
         expect(rec).toEqual(null);
+    });
+});
+
+describe('ReportUtils - test addGroupedRecordAfterRecId', () => {
+
+    let ungroupedReportData = [
+        {recId: {value:1}, data: 1},
+        {recId: {value:2}, data: 2},
+        {recId: {value:3}, data: 3}
+    ];
+
+    let groupedReportData1 = [
+        {children: [{recId: {value:1}, data: 1}]},
+        {children: [{recId: {value:2}, data: 2}]},
+        {children: [
+            {recId: {value:3}, data: 3},
+            {recId: {value:4}, data: 4}
+        ]}
+    ];
+    let newRec = {data: 5};
+
+    // expected use
+    it('adds recId in nested grouped report', () => {
+        let testData = groupedReportData1.slice();
+        let result = ReportUtils.addGroupedRecordAfterRecId(testData, 3, "recId", newRec);
+        expect(result).toEqual(true);
+        expect(testData.length).toBe(3);
+        expect(testData[2].children.length).toBe(3);
+        expect(testData[2].children[1]).toBe(newRec);
+    });
+
+    // also works for ungrouped report
+    it('adds recId in ungrouped report', () => {
+        let testData = ungroupedReportData.slice();
+        let result = ReportUtils.addGroupedRecordAfterRecId(testData, 2, "recId", newRec);
+        expect(result).toEqual(true);
+        expect(testData.length).toBe(4);
+    });
+
+    // returns null if record not found
+    it('returns false if record not found', () => {
+        // record not present
+        let testData = groupedReportData1.slice();
+        let result = ReportUtils.addGroupedRecordAfterRecId(testData, 999, "recId", newRec);
+        expect(result).toEqual(false);
+
+        testData = ungroupedReportData.slice();
+        result = ReportUtils.addGroupedRecordAfterRecId(testData, 999, "recId", newRec);
+        expect(result).toEqual(false);
+
+        // record exists but key field incorrect
+        testData = ungroupedReportData.slice();
+        result = ReportUtils.addGroupedRecordAfterRecId(testData, 2, "recIdTYPO", newRec);
+        expect(result).toEqual(false);
+
+        // no records, always return null
+        result = ReportUtils.addGroupedRecordAfterRecId([], 2, "recId", newRec);
+        expect(result).toEqual(false);
+
+        result = ReportUtils.addGroupedRecordAfterRecId({}, 2, "recId", newRec);
+        expect(result).toEqual(false);
+    });
+});
+
+describe('ReportUtils - test removeGroupedRecordById', () => {
+
+    let ungroupedReportData = [
+        {recId: {value:1}, data: 1},
+        {recId: {value:2}, data: 2},
+        {recId: {value:3}, data: 3}
+    ];
+
+    let groupedReportData = [
+        {children: [{recId: {value:1}, data: 1}]},
+        {children: [{recId: {value:2}, data: 2}]},
+        {children: [
+            {recId: {value:3}, data: 3},
+            {recId: {value:4}, data: 4}
+        ]}
+    ];
+    // expected use
+    it('removes recId in nested grouped report', () => {
+        let testData = groupedReportData.slice();
+        let result = ReportUtils.removeGroupedRecordById(testData, 3, "recId");
+        expect(result).toEqual(true);
+        expect(testData.length).toBe(3);
+        expect(testData[2].children.length).toBe(1);
+        expect(testData[2].children[0]).toEqual({recId: {value:4}, data: 4});
+    });
+
+    // also works for ungrouped report
+    it('removes recId in ungrouped report', () => {
+        let testData = ungroupedReportData.slice();
+        let result = ReportUtils.removeGroupedRecordById(testData, 2, "recId");
+        expect(result).toEqual(true);
+        expect(testData.length).toBe(2);
+    });
+
+    // returns null if record not found
+    it('returns false if record not found', () => {
+        // record not present
+        let testData = groupedReportData.slice();
+        let result = ReportUtils.removeGroupedRecordById(testData, 999, "recId");
+        expect(result).toEqual(false);
+
+        testData = ungroupedReportData.slice();
+        result = ReportUtils.removeGroupedRecordById(testData, 999, "recId");
+        expect(result).toEqual(false);
+
+        // record exists but key field incorrect
+        testData = ungroupedReportData.slice();
+        result = ReportUtils.removeGroupedRecordById(testData, 2, "recIdTYPO");
+        expect(result).toEqual(false);
+
+        // no records, always return null
+        result = ReportUtils.removeGroupedRecordById([], 2, "recId");
+        expect(result).toEqual(false);
+
+        result = ReportUtils.removeGroupedRecordById({}, 2, "recId");
+        expect(result).toEqual(false);
+    });
+});
+
+describe('ReportUtils - test removeRecordFromArray', () => {
+
+    let recordData = [
+        {recId: {value:1}, data: 1},
+        {recId: {value:2}, data: 2},
+        {recId: {value:3}, data: 3}
+    ];
+
+    // expected use
+    it('removes recId in records', () => {
+        let testData = recordData.slice();
+        let result = ReportUtils.removeRecordFromArray(testData, 2, "recId");
+        expect(result).toEqual([{recId: {value:2}, data: 2}]);
+        expect(testData.length).toBe(2);
+    });
+
+    // returns null if record not found
+    it('returns [] if record not found', () => {
+        // record not present
+        let testData = recordData.slice();
+        let result = ReportUtils.removeRecordFromArray(testData, 999, "recId");
+        expect(result).toEqual([]);
+
+        // record exists but key field incorrect
+        testData = recordData.slice();
+        result = ReportUtils.removeRecordFromArray(testData, 2, "recIdTYPO");
+        expect(result).toEqual([]);
+
+        // no records, always return null
+        result = ReportUtils.removeRecordFromArray([], 2, "recId");
+        expect(result).toEqual([]);
+
+        result = ReportUtils.removeRecordFromArray(null, 2, "recId");
+        expect(result).toEqual([]);
+    });
+});
+
+describe('ReportUtils - test findRecordIndex', () => {
+
+    let recordData = [
+        {recId: {value:1}, data: 1},
+        {recId: {value:2}, data: 2},
+        {recId: {value:3}, data: 3}
+    ];
+
+    // expected use
+    it('finds recId in records', () => {
+        let testData = recordData.slice();
+        let result = ReportUtils.findRecordIndex(testData, 2, "recId");
+        expect(result).toEqual(1);
+    });
+
+    // returns null if record not found
+    it('returns -1 if record not found', () => {
+        // record not present
+        let testData = recordData.slice();
+        let result = ReportUtils.findRecordIndex(testData, 999, "recId");
+        expect(result).toEqual(-1);
+
+        // record exists but key field incorrect
+        testData = recordData.slice();
+        result = ReportUtils.findRecordIndex(testData, 2, "recIdTYPO");
+        expect(result).toEqual(-1);
+
+        // no records, always return null
+        result = ReportUtils.findRecordIndex([], 2, "recId");
+        expect(result).toEqual(-1);
+
+        result = ReportUtils.findRecordIndex(null, 2, "recId");
+        expect(result).toEqual(-1);
     });
 });

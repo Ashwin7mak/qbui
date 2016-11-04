@@ -774,6 +774,10 @@ let ReportDataStore = Fluxxor.createStore({
             //find record to add after
             let record = ReportUtils.findGroupedRecord(model.filteredRecords, afterRecId.value, this.reportModel.model.keyField.name);
 
+            if (record === null) {
+                logger.error(`failed to find record that initiated new record call in the list: recId ${afterRecId}`);
+                return;
+            }
             let groupFids = model.groupFields.map(field => {
                 return field.field.id;
             });
@@ -783,7 +787,10 @@ let ReportDataStore = Fluxxor.createStore({
                 let valueAnswer = null;
                 let theCorrespondingField = _.find(model.fields, (item) => item.id === obj.id);
                 //copy the group field values
-                if (groupFids.includes(theCorrespondingField.id)) {
+                let isGroupedFid = _.findIndex(groupFids, item => {
+                    return item === theCorrespondingField.id;
+                });
+                if (isGroupedFid !== -1) {
                     let fieldValuesForRecord = _.find(record, (item) => item.id === theCorrespondingField.id);
                     valueAnswer = {value: fieldValuesForRecord.value, id:obj.id};
                 } else if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {

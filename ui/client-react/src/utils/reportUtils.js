@@ -275,9 +275,12 @@ class ReportUtils {
      * @returns {*}
      */
     static findRecordIndex(records, recId, keyName) {
-        return records.findIndex(record => {
-            return record[keyName] ? record[keyName].value === recId : false;
-        });
+        if (records) {
+            return records.findIndex(record => {
+                return record[keyName] ? record[keyName].value === recId : false;
+            });
+        }
+        return -1;
     }
 
     /**
@@ -308,25 +311,25 @@ class ReportUtils {
         if (Array.isArray(node)) {
             group = node = {children: node};
         }
-        return _addGroupedRec(group, node, recId, keyName, newRec);
+        return _addGroupedRec(group, node);
 
-        function _addGroupedRec(_group, _node, _recId, _keyName, _newRec) {
+        function _addGroupedRec(_group, _node) {
+            let found = false;
             if (_node.children) {
-                let found = false;
-                for (let i = 0; !found && i < _node.children.length;i++) {
+                for (let i = 0; !found && i < _node.children.length; i++) {
                     if (_node.children[i].children) {
-                        found = _addGroupedRec(_node.children, _node.children[i], _recId, _keyName, _newRec);
+                        _addGroupedRec(_node.children, _node.children[i]);
                     } else {
-                        let recordIdx = ReportUtils.findRecordIndex(_node.children, _recId, _keyName);
+                        let recordIdx = ReportUtils.findRecordIndex(_node.children, recId, keyName);
                         if (recordIdx !== -1) {
                             found = true;
-                            _node.children.splice(recordIdx + 1, 0, _newRec);
+                            _node.children.splice(recordIdx + 1, 0, newRec);
+                            break;
                         }
                     }
                 }
-                return found;
             }
-            return false;
+            return found;
         }
     }
     /**
