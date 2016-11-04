@@ -79,7 +79,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         flex-wrap: wrap;
         padding: 5px 0;
         .field {
-            flex: 1 1 50%;
+            flex: 1 1 auto;
             padding: 0 0 10px 0;
             width: 50%;
             .fieldLabel {
