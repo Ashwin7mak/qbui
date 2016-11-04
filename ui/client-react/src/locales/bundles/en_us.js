@@ -147,6 +147,11 @@ export default {
                 403: "You are not authorized to access this form",
                 500: "Unexpected error rendering this form"
             },
+            footer: {
+                lastUpdatedBy: "Last updated by ",
+                createdOn: "Created on ",
+                ownedBy: "Owned by "
+            }
         },
         report : {
             blank : "blank",

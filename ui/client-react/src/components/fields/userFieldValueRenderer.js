@@ -45,7 +45,7 @@ const UserFieldValueRenderer = React.createClass({
                 </OverlayTrigger>);
         }
 
-        return <div className="userDisplayValue" >{this.props.display}</div>;
+        return <div className="userDisplayValue">{this.props.display}</div>;
     }
 });
 

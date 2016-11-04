@@ -83,6 +83,14 @@
             return fidList;
         }
 
+        function getBuiltInFieldsFids(tableFields) {
+            let tableFieldsFidList = [];
+            _.forEach(tableFields, function(item) {
+                tableFieldsFidList.push({id: fldElement.id, required: fldElement.required});
+            });
+            return tableFieldsFidList;
+        }
+
         function mergeConstraintsFromFidlist(fields, constraintList) {
             return fields.map((field) => {
                 let matchingField = lodash.find(constraintList, (constraintField) => {
@@ -167,6 +175,11 @@
                             //  for record and fields; otherwise will return just the form meta data and empty
                             //  object for records and fields.
                             let fidList = extractFidsListFromForm(obj.formMeta, obj.tableFields);
+                            if (obj.formMeta.includeBuiltIns) {
+                                let builtInFieldsFids = getBuiltInFieldsFids(obj.tableFields);
+                                fidList.push.apply(fidList, builtInFieldsFids);
+                            }
+
                             if (fidList && fidList.length > 0) {
 
                                 //  ensure the fid list is ordered
