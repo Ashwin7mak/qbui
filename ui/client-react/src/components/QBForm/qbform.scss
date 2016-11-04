@@ -237,13 +237,14 @@ $edit-field-padding: 5px;
  * not absolute, and have the parent of the datepicker and input box be a flexbox so we can
  * reorder the datepicker AFTER the input using only CSS
  */
-.formElement.field .fieldValueEditor .dateCell {
+.formElement .fieldValueEditor .dateCell {
     border:0;
     > div {
         display:flex;
         flex-direction:column;
         .input-group.date {
             border: 1px solid #c7c7c7;
+            border-radius: 2px;
         }
         .bootstrap-datetimepicker-widget {
             right:0 !important;

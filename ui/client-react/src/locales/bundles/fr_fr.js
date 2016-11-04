@@ -49,6 +49,8 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
+            dontDelete: "Ne pas supprimer",
+            deleteThisRecord: "Supprimer cet enregistrement?",
             more: "Plus...",
             placeholder: "Sélectionner...",
             notFound: "Pas trouvé"
@@ -326,6 +328,18 @@ export default {
             url: 'www.exemple.fr'
         },
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {S'il vous plaît fixer 1 champ}\n other {S'il vous plaît corriger ces # champs}\n} ",
+        errors: {
+            errorLoadingReport: {
+                message: "Ce rapport n'est pas disponible",
+                helpText: "Pour l'instant, vous pouvez essayer Sélection d'un rapport différent.",
+                contactSupport: "Laissez notre équipe sait que nous puissions fixer",
+                supportTeamInfo: "Quelques informations pour l'équipe de soutien:",
+                playGraphic: "Me montrer comment",
+                stopGraphic: "Arrête de jouer",
+                showAdditionalInfo: "Voir les détails",
+                hideAdditionalInfo: "Cacher les détails"
+            }
+        },
         invalidMsg : {
             unknown: 'Type inconnu non valide. Résultats: ',
             required: 'Remplissez {fieldName}',

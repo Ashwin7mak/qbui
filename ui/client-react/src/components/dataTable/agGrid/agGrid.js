@@ -132,7 +132,6 @@ let AGGrid = React.createClass({
      * @returns JSX column header dropdown
      */
     createHeaderMenu(columnIndex, pullRight) {
-
         const colDef = this.props.columns[columnIndex];
 
         let isSortedAsc = true;
@@ -610,7 +609,6 @@ let AGGrid = React.createClass({
     onRowClicked(params) {
 
         const target = params.event.target;
-
         if (this.isEditChild(target.parentNode)) {
             return;
         }

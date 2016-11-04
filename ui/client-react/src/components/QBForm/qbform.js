@@ -348,6 +348,7 @@ let QBForm = React.createClass({
      * Create a form footer with built-in fields
      */
     createFormFooter() {
+
         let fields = this.getBuiltInFieldsForFooter();
         var msg = [];
         for (var i = 0; i < fields.length; i++) {
@@ -375,22 +376,47 @@ let QBForm = React.createClass({
      * Get built-in type fields from form fields collection
      */
     getBuiltInFieldsForFooter() {
+
         let fields = this.props.formData.fields;
         let values = this.props.formData.record;
         let biFields = _.filter(fields, function(fld) {return fld.builtIn && fld.name !== Constants.BUILTIN_FIELD_NAME.RECORD_ID;});
         const result = [];
+
         for (var fld in biFields) {
             let fldVal = _.find(values, ['id', biFields[fld].id]);
-            if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.LAST_MODIFIED_BY) {
-                result.push({name: Locale.getMessage("form.footer.lastUpdatedBy"), value: fldVal.display, email: fldVal.value.email, screenName: fldVal.value.screenName, id:1, type:Constants.USER});
-            }
-            if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.DATE_CREATED) {
-                result.push({name: Locale.getMessage("form.footer.createdOn"), value: fldVal.display, id:2, type:Constants.DATE});
-            }
-            if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.RECORD_OWNER) {
-                result.push({name: Locale.getMessage("form.footer.ownedBy"), value: fldVal.display, email: fldVal.value.email, screenName: fldVal.value.screenName, id:3, type:Constants.USER});
+
+            if (fldVal && fldVal.value) {
+                if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.LAST_MODIFIED_BY) {
+                    result.push({
+                        name: Locale.getMessage("form.footer.lastUpdatedBy"),
+                        value: fldVal.display,
+                        email: fldVal.value.email,
+                        screenName: fldVal.value.screenName,
+                        id: 1,
+                        type: Constants.USER
+                    });
+                }
+                if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.DATE_CREATED) {
+                    result.push({
+                        name: Locale.getMessage("form.footer.createdOn"),
+                        value: fldVal.display,
+                        id: 2,
+                        type: Constants.DATE
+                    });
+                }
+                if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.RECORD_OWNER) {
+                    result.push({
+                        name: Locale.getMessage("form.footer.ownedBy"),
+                        value: fldVal.display,
+                        email: fldVal.value.email,
+                        screenName: fldVal.value.screenName,
+                        id: 3,
+                        type: Constants.USER
+                    });
+                }
             }
         }
+
         return result;
     },
 
@@ -403,6 +429,7 @@ let QBForm = React.createClass({
         let formFooter = [];
         if (this.props.formData && this.props.formData.formMeta.includeBuiltIns) {
             let frm = this.props.formData;
+
             formFooter = this.createFormFooter();
         }
 

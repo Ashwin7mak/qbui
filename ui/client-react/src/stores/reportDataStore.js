@@ -573,12 +573,14 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onLoadReportFailed() {
+    onLoadReportFailed(error) {
         this.loading = false;
         this.editingIndex = undefined;
         this.editingId = undefined;
 
         this.error = true;
+        this.errorDetails = error;
+
         this.emit('change');
     },
 
@@ -632,18 +634,18 @@ let ReportDataStore = Fluxxor.createStore({
         this.editingIndex = undefined;
         this.editingId = undefined;
 
-        this.error = false;
-
         this.reportModel.updateFilteredRecords(response.recordData);
         this.reportModel.setMetaData(response.metaData);
 
         //  Need to update record count cause may be filtering
         this.reportModel.updateRecordsCount(response.recordCount);
 
+        this.error = false;
+
         this.emit('change');
     },
 
-    onLoadRecordsFailed() {
+    onLoadRecordsFailed(error) {
         this.loading = false;
         this.editingIndex = undefined;
         this.editingId = undefined;
@@ -669,6 +671,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.editingId = undefined;
 
         this.error = true;
+        this.errorDetails = error;
         this.emit('change');
     },
 
@@ -683,9 +686,10 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onLoadReportRecordsCountFailed() {
+    onLoadReportRecordsCountFailed(error) {
         this.countingTotalRecords = false;
         this.error = true;
+        this.errorDetails = error;
         this.emit('change');
     },
 
@@ -1087,6 +1091,7 @@ let ReportDataStore = Fluxxor.createStore({
             editingIndex: this.editingIndex,
             editingId: this.editingId,
             error: this.error,
+            errorDetails: this.errorDetails,
             data: this.reportModel.get(),
             appId: this.appId,
             tblId: this.tblId,

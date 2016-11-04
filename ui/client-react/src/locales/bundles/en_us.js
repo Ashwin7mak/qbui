@@ -52,6 +52,8 @@ export default {
             print: "Print",
             copy: "Copy",
             delete: "Delete",
+            dontDelete: "Don't delete",
+            deleteThisRecord: "Delete this record?",
             more: "More...",
             placeholder: "Select...",
             notFound: "Not Found"
@@ -329,6 +331,18 @@ export default {
             url: 'www.example.com'
         },
         editErrors :"{numErrors, plural, \n  =0 {No errors}\n =1 {Please fix 1 field}\n other {Please fix these # fields}\n} ",
+        errors: {
+            errorLoadingReport: {
+                message: "That report is not available",
+                helpText: "For now, you can try selecting a different report.",
+                contactSupport: "Let our team know so we can fix it",
+                supportTeamInfo: "Some information for the support team:",
+                playGraphic: "Show me how",
+                stopGraphic: "Stop playing",
+                showAdditionalInfo: "View details",
+                hideAdditionalInfo: "Hide details"
+            }
+        },
         invalidMsg : {
             unknown: 'Invalid unknown type. Results: ',
             required: 'Fill in the {fieldName}',
