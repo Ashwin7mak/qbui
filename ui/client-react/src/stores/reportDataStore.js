@@ -213,7 +213,7 @@ let reportModel = {
         if (this.model.hasGrouping) {
             return ReportUtils.findGroupedRecord(records, recId, this.model.keyField.name);
         } else {
-            return records.find(rec => rec[this.model.keyField.name].value === recId);
+            return ReportUtils.findGroupedRecord(records, recId, this.model.keyField.name);
         }
     },
 
@@ -224,7 +224,7 @@ let reportModel = {
      * @returns {number|*}
      */
     findRecordIndexById(records, recId) {
-        return _.findIndex(records, rec => rec[this.model.keyField.name].value === recId);
+        return ReportUtils.findRecordIndex(records, recId, this.model.keyField.name);
     },
 
     findARecord(recId) {
@@ -448,9 +448,8 @@ let reportModel = {
         let recordDeleted = false;
         let filteredRecordDeleted = false;
         if (this.model.hasGrouping) {
-            //only removing it from filteredRecords seems to be do the trick. No need to mess with the records object until we know we need to.
-            filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, newFilteredRecords, recId, this.model.keyField.name);
-            recordDeleted = filteredRecordDeleted; //this is needed because pagination is using record count from records.
+            filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, this.model.keyField.name);
+            recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, this.model.keyField.name);
         } else {
             //find record
             let filteredRecordIndex = this.findRecordIndexById(newFilteredRecords, recId);
@@ -474,7 +473,7 @@ let reportModel = {
         }
         if (recordDeleted) {
             this.model.records = newRecords;
-            this.model.recordsCount--;
+            this.model.recordsCount--; //pagination uses this one.
         }
     }
 };
@@ -808,12 +807,16 @@ let ReportDataStore = Fluxxor.createStore({
             const newRecords = model.records.slice(0);
 
             //insert after the record (in the same group) -- update both record sets and update counts
-            ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
-            //ReportUtils.addGroupedRecordAfterRecId(newRecords, newRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
-            model.filteredRecords = newFilteredRecords;
-            model.filteredRecordsCount++;
-            model.records = newRecords;
-            model.recordsCount++;
+            let filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+            let recordAdded = ReportUtils.addGroupedRecordAfterRecId(newRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+            if (filteredRecordAdded) {
+                model.filteredRecords = newFilteredRecords;
+                model.filteredRecordsCount++;
+            }
+            if (recordAdded) {
+                model.records = newRecords;
+                model.recordsCount++; //for pagination
+            }
 
             //editing index for aggrid to open inline edit
             this.editingIndex = SchemaConsts.UNSAVED_RECORD_ID;

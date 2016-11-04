@@ -267,60 +267,100 @@ class ReportUtils {
         return null;
     }
 
-
     /**
-     * find the innermost group that in grouped records report
-     *
-     * @param node node in grouped record tree
-     * @param recId record id to find
-     * @param keyName key field name
+     * Find index of a record by recId from a flat array of records
+     * @param array
+     * @param recId
+     * @param keyName
+     * @returns {*}
      */
-    static addGroupedRecordAfterRecId(group, node, recId, keyName, newRec) {
-
-        if (Array.isArray(node)) {
-            return ReportUtils.addGroupedRecordAfterRecId({children: node}, {children: node}, recId, keyName, newRec);
-        }
-        if (node.children) {
-            let found = false;
-            for (let i = 0; !found && i < node.children.length;i++) {
-                if (node.children[i].children) {
-                    found = ReportUtils.addGroupedRecordAfterRecId(node.children, node.children[i], recId, keyName, newRec);
-                } else {
-                    let recordIdx = node.children.findIndex(field => {
-                        return field[keyName].value === recId;
-                    });
-                    if (recordIdx !== -1) {
-                        found = true;
-                        node.children.splice(recordIdx + 1, 0, newRec);
-                    }
-                }
-            }
-            return found;
-        }
-        return null;
+    static findRecordIndex(records, recId, keyName) {
+        return records.findIndex(record => {
+            return record[keyName] ? record[keyName].value === recId : false;
+        });
     }
 
-    static removeGroupedRecordById(group, node, recId, keyName) {
+    /**
+     * Remove a record by recId from a flat array of records
+     * @param records
+     * @param recId
+     * @param keyName
+     * @returns {Array}
+     */
+    static removeRecordFromArray(records, recId, keyName) {
+        return _.remove(records, (record) => {
+            return record[keyName] ? record[keyName].value === recId : false;
+        });
+    }
 
+    /**
+     * Add a record to a group after a specified record id.
+     * @param group
+     * @param node
+     * @param recId
+     * @param keyName
+     * @param newRec
+     * @returns {*}
+     */
+    static addGroupedRecordAfterRecId(node, recId, keyName, newRec) {
+
+        let group = node;
         if (Array.isArray(node)) {
-            return ReportUtils.removeGroupedRecordById({children: node}, {children: node}, recId, keyName);
+            group = node = {children: node};
         }
-        if (node.children) {
-            let found = false;
+        return _addGroupedRec(group, node, recId, keyName, newRec);
 
-            for (let i = 0; !found && i < node.children.length;i++) {
-                if (node.children[i].children) {
-                    found = ReportUtils.removeGroupedRecordById(node.children, node.children[i], recId, keyName);
-                } else {
-                    let removedRecs = _.remove(node.children, (field) => {
-                        return field[keyName].value === recId;
-                    });
-                    found = removedRecs.length > 0;
+        function _addGroupedRec(_group, _node, _recId, _keyName, _newRec) {
+            if (_node.children) {
+                let found = false;
+                for (let i = 0; !found && i < _node.children.length;i++) {
+                    if (_node.children[i].children) {
+                        found = _addGroupedRec(_node.children, _node.children[i], _recId, _keyName, _newRec);
+                    } else {
+                        let recordIdx = ReportUtils.findRecordIndex(_node.children, _recId, _keyName);
+                        if (recordIdx !== -1) {
+                            found = true;
+                            _node.children.splice(recordIdx + 1, 0, _newRec);
+                        }
+                    }
                 }
+                return found;
             }
-            return found;
+            return false;
         }
-        return null;
+    }
+    /**
+     * Remove a record from a grouped set of records.
+     * @param group
+     * @param node
+     * @param recId
+     * @param keyName
+     * @returns {*}
+     */
+    static removeGroupedRecordById(node, recId, keyName) {
+
+        let group = node;
+        if (Array.isArray(node)) {
+            group = node = {children: node};
+        }
+        return _removeGroupedRec(group, node);
+
+        function _removeGroupedRec(_group, _node) {
+            if (_node.children) {
+                let found = false;
+
+                for (let i = 0; !found && i < _node.children.length; i++) {
+                    if (_node.children[i].children) {
+                        found = _removeGroupedRec(_node.children, _node.children[i]);
+                    } else {
+                        let removedRecs = ReportUtils.removeRecordFromArray(_node.children, recId, keyName);
+                        found = removedRecs.length > 0;
+                    }
+                }
+                return found;
+            }
+            return false;
+        }
     }
 }
 
