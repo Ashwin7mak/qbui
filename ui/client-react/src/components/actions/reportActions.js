@@ -51,12 +51,7 @@ let ReportActions = React.createClass({
      * delete the selected records, after confirmation if multiple records selected
      */
     handleDelete() {
-        if (this.props.selection.length > 1) {
-            this.setState({confirmDeletesDialogOpen: true});
-        } else {
-            this.handleBulkDelete();
-        }
-
+        this.setState({confirmDeletesDialogOpen: true});
     },
 
     /**
@@ -92,7 +87,16 @@ let ReportActions = React.createClass({
      * @returns {XML}
      */
     getConfimDialog() {
-        const records = Locale.getMessage('records.plural');
+
+        let msg;
+
+        if (this.props.selection.length > 1) {
+            const records = Locale.getMessage('records.plural');
+            const deleteMSg = Locale.getMessage('selection.delete');
+            msg = `${deleteMSg} ${this.props.selection.length} ${records}?`;
+        } else {
+            msg = Locale.getMessage('selection.deleteThisRecord');
+        }
 
         return (
             <QBModal
@@ -101,7 +105,7 @@ let ReportActions = React.createClass({
                 primaryButtonOnClick={this.handleBulkDelete}
                 leftButtonName={Locale.getMessage('selection.dontDelete')}
                 leftButtonOnClick={this.cancelBulkDelete}
-                bodyMessage={`Delete ${this.props.selection.length} ${records}?`}
+                bodyMessage={msg}
                 type="alert"/>);
     },
     /**

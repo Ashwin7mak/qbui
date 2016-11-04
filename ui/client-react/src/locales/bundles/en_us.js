@@ -53,6 +53,7 @@ export default {
             copy: "Copy",
             delete: "Delete",
             dontDelete: "Don't delete",
+            deleteThisRecord: "Delete this record?",
             more: "More...",
             placeholder: "Select...",
             notFound: "Not Found"
