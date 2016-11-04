@@ -1,4 +1,5 @@
 @import '../../../../src/assets/css/qbVariables';
+@import '../../../../src/assets/css/_customVariables';
 
 $margin-spacer: 10px;
 $grid-default-cell-padding: 10px;
@@ -9,7 +10,7 @@ $table-actions-container-bg: #fff;
 // this is the space on the left that is saved for the checkbox
 // the whole container translates on X axis by this many pixels on swipe left
 // this value is also used in cardViewHolder.js -> swiping function so any updates should have corresponding changes there as well.
-$checkbox-width: 40px;
+$checkbox-width: $card-view-checkbox-width;
 
 .tableLoaderContainer {
     flex: 1 1 auto;
