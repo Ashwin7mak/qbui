@@ -104,56 +104,63 @@
             return JSON.parse(jsonStr);
         }
 
-        /**
-         * Negative Test the API GET table defaulthomepage and GET homepage should return empty if table POST defaulthomepage not set
-         */
-        it('Negative Test - Verify GET defaulthomepage and GET report homepage returns empty meta data if defaulthomepage not set', function(done) {
-            //Execute a GET table home Page
-            recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
-                assert.deepEqual(defaultHomePageResults.body, '');
-                //Execute a GET report homepage
-                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
-                    var results = JSON.parse(reportHomePageResults.body);
-                    //verify report meta Data is undefined
-                    assert.deepEqual(results.metaData, undefined);
-                    //verify report data is empty
-                    assert.deepEqual(results, {});
-                    done();
+        describe('API - Negative report table home page tests', function() {
+            /**
+             * Negative Test the API GET table defaulthomepage and GET homepage should return report 1 if table POST defaulthomepage not set
+             * (until default report settings is impl)
+             */
+            it('Negative Test - Verify GET defaulthomepage and GET report homepage returns report 1  meta data if defaulthomepage not set', function(done) {
+                //Execute a GET table home Page
+                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
+                    assert.deepEqual(defaultHomePageResults.body, '"1"');
+                    //Execute a GET report homepage
+                    recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
+                        var results = JSON.parse(reportHomePageResults.body);
+                        //verify report meta Data
+                        assert.ok(results, "expected results from report homepage request");
+                        assert.ok(results.metaData, "expected results.metaData from report homepage request");
+                        //verify report meta Data report id is report 1
+                        assert.deepEqual(results.metaData.id, 1, "expected report 1 for no specific default report");
+
+                        done();
+                    });
                 });
             });
-        });
 
-        /**
-         * Negative Test for roles.If POST custdefaulthomepage is set for participant and authenticate as viewer should return empty data for defaulthomepage and homepages GET'S.
-         */
-        it('Negative Test - Give custdefaulthomepage permission to participant verify GET defaulthomepage as viewer', function(done) {
-            //create user 1
-            recordBase.apiBase.createUser().then(function(userResponse1) {
-                var userId1 = JSON.parse(userResponse1.body).id;
-                //add userId1 to participant appRole
-                recordBase.apiBase.assignUsersToAppRole(app.id, "11", [userId1]).then(function() {
-                    //create user2
-                    recordBase.apiBase.createUser().then(function(userResponse2) {
-                        var userId2 = JSON.parse(userResponse2.body).id;
-                        //add userId2 to viewer appRole
-                        recordBase.apiBase.assignUsersToAppRole(app.id, "10", [userId2]).then(function() {
-                            //add custdefaulthomepage permission to participant
-                            recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON("11", reportId)).then(function() {
-                                //get the user authentication as viewer
-                                recordBase.apiBase.createUserAuthentication(userId2).then(function() {
-                                    //Execute a GET table defaulthomepage
-                                    recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
-                                        //verify GET defaulthomepage returns empty
-                                        assert.deepEqual(defaultHomePageResults.body, "");
-                                        //Execute a GET report homepage
-                                        recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
-                                            var results = JSON.parse(reportHomePageResults.body);
-                                            //verify report meta Data is empty
-                                            assert.deepEqual(results.metaData, undefined);
-
-                                            //verify report data is empty
-                                            assert.deepEqual(results, {});
-                                            done();
+            /**
+             * Negative Test for roles.If POST custdefaulthomepage is set for participant and authenticate as viewer should return report 1 data for defaulthomepage and homepages
+             * GET'S.
+             * (until default report settings is impl)
+             */
+            it('Negative Test - Give custdefaulthomepage permission to participant verify GET defaulthomepage as viewer', function(done) {
+                //create user 1
+                recordBase.apiBase.createUser().then(function(userResponse1) {
+                    var userId1 = JSON.parse(userResponse1.body).id;
+                    //add userId1 to participant appRole
+                    recordBase.apiBase.assignUsersToAppRole(app.id, "11", [userId1]).then(function() {
+                        //create user2
+                        recordBase.apiBase.createUser().then(function(userResponse2) {
+                            var userId2 = JSON.parse(userResponse2.body).id;
+                            //add userId2 to viewer appRole
+                            recordBase.apiBase.assignUsersToAppRole(app.id, "10", [userId2]).then(function() {
+                                //add custdefaulthomepage permission to participant
+                                recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON("11", reportId)).then(function() {
+                                    //get the user authentication as viewer
+                                    recordBase.apiBase.createUserAuthentication(userId2).then(function() {
+                                        //Execute a GET table defaulthomepage
+                                        recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
+                                            //verify GET defaulthomepage returns "1"(list all)
+                                            assert.deepEqual(defaultHomePageResults.body, '"1"');
+                                            //Execute a GET report homepage
+                                            recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
+                                                var results = JSON.parse(reportHomePageResults.body);
+                                                //verify report meta Data
+                                                assert.ok(results, "expected results from report homepage request");
+                                                assert.ok(results.metaData, "expected results.metaData from report homepage request");
+                                                //verify report meta Data report id is report 1
+                                                assert.deepEqual(results.metaData.id, 1, "expected report 1 for no specific default report");
+                                                done();
+                                            });
                                         });
                                     });
                                 });
