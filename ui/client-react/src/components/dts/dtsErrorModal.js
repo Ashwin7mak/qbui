@@ -9,6 +9,8 @@ const DTSErrorModal = React.createClass({
         };
     },
     componentWillReceiveProps(props) {
+        //I can get ride of this, and on click, fire off a function, that will fire off a listener
+        //that willl change
         // this.dtsErrorReceived(this.props.show);
         console.log('props: ', props);
         this.setState({
@@ -28,7 +30,7 @@ const DTSErrorModal = React.createClass({
             <br/> <br/>
             Your app is still available in QuickBase Classic.
             <br/> <br/>
-            Transaction ID: xxxxxx</p>;
+            Transaction ID: {this.props.tid}</p>;
         const primaryButtonName = "Open my app in Classic";
         console.log('this.props.showDTSErrorModal', this.props.show);
         return (

@@ -49,6 +49,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.originalRecord = null;
         this.recordChanges = {};
         this.showDTSErrorModal = false;
+        this.dtsErrorModalTID = "No Transaction ID Available";
         this.editErrors = {
             ok: true,
             errors:[]
@@ -217,11 +218,13 @@ let RecordPendingEditsStore = Fluxxor.createStore({
 
     getServerErrs(payload) {
         // init no errors
+        //a new handleError functino
+            //that calls getServerErrs
+            //and calls my dtsErrorModal
         this.editErrors = {
             ok: true,
             errors:[]
         };
-
         // get errors from payload if not ok
         if (_.has(payload, 'error.data.response.errors') && payload.error.data.response.errors.length !== 0) {
             this.editErrors.errors = payload.error.data.response.errors;
@@ -316,8 +319,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.emit('change');
     },
     onDTSErrorModal(payload) {
-        //fill in
-        console.log('onDTSErrorModal payload: ', payload);
+        this.dtsErrorModalTID = payload.error.response.data.headers.qb_tid;
         this.showDTSErrorModal = true;
         this.emit('change');
     },
@@ -349,7 +351,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             recordChanges : this.recordChanges,
             commitChanges : this.commitChanges,
             editErrors: this.editErrors,
-            showDTSErrorModal: this.showDTSErrorModal
+            showDTSErrorModal: this.showDTSErrorModal,
+            dtsErrorModalTID: this.dtsErrorModalTID
         };
     },
 });

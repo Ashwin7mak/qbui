@@ -73,8 +73,6 @@ let recordActions = {
                         if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
                             let resJson = JSON.parse(response.data.body);
                             this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
-                            // //===========================================================================================================================================================================
-                            this.dispatch(actions.DTS_ERROR_MODAL, {appId, tblId, record, recId: resJson.id});
                             NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
                             resolve(resJson.id);
                         } else {
@@ -85,12 +83,11 @@ let recordActions = {
                         }
                     },
                     error => {
-                        // console.log('onError');
+                        console.log('onError');
                         //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
-                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
-                        //===========================================================================================================================================================================
-                        this.dispatch(actions.DTS_ERROR_MODAL, {appId, tblId, record, error: error.response});
+                        // logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
+                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});//===========================================================================================================================================================================
+                        this.dispatch(actions.DTS_ERROR_MODAL, {appId, tblId, record, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
                         reject();
                     }
@@ -110,6 +107,8 @@ let recordActions = {
      */
     deleteRecord(appId, tblId, recId, nameForRecords) {
         // promise is returned in support of unit testing only
+        console.log('I am a deleted record!!');
+        appId = "Banana";
         return new Promise((resolve, reject) => {
             if (appId && tblId && (!!(recId === 0 || recId))) {
                 this.dispatch(actions.DELETE_RECORD, {appId, tblId, recId});
@@ -127,6 +126,8 @@ let recordActions = {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
                         this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error.response});
                         NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'), 3000);
+                        //===========================================================================================================================================================================
+                        this.dispatch(actions.DTS_ERROR_MODAL, {appId, tblId, recId, error: error});
                         reject();
                     }
                 ).catch(

@@ -677,13 +677,15 @@ export let ReportContent = React.createClass({
 
         const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
         const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
-        const showDTSErrorModal = this.props.pendEdits.showDTSErrorModal
+        const showDTSErrorModal = this.props.pendEdits.showDTSErrorModal;
+        const dtsErrorModalTID = this.props.pendEdits.dtsErrorModalTID;
+        console.log('dtsErrorModalTID: ', dtsErrorModalTID);
         return (
                 <div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
                     <div className={isInlineEditOpen ? "reportContent inlineEditing" : "reportContent"}>
-                        <DTSAppErrorModal show={showDTSErrorModal}/>
+                        <DTSAppErrorModal show={showDTSErrorModal} tid={dtsErrorModalTID}/>
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
