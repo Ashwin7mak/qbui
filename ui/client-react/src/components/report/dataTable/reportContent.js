@@ -151,9 +151,14 @@ export let ReportContent = React.createClass({
             origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
         } else {
             //add each non null value as to the new record as a change
-            let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
-                return rec[this.props.uniqueIdentifier].value === recId;
-            });
+            let newRec = null;
+            if (this.props.reportData.data.hasGrouping) {
+                newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.uniqueIdentifier);
+            } else {
+                newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
+                    return rec[this.props.uniqueIdentifier].value === recId;
+                });
+            }
             if (newRec) {
                 changes = {};
                 // loop thru the values in the new rec add any non nulls to change set

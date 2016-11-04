@@ -4,6 +4,7 @@
 const listDelimiter = ".";
 const groupDelimiter = ":";
 import constants from '../../../common/src/constants';
+import _ from 'lodash';
 
 class ReportUtils {
 
@@ -240,6 +241,62 @@ class ReportUtils {
                 result = ReportUtils.findGroupedRecord(node.children[i], recId, keyName);
             }
             return result;
+        }
+        return null;
+    }
+
+
+    /**
+     * find the innermost group that in grouped records report
+     *
+     * @param node node in grouped record tree
+     * @param recId record id to find
+     * @param keyName key field name
+     */
+    static addGroupedRecordAfterRecId(group, node, recId, keyName, newRec) {
+
+        if (Array.isArray(node)) {
+            return ReportUtils.addGroupedRecordAfterRecId({children: node}, {children: node}, recId, keyName, newRec);
+        }
+        if (node.children) {
+            let found = false;
+            for (let i = 0; !found && i < node.children.length;i++) {
+                if (node.children[i].children) {
+                    found = ReportUtils.addGroupedRecordAfterRecId(node.children, node.children[i], recId, keyName, newRec);
+                } else {
+                    let recordIdx = node.children.findIndex(field => {
+                        return field[keyName].value === recId;
+                    });
+                    if (recordIdx !== -1) {
+                        found = true;
+                        node.children.splice(recordIdx + 1, 0, newRec);
+                    }
+                }
+            }
+            return found;
+        }
+        return null;
+    }
+
+    static removeGroupedRecordById(group, node, recId, keyName) {
+
+        if (Array.isArray(node)) {
+            return ReportUtils.removeGroupedRecordById({children: node}, {children: node}, recId, keyName);
+        }
+        if (node.children) {
+            let found = false;
+
+            for (let i = 0; !found && i < node.children.length;i++) {
+                if (node.children[i].children) {
+                    found = ReportUtils.removeGroupedRecordById(node.children, node.children[i], recId, keyName);
+                } else {
+                    let removedRecs = _.remove(node.children, (field) => {
+                        return field[keyName].value === recId;
+                    });
+                    found = removedRecs.length > 0;
+                }
+            }
+            return found;
         }
         return null;
     }
