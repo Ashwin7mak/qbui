@@ -385,7 +385,7 @@ let QBForm = React.createClass({
         for (var fld in biFields) {
             let fldVal = _.find(values, ['id', biFields[fld].id]);
 
-            if (fldVal) {
+            if (fldVal && fldVal.value) {
                 if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.LAST_MODIFIED_BY) {
                     result.push({
                         name: Locale.getMessage("form.footer.lastUpdatedBy"),
