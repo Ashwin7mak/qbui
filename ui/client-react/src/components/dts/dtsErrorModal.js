@@ -8,17 +8,13 @@ const DTSErrorModal = React.createClass({
             isOpen: false
         };
     },
-    componentWillReceiveProps() {
+    componentWillReceiveProps(props) {
         // this.dtsErrorReceived(this.props.show);
+        console.log('props: ', props);
         this.setState({
-            isOpen: true
+            isOpen: props.show
         });
     },
-    // dtsErrorReceived(show) {
-    //     //this will open the modal if an dts sync error is received
-    //
-    //     }
-    // },
     close() {
         //this will close and reroute to classic
         this.setState({
@@ -26,12 +22,11 @@ const DTSErrorModal = React.createClass({
         });
     },
     render() {
-        const title = "Sorry to interrupt your work.";
+        const title = "Sorry to interrupt your work";
         const errorMessage = <p>
-            We can’t save your changes in Mercury right now, but your
-            app is still available in QuickBase Classic. Our team is
-            working hard to resolve this and will make your app
-            available again in Mercury in 24 hours.
+            Mercury can’t continue running your app today, but will resume tomorrow.
+            <br/> <br/>
+            Your app is still available in QuickBase Classic.
             <br/> <br/>
             Transaction ID: xxxxxx</p>;
         const primaryButtonName = "Open my app in Classic";

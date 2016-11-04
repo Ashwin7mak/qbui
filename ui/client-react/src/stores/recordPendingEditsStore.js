@@ -315,9 +315,9 @@ let RecordPendingEditsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-    onDTSErrorModal() {
+    onDTSErrorModal(payload) {
         //fill in
-        console.log('onDTSErrorModal');
+        console.log('onDTSErrorModal payload: ', payload);
         this.showDTSErrorModal = true;
         this.emit('change');
     },

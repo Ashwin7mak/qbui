@@ -85,6 +85,7 @@ let recordActions = {
                         }
                     },
                     error => {
+                        // console.log('onError');
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
                         this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
