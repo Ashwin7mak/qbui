@@ -35,18 +35,17 @@ const ReportRoute = React.createClass({
         let tblId = params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
-
-        let offset = NumberUtils.getNumericPropertyValue(this.props.reportData, 'pageOffset');
-        let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows');
-
         if (appId && tblId && rptId) {
+            //  loading a report..always render the 1st page on initial load
+            let offset = constants.PAGE.DEFAULT_OFFSET;
+            let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
             this.loadReport(appId, tblId, rptId, offset, numRows);
         }
     },
     componentDidMount() {
         const flux = this.getFlux();
         flux.actions.hideTopNav();
-
+        flux.actions.resetRowMenu();
         if (this.props.params) {
             this.loadReportFromParams(this.props.params);
         }
@@ -87,7 +86,7 @@ const ReportRoute = React.createClass({
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
         const {appId, tblId} = this.props.params;
-        const tableLink = `/app/${appId}/table/${tblId}`;
+        const tableLink = `/qbase/app/${appId}/table/${tblId}`;
         return (
             <div className="reportStageHeadline">
 
@@ -124,6 +123,7 @@ const ReportRoute = React.createClass({
                     reportData={this.props.reportData}
                     appUsers={this.props.appUsers}
                     pendEdits={this.props.pendEdits}
+                    isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                     routeParams={this.props.routeParams}
                     selectedAppId={this.props.selectedAppId}
                     fields={this.props.fields}

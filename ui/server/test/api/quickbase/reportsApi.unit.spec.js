@@ -1,6 +1,6 @@
 'use strict';
 
-var config = {
+let config = {
     javaHost: 'http://javaHost',
     SSL_KEY : {
         private    : 'privateKey',
@@ -8,22 +8,22 @@ var config = {
         requireCert: true
     }
 };
-var sinon = require('sinon');
-var assert = require('assert');
-var requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
-var reportsApi = require('../../../src/api/quickbase/reportsApi')(config);
-var recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
+let sinon = require('sinon');
+let assert = require('assert');
+let requestHelper = require('./../../../src/api/quickbase/requestHelper')(config);
+let reportsApi = require('../../../src/api/quickbase/reportsApi')(config);
+let recordsApi = require('../../../src/api/quickbase/recordsApi')(config);
 let errorCodes = require('../../../src/api/errorCodes');
+let constants = require('../../../../common/src/constants');
 /**
  * Unit tests for report apis
  */
 describe('Validate ReportsApi unit tests', function() {
 
     /**
-     * Unit test fetchFacets api
+     * Unit test fetchReportMetaData api
      */
-    describe('validate fetchFacets api', function() {
-        var executeReqSpy = null;
+    describe('validate fetchReportMetaData api', function() {
         var req = {
             headers: {
                 'tid': 'tid'
@@ -33,24 +33,86 @@ describe('Validate ReportsApi unit tests', function() {
             'method': 'get'
         };
 
+        var metaResponse = {'body': '{"id":1}'};
+        var fetchMetaData = Promise.resolve(metaResponse);
+
+        var getExecuteRequestStub;
+        beforeEach(function() {
+            reportsApi.setRequestHelper(requestHelper);
+            getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
+        });
+        afterEach(function() {
+            getExecuteRequestStub.restore();
+        });
+        it('Test success report meta data', function(done) {
+            getExecuteRequestStub.returns(fetchMetaData);
+            var promise = reportsApi.fetchReportMetaData(req);
+            promise.then(
+                function(response) {
+                    assert.deepEqual(response, metaResponse);
+                    done();
+                },
+                function(error) {
+                    done(new Error('Failure promise unexpectedly returned testing fetchReportMetaData success'));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportMetaData success: ' + JSON.stringify(errorMsg)));
+            });
+        });
+        it('Test failure report meta data', function(done) {
+            getExecuteRequestStub.returns(Promise.reject(new Error("error")));
+            var promise = reportsApi.fetchReportMetaData(req);
+            promise.then(
+                function(response) {
+                    done(new Error('Success promise unexpectedly return testing fetchReportMetaData failure'));
+                },
+                function(error) {
+                    done();
+                    assert.deepEqual(error, new Error("error"));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchReportMetaData failure: ' + JSON.stringify(errorMsg)));
+            });
+        });
+    });
+
+    /**
+     * Unit test fetchFacets api
+     */
+    describe('validate fetchFacets api', function() {
+        var executeReqSpy = null;
+        var unexpectedSpy = null;
+        var req = {
+            headers: {
+                'tid': 'tid'
+            },
+            'Content-Type': 'content-type',
+            'url': '/testurl.com',
+            'method': 'get'
+        };
+        var reportId = 1;
+
         beforeEach(function() {
             reportsApi.setRequestHelper(requestHelper);
             executeReqSpy = sinon.spy(requestHelper, "executeRequest");
+            unexpectedSpy = sinon.spy(requestHelper, "logUnexpectedError");
         });
         afterEach(function() {
             executeReqSpy.restore();
+            unexpectedSpy.restore();
         });
 
-        it('Test success ', function(done) {
+        it('Test success fetch facets', function(done) {
             var requestStub = sinon.stub();
             requestHelper.setRequestObject(requestStub);
             requestStub.yields(null, {statusCode: 200}, {'body': 'body'});
-            var promise = reportsApi.fetchFacetResults(req);
+            var promise = reportsApi.fetchReportFacets(req, reportId);
             promise.then(
                 function(response) {
                     done();
                     assert.deepEqual(response, {statusCode: 200});
                     assert(executeReqSpy.called);
+                    assert.equal(unexpectedSpy.called, false);
                     var opts = executeReqSpy.args[0][1];
                     assert.equal(opts.headers['Content-Type'], 'application/json');
                 },
@@ -61,20 +123,21 @@ describe('Validate ReportsApi unit tests', function() {
                 done(new Error('unable to resolve test success: ' + JSON.stringify(errorMsg)));
             });
         });
-        it('Test facets url ', function(done) {
-            req.url = "/reports/2/reportComponents";
+        it('Test fetch facets url ', function(done) {
+            req.url = "/apps/1/tables/2/reports/1/reportResults";
             var requestStub = sinon.stub();
             requestHelper.setRequestObject(requestStub);
             requestStub.yields(null, {statusCode: 200}, {'body': 'body'});
-            var promise = reportsApi.fetchFacetResults(req);
+            var promise = reportsApi.fetchReportFacets(req, reportId);
             promise.then(
                 function(response) {
                     done();
                     assert.deepEqual(response, {statusCode: 200});
                     assert(executeReqSpy.called);
+                    assert.equal(unexpectedSpy.called, false);
                     var opts = executeReqSpy.args[0][1];
                     assert.equal(opts.headers['Content-Type'], 'application/json');
-                    var indexOfFacetsURL = opts.url.indexOf('reports/2/facets/results');
+                    var indexOfFacetsURL = opts.url.indexOf('reports/1/facets/results');
                     assert.notEqual(indexOfFacetsURL, -1);
                 },
                 function(error) {
@@ -84,164 +147,46 @@ describe('Validate ReportsApi unit tests', function() {
                 done(new Error('unable to resolve test facets url: ' + JSON.stringify(errorMsg)));
             });
         });
-        it('Test failure ', function(done) {
+        it('Test failure fetch facets', function(done) {
+            req.url = "/apps/1/tables/2/reports/1/reportResults";
             var requestStub = sinon.stub();
             requestHelper.setRequestObject(requestStub);
-            requestStub.yields(new Error("error"));
-            var promise = reportsApi.fetchFacetResults(req);
+            requestStub.yields(null, {body:'[{"code":' + errorCodes.UNKNOWN + '}]'});
+            var promise = reportsApi.fetchReportFacets(req, reportId);
             promise.then(
                 function(response) {
                     done();
-                    assert.deepEqual(response, {statusCode: 200});
+                    assert.equal(response.errorCode, errorCodes.UNKNOWN);
                     assert(executeReqSpy.called);
+                    assert.equal(unexpectedSpy.called, false);
                     var opts = executeReqSpy.args[0][1];
                     assert.equal(opts.headers['Content-Type'], 'application/json');
                 },
                 function(response) {
-                    done();
-                    assert.deepEqual(response, new Error("error"));
+                    done(new Error("Unexpected promise error returned with test failure"));
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve test failure: ' + JSON.stringify(errorMsg)));
             });
         });
-    });
-
-    /**
-     * Unit tests for fetchReportMetaDataAndContentStub api
-     */
-    describe('validate fetchReportMetaDataAndContent api', function() {
-        var req = {
-            headers: {
-                'tid': 'tid'
-            },
-            'params': {
-                appId: 1,
-                tableId: 2,
-                reportId: 3
-            },
-            'Content-Type': 'content-type',
-            'url': 'apps/1/table/2/reports/3',
-            'method': 'get',
-            'query':''
-        };
-
-        var reportMetaData = '{"name":"Report With Facets","description":null,"type":"TABLE","ownerId":"10000","tableId":"0fynnxaaaaae","id":1,"showDescriptionOnReport":false,"hideReport":false,"showSearchBox":true,"fids":[],"sortList":[{"fieldId":6,"sortOrder":"asc","groupType":"V"}],"facetFids":[6,7,8,9],"facetBehavior":"default","query":null,"allowEdit":true,"allowView":true,"displayNewlyChangedRecords":false,"reportFormat":"","calculatedColumns":null,"rolesWithGrantedAccess":[],"summary":"hide"}';
-        var fetchReportComponentsStub;
-        var reportsData = JSON.parse(reportMetaData);
-
-        beforeEach(function() {
-            reportsApi.setRequestHelper(requestHelper);
-            fetchReportComponentsStub = sinon.stub(reportsApi, "fetchReportComponents");
-        });
-
-        afterEach(function() {
-            fetchReportComponentsStub.restore();
-        });
-
-        it('Test success ', function(done) {
+        it('Test unexpected exception fetch facets', function(done) {
+            req.url = "/apps/1/tables/2/reports/1/reportResults";
             var requestStub = sinon.stub();
             requestHelper.setRequestObject(requestStub);
-            requestStub.yields(null, {statusCode: 200, body: reportMetaData});
-            requestHelper.setRequestObject(requestStub);
-
-            fetchReportComponentsStub.returns(Promise.resolve(''));
-            var promise = reportsApi.fetchReportMetaDataAndContent(req);
+            requestStub.yields(null);
+            var promise = reportsApi.fetchReportFacets(req, reportId);
             promise.then(
                 function(response) {
-                    assert.deepEqual(response, {
-                        reportData: {
-                            data: ''
-                        },
-                        reportMetaData: {
-                            data: reportsData
-                        },
-                    });
                     done();
+                    assert.equal(response.errorCode, errorCodes.UNKNOWN);
+                    assert(executeReqSpy.called);
+                    assert(unexpectedSpy.called);
                 },
-                function(error) {
-                    done(new Error('Failure promise unexpectedly returned testing fetchReportMetaDataAndContent success'));
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve fetchReportMetaDataAndContent success: ' + JSON.stringify(errorMsg)));
-            });
-        });
-        it('Test failure when fetching report components', function(done) {
-            var requestStub = sinon.stub();
-            requestStub.yields(null, {statusCode: 200, body: reportMetaData});
-            requestHelper.setRequestObject(requestStub);
-
-            fetchReportComponentsStub.returns(Promise.reject(new Error("error")));
-
-            var promise = reportsApi.fetchReportMetaDataAndContent(req);
-            promise.then(
                 function(response) {
-                    done(new Error('Success promise unexpectedly returned testing fetchReportMetaDataAndContent failure'));
-                },
-                function(error) {
-                    done();
-                    assert.deepEqual(error, new Error("error"));
+                    done(new Error("Unexpected promise error response returned with test failure"));
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve fetchReportMetaDataAndContent failure: ' + JSON.stringify(errorMsg)));
-            });
-        });
-    });
-
-    /**
-     * Unit test fetchReportResults api
-     */
-    describe('validate fetchReportResults api', function() {
-        var req = {
-            headers: {
-                'tid': 'tid'
-            },
-            'Content-Type': 'content-type',
-            'url': '/testurl.com',
-            'method': 'get'
-        };
-        var getRecordsStub;
-        beforeEach(function() {
-            getRecordsStub = sinon.stub(recordsApi, "fetchRecordsAndFields");
-            reportsApi.setRecordsApi(recordsApi);
-        });
-        afterEach(function() {
-            getRecordsStub.restore();
-        });
-        it('Test success ', function(done) {
-            getRecordsStub.returns(Promise.resolve({
-                records: [],
-                fields: []
-            }));
-            var promise = reportsApi.fetchReportResults(req);
-            promise.then(
-                function(response) {
-                    assert.deepEqual(response, {
-                        records: [],
-                        fields: []
-                    });
-                    done();
-                },
-                function(error) {
-                    done(new Error('Failure promise unexpectedly returned testing fetchReportResults success'));
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve fetchReportResults success: ' + JSON.stringify(errorMsg)));
-            });
-        });
-        it('Test failure ', function(done) {
-            getRecordsStub.returns(Promise.reject(new Error("error")));
-            var promise = reportsApi.fetchReportResults(req);
-            promise.then(
-                function(response) {
-                    done(new Error('Success promise unexpectedly return testing fetchReportResults failure'));
-                },
-                function(error) {
-                    done();
-                    assert.deepEqual(error, new Error("error"));
-                }
-            ).catch(function(errorMsg) {
-                done(new Error('unable to resolve fetchReportResults failure: ' + JSON.stringify(errorMsg)));
+                done(new Error('unable to resolve test failure: ' + JSON.stringify(errorMsg)));
             });
         });
     });
@@ -260,18 +205,22 @@ describe('Validate ReportsApi unit tests', function() {
         };
         var countResult = {count:1};
         var getExecuteRequestStub;
+        var unexpectedSpy;
         beforeEach(function() {
             getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
+            unexpectedSpy = sinon.spy(requestHelper, "logUnexpectedError");
         });
         afterEach(function() {
             getExecuteRequestStub.restore();
+            unexpectedSpy.restore();
         });
-        it('Test success ', function(done) {
+        it('Test success fetch report record count', function(done) {
             getExecuteRequestStub.returns(Promise.resolve(countResult));
             var promise = reportsApi.fetchReportRecordsCount(req);
             promise.then(
                 function(response) {
                     assert.deepEqual(response, countResult);
+                    assert.equal(unexpectedSpy.called, false);
                     done();
                 },
                 function(error) {
@@ -281,7 +230,7 @@ describe('Validate ReportsApi unit tests', function() {
                 done(new Error('unable to resolve fetchReportRecordsCount success: ' + JSON.stringify(errorMsg)));
             });
         });
-        it('Test failure ', function(done) {
+        it('Test failure fetch report record count', function(done) {
             getExecuteRequestStub.returns(Promise.reject(new Error("error")));
             var promise = reportsApi.fetchReportRecordsCount(req);
             promise.then(
@@ -291,6 +240,7 @@ describe('Validate ReportsApi unit tests', function() {
                 function(error) {
                     done();
                     assert.deepEqual(error, new Error("error"));
+                    assert.equal(unexpectedSpy.called, false);
                 }
             ).catch(function(errorMsg) {
                 done(new Error('unable to resolve fetchReportRecordsCount failure: ' + JSON.stringify(errorMsg)));
@@ -299,7 +249,60 @@ describe('Validate ReportsApi unit tests', function() {
     });
 
     /**
-     * Unit test fetchReportResults api
+     * Unit test fetchReportCount method
+     */
+    describe('validate fetchReportCount method', function() {
+        var defaultUrl = '/testurl.com';
+        var req = {
+            headers: {
+                'tid': 'tid'
+            },
+            'Content-Type': 'content-type',
+            'url': defaultUrl,
+            'method': 'get'
+        };
+
+        var countResult = {count:1};
+        var reportId = 1;
+
+        var getReportCountStub;
+        var getRecordCountStub;
+
+        reportsApi.setRecordsApi(recordsApi);
+        beforeEach(function() {
+            getReportCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+            getRecordCountStub = sinon.stub(recordsApi, "fetchCountForRecords");
+        });
+        afterEach(function() {
+            getReportCountStub.restore();
+            getRecordCountStub.restore();
+            req.url = defaultUrl;
+        });
+
+        var testCases = [
+            {name:'call records count', query:'1.EX.test', expectation: {recordsSpy: true, reportSpy: false}},
+            {name:'call reports count', query:null, expectation: {recordsSpy: false, reportSpy: true}}
+        ];
+
+        testCases.forEach((test) => {
+            it(test.name, function(done) {
+                getReportCountStub.returns(Promise.resolve('1'));
+                getRecordCountStub.returns(Promise.resolve('2'));
+
+                if (test.query) {
+                    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, test.query);
+                }
+                reportsApi.fetchReportCount(req, reportId);
+                assert.equal(getRecordCountStub.called, test.expectation.recordsSpy);
+                assert.equal(getReportCountStub.called, test.expectation.reportSpy);
+                done();
+            });
+        });
+    });
+
+
+    /**
+     * Unit test fetchReportTableHomepage api
      */
     describe('validate fetchReportTableHomepage api', function() {
         var req = {
@@ -312,19 +315,11 @@ describe('Validate ReportsApi unit tests', function() {
             params: null
         };
 
-        var reportObj = {
-            reportMetaData: {
-                data: ''
-            },
-            reportData: {
-                data: ''
-            }
-        };
+        var reportObj = {};
 
         var getExecuteRequestStub;
         var executeReqLogSpy;
         var fetchReportStub;
-        var fetchReportComponentsStub;
 
         var responseBody = '' +
             '{"name":"Activity Summary","description":"","type":"NEWSUMMARY","ownerId":null,"tableId":"bkqw6gbkb",' +
@@ -334,34 +329,26 @@ describe('Validate ReportsApi unit tests', function() {
             '"displayNewlyChangedRecords":false,"reportFormat":"","rolesWithGrantedAccess":[12,15,16],"summary":"show"}';
 
         beforeEach(function() {
-            reportObj.reportMetaData.data = '';
-            reportObj.reportData.data = '';
-
+            reportObj = {};
             getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest");
             executeReqLogSpy = sinon.spy(requestHelper, "logUnexpectedError");
             fetchReportStub = sinon.stub(reportsApi, "fetchReport");
-            fetchReportComponentsStub = sinon.stub(reportsApi, "fetchReportComponents");
         });
         afterEach(function() {
             getExecuteRequestStub.restore();
             executeReqLogSpy.restore();
             fetchReportStub.restore();
-            fetchReportComponentsStub.restore();
         });
         it('Test success ', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
+            getExecuteRequestStub.returns(Promise.resolve({body: 1}));
             fetchReportStub.returns(Promise.resolve('reportData'));
-            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
-
             reportsApi.setRequestHelper(requestHelper);
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
                     done();
-                    reportObj.reportMetaData.data = JSON.parse(responseBody);
-                    reportObj.reportData.data = 'reportData' ;
-                    assert.deepEqual(response, reportObj);
+                    assert.deepEqual(response, 'reportData');
                 },
                 function(error) {
                     done(new Error("promise error response returned when testing success"));
@@ -372,27 +359,34 @@ describe('Validate ReportsApi unit tests', function() {
         });
 
         it('Test report table homepage not defined ', function(done) {
-            getExecuteRequestStub.restore();
-            getExecuteRequestStub = sinon.stub(requestHelper, "executeRequest", function(stubReq, opts) {
-                if (opts.url.endsWith("defaulthomepage")) {
-                    // setup case of no homepage defined
-                    return Promise.resolve({body: ''});
-                } else {
-                    // results of report meta data
-                    return Promise.resolve({body: responseBody});
-                }
-            });
-            fetchReportStub.returns(Promise.resolve('reportData'));
-            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
+            getExecuteRequestStub.returns(Promise.resolve({body: ''}));
+            fetchReportStub.returns(Promise.resolve('reportData 1'));
             reportsApi.setRequestHelper(requestHelper);
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
                     done();
-                    reportObj.reportMetaData.data = JSON.parse(responseBody);
-                    reportObj.reportData.data = 'reportData' ;
-                    assert.deepEqual(response, reportObj);
+                    assert.deepEqual(response, 'reportData 1');
+                },
+                function(error) {
+                    done(new Error("promise error response returned when testing table homepage zero" + JSON.stringify(error)));
+                }
+            ).catch(function(errorMsg) {
+                done(new Error('unable to resolve fetchTableHomePageReport success when testing table homepage zero: ' + JSON.stringify(errorMsg)));
+            });
+        });
+
+        it('Test report table homepage zero ', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body: '0'}));
+            fetchReportStub.returns(Promise.resolve('reportData 1'));
+            reportsApi.setRequestHelper(requestHelper);
+
+            var promise = reportsApi.fetchTableHomePageReport(req);
+            promise.then(
+                function(response) {
+                    done();
+                    assert.deepEqual(response, 'reportData 1');
                 },
                 function(error) {
                     done(new Error("promise error response returned when testing undefined table homepage " + JSON.stringify(error)));
@@ -402,52 +396,27 @@ describe('Validate ReportsApi unit tests', function() {
             });
         });
 
-        it('Test failure when fetching table homepage meta data', function(done) {
-            var fetchReportMetaStub = sinon.stub(reportsApi, "fetchReportMetaData");
-
-            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
-            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
-            fetchReportMetaStub.returns(Promise.reject('error'));
+        it('Test report table homepage unexpected exception ', function(done) {
+            getExecuteRequestStub.returns(Promise.resolve({body: {'1':'bad'}}));
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
                 function(response) {
-                    fetchReportMetaStub.restore();
-                    done(new Error("promise success response returned when testing unexpected homepage report metaData failure"));
+                    done(new Error("promise success response returned when testing unexpected exception table homepage"));
+
                 },
                 function(error) {
-                    fetchReportMetaStub.restore();
-                    done();
-                    assert.ok(error);
-                }
-            ).catch(function(errorMsg) {
-                fetchReportMetaStub.restore();
-                done(new Error('unable to resolve fetchTableHomePageReport success when testing report table homepage metadata failure: ' + JSON.stringify(errorMsg)));
-            });
-        });
-
-        it('Test unexpected failure when parsing meta data', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body: new Error()}));
-            fetchReportComponentsStub.returns(Promise.resolve('reportData'));
-
-            var promise = reportsApi.fetchTableHomePageReport(req);
-            promise.then(
-                function(response) {
-                    done(new Error("promise success response returned when testing parsing meta data failure"));
-                },
-                function(error) {
-                    done();
-                    assert.ok(error);
                     assert(executeReqLogSpy.called);
+                    done();
                 }
             ).catch(function(errorMsg) {
-                done(new Error('unable to resolve fetchTableHomePageReport when parsing meta data failure: ' + JSON.stringify(errorMsg)));
+                done(new Error('unable to resolve fetchTableHomePageReport success when testing undefined table homepage: ' + JSON.stringify(errorMsg)));
             });
         });
 
-        it('Test failure on fetchReportComponent', function(done) {
+
+        it('Test failure on fetch report table home page', function(done) {
             getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
-            fetchReportComponentsStub.returns(Promise.reject(new Error("error")));
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
@@ -468,7 +437,6 @@ describe('Validate ReportsApi unit tests', function() {
                 body: 'error body'
             };
             getExecuteRequestStub.returns(Promise.reject(errorObj));
-            fetchReportComponentsStub.returns(Promise.reject(new Error("report component error")));
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
@@ -489,7 +457,6 @@ describe('Validate ReportsApi unit tests', function() {
                 statusMessage: 'error statusMessage'
             };
             getExecuteRequestStub.returns(Promise.reject(errorObj));
-            fetchReportComponentsStub.returns(Promise.reject(new Error("report component error")));
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
@@ -506,8 +473,8 @@ describe('Validate ReportsApi unit tests', function() {
         });
 
         it('Test error on fetch table homepage report id', function(done) {
-            getExecuteRequestStub.returns(Promise.resolve({body: responseBody}));
-            fetchReportComponentsStub.returns(Promise.reject('report component error'));
+            getExecuteRequestStub.returns(Promise.resolve({body: 1}));
+            fetchReportStub.returns(Promise.reject('error'));
 
             var promise = reportsApi.fetchTableHomePageReport(req);
             promise.then(
@@ -526,108 +493,6 @@ describe('Validate ReportsApi unit tests', function() {
     });
 
     /**
-     * Unit test fetchReportComponents api
-     */
-    describe('validate fetchReportComponents api', function() {
-        var req = {
-            headers: {
-                'tid': 'tid'
-            },
-            'Content-Type': 'content-type',
-            'url': '/testurl.com',
-            'method': 'get'
-        };
-        reportsApi.setRecordsApi(recordsApi);
-        var expectedSuccessResponse = {
-            records: [],
-            fields: [],
-            facets: []
-        };
-        var expectedUnknownErrorResponse = {
-            records: [],
-            fields: [],
-            facets: [{id: null, errorCode: errorCodes.UNKNOWN}]
-        };
-        var fetchReportResultsPromise = Promise.resolve({records: [], fields: []});
-        var fetchFacetsPromise = Promise.resolve({body:'[[[{"id":142,"value":"2015-08-13"}],[{"id":142,"value":"2015-09-10"}]],[[{"id":7,"value":"Email Received"}],[{"id":7,"value":"Email Sent"}]]]'});
-        afterEach(function() {
-            reportsApi.fetchFacetResults.restore();
-            reportsApi.fetchReportResults.restore();
-        });
-        it('Test success', function(done) {
-            var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
-            var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
-            getReportResults.returns(fetchReportResultsPromise);
-            getFacetsStub.returns(fetchFacetsPromise);
-            var promise = reportsApi.fetchReportComponents(req);
-            promise.then(
-                function(response) {
-                    done();
-                    assert.deepEqual(response, expectedSuccessResponse);
-                },
-                function(error) {
-                    done(new Error("error"));
-                }
-            );
-        });
-        it('Test error from reportResults', function(done) {
-            var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
-            var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
-            getReportResults.returns(Promise.reject(new Error("error")));
-            getFacetsStub.returns(fetchFacetsPromise);
-            var promise = reportsApi.fetchReportComponents(req);
-            promise.then(
-                function(response) {
-                    done(new Error("Unexpected success promise return with test error from reportResults"));
-                },
-                function(error) {
-                    done();
-                    assert.deepEqual(error, new Error("error"));
-                }
-            );
-        });
-        it('Test error from fetchFacets', function(done) {
-            var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
-            var getFacetsStub = sinon.stub(reportsApi, "fetchFacetResults");
-            getReportResults.returns(fetchReportResultsPromise);
-            getFacetsStub.returns(Promise.reject(new Error("error")));
-            var promise = reportsApi.fetchReportComponents(req);
-            promise.then(
-                function(response) {
-                    done();
-                    assert.deepEqual(response, expectedUnknownErrorResponse);
-                },
-                function(error) {
-                    done(new Error("unexpected failure promise returned with fetch facets"));
-                }
-            );
-        });
-        it('Test 10K error from fetchFacets', function(done) {
-            var getReportResults = sinon.stub(reportsApi, "fetchReportResults");
-            var fetchFacetsErrorPromise = Promise.reject({body:'[{"code":' + errorCodes.UNKNOWN + '}]'});
-            var getFacetsErrorStub = sinon.stub(reportsApi, "fetchFacetResults");
-            getReportResults.returns(fetchReportResultsPromise);
-            getFacetsErrorStub.returns(fetchFacetsErrorPromise);
-
-            var errorExpectedResponse = {
-                records: [],
-                fields: [],
-                facets: [{id: null, errorCode: errorCodes.UNKNOWN}]
-            };
-            var promise = reportsApi.fetchReportComponents(req);
-            promise.then(
-                function(response) {
-                    done();
-                    assert.deepEqual(response, errorExpectedResponse);
-                },
-                function(error) {
-                    done(new Error("unexpected failure promise returned with 10k fetch facets"));
-                }
-            );
-        });
-    });
-
-    /**
      * Unit test fetchReport api
      */
     describe('validate fetchReport api', function() {
@@ -636,7 +501,7 @@ describe('Validate ReportsApi unit tests', function() {
                 'tid': 'tid'
             },
             'Content-Type': 'content-type',
-            'url': '/testurl.com?format=display',
+            'url': 'testurl.com?format=display',
             'method': 'get'
         };
         reportsApi.setRecordsApi(recordsApi);
@@ -648,27 +513,106 @@ describe('Validate ReportsApi unit tests', function() {
         };
 
         var fetchReportGroupingResultsPromise = Promise.resolve({'body': '{"records":null, "type":"GROUP", "groups":[{"summaryRef":{"summaries":["groupName"]}, "records":[[{"id":1, "value":"VP Operations"}, {"id":2, "value":1}]]}]}'});
-        var fetchReportResultsPromise = Promise.resolve({'body': '[[ {"id":1, "value": 1234525} ], [ {"id":2, "value": 1234567} ]]'});
+        var fetchReportResultsPromise = Promise.resolve({'body': '[[ {"id":1, "value": 1234525, "sortList":"1:EQUALS"} ], [ {"id":2, "value": 1234567, "sortList":"1:EQUALS"} ]]'});
         var fetchFieldsPromise = Promise.resolve({'body': '[{ "id":1, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}, { "id":2, "value": 123454, "datatypeAttributes": { "type": "TEXT"}, "display": "12-3454"}]'});
+        var fetchFacetsPromise = Promise.resolve({body:'[[[{"id":142,"value":"2015-08-13"}],[{"id":142,"value":"2015-09-10"}]],[[{"id":7,"value":"Email Received"}],[{"id":7,"value":"Email Sent"}]]]'});
+        var fetchMetaData = Promise.resolve({'body': '{"id":1,"sortList":[{"fieldId":1, "sortOrder":"ASC", "groupType":"EQUALS"},{"fieldId":1, "sortOrder":"DESC"}]}'});
 
         var fetchCountPromise = Promise.resolve({body:'1'});
 
+        var getFieldsStub;
+        var getFacetsStub;
+        var getCountStub;
+        var getMetaStub;
+        var reportResultsStub;
+        var executeReqLogSpy;
+
+        beforeEach(function() {
+            getFieldsStub = sinon.stub(reportsApi, "fetchFields");
+            getFacetsStub = sinon.stub(reportsApi, "fetchReportFacets");
+            getCountStub = sinon.stub(reportsApi, "fetchReportCount");
+            getMetaStub = sinon.stub(reportsApi, "fetchReportMetaData");
+            reportResultsStub = sinon.stub(requestHelper, "executeRequest");
+            executeReqLogSpy = sinon.spy(requestHelper, "logUnexpectedError");
+            reportsApi.setRequestHelper(requestHelper);
+        });
+
         afterEach(function() {
-            reportsApi.fetchReportRecordsCount.restore();
-            reportsApi.fetchFields.restore();
-            requestHelper.executeRequest.restore();
+            getFieldsStub.restore();
+            getFacetsStub.restore();
+            getCountStub.restore();
+            getMetaStub.restore();
+            reportResultsStub.restore();
+            executeReqLogSpy.restore();
+            req.url = 'testurl.com?format=display';
         });
-        it('Test success', function(done) {
-            //var getReportResults = sinon.stub(reportsApi, "fetchReportResult");
-            reportsApi.setRequestHelper(requestHelper);
-            var getReportResults = sinon.stub(requestHelper, "executeRequest");
 
-            var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
-            var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
+        it('Test get report success - no facets', function(done) {
+            req.method = 'get';
 
-            getReportResults.returns(fetchReportResultsPromise);
+            reportResultsStub.returns(fetchReportResultsPromise);
             getFieldsStub.returns(fetchFieldsPromise);
             getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing get report success with no facets"));
+                }
+            );
+        });
+
+        it('Test get report success - with facets', function(done) {
+            req.method = 'get';
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getFacetsStub.returns(fetchFacetsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1, true);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing get report success with facets"));
+                }
+            );
+        });
+
+        it('Test get report success with max row limit exceeded', function(done) {
+            req.method = 'get';
+            req.url += '&offset=0&numRows=' + (constants.PAGE.MAX_NUM_ROWS + 1);
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return when testing get report success with max row limit exceeded"));
+                }
+            );
+        });
+
+        it('Test get report success with grouping and no facets', function(done) {
+            req.method = 'get';
+
+            reportResultsStub.returns(fetchReportGroupingResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
 
             var promise = reportsApi.fetchReport(req, 1);
             promise.then(
@@ -680,44 +624,19 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
-        it('Test success with grouping', function(done) {
-            //var getReportResults = sinon.stub(reportsApi, "fetchReportResult");
+        it('Test get report error', function(done) {
+            req.method = 'get';
             reportsApi.setRequestHelper(requestHelper);
-            var getReportResults = sinon.stub(requestHelper, "executeRequest");
 
-            var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
-            var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
-
-            getReportResults.returns(fetchReportGroupingResultsPromise);
+            reportResultsStub.returns(Promise.reject(new Error("error")));
             getFieldsStub.returns(fetchFieldsPromise);
             getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
 
             var promise = reportsApi.fetchReport(req, 1);
             promise.then(
                 function(response) {
-                    done();
-                },
-                function(error) {
-                    done(new Error("error"));
-                }
-            );
-        });
-        it('Test error', function(done) {
-            //var getReportResults = sinon.stub(reportsApi, "fetchReportResult");
-            reportsApi.setRequestHelper(requestHelper);
-            var getReportResults = sinon.stub(requestHelper, "executeRequest");
-
-            var getFieldsStub = sinon.stub(reportsApi, "fetchFields");
-            var getCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
-
-            getReportResults.returns(Promise.reject(new Error("error")));
-            getFieldsStub.returns(fetchFieldsPromise);
-            getCountStub.returns(fetchCountPromise);
-
-            var promise = reportsApi.fetchReport(req, 1);
-            promise.then(
-                function(response) {
-                    done(new Error("Unexpected success promise return with test error from reportResults"));
+                    done(new Error("Unexpected success promise return with test error from fetchReports"));
                 },
                 function(error) {
                     done();
@@ -725,6 +644,144 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
+        it('Test get report error with meta data failure', function(done) {
+            req.method = 'get';
+            reportsApi.setRequestHelper(requestHelper);
 
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(Promise.reject('metaError'));
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return with test meta data failure from fetchReports(Get request)"));
+                },
+                function(error) {
+                    done();
+                    assert.equal(error, 'metaError');
+                }
+            );
+        });
+        it('Test get report with unexpected exception', function(done) {
+            req.method = 'get';
+            reportsApi.setRequestHelper(requestHelper);
+
+            reportResultsStub.returns({body:'bad object structure'});
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return with testing unexpected error from get fetchReports"));
+                },
+                function(error) {
+                    assert(executeReqLogSpy.called);
+                    done();
+                }
+            );
+        });
+        it('Test post dynamic report success WITHOUT meta data overrides', function(done) {
+            req.method = 'post';
+            reportsApi.setRequestHelper(requestHelper);
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return with testing meta data override from fetchReports"));
+                }
+            );
+        });
+        it('Test post dynamic report success with meta data failure', function(done) {
+            req.method = 'post';
+            reportsApi.setRequestHelper(requestHelper);
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(Promise.reject('meta error'));
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return with test meta data failure from fetchReports(post request)"));
+                },
+                function(error) {
+                    done();
+                    assert.ok(error);
+                }
+            );
+        });
+        it('Test post dynamic report success WITH meta data overrides', function(done) {
+            req.method = 'post';
+            req.url += '&sortList=1:EQUALS&query=1.EX.test&columns=1';
+            reportsApi.setRequestHelper(requestHelper);
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return with testing meta data override from fetchReports"));
+                }
+            );
+        });
+        it('Test post dynamic report with unexpected exception processing report results', function(done) {
+            req.method = 'post';
+            reportsApi.setRequestHelper(requestHelper);
+
+            reportResultsStub.returns({body:'bad object structure'});
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return with testing unexpected error from post fetchReports"));
+                },
+                function(error) {
+                    assert(executeReqLogSpy.called);
+                    done();
+                }
+            );
+        });
+        it('Test post dynamic report with unexpected exception processing fields within report results', function(done) {
+            req.method = 'post';
+            reportsApi.setRequestHelper(requestHelper);
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns({body:'bad object structure'});
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaData);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done(new Error("Unexpected success promise return with testing unexpected error from post fetchReports"));
+                },
+                function(error) {
+                    assert(executeReqLogSpy.called);
+                    done();
+                }
+            );
+        });
     });
 });

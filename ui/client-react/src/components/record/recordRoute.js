@@ -87,7 +87,7 @@ export let RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.params;
 
-        const link = `/app/${appId}/table/${tblId}/report/${rptId}`;
+        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}`;
         this.props.router.push(link);
     },
 
@@ -96,7 +96,7 @@ export let RecordRoute = React.createClass({
      * @param recId
      */
     navigateToRecord(appId, tblId, rptId, recId) {
-        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         this.props.router.push(link);
     },
 
@@ -139,7 +139,7 @@ export let RecordRoute = React.createClass({
         if (this.props.params) {
             const {appId, tblId, rptId} = this.props.params;
 
-            const tableLink = `/app/${appId}/table/${tblId}`;
+            const tableLink = `/qbase/app/${appId}/table/${tblId}`;
 
             const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
@@ -216,7 +216,8 @@ export let RecordRoute = React.createClass({
         return this.props.form.syncLoadedForm ||
             !_.isEqual(this.props.form.formData, nextProps.form.formData) ||
             !_.isEqual(this.props.form.formLoading, nextProps.form.formLoading) ||
-            !_.isEqual(this.props.pendEdits, nextProps.pendEdits);
+            !_.isEqual(this.props.pendEdits, nextProps.pendEdits) ||
+            !_.isEqual(this.props.selectedTable, nextProps.selectedTable);
     },
 
     /**

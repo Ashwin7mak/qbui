@@ -116,12 +116,12 @@
                     //Execute a GET report homepage
                     recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                         var results = JSON.parse(reportHomePageResults.body);
-                        //verify report meta Data is using report 1
-                        assert.deepEqual(results.reportMetaData.data.id, 1);
+                        //verify report meta Data
+                        assert.ok(results, "expected results from report homepage request");
+                        assert.ok(results.metaData, "expected results.metaData from report homepage request");
+                        //verify report meta Data report id is report 1
+                        assert.deepEqual(results.metaData.id, 1, "expected report 1 for no specific default report");
 
-                        //verify report data is empty
-                        var reportData = results.reportData.data;
-                        assert.notEqual(reportData, '');
                         done();
                     });
                 });
@@ -154,12 +154,11 @@
                                             //Execute a GET report homepage
                                             recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                                                 var results = JSON.parse(reportHomePageResults.body);
+                                                //verify report meta Data
+                                                assert.ok(results, "expected results from report homepage request");
+                                                assert.ok(results.metaData, "expected results.metaData from report homepage request");
                                                 //verify report meta Data report id is report 1
-                                                assert.deepEqual(results.reportMetaData.data.id, 1);
-
-                                                //verify report data is report 1
-                                                var reportData = results.reportData.data;
-                                                assert.notEqual(reportData, '');
+                                                assert.deepEqual(results.metaData.id, 1, "expected report 1 for no specific default report");
                                                 done();
                                             });
                                         });
@@ -232,14 +231,13 @@
                                     var results = JSON.parse(reportHomePageResults.body);
                                     //Verify returned results has right report Id and role info
                                     //verify report meta Data
-                                    var reportMetaData = results.reportMetaData.data;
+                                    var reportMetaData = results.metaData;
                                     assert.deepEqual(reportMetaData.id, testcase.reportId);
                                     assert.deepEqual(reportMetaData.name, testcase.reportName);
 
                                     //verify report data
-                                    var reportData = results.reportData.data;
-                                    assert.deepEqual(reportData.groups, []);
-                                    assert.deepEqual(reportData.records.length, 10);
+                                    assert.deepEqual(results.groups, []);
+                                    assert.deepEqual(results.records.length, 10);
                                     done();
                                 });
                             });

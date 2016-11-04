@@ -19,6 +19,8 @@
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
                 app = appAndRecords[0];
                 recordList = appAndRecords[1];
+                return e2eBase.resizeBrowser(e2eConsts.LARGE_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT);
+            }).then(function() {
                 // Get a session ticket for that subdomain and realmId (stores it in the browser)
                 // Gather the necessary values to make the requests via the browser
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;

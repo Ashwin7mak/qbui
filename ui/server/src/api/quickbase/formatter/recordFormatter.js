@@ -62,7 +62,7 @@
         //Display formats record field values according to the field's display settings
         function formatRecordValue(fieldValue, fieldInfo) {
 
-            var tempFieldInfo = _.cloneDeep(fieldInfo.datatypeAttributes);
+            var tempFieldInfo = fieldInfo ? _.cloneDeep(fieldInfo.datatypeAttributes) : {};
             switch (tempFieldInfo.type) {
             case consts.PHONE_NUMBER:
                 fieldValue.display = phoneFormatter.format(fieldValue, tempFieldInfo);

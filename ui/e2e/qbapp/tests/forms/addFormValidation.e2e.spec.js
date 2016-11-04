@@ -51,12 +51,8 @@
             });
         });
 
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
-
         it('Validate all required fields by not entering anything into them on form', function(done) {
-            var expectedErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field', 'Fill in the Phone Number Field', 'Fill in the Email Address Field', 'Fill in the URL Field'];
+            var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
             formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                 //click on add record button
                 reportServicePage.clickAddRecordOnStage();
@@ -80,7 +76,7 @@
                 {
                     message: 'all numeric fields',
                     fieldTypeClassNames: 'numericField',
-                    expectedErrorMessages : ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field', 'Fill in the Phone Number Field', 'Fill in the Email Address Field', 'Fill in the URL Field']
+                    expectedErrorMessages : ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field']
                 },
             ];
         }
@@ -102,11 +98,11 @@
 
                     //verify clicking on alert button brings up the error message popup
                     formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
+                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
 
                     //verify clicking on alert again hides the error message popup
                     formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
+                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
                     done();
                 });
             });
@@ -114,7 +110,7 @@
 
         it('Save and add another Button - Validate errors and correct the errors by adding new record', function(done) {
             var validFieldClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
-            var expectedErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field', 'Fill in the Phone Number Field', 'Fill in the Email Address Field', 'Fill in the URL Field'];
+            var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
 
             //click on add record button
             reportServicePage.clickAddRecordOnStage();
@@ -123,7 +119,7 @@
             formsPage.enterInvalidFormValues('numericField');
 
             //Save the form
-            formsPage.clickSaveBtnWithName('Save & add another');
+            formsPage.clickSaveBtnWithName('Save & Add Another');
 
             //verify validation
             formsPage.verifyErrorMessages(expectedErrorMessages);

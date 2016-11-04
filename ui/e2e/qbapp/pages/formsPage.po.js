@@ -49,6 +49,7 @@
 
         //form error messages
         this.formErrorMessage = element.all(by.className('loadedContent')).first().element(by.className('qbErrorMessage'));
+        this.formErrorMessageVisisble = element.all(by.className('loadedContent')).first().element(by.className('qbErrorMessageVisible'));
         this.formErrorMessageHeader = this.formErrorMessage.element(by.className('qbErrorMessageHeader'));
         this.formErrorMessageHeaderCloseBtn = this.formErrorMessageHeader.element(by.className('rightIcons')).element(by.tagName('button'));
         this.formErrorMessageHeaderAlertBtn = this.formErrorMessageHeader.element(by.className('leftIcons')).element(by.className('iconTableUISturdy-alert'));
@@ -80,7 +81,7 @@
         this.clickFormSaveAndAddAnotherBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
-                self.clickSaveBtnWithName('Save & add another');
+                self.clickSaveBtnWithName('Save & Add Another');
                 // Check that the edit notification is displayed
                 return reportServicePage.waitForElement(reportServicePage.editSuccessPopup).then(function() {
                     return reportServicePage.waitForElement(self.formEditContainerEl);
