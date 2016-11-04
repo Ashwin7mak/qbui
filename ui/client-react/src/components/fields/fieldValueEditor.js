@@ -20,7 +20,7 @@ import TextFieldValueEditor from './textFieldValueEditor';
 import TimeFieldValueEditor from './timeFieldValueEditor';
 import UrlFieldValueEditor from './urlFieldValueEditor';
 import UserFieldValueEditor from './userFieldValueEditor';
-import ErrorTipItem from '../qbToolTip/errorTipItem';
+import ErrorWrapper from '../fields/errorWrapper';
 
 /**
  * # FieldValueEditor
@@ -301,10 +301,10 @@ const FieldValueEditor = React.createClass({
                 {requiredDiv}
 
                 {/* render type specific editor */}
-                <ErrorTipItem isInvalid={this.props.isInvalid}
+                <ErrorWrapper isInvalid={this.props.isInvalid}
                                invalidMessage={this.props.invalidMessage}>
                 {renderedType}
-                </ErrorTipItem>
+                </ErrorWrapper>
             </div>
         );
     }

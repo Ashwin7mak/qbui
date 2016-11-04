@@ -908,7 +908,7 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalledWith(
-            appId, tblId, null, null, {5: {oldVal: {value: undefined, id: 5}, newVal:{value: 'abc'}, fieldName: 'col_text', fieldDef: fakeReportDataFields_unsaved.fields.data[0]}}
+            appId, tblId, null, null, {5: {oldVal: {value: undefined, id: 5}, newVal:{value: 'abc'}, fieldName: 'col_text', fieldDef: fakeReportDataFields_unsaved.fields.data[0]}}, true
         );
     });
 
@@ -1248,7 +1248,7 @@ describe('ReportContent functions', () => {
                                                                 router={[]}
                                                                 recordsCount={100}/>);
         component.openRow({RecId: {value: 2}});
-        expect(component.props.router).toContain('/app/123/table/456/report/2/record/2');
+        expect(component.props.router).toContain('/qbase/app/123/table/456/report/2/record/2');
     });
 
 });

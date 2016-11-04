@@ -163,6 +163,7 @@ textarea:focus,
 .userDisplayValue {
     overflow:hidden;
     text-overflow:ellipsis;
+    display: inline;
 }
 
 .cellData.NoWrap {

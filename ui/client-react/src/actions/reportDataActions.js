@@ -13,83 +13,7 @@ import QueryUtils from '../utils/queryUtils';
 import ReportUtils from '../utils/reportUtils';
 import Locale from '../locales/locales';
 import {NotificationManager} from 'react-notifications';
-
-let logger = new Logger();
-
 import reportModel from '../models/reportModel';
-
-//  Build the request query parameters needed to properly filter the report request based on the report
-//  meta data.  Information that could be sent include fid list, sort list, grouping and query parameters
-function buildRequestQuery(response, requiredQueryParams, overrideQueryParams, facetQueryExpression, filter) {
-    var queryParams = {};
-    var reportMetaData = {};
-
-    if (response.data && response.data.reportMetaData) {
-        reportMetaData = response.data.reportMetaData;
-    } else {
-        reportMetaData = response;
-    }
-
-    //required query params
-    queryParams[query.OFFSET_PARAM] = requiredQueryParams[query.OFFSET_PARAM];
-    queryParams[query.NUMROWS_PARAM] = requiredQueryParams[query.NUMROWS_PARAM];
-    queryParams[query.FORMAT_PARAM] = requiredQueryParams[query.FORMAT_PARAM];
-
-    //for the optional ones, if something is null/undefined pull from report's meta data
-    if (reportMetaData && reportMetaData.data) {
-        overrideQueryParams = overrideQueryParams || {};
-
-        if (overrideQueryParams.hasOwnProperty(query.COLUMNS_PARAM)) {
-            queryParams[query.COLUMNS_PARAM] = overrideQueryParams[query.COLUMNS_PARAM];
-        } else {
-            if (reportMetaData.data && reportMetaData.data.fids) {
-                queryParams[query.COLUMNS_PARAM] = ReportUtils.getFidListString(reportMetaData.data.fids);
-            }
-        }
-
-        //  Optional parameters used to return a result set in sorted and/or grouped order for
-        //  easier client rendering of the result set data.
-        //
-        //      sortList: ==>  '2.1:V.33:C'
-        //
-        // if the report started out with sort/group settings defined and you removed them via the sort/group popover
-        // to modify the sort/group settings adhoc, it should use the empty sort/group param and not fall
-        // thru to use the original report settings. So here we test for hasOwnProperty since an empty value in the property
-        // means to overide the sort/group with no sort/grouping. if the property is excluded only then do we default to the
-        // original report settings for sort/group
-        if (overrideQueryParams.hasOwnProperty(query.SORT_LIST_PARAM)) {
-            queryParams[query.SORT_LIST_PARAM] = overrideQueryParams[query.SORT_LIST_PARAM];
-        } else {
-            /*eslint no-lonely-if:0*/
-            if (reportMetaData.data.sortList) {
-                queryParams[query.SORT_LIST_PARAM] = ReportUtils.getSortListString(reportMetaData.data.sortList);
-            }
-        }
-
-        if (overrideQueryParams.hasOwnProperty(query.QUERY_PARAM)) {
-            queryParams[query.QUERY_PARAM] = overrideQueryParams[query.QUERY_PARAM];
-        } else {
-            //  Concatenate facet expression(if any) and search filter(if any) into single query expression
-            //  where each individual expression is 'AND'ed with the other.  To optimize query performance,
-            //  order the array elements 1..n in order of significance/most targeted selection as the
-            //  outputted query is built starting at offset 0.
-            let filterQueries = [];
-            if (reportMetaData.data.query) {
-                filterQueries.push(reportMetaData.data.query);
-            }
-            if (facetQueryExpression) {
-                filterQueries.push(facetQueryExpression.data);
-            }
-
-            if (filter && filter.search) {
-                filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
-            }
-            queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
-        }
-    }
-
-    return queryParams;
-}
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
@@ -98,66 +22,11 @@ function buildRequestQuery(response, requiredQueryParams, overrideQueryParams, f
 //  code.  Promises are returned only to support our unit tests, which are expected
 //  to implement the appropriate handlers.
 Promise.onPossiblyUnhandledRejection(function(err) {
+    let logger = new Logger();
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
 let reportDataActions = {
-
-    loadReport(appId, tblId, rptId, format, offset, rows, sortList) {
-        //  promise is returned in support of unit testing only
-        return new Promise((resolve, reject) => {
-            if (appId && tblId && rptId) {
-                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
-                this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT, {});
-                let reportService = new ReportService();
-
-                reportService.getReport(appId, tblId, rptId, format, offset, rows, sortList).then(
-                    (response) => {
-                        // We only need to check for reportData. The metadata will be fetched
-                        // and parsed in the node call.
-                        if (response.data.reportMetaData && response.data.reportData) {
-                            var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
-                            _.extend(model, {sortList: sortList});
-                            this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
-                            resolve();
-                        }
-                    },
-                    error => {
-                        //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportService.getReport:');
-                        this.dispatch(actions.LOAD_REPORT_FAILED, error.response.status);
-                        reject();
-                    }
-                ).catch(ex => {
-                    logger.logException(ex);
-                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
-                    reject();
-                });
-
-                reportService.getReportRecordsCount(appId, tblId, rptId).then(
-                    response => {
-                        if (response.data) {
-                            logger.debug('ReportRecordsCount service call successful');
-                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response.data);
-                        }
-                    },
-                    error => {
-                        logger.parseAndLogError(LogLevel.ERROR, error, 'reportService.getReportRecordsCount:');
-                        this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error.response.status);
-                        reject();
-                    }
-                ).catch(ex => {
-                    logger.logException(ex);
-                    this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, 500);
-                    reject();
-                });
-            } else {
-                logger.error('reportDataActions.loadReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
-                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
-                reject();
-            }
-        });
-    },
 
     filterSelectionsPending(selections) {
         this.dispatch(actions.FILTER_SELECTIONS_PENDING, {selections});
@@ -182,86 +51,162 @@ let reportDataActions = {
         this.dispatch(actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId});
     },
 
-
-    /* Action called to get a new set of records given a report.
-     * Override params can override report's sortlist/query etc
+    /**
+     * Load a report based on it's meta data definition.
      *
-     * Extended filter criteria can be attached to the query -
-     *  Supported filtering options include:
+     * @param appId
+     * @param tblId
+     * @param rptId
+     * @param format: should the report output be formatted for display.  If not true, raw data values are returned.
+     * @param offset
+     * @param rows
+     */
+    loadReport(appId, tblId, rptId, format, offset, rows) {
+
+        let logger = new Logger();
+
+        //  promise is returned in support of unit testing only
+        return new Promise((resolve, reject) => {
+            if (appId && tblId && rptId) {
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId, offset, rows});
+                let reportService = new ReportService();
+
+                //format, offset, rows, sortList
+                let params = {};
+                params[query.OFFSET_PARAM] = offset;
+                params[query.NUMROWS_PARAM] = rows;
+
+                //  Fetch a report.  The response will include:
+                //    - report data/grouping data
+                //    - report meta data
+                //    - report fields
+                //    - report facets
+                //    - report count
+                //
+                reportService.getReportResults(appId, tblId, rptId, params, format).then(
+                    (reportResponse) => {
+                        let metaData = reportResponse.data ? reportResponse.data.metaData : null;
+                        let model = reportModel.set(metaData, reportResponse.data);
+                        this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                        resolve();
+                    },
+                    (reportResponseError) => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, reportResponseError.response, 'reportService.getReport:');
+                        this.dispatch(actions.LOAD_REPORT_FAILED, reportResponseError.response.status);
+                        reject();
+                    }
+                ).catch(ex => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+                    logger.logException(ex);
+                    reject();
+                });
+            } else {
+                logger.error('reportDataActions.loadReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                this.dispatch(actions.LOAD_REPORT_FAILED, 500);
+                reject();
+            }
+        });
+    },
+
+    /* Run a customized report that optionally allows for dynamically overriding report meta data defaults for
+     * sort/grouping, query and column list settings.
+     *
+     * Currently supported query filtering overrides include:
      *       facet  : expression representing all the facets selected by user so far example [{fid: fid1, values: value1, value2}, {fid: fid2, values: value3, value4}, ..]
      *       search : search string
      *
-     * @param requiredQueryParams: {format, offset, numrows}
+     * The overrides are expected to be defined in the queryParams parameter.  If no entry is found, then the report meta
+     * data defaults will be used.  NOTE: an empty parameter value is considered valid (clear the default value) and will
+     * be passed to the node layer.
+     *
+     * @param appId
+     * @param tblId
+     * @param rptId
+     * @param format: should the report output be formatted for display.  If not true, raw data values are returned.
      * @param filter: {facet, search}
-     * @param overrideQueryParams: {columns, sortlist, query}
+     * @param queryParams: {offset, numrows, cList, sList, query}
      */
-    getFilteredRecords(appId, tblId, rptId, requiredQueryParams, filter, overrideQueryParams) {
-        //  promise is returned in support of unit testing only
+    loadDynamicReport(appId, tblId, rptId, format, filter, queryParams) {
+
+        let logger = new Logger();
+
         return new Promise((resolve, reject) => {
-
             if (appId && tblId && rptId) {
-                let sortList = overrideQueryParams && overrideQueryParams[query.SORT_LIST_PARAM] ? overrideQueryParams[query.SORT_LIST_PARAM] : "";
-                let offset = requiredQueryParams && requiredQueryParams[query.OFFSET_PARAM] ? requiredQueryParams[query.OFFSET_PARAM] : constants.PAGE.DEFAULT_OFFSET;
-                let numRows = requiredQueryParams && requiredQueryParams[query.NUMROWS_PARAM] ? requiredQueryParams[query.NUMROWS_PARAM] : constants.PAGE.DEFAULT_NUM_ROWS;
-                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, offset: offset, numRows: numRows, sortList: sortList});
 
-                let reportService = new ReportService();
-                let recordService = new RecordService();
-
-                // Fetch the report meta data and parse the facet expression into a query expression
-                // that is used when querying for the report data.
-                var promises = [];
-                promises.push(reportService.getReport(appId, tblId, rptId));
-
-                // The filter parameter may contain a facetExpression
-                let facetExpression = filter ? filter.facet : '';
-                if (facetExpression !== '' && facetExpression.length) {
-                    promises.push(reportService.parseFacetExpression(facetExpression));
+                if (!queryParams) {
+                    queryParams = {};
                 }
 
-                Promise.all(promises).then(
-                    response => {
-                        var queryParams = buildRequestQuery(response[0], requiredQueryParams, overrideQueryParams, response[1], filter);
+                let offset = queryParams[query.OFFSET_PARAM];
+                let numRows = queryParams[query.NUMROWS_PARAM];
+                let sortList = queryParams[query.SORT_LIST_PARAM];
 
-                        //  Get the filtered records
-                        recordService.getRecords(appId, tblId, queryParams).then(
-                            recordResponse => {
-                                logger.debug('Filter Report Records service call successful');
-                                var model = reportModel.set(null, recordResponse);
+                this.dispatch(actions.LOAD_RECORDS, {appId, tblId, rptId, filter, offset:offset, numRows:numRows, sortList:sortList});
+                let reportService = new ReportService();
+
+                //  call node to parse the supplied facet expression into a query expression that
+                //  can be included on the request.
+                reportService.parseFacetExpression(filter ? filter.facet : '').then(
+                    (facetResponse) => {
+                        let filterQueries = [];
+
+                        //  add the facet expression..if any
+                        if (facetResponse.data) {
+                            filterQueries.push(facetResponse.data);
+                        }
+
+                        //  any search filters
+                        if (filter && filter.search) {
+                            filterQueries.push(QueryUtils.parseStringIntoAllFieldsContainsExpression(filter.search));
+                        }
+
+                        //  override the report query expressions
+                        if (filterQueries.length > 0) {
+                            queryParams[query.QUERY_PARAM] = QueryUtils.concatQueries(filterQueries);
+                        }
+
+                        //  Fetch a report with custom attributes.  The response will include:
+                        //    - report data/grouping data
+                        //    - report meta data (includes the override settings..if any)
+                        //    - report fields
+                        //    - report count
+                        //
+                        //  NOTE:
+                        //    - the sorting, grouping and clist requirements(if any) are expected to be included in queryParams
+                        //    - no faceting data is returned..
+                        //
+                        reportService.getDynamicReportResults(appId, tblId, rptId, queryParams, format).then(
+                            (reportResponse) => {
+                                let metaData = reportResponse.data ? reportResponse.data.metaData : null;
+                                let model = reportModel.set(metaData, reportResponse.data);
                                 this.dispatch(actions.LOAD_RECORDS_SUCCESS, model);
-                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, recordResponse);
                                 resolve();
                             },
-                            error => {
-                                //  axios upgraded to an error.response object in 0.13.x
-                                logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.getRecords:');
-                                this.dispatch(actions.LOAD_RECORDS_FAILED, error.response.status);
-                                this.dispatch(actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, error.response.status);
+                            (reportResultsError) => {
+                                logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportDataActions.loadDynamicReport');
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, reportResultsError.response.status);
                                 reject();
                             }
-                        ).catch(
-                            ex => {
-                                logger.logException(ex);
-                                this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
-                                reject();
-                            }
-                        );
+                        ).catch((ex) => {
+                            // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+                            logger.logException(ex);
+                            reject();
+                        });
                     },
-                    error => {
+                    (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
-                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.getRecords');
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportDataActions.parseFacetExpression');
                         this.dispatch(actions.LOAD_RECORDS_FAILED, error.response.status);
                         reject();
                     }
-                ).catch(
-                    ex => {
-                        logger.logException(ex);
-                        this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
-                        reject();
-                    }
-                );
+                ).catch((ex) => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
+                    logger.logException(ex);
+                    reject();
+                });
             } else {
-                logger.error('reportDataActions.getFilteredRecords: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
+                logger.error('reportDataActions.loadDynamicReport: Missing one or more required input parameters.  AppId:' + appId + '; TblId:' + tblId + '; RptId:' + rptId);
                 this.dispatch(actions.LOAD_RECORDS_FAILED, 500);
                 reject();
             }
@@ -309,7 +254,7 @@ let reportDataActions = {
      */
     editingReportRow(recId) {
         this.dispatch(actions.EDIT_REPORT_RECORD, {recId});
-    },
+    }
 };
 
 export default reportDataActions;

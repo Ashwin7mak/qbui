@@ -6,13 +6,21 @@
   border-width: 1px;
   border-color: $errorMessage-border-color;
   position: absolute;
-  bottom: 59px;
+  bottom: -200px;
   right: 0px;
   max-width: 450px;
   width: 90%;
   text-align: left;
-  z-index: 9999;
+  z-index: 9998;
   margin: 0 auto;
+
+  visibility:hidden;
+  transition:0.5s ease-in-out;
+
+  &.qbErrorMessageVisible {
+    visibility:visible;
+    bottom: 47px;
+  }
 
   div {
     padding: 2px;
@@ -25,13 +33,21 @@
       .leftIcons {
         display: flex;
         font-size: 26px;
+        padding-left: 10px;
+        padding-right: 10px;
+        span{
+          padding-top: 9px;
+        }
+        h4{
+          padding-left: 10px;
+        }
       }
       .rightIcons {
         flex: 0 0 auto;
         button {
           height:40px;
           font-size: 16px;
-          color: #fff;
+          color: $errorMessage-header-text-color;
           background-color: $errorMessage-header-background;
           border-radius: 0;
           border: 0;
@@ -47,17 +63,53 @@
       color: $errorMessage-content-text-color;
       flex-direction: column;
       display: flex;
+      overflow: auto;
+      max-height: 290px;
 
       .qbErrorMessageItem {
         margin-left: 40px;
+        margin-right: 10px;
+        margin-top: 8px;
       }
     }
+  }
+}
 
-    span {
-      margin-left: 2px;
-      margin-right: 10px;
-      margin-top: 8px;
+@include small-breakpoint {
+  .qbErrorMessage {
+    width: 100%;
+    max-width: none;
+    div {
+      padding: 1px;
+      &.qbErrorMessageHeader {
+        height: 30px;
+        .leftIcons {
+          font-size: 20px;
+          padding-left: 5px;
+          span{
+            padding-top: 3px;
+          }
+          h4{
+            margin-top: 3px;
+            margin-bottom: 0px;
+          }
+        }
+        .rightIcons {
+          button {
+            height: 0px !important;
+            font-size: 12px;
+          }
+          .btn {
+            vertical-align: top;
+            padding-top: 3px !important;
+            padding-right: 3px !important;
+          }
+        }
+      }
+      &.qbErrorMessageContent {
+        overflow: auto;
+        max-height: 160px;
+      }
     }
-
   }
 }

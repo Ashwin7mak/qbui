@@ -73,7 +73,7 @@ let RecordTrowser = React.createClass({
 
         if (this.props.reportData && this.props.reportData.navigateAfterSave) {
             let {appId, tblId} = this.props;
-            this.props.router.push(`/app/${appId}/table/${tblId}/record/${recId}`);
+            this.props.router.push(`/qbase/app/${appId}/table/${tblId}/record/${recId}`);
         }
     },
 
@@ -251,10 +251,10 @@ let RecordTrowser = React.createClass({
                 {showNext &&
                     <Button bsStyle="primary" onClick={this.saveAndNextClicked}><I18nMessage message="nav.saveAndNext"/></Button>
                 }
-                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
                 {this.props.recId === null &&
-                    <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
+                <Button bsStyle="primary" onClick={() => {this.saveClicked(true);}}><I18nMessage message="nav.saveAndAddAnother"/></Button>
                 }
+                <Button bsStyle="primary" onClick={() => {this.saveClicked(false);}}><I18nMessage message="nav.save"/></Button>
             </div>);
     },
 
@@ -291,8 +291,9 @@ let RecordTrowser = React.createClass({
      * trowser to wrap report manager
      */
     render() {
+        const errorFlg = this.props.pendEdits && this.props.pendEdits.editErrors && this.props.pendEdits.editErrors.errors.length > 0;
         return (
-            <Trowser className="recordTrowser"
+            <Trowser className={"recordTrowser " + (errorFlg ? "recordTrowserErrorPopRes" : "")}
                      visible={this.props.visible}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
                      centerActions={this.getTrowserActions()}

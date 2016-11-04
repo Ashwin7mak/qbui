@@ -23,7 +23,7 @@ describe('SortAndGroup functions', () => {
     var component;
     let flux = {
         actions: {
-            getFilteredRecords() {
+            loadDynamicReport() {
                 return;
             },
             loadReport() {
@@ -224,32 +224,32 @@ describe('SortAndGroup functions', () => {
     describe('test apply and reset methods', () => {
 
         it('test applyAndHide not dirty ', () => {
-            spyOn(flux.actions, 'getFilteredRecords');
+            spyOn(flux.actions, 'loadDynamicReport');
             component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}/>);
             component.show();
             expect(component.state.dirty).toBeFalsy();
             component.applyAndHide();
-            expect(flux.actions.getFilteredRecords).not.toHaveBeenCalled();
-            flux.actions.getFilteredRecords.calls.reset();
+            expect(flux.actions.loadDynamicReport).not.toHaveBeenCalled();
+            flux.actions.loadDynamicReport.calls.reset();
             expect(component.state.show).toBeFalsy();
         });
 
         it('test applyAndHide dirty with order', () => {
-            spyOn(flux.actions, 'loadReport');
+            spyOn(flux.actions, 'loadDynamicReport');
             component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} fields={fieldsData}/>);
             component.show();
             expect(component.state.dirty).toBeFalsy();
             component.handleSetOrder('sort', 1, true, aField);
             expect(component.state.dirty).toBeTruthy();
             component.applyAndHide();
-            expect(flux.actions.loadReport).toHaveBeenCalled();
-            flux.actions.loadReport.calls.reset();
+            expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
+            flux.actions.loadDynamicReport.calls.reset();
             expect(component.state.show).toBeFalsy();
         });
 
 
         it('test applyAndHide dirty with adds', () => {
-            spyOn(flux.actions, 'loadReport');
+            spyOn(flux.actions, 'loadDynamicReport');
             component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} fields={fieldsData}
                                                                    reportData={reportData}/>);
             component.show();
@@ -261,14 +261,14 @@ describe('SortAndGroup functions', () => {
             component.handleAddField('group', otherField);
             expect(component.state.dirty).toBeTruthy();
             component.applyAndHide();
-            expect(flux.actions.loadReport).toHaveBeenCalled();
-            flux.actions.loadReport.calls.reset();
+            expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
+            flux.actions.loadDynamicReport.calls.reset();
             expect(component.state.show).toBeFalsy();
         });
 
 
         it('test applyAndHide dirty with removes', () => {
-            spyOn(flux.actions, 'loadReport');
+            spyOn(flux.actions, 'loadDynamicReport');
             component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} fields={fieldsData}
                                                                    reportData={_.cloneDeep(reportData)}/>);
             component.show();
@@ -278,30 +278,30 @@ describe('SortAndGroup functions', () => {
             component.handleRemoveField('group', 1);
             expect(component.state.dirty).toBeTruthy();
             component.applyAndHide();
-            expect(flux.actions.loadReport).toHaveBeenCalled();
-            flux.actions.loadReport.calls.reset();
+            expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
+            flux.actions.loadDynamicReport.calls.reset();
             expect(component.state.show).toBeFalsy();
         });
 
         it('test resetAndHide no original', () => {
-            spyOn(flux.actions, 'getFilteredRecords');
+            spyOn(flux.actions, 'loadDynamicReport');
             component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} fields={fieldsData}/>);
             component.show();
             component.resetAndHide();
-            expect(flux.actions.getFilteredRecords).not.toHaveBeenCalled();
-            flux.actions.getFilteredRecords.calls.reset();
+            expect(flux.actions.loadDynamicReport).not.toHaveBeenCalled();
+            flux.actions.loadDynamicReport.calls.reset();
             expect(component.state.show).toBeFalsy();
         });
 
         it('test resetAndHide has original', () => {
-            spyOn(flux.actions, 'loadReport');
+            spyOn(flux.actions, 'loadDynamicReport');
             component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux}
                                                                    fields={fieldsData}
                                                                    reportData={reportData}/>);
             component.show();
             component.resetAndHide();
-            expect(flux.actions.loadReport).toHaveBeenCalled();
-            flux.actions.loadReport.calls.reset();
+            expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
+            flux.actions.loadDynamicReport.calls.reset();
             expect(component.state.show).toBeFalsy();
         });
     });
@@ -480,7 +480,7 @@ describe('SortAndGroup functions', () => {
                                                                    fields={fieldsData}
                                                                    reportData={reportData}/>);
 
-            spyOn(flux.actions, 'loadReport');
+            spyOn(flux.actions, 'loadDynamicReport');
             component = TestUtils.renderIntoDocument(<SortAndGroup flux={flux} fields={fieldsData}/>);
             component.show();
             expect(component.state.dirty).toBeFalsy();
@@ -488,8 +488,8 @@ describe('SortAndGroup functions', () => {
             expect(component.state.dirty).toBeTruthy();
             component.handleSetOrder('group', 0, false, aField);
             component.handleClickOutside();
-            expect(flux.actions.loadReport).toHaveBeenCalled();
-            flux.actions.loadReport.calls.reset();
+            expect(flux.actions.loadDynamicReport).toHaveBeenCalled();
+            flux.actions.loadDynamicReport.calls.reset();
             expect(component.state.show).toBeFalsy();
         });
 
@@ -498,12 +498,12 @@ describe('SortAndGroup functions', () => {
                                                                    fields={fieldsData}
                                                                    reportData={reportData}/>);
 
-            spyOn(flux.actions, 'getFilteredRecords');
+            spyOn(flux.actions, 'loadDynamicReport');
             component.show();
             expect(component.state.dirty).toBeFalsy();
             component.handleClickOutside();
-            expect(flux.actions.getFilteredRecords).not.toHaveBeenCalled();
-            flux.actions.getFilteredRecords.calls.reset();
+            expect(flux.actions.loadDynamicReport).not.toHaveBeenCalled();
+            flux.actions.loadDynamicReport.calls.reset();
             expect(component.state.show).toBeFalsy();
         });
 

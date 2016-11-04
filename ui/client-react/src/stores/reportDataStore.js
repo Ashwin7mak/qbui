@@ -39,7 +39,7 @@ let reportModel = {
         recordsCount: null,
         sortFids: [],
         groupEls: [],
-        originalMetaData: null,
+        originalMetaData: null
     },
 
     /**
@@ -145,7 +145,9 @@ let reportModel = {
         this.model.name = reportMetaData.name;
         this.model.description = reportMetaData.description;
         this.model.fids = reportMetaData.fids ? reportMetaData.fids : [];
+
         // in report's meta data sortlist is returned as an array of sort elements
+        this.setSortList(ReportUtils.getSortListFromObject(reportMetaData.sortList));
         this.setSortFids(reportMetaData.sortList);
         this.setGroupElements(reportMetaData.sortList);
     },
@@ -288,14 +290,6 @@ let reportModel = {
     },
 
     /**
-     * Update count of filtered records
-     * @param recordsCountData
-     */
-    updateFilteredRecordsCount(count) {
-        this.model.filteredRecordsCount = parseInt(count);
-    },
-
-    /**
      * Update the filtered Records from response.
      * @param recordData
      */
@@ -305,13 +299,14 @@ let reportModel = {
             this.model.filteredRecords = recordData.groups.gridData;
             this.model.filteredRecordsCount = recordData.groups.totalRows;
             this.model.groupFields = recordData.groups.fields;
+            this.model.hasGrouping = recordData.groups.hasGrouping;
         } else {
             this.model.columns = this.getReportColumns(recordData.fields);
             this.model.filteredRecords = this.getReportData(recordData.fields, recordData.records);
             this.model.filteredRecordsCount = recordData.records.length;
             this.model.groupFields = null;
+            this.model.hasGrouping = false;
         }
-
     },
 
     /**
@@ -335,6 +330,14 @@ let reportModel = {
                 }
             }
         }
+    },
+
+    /**
+     * set the sortList order
+     * @param sortList
+     */
+    setSortList(sortList) {
+        this.model.sortList = sortList;
     },
 
     /**
@@ -513,8 +516,6 @@ let ReportDataStore = Fluxxor.createStore({
             actions.LOAD_RECORDS, this.onLoadRecords,
             actions.LOAD_RECORDS_SUCCESS, this.onLoadRecordsSuccess,
             actions.LOAD_RECORDS_FAILED, this.onLoadRecordsFailed,
-            actions.LOAD_FILTERED_RECORDS_COUNT_SUCCESS, this.onFilteredRecordsCountSuccess,
-            actions.LOAD_FILTERED_RECORDS_COUNT_FAILED, this.onFilteredRecordsCountFailed,
             actions.FILTER_SELECTIONS_PENDING, this.onFilterSelectionsPending,
             actions.SHOW_FACET_MENU, this.onShowFacetMenu,
             actions.HIDE_FACET_MENU, this.onHideFacetMenu,
@@ -593,11 +594,8 @@ let ReportDataStore = Fluxxor.createStore({
         reportModel.setOriginalMetaData(response.metaData);
         reportModel.setMetaData(response.metaData);
         reportModel.setRecordData(response.recordData);
-        if (response.sortList !== undefined) {
-            reportModel.setSortFids(response.sortList);
-            reportModel.setGroupElements(response.sortList);
-        }
         reportModel.setFacetData(response.recordData);
+        reportModel.updateRecordsCount(response.recordCount);
 
         this.emit('change');
     },
@@ -610,10 +608,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.appId = payload.appId;
         this.tblId = payload.tblId;
         this.rptId = payload.rptId;
-        this.selections = payload.filter.selections;
-        this.facetExpression = payload.filter.facet;
-        this.searchStringForFiltering = payload.filter.search;
 
+        this.selections = payload.filter ? payload.filter.selections : '';
+        this.facetExpression = payload.filter ? payload.filter.facet : '';
+        this.searchStringForFiltering = payload.filter ? payload.filter.search : '';
+
+        this.reportModel.setSortList(payload.sortList);
         this.reportModel.setSortFids(payload.sortList);
         this.reportModel.setGroupElements(payload.sortList);
 
@@ -634,7 +634,12 @@ let ReportDataStore = Fluxxor.createStore({
         this.editingId = undefined;
 
         this.error = false;
+
         this.reportModel.updateFilteredRecords(response.recordData);
+        this.reportModel.setMetaData(response.metaData);
+
+        //  Need to update record count cause may be filtering
+        this.reportModel.updateRecordsCount(response.recordCount);
 
         this.emit('change');
     },
@@ -675,7 +680,7 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadReportRecordsCountSuccess(response) {
         this.countingTotalRecords = false;
-        this.reportModel.updateRecordsCount(response.body);
+        this.reportModel.updateRecordsCount(response.recordCount);
         this.emit('change');
     },
 
@@ -846,10 +851,9 @@ let ReportDataStore = Fluxxor.createStore({
     /**
      * removes the record with the matching value in the keyfield from the
      * models filteredRecord list
-     * @param id
+     * @param recId
      */
     onDeleteReportRecordSuccess(recId) {
-        const model = this.reportModel.get();
         this.reportModel.deleteRecordsFromLists(recId);
         this.emit('change');
     },
@@ -876,7 +880,6 @@ let ReportDataStore = Fluxxor.createStore({
      * @param recIds
      */
     onDeleteReportRecordBulkSuccess(recIds) {
-        const model = this.reportModel.get();
         for (var i = 0; i < recIds.length; i++) {
             this.reportModel.deleteRecordsFromLists(recIds[i]);
         }
@@ -947,7 +950,6 @@ let ReportDataStore = Fluxxor.createStore({
     /**
      * Cancels an record edit
      * the id and index of a record to render in inline edit id is cleared
-     * @param payload - none
      */
     onClearEdit() {
         this.editingIndex = undefined;

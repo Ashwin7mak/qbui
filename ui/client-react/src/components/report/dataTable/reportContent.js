@@ -36,7 +36,7 @@ export let ReportContent = React.createClass({
         flux.actions.openingReportRow(recId);
 
         //create the link we want to send the user to and then send them on their way
-        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         if (this.props.router) {
             this.props.router.push(link);
         }
@@ -179,7 +179,7 @@ export let ReportContent = React.createClass({
                 });
             }
         }
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes);
+        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
     },
 
     /**

@@ -6,8 +6,6 @@ import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
-var logger = new Logger();
-
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
 //  because the core application code has no logic implemented to handle a rejected
@@ -15,6 +13,7 @@ var logger = new Logger();
 //  code.  Promises are returned only to support our unit tests, which are expected
 //  to implement the appropriate handlers.
 Promise.onPossiblyUnhandledRejection(function(err) {
+    let logger = new Logger();
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
@@ -25,7 +24,7 @@ let appsModel = {
         if (apps) {
             //  add a link element to each individual app
             apps.forEach((app) => {
-                app.link = '/app/' + app.id;
+                app.link = '/qbase/app/' + app.id;
             });
         }
         return apps;
@@ -33,9 +32,8 @@ let appsModel = {
 };
 
 let appsActions = {
-
     loadApps(withTables) {
-
+        let logger = new Logger();
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             this.dispatch(actions.LOAD_APPS);
@@ -53,17 +51,21 @@ let appsActions = {
                         //  TODO: potential for a large volume of async calls...
                         //  TODO: move the loop to the NODE layer.
                         let promises = [];
-                        response.data.forEach((app) => {
-                            promises.push(appService.getApp(app.id));
-                        });
+                        if (response.data && Array.isArray(response.data)) {
+                            response.data.forEach((app) => {
+                                promises.push(appService.getApp(app.id));
+                            });
+                        }
 
                         Promise.all(promises).then(
                             (apps) => {
                                 //  build of list that contains the app data
                                 let appList = [];
-                                apps.forEach((app) => {
-                                    appList.push(app.data);
-                                });
+                                if (apps && Array.isArray(apps)) {
+                                    apps.forEach((app) => {
+                                        appList.push(app.data);
+                                    });
+                                }
 
                                 var model = appsModel.set(appList);
                                 this.dispatch(actions.LOAD_APPS_SUCCESS, model);
@@ -76,8 +78,8 @@ let appsActions = {
                                 reject();
                             }
                         ).catch((ex) => {
+                            // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                             logger.logException(ex);
-                            this.dispatch(actions.LOAD_APPS_FAILED, 500);
                             reject();
                         });
 
@@ -94,8 +96,8 @@ let appsActions = {
                     reject();
                 }
             ).catch(ex => {
+                // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                 logger.logException(ex);
-                this.dispatch(actions.LOAD_APPS_FAILED, 500);
                 reject();
             });
         });

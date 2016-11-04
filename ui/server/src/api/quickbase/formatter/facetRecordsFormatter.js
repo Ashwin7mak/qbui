@@ -122,8 +122,11 @@
 
                         //  Basic information about the facet...the fid, name and data type
                         facet.id = facetRecords[0][0].id;
-                        facet.name = fieldsMap[facet.id].name;
-                        facet.type = fieldsMap[facet.id].datatypeAttributes.type;
+
+                        if (fieldsMap[facet.id]) {
+                            facet.name = fieldsMap[facet.id].name;
+                            facet.type = fieldsMap[facet.id].datatypeAttributes.type;
+                        }
 
                         // check for any facet business rule errors
                         var facetErrorCode = checkForFacetErrorCode(facetRecords);

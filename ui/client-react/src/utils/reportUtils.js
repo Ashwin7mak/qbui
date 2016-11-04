@@ -1,10 +1,12 @@
 /**
  * Static class of utility functions related to reports meta data
  */
-const listDelimiter = ".";
-const groupDelimiter = ":";
+
 import constants from '../../../common/src/constants';
 import _ from 'lodash';
+
+const listDelimiter = constants.REQUEST_PARAMETER.LIST_DELIMITER;
+const groupDelimiter = constants.REQUEST_PARAMETER.GROUP_DELIMITER;
 
 class ReportUtils {
 
@@ -22,8 +24,8 @@ class ReportUtils {
      * Given arrays of sort fids and group elements combines them into a sortList type string.
      * The grouping fids always go before sort fids
      * @param sortFids array of sort fids ex: [3]
-     * @param groupEls array of group elements ex: [-6:V]
-     * @returns sortList string ex: [-6:V.3]
+     * @param groupEls array of group elements ex: [-6:EQUALS]
+     * @returns sortList string ex: [-6:EQUALS.3]
      */
     static getGListString(sortFids, groupEls) {
         let groupString = ReportUtils.getListString(groupEls);
@@ -108,7 +110,7 @@ class ReportUtils {
     }
     /**
      * Given a sortList string or array pull out sort fids
-     * @param sortList -- sortList could be a string like 6.7:V.-10 or an array ["6", "7:V", "-10"]
+     * @param sortList -- sortList could be a string like 6.7:EQUALS.-10 or an array ["6", "7:EQUALS", "-10"]
      * @returns array of sort fids ( ignores all grouped fids)
      */
     static getSortFidsOnly(sortList) {
@@ -123,7 +125,7 @@ class ReportUtils {
                     if (sortEl.length === 1) {
                         sortFids.push(sortEl[0]);
                     }
-                } else if (sort && sort.groupType === null) {
+                } else if (sort && !sort.groupType) {
                     sortFids.push(sort.sortOrder === constants.SORT_ORDER.DESC ? '-' + sort.fieldId : sort.fieldId);
                 }
             });
@@ -132,7 +134,7 @@ class ReportUtils {
     }
     /**
      * Given a sortList string or array pull out group fids
-     * @param sortList -- sortList could be a string like 6.7:V.-10 or an array ["6", "7:V", "-10"] or an array of sort objects like [{fieldId: 7, sortOrder: "asc", groupType:"V"}]
+     * @param sortList -- sortList could be a string like 6.7:EQUALS.-10 or an array ["6", "7:EQUALS", "-10"] or an array of sort objects like [{fieldId: 7, sortOrder: "asc", groupType:"EQUALS"}]
      * @returns array of group elements ( ignores all sort fids)
      */
     static getGroupElements(sortList) {
@@ -220,6 +222,26 @@ class ReportUtils {
     }
 
     /**
+     * Take as input a list of sort list objects and return as a string value, with each entry
+     * separated by the list delimiter(.).
+     *
+     * Example input is an array of sort objects like [{fieldId: 7, sortOrder: "asc", groupType:"EQUALS"}]
+     *
+     * @param sortListObj
+     * @returns {*}
+     */
+    static getSortListFromObject(sortListObj) {
+        if (Array.isArray(sortListObj)) {
+            let sortList = [];
+            sortListObj.forEach((sortEl) => {
+                sortList.push(ReportUtils.getGroupString(sortEl.fieldId, sortEl.sortOrder === constants.SORT_ORDER.ASC, sortEl.groupType));
+            });
+            return ReportUtils.getListString(sortList);
+        }
+        return sortListObj;
+    }
+
+    /*
      * find record in grouped records report
      *
      * @param node node in grouped record tree
@@ -237,7 +259,7 @@ class ReportUtils {
         if (node.children) {
             let result = null;
 
-            for (let i = 0;result === null && i < node.children.length;i++) {
+            for (let i = 0; result === null && i < node.children.length; i++) {
                 result = ReportUtils.findGroupedRecord(node.children[i], recId, keyName);
             }
             return result;
@@ -304,4 +326,5 @@ class ReportUtils {
 
 ReportUtils.listDelimiter = listDelimiter;
 ReportUtils.groupDelimiter = groupDelimiter;
+
 export default ReportUtils;
