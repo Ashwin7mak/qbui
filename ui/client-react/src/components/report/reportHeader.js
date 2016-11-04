@@ -77,19 +77,19 @@ var ReportHeader = React.createClass({
         const trimmedSearch = StringUtils.trim(searchString);
 
         //  only generate a report if search value differs from prior search value
-        if (trimmedSearch !== this.props.reportData.searchStringForFiltering) {
-            const filter = FilterUtils.getFilter(trimmedSearch, selections, this.facetFields);
+        //if (trimmedSearch !== this.props.reportData.searchStringForFiltering) {
+        const filter = FilterUtils.getFilter(trimmedSearch, selections, this.facetFields);
 
-            let queryParams = {};
-            queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
-            queryParams[query.OFFSET_PARAM] = constants.PAGE.DEFAULT_OFFSET;
-            queryParams[query.NUMROWS_PARAM] = constants.PAGE.DEFAULT_NUM_ROWS;
+        let queryParams = {};
+        queryParams[query.SORT_LIST_PARAM] = ReportUtils.getGListString(this.props.reportData.data.sortFids, this.props.reportData.data.groupEls);
+        queryParams[query.OFFSET_PARAM] = constants.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = constants.PAGE.DEFAULT_NUM_ROWS;
 
-            this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
-                this.props.routeParams.tblId,
-                typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
-                true, filter, queryParams);
-        }
+        this.getFlux().actions.loadDynamicReport(this.props.selectedAppId,
+            this.props.routeParams.tblId,
+            typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
+            true, filter, queryParams);
+        //}
     },
 
     handleSearchChange(e) {
