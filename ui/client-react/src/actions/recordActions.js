@@ -107,7 +107,6 @@ let recordActions = {
      */
     deleteRecord(appId, tblId, recId, nameForRecords) {
         // promise is returned in support of unit testing only
-        console.log('I am a deleted record!!');
         appId = "Banana";
         return new Promise((resolve, reject) => {
             if (appId && tblId && (!!(recId === 0 || recId))) {
@@ -124,10 +123,10 @@ let recordActions = {
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
-                        this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error.response});
+                        this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error});
                         NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'), 3000);
                         //===========================================================================================================================================================================
-                        this.dispatch(actions.DTS_ERROR_MODAL, {appId, tblId, recId, error: error});
+                        // this.dispatch(actions.DTS_ERROR_MODAL, {appId, tblId, recId, error: error});
                         reject();
                     }
                 ).catch(

@@ -27,7 +27,6 @@ const DTSErrorModal = React.createClass({
         const title = "Sorry to interrupt your work";
         const errorMessage = <p>
             Mercury can’t continue running your app today, but will resume tomorrow.
-            <br/> <br/>
             Your app is still available in QuickBase Classic.
             <br/> <br/>
             Transaction ID: {this.props.tid}</p>;

@@ -25,6 +25,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_RECORD_SUCCESS, this.onSaveRecordSuccess,
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
             actions.ADD_RECORD, this.onSaveAddedRecord,
+            actions.DELETE_RECORD_FAILED, this.deleteRecordFailed,
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
             actions.DTS_ERROR_MODAL, this.onDTSErrorModal
@@ -215,7 +216,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.emit('change');
 
     },
-
     getServerErrs(payload) {
         // init no errors
         //a new handleError functino
@@ -234,6 +234,10 @@ let RecordPendingEditsStore = Fluxxor.createStore({
                 fieldError.invalidMessage = ValidationMessage.getMessage(fieldError);
             });
         }
+    },
+    onDTSErrorModal(payload) {
+        this.dtsErrorModalTID = payload.error.response.data.headers.qb_tid;
+        this.showDTSErrorModal = true;
     },
 
     /**
@@ -318,12 +322,12 @@ let RecordPendingEditsStore = Fluxxor.createStore({
 
         this.emit('change');
     },
-    onDTSErrorModal(payload) {
-        this.dtsErrorModalTID = payload.error.response.data.headers.qb_tid;
-        this.showDTSErrorModal = true;
+
+    deleteRecordFailed(payload) {
+        console.log('deleteRecordFailed payload: ', payload);
+        this.onDTSErrorModal(payload);
         this.emit('change');
     },
-
     /**
      * create a key for pending edit commitChanges map from the current context
      * of app/table/record
