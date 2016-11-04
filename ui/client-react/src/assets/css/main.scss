@@ -42,6 +42,10 @@ p, .p {
   font-weight: 400;
 }
 
+a {
+  cursor: pointer;
+}
+
 .button-text {
   font-size: $font-size-button;
   font-weight: 700;
@@ -55,4 +59,9 @@ p, .p {
 @include placeholder {
   font-style: italic;
   font-size: $font-size-placeholder;
+}
+
+//firefox marks email & url input type fields invalid before submit, not what xd wants
+input:-moz-ui-invalid {
+  box-shadow: none;
 }

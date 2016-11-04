@@ -124,10 +124,6 @@
                 });
             });
 
-            afterAll(function(done) {
-                e2eBase.cleanup(done);
-            });
-
             /**
              * Function that will verify the filtered rows are contained in actual record list.
              * @param facets Group
@@ -455,13 +451,6 @@
                     });
                 });
             });
-        });
-
-        /**
-         * After all tests are done, run the cleanup function in the base class
-         */
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
         });
     });
 }());

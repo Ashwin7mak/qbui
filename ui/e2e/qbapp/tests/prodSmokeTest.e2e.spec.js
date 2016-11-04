@@ -62,7 +62,7 @@
             });
 
             // Log in to the new stack env and load the List All report
-            browser.get(NEW_STACK_PROD_REALM + '/app/' + CURRENT_STACK_APPID + '/table/' + CURRENT_STACK_TABLEID + '/report/1');
+            browser.get(NEW_STACK_PROD_REALM + '/qbase/app/' + CURRENT_STACK_APPID + '/table/' + CURRENT_STACK_TABLEID + '/report/1');
             done();
         });
 

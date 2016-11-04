@@ -202,7 +202,7 @@
                 recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(report) {
                     var r = JSON.parse(report.body);
                     //Execute report against 'resultComponents' endpoint.
-                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/reportComponents?format=' + FORMAT, consts.GET).then(function(reportResults) {
+                    recordBase.apiBase.executeRequest(reportEndpoint + r.id + '/results?format=' + FORMAT, consts.GET).then(function(reportResults) {
                         var results = JSON.parse(reportResults.body);
                         //Verify records
                         verifyRecords(results);

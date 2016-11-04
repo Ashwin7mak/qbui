@@ -36,14 +36,15 @@ export let Nav = React.createClass({
             pendEdits: flux.store('RecordPendingEditsStore').getState(),
             reportData: flux.store('ReportDataStore').getState(),
             fields: flux.store('FieldsStore').getState(),
-            form: flux.store('FormStore').getState()
+            form: flux.store('FormStore').getState(),
+            reportSearchData: flux.store('ReportDataSearchStore').getState(),
         };
     },
 
     getTopGlobalActions() {
         const actions = [
-            {msg:'globalActions.user', link:'/user', icon:'user'},
-            {msg:'globalActions.help', link:'/help', icon:'help'}
+            {msg:'globalActions.user', link:'/qbase/user', icon:'user'},
+            {msg:'globalActions.help', link:'/qbase/help', icon:'help'}
         ];
         return (<GlobalActions actions={actions}
                                position={"top"}
@@ -52,7 +53,7 @@ export let Nav = React.createClass({
 
     getLeftGlobalActions() {
         const actions = [
-            {msg:'globalActions.user', link:'/user', icon:'user'}
+            {msg:'globalActions.user', link:'/qbase/user', icon:'user'}
         ];
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
@@ -207,6 +208,7 @@ export let Nav = React.createClass({
                             pendEdits:this.state.pendEdits,
                             fields: this.state.fields,
                             form: this.state.form,
+                            reportSearchData: this.state.reportSearchData,
                             selectedApp: this.getSelectedApp(),
                             selectedTable: this.getSelectedTable(),
                             scrollingReport: this.state.nav.scrollingReport,

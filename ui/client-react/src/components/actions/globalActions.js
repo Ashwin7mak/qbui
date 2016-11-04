@@ -74,7 +74,7 @@ let GlobalActions = React.createClass({
                 </Button>
 
                 <Dropdown.Menu>
-                    <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage
+                    <MenuItem href="/qbase/user" eventKey={eventKeyIdx++}><I18nMessage
                         message={'header.menu.preferences'}/></MenuItem>
                     <MenuItem divider/>
 

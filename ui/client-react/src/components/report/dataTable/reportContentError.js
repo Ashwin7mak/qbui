@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import {I18nMessage} from '../../../utils/i18nMessage';
+import QbIcon from '../../qbIcon/qbIcon';
 
 import _ from 'lodash';
 
@@ -102,6 +103,20 @@ const ReportContentError = React.createClass({
         return (
             <div className="reportContentError">
                 <h3><I18nMessage message="errors.errorLoadingReport.message" /></h3>
+
+                <div className="additionalHelp">
+                    <h5>
+                        <a className="helpLink" href={`mailto:${supportEmail}?${supportEmailSubject}&${this.createSupportEmailBody()}`}>
+                            <span className="iconContainer">
+                                <QbIcon icon="mail" />
+                            </span>
+                            <span className="helpText">
+                                <I18nMessage message="errors.errorLoadingReport.contactSupport"/>
+                            </span>
+                        </a>
+                    </h5>
+                </div>
+
                 <p><I18nMessage message="errors.errorLoadingReport.helpText" /></p>
 
                 <img
@@ -111,14 +126,6 @@ const ReportContentError = React.createClass({
                     onKeyDown={this.toggleErrorGraphic}
                     tabIndex="1"
                 />
-
-                <div className="additionalHelp">
-                    <h5>
-                        <a href={`mailto:${supportEmail}?${supportEmailSubject}&${this.createSupportEmailBody()}`}>
-                            <I18nMessage message="errors.errorLoadingReport.contactSupport"/>
-                        </a>
-                    </h5>
-                </div>
 
                 <button className="btn btn-link toggleSupportInfoBtn" onClick={this.toggleSupportContent}>{showAdditionalInfoText}</button>
                 <div className="additionalInfo">

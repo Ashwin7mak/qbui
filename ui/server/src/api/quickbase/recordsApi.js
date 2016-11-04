@@ -44,7 +44,6 @@
     let _ = require('lodash');
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');
-    let dataErrs = require('../../../../common/src/dataEntryErrorCodes');
     var httpStatusCodes = require('../../constants/httpStatusCodes');
     var ValidationUtils = require('../../../../common/src/validationUtils');
 
@@ -66,7 +65,6 @@
         var requestHelper = require('./requestHelper')(config);
         let fieldsApi = require('./fieldsApi')(config);
         let routeHelper = require('../../routes/routeHelper');
-        var groupFormatter = require('./formatter/groupFormatter');
         var recordFormatter = require('./formatter/recordFormatter')();
         var constants = require('../../../../common/src/constants');
         var url = require('url');
@@ -158,9 +156,8 @@
 
                     Promise.all(fetchRequests).then(
                         function(response) {
-                            var responseObject = {};
-
-                            var records = jsonBigNum.parse(response[0].body);
+                            let responseObject = {};
+                            let records = jsonBigNum.parse(response[0].body);
 
                             //  return raw undecorated record values due to flag format=raw
                             if (requestHelper.isRawFormat(req)) {
@@ -168,60 +165,27 @@
                             } else {
                                 //  build empty response object array elements to return
                                 responseObject[RECORDS] = [];
-                                responseObject[GROUPS] = [];
                                 responseObject[FILTERED_RECORDS_COUNT] = null;
 
-                                //
-                                //  Just the home page currently calls report/result endpoint, which has the refactored
-                                //  json result that includes grouping.   Client side filtering, grouping and sorting
-                                //  still use the records endpoint as report/results does not yet accept filtering
-                                //  parameters.
-                                if (records.type === constants.RECORD_TYPE.GROUP) {
-                                    //  format the records using the server side grouping results
-                                    responseObject[FIELDS] = fieldsApi.removeUnusedFields(records.groups[0].records[0], JSON.parse(response[1].body));
-                                    responseObject[GROUPS] = groupFormatter.coreGroup(req, responseObject[FIELDS], records);
-                                } else {
-                                    //  NEED to support records api and reports api json output, so output may be
-                                    //  an array or an object...this is temporary and will get removed once all
-                                    //  report endpoint processing is moved into reportsApi
-                                    if (!Array.isArray(records)) {
-                                        records = records.records;
-                                    }
+                                let groupedRecords = {};
+                                if (requestHelper.isDisplayFormat(req)) {
+                                    responseObject[FIELDS] = fieldsApi.removeUnusedFields(records[0], JSON.parse(response[1].body));
 
-                                    if (requestHelper.isDisplayFormat(req)) {
-                                        responseObject[FIELDS] = fieldsApi.removeUnusedFields(records[0], JSON.parse(response[1].body));
+                                    //  initialize perfLogger
+                                    let perfLog = perfLogger.getInstance();
+                                    perfLog.init("RecordsApi..Format Display Records", {req: req, idsOnly: true});
 
-                                        //  initialize perfLogger
-                                        let perfLog = perfLogger.getInstance();
-                                        perfLog.init("RecordsApi..Format Display Records", {req: req, idsOnly: true});
-
-                                        records = recordFormatter.formatRecords(records, responseObject[FIELDS]);
-                                        perfLog.log();
-
-                                        //  re-init perfLogger
-                                        perfLog.init("Build GroupList");
-
-                                        //  REMOVE once all grouping is no longer associated with a records
-                                        //  api request.  Want grouping to be a report centric operation, so only
-                                        //  reportsApi should know about it...
-                                        //
-                                        //  NOTE: client side grouping is dependent on records being formatted for display
-                                        var groupedRecords = groupFormatter.group(req, responseObject[FIELDS], records);
-                                        perfLog.log();
-                                    }
-
-                                    //  if we are grouping our results, no need to send the flat result set.
-                                    if (groupedRecords && groupedRecords.hasGrouping === true) {
-                                        responseObject[GROUPS] = groupedRecords;
-                                    } else {
-                                        responseObject[RECORDS] = records;
-                                    }
+                                    records = recordFormatter.formatRecords(records, responseObject[FIELDS]);
+                                    perfLog.log();
+                                    //  NOTE: grouping is reporting concept and should not called from this endpoint as
+                                    //  output with multiple pages will not page correctly.
                                 }
 
-                                if (response[2]) {
-                                    responseObject[FILTERED_RECORDS_COUNT] = response[2].body;
-                                }
+                                responseObject[RECORDS] = records;
+                            }
 
+                            if (response[2]) {
+                                responseObject[FILTERED_RECORDS_COUNT] = response[2].body;
                             }
 
                             resolve(responseObject);
@@ -243,93 +207,39 @@
              * @returns Promise
              */
             fetchRecords: function(req) {
-                // TODO: ENFORCE a row limit on all requests.  Check for offset and numOfRows query parameters and if both
-                // are not supplied OR invalid, will set to default values.
-                //
-                // TODO: if invalid parameters, consider throwing an exception vs setting to defaults
-                //
-                //let rowLimitsValid = requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET) &&
-                //    requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS);
-                //
-                //if (rowLimitsValid) {
-                //    //  we have row limit parameters..now ensure they are integers
-                //    let reqOffset = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.OFFSET);
-                //    let reqNumRows = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.NUM_ROWS);
-                //    rowLimitsValid = isInteger(reqOffset) && isInteger(reqNumRows);
-                //
-                //    //  if the max number of records to query exceeds limit, throw exception
-                //    if (rowLimitsValid) {
-                //        // TODO: look at getting smarter about max row limit...the number of columns on the report should also be considered..
-                //        if (parseInt(reqNumRows) > constants.PAGE.MAX_NUM_ROWS) {
-                //            let errorMsg = constants.REQUEST_PARAMETER.NUM_ROWS + '=' + reqNumRows + ' request parameter is greater than maximum request limit of ' + constants.PAGE.MAX_NUM_ROWS;
-                //            throw errorMsg;
-                //        }
-                //    }
-                //}
-                //
-                ////  if we don't have valid row limits, then add the default offset and max number of rows.
-                //if (!rowLimitsValid) {
-                //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.OFFSET, constants.PAGE.DEFAULT_OFFSET);
-                //    requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.NUM_ROWS, constants.PAGE.DEFAULT_NUM_ROWS);
-                //}
 
-                let opts = requestHelper.setOptions(req);
+                let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 //  get the request parameters
                 let search = url.parse(req.url).search;
                 let query = url.parse(opts.url, true).query;
 
-                if (routeHelper.isRecordsRoute(req.url)) {
-                    if (req.params.recordId) {
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url, req.params.recordId);
-                    } else {
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
-                    }
+                if (req.params.recordId) {
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url, req.params.recordId);
                 } else {
-                    //  if not a records route, check to see if it is a request for reportComponents or report home page
-                    /*eslint no-lonely-if:0 */
-                    if (routeHelper.isReportComponentRoute(req.url)) {
-                        //  For a reportComponents endpoint request, if sorting, use the records endpoint, with the
-                        //  parameter list to retrieve the data; otherwise use the report/results endpoint.  This is
-                        //  necessary as the reports endpoint does not accept request parameters like sortlist.
-                        if (search && search.toLowerCase().indexOf(constants.REQUEST_PARAMETER.SORT_LIST.toLowerCase()) !== -1) {
-                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
-                        } else {
-                            opts.url = requestHelper.getRequestJavaHost() + routeHelper.getReportsResultsRoute(req.url);
-                        }
-                    } else {
-                        //  not an expected route; set to return all records for the given table
-                        opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
-                    }
+                    opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsRoute(req.url);
                 }
 
                 //  any request parameters to append?
                 if (search) {
                     opts.url += search;
+                    //  remove the format display option as that's a node only parameter
+                    requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.FORMAT);
                 }
 
-                // TEMPORARY to get grouping to work with core changes...this removes the grouping tags
-                // AND paging tags from the opts.url rest request so that core doesn't group.  Grouping
-                // is still done in the node layer but since paging is in place, complex grouping will fail.
-                // Given the report meta data doesn't have default grouping on prod/pre-prod, and the UI
-                // only groups using equals, this should be fine for the interim until a complete solution
-                // is implemented.
-                if (query && query.hasOwnProperty(constants.REQUEST_PARAMETER.SORT_LIST)) {
-                    let sList = query[constants.REQUEST_PARAMETER.SORT_LIST];
-                    if (sList) {
-                        let sListArr = sList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
-
-                        let sortList = [];
-                        sListArr.forEach((sort) => {
-                            var sortEl = sort.split(constants.REQUEST_PARAMETER.GROUP_DELIMITER);
-                            sortList.push(sortEl[0]);
-                        });
-                        if (sortList.length > 0) {
-                            requestHelper.removeRequestParameter(opts, constants.REQUEST_PARAMETER.SORT_LIST);
-                            let sortListStr = sortList.join(constants.REQUEST_PARAMETER.LIST_DELIMITER);
-                            opts.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=' + sortListStr;
-                        }
+                // Ensure the offset and numRows request parameter is set to either a supplied value or the defaults if invalid or not supplied
+                let offset = requestHelper.getQueryParameterValue(opts, constants.REQUEST_PARAMETER.OFFSET);
+                let numRows = requestHelper.getQueryParameterValue(opts, constants.REQUEST_PARAMETER.NUM_ROWS);
+                if (offset === null || numRows === null || !Number.isInteger(+offset) || !Number.isInteger(+numRows)) {
+                    offset = constants.PAGE.DEFAULT_OFFSET;
+                    numRows = constants.PAGE.DEFAULT_NUM_ROWS;
+                } else {
+                    //  make sure the number of rows requested does not exceed the maximum allowed row fetch limit.
+                    /*eslint no-lonely-if:0*/
+                    if (numRows > constants.PAGE.MAX_NUM_ROWS) {
+                        log.warn("Record request number of rows exceeds allowed limit.  Setting to max number of row limit of " + constants.PAGE.MAX_NUM_ROWS);
+                        numRows = constants.PAGE.MAX_NUM_ROWS;
                     }
                 }
 
@@ -340,7 +250,7 @@
              * Fetch the count of all records that match a user query
              */
             fetchCountForRecords: function(req) {
-                let opts = requestHelper.setOptions(req);
+                let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 opts.url = requestHelper.getRequestJavaHost() + routeHelper.getRecordsCountRoute(req.url);

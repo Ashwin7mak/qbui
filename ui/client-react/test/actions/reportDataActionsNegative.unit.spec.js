@@ -10,7 +10,6 @@ let errorObject = {
     message: errorMessage,
     status: errorStatus
 };
-
 let exStatus = 500;
 
 let inputs = {
@@ -21,6 +20,11 @@ let inputs = {
     filter: {
         facet: 'abc',
         search: ''
+    },
+    queryParams: {
+        offset: constants.PAGE.DEFAULT_OFFSET,
+        numRows: constants.PAGE.DEFAULT_NUM_ROWS,
+        sortList: ''
     }
 };
 
@@ -32,15 +36,15 @@ let filterReportInputs = {
         facet: 'abc',
         search: ''
     },
-    offset: constants.PAGE.DEFAULT_OFFSET,
-    numRows: constants.PAGE.DEFAULT_NUM_ROWS,
-    sortList: ""
+    offset: inputs.queryParams.offset,
+    numRows: inputs.queryParams.numRows,
+    sortList: inputs.queryParams.sortList
 };
 
 let responseReportData = {
     data: {
         name: 'name',
-        sortList: ['2', '1:V']
+        sortList: ['2', '1:EQUALS']
     }
 };
 let responseResultData = {
@@ -60,84 +64,54 @@ let mockPromiseSuccess = function(expectedResult) {
 };
 let mockPromiseError = function() {
     var p = Promise.defer();
-    p.reject({response:{message: errorMessage, status: errorStatus}});
+    p.reject({response:{message:'someError', status:errorStatus}});
     return p.promise;
 };
 let mockPromiseException = function() {
-    throw new Error("error");
+    var p = Promise.defer();
+    p.reject({response: "string".badFunction()});
+    return p.promise;
 };
 
 let stores = {};
 let flux = new Fluxxor.Flux(stores);
 flux.addActions(reportDataActions);
 
+class mockLogger {
+    constructor() {}
+    logException() {}
+    debug() {}
+    warn() {}
+    error() {}
+    parseAndLogError() {}
+}
 
-describe('Report Data Actions -- Filter report Negative', () => {
+describe('Report Data Actions -- load a dynamic report that throws errors/exceptions', () => {
     'use strict';
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-
+        spyOn(mockLogger.prototype, 'logException').and.callThrough();
+        reportDataActions.__ResetDependency__('ReportService');
+        reportDataActions.__Rewire__('Logger', mockLogger);
     });
     afterEach(() => {
-        reportDataActions.__ResetDependency__('ReportService');
-        reportDataActions.__ResetDependency__('RecordService');
+        reportDataActions.__ResetDependency__('Logger');
     });
 
     it('test filter report fail on resolve facet', (done) => {
         class mockReportService {
             constructor() { }
-            getReport() {
-                return mockPromiseSuccess(responseReportData);
-            }
             parseFacetExpression() {
                 return mockPromiseError();
             }
-        }
-        class mockRecordService {
-            constructor() {
-            }
-            getRecords() {
-                return mockPromiseSuccess(responseResultData);
+            getDynamicReportResults() {
+                return mockProcessSuccess(responseResultData);
             }
         }
+
         reportDataActions.__Rewire__('ReportService', mockReportService);
-        reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted}, inputs.filter).then(
-            () => {
-                expect(true).toBe(false);
-                done();
-            },
-            () => {
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, jasmine.any(Object)]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, {response: errorObject}]);
-                done();
-            }
-        );
-    });
-
-    it('test filter report fail on get records', (done) => {
-
-        class mockReportService {
-            constructor() { }
-            getReport() {
-                return mockPromiseSuccess(responseReportData);
-            }
-            parseFacetExpression() {
-                return mockPromiseSuccess(responseResultQuery);
-            }
-        }
-        class mockRecordService {
-            constructor() {
-            }
-            getRecords() {
-                return mockPromiseError();
-            }
-        }
-        reportDataActions.__Rewire__('ReportService', mockReportService);
-        reportDataActions.__Rewire__('RecordService', mockRecordService);
-
-        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted, offset:constants.PAGE.DEFAULT_OFFSET, numRows:constants.PAGE.DEFAULT_NUM_ROWS}, inputs.filter, {}).then(
+        flux.actions.loadDynamicReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, inputs.queryParams).then(
             () => {
                 expect(true).toBe(false);
                 done();
@@ -150,33 +124,76 @@ describe('Report Data Actions -- Filter report Negative', () => {
         );
     });
 
-    it('test filter report exception on get records', (done) => {
+    it('test filter report error on get results', (done) => {
         class mockReportService {
             constructor() { }
-            getReport() {
-                return mockPromiseSuccess(responseReportData);
-            }
             parseFacetExpression() {
                 return mockPromiseSuccess(responseResultQuery);
             }
-        }
-        class mockRecordService {
-            constructor() {
+            getDynamicReportResults() {
+                return mockPromiseError();
             }
-            getRecords() {
+        }
+
+        reportDataActions.__Rewire__('ReportService', mockReportService);
+        flux.actions.loadDynamicReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, inputs.queryParams).then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, {response: errorObject}]);
+                done();
+            }
+        );
+    });
+
+    it('test filter report exception on get results', (done) => {
+        class mockReportService {
+            constructor() { }
+            parseFacetExpression() {
+                return mockPromiseSuccess(responseResultQuery);
+            }
+            getDynamicReportResults() {
                 return mockPromiseException();
             }
         }
+
         reportDataActions.__Rewire__('ReportService', mockReportService);
-        reportDataActions.__Rewire__('RecordService', mockRecordService);
-        flux.actions.getFilteredRecords(inputs.appId, inputs.tblId, inputs.rptId, {format:inputs.formatted}, inputs.filter).then(
+        flux.actions.loadDynamicReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, inputs.queryParams).then(
             () => {
                 expect(true).toBe(false);
                 done();
             },
             () => {
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_RECORDS_FAILED, exStatus]);
+                expect(mockLogger.prototype.logException).toHaveBeenCalled();
+                done();
+            }
+        );
+    });
+
+    it('test filter report exception on facet expression', (done) => {
+        class mockReportService {
+            constructor() { }
+            parseFacetExpression() {
+                return mockPromiseSuccess(null);
+            }
+            getDynamicReportResults() {
+                return mockProcessSuccess(responseResultData);
+            }
+        }
+
+        reportDataActions.__Rewire__('ReportService', mockReportService);
+        flux.actions.loadDynamicReport(inputs.appId, inputs.tblId, inputs.rptId, inputs.formatted, inputs.filter, inputs.queryParams).then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_RECORDS, filterReportInputs]);
+                expect(mockLogger.prototype.logException).toHaveBeenCalled();
                 done();
             }
         );
@@ -184,20 +201,14 @@ describe('Report Data Actions -- Filter report Negative', () => {
 
 });
 
-describe('Report Data Actions -- Filter report Negative missing parameters', () => {
+describe('Report Data Actions -- load a dynamic report with missing parameters', () => {
     'use strict';
     class mockReportService {
         constructor() { }
-        getReport() {
-            return mockPromiseSuccess(responseReportData);
+        parseFacetExpression() {
+            return mockPromiseSuccess(responseResultQuery);
         }
-        getReportDataAndFacets() {
-            return mockPromiseSuccess(responseResultData);
-        }
-    }
-    class mockRecordService {
-        constructor() { }
-        getRecords() {
+        getDynamicReportResults() {
             return mockPromiseSuccess(responseResultData);
         }
     }
@@ -206,15 +217,13 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockReportService.prototype, 'getReport');
-        spyOn(mockRecordService.prototype, 'getRecords');
+        spyOn(mockReportService.prototype, 'parseFacetExpression');
+        spyOn(mockReportService.prototype, 'getDynamicReportResults');
         reportDataActions.__Rewire__('ReportService', mockReportService);
-        reportDataActions.__Rewire__('RecordService', mockRecordService);
     });
 
     afterEach(() => {
         reportDataActions.__ResetDependency__('ReportService');
-        reportDataActions.__ResetDependency__('RecordService');
     });
 
     var dataProvider = [
@@ -225,14 +234,14 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
 
     dataProvider.forEach(function(data) {
         it(data.test, (done) => {
-            flux.actions.getFilteredRecords(data.appId, data.tblId, data.rptId, {format:false}, filter).then(
+            flux.actions.loadDynamicReport(data.appId, data.tblId, data.rptId, inputs.formatted, filter).then(
                 () => {
                     expect(true).toBe(false);
                     done();
                 },
                 () => {
-                    expect(mockReportService.prototype.getReport).not.toHaveBeenCalled();
-                    expect(mockRecordService.prototype.getRecords).not.toHaveBeenCalled();
+                    expect(mockReportService.prototype.parseFacetExpression).not.toHaveBeenCalled();
+                    expect(mockReportService.prototype.getDynamicReportResults).not.toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_RECORDS_FAILED, exStatus);
                     done();
                 }
@@ -241,21 +250,18 @@ describe('Report Data Actions -- Filter report Negative missing parameters', () 
     });
 });
 
-describe('Report Data Actions -- load report Negative missing parameters', () => {
+describe('Report Data Actions -- load a report with missing parameters', () => {
     'use strict';
     class mockReportService {
         constructor() { }
-        getReport() {
+        getReportResults() {
             return mockPromiseSuccess(responseReportData);
-        }
-        getReportDataAndFacets() {
-            return mockPromiseSuccess(responseResultData);
         }
     }
 
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
-        spyOn(mockReportService.prototype, 'getReport');
+        spyOn(mockReportService.prototype, 'getReportResults');
         reportDataActions.__Rewire__('ReportService', mockReportService);
     });
 
@@ -271,13 +277,13 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
 
     dataProvider.forEach(function(data) {
         it(data.test, (done) => {
-            flux.actions.loadReport(data.appId, data.tblId, data.rptId, false).then(
+            flux.actions.loadReport(data.appId, data.tblId, data.rptId, false, inputs.queryParams.offset, inputs.queryParams.numRows).then(
                 () => {
                     expect(true).toBe(false);
                     done();
                 },
                 () => {
-                    expect(mockReportService.prototype.getReport).not.toHaveBeenCalled();
+                    expect(mockReportService.prototype.getReportResults).not.toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch).toHaveBeenCalledWith(actions.LOAD_REPORT_FAILED, exStatus);
                     done();
                 }
@@ -287,21 +293,11 @@ describe('Report Data Actions -- load report Negative missing parameters', () =>
 });
 
 
-describe('Report Data Actions -- Fetch a report negative', () => {
+describe('Report Data Actions -- Load a report that throws error/exception', () => {
     'use strict';
     class mockReportService {
         constructor() { }
-        getReport() {
-            return mockPromiseError();
-        }
-        getReportRecordsCount() {
-            return mockPromiseSuccess(responseReportData);
-        }
-    }
-
-    class mockRecordService {
-        constructor() { }
-        getRecords() {
+        getReportResults() {
             return mockPromiseError();
         }
     }
@@ -309,17 +305,15 @@ describe('Report Data Actions -- Fetch a report negative', () => {
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         reportDataActions.__Rewire__('ReportService', mockReportService);
-        reportDataActions.__Rewire__('RecordService', mockRecordService);
-        spyOn(mockReportService.prototype, 'getReport').and.callThrough();
+        spyOn(mockReportService.prototype, 'getReportResults').and.callThrough();
     });
 
     afterEach(() => {
         reportDataActions.__ResetDependency__('ReportService');
-        reportDataActions.__ResetDependency__('RecordService');
     });
 
     var dataProvider = [
-        {test:'test throwing exception when getting a report', func:flux.actions.loadReport, loadReportAct: actions.LOAD_REPORT, loadReportRecordsCountAct: actions.LOAD_REPORT_RECORDS_COUNT, errAct: actions.LOAD_REPORT_FAILED, recordsCountSuccAct: actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS},
+        {test:'test throwing exception when getting a report', func:flux.actions.loadReport, loadReportAct: actions.LOAD_REPORT, errAct: actions.LOAD_REPORT_FAILED}
     ];
     var filter = {facet: 'abc', search: ''};
 
@@ -331,59 +325,10 @@ describe('Report Data Actions -- Fetch a report negative', () => {
                     done();
                 },
                 () => {
-                    expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(4);
+                    expect(mockReportService.prototype.getReportResults).toHaveBeenCalled();
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([data.loadReportAct, jasmine.any(Object)]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.loadReportRecordsCountAct, jasmine.any(Object)]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([data.errAct, {response: {message: errorMessage, status: errorStatus}}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(3)).toEqual([data.recordsCountSuccAct, jasmine.any(Object)]);
-                    done();
-                }
-            );
-        });
-    });
-});
-
-describe('Report Data Actions -- Fetch a report with reports count fetch failure', () => {
-    'use strict';
-    class mockReportService {
-        constructor() { }
-        getReport() {
-            return mockPromiseSuccess(responseReportData);
-        }
-        getReportRecordsCount() {
-            return mockPromiseError();
-        }
-    }
-
-    beforeEach(() => {
-        spyOn(flux.dispatchBinder, 'dispatch');
-        reportDataActions.__Rewire__('ReportService', mockReportService);
-        spyOn(mockReportService.prototype, 'getReport').and.callThrough();
-        spyOn(mockReportService.prototype, 'getReportRecordsCount').and.callThrough();
-    });
-
-    afterEach(() => {
-        reportDataActions.__ResetDependency__('ReportService');
-    });
-
-    var dataProvider = [
-        {test:'test throwing exception when loading a report', func:flux.actions.loadReport, loadReportAct: actions.LOAD_REPORT, loadReportRecordsCountAct: actions.LOAD_REPORT_RECORDS_COUNT, errAct: actions.LOAD_REPORT_RECORDS_COUNT_FAILED},
-    ];
-
-    dataProvider.forEach(function(data) {
-        it(data.test, (done) => {
-            data.func.apply(null, [1, 2, 3, false, 1, 10]).then(
-                () => {
-                    expect(true).toBe(false);
-                    done();
-                },
-                () => {
-                    expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([data.loadReportAct, jasmine.any(Object)]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.loadReportRecordsCountAct, jasmine.any(Object)]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([data.errAct, {response: errorObject}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.errAct, {response: errorObject}]);
                     done();
                 }
             );
@@ -395,7 +340,7 @@ describe('Report Data Actions -- ', () => {
     'use strict';
     class mockReportService {
         constructor() { }
-        getReport() {
+        getDynamicReportResults() {
             return mockPromiseError();
         }
         parseFacetExpression() {
@@ -403,18 +348,10 @@ describe('Report Data Actions -- ', () => {
         }
     }
 
-    class mockRecordService {
-        constructor() { }
-        getRecords() {
-            return mockPromiseError();
-        }
-    }
-
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         reportDataActions.__Rewire__('ReportService', mockReportService);
-        reportDataActions.__Rewire__('RecordService', mockRecordService);
-        spyOn(mockReportService.prototype, 'getReport').and.callThrough();
+        spyOn(mockReportService.prototype, 'getDynamicReportResults').and.callThrough();
     });
 
     afterEach(() => {
@@ -423,7 +360,7 @@ describe('Report Data Actions -- ', () => {
     });
 
     var dataProvider = [
-        {test:'test throwing exception when filtering a report', func:flux.actions.getFilteredRecords, loadAct: actions.LOAD_RECORDS, errAct: actions.LOAD_RECORDS_FAILED}
+        {test:'test throwing exception when filtering a report', func:flux.actions.loadDynamicReport, loadAct: actions.LOAD_RECORDS, errAct: actions.LOAD_RECORDS_FAILED}
     ];
     var filter = {facet: 'abc', search: ''};
 
@@ -435,7 +372,7 @@ describe('Report Data Actions -- ', () => {
                     done();
                 },
                 () => {
-                    expect(mockReportService.prototype.getReport).toHaveBeenCalled();
+                    expect(mockReportService.prototype.getDynamicReportResults).toHaveBeenCalled();
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([data.loadAct, jasmine.any(Object)]);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.errAct, {response: errorObject}]);
@@ -445,61 +382,3 @@ describe('Report Data Actions -- ', () => {
         });
     });
 });
-
-describe('Report Data Actions -- ', () => {
-    'use strict';
-    class mockReportService {
-        constructor() { }
-        getReport() {
-            return mockPromiseError();
-        }
-        parseFacetExpression() {
-            return mockPromiseError();
-        }
-    }
-
-    class mockRecordService {
-        constructor() { }
-        getRecords() {
-            return mockPromiseError();
-        }
-    }
-
-    beforeEach(() => {
-        spyOn(flux.dispatchBinder, 'dispatch');
-        reportDataActions.__Rewire__('ReportService', mockReportService);
-        reportDataActions.__Rewire__('RecordService', mockRecordService);
-        spyOn(mockReportService.prototype, 'getReport').and.callThrough();
-    });
-
-    afterEach(() => {
-        reportDataActions.__ResetDependency__('ReportService');
-        reportDataActions.__ResetDependency__('RecordService');
-    });
-
-    var dataProvider = [
-        {test:'test throwing exception when filtering a report', func:flux.actions.getFilteredRecords, loadAct: actions.LOAD_RECORDS, errAct:actions.LOAD_RECORDS_FAILED}
-    ];
-    var filter = {facet: 'abc', search: ''};
-
-    dataProvider.forEach(function(data) {
-        it(data.test, (done) => {
-            data.func.apply(null, [1, 2, 3, false, filter]).then(
-                () => {
-                    expect(true).toBe(false);
-                    done();
-                },
-                () => {
-                    expect(mockReportService.prototype.getReport).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([data.loadAct, jasmine.any(Object)]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([data.errAct, {response: errorObject}]);
-                    done();
-                }
-            );
-        });
-    });
-});
-
-
-

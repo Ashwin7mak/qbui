@@ -83,7 +83,7 @@
              * @returns Promise
              */
             fetchFields: function(req) {
-                let opts = requestHelper.setOptions(req);
+                let opts = requestHelper.setOptions(req, true);
                 opts.headers[constants.CONTENT_TYPE] = constants.APPLICATION_JSON;
 
                 if (req.params.fieldId) {

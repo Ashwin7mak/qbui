@@ -26,7 +26,7 @@
         // MISSING_FIELD             : 16,
         // NO_ACCESS_TO_FIELD        : 17,
         // UNSUPPORTED               : 18,
-        // INVALID_ENTRY             : 19,
+        INVALID_ENTRY             : 19,
         // EDIT_CONFLICT             : 20,
         // FILE_ERROR                : 21,
         // PREDECESSOR_LOOP          : 22,

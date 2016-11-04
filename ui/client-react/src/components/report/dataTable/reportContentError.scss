@@ -51,8 +51,27 @@
     }
 
     .additionalHelp {
-        margin-top: 30px;
         text-align: center;
+
+        .helpLink {
+            position: relative;
+        }
+
+        .iconContainer {
+            position: absolute;
+            left: 0px;
+            top: -1px;
+        }
+
+        .qbIcon {
+            color: $color-cyan-600;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .helpText {
+            padding-left: 25px;
+        }
     }
 
     .toggleSupportInfoBtn {

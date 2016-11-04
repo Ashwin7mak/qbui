@@ -4,12 +4,11 @@ import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
 import * as query from '../../constants/query';
 import Fluxxor from 'fluxxor';
-import '../header/smallHeader.scss';
-import './recordHeader.scss';
+import Header from '../header/smallHeader';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 /**
- * A header that takes the place of the top nav when viewing a report
+ * A header that takes the place of the top nav when viewing a record
  * (visible on small breakpoint currently)
  */
 let RecordHeader = React.createClass({
@@ -24,21 +23,11 @@ let RecordHeader = React.createClass({
     },
 
     render() {
-        let headerClasses = 'smallHeader recordHeader';
-        return (<div className={headerClasses}>
-            <div className="left">
-                <a className="iconLink toggleNavButton" href="#" onClick={this.onNavClick}>
-                    <QBicon icon="hamburger" />
-                </a>
-            </div>
-
-            <div className="center title">
-                {this.props.title}
-            </div>
-
-            <div className="right">
-            </div>
-        </div>);
+        const headerClasses = "recordHeader";
+        return <Header
+            headerClasses={headerClasses}
+            title={this.props.title}
+        />;
     }
 });
 

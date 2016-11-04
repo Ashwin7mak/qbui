@@ -184,8 +184,10 @@ let AGGrid = React.createClass({
         const headers = this.refs.gridWrapper.getElementsByClassName("ag-header-cell-menu-button");
         // convert nodelist to array then iterate to render each menu
         _.map(headers, (header, index) => {
-            const pullRight = index === headers.length - 1;
-            ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
+            if (header.childElementCount === 0) {
+                const pullRight = index === headers.length - 1;
+                ReactDOM.render(this.createHeaderMenu(index, pullRight), header);
+            }
         });
     },
     /**
@@ -245,10 +247,10 @@ let AGGrid = React.createClass({
 
         let sortList = ReportUtils.getSortListString(this.props.groupEls);
         queryParams[query.SORT_LIST_PARAM] = ReportUtils.appendSortFidToList(sortList, sortFid);
+        queryParams[query.OFFSET_PARAM] = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        queryParams[query.NUMROWS_PARAM] = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
 
-        flux.actions.getFilteredRecords(this.props.appId,
-            this.props.tblId,
-            this.props.rptId, {format:true}, this.props.filter, queryParams);
+        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     },
     /**
      * On selection of group option from menu fire off the action to group the data
@@ -261,25 +263,21 @@ let AGGrid = React.createClass({
         //for on-the-fly grouping, forget the previous group and go with the selection but add the previous sort fids.
         let sortFid = column.id.toString();
         let groupString = ReportUtils.getGroupString(sortFid, asc, GROUP_TYPE.TEXT.equals);
+
         let sortList = ReportUtils.getSortListString(this.props.sortFids);
         let sortListParam = ReportUtils.prependSortFidToList(sortList, groupString);
 
-        /** AG-grid has a bug where on re-render it doesn't call groupRenderer
-         And hence doesn't render group headers.
-         To get around that, on grouping rebuild the whole report
-         If the report was grouped on the previous render then groupRender was already called so no need to re-load everything.
-         So optimize for that case..
-        */
-        if (this.props.groupEls.length) {
-            let queryParams = {};
-            queryParams[query.SORT_LIST_PARAM] = sortListParam;
-            flux.actions.getFilteredRecords(this.props.appId, this.props.tblId, this.props.rptId, {format:true}, this.props.filter, queryParams);
-        } else {
-            flux.actions.loadReport(this.props.appId,
-                this.props.tblId,
-                this.props.rptId, true, null, null, sortListParam);
-        }
+        let offset = this.props.reportData && this.props.reportData.pageOffset ? this.props.reportData.pageOffset : serverTypeConsts.PAGE.DEFAULT_OFFSET;
+        let numRows = this.props.reportData && this.props.reportData.numRows ? this.props.reportData.numRows : serverTypeConsts.PAGE.DEFAULT_NUM_ROWS;
+
+        let queryParams = {};
+        queryParams[query.OFFSET_PARAM] = offset;
+        queryParams[query.NUMROWS_PARAM] = numRows;
+        queryParams[query.SORT_LIST_PARAM] = sortListParam;
+
+        flux.actions.loadDynamicReport(this.props.appId, this.props.tblId, this.props.rptId, true, this.props.filter, queryParams);
     },
+
     /**
      * AG-grid doesn't fire any events or add any classes to the column for which menu has been opened
      * This makes the menu look like its detached from the header. The following is a hack to handle this.
@@ -295,7 +293,6 @@ let AGGrid = React.createClass({
         }
     },
     onMenuClose() {
-
         document.addEventListener("DOMNodeRemoved", (ev) => {
             if (ev.target && ev.target.className && ev.target.className.indexOf("ag-menu") !== -1) {
                 if (this.selectedColumnId.length) {
@@ -504,6 +501,7 @@ let AGGrid = React.createClass({
         }
     },
     componentDidUpdate(prevProps,  prevState) {
+        this.installHeaderMenus();
         if (!this.props.loading) {
             let flux = this.getFlux();
             flux.actions.measure('component-AgGrid', 'component-AgGrid start');
@@ -631,6 +629,7 @@ let AGGrid = React.createClass({
         if (target &&
             target.className.indexOf("qbIcon") !== -1 ||
             target.className.indexOf("iconLink") !== -1 ||
+            target.className.indexOf("iconActionButton") !== -1 ||
             target.tagName === "INPUT" ||
             target.tagName === "A" ||
             target.parentNode.tagName === "A") {
