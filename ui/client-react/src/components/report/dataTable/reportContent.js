@@ -17,6 +17,7 @@ import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
+import DTSErrorModal from '../../dts/dtsErrorModal'
 
 let logger = new Logger();
 
@@ -694,6 +695,7 @@ export let ReportContent = React.createClass({
             reportContent = (
                 <div className="loadedContent">
                     <div className={addPadding}>
+                        <DTSErrorModal show={this.props.pendEdits.showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} />
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}

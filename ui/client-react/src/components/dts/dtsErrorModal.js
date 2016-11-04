@@ -34,7 +34,6 @@ const DTSErrorModal = React.createClass({
             <br/> <br/>
             Transaction ID: {this.props.tid}</p>;
         const primaryButtonName = "Open my app in Classic";
-        console.log('this.props.showDTSErrorModal', this.props.show);
         return (
             <QBModal
                 show={this.state.isOpen}
