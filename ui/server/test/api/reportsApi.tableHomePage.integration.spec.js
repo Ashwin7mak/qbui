@@ -112,7 +112,7 @@
             it('Negative Test - Verify GET defaulthomepage and GET report homepage returns report 1  meta data if defaulthomepage not set', function(done) {
                 //Execute a GET table home Page
                 recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
-                    assert.deepEqual(defaultHomePageResults.body, '');
+                    assert.deepEqual(defaultHomePageResults.body, '"1"');
                     //Execute a GET report homepage
                     recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                         var results = JSON.parse(reportHomePageResults.body);
@@ -149,8 +149,8 @@
                                     recordBase.apiBase.createUserAuthentication(userId2).then(function() {
                                         //Execute a GET table defaulthomepage
                                         recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
-                                            //verify GET defaulthomepage returns empty
-                                            assert.deepEqual(defaultHomePageResults.body, "");
+                                            //verify GET defaulthomepage returns "1"(list all)
+                                            assert.deepEqual(defaultHomePageResults.body, '"1"');
                                             //Execute a GET report homepage
                                             recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                                                 var results = JSON.parse(reportHomePageResults.body);
