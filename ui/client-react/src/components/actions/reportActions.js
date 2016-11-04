@@ -128,7 +128,7 @@ let ReportActions = React.createClass({
                                          body={this.getEmailBody()}/>
 
                         <ActionIcon icon="duplicate" tip={Locale.getMessage("unimplemented.copy")} disabled={true}/>
-                        <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")} onClick={this.handleBulkDelete}/>
+                        <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")} onClick={this.handleDelete}/>
 
 
                     </div>
