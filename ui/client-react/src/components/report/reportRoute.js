@@ -45,7 +45,7 @@ const ReportRoute = React.createClass({
     componentDidMount() {
         const flux = this.getFlux();
         flux.actions.hideTopNav();
-
+        flux.actions.resetRowMenu();
         if (this.props.params) {
             this.loadReportFromParams(this.props.params);
         }
@@ -123,6 +123,7 @@ const ReportRoute = React.createClass({
                     reportData={this.props.reportData}
                     appUsers={this.props.appUsers}
                     pendEdits={this.props.pendEdits}
+                    isRowPopUpMenuOpen={this.props.isRowPopUpMenuOpen}
                     routeParams={this.props.routeParams}
                     selectedAppId={this.props.selectedAppId}
                     fields={this.props.fields}

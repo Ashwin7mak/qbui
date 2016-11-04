@@ -453,7 +453,7 @@ export const SelectionColumnCheckBoxCellRenderer = React.createClass({
                             rowEditErrors={this.state.rowEditErrors}
                             params={this.props.params}
             />
-            <IconActions dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
+            <IconActions flux={this.props.params.context.flux} dropdownTooltip={true} className="recordActions" pullRight={false} menuIcons actions={actions} maxButtonsBeforeMenu={1} />
         </div>);
     }
 });

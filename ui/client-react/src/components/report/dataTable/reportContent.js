@@ -653,7 +653,6 @@ export let ReportContent = React.createClass({
 
 
     render() {
-
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
         let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
@@ -674,13 +673,22 @@ export let ReportContent = React.createClass({
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
         let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
+        let addPadding;
+        const isRowPopUpMenuOpen = this.props.isRowPopUpMenuOpen;
         const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
+        if (isInlineEditOpen) {
+            addPadding = "reportContent inlineEditing";
+        } else if (isRowPopUpMenuOpen) {
+            addPadding =  "reportContent rowPopUpMenuOpen";
+        } else {
+            addPadding = "reportContent";
+        }
         const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
         return (
                 <div className="loadedContent">
                 {this.props.reportData.error ?
                     <div>Error loading report!</div> :
-                    <div className={isInlineEditOpen ? "reportContent inlineEditing" : "reportContent"}>
+                    <div className={addPadding}>
 
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
@@ -750,15 +758,6 @@ export let ReportContent = React.createClass({
                                 filter={{selections: this.props.reportData.selections,
                                         facet: this.props.reportData.facetExpression,
                                         search: this.props.reportData.searchStringForFiltering}}/>
-                        }
-                        {showFooter &&
-                        <ReportFooter
-                            reportData={this.props.reportData}
-                            getNextReportPage={this.props.reportFooter.props.getNextReportPage}
-                            getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}
-                            pageStart={this.props.reportFooter.props.pageStart}
-                            pageEnd={this.props.reportFooter.props.pageEnd}
-                            recordsCount={this.props.reportFooter.props.recordsCount}/>
                         }
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}

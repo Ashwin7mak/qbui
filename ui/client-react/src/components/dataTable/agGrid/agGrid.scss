@@ -41,6 +41,10 @@ $cell-edit-background-edit: #f3f8fe;
     margin-bottom: 330px;
 }
 
+.rowPopUpMenuOpen .agGrid .ag-body-container {
+    margin-bottom: 150px;
+}
+
 .inlineEditing .agGrid {
     .selectAllCheckbox,
     .ag-selection-checkbox,
@@ -49,6 +53,8 @@ $cell-edit-background-edit: #f3f8fe;
         display: none;
     }
 }
+
+//This allows .editTools to be on top, when scrolling horizontally
 
 .ag-pinned-left-cols-viewport {
     height: auto !important;
@@ -64,6 +70,7 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-body-container {
         background-color: $color2;
         margin-bottom:0;
+        height: 100%
     }
     /* prevent clipping of actions and dropdowns in 1st column */
     .ag-pinned-left-cols-viewport {
@@ -113,9 +120,20 @@ $cell-edit-background-edit: #f3f8fe;
         opacity: .2;
     }
     .ag-header-cell-menu-button .dropdown-menu {
+        max-height: 200px;
         font-size: 12px;
         margin-top:0;
         padding-top:0;
+        overflow: auto;
+        @include height-medium-breakpoint {
+            max-height: 320px;
+        }
+        @include height-large-breakpoint {
+            max-height: 320px;
+        }
+        @include height-xlarge-breakpoint {
+            max-height: 320px;
+        }
     }
     .ag-header-cell:hover {
         .ag-header-cell-menu-button button {
