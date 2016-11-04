@@ -157,14 +157,14 @@
 .timeCell.cellEdit {
     display:inline-block;
     width: 100%;
+    border: none;
     .Select {
         height: 28px;
         border: 0;
     }
     .Select-control {
         border-radius: 2px;
-        height: 28px;
-        border: 0;
+        height: 32px;
     }
     .Select-input {
         padding-left: 1px;
@@ -183,7 +183,11 @@
     }
     .Select-option {
         color: $color25;
-        padding-top: 1px;
+        padding: 4px 0 4px 32px;
+        .qbIcon {
+            left: 0;
+            padding: 2px 7px;
+        }
     }
     .Select-arrow-zone {
         background-color: $datepicker-bg;
@@ -192,7 +196,7 @@
             color: $datepicker-select-button-fg;
         }
         .glyphicon-time {
-            color: $color-black-700;
+            color: $text-color;
             padding-top: 3px;
             padding-left: 5px;
         }
@@ -224,30 +228,58 @@
         }
     }
     .glyphicon-calendar {
-        color: $color-black-700;
+        color: $text-color;
+    }
+    .date.is-focused {
+        border: solid 1px $input-text-focus-border-color;
+        //Added border-color for multi choice text box
+        border-color: $input-text-focus-border-color !important;
+        border-radius: 2px;
+        @include focus-shadow();
+    }
+    > * {
+        border: 0;
+
+        .input-group.date input.form-control {
+            border: 0;
+            padding: 3px;
+            height: 28px;
+            // remove browser focus style from the input
+            outline: none;
+            box-shadow: none;
+        }
+        .input-group.date .input-group-addon {
+            background: #fff;
+            height: 20px;
+            padding: 0;
+            border: 0;
+            color: $icon-color;
+        }
+        .bootstrap-datetimepicker-widget {
+            top: 34px !important;
+        }
     }
 }
 
-.dateCell.cellEdit>* {
-    border: 0;
-
-    .input-group.date input.form-control {
-        border: 0;
-        padding: 3px;
-        height: 28px;
-        border-radius: 0;
-    }
-    .input-group.date .input-group-addon {
-        background: #fff;
-        height: 20px;
-        padding: 0;
-        border: 0;
-        color: $icon-color;
-    }
-    .bootstrap-datetimepicker-widget {
-        top: 34px !important;
-    }
+.dateTimeFieldValueEditor {
+    display: flex;
 }
 
+.dateCell, .timeCell {
+    height: 32px;
 
+    > input {
+        width: 100%;
+        height: 100%;
+        padding: $padding-small-vertical;
+    }
 
+    &.cellEdit.nativeInput {
+        border: 0;
+        display: flex;
+        > input {
+            flex-grow: 1;
+            border: 1px solid $input-text-normal-border-color;
+        }
+    }
+}

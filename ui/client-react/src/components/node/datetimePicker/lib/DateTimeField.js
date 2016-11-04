@@ -76,7 +76,8 @@ var DateTimeField = (function (_Component) {
       },
       viewDate: (0, _moment2["default"])(this.props.dateTime, this.props.format, true).isValid() ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true).startOf("month") : (0, _moment2["default"])().startOf("month"),
       selectedDate: (0, _moment2["default"])(this.props.dateTime, this.props.format, true).isValid() ? (0, _moment2["default"])(this.props.dateTime, this.props.format, true) : (0, _moment2["default"])(),
-      inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : (0, _moment2["default"])(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat())
+      inputValue: typeof this.props.defaultText !== "undefined" ? this.props.defaultText : (0, _moment2["default"])(this.props.dateTime, this.props.format, true).format(this.resolvePropsInputFormat()),
+      isFocused: false
     };
 
     /**
@@ -119,7 +120,7 @@ var DateTimeField = (function (_Component) {
      * @returns {*}
      */
     this.onBlur = function (event) {
-
+      _this.setState({isFocused: false});
       var dateTemplate = event.target == null ? event : event.target.value;
       var value = null;
 
@@ -540,8 +541,17 @@ var DateTimeField = (function (_Component) {
         }),
         _react2["default"].createElement(
           "div",
-          { className: "input-group date " + this.size(), ref: "datetimepicker" },
-          _react2["default"].createElement("input", _extends({ className: "form-control", onKeyPress: this.onKeyPress, onBlur: this.onBlur, onChange: this.onChange, type: "text", value: this.state.inputValue }, this.props.inputProps)),
+          { className: "input-group date " + this.size() + (this.state.isFocused ? ' is-focused' : ''), ref: "datetimepicker" },
+          _react2["default"].createElement("input",
+            _extends({
+                className: "form-control",
+                onKeyPress: this.onKeyPress,
+                onBlur: this.onBlur,
+                onChange: this.onChange,
+                onFocus: (function() {this.setState({isFocused: true})}).bind(this),
+                type: "text",
+                value: this.state.inputValue
+            }, this.props.inputProps)),
           _react2["default"].createElement(
             "span",
             { className: "input-group-addon", onBlur: this.onBlur, onClick: this.onClick, ref: "dtpbutton" },
