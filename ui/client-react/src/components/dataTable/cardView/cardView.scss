@@ -35,7 +35,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
     cursor:pointer;
     .card {
         flex: 1 1 auto;
-        width: 100%;
+        width: calc(100% - 25px);
     }
 
 
@@ -43,6 +43,7 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         position: relative;
         display: flex;
         flex-direction: row;
+        width: calc(100% + 15px);
     }
     .fieldRow.collapsed {
         max-height: 35px;
@@ -51,6 +52,10 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
         -webkit-transition: .35s;
         transition: .25s;
         transition-timing-function: ease;
+        .fieldValue, .fieldLabel {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     }
     .fieldRow.expanded {
         max-height: 1024px;
@@ -82,22 +87,20 @@ $chevron_closed_icon: url('../../../../src/assets/images/chevron_closed.svg');
                 padding-bottom: 2px;
                 display: block;
             }
-            .fieldValue, .fieldLabel {
-                display: block;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
             &:nth-child(n+3) {
                 .fieldValue {
                     white-space: normal;
                 }
             }
         }
+        .fieldValue, .fieldLabel {
+            display: block;
+            overflow: hidden;
+        }
     }
     .card-expander {
         position:absolute;
-        right:0;
+        right: 15px;
         top:0;
         .qbPanelHeaderIcon {
             top:0;
