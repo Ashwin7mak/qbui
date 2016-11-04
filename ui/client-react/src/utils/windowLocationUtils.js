@@ -41,8 +41,29 @@ class WindowLocationUtils {
         return window.location.href;
     }
 
+    /**
+     * We need to get the subdomain for redirect url construction
+     * To get the real subdomain we need to split on the '.' character
+     * And then take the first entry in the array
+     * Example: team.quickbase.com
+     * Example returns {team}
+     */
     static getSubdomain() {
-        return window.location.hostname.split(".")[0];
+        return window.location.hostname.split(".").shift();
+    }
+
+    /**
+     * We need to get the subdomain for redirect url construction
+     * To get the real subdomain we need to split on the '.' character
+     * And then take the first entry in the array
+     * Example: team.quickbase.com
+     * Example returns {team}
+     */
+    static getHostname() {
+        var hostnameSplit = window.location.hostname.split(".");
+        var hostname = hostnameSplit.pop(); //we can't assume that we are deployed on TLD .com
+        hostname = "." + hostnameSplit.pop() + "." + hostname;
+        return hostname;
     }
 
     /**

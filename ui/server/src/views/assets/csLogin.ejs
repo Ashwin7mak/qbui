@@ -2,7 +2,9 @@
     QuickBase.</p>
 
 <script type="text/javascript">
-var currentStackDomain = window.location.hostname.split(".")[0] + ".quickbase.com";
+var hostnameSplit = window.location.hostname.split(".");
+var hostname = "." + hostnameSplit.pop();
+var currentStackDomain = hostnameSplit.shift() + "." + hostnameSplit.pop() + hostname;
 var currentStackSignIn=  "https://" + currentStackDomain + "/db/main?a=SignIn";
 document.getElementById("signin").href = currentStackSignIn;
 </script>

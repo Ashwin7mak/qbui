@@ -169,12 +169,12 @@ class BaseService {
      * To find the hostname for current stack, we can do a string replace on the current window.location.hostname value and strip out ".newstack"
      * Now we combine these 3 values with an https to construct the full redirect url.
      *
-     * example prod output: team.quickbase.com/db/main?a=nsredirect&nsurl=https://team.newstack.quickbase.com/qbase/apps
+     * example prod output: team.quickbase.com/db/main?a=nsredirect&nsurl=https://team.quickbase.com/qbase/apps
      */
     constructRedirectUrl() {
         let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
         let newStackDestination = WindowLocationUtils.getHref();
-        let currentStackDomain = WindowLocationUtils.getSubdomain() + ".quickbase.com";
+        let currentStackDomain = WindowLocationUtils.getSubdomain() + WindowLocationUtils.getHostname();
         currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
         return currentStackSignInUrl;
     }
