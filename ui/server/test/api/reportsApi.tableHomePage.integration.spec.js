@@ -34,7 +34,7 @@
                     {name: 'Null Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Empty Text Field', datatypeAttributes: {type: 'TEXT'}, type: 'SCALAR'},
                     {name: 'Date Field', datatypeAttributes: {type: 'DATE'}, type: 'SCALAR'},
-                ]
+                    ]
                 }
             ]
 
@@ -43,10 +43,10 @@
         /**
          * Setup method. Generates JSON for an app, a table with different fields, and 10 records with different field types.
          */
-        before(function (done) {
+        before(function(done) {
             this.timeout(consts.INTEGRATION_TIMEOUT * appWithNoFlags.length);
             //create app, table with random fields and records
-            recordBase.createApp(appWithNoFlags).then(function (appResponse) {
+            recordBase.createApp(appWithNoFlags).then(function(appResponse) {
                 app = JSON.parse(appResponse.body);
                 var recordsEndpoint = recordBase.apiBase.resolveRecordsEndpoint(app.id, app.tables[0].id);
                 // Get the appropriate fields out of the Create App response (specifically the created field Ids)
@@ -54,7 +54,7 @@
                 // Generate some record JSON objects to add to the app
                 var generatedRecords = recordBase.generateRecords(nonBuiltInFields, 10);
                 //Add records to the table
-                recordBase.addRecords(app, app.tables[0], generatedRecords).then(function (returnedRecords) {
+                recordBase.addRecords(app, app.tables[0], generatedRecords).then(function(returnedRecords) {
                     //create report
                     var reportEndpoint = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                     var reportToCreate = {
@@ -64,9 +64,9 @@
                         query: null,
                     };
                     //Create a report
-                    recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function (reportResults) {
+                    recordBase.apiBase.executeRequest(reportEndpoint, consts.POST, reportToCreate).then(function(reportResults) {
                         reportId = JSON.parse(reportResults.body).id;
-                    }).then(function () {
+                    }).then(function() {
                         //create report 2
                         var reportEndpoint2 = recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[0].id);
                         var reportToCreate2 = {
@@ -76,12 +76,12 @@
                             query: null,
                         };
                         //Create a report
-                        recordBase.apiBase.executeRequest(reportEndpoint2, consts.POST, reportToCreate2).then(function (reportResults) {
+                        recordBase.apiBase.executeRequest(reportEndpoint2, consts.POST, reportToCreate2).then(function(reportResults) {
                             reportId2 = JSON.parse(reportResults.body).id;
                             done();
                         });
                     });
-                }).catch(function (error) {
+                }).catch(function(error) {
                     log.error(JSON.stringify(error));
                     done();
                 });
@@ -89,9 +89,9 @@
             });
         });
 
-        beforeEach(function (done) {
+        beforeEach(function(done) {
             //set the authentication to Admin
-            recordBase.apiBase.createUserAuthentication(ADMIN_USER_ID).then(function () {
+            recordBase.apiBase.createUserAuthentication(ADMIN_USER_ID).then(function() {
                 done();
             });
         });
@@ -104,17 +104,17 @@
             return JSON.parse(jsonStr);
         }
 
-        describe ('API - Negative report table home page tests', function() {
+        describe('API - Negative report table home page tests', function() {
             /**
              * Negative Test the API GET table defaulthomepage and GET homepage should return report 1 if table POST defaulthomepage not set
              * (until default report settings is impl)
              */
-            it('Negative Test - Verify GET defaulthomepage and GET report homepage returns report 1  meta data if defaulthomepage not set', function (done) {
+            it('Negative Test - Verify GET defaulthomepage and GET report homepage returns report 1  meta data if defaulthomepage not set', function(done) {
                 //Execute a GET table home Page
-                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function (defaultHomePageResults) {
+                recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
                     assert.deepEqual(defaultHomePageResults.body, '');
                     //Execute a GET report homepage
-                    recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function (reportHomePageResults) {
+                    recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                         var results = JSON.parse(reportHomePageResults.body);
                         //verify report meta Data is using report 1
                         assert.deepEqual(results.reportMetaData.data.id, 1);
@@ -132,27 +132,27 @@
              * GET'S.
              * (until default report settings is impl)
              */
-            it('Negative Test - Give custdefaulthomepage permission to participant verify GET defaulthomepage as viewer', function (done) {
+            it('Negative Test - Give custdefaulthomepage permission to participant verify GET defaulthomepage as viewer', function(done) {
                 //create user 1
-                recordBase.apiBase.createUser().then(function (userResponse1) {
+                recordBase.apiBase.createUser().then(function(userResponse1) {
                     var userId1 = JSON.parse(userResponse1.body).id;
                     //add userId1 to participant appRole
-                    recordBase.apiBase.assignUsersToAppRole(app.id, "11", [userId1]).then(function () {
+                    recordBase.apiBase.assignUsersToAppRole(app.id, "11", [userId1]).then(function() {
                         //create user2
-                        recordBase.apiBase.createUser().then(function (userResponse2) {
+                        recordBase.apiBase.createUser().then(function(userResponse2) {
                             var userId2 = JSON.parse(userResponse2.body).id;
                             //add userId2 to viewer appRole
-                            recordBase.apiBase.assignUsersToAppRole(app.id, "10", [userId2]).then(function () {
+                            recordBase.apiBase.assignUsersToAppRole(app.id, "10", [userId2]).then(function() {
                                 //add custdefaulthomepage permission to participant
-                                recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON("11", reportId)).then(function () {
+                                recordBase.apiBase.setCustDefaultTableHomePageForRole(app.id, app.tables[0].id, createRoleReportMapJSON("11", reportId)).then(function() {
                                     //get the user authentication as viewer
-                                    recordBase.apiBase.createUserAuthentication(userId2).then(function () {
+                                    recordBase.apiBase.createUserAuthentication(userId2).then(function() {
                                         //Execute a GET table defaulthomepage
-                                        recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function (defaultHomePageResults) {
+                                        recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/defaulthomepage?format=' + FORMAT, consts.GET).then(function(defaultHomePageResults) {
                                             //verify GET defaulthomepage returns empty
                                             assert.deepEqual(defaultHomePageResults.body, "");
                                             //Execute a GET report homepage
-                                            recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function (reportHomePageResults) {
+                                            recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                                                 var results = JSON.parse(reportHomePageResults.body);
                                                 //verify report meta Data report id is report 1
                                                 assert.deepEqual(results.reportMetaData.data.id, 1);
