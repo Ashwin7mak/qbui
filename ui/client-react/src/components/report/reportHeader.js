@@ -75,9 +75,6 @@ var ReportHeader = React.createClass({
     filterReport(searchString, selections) {
         // leading and trailing spaces are trimmed..
         const trimmedSearch = StringUtils.trim(searchString);
-
-        //  only generate a report if search value differs from prior search value
-        //if (trimmedSearch !== this.props.reportData.searchStringForFiltering) {
         const filter = FilterUtils.getFilter(trimmedSearch, selections, this.facetFields);
 
         let queryParams = {};
@@ -89,7 +86,7 @@ var ReportHeader = React.createClass({
             this.props.routeParams.tblId,
             typeof this.props.rptId !== "undefined" ? this.props.rptId : this.props.routeParams.rptId,
             true, filter, queryParams);
-        //}
+
     },
 
     handleSearchChange(e) {
