@@ -114,6 +114,7 @@ let formActions = {
                         } else {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
                         }
+                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
                         this.dispatch(failedAction, error.response.status);
                         reject();
                     }

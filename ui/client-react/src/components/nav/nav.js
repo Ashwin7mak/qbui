@@ -13,6 +13,7 @@ import {withRouter} from 'react-router';
 import _ from 'lodash';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
@@ -125,11 +126,21 @@ export let Nav = React.createClass({
 
                 flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
+                    done();
+                },
+                () => {
+                    WindowLocationUtils.pushWithoutQuery();
+                    done();
                 });
             } else {
 
                 flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
+                    done();
+                },
+                () => {
+                    WindowLocationUtils.pushWithoutQuery();
+                    done();
                 });
             }
         }
