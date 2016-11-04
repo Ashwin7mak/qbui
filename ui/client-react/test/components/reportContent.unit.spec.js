@@ -3,7 +3,6 @@ import TestUtils from 'react-addons-test-utils';
 import {ReportContent, __RewireAPI__ as ReportContentRewireAPI} from '../../src/components/report/dataTable/reportContent';
 import {CardViewListHolder} from '../../src/components/dataTable/cardView/cardViewListHolder';
 import AGGrid  from '../../src/components/dataTable/agGrid/agGrid';
-import ReportContentError from '../../src/components/report/dataTable/reportContentError';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {NumericCellRenderer, DateCellRenderer} from '../../src/components/dataTable/agGrid/cellRenderers';
 import _ from 'lodash';
@@ -796,17 +795,6 @@ describe('ReportContent functions', () => {
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
-    });
-
-    it('test show of navigation arrows in footer with paginated report', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                reportData={fakeReportData_pagedData}
-                                                                reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}
-                                                                recordsCount={100}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
-        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportFooter");
-        expect(reportNavigation.length).toEqual(1);
     });
 
     it('test hide of footer on row selection', () => {

@@ -654,7 +654,6 @@ export let ReportContent = React.createClass({
 
 
     render() {
-
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
         let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
@@ -675,7 +674,16 @@ export let ReportContent = React.createClass({
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
         let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
+        let addPadding;
+        const isRowPopUpMenuOpen = this.props.isRowPopUpMenuOpen;
         const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
+        if (isInlineEditOpen) {
+            addPadding = "reportContent inlineEditing";
+        } else if (isRowPopUpMenuOpen) {
+            addPadding =  "reportContent rowPopUpMenuOpen";
+        } else {
+            addPadding = "reportContent";
+        }
         const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
 
         let reportContent;
@@ -683,102 +691,96 @@ export let ReportContent = React.createClass({
         if (this.props.reportData.error) {
             reportContent = <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
         } else {
-            reportContent = <div className={isInlineEditOpen ? "reportContent inlineEditing" : "reportContent"}>
-
-                {!isSmall && this.props.reactabular &&
-                <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
-                        columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                        uniqueIdentifier={this.props.uniqueIdentifier ||  SchemaConsts.DEFAULT_RECORD_KEY}
-                        keyField={this.props.keyField}
-                        selectedRows={this.props.selectedRows}
-                        onRowClick={this.openRow}
-                        onEditRecordStart={this.handleEditRecordStart}
-                        onEditRecordCancel={this.handleEditRecordCancel}
-                        onFieldChange={this.handleFieldChange}
-                        onRecordChange={this.handleRecordChange}
-                        appUsers={this.props.appUsers}
-                        appId={this.props.reportData.appId}
-                        tblId={this.props.reportData.tblId}
-                        rptId={this.props.reportData.rptId}
-                        isInlineEditOpen={isInlineEditOpen}
-                        pendEdits={this.props.pendEdits}
-                        editErrors={editErrors}
-                        showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                        recordsCount={recordsCount}
-                        groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
-                        groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
-                        sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
-                        filter={{selections: this.props.reportData.selections,
-                            facet: this.props.reportData.facetExpression,
-                            search: this.props.reportData.searchStringForFiltering}}
-                />}
-                {!isSmall && !this.props.reactabular &&
-                <AGGrid loading={this.props.reportData.loading}
-                        editingIndex={this.props.reportData.editingIndex}
-                        editingId={this.props.reportData.editingId}
-                        records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
-                        columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                        uniqueIdentifier={this.props.uniqueIdentifier || SchemaConsts.DEFAULT_RECORD_KEY}
-                        keyField={keyField}
-                        appId={this.props.reportData.appId}
-                        appUsers={this.props.appUsers}
-                        isInlineEditOpen={isInlineEditOpen}
-                        pendEdits={this.props.pendEdits}
-                        editErrors={editErrors}
-                        onRecordDelete={this.handleRecordDelete}
-                        onEditRecordStart={this.handleEditRecordStart}
-                        onEditRecordCancel={this.handleEditRecordCancel}
-                        onFieldChange={this.handleFieldChange}
-                        onRecordChange={this.handleRecordChange}
-                        onRecordAdd={this.handleRecordAdd}
-                        onRecordNewBlank={this.handleRecordNewBlank}
-                        onRecordSaveClicked={this.handleRecordSaveClicked}
-                        validateRecord={this.validateRecord}
-                        validateFieldValue={this.handleValidateFieldValue}
-                        getOrigRec={this.getOrigRec}
-                        getPendingChanges={this.getPendingChanges}
-                        tblId={this.props.reportData.tblId}
-                        rptId={this.props.reportData.rptId}
-                        reportHeader={this.props.reportHeader}
-                        reportFooter={this.props.reportFooter}
-                        pageActions={this.props.pageActions}
-                        selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}
-                        onScroll={this.onScrollRecords}
-                        onRowClick={this.openRow}
-                        showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
-                        recordsCount={recordsCount}
-                        groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
-                        groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
-                        sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
-                        filter={{selections: this.props.reportData.selections,
-                            facet: this.props.reportData.facetExpression,
-                            search: this.props.reportData.searchStringForFiltering}}/>
-                }
-                {showFooter &&
-                <ReportFooter
-                    reportData={this.props.reportData}
-                    getNextReportPage={this.props.reportFooter.props.getNextReportPage}
-                    getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}
-                    pageStart={this.props.reportFooter.props.pageStart}
-                    pageEnd={this.props.reportFooter.props.pageEnd}
-                    recordsCount={this.props.reportFooter.props.recordsCount}/>
-                }
-                {isSmall &&
-                <CardViewListHolder reportData={this.props.reportData}
-                                    appUsers={this.props.appUsers}
-                                    uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                    keyField={keyField}
-                                    reportHeader={this.props.reportHeader}
-                                    selectionActions={<ReportActions selection={this.props.selectedRows}/>}
-                                    onScroll={this.onScrollRecords}
-                                    onRowClicked={this.openRow}
-                                    selectedRows={this.props.selectedRows}
-                                    pageStart={this.props.cardViewPagination.props.pageStart}
-                                    pageEnd={this.props.cardViewPagination.props.pageEnd}
-                                    getNextReportPage={this.props.cardViewPagination.props.getNextReportPage}
-                                    getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}/>
-                }
-            </div>;
+            reportContent = (
+                <div className="loadedContent">
+                    <div className={addPadding}>
+                        {!isSmall && this.props.reactabular &&
+                        <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
+                                columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
+                                uniqueIdentifier={this.props.uniqueIdentifier ||  SchemaConsts.DEFAULT_RECORD_KEY}
+                                keyField={this.props.keyField}
+                                selectedRows={this.props.selectedRows}
+                                onRowClick={this.openRow}
+                                onEditRecordStart={this.handleEditRecordStart}
+                                onEditRecordCancel={this.handleEditRecordCancel}
+                                onFieldChange={this.handleFieldChange}
+                                onRecordChange={this.handleRecordChange}
+                                appUsers={this.props.appUsers}
+                                appId={this.props.reportData.appId}
+                                tblId={this.props.reportData.tblId}
+                                rptId={this.props.reportData.rptId}
+                                isInlineEditOpen={isInlineEditOpen}
+                                pendEdits={this.props.pendEdits}
+                                editErrors={editErrors}
+                                showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
+                                recordsCount={recordsCount}
+                                groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
+                                groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
+                                sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+                                filter={{selections: this.props.reportData.selections,
+                                    facet: this.props.reportData.facetExpression,
+                                    search: this.props.reportData.searchStringForFiltering}}
+                        />}
+                        {!isSmall && !this.props.reactabular &&
+                        <AGGrid loading={this.props.reportData.loading}
+                                editingIndex={this.props.reportData.editingIndex}
+                                editingId={this.props.reportData.editingId}
+                                records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
+                                columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
+                                uniqueIdentifier={this.props.uniqueIdentifier || SchemaConsts.DEFAULT_RECORD_KEY}
+                                keyField={keyField}
+                                appId={this.props.reportData.appId}
+                                appUsers={this.props.appUsers}
+                                isInlineEditOpen={isInlineEditOpen}
+                                pendEdits={this.props.pendEdits}
+                                editErrors={editErrors}
+                                onRecordDelete={this.handleRecordDelete}
+                                onEditRecordStart={this.handleEditRecordStart}
+                                onEditRecordCancel={this.handleEditRecordCancel}
+                                onFieldChange={this.handleFieldChange}
+                                onRecordChange={this.handleRecordChange}
+                                onRecordAdd={this.handleRecordAdd}
+                                onRecordNewBlank={this.handleRecordNewBlank}
+                                onRecordSaveClicked={this.handleRecordSaveClicked}
+                                validateRecord={this.validateRecord}
+                                validateFieldValue={this.handleValidateFieldValue}
+                                getOrigRec={this.getOrigRec}
+                                getPendingChanges={this.getPendingChanges}
+                                tblId={this.props.reportData.tblId}
+                                rptId={this.props.reportData.rptId}
+                                reportHeader={this.props.reportHeader}
+                                reportFooter={this.props.reportFooter}
+                                pageActions={this.props.pageActions}
+                                selectionActions={<ReportActions appId={this.props.reportData.appId} tblId={this.props.reportData.tblId} rptId={this.props.reportData.rptId} nameForRecords={this.props.nameForRecords} />}
+                                onScroll={this.onScrollRecords}
+                                onRowClick={this.openRow}
+                                showGrouping={this.props.reportData.data ? this.props.reportData.data.hasGrouping : false}
+                                recordsCount={recordsCount}
+                                groupLevel={this.props.reportData.data ? this.props.reportData.data.groupLevel : 0}
+                                groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
+                                sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
+                                filter={{selections: this.props.reportData.selections,
+                                    facet: this.props.reportData.facetExpression,
+                                    search: this.props.reportData.searchStringForFiltering}}/>
+                        }
+                        {isSmall &&
+                        <CardViewListHolder reportData={this.props.reportData}
+                                            appUsers={this.props.appUsers}
+                                            uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
+                                            keyField={keyField}
+                                            reportHeader={this.props.reportHeader}
+                                            selectionActions={<ReportActions selection={this.props.selectedRows}/>}
+                                            onScroll={this.onScrollRecords}
+                                            onRowClicked={this.openRow}
+                                            selectedRows={this.props.selectedRows}
+                                            pageStart={this.props.cardViewPagination.props.pageStart}
+                                            pageEnd={this.props.cardViewPagination.props.pageEnd}
+                                            getNextReportPage={this.props.cardViewPagination.props.getNextReportPage}
+                                            getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}/>
+                        }
+                    </div>
+                </div>
+            );
         }
 
         return (

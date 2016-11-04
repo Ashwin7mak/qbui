@@ -59,6 +59,11 @@ const DateFieldValueEditor = React.createClass({
         idKey: React.PropTypes.any
     },
 
+
+    contextTypes: {
+        touch: React.PropTypes.bool
+    },
+
     getDefaultProps() {
         return {
             isInvalid: false
@@ -66,20 +71,30 @@ const DateFieldValueEditor = React.createClass({
     },
 
     onChange(newValue, enteredValue) {
-        if (this.props.onChange || this.props.onDateTimeChange) {
+        const onChange = this.props.onDateTimeChange || this.props.onChange;
+        if (onChange) {
             if (newValue === null || newValue || enteredValue === '') {
                 let formattedDate = null;
-                if (newValue !== null && moment(newValue, DATE_INPUT).isValid()) {
+                if (moment(newValue, DATE_INPUT).isValid()) {
+                    // format newValue passed in from the DatePicker component
                     formattedDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
+                } else if (moment(newValue, DATE_FORMATTED).isValid()) {
+                    // newValue was passed in via <input>, no need to change
+                    formattedDate = newValue;
                 }
-
-                if (this.props.onDateTimeChange) {
-                    this.props.onDateTimeChange(formattedDate);
-                } else {
-                    this.props.onChange(formattedDate);
-                }
+                // onChange callbacks expect date in YYYY-MM-DD format
+                onChange(formattedDate);
             }
         }
+    },
+
+    /**
+     * Called via an <input> node.
+     * @param {Event} event the change event
+     */
+    onInputChange(event) {
+        const newValue = event.target.value || null;
+        this.onChange(newValue);
     },
 
     //send up the chain an object with value and formatted display value
@@ -90,7 +105,11 @@ const DateFieldValueEditor = React.createClass({
                     this.props.onDateTimeBlur(newValue);
                 } else {
                     let newDate = null;
-                    if (newValue) {
+                    if (moment(newValue, DATE_FORMATTED).isValid()) {
+                        // newValue was passed in via <input>, no need to change
+                        newDate = newValue;
+                    } else if (moment(newValue, DATE_INPUT).isValid()) {
+                        // format newValue passed in from the DatePicker component
                         newDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
                     }
 
@@ -106,36 +125,53 @@ const DateFieldValueEditor = React.createClass({
         }
     },
 
+    /**
+     * Called via an <input> node.
+     * @param {Event} event the change event
+     */
+    onInputBlur(event) {
+        const newValue = event.target.value || null;
+        this.onBlur(newValue);
+    },
+
     render() {
-        let classes = 'cellEdit dateCell borderOnError place';
+        //  display native input only for smallbreakpoint touch devices
+        let useNativeInput = (Breakpoints.isSmallBreakpoint() && this.context.touch) ;
+        let classes = ['cellEdit', 'dateCell', 'borderOnError', 'place'];
 
         // error state css class
         if (this.props.isInvalid) {
-            classes += ' error';
+            classes.push('error');
         }
         if (this.props.classes) {
-            classes += ' ' + this.props.classes;
+            classes.push(this.props.classes);
         }
 
-        let theDate = null;
-        if (this.props.value !== null) {
-            theDate = this.props.value ? moment(this.props.value.replace(/(\[.*?\])/, '')).format(DATE_INPUT) : '';
+        let theDate = undefined;
+        if (this.props.value && this.props.value !== null) {
+            if (useNativeInput) {
+                theDate = moment(this.props.value.replace(/(\[.*?\])/, '')).format(DATE_FORMATTED);
+            } else {
+                theDate = moment(this.props.value.replace(/(\[.*?\])/, '')).format(DATE_INPUT);
+            }
         }
 
         //  if no date, use the ghost format class for the help placeholder
         if (!theDate) {
-            classes += ' ghost-text';
+            classes.push('ghost-text');
         }
 
-        //  TODO: verify small breakpoint once form edit is implemented
-        return (Breakpoints.isSmallBreakpoint() ?
-            <div className={classes}>
+        // display native input only for smallbreakpoint touch devices
+        return (useNativeInput ?
+            <div className={classes.concat('nativeInput').join(' ')}>
                 <input type="date"
                     name="date-picker"
-                    onBlur={this.onBlur}
-                    onChange={this.onChange}/>
+                    onBlur={this.onInputBlur}
+                    onChange={this.onInputChange}
+                    value={theDate}
+                    placeholder={DATE_FORMATTED}/>
             </div> :
-            <div className={classes}>
+            <div className={classes.join(' ')}>
                 <DatePicker
                     name="date-picker"
                     dateTime={theDate}
