@@ -33,14 +33,14 @@ const UserFieldValueRenderer = React.createClass({
 
             // we have info to place in a tooltip
             const tooltip = (
-                <Tooltip id="tooltip" style={{"whiteSpace":"nowrap"}} >
-                    {this.props.value && this.props.value.screenName && <div>User Name: {this.props.value.screenName}</div>}
-                    {this.props.value && this.props.value.email && <div>Email: {this.props.value.email}</div>}
+                <Tooltip id="tooltip" className="tipUserFieldValue" style={{"whiteSpace":"nowrap"}} >
+                    {this.props.value && this.props.value.screenName && <div className="tipScreenName">User Name: {this.props.value.screenName}</div>}
+                    {this.props.value && this.props.value.email && <div className="tipEmail">Email: {this.props.value.email}</div>}
                 </Tooltip>
             );
 
             return (
-                <OverlayTrigger placement="top" overlay={tooltip}>
+                <OverlayTrigger placement="top" overlay={tooltip} >
                     <div className="userDisplayValue">{this.props.display}</div>
                 </OverlayTrigger>);
         }

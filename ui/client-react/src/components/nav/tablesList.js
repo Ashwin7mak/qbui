@@ -118,7 +118,6 @@ let TablesList = React.createClass({
         <li className="horizontal">
             <ul className="topLinks">
                 {this.getNavItem('nav.home', `/qbase/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
-                {this.getNavItem('nav.users', '/qbase/users', 'user')}
             </ul>
         </li>);
     },
@@ -131,7 +130,6 @@ let TablesList = React.createClass({
 
                     <NavItem item={{msg: 'nav.tablesHeading'}}
                              isHeading={true}
-                             secondaryIcon={"search"}
                              onClick={this.onClickTables} open={true} />
                     <li className={this.state.searching ? "search open" : "search"}>
                         <SearchBox ref="tablesSearchBox" searchBoxKey="tablesSearchBox"

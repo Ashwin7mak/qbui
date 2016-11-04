@@ -24,7 +24,7 @@ describe('UserFieldValueRenderer functions', () => {
         TestUtils.Simulate.mouseOver(userFieldValueRenderer);
 
         // no tooltip if no values to display
-        const tooltips = document.getElementsByClassName("tooltip-inner");
+        const tooltips = document.getElementsByClassName("tipUserFieldValue");
         expect(tooltips.length).toBe(0);
     });
 
@@ -46,7 +46,7 @@ describe('UserFieldValueRenderer functions', () => {
         // get the tooltip to display
         TestUtils.Simulate.mouseOver(userFieldValueRenderer);
 
-        const tooltips = document.getElementsByClassName("tooltip-inner");
+        const tooltips = document.getElementsByClassName("tipUserFieldValue");
         expect(tooltips.length).toBe(1);
 
         // find the tooltip lines
@@ -54,8 +54,11 @@ describe('UserFieldValueRenderer functions', () => {
         expect(tipEntries.length).toBe(2);
 
         // check the text of the tooltip
-        expect(tipEntries[0]).toHaveText(user.screenName);
-        expect(tipEntries[1]).toHaveText(user.email);
+        const screenNames = document.querySelectorAll(".tooltip-inner .tipScreenName");
+        expect(screenNames.length).toBe(1);
+
+        const emails = document.querySelectorAll(".tooltip-inner .tipEmail");
+        expect(emails.length).toBe(1);
     });
 
     it('test render of component with email but no screenName', () => {

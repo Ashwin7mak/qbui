@@ -45,8 +45,14 @@
             height:32px;
             width:32px;
             margin:0;
-
         }
+        a.iconLink[disabled] {
+            cursor: not-allowed;
+            .qbIcon {
+                color: $icon-disabled-color;
+            }
+        }
+
 
         div.dropdown {
             vertical-align:baseline;
@@ -105,6 +111,10 @@
     a.iconLink:hover {
         text-decoration:none;
         color: #fff;
+    }
+
+    a.iconLink[disabled]:hover {
+        background-color: inherit;
     }
 }
 

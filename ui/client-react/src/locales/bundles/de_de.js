@@ -348,6 +348,13 @@ export default {
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
             choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },
-        noneOption: "\<Keiner\>"
+        noneOption: "\<Keiner\>",
+        unimplemented: {
+            search: "Die Suche ist noch nicht verfügbar",
+            favorites: "Der Zugriff auf Favoriten ist noch nicht verfügbar",
+            makeFavorite: "Kennzeichnung als Favorit ist noch nicht verfügbar",
+            print: "Der Druck ist noch nicht verfügbar",
+            copy: "Kopieren ist noch nicht verfügbar"
+        }
     }
 };

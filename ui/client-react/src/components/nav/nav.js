@@ -43,22 +43,23 @@ export let Nav = React.createClass({
 
     getTopGlobalActions() {
         const actions = [
-            {msg:'globalActions.user', link:'/qbase/user', icon:'user'},
             {msg:'globalActions.help', link:'/qbase/help', icon:'help'}
         ];
         return (<GlobalActions actions={actions}
                                position={"top"}
+                               dropdownIcon="user"
+                               dropdownMsg="globalActions.user"
                                startTabIndex={4}/>);
     },
 
     getLeftGlobalActions() {
         const actions = [
-            {msg:'globalActions.user', link:'/qbase/user', icon:'user'}
+            {msg:'globalActions.help', link:'/qbase/help', icon:'help'}
         ];
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
-                               dropdownIcon="help"
-                               dropdownMsg="globalActions.help"
+                               dropdownIcon="user"
+                               dropdownMsg="globalActions.user"
                                startTabIndex={100}
                                position={"left"}/>);
     },
@@ -118,6 +119,7 @@ export let Nav = React.createClass({
 
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
         if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && (!this.state.nav.trowserOpen || oldRecId !== editRec)) {
+
 
             const flux = this.getFlux();
 
