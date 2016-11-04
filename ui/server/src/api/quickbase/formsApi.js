@@ -88,7 +88,7 @@
             for (let fld in tableFields) {
                 let fldElement = tableFields[fld];
                 if (fldElement.builtIn) {
-                    tableFieldsFidList.push({id: fldElement.id, required: fldElement.required});
+                    tableFieldsFidList.push({id: fldElement.id, required: false});
                 }
             }
             return tableFieldsFidList;
