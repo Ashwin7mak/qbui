@@ -329,6 +329,18 @@ export default {
             url: 'www.beispiel.de'
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
+        errors: {
+            errorLoadingReport: {
+                message: "Dieser Bericht ist nicht verfügbar",
+                helpText: "Denn jetzt können Sie versuchen, einen anderen Bericht auswählen.",
+                contactSupport: "Lassen Sie unser Team kennen, damit wir das Problem beheben können",
+                supportTeamInfo: "Einige Informationen für das Support-Team:",
+                playGraphic: "Zeig mir wie",
+                stopGraphic: "Hör auf zu spielen",
+                showAdditionalInfo: "Details anzeigen",
+                hideAdditionalInfo: "Details ausblenden"
+            }
+        },
         invalidMsg : {
             unknown: 'Ungültige unbekannte Art. Befund: ',
             required: 'Füllen Sie das {fieldName}',
