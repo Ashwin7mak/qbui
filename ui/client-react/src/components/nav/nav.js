@@ -149,7 +149,9 @@ export let Nav = React.createClass({
     componentDidUpdate(prevProps) {
 
         // component updated, update the record trowser content if necessary
-        this.updateRecordTrowser(prevProps.location.query.editRec);
+        if (document.querySelector(".notification-container-empty")) {
+            this.updateRecordTrowser(prevProps.location.query.editRec);
+        }
     },
 
     render() {
