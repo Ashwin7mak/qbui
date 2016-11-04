@@ -9,7 +9,7 @@
     var FormsPage = requirePO('formsPage');
     var formsPage = new FormsPage();
 
-    describe('Edit Form Tests', function() {
+    describe('Add a record Via Form Tests : ', function() {
         var realmName;
         var realmId;
         var app;
@@ -47,32 +47,31 @@
         });
 
         it('Add a record from the form', function(done) {
-            //TODO textField.Right now even phone no field says textField. Sp coudnt enter values and save record
-            var fieldTypeClassNames = ['numericField', 'dateCell', 'timeCell', 'checkbox'];
+            var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
             formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                 //click on add record button
                 reportServicePage.clickAddRecordOnStage();
                 // Check that the add form container is displayed
                 expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
-            }).then(function() {
+
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
-            }).then(function() {
+
                 //Save the form
                 formsPage.clickFormSaveBtn();
             }).then(function() {
                 //reload the report to verify the row edited
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                 return formsPage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    //Verify there are 7 records after editing 1
                     e2eBase.sleep(browser.params.smallSleep);
-                    expect(reportServicePage.reportRecordsCount.getText()).toContain('8 records');
-                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(7, fieldTypeClassNames[j]);
-                    }
-                    done();
+                    reportServicePage.agGridRecordElList.then(function(records) {
+                        for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                            formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
+                        }
+                        done();
+                    });
                 });
             });
         });

@@ -114,12 +114,10 @@
                 //Execute a GET report homepage
                 recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                     var results = JSON.parse(reportHomePageResults.body);
-                    //verify report meta Data is empty
-                    assert.deepEqual(results.reportMetaData.data, '');
-
+                    //verify report meta Data is undefined
+                    assert.deepEqual(results.metaData, undefined);
                     //verify report data is empty
-                    var reportData = results.reportData.data;
-                    assert.deepEqual(results.reportData.data, '');
+                    assert.deepEqual(results, {});
                     done();
                 });
             });
@@ -151,11 +149,10 @@
                                         recordBase.apiBase.executeRequest(recordBase.apiBase.resolveTablesEndpoint(app.id, app.tables[0].id) + '/homepage?format=' + FORMAT, consts.GET).then(function(reportHomePageResults) {
                                             var results = JSON.parse(reportHomePageResults.body);
                                             //verify report meta Data is empty
-                                            assert.deepEqual(results.reportMetaData.data, '');
+                                            assert.deepEqual(results.metaData, undefined);
 
                                             //verify report data is empty
-                                            var reportData = results.reportData.data;
-                                            assert.deepEqual(results.reportData.data, '');
+                                            assert.deepEqual(results, {});
                                             done();
                                         });
                                     });
@@ -227,14 +224,13 @@
                                     var results = JSON.parse(reportHomePageResults.body);
                                     //Verify returned results has right report Id and role info
                                     //verify report meta Data
-                                    var reportMetaData = results.reportMetaData.data;
+                                    var reportMetaData = results.metaData;
                                     assert.deepEqual(reportMetaData.id, testcase.reportId);
                                     assert.deepEqual(reportMetaData.name, testcase.reportName);
 
                                     //verify report data
-                                    var reportData = results.reportData.data;
-                                    assert.deepEqual(reportData.groups, []);
-                                    assert.deepEqual(reportData.records.length, 10);
+                                    assert.deepEqual(results.groups, []);
+                                    assert.deepEqual(results.records.length, 10);
                                     done();
                                 });
                             });

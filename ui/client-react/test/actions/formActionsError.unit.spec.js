@@ -23,10 +23,16 @@ describe('Form Actions loadFormAndRecord negative tests -- ', () => {
             p.reject({response:{message:'someError', status:errorStatus}});
             return p.promise;
         }
+        getForm() {
+            var p = Promise.defer();
+            p.reject({response:{message:'someError', status:errorStatus}});
+            return p.promise;
+        }
     }
     beforeEach(() => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockFormService.prototype, 'getFormAndRecord').and.callThrough();
+        spyOn(mockFormService.prototype, 'getForm').and.callThrough();
         formActions.__Rewire__('FormService', mockFormService);
     });
 
@@ -34,7 +40,7 @@ describe('Form Actions loadFormAndRecord negative tests -- ', () => {
         formActions.__ResetDependency__('FormService');
     });
 
-    it('test missing params', (done) => {
+    it('test missing params loadFormAndRecord', (done) => {
         flux.actions.loadFormAndRecord().then(
             () => {
                 expect(true).toBe(false);
@@ -46,7 +52,20 @@ describe('Form Actions loadFormAndRecord negative tests -- ', () => {
             }
         );
     });
-    it('test promise reject handling', (done) => {
+    it('test missing params loadForm', (done) => {
+        flux.actions.loadForm().then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(mockFormService.prototype.getForm).not.toHaveBeenCalled();
+                done();
+            }
+        );
+    });
+
+    it('test promise reject handling loadFormAndRecord', (done) => {
         flux.actions.loadFormAndRecord(appId, tblId, recordId).then(
             () => {
                 expect(true).toBe(false);
@@ -57,6 +76,21 @@ describe('Form Actions loadFormAndRecord negative tests -- ', () => {
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FORM_AND_RECORD]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FORM_AND_RECORD_FAILED, errorStatus]);
+                done();
+            }
+        );
+    });
+    it('test promise reject handling loadForm', (done) => {
+        flux.actions.loadForm(appId, tblId, recordId).then(
+            () => {
+                expect(true).toBe(false);
+                done();
+            },
+            () => {
+                expect(mockFormService.prototype.getForm).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FORM]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FORM_FAILED, errorStatus]);
                 done();
             }
         );

@@ -7,6 +7,7 @@ import StringUtils from '../utils/stringUtils';
 import WindowLocationUtils from '../utils/windowLocationUtils';
 import uuid from 'uuid';
 import Promise from 'bluebird';
+import QbResponseError from './QbResponseError';
 
 window.Promise = Promise; // set global Promise to Bluebird promise (axios has dependency on Promises which are not in IE 11)
 
@@ -111,7 +112,7 @@ class BaseService {
             },
             error => {
                 self.checkResponseStatus(error);
-                return Promise.reject(error);
+                return Promise.reject(new QbResponseError(error));
             }
         );
     }
@@ -169,7 +170,7 @@ class BaseService {
      * To find the hostname for current stack, we can do a string replace on the current window.location.hostname value and strip out ".newstack"
      * Now we combine these 3 values with an https to construct the full redirect url.
      *
-     * example prod output: team.quickbase.com/db/main?a=nsredirect&nsurl=https://team.newstack.quickbase.com/apps
+     * example prod output: team.quickbase.com/db/main?a=nsredirect&nsurl=https://team.newstack.quickbase.com/qbase/apps
      */
     constructRedirectUrl() {
         let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
