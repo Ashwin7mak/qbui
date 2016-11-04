@@ -114,7 +114,7 @@ describe('LeftNav', () => {
                                                           items={navItemsTestData}/>);
 
         TestUtils.findRenderedDOMComponentWithClass(component, 'appsList');
-        expect(TestUtils.scryRenderedDOMComponentsWithTag(component, 'tablesList').length).toEqual(0);
+        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'tablesList').length).toEqual(0);
     });
 
     it('renders the tables list if a valid app is currently selected', () => {
@@ -125,7 +125,7 @@ describe('LeftNav', () => {
                                                           items={navItemsTestData}/>);
 
         TestUtils.findRenderedDOMComponentWithClass(component, 'tablesList');
-        expect(TestUtils.scryRenderedDOMComponentsWithTag(component, 'appsList').length).toEqual(0);
+        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'appsList').length).toEqual(0);
     });
 
     it('renders the apps list if an invalid/non-existing app is currently selected', () => {
@@ -136,6 +136,6 @@ describe('LeftNav', () => {
                                                           items={navItemsTestData}/>);
 
         TestUtils.findRenderedDOMComponentWithClass(component, 'appsList');
-        expect(TestUtils.scryRenderedDOMComponentsWithTag(component, 'tablesList').length).toEqual(0);
+        expect(TestUtils.scryRenderedDOMComponentsWithClass(component, 'tablesList').length).toEqual(0);
     });
 });

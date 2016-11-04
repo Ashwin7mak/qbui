@@ -1,6 +1,7 @@
 import React from 'react';
 import QBicon from '../components/qbIcon/qbIcon.js';
 import UrlFileAttachmentReportLinkFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
+import WindowLocationUtils from './windowLocationUtils';
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -29,16 +30,8 @@ const UrlUtils = {
             return <span />;
         }
     },
-    getRealmId(url) {
-        if (!url) {
-            return null;
-        }
-
-        // Return the first part of the subdomain (which is the realm id)
-        return url.split('//')[1].split('.')[0];
-    },
     getQuickBaseClassicLink(selectedAppId) {
-        let realmId = this.getRealmId(this._getCurrentLocation());
+        let realmId = WindowLocationUtils.getSubdomain();
         let link = `https://${realmId}.quickbase.com/db/`;
 
         if (selectedAppId) {
@@ -49,9 +42,6 @@ const UrlUtils = {
 
         return link;
     },
-    _getCurrentLocation() {
-        return window.location.href;
-    }
 };
 
 export default UrlUtils;

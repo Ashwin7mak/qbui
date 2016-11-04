@@ -1,6 +1,7 @@
 import React from 'react';
 import UrlUtils from '../../src/utils/urlUtils';
 import QBicon from '../../src/components/qbIcon/qbIcon';
+import WindowUtils from '../../src/utils/windowLocationUtils';
 
 describe('UrlUtils', () => {
     let phoneIcon = 'phone-outline';
@@ -74,39 +75,9 @@ describe('UrlUtils', () => {
         });
     });
 
-    describe('getRealmId', () => {
-        let testRealmId = 'realmId';
-
-        let testCases = [
-            {
-                description: 'returns null if a URL is not provided',
-                url: null,
-                expectation: null
-            },
-            {
-                description: 'returns the realm ID from a url',
-                url: `https://${testRealmId}.quickbase.com`,
-                expectation: testRealmId
-            },
-            {
-                description: 'returns the realm ID from a multipart subdomain',
-                url: `https://${testRealmId}.subdomain.quickbase.com`,
-                expectation: testRealmId
-            }
-        ];
-
-
-        testCases.forEach(testCase => {
-            it(testCase.description, () => {
-                expect(UrlUtils.getRealmId(testCase.url)).toEqual(testCase.expectation);
-            });
-        });
-    });
-
     describe('getQuickBaseClassicLink', () => {
         let testRealmId = 'realmId';
         let testAppId = 'testAppId';
-        let currentUrl = `https://${testRealmId}.quickbase.com/app/${testAppId}`;
 
         let testCases = [
             {
@@ -123,9 +94,15 @@ describe('UrlUtils', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                spyOn(UrlUtils, '_getCurrentLocation').and.returnValue(currentUrl);
+                let mockWindowUtils =  {
+                    getSubdomain() {return testRealmId;}
+                };
+
+                UrlUtils.__Rewire__('WindowLocationUtils', mockWindowUtils);
 
                 expect(UrlUtils.getQuickBaseClassicLink(testCase.selectedAppId)).toEqual(testCase.expectation);
+
+                UrlUtils.__ResetDependency__('WindowLocationUtils');
             });
         });
     });
