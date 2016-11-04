@@ -11,6 +11,8 @@ var logger = new Logger();
    RecordPendingEditsStore keeps track of inline edits in progress made on a record    before they are committed to database
  **/
 
+//a constant may already exist in a constants file, use that one instead
+const DTS_ERR0R_CODE = 500;
 
 let RecordPendingEditsStore = Fluxxor.createStore({
 
@@ -26,6 +28,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             actions.SAVE_RECORD_FAILED, this.onSaveRecordFailed,
             actions.ADD_RECORD, this.onSaveAddedRecord,
             actions.DELETE_RECORD_FAILED, this.deleteRecordFailed,
+            actions.DELETE_RECORD_BULK_FAILED, this.deleteRecordBulkFailed,
             actions.ADD_RECORD_SUCCESS, this.onAddRecordSuccess,
             actions.ADD_RECORD_FAILED, this.onAddRecordFailed,
             actions.DTS_ERROR_MODAL, this.onDTSErrorModal
@@ -216,6 +219,12 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.emit('change');
 
     },
+    handleErrors(payload) {
+        this.getServerErrs(payload);
+        // if () {
+        this.onDTSErrorModal(payload);
+        // }
+    },
     getServerErrs(payload) {
         // init no errors
         //a new handleError functino
@@ -251,7 +260,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
             this.commitChanges[entry].status = actions.SAVE_RECORD_FAILED;
         }
-        this.getServerErrs(payload);
+        this.handleErrors(payload);
         this.recordEditOpen = true;
         this.emit('change');
     },
@@ -275,7 +284,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
      * @param payload - the recId
      */
     onAddRecordSuccess(payload) {
-        console.log('onAddRecordSuccess');
         this.currentEditingRecordId = payload.recId;
         let entry = this._getEntryKey();
         if (typeof (this.commitChanges[entry]) === 'undefined') {
@@ -318,14 +326,17 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
             this.commitChanges[entry].status = actions.ADD_RECORD_FAILED;
         }
-        this.getServerErrs(payload);
+        this.handleErrors(payload);
 
         this.emit('change');
     },
 
     deleteRecordFailed(payload) {
-        console.log('deleteRecordFailed payload: ', payload);
-        this.onDTSErrorModal(payload);
+        this.handleErrors(payload);
+        this.emit('change');
+    },
+    deleteRecordBulkFailed(payload) {
+        this.handleErrors(payload);
         this.emit('change');
     },
     /**

@@ -3,6 +3,10 @@ import QBModal from '../qbModal/qbModal';
 
 
 const DTSErrorModal = React.createClass({
+    ///There will be no state
+    //There will be no function to close modal
+    //Everything will exist in it's parents
+    //This is only for building/testing purposes right now
     getInitialState() {
         return {
             isOpen: false
@@ -12,7 +16,6 @@ const DTSErrorModal = React.createClass({
         //I can get ride of this, and on click, fire off a function, that will fire off a listener
         //that willl change
         // this.dtsErrorReceived(this.props.show);
-        console.log('props: ', props);
         this.setState({
             isOpen: props.show
         });
