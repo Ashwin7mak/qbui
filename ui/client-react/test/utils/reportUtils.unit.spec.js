@@ -55,7 +55,7 @@ describe('ReportUtils - test getSortFidsOnly', () => {
         {test:'null input', input:null, output: []},
         {test:'valid input with sort- integer array input', input:['3', '-4'], output: ['3', '-4']},
         {test:'valid input with group- integer array input', input:['3:V', '-4'], output: ['-4']},
-        {test:'valid input with sort- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: null}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['3', '-4']},
+        {test:'valid input with sort and no group type - object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: null}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: undefined}], output: ['3', '-4']},
         {test:'valid input with group- object array input', input:[{fieldId: '3', sortOrder: constants.SORT_ORDER.ASC, groupType: "V"}, {fieldId: '4', sortOrder: constants.SORT_ORDER.DESC, groupType: null}], output: ['-4']}
     ];
     dataProvider.forEach(function(data) {
@@ -164,6 +164,35 @@ describe('ReportUtils - test getGListString', () => {
     dataProvider.forEach(function(data) {
         it(data.test, function() {
             expect(ReportUtils.getGListString(data.sortFids, data.groupEls)).toBe(data.output);
+        });
+    });
+});
+
+describe('ReportUtils - test getSortListFromObject', () => {
+    var dataProvider = [
+        {test: 'empty input', sortList: [], output: ''},
+        {test: 'null input', sortList: null, output: null},
+        {test: 'non-array input', sortList: 'someString', output: 'someString'},
+        {test: '1 sort only input', sortList: [{fieldId: 1, sortOrder: 'asc'}], output: '1'},
+        {
+            test: 'Multiple sort only input',
+            sortList: [{fieldId: 1, sortOrder: 'asc'}, {fieldId: 2, sortOrder: 'desc'}],
+            output: '1.-2'
+        },
+        {
+            test: '1 group only input',
+            sortList: [{fieldId: 1, sortOrder: 'asc', groupType: 'EQUALS'}],
+            output: '1:EQUALS'
+        },
+        {
+            test: 'Multiple sort and group input',
+            sortList: [{fieldId: 1, sortOrder: 'asc'}, {fieldId: 2, sortOrder: 'desc', groupType: 'EQUALS'}],
+            output: '1.-2:EQUALS'
+        }
+    ];
+    dataProvider.forEach(function(data) {
+        it(data.test, function() {
+            expect(ReportUtils.getSortListFromObject(data.sortList)).toBe(data.output);
         });
     });
 });

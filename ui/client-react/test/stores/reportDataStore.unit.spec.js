@@ -139,7 +139,7 @@ describe('Test ReportData Store', () => {
             metaData: {
                 name: 'report_name',
                 fids: [],
-                sortList: "1:V"
+                sortList: "1:EQUALS"
             },
             recordData: {
                 fields: [],
@@ -152,7 +152,7 @@ describe('Test ReportData Store', () => {
                             id: 1,
                             name: 'group-field1'
                         }],
-                        groupType: 'V'
+                        groupType: 'EQUALS'
                     }],
                     gridColumns: [{
                         id: 2,
@@ -161,10 +161,10 @@ describe('Test ReportData Store', () => {
                     gridData: [{
                         id: 2,
                         value: 'grid-data2'
-                    }],
-                    totalRows: 1
+                    }]
                 }
-            }
+            },
+            recordCount: 1
         };
 
         let action = {
@@ -191,7 +191,7 @@ describe('Test ReportData Store', () => {
             metaData: {
                 name: 'report_name',
                 fids: [],
-                sortList: ""
+                sortList: "1:EQUALS"
             },
             recordData: {
                 fields: [],
@@ -204,7 +204,7 @@ describe('Test ReportData Store', () => {
                             id: 1,
                             name: 'group-field1'
                         }],
-                        groupType: 'V'
+                        groupType: 'EQUALS'
                     }],
                     gridColumns: [{
                         id: 2,
@@ -214,10 +214,10 @@ describe('Test ReportData Store', () => {
                         id: 2,
                         value: 'grid-data2'
                     }],
-                    totalRows: 1
-                }
+                },
             },
-            sortList: "1:V"
+            recordCount: 1,
+            sortList: "1:EQUALS"
         };
 
         let action = {
@@ -498,7 +498,8 @@ describe('Test ReportData Store', () => {
                     {id: 8, value: 456, display: 456}
                     ]],
                 groups: []
-            }
+            },
+            recordCount: 2
         };
 
         let loadReportAction = {
@@ -559,7 +560,8 @@ describe('Test ReportData Store', () => {
                         {id: 8, value: 456, display: 456}
                     ]],
                 groups: []
-            }
+            },
+            recordCount: 2
         };
 
         let loadReportAction = {
@@ -619,7 +621,8 @@ describe('Test ReportData Store', () => {
                         {id: 8, value: 456, display: 456}
                     ]],
                 groups: []
-            }
+            },
+            recordCount: 2
         };
 
         let loadReportAction = {
@@ -688,7 +691,8 @@ describe('Test ReportData Store', () => {
                         {id: 8, value: null, display: null}
                     ]],
                 groups: []
-            }
+            },
+            recordCount: 3
         };
 
         let loadReportAction = {
@@ -752,7 +756,8 @@ describe('Test ReportData Store', () => {
                         {id: 8, value: null, display: null}
                     ]],
                 groups: []
-            }
+            },
+            recordCount: 3
         };
 
         let loadReportAction = {
@@ -878,7 +883,8 @@ describe('Test ReportData Store', () => {
                                 {id: 8, value: null}
                             ]],
                         groups: []
-                    }
+                    },
+                    recordCount: 2
                 };
 
                 let loadReportAction = {
@@ -945,7 +951,8 @@ describe('Test ReportData Store', () => {
                         {id: 8, value: 456, display: 456}
                     ]],
                 groups: []
-            }
+            },
+            recordCount: 2
         };
 
         let loadReportAction = {
@@ -1010,7 +1017,8 @@ describe('Test ReportData Store', () => {
                         {id: 8, value: null, display: null}
                     ]],
                 groups: []
-            }
+            },
+            recordCount: 2
         };
 
         let loadReportAction = {
@@ -1062,14 +1070,15 @@ describe('Test ReportData Store', () => {
                 ],
                 records: [[
                     {id: 16, value: 16, display: 16},
-                    {id: 8, value: 1234, display: 1234},
+                    {id: 8, value: 1234, display: 1234}
                 ],
                     [
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
                 groups: []
-            }
+            },
+            recordCount: 2
         };
         let reportRecordsCountPayload = {
             body:2
@@ -1140,7 +1149,8 @@ describe('Test ReportData Store', () => {
                         {id: 8, value: 456, display: 456}
                     ]],
                 groups: []
-            }
+            },
+            recordCount: 2
         };
         let reportRecordsCountPayload = {
             body:2
@@ -1210,9 +1220,9 @@ describe('Test ReportData Store', () => {
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: [],
-                recordsCount: 2
-            }
+                groups: []
+            },
+            recordCount: 2
         };
         let reportRecordsCountPayload = {
             body:2
@@ -1280,9 +1290,9 @@ describe('Test ReportData Store', () => {
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: [],
-                recordsCount: 2
-            }
+                groups: []
+            },
+            recordCount: 2
         };
         let reportRecordsCountPayload = {
             body:2
@@ -1351,9 +1361,9 @@ describe('Test ReportData Store', () => {
                         {id: 16, value: "NYC", display: "NYC"},
                         {id: 8, value: 456, display: 456}
                     ]],
-                groups: [],
-                recordsCount: 2
-            }
+                groups: []
+            },
+            recordCount: 2
         };
         let reportRecordsCountPayload = {
             body:2
@@ -1425,7 +1435,8 @@ describe('Test ReportData Store', () => {
                         {id: 8, value: 456, display: 456}
                     ]],
                 groups: []
-            }
+            },
+            recordCount: 2
         };
         let reportRecordsCountPayload = {
             body:2
@@ -1481,7 +1492,7 @@ describe('Test ReportData Store', () => {
 
     it('test load report records count success action', () => {
         let payload = {
-            body: 10
+            body: 2
         };
 
         let loadReportRecordsCountAction = {

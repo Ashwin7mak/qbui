@@ -119,11 +119,20 @@ describe('Fields Actions getFields -- ', () => {
     class mockFieldsService {
         constructor() { }
         getFields() {
-            return Promise.resolve(null);
+            return Promise.reject(null);
         }
         getField(id) {
-            return Promise.resolve(null);
+            return Promise.reject(null);
         }
+    }
+
+    class mockLogger {
+        constructor() {}
+        logException() {}
+        debug() {}
+        warn() {}
+        error() {}
+        parseAndLogError() {}
     }
 
     let stores = {};
@@ -134,11 +143,14 @@ describe('Fields Actions getFields -- ', () => {
         spyOn(flux.dispatchBinder, 'dispatch');
         spyOn(mockFieldsService.prototype, 'getFields').and.callThrough();
         spyOn(mockFieldsService.prototype, 'getField').and.callThrough();
+        spyOn(mockLogger.prototype, 'logException').and.callThrough();
         fieldsActions.__Rewire__('FieldsService', mockFieldsService);
+        fieldsActions.__Rewire__('Logger', mockLogger);
     });
 
     afterEach(() => {
         fieldsActions.__ResetDependency__('FieldsService');
+        fieldsActions.__ResetDependency__('Logger');
     });
 
     it('test exception handling', (done) => {
@@ -150,9 +162,9 @@ describe('Fields Actions getFields -- ', () => {
             () => {
                 expect(mockFieldsService.prototype.getFields).toHaveBeenCalled();
                 expect(mockFieldsService.prototype.getField).not.toHaveBeenCalled();
-                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_FIELDS]);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_FIELDS_FAILED, exStatus]);
+                expect(mockLogger.prototype.logException).toHaveBeenCalled();
                 done();
             }
         );
