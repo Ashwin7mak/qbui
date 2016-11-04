@@ -45,6 +45,10 @@ $page-actions-background-color: #486c8f;
                 background-color: $color-green-600;
                 color: $color2;
                 margin-right: 30px;
+
+                .qbIcon {
+                    color: $color2;
+                }
             }
         }
     }

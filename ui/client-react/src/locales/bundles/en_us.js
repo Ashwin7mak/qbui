@@ -9,6 +9,28 @@ export default {
         apps: {
             header: "Apps"
         },
+        app: {
+            homepage: {
+                welcomeTitle: "Welcome to Mercury Beta",
+                welcomeText: "While you learn your way around, use this area in place of your app homepage. " +
+                "This is your real app in Mercury. You won’t see your app homepage yet, but all your " +
+                "data is here. Work you do here displays immediately in Classic view, too.",
+                launchVideoLink: "Launch video tour (3:00)",
+                guideMeLink: "Guide me through Mercury",
+                guideTitle: "Welcome guide",
+                guideText: "Learn all about the Mercury Beta program. See what features are currently available and how your team can get work done faster, across devices, using Mercury.",
+                guideButton: "Download the Welcome guide",
+                feedbackTitle: "We want your feedback",
+                feedbackText: "Our team is waiting to hear from you! We’re so eager to hear what you think about Mercury that we’ve included a Feedback button on each page of your app.",
+                feedbackButton: "Give feedback",
+                tipTitle: "Nothing happened when I clicked...",
+                tipText: "This is work in progress, so if you click a button and it doesn’t do anything, no worries. We’re still working on that feature.",
+                helpTitle: "Need help?",
+                helpText: "We want you to be successful; that’s why we’re always here to help.",
+                helpLinkPreText: "Please contact us at",
+                missingWalkMe: "Tutorial is not available."
+            }
+        },
         pendingEditModal: {
             modalBodyMessage: "Save changes before leaving?",
             modalStayButton: "Stay and keep working",
@@ -53,7 +75,7 @@ export default {
             previousRecord: "Previous Record",
             save: "Save",
             saveAndNext: "Save & Next",
-            saveAndAddAnother: "Save & add another",
+            saveAndAddAnother: "Save & Add Another",
             new: "New"
         },
         field: {
@@ -124,6 +146,11 @@ export default {
                 403: "You are not authorized to access this form",
                 500: "Unexpected error rendering this form"
             },
+            footer: {
+                lastUpdatedBy: "Last updated by ",
+                createdOn: "Created on ",
+                ownedBy: "Owned by "
+            }
         },
         report : {
             blank : "blank",

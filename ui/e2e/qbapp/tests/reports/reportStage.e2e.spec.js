@@ -90,12 +90,5 @@
         });
 
         //TODO: Add tests for stage content (specifically email link and link hover)
-
-        /**
-         * After all tests are done, run the cleanup function in the base class
-         */
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
     });
 }());

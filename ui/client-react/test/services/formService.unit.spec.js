@@ -65,4 +65,37 @@ describe('FormService functions', () => {
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
     });
 
+    it('test getForm function with type defined', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 4;
+        var type = query.ADD_FORM_TYPE;
+
+        var params = {};
+        params[query.REPORT_ID_PARAM] = rptId;
+        params[query.FORM_TYPE_PARAM] = type;
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+
+        var url = formService.constructUrl(formService.API.GET_FORM_COMPONENTS_ONLY, [appId, tblId]);
+
+        formService.getForm(appId, tblId, rptId, type);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
+    it('test getForm function without type defined', () => {
+        var appId = 1;
+        var tblId = 2;
+        var rptId = 4;
+
+        var params = {};
+        params[query.REPORT_ID_PARAM] = rptId;
+        params[query.FORM_TYPE_PARAM] = query.VIEW_FORM_TYPE;
+        params[query.FORMAT_PARAM] = query.DISPLAY_FORMAT;
+
+        var url = formService.constructUrl(formService.API.GET_FORM_COMPONENTS_ONLY, [appId, tblId]);
+
+        formService.getForm(appId, tblId, rptId);
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params:params});
+    });
+
 });

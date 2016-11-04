@@ -35,10 +35,10 @@ const ReportRoute = React.createClass({
         let tblId = params.tblId;
         let rptId = typeof this.props.rptId !== "undefined" ? this.props.rptId : params.rptId;
 
-        let offset = NumberUtils.getNumericPropertyValue(this.props.reportData, 'pageOffset');
-        let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows');
-
         if (appId && tblId && rptId) {
+            //  loading a report..always render the 1st page on initial load
+            let offset = constants.PAGE.DEFAULT_OFFSET;
+            let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows') || constants.PAGE.DEFAULT_NUM_ROWS;
             this.loadReport(appId, tblId, rptId, offset, numRows);
         }
     },
@@ -73,18 +73,20 @@ const ReportRoute = React.createClass({
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
-            {msg: 'unimplemented.makeFavorite', icon:'star', disabled:true},
+            {msg: 'pageActions.favorite', icon:'star'},
+            {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
             {msg: 'pageActions.email', icon:'mail'},
-            {msg: 'unimplemented.print', icon:'print', disabled:true}
+            {msg: 'pageActions.print', icon:'print'},
+            {msg: 'pageActions.customizeReport', icon:'settings-hollow'},
         ];
-        return (<IconActions className="pageActions" actions={actions} />);
+        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
 
 
     getStageHeadline() {
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
         const {appId, tblId} = this.props.params;
-        const tableLink = `/app/${appId}/table/${tblId}`;
+        const tableLink = `/qbase/app/${appId}/table/${tblId}`;
         return (
             <div className="reportStageHeadline">
 

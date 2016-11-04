@@ -32,9 +32,6 @@ consts = require('../../common/src/constants.js');
 
     var app;
 
-    e2eBase.setBaseUrl(config.DOMAIN);
-    e2eBase.initialize();
-
     //generate an app and console log the app and tables it created when done
     generateNewData(() => {
         createdRecs();

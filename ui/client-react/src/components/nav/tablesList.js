@@ -67,7 +67,7 @@ let TablesList = React.createClass({
      * get link to table homepage
      */
     getTableLink(table) {
-        return `/app/${this.props.selectedAppId}/table/${table.id}`;
+        return `/qbase/app/${this.props.selectedAppId}/table/${table.id}`;
     },
 
     /**
@@ -117,7 +117,7 @@ let TablesList = React.createClass({
         return (
         <li className="horizontal">
             <ul className="topLinks">
-                {this.getNavItem('nav.home', `/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
+                {this.getNavItem('nav.home', `/qbase/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
             </ul>
         </li>);
     },

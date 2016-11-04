@@ -130,6 +130,7 @@ html body {
 
         .mainContent {
             display: flex;
+            flex-direction: column;
             order: 2;
             flex: 1 1 auto;
             min-width: 0;
@@ -139,6 +140,7 @@ html body {
             transform: translate3d(0,0,0);
             //min-height is required in order for the scrollbar to work in firefox
             min-height: 0;
+            overflow: auto;
         }
 
         .footer {
