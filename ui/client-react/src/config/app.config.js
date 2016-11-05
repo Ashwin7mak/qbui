@@ -54,7 +54,7 @@ if (__QB_TEST__) {
             logToConsole: true,
             logToServer: true
         },
-        unauthorizedRedirect: '/unauthorized'
+        unauthorizedRedirect: '/qbase/unauthorized'
     });
 }
 
@@ -67,7 +67,7 @@ if (__QB_LOCAL__) {
             logToConsole: true,
             logToServer: false
         },
-        unauthorizedRedirect: '/unauthorized'
+        unauthorizedRedirect: '/qbase/unauthorized'
     });
 }
 

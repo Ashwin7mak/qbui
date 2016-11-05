@@ -32,6 +32,11 @@
         color: #fff;
     }
 
+    a.iconLink[disabled] {
+        cursor: not-allowed;
+        background-color: $icon-disabled-color;
+    }
+
     font-size:16px;
     padding: 0;
     height: 100%;

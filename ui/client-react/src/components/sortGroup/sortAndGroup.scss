@@ -16,7 +16,7 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
 }
 
 .sortAndGroupDialog {
-  height: 530px;
+  height: 290px;
   width: 360px;
   min-width: 290px;
   overflow: hidden;
@@ -26,6 +26,18 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
   left: -10px;
   position: absolute;
   box-shadow: $shadow;
+
+  @include height-medium-breakpoint {
+    height: 420px;
+  }
+
+  @include height-large-breakpoint {
+    height: 580px;
+  }
+
+  @include height-xlarge-breakpoint {
+    height: 880px;
+  }
 
   .sortButtonSpan.btn.btn-default {
     margin-top: 0;
@@ -68,6 +80,18 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
 
   .dialogContent {
     overflow: auto;
+    max-height: 170px;
+    @include height-medium-breakpoint {
+      max-height: 320px;
+    }
+
+    @include height-large-breakpoint {
+      max-height: 580px;
+    }
+
+    @include height-xlarge-breakpoint {
+      max-height: 880px;
+    }
   }
 
   .fieldSelectorContainer {
@@ -135,6 +159,7 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
       white-space: nowrap;
     }
     .fieldChoiceActions {
+      white-space: nowrap;
       display: flex;
     }
   }
@@ -206,14 +231,37 @@ $shadow :   0px 4px 15px 0px rgba(70,66,66,0.15);
     }
   }
   .panel-body {
+    height: 430px;
     display: flex;
     flex-direction: column;
+
+    @include height-medium-breakpoint {
+      height: 430px;
+    }
+
+    @include height-large-breakpoint {
+      height: 690px;
+    }
+
+    @include height-xlarge-breakpoint {
+      height: 890px;
+    }
   }
   .list-group {
-    height: 490px;
-    min-height: 244px;
+    height: 210px;
     overflow: auto;
     margin-bottom: 0;
+    @include height-medium-breakpoint {
+      height: 410px;
+    }
+
+    @include height-large-breakpoint {
+      height: 570px;
+    }
+
+    @include height-xlarge-breakpoint {
+      height: 740px;
+    }
   }
   .list-group-item {
     color:$color11;

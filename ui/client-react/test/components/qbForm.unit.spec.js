@@ -8,6 +8,7 @@ import Breakpoints from '../../src/utils/breakpoints';
 
 const fakeQBFormData = {
     formMeta: {
+        "includeBuiltIns": true,
         "tabs": {
             "0": {
                 "orderIndex": 0,
@@ -163,8 +164,8 @@ const emptyQBFormData = {
             }
         }
     },
-    record:[{id:2, value: "field value"}],
-    fields: [{id: 2, name: "field name", datatypeAttributes: {type: "TEXT"}}]
+    record:[{id:2, value: "field value"}, {id:1, value: "built in field value"}],
+    fields: [{id: 2, name: "field name", datatypeAttributes: {type: "TEXT"}}, {"builtIn": true, "datatypeAttributes": {"type": "DATE_TIME"}, "id": 1, "required": false, "type": "SCALAR", "name": "built in field name"}]
 };
 
 var FieldElementMock = React.createClass({
@@ -197,7 +198,7 @@ describe('QBForm functions', () => {
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const qbForm = ReactDOM.findDOMNode(component);
         expect(qbForm).toBeDefined();

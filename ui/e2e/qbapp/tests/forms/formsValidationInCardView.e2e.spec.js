@@ -23,8 +23,8 @@
         var app;
         var recordList;
         var RECORDS_COUNT = '8 records';
-        var expectedErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field', 'Fill in the Phone Number Field', 'Fill in the Email Address Field', 'Fill in the URL Field'];
-        var expectedNumericErrorMessages = ['Fill in the Numeric Field', 'Fill in the Numeric Percent Field', 'Fill in the Duration Field'];
+        var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
+        var expectedNumericErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field'];
 
         beforeAll(function(done) {
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
@@ -54,10 +54,6 @@
             return reportServicePage.waitForElement(reportCardViewPage.loadedContentEl).then(function() {
                 done();
             });
-        });
-
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
         });
 
         it('Validate all required fields on the form', function(done) {
@@ -95,11 +91,11 @@
 
             //verify clicking on alert button brings up the error message popup
             formsPage.clickFormAlertBtn();
-            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
+            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
 
             //verify clicking on alert again hides the error message popup
             formsPage.clickFormAlertBtn();
-            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
+            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
             done();
 
         });
@@ -121,11 +117,11 @@
 
             //verify clicking on alert button brings up the error message popup
             formsPage.clickFormAlertBtn();
-            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe(null);
+            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
 
             //verify clicking on alert again hides the error message popup
             formsPage.clickFormAlertBtn();
-            expect(formsPage.formErrorMessage.getAttribute('hidden')).toBe('true');
+            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
             done();
 
         });

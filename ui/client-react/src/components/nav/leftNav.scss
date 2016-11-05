@@ -266,10 +266,11 @@ div.leftNavTooltip {
         color: $left-nav-heading-fg;
         margin: 0;
         padding-left: 10px;
+        line-height: 40px;
 
         &.withSecondary {
             cursor: pointer;
-            line-height: 40px;
+
             .qbIcon {
                 font-size: 16px;
                 position: absolute;

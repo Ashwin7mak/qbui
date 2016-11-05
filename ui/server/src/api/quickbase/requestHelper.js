@@ -8,14 +8,14 @@
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');
     let url = require('url');
-    var consts = require('../../../../common/src/constants');
+    let consts = require('../../../../common/src/constants');
 
     module.exports = function(config) {
         let request = defaultRequest;
         /**
          * Set of common methods used to parse out information from the http request object
          */
-        var helper = {
+        let helper = {
 
             isGet          : function(req) {
                 return req.method.toLowerCase() === 'get';
@@ -42,7 +42,7 @@
                 return config ? config.javaHost + req.url : '';
             },
             getAgentOptions: function(req) {
-                var agentOptions = {
+                let agentOptions = {
                     rejectUnauthorized: false
                 };
 
@@ -65,7 +65,7 @@
              * @param headers
              */
             copyHeadersToResponse: function(res, headers) {
-                for (var key in headers) {
+                for (let key in headers) {
                     if (headers.hasOwnProperty(key)) {
                         res[key] = headers[key];
                     }
@@ -81,7 +81,7 @@
              */
             setBodyOption: function(req, opts) {
                 //  body header option valid for all verbs EXCEPT 'get'.
-                if (!this.isGet(req)) {
+                if (!this.isGet(req) && !this.isGet(opts)) {
                     opts.body = req.rawBody;
                 }
                 return opts;
@@ -91,15 +91,16 @@
              * Set common shared request attributes on the server request
              *
              * @param req
+             * @param forceGet - Regardless of req method setting, always set to a get request
              * @returns request object used when submitting a server request
              */
-            setOptions: function(req) {
+            setOptions: function(req, forceGet) {
 
                 this.setTidHeader(req);
 
-                var opts = {
+                let opts = {
                     url         : this.getRequestUrl(req),
-                    method      : req.method,
+                    method      : (forceGet === true ? 'GET' : req.method),
                     agentOptions: this.getAgentOptions(req),
                     headers     : req.headers
                 };
@@ -129,7 +130,7 @@
              * @returns req
              */
             setTidHeader: function(req) {
-                var headers = {};
+                let headers = {};
                 if (req && req.headers) {
                     headers = req.headers;
                 }

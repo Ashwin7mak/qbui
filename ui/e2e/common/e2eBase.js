@@ -63,17 +63,17 @@
             },
             // Helper method to get the proper URL for loading the dashboard page containing a list of apps and tables for a realm
             getRequestAppsPageEndpoint: function(realmName) {
-                var requestAppsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/apps/');
+                var requestAppsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/apps/');
                 return requestAppsPageEndPoint;
             },
             // Helper method to get the proper URL for loading the table home page containing a list of tables for a realm for an app
             getRequestTableEndpoint: function(realmName, appId, tableId) {
-                var requestTableEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/app/' + appId + '/table/' + tableId);
+                var requestTableEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId);
                 return requestTableEndPoint;
             },
             // Helper method to get the proper URL for loading the reports page for particular app and particular table for a realm
             getRequestReportsPageEndpoint: function(realmName, appId, tableId, reportId) {
-                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
+                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
                 return requestReportsPageEndPoint;
             },
             // Get the proper URL for loading the session ticket page in the browser

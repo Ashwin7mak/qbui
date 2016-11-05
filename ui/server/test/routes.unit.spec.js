@@ -139,7 +139,7 @@ describe('Test Express Node Routes', function() {
 
     it('Validate unauthorized route', function(done) {
         request(app).
-            get('/unauthorized').
+            get('/qbase/unauthorized').
             expect(401).
             end(function(err, res) {
                 if (err) {return done(err);}
@@ -149,7 +149,7 @@ describe('Test Express Node Routes', function() {
 
     it('Validate pageNotFound route', function(done) {
         request(app).
-            get('/pageNotFound').
+            get('/qbase/pageNotFound').
             expect(404).
             end(function(err, res) {
                 if (err) {return done(err);}
@@ -159,7 +159,7 @@ describe('Test Express Node Routes', function() {
 
     it('Validate internal server error route', function(done) {
         request(app).
-            get('/internalServerError').
+            get('/qbase/internalServerError').
             expect(500).
             end(function(err, res) {
                 if (err) {return done(err);}
@@ -169,7 +169,7 @@ describe('Test Express Node Routes', function() {
 
     it('Validate an undefined route', function(done) {
         request(app).
-            get('/undefinedRoute').
+            get('/qbase/undefinedRoute').
             expect(404).
             end(function(err, res) {
                 if (err) {return done(err);}
@@ -179,7 +179,7 @@ describe('Test Express Node Routes', function() {
 
     it('Validate an forbidden route', function(done) {
         request(app).
-            get('/forbidden').
+            get('/qbase/forbidden').
             expect(403).
             end(function(err, res) {
                 if (err) {return done(err);}

@@ -64,7 +64,6 @@ let AppsList = React.createClass({
 
                 <NavItem item={{msg: 'nav.appsHeading'}}
                          isHeading={true}
-                         secondaryIcon={"search"}
                          onClick={this.onClickApps}
                          open={true} />
 

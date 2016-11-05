@@ -49,6 +49,8 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
+            dontDelete: "Ne pas supprimer",
+            deleteThisRecord: "Supprimer cet enregistrement?",
             more: "Plus...",
             placeholder: "Sélectionner...",
             notFound: "Pas trouvé"
@@ -142,6 +144,11 @@ export default {
             error: {
                 403: "Vous n'êtes pas autorisé à accéder à ce formulaire",
                 500: "Erreur inattendue rendant ce formulaire"
+            },
+            footer: {
+                lastUpdatedBy: "Dernière mise à jour par ",
+                createdOn: "Créé sur ",
+                ownedBy: "Propriétaire "
             }
         },
         report : {
@@ -321,6 +328,18 @@ export default {
             url: 'www.exemple.fr'
         },
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {S'il vous plaît fixer 1 champ}\n other {S'il vous plaît corriger ces # champs}\n} ",
+        errors: {
+            errorLoadingReport: {
+                message: "Ce rapport n'est pas disponible",
+                helpText: "Pour l'instant, vous pouvez essayer Sélection d'un rapport différent.",
+                contactSupport: "Laissez notre équipe sait que nous puissions fixer",
+                supportTeamInfo: "Quelques informations pour l'équipe de soutien:",
+                playGraphic: "Me montrer comment",
+                stopGraphic: "Arrête de jouer",
+                showAdditionalInfo: "Voir les détails",
+                hideAdditionalInfo: "Cacher les détails"
+            }
+        },
         invalidMsg : {
             unknown: 'Type inconnu non valide. Résultats: ',
             required: 'Remplissez {fieldName}',
@@ -339,6 +358,13 @@ export default {
             quickBaseClassic: " dans QuickBase Classic. ",
             clickHere: "Ouvrez l'application"
         },
-        noneOption: "\<Aucun\>"
+        noneOption: "\<Aucun\>",
+        unimplemented: {
+            search: "La recherche n'est pas encore disponible",
+            favorites: "L'accès aux Favoris n'est pas encore disponible",
+            makeFavorite: "Marquer comme favori n'est pas encore disponible",
+            print: "L'impression n'est pas encore disponible",
+            copy: "La copie n'est pas encore disponible"
+        }
     }
 };
