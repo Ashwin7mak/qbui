@@ -5,6 +5,7 @@
     flex-direction: column;
     flex: 1 1 auto;
     min-width: 0;
+    overflow-y: scroll;
 
     @include not-small-breakpoint {
         background: $report-container-bg;
@@ -278,6 +279,10 @@
     display:flex;
     align-items:center;
 
+    .tipChildWrapper {
+        width: auto;
+    }
+
     .navigationButton {
         text-decoration: none;
         padding-top:10px;
@@ -342,7 +347,6 @@ $add-record-radius: 20px;
 
         .popover-content {
             color:$icon-color;
-            max-height: 100%;
         }
     }
     .reportContainer .reportToolsAndContentContainer .loadedContent {
@@ -376,4 +380,3 @@ $add-record-radius: 20px;
         }
     }
 }
-

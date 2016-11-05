@@ -4,6 +4,7 @@ import Fluxxor from 'fluxxor';
 import {I18nMessage} from '../../utils/i18nMessage';
 import _ from 'lodash';
 import SearchBox from '../search/searchBox';
+import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import './smallHeader.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -24,9 +25,9 @@ var SmallHeader = React.createClass({
         /* optional key for searchbox */
         searchBoxKey: React.PropTypes.string,
         /* callback for search text */
-        onSearchChange: React.PropTypes.function,
+        onSearchChange: React.PropTypes.func,
         /* callback for clear search text */
-        onClearSearch: React.PropTypes.function,
+        onClearSearch: React.PropTypes.func,
         /* pre-populated value for search text */
         searchValue: React.PropTypes.string
     },
@@ -59,6 +60,8 @@ var SmallHeader = React.createClass({
         let headerClasses = 'smallHeader' + (this.state.searching ? ' searching' : '');
         headerClasses += this.props.headerClasses ? ' ' + this.props.headerClasses : '';
 
+        const unimplementedFavoritesTip = <Tooltip id="unimplemented.favorites.tt"><I18nMessage message="unimplemented.favorites"/></Tooltip>;
+
         return (<div className={headerClasses}>
             <div className="left">
                 <a className="iconLink toggleNavButton" href="#" onClick={this.onNavClick}>
@@ -85,9 +88,13 @@ var SmallHeader = React.createClass({
                 <a className="iconLink" href="#" onClick={this.startSearching}>
                     <QBicon icon="search" />
                 </a>
-                <a className="iconLink" href="#">
-                    <QBicon icon="star-full" />
-                </a>
+                <OverlayTrigger placement="left"
+                                trigger={['hover', 'click']}
+                                overlay={unimplementedFavoritesTip}>
+                    <a className="iconLink" href="#" disabled>
+                        <QBicon icon="star-full" />
+                    </a>
+                </OverlayTrigger>
             </div>
         </div>);
     }

@@ -40,10 +40,15 @@
         overflow:auto;
 
     }
+    .loadedContent {
+        overflow: auto;
+    }
     .formContainer {
         overflow: auto;
-        position:absolute;
         width:100%;
+    }
+    .divider.color-black-700 {
+        color: $color-black-700;
     }
 }
 
@@ -112,9 +117,6 @@
     transition: all 200ms linear;
 }
 
-.color-black-700 {
-    color: $color-black-700;
-}
 
 @include small-breakpoint {
 

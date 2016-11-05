@@ -13,7 +13,8 @@ describe('AppHomePageRoute functions', () => {
             selectAppId: function() {return;},
             showTopNav: function() {return;},
             setTopTitle: function() {return;},
-            doneRoute: function() {return;}
+            doneRoute: function() {return;},
+            resetRowMenu: function() {return;}
         }
     };
 

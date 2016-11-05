@@ -16,7 +16,7 @@
     var reportContentPage = new ReportContentPage();
     var reportPagingPage = new ReportPagingPage();
 
-    describe('Delete Report SetUp', function() {
+    describe('Delete Records on a Report Setup', function() {
         var realmName;
         var realmId;
         var testApp;
@@ -79,7 +79,7 @@
                 // Step 1: Selecting the first record for the deletion and checking for the success messages
                 reportContentPage.reportRowSelected(rowToBeDeleted);
                 reportContentPage.clickSelectedRecordDeleteIcon();
-                reportContentPage.assertDeleteMessageSuccess(successMessage);
+                reportContentPage.assertSuccessMessage(successMessage);
                 reportContentPage.waitForReportContent();
 
                 // Step 2. Checking for the deleted record on the first page
@@ -95,27 +95,18 @@
                 done();
             });
 
-
             it('Checking for the deleted functionality on the 2nd page page', function(done) {
-
                 // Step 5. Checking for the delete functionality on the second page
                 reportPagingPage.pagingToolbarNextButton.click();
                 reportContentPage.waitForReportContent();
                 reportContentPage.reportRowSelected(rowToBeDeleted);
                 reportContentPage.clickSelectedRecordDeleteIcon();
-                reportContentPage.assertDeleteMessageSuccess(successMessage);
+                reportContentPage.assertSuccessMessage(successMessage);
                 reportContentPage.waitForReportContent();
                 done();
             });
-
         });
 
-        //Todo: Add bulk delete test
-
-        /* After all tests are done, run the cleanup function in the base class */
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
-        });
+        //Todo: Add bulk delete test (aka deleting multiple records at a time)
     });
-
 }());

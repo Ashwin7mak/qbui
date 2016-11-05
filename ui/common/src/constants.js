@@ -10,6 +10,7 @@
         PUT             : 'PUT',
         PATCH           : 'PATCH',
         CONTENT_TYPE    : 'Content-Type',
+        CONTENT_LENGTH  : 'Content-Length',
         APPLICATION_JSON: 'application/json',
         APPLICATION_XML : 'application/xml',
         TEXT_HTML       : 'text/html',
@@ -92,6 +93,12 @@
         RECORD_TYPE: {
             GROUP: 'GROUP',
             TABLE: 'TABLE'
+        },
+        BUILTIN_FIELD_NAME: {
+            RECORD_ID: 'Record ID#',
+            LAST_MODIFIED_BY: "Last Modified By",
+            DATE_CREATED: "Date Created",
+            RECORD_OWNER: "Record Owner"
         }
     });
 

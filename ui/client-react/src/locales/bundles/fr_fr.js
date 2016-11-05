@@ -6,6 +6,28 @@ export default {
         apps: {
             header: "Vos Apps"
         },
+        app: {
+            homepage: {
+                welcomeTitle: "Bienvenue sur Mercury Beta",
+                welcomeText: "Pendant que vous apprenez votre chemin, utilisez cette zone à la place de votre page d'accueil d'application. " +
+                "C'est votre application réelle dans Mercury. Vous ne verrez pas encore la page d'accueil de votre application, mais " +
+                "données sont ici. Les travaux effectués ici s'affichent immédiatement en mode Classique.",
+                launchVideoLink: "Lancez une tournée vidéo (3:00)",
+                guideMeLink: "Guide-moi par Mercury",
+                guideTitle: "Guide d'accueil",
+                guideText: "Apprenez tout sur le programme Mercury Beta. Voyez quelles fonctionnalités sont actuellement disponibles et comment votre équipe peut obtenir le travail plus rapidement, à travers les périphériques, en utilisant Mercury.",
+                guideButton: "Télécharger le guide d'accueil",
+                feedbackTitle: "Nous souhaitons recevoir vos commentaires",
+                feedbackText: "Notre équipe attend vos nouvelles! Nous sommes tellement désireux d'entendre ce que vous pensez de Mercury que nous avons inclus un bouton de commentaires sur chaque page de votre application.",
+                feedbackButton: "Donnez votre avis",
+                tipTitle: "Rien ne s'est passé quand j'ai cliqué...",
+                tipText: "Il s'agit de travaux en cours, donc si vous cliquez sur un bouton et il ne fait rien, pas de soucis. Nous travaillons encore sur cette fonctionnalité.",
+                helpTitle: "Besoin d'aide?",
+                helpText: "Nous voulons que vous réussissiez; C'est pourquoi nous sommes toujours là pour vous aider.",
+                helpLinkPreText: "Veuillez nous contacter au",
+                missingWalkMe: "Le didacticiel n'est pas disponible"
+            }
+        },
         pendingEditModal: {
             modalBodyMessage: "Enregistrer les modifications avant de quitte?",
             modalStayButton: "Restez et continuer à travailler",
@@ -27,6 +49,8 @@ export default {
             print: "Impremer",
             copy: "Copier",
             delete: "Effacer",
+            dontDelete: "Ne pas supprimer",
+            deleteThisRecord: "Supprimer cet enregistrement?",
             more: "Plus...",
             placeholder: "Sélectionner...",
             notFound: "Pas trouvé"
@@ -120,6 +144,11 @@ export default {
             error: {
                 403: "Vous n'êtes pas autorisé à accéder à ce formulaire",
                 500: "Erreur inattendue rendant ce formulaire"
+            },
+            footer: {
+                lastUpdatedBy: "Dernière mise à jour par ",
+                createdOn: "Créé sur ",
+                ownedBy: "Propriétaire "
             }
         },
         report : {
@@ -299,6 +328,18 @@ export default {
             url: 'www.exemple.fr'
         },
         editErrors :"{numErrors, plural, \n  =0 {Pas d'erreurs}\n =1 {S'il vous plaît fixer 1 champ}\n other {S'il vous plaît corriger ces # champs}\n} ",
+        errors: {
+            errorLoadingReport: {
+                message: "Ce rapport n'est pas disponible",
+                helpText: "Pour l'instant, vous pouvez essayer Sélection d'un rapport différent.",
+                contactSupport: "Laissez notre équipe sait que nous puissions fixer",
+                supportTeamInfo: "Quelques informations pour l'équipe de soutien:",
+                playGraphic: "Me montrer comment",
+                stopGraphic: "Arrête de jouer",
+                showAdditionalInfo: "Voir les détails",
+                hideAdditionalInfo: "Cacher les détails"
+            }
+        },
         invalidMsg : {
             unknown: 'Type inconnu non valide. Résultats: ',
             required: 'Remplissez {fieldName}',
@@ -306,6 +347,24 @@ export default {
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
         },
-        noneOption: "\<Aucun\>"
+        createInQuickBaseClassicMessage: {
+            noTables: "Il n'y a pas tables.",
+            createInQuickBaseClassic: "Créer ",
+            noApps: "Il n'y a pas d'applications dans Mercury.",
+            addApps: "Ajouter des applications en contactant "
+        },
+        appNotFoundError: {
+            notFound: "L'application est pas disponible dans Mercury en ce moment. ",
+            quickBaseClassic: " dans QuickBase Classic. ",
+            clickHere: "Ouvrez l'application"
+        },
+        noneOption: "\<Aucun\>",
+        unimplemented: {
+            search: "La recherche n'est pas encore disponible",
+            favorites: "L'accès aux Favoris n'est pas encore disponible",
+            makeFavorite: "Marquer comme favori n'est pas encore disponible",
+            print: "L'impression n'est pas encore disponible",
+            copy: "La copie n'est pas encore disponible"
+        }
     }
 };

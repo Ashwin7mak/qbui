@@ -24,7 +24,6 @@ let RecordHeader = React.createClass({
 
     render() {
         const headerClasses = "recordHeader";
-
         return <Header
             headerClasses={headerClasses}
             title={this.props.title}

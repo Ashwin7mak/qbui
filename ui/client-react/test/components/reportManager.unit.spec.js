@@ -56,7 +56,7 @@ describe('Report Manager functions', () => {
 
         // 2 reports * 3 sections = 6 links
         let reportLinks = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportLink");
-        expect(reportLinks.length).toEqual(6);
+        expect(reportLinks.length).toEqual(2);
     });
 
     it('test searching report list', () => {
@@ -68,9 +68,9 @@ describe('Report Manager functions', () => {
         let reportItems = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportItems");
         expect(reportItems.length).toBeGreaterThan(0);
 
-        // 1 filtered report * 3 sections = 3 links
+        // 1 filtered report
         let reportLinks = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportLink");
-        expect(reportLinks.length).toEqual(3);
+        expect(reportLinks.length).toEqual(1);
 
         let searchInputBox = TestUtils.findRenderedDOMComponentWithTag(component, "input");
         searchInputBox.value = "Changes";

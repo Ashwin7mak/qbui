@@ -10,6 +10,12 @@
 
     var chance = require('chance').Chance();
     var _ = require('lodash');
+    var NUMERIC_FIELD = 6;
+    var NUMERIC_PERCENT_FIELD = 8;
+    var NUMERIC_DURATION_FIELD = 13;
+    var PHONE_NO_FIELD = 15;
+    var EMAIL_FIELD = 16;
+    var URL_FIELD = 17;
 
     const formElementDisplayOptions = ['ADD', 'EDIT', 'VIEW'];
     const formElementDisplayOptionsAddAndEdit = ['ADD', 'EDIT', 'VIEW'];
@@ -57,6 +63,10 @@
             for (var i = 5; i < fields.length; i++) {
                 var builderInstance = formElementBuilder.builder();
 
+                //Make some fields required on the form.
+                if (i === NUMERIC_FIELD || i === NUMERIC_PERCENT_FIELD || i === NUMERIC_DURATION_FIELD || i === PHONE_NO_FIELD || i === EMAIL_FIELD || i === URL_FIELD) {
+                    builderInstance.withRequired(true);
+                }
                 builderInstance.withFieldId(fields[i][fieldConsts.fieldKeys.ID]);
                 builderInstance.withOrderIndex(elementIndex);
                 builderInstance.withPositionSameRow(rawValue.generateBool()); //all fields displays in same row if we comment out this

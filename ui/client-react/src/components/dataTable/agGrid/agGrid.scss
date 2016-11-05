@@ -41,11 +41,20 @@ $cell-edit-background-edit: #f3f8fe;
     margin-bottom: 330px;
 }
 
-.inlineEditing .agGrid .selectAllCheckbox,
-.inlineEditing .agGrid .ag-selection-checkbox
-{
-    display:none;
+.rowPopUpMenuOpen .agGrid .ag-body-container {
+    margin-bottom: 150px;
 }
+
+.inlineEditing .agGrid {
+    .selectAllCheckbox,
+    .ag-selection-checkbox,
+    .selectionCell .recordActions,
+    .ag-header-icon {
+        display: none;
+    }
+}
+
+//This allows .editTools to be on top, when scrolling horizontally
 
 .ag-pinned-left-cols-viewport {
     height: auto !important;
@@ -61,6 +70,7 @@ $cell-edit-background-edit: #f3f8fe;
     .ag-body-container {
         background-color: $color2;
         margin-bottom:0;
+        height: 100%
     }
     /* prevent clipping of actions and dropdowns in 1st column */
     .ag-pinned-left-cols-viewport {
@@ -99,6 +109,10 @@ $cell-edit-background-edit: #f3f8fe;
     }
     .ag-header {
         overflow:visible;
+        .ag-pinned-left-header {
+            position: absolute;
+            z-index: 10;
+        }
     }
     .ag-header-viewport {
         overflow:visible;
@@ -110,9 +124,20 @@ $cell-edit-background-edit: #f3f8fe;
         opacity: .2;
     }
     .ag-header-cell-menu-button .dropdown-menu {
+        max-height: 200px;
         font-size: 12px;
         margin-top:0;
         padding-top:0;
+        overflow: auto;
+        @include height-medium-breakpoint {
+            max-height: 320px;
+        }
+        @include height-large-breakpoint {
+            max-height: 320px;
+        }
+        @include height-xlarge-breakpoint {
+            max-height: 320px;
+        }
     }
     .ag-header-cell:hover {
         .ag-header-cell-menu-button button {
@@ -133,6 +158,9 @@ $cell-edit-background-edit: #f3f8fe;
     .gridCell {
         word-wrap: break-word;
         padding: $grid-default-cell-padding;
+        .fieldValueEditor .tipChildWrapper {
+            width: 100%;
+        }
     }
 
     .ag-header-row .gridHeaderCell {
@@ -201,6 +229,10 @@ $cell-edit-background-edit: #f3f8fe;
                         vertical-align:middle;
                         width:28px;
                         padding:4px;
+
+                        &.disabled {
+                            color: $icon-disabled-color;
+                        }
                     }
 
                     &:hover {
@@ -563,6 +595,9 @@ $cell-edit-background-edit: #f3f8fe;
                         }
                     }
                 }
+                .qbIcon {
+                    font-size: $grid-font-size;
+                }
             }
 
             //  edit mode styles for a date/time field combination within the grid
@@ -582,6 +617,11 @@ $cell-edit-background-edit: #f3f8fe;
                 &.timeCell {
                     .Select-option {
                         font-size: 12px;
+                        padding: 2px 0 2px 20px;
+                        .qbIcon {
+                            font-size: inherit;
+                            padding: 3px 4px;
+                        }
                     }
                     .Select-placeholder {
                         font-size: 12px;
@@ -603,7 +643,6 @@ $cell-edit-background-edit: #f3f8fe;
     }
 
     .gridCell {
-
         .editTools {
             z-index:1;
             display:flex;

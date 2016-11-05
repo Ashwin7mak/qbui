@@ -22,7 +22,7 @@ let GlobalAction = React.createClass({
         tabIndex: React.PropTypes.number.isRequired
     },
 
-    render: function() {
+    render() {
         return (
             <li className={"link globalAction"}>
                 <Link className={"globalActionLink"} tabIndex={this.props.tabIndex} to={this.props.action.link} onClick={this.props.onSelect}>
@@ -60,21 +60,24 @@ let GlobalActions = React.createClass({
         let flux = this.getFlux();
         flux.actions.changeLocale(locale);
     },
-    getGlobalDropdown() {
+
+    getUserDropdown() {
         let supportedLocales = Locale.getSupportedLocales();
         let eventKeyIdx = 20;
         return (
             <Dropdown id="nav-right-dropdown" dropup={this.props.position === "left"}>
 
-                <Button bsRole="toggle"
+                <a bsRole="toggle"
                         className={"dropdownToggle globalActionLink"}
                         tabIndex={this.props.startTabIndex + this.props.actions.length}>
                     <QBicon icon={this.props.dropdownIcon}/>
                     <span className={"navLabel"}>{this.props.dropdownMsg !== '' ? <I18nMessage message={this.props.dropdownMsg}/> : ''}</span>
-                </Button>
+                </a>
 
                 <Dropdown.Menu>
-                    <MenuItem href="/user" eventKey={eventKeyIdx++}><I18nMessage
+
+                    <MenuItem href="/qbase/user" eventKey={eventKeyIdx++} disabled><I18nMessage
+
                         message={'header.menu.preferences'}/></MenuItem>
                     <MenuItem divider/>
 
@@ -90,10 +93,12 @@ let GlobalActions = React.createClass({
                 </Dropdown.Menu>
             </Dropdown>);
     },
-    render: function() {
+    render() {
         return (
             <div className={"globalActions"}>
                 <ul className={"globalActionsList"}>
+                    <li className={"link globalAction withDropdown"}>{this.getUserDropdown()}</li>
+
                     {this.props.actions && this.props.actions.map((action, index) => {
                         return <GlobalAction tabIndex={this.props.startTabIndex + index}
                                              key={action.msg}
@@ -101,7 +106,6 @@ let GlobalActions = React.createClass({
                                              onSelect={this.props.onSelect}
                                              action={action}/>;
                     })}
-                    <li className={"link globalAction withDropdown"}>{this.getGlobalDropdown()}</li>
                 </ul>
             </div>);
     }

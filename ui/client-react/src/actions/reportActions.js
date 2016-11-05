@@ -6,8 +6,6 @@ import Promise from 'bluebird';
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 
-let logger = new Logger();
-
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
 //  because the core application code has no logic implemented to handle a rejected
@@ -15,12 +13,23 @@ let logger = new Logger();
 //  code.  Promises are returned only to support our unit tests, which are expected
 //  to implement the appropriate handlers.
 Promise.onPossiblyUnhandledRejection(function(err) {
+    let logger = new Logger();
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
 let reportActions = {
 
+    /**
+     * Retrieve a list of reports for the given app/table.  This function is called primarily when
+     * populating the left hand navigation window with the list of reports and when displaying a
+     * trowser window that displays all of the reports for a table.
+     *
+     * @param appId
+     * @param tblId
+     */
     loadReports(appId, tblId) {
+
+        let logger = new Logger();
 
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
@@ -41,8 +50,8 @@ let reportActions = {
                         reject();
                     }
                 ).catch((ex) => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                     logger.logException(ex);
-                    this.dispatch(actions.LOAD_REPORTS_FAILED, 500);
                     reject();
                 });
             } else {
@@ -52,6 +61,7 @@ let reportActions = {
             }
         });
     }
+
 };
 
 export default reportActions;

@@ -6,6 +6,28 @@ export default {
         apps: {
             header: "Anwendungen"
         },
+        app: {
+            homepage: {
+                welcomeTitle: "Willkommen bei Mercury Beta",
+                welcomeText: "Während Sie Ihren Weg lernen, verwenden Sie diesen Bereich anstelle der App-Homepage. " +
+                "Dies ist Ihre echte App in Mercury. Sie werden Ihre App-Homepage noch nicht sehen, aber alle Ihre " +
+                "daten sind hier. Die Arbeit, die Sie hier vornehmen, wird auch in der klassischen Ansicht angezeigt.",
+                launchVideoLink: "Starten Sie Video-Tour (3:00)",
+                guideMeLink: "Führ mich durch Quecksilber",
+                guideTitle: "Begrüßungsführer",
+                guideText: "Erfahren Sie alles über das Mercury-Beta-Programm. Sehen Sie, welche Funktionen zurzeit verfügbar sind und wie Ihr Team die Arbeit schneller erledigen kann, über Geräte hinweg mit Hilfe von Mercury.",
+                guideButton: "Laden Sie den Begrüßungsführer herunter",
+                feedbackTitle: "Wir freuen uns über Ihr Feedback",
+                feedbackText: "Unser Team wartet darauf, von Ihnen zu hören! Wir sind so eifrig zu hören, was Sie über Mercury denken, dass wir einen Feedback-Button auf jeder Seite Ihrer App enthalten haben.",
+                feedbackButton: "Feedback geben",
+                tipTitle: "Nichts geschah, als ich anklickte ...",
+                tipText: "Dies ist in Arbeit, so dass, wenn Sie auf eine Schaltfläche klicken und es macht nichts, keine Sorgen. Wir arbeiten noch an dieser Funktion.",
+                helpTitle: "Brauche Hilfe?",
+                helpText: "Wir wollen, dass Sie erfolgreich sind; Deshalb sind wir immer hier, um zu helfen.",
+                helpLinkPreText: "Bitte kontaktieren Sie uns unter",
+                missingWalkMe: "Tutorial ist nicht verfügbar"
+            }
+        },
         pendingEditModal: {
             modalBodyMessage: "Speichern Sie die Änderungen vor dem Verlassen?",
             modalStayButton: "Bleiben Sie und halten Sie arbeiten",
@@ -27,6 +49,8 @@ export default {
             print: "Drucken",
             copy: "Kopieren",
             delete: "Löschen",
+            dontDelete: "Nicht löschen",
+            deleteThisRecord: "Löschen Sie diesen Datensatz?",
             more: "Mehr...",
             placeholder: 'Wählen...',
             notFound: "Nicht gefunden"
@@ -121,6 +145,11 @@ export default {
             error: {
                 403: "Sie sind nicht dieses Formular für den Zugriff auf autorisierte",
                 500: "Unerwarteter Fehler macht dieses Formular"
+            },
+            footer: {
+                lastUpdatedBy: "Zuletzt aktualisiert von ",
+                createdOn: "Erstellt am ",
+                ownedBy: "gehört "
             }
         },
         report : {
@@ -300,6 +329,18 @@ export default {
             url: 'www.beispiel.de'
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
+        errors: {
+            errorLoadingReport: {
+                message: "Dieser Bericht ist nicht verfügbar",
+                helpText: "Denn jetzt können Sie versuchen, einen anderen Bericht auswählen.",
+                contactSupport: "Lassen Sie unser Team kennen, damit wir das Problem beheben können",
+                supportTeamInfo: "Einige Informationen für das Support-Team:",
+                playGraphic: "Zeig mir wie",
+                stopGraphic: "Hör auf zu spielen",
+                showAdditionalInfo: "Details anzeigen",
+                hideAdditionalInfo: "Details ausblenden"
+            }
+        },
         invalidMsg : {
             unknown: 'Ungültige unbekannte Art. Befund: ',
             required: 'Füllen Sie das {fieldName}',
@@ -307,6 +348,24 @@ export default {
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
             choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },
-        noneOption: "\<Keiner\>"
+        createInQuickBaseClassicMessage: {
+            noTables: "Es gibt keine Tabellen.",
+            createInQuickBaseClassic: "Erstellen Sie einige in ",
+            noApps: "Es gibt keine Apps in Mercury.",
+            addApps: "Apps durch Kontaktaufnahme hinzufügen "
+        },
+        appNotFoundError: {
+            notFound: "Die App ist im Moment nicht verfügbar in Mercury. ",
+            quickBaseClassic: " in Quickbase Classic. ",
+            clickHere: "Öffnen Sie die App"
+        },
+        noneOption: "\<Keiner\>",
+        unimplemented: {
+            search: "Die Suche ist noch nicht verfügbar",
+            favorites: "Der Zugriff auf Favoriten ist noch nicht verfügbar",
+            makeFavorite: "Kennzeichnung als Favorit ist noch nicht verfügbar",
+            print: "Der Druck ist noch nicht verfügbar",
+            copy: "Kopieren ist noch nicht verfügbar"
+        }
     }
 };

@@ -78,8 +78,12 @@ $breadCrumbsSeparatorColor: #c7c7c7;
     .stageRight {
         padding-top:20px;
         flex:0 0 auto;
+
         .iconActionButton {
-            color:$page-actions-icon-color
+            color:$page-actions-icon-color;
+        }
+        .iconActionButton.disabled {
+            color: $icon-disabled-color;
         }
     }
 }

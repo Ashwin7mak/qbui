@@ -98,24 +98,24 @@
         require('./routes/qbClientRoutes')(app, config);
         require('./routes/qbApiRoutes')(app, config, routeMapper);
 
-        app.route('/signin')
+        app.route('/qbase/signin')
             .get(authentication.signin);
 
-        app.route('/signout')
+        app.route('/qbase/signout')
                 .get(authentication.signout);
 
         // unauthorized
-        app.route('/unauthorized*')
+        app.route('/qbase/unauthorized*')
             .get(errors[httpStatusCodes.UNAUTHORIZED]);
 
         // forbidden
-        app.route('/forbidden*')
+        app.route('/qbase/forbidden*')
             .get(errors[httpStatusCodes.FORBIDDEN]);
 
-        app.route('/pageNotFound*')
+        app.route('/qbase/pageNotFound*')
                 .get(errors[httpStatusCodes.NOT_FOUND]);
 
-        app.route('/internalServerError*')
+        app.route('/qbase/internalServerError*')
                 .get(errors[httpStatusCodes.INTERNAL_SERVER_ERROR]);
 
         // All undefined asset or api routes should return a 404
@@ -123,7 +123,7 @@
                 .get(errors[httpStatusCodes.NOT_FOUND]);
 
         //  Unknown page
-        app.route('/*')
+        app.route('/qbase/*')
                 .get(errors[httpStatusCodes.NOT_FOUND]);
 
 

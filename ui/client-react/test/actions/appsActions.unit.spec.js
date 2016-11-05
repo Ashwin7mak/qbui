@@ -6,7 +6,7 @@ import Promise from 'bluebird';
 describe('Apps Actions functions with Tables', () => {
     'use strict';
 
-    let responseData = [{id:'tableId', link:'/app/tableId'}];
+    let responseData = [{id:'tableId', link:'/qbase/app/tableId'}];
 
     class mockAppService {
         constructor() { }
