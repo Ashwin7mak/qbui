@@ -26,8 +26,13 @@ $left-nav-horizontal-icon-border-color: $color32;
     a,a:hover,a:focus {
         text-decoration: none;
     }
+
     .leftNavLabel {
         vertical-align: middle;
+    }
+
+    .loadedContent {
+        width: 100%;
     }
 }
 
