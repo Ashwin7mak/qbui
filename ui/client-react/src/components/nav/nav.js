@@ -185,6 +185,7 @@ export let Nav = React.createClass({
                 expanded={this.state.nav.leftNavExpanded}
                 appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
+                appsLoading={this.state.apps.loading}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
                 onSelectReports={this.onSelectTableReports}
@@ -204,7 +205,9 @@ export let Nav = React.createClass({
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
                             key: this.props.location ? this.props.location.pathname : "",
+                            apps: this.state.apps.apps,
                             selectedAppId: this.state.apps.selectedAppId,
+                            appsLoading: this.state.apps.loading,
                             reportData: this.state.reportData,
                             appUsers: this.state.apps.appUsers,
                             pendEdits:this.state.pendEdits,

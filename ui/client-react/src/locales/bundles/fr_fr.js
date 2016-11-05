@@ -347,6 +347,17 @@ export default {
             maxChars: "Utilisez jusqu'à caractères {maxNum}",
             choiceMaxLength :"Sélectionnez un choix avec {maxNum} caractères ou moins"
         },
+        createInQuickBaseClassicMessage: {
+            noTables: "Il n'y a pas tables.",
+            createInQuickBaseClassic: "Créer ",
+            noApps: "Il n'y a pas d'applications dans Mercury.",
+            addApps: "Ajouter des applications en contactant "
+        },
+        appNotFoundError: {
+            notFound: "L'application est pas disponible dans Mercury en ce moment. ",
+            quickBaseClassic: " dans QuickBase Classic. ",
+            clickHere: "Ouvrez l'application"
+        },
         noneOption: "\<Aucun\>",
         unimplemented: {
             search: "La recherche n'est pas encore disponible",
