@@ -5,8 +5,9 @@ import Locale from '../../locales/locales';
 import GlobalActions from '../actions/globalActions';
 import Fluxxor from 'fluxxor';
 import QBicon from '../qbIcon/qbIcon';
+import QBToolTip from '../qbToolTip/qbToolTip';
 let FluxMixin = Fluxxor.FluxMixin(React);
-import {OverlayTrigger, Popover, ButtonGroup, Button, Input} from 'react-bootstrap';
+import {OverlayTrigger, Popover, ButtonGroup, Button, Input, Tooltip} from 'react-bootstrap';
 import SearchBox from '../search/searchBox';
 
 import './topNav.scss';
@@ -42,12 +43,12 @@ var TopNav = React.createClass({
                     {this.props.title}
                 </div>);
     },
-    render: function() {
-        const searchIcon = <QBicon icon="search" />;
-
-        let eventKeyIdx = 20;
+    render() {
 
         const classes = "topNav" + (this.props.showOnSmall ? "" : " hideSmall");
+
+        const unimplementedSearchTip = <Tooltip id="unimplemented.search.tt"><I18nMessage message="unimplemented.search"/></Tooltip>;
+        const unimplementedFavoritesTip = <Tooltip id="unimplemented.favorites.tt"><I18nMessage message="unimplemented.favorites"/></Tooltip>;
         return (
             <div className={classes}>
                 <div className="top">
@@ -65,20 +66,15 @@ var TopNav = React.createClass({
 
                         <ButtonGroup className="navItem">
 
-                            <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
-                                <Popover id={0} className={'searchPopover'}  title="Search">
-                                    <SearchBox
-                                           value={this.state.searchText}
-                                           onChange={this.searchChanged}
-                                           onClearSearch={this.searchCleared}
-                                           placeholder={Locale.getMessage('nav.searchRecordsPlaceholder')} />
-                                </Popover>}>
-
-
-                                <Button tabIndex="2"><QBicon icon="search" /></Button>
+                            <OverlayTrigger placement="bottom" trigger={['hover', 'click']}
+                                            overlay={unimplementedSearchTip}>
+                                <Button tabIndex="2" className="disabled"><QBicon icon="search" /></Button>
                             </OverlayTrigger>
 
-                            <Button tabIndex="3" className="favoritesButton"><QBicon icon="star-full" /></Button>
+                            <OverlayTrigger placement="bottom" trigger={['hover', 'click']}
+                                            overlay={unimplementedFavoritesTip}>
+                                <Button tabIndex="3" className="disabled"><QBicon icon="star-full" /></Button>
+                            </OverlayTrigger>
                         </ButtonGroup>
                     </div>
 

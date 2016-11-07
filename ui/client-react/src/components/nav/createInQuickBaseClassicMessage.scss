@@ -1,0 +1,15 @@
+@import '../../assets/css/qbVariables';
+
+.createInQuickBaseClassicMessage {
+    padding: 0 10px;
+
+    a.quickBaseClassicLink {
+        color: $link-hover-color;
+        text-decoration: none;
+    }
+
+    a.quickBaseClassicLink:hover, a.quickBaseClassicLink:active {
+        color: $link-hover-color;
+        text-decoration: underline;
+    }
+}

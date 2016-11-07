@@ -350,6 +350,24 @@ export default {
             maxChars: 'Use up to {maxNum} characters',
             choiceMaxLength :"Select a choice with {maxNum} characters or less"
         },
-        noneOption: "\<None\>"
+        createInQuickBaseClassicMessage: {
+            noTables: "There are no tables.",
+            createInQuickBaseClassic: "Create some in ",
+            noApps: "There are no apps in Mercury.",
+            addApps: "Add apps by contacting "
+        },
+        appNotFoundError: {
+            notFound: "The app is not available in Mercury right now. ",
+            quickBaseClassic: " in QuickBase Classic. ",
+            clickHere: "Open the app"
+        },
+        noneOption: "\<None\>",
+        unimplemented: {
+            search: "Searching is not available yet",
+            favorites: "Accessing favorites is not available yet",
+            makeFavorite: "Marking as a favorite is not available yet",
+            print: "Printing is not available yet",
+            copy: "Copying is not available yet"
+        }
     }
 };

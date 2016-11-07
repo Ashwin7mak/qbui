@@ -164,14 +164,9 @@ let AGGrid = React.createClass({
                 <MenuItem onSelect={() => this.groupReport(colDef, true)}> {groupAscText}</MenuItem>
                 <MenuItem onSelect={() => this.groupReport(colDef, false)}> {groupDescText}</MenuItem>
                 <MenuItem divider/>
-                <MenuItem><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
-                <MenuItem><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
-                <MenuItem><I18nMessage message="report.menu.hideColumn"/></MenuItem>
-                <MenuItem divider/>
-                <MenuItem><I18nMessage message="report.menu.newTable"/></MenuItem>
-                <MenuItem divider/>
-                <MenuItem><I18nMessage message="report.menu.columnProps"/></MenuItem>
-                <MenuItem><I18nMessage message="report.menu.fieldProps"/></MenuItem>
+                <MenuItem disabled><I18nMessage message="report.menu.addColumnBefore"/></MenuItem>
+                <MenuItem disabled><I18nMessage message="report.menu.addColumnAfter"/></MenuItem>
+                <MenuItem disabled><I18nMessage message="report.menu.hideColumn"/></MenuItem>
             </Dropdown.Menu>
         </Dropdown>);
     },
@@ -623,10 +618,12 @@ let AGGrid = React.createClass({
             this.api.onGroupExpandedOrCollapsed();
             return;
         }
+
         //For click on record action icons or input fields or links or link child elements do nothing
         if (target &&
             target.className.indexOf("qbIcon") !== -1 ||
             target.className.indexOf("iconLink") !== -1 ||
+            target.className.indexOf("dropdown") !== -1 ||
             target.className.indexOf("iconActionButton") !== -1 ||
             target.tagName === "INPUT" ||
             target.tagName === "A" ||
