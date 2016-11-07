@@ -17,7 +17,7 @@ import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
-import DTSErrorModal from '../../dts/dtsErrorModal'
+import DTSErrorModal from '../../dts/dtsErrorModal';
 
 let logger = new Logger();
 
@@ -447,47 +447,47 @@ export let ReportContent = React.createClass({
                         let datePart = groupData.group.split(GROUP_TYPE.delimiter);
                         if (datePart.length > 1) {
                             switch (groupType) {
-                                case GROUP_TYPE.DATE.month:
-                                    let month = Locales.getMessage('month.' + datePart[0].toLowerCase());
-                                    groupData.group = Locales.getMessage('groupHeader.date.month', {month: month, year: datePart[1]});
-                                    break;
-                                case GROUP_TYPE.DATE.quarter:
-                                    let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
-                                    groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter: abbrQuarter, year: datePart[1]});
-                                    break;
-                                case GROUP_TYPE.DATE.fiscalQuarter:
-                                    let abbrFiscalQtr = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
-                                    let abbrFiscalYr = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[1];
-                                    groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter: abbrFiscalQtr, year: abbrFiscalYr});
-                                    break;
+                            case GROUP_TYPE.DATE.month:
+                                let month = Locales.getMessage('month.' + datePart[0].toLowerCase());
+                                groupData.group = Locales.getMessage('groupHeader.date.month', {month: month, year: datePart[1]});
+                                break;
+                            case GROUP_TYPE.DATE.quarter:
+                                let abbrQuarter = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
+                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter: abbrQuarter, year: datePart[1]});
+                                break;
+                            case GROUP_TYPE.DATE.fiscalQuarter:
+                                let abbrFiscalQtr = Locales.getMessage('groupHeader.abbr.quarter') + datePart[0];
+                                let abbrFiscalYr = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[1];
+                                groupData.group = Locales.getMessage('groupHeader.date.quarter', {quarter: abbrFiscalQtr, year: abbrFiscalYr});
+                                break;
                             }
                         } else {
                             switch (groupType) {
-                                case GROUP_TYPE.DATE.fiscalYear:
-                                    groupData.group = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[0];
-                                    break;
-                                case GROUP_TYPE.DATE.week:
-                                    groupData.group = Locales.getMessage('groupHeader.date.week', {date: this.localizeDate(datePart[0])});
-                                    break;
-                                case GROUP_TYPE.DATE.day:
-                                    groupData.group = this.localizeDate(datePart[0]);
-                                    break;
-                                case GROUP_TYPE.DATE.equals:
-                                    let opts = null;
-                                    if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME) {
-                                        opts = {
-                                            year: 'numeric', month: 'numeric', day: 'numeric',
-                                            hour: 'numeric', minute: 'numeric'
-                                        };
-                                    }
-                                    groupData.group = this.localizeDate(datePart[0], opts);
+                            case GROUP_TYPE.DATE.fiscalYear:
+                                groupData.group = Locales.getMessage('groupHeader.abbr.fiscalYear') + datePart[0];
+                                break;
+                            case GROUP_TYPE.DATE.week:
+                                groupData.group = Locales.getMessage('groupHeader.date.week', {date: this.localizeDate(datePart[0])});
+                                break;
+                            case GROUP_TYPE.DATE.day:
+                                groupData.group = this.localizeDate(datePart[0]);
+                                break;
+                            case GROUP_TYPE.DATE.equals:
+                                let opts = null;
+                                if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME) {
+                                    opts = {
+                                        year: 'numeric', month: 'numeric', day: 'numeric',
+                                        hour: 'numeric', minute: 'numeric'
+                                    };
+                                }
+                                groupData.group = this.localizeDate(datePart[0], opts);
 
-                                    //  i18n-react appends a comma after the date for en-us --> 07/22/2015, 09:44 AM -- Replace with space
-                                    if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME && Locales.getLocale() === 'en-us') {
-                                        groupData.group = groupData.group.replace(',', ' ');
-                                    }
+                                //  i18n-react appends a comma after the date for en-us --> 07/22/2015, 09:44 AM -- Replace with space
+                                if (groupField.datatypeAttributes.type === SchemaConsts.DATE_TIME && Locales.getLocale() === 'en-us') {
+                                    groupData.group = groupData.group.replace(',', ' ');
+                                }
 
-                                    break;
+                                break;
                             }
                         }
 
@@ -500,31 +500,31 @@ export let ReportContent = React.createClass({
                         let timeOfDay = null;
 
                         switch (groupType) {
-                            case GROUP_TYPE.TIME_OF_DAY.equals:
-                            case GROUP_TYPE.TIME_OF_DAY.second:
-                                timeOfDay = this.parseTimeOfDay(groupData.group);
-                                if (timeOfDay) {
-                                    groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric', second: 'numeric'});
-                                }
-                                break;
-                            case GROUP_TYPE.TIME_OF_DAY.minute:
-                                timeOfDay = this.parseTimeOfDay(groupData.group);
-                                if (timeOfDay) {
-                                    groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
-                                }
-                                break;
-                            case GROUP_TYPE.TIME_OF_DAY.hour:
-                                timeOfDay = this.parseTimeOfDay(groupData.group);
-                                if (timeOfDay) {
-                                    groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
-                                }
-                                break;
-                            case GROUP_TYPE.TIME_OF_DAY.am_pm:
-                                timeOfDay = this.parseTimeOfDay(groupData.group);
-                                if (timeOfDay) {
-                                    groupData.group = (timeOfDay.getHours() < 12 ? Locales.getMessage('groupHeader.am') : Locales.getMessage('groupHeader.pm'));
-                                }
-                                break;
+                        case GROUP_TYPE.TIME_OF_DAY.equals:
+                        case GROUP_TYPE.TIME_OF_DAY.second:
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric', second: 'numeric'});
+                            }
+                            break;
+                        case GROUP_TYPE.TIME_OF_DAY.minute:
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
+                            }
+                            break;
+                        case GROUP_TYPE.TIME_OF_DAY.hour:
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = this.localizeDate(timeOfDay, {hour: 'numeric', minute: 'numeric'});
+                            }
+                            break;
+                        case GROUP_TYPE.TIME_OF_DAY.am_pm:
+                            timeOfDay = this.parseTimeOfDay(groupData.group);
+                            if (timeOfDay) {
+                                groupData.group = (timeOfDay.getHours() < 12 ? Locales.getMessage('groupHeader.am') : Locales.getMessage('groupHeader.pm'));
+                            }
+                            break;
                         }
 
                         // continue to next element in the for loop
@@ -545,21 +545,21 @@ export let ReportContent = React.createClass({
 
                         let messageKey = '';
                         switch (groupType) {
-                            case GROUP_TYPE.DURATION.second:
-                                messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.second' : 'groupHeader.duration.seconds';
-                                break;
-                            case GROUP_TYPE.DURATION.minute:
-                                messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.minute' : 'groupHeader.duration.minutes';
-                                break;
-                            case GROUP_TYPE.DURATION.hour:
-                                messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.hour' : 'groupHeader.duration.hours';
-                                break;
-                            case GROUP_TYPE.DURATION.week:
-                                messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.week' : 'groupHeader.duration.weeks';
-                                break;
-                            case GROUP_TYPE.DURATION.day:
-                                messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.day' : 'groupHeader.duration.days';
-                                break;
+                        case GROUP_TYPE.DURATION.second:
+                            messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.second' : 'groupHeader.duration.seconds';
+                            break;
+                        case GROUP_TYPE.DURATION.minute:
+                            messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.minute' : 'groupHeader.duration.minutes';
+                            break;
+                        case GROUP_TYPE.DURATION.hour:
+                            messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.hour' : 'groupHeader.duration.hours';
+                            break;
+                        case GROUP_TYPE.DURATION.week:
+                            messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.week' : 'groupHeader.duration.weeks';
+                            break;
+                        case GROUP_TYPE.DURATION.day:
+                            messageKey = Math.abs(groupData.group) === 1 ? 'groupHeader.duration.day' : 'groupHeader.duration.days';
+                            break;
                         }
 
                         // this should not happen, but in the event messageKey is empty(meaning bad duration data),
