@@ -87,7 +87,7 @@ let recordActions = {
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
-                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
+                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
                         // Remove this notification since Micah Z thinks we should not display it here.
                         // NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
                         reject();
