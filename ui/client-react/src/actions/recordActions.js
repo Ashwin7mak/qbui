@@ -190,7 +190,7 @@ let recordActions = {
     /**
      * save a record
      */
-    saveRecord(appId, tblId, recId, pendEdits, fields) {
+    saveRecord(appId, tblId, recId, pendEdits, fields, addNewRecord) {
         function createColChange(value, display, field, payload) {
             let colChange = {};
             colChange.fieldName = field.name;
@@ -269,7 +269,14 @@ let recordActions = {
                     response => {
                         logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, changes});
-                        NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+
+                        // When adding a new record immediately after saving, the success message should appear
+                        // after the new record row is added so that it appears correctly and for the correct duration
+                        // See method addNewRowAfterRecordSaveSuccess in reportContent for when the mesage is displayed.
+                        if (!addNewRecord) {
+                            NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+                        }
+
                         resolve(recId);
                     },
                     error => {

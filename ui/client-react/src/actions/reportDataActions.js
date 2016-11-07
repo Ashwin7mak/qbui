@@ -48,7 +48,10 @@ let reportDataActions = {
      * setup a a new record not yet saved to the database
      */
     newBlankReportRecord(appId, tblId, afterRecId) {
-        this.dispatch(actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId});
+        return new Promise((resolve, reject) => {
+            resolve();
+            this.dispatch(actions.NEW_BLANK_REPORT_RECORD, {appId, tblId, afterRecId});
+        });
     },
 
     /**

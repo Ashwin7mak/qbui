@@ -1,5 +1,7 @@
 import React from "react";
 import ReactIntl from "react-intl";
+import {NotificationManager} from 'react-notifications';
+import Locale from '../../../locales/locales';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
@@ -214,7 +216,7 @@ export let ReportContent = React.createClass({
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
         if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            let saveRecordPromise = this.handleRecordSaveClicked(afterRecId);
+            let saveRecordPromise = this.handleRecordSaveClicked(afterRecId, true);
 
             // After saving the record successfully, then add the new row
             // Don't do anything if the record wasn't saved successfully or a promise was not returned
@@ -229,14 +231,18 @@ export let ReportContent = React.createClass({
 
     addNewRowAfterRecordSaveSuccess(afterRecId) {
         const flux = this.getFlux();
-        flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+        flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId).then(() => {
+            // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
+            // due to the speed of re-rendering
+            NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+        });
     },
 
     /**
      * User wants to save changes to a record.
      * @param id
      */
-    handleRecordSaveClicked(id) {
+    handleRecordSaveClicked(id, addNewRecord = false) {
         //signal record save action, server will validate and if ok update an existing records with changed values
         // or add a new record
         if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
@@ -246,7 +252,7 @@ export let ReportContent = React.createClass({
             }
             return this.handleRecordAdd(recordChanges);
         } else {
-            return this.handleRecordChange(id);
+            return this.handleRecordChange(id, addNewRecord);
         }
     },
 
@@ -281,11 +287,11 @@ export let ReportContent = React.createClass({
      * Save changes to an existing record
      * @param recId
      */
-    handleRecordChange(recId) {
+    handleRecordChange(recId, addNewRecord = false) {
         const flux = this.getFlux();
         if (_.has(this.props, 'fields.fields.data')) {
             flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data);
+            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, addNewRecord);
         }
     },
 
