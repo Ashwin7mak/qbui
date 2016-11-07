@@ -213,7 +213,7 @@ let reportModel = {
         if (this.model.hasGrouping) {
             return ReportUtils.findGroupedRecord(records, recId, this.model.keyField.name);
         } else {
-            return ReportUtils.findGroupedRecord(records, recId, this.model.keyField.name);
+            return records.find(rec => rec[this.model.keyField.name].value === recId);
         }
     },
 
@@ -942,7 +942,11 @@ let ReportDataStore = Fluxxor.createStore({
         // update the  record values
         this.editingIndex = undefined;
         if (this.reportModel.model.hasGrouping) {
-            this.createNewGroupedRecord(-1);
+            let record = ReportUtils.findGroupedRecord(this.reportModel.model.filteredRecords, SchemaConsts.UNSAVED_RECORD_ID, this.reportModel.model.keyField.name);
+            if (record === null) {
+                // add record was called without creating an empty record probably from a trowser so create one here
+                this.createNewGroupedRecord(-1);
+            }
         } else {
             let record = this.reportModel.findARecord(payload.recId);
             let filtRecord = this.reportModel.findAFilteredRecord(payload.recId);
