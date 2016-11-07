@@ -388,7 +388,7 @@ export let ReportContent = React.createClass({
 
                 //  Recursive call get to the last grouping field, and then update the grouping
                 //  labels as we work our way back to the top of the stack.
-                if (lvl < groupFields.length - 1) {
+                if (lvl < groupFields.length - 1 && groupDataRecords[group].children) {
                     this.localizeGroupingHeaders(groupFields, groupDataRecords[group].children, lvl + 1);
                 }
 
@@ -402,6 +402,9 @@ export let ReportContent = React.createClass({
                     //  that have already been localized.
                     groupData.localized = true;
 
+                    if (groupData.group === undefined) {
+                        continue;
+                    }
                     //  If no grouping header, use the empty label
                     if (groupData.group === null || groupData.group === '') {
                         groupData.group = Locales.getMessage('groupHeader.empty');

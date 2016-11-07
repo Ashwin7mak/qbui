@@ -267,6 +267,40 @@ class ReportUtils {
         return null;
     }
 
+    /*
+     * find first leaf record in a grouped records report
+     *
+     * @param node node in grouped record tree
+     * @param recId record id to find
+     * @param keyName key field name
+     */
+    static findFirstGroupedRecord(node) {
+
+        if (Array.isArray(node)) {
+            return ReportUtils.findFirstGroupedRecord({children: node});
+        }
+        if (node.children) {
+            let result = null;
+
+            for (let i = 0; result === null && i < node.children.length; i++) {
+                result = ReportUtils.findFirstGroupedRecord(node.children[i]);
+            }
+            return result;
+        } else {
+            return node;
+        }
+    }
+
+    /**
+     * Add a record to a group after a specified record id.
+     * @param group
+     * @param node
+     * @param recId
+     * @param keyName
+     * @param newRec
+     * @returns {*}
+     */
+
     static addGroupedRecordAfterRecId(node, recId, keyName, newRec) {
 
         if (node.children) {
@@ -320,42 +354,6 @@ class ReportUtils {
         return [];
     }
 
-    /**
-     * Add a record to a group after a specified record id.
-     * @param group
-     * @param node
-     * @param recId
-     * @param keyName
-     * @param newRec
-     * @returns {*}
-     */
-    //static addGroupedRecordAfterRecId(node, recId, keyName, newRec) {
-    //
-    //    let group = node;
-    //    if (Array.isArray(node)) {
-    //        group = node = {children: node};
-    //    }
-    //    return _addGroupedRec(group, node);
-    //
-    //    function _addGroupedRec(_group, _node) {
-    //        let found = false;
-    //        if (_node.children) {
-    //            for (let i = 0; !found && i < _node.children.length; i++) {
-    //                if (_node.children[i].children) {
-    //                    _addGroupedRec(_node.children, _node.children[i]);
-    //                } else {
-    //                    let recordIdx = ReportUtils.findRecordIndex(_node.children, recId, keyName);
-    //                    if (recordIdx !== -1) {
-    //                        found = true;
-    //                        _node.children.splice(recordIdx + 1, 0, newRec);
-    //                        break;
-    //                    }
-    //                }
-    //            }
-    //        }
-    //        return found;
-    //    }
-    //}
     /**
      * Remove a record from a grouped set of records.
      * @param group

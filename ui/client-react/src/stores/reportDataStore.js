@@ -250,8 +250,16 @@ let reportModel = {
      * @param changes - the changes to make to the record form is [{id: fieldid, display: dispVal, value: raw, fieldName: name}, ...]
      */
     updateARecord(oldRecId, newRecId, changes) {
-        let record = this.findARecord(oldRecId);
-        let filtRecord = this.findAFilteredRecord(oldRecId);
+        let record = null;
+        let filtRecord = null;
+
+        if (this.model.hasGrouping) {
+            record = ReportUtils.findGroupedRecord(this.model.records, oldRecId, this.model.keyField.name);
+            filtRecord = ReportUtils.findGroupedRecord(this.model.filteredRecords, oldRecId, this.model.keyField.name);
+        } else {
+            record = this.findARecord(oldRecId);
+            filtRecord = this.findAFilteredRecord(oldRecId);
+        }
 
         // update with new recid
         if (newRecId !== null) {
@@ -751,20 +759,34 @@ let ReportDataStore = Fluxxor.createStore({
             model.recordsCount++;
         }
     },
+    /**
+     * create a new record in the grouped structure
+     * If a valid recId is provided then make a copy of the corresponding record and also copy grouped field values.
+     * If afterRecId is -1 then no record initiated this action (example add from a form) - so find the first leaf node and make a copy.
+     * @param afterRecId
+     */
     createNewGroupedRecord(afterRecId) {
         const model = this.reportModel.get();
 
         if (model.filteredRecords.length > 0) {
             //find record to add after
             let record = ReportUtils.findGroupedRecord(model.filteredRecords, afterRecId.value, this.reportModel.model.keyField.name);
+            if (afterRecId === -1) {
+                record = ReportUtils.findFirstGroupedRecord(model.filteredRecords, afterRecId.value, this.reportModel.model.keyField.name);
+            }
 
             if (record === null) {
                 logger.error(`failed to find record that initiated new record call in the list: recId ${afterRecId}`);
                 return;
             }
-            let groupFids = model.groupFields.map(field => {
-                return field.field.id;
-            });
+            let groupFids = [];
+
+            if (afterRecId !== -1) {
+                groupFids = model.groupFields.map(field => {
+                    return field.field.id;
+                });
+            }
+
             // use this record to create newRecord
             const newRecord = _.mapValues(record, (obj) => {
                 //get the default value for the fid if any
@@ -798,8 +820,17 @@ let ReportDataStore = Fluxxor.createStore({
             //const newRecords = model.records.slice(0);
 
             //insert after the record (in the same group) -- update both record sets and update counts
-            let filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
-            let recordAdded = filteredRecordAdded;//Yes this is a hack - for some reason updating records array adds an extra row to aggrid - no idea why.
+            let filteredRecordAdded = false;
+            let recordAdded = false;
+
+            if (afterRecId === -1) {
+                filteredRecordAdded = newFilteredRecords.unshift(newRecord);
+                recordAdded = filteredRecordAdded;
+            } else {
+                filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+                recordAdded = filteredRecordAdded;//Yes this is a hack - for some reason updating records array adds an extra row to aggrid - no idea why.
+            }
+
             if (filteredRecordAdded) {
                 model.filteredRecords = newFilteredRecords;
                 model.filteredRecordsCount++;
@@ -910,13 +941,13 @@ let ReportDataStore = Fluxxor.createStore({
     onAddRecordSuccess(payload) {
         // update the  record values
         this.editingIndex = undefined;
-        let record = this.reportModel.findARecord(payload.recId);
-        let filtRecord = this.reportModel.findAFilteredRecord(payload.recId);
-        if (record === undefined && filtRecord === undefined) {
-            // add record was called without creating an empty record probably from a trowser so create one here
-            if (this.reportModel.model.hasGrouping) {
-                this.createNewGroupedRecord(payload.recId);
-            } else {
+        if (this.reportModel.model.hasGrouping) {
+            this.createNewGroupedRecord(-1);
+        } else {
+            let record = this.reportModel.findARecord(payload.recId);
+            let filtRecord = this.reportModel.findAFilteredRecord(payload.recId);
+            if (record === null && filtRecord === null) {
+                // add record was called without creating an empty record probably from a trowser so create one here
                 this.createNewRecord(payload.recId);
             }
         }
