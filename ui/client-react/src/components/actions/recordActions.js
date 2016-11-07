@@ -42,15 +42,14 @@ let RecordActions = React.createClass({
 
                 <div className="actionIcons">
                     <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit") + " " + record} onClick={this.props.onEditAction}/>
-                    <ActionIcon icon="print" tip={this.getSelectionTip("selection.print") + " " + record}/>
+                    <ActionIcon icon="print" tip={Locale.getMessage("unimplemented.print")} disabled={true}/>
 
                     <EmailReportLink tip={this.getSelectionTip("selection.email") + " " + record}
                                      subject={this.getEmailSubject()}
                                      body={this.getEmailBody()}/>
 
-                    <ActionIcon icon="duplicate" tip={this.getSelectionTip("selection.copy") + " " + record}/>
+                    <ActionIcon icon="duplicate" tip={Locale.getMessage("unimplemented.copy")} disabled={true}/>
                     <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record}/>
-                    <ActionIcon icon="pickles" tip={this.getSelectionTip("selection.more") } onClick={this.showExtraActions}/>
                 </div>
 
             </div>

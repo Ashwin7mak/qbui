@@ -44,22 +44,23 @@ export let Nav = React.createClass({
 
     getTopGlobalActions() {
         const actions = [
-            {msg:'globalActions.user', link:'/user', icon:'user'},
-            {msg:'globalActions.help', link:'/help', icon:'help'}
+            {msg:'globalActions.help', link:'/qbase/help', icon:'help'}
         ];
         return (<GlobalActions actions={actions}
                                position={"top"}
+                               dropdownIcon="user"
+                               dropdownMsg="globalActions.user"
                                startTabIndex={4}/>);
     },
 
     getLeftGlobalActions() {
         const actions = [
-            {msg:'globalActions.user', link:'/user', icon:'user'}
+            {msg:'globalActions.help', link:'/qbase/help', icon:'help'}
         ];
         return (<GlobalActions actions={actions}
                                onSelect={this.onSelectItem}
-                               dropdownIcon="help"
-                               dropdownMsg="globalActions.help"
+                               dropdownIcon="user"
+                               dropdownMsg="globalActions.user"
                                startTabIndex={100}
                                position={"left"}/>);
     },
@@ -119,6 +120,7 @@ export let Nav = React.createClass({
 
         // load new form data if we have an edit record query parameter and the trowser is closed (or we have a new record ID)
         if (this.props.location.query[UrlConsts.EDIT_RECORD_KEY] && !this.state.form.editFormLoading && (!this.state.nav.trowserOpen || oldRecId !== editRec)) {
+
 
             const flux = this.getFlux();
 
@@ -197,6 +199,7 @@ export let Nav = React.createClass({
                 expanded={this.state.nav.leftNavExpanded}
                 appsListOpen={this.state.nav.appsListOpen}
                 apps={this.state.apps.apps}
+                appsLoading={this.state.apps.loading}
                 selectedAppId={this.state.apps.selectedAppId}
                 selectedTableId={this.state.apps.selectedTableId}
                 onSelectReports={this.onSelectTableReports}
@@ -216,10 +219,13 @@ export let Nav = React.createClass({
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
                             key: this.props.location ? this.props.location.pathname : "",
+                            apps: this.state.apps.apps,
                             selectedAppId: this.state.apps.selectedAppId,
+                            appsLoading: this.state.apps.loading,
                             reportData: this.state.reportData,
                             appUsers: this.state.apps.appUsers,
                             pendEdits:this.state.pendEdits,
+                            isRowPopUpMenuOpen: this.state.nav.isRowPopUpMenuOpen,
                             fields: this.state.fields,
                             form: this.state.form,
                             reportSearchData: this.state.reportSearchData,

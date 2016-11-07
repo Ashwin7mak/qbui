@@ -174,13 +174,13 @@ let history = AppHistory.setup(flux).history;
 
 render((
     <Router history={history}>
-        <Route path="/" component={Apps} />
+        <Route path="/qbase/" component={Apps} />
 
-        <Route path="apps" component={NavWrapper} >
+        <Route path="/qbase/apps" component={NavWrapper} >
             <IndexRoute component={AppsRoute} />
         </Route>
 
-        <Route path="app/:appId" component={NavWrapper} >
+        <Route path="/qbase/app/:appId" component={NavWrapper} >
             <IndexRoute component={AppHomePageRoute} />
             <Route path="table/:tblId" component={TableHomePageRoute} />
             <Route path="table/:tblId/report/:rptId" component={ReportRoute} />

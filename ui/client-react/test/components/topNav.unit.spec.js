@@ -104,12 +104,6 @@ describe('TopNav functions', () => {
     it('test global search renders', () => {
         let searchInputContainer = TestUtils.scryRenderedDOMComponentsWithClass(component, "iconTableUISturdy-search");
         expect(searchInputContainer.length).toEqual(1);
-        TestUtils.Simulate.click(searchInputContainer[0]);
-
-        let searchPopOver = document.querySelectorAll(".searchPopover");
-        expect(searchPopOver.length).toEqual(1);
-        let searchInputBox = searchPopOver[0].querySelectorAll(".searchInput");
-        expect(searchInputBox.length).toEqual(1);
     });
 
 });

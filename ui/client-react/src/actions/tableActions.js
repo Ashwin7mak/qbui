@@ -1,14 +1,11 @@
 // action creators
 import * as actions from '../constants/actions';
 import TableService from '../services/tableService';
-import ReportService from '../services/reportService';
 import Promise from 'bluebird';
 import reportModel from '../models/reportModel';
 
 import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
-
-let logger = new Logger();
 
 //  Custom handling of 'possible unhandled rejection' error,  because we don't want
 //  to see an exception in the console output.  The exception is thrown by bluebird
@@ -17,53 +14,64 @@ let logger = new Logger();
 //  code.  Promises are returned only to support our unit tests, which are expected
 //  to implement the appropriate handlers.
 Promise.onPossiblyUnhandledRejection(function(err) {
+    let logger = new Logger();
     logger.debug('Bluebird Unhandled rejection', err);
 });
 
+const DEFAULT_HOMEPAGE_ID = '0';
+
 let tableActions = {
 
+    /**
+     * Fetch the table home page report
+     *
+     * @param appId
+     * @param tblId
+     * @param offset
+     * @param numRows
+     */
     loadTableHomePage: function(appId, tblId, offset, numRows) {
+
+        let logger = new Logger();
+
         //  promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId) {
                 let tableService = new TableService();
-                let reportService = new ReportService();
 
+                //  even though we don't yet know the home page report id, want a spinner to display,
+                //  so dispatch the LOAD_REPORT event.
+                this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId:DEFAULT_HOMEPAGE_ID});
+
+                //  Fetch the home page.  The response will include:
+                //    - report data/grouping data
+                //    - report meta data
+                //    - report fields
+                //    - report facets
+                //    - report count
                 tableService.getHomePage(appId, tblId, offset, numRows).then(
                     (response) => {
-                        var model = reportModel.set(response.data.reportMetaData, response.data.reportData);
-                        reportService.getReportRecordsCount(appId, tblId, model.rptId).then(
-                            response1 => {
-                                if (response1.data) {
-                                    logger.debug('ReportRecordsCount service call successful');
-                                    this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS, response1.data);
-                                    resolve();
-                                }
-                            },
-                            error1 => {
-                                logger.parseAndLogError(LogLevel.ERROR, error1, 'reportService.getReportRecordsCount:');
-                                this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, error1.response.status);
-                                reject();
-                            }
-                        ).catch(ex => {
-                            logger.logException(ex);
-                            this.dispatch(actions.LOAD_REPORT_RECORDS_COUNT_FAILED, 500);
-                            reject();
-                        });
+                        let metaData = response.data ? response.data.metaData : null;
+                        let model = reportModel.set(metaData, response.data);
 
-                        //  not waiting for the records count..fire off the load report events
-                        this.dispatch(actions.LOAD_REPORT, {appId, tblId, "rptId": model.rptId});
+                        //  if the report id does not match the default homepage id, re-init the load report
+                        //  event to ensure the reportId is set in the store.
+                        if (model.rptId !== DEFAULT_HOMEPAGE_ID) {
+                            this.dispatch(actions.LOAD_REPORT, {appId, tblId, rptId: model.rptId});
+                        }
+
                         this.dispatch(actions.LOAD_REPORT_SUCCESS, model);
+                        resolve();
                     },
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'tableService.getHomePage:');
-                        this.dispatch(actions.LOAD_REPORT_FAILED, error.response.status);
+                        this.dispatch(actions.LOAD_REPORT_FAILED, error);
                         reject();
                     }
                 ).catch((ex) => {
+                    // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                     logger.logException(ex);
-                    this.dispatch(actions.LOAD_REPORT_FAILED, 500);
                     reject();
                 });
             } else {

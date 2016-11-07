@@ -4,7 +4,20 @@ $edit-field-padding: 5px;
 
 .formContainer {
     padding: 10px;
-}
+    .formFooter {
+        display: inline;
+        margin: 15px 0 15px 1px;
+        font-size: $font-size-small;
+        .fieldNormalText {
+            color: $color-black-600;
+        }
+        .fieldLinkText {
+            color: $color-indigo-700
+        }
+        .div {
+            display: inline;
+        }
+    }
 
 
 .formSection {
@@ -116,7 +129,10 @@ $edit-field-padding: 5px;
         .checkbox {
             top: $edit-field-padding;
         }
-
+        .errorDiv {
+            display: flex;
+            flex-direction: column;
+        }
 
     }
     .input, textarea.cellEdit {
@@ -221,13 +237,14 @@ $edit-field-padding: 5px;
  * not absolute, and have the parent of the datepicker and input box be a flexbox so we can
  * reorder the datepicker AFTER the input using only CSS
  */
-.formElement.field .fieldValueEditor .dateCell {
+.formElement .fieldValueEditor .dateCell {
     border:0;
     > div {
         display:flex;
         flex-direction:column;
         .input-group.date {
             border: 1px solid #c7c7c7;
+            border-radius: 2px;
         }
         .bootstrap-datetimepicker-widget {
             right:0 !important;
@@ -237,4 +254,6 @@ $edit-field-padding: 5px;
 
         }
     }
+}
+
 }

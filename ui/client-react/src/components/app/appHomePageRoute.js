@@ -1,15 +1,17 @@
 import React from 'react';
-import Stage from '../stage/stage';
 import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
-import Breakpoints from '../../utils/breakpoints';
+import M5AppHomePage from './m5AppHomePage';
+
+import AppNotFound from './appNotFound';
 
 import './appHomePage.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
+
 /**
  * placeholder for app dashboard route
  */
@@ -19,10 +21,18 @@ let AppHomePageRoute = React.createClass({
     contextTypes: {
         touch: React.PropTypes.bool
     },
+
+    /**
+     * Select an app by ID
+     */
     selectAppId(appId) {
         let flux = this.getFlux();
         flux.actions.selectAppId(appId);
     },
+
+    /**
+     * Select an app from the route params
+     */
     selectAppFromParams(params, checkParams) {
         if (params) {
             let appId = params.appId;
@@ -76,7 +86,6 @@ let AppHomePageRoute = React.createClass({
     getStageHeadline() {
         return (this.props.selectedApp &&
             <div className="stageHeadline">
-
                 <h3 className="appName breadCrumbs"><QBicon icon="favicon"/> {this.props.selectedApp.name}</h3>
             </div>
         );
@@ -87,18 +96,17 @@ let AppHomePageRoute = React.createClass({
                 {/* todo */}
             </div>);
     },
-    render: function() {
-        let isSmall = Breakpoints.isSmallBreakpoint();
+
+    /**
+     * Render a temporary homepage. If the currenlty selected app does not exist, display a warning.
+     * @returns {XML}
+     */
+    render() {
         return (
-            isSmall ?
-                <div className="appHomePageContainer">
-                    <div className="appHomePageActionsContainer secondaryBar">
-                        {this.getSecondaryBar()}
-                        {this.getPageActions(2)}
-                    </div>
-                    <div className="appHomePageImageContainer"><img className="appHomePageMobileImage"/></div>
-                </div> :
-                <div className="appHomePageImageContainer"><img className="appHomePageImage"/></div>
+            <div className="appHomePageContainer">
+                <AppNotFound appsLoading={this.props.appsLoading} selectedAppId={this.props.selectedAppId} apps={this.props.apps} />
+                <M5AppHomePage />
+            </div>
         );
     }
 });

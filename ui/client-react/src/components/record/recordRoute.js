@@ -15,6 +15,7 @@ import Locale from '../../locales/locales';
 import Loader from 'react-loader';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import RecordHeader from './recordHeader';
+import Breakpoints from '../../utils/breakpoints';
 import _ from 'lodash';
 import './record.scss';
 
@@ -86,7 +87,7 @@ export let RecordRoute = React.createClass({
 
         const {appId, tblId, rptId} = this.props.params;
 
-        const link = `/app/${appId}/table/${tblId}/report/${rptId}`;
+        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}`;
         this.props.router.push(link);
     },
 
@@ -95,7 +96,7 @@ export let RecordRoute = React.createClass({
      * @param recId
      */
     navigateToRecord(appId, tblId, rptId, recId) {
-        const link = `/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
+        const link = `/qbase/app/${appId}/table/${tblId}/report/${rptId}/record/${recId}`;
         this.props.router.push(link);
     },
 
@@ -127,15 +128,18 @@ export let RecordRoute = React.createClass({
 
     getTitle() {
         const {recordId} = this.props.params;
+        const isSmall = Breakpoints.isSmallBreakpoint();
         const tableName = this.props.selectedTable ? this.props.selectedTable.name : '';
-        return <div className="title"><TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/><span> {tableName} # {recordId}</span></div>;
+        return <div className="title">
+            {isSmall ? <TableIcon classes="primaryIcon" icon={this.props.selectedTable ? this.props.selectedTable.icon : ""}/> : null}
+            <span> {tableName} # {recordId}</span></div>;
     },
 
     getStageHeadline() {
         if (this.props.params) {
             const {appId, tblId, rptId} = this.props.params;
 
-            const tableLink = `/app/${appId}/table/${tblId}`;
+            const tableLink = `/qbase/app/${appId}/table/${tblId}`;
 
             const reportName = this.props.reportData && this.props.reportData.data.name ? this.props.reportData.data.name : Locale.getMessage('nav.backToReport');
             const showBack = !!(this.props.reportData && this.props.reportData.previousRecordId !== null);
@@ -145,7 +149,7 @@ export let RecordRoute = React.createClass({
 
                 <div className="navLinks">
                     {this.props.selectedTable && <Link className="tableHomepageLink" to={tableLink}><TableIcon icon={this.props.selectedTable.icon}/>{this.props.selectedTable.name}</Link>}
-                    {this.props.selectedTable && rptId && <span className="color-black-700">&nbsp;:&nbsp;</span>}
+                    {this.props.selectedTable && rptId && <span className="divider color-black-700">&nbsp;&nbsp;:&nbsp;&nbsp;</span>}
                     {rptId && <a className="backToReport" href="#" onClick={this.returnToReport}>{reportName}</a>}
                 </div>
                 <div className="stageHeadline iconActions">
@@ -199,11 +203,10 @@ export let RecordRoute = React.createClass({
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'pageActions.email', icon:'mail'},
-            {msg: 'pageActions.print', icon:'print'},
-            {msg: 'pageActions.delete', icon:'delete'},
-            {msg: 'pageActions.customizeForm', icon:'settings-hollow'}];
+            {msg: 'unimplemented.print', icon:'print', disabled:true},
+            {msg: 'pageActions.delete', icon:'delete'}];
 
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={actions.length - 1} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
     /**

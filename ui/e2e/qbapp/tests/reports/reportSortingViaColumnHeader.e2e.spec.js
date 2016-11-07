@@ -100,8 +100,8 @@
          */
         var getExpectedSortedResultsUsingLoDashSort = function(Fids, sortFids, sortOrder) {
             var sortedRecords;
-            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id);
-            e2eBase.recordBase.apiBase.executeRequest(reportEndpoint + 1 + '/reportComponents', consts.GET).then(function(reportResult) {
+            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportResult) {
                 var results = JSON.parse(reportResult.body);
                 // Sort the actual records using lodash _.orderby
                 sortedRecords = reportSortingPage.sortRecords(results.records, sortFids, sortOrder);

@@ -77,7 +77,7 @@ describe('QbGrid functions', () => {
 
     let flux = {
         actions: {
-            getFilteredRecords: ()=>{},
+            loadDynamicReport: ()=>{},
             selectedRows: ()=>{},
             rowClicked: ()=>{},
             mark: ()=>{},
@@ -87,14 +87,14 @@ describe('QbGrid functions', () => {
 
     beforeEach(() => {
         NumberFieldValueRendererRewire.__Rewire__('I18nNumber', I18nMessageMock);
-        spyOn(flux.actions, 'getFilteredRecords');
+        spyOn(flux.actions, 'loadDynamicReport');
         spyOn(flux.actions, 'rowClicked');
 
     });
 
     afterEach(() => {
         NumberFieldValueRendererRewire.__ResetDependency__('I18nNumber');
-        flux.actions.getFilteredRecords.calls.reset();
+        flux.actions.loadDynamicReport.calls.reset();
         flux.actions.rowClicked.calls.reset();
     });
 

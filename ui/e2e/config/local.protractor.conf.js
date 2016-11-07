@@ -59,7 +59,7 @@
         // https://github.com/SeleniumHQ/selenium/blob/master/javascript/webdriver/capabilities.js
         capabilities: {
             browserName: 'chrome',
-            breakpointSize: 'xlarge'
+            breakpointSize: 'large'
             // These two values enable parallel testing which will run a spec file per instance
             //shardTestFiles: true,
             //maxInstances: 2

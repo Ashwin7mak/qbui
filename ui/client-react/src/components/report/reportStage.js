@@ -19,7 +19,7 @@ const ReportStage = React.createClass({
         window.location.href = 'mailto:clay_nicolau@intuit.com?subject=ReArch LH Feedback';
     },
     getReportLink() {
-        return window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/app/" + this.props.reportData.appId + "/table/" + this.props.reportData.tblId + "/report/" + this.props.reportData.rptId;
+        return window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/qbase/app/" + this.props.reportData.appId + "/table/" + this.props.reportData.tblId + "/report/" + this.props.reportData.rptId;
     },
 
     render() {
