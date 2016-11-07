@@ -28,7 +28,7 @@ let recordActions = {
     /**
      * save a new record
      */
-    saveNewRecord(appId, tblId, recordChanges, fields) {
+    saveNewRecord(appId, tblId, recordChanges, fields, addNewRecordAfterSave = false) {
         function getRecord(_recordChanges, _fields) {
             //save changes in record
             let payload = [];
@@ -73,7 +73,10 @@ let recordActions = {
                         if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
                             let resJson = JSON.parse(response.data.body);
                             this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
-                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+
+                            if (!addNewRecordAfterSave) {
+                                NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                            }
                             resolve(resJson.id);
                         } else {
                             logger.error('RecordService createRecord call error: no response data value returned');
@@ -190,7 +193,7 @@ let recordActions = {
     /**
      * save a record
      */
-    saveRecord(appId, tblId, recId, pendEdits, fields, addNewRecord) {
+    saveRecord(appId, tblId, recId, pendEdits, fields, addNewRecordAfterSave = false) {
         function createColChange(value, display, field, payload) {
             let colChange = {};
             colChange.fieldName = field.name;
@@ -273,7 +276,7 @@ let recordActions = {
                         // When adding a new record immediately after saving, the success message should appear
                         // after the new record row is added so that it appears correctly and for the correct duration
                         // See method addNewRowAfterRecordSaveSuccess in reportContent for when the mesage is displayed.
-                        if (!addNewRecord) {
+                        if (!addNewRecordAfterSave) {
                             NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
                         }
 

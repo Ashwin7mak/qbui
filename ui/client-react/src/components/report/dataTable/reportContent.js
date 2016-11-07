@@ -203,15 +203,20 @@ export let ReportContent = React.createClass({
     },
 
     /**
-     *  When inline edit mode and user wants to add a new record
+     *  When inline edit mode and user wants to add a new record and they are not currently trying to save or add a new record
      *  if there are pending edits or this record is not yet saved
-     *  try save instead of adding new one
-     *  otherwise if there are no unsaved changes add a blank new unsaved record after the
-     *  record specified
+     *  try save first before adding a new record
+     *  if there are no unsaved changes or changes save successfully
+     *  add a blank new unsaved record after the record specified
      * @param afterRecId
      */
     handleRecordNewBlank(afterRecId) {
         const flux = this.getFlux();
+
+        // Don't allow a user to add multiple records in rapid success (i.e., clicking "Save and add new" multiple times rapidly)
+        if (this.props.pendEdits.saving) {
+            return;
+        }
 
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
@@ -229,7 +234,7 @@ export let ReportContent = React.createClass({
         return null;
     },
 
-    addNewRowAfterRecordSaveSuccess(afterRecId) {
+    addNewRowAfterRecordSaveSuccess(afterRecId, successMessageKey) {
         const flux = this.getFlux();
         flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId).then(() => {
             // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
@@ -250,7 +255,7 @@ export let ReportContent = React.createClass({
             if (this.props.pendEdits.recordChanges) {
                 recordChanges = _.cloneDeep(this.props.pendEdits.recordChanges);
             }
-            return this.handleRecordAdd(recordChanges);
+            return this.handleRecordAdd(recordChanges, addNewRecord);
         } else {
             return this.handleRecordChange(id, addNewRecord);
         }
@@ -273,25 +278,25 @@ export let ReportContent = React.createClass({
      * @param recordChanges
      * @returns {Array} of field values for the new record
      */
-    handleRecordAdd(recordChanges) {
+    handleRecordAdd(recordChanges, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
 
         let fields = {};
         if (_.has(this.props, 'fields.fields.data')) {
             fields = this.props.fields.fields.data;
         }
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, addNewRecordAfterSave);
     },
 
     /**
      * Save changes to an existing record
      * @param recId
      */
-    handleRecordChange(recId, addNewRecord = false) {
+    handleRecordChange(recId, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
         if (_.has(this.props, 'fields.fields.data')) {
             flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, addNewRecord);
+            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, addNewRecordAfterSave);
         }
     },
 
