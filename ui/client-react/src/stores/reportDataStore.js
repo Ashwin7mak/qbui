@@ -948,9 +948,9 @@ let ReportDataStore = Fluxxor.createStore({
                 this.createNewGroupedRecord(-1);
             }
         } else {
-            let record = this.reportModel.findARecord(payload.recId);
-            let filtRecord = this.reportModel.findAFilteredRecord(payload.recId);
-            if (record === null && filtRecord === null) {
+            let record = this.reportModel.findARecord(SchemaConsts.UNSAVED_RECORD_ID);
+            let filtRecord = this.reportModel.findAFilteredRecord(SchemaConsts.UNSAVED_RECORD_ID);
+            if (record === undefined && filtRecord === undefined) {
                 // add record was called without creating an empty record probably from a trowser so create one here
                 this.createNewRecord(payload.recId);
             }
