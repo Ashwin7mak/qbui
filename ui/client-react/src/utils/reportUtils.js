@@ -267,6 +267,27 @@ class ReportUtils {
         return null;
     }
 
+    static addGroupedRecordAfterRecId(node, recId, keyName, newRec) {
+
+        if (node.children) {
+            return ReportUtils.addGroupedRecordAfterRecId(node.children, recId, keyName, newRec);
+        }
+        if (Array.isArray(node)) {
+            let index = _.findIndex(node, child => child[keyName] && child[keyName].value === recId);
+            if (index !== -1) {
+                node.splice(index + 1, 0, newRec);
+                return true;
+            } else {
+                let found = false;
+                for (let i = 0; !found && i < node.length; i++) {
+                    found = ReportUtils.addGroupedRecordAfterRecId(node[i], recId, keyName, newRec);
+                }
+                return found;
+            }
+        }
+        return false;
+    }
+
     /**
      * Find index of a record by recId from a flat array of records
      * @param array
@@ -308,33 +329,33 @@ class ReportUtils {
      * @param newRec
      * @returns {*}
      */
-    static addGroupedRecordAfterRecId(node, recId, keyName, newRec) {
-
-        let group = node;
-        if (Array.isArray(node)) {
-            group = node = {children: node};
-        }
-        return _addGroupedRec(group, node);
-
-        function _addGroupedRec(_group, _node) {
-            let found = false;
-            if (_node.children) {
-                for (let i = 0; !found && i < _node.children.length; i++) {
-                    if (_node.children[i].children) {
-                        _addGroupedRec(_node.children, _node.children[i]);
-                    } else {
-                        let recordIdx = ReportUtils.findRecordIndex(_node.children, recId, keyName);
-                        if (recordIdx !== -1) {
-                            found = true;
-                            _node.children.splice(recordIdx + 1, 0, newRec);
-                            break;
-                        }
-                    }
-                }
-            }
-            return found;
-        }
-    }
+    //static addGroupedRecordAfterRecId(node, recId, keyName, newRec) {
+    //
+    //    let group = node;
+    //    if (Array.isArray(node)) {
+    //        group = node = {children: node};
+    //    }
+    //    return _addGroupedRec(group, node);
+    //
+    //    function _addGroupedRec(_group, _node) {
+    //        let found = false;
+    //        if (_node.children) {
+    //            for (let i = 0; !found && i < _node.children.length; i++) {
+    //                if (_node.children[i].children) {
+    //                    _addGroupedRec(_node.children, _node.children[i]);
+    //                } else {
+    //                    let recordIdx = ReportUtils.findRecordIndex(_node.children, recId, keyName);
+    //                    if (recordIdx !== -1) {
+    //                        found = true;
+    //                        _node.children.splice(recordIdx + 1, 0, newRec);
+    //                        break;
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        return found;
+    //    }
+    //}
     /**
      * Remove a record from a grouped set of records.
      * @param group
