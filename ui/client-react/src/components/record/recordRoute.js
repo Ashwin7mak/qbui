@@ -203,11 +203,10 @@ export let RecordRoute = React.createClass({
             {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'pageActions.email', icon:'mail'},
-            {msg: 'pageActions.print', icon:'print'},
-            {msg: 'pageActions.delete', icon:'delete'},
-            {msg: 'pageActions.customizeForm', icon:'settings-hollow'}];
+            {msg: 'unimplemented.print', icon:'print', disabled:true},
+            {msg: 'pageActions.delete', icon:'delete'}];
 
-        return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={actions.length - 1} {...this.props}/>);
+        return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
 
     /**

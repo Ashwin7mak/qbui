@@ -16,6 +16,7 @@ import ValidationUtils from "../../../../../common/src/validationUtils";
 import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
+import ReportContentError from './reportContentError';
 
 let logger = new Logger();
 
@@ -664,7 +665,6 @@ export let ReportContent = React.createClass({
 
 
     render() {
-
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
         let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
@@ -685,14 +685,26 @@ export let ReportContent = React.createClass({
         let areRowsSelected = !!(selectedRows && selectedRows.length > 0);
         let showFooter = !this.props.reactabular  && !areRowsSelected && !isSmall;
 
+        let addPadding;
+        const isRowPopUpMenuOpen = this.props.isRowPopUpMenuOpen;
         const isInlineEditOpen = this.props.pendEdits && this.props.pendEdits.isInlineEditOpen;
+        if (isInlineEditOpen) {
+            addPadding = "reportContent inlineEditing";
+        } else if (isRowPopUpMenuOpen) {
+            addPadding =  "reportContent rowPopUpMenuOpen";
+        } else {
+            addPadding = "reportContent";
+        }
         const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
-        return (
-                <div className="loadedContent">
-                {this.props.reportData.error ?
-                    <div>Error loading report!</div> :
-                    <div className={isInlineEditOpen ? "reportContent inlineEditing" : "reportContent"}>
 
+        let reportContent;
+
+        if (this.props.reportData.error) {
+            reportContent = <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
+        } else {
+            reportContent = (
+                <div className="loadedContent">
+                    <div className={addPadding}>
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
@@ -717,8 +729,8 @@ export let ReportContent = React.createClass({
                                 groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                                 filter={{selections: this.props.reportData.selections,
-                                        facet: this.props.reportData.facetExpression,
-                                        search: this.props.reportData.searchStringForFiltering}}
+                                    facet: this.props.reportData.facetExpression,
+                                    search: this.props.reportData.searchStringForFiltering}}
                         />}
                         {!isSmall && !this.props.reactabular &&
                         <AGGrid loading={this.props.reportData.loading}
@@ -759,17 +771,8 @@ export let ReportContent = React.createClass({
                                 groupEls={this.props.reportData.data ? this.props.reportData.data.groupEls : []}
                                 sortFids={this.props.reportData.data ? this.props.reportData.data.sortFids : []}
                                 filter={{selections: this.props.reportData.selections,
-                                        facet: this.props.reportData.facetExpression,
-                                        search: this.props.reportData.searchStringForFiltering}}/>
-                        }
-                        {showFooter &&
-                        <ReportFooter
-                            reportData={this.props.reportData}
-                            getNextReportPage={this.props.reportFooter.props.getNextReportPage}
-                            getPreviousReportPage={this.props.reportFooter.props.getPreviousReportPage}
-                            pageStart={this.props.reportFooter.props.pageStart}
-                            pageEnd={this.props.reportFooter.props.pageEnd}
-                            recordsCount={this.props.reportFooter.props.recordsCount}/>
+                                    facet: this.props.reportData.facetExpression,
+                                    search: this.props.reportData.searchStringForFiltering}}/>
                         }
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
@@ -787,7 +790,13 @@ export let ReportContent = React.createClass({
                                             getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}/>
                         }
                     </div>
-                }
+                </div>
+            );
+        }
+
+        return (
+            <div className="loadedContent">
+                {reportContent}
             </div>
         );
     }

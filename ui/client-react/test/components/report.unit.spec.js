@@ -5,6 +5,7 @@ import Report from '../../src/components/report/reportRoute';
 import ReportToolbar from '../../src/components/report/reportToolbar';
 import Stage from '../../src/components/stage/stage';
 import ReportDataSearchStore from '../../src/stores/reportDataSearchStore';
+import Constants from '../../../common/src/constants';
 import Fluxxor from 'fluxxor';
 
 import Locale from '../../src/locales/locales';
@@ -16,7 +17,7 @@ describe('Report functions', () => {
     let component;
     let reportDataParams = {reportData: {data: {columns: [{field: "col_num", headerName: "col_num", fieldDef: {}}]}}};
 
-    let reportParams = {appId:1, tblId:2, rptId:3, format: true, offSet: null, numRows: null};
+    let reportParams = {appId:1, tblId:2, rptId:3, format: true, offSet: Constants.PAGE.DEFAULT_OFFSET, numRows: Constants.PAGE.DEFAULT_NUM_ROWS};
     let secondaryParams = {appId:4, tblId:5, rptId:6};
 
     let reportDataSearchStore = Fluxxor.createStore({
@@ -36,7 +37,8 @@ describe('Report functions', () => {
         selectTableId() {return;},
         getFilteredRecords() {return;},
         hideTopNav() {return;},
-        loadFields() {return;}
+        loadFields() {return;},
+        resetRowMenu() {return;}
     };
 
     let ReportStageMock = React.createClass({

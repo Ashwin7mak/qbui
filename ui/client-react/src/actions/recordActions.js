@@ -128,8 +128,8 @@ let recordActions = {
                     }
                 ).catch(
                     ex => {
+                        // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                         logger.logException(ex);
-                        this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: ex});
                         reject();
                     }
                 );
@@ -171,8 +171,8 @@ let recordActions = {
                     }
                 ).catch(
                     ex => {
+                        // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                         logger.logException(ex);
-                        this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: ex});
                         reject();
                     }
                 );

@@ -864,12 +864,22 @@ describe('Validate Group Utility functions', function() {
             });
         });
 
+        describe('validate CHECKBOX, URL and PHONE group types', function() {
+            var validGroupTypeTestCases = [
+                {name: 'checkbox equals', dataType: constants.CHECKBOX, groupType: groupTypes.COMMON.equals, expectation: true},
+                {name: 'phone equals', dataType: constants.PHONE_NUMBER, groupType: groupTypes.COMMON.equals, expectation: true},
+                {name: 'url equals', dataType: constants.URL, groupType: groupTypes.COMMON.equals, expectation: true}
+            ];
+            validGroupTypeTestCases.forEach(function(test) {
+                it('Test case: ' + test.name, function() {
+                    assert.equal(groupUtils.isValidGroupType(test.dataType, test.groupType), test.expectation);
+                });
+            });
+        });
+
         describe('validate unsupported date type tests', function() {
             var unsupportedGroupTypes = [
-                {name: 'CHECKBOX', dataType: constants.CHECKBOX},
-                {name: 'FILE_ATTACHMENT', dataType: constants.FILE_ATTACHMENT},
-                {name: 'PHONE_NUMBER', dataType: constants.PHONE_NUMBER},
-                {name: 'URL', dataType: constants.URL}
+                {name: 'FILE_ATTACHMENT', dataType: constants.FILE_ATTACHMENT}
             ];
 
             unsupportedGroupTypes.forEach(function(test) {

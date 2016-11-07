@@ -9,10 +9,11 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 let ActionIcon = React.createClass({
 
     propTypes: {
-        tip:React.PropTypes.string,
-        icon:React.PropTypes.string.isRequired,
-        bsStyle:React.PropTypes.string,
-        onClick:React.PropTypes.func
+        tip: React.PropTypes.string,
+        icon: React.PropTypes.string.isRequired,
+        bsStyle: React.PropTypes.string,
+        onClick: React.PropTypes.func,
+        disabled: React.PropTypes.bool
     },
 
     render() {
@@ -20,9 +21,9 @@ let ActionIcon = React.createClass({
         const tooltip = <Tooltip id={this.props.tip} positionTop={22}>{this.props.tip}</Tooltip>;
 
         return (
-            <OverlayTrigger placement="top" overlay={tooltip}>
-                <a href="#" className={"iconLink icon-" + this.props.icon} onClick={this.props.onClick}>
-                    <QBicon icon={this.props.icon}/>
+            <OverlayTrigger placement="top" overlay={tooltip} trigger={['hover', 'click']}>
+                <a href="#" className={"iconLink icon-" + this.props.icon} onClick={this.props.onClick} disabled={this.props.disabled}>
+                    <QBicon className={this.props.disabled ? "disabled" : ""} icon={this.props.icon}/>
                 </a>
             </OverlayTrigger>);
 
