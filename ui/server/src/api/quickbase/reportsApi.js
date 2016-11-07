@@ -9,6 +9,7 @@
     let Promise = require('bluebird');
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');
+    let lodash = require('lodash');
 
     /* See comment in recordsApi.js */
     let jsonBigNum = require('json-bignum');
@@ -188,20 +189,45 @@
             fetchReportCount: function(req, reportId) {
                 //  if there is a query parameter (ie: filter), need to query for the count using
                 //  the records endpoint; otherwise can use the reports endpoint to get the count.
+                //  TODO: this is temporary and go away once report summary is implemented as it
+                //  TODO: is expected to include report record counts.
                 let query = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
                 if (query !== null) {
                     return new Promise((resolve, reject) => {
-                        recordsApi.fetchCountForRecords(req).then(
-                            (response) => {
-                                resolve(response);
+                        //  Need to fetch the report meta data to determine if there is a query
+                        //  parameter defined for the report.
+                        this.fetchReportMetaData(req, reportId).then(
+                            (metaDataResult) => {
+                                //  make a copy cause we could be altering if meta data query is defined
+                                let req2 = lodash.clone(req);
+
+                                let reportMetaData = JSON.parse(metaDataResult.body);
+                                if (reportMetaData.query && reportMetaData.query.length > 0) {
+                                    //  there is an existing query for this report; need to supplement by
+                                    //  adding the client query
+                                    query = '((' + reportMetaData.query + ')' + (query.length > 0 ? constants.QUERY_AND + query : '') + ')';
+
+                                    //  update the request with the new query expression
+                                    requestHelper.removeRequestParameter(req2, constants.REQUEST_PARAMETER.QUERY);
+                                    requestHelper.addQueryParameter(req2, constants.REQUEST_PARAMETER.QUERY, query);
+                                }
+
+                                recordsApi.fetchCountForRecords(req2).then(
+                                    (response) => {
+                                        resolve(response);
+                                    },
+                                    (error) => {
+                                        reject(error);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('reportsAPI..fetchRecordsCount', ex, true);
+                                    reject(ex);
+                                });
                             },
-                            (error) => {
-                                reject(error);
+                            (metaError) => {
+                                reject(metaError);
                             }
-                        ).catch((ex) => {
-                            requestHelper.logUnexpectedError('reportsAPI..fetchRecordsCount', ex, true);
-                            reject(ex);
-                        });
+                        );
                     });
                 } else {
                     return this.fetchReportRecordsCount(req, reportId);
@@ -341,10 +367,14 @@
                                     }
                                 }
 
-                                //  override the default report meta data setting for query parameter
+                                //  Supplement the default report meta data setting(if any) with any client query(if any)
                                 let query = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
                                 if (query !== null) {
-                                    reportMetaData.query = query;
+                                    if (reportMetaData && reportMetaData.query) {
+                                        reportMetaData.query = '((' + reportMetaData.query + ')' + constants.QUERY_AND + query + ')';
+                                    } else {
+                                        reportMetaData.query = query;
+                                    }
                                 }
 
                                 //  override the default report meta data column fid list

@@ -265,27 +265,34 @@ describe('Validate ReportsApi unit tests', function() {
         var countResult = {count:1};
         var reportId = 1;
 
+        var getMetaDataStub;
         var getReportCountStub;
         var getRecordCountStub;
-
         reportsApi.setRecordsApi(recordsApi);
+
         beforeEach(function() {
+            getMetaDataStub = sinon.stub(reportsApi, "fetchReportMetaData");
             getReportCountStub = sinon.stub(reportsApi, "fetchReportRecordsCount");
             getRecordCountStub = sinon.stub(recordsApi, "fetchCountForRecords");
         });
         afterEach(function() {
+            getMetaDataStub.restore();
             getReportCountStub.restore();
             getRecordCountStub.restore();
             req.url = defaultUrl;
         });
 
         var testCases = [
-            {name:'call records count', query:'1.EX.test', expectation: {recordsSpy: true, reportSpy: false}},
-            {name:'call reports count', query:null, expectation: {recordsSpy: false, reportSpy: true}}
+            {name:'call records count with query and default', query:'{1.EX.test}', defaultQuery:'{2.EX.Y}', expectation: {metaDataSpy: true, recordsSpy: true, reportSpy: false}},
+            {name:'call records count with query and null default', query:'{1.EX.test}', defaultQuery:null, expectation: {metaDataSpy: true, recordsSpy: true, reportSpy: false}},
+            {name:'call records count with query and empty default', query:'{1.EX.test}', defaultQuery:'', expectation: {metaDataSpy: true, recordsSpy: true, reportSpy: false}},
+            {name:'call reports count with null query', query:null, defaultQuery:'{2.EX.Y}', expectation: {metaDataSpy: false, recordsSpy: false, reportSpy: true}},
+            {name:'call reports count with empty query', query:'', defaultQuery:'{2.EX.Y}', expectation: {metaDataSpy: false, recordsSpy: false, reportSpy: true}}
         ];
 
         testCases.forEach((test) => {
             it(test.name, function(done) {
+                getMetaDataStub.returns(Promise.resolve({'body': '{"id":1,"query":"' + test.defaultQuery + '","sortList":[{"fieldId":1, "sortOrder":"ASC", "groupType":"EQUALS"},{"fieldId":1, "sortOrder":"DESC"}]}'}));
                 getReportCountStub.returns(Promise.resolve('1'));
                 getRecordCountStub.returns(Promise.resolve('2'));
 
@@ -293,7 +300,7 @@ describe('Validate ReportsApi unit tests', function() {
                     requestHelper.addQueryParameter(req, constants.REQUEST_PARAMETER.QUERY, test.query);
                 }
                 reportsApi.fetchReportCount(req, reportId);
-                assert.equal(getRecordCountStub.called, test.expectation.recordsSpy);
+                assert.equal(getMetaDataStub.called, test.expectation.metaDataSpy);
                 assert.equal(getReportCountStub.called, test.expectation.reportSpy);
                 done();
             });
