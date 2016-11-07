@@ -795,17 +795,17 @@ let ReportDataStore = Fluxxor.createStore({
 
             //make a copy
             const newFilteredRecords = model.filteredRecords.slice(0);
-            const newRecords = model.records.slice(0);
+            //const newRecords = model.records.slice(0);
 
             //insert after the record (in the same group) -- update both record sets and update counts
             let filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
-            let recordAdded = ReportUtils.addGroupedRecordAfterRecId(newRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+            let recordAdded = filteredRecordAdded;//Yes this is a hack - for some reason updating records array adds an extra row to aggrid - no idea why.
             if (filteredRecordAdded) {
                 model.filteredRecords = newFilteredRecords;
                 model.filteredRecordsCount++;
             }
             if (recordAdded) {
-                model.records = newRecords;
+                //model.records = newRecords;
                 model.recordsCount++; //for pagination
             }
 
