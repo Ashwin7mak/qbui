@@ -798,8 +798,8 @@ let ReportDataStore = Fluxxor.createStore({
             const newRecords = model.records.slice(0);
 
             //insert after the record (in the same group) -- update both record sets and update counts
-            let filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
-            let recordAdded = ReportUtils.addGroupedRecordAfterRecId(newRecords, newRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+            let filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+            let recordAdded = ReportUtils.addGroupedRecordAfterRecId(newRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
             if (filteredRecordAdded) {
                 model.filteredRecords = newFilteredRecords;
                 model.filteredRecordsCount++;
