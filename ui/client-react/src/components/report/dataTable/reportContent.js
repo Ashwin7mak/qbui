@@ -695,7 +695,7 @@ export let ReportContent = React.createClass({
             reportContent = (
                 <div className="loadedContent">
                     <div className={addPadding}>
-                        <DTSErrorModal show={this.props.pendEdits.showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} />
+                        <DTSErrorModal show={this.props.pendEdits.showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} selectedAppId={this.props.selectedAppId} />
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}

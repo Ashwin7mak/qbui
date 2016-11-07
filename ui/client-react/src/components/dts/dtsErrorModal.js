@@ -1,12 +1,16 @@
 import React from 'react';
 import QBModal from '../qbModal/qbModal';
-
+import UrlUtils from '../../utils/urlUtils';
 
 const DTSErrorModal = React.createClass({
     ///There will be no state
     //There will be no function to close modal
     //Everything will exist in it's parents
     //This is only for building/testing purposes right now
+    propTypes: {
+        show: React.PropTypes.bool,
+        selectedAppId: React.PropTypes.string
+    },
     getInitialState() {
         return {
             isOpen: false
@@ -42,6 +46,7 @@ const DTSErrorModal = React.createClass({
                 primaryButtonOnClick={this.close}
                 title={title}
                 bodyMessage={errorMessage}
+                link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}
                 type="dtsAppDeleted" />
         );
     }

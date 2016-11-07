@@ -22,6 +22,10 @@ const QBModal = React.createClass({
          * */
         size: React.PropTypes.string,
         /**
+         * Pass in a link to have a button reroute to a new page
+         * */
+        link: React.PropTypes.string,
+        /**
          *This is the message for the modal body
          */
         bodyMessage: React.PropTypes.string,
@@ -135,13 +139,30 @@ const QBModal = React.createClass({
         let buttons = [
             <Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
         ];
+        if (this.props.link) {
+            buttons = [
+                <a href={this.props.link}><Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></a>
+            ];
+        }
 
         if (this.props.middleButtonName) {
-            buttons.unshift(<Button key={buttons.length} className="secondaryButton middleButton" onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
+            if (this.props.link) {
+                buttons.unshift(<a href={this.props.link}><Button key={buttons.length} className="secondaryButton middleButton"
+                                        onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button></a>);
+            } else {
+                buttons.unshift(<Button key={buttons.length} className="secondaryButton middleButton"
+                                        onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
+            }
         }
 
         if (this.props.leftButtonName) {
-            buttons.unshift(<Button key={buttons.length} className="secondaryButton leftButton" onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>);
+            if (this.props.link) {
+                buttons.unshift(<a href={this.props.link}><Button key={buttons.length} className="secondaryButton leftButton"
+                                        onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button></a>);
+            } else {
+                buttons.unshift(<Button key={buttons.length} className="secondaryButton leftButton"
+                                        onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>);
+            }
         }
 
         return (
@@ -166,6 +187,7 @@ const QBModal = React.createClass({
         }
     },
     render() {
+        console.log('this.props.link: ', this.props.link);
         return (
             <div>
                 <Modal className="qbModal" show={this.props.show}>

@@ -220,7 +220,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
 
     },
     handleErrors(payload) {
-        console.log('statuscode: ', payload.error.data.statusCode);
         this.getServerErrs(payload);
         // if (payload.error.data.statusCode === DTS_ERR0R_CODE) {
         this.onDTSErrorModal(payload);
@@ -246,7 +245,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
     },
     onDTSErrorModal(payload) {
-        console.log('payload.error: ', payload.error)
         this.dtsErrorModalTID = payload.error.tid;
         this.showDTSErrorModal = true;
     },
