@@ -101,11 +101,13 @@ const RowEditActions = React.createClass({
         }
 
 
-        // Get the state from the flux store here so that the entire AG Grid does not need to reload
+        // Get the saving state from the flux store here so that the entire AG Grid does not need to reload
         let saving = false;
-        let recordPendingEdits = this.props.flux.store('RecordPendingEditsStore').getState();
-        if (recordPendingEdits) {
-            saving = recordPendingEdits.saving;
+        if (_.has(this.props, 'flux.store')) {
+            let recordPendingEdits = this.props.flux.store('RecordPendingEditsStore').getState();
+            if (recordPendingEdits) {
+                saving = recordPendingEdits.saving;
+            }
         }
 
         let addRecordClass = 'addRecord';

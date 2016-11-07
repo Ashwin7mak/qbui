@@ -298,7 +298,6 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         };
         this.saving = false;
         this.emit('change');
-
     },
 
     /**
