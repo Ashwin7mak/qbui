@@ -58,6 +58,9 @@
         .iconLink {
             font-size:22px;
         }
+        .iconLink[disabled] .qbIcon {
+            opacity: .65;
+        }
         .qbIcon {
             width:auto;
             padding: 0 4px;

@@ -121,14 +121,15 @@ let ReportActions = React.createClass({
                         {this.props.selection.length === 1 &&
                             <ActionIcon icon="edit" onClick={this.onEditClicked} tip={this.getSelectionTip("selection.edit")}/>
                         }
-                        <ActionIcon icon="print" tip={this.getSelectionTip("selection.print")}/>
+                        <ActionIcon icon="print" tip={Locale.getMessage("unimplemented.print")} disabled={true}/>
 
                         <EmailReportLink tip={this.getSelectionTip("selection.email")}
                                          subject={this.getEmailSubject()}
                                          body={this.getEmailBody()}/>
 
-                        <ActionIcon icon="duplicate" tip={this.getSelectionTip("selection.copy")}/>
+                        <ActionIcon icon="duplicate" tip={Locale.getMessage("unimplemented.copy")} disabled={true}/>
                         <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete")} onClick={this.handleDelete}/>
+
 
                     </div>
                 </div>

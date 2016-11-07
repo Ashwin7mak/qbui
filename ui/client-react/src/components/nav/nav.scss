@@ -38,13 +38,6 @@ html body {
 
 }
 
-body.touch {
-
-    .tooltip {
-        display: none !important;
-    }
-}
-
 #content {
     height: 100%;
 }
@@ -115,12 +108,13 @@ body.touch {
                     padding:0;
                     height: $top-nav-height;
                     text-align:center;
-                    &.dropdownToggle {
-                        width:20px;
-                    }
                 }
-                button:hover .hi {
+                button:not(.disabled):hover .hi {
                     color: #fff;
+                }
+
+                button.disabled {
+                    opacity: .65;
                 }
             }
 

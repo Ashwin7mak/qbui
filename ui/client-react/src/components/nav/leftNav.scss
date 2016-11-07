@@ -26,8 +26,13 @@ $left-nav-horizontal-icon-border-color: $color32;
     a,a:hover,a:focus {
         text-decoration: none;
     }
+
     .leftNavLabel {
         vertical-align: middle;
+    }
+
+    .loadedContent {
+        width: 100%;
     }
 }
 
@@ -266,10 +271,11 @@ div.leftNavTooltip {
         color: $left-nav-heading-fg;
         margin: 0;
         padding-left: 10px;
+        line-height: 40px;
 
         &.withSecondary {
             cursor: pointer;
-            line-height: 40px;
+
             .qbIcon {
                 font-size: 16px;
                 position: absolute;
@@ -529,4 +535,18 @@ $travel-distance: 15;
 
 .leftNav.appsListOpen .branding .qbIcon.iconTableUISturdy-caret-filled-up {
     transform: rotate(0deg);
+}
+
+.leftNav .loader {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    position: relative;
+
+    .spinner {
+        // Requires important flags because the react-loader puts styles inline on the elements
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+    }
 }

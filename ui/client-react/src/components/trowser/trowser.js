@@ -80,7 +80,6 @@ let Trowser = React.createClass({
                             {this.props.breadcrumbs}
                         </div>
                         <div className={"rightIcons"}>
-                            <Button><QBicon icon={"help"}/></Button>
                             <Button onClick={this.props.onCancel}><QBicon icon={"close"}/></Button>
                         </div>
                     </div>
