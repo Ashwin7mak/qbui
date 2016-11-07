@@ -234,9 +234,13 @@ export let ReportContent = React.createClass({
         return null;
     },
 
-    addNewRowAfterRecordSaveSuccess(afterRecId, successMessageKey) {
+    addNewRowAfterRecordSaveSuccess(afterRecId) {
         const flux = this.getFlux();
-        flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId).then(() => {
+        let newBlankReportPromise = flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+
+        // The promise is saved to a variable and called separately for testing purposes
+        // Jasmine spys do not recognize that the flux.actions.newBlankReportRecord has been called if this is chained
+        newBlankReportPromise.then(() => {
             // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
             // due to the speed of re-rendering
             NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
@@ -276,6 +280,7 @@ export let ReportContent = React.createClass({
     /**
      * Save a new record
      * @param recordChanges
+     * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      * @returns {Array} of field values for the new record
      */
     handleRecordAdd(recordChanges, addNewRecordAfterSave = false) {
@@ -291,6 +296,7 @@ export let ReportContent = React.createClass({
     /**
      * Save changes to an existing record
      * @param recId
+     * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      */
     handleRecordChange(recId, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
