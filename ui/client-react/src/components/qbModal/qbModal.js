@@ -22,7 +22,7 @@ const QBModal = React.createClass({
          * */
         size: React.PropTypes.string,
         /**
-         * Pass in a link to have a button reroute to a new page
+         * Pass in a link to have a button reroute to a new url
          * */
         link: React.PropTypes.string,
         /**
