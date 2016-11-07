@@ -117,7 +117,9 @@
         this.selectTodaysDateFromDatePicker = function(fieldDateIconElement) {
             return fieldDateIconElement.element(by.className('glyphicon-calendar')).click().then(function() {
                 reportServicePage.waitForElement(fieldDateIconElement.element(by.className('datepicker'))).then(function() {
-                    return fieldDateIconElement.element(by.className('datepicker')).element(by.className('active')).click();
+                    return reportServicePage.waitForElement(fieldDateIconElement.element(by.className('datepicker')).element(by.className('active'))).then(function() {
+                        return fieldDateIconElement.element(by.className('datepicker')).element(by.className('active')).click();
+                    });
                 });
             });
         };
