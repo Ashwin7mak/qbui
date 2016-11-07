@@ -71,7 +71,6 @@
         });
 
         it('Save Btn - Validate Add form', function(done) {
-            //TODO 'dateCell', 'timeCell' in small breakpoints dosent work typing in date and time.
             var fieldTypeClassNames = ['numericField'];
             //click on add record button
             reportCardViewPage.clickAddRecord();
@@ -101,7 +100,7 @@
         });
 
         it('Save Btn -Validate Edit form', function(done) {
-            var fieldTypeClassNames = ['numericField'];
+            var fieldTypeClassNames = ['textField', 'numericField'];
             //Select record 1
             reportCardViewPage.clickRecord(1);
             reportCardViewPage.clickEditRecord();

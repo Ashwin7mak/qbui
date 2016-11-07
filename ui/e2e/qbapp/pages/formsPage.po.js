@@ -114,6 +114,14 @@
             });
         };
 
+        this.selectTodaysDateFromDatePicker = function(fieldDateIconElement) {
+            return fieldDateIconElement.element(by.className('glyphicon-calendar')).click().then(function() {
+                reportServicePage.waitForElement(fieldDateIconElement.element(by.className('datepicker'))).then(function() {
+                    return fieldDateIconElement.element(by.className('datepicker')).element(by.className('active')).click();
+                });
+            });
+        };
+
         this.enterFormValues = function(fieldLabel) {
             var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
@@ -123,9 +131,14 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        //Do the click below to make it user editable
-                        return elm.element(by.className('date')).click().then(function() {
-                            return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
+                        //TODO Enable below when the bug that enters date into date field is fixed
+                        //return elm.element(by.className('date')).click().then(function() {
+                        //    return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
+                        //});
+
+                        //Select the date from the date picker untill above is fixed
+                        return elm.element(by.className('date')).element(by.tagName('input')).sendKeys(protractor.Key.BACK_SPACE).then(function() {
+                            return self.selectTodaysDateFromDatePicker(elm);
                         });
                     });
                 } else if (fieldLabel === 'textField') {
