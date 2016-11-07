@@ -149,6 +149,7 @@ export let Nav = React.createClass({
     componentDidUpdate(prevProps) {
 
         // component updated, update the record trowser content if necessary
+        // temporary solution to prevent UI getting in an endless loop state (MB-1369)
         if (document.querySelector(".notification-container-empty")) {
             this.updateRecordTrowser(prevProps.location.query.editRec);
         }
