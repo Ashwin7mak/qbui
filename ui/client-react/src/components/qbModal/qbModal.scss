@@ -26,6 +26,7 @@
     }
 
     .modal-dialog {
+        z-index: 9999;
         //width: 100%;
         //height: 100%;
         @include small-breakpoint {
@@ -48,7 +49,7 @@
     .large {
         //margin: 200px auto;
         height: 404px;
-        width: 687px !important;
+        width: 587px !important;
     }
 
     .modal-backdrop.in {
