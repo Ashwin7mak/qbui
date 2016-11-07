@@ -187,7 +187,6 @@ const QBModal = React.createClass({
         }
     },
     render() {
-        console.log('this.props.link: ', this.props.link);
         return (
             <div>
                 <Modal className="qbModal" show={this.props.show}>
