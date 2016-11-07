@@ -174,9 +174,36 @@ class BaseService {
     constructRedirectUrl() {
         let currentStackSignInUrl = "/db/main?a=nsredirect&nsurl=";
         let newStackDestination = WindowLocationUtils.getHref();
-        let currentStackDomain = WindowLocationUtils.getSubdomain() + WindowLocationUtils.getHostname();
+        let currentStackDomain = this.getSubdomain() + "." +  this.getDomain();
         currentStackSignInUrl = "https://" + currentStackDomain + currentStackSignInUrl + newStackDestination;
         return currentStackSignInUrl;
+    }
+
+    /**
+     * We need to get the subdomain for redirect url construction
+     * To get the real subdomain we need to split on the '.' character
+     * And then take the first entry in the array
+     * Example: team.quickbase.com
+     * Example returns {team}
+     */
+    getSubdomain() {
+        let hostname = WindowLocationUtils.getHostname();
+        return hostname.split(".").shift();
+    }
+
+    /**
+     * We need to get the domain for redirect url construction
+     * To get the real domain we need to split on the '.' character
+     * And then take the last 2 entries in the array
+     * Example: team.quickbase.com
+     * Example returns {quickbase.com}
+     */
+    getDomain() {
+        let hostname = WindowLocationUtils.getHostname();
+        let hostnameSplit = hostname.split(".");
+        let domainAndTLD = hostnameSplit.pop(); //we can't assume that we are deployed on TLD .com
+        domainAndTLD = hostnameSplit.pop() + "." + domainAndTLD;
+        return domainAndTLD;
     }
 
 }

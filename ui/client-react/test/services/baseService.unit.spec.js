@@ -23,8 +23,12 @@ describe('BaseService rewire tests', () => {
         }
     };
 
-    var simpleSubdomain = {href: "https://team.quickbase.com", hostname: "team.quickbase.com", expectedUrl: 'https://team.quickbase.com/db/main?a=nsredirect&nsurl='};
-    var complexSubdomain = {href: "https://team.demo.quickbaserocks.com", hostname: "team.demo.quickbaserocks.com", expectedUrl: 'https://team.quickbaserocks.com/db/main?a=nsredirect&nsurl='};
+    var simpleSubdomain = {href: "https://team.quickbase.com", hostname: "team.quickbase.com",
+        subdomain: "team", domain: "quickbase.com",
+        expectedUrl: 'https://team.quickbase.com/db/main?a=nsredirect&nsurl='};
+    var complexSubdomain = {href: "https://team.demo.quickbaserocks.com", hostname: "team.demo.quickbaserocks.com",
+        subdomain: "team", domain: "quickbaserocks.com",
+        expectedUrl: 'https://team.quickbaserocks.com/db/main?a=nsredirect&nsurl='};
 
     var mockWindowUtils = {
         update: function(url) {
@@ -36,14 +40,8 @@ describe('BaseService rewire tests', () => {
         getHref: function() {
             return simpleSubdomain.href;
         },
-        getSubdomain: function() {
-            return simpleSubdomain.hostname.split(".").shift();
-        },
         getHostname: function() {
-            var hostnameSplit = simpleSubdomain.hostname.split(".");
-            var hostname = hostnameSplit.pop();
-            hostname = "." + hostnameSplit.pop() + "." + hostname;
-            return hostname;
+            return simpleSubdomain.hostname;
         }
     };
 
@@ -131,20 +129,38 @@ describe('BaseService rewire tests', () => {
         expect(expectedUrl).toEqual(url);
     });
 
+    it('test getSubdomain method with simple subdomain', () => {
+        baseService = new BaseService();
+        var subdomain = baseService.getSubdomain();
+        expect(simpleSubdomain.subdomain).toEqual(subdomain);
+    });
+
+    it('test getDomain method with simple subdomain', () => {
+        baseService = new BaseService();
+        var domain = baseService.getDomain();
+        expect(simpleSubdomain.domain).toEqual(domain);
+    });
+
     it('test constructRedirectUrl method with complex subdomain', () => {
-        mockWindowUtils.getSubdomain = function() {return complexSubdomain.hostname.split(".").shift();};
         mockWindowUtils.getHref = function() {return complexSubdomain.href;};
-        mockWindowUtils.getHostname = function() {
-            var hostnameSplit = complexSubdomain.hostname.split(".");
-            var hostname = hostnameSplit.pop();
-            hostname = "." + hostnameSplit.pop() + "." + hostname;
-            return hostname;
-        };
+        mockWindowUtils.getHostname = function() {return complexSubdomain.hostname;};
         BaseService.__Rewire__('WindowLocationUtils', mockWindowUtils);
         baseService = new BaseService();
         var expectedUrl = complexSubdomain.expectedUrl + mockWindowUtils.getHref();
         var url = baseService.constructRedirectUrl();
         expect(expectedUrl).toEqual(url);
+    });
+
+    it('test getSubdomain method with complex subdomain', () => {
+        baseService = new BaseService();
+        var subdomain = baseService.getSubdomain();
+        expect(complexSubdomain.subdomain).toEqual(subdomain);
+    });
+
+    it('test getDomain method with complex subdomain', () => {
+        baseService = new BaseService();
+        var domain = baseService.getDomain();
+        expect(complexSubdomain.domain).toEqual(domain);
     });
 
 });
