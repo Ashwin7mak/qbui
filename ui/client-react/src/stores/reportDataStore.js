@@ -443,8 +443,8 @@ let reportModel = {
     deleteRecordsFromLists(recId) {
         var recordValueToMatch = {};
         recordValueToMatch[SchemaConsts.DEFAULT_RECORD_KEY] = {value: recId};
-        const newFilteredRecords = this.model.filteredRecords.slice(0);
-        const newRecords = this.model.records.slice(0);
+        const newFilteredRecords = this.model.filteredRecords ? this.model.filteredRecords.slice(0) : null;
+        const newRecords = this.model.records ? this.model.records.slice(0) : null;
         let recordDeleted = false;
         let filteredRecordDeleted = false;
         if (this.model.hasGrouping) {
@@ -484,6 +484,7 @@ let ReportDataStore = Fluxxor.createStore({
     initialize() {
         this.reportModel = reportModel;
         this.loading = false;
+        //set these to undefined to differentiate from null value. TODO this needs to be cleaned up in M6
         this.editingIndex = undefined;
         this.editingId = undefined;
         this.error = false;
@@ -654,27 +655,6 @@ let ReportDataStore = Fluxxor.createStore({
         this.emit('change');
     },
 
-    onFilteredRecordsCountSuccess(response) {
-        this.loading = false;
-        this.editingIndex = undefined;
-        this.editingId = undefined;
-
-        this.error = false;
-        this.reportModel.updateFilteredRecordsCount(response.data.filteredCount);
-
-        this.emit('change');
-    },
-
-    onFilteredRecordsCountFailed() {
-        this.loading = false;
-        this.editingIndex = undefined;
-        this.editingId = undefined;
-
-        this.error = true;
-        this.errorDetails = error;
-        this.emit('change');
-    },
-
     onLoadReportRecordsCount() {
         this.countingTotalRecords = true;
         this.emit('change');
@@ -818,8 +798,8 @@ let ReportDataStore = Fluxxor.createStore({
             const newRecords = model.records.slice(0);
 
             //insert after the record (in the same group) -- update both record sets and update counts
-            let filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
-            let recordAdded = ReportUtils.addGroupedRecordAfterRecId(newRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+            let filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+            let recordAdded = ReportUtils.addGroupedRecordAfterRecId(newRecords, newRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
             if (filteredRecordAdded) {
                 model.filteredRecords = newFilteredRecords;
                 model.filteredRecordsCount++;

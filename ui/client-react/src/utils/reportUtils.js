@@ -275,7 +275,7 @@ class ReportUtils {
      * @returns {*}
      */
     static findRecordIndex(records, recId, keyName) {
-        if (records) {
+        if (Array.isArray(records)) {
             return records.findIndex(record => {
                 return record[keyName] ? record[keyName].value === recId : false;
             });
@@ -291,9 +291,12 @@ class ReportUtils {
      * @returns {Array}
      */
     static removeRecordFromArray(records, recId, keyName) {
-        return _.remove(records, (record) => {
-            return record[keyName] ? record[keyName].value === recId : false;
-        });
+        if (Array.isArray(records)) {
+            return _.remove(records, (record) => {
+                return record[keyName] ? record[keyName].value === recId : false;
+            });
+        }
+        return [];
     }
 
     /**
