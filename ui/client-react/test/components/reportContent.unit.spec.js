@@ -783,7 +783,7 @@ describe('ReportContent functions', () => {
         ReportContentRewireAPI.__ResetDependency__('Locales');
     });
 
-    it('test render of component', () => {
+    fit('test render of component', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_empty}
                                                                 reportHeader={header_empty}
@@ -1196,7 +1196,8 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}/>);
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={pendEdits}/>);
         var agGrid = TestUtils.scryRenderedComponentsWithType(component, AGGridMock);
         expect(agGrid.length).toEqual(1);
         agGrid = agGrid[0];
@@ -1208,7 +1209,8 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}/>);
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={pendEdits}/>);
         spyOn(flux.actions, 'mark');
         component.startPerfTiming({reportData: {
             loading : true
@@ -1220,7 +1222,8 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}/>);
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={pendEdits}/>);
         spyOn(flux.actions, 'measure');
         spyOn(flux.actions, 'logMeasurements');
         component.capturePerfTiming({reportData: {
@@ -1239,7 +1242,8 @@ describe('ReportContent functions', () => {
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
                                                                 router={[]}
-                                                                recordsCount={100}/>);
+                                                                recordsCount={100}
+                                                                pendEdits={pendEdits}/>);
         component.openRow({RecId: {value: 2}});
         expect(component.props.router).toContain('/qbase/app/123/table/456/report/2/record/2');
     });
