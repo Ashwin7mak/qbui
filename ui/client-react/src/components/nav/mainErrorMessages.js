@@ -9,6 +9,21 @@ import './mainErrorMessages.scss';
 
 const supportEmail = 'betaprogram@quickbase.com';
 
+const I18nKeys = {
+    getMainKey(key) {
+        return `errors.${key}`;
+    },
+    appNotFound(key) {
+        return I18nKeys.getMainKey(`appNotFound.${key}`);
+    },
+    noApps(key) {
+        return I18nKeys.getMainKey(`noApps.${key}`);
+    },
+    noTables(key) {
+        return I18nKeys.getMainKey(`noTables.${key}`);
+    }
+};
+
 const MainErrorMessage = React.createClass({
     propTypes: {
         apps: PropTypes.array,
@@ -38,11 +53,11 @@ const MainErrorMessage = React.createClass({
 
         return (
             <AlertBanner show={show} showCreateInQuickBaseClassicLink={true} selectedAppId={selectedAppId}>
-                <I18nMessage message="appNotFoundError.notFound"/>
+                <I18nMessage message={I18nKeys.appNotFound('notFound')} />
                 <a href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>
-                    <I18nMessage message="appNotFoundError.clickHere" />
+                    <I18nMessage message={I18nKeys.appNotFound('clickHere')} />
                 </a>
-                <I18nMessage message="appNotFoundError.quickBaseClassic" />
+                <I18nMessage message={I18nKeys.appNotFound('inQuickBaseClassic')} />
             </AlertBanner>
         );
     },
@@ -56,10 +71,10 @@ const MainErrorMessage = React.createClass({
 
         return (
             <AlertBanner show={show}>
-                <I18nMessage message="createInQuickBaseClassicMessage.noApps" />
-                <I18nMessage message="createInQuickBaseClassicMessage.addAppsContact" />
+                <I18nMessage message={I18nKeys.noApps('noApps')} />
+                <I18nMessage message={I18nKeys.noApps('addAppsContact')} />
                 {this.renderSupportLink()}
-                <I18nMessage message="createInQuickBaseClassicMessage.addApps"/>
+                <I18nMessage message={I18nKeys.noApps('addApps')} />
             </AlertBanner>
         );
     },
@@ -73,8 +88,8 @@ const MainErrorMessage = React.createClass({
 
         return (
             <AlertBanner show={show}>
-                <I18nMessage message="createInQuickBaseClassicMessage.noTables" />
-                <I18nMessage message="createInQuickBaseClassicMessage.createTablesInQuickBaseClassic" />
+                <I18nMessage message={I18nKeys.noTables('noTables')} />
+                <I18nMessage message={I18nKeys.noTables('createTablesInQuickBaseClassic')} />
                 <a href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>
                     <I18nMessage message="quickBaseClassic"/>
                 </a>.
