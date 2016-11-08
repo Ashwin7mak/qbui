@@ -106,7 +106,6 @@ let recordActions = {
      * delete a record
      */
     deleteRecord(appId, tblId, recId, nameForRecords) {
-        appId = 'Banana!';
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && (!!(recId === 0 || recId))) {
