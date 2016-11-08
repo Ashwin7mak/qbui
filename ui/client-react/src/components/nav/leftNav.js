@@ -82,11 +82,9 @@ let LeftNav = React.createClass({
             <Swipeable className={classes} onSwipedLeft={this.swipedLeft}>
                 {this.createBranding()}
 
-                <div className={"transitionGroup"}>
-                    <Loader loaded={!this.props.appsLoading} options={SpinnerConfigurations.LEFT_NAV_BAR}>
-                        {this.renderNavContent()}
-                    </Loader>
-                </div>
+                <Loader loadedClassName="transitionGroup" loaded={!this.props.appsLoading} options={SpinnerConfigurations.LEFT_NAV_BAR}>
+                    {this.renderNavContent()}
+                </Loader>
 
                 {this.props.globalActions}
             </Swipeable>

@@ -34,7 +34,7 @@ export default {
         pendingEditModal: {
             modalBodyMessage: "Save changes before leaving?",
             modalStayButton: "Stay and keep working",
-            modalDoNotSaveButton: "Don\'t Save",
+            modalDoNotSaveButton: "Don't Save",
             modalSaveButton: "Save"
         },
         reports : {

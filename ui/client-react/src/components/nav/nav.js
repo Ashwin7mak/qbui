@@ -18,6 +18,8 @@ import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
 
+import AppQbModal from '../qbModal/appQbModal';
+
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
 
@@ -159,6 +161,9 @@ export let Nav = React.createClass({
 
         return (<div className={classes}>
             <NotificationContainer/>
+            {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
+            <AppQbModal/>
+
             {this.props.params && this.props.params.appId &&
                 <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
