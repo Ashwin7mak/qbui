@@ -3,6 +3,7 @@ import React from "react";
 import Fluxxor from "fluxxor";
 import LeftNav from "./leftNav";
 import TopNav from "../header/topNav";
+import MainErrorMessages from './mainErrorMessages';
 import ReportManagerTrowser from "../report/reportManagerTrowser";
 import RecordTrowser from "../record/recordTrowser";
 import * as SchemaConsts from "../../constants/schema";
@@ -202,6 +203,7 @@ export let Nav = React.createClass({
                         showOnSmall = {this.state.nav.showTopNav}/>
                 {this.props.children &&
                     <div className="mainContent" >
+                        <MainErrorMessages apps={this.state.apps.apps} this.selectedAppId/>
                         {/* insert the component passed in by the router */}
                         {React.cloneElement(this.props.children, {
                             key: this.props.location ? this.props.location.pathname : "",

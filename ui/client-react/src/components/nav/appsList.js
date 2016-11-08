@@ -49,15 +49,9 @@ let AppsList = React.createClass({
                 () => {setTimeout(() => ReactDOM.findDOMNode(this.refs.appsSearchBox).querySelector("input.searchInput").focus(), 200);});
         }
     },
-    hasNoApps() {
-        return (!this.props.appsLoading && this.props.apps && this.props.apps.length === 0);
-    },
+
     render() {
         let apps = this.appList();
-
-        if (this.hasNoApps()) {
-            apps = <CreateInQuickBaseClassicMessage nameOfElements="apps" />;
-        }
 
         return (
             <ul className={"appsList"} >
