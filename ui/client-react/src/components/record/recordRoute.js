@@ -234,6 +234,9 @@ export let RecordRoute = React.createClass({
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
             return null;
         } else {
+            const {errorStatus} = this.props.form;
+            const formInternalError = (errorStatus && errorStatus === 500);
+            const formAccessRightError = (errorStatus && errorStatus === 403);
 
             return (
                 <div className="recordContainer">
@@ -250,9 +253,9 @@ export let RecordRoute = React.createClass({
                         {this.getPageActions()}
                     </div>
 
-                    <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
-                            loaded={!this.props.form || !this.props.form.formLoading} >
-
+                    {!errorStatus ?
+                        <Loader key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
+                                            loaded={(!this.props.form || !this.props.form.formLoading)}>
                         <Record key={_.has(this.props, "form.formData.recordId") ? this.props.form.formData.recordId : null }
                                 appId={this.props.params.appId}
                                 tblId={this.props.params.tblId}
@@ -260,7 +263,9 @@ export let RecordRoute = React.createClass({
                                 errorStatus={this.props.form && this.props.form.errorStatus ? this.props.form.errorStatus : null}
                                 formData={this.props.form ? this.props.form.formData : null}
                                 appUsers={this.props.appUsers} />
-                    </Loader>
+                        </Loader> : null }
+                    {formInternalError && <pre><I18nMessage message="form.error.500"/></pre>}
+                    {formAccessRightError && <pre><I18nMessage message="form.error.403"/></pre>}
                 </div>);
         }
     }

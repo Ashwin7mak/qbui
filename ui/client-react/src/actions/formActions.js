@@ -114,8 +114,17 @@ let formActions = {
                         } else {
                             logger.parseAndLogError(LogLevel.ERROR, error.response, 'formService.loadForm:');
                         }
-                        NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
+
+                        if (error.response.status === 403) {
+                            NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'), 1500);
+                        } else {
+                            NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
+                        }
+
+                        // remove the editRec query string since we are not successfully editing the form
+                        WindowLocationUtils.pushWithoutQuery();
                         this.dispatch(failedAction, error.response.status);
+
                         reject();
                     }
                 );
@@ -168,13 +177,12 @@ let formActions = {
 
                         // remove the editRec query string since we are not successfully editing the form
                         WindowLocationUtils.pushWithoutQuery();
-                        this.dispatch(failedAction, error.response.status);
-
                         if (error.response.status === 403) {
                             NotificationManager.error(Locale.getMessage('form.error.403'), Locale.getMessage('failed'), 1500);
                         } else {
                             NotificationManager.error(Locale.getMessage('recordNotifications.cannotLoad'), Locale.getMessage('failed'), 1500);
                         }
+                        this.dispatch(failedAction, error.response.status);
 
                         reject();
                     }

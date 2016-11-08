@@ -125,24 +125,12 @@ export let Nav = React.createClass({
             const flux = this.getFlux();
 
             if (editRec === UrlConsts.NEW_RECORD_VALUE) {
-
                 flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
-                    done();
-                },
-                () => {
-                    WindowLocationUtils.pushWithoutQuery();
-                    done();
                 });
             } else {
-
                 flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
-                    done();
-                },
-                () => {
-                    WindowLocationUtils.pushWithoutQuery();
-                    done();
                 });
             }
         }
