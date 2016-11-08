@@ -5,7 +5,7 @@
     flex-direction: column;
     flex: 1 1 auto;
     min-width: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     @include not-small-breakpoint {
         background: $report-container-bg;

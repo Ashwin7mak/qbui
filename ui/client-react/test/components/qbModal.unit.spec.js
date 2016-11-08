@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import TestUtils, {Simulate} from 'react-addons-test-utils';
 
 import QbModal from '../../src/components/qbModal/qbModal';

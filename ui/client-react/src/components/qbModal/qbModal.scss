@@ -2,9 +2,14 @@
 @import '../../assets/css/_qbColorVariables';
 
 .qbModal {
+
+    // Modal should always appear on the top layer, even above the trowser
+    z-index: 9999;
+
     a {
         text-decoration: none;
     }
+
     .bodyContainer {
         display: flex;
         margin-bottom: 10px;
