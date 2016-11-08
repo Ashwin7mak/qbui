@@ -14,7 +14,7 @@ describe('Test recordPendingEdits Store ', () => {
         appId : 'a',
         tblId : 'b',
         recId : 4,
-        error: {tid: '880-8-08-312'}
+        error: {tid: '880-8-08-312', data: {statusCode: 500}}
     };
 
     beforeEach(() => {
