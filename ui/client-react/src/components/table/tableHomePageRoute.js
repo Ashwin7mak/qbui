@@ -9,7 +9,7 @@ import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
 import {I18nMessage} from "../../utils/i18nMessage";
 import NumberUtils from '../../utils/numberUtils';
-
+import Constants from '../../../../common/src/constants';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
