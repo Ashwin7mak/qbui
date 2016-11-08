@@ -101,6 +101,7 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
         .fieldValue, .fieldLabel {
             display: block;
             overflow: hidden;
+            word-wrap: break-word;
         }
     }
     .card-expander {
