@@ -13,7 +13,7 @@ function i18nKey(subkey) {
 }
 
 const videoTourLink = 'https://heycool.wistia.com/medias/rase8bl4ws';
-const welcomeGuideLink = 'https://d2qhvajt3imc89.cloudfront.net/customers/QuickBase/Welcome_guide.pdf';
+const welcomeGuideLink = 'https://d2qhvajt3imc89.cloudfront.net/customers/QuickBase/MercuryBeta_WelcomeGuide-v1.0.pdf';
 const feedbackLink = 'https://quickbase.uservoice.com/forums/378045-mercury';
 
 const M5AppHomePage = React.createClass({
