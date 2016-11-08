@@ -6,8 +6,14 @@ import {I18nMessage} from '../../utils/i18nMessage';
 
 import './alertBanner.scss';
 
+/**
+ * Creates an alert that spans the width of the page
+ * This is a wrapper component that renders any child components inside of the alert.
+ */
 const AlertBanner = React.createClass({
     propTypes: {
+        /**
+         * If true, show the alert */
         show: PropTypes.bool,
     },
     displayAlertBanner() {
