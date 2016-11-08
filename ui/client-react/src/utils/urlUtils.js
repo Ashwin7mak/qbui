@@ -34,7 +34,8 @@ const UrlUtils = {
     },
     getQuickBaseClassicLink(selectedAppId) {
         let realmId = baseService.getSubdomain();
-        let link = `https://${realmId}.quickbase.com/db/`;
+        let domain = baseService.getDomain();
+        let link = `https://${realmId}.${domain}/db/`;
 
         if (selectedAppId) {
             link += selectedAppId;

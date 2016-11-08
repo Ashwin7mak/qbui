@@ -76,33 +76,35 @@ describe('UrlUtils', () => {
     });
 
     describe('getQuickBaseClassicLink', () => {
-        let testRealmId = 'localhost';
+        let testRealmId = 'realmId';
         let testAppId = 'testAppId';
+        let testDomainId = 'quickbase.com';
 
         let testCases = [
             {
                 description: 'returns the main quickbase classic link if selectedAppId is provided',
                 selectedAppId: null,
-                expectation: `https://${testRealmId}.quickbase.com/db/main`
+                expectation: `https://${testRealmId}.${testDomainId}/db/main`
             },
             {
                 description: 'returns the quickbase classic link for the app',
                 selectedAppId: testAppId,
-                expectation: `https://${testRealmId}.quickbase.com/db/${testAppId}`
+                expectation: `https://${testRealmId}.${testDomainId}/db/${testAppId}`
             }
         ];
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
                 let baseService =  {
-                    getSubdomain() {return testRealmId;}
+                    getSubdomain() {return testRealmId;},
+                    getDomain() {return testDomainId;}
                 };
 
-                UrlUtils.__Rewire__('BaseService', baseService);
+                UrlUtils.__Rewire__('baseService', baseService);
 
                 expect(UrlUtils.getQuickBaseClassicLink(testCase.selectedAppId)).toEqual(testCase.expectation);
 
-                UrlUtils.__ResetDependency__('BaseService');
+                UrlUtils.__ResetDependency__('baseService');
             });
         });
     });
