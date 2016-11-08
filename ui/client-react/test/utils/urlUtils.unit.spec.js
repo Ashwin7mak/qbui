@@ -76,7 +76,7 @@ describe('UrlUtils', () => {
     });
 
     describe('getQuickBaseClassicLink', () => {
-        let testRealmId = 'realmId';
+        let testRealmId = 'localhost';
         let testAppId = 'testAppId';
 
         let testCases = [
@@ -94,15 +94,15 @@ describe('UrlUtils', () => {
 
         testCases.forEach(testCase => {
             it(testCase.description, () => {
-                let mockWindowUtils =  {
+                let baseService =  {
                     getSubdomain() {return testRealmId;}
                 };
 
-                UrlUtils.__Rewire__('WindowLocationUtils', mockWindowUtils);
+                UrlUtils.__Rewire__('BaseService', baseService);
 
                 expect(UrlUtils.getQuickBaseClassicLink(testCase.selectedAppId)).toEqual(testCase.expectation);
 
-                UrlUtils.__ResetDependency__('WindowLocationUtils');
+                UrlUtils.__ResetDependency__('BaseService');
             });
         });
     });
