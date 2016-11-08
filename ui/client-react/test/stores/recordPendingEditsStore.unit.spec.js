@@ -33,6 +33,8 @@ describe('Test recordPendingEdits Store ', () => {
     it('test default recordPendingEdits store state', () => {
         // verify default states
         expect(flux.store(STORE_NAME).isPendingEdit).toBeFalsy();
+        expect(flux.store(STORE_NAME).showDTSErrorModal).toBeFalsy();
+        expect(flux.store(STORE_NAME).dtsErrorModalTID).toBeDefined();
         expect(flux.store(STORE_NAME).currentEditingAppId).toBeDefined();
         expect(flux.store(STORE_NAME).currentEditingTableId).toBeDefined();
         expect(flux.store(STORE_NAME).currentEditingRecordId).toBeDefined();
