@@ -19,7 +19,7 @@ const AlertBanner = React.createClass({
     displayAlertBanner() {
         if (this.props.show) {
             return (
-                <div className="alertBanner">
+                <div className="alertBanner" key={1}>
                     <QbIcon icon="alert" />
                     <p className="mainText">
                         {this.props.children}

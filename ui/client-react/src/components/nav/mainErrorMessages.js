@@ -83,7 +83,7 @@ const MainErrorMessage = React.createClass({
     },
 
     /**
-     * Renders a message indicating the currenlty selected app does not have any tables
+     * Renders a message indicating the currently selected app does not have any tables
      */
     renderNoTablesMessage() {
         let {apps, appsLoading, selectedAppId} = this.props;
