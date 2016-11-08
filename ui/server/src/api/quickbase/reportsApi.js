@@ -116,7 +116,7 @@
                     return reportMetaData.query;
                 }
             }
-            return query || '';
+            return query || null;
         }
 
         let reportsApi = {
