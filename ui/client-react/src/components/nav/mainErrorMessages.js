@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
-import {I18nMesage} from '../../utils/i18nMessage';
+import {I18nMessage} from '../../utils/i18nMessage';
+import AppUtils from '../../utils/appUtils';
 import AlertBanner from '../alertBanner/alertBanner';
 
 const MainErrorMessage = React.createClass({
