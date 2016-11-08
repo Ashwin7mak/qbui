@@ -105,10 +105,10 @@ const DateFieldValueEditor = React.createClass({
                     this.props.onDateTimeBlur(newValue);
                 } else {
                     let newDate = null;
-                    if (moment(newValue, DATE_FORMATTED).isValid()) {
+                    if (moment(newValue, DATE_FORMATTED, true).isValid()) {
                         // newValue was passed in via <input>, no need to change
                         newDate = newValue;
-                    } else if (moment(newValue, DATE_INPUT).isValid()) {
+                    } else if (moment(newValue, DATE_INPUT, true).isValid()) {
                         // format newValue passed in from the DatePicker component
                         newDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
                     }
