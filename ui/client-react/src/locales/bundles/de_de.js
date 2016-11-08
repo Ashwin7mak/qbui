@@ -49,6 +49,8 @@ export default {
             print: "Drucken",
             copy: "Kopieren",
             delete: "Löschen",
+            dontDelete: "Nicht löschen",
+            deleteThisRecord: "Löschen Sie diesen Datensatz?",
             more: "Mehr...",
             placeholder: 'Wählen...',
             notFound: "Nicht gefunden"
@@ -327,6 +329,18 @@ export default {
             url: 'www.beispiel.de'
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
+        errors: {
+            errorLoadingReport: {
+                message: "Dieser Bericht ist nicht verfügbar",
+                helpText: "Denn jetzt können Sie versuchen, einen anderen Bericht auswählen.",
+                contactSupport: "Lassen Sie unser Team kennen, damit wir das Problem beheben können",
+                supportTeamInfo: "Einige Informationen für das Support-Team:",
+                playGraphic: "Zeig mir wie",
+                stopGraphic: "Hör auf zu spielen",
+                showAdditionalInfo: "Details anzeigen",
+                hideAdditionalInfo: "Details ausblenden"
+            }
+        },
         invalidMsg : {
             unknown: 'Ungültige unbekannte Art. Befund: ',
             required: 'Füllen Sie das {fieldName}',
@@ -334,6 +348,24 @@ export default {
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
             choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },
-        noneOption: "\<Keiner\>"
+        createInQuickBaseClassicMessage: {
+            noTables: "Es gibt keine Tabellen.",
+            createInQuickBaseClassic: "Erstellen Sie einige in ",
+            noApps: "Es gibt keine Apps in Mercury.",
+            addApps: "Apps durch Kontaktaufnahme hinzufügen "
+        },
+        appNotFoundError: {
+            notFound: "Die App ist im Moment nicht verfügbar in Mercury. ",
+            quickBaseClassic: " in Quickbase Classic. ",
+            clickHere: "Öffnen Sie die App"
+        },
+        noneOption: "\<Keiner\>",
+        unimplemented: {
+            search: "Die Suche ist noch nicht verfügbar",
+            favorites: "Der Zugriff auf Favoriten ist noch nicht verfügbar",
+            makeFavorite: "Kennzeichnung als Favorit ist noch nicht verfügbar",
+            print: "Der Druck ist noch nicht verfügbar",
+            copy: "Kopieren ist noch nicht verfügbar"
+        }
     }
 };

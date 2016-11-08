@@ -32,7 +32,8 @@ let IconActions = React.createClass({
             msg: React.PropTypes.string,
             rawMsg: React.PropTypes.bool, // msg doesn't need to be localized
             onClick: React.PropTypes.function,
-            className: React.PropTypes.string
+            className: React.PropTypes.string,
+            disabled: React.PropTypes.bool
         })).isRequired,
         flux: React.PropTypes.object,
         maxButtonsBeforeMenu: React.PropTypes.number, // show action in dropdown after this,
@@ -67,20 +68,24 @@ let IconActions = React.createClass({
             tooltip = (<Tooltip id={action.msg}><I18nMessage message={action.msg}/></Tooltip>);
         }
         let className = "iconActionButton ";
+        if (action.disabled) {
+            className += "disabled ";
+        }
         if (action.className) {
             className += action.className;
         }
+
 
         return (<OverlayTrigger key={action.msg} placement="bottom" overlay={tooltip}>
                     <Button key={action.msg}
                        tabIndex="0"
                        className={className}
-                       onClick={action.onClick}
-                       disabled={action.disabled ? true : false} >
+                       onClick={action.onClick}>
                             <QBicon icon={action.icon}/>
                     </Button>
                 </OverlayTrigger>);
     },
+
     /* callback from opening pickle menu */
     onDropdownToggle(open) {
         //This adds white space at the bottom when the row menu is open to avoid clipping row menu pop up.
@@ -109,16 +114,19 @@ let IconActions = React.createClass({
         }
 
         return (
-            <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} onToggle={this.onDropdownToggle}  rootClose>
+            <Dropdown className={classes} id="nav-right-dropdown" pullRight={this.props.pullRight} onToggle={this.onDropdownToggle} rootClose>
 
                 {dropdownTrigger}
                 <Dropdown.Menu >
                     {this.props.actions.map((action, index) => {
                         if (index >= this.props.maxButtonsBeforeMenu) {
-                            return <MenuItem key={action.msg} href="#" onSelect={action.onClick} >
-                                      {this.props.menuIcons && <QBicon className={action.className} icon={action.icon}/>}
+                            return (
+                                <MenuItem key={action.msg} href="#" onSelect={action.onClick} disabled={action.disabled} >
+                                    {this.props.menuIcons &&
+                                        <QBicon className={action.disabled ? "disabled " + action.className : action.className}
+                                                icon={action.icon}/>}
                                         {action.rawMsg ? action.msg : <I18nMessage message={action.msg} />}
-                                   </MenuItem>;
+                                </MenuItem>);
                         }
                     })}
                 </Dropdown.Menu>

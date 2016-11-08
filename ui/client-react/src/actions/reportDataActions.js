@@ -93,7 +93,7 @@ let reportDataActions = {
                     (reportResponseError) => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, reportResponseError.response, 'reportService.getReport:');
-                        this.dispatch(actions.LOAD_REPORT_FAILED, reportResponseError.response.status);
+                        this.dispatch(actions.LOAD_REPORT_FAILED, reportResponseError);
                         reject();
                     }
                 ).catch(ex => {
@@ -185,7 +185,7 @@ let reportDataActions = {
                             },
                             (reportResultsError) => {
                                 logger.parseAndLogError(LogLevel.ERROR, reportResultsError.response, 'reportDataActions.loadDynamicReport');
-                                this.dispatch(actions.LOAD_RECORDS_FAILED, reportResultsError.response.status);
+                                this.dispatch(actions.LOAD_RECORDS_FAILED, reportResultsError);
                                 reject();
                             }
                         ).catch((ex) => {
@@ -197,7 +197,7 @@ let reportDataActions = {
                     (error) => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'reportDataActions.parseFacetExpression');
-                        this.dispatch(actions.LOAD_RECORDS_FAILED, error.response.status);
+                        this.dispatch(actions.LOAD_RECORDS_FAILED, error);
                         reject();
                     }
                 ).catch((ex) => {

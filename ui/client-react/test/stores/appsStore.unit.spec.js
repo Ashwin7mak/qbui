@@ -32,7 +32,7 @@ describe('Test Apps Store', () => {
         expect(flux.store(STORE_NAME).apps.length).toEqual(0);
         expect(flux.store(STORE_NAME).selectedAppId).toBeFalsy();
         expect(flux.store(STORE_NAME).selectedTableId).toBeFalsy();
-        expect(flux.store(STORE_NAME).loading).toBeFalsy();
+        expect(flux.store(STORE_NAME).loading).toBeTruthy();
         expect(flux.store(STORE_NAME).error).toBeFalsy();
         //  expect 4 bindActions
         expect(flux.store(STORE_NAME).__actions__.LOAD_APPS).toBeDefined();

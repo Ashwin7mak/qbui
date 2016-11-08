@@ -50,7 +50,7 @@ import QBModalDoc from './docs/qbModal.js';
 
 render((
     <Router history={browserHistory}>
-        <Route path="components" component={ComponentLibraryWrapper}>
+        <Route path="qbase/components" component={ComponentLibraryWrapper}>
             <IndexRedirect to="qbpanel" />
             <Route path="checkBoxFieldValueEditor" component={CheckBoxFieldValueEditorDoc} />
             <Route path="checkBoxFieldValueRenderer" component={CheckBoxFieldValueRendererDoc} />

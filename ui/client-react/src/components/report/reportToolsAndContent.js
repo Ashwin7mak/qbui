@@ -18,6 +18,7 @@ import FieldUtils from '../../utils/fieldUtils';
 import ReportUtils from '../../utils/reportUtils';
 import * as SchemaConsts from "../../constants/schema";
 import * as Constants from "../../../../common/src/constants";
+import ReportContentError from './dataTable/reportContentError';
 
 let logger = new Logger();
 
@@ -126,11 +127,8 @@ const ReportToolsAndContent = React.createClass({
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
             {msg: 'pageActions.addRecord', icon:'add'},
-            {msg: 'pageActions.favorite', icon:'star'},
-            {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
-            {msg: 'pageActions.email', icon:'mail'},
-            {msg: 'pageActions.print', icon:'print'},
-            {msg: 'pageActions.customizeReport', icon:'settings-hollow'},
+            {msg: 'pageActions.favorite', icon:'star', disabled: true},
+            {msg: 'pageActions.print', icon:'print', disabled: true},
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
@@ -325,7 +323,7 @@ const ReportToolsAndContent = React.createClass({
             (_.isUndefined(this.props.params.rptId) && _.isUndefined(this.props.rptId))
         ) {
             logger.info("the necessary params were not specified to reportRoute render params=" + simpleStringify(this.props.params));
-            return null;
+            return <ReportContentError errorDetails={this.props.reportData.errorDetails} />;
         } else {
             let toolbar = <ReportToolbar appId={this.props.params.appId}
                                          tblId={this.props.params.tblId}

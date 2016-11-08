@@ -3,13 +3,15 @@ import QBicon from '../qbIcon/qbIcon';
 import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
-import Breakpoints from '../../utils/breakpoints';
 import M5AppHomePage from './m5AppHomePage';
+
+import AppNotFound from './appNotFound';
 
 import './appHomePage.scss';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let logger = new Logger();
+
 /**
  * placeholder for app dashboard route
  */
@@ -19,10 +21,18 @@ let AppHomePageRoute = React.createClass({
     contextTypes: {
         touch: React.PropTypes.bool
     },
+
+    /**
+     * Select an app by ID
+     */
     selectAppId(appId) {
         let flux = this.getFlux();
         flux.actions.selectAppId(appId);
     },
+
+    /**
+     * Select an app from the route params
+     */
     selectAppFromParams(params, checkParams) {
         if (params) {
             let appId = params.appId;
@@ -86,10 +96,18 @@ let AppHomePageRoute = React.createClass({
                 {/* todo */}
             </div>);
     },
-    render: function() {
-        let isSmall = Breakpoints.isSmallBreakpoint();
 
-        return <M5AppHomePage />;
+    /**
+     * Render a temporary homepage. If the currenlty selected app does not exist, display a warning.
+     * @returns {XML}
+     */
+    render() {
+        return (
+            <div className="appHomePageContainer">
+                <AppNotFound appsLoading={this.props.appsLoading} selectedAppId={this.props.selectedAppId} apps={this.props.apps} />
+                <M5AppHomePage />
+            </div>
+        );
     }
 });
 

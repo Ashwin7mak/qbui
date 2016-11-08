@@ -540,11 +540,15 @@
                         (response) => {
                             // parse out the id and use to fetch the report meta data.  Process the meta data
                             // to fetch and return the report content.
-                            if (response.body) {
-                                let homepageReportId = JSON.parse(response.body);
+                            let homepageReportId = '1'; // assume 1st report List All
+                            let responseBodyParsed;
+                            if (response.body && ('0' !== (responseBodyParsed = JSON.parse(response.body)))) {
+                                //if had a default report defined use that
+                                homepageReportId = responseBodyParsed;
+                            }
 
-                                //  have a homepage id; fetch the report
-                                this.fetchReport(req, homepageReportId, true).then(
+                            //  have a homepage id; fetch the report
+                            this.fetchReport(req, homepageReportId, true).then(
                                     (reportResponse) => {
                                         resolve(reportResponse);
                                     },
@@ -552,15 +556,11 @@
                                         log.error({req:req}, 'Error fetching table homepage report content in fetchTableHomePageReport.');
                                         reject(reportError);
                                     }
-                                ).catch((ex) => {
-                                    requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
-                                    reject(ex);
-                                });
-                            } else {
-                                //  no report id returned (because one is not defined); return empty report object
-                                log.warn({req:req}, 'No report homepage defined for table.');
-                                resolve({});
-                            }
+                                    ).catch((ex) => {
+                                        requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
+                                        reject(ex);
+                                    });
+
                         },
                         (error) => {
                             log.error({req: req}, "Error getting table homepage reportId in fetchTableHomePageReport");

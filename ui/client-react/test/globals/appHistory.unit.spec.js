@@ -125,33 +125,5 @@ describe('AppHistory', () => {
 
         expect(mockFluxWithNewRecord.actions.saveNewRecord).toHaveBeenCalled();
     });
-
-    it('saves any pending edits before navigating away (existing record)', done => {
-        let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, done: done});
-        AppHistory.setup(mockFluxWithPendingEdit);
-
-        spyOn(mockFluxWithPendingEdit.actions, 'saveRecord').and.callThrough();
-        spyOn(AppHistory, '_continueToDestination').and.callThrough();
-
-        goToNewPage();
-
-        expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalled();
-        expect(AppHistory._continueToDestination).toHaveBeenCalled();
-    });
-
-    it('halts a route change if there was a problem saving the changes', done => {
-        let mockWithError = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, hasErrorOnSave: true, done: done});
-
-        AppHistory.setup(mockWithError);
-
-        spyOn(AppHistory, '_onRecordSavedError').and.callThrough();
-        spyOn(AppHistory, '_haltRouteChange').and.callThrough();
-
-
-        goToNewPage();
-
-        expect(AppHistory._onRecordSavedError).toHaveBeenCalled();
-        expect(AppHistory._haltRouteChange).toHaveBeenCalled();
-    });
 });
 
