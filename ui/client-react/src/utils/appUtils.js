@@ -13,7 +13,7 @@ const AppUtils = {
     getAppTables(appId, apps = []) {
         let app = _.find(apps, {id: appId});
 
-        return app ? app.tables : [];
+        return (app && app.tables) ? app.tables : [];
     }
 };
 

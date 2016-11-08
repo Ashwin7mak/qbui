@@ -14,16 +14,19 @@ const I18nKeys = {
         return `errors.${key}`;
     },
     appNotFound(key) {
-        return I18nKeys.getMainKey(`appNotFound.${key}`);
+        return this.getMainKey(`appNotFound.${key}`);
     },
     noApps(key) {
-        return I18nKeys.getMainKey(`noApps.${key}`);
+        return this.getMainKey(`noApps.${key}`);
     },
     noTables(key) {
-        return I18nKeys.getMainKey(`noTables.${key}`);
+        return this.getMainKey(`noTables.${key}`);
     }
 };
 
+/**
+ * This parent-level component can display error messages that appear in the main content area
+ */
 const MainErrorMessage = React.createClass({
     propTypes: {
         apps: PropTypes.array,
@@ -49,7 +52,7 @@ const MainErrorMessage = React.createClass({
      */
     renderAppNotFoundMessage() {
         let {apps, appsLoading, selectedAppId} = this.props;
-        let show = (!appsLoading && !AppUtils.appExists(selectedAppId, apps));
+        let show = (!appsLoading && apps && apps.length > 0 && !AppUtils.appExists(selectedAppId, apps));
 
         return (
             <AlertBanner show={show} showCreateInQuickBaseClassicLink={true} selectedAppId={selectedAppId}>
