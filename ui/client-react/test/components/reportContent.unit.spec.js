@@ -783,7 +783,7 @@ describe('ReportContent functions', () => {
         ReportContentRewireAPI.__ResetDependency__('Locales');
     });
 
-    fit('test render of component', () => {
+    it('test render of component', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_empty}
                                                                 reportHeader={header_empty}
