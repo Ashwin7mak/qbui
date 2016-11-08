@@ -262,7 +262,6 @@ describe('Test recordPendingEdits Store ', () => {
             type: actions.SAVE_RECORD_FAILED,
             payload : Object.assign({}, appTableRecPayload)
         };
-
         flux.dispatcher.dispatch(saveRecordFailedAction);
         expect(flux.store(STORE_NAME).showDTSErrorModal).toBe(true);
         expect(flux.store(STORE_NAME).dtsErrorModalTID).toBeDefined();
