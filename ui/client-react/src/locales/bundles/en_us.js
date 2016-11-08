@@ -351,8 +351,8 @@ export default {
             choiceMaxLength :"Select a choice with {maxNum} characters or less"
         },
         createInQuickBaseClassicMessage: {
-            noTables: "There are no tables.",
-            createInQuickBaseClassic: "Create some in ",
+            noTables: "There are no tables in the app. ",
+            createTablesInQuickBaseClassic: "Create tables in ",
             noApps: "There are no apps in Mercury.",
             addAppsContact: " Contact ",
             addApps: " to add apps."
@@ -369,6 +369,7 @@ export default {
             makeFavorite: "Marking as a favorite is not available yet",
             print: "Printing is not available yet",
             copy: "Copying is not available yet"
-        }
+        },
+        quickBaseClassic: "QuickBase Classic"
     }
 };

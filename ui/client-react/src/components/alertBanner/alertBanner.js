@@ -9,8 +9,6 @@ import './alertBanner.scss';
 const AlertBanner = React.createClass({
     propTypes: {
         show: PropTypes.bool,
-        showCreateInQuickBaseClassicLink: PropTypes.bool,
-        selectedAppId: PropTypes.string
     },
     displayAlertBanner() {
         if (this.props.show) {
@@ -19,7 +17,6 @@ const AlertBanner = React.createClass({
                     <QbIcon icon="alert" />
                     <p className="mainText">
                         {this.props.children}
-                        {this.renderQuickBaseClassicLink()}
                     </p>
                 </div>
             );
@@ -27,20 +24,7 @@ const AlertBanner = React.createClass({
             return null;
         }
     },
-    renderQuickBaseClassicLink() {
-        if (this.props.showCreateInQuickBaseClassicLink) {
-            return (
-                <span>
-                    <a href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>
-                        <I18nMessage message="appNotFoundError.clickHere" />
-                    </a>
-                    <I18nMessage message="appNotFoundError.quickBaseClassic" />
-                </span>
-        );
-        }
 
-        return null;
-    },
     render() {
         return (
             <ReactCSSTransitionGroup transitionName="alertBanner" transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>

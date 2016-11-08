@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import Locale from '../../locales/locales';
 import NavItem from './navItem';
 import SearchBox from '../search/searchBox';
-import CreateInQuickBaseClassicMessage from './createInQuickBaseClassicMessage';
 
 let AppsList = React.createClass({
 
@@ -51,8 +50,6 @@ let AppsList = React.createClass({
     },
 
     render() {
-        let apps = this.appList();
-
         return (
             <ul className={"appsList"} >
 
@@ -69,7 +66,7 @@ let AppsList = React.createClass({
                                placeholder={Locale.getMessage('nav.searchAppsPlaceholder')} />
                 </li>
 
-                {apps}
+                {this.appList()}
             </ul>
 
         );
