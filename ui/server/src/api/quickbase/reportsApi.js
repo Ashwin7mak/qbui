@@ -36,6 +36,12 @@
         let GROUPS = 'groups';
         let FILTERED_RECORDS_COUNT = 'filteredCount';
 
+        /**
+         * Take a sort list request parameter and convert in to list of sort list objects
+         *
+         * @param sortList
+         * @returns {Array}
+         */
         function getSortListAsObject(sortList) {
             let sortListParts = sortList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
             let sListObj = [];
@@ -65,6 +71,12 @@
             return fieldsApi.removeUnusedFields(record, fields);
         }
 
+        /**
+         * Take a list of sort list objects and parse into string that can be used as a request parameter
+         *
+         * @param sortList
+         * @returns {string}
+         */
         function parseSortList(sortList) {
             let sList = '';
             if (Array.isArray(sortList)) {
@@ -87,6 +99,24 @@
                 }
             }
             return sList;
+        }
+
+        /**
+         * Return a query expression sourced from the reportMetaData and supplied query expression
+         *
+         * @param reportMetaData
+         * @param query
+         * @returns {*}
+         */
+        function getQueryExpression(reportMetaData, query) {
+            if (reportMetaData && reportMetaData.query && reportMetaData.query.length > 0) {
+                if (query && query.length > 0) {
+                    return '((' + reportMetaData.query + ')' + constants.QUERY_AND + query + ')';
+                } else {
+                    return reportMetaData.query;
+                }
+            }
+            return query || '';
         }
 
         let reportsApi = {
@@ -201,13 +231,12 @@
                                 //  make a copy cause we could be altering if meta data query is defined
                                 let req2 = lodash.clone(req);
 
+                                //  check for existing query expression defined on the report meta data
                                 let reportMetaData = JSON.parse(metaDataResult.body);
-                                if (reportMetaData.query && reportMetaData.query.length > 0) {
-                                    //  there is an existing query for this report; need to supplement by
-                                    //  adding the client query
-                                    query = '((' + reportMetaData.query + ')' + (query.length > 0 ? constants.QUERY_AND + query : '') + ')';
+                                if (reportMetaData && reportMetaData.query) {
+                                    query = getQueryExpression(reportMetaData, query);
 
-                                    //  update the request with the new query expression
+                                    //  remove the current query request parameter and update with the new expression
                                     requestHelper.removeRequestParameter(req2, constants.REQUEST_PARAMETER.QUERY);
                                     requestHelper.addQueryParameter(req2, constants.REQUEST_PARAMETER.QUERY, query);
                                 }
@@ -369,13 +398,7 @@
 
                                 //  Supplement the default report meta data setting(if any) with any client query(if any)
                                 let query = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
-                                if (query !== null) {
-                                    if (reportMetaData && reportMetaData.query) {
-                                        reportMetaData.query = '((' + reportMetaData.query + ')' + constants.QUERY_AND + query + ')';
-                                    } else {
-                                        reportMetaData.query = query;
-                                    }
-                                }
+                                reportMetaData.query = getQueryExpression(reportMetaData, query);
 
                                 //  override the default report meta data column fid list
                                 let columnFids = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.COLUMNS);

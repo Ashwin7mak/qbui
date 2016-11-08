@@ -771,6 +771,26 @@ describe('Validate ReportsApi unit tests', function() {
                 }
             );
         });
+        it('Test post dynamic report success WITH NO meta data overrides but a default query', function(done) {
+            req.method = 'post';
+            req.url += '&sortList=1:EQUALS';
+            reportsApi.setRequestHelper(requestHelper);
+
+            reportResultsStub.returns(fetchReportResultsPromise);
+            getFieldsStub.returns(fetchFieldsPromise);
+            getCountStub.returns(fetchCountPromise);
+            getMetaStub.returns(fetchMetaDataWithQuery);
+
+            var promise = reportsApi.fetchReport(req, 1);
+            promise.then(
+                function(response) {
+                    done();
+                },
+                function(error) {
+                    done(new Error("Unexpected failure promise return with testing meta data override from fetchReports"));
+                }
+            );
+        });
         it('Test post dynamic report with unexpected exception processing report results', function(done) {
             req.method = 'post';
             reportsApi.setRequestHelper(requestHelper);
