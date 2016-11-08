@@ -11,25 +11,6 @@ const DTSErrorModal = React.createClass({
         show: React.PropTypes.bool,
         selectedAppId: React.PropTypes.string
     },
-    getInitialState() {
-        return {
-            isOpen: false
-        };
-    },
-    componentWillReceiveProps(props) {
-        //I can get ride of this, and on click, fire off a function, that will fire off a listener
-        //that willl change
-        // this.dtsErrorReceived(this.props.show);
-        this.setState({
-            isOpen: props.show
-        });
-    },
-    close() {
-        //this will close and reroute to classic
-        this.setState({
-            isOpen: false
-        });
-    },
     render() {
         const title = "Sorry to interrupt your work";
         const errorMessage = <p>
@@ -40,10 +21,9 @@ const DTSErrorModal = React.createClass({
         const primaryButtonName = "Open my app in Classic";
         return (
             <QBModal
-                show={this.state.isOpen}
+                show={this.props.show}
                 size="large"
                 primaryButtonName={primaryButtonName}
-                primaryButtonOnClick={this.close}
                 title={title}
                 bodyMessage={errorMessage}
                 link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}
