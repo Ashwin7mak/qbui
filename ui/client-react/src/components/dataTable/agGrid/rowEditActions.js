@@ -9,6 +9,8 @@ import QBToolTip from '../../qbToolTip/qbToolTip';
 import Loader  from 'react-loader';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
+import _ from 'lodash';
+
 /**
  * editing tools for the currently edited row
  */
@@ -103,7 +105,7 @@ const RowEditActions = React.createClass({
 
         // Get the saving state from the flux store here so that the entire AG Grid does not need to reload
         let saving = false;
-        if (_.has(this.props, 'flux.store')) {
+        if (this.props.flux && this.props.flux.store) {
             let recordPendingEdits = this.props.flux.store('RecordPendingEditsStore').getState();
             if (recordPendingEdits) {
                 saving = recordPendingEdits.saving;
