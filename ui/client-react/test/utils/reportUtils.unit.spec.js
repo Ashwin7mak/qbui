@@ -257,6 +257,63 @@ describe('ReportUtils - test findGroupedRecord', () => {
     });
 });
 
+describe('ReportUtils - test findFirstGroupedRecord', () => {
+
+    let ungroupedReportData = [
+        {recId: {value:1}, data: 1},
+        {recId: {value:2}, data: 2},
+        {recId: {value:3}, data: 3}
+    ];
+
+    let groupedReportData = [
+        {recId: {value:1}, data: 1},
+        {recId: {value:2}, data: 2},
+        {children: [
+            {recId: {value:3}, data: 3},
+            {recId: {value:4}, data: 4}
+        ]}
+    ];
+
+    let nestedReportData = [
+        {children: [
+            {recId: {value:3}, data: 3},
+            {recId: {value:4}, data: 4},
+            {children: [
+                {recId: {value:5}, data: 5},
+                {recId: {value:6}, data: 6}
+            ]}
+        ]}
+    ];
+    // expected use
+    it('finds first record in grouped report', () => {
+        let rec = ReportUtils.findFirstGroupedRecord(groupedReportData);
+        expect(rec).not.toEqual(null);
+        expect(rec.data).toBe(1);
+    });
+
+    // also works for ungrouped report
+    it('finds recId in ungrouped report', () => {
+        let rec = ReportUtils.findFirstGroupedRecord(ungroupedReportData);
+        expect(rec).not.toEqual(null);
+        expect(rec.data).toBe(1);
+    });
+
+    it('finds first record in nested report', () => {
+        let rec = ReportUtils.findFirstGroupedRecord(nestedReportData);
+        expect(rec).not.toEqual(null);
+        expect(rec.data).toBe(3);
+    });
+
+
+    // returns null if record not found
+    it('returns null in case of empty records', () => {
+        // no records, always return null
+        let rec = ReportUtils.findFirstGroupedRecord([]);
+        expect(rec).toEqual(null);
+    });
+});
+
+
 describe('ReportUtils - test addGroupedRecordAfterRecId', () => {
 
     let ungroupedReportData = [
