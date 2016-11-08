@@ -354,7 +354,8 @@ export default {
             noTables: "There are no tables.",
             createInQuickBaseClassic: "Create some in ",
             noApps: "There are no apps in Mercury.",
-            addApps: "Add apps by contacting "
+            addAppsContact: " Contact ",
+            addApps: " to add apps."
         },
         appNotFoundError: {
             notFound: "The app is not available in Mercury right now. ",
