@@ -36,6 +36,8 @@ var AGGridMock = React.createClass({
 
 const header_empty = <div>nothing</div>;
 
+const pendEdits = {showDTSErrorModal: false};
+
 const fakeReportData_empty = {
     loading: false,
     data: {
@@ -785,7 +787,8 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_empty}
                                                                 reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}/>);
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={pendEdits}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
@@ -793,7 +796,8 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_empty}
                                                                 reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}/>);
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={pendEdits}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
@@ -802,7 +806,8 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_emptyData}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                selectedRows={selectedRowIds}/>);
+                                                                selectedRows={selectedRowIds}
+                                                                pendEdits={pendEdits}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
         expect(reportNavigation.length).toEqual(0);
@@ -812,7 +817,8 @@ describe('ReportContent functions', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 reportData={fakeReportData_emptyData}
                                                                 reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}/>);
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={pendEdits}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
@@ -822,7 +828,8 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_emptyData}
                                                                 fields={{keyField : {name: 'testId'}}}
                                                                 reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}/>);
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={pendEdits}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
@@ -847,7 +854,8 @@ describe('ReportContent functions', () => {
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
                                                                 uniqueIdentifier={keyField}
-                                                                keyField={keyField}/>);
+                                                                keyField={keyField}
+                                                                pendEdits={pendEdits}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let result = component.getOrigRec(modifiedRec[keyField].value);
         expect(result).toEqual(origRecExpect);
@@ -864,7 +872,8 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                keyField={keyField}/>);
+                                                                keyField={keyField}
+                                                                pendEdits={pendEdits}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalled();
@@ -885,7 +894,8 @@ describe('ReportContent functions', () => {
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
                                                                 uniqueIdentifier={keyField}
-                                                                keyField={keyField}/>);
+                                                                keyField={keyField}
+                                                                pendEdits={pendEdits}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalledWith(
@@ -905,7 +915,8 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                keyField={keyField}/>);
+                                                                keyField={keyField}
+                                                                pendEdits={pendEdits}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordCancel(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsCancel).toHaveBeenCalled();
@@ -952,7 +963,8 @@ describe('ReportContent functions', () => {
                                                                 uniqueIdentifier="col_text"
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                keyField={keyField}/>);
+                                                                keyField={keyField}
+                                                                pendEdits={pendEdits}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordDelete(origRec);
         expect(flux.actions.deleteRecord).toHaveBeenCalled();
