@@ -13,7 +13,8 @@ describe('Test recordPendingEdits Store ', () => {
     let appTableRecPayload = {
         appId : 'a',
         tblId : 'b',
-        recId : 4
+        recId : 4,
+        error: {tid: '880-8-08-312'}
     };
 
     beforeEach(() => {
