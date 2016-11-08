@@ -191,7 +191,6 @@ let RecordTrowser = React.createClass({
 
         // let flux now we're tranversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
-        // flux.actions.recordPendingEditsCancel(appId, tblId, this.props.recId);
         flux.actions.editPreviousRecord(previousEditRecordId);
 
         flux.actions.openRecordForEdit(previousEditRecordId);
@@ -205,7 +204,6 @@ let RecordTrowser = React.createClass({
 
         // let flux now we're tranversing records so it can pass down updated previous/next record IDs
         let flux = this.getFlux();
-        // flux.actions.recordPendingEditsCancel(appId, tblId, this.props.recId);
         flux.actions.editNextRecord(nextEditRecordId);
 
         flux.actions.openRecordForEdit(nextEditRecordId);

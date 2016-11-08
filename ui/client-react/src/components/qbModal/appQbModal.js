@@ -30,19 +30,15 @@ const AppQbModal = React.createClass({
         return blankModal;
     },
     componentDidMount() {
-        let appModalDomComponent = document.querySelector(`#${appModalId}`);
-
-        if (appModalDomComponent) {
-            document.querySelector(`#${appModalId}`).addEventListener(SHOW_APP_MODAL_EVENT, this.showModal);
-            document.querySelector(`#${appModalId}`).addEventListener(HIDE_APP_MODAL_EVENT, this.hideModal);
+        if (this.refs[appModalId]) {
+            this.refs[appModalId].addEventListener(SHOW_APP_MODAL_EVENT, this.showModal);
+            this.refs[appModalId].addEventListener(HIDE_APP_MODAL_EVENT, this.hideModal);
         }
     },
     componentWillUnmount() {
-        let appModalDomComponent = document.querySelector(`#${appModalId}`);
-
-        if (appModalDomComponent) {
-            document.querySelector(`#${appModalId}`).removeEventListener(SHOW_APP_MODAL_EVENT);
-            document.querySelector(`#${appModalId}`).removeEventListener(HIDE_APP_MODAL_EVENT);
+        if (this.refs[appModalId]) {
+            this.refs[appModalId].removeEventListener(SHOW_APP_MODAL_EVENT);
+            this.refs[appModalId].removeEventListener(HIDE_APP_MODAL_EVENT);
         }
     },
     showModal(evt) {
@@ -56,7 +52,7 @@ const AppQbModal = React.createClass({
     },
     render() {
         return (
-            <div id={appModalId}>
+            <div id={appModalId} ref={appModalId}>
                 <QbModal
                     show={this.state.showModal}
                     bodyMessage={this.state.messageI18nKey ? Locale.getMessage(this.state.messageI18nKey) : null}
