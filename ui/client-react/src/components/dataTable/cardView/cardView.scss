@@ -85,7 +85,7 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
         padding: 5px 0;
         .field {
             flex: 1 1 auto;
-            padding: 0 0 10px 0;
+            padding: 0 10px 10px 0;
             width: 50%;
             .fieldLabel {
                 color: $fieldLabel-color;
