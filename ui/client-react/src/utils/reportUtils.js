@@ -360,7 +360,7 @@ class ReportUtils {
      * @param node
      * @param recId
      * @param keyName
-     * @returns {*}
+     * @returns true if record was successfully found and deleted.
      */
     static removeGroupedRecordById(node, recId, keyName) {
 
