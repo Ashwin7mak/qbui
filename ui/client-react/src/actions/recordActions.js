@@ -29,7 +29,6 @@ let recordActions = {
      * save a new record
      */
     saveNewRecord(appId, tblId, recordChanges, fields) {
-        appId = "Banana!";
         function getRecord(_recordChanges, _fields) {
             //save changes in record
             let payload = [];
@@ -149,7 +148,6 @@ let recordActions = {
      * delete records in bulk
      */
     deleteRecordBulk(appId, tblId, recIds, nameForRecords) {
-        appId = "Banana!";
         // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             if (appId && tblId && recIds && recIds.length >= 1) {
@@ -194,7 +192,6 @@ let recordActions = {
      * save a record
      */
     saveRecord(appId, tblId, recId, pendEdits, fields) {
-        appId = "Banana";
         function createColChange(value, display, field, payload) {
             let colChange = {};
             colChange.fieldName = field.name;
