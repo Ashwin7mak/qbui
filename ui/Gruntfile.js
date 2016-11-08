@@ -8,6 +8,8 @@ module.exports = function(grunt) {
     'use strict';
 
     var currentDateTime = new Date().getTime();
+    // Select a random port number for sauce labs to launch selenium at (prevents concurrency issues in CI builds)
+    var seleniumPort = Math.floor(Math.random() * 9000) + 1000;
 
     var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
     var buildDir = path.join(__dirname, '/build');
@@ -557,7 +559,8 @@ module.exports = function(grunt) {
                     tunnelIdentifier: tunnelIdentifier,
                     verbose         : true,
                     logger          : console.log,
-                    dns             : sauceDns
+                    dns             : sauceDns,
+                    port            : seleniumPort
                 }
             },
             aws: {
@@ -568,7 +571,8 @@ module.exports = function(grunt) {
                     tunnelIdentifier: tunnelIdentifier,
                     //proxyTunnel     : true,
                     verbose         : true,
-                    logfile         : 'sauceConnect.log'
+                    logfile         : 'sauceConnect.log',
+                    port            : seleniumPort
                 }
             }
         },

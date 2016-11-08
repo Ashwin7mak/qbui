@@ -89,7 +89,7 @@
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
 
         //Report page actions on stage
-        this.reportActions = this.reportStageContentEl.element(by.className('pageActions'));
+        this.reportActions = this.reportStageContentEl.all(by.className('pageActions')).first();
         //Add record btn
         this.reportAddRecordBtn = this.reportActions.element(by.className('iconTableUISturdy-add'));
         //Edit button
