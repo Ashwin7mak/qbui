@@ -53,6 +53,7 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD_SUCCESS).toBeDefined();
         expect(flux.store(STORE_NAME).__actions__.ADD_RECORD_FAILED).toBeDefined();
+        expect(flux.store(STORE_NAME).__actions__.DTS_ERROR_MODAL).toBeDefined();
 
     });
 
@@ -263,6 +264,8 @@ describe('Test recordPendingEdits Store ', () => {
         };
 
         flux.dispatcher.dispatch(saveRecordFailedAction);
+        expect(flux.store(STORE_NAME).showDTSErrorModal).toBe(true);
+        expect(flux.store(STORE_NAME).dtsErrorModalTID).toBeDefined();
         expect(flux.store(STORE_NAME).isPendingEdit).toBe(true);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(appTableRecPayload.recId);
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
@@ -332,8 +335,12 @@ describe('Test recordPendingEdits Store ', () => {
             payload : Object.assign({}, appTableRecPayload)
         };
 
+        let state = flux.store(STORE_NAME).getState();
+
         flux.dispatcher.dispatch(onAddRecordFailedAction);
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(state.showDTSErrorModal).toBe(true);
+        expect(state.dtsErrorModalTID).toBeDefined();
     });
 
 
@@ -343,6 +350,8 @@ describe('Test recordPendingEdits Store ', () => {
         let state = flux.store(STORE_NAME).getState();
 
         //  expect the following to be returned when 'getting state'
+        expect(state.showDTSErrorModal).toBeDefined();
+        expect(state.dtsErrorModalTID).toBeDefined();
         expect(state.isPendingEdit).toBeDefined();
         expect(state.currentEditingAppId).toBeDefined();
         expect(state.currentEditingRecordId).toBeDefined();
