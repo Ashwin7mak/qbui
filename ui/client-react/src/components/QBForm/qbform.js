@@ -5,6 +5,9 @@ import FieldElement from './fieldElement';
 import FieldLabelElement from './fieldLabelElement';
 import Breakpoints from '../../utils/breakpoints';
 import Locale from '../../locales/locales';
+import FieldUtils from '../../utils/fieldUtils';
+import Constants from '../../../../common/src/constants';
+import UserFieldValueRenderer from '../fields/userFieldValueRenderer.js';
 
 import './qbform.scss';
 import './tabs.scss';
@@ -66,7 +69,6 @@ let QBForm = React.createClass({
         const colSpan = isLast ? 100 : 1;
 
         const cells = [];
-
         if (element.FormTextElement) {
             cells.push(this.createTextElementCell(element.FormTextElement, orderIndex, colSpan));
         }
@@ -104,7 +106,7 @@ let QBForm = React.createClass({
     getFieldRecord(field) {
         if (field) {
             const fieldId = field.id;
-            if (_.has(this.props, 'pendEdits.recordChanges') && this.props.pendEdits.recordChanges[fieldId]) {
+            if (this.props.pendEdits && this.props.pendEdits.recordChanges && this.props.pendEdits.recordChanges[fieldId]) {
                 let vals = {};
                 vals.id = fieldId;
                 vals.value = this.props.pendEdits.recordChanges[fieldId].newVal.value;
@@ -135,6 +137,7 @@ let QBForm = React.createClass({
      * create a TD with a field label
      * @param element
      * @param sectionIndex
+     * @param validationStatus
      * @returns {XML}
      */
     createFieldLabelCell(element, sectionIndex, validationStatus) {
@@ -142,9 +145,16 @@ let QBForm = React.createClass({
         let relatedField = this.getRelatedField(element.fieldId);
 
         let key = "fieldLabel" + sectionIndex + "-" + element.orderIndex;
+
         return (
             <td key={key}>
-                <FieldLabelElement element={element} relatedField={relatedField} indicateRequiredOnLabel={this.props.edit} isInvalid={validationStatus.isInvalid}/>
+                <FieldLabelElement
+                    element={element}
+                    relatedField={relatedField}
+                    indicateRequiredOnLabel={this.props.edit}
+                    isInvalid={validationStatus.isInvalid}
+                    label={FieldUtils.getFieldLabel(element, relatedField)}
+                />
             </td>);
     },
 
@@ -335,39 +345,110 @@ let QBForm = React.createClass({
     },
 
     /**
+     * Create a form footer with built-in fields
+     */
+    createFormFooter() {
+
+        let fields = this.getBuiltInFieldsForFooter();
+        var msg = [];
+        for (var i = 0; i < fields.length; i++) {
+            if (fields[i].type === Constants.USER) {
+                let user = {
+                    screenName: fields[i].screenName,
+                    email: fields[i].email
+                };
+                let display = fields[i].screenName + ". ";
+                msg.push(<span key={i} className="fieldNormalText">{fields[i].name}</span>);
+                msg.push(<span key={i + "a"} className="fieldLinkText"><UserFieldValueRenderer value={user} display={display} /></span>);
+            } else {
+                msg.push(<span key={i} className="fieldNormalText">{fields[i].name + " " + fields[i].value + ". "}</span>);
+            }
+
+        }
+        return (
+            <div className="formFooter">
+                {msg}
+            </div>
+        );
+    },
+
+    /**
+     * Get built-in type fields from form fields collection
+     */
+    getBuiltInFieldsForFooter() {
+
+        let fields = this.props.formData.fields;
+        let values = this.props.formData.record;
+        let biFields = _.filter(fields, function(fld) {return fld.builtIn && fld.name !== Constants.BUILTIN_FIELD_NAME.RECORD_ID;});
+        const result = [];
+
+        for (var fld in biFields) {
+            let fldVal = _.find(values, ['id', biFields[fld].id]);
+
+            if (fldVal && fldVal.value) {
+                if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.LAST_MODIFIED_BY) {
+                    result.push({
+                        name: Locale.getMessage("form.footer.lastUpdatedBy"),
+                        value: fldVal.display,
+                        email: fldVal.value.email,
+                        screenName: fldVal.value.screenName,
+                        id: 1,
+                        type: Constants.USER
+                    });
+                }
+                if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.DATE_CREATED) {
+                    result.push({
+                        name: Locale.getMessage("form.footer.createdOn"),
+                        value: fldVal.display,
+                        id: 2,
+                        type: Constants.DATE
+                    });
+                }
+                if (biFields[fld].name === Constants.BUILTIN_FIELD_NAME.RECORD_OWNER) {
+                    result.push({
+                        name: Locale.getMessage("form.footer.ownedBy"),
+                        value: fldVal.display,
+                        email: fldVal.value.email,
+                        screenName: fldVal.value.screenName,
+                        id: 3,
+                        type: Constants.USER
+                    });
+                }
+            }
+        }
+
+        return result;
+    },
+
+    /**
      * render a form as an set of tabs containing HTML tables (a la legacy QuickBase)
      */
     render() {
         const tabChildren = [];
         const singleColumn = Breakpoints.isSmallBreakpoint();
-        let errorMsg = '';
+        let formFooter = [];
+        if (this.props.formData && this.props.formData.formMeta.includeBuiltIns) {
+            let frm = this.props.formData;
 
-        //  If there is an errorStatus, display the appropriate message based on the error code; otherwise
-        //  render the form with the supplied data(if any).
-        //  TODO: when error handling is implemented beyond forms, the thinking is that an error component
-        //  TODO: should be created to replace the below and handle the locale messaging and rendering of
-        //  TODO: a common error page.
-        if (this.props.errorStatus) {
-            if (this.props.errorStatus === 403) {
-                errorMsg = Locale.getMessage("form.error.403");
-            } else {
-                errorMsg = Locale.getMessage("form.error.500");
-            }
-        } else if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
+            formFooter = this.createFormFooter();
+        }
+
+        // if (frm && <frm className="formMeta includeBuiltIns"></frm>) {
+        //     formFooter = this.createFormFooter();
+        // }
+        if (this.props.formData &&  this.props.formData.formMeta && this.props.formData.formMeta.tabs) {
             let tabs = this.props.formData.formMeta.tabs;
-
             Object.keys(tabs).forEach(key => {
                 tabChildren.push(this.createTab(tabs[key], singleColumn));
             });
         }
-
         const formContent = tabChildren.length < 2 ? tabChildren : <Tabs activeKey={this.props.activeTab}>{tabChildren}</Tabs>;
-
         return (
             <div className="formContainer">
                 <form className={this.props.edit ? "editForm" : "viewForm"}>
-                    {errorMsg ? <div className="errorSection">{errorMsg}</div> : formContent}
+                    {formContent}
                 </form>
+                <div>{formFooter}</div>
             </div>
         );
     }

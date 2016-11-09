@@ -113,7 +113,7 @@ var config = {
                 // all png files can be required into js files with this
                 // url loader transform works like a file loader,
                 // but can return a Data Url if the file is smaller than a limit.
-                test: /\.png?$/,
+                test: /\.(png|gif)?$/,
                 include: [
                     path.resolve(__dirname, 'client-react/src')
                 ],

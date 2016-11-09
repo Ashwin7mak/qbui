@@ -28,7 +28,7 @@ let recordActions = {
     /**
      * save a new record
      */
-    saveNewRecord(appId, tblId, recordChanges, fields) {
+    saveNewRecord(appId, tblId, recordChanges, fields, addNewRecordAfterSave = false) {
         function getRecord(_recordChanges, _fields) {
             //save changes in record
             let payload = [];
@@ -59,40 +59,42 @@ let recordActions = {
             // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             let record = getRecord(recordChanges, fields);
-            if (appId && tblId && record.length) {
-                this.dispatch(actions.ADD_RECORD, {appId, tblId, record});
+
+            if (appId && tblId && record) {
+
+                this.dispatch(actions.ADD_RECORD, {appId, tblId, changes:recordChanges});
+
                 let recordService = new RecordService();
 
                 // save the changes to the record
                 recordService.createRecord(appId, tblId, record).then(
-                        response => {
-                            logger.debug('RecordService createRecord success:' + JSON.stringify(response));
-                            if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
-                                let resJson = JSON.parse(response.data.body);
-                                this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
+                    response => {
+                        logger.debug('RecordService createRecord success:' + JSON.stringify(response));
+                        if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
+                            let resJson = JSON.parse(response.data.body);
+                            this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
+
+                            if (!addNewRecordAfterSave) {
                                 NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
-                                resolve(resJson.id);
-                            } else {
-                                logger.error('RecordService createRecord call error: no response data value returned');
-                                this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
-                                NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
-                                reject();
                             }
-                        },
-                        error => {
-                            //  axios upgraded to an error.response object in 0.13.x
-                            logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
-                            this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
-                            NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                            resolve(resJson.id);
+                        } else {
+                            logger.error('RecordService createRecord call error: no response data value returned');
+                            this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
+                            // Remove this notification since Micah Z thinks we should not display it here.
+                            // NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
                             reject();
                         }
-                    ).catch(
-                        ex => {
-                            logger.logException(ex);
-                            this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: ex});
-                            reject();
-                        }
-                    );
+                    },
+                    error => {
+                        //  axios upgraded to an error.response object in 0.13.x
+                        logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
+                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
+                        // Remove this notification since Micah Z thinks we should not display it here.
+                        // NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                        reject();
+                    }
+                );
             } else {
                 var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
                         appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
@@ -129,8 +131,8 @@ let recordActions = {
                     }
                 ).catch(
                     ex => {
+                        // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                         logger.logException(ex);
-                        this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: ex});
                         reject();
                     }
                 );
@@ -172,8 +174,8 @@ let recordActions = {
                     }
                 ).catch(
                     ex => {
+                        // TODO - remove catch block and update onPossiblyUnhandledRejection bluebird handler
                         logger.logException(ex);
-                        this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: ex});
                         reject();
                     }
                 );
@@ -191,7 +193,7 @@ let recordActions = {
     /**
      * save a record
      */
-    saveRecord(appId, tblId, recId, pendEdits, fields) {
+    saveRecord(appId, tblId, recId, pendEdits, fields, addNewRecordAfterSave = false) {
         function createColChange(value, display, field, payload) {
             let colChange = {};
             colChange.fieldName = field.name;
@@ -270,20 +272,21 @@ let recordActions = {
                     response => {
                         logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, changes});
-                        NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
-                        resolve();
+
+                        // When adding a new record immediately after saving, the success message should appear
+                        // after the new record row is added so that it appears correctly and for the correct duration
+                        // See method addNewRowAfterRecordSaveSuccess in reportContent for when the mesage is displayed.
+                        if (!addNewRecordAfterSave) {
+                            NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+                        }
+
+                        resolve(recId);
                     },
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.saveRecord:');
                         this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error.response});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
-                        reject();
-                    }
-                ).catch(
-                    ex => {
-                        logger.logException(ex);
-                        this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: ex});
                         reject();
                     }
                 );

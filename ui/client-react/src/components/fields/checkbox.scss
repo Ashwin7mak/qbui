@@ -22,11 +22,24 @@ $checkbox-font-size-mobile: 16px;
 }
 
 .checkbox {
+    // Handle focus states on the main div because Firefox and Safari do not allow focus on labels
+    &:focus {
+        outline: none;
+
+        label:after {
+            @include focus-shadow;
+        }
+    }
+
     //clear out the default margins
     margin: 0;
+
     label {
         min-height: 12px;
         min-width: 12px;
+        @include small-breakpoint {
+            width: 100%;
+        }
     }
 
     /* Remove default checkbox */
@@ -58,6 +71,7 @@ $checkbox-font-size-mobile: 16px;
             /* .1s delay is for check animation */
             transition: border .25s, background-color .25s, font-size .20s .1s, width .20s .1s, height .20s .1s, top .20s .1s, left .20s .1s;
             z-index: 1;
+            margin-top: 2px;
         }
 
         // Focus state
@@ -65,7 +79,9 @@ $checkbox-font-size-mobile: 16px;
             outline: none;
         }
 
-        &:focus + label:after, + label:focus:after, label:focus:after {
+        &:focus + label:after,
+        + label:focus:after,
+        label:focus:after {
             @include focus-shadow;
         }
 
@@ -123,13 +139,18 @@ $checkbox-font-size-mobile: 16px;
 
     &.hasLabel {
         input, .symbol {
-            margin-right: 10px;
+            margin-right: 12px;
         }
 
         @include not-small-breakpoint {
             [type="checkbox"]:checked + label:before {
                 top: 4px;
             }
+        }
+
+        @include small-breakpoint {
+          display: flex;
+          align-items: center;
         }
 
         .label {
@@ -153,27 +174,28 @@ $checkbox-font-size-mobile: 16px;
         input[type="checkbox"] {
             float: left;
             margin-left: 0;
-            margin-right: 9px;
             position: relative;
             height: 20px;
             width: 20px;
         }
 
         .required-symbol {
-            left: 28px;
+            left: 30px;
         }
     }
 
     &.renderer {
         margin: 0;
+        display: flex;
+        align-items: center;
 
         label:focus {
             outline: none;
         }
 
         .label {
-            display: inline;
             border: 2px solid transparent;
+            pointer-events: none;
         }
 
         .symbol {
@@ -194,6 +216,17 @@ $checkbox-font-size-mobile: 16px;
             }
         }
 
+        .checked, .checkbox-unchecked {
+            align-self: flex-start;
+        }
+
+        .checked {
+            margin-top: 4px;
+            @include small-breakpoint {
+                margin-top: 6px;
+            }
+        }
+
         .checkbox-unchecked {
             @include unchecked-checkbox;
             display: inline-flex;
@@ -201,10 +234,12 @@ $checkbox-font-size-mobile: 16px;
             margin-right: 8px;
             margin-top: 2px;
             width: $checkbox-size;
+            opacity: $checkbox-disabled-opacity;
 
             @include small-breakpoint {
                 height: $checkbox-size-mobile;
                 width: $checkbox-size-mobile;
+                margin-top: 4px;
             }
         }
 
@@ -218,13 +253,30 @@ $checkbox-font-size-mobile: 16px;
 
     .required-symbol {
         color: $required-asterisk-color;
-        font-size: 18px;
+        font-size: 14px;
         left: 4px;
         position: absolute;
-        top: -9px;
+        top: -8px;
+        @include small-breakpoint {
+            top: -6px;
+        }
 
         &.invalid {
             color: $error-color;
         }
+    }
+
+    .checkbox-unchecked {
+        flex-shrink: 0;
+    }
+}
+
+.cellData .checkbox.renderer {
+    display: block;
+}
+
+@include small-breakpoint {
+    .formElement.fieldLabel.checkbox-field-label {
+        display: none;
     }
 }

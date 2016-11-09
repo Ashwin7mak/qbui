@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 import {Link} from 'react-router';
 import QBicon from '../qbIcon/qbIcon';
 import NavItem from './navItem';
@@ -8,6 +7,7 @@ import Locale from '../../locales/locales';
 import {I18nMessage} from '../../utils/i18nMessage';
 import TableIconUtils from '../../utils/tableIconUtils';
 import SearchBox from '../search/searchBox';
+import CreateInQuickBaseClassicMessage from './createInQuickBaseClassicMessage';
 
 
 let TablesList = React.createClass({
@@ -67,7 +67,7 @@ let TablesList = React.createClass({
      * get link to table homepage
      */
     getTableLink(table) {
-        return `/app/${this.props.selectedAppId}/table/${table.id}`;
+        return `/qbase/app/${this.props.selectedAppId}/table/${table.id}`;
     },
 
     /**
@@ -80,6 +80,10 @@ let TablesList = React.createClass({
             <Link to={table.link}>{table.name}</Link>
             <a href="#" className="right" onClick={()=>this.props.showReports(table.id)}><QBicon icon={"report-menu-3"}/></a>
         </div>);
+    },
+
+    hasNoTables() {
+        return (!this.props.appsLoading && this.props.getAppTables(this.props.selectedAppId).length === 0);
     },
 
     /**
@@ -117,13 +121,22 @@ let TablesList = React.createClass({
         return (
         <li className="horizontal">
             <ul className="topLinks">
-                {this.getNavItem('nav.home', `/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
-                {this.getNavItem('nav.users', '/users', 'user')}
+                {this.getNavItem('nav.home', `/qbase/app/${this.props.selectedAppId}`, 'home', appHomePageSelected)}
             </ul>
         </li>);
     },
 
     render() {
+        let tables = (
+            <ul className="tablesList">
+                {this.tablesList()}
+            </ul>
+        );
+
+        if (this.hasNoTables()) {
+            tables = <CreateInQuickBaseClassicMessage nameOfElements="tables" selectedAppId={this.props.selectedAppId} />;
+        }
+
         return (
             <div className="tablesHeadingAndList">
                 <ul className="tablesHeading">
@@ -131,7 +144,6 @@ let TablesList = React.createClass({
 
                     <NavItem item={{msg: 'nav.tablesHeading'}}
                              isHeading={true}
-                             secondaryIcon={"search"}
                              onClick={this.onClickTables} open={true} />
                     <li className={this.state.searching ? "search open" : "search"}>
                         <SearchBox ref="tablesSearchBox" searchBoxKey="tablesSearchBox"
@@ -140,9 +152,8 @@ let TablesList = React.createClass({
                                    onClearSearch={this.onClearSearch}
                                    placeholder={Locale.getMessage('nav.searchTablesPlaceholder')} />                    </li>
                 </ul>
-                <ul className="tablesList">
-                    {this.tablesList()}
-                </ul>
+
+                {tables}
             </div>
 
         );

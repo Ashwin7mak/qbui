@@ -80,7 +80,7 @@ describe('RecordTrowser functions', () => {
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
         let saveButton = ReactDOM.findDOMNode(component).querySelectorAll(".trowserFooter .rightIcons .btn");
-        expect(saveButton.length).toBe(1);
+        expect(saveButton.length).toBe(2);
 
         TestUtils.Simulate.click(saveButton[0]);
 
@@ -107,7 +107,7 @@ describe('RecordTrowser functions', () => {
 
         const form = {editFormData: {}};
 
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1"}]}}} flux={flux} recId={null} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={null} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -119,7 +119,7 @@ describe('RecordTrowser functions', () => {
 
         const form = {editFormData: {}};
 
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1"}]}}} flux={flux} recId={"1"} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -131,7 +131,7 @@ describe('RecordTrowser functions', () => {
 
         const form = {editFormData: {}};
 
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1"}]}}} flux={flux} recId={"1"} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={"1"} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 
@@ -143,7 +143,7 @@ describe('RecordTrowser functions', () => {
 
         const form = {editFormData: {}};
 
-        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1"}]}}} flux={flux} recId={null} visible={true}/>);
+        component = TestUtils.renderIntoDocument(<RecordTrowser form={form} pendEdits={{isPendingEdit:true, recordChanges: {}, editErrors: {errors: [{id: 9, invalidMessage: "error message #1", def: {fieldName: "test field"}}]}}} flux={flux} recId={null} visible={true}/>);
 
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
 

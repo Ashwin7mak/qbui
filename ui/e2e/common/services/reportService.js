@@ -190,8 +190,7 @@
             runReport: function(appId, tableId, reportId) {
                 var deferred = promise.pending();
                 var reportsEndpoint = recordBase.apiBase.resolveReportsEndpoint(appId, tableId, reportId);
-                var runReportEndpoint = reportsEndpoint + '/results';
-                recordBase.apiBase.executeRequest(runReportEndpoint, 'GET').then(function(result) {
+                recordBase.apiBase.executeRequest(reportsEndpoint, 'GET').then(function(result) {
                     //console.log('Report create result');
                     var responseBody = JSON.parse(result.body);
                     //console.log(parsed);
@@ -266,6 +265,18 @@
                     deferred.reject(error);
                 });
                 return deferred.promise;
+            },
+
+            /**
+             * Helper method that will load a report for you in your browser by directly hitting a generated URL
+             * @param realmName
+             * @param testApp
+             * @param tableId
+             * @param reportId
+             * @returns A promise that will resolve after loading the generated URL
+             */
+            loadReportByIdInBrowser: function(realmName, appId, tableId, reportId) {
+                return browser.get(e2eBase.getRequestReportsPageEndpoint(realmName, appId, tableId, reportId));
             }
         };
         return reportService;

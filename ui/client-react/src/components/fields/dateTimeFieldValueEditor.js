@@ -148,7 +148,6 @@ const DateTimeFieldValueEditor = React.createClass({
     },
 
     onTimeBlur(value) {
-
         if (this.props.onBlur) {
             if (value === null || value) {
                 let isoFormat = null;
@@ -178,10 +177,12 @@ const DateTimeFieldValueEditor = React.createClass({
             dateTimeClass = '';
         }
 
-        return <div>
-            <DateFieldValueEditor onDateTimeChange={this.onDateChange} onDateTimeBlur={this.onDateBlur} classes={dateTimeClass} {...this.props}/>
+        let commonProps = {...this.props};
+        commonProps.classes = dateTimeClass;
+        return <div className="dateTimeFieldValueEditor">
+            <DateFieldValueEditor onDateTimeChange={this.onDateChange} onDateTimeBlur={this.onDateBlur} {...commonProps}/>
             {showTimeEditor ?
-                <TimeFieldValueEditor onDateTimeChange={this.onTimeChange} onDateTimeBlur={this.onTimeBlur} classes={dateTimeClass} {...this.props}/> : null}
+                <TimeFieldValueEditor onDateTimeChange={this.onTimeChange} onDateTimeBlur={this.onTimeBlur} {...commonProps}/> : null}
         </div>;
     }
 

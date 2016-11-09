@@ -277,17 +277,20 @@ describe('AGGrid cell editor functions', () => {
         expect(timeEditInputs[0].value).toBe("02:33");
     });
 
-    it('test DateTimeFormatter edit - quickbase shortcuts', () => {
+    it('test DateTimeFormatter edit - quickbase shortcuts increment date', () => {
         const params = {
             value: {
                 value: "2015-09-03T09:33:03.777Z"
             },
             column: {
                 colDef: {
-                    type : consts.SCALAR,
-                    datatypeAttributes: {
-                        showTime: true,
-                        dateFormat: "MM-DD-YYYY hh:mm:ss"
+                    fieldDef: {
+                        type: consts.SCALAR,
+                        datatypeAttributes: {
+                            showTime: true,
+                            dateFormat: "MM-DD-YYYY hh:mm:ss"
+                        },
+                        userEditableValue: true
                     }
                 }
             }
@@ -307,8 +310,41 @@ describe('AGGrid cell editor functions', () => {
         TestUtils.Simulate.keyPress(dateEditInputs[0], {"charCode": ASCII_RIGHT_BRACKET});
         expect(dateEditInputs[0].value).toBe("09-04-2015");
 
-        //  decrement a date 2 days
-        TestUtils.Simulate.keyPress(dateEditInputs[0], {"charCode": ASCII_LEFT_BRACKET});
+        TestUtils.Simulate.blur(dateEditInputs[0], {"target": {value: "Jan 2015"}});
+        expect(dateEditInputs[0].value).toBe("01-31-2015");
+
+    });
+
+    it('test DateTimeFormatter edit - quickbase shortcuts decrement date', () => {
+        const params = {
+            value: {
+                value: "2015-09-03T09:33:03.777Z"
+            },
+            column: {
+                colDef: {
+                    fieldDef: {
+                        type: consts.SCALAR,
+                        datatypeAttributes: {
+                            showTime: true,
+                            dateFormat: "MM-DD-YYYY hh:mm:ss"
+                        },
+                        userEditableValue: true
+                    }
+                }
+            }
+        };
+        var ASCII_LEFT_BRACKET = 91;
+        var ASCII_RIGHT_BRACKET = 93;
+
+        component = TestUtils.renderIntoDocument(<DateTimeCellRenderer params={params} />);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+
+        //  test date picker
+        const dateEditInputs = ReactDOM.findDOMNode(component).querySelectorAll(".dateCell input");
+        expect(dateEditInputs.length).toEqual(1);
+        expect(dateEditInputs[0].value).toBe(`09-03-2015`);
+
+        //  decrement a date
         TestUtils.Simulate.keyPress(dateEditInputs[0], {"charCode": ASCII_LEFT_BRACKET});
         expect(dateEditInputs[0].value).toBe("09-02-2015");
 

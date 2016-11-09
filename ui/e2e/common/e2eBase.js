@@ -19,20 +19,24 @@
         var formService = require('./services/formService.js');
 
         var e2eBase = {
-            // Delegate to recordBase to initialize
+            // Instantiate recordBase module to use for your tests
             recordBase: recordBase,
-            // Create a realm
-            setUp: function() {
-                let defaultBase = config ? config.DOMAIN : 'http://localhost:9001';
-                this.setBaseUrl(typeof browser !== 'undefined' ? browser.baseUrl : defaultBase);
-                this.initialize();
+            /**
+             * Set the baseUrl we want to use to reach out for testing
+             * Only run this if you do NOT pass in a config object when requiring the e2eBase module (see Protractor config files)
+             * Run this BEFORE initialize function below
+             * @param baseUrl - The url where your nodejs server is running. example: http://localhost:9001 for e2e tests
+             */
+            setBaseUrl: function(baseUrl) {
+                recordBase.setBaseUrl(baseUrl);
             },
+            /**
+             * Initialize recordApi.base.js and api.base.js in the Mocha layer (qbui/server package)
+             * Only run this if you do NOT pass in a config object when requiring the e2eBase module (see Protractor config files)
+             * Make sure to run this AFTER setBaseUrl to avoid authentication errors due to ticket for wrong realm
+             */
             initialize: function() {
                 recordBase.initialize();
-            },
-            // Set the baseUrl we want to use to reach out for testing
-            setBaseUrl: function(baseUrlConfig) {
-                recordBase.setBaseUrl(baseUrlConfig);
             },
             // Initialize the service modules to use the same base class
             appService: appService(recordBase),
@@ -45,7 +49,7 @@
             // Common variables
             ticketEndpoint: recordBase.apiBase.resolveTicketEndpoint(),
             // Checks for any JS errors in the browser, resets the browser window size and cleans up the test realm and app
-            cleanup: function(done) {
+            cleanup: function() {
                 //Checks for any JS errors in the browser console
                 //browser.manage().logs().get('browser').then(function(browserLog) {
                 //    // TODO: Errors in the console need to fix
@@ -55,23 +59,21 @@
                 //    }
                 //});
                 //Cleanup the realm and app
-                e2eBase.recordBase.apiBase.cleanup().then(function() {
-                    done();
-                });
+                return e2eBase.recordBase.apiBase.cleanup();
             },
             // Helper method to get the proper URL for loading the dashboard page containing a list of apps and tables for a realm
             getRequestAppsPageEndpoint: function(realmName) {
-                var requestAppsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/apps/');
+                var requestAppsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/apps/');
                 return requestAppsPageEndPoint;
             },
             // Helper method to get the proper URL for loading the table home page containing a list of tables for a realm for an app
             getRequestTableEndpoint: function(realmName, appId, tableId) {
-                var requestTableEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/app/' + appId + '/table/' + tableId);
+                var requestTableEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId);
                 return requestTableEndPoint;
             },
             // Helper method to get the proper URL for loading the reports page for particular app and particular table for a realm
             getRequestReportsPageEndpoint: function(realmName, appId, tableId, reportId) {
-                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
+                var requestReportsPageEndPoint = e2eBase.recordBase.apiBase.generateFullRequest(realmName, '/qbase/app/' + appId + '/table/' + tableId + '/report/' + reportId + '');
                 return requestReportsPageEndPoint;
             },
             // Get the proper URL for loading the session ticket page in the browser
@@ -108,7 +110,7 @@
             basicSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
                 var MIN_RECORDSCOUNT = 11;
-                e2eBase.setUp();
+
                 // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
@@ -118,7 +120,7 @@
                     var table1NonBuiltInFields = e2eBase.tableService.getNonBuiltInFields(createdApp.tables[0]);
                     // Generate the record JSON objects
                     var table1GeneratedRecords = e2eBase.recordService.generateRecords(table1NonBuiltInFields, numberOfRecords);
-                    //Add 1 duplicate record
+                    // Add 1 duplicate record
                     var clonedArray = JSON.parse(JSON.stringify(table1GeneratedRecords));
                     var dupRecord = clonedArray[0];
                     // Edit the numeric field so we can check the second level sort (ex: 6.7)
@@ -264,8 +266,10 @@
              * Setup method that generates an application, table, report and a specified number of records
              * Creates an App, 1 2 Tables with all Field Types, 10 Records, 1 List All Report with all Features and 1 Form to go with it
              */
-            defaultSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
+            defaultAppSetup: function(tableToFieldToFieldTypeMap, numberOfRecords) {
                 var createdApp;
+                var MIN_RECORDSCOUNT = 11;
+
                 // Use map of tables passed in or create default
                 if (!tableToFieldToFieldTypeMap) {
                     tableToFieldToFieldTypeMap  = e2eConsts.createDefaultTableMap();
@@ -276,7 +280,6 @@
                     numberOfRecords  = e2eConsts.MAX_PAGING_SIZE + 5;
                 }
 
-                e2eBase.setUp();
                 // Generate the app JSON object
                 var generatedApp = e2eBase.appService.generateAppFromMap(tableToFieldToFieldTypeMap);
                 // Create the app via the API
@@ -312,8 +315,15 @@
                         // Add the empty record back in to create via API
                         generatedRecords.push(generatedEmptyRecord);
 
-                        // Via the API create records
-                        createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        // Build create record promises
+                        if (numberOfRecords < MIN_RECORDSCOUNT) {
+                            // Via the API create the records
+                            createAppPromises.push(e2eBase.recordService.addRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        } else {
+                            // Via the API create the bulk records
+                            createAppPromises.push(e2eBase.recordService.addBulkRecords(createdApp, createdApp.tables[i], generatedRecords));
+                        }
+
                         // Create a list all report for the table
                         createAppPromises.push(e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[i].id, 'Table ' + (i + 1) + ' List All Report', null, null, null, null));
 
@@ -335,7 +345,7 @@
                     return createdApp;
                 }).catch(function(e) {
                     // Catch any errors and reject the promise with it
-                    return Promise.reject(new Error('Error during defaultSetup: ' + e.message));
+                    return Promise.reject(new Error('Error during defaultAppSetup: ' + e.message));
                 });
             },
 
@@ -346,7 +356,7 @@
             fullReportsSetup: function(numRecords) {
                 var createdApp;
 
-                return this.defaultSetup(null, numRecords).then(function(createdAppResponse) {
+                return this.defaultAppSetup(null, numRecords).then(function(createdAppResponse) {
                     createdApp = createdAppResponse;
 
                     var TEXT_FID = 6;
@@ -377,22 +387,23 @@
 
                     //TODO: Had issue using promise.all here, it wasn't creating all the reports even though was getting responses from all 4 calls
                     // Create report with fids
-                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null).then(function(rid1) {
-                        reportIds.push(rid1);
-                        // Create report with sortList
-                        return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null).then(function(rid2) {
+                    return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields', fids, null, null, null)
+                        .then(function(rid1) {
+                            reportIds.push(rid1);
+                            // Create report with sortList
+                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Sorting', null, sortList, null, null);
+                        }).then(function(rid2) {
                             reportIds.push(rid2);
                             // Create report with facetFids
-                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null).then(function(rid3) {
-                                reportIds.push(rid3);
-                                // Create report with all params defined
-                                return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null).then(function(rid4) {
-                                    reportIds.push(rid4);
-                                    return reportIds;
-                                });
-                            });
+                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Facets', null, null, facetFids, null);
+                        }).then(function(rid3) {
+                            reportIds.push(rid3);
+                            // Create report with all params defined
+                            return e2eBase.reportService.createDefaultReport(createdApp.id, createdApp.tables[0].id, 'Report with Custom Fields, Sorting, and Facets', fids, sortList, facetFids, null);
+                        }).then(function(rid4) {
+                            reportIds.push(rid4);
+                            return reportIds;
                         });
-                    });
                 }).then(function(reportIds) {
                     // Return back the list of reportIds
                     return [createdApp, reportIds];
@@ -404,7 +415,7 @@
 
 
             /*
-             * @deprecated Please use defaultSetup or fullReportsSetup going forward
+             * @deprecated Please use defaultAppSetup or fullReportsSetup going forward
              */
 
             // Setup method for the reports spec files. Creates the table / field mapping to be generated by basicSetup
@@ -446,7 +457,6 @@
                     return Promise.reject(new Error("no map of tables to build defined"));
                 } else {
                     // Create the app schema via the API
-                    e2eBase.setUp();
                     return e2eBase.appService.createAppSchema(tableToFieldToFieldTypeMap);
                 }
             },
@@ -457,7 +467,7 @@
                     recordService : this.recordService,
                     tableService : this.tableService,
                     reportService : this.reportService,
-                    formService : this.formService,
+                    formService : this.formService
                 };
                 return e2eBase.appService.createRecords(app, recordsConfig, services);
             },

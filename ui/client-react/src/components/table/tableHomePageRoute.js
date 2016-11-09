@@ -9,7 +9,7 @@ import ReportToolsAndContent from '../report/reportToolsAndContent';
 import Fluxxor from 'fluxxor';
 import {I18nMessage} from "../../utils/i18nMessage";
 import NumberUtils from '../../utils/numberUtils';
-
+import Constants from '../../../../common/src/constants';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 import './tableHomePage.scss';
@@ -37,8 +37,11 @@ let TableHomePageRoute = React.createClass({
         let appId = params.appId;
         let tblId = params.tblId;
 
-        let offset = NumberUtils.getNumericPropertyValue(this.props.reportData, 'pageOffset');
-        let numRows = NumberUtils.getNumericPropertyValue(this.props.reportData, 'numRows');
+        //  Always fetch page 1 as this is called only when loading the home page for the first
+        //  time.  Paging will always call report paging after initial load as the client will not
+        //  (and shouldnt) know that the report is default table report and not a saved report.
+        let offset = Constants.PAGE.DEFAULT_OFFSET;
+        let numRows = Constants.PAGE.DEFAULT_NUM_ROWS;
 
         if (appId && tblId) {
             this.loadTableHomePageReportFromParams(appId, tblId, offset, numRows);
@@ -53,14 +56,19 @@ let TableHomePageRoute = React.createClass({
         }
     },
 
+    /**
+     * Add a new record in trowser
+     */
+    editNewRecord() {
+        const flux = this.getFlux();
+        flux.actions.editNewRecord();
+    },
+
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
-            {msg: 'pageActions.favorite', icon:'star'},
-            {msg: 'pageActions.gridEdit', icon:'report-grid-edit'},
-            {msg: 'pageActions.email', icon:'mail'},
-            {msg: 'pageActions.print', icon:'print'},
-            {msg: 'pageActions.customizeReport', icon:'settings-hollow'},
+            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
+            {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
+            {msg: 'unimplemented.print', icon:'print', disabled: true},
         ];
         return (<IconActions className="pageActions" actions={actions} maxButtonsBeforeMenu={maxButtonsBeforeMenu}/>);
     },
@@ -71,9 +79,9 @@ let TableHomePageRoute = React.createClass({
         return (
             <div className="tableHomepageStageHeadline">
 
-                <div className="navLinks stageHeadline">
+                <div className="navLinks">
                     {this.props.selectedTable && this.props.selectedTable.icon && <TableIcon icon={this.props.selectedTable.icon}/> }
-                    <h3>{this.props.selectedTable && this.props.selectedTable.name}&nbsp;<I18nMessage message={'nav.home'}/></h3>
+                    <span>{this.props.selectedTable && this.props.selectedTable.name}&nbsp;<I18nMessage message={'nav.home'}/></span>
                 </div>
             </div>);
     },

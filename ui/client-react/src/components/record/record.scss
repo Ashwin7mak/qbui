@@ -11,10 +11,17 @@
     flex-direction: column;
 
     .recordStageHeadline {
-
         display:flex;
         flex-direction:column;
         justify-content:center;
+
+        .title {
+            font-size: $font-size-h3;
+        }
+        .tableHomepageLink {
+            display:flex;
+            align-items:center;
+        }
     }
     .recordActionsContainer {
         display: flex;
@@ -33,17 +40,42 @@
         overflow:auto;
 
     }
+    .loadedContent {
+        overflow: auto;
+    }
     .formContainer {
         overflow: auto;
-        position:absolute;
         width:100%;
+    }
+    .divider.color-black-700 {
+        color: $color-black-700;
     }
 }
 
+@include not-small-breakpoint {
+    .smallHeader.recordHeader {
+        display: none;
+    }
+}
 
 @include small-breakpoint {
+    .secondaryBar .iconActions.pageActions {
+        padding-left: 6px;
+        .iconActionButton {
+            margin-right: 3px;
+        }
+        .dropdownToggle {
+            margin-left: -4px;
+        }
+    }
     .secondaryBar .iconActions.pageActions .iconActionButton.addRecord {
         display:none; /* hide on small, use a floating add button */
+    }
+
+    .recordStageHeadline {
+        .formName {
+            font-size: $font-size-h4;
+        }
     }
 }
 
@@ -83,4 +115,9 @@
 .previous-leave.previous-leave-active {
     left: 100%;
     transition: all 200ms linear;
+}
+
+
+@include small-breakpoint {
+
 }

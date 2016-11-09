@@ -9,7 +9,6 @@
     var reportServicePage = new ReportServicePage();
     var reportSortingPage = new ReportSortingPage();
 
-
     describe('Report Sorting Tests - ', function() {
         var realmName;
         var realmId;
@@ -101,8 +100,8 @@
          */
         var getExpectedSortedResultsUsingLoDashSort = function(Fids, sortFids, sortOrder) {
             var sortedRecords;
-            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id);
-            e2eBase.recordBase.apiBase.executeRequest(reportEndpoint + 1 + '/reportComponents', consts.GET).then(function(reportResult) {
+            var reportEndpoint = e2eBase.recordBase.apiBase.resolveReportsEndpoint(app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            e2eBase.recordBase.apiBase.executeRequest(reportEndpoint, consts.GET).then(function(reportResult) {
                 var results = JSON.parse(reportResult.body);
                 // Sort the actual records using lodash _.orderby
                 sortedRecords = reportSortingPage.sortRecords(results.records, sortFids, sortOrder);
@@ -283,17 +282,11 @@
                 return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
                     e2eBase.sleep(browser.params.smallSleep);
                     //finally verify item got selected
-                    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Date Field", "Sort newest to oldest");
-                    done();
+                    reportSortingPage.expandColumnHeaderMenuAndVerifySelectedItem("Date Field", "Sort newest to oldest").then(function() {
+                        done();
+                    });
                 });
             });
-        });
-
-        /**
-         * After all tests are done, run the cleanup function in the base class
-         */
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
         });
     });
 }());

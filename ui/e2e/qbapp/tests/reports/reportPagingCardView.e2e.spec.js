@@ -278,14 +278,6 @@
                     });
                 });
             });
-
-        });
-
-        /**
-         * After all tests are done, run the cleanup function in the base class
-         */
-        afterAll(function(done) {
-            e2eBase.cleanup(done);
         });
     });
 }());

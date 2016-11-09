@@ -16,7 +16,8 @@ let CardViewList = React.createClass({
         onRowSelected: React.PropTypes.func,
         onRowClicked: React.PropTypes.func,
         isRowSelected: React.PropTypes.func,
-        onSwipe: React.PropTypes.func
+        onSwipe: React.PropTypes.func,
+        columns: React.PropTypes.array
     },
 
     getInitialState() {
@@ -47,6 +48,7 @@ let CardViewList = React.createClass({
                                      groupId={groupId}
                                      groupLevel={groupLevel}
                                      node={node}
+                                     columns={this.props.columns}
                                      uniqueIdentifier={this.props.uniqueIdentifier}
                                      allowCardSelection={this.props.allowCardSelection}
                                      onToggleCardSelection={this.props.onToggleCardSelection}
@@ -60,6 +62,7 @@ let CardViewList = React.createClass({
 
         let className = "cardViewList group-level-" + this.props.groupLevel;
         let groupIcon = this.state.open ? "caret-filled-down" : "caret-filled-right";
+
         return (
             <div>
                 {this.props.node.group || this.props.node.children && this.props.node.children.length ?
@@ -78,6 +81,7 @@ let CardViewList = React.createClass({
                     <CardView key={this.props.node[this.props.uniqueIdentifier]}
                               rowId={this.props.node[this.props.uniqueIdentifier] ? this.props.node[this.props.uniqueIdentifier].value : null}
                               data={this.props.node}
+                              columns={this.props.columns}
                               uniqueIdentifier={this.props.uniqueIdentifier}
                               allowCardSelection={this.props.allowCardSelection}
                               onToggleCardSelection={this.props.onToggleCardSelection}

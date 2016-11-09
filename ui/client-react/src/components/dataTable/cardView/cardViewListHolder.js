@@ -144,7 +144,7 @@ let CardViewListHolder = React.createClass({
      * @param delta - delta from touch starting position
      * @param isUpSwipe - (swiped up relative to starting point)
      */
-    swiping(delta, isUpSwipe) {
+    swiping(target, delta, isUpSwipe) {
         if (isUpSwipe && this.isElementVisible('cardViewFooter')) {
             // If up swipe, check for visibility of the 'Fetch More' button. If it is visible, display loading indicator,
             // move the table (including button and spinner) up proportional to the swipe distance. If the swipe exceeds
@@ -187,10 +187,10 @@ let CardViewListHolder = React.createClass({
                 loadingIndicatorElem.style.display = "flex";
                 // As long as the swipe is less than drag distance, move the table, header/footer button and spinner
                 if (delta < MAX_SWIPE_DISTANCE) {
-                    tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + (delta) + 'px)';
+                    tableElem.style.transform = 'translate(-40px, ' + (isUpward ? '-' : '') + (delta) + 'px)';
                 } else {
                     // If the swipe exceeds drag distance, snap the table, footer and indicator to the top or bottom
-                    tableElem.style.transform = 'translate(0px, ' + (isUpward ? '-' : '') + '45px)';
+                    tableElem.style.transform = 'translate(-40px, ' + (isUpward ? '-' : '') + '45px)';
                 }
             }
         }
@@ -274,7 +274,9 @@ let CardViewListHolder = React.createClass({
                             <div className="spacer"></div>
                         }
 
-                        <CardViewList ref="cardViewList" node={recordNodes}
+                        <CardViewList ref="cardViewList"
+                                      node={recordNodes}
+                                      columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
                                       uniqueIdentifier={this.props.uniqueIdentifier}
                                       groupId=""
                                       groupLevel={-1}

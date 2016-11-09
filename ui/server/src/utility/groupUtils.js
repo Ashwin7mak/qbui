@@ -149,6 +149,13 @@
                 case groupTypes.USER.firstWord: return true;
                 }
                 return false;
+            case constants.PHONE_NUMBER:
+            case constants.CHECKBOX:
+            case constants.URL:
+                switch (groupType) {
+                case groupTypes.COMMON.equals: return true;
+                }
+                return false;
             }
 
             return false;
@@ -254,7 +261,7 @@
         },
 
         /**
-         * Return the first day of the week of a given date.  QuickBase considers Monday as the first day
+         * Return the first day of the week of a given date.  QuickBase, by default, considers Monday as the first day
          * of the(work) week, so the date returned will be the preceding Monday in the format specified.
          *
          * Strict parsing is enforced.  This means the displayDate string must match the format.
@@ -270,6 +277,8 @@
          * @returns {*}
          */
         getFirstDayOfWeek: function(displayDate, format) {
+            //TODO: once implemented with server grouping, need to reference app to determine first day of week.
+            //TODO: QuickBase default to Monday, but another day of the week can be selected at the app level.
             if (displayDate) {
                 let momentDate = moment(displayDate, format, true);
                 if (momentDate.isValid()) {

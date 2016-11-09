@@ -7,8 +7,8 @@ import * as actions from '../constants/actions';
 let recordPendingEditsActions = {
 
     /* the start of editing a record */
-    recordPendingEditsStart(appId, tblId, recId, origRec, changes) {
-        this.dispatch(actions.RECORD_EDIT_START, {appId, tblId, recId, origRec, changes});
+    recordPendingEditsStart(appId, tblId, recId, origRec, changes, isInlineEdit = false) {
+        this.dispatch(actions.RECORD_EDIT_START, {appId, tblId, recId, origRec, changes, isInlineEdit});
     },
     /* the change of a field while editing a record */
     recordPendingEditsChangeField(appId, tblId, recId, changes) {

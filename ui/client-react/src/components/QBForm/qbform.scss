@@ -4,7 +4,20 @@ $edit-field-padding: 5px;
 
 .formContainer {
     padding: 10px;
-}
+    .formFooter {
+        display: inline;
+        margin: 15px 0 15px 1px;
+        font-size: $font-size-small;
+        .fieldNormalText {
+            color: $color-black-600;
+        }
+        .fieldLinkText {
+            color: $color-indigo-700
+        }
+        .div {
+            display: inline;
+        }
+    }
 
 
 .formSection {
@@ -36,6 +49,9 @@ $edit-field-padding: 5px;
     &.nonCollapsible {
         .qbPanelHeaderIcon {
             display: none;
+        }
+        .qbPanelHeader {
+            padding-top: 0;
         }
     }
     .fieldRow {
@@ -71,7 +87,6 @@ $edit-field-padding: 5px;
 
         /* field label in field td */
         .field .fieldLabel {
-            max-width: 20em;
             text-align:left;
             margin-bottom: $edit-field-padding;
         }
@@ -114,6 +129,11 @@ $edit-field-padding: 5px;
         .checkbox {
             top: $edit-field-padding;
         }
+        .errorDiv {
+            display: flex;
+            flex-direction: column;
+        }
+
     }
     .input, textarea.cellEdit {
         padding: $edit-field-padding;
@@ -166,6 +186,10 @@ $edit-field-padding: 5px;
     .formSection {
         display: block;
 
+        .qbPanelHeader {
+            padding: 10px 0 20px 10px;
+        }
+
         .formTable {
             margin-left: 0px;
             width: 100%;
@@ -192,9 +216,44 @@ $edit-field-padding: 5px;
         .errorText {
             font-size: $font-size-small;
         }
+        .fieldValueEditor {
+            &.fieldInputWidth {
+                width: 100%;
+                .input {
+                    width: 100%;
+                }
+            }
+        }
     }
 }
 
 .tooltip {
     z-index: 1;
+}
+
+/**
+ * on forms, we want the form to expand vertically to accomodate the datepicker
+ * when it's open (like react-select based components), so make it use relative positioning,
+ * not absolute, and have the parent of the datepicker and input box be a flexbox so we can
+ * reorder the datepicker AFTER the input using only CSS
+ */
+.formElement .fieldValueEditor .dateCell {
+    border:0;
+    > div {
+        display:flex;
+        flex-direction:column;
+        .input-group.date {
+            border: 1px solid #c7c7c7;
+            border-radius: 2px;
+        }
+        .bootstrap-datetimepicker-widget {
+            right:0 !important;
+            top:10px !important;
+            order:2;
+            position: relative !important;
+
+        }
+    }
+}
+
 }

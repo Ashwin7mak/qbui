@@ -8,6 +8,7 @@ import Breakpoints from '../../src/utils/breakpoints';
 
 const fakeQBFormData = {
     formMeta: {
+        "includeBuiltIns": true,
         "tabs": {
             "0": {
                 "orderIndex": 0,
@@ -163,8 +164,8 @@ const emptyQBFormData = {
             }
         }
     },
-    record:[{id:2, value: "field value"}],
-    fields: [{id: 2, name: "field name", datatypeAttributes: {type: "TEXT"}}]
+    record:[{id:2, value: "field value"}, {id:1, value: "built in field value"}],
+    fields: [{id: 2, name: "field name", datatypeAttributes: {type: "TEXT"}}, {"builtIn": true, "datatypeAttributes": {"type": "DATE_TIME"}, "id": 1, "required": false, "type": "SCALAR", "name": "built in field name"}]
 };
 
 var FieldElementMock = React.createClass({
@@ -197,7 +198,7 @@ describe('QBForm functions', () => {
     });
 
     it('test render of component', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"}></QBForm>);
+        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} formData={fakeQBFormData}></QBForm>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
         const qbForm = ReactDOM.findDOMNode(component);
         expect(qbForm).toBeDefined();
@@ -251,23 +252,6 @@ describe('QBForm functions', () => {
         expect(fieldElements.length).toEqual(0);
     });
 
-    it('test render of form with unauthorized error status', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} errorStatus={403} formData={fakeQBFormData}></QBForm>);
-        const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
-        expect(fieldElements.length).toEqual(0);
-
-        const errorSection = TestUtils.scryRenderedDOMComponentsWithClass(component, "errorSection");
-        expect(errorSection.length).toEqual(1);
-    });
-
-    it('test render of form with misc error status', () => {
-        component = TestUtils.renderIntoDocument(<QBForm activeTab={"0"} errorStatus={500} formData={fakeQBFormData}></QBForm>);
-        const fieldElements = TestUtils.scryRenderedDOMComponentsWithClass(component, "formElement field");
-        expect(fieldElements.length).toEqual(0);
-
-        const errorSection = TestUtils.scryRenderedDOMComponentsWithClass(component, "errorSection");
-        expect(errorSection.length).toEqual(1);
-    });
 
     it('test render of form field element with data from pendingEdits', () => {
         let edits = {

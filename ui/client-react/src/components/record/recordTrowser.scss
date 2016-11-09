@@ -1,33 +1,58 @@
 @import '../../assets/css/qbVariables';
 
 .recordTrowser {
+    .trowserFooter {
+        z-index: 9999;
+    }
     .trowserFooter .saveButtons {
         display: flex;
     }
     .trowserHeader {
+        .breadcrumbs {
+            .iconActions {
+                display: inline-block;
+                /*this is temporary fix because the icons have built in padding which is incorrect*/
+                margin-right: 10px;
 
-        .qbIcon {
-            margin-right: 5px;
-        }
-        .iconActions {
-            display: inline-block;
-
-            margin-right: 20px;
-
-            .btn {
-                &:hover {
-                    background-color:#0097CD;
-                    color: #fff;
-                }
-                background-color:inherit;
-                color: #fff;
-                width: 32px;
-                padding:0;
-                .qbIcon {
-                    font-size: 24px;
-                    margin:0;
+                .btn {
+                    &:hover {
+                        background-color:$nav-icon-hover-bg;
+                        color: $color2;
+                    }
+                    background-color:inherit;
+                    color: $color2;
+                    padding:0;
+                    .qbIcon {
+                        font-size: 24px;
+                    }
+                    &.prevRecord, &.nextRecord {
+                        .qbIcon {
+                            font-size: 30px;
+                            width: 30px;
+                        }
+                    }
                 }
             }
+        }
+    }
+}
+
+.recordTrowserErrorPopRes {
+    .trowserChildren {
+        padding-bottom: 340px;
+    }
+}
+
+@include small-breakpoint {
+    .recordTrowser {
+        .trowserFooter .saveButtons {
+            display: flex;
+        }
+    }
+
+    .recordTrowserErrorPopRes {
+        .trowserChildren {
+            padding-bottom: 200px;
         }
     }
 }

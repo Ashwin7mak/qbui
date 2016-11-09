@@ -10,7 +10,7 @@ import Locales from '../../src/locales/locales';
 import * as SchemaConsts from '../../src/constants/schema';
 import * as GroupTypes from '../../../common/src/groupTypes';
 import LimitConstants from '../../../common/src/limitConstants';
-
+import Promise from 'bluebird';
 
 import Breakpoints from '../../src/utils/breakpoints';
 
@@ -228,10 +228,36 @@ const fakeReportData_pagedData  = {
     }
 };
 
+
+const fakeReportDataFields_unsaved = {
+    fields: {
+        data: [
+            {
+                "datatypeAttributes": {
+                    "type": "TEXT", "clientSideAttributes": {"width": 50, "bold": true, "word_wrap": false, "max_chars": 0},
+                    "htmlAllowed": false
+                }, "id": 5, "name": "abc", "type": "SCALAR", "builtIn": false,
+                "dataIsCopyable": true, "includeInQuickSearch": true, "appearsByDefault": true, "userEditableValue": true,
+                "required": false, "defaultValue": {}, "multiChoiceSourceAllowed": false
+            },
+
+            {
+                "datatypeAttributes": {
+                    "type": "NUMERIC", "clientSideAttributes": {"width": 50, "bold": false, "word_wrap": false},
+                    "decimalPlaces": 0, "treatNullAsZero": true, "unitsDescription": ""
+                }, "id": 7, "name": "Record ID#", "type": "SCALAR",  "builtIn": true,
+                "dataIsCopyable": true, "includeInQuickSearch": true, "appearsByDefault": false, "userEditableValue": false,
+                "required": true, "unique": true, "indexed": true, "keyField": true, "defaultValue": {},
+                "multiChoiceSourceAllowed": false
+            }
+        ]
+    }
+};
+
 const fakeReportData_unsaved = {
     loading: false,
     countingTotalRecords: false,
-    recordsCount:10,
+    recordsCount:1,
     data: {
         name: "test unsaved",
         groupFields: [],
@@ -245,6 +271,13 @@ const fakeReportData_unsaved = {
         }]
     }
 };
+
+
+let map = new Map();
+fakeReportDataFields_unsaved.fields.data.forEach((field) => {
+    map.set(field.id, field);
+});
+fakeReportData_unsaved.data.fieldsMap = map;
 
 const cols_with_numeric_field = [
     {
@@ -335,6 +368,7 @@ const selectedRowIds = [
     2
 ];
 
+let doneFunction = null; // Holds the done function for an asynchronous test so it can be called in the mock flux
 const flux = {
     actions: {
         scrollingReport(scrolling) {
@@ -352,8 +386,17 @@ const flux = {
         recordPendingEditsCommit: ()=> {
         },
         newBlankReportRecord: ()=> {
+            return new Promise((resolve, reject) => {
+                resolve();
+                if (doneFunction) {
+                    doneFunction();
+                }
+            });
         },
         saveRecord: ()=> {
+            return new Promise((resolve, reject) => {
+                resolve(101);
+            });
         },
         saveNewRecord: ()=> {
         },
@@ -750,6 +793,7 @@ describe('ReportContent functions', () => {
 
     it('test render of component', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 reportData={fakeReportData_empty}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}/>);
@@ -758,33 +802,16 @@ describe('ReportContent functions', () => {
 
     it('test render of empty component', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 reportData={fakeReportData_empty}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
-    it('test render of error', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                reportData={{error:'ground control to major Tom'}}
-                                                                reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(0);
-    });
-
-    it('test show of navigation arrows in footer with paginated report', () => {
-        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                reportData={fakeReportData_pagedData}
-                                                                reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}
-                                                                recordsCount={100}/>);
-        expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
-        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportFooter");
-        expect(reportNavigation.length).toEqual(1);
-    });
-
     it('test hide of footer on row selection', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 reportData={fakeReportData_emptyData}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
@@ -796,6 +823,7 @@ describe('ReportContent functions', () => {
 
     it('test render of empty data', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 reportData={fakeReportData_emptyData}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}/>);
@@ -805,6 +833,7 @@ describe('ReportContent functions', () => {
     it('test render with keyField', () => {
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 reportData={fakeReportData_emptyData}
                                                                 fields={{keyField : {name: 'testId'}}}
                                                                 reportHeader={header_empty}
@@ -829,6 +858,7 @@ describe('ReportContent functions', () => {
         };
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
@@ -845,6 +875,7 @@ describe('ReportContent functions', () => {
         spyOn(flux.actions, 'recordPendingEditsStart');
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 appId="123"
                                                                 tblId="456"
                                                                 reportData={fakeReportData_simple}
@@ -865,6 +896,7 @@ describe('ReportContent functions', () => {
         spyOn(flux.actions, 'recordPendingEditsStart');
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 appId={appId}
                                                                 tblId={tblId}
                                                                 reportData={fakeReportData_unsaved}
@@ -875,7 +907,7 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalledWith(
-            appId, tblId, null, null, {5: {oldVal: {value: null, id: 5}, newVal:{value: 'abc'}, fieldName: 'col_text'}}
+            appId, tblId, null, null, {5: {oldVal: {value: undefined, id: 5}, newVal:{value: 'abc'}, fieldName: 'col_text', fieldDef: fakeReportDataFields_unsaved.fields.data[0]}}, true
         );
     });
 
@@ -886,6 +918,7 @@ describe('ReportContent functions', () => {
         spyOn(flux.actions, 'recordPendingEditsCancel');
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 appId="123"
                                                                 tblId="456"
                                                                 reportData={fakeReportData_simple}
@@ -932,6 +965,7 @@ describe('ReportContent functions', () => {
         spyOn(flux.actions, 'deleteRecord');
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 appId="123"
                                                                 tblId="456"
                                                                 reportData={fakeReportData_simple}
@@ -1040,7 +1074,8 @@ describe('ReportContent functions', () => {
         expect(flux.actions.newBlankReportRecord).toHaveBeenCalled();
     });
 
-    it('test handleRecordNewBlank on dirty', () => {
+    it('test handleRecordNewBlank on dirty', (done) => {
+        doneFunction = done;
         let keyField = "id";
         let edits = {
             isPendingEdit: true,
@@ -1051,19 +1086,22 @@ describe('ReportContent functions', () => {
             }
         };
 
-        spyOn(flux.actions, 'newBlankReportRecord');
+        spyOn(flux.actions, 'newBlankReportRecord').and.callThrough();
 
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 appId="123"
                                                                 tblId="456"
                                                                 pendEdits={edits}
                                                                 reportData={fakeReportData_simple}
+                                                                fields={fakeReportDataFields_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
                                                                 uniqueIdentifier={keyField}
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
-        component.handleRecordNewBlank(101);
+
+        component.handleRecordNewBlank({value: 101});
+
         expect(flux.actions.newBlankReportRecord).not.toHaveBeenCalled();
     });
 
@@ -1124,7 +1162,7 @@ describe('ReportContent functions', () => {
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordAdd(edits.recordChanges);
-        expect(flux.actions.saveNewRecord).toHaveBeenCalledWith('123', '456', edits.recordChanges, fieldsData.fields.data);
+        expect(flux.actions.saveNewRecord).toHaveBeenCalledWith('123', '456', edits.recordChanges, fieldsData.fields.data, false);
     });
 
     it('test handleRecordChange', () => {
@@ -1168,6 +1206,7 @@ describe('ReportContent functions', () => {
 
     it('test render of data without attributes', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}/>);
@@ -1180,6 +1219,7 @@ describe('ReportContent functions', () => {
 
     it('test startPerfTiming', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}/>);
@@ -1192,6 +1232,7 @@ describe('ReportContent functions', () => {
 
     it('test capturePerfTiming', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}/>);
@@ -1205,6 +1246,7 @@ describe('ReportContent functions', () => {
     });
     it('test openRow callback to push state to router', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                pendEdits={{}}
                                                                 appId="123"
                                                                 tblId="456"
                                                                 rptId="2"
@@ -1215,7 +1257,7 @@ describe('ReportContent functions', () => {
                                                                 router={[]}
                                                                 recordsCount={100}/>);
         component.openRow({RecId: {value: 2}});
-        expect(component.props.router).toContain('/app/123/table/456/report/2/record/2');
+        expect(component.props.router).toContain('/qbase/app/123/table/456/report/2/record/2');
     });
 
 });

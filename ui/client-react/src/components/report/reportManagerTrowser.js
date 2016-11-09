@@ -45,20 +45,19 @@ let ReportManagerTrowser = React.createClass({
         const table = this.props.selectedTable;
 
         return (
-            <h4>
-                <TableIcon icon={table ? table.icon : ""}/> {table ? table.name : ""} <QBicon icon="caret-right"/>
+            <div className="breadcrumbsContent">
+                <TableIcon classes={"primaryIcon"} icon={table ? table.icon : ""}/>
+                <span>{table ? table.name : ""}</span>
+                <span> : </span>
                 <I18nMessage message={'nav.reportsHeading'}/>
-            </h4>);
+            </div>);
 
     },
     /**
      *  get actions element for bottome center of trowser (placeholders for now)
      */
     getTrowserActions() {
-        return (<div className={"centerActions"}>
-            <a href="#"><QBicon icon="add-mini"/><I18nMessage message={'report.newReport'}/></a>
-            <a href="#"><QBicon icon="settings"/><I18nMessage message={'report.organizeReports'}/></a>
-        </div>);
+        return <div className={"centerActions"} />;
     },
 
     getTrowserRightIcons() {
@@ -76,7 +75,7 @@ let ReportManagerTrowser = React.createClass({
      */
     render() {
         return (
-            <Trowser position={"top"}
+            <Trowser position="top"
                      visible={this.props.visible}
                      breadcrumbs={this.getTrowserBreadcrumbs()}
                      centerActions={this.getTrowserActions()}

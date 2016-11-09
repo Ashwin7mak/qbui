@@ -10,6 +10,9 @@ import AppsList from './appsList';
 import TablesList from './tablesList';
 import QBicon from '../qbIcon/qbIcon';
 import './leftNav.scss';
+import AppUtils from '../../utils/appUtils';
+import * as SpinnerConfigurations from "../../constants/spinnerConfigurations";
+
 
 let LeftNav = React.createClass({
 
@@ -63,6 +66,15 @@ let LeftNav = React.createClass({
         this.props.onNavClick();
     },
 
+    renderNavContent() {
+        // Show the apps list if the apps list is open or if the currently selected app does not exist (So a user can choose a different app)
+        if (this.props.appsListOpen || !AppUtils.appExists(this.props.selectedAppId, this.props.apps)) {
+            return <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  />;
+        } else {
+            return <TablesList key={"tables"} expanded={this.props.expanded} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables} {...this.props} />;
+        }
+    },
+
     render() {
         let classes = "leftNav";
         classes += (this.props.visible ? " open" : " closed");
@@ -71,16 +83,14 @@ let LeftNav = React.createClass({
         if (this.props.appsListOpen) {
             classes += " appsListOpen";
         }
+
         return (
             <Swipeable className={classes} onSwipedLeft={this.swipedLeft}>
                 {this.createBranding()}
 
-                <div className={"transitionGroup"}>
-                    {!this.props.selectedAppId || this.props.appsListOpen ?
-                        <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  /> :
-                        <TablesList key={"tables"} expanded={this.props.expanded} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables} {...this.props} /> }
-
-                </div>
+                <Loader loadedClassName="transitionGroup" loaded={!this.props.appsLoading} options={SpinnerConfigurations.LEFT_NAV_BAR}>
+                    {this.renderNavContent()}
+                </Loader>
 
                 {this.props.globalActions}
             </Swipeable>

@@ -37,6 +37,7 @@
         var FIELDS_ENDPOINT = '/fields/';
         var FORMS_ENDPOINT = '/forms/';
         var REPORTS_ENDPOINT = '/reports/';
+        var REPORTS_RESULTS_ENDPOINT = '/results';
         var RECORDS_ENDPOINT = '/records/';
         var REALMS_ENDPOINT = '/realms/';
         var USERS_ENDPOINT = '/users/';
@@ -170,7 +171,7 @@
             resolveReportsEndpoint      : function(appId, tableId, reportId) {
                 var reportEndpoint = NODE_BASE_ENDPOINT + APPS_ENDPOINT + appId + TABLES_ENDPOINT + tableId + REPORTS_ENDPOINT;
                 if (reportId) {
-                    reportEndpoint = reportEndpoint + reportId;
+                    reportEndpoint = reportEndpoint + reportId + REPORTS_RESULTS_ENDPOINT;
                 }
                 return reportEndpoint;
             },

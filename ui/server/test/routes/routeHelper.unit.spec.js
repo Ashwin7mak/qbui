@@ -259,21 +259,38 @@ describe('Validate RouteHelper unit tests', function() {
         });
     });
 
-    describe('validate isReportComponentRoute method', function() {
+    describe('validate dynamic getReportsResultsRoute method', function() {
         var testCases = [
-            {name: 'test empty url', url: '', expectation: false},
-            {name: 'test null url', url: null, expectation: false},
-            {name: 'test invalid url', url: '/non/parsing/url', expectation: false},
-            {name: 'test valid url - mixed case no leading slash', url: 'apps/123/tables/456/Reports/789/ReportComponents', expectation: true},
-            {name: 'test valid url - mixed case with domain', url: 'https://somedomain/apps/123/tables/456/Reports/789/ReportComponents', expectation: true},
-            {name: 'test valid url - mixed case', url: '/apps/123/tables/456/reports/789/ReportComponents', expectation: true},
-            {name: 'test valid url - lower case', url: '/apps/123/tables/456/reports/789/reportcomponents', expectation: true},
-            {name: 'test valid url - upper case', url: '/apps/123/tables/456/reports/789/REPORTCOMPONENTS', expectation: true}
+            {name: 'test empty url', url: '', expectation: ''},
+            {name: 'test null url', url: null, expectation: null},
+            {name: 'test invalid url', url: '/non/parsing/url', expectation: '/non/parsing/url'},
+            {name: 'test invalid url - no table id', url: '/apps/123/tables', expectation: '/apps/123/tables'},
+            {name: 'test valid url', url: '/apps/123/tables/456', expectation: '/apps/123/tables/456/reports/invoke'}
         ];
 
         testCases.forEach(function(testCase) {
             it('Test case: ' + testCase.name, function(done) {
-                assert.equal(routeHelper.isReportComponentRoute(testCase.url), testCase.expectation);
+                assert.equal(routeHelper.getDynamicReportsResultsRoute(testCase.url, testCase.id), testCase.expectation);
+                done();
+            });
+        });
+    });
+
+    describe('validate isReportResultsRoute method', function() {
+        var testCases = [
+            {name: 'test empty url', url: '', expectation: false},
+            {name: 'test null url', url: null, expectation: false},
+            {name: 'test invalid url', url: '/non/parsing/url', expectation: false},
+            {name: 'test valid url - mixed case no leading slash', url: 'apps/123/tables/456/Reports/789/results', expectation: true},
+            {name: 'test valid url - mixed case with domain', url: 'https://somedomain/apps/123/tables/456/Reports/789/results', expectation: true},
+            {name: 'test valid url - mixed case', url: '/apps/123/tables/456/reports/789/results', expectation: true},
+            {name: 'test valid url - lower case', url: '/apps/123/tables/456/reports/789/Results', expectation: true},
+            {name: 'test valid url - upper case', url: '/apps/123/tables/456/reports/789/RESULTS', expectation: true}
+        ];
+
+        testCases.forEach(function(testCase) {
+            it('Test case: ' + testCase.name, function(done) {
+                assert.equal(routeHelper.isReportResultsRoute(testCase.url), testCase.expectation);
                 done();
             });
         });
