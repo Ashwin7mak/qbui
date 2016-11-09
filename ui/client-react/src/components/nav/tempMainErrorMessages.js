@@ -56,7 +56,7 @@ const TempMainErrorMessage = React.createClass({
      */
     renderAppNotFoundMessage() {
         let {apps, appsLoading, selectedAppId} = this.props;
-        let show = (!appsLoading && apps && apps.length > 0 && !AppUtils.appExists(selectedAppId, apps));
+        let show = (!appsLoading && apps && apps.length > 0 && selectedAppId && !AppUtils.appExists(selectedAppId, apps));
 
         return (
             <AlertBanner show={show} showCreateInQuickBaseClassicLink={true} selectedAppId={selectedAppId}>

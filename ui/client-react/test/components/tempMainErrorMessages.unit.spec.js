@@ -64,6 +64,14 @@ describe('TempMainErrorMessages', () => {
             expectMessagesToBeHidden: [noAppsErrorMessageId, appNotFoundErrorMessageId, noTablesErrorMessageId]
         },
         {
+            description: 'does not display an "App Not Found" error message if there is not a currently selected app',
+            apps: testApps,
+            appsLoading: false,
+            selectedAppId: null,
+            expectMessagesToBeDisplayed: [],
+            expectMessagesToBeHidden: [noAppsErrorMessageId, appNotFoundErrorMessageId, noTablesErrorMessageId]
+        },
+        {
             description: 'displays an error message if there are no tables in the currently selected app',
             apps: testApps,
             appsLoading: false,
