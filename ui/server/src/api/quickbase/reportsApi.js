@@ -9,6 +9,7 @@
     let Promise = require('bluebird');
     let log = require('../../logger').getLogger();
     let perfLogger = require('../../perfLogger');
+    let lodash = require('lodash');
 
     /* See comment in recordsApi.js */
     let jsonBigNum = require('json-bignum');
@@ -35,6 +36,12 @@
         let GROUPS = 'groups';
         let FILTERED_RECORDS_COUNT = 'filteredCount';
 
+        /**
+         * Take a sort list request parameter and convert in to list of sort list objects
+         *
+         * @param sortList
+         * @returns {Array}
+         */
         function getSortListAsObject(sortList) {
             let sortListParts = sortList.split(constants.REQUEST_PARAMETER.LIST_DELIMITER);
             let sListObj = [];
@@ -64,6 +71,12 @@
             return fieldsApi.removeUnusedFields(record, fields);
         }
 
+        /**
+         * Take a list of sort list objects and parse into string that can be used as a request parameter
+         *
+         * @param sortList
+         * @returns {string}
+         */
         function parseSortList(sortList) {
             let sList = '';
             if (Array.isArray(sortList)) {
@@ -86,6 +99,24 @@
                 }
             }
             return sList;
+        }
+
+        /**
+         * Return a query expression sourced from the reportMetaData and supplied query expression
+         *
+         * @param reportMetaData
+         * @param query
+         * @returns {*}
+         */
+        function getQueryExpression(reportMetaData, query) {
+            if (reportMetaData && reportMetaData.query && reportMetaData.query.length > 0) {
+                if (query && query.length > 0) {
+                    return '((' + reportMetaData.query + ')' + constants.QUERY_AND + query + ')';
+                } else {
+                    return reportMetaData.query;
+                }
+            }
+            return query || null;
         }
 
         let reportsApi = {
@@ -188,20 +219,44 @@
             fetchReportCount: function(req, reportId) {
                 //  if there is a query parameter (ie: filter), need to query for the count using
                 //  the records endpoint; otherwise can use the reports endpoint to get the count.
+                //  TODO: this is temporary and go away once report summary is implemented as it
+                //  TODO: is expected to include report record counts.
                 let query = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
                 if (query !== null) {
                     return new Promise((resolve, reject) => {
-                        recordsApi.fetchCountForRecords(req).then(
-                            (response) => {
-                                resolve(response);
+                        //  Need to fetch the report meta data to determine if there is a query
+                        //  parameter defined for the report.
+                        this.fetchReportMetaData(req, reportId).then(
+                            (metaDataResult) => {
+                                //  make a copy cause we could be altering if meta data query is defined
+                                let req2 = lodash.clone(req);
+
+                                //  check for existing query expression defined on the report meta data
+                                let reportMetaData = JSON.parse(metaDataResult.body);
+                                if (reportMetaData && reportMetaData.query) {
+                                    query = getQueryExpression(reportMetaData, query);
+
+                                    //  remove the current query request parameter and update with the new expression
+                                    requestHelper.removeRequestParameter(req2, constants.REQUEST_PARAMETER.QUERY);
+                                    requestHelper.addQueryParameter(req2, constants.REQUEST_PARAMETER.QUERY, query);
+                                }
+
+                                recordsApi.fetchCountForRecords(req2).then(
+                                    (response) => {
+                                        resolve(response);
+                                    },
+                                    (error) => {
+                                        reject(error);
+                                    }
+                                ).catch((ex) => {
+                                    requestHelper.logUnexpectedError('reportsAPI..fetchRecordsCount', ex, true);
+                                    reject(ex);
+                                });
                             },
-                            (error) => {
-                                reject(error);
+                            (metaError) => {
+                                reject(metaError);
                             }
-                        ).catch((ex) => {
-                            requestHelper.logUnexpectedError('reportsAPI..fetchRecordsCount', ex, true);
-                            reject(ex);
-                        });
+                        );
                     });
                 } else {
                     return this.fetchReportRecordsCount(req, reportId);
@@ -341,11 +396,9 @@
                                     }
                                 }
 
-                                //  override the default report meta data setting for query parameter
+                                //  Supplement the default report meta data setting(if any) with any client query(if any)
                                 let query = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
-                                if (query !== null) {
-                                    reportMetaData.query = query;
-                                }
+                                reportMetaData.query = getQueryExpression(reportMetaData, query);
 
                                 //  override the default report meta data column fid list
                                 let columnFids = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.COLUMNS);

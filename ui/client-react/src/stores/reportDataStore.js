@@ -224,7 +224,7 @@ let reportModel = {
      * @returns {number|*}
      */
     findRecordIndexById(records, recId) {
-        return _.findIndex(records, rec => rec[this.model.keyField.name].value === recId);
+        return ReportUtils.findRecordIndex(records, recId, this.model.keyField.name);
     },
 
     findARecord(recId) {
@@ -250,8 +250,16 @@ let reportModel = {
      * @param changes - the changes to make to the record form is [{id: fieldid, display: dispVal, value: raw, fieldName: name}, ...]
      */
     updateARecord(oldRecId, newRecId, changes) {
-        let record = this.findARecord(oldRecId);
-        let filtRecord = this.findAFilteredRecord(oldRecId);
+        let record = null;
+        let filtRecord = null;
+
+        if (this.model.hasGrouping) {
+            record = ReportUtils.findGroupedRecord(this.model.records, oldRecId, this.model.keyField.name);
+            filtRecord = ReportUtils.findGroupedRecord(this.model.filteredRecords, oldRecId, this.model.keyField.name);
+        } else {
+            record = this.findARecord(oldRecId);
+            filtRecord = this.findAFilteredRecord(oldRecId);
+        }
 
         // update with new recid
         if (newRecId !== null) {
@@ -443,19 +451,37 @@ let reportModel = {
     deleteRecordsFromLists(recId) {
         var recordValueToMatch = {};
         recordValueToMatch[SchemaConsts.DEFAULT_RECORD_KEY] = {value: recId};
-        var index = _.findIndex(this.model.filteredRecords, recordValueToMatch);
-        if (index !== -1) {
-            this.model.filteredRecords.splice(index, 1);
-            this.model.recordsCount--;
+        const newFilteredRecords = this.model.filteredRecords ? this.model.filteredRecords.slice(0) : null;
+        const newRecords = this.model.records ? this.model.records.slice(0) : null;
+        let recordDeleted = false;
+        let filteredRecordDeleted = false;
+        if (this.model.hasGrouping) {
+            filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, this.model.keyField.name);
+            recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, this.model.keyField.name);
         } else {
-            logger.error(`the record to delete does not exist in the filteredRecords list. value: ${recId} index: ${index}`);
+            //find record
+            let filteredRecordIndex = this.findRecordIndexById(newFilteredRecords, recId);
+            //remove it
+            if (filteredRecordIndex !== -1) {
+                filteredRecordDeleted = true;
+                newFilteredRecords.splice(filteredRecordIndex, 1);
+            }
+
+            //find record
+            let recordIndex = this.findRecordIndexById(newRecords, recId);
+            //remove it
+            if (recordIndex !== -1) {
+                recordDeleted = true;
+                newRecords.splice(recordIndex, 1);
+            }
         }
-        index = _.findIndex(this.model.records, recordValueToMatch);
-        if (index !== -1) {
-            this.model.records.splice(index, 1);
-            this.model.recordsCount--;
-        } else {
-            logger.error(`the record to delete does not exist in the filteredRecords list. value: ${recId} index: ${index}`);
+        if (filteredRecordDeleted) {
+            this.model.filteredRecords = newFilteredRecords;
+            this.model.filteredRecordsCount--;
+        }
+        if (recordDeleted) {
+            this.model.records = newRecords;
+            this.model.recordsCount--; //pagination uses this one.
         }
     }
 };
@@ -466,8 +492,9 @@ let ReportDataStore = Fluxxor.createStore({
     initialize() {
         this.reportModel = reportModel;
         this.loading = false;
-        this.editingIndex = null;
-        this.editingId = null;
+        //set these to undefined to differentiate from null value. TODO this needs to be cleaned up in M6
+        this.editingIndex = undefined;
+        this.editingId = undefined;
         this.error = false;
         this.nonFacetClicksEnabled = true;
         this.searchStringForFiltering = '';
@@ -538,8 +565,8 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadReport(report) {
         this.loading = true;
-        this.editingIndex = null;
-        this.editingId = null;
+        this.editingIndex = undefined;
+        this.editingId = undefined;
 
         this.appId = report.appId;
         this.tblId = report.tblId;
@@ -557,8 +584,8 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadReportFailed(error) {
         this.loading = false;
-        this.editingIndex = null;
-        this.editingId = null;
+        this.editingIndex = undefined;
+        this.editingId = undefined;
 
         this.error = true;
         this.errorDetails = error;
@@ -568,8 +595,8 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadReportSuccess(response) {
         this.loading = false;
-        this.editingIndex = null;
-        this.editingId = null;
+        this.editingIndex = undefined;
+        this.editingId = undefined;
 
         this.error = false;
 
@@ -585,8 +612,8 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadRecords(payload) {
         this.loading = true;
-        this.editingIndex = null;
-        this.editingId = null;
+        this.editingIndex = undefined;
+        this.editingId = undefined;
 
         this.appId = payload.appId;
         this.tblId = payload.tblId;
@@ -613,8 +640,8 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadRecordsSuccess(response) {
         this.loading = false;
-        this.editingIndex = null;
-        this.editingId = null;
+        this.editingIndex = undefined;
+        this.editingId = undefined;
 
         this.reportModel.updateFilteredRecords(response.recordData);
         this.reportModel.setMetaData(response.metaData);
@@ -629,11 +656,10 @@ let ReportDataStore = Fluxxor.createStore({
 
     onLoadRecordsFailed(error) {
         this.loading = false;
-        this.editingIndex = null;
-        this.editingId = null;
+        this.editingIndex = undefined;
+        this.editingId = undefined;
 
         this.error = true;
-        this.errorDetails = error;
         this.emit('change');
     },
 
@@ -672,8 +698,14 @@ let ReportDataStore = Fluxxor.createStore({
             //find record to add after
 
             let afterRecIndex = -1;
-            if (afterRecId && afterRecId.value !== undefined) {
-                afterRecIndex = this.reportModel.findRecordIndexById(model.filteredRecords, afterRecId.value);
+
+            // If afterRecId is an object, get the id value
+            if (_.has(afterRecId, 'value')) {
+                afterRecId = afterRecId.value;
+            }
+
+            if (afterRecId) {
+                afterRecIndex = this.reportModel.findRecordIndexById(model.filteredRecords, afterRecId);
             }
 
             // use 1st record to create newRecord
@@ -701,8 +733,8 @@ let ReportDataStore = Fluxxor.createStore({
             const newFilteredRecords = model.filteredRecords.slice(0);
 
             //insert after the index
-            this.editingIndex = null;
-            this.editingId = null;
+            this.editingIndex = undefined;
+            this.editingId = undefined;
 
             // add to filtered records
             if (afterRecIndex !== -1) {
@@ -734,6 +766,92 @@ let ReportDataStore = Fluxxor.createStore({
         }
     },
     /**
+     * create a new record in the grouped structure
+     * If a valid recId is provided then make a copy of the corresponding record and also copy grouped field values.
+     * If afterRecId is -1 then no record initiated this action (example add from a form) - so find the first leaf node and make a copy.
+     * @param afterRecId
+     */
+    createNewGroupedRecord(afterRecId) {
+        const model = this.reportModel.get();
+
+        if (model.filteredRecords.length > 0) {
+            //find record to add after
+            let record = ReportUtils.findGroupedRecord(model.filteredRecords, afterRecId.value, this.reportModel.model.keyField.name);
+            if (afterRecId === -1) {
+                record = ReportUtils.findFirstGroupedRecord(model.filteredRecords, afterRecId.value, this.reportModel.model.keyField.name);
+            }
+
+            if (record === null) {
+                logger.error(`failed to find record that initiated new record call in the list: recId ${afterRecId}`);
+                return;
+            }
+            let groupFids = [];
+
+            if (afterRecId !== -1) {
+                groupFids = model.groupFields.map(field => {
+                    return field.field.id;
+                });
+            }
+
+            // use this record to create newRecord
+            const newRecord = _.mapValues(record, (obj) => {
+                //get the default value for the fid if any
+                let valueAnswer = null;
+                let theCorrespondingField = _.find(model.fields, (item) => item.id === obj.id);
+                //copy the group field values
+                let isGroupedFid = _.findIndex(groupFids, item => {
+                    return item === theCorrespondingField.id;
+                });
+                if (isGroupedFid !== -1) {
+                    let fieldValuesForRecord = _.find(record, (item) => item.id === theCorrespondingField.id);
+                    valueAnswer = {value: fieldValuesForRecord.value, id:obj.id};
+                } else if (theCorrespondingField && _.has(theCorrespondingField, 'defaultValue.coercedValue')) {
+                    //set the default values in the answer for each field
+                    valueAnswer = {value: theCorrespondingField.defaultValue.coercedValue.value, id: obj.id};
+                } else {
+                    //TBD : type specific values
+                    valueAnswer = {value: null, id: obj.id};
+                }
+                return valueAnswer;
+            });
+
+            //format the values in the new record
+            this.reportModel.formatRecordValues(newRecord);
+
+            // set id to unsaved
+            newRecord[model.keyField.name].value = SchemaConsts.UNSAVED_RECORD_ID;
+
+            //make a copy
+            const newFilteredRecords = model.filteredRecords.slice(0);
+            //const newRecords = model.records.slice(0);
+
+            //insert after the record (in the same group) -- update both record sets and update counts
+            let filteredRecordAdded = false;
+            let recordAdded = false;
+
+            if (afterRecId === -1) {
+                filteredRecordAdded = newFilteredRecords.unshift(newRecord);
+                recordAdded = filteredRecordAdded;
+            } else {
+                filteredRecordAdded = ReportUtils.addGroupedRecordAfterRecId(newFilteredRecords, afterRecId.value, this.reportModel.model.keyField.name, newRecord);
+                recordAdded = filteredRecordAdded;//Yes this is a hack - for some reason updating records array adds an extra row to aggrid - no idea why.
+            }
+
+            if (filteredRecordAdded) {
+                model.filteredRecords = newFilteredRecords;
+                model.filteredRecordsCount++;
+            }
+            if (recordAdded) {
+                //model.records = newRecords;
+                model.recordsCount++; //for pagination
+            }
+
+            //editing index for aggrid to open inline edit
+            this.editingIndex = SchemaConsts.UNSAVED_RECORD_ID;
+            this.editingId = SchemaConsts.UNSAVED_RECORD_ID;
+        }
+    },
+    /**
      * adds a new blank record to the list of records
      *
      * @param payload parameter contains
@@ -742,7 +860,14 @@ let ReportDataStore = Fluxxor.createStore({
      *
      */
     onAddReportRecord(payload) {
-        this.createNewRecord(payload.afterRecId);
+        if (this.editingIndex !== undefined || this.editingId !== undefined) {
+            this.onRecordEditCancel(payload);
+        }
+        if (this.reportModel.model.hasGrouping) {
+            this.createNewGroupedRecord(payload.afterRecId);
+        } else {
+            this.createNewRecord(payload.afterRecId);
+        }
         this.emit('change');
     },
 
@@ -809,7 +934,7 @@ let ReportDataStore = Fluxxor.createStore({
     onSaveRecordSuccess(payload) {
         // update the  record values
 
-        this.editingIndex = null;
+        this.editingIndex = undefined;
         this.reportModel.updateARecord(payload.recId, null, payload.changes);
         this.emit("change");
     },
@@ -821,17 +946,26 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onAddRecordSuccess(payload) {
         // update the  record values
-        this.editingIndex = null;
-        let record = this.reportModel.findARecord(payload.recId);
-        let filtRecord = this.reportModel.findAFilteredRecord(payload.recId);
-        if (record === undefined && filtRecord === undefined) {
-            // add record was called without creating an empty record probably from a trowser so create one here
-            this.createNewRecord();
+        this.editingIndex = undefined;
+        if (this.reportModel.model.hasGrouping) {
+            let record = ReportUtils.findGroupedRecord(this.reportModel.model.filteredRecords, SchemaConsts.UNSAVED_RECORD_ID, this.reportModel.model.keyField.name);
+            if (record === null) {
+                // add record was called without creating an empty record probably from a trowser so create one here
+                this.createNewGroupedRecord(-1);
+            }
+        } else {
+            let record = this.reportModel.findARecord(SchemaConsts.UNSAVED_RECORD_ID);
+            let filtRecord = this.reportModel.findAFilteredRecord(SchemaConsts.UNSAVED_RECORD_ID);
+            if (record === undefined && filtRecord === undefined) {
+                // add record was called without creating an empty record probably from a trowser so create one here
+                this.createNewRecord(payload.recId);
+            }
         }
         this.reportModel.updateARecord(SchemaConsts.UNSAVED_RECORD_ID, payload.recId, payload.record);
 
         this.emit("change");
     },
+
 
     /**
      * Cancels an record edit
@@ -843,28 +977,7 @@ let ReportDataStore = Fluxxor.createStore({
     onRecordEditCancel(payload) {
         //remove record if its new unsaved
         if (payload.recId && payload.recId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            const model = this.reportModel.get();
-            //make a copy
-            const newFilteredRecords = model.filteredRecords.slice(0);
-            //find record
-            let cancelledFRecordIndex = this.reportModel.findRecordIndexById(newFilteredRecords, SchemaConsts.UNSAVED_RECORD_ID);
-            //remove it
-            if (cancelledFRecordIndex !== -1) {
-                newFilteredRecords.splice(cancelledFRecordIndex, 1);
-                model.filteredRecords = newFilteredRecords;
-                model.filteredRecordsCount--;
-            }
-
-            //make a copy
-            const newRecords = model.records.slice(0);
-            //find record
-            let cancelledRecordIndex = this.reportModel.findRecordIndexById(newRecords, SchemaConsts.UNSAVED_RECORD_ID);
-            //remove it
-            if (cancelledRecordIndex !== -1) {
-                newRecords.splice(cancelledRecordIndex, 1);
-                model.records = newRecords;
-                model.recordsCount--;
-            }
+            this.reportModel.deleteRecordsFromLists(payload.recId.value);
         }
         this.onClearEdit();
     },
@@ -874,8 +987,8 @@ let ReportDataStore = Fluxxor.createStore({
      * the id and index of a record to render in inline edit id is cleared
      */
     onClearEdit() {
-        this.editingIndex = null;
-        this.editingId = null;
+        this.editingIndex = undefined;
+        this.editingId = undefined;
         this.emit("change");
     },
 

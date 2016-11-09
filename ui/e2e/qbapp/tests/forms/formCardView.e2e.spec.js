@@ -59,7 +59,7 @@
         it('Add a record from the form', function(done) {
             //TODO textField.Right now even phone no field says textField. So can't enter values and save record
             //TODO 'dateCell', 'timeCell' in small breakpoints dosent work typing in date and time.
-            var fieldTypeClassNames = ['textField', 'numericField', 'checkbox'];
+            var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
             //click on add record button
             reportCardViewPage.clickAddRecord();
             // Check that the add form container is displayed
@@ -111,7 +111,7 @@
         });
 
         it('Edit a record from the form and Verify Save And Next functionality', function(done) {
-            var fieldTypeClassNames = ['textField', 'numericField'];
+            var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell'];
             //Select record 1
             reportCardViewPage.clickRecord(4);
             reportCardViewPage.clickEditRecord();

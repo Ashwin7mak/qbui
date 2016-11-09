@@ -13,9 +13,12 @@ import {withRouter} from 'react-router';
 import _ from 'lodash';
 import "./nav.scss";
 import "react-notifications/lib/notifications.css";
+import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
+
+import AppQbModal from '../qbModal/appQbModal';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
 let StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -124,12 +127,10 @@ export let Nav = React.createClass({
             const flux = this.getFlux();
 
             if (editRec === UrlConsts.NEW_RECORD_VALUE) {
-
                 flux.actions.loadForm(appId, tblId, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
             } else {
-
                 flux.actions.loadFormAndRecord(appId, tblId, editRec, rptId, "edit", true).then(() => {
                     flux.actions.showTrowser(TrowserConsts.TROWSER_EDIT_RECORD);
                 });
@@ -140,7 +141,11 @@ export let Nav = React.createClass({
     componentDidUpdate(prevProps) {
 
         // component updated, update the record trowser content if necessary
-        this.updateRecordTrowser(prevProps.location.query.editRec);
+        // temporary solution to prevent UI getting in an endless loop state (MB-1369)
+        const {editFormErrorStatus, editFormLoading, errorStatus} = this.state.form;
+        if (!editFormLoading) {
+            this.updateRecordTrowser(prevProps.location.query.editRec);
+        }
     },
 
     render() {
@@ -158,6 +163,9 @@ export let Nav = React.createClass({
 
         return (<div className={classes}>
             <NotificationContainer/>
+            {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
+            <AppQbModal/>
+
             {this.props.params && this.props.params.appId &&
                 <RecordTrowser visible={this.state.nav.trowserOpen && this.state.nav.trowserContent === TrowserConsts.TROWSER_EDIT_RECORD}
                                router={this.props.router}
