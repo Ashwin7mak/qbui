@@ -59,7 +59,7 @@
                 {
                     message: 'all numeric fields',
                     fieldTypeClassNames: 'numericField',
-                    expectedErrorMessages: ['Numeric Field', 'Numeric Percent Field', 'Duration Field']
+                    expectedNumericErrorMessages: ['Numeric Field', 'Numeric Percent Field', 'Duration Field']
                 },
                 //TODO validate email, url and phone no fields. Right now we have bugs for these.
             ];
@@ -78,7 +78,7 @@
                     formsPage.clickSaveBtnWithName('Save');
 
                     //verify validation
-                    formsPage.verifyErrorMessages(testcase.expectedErrorMessages);
+                    formsPage.verifyErrorMessages(testcase.expectedNumericErrorMessages);
 
                     //verify clicking on alert button brings up the error message popup
                     formsPage.clickFormAlertBtn();

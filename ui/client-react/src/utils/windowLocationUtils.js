@@ -37,12 +37,20 @@ class WindowLocationUtils {
         window.location.href = url;
     }
 
+    /**
+     * Function to return the current href
+     * this exists for testability
+     */
     static getHref() {
         return window.location.href;
     }
 
-    static getSubdomain() {
-        return window.location.hostname.split(".")[0];
+    /**
+     * Function to return the current hostname
+     * this exists for testability
+     */
+    static getHostname() {
+        return window.location.hostname;
     }
 
     /**
