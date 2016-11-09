@@ -25,7 +25,7 @@ class FieldUtils {
     */
     static getUniqueIdentifierFieldNameFromFields(fields) {
         if (requiredFieldsArePresent(fields)) {
-            let uniqueIdentifierField = _.find(fields.fields.data, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+            let uniqueIdentifierField = _.find(fields.fields.data, {keyField: true});
             if (uniqueIdentifierField) {
                 return uniqueIdentifierField.name;
             } else {
