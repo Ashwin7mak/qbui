@@ -472,6 +472,12 @@ var DateTimeField = (function (_Component) {
       });
     };
 
+    /**
+     * NB: Custom change added to base library
+     * Handler for closing the datepicker when the Escape key is pressed. Do nothing if the
+     * datepicker is hidden.
+     * @param  {Event} event keydown event
+     */
     this.onEscape = function (event) {
         if (_this.state.showPicker) {
             event.stopPropagation();

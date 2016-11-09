@@ -130,14 +130,26 @@ var DateTimePickerDate = (function (_Component) {
       }
     };
 
+    /**
+     * NB: Custom change added to base library
+     * Listen to keydown events on capture phase.
+     */
     this.componentWillMount = function () {
         document.addEventListener("keydown", _this.onKeyDown, true);
     };
 
+    /**
+     * NB: Custom change added to base library
+     * Remove keydown event listener.
+     */
     this.componentWillUnmount = function () {
         document.removeEventListener("keydown", _this.onKeyDown, true);
     };
 
+    /**
+     * NB: Custom change added to base library
+     * Handler for Escape key used to hide the datepicker.
+     */
     this.onKeyDown = function (event) {
         // keyCode 27 : Escape key
         if (event.keyCode === 27 && _this.props.onEscape) {
