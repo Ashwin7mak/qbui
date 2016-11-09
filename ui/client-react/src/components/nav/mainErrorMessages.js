@@ -56,11 +56,13 @@ const MainErrorMessage = React.createClass({
 
         return (
             <AlertBanner show={show} showCreateInQuickBaseClassicLink={true} selectedAppId={selectedAppId}>
-                <I18nMessage message={I18nKeys.appNotFound('notFound')} />
-                <a href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>
-                    <I18nMessage message={I18nKeys.appNotFound('clickHere')} />
-                </a>
-                <I18nMessage message={I18nKeys.appNotFound('inQuickBaseClassic')} />
+                <span id="appNotFoundErrorMessage">
+                    <I18nMessage message={I18nKeys.appNotFound('notFound')} />
+                    <a href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>
+                        <I18nMessage message={I18nKeys.appNotFound('clickHere')} />
+                    </a>
+                    <I18nMessage message={I18nKeys.appNotFound('inQuickBaseClassic')} />
+                </span>
             </AlertBanner>
         );
     },
@@ -74,10 +76,12 @@ const MainErrorMessage = React.createClass({
 
         return (
             <AlertBanner show={show}>
-                <I18nMessage message={I18nKeys.noApps('noApps')} />
-                <I18nMessage message={I18nKeys.noApps('addAppsContact')} />
-                {this.renderSupportLink()}
-                <I18nMessage message={I18nKeys.noApps('addApps')} />
+                <span id="noAppsErrorMessage">
+                    <I18nMessage message={I18nKeys.noApps('noApps')} />
+                    <I18nMessage message={I18nKeys.noApps('addAppsContact')} />
+                    {this.renderSupportLink()}
+                    <I18nMessage message={I18nKeys.noApps('addApps')} />
+                </span>
             </AlertBanner>
         );
     },
@@ -91,11 +95,13 @@ const MainErrorMessage = React.createClass({
 
         return (
             <AlertBanner show={show}>
-                <I18nMessage message={I18nKeys.noTables('noTables')} />
-                <I18nMessage message={I18nKeys.noTables('createTablesInQuickBaseClassic')} />
-                <a href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>
-                    <I18nMessage message="quickBaseClassic"/>
-                </a>.
+                <span id="noTablesErrorMessage">
+                    <I18nMessage message={I18nKeys.noTables('noTables')} />
+                    <I18nMessage message={I18nKeys.noTables('createTablesInQuickBaseClassic')} />
+                    <a href={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}>
+                        <I18nMessage message="quickBaseClassic"/>
+                    </a>.
+                </span>
             </AlertBanner>
         );
     },

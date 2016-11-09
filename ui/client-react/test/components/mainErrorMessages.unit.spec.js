@@ -18,55 +18,66 @@ describe('MainErrorMessages', () => {
         {id: existingAppWithTables, tables: [1, 2, 3]}
     ];
 
+    let noAppsErrorMessageId = 'noAppsErrorMessage';
+    let appNotFoundErrorMessageId = 'appNotFoundErrorMessage';
+    let noTablesErrorMessageId = 'noTablesErrorMessage';
+
     let testCases = [
         {
             description: 'does not display messages if the apps are still loading',
             apps: [],
             appsLoading: true,
             selectedAppId: null,
-            expectation: ''
+            expectMessagesToBeDisplayed: [],
+            expectMessagesToBeHidden: [noAppsErrorMessageId, appNotFoundErrorMessageId, noTablesErrorMessageId]
         },
         {
             description: 'displays an error message if there are no apps',
             apps: [],
             appsLoading: false,
             selectedAppId: null,
-            expectation: 'There are no apps in Mercury. Contact betaprogram@quickbase.com to add apps.'
+            expectMessagesToBeDisplayed: [noAppsErrorMessageId],
+            expectMessagesToBeHidden: [appNotFoundErrorMessageId, noTablesErrorMessageId]
         },
         {
             description: 'does not display an error message if there are apps',
             apps: testApps,
             appsLoading: false,
             selectedAppId: existingAppWithTables,
-            expectation: ''
+            expectMessagesToBeDisplayed: [],
+            expectMessagesToBeHidden: [noAppsErrorMessageId, appNotFoundErrorMessageId, noTablesErrorMessageId]
         },
         {
             description: 'displays an error message if the currently selected app does not exist in Mercury',
             apps: testApps,
             appsLoading: false,
             selectedAppId: nonExistingApp,
-            expectation: 'The app is not available in Mercury right now. Open the app  in QuickBase Classic. '
+            expectMessagesToBeDisplayed: [appNotFoundErrorMessageId],
+            expectMessagesToBeHidden: [noAppsErrorMessageId, noTablesErrorMessageId]
         },
         {
             description: 'does not display an error message if the currently selected app exists in Mercury',
             apps: testApps,
             appsLoading: false,
             selectedAppId: existingAppWithTables,
-            expectation: ''
+            expectMessagesToBeDisplayed: [],
+            expectMessagesToBeHidden: [noAppsErrorMessageId, appNotFoundErrorMessageId, noTablesErrorMessageId]
         },
         {
             description: 'displays an error message if there are no tables in the currently selected app',
             apps: testApps,
             appsLoading: false,
             selectedAppId: existingApp,
-            expectation: 'There are no tables in the app. Create tables in QuickBase Classic.'
+            expectMessagesToBeDisplayed: [noTablesErrorMessageId],
+            expectMessagesToBeHidden: [noAppsErrorMessageId, appNotFoundErrorMessageId]
         },
         {
             description: 'does not display an error message if the currently selected app has tables',
             apps: testApps,
             appsLoading: false,
             selectedAppId: existingAppWithTables,
-            expectation: ''
+            expectMessagesToBeDisplayed: [],
+            expectMessagesToBeHidden: [noAppsErrorMessageId, appNotFoundErrorMessageId, noTablesErrorMessageId]
         }
     ];
 
@@ -78,7 +89,13 @@ describe('MainErrorMessages', () => {
 
             domComponent = ReactDOM.findDOMNode(component);
 
-            expect(domComponent.innerText).toEqual(testCase.expectation);
+            testCase.expectMessagesToBeDisplayed.forEach(message => {
+                expect(domComponent.querySelector(`#${message}`)).not.toBeNull();
+            });
+
+            testCase.expectMessagesToBeHidden.forEach(message => {
+                expect(domComponent.querySelector(`#${message}`)).toBeNull();
+            });
         });
     });
 });
