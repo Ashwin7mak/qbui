@@ -1,13 +1,12 @@
 import React from 'react';
 import {I18nMessage} from '../../utils/i18nMessage';
 import Locale from '../../locales/locales';
-import QBicon from '../qbIcon/qbIcon';
 import {NotificationManager} from 'react-notifications';
+import {SUPPORT_LINK} from '../../constants/urlConstants';
 
 import './appHomePage.scss';
 import './m5AppHomePage.scss';
 
-const supportEmail = 'betaprogram@quickbase.com';
 function i18nKey(subkey) {
     return `app.homepage.${subkey}`;
 }
@@ -70,8 +69,12 @@ const M5AppHomePage = React.createClass({
                                 <h4><I18nMessage message={i18nKey('helpTitle')} /></h4>
                                 <p><I18nMessage message={i18nKey('helpText')} /></p>
                                 <div className="supportEmail">
-                                    <QBicon icon="mail"/>
-                                    <p className="supportEmailText"><I18nMessage message={i18nKey('helpLinkPreText')} /> <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.</p>
+                                    <p className="supportEmailText">
+                                        <I18nMessage message={i18nKey('helpLinkPreText')} />
+                                        <a href={SUPPORT_LINK} target="_blank">
+                                            <I18nMessage message={i18nKey('helpLinkText')} />
+                                        </a>.
+                                    </p>
                                 </div>
                             </div>
                         </div>

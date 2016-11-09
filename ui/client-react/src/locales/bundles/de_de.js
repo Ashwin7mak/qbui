@@ -24,7 +24,8 @@ export default {
                 tipText: "Dies ist in Arbeit, so dass, wenn Sie auf eine Schaltfläche klicken und es macht nichts, keine Sorgen. Wir arbeiten noch an dieser Funktion.",
                 helpTitle: "Brauche Hilfe?",
                 helpText: "Wir wollen, dass Sie erfolgreich sind; Deshalb sind wir immer hier, um zu helfen.",
-                helpLinkPreText: "Bitte kontaktieren Sie uns unter",
+                helpLinkPreText: "Bitte ",
+                helpLinkText: "wenden Sie sich an unser Care-Team",
                 missingWalkMe: "Tutorial ist nicht verfügbar"
             }
         },
