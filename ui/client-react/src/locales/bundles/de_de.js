@@ -336,8 +336,7 @@ export default {
                 clickHere: "Öffnen Sie die App"
             },
             noApps: {
-                noApps: "Es gibt keine Apps in Mercury.",
-                addAppsContact: " Kontakt ",
+                noApps: "Es gibt keine Apps in Mercury. ",
                 addApps: " hinzuzufügen Apps."
             },
             errorLoadingReport: {
@@ -353,6 +352,9 @@ export default {
             noTables: {
                 noTables: "Es gibt keine Tabellen. ",
                 createTablesInQuickBaseClassic: "Erstellen von Tabellen in "
+            },
+            supportLink: {
+                text: "Wenden Sie sich an unser Care-Team"
             }
         },
         invalidMsg : {
