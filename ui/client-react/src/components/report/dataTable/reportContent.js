@@ -1,5 +1,7 @@
 import React from "react";
 import ReactIntl from "react-intl";
+import {NotificationManager} from 'react-notifications';
+import Locale from '../../../locales/locales';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
@@ -145,38 +147,45 @@ export let ReportContent = React.createClass({
      * @param recId
      */
     handleEditRecordStart(recId) {
-        const flux = this.getFlux();
-        let origRec = null;
-        let changes = {};
+        if (_.has(this.props, 'reportData.data')) {
+            const flux = this.getFlux();
+            let origRec = null;
+            let changes = {};
 
-        if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
-            origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
-        } else {
-            //add each non null value as to the new record as a change
-            let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
-                return rec[this.props.uniqueIdentifier].value === recId;
-            });
-            if (newRec) {
-                changes = {};
-                // loop thru the values in the new rec add any non nulls to change set
-                // so it will be treated as dirty/not saved
-                Object.keys(newRec).forEach((key) => {
-                    let field = newRec[key];
-                    let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;
-                    if (fieldDef && !fieldDef.builtIn) {
-                        let change = {
-                            //the + before field.id is needed turn the field id from string into a number
-                            oldVal: {value: undefined, id: +field.id},
-                            newVal: {value: field.value},
-                            fieldName: key,
-                            fieldDef : fieldDef
-                        };
-                        changes[field.id] = change;
-                    }
-                });
+            if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
+                origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
+            } else {
+                //add each non null value as to the new record as a change
+                let newRec = null;
+                if (this.props.reportData.data.hasGrouping) {
+                    newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.uniqueIdentifier);
+                } else {
+                    newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
+                        return rec[this.props.uniqueIdentifier].value === recId;
+                    });
+                }
+                if (newRec) {
+                    changes = {};
+                    // loop thru the values in the new rec add any non nulls to change set
+                    // so it will be treated as dirty/not saved
+                    Object.keys(newRec).forEach((key) => {
+                        let field = newRec[key];
+                        let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;
+                        if (fieldDef && !fieldDef.builtIn) {
+                            let change = {
+                                //the + before field.id is needed turn the field id from string into a number
+                                oldVal: {value: undefined, id: +field.id},
+                                newVal: {value: field.value},
+                                fieldName: key,
+                                fieldDef: fieldDef
+                            };
+                            changes[field.id] = change;
+                        }
+                    });
+                }
             }
+            flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
         }
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
     },
 
     /**
@@ -202,31 +211,55 @@ export let ReportContent = React.createClass({
     },
 
     /**
-     *  When inline edit mode and user wants to add a new record
+     *  When inline edit mode and user wants to add a new record and they are not currently trying to save or add a new record
      *  if there are pending edits or this record is not yet saved
-     *  try save instead of adding new one
-     *  otherwise if there are no unsaved changes add a blank new unsaved record after the
-     *  record specified
+     *  try save first before adding a new record
+     *  if there are no unsaved changes or changes save successfully
+     *  add a blank new unsaved record after the record specified
      * @param afterRecId
      */
     handleRecordNewBlank(afterRecId) {
         const flux = this.getFlux();
+
+        // Don't allow a user to add multiple records in rapid success (i.e., clicking "Save and add new" multiple times rapidly)
+        if (this.props.pendEdits.saving) {
+            return;
+        }
+
         // if there are pending edits or this record is not saved
         // try save instead of adding new one
         if (this.props.pendEdits.isPendingEdit || afterRecId.value === SchemaConsts.UNSAVED_RECORD_ID) {
-            this.handleRecordSaveClicked(afterRecId);
+            let saveRecordPromise = this.handleRecordSaveClicked(afterRecId, true);
+
+            // After saving the record successfully, then add the new row
+            // Don't do anything if the record wasn't saved successfully or a promise was not returned
+            if (saveRecordPromise) {
+                saveRecordPromise.then(this.addNewRowAfterRecordSaveSuccess);
+            }
         } else {
             flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
         }
         return null;
     },
 
+    addNewRowAfterRecordSaveSuccess(afterRecId) {
+        const flux = this.getFlux();
+        let newBlankReportPromise = flux.actions.newBlankReportRecord(this.props.appId, this.props.tblId, afterRecId);
+
+        // The promise is saved to a variable and called separately for testing purposes
+        // Jasmine spys do not recognize that the flux.actions.newBlankReportRecord has been called if this is chained
+        newBlankReportPromise.then(() => {
+            // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
+            // due to the speed of re-rendering
+            NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+        });
+    },
 
     /**
      * User wants to save changes to a record.
      * @param id
      */
-    handleRecordSaveClicked(id) {
+    handleRecordSaveClicked(id, addNewRecord = false) {
         //signal record save action, server will validate and if ok update an existing records with changed values
         // or add a new record
         if (id.value === SchemaConsts.UNSAVED_RECORD_ID) {
@@ -234,9 +267,9 @@ export let ReportContent = React.createClass({
             if (this.props.pendEdits.recordChanges) {
                 recordChanges = _.cloneDeep(this.props.pendEdits.recordChanges);
             }
-            this.handleRecordAdd(recordChanges);
+            return this.handleRecordAdd(recordChanges, addNewRecord);
         } else {
-            this.handleRecordChange(id);
+            return this.handleRecordChange(id, addNewRecord);
         }
     },
 
@@ -255,27 +288,29 @@ export let ReportContent = React.createClass({
     /**
      * Save a new record
      * @param recordChanges
+     * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      * @returns {Array} of field values for the new record
      */
-    handleRecordAdd(recordChanges) {
+    handleRecordAdd(recordChanges, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
 
         let fields = {};
         if (_.has(this.props, 'fields.fields.data')) {
             fields = this.props.fields.fields.data;
         }
-        flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, addNewRecordAfterSave);
     },
 
     /**
      * Save changes to an existing record
      * @param recId
+     * @param addNewRecordAfterSave flag for indicating whether a new record will be added following a successful save.
      */
-    handleRecordChange(recId) {
+    handleRecordChange(recId, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
         if (_.has(this.props, 'fields.fields.data')) {
             flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-            flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data);
+            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, addNewRecordAfterSave);
         }
     },
 
@@ -382,7 +417,7 @@ export let ReportContent = React.createClass({
 
                 //  Recursive call get to the last grouping field, and then update the grouping
                 //  labels as we work our way back to the top of the stack.
-                if (lvl < groupFields.length - 1) {
+                if (lvl < groupFields.length - 1 && groupDataRecords[group].children) {
                     this.localizeGroupingHeaders(groupFields, groupDataRecords[group].children, lvl + 1);
                 }
 
@@ -396,6 +431,9 @@ export let ReportContent = React.createClass({
                     //  that have already been localized.
                     groupData.localized = true;
 
+                    if (groupData.group === undefined) {
+                        continue;
+                    }
                     //  If no grouping header, use the empty label
                     if (groupData.group === null || groupData.group === '') {
                         groupData.group = Locales.getMessage('groupHeader.empty');

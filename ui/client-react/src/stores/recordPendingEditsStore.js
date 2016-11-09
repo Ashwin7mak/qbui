@@ -58,6 +58,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
+        this.saving = false;
     },
 
     /**
@@ -195,6 +196,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingRecordId = payload.recId;
         let changes = payload.changes;
         logger.debug('saving changes: ' + JSON.stringify(payload));
+        this.saving = true;
+        this.emit('change');
     },
 
     /**
@@ -216,6 +219,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
+        this.saving = false;
         this.emit('change');
 
     },
@@ -258,6 +262,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.handleErrors(payload);
         this.recordEditOpen = true;
+        this.saving = false;
         this.emit('change');
     },
 
@@ -271,7 +276,9 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = null;
         this.recordChanges = payload.changes;
+        this.saving = true;
         logger.debug('saving added record: ' + JSON.stringify(payload));
+        this.emit('change');
     },
 
     /**
@@ -303,8 +310,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
+        this.saving = false;
         this.emit('change');
-
     },
 
     /**
@@ -322,8 +329,9 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         if (typeof (this.commitChanges[entry]) !== 'undefined') {
             this.commitChanges[entry].status = actions.ADD_RECORD_FAILED;
         }
-        this.handleErrors(payload);
 
+        this.handleErrors(payload);
+        this.saving = false;
         this.emit('change');
     },
 
@@ -363,7 +371,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             commitChanges : this.commitChanges,
             editErrors: this.editErrors,
             showDTSErrorModal: this.showDTSErrorModal,
-            dtsErrorModalTID: this.dtsErrorModalTID
+            dtsErrorModalTID: this.dtsErrorModalTID,
+            saving: this.saving
         };
     },
 });
