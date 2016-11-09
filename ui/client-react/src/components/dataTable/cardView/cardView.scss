@@ -1,3 +1,4 @@
+
 @import '../../../../src/assets/css/qbVariables';
 @import '../../../../src/assets/css/_customVariables';
 
@@ -57,10 +58,6 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
         -webkit-transition: .35s;
         transition: .25s;
         transition-timing-function: ease;
-        .fieldValue, .fieldLabel {
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
     }
     .fieldRow.expanded {
         max-height: 1024px;
@@ -101,7 +98,8 @@ $custom-row-card-horizontal-padding: $custom-row-card-padding-left + $custom-row
         .fieldValue, .fieldLabel {
             display: block;
             overflow: hidden;
-            word-wrap: break-word;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     }
     .card-expander {
