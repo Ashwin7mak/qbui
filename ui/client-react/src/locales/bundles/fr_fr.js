@@ -34,6 +34,12 @@ export default {
             modalDoNotSaveButton: "Ne pas enregistrer",
             modalSaveButton: "Sauvegarder"
         },
+        dtsErrorModal: {
+            dtsErrorTitle: "Désolé d'interrompre votre travail",
+            dtsErrorBodyMessage: "Mercury ne peut pas continuer à exécuter votre application aujourd'hui, mais reprendra demain. \ N Votre application est toujours disponible dans QuickBase Classic.",
+            dtsErrorTID: "Identifiant de transaction:",
+            dtsErrorPrimaryButtonText: "Ouvrez mon application en Classique"
+        },
         reports : {
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
             emailSubject: "'{reportName}' rapport depuis l'application QuickBase '{appName}'",

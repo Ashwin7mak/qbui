@@ -1,6 +1,7 @@
 import React from 'react';
 import QBModal from '../qbModal/qbModal';
 import UrlUtils from '../../utils/urlUtils';
+import {I18nMessage} from '../../../src/utils/i18nMessage';
 
 const DTSErrorModal = React.createClass({
     ///There will be no state
@@ -33,3 +34,5 @@ const DTSErrorModal = React.createClass({
 });
 
 export default DTSErrorModal;
+
+// <I18nMessage message={'footer.copyright'} />
