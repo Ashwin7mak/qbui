@@ -307,8 +307,9 @@ $errorMessage-header-background: $color-red-700;
 $errorMessage-content-background: $color-black-100;
 $errorMessage-content-text-color: $color-blue-600;
 $errorMessage-header-text-color: $color-black-100;
+//CRUD Related error
+$error-color: $color-red-700;
 
 // QBModal
-$modal-icon-color: $color-orange-200;
+$modal-icon-color: $color-orange-500;
 $default-text-onlight-color: $color-black-700;
-$error-color: $color-red-700;

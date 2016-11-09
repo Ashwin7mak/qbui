@@ -13,13 +13,13 @@ const DTSErrorModal = React.createClass({
         selectedAppId: React.PropTypes.string
     },
     render() {
-        const title = "Sorry to interrupt your work";
-        const errorMessage = <p>
-            Mercury can’t continue running your app today, but will resume tomorrow.
-            Your app is still available in QuickBase Classic.
-            <br/> <br/>
-            Transaction ID: {this.props.tid}</p>;
-        const primaryButtonName = "Open my app in Classic";
+        const title = <I18nMessage message={'dtsErrorModal.dtsErrorTitle'} />;
+        const errorMessage = <div> <I18nMessage message={'dtsErrorModal.dtsErrorBodyMessage'} /> <br/>
+                            <I18nMessage message={'dtsErrorModal.dtsErrorSecondErrorBodyMessage'} />
+                            <br /><br />
+                            <I18nMessage message={'dtsErrorModal.dtsErrorTID'} /><p>{this.props.tid}</p>
+                            </div>;
+        const primaryButtonName = <I18nMessage message={'dtsErrorModal.dtsErrorPrimaryButtonText'} />;
         return (
             <QBModal
                 show={this.props.show}
@@ -34,5 +34,3 @@ const DTSErrorModal = React.createClass({
 });
 
 export default DTSErrorModal;
-
-// <I18nMessage message={'footer.copyright'} />

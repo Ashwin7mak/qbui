@@ -39,7 +39,8 @@ export default {
         },
         dtsErrorModal: {
             dtsErrorTitle: "Sorry to interrupt your work",
-            dtsErrorBodyMessage: "Mercury can’t continue running your app today, but will resume tomorrow. \n Your app is still available in QuickBase Classic.",
+            dtsErrorBodyMessage: "Mercury can’t continue running your app today, but will resume tomorrow.",
+            dtsErrorSecondErrorBodyMessage: "Your app is still available in QuickBase Classic.",
             dtsErrorTID: "Transaction ID:",
             dtsErrorPrimaryButtonText: "Open my app in Classic"
         },

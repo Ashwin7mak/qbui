@@ -36,7 +36,8 @@ export default {
         },
         dtsErrorModal: {
             dtsErrorTitle: "Es tut uns Leid, Ihre Arbeit zu unterbrechen",
-            dtsErrorBodyMessage: "Quecksilber kann nicht fortgesetzt werden Ihre App heute läuft, aber es wird morgen fortgesetzt. \n Ihre Anwendung ist in Quickbase-Klassiker noch zur Verfügung.",
+            dtsErrorBodyMessage: "Quecksilber kann nicht fortgesetzt werden Ihre App heute läuft, aber es wird morgen fortgesetzt.",
+            dtsErrorSecondErrorBodyMessage: "Ihre Anwendung ist in Quickbase-Klassiker noch zur Verfügung.",
             dtsErrorTID: "Transaktions-ID:",
             dtsErrorPrimaryButtonText: "Öffne meine app in der klassischen"
         },
