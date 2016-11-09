@@ -472,6 +472,13 @@ var DateTimeField = (function (_Component) {
       });
     };
 
+    this.onEscape = function (event) {
+        if (_this.state.showPicker) {
+            event.stopPropagation();
+            _this.closePicker();
+        }
+    };
+
     this.size = function () {
       switch (_this.props.size) {
         case _ConstantsJs2["default"].SIZE_SMALL:
@@ -513,6 +520,7 @@ var DateTimeField = (function (_Component) {
           addMinute: this.addMinute,
           addMonth: this.addMonth,
           addYear: this.addYear,
+          onEscape: this.onEscape,
           daysOfWeekDisabled: this.props.daysOfWeekDisabled,
           maxDate: this.props.maxDate,
           minDate: this.props.minDate,

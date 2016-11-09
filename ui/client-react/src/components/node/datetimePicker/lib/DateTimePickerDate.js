@@ -53,7 +53,8 @@ var DateTimePickerDate = (function (_Component) {
       addDecade: _react.PropTypes.func.isRequired,
       subtractDecade: _react.PropTypes.func.isRequired,
       minDate: _react.PropTypes.object,
-      maxDate: _react.PropTypes.object
+      maxDate: _react.PropTypes.object,
+      onEscape: _react.PropTypes.func
     },
     enumerable: true
   }]);
@@ -127,6 +128,21 @@ var DateTimePickerDate = (function (_Component) {
       } else {
         return null;
       }
+    };
+
+    this.componentWillMount = function () {
+        document.addEventListener("keydown", _this.onKeyDown, true);
+    };
+
+    this.componentWillUnmount = function () {
+        document.removeEventListener("keydown", _this.onKeyDown, true);
+    };
+
+    this.onKeyDown = function (event) {
+        // keyCode 27 : Escape key
+        if (event.keyCode === 27 && _this.props.onEscape) {
+            _this.props.onEscape(event);
+        }
     };
 
     this.renderYears = function () {

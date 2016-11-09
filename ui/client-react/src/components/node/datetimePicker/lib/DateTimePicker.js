@@ -53,6 +53,7 @@ var DateTimePicker = (function (_Component) {
             addDecade: _this.props.addDecade,
             addMonth: _this.props.addMonth,
             addYear: _this.props.addYear,
+            onEscape: _this.props.onEscape,
             daysOfWeekDisabled: _this.props.daysOfWeekDisabled,
             maxDate: _this.props.maxDate,
             minDate: _this.props.minDate,
@@ -151,7 +152,8 @@ var DateTimePicker = (function (_Component) {
       widgetStyle: _react.PropTypes.object,
       togglePicker: _react.PropTypes.func,
       setSelectedHour: _react.PropTypes.func,
-      setSelectedMinute: _react.PropTypes.func
+      setSelectedMinute: _react.PropTypes.func,
+      onEscape: _react.PropTypes.func
     },
     enumerable: true
   }]);

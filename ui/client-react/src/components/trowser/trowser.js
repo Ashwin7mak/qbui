@@ -52,11 +52,11 @@ let Trowser = React.createClass({
         }
     },
     componentWillMount() {
-        window.addEventListener("keydown", this.handleKey, false);
+        document.addEventListener("keydown", this.handleKey, false);
     },
 
     componentWillUnmount() {
-        window.removeEventListener("keydown", this.handleKey, false);
+        document.removeEventListener("keydown", this.handleKey, false);
     },
     /**
      *
