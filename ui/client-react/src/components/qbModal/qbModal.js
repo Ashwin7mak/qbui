@@ -14,6 +14,10 @@ const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_
 const QBModal = React.createClass({
     propTypes: {
         /**
+         * Pass in a unique className, to make the qbModals easier to uniquely style and to test
+         * */
+        uniqueClassName: React.PropTypes.string,
+        /**
          * This boolean sets whether or not the modal should be shown
          */
         show: React.PropTypes.bool,
@@ -185,9 +189,15 @@ const QBModal = React.createClass({
     //this.props.children is being passed to Modal.body
         //this allows jsx to be passed in, instead of a string
     render() {
+        let className;
+        if (this.props.uniqueClassName) {
+            className = "qbModal " + this.props.uniqueClassName;
+        } else {
+            className = "qbModal";
+        }
         return (
             <div>
-                <Modal className="qbModal" show={this.props.show}>
+                <Modal className={className} show={this.props.show}>
                     <div className="bodyContainer">
                         {this.renderQBIcon()}
                         <div>

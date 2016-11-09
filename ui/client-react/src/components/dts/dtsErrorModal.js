@@ -22,6 +22,7 @@ const DTSErrorModal = React.createClass({
         const primaryButtonName = <I18nMessage message={'dtsErrorModal.dtsErrorPrimaryButtonText'} />;
         return (
             <QBModal
+                uniqueClassName={"dtsErrorModal"}
                 show={this.props.show}
                 size="large"
                 primaryButtonName={primaryButtonName}
