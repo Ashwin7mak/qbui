@@ -17,6 +17,7 @@ import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
+import FieldUtils from '../../../utils/fieldUtils';
 
 let logger = new Logger();
 
@@ -246,7 +247,7 @@ export let ReportContent = React.createClass({
      */
     handleRecordDelete(record) {
         const flux = this.getFlux();
-        var recId = record[SchemaConsts.DEFAULT_RECORD_KEY].value;
+        var recId = record[FieldUtils.getUniqueIdentifierFieldName(record)].value;
         //this.props.nameForRecords
         flux.actions.deleteRecord(this.props.appId, this.props.tblId, recId, this.props.nameForRecords);
     },
@@ -656,7 +657,7 @@ export let ReportContent = React.createClass({
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
-        let keyField = SchemaConsts.DEFAULT_RECORD_KEY;
+        let keyField = FieldUtils.getUniqueIdentifierFieldName(this.props);
         if (this.props.keyField) {
             keyField = this.props.keyField;
         } else if (this.props.fields && this.props.fields.keyField && this.props.fields.keyField.name) {

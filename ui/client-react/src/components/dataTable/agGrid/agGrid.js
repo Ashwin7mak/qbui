@@ -12,7 +12,7 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
-import * as SchemaConsts from '../../../constants/schema';
+import FieldUtils from '../../../utils/fieldUtils';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 import {
@@ -724,8 +724,9 @@ let AGGrid = React.createClass({
         let rows = [];
         if (this.api) {
             this.api.getSelectedRows().forEach(row => {
-                if (row[SchemaConsts.DEFAULT_RECORD_KEY]) {
-                    rows.push(row[SchemaConsts.DEFAULT_RECORD_KEY].value);
+                let recordIdField = FieldUtils.getUniqueIdentifierFieldName(row);
+                if (row[recordIdField]) {
+                    rows.push(row[recordIdField].value);
                 }
             });
         }

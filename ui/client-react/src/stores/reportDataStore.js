@@ -442,7 +442,7 @@ let reportModel = {
      */
     deleteRecordsFromLists(recId) {
         var recordValueToMatch = {};
-        recordValueToMatch[SchemaConsts.DEFAULT_RECORD_KEY] = {value: recId};
+        recordValueToMatch[FieldUtils.getUniqueIdentifierFieldName(recordValueToMatch)] = {value: recId};
         var index = _.findIndex(this.model.filteredRecords, recordValueToMatch);
         if (index !== -1) {
             this.model.filteredRecords.splice(index, 1);
