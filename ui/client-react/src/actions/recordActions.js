@@ -81,8 +81,9 @@ let recordActions = {
                         } else {
                             logger.error('RecordService createRecord call error: no response data value returned');
                             this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
-                            // Remove this notification since Micah Z thinks we should not display it here.
-                            // NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                            if (error.response.status === 403) {
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
+                            }
                             reject();
                         }
                     },
@@ -90,8 +91,9 @@ let recordActions = {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
                         this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
-                        // Remove this notification since Micah Z thinks we should not display it here.
-                        // NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                        if (error.response.status === 403) {
+                            NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
+                        }
                         reject();
                     }
                 );
