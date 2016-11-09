@@ -77,7 +77,7 @@ const TempMainErrorMessage = React.createClass({
     renderNoAppsMessage() {
         let {apps, appsLoading} = this.props;
         let show = (!appsLoading && apps && apps.length === 0);
-show = true;
+
         return (
             <AlertBanner show={show}>
                 <span id="noAppsErrorMessage">
