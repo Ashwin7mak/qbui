@@ -146,38 +146,45 @@ export let ReportContent = React.createClass({
      * @param recId
      */
     handleEditRecordStart(recId) {
-        const flux = this.getFlux();
-        let origRec = null;
-        let changes = {};
+        if (_.has(this.props, 'reportData.data')) {
+            const flux = this.getFlux();
+            let origRec = null;
+            let changes = {};
 
-        if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
-            origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
-        } else {
-            //add each non null value as to the new record as a change
-            let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
-                return rec[this.props.uniqueIdentifier].value === recId;
-            });
-            if (newRec) {
-                changes = {};
-                // loop thru the values in the new rec add any non nulls to change set
-                // so it will be treated as dirty/not saved
-                Object.keys(newRec).forEach((key) => {
-                    let field = newRec[key];
-                    let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;
-                    if (fieldDef && !fieldDef.builtIn) {
-                        let change = {
-                            //the + before field.id is needed turn the field id from string into a number
-                            oldVal: {value: undefined, id: +field.id},
-                            newVal: {value: field.value},
-                            fieldName: key,
-                            fieldDef : fieldDef
-                        };
-                        changes[field.id] = change;
-                    }
-                });
+            if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
+                origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
+            } else {
+                //add each non null value as to the new record as a change
+                let newRec = null;
+                if (this.props.reportData.data.hasGrouping) {
+                    newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.uniqueIdentifier);
+                } else {
+                    newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
+                        return rec[this.props.uniqueIdentifier].value === recId;
+                    });
+                }
+                if (newRec) {
+                    changes = {};
+                    // loop thru the values in the new rec add any non nulls to change set
+                    // so it will be treated as dirty/not saved
+                    Object.keys(newRec).forEach((key) => {
+                        let field = newRec[key];
+                        let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;
+                        if (fieldDef && !fieldDef.builtIn) {
+                            let change = {
+                                //the + before field.id is needed turn the field id from string into a number
+                                oldVal: {value: undefined, id: +field.id},
+                                newVal: {value: field.value},
+                                fieldName: key,
+                                fieldDef: fieldDef
+                            };
+                            changes[field.id] = change;
+                        }
+                    });
+                }
             }
+            flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
         }
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
     },
 
     /**
@@ -409,7 +416,7 @@ export let ReportContent = React.createClass({
 
                 //  Recursive call get to the last grouping field, and then update the grouping
                 //  labels as we work our way back to the top of the stack.
-                if (lvl < groupFields.length - 1) {
+                if (lvl < groupFields.length - 1 && groupDataRecords[group].children) {
                     this.localizeGroupingHeaders(groupFields, groupDataRecords[group].children, lvl + 1);
                 }
 
@@ -423,6 +430,9 @@ export let ReportContent = React.createClass({
                     //  that have already been localized.
                     groupData.localized = true;
 
+                    if (groupData.group === undefined) {
+                        continue;
+                    }
                     //  If no grouping header, use the empty label
                     if (groupData.group === null || groupData.group === '') {
                         groupData.group = Locales.getMessage('groupHeader.empty');
