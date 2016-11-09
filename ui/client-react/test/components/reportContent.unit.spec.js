@@ -779,6 +779,7 @@ xdescribe('ReportContent grouping functions exception handling', () => {
 describe('ReportContent functions', () => {
     'use strict';
 
+    const qbModalClass = ".qbModal";
     var component;
 
     beforeEach(() => {
@@ -789,6 +790,10 @@ describe('ReportContent functions', () => {
     afterEach(() => {
         ReportContentRewireAPI.__ResetDependency__('AGGrid');
         ReportContentRewireAPI.__ResetDependency__('Locales');
+        let modalInDom = document.querySelector(qbModalClass);
+        if (modalInDom) {
+            modalInDom.parentNode.removeChild(modalInDom);
+        }
     });
 
     it('test render of component', () => {
@@ -807,6 +812,30 @@ describe('ReportContent functions', () => {
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+    });
+
+    it('test render of dtsErrorModal component', () => {
+        let mockPendEdits = {showDTSErrorModal: true};
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={mockPendEdits}/>);
+        let dtsErrorModal = document.querySelector(qbModalClass);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        expect(dtsErrorModal).not.toBeNull();
+    });
+
+    it('test hide of dtsErrorModal component', () => {
+        let mockPendEdits = {showDTSErrorModal: false};
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={mockPendEdits}/>);
+        let dtsErrorModal = document.querySelector(qbModalClass);
+        expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
+        expect(dtsErrorModal).toBeNull();
     });
 
     it('test hide of footer on row selection', () => {
