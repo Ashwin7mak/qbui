@@ -14,7 +14,7 @@ const DTSErrorModal = React.createClass({
     },
     render() {
         const title = <I18nMessage message={'dtsErrorModal.dtsErrorTitle'} />;
-        const errorMessage = <div> <I18nMessage message={'dtsErrorModal.dtsErrorBodyMessage'} /> <br/>
+        const errorMessage = <div> <I18nMessage message={'dtsErrorModal.dtsErrorBodyMessage'} /><br/>
                             <I18nMessage message={'dtsErrorModal.dtsErrorSecondErrorBodyMessage'} />
                             <br /><br />
                             <I18nMessage message={'dtsErrorModal.dtsErrorTID'} /><p>{this.props.tid}</p>
@@ -26,9 +26,10 @@ const DTSErrorModal = React.createClass({
                 size="large"
                 primaryButtonName={primaryButtonName}
                 title={title}
-                bodyMessage={errorMessage}
                 link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}
-                type="dtsAppDeleted" />
+                type="dtsAppDeleted" >
+                {errorMessage}
+            </QBModal>
         );
     }
 });

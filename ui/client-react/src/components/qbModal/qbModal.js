@@ -182,6 +182,8 @@ const QBModal = React.createClass({
             }
         }
     },
+    //this.props.children is being passed to Modal.body
+        //this allows jsx to be passed in, instead of a string
     render() {
         return (
             <div>
@@ -194,6 +196,7 @@ const QBModal = React.createClass({
                             </Modal.Title>
                             <Modal.Body>
                                 {this.renderBody()}
+                                {this.props.children}
                             </Modal.Body>
                         </div>
                     </div>
