@@ -12,7 +12,7 @@ function i18nKey(subkey) {
     return `app.homepage.${subkey}`;
 }
 
-const videoTourLink = 'https://heycool.wistia.com/medias/rase8bl4ws';
+const videoTourLink = 'https://quickbase.wistia.com/medias/zl4za7cf5eand';
 const welcomeGuideLink = 'https://d2qhvajt3imc89.cloudfront.net/customers/QuickBase/MercuryBeta_WelcomeGuide-v1.0.pdf';
 const feedbackLink = 'https://quickbase.uservoice.com/forums/378045-mercury';
 
