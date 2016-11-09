@@ -93,7 +93,7 @@
         //Add record btn
         this.reportAddRecordBtn = this.reportActions.element(by.className('iconTableUISturdy-add'));
         //Edit button
-        this.reportEditRecordBtnOnStage = this.recordContainer.element(by.className('layout-stage')).element(by.className('pageActions')).element(by.className('iconTableUISturdy-edit'));
+        this.reportEditRecordBtnOnStage = this.recordContainer.element(by.className('layout-stage')).all(by.className('pageActions')).first().element(by.className('iconTableUISturdy-edit'));
 
 
         //stage heading

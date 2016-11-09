@@ -6,6 +6,9 @@
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
+    var ReportContentPage = requirePO('reportContent');
+    var reportContentPage = new ReportContentPage();
+
     var FormsPage = requirePO('formsPage');
     var formsPage = new FormsPage();
 
@@ -40,7 +43,7 @@
             var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            reportContentPage.waitForReportContent().then(function() {
                 //click edit record from the grid recordActions
                 reportServicePage.clickRecordEditPencil(2);
 
@@ -55,7 +58,7 @@
                 //reload the report to verify the row edited
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                 //verify the edited record
-                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                return reportContentPage.waitForReportContent().then(function() {
                     //Verify there are 6 records after adding 1
                     e2eBase.sleep(browser.params.smallSleep);
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
@@ -70,7 +73,7 @@
             var fieldTypeClassNames = ['dateCell', 'timeCell'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "3"));
-            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            reportContentPage.waitForReportContent().then(function() {
                 //click edit record from the grid recordActions
                 reportServicePage.clickEditPencilOnStage(3);
 
@@ -85,7 +88,7 @@
                 //reload the report to verify the row edited
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "3"));
                 //verify the edited record
-                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                return reportContentPage.waitForReportContent().then(function() {
                     //Verify there are 6 records after adding 1
                     e2eBase.sleep(browser.params.smallSleep);
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
@@ -100,7 +103,7 @@
             var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "4"));
-            return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            reportContentPage.waitForReportContent().then(function() {
                 //click on add record button
                 reportServicePage.clickEditPencilOnReportActions(1);
 
@@ -114,7 +117,7 @@
             }).then(function() {
                 //reload the report to verify the row edited
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "4"));
-                return reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                return reportContentPage.waitForReportContent().then(function() {
                     //Verify there are 7 records after editing 1
                     e2eBase.sleep(browser.params.smallSleep);
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
@@ -124,6 +127,5 @@
                 });
             });
         });
-
     });
 }());
