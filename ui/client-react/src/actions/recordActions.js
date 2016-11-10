@@ -7,6 +7,7 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import Promise from 'bluebird';
 import Locale from '../locales/locales';
+import _ from 'lodash';
 import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
@@ -81,8 +82,16 @@ let recordActions = {
                         } else {
                             logger.error('RecordService createRecord call error: no response data value returned');
                             this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
-                            // Remove this notification since Micah Z thinks we should not display it here.
-                            // NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                            if (error.response.status === 403) {
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
+                            }
+                            if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
+                                const {status} = error.response.data.response;
+                                if (status !== 422) {
+                                    // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
+                                    NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'), 1500);
+                                }
+                            }
                             reject();
                         }
                     },
@@ -90,8 +99,16 @@ let recordActions = {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
                         this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
-                        // Remove this notification since Micah Z thinks we should not display it here.
-                        // NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                        if (error.response.status === 403) {
+                            NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
+                        }
+                        if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
+                            const {status} = error.response.data.response;
+                            if (status !== 422) {
+                                // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'), 1500);
+                            }
+                        }
                         reject();
                     }
                 );

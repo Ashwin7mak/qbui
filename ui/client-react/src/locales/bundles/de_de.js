@@ -124,7 +124,11 @@ export default {
             recordNotSaved :"Nehmen Sie nicht gespeichert",
             deleted : "gelöscht",
             notDeleted : "nicht gelöscht",
-            cannotLoad : "Kann nicht Datensatz laden"
+            cannotLoad : "Kann nicht Datensatz laden",
+            error: {
+                403: "Sie sind nicht zu erstellen oder Zugriff auf diesen Datensatz autorisiert",
+                500: "Unerwarteter Fehler diesen Rekord-Rendering"
+            }
         },
         header: {
             menu: {
