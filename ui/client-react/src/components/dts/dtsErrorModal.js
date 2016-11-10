@@ -13,7 +13,8 @@ const DTSErrorModal = React.createClass({
     propTypes: {
         show: React.PropTypes.bool,
         selectedAppId: React.PropTypes.string,
-        tid: React.PropTypes.string
+        tid: React.PropTypes.string,
+        link: React.PropTypes.string
     },
     render() {
         const title = <I18nMessage message={'dtsErrorModal.dtsErrorTitle'} />;
@@ -37,7 +38,7 @@ const DTSErrorModal = React.createClass({
                 size="large"
                 primaryButtonName={primaryButtonName}
                 title={title}
-                link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)}
+                link={this.props.link}
                 type="dtsAppDeleted" >
                 {errorMessage}
             </QBModal>

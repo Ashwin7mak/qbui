@@ -20,6 +20,7 @@ import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
 import DTSErrorModal from '../../dts/dtsErrorModal';
+import UrlUtils from '../../../utils/urlUtils';
 
 let logger = new Logger();
 
@@ -734,7 +735,7 @@ export let ReportContent = React.createClass({
             reportContent = (
                 <div className="loadedContent">
                     <div className={addPadding}>
-                        <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} selectedAppId={this.props.selectedAppId} />
+                        <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
