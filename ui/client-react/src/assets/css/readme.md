@@ -35,6 +35,12 @@ Don't inline styles in React. Inlined styles are difficult to override (thereby 
 # Formatting
 For the most part our formating guide will be enforced by the Sass linting tool but here's a full writeup on how it all works.
 
+For automatic formatting of a file based on the rules indicated in `stylint.config.js`, you can run the stylefmt command.
+
+(From the ui directory)
+
+`$ node_modules/.bin/stylefmt -R client-react/src` -> Will format all css/sass files in the src directory. Alternatively, you can specific a specific file as the last paramter.
+
 ## Spacing
 * Where possible, limit CSS files width to 80 characters. There will be unavoidable exceptions to this rule, such as URLs, or gradient syntax. Don’t worry.
 * Use soft-tabs with a four space indent.
