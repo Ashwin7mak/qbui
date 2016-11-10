@@ -249,7 +249,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
     },
     onDTSErrorModal(payload) {
-        this.dtsErrorModalTID = payload.error.tid;
+        this.dtsErrorModalTID = payload.error ? payload.error.tid : this.dtsErrorModalTID;
         this.showDTSErrorModal = true;
     },
 
