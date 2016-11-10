@@ -22,9 +22,9 @@ const QBModal = React.createClass({
          */
         show: React.PropTypes.bool,
         /**
-         * Pass in a string of "small", "medium" or large to resize your modal
+         * Pass in a string of "small" or "large" to resize your modal, if no size is pass it defaults to "small"
          * */
-        size: React.PropTypes.string,
+        size: React.PropTypes.oneOf["small", "large"],
         /**
          * Pass in a link to have a button reroute to a new url
          * */
