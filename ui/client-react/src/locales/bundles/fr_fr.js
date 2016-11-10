@@ -117,7 +117,11 @@ export default {
             recordNotSaved :"Enregistrement non enregistré",
             deleted : "supprimé",
             notDeleted : "non supprimés",
-            cannotLoad : "Impossible de charger la fiche"
+            cannotLoad : "Impossible de charger la fiche",
+            error: {
+                403: "Vous n'êtes pas autorisé à créer ou à accéder à cette fiche",
+                500: "Erreur inattendue rendant cette fiche"
+            }
         },
         header: {
             menu: {
