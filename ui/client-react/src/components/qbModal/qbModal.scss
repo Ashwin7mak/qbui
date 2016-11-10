@@ -4,7 +4,7 @@
 .qbModal {
 
     // Modal should always appear on the top layer, even above the trowser
-    z-index: 9999;
+    z-index: $zindex-modal;
 
     a {
         text-decoration: none;

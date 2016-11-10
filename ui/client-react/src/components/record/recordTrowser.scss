@@ -2,7 +2,7 @@
 
 .recordTrowser {
     .trowserFooter {
-        z-index: 5000;
+        z-index: $zindex-trowserFooter;
     }
     .trowserFooter .saveButtons {
         display: flex;

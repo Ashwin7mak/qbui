@@ -12,7 +12,7 @@ $action-separator-color: #486c8f;
 
 .trowser  {
     position:absolute;
-    z-index:1000;
+    z-index: $zindex-trowser;
     left:0;right:0;
     height:100%;
     color: $trowser-fg;
