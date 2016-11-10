@@ -168,8 +168,10 @@ const QBModal = React.createClass({
             </Modal.Footer>
         );
     },
-    //this.props.children is being passed to Modal.body
-        //this allows jsx to be passed in, instead of a string
+    /**
+     * this.props.children is being passed to Modal.body
+     * this allows jsx to be passed in, instead of a string
+    */
     render() {
         let classNames = ['qbModal'];
         if (this.props.uniqueClassName) {
