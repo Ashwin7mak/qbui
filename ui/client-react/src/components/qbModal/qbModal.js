@@ -9,6 +9,7 @@ const QB_MODAL_STANDARD = 'standard';
 const QB_MODAL_SUCCESS = 'success';
 const QB_MODAL_ISBUSY = 'isBusy';
 const QB_MODAL_DTS_APP_DELETED = 'dtsAppDeleted';
+const QB_MODAL_SIZE = ['large'];
 const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_ISBUSY, QB_MODAL_DTS_APP_DELETED];
 
 const QBModal = React.createClass({
@@ -24,7 +25,7 @@ const QBModal = React.createClass({
         /**
          * Pass in a string of "small" or "large" to resize your modal, if no size is pass it defaults to "small"
          * */
-        size: React.PropTypes.oneOf["small", "large"],
+        size: React.PropTypes.oneOf(QB_MODAL_SIZE),
         /**
          * Pass in a link to have a button reroute to a new url
          * */
@@ -177,7 +178,7 @@ const QBModal = React.createClass({
             </Modal.Footer>
         );
     },
-    componentDidUpdate() {
+    componentDidMount() {
         //This sets the size of the modal, if no size is given it defaults to small
         let modalDialog = document.querySelector(".modal-content") ;
         if (modalDialog) {
