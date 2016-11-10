@@ -2,7 +2,6 @@ import React, {PropTypes} from 'react';
 import Locales from "../../locales/locales";
 
 import EmailFormatter from '../../../../common/src/formatter/emailFormatter';
-import EmailValidator from '../../../../common/src/validator/emailValidator';
 
 import EmailFieldValueRenderer from './emailFieldValueRenderer';
 import TextFieldValueEditor from './textFieldValueEditor';

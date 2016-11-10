@@ -67,8 +67,7 @@ let NavItem = React.createClass({
                 <span className={"leftNavLabel"}>{label}</span>
             </Link>
             { this.props.showSecondary && this.props.secondaryIcon &&
-            <a href="#"
-               onClick={(event)=> this.onSecondaryClick(event, item.id)}
+            <a onClick={(event)=> this.onSecondaryClick(event, item.id)}
                onKeyDown={(event)=> this.onSecondaryClick(event, item.id)}
                className="right">
                 <QBicon icon={this.props.secondaryIcon}/>

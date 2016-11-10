@@ -2,6 +2,7 @@ import {useRouterHistory} from "react-router";
 import createHistory from 'history/lib/createBrowserHistory';
 import {useBeforeUnload} from 'history';
 import {UNSAVED_RECORD_ID} from '../constants/schema';
+import {ShowAppModal, HideAppModal} from '../components/qbModal/appQbModalFunctions';
 
 // Uses singleton pattern
 // Only one instance of this class may be instantiated so that the same history can be used
@@ -16,8 +17,6 @@ let self = null; // eslint-disable-line
 class AppHistory {
     constructor() {
         if (!self) {
-            self = this;
-
             // A custom browser history object that can be used by React Router
             this.history = useRouterHistory(useBeforeUnload(createHistory))();
 
@@ -34,6 +33,8 @@ class AppHistory {
             // Keep track of the event listeners so they can be canceled
             this.cancelListenBefore = null;
             this.cancelListenBeforeUnload = null;
+
+            self = this;
         }
 
         return self;
@@ -46,9 +47,9 @@ class AppHistory {
      * @param flux
      */
     setup(flux) {
-        this.flux = flux;
+        self.flux = flux;
 
-        this._setupHistoryListeners();
+        self._setupHistoryListeners();
 
         return self;
     }
@@ -57,8 +58,8 @@ class AppHistory {
      * Clears the AppHistory singleton and event listeners
      */
     reset() {
-        if (this.cancelListenBefore) {this.cancelListenBefore();}
-        if (this.cancelListenBeforeUnload) {this.cancelListenBeforeUnload();}
+        if (self && self.cancelListenBefore) {self.cancelListenBefore();}
+        if (self && self.cancelListenBeforeUnload) {self.cancelListenBeforeUnload();}
 
         self = null; // eslint-disable-line
     }
@@ -69,71 +70,121 @@ class AppHistory {
      */
     _setupHistoryListeners() {
         // Setup listener for route changes within the app
-        this.cancelListenBefore = this.history.listenBefore((location, callback) => {
-            this.callback = callback;
-            this.pendEdits = this.flux.store('RecordPendingEditsStore').getState();
+        self.cancelListenBefore = self.history.listenBefore((location, callback) => {
+            if (self) {
+                self.callback = callback;
 
-            if (this.pendEdits.isPendingEdit) {
-                this._saveChanges();
+                if (self.flux) {
+                    self.pendEdits = self.flux.store('RecordPendingEditsStore').getState();
+                }
+
+                if (this.hasPendingEdits()) {
+                    this.showPendingEditsConfirmationModal();
+                } else {
+                    self._continueToDestination();
+                }
             } else {
-                return this._continueToDestination();
+                return callback();
             }
         });
 
         // Setup listener for route changes outside of the app (e.g., pasting in a new url)
-        this.cancelListenBeforeUnload = this.history.listenBeforeUnload(event => {
-            if (this.pendEdits.isPendingEdit) {
-                event.returnValue = 'DONT LEAVE ME!!!';
-                return 'DONT LEAVE ME!!';
+        self.cancelListenBeforeUnload = self.history.listenBeforeUnload(event => {
+            if (self && self.flux) {
+                self.pendEdits = self.flux.store('RecordPendingEditsStore').getState();
+            }
+
+            // The following text does not need to be internationalized because
+            // it will not actually appear in the modal on evergreen browsers.
+            if (this.hasPendingEdits()) {
+                if (event) {
+                    event.returnValue = 'Save changes before leaving?';
+                }
+                return 'Save changes before leaving?';
             }
         });
     }
 
+    hasPendingEdits() {
+        return (self && self.pendEdits && self.pendEdits.isPendingEdit);
+    }
+
+    /**
+     * Displays a modal that asks a user about unsaved changes
+     * @param onSave Function that handles if the user wants to save changes and then continue
+     * @param onDisard Function that handles if the user wants to discard changes and then continue
+     * @param onCancel Function that handles if the user wants to cancel navigation
+     */
+    showPendingEditsConfirmationModal(onSave, onDiscard, onCancel) {
+        ShowAppModal({
+            type: 'alert',
+            messageI18nKey: 'pendingEditModal.modalBodyMessage',
+            primaryButtonI18nKey: 'pendingEditModal.modalSaveButton',
+            primaryButtonOnClick: (onSave ? onSave : self._saveChanges),
+            middleButtonI18nKey: 'pendingEditModal.modalDoNotSaveButton',
+            middleButtonOnClick: (onDiscard ? onDiscard : self._discardChanges),
+            leftButtonI18nKey: 'pendingEditModal.modalStayButton',
+            leftButtonOnClick: (onCancel ? onCancel : self._haltRouteChange)
+        });
+    }
+
+    _hideModal() {
+        HideAppModal();
+    }
+
+    /*
+    * All functions below reference 'self' instead of 'this' because of a context change
+    * after being called from the modal
+    */
     _saveChanges() {
-        this.appId = this.pendEdits.currentEditingAppId;
-        this.tableId = this.pendEdits.currentEditingTableId;
-        this.recordId = this.pendEdits.currentEditingRecordId;
+        self._hideModal();
 
-        this.fields = this.flux.store('FieldsStore').getState().fields.data;
+        self.appId = self.pendEdits.currentEditingAppId;
+        self.tableId = self.pendEdits.currentEditingTableId;
+        self.recordId = self.pendEdits.currentEditingRecordId;
 
-        if (this.pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
-            this._handleRecordAdd();
+        self.fields = self.flux.store('FieldsStore').getState().fields.data;
+
+        if (self.pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
+            self._handleRecordAdd();
         } else {
-            this._handleRecordChange();
+            self._handleRecordChange();
         }
     }
 
     _handleRecordAdd() {
-        this.flux.actions.saveNewRecord(this.appId, this.tableId, this.pendEdits.recordChanges, this.fields)
-            .then(this._onRecordSaved, this._onRecordSavedError);
+        self.flux.actions.saveNewRecord(self.appId, self.tableId, self.pendEdits.recordChanges, self.fields)
+            .then(self._onRecordSaved, self._onRecordSavedError);
     }
 
     _handleRecordChange() {
-        this.flux.actions.recordPendingEditsCommit(this.appId, this.tableId, this.recordId);
-        this.flux.actions.saveRecord(this.appId, this.tableId, this.recordId, this.pendEdits, this.fields)
-            .then(this._onRecordSaved, this._onRecordSavedError);
+        self.flux.actions.recordPendingEditsCommit(self.appId, self.tableId, self.recordId);
+        self.flux.actions.saveRecord(self.appId, self.tableId, self.recordId, self.pendEdits, self.fields)
+            .then(self._onRecordSaved, self._onRecordSavedError);
     }
 
     _onRecordSaved() {
-        this._continueToDestination();
+        self._continueToDestination();
     }
 
     _onRecordSavedError() {
-        this._haltRouteChange();
+        self._haltRouteChange();
     }
 
-    // Turn this back on once the user is asked if they want to cancel with a modal
-    // _discardChanges() {
-    //     this.flux.actions.recordPendingEditsCancel(this.appId, this.tableId, this.recordId);
-    //     this._continueToDestination();
-    // }
+    _discardChanges() {
+        self._hideModal();
+
+        self.flux.actions.recordPendingEditsCancel(self.appId, self.tableId, self.recordId);
+        self._continueToDestination();
+    }
 
     _continueToDestination() {
-        this.callback();
+        self.callback();
     }
 
     _haltRouteChange() {
-        this.callback(false);
+        self._hideModal();
+        self.callback(false);
     }
 }
 

@@ -184,8 +184,8 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).currentEditingAppId).toEqual(appTableRecPayload.appId);
         expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(appTableRecPayload.recId);
-        expect(flux.store(STORE_NAME).emit).not.toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
     it('test SaveRecordSuccess recordPendingEdits action', () => {
@@ -284,8 +284,8 @@ describe('Test recordPendingEdits Store ', () => {
         expect(flux.store(STORE_NAME).currentEditingAppId).toEqual(appTableRecPayload.appId);
         expect(flux.store(STORE_NAME).currentEditingTableId).toEqual(appTableRecPayload.tblId);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(null);
-        expect(flux.store(STORE_NAME).emit).not.toHaveBeenCalledWith('change');
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(0);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
     });
 
     it('test onAddRecordSuccess recordPendingEdits action', () => {
@@ -320,7 +320,7 @@ describe('Test recordPendingEdits Store ', () => {
         flux.dispatcher.dispatch(onAddRecordSuccessAction);
         expect(flux.store(STORE_NAME).currentEditingRecordId).toEqual(appTableRecPayload.recId);
         expect(flux.store(STORE_NAME).isPendingEdit).toBeFalsy();
-        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });
 
     it('test onAddRecordFailed recordPendingEdits action', () => {

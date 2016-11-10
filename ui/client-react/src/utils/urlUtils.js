@@ -1,7 +1,9 @@
 import React from 'react';
 import QBicon from '../components/qbIcon/qbIcon.js';
 import UrlFileAttachmentReportLinkFormatter from '../../../common/src/formatter/urlFileAttachmentReportLinkFormatter';
-import WindowLocationUtils from './windowLocationUtils';
+import BaseService from '../services/baseService';
+
+let baseService = new BaseService();
 
 const UrlUtils = {
     getIconForProtocol(protocol) {
@@ -31,8 +33,9 @@ const UrlUtils = {
         }
     },
     getQuickBaseClassicLink(selectedAppId) {
-        let realmId = WindowLocationUtils.getSubdomain();
-        let link = `https://${realmId}.quickbase.com/db/`;
+        let realmId = baseService.getSubdomain();
+        let domain = baseService.getDomain();
+        let link = `https://${realmId}.${domain}/db/`;
 
         if (selectedAppId) {
             link += selectedAppId;

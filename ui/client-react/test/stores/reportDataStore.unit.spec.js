@@ -641,6 +641,75 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });
 
+    it('test onAddReportRecord action on grouped records', () => {
+
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId: false,
+                    id: 4,
+                    name: "A field",
+                    type: "SCALAR",
+                    keyField: false,
+                    defaultValue: {
+                        coercedValue: "City",
+                        displayValue: "City"
+                    },
+                    datatypeAttributes: {
+                        type: "TEXT"
+                    }
+                },
+                    {
+                        builtId: false,
+                        id: 3,
+                        name: "Record #Id",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes: {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                groups: {
+                    gridData: [
+                        {children: [{"A field": {id: 4, value: "1"}, "Record #Id": {id: 3, value: 1}}]},
+                        {children: [{"A field": {id: 4, value: "2"}, "Record #Id":  {id: 3, value: 2}}]},
+                        {children:[
+                                [{"A field": {id: 4, value: "3"}, "Record #Id":  {id: 3, value: 3}}],
+                                [{"A field": {id: 4, value: "4"}, "Record #Id":  {id: 3, value: 4}}]
+                        ]
+                        }
+                    ],
+                    hasGrouping: true,
+                    fields: []
+                }
+            },
+            recordCount: 4
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let addReportRecordAction = {
+            type: actions.NEW_BLANK_REPORT_RECORD,
+            payload: {afterRecId : {value :2}}
+        };
+
+
+        flux.dispatcher.dispatch(addReportRecordAction);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
+        let state = flux.store(STORE_NAME).getState();
+        let recordsAfter = state.data.filteredRecords;
+        expect(recordsAfter[1].children.length).toBe(2);
+    });
+
     it('test onAddRecordSuccess action', () => {
 
         //populate the model
@@ -1464,6 +1533,79 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });
 
+    it('test onDeleteReportRecord on grouped records', () => {
+        //populate the model
+        let reportPayload = {
+            metaData: {},
+            recordData: {
+                fields: [{
+                    builtId: false,
+                    id: 4,
+                    name: "A field",
+                    type: "SCALAR",
+                    keyField: false,
+                    defaultValue: {
+                        coercedValue: "City",
+                        displayValue: "City"
+                    },
+                    datatypeAttributes: {
+                        type: "TEXT"
+                    }
+                },
+                    {
+                        builtId: false,
+                        id: 3,
+                        name: "Record #Id",
+                        type: "SCALAR",
+                        keyField: true,
+                        datatypeAttributes: {
+                            type: "NUMERIC",
+                            decimalPlaces: 3,
+                        }
+                    }
+                ],
+                groups: {
+                    gridData: [
+                        {children: [{"A field": {id: 4, value: "1"}, "Record #Id": {id: 3, value: 1}}]},
+                        {children: [{"A field": {id: 4, value: "2"}, "Record #Id":  {id: 3, value: 2}}]},
+                        {children:[
+                            {"A field": {id: 4, value: "3"}, "Record #Id":  {id: 3, value: 3}},
+                            {"A field": {id: 4, value: "4"}, "Record #Id":  {id: 3, value: 4}}
+                        ]
+                        }
+                    ],
+                    hasGrouping: true,
+                    fields: []
+                }
+            },
+            recordCount: 4
+        };
+
+        let loadReportAction = {
+            type: actions.LOAD_REPORT_SUCCESS,
+            payload: reportPayload
+        };
+        flux.dispatcher.dispatch(loadReportAction);
+
+        let loadReportRecordsCountAction = {
+            type: actions.LOAD_REPORT_RECORDS_COUNT_SUCCESS,
+            payload: 4
+        };
+        flux.dispatcher.dispatch(loadReportRecordsCountAction);
+
+        let onDeleteReportRecordSuccess = {
+            type: actions.DELETE_RECORD_SUCCESS,
+            payload: 3
+        };
+
+        flux.dispatcher.dispatch(onDeleteReportRecordSuccess);
+        expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
+        expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
+        let state = flux.store(STORE_NAME).getState();
+        let recordsAfter = state.data.filteredRecords;
+        expect(recordsAfter[2].children.length).toBe(1);
+    });
+
     it('test load report records count  action', () => {
         let loadReportRecordsCountAction = {
             type: actions.LOAD_REPORT_RECORDS_COUNT,
@@ -1492,7 +1634,7 @@ describe('Test ReportData Store', () => {
 
     it('test load report records count success action', () => {
         let payload = {
-            body: 2
+            body: {recordsCount: 4}
         };
 
         let loadReportRecordsCountAction = {
@@ -1503,7 +1645,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(loadReportRecordsCountAction);
         expect(flux.store(STORE_NAME).countingTotalRecords).toBeFalsy();
         expect(flux.store(STORE_NAME).error).toBeFalsy();
-        expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(payload.body);
+        expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(payload.body.recordsCount);
     });
 
 
