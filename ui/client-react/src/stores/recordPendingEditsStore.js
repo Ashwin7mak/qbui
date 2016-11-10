@@ -225,8 +225,12 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     },
     handleErrors(payload) {
         this.getServerErrs(payload);
-        if (payload.error.data.statusCode === DTS_ERR0R_CODE) {
-            this.onDTSErrorModal(payload);
+        if (payload.error) {
+            if (payload.error.data) {
+                if (payload.error.data.statusCode === DTS_ERR0R_CODE) {
+                    this.onDTSErrorModal(payload);
+                }
+            }
         }
     },
     getServerErrs(payload) {
