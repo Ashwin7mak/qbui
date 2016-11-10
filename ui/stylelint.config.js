@@ -3,7 +3,7 @@ module.exports = {
         "stylelint-scss",
         "stylelint-declaration-use-variable"
     ],
-    defaultSeverity: "error",
+    "defaultSeverity": "error",
     "rules": {
         // See rules here
         // https://github.com/stylelint/stylelint/blob/master/docs/user-guide/rules.md

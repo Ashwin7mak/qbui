@@ -34,10 +34,11 @@ module.exports = function(grunt) {
         });
     }
 
+    // Grunt task for linting and formatting css/sass styles
     grunt.registerTask('lintStyles', 'Run stylelint on code', function(target) {
         var done = this.async();
         stylelint.lint({
-            configFile: '.stylelintrc',
+            configFile: 'stylelint.config.js',
             syntax: 'scss',
             formatter: 'string',
             files:  'client-react/src/**/*.{scss,css}'
