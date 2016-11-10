@@ -789,8 +789,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('codeStandards', [
-        'lint'
-        //, 'lintStyles' this will add linting styles to the try-ui build process
+        'lint',
+        'lintStyles'
     ]);
 
     grunt.registerTask('testClientOnly', function() {

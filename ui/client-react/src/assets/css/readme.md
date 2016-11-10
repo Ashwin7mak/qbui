@@ -1,6 +1,14 @@
 # Introduction
 The purpose of this document is to layout best practices when writing CSS for QuickBase. QuickBase is now built with some Bootstrap for React components using a Sass preprocessor for the re-architecture project.
 
+# Lint Tools
+
+The CSS/Sass linting tool will run as part of the normal code standards grunt tasks (`$ grunt test` or `$ grunt codeStandards`).
+The CSS/Sass linting tool can be run separately by running `$ grunt linStyles`.
+
+The CSS/Sass linting tool will only report errors and will not display warnings. If you need to see both errors and warnings
+in the console output, you can use `$ grunt lintStyles:all`.
+
 # Architecture
 
 Sass files are stored in the same folder as the related component. For example, inside of the `fieldValueEditor` folder
