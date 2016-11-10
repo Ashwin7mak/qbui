@@ -12,7 +12,7 @@ export default {
                 welcomeText: "Während Sie Ihren Weg lernen, verwenden Sie diesen Bereich anstelle der App-Homepage. " +
                 "Dies ist Ihre echte App in Mercury. Sie werden Ihre App-Homepage noch nicht sehen, aber alle Ihre " +
                 "daten sind hier. Die Arbeit, die Sie hier vornehmen, wird auch in der klassischen Ansicht angezeigt.",
-                launchVideoLink: "Starten Sie Video-Tour (3:00)",
+                launchVideoLink: "Starten Sie Video-Tour (2:58)",
                 guideMeLink: "Führ mich durch Quecksilber",
                 guideTitle: "Begrüßungsführer",
                 guideText: "Erfahren Sie alles über das Mercury-Beta-Programm. Sehen Sie, welche Funktionen zurzeit verfügbar sind und wie Ihr Team die Arbeit schneller erledigen kann, über Geräte hinweg mit Hilfe von Mercury.",
