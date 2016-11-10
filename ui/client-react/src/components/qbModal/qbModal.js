@@ -146,28 +146,18 @@ const QBModal = React.createClass({
         ];
         if (this.props.link) {
             buttons = [
-                <a href={this.props.link}><Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button></a>
+                <a key={0} className="anchorButton  primaryButton" href={this.props.link} onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</a>
             ];
         }
 
         if (this.props.middleButtonName) {
-            if (this.props.link) {
-                buttons.unshift(<a href={this.props.link}><Button key={buttons.length} className="secondaryButton middleButton"
-                                        onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button></a>);
-            } else {
-                buttons.unshift(<Button key={buttons.length} className="secondaryButton middleButton"
-                                        onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
-            }
+            buttons.unshift(<Button key={buttons.length} className="secondaryButton middleButton"
+                                    onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
         }
 
         if (this.props.leftButtonName) {
-            if (this.props.link) {
-                buttons.unshift(<a href={this.props.link}><Button key={buttons.length} className="secondaryButton leftButton"
-                                        onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button></a>);
-            } else {
-                buttons.unshift(<Button key={buttons.length} className="secondaryButton leftButton"
-                                        onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>);
-            }
+            buttons.unshift(<Button key={buttons.length} className="secondaryButton leftButton"
+                                    onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>);
         }
 
         return (
@@ -178,27 +168,17 @@ const QBModal = React.createClass({
             </Modal.Footer>
         );
     },
-    componentDidMount() {
-        //This sets the size of the modal, if no size is given it defaults to small
-        let modalDialog = document.querySelector(".modal-content") ;
-        if (modalDialog) {
-            if (this.props.size === "large") {
-                modalDialog.classList.add("large");
-            }
-        }
-    },
     //this.props.children is being passed to Modal.body
         //this allows jsx to be passed in, instead of a string
     render() {
-        let className;
+        let classNames = ['qbModal'];
         if (this.props.uniqueClassName) {
-            className = "qbModal " + this.props.uniqueClassName;
-        } else {
-            className = "qbModal";
+            classNames.push(this.props.uniqueClassName);
         }
+        classNames.push(this.props.size || '');
         return (
             <div>
-                <Modal className={className} show={this.props.show}>
+                <Modal className={classNames.join(' ')} show={this.props.show}>
                     <div className="bodyContainer">
                         {this.renderQBIcon()}
                         <div>

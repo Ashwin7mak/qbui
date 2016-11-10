@@ -31,6 +31,8 @@
     }
 
     .modal-dialog {
+        margin: 200px auto;
+        width: 450px;
         z-index: 9999;
         @include small-breakpoint {
             margin: 0 auto;
@@ -38,10 +40,15 @@
         }
     }
 
-    .large {
+    &.large .modal-content{
         padding-top: 20px;
         height: 300px;
-        width: 510px !important;
+        width: 510px;
+
+        @include small-breakpoint {
+            width: inherit;
+            height: auto;
+        }
     }
 
     .modal-backdrop.in {
@@ -50,30 +57,6 @@
 
     .modal-backdrop {
         background-color: $color-black-800;
-    }
-
-    .modal-content {
-        border-bottom: none;
-        border-left: 30px white solid;
-        border-radius: 2px;
-        border-right: 30px white solid;
-        border-top: none;
-
-        @include small-breakpoint {
-            border-left: 10px white solid;
-            border-radius: 0px;
-            border-right: 10px white solid;
-        }
-    }
-
-    .modal-dialog {
-        margin: 200px auto;
-        width: 450px;
-
-      @include small-breakpoint {
-          margin: 0 auto;
-          width: 100%;
-      }
     }
 
     .modal-body {
@@ -163,6 +146,21 @@
                   margin-bottom: 20px;
               }
             }
+        }
+    }
+//style for anchor tag
+    .anchorButton {
+        display: block;
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px;
+
+        @include small-breakpoint {
+            display: block;
+            margin-left: 0;
+            margin-right: 0;
+            width: 100%;
+            margin-bottom: 20px;
         }
     }
 
