@@ -5,10 +5,11 @@ import {I18nMessage} from '../../../src/utils/i18nMessage';
 import './dtsErrorModal.scss';
 
 const DTSErrorModal = React.createClass({
-    ///There will be no state
-    //There will be no function to close modal
-    //Everything will exist in it's parents
-    //This is only for building/testing purposes right now
+    /**There will be no state
+     * There will be no function to close modal
+     * Everything will exist in it's parents
+     * This is only for building/testing purposes right now
+    */
     propTypes: {
         show: React.PropTypes.bool,
         selectedAppId: React.PropTypes.string,
