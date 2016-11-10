@@ -48,6 +48,7 @@
     "react-codemirror": "^0.2.6",
     "react-cookie": "^0.3.4",
     "react-dom": "~15.0.1",
+    "react-fastclick": "^2.1.2",
     "react-intl": "1.2.0",
     "react-loader": "^2.0.0",
     "react-notifications": "^1.2.0",
