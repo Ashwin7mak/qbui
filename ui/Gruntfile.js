@@ -962,7 +962,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('lint', 'Run eslint and stylelint on code', function() {
         return grunt.task.run([
-            'lintStyles',
             'shell:lint'
         ]);
     });

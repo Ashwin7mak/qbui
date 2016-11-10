@@ -36,7 +36,7 @@ module.exports = function(grunt) {
 
     // Grunt task for linting and formatting css/sass styles
     grunt.registerTask('lintStyles', 'Run stylelint on code', function(target) {
-        var done = this.async();
+        var done = this.async(); // eslint-disable-line
         stylelint.lint({
             configFile: 'stylelint.config.js',
             syntax: 'scss',
