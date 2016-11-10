@@ -10,7 +10,8 @@ const DTSErrorModal = React.createClass({
     //This is only for building/testing purposes right now
     propTypes: {
         show: React.PropTypes.bool,
-        selectedAppId: React.PropTypes.string
+        selectedAppId: React.PropTypes.string,
+        tid: React.PropTypes.string
     },
     render() {
         const title = <I18nMessage message={'dtsErrorModal.dtsErrorTitle'} />;
