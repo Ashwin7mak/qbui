@@ -241,6 +241,17 @@
         };
 
         /**
+         * Given a record element in agGrid, click on the row to open in view mode
+         * @param recordRowElement
+         */
+        this.openRecord = function(recordRowIndex) {
+            //TODO: Doesn't work for Safari and Firefox, need to find workaround
+            var rowElement = element(by.className('ag-body')).element(by.className('ag-body-container')).all(by.className('ag-row')).get(recordRowIndex).all(by.className('nonEditable')).first();
+            browser.actions().click(rowElement).perform();
+            return e2ePageBase.waitForElement(element(by.className('viewForm')));
+        };
+
+        /**
          * Given a record element in agGrid, click on the edit pencil for that record to open the edit form
          * @param recordRowIndex
          */

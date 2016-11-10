@@ -11,6 +11,7 @@
     var reportServicePage = new ReportServicePage();
     var ReportCardViewPage = requirePO('reportCardView');
     var reportCardViewPage = new ReportCardViewPage();
+    var RequestSessionTicketPage = requirePO('requestSessionTicket');
 
     var date = new Array();
     date = new Date().toJSON().slice(0, 10).split('-');
@@ -34,13 +35,16 @@
         this.formErrorMsgAlertBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveAlertButton'));
 
         this.formBodyEl = element(by.tagName('body'));
+        this.recordContainerEl = element(by.className('recordContainer')).all(by.className('loadedContent')).first();
         //form container
         this.formContainerEl = element(by.className('recordTrowser')).element(by.className('formContainer'));
         //view form
-        this.formViewContainerEl = this.formContainerEl.element(by.className('viewForm'));
+        this.formViewContainerEl = this.recordContainerEl.element(by.className('viewForm'));
         //edit Form
         this.formEditContainerEl = this.formContainerEl.element(by.className('editForm'));
-        //form table field labels
+        //form view table
+        this.formViewModeTable = this.formViewContainerEl.element(by.className('qbPanelBody')).element(by.className('formTable'));
+        //form edit table field labels
         this.formTable = this.formEditContainerEl.element(by.className('qbPanelBody')).element(by.className('formTable'));
         //form table field values
         this.formTableFieldValueElList = this.formEditContainerEl.element(by.className('qbPanelBody')).element(by.className('formTable')).all(by.className('input'));
@@ -73,7 +77,7 @@
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
                 self.clickSaveBtnWithName('Save');
-                    // Check that the edit notification is displayed
+                // Check that the edit notification is displayed
                 return reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
             });
         };
@@ -93,7 +97,7 @@
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
                 self.clickSaveBtnWithName('Save & Next');
-                    // Check that the edit notification is displayed
+                // Check that the edit notification is displayed
                 return reportServicePage.waitForElement(reportServicePage.editSuccessPopup).then(function() {
                     return reportServicePage.waitForElement(self.formEditContainerEl);
                 });
@@ -246,6 +250,38 @@
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 10)).toBe('true');
                 }
             });
+        };
+
+        /**
+         * Function that creates JSON for roleId reportId map for custdefaulthomepage POST
+         */
+        this.createRoleReportMapJSON = function(roleId, report_Id) {
+            var jsonStr = '{"' + roleId + '":"' + report_Id + '"}';
+            return JSON.parse(jsonStr);
+        };
+
+        /**
+         * Function that gets user authentication
+         */
+        this.getUserAuthentication = function(userId) {
+            // Get a session ticket for that subdomain and realmId (stores it in the browser)
+            var realmName = e2eBase.recordBase.apiBase.realm.subdomain;
+            var realmId = e2eBase.recordBase.apiBase.realm.id;
+            //get the user authentication
+            return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.recordBase.apiBase.resolveUserTicketEndpoint() + '?uid=' + userId + '&realmId='));
+        };
+
+        this.verifyFieldsNotPresentOnForm = function(formTableElement, expectedFieldsNotPresentOnForm) {
+            return formTableElement.all(by.className('fieldLabel')).filter(function(elm) {
+                return elm;
+            }).map(function(elm) {
+                return elm.getText();
+            }).then(function(fieldsPresentOnForm) {
+                expectedFieldsNotPresentOnForm.filter(function(elem) {
+                    return fieldsPresentOnForm.indexOf(elem) > -1;
+                });
+            });
+
         };
 
     };
