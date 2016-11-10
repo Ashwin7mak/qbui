@@ -101,22 +101,23 @@ const DateFieldValueEditor = React.createClass({
     onBlur(newValue) {
         if (this.props.onBlur || this.props.onDateTimeBlur) {
             if (newValue === null || newValue) {
-                let newDate = null;
-                if (moment(newValue, DATE_FORMATTED, true).isValid()) {
-                    // newValue was passed in via <input>, no need to change
-                    newDate = newValue;
-                } else if (moment(newValue, DATE_INPUT, true).isValid()) {
-                    // format newValue passed in from the DatePicker component
-                    newDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
-                }
-
                 if (this.props.onDateTimeBlur) {
-                    this.props.onDateTimeBlur(newDate);
+                    this.props.onDateTimeBlur(newValue);
                 } else {
+                    let newDate = null;
+                    if (moment(newValue, DATE_FORMATTED).isValid()) {
+                        // newValue was passed in via <input>, no need to change
+                        newDate = newValue;
+                    } else if (moment(newValue, DATE_INPUT).isValid()) {
+                        // format newValue passed in from the DatePicker component
+                        newDate = moment(newValue, DATE_INPUT).format(DATE_FORMATTED);
+                    }
+
                     let valueObj = {
                         value: newDate,
                         display: ''
                     };
+
                     valueObj.display = dateTimeFormatter.format(valueObj, this.props.attributes);
                     this.props.onBlur(valueObj);
                 }
