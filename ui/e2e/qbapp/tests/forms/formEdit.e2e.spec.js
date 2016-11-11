@@ -70,7 +70,7 @@
         });
 
         it('Edit a record via stage pageActions edit pencil using report with sorting', function(done) {
-            var fieldTypeClassNames = ['dateCell', 'timeCell'];
+            var fieldTypeClassNames = ['textField', 'numericField'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "3"));
             reportContentPage.waitForReportContent().then(function() {
@@ -100,7 +100,7 @@
         });
 
         it('Edit a record from the tableActions Container using report with facets', function(done) {
-            var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
+            var fieldTypeClassNames = ['textField', 'numericField'];
             //Open the report
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "4"));
             reportContentPage.waitForReportContent().then(function() {
