@@ -9,6 +9,7 @@ let inputs = {
     appId: '1',
     tblId: '2',
     rptId: '3',
+    recId: 4,
     formatted: true,
     filter: {
         facet: 'abc',
@@ -46,6 +47,9 @@ describe('Record actions Edit Record functions -- Negative', () => {
         createRecord(a, t, r, c) {
             return Promise.resolve({data:responseData});
         }
+        getRecord(a, t, r, c) {
+            return Promise.resolve({data:responseData});
+        }
     }
 
     beforeEach(() => {
@@ -66,7 +70,7 @@ describe('Record actions Edit Record functions -- Negative', () => {
         {test:'test saveRecord with missing recId', appId:1, tblId:2, recId:undefined, pendEdits:edits, fields: fields},
         {test:'test saveRecord with null recId', appId:1, tblId:2, recId:null, pendEdits:edits, fields: fields},
         {test:'test saveRecord with missing edits', appId:1, tblId:2, recId:3, pendEdits:null, fields: fields},
-        {test:'test saveRecord with missing fields', appId:1, tblId:2, recId:3, pendEdits:edits, fields: null}
+        {test:'test saveRecord with missing fields', appId:1, tblId:2, recId:3, pendEdits:edits, fields: null},
     ];
 
     var saveNewDataProvider = [
@@ -273,6 +277,72 @@ describe('Record actions Edit Record functions -- errors / exceptions Negative',
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD,
                     {appId, tblId, record:[]}]);
                 expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_RECORD_FAILED,
+                    jasmine.objectContaining({error : jasmine.any(Object)})]);
+                done();
+            },
+            () => {
+                expect(true).toBe(true);
+                done();
+            }
+        );
+    });
+
+    it('test saveNewRecord no record returned', (done) => {
+        class mockRecordService {
+            constructor() {
+            }
+
+            createRecord() {
+                return Promise.resolve({data: {id:3}});
+            }
+            getRecord() {
+                return mockPromiseError();
+            }
+        }
+        flux.actions.saveNewRecord(inputs.appId, inputs.tblId, {}, {}).then(
+            () => {
+                expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(4);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD,
+                    {appId, tblId, record:[]}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.GET_RECORD,
+                    {appId, tblId, recId: 3, clist: ''}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.GET_RECORD_FAILED,
+                    {appId, tblId, recId: 3, error: {message:'someError', status:errorStatus}}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(3)).toEqual([actions.ADD_RECORD_FAILED,
+                    jasmine.objectContaining({error : jasmine.any(Object)})]);
+                done();
+            },
+            () => {
+                expect(true).toBe(true);
+                done();
+            }
+        );
+    });
+
+    it('test saveRecord no record returned', (done) => {
+        class mockRecordService {
+            constructor() {
+            }
+
+            createRecord() {
+                return Promise.resolve({data: {id:inputs.recId}});
+            }
+            getRecord() {
+                return mockPromiseError();
+            }
+        }
+        flux.actions.saveRecord(inputs.appId, inputs.tblId, inputs.recId, {}, []).then(
+            () => {
+                expect(mockRecordService.prototype.createRecord).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(4);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SAVE_REPORT_RECORD,
+                    {appId, tblId, recId, changes: {}}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.GET_RECORD,
+                    {appId, tblId, recId: inputs.recId, clist: ''}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.GET_RECORD_FAILED,
+                    {appId, tblId, recId: inputs.recId, error: {message:'someError', status:errorStatus}}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(3)).toEqual([actions.SAVE_RECORD_FAILED,
                     jasmine.objectContaining({error : jasmine.any(Object)})]);
                 done();
             },
