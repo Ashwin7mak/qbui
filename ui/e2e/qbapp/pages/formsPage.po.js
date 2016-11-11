@@ -12,6 +12,8 @@
     var ReportCardViewPage = requirePO('reportCardView');
     var reportCardViewPage = new ReportCardViewPage();
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
+    var ReportContentPage = requirePO('reportContent');
+    var reportContentPage = new ReportContentPage();
 
     var date = new Array();
     date = new Date().toJSON().slice(0, 10).split('-');
@@ -91,6 +93,7 @@
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
                 self.clickSaveBtnWithName('Save');
+                reportContentPage.waitForReportContent();
                 // Check that the edit notification is displayed
                 return reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
             });
@@ -233,6 +236,18 @@
                         //close the alert
                         return self.formErrorMessageHeaderCloseBtn.click();
                     });
+                });
+            });
+        };
+
+        this.closeSaveChangesDialogue = function() {
+            var self = this;
+            return self.clickFormCloseBtn().then(function() {
+                //come out of dirty form state
+                reportServicePage.waitForElement(self.formsSaveChangesDialog).then(function() {
+                    expect(self.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
+                    //close the dialogue by clicking on dont save
+                    return self.clickButtonOnSaveChangesDialog("Don't Save");
                 });
             });
         };

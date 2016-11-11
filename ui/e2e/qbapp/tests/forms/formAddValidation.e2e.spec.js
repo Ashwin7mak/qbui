@@ -64,6 +64,9 @@
 
                 //verify validation
                 formsPage.verifyErrorMessages(expectedErrorMessages);
+
+                //close forms
+                formsPage.clickFormCloseBtn();
                 done();
             });
         });
@@ -103,6 +106,9 @@
                     //verify clicking on alert again hides the error message popup
                     formsPage.clickFormAlertBtn();
                     expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
+
+                    //close dirty form
+                    formsPage.closeSaveChangesDialogue();
                     done();
                 });
             });

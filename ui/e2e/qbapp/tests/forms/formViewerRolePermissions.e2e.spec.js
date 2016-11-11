@@ -134,15 +134,8 @@
                 //Verify record has no permission message shows up.
                 reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
             }).then(function() {
-                formsPage.clickFormCloseBtn();
-            }).then(function() {
-                //come out of dirty form state
-                reportServicePage.waitForElement(formsPage.formsSaveChangesDialog).then(function() {
-                    expect(formsPage.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
-                    //close the dialogue by clicking on dont save
-                    formsPage.clickButtonOnSaveChangesDialog("Don't Save");
-                    done();
-                });
+                formsPage.closeSaveChangesDialogue();
+                done();
             });
         });
 
@@ -172,15 +165,8 @@
                 //TODO enable when MB-1488 is fixed enable below and remove above message
                 //reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
             }).then(function() {
-                formsPage.clickFormCloseBtn();
-            }).then(function() {
-                //come out of dirty form state
-                reportServicePage.waitForElement(formsPage.formsSaveChangesDialog).then(function() {
-                    expect(formsPage.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
-                    //close the dialogue by clicking on dont save
-                    formsPage.clickButtonOnSaveChangesDialog("Don't Save");
-                    done();
-                });
+                formsPage.closeSaveChangesDialogue();
+                done();
             });
         });
 
