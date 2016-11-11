@@ -16,9 +16,11 @@ const videoTourLink = 'https://quickbase.wistia.com/medias/zl4za7cf5e';
 const welcomeGuideLink = 'https://d2qhvajt3imc89.cloudfront.net/customers/QuickBase/MercuryBeta_WelcomeGuide-v1.0.pdf';
 const feedbackLink = 'https://quickbase.uservoice.com/forums/378045-mercury';
 
-// Scripts for Wistia video popover
-// These script tags are only relevant to this temporary homepage
-// They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
+/**
+ * Scripts for Wistia video popover
+ * These script tags are only relevant to this temporary homepage
+ * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
+ */
 const wistiaScriptPart1 = document.createElement("script");
 wistiaScriptPart1.src = "//fast.wistia.com/embed/medias/zl4za7cf5e.jsonp";
 wistiaScriptPart1.async = true;
