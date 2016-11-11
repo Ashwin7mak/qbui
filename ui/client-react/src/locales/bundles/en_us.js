@@ -120,7 +120,11 @@ export default {
             recordNotSaved :"Record not saved",
             deleted : "deleted",
             notDeleted : "not deleted",
-            cannotLoad : "Cannot load record"
+            cannotLoad : "Cannot load record",
+            error: {
+                403: "You are not authorized to create or access this record",
+                500: "Unexpected error rendering this record"
+            }
         },
         header: {
             menu: {

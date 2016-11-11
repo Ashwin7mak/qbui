@@ -515,7 +515,6 @@
                                 }
 
                                 //  add any faceting data to the response
-                                //  NOTE: this conditional block must run AFTER responseObject[FIELDS] is set.
                                 if (includeFacets === true) {
                                     /*eslint no-lonely-if:0 */
                                     let facets = response[3];
@@ -528,7 +527,7 @@
                                         if (facets.body && facets.body.length > 0) {
                                             //  jsonBigNum.parse throws exception if the input is empty array
                                             let facetRecords = jsonBigNum.parse(facets.body);
-                                            responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, responseObject[FIELDS]);
+                                            responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
                                         }
                                     }
                                 }
