@@ -1,7 +1,7 @@
 import React from 'react';
 import QBModal from '../qbModal/qbModal';
 import UrlUtils from '../../utils/urlUtils';
-import {I18nMessage} from '../../../src/utils/i18nMessage';
+import Locale from '../../locales/locales';
 import './dtsErrorModal.scss';
 
 const DTSErrorModal = React.createClass({
@@ -17,20 +17,21 @@ const DTSErrorModal = React.createClass({
         link: React.PropTypes.string
     },
     render() {
-        const title = <I18nMessage message={'dtsErrorModal.dtsErrorTitle'} />;
+        const title = Locale.getMessage('dtsErrorModal.dtsErrorTitle');
+        const primaryButtonName = Locale.getMessage('dtsErrorModal.dtsErrorPrimaryButtonText');
         const errorMessage = <div className="dtsErrorModal">
                                 <span className="dtsErrorBodyMessageOne">
-                                    <I18nMessage message={'dtsErrorModal.dtsErrorBodyMessage'} />
+                                    {Locale.getMessage('dtsErrorModal.dtsErrorBodyMessage')}
                                 </span>
                                 <span className="dtsErrorBodyMessageTwo">
-                                    <I18nMessage message={'dtsErrorModal.dtsErrorSecondErrorBodyMessage'} />
+                                    {Locale.getMessage('dtsErrorModal.dtsErrorSecondErrorBodyMessage')}
                                 </span>
                                 <span className="dtsErrorTID">
-                                    <I18nMessage message={'dtsErrorModal.dtsErrorTID'} />
+                                    {Locale.getMessage('dtsErrorModal.dtsErrorTID')}
                                     <p>{this.props.tid}</p>
                                 </span>
                             </div>;
-        const primaryButtonName = <I18nMessage message={'dtsErrorModal.dtsErrorPrimaryButtonText'} />;
+
         return (
             <QBModal
                 uniqueClassName={"dtsErrorModal"}
