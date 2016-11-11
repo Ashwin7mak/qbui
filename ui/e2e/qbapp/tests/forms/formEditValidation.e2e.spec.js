@@ -19,6 +19,7 @@
         var realmId;
         var app;
         var recordList;
+        var expectedNumericErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field'];
 
         beforeAll(function(done) {
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
@@ -44,91 +45,75 @@
          */
         beforeEach(function(done) {
             //go to report page directly.
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-            // Wait until report loaded
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            done();
+        });
+
+        it('Save Button - Validate errors ', function(done) {
+            var fieldTypeClassNames = ['textField', 'numericField'];
+            reportContentPage.waitForReportContent().then(function() {
+                //click edit record from the grid recordActions
+                reportServicePage.clickRecordEditPencil(2);
+            }).then(function() {
+                //enter invalid values into fields on form
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    formsPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+                }
+            }).then(function() {
+                //Save the form
+                formsPage.clickSaveBtnWithName('Save');
+            }).then(function() {
+                //verify validation
+                formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+            }).then(function() {
+                //verify clicking on alert button brings up the error message popup
+                formsPage.clickFormAlertBtn();
+                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
+            }).then(function() {
+                //verify clicking on alert again hides the error message popup
+                formsPage.clickFormAlertBtn();
+                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
+            }).then(function() {
+                //close dirty form
+                formsPage.closeSaveChangesDialogue();
                 done();
             });
         });
 
-        /**
-         * Data Provider for reports and faceting results.
-         */
-        function invalidFieldValueTestCases() {
-            return [
-                {
-                    message: 'all numeric fields',
-                    fieldTypeClassNames: 'numericField',
-                    expectedNumericErrorMessages: ['Numeric Field', 'Numeric Percent Field', 'Duration Field']
-                },
-                //TODO validate email, url and phone no fields. Right now we have bugs for these.
-            ];
-        }
-
-        invalidFieldValueTestCases().forEach(function(testcase) {
-            it('Save Button - Validate ' + testcase.message, function(done) {
-                reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    //click edit record from the grid recordActions
-                    reportServicePage.clickRecordEditPencil(2);
-
-                    //enter invalid values into fields on form
-                    formsPage.enterInvalidFormValues(testcase.fieldTypeClassNames);
-
-                    //Save the form
-                    formsPage.clickSaveBtnWithName('Save');
-
-                    //verify validation
-                    formsPage.verifyErrorMessages(testcase.expectedNumericErrorMessages);
-
-                    //verify clicking on alert button brings up the error message popup
-                    formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
-
-                    //verify clicking on alert again hides the error message popup
-                    formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
-
-                    //close dirty form
-                    formsPage.closeSaveChangesDialogue();
-                    done();
-                });
-            });
-        });
-
         it('Save and Next Button - Validate errors and correct the errors by editing new record', function(done) {
-            var validFieldClassNames = ['textField', 'numericField'];
-            var expectedNumericErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field'];
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            var fieldTypeClassNames = ['textField', 'numericField'];
+            reportContentPage.waitForReportContent().then(function() {
                 //click edit record from the grid recordActions
                 reportServicePage.clickRecordEditPencil(3);
-
+            }).then(function() {
                 //get the fields from the table and generate a record
-                formsPage.enterInvalidFormValues('numericField');
-
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    formsPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+                }
+            }).then(function() {
                 //Save the form
                 formsPage.clickSaveBtnWithName('Save & Next');
-
+            }).then(function() {
                 //verify validation
                 formsPage.verifyErrorMessages(expectedNumericErrorMessages);
                 // Needed to get around stale element error
                 e2eBase.sleep(browser.params.smallSleep);
-
+            }).then(function() {
                 //correct the errors and add the record
-                for (var i = 0; i < validFieldClassNames.length; i++) {
-                    formsPage.enterFormValues(validFieldClassNames[i]);
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.enterFormValues(fieldTypeClassNames[j]);
                 }
-
+            }).then(function() {
                 //Save the form by clicking on 'Save and Next' btn
                 formsPage.clickFormSaveAndNextBtn();
             }).then(function() {
-                //reload the report to verify the row edited
-                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-                return formsPage.waitForElement(reportServicePage.loadedContentEl).then(function() {
-                    for (var j = 0; j < validFieldClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(3, validFieldClassNames[j]);
-                    }
-                    done();
-                });
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPage.waitForReportContent();
+            }).then(function() {
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
+                }
+                done();
             });
         });
 
