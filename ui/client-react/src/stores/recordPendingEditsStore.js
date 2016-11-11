@@ -3,12 +3,12 @@ import Fluxxor from "fluxxor";
 import _ from 'lodash';
 import Logger from '../utils/logger';
 import ValidationUtils from '../../../common/src/validationUtils';
-import ValidationMessage from "../utils/validationMessage";
+import ValidationMessage from '../utils/validationMessage';
 import HttpStatusCode from '../../../common/src/constants';
-
 var logger = new Logger();
-const DTS_ERR0R_CODE = HttpStatusCode.INTERNAL_SERVER_ERROR;
- const DTS_ERROR_MESSAGES_CODE = "LegacyStackOperationOrDataSyncError";
+
+const [DTS_ERR0R_CODE, DTS_ERROR_MESSAGES_CODE] = [HttpStatusCode.INTERNAL_SERVER_ERROR, 'LegacyStackOperationOrDataSyncError'];
+
 /**
    RecordPendingEditsStore keeps track of inline edits in progress made on a record    before they are committed to database
  **/
