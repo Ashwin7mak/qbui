@@ -15,7 +15,7 @@ describe('Test recordPendingEdits Store ', () => {
         appId : 'a',
         tblId : 'b',
         recId : 4,
-        error: {tid: '', statusCode: HttpStatusCode .INTERNAL_SERVER_ERROR}
+        error: {tid: '', statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR, errorMessages: [{code: "LegacyStackOperationOrDataSyncError"}]}
     };
 
     beforeEach(() => {
