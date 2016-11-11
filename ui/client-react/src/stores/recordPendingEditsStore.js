@@ -4,15 +4,14 @@ import _ from 'lodash';
 import Logger from '../utils/logger';
 import ValidationUtils from '../../../common/src/validationUtils';
 import ValidationMessage from "../utils/validationMessage";
+import HttpStatusCode from '../../../common/src/constants';
 
 var logger = new Logger();
-
+const DTS_ERR0R_CODE = HttpStatusCode.INTERNAL_SERVER_ERROR;
+ const DTS_ERROR_MESSAGES_CODE = "LegacyStackOperationOrDataSyncError";
 /**
    RecordPendingEditsStore keeps track of inline edits in progress made on a record    before they are committed to database
  **/
-
-//a constant may already exist in a constants file, use that one instead
-const DTS_ERR0R_CODE = 500;
 
 let RecordPendingEditsStore = Fluxxor.createStore({
 
@@ -226,7 +225,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     handleErrors(payload) {
         this.getServerErrs(payload);
         if (payload.error) {
-            if (payload.error.statusCode === DTS_ERR0R_CODE) {
+            if (payload.error.statusCode === DTS_ERR0R_CODE && payload.error.errorMessages[0].code === DTS_ERROR_MESSAGES_CODE) {
                 this.onDTSErrorModal(payload);
             }
         }
