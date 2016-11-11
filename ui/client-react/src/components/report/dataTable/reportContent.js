@@ -317,7 +317,7 @@ export let ReportContent = React.createClass({
                 colList.push(field.id);
             });
             flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, addNewRecordAfterSave);
+            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
         }
     },
 
