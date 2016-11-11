@@ -28,7 +28,7 @@ let recordActions = {
     /**
      * save a new record
      */
-    saveNewRecord(appId, tblId, recordChanges, fields, addNewRecordAfterSave = false) {
+    saveNewRecord(appId, tblId, recordChanges, fields, colList = [], addNewRecordAfterSave = false) {
         function getRecord(_recordChanges, _fields) {
             //save changes in record
             let payload = [];
@@ -72,12 +72,33 @@ let recordActions = {
                         logger.debug('RecordService createRecord success:' + JSON.stringify(response));
                         if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
                             let resJson = JSON.parse(response.data.body);
-                            this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
+                            if (resJson.id) {
+                                //normally getRecord will only return default columns for the table. so pass in clist for all of report's columns
+                                let clist = colList ? colList : [];
+                                if (!clist.length && fields) {
+                                    fields.forEach((field) => {
+                                        clist.push(field.id);
+                                    });
+                                }
+                                clist = clist.join('.');
+                                this.dispatch(actions.GET_RECORD, {appId, tblId, recId: resJson.id, clist: clist});
+                                recordService.getRecord(appId, tblId, resJson.id, clist).then(
+                                    getResponse => {
+                                        logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                        this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record: getResponse.data, recId: resJson.id});
 
-                            if (!addNewRecordAfterSave) {
-                                NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                                        if (!addNewRecordAfterSave) {
+                                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                                        }
+                                        resolve(resJson.id);
+                                    },
+                                    getError => {
+                                        logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
+                                        this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
+                                        reject();
+                                    }
+                                );
                             }
-                            resolve(resJson.id);
                         } else {
                             logger.error('RecordService createRecord call error: no response data value returned');
                             this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
@@ -193,7 +214,7 @@ let recordActions = {
     /**
      * save a record
      */
-    saveRecord(appId, tblId, recId, pendEdits, fields, addNewRecordAfterSave = false) {
+    saveRecord(appId, tblId, recId, pendEdits, fields, colList, addNewRecordAfterSave = false) {
         function createColChange(value, display, field, payload) {
             let colChange = {};
             colChange.fieldName = field.name;
@@ -271,16 +292,29 @@ let recordActions = {
                 recordService.saveRecord(appId, tblId, recId, changes).then(
                     response => {
                         logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
-                        this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, changes});
-
-                        // When adding a new record immediately after saving, the success message should appear
-                        // after the new record row is added so that it appears correctly and for the correct duration
-                        // See method addNewRowAfterRecordSaveSuccess in reportContent for when the mesage is displayed.
-                        if (!addNewRecordAfterSave) {
-                            NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+                        let clist = colList ? colList : [];
+                        if (!clist.length && fields) {
+                            fields.forEach((field) => {
+                                clist.push(field.id);
+                            });
                         }
-
-                        resolve(recId);
+                        clist = clist.join('.');
+                        this.dispatch(actions.GET_RECORD, {appId, tblId, recId, clist: clist});
+                        recordService.getRecord(appId, tblId, recId, clist).then(
+                            getResponse => {
+                                logger.debug('RecordService getRecord success:' + JSON.stringify(getResponse));
+                                this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, record: getResponse.data});
+                                if (!addNewRecordAfterSave) {
+                                    NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                                }
+                                resolve(recId);
+                            },
+                            getError => {
+                                logger.parseAndLogError(LogLevel.ERROR, getError.response, 'recordService.getRecord:');
+                                this.dispatch(actions.GET_RECORD_FAILED, {appId, tblId, recId, error: getError.response});
+                                reject();
+                            }
+                        );
                     },
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x

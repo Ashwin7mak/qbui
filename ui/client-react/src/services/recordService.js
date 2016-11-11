@@ -11,7 +11,8 @@ class RecordService extends BaseService {
 
         //  Record service API endpoints
         this.API = {
-            GET_RECORD         : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
+            GET_RECORD         : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
+            GET_RECORDS        : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
             PATCH_RECORD       : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
             CREATE_RECORD      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}`,
             DELETE_RECORD      : `${constants.BASE_URL.QUICKBASE}/${constants.APPS}/{0}/${constants.TABLES}/{1}/${constants.RECORDS}/{2}`,
@@ -56,7 +57,16 @@ class RecordService extends BaseService {
             }
         }
 
-        let url = super.constructUrl(this.API.GET_RECORD, [appId, tableId]);
+        let url = super.constructUrl(this.API.GET_RECORDS, [appId, tableId]);
+        return super.get(url, {params:params});
+    }
+
+    getRecord(appId, tableId, recId, clist) {
+        let params = {};
+        if (StringUtils.isNonEmptyString(clist)) {
+            params[query.COLUMNS_PARAM] = clist;
+        }
+        let url = super.constructUrl(this.API.GET_RECORD, [appId, tableId, recId]);
         return super.get(url, {params:params});
     }
 

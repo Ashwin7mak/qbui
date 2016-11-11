@@ -13,6 +13,10 @@ describe('Record actions - Edit Record functions -- success', () => {
     let recIds = [1, 2, 3];
     let newRecId = 34;
     let responseData = {appId, tblId, data: 'success'};
+    let record = {
+        fields: [],
+        records: []
+    }
 
     class mockRecordService {
         constructor() {}
@@ -28,6 +32,9 @@ describe('Record actions - Edit Record functions -- success', () => {
         deleteRecordBulk(a, b, r) {
             return Promise.resolve({data:responseData});
         }
+        getRecord(a, b, c, d) {
+            return Promise.resolve({data: record});
+        }
     }
     let stores = {};
     let flux = new Fluxxor.Flux(stores);
@@ -39,6 +46,7 @@ describe('Record actions - Edit Record functions -- success', () => {
         spyOn(mockRecordService.prototype, 'createRecord').and.callThrough();
         spyOn(mockRecordService.prototype, 'deleteRecord').and.callThrough();
         spyOn(mockRecordService.prototype, 'deleteRecordBulk').and.callThrough();
+        spyOn(mockRecordService.prototype, 'getRecord').and.callThrough();
         recordActions.__Rewire__('RecordService', mockRecordService);
     });
 
@@ -106,11 +114,13 @@ describe('Record actions - Edit Record functions -- success', () => {
         flux.actions.saveRecord(appId, tblId, recId, edits, fields).then(
                 () => {
                     expect(mockRecordService.prototype.saveRecord).toHaveBeenCalled();
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SAVE_REPORT_RECORD,
                         {appId, tblId, recId, changes}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.SAVE_RECORD_SUCCESS,
-                        jasmine.any(Object)]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.GET_RECORD,
+                        {appId, tblId, recId, clist: '6'}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.SAVE_RECORD_SUCCESS,
+                        {appId, tblId, recId, record}]);
                     done();
                 },
                 () => {
@@ -161,11 +171,13 @@ describe('Record actions - Edit Record functions -- success', () => {
         flux.actions.saveNewRecord(appId, tblId, recordChanges, fields).then(
                 () => {
                     expect(mockRecordService.prototype.createRecord).toHaveBeenCalledWith(appId, tblId, newRec);
-                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(2);
+                    expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
                     expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.ADD_RECORD,
                         {appId, tblId, changes:recordChanges}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.ADD_RECORD_SUCCESS,
-                        {appId, tblId, record:newRec, recId:newRecId}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.GET_RECORD,
+                        {appId, tblId, recId:newRecId, clist: '4.5'}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.ADD_RECORD_SUCCESS,
+                        {appId, tblId, record:record, recId:newRecId}]);
                     done();
                 },
                 () => {
