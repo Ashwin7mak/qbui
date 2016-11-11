@@ -100,7 +100,7 @@ var ReportHeader = React.createClass({
         const headerClasses = "reportHeader";
 
         const reportName = this.props.reportData && this.props.reportData.data && this.props.reportData.data.name;
-        const title = <div><QBicon icon="report-menu-3"/><span className="reportLabel">{reportName}</span></div>;
+        const title = <div class="title"><QBicon icon="report-menu-3"/><span className="reportLabel">{reportName}</span></div>;
         let placeMsg = Locale.getMessage("report.searchPlaceHolder") + " " + Locale.getMessage("records.plural");
 
         return <Header
