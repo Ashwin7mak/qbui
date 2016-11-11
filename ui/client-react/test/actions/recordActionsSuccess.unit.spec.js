@@ -130,6 +130,57 @@ describe('Record actions - Edit Record functions -- success', () => {
             );
     });
 
+    it('test saveRecord and prep for a record to be added immediately after (do not call notification until later)', (done) => {
+        let notificationSuccess = jasmine.createSpy();
+        recordActions.__Rewire__('NotificationManager', {success: notificationSuccess});
+        let addNewRecordAfterSave = true;
+        let fields = [{
+            id:6,
+            name: "test",
+        }];
+        let edits = {
+            recordChanges: {
+                6: {
+                    fieldName: "test",
+                    fieldDef: fields[0],
+                    newVal: {value: "value", display: "display"}
+                }
+            },
+            originalRecord: {
+                fids: {6: {
+                    display: "oldDisplay",
+                    value: "oldValue",
+                    id: 6
+                }}
+            }
+        };
+
+        let changes = [{display : "display",
+            fieldDef: fields[0],
+            fieldName: "test",
+            id: 6,
+            value: "value"}];
+        flux.actions.saveRecord(appId, tblId, recId, edits, fields, [], addNewRecordAfterSave).then(
+            () => {
+                expect(notificationSuccess).not.toHaveBeenCalled();
+                expect(mockRecordService.prototype.saveRecord).toHaveBeenCalled();
+                expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.SAVE_REPORT_RECORD,
+                    {appId, tblId, recId, changes}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.GET_RECORD,
+                    {appId, tblId, recId, clist: '6'}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.SAVE_RECORD_SUCCESS,
+                    {appId, tblId, recId, record}]);
+                done();
+            },
+            () => {
+                expect(true).toBe(false);
+                recordActions.__ResetDependency__('NotificationManager');
+                done();
+            }
+        );
+    });
+
     it('test saveNewRecord', (done) => {
 
 
