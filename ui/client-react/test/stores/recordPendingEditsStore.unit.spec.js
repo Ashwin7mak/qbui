@@ -2,6 +2,7 @@ import * as actions from '../../src/constants/actions';
 
 import Store from '../../src/stores/recordPendingEditsStore';
 import Fluxxor from 'fluxxor';
+import HttpStatusCode from '../../../common/src/constants';
 
 describe('Test recordPendingEdits Store ', () => {
     'use strict';
@@ -14,7 +15,7 @@ describe('Test recordPendingEdits Store ', () => {
         appId : 'a',
         tblId : 'b',
         recId : 4,
-        error: {tid: '880-8-08-312', data: {statusCode: 500}}
+        error: {tid: '', statusCode: HttpStatusCode .INTERNAL_SERVER_ERROR}
     };
 
     beforeEach(() => {
