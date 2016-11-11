@@ -16,7 +16,7 @@ describe('Record actions - Edit Record functions -- success', () => {
     let record = {
         fields: [],
         records: []
-    }
+    };
 
     class mockRecordService {
         constructor() {}
