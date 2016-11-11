@@ -152,7 +152,7 @@
          */
         this.selectTodaysDateFromDatePicker = function(fieldDateIconElement) {
             return fieldDateIconElement.element(by.className('glyphicon-calendar')).click().then(function() {
-                e2ePageBase.waitForElement(fieldDateIconElement.element(by.className('datepicker'))).then(function() {
+                return e2ePageBase.waitForElement(fieldDateIconElement.element(by.className('datepicker'))).then(function() {
                     return fieldDateIconElement.element(by.className('datepicker')).element(by.className('active')).click();
                 });
             });

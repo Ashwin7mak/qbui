@@ -499,6 +499,7 @@
 
         this.deleteIcon = element(by.className('iconLink icon-delete')).element(by.className('qbIcon iconTableUISturdy-delete'));
         this.successWindow = element(by.className('notification notification-success')).element(by.className('notification-message')).element(by.className('message'));
+        this.notificationWindow = element(by.className('notification')).element(by.className('notification-message')).element(by.className('message'));
 
 
         //Click on the Delete Icon and Checking for the success Message
@@ -512,6 +513,15 @@
             var self = this;
             this.waitForElement(self.successWindow).then(function() {
                 expect(self.successWindow.getText()).toMatch(successMessage.toString());
+            });
+        };
+
+        // Notification window assertion
+        this.assertNotificationMessage = function(notificationMessage) {
+            var self = this;
+            this.waitForElement(self.notificationWindow).then(function() {
+                expect(self.notificationWindow.getText()).toMatch(notificationMessage.toString());
+                return self.waitForElementToBeInvisible(self.notificationWindow);
             });
         };
 

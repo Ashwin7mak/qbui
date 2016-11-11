@@ -54,24 +54,24 @@
                     reportId = r.id;
                 });
 
-                //Modify the field rights of all numeric fields on a form (readAccess and modify access set to false)
-                e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 7, false, false).then(function() {
-                    e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 8, false, false).then(function() {
-                        e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 9, false, false).then(function() {
-                            e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 10, false, false).then(function() {
-                                e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 14, false, false);
-                            });
-                        });
-                    });
-                });
-
                 //create user
                 e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
                     e2eBase.recordBase.apiBase.assignUsersToAppRole(appId, roleId, [userId]).then(function() {
                         //POST custdefaulthomepage for a table
-                        e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, formsPage.createRoleReportMapJSON(roleId, reportId));
-                        done();
+                        e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, formsPage.createRoleReportMapJSON(roleId, reportId)).then(function() {
+                            //Modify the field rights of all numeric fields on a form (readAccess and modify access set to false)
+                            e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 7, false, false).then(function() {
+                                e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 8, false, false).then(function() {
+                                    e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 9, false, false).then(function() {
+                                        e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 10, false, false).then(function() {
+                                            e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 14, false, false);
+                                            done();
+                                        });
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
             });
@@ -153,7 +153,7 @@
         });
 
         it('Verify can edit a record since table rights canModify set to "ALL_RECORDS', function(done) {
-            var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell'];
+            var fieldTypeClassNames = ['textField'];
 
             //get user authentication
             formsPage.getUserAuthentication(userId).then(function() {

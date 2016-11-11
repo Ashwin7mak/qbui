@@ -22,7 +22,7 @@
     var sDate = date[1] + '-' + date[2] + '-' + date[0];
 
     var FormsPage = function() {
-        this.formTrowserHeader = element(by.className('recordTrowser')).element(by.className('trowserHeader'));
+        this.formTrowserHeader = element(by.className('trowserHeader'));
         //form help button
         this.formHelpBtn = this.formTrowserHeader.element(by.className('iconTableUISturdy-help'));
         //form close button
@@ -58,6 +58,20 @@
         this.formErrorMessageHeaderCloseBtn = this.formErrorMessageHeader.element(by.className('rightIcons')).element(by.tagName('button'));
         this.formErrorMessageHeaderAlertBtn = this.formErrorMessageHeader.element(by.className('leftIcons')).element(by.className('iconTableUISturdy-alert'));
         this.formErrorMessageContent = this.formErrorMessage.element(by.className('qbErrorMessageContent'));
+
+        //Save changes before leaving dialogue
+        this.formsSaveChangesDialog = element(by.className('modal-dialog'));
+        this.formsSaveChangesDialogHeader = this.formsSaveChangesDialog.element(by.className('modal-body'));
+        this.formsSaveChangesDialogFooter = this.formsSaveChangesDialog.element(by.className('modal-footer'));
+        this.clickButtonOnSaveChangesDialog = function(btnName) {
+            this.formsSaveChangesDialogFooter.element(by.className('buttons')).all(by.tagName('button')).filter(function(elm) {
+                return elm.getAttribute('textContent').then(function(text) {
+                    return text  === btnName;
+                });
+            }).then(function(filteredSaveBtn) {
+                return filteredSaveBtn[0].click();
+            });
+        };
 
         //Save buttons function
         this.clickSaveBtnWithName = function(btnName) {
@@ -113,14 +127,14 @@
 
         this.clickFormCloseBtn = function() {
             var self = this;
-            return this.formCloseBtn.click().then(function() {
-                return reportServicePage.waitForElement(self.reportAddRecordBtn);
+            return reportServicePage.waitForElementToBeClickable(self.formCloseBtn).then(function() {
+                return self.formCloseBtn.click();
             });
         };
 
         this.selectTodaysDateFromDatePicker = function(fieldDateIconElement) {
             return fieldDateIconElement.element(by.className('glyphicon-calendar')).click().then(function() {
-                reportServicePage.waitForElement(fieldDateIconElement.element(by.className('datepicker'))).then(function() {
+                return reportServicePage.waitForElement(fieldDateIconElement.element(by.className('datepicker'))).then(function() {
                     return reportServicePage.waitForElement(fieldDateIconElement.element(by.className('datepicker')).element(by.className('active'))).then(function() {
                         return fieldDateIconElement.element(by.className('datepicker')).element(by.className('active')).click();
                     });
@@ -137,15 +151,14 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        //TODO Enable below when the bug that enters date into date field is fixed
-                        //return elm.element(by.className('date')).click().then(function() {
-                        //    return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
-                        //});
-
-                        //Select the date from the date picker untill above is fixed
-                        return elm.element(by.className('date')).element(by.tagName('input')).sendKeys(protractor.Key.BACK_SPACE).then(function() {
-                            return self.selectTodaysDateFromDatePicker(elm);
+                        return elm.element(by.className('date')).click().then(function() {
+                            return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
                         });
+
+                        ////Select the date from the date picker.
+                        //return elm.element(by.className('date')).element(by.tagName('input')).sendKeys(protractor.Key.BACK_SPACE).then(function() {
+                        //    return self.selectTodaysDateFromDatePicker(elm);
+                        //});
                     });
                 } else if (fieldLabel === 'textField') {
                     //enter text fields

@@ -54,22 +54,22 @@
                     reportId = r.id;
                 });
 
-                //Modify the field rights of all text records (readAccess and modify access set to false)
-                e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 6, false, false).then(function() {
-                    e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 16, false, false).then(function() {
-                        e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 17, false, false).then(function() {
-                            e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 18, false, false);
-                        });
-                    });
-                });
-
                 //create user
                 e2eBase.recordBase.apiBase.createUser().then(function(userResponse) {
                     userId = JSON.parse(userResponse.body).id;
                     e2eBase.recordBase.apiBase.assignUsersToAppRole(appId, roleId, [userId]).then(function() {
                         //POST custdefaulthomepage for a table
-                        e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, formsPage.createRoleReportMapJSON(roleId, reportId));
-                        done();
+                        e2eBase.recordBase.apiBase.setCustDefaultTableHomePageForRole(appId, tableId, formsPage.createRoleReportMapJSON(roleId, reportId)).then(function() {
+                            //Modify the field rights of all text records (readAccess and modify access set to false)
+                            e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 6, false, false).then(function() {
+                                e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 16, false, false).then(function() {
+                                    e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 17, false, false).then(function() {
+                                        e2eBase.roleService.createFieldRightsForAppRole(appId, roleId, tableId, 18, false, false);
+                                        done();
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
             });
@@ -112,12 +112,10 @@
             });
         });
 
-        //TODO Need XJ's fix to enable this tests Its in infinite loop if no permission to add a record after hitting save
-        xit('Verify cannot add a record into table as tableRights canadd set to false', function(done) {
+        it('Verify cannot add a record into table as tableRights canadd set to false', function(done) {
             var fieldTypeClassNames = ['numericField'];
             //get user authentication
             formsPage.getUserAuthentication(userId).then(function() {
-            }).then(function() {
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
                 reportContentPO.waitForReportContent();
@@ -133,20 +131,22 @@
                 //Save the form
                 formsPage.clickSaveBtnWithName('Save');
             }).then(function() {
-                //Verify record not added
-                //TODO after XJ's fix verify no permission message
-                //Reload the reports page and verify the records count in the table
-                e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
-                reportContentPO.waitForReportContent();
-
-                //Verify count of records didn't change
-                expect(reportServicePage.reportRecordsCount.getText()).toBe('7 records');
-                done();
+                //Verify record has no permission message shows up.
+                reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
+            }).then(function() {
+                formsPage.clickFormCloseBtn();
+            }).then(function() {
+                //come out of dirty form state
+                reportServicePage.waitForElement(formsPage.formsSaveChangesDialog).then(function() {
+                    expect(formsPage.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
+                    //close the dialogue by clicking on dont save
+                    formsPage.clickButtonOnSaveChangesDialog("Don't Save");
+                    done();
+                });
             });
         });
 
-        //TODO Need XJ's fix to enable this tests Its in infinite loop if no permission to add a record after hitting save
-        xit('Verify cannot edit a record since table rights canModify set to "NONE', function(done) {
+        it('Verify cannot edit a record since table rights canModify set to "NONE', function(done) {
             var fieldTypeClassNames = ['numericField'];
 
             //get user authentication
@@ -155,23 +155,36 @@
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
                 reportContentPO.waitForReportContent();
-
+            }).then(function() {
                 //click edit record from the grid recordActions
                 reportServicePage.clickRecordEditPencil(2);
-
+            }).then(function() {
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
-
+            }).then(function() {
                 //Save the form
                 formsPage.clickSaveBtnWithName('Save');
-
-                //TODO verify no permission message
-                done();
+            }).then(function() {
+                //Verify record has no permission message shows up.
+                reportContentPO.assertNotificationMessage("Record not saved");
+                //TODO enable when MB-1488 is fixed enable below and remove above message
+                //reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
+            }).then(function() {
+                formsPage.clickFormCloseBtn();
+            }).then(function() {
+                //come out of dirty form state
+                reportServicePage.waitForElement(formsPage.formsSaveChangesDialog).then(function() {
+                    expect(formsPage.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
+                    //close the dialogue by clicking on dont save
+                    formsPage.clickButtonOnSaveChangesDialog("Don't Save");
+                    done();
+                });
             });
-
         });
+
+        //TODO verify cannot delete a record when no permission.
 
     });
 }());
