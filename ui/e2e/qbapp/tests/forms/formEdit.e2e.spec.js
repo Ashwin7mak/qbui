@@ -56,6 +56,8 @@
                 //Save the form
                 formsPage.clickFormSaveBtn();
             }).then(function() {
+                reportContentPage.assertNotificationMessage('Record saved');
+            }).then(function() {
                 //reload the report to verify the row edited
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
                 reportContentPage.waitForReportContent();
@@ -86,6 +88,8 @@
                 //Save the form
                 formsPage.clickFormSaveBtn();
             }).then(function() {
+                reportContentPage.assertNotificationMessage('Record saved');
+            }).then(function() {
                 //reload the report to verify the row edited
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 3);
                 reportContentPage.waitForReportContent();
@@ -113,6 +117,8 @@
             }).then(function() {
                 //Save the form
                 formsPage.clickFormSaveBtn();
+            }).then(function() {
+                reportContentPage.assertNotificationMessage('Record saved');
             }).then(function() {
                 //reload the report to verify the row edited
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);

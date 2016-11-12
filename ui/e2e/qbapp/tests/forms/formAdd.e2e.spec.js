@@ -36,42 +36,33 @@
             });
         });
 
-        /**
-         * Before each test starts just make sure the report has loaded
-         */
-        beforeEach(function(done) {
-            //go to report page directly.
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-            // Wait until report loaded
-            reportContentPage.waitForReportContent().then(function() {
-                done();
-            });
-        });
 
         it('Add a record from the form', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
-            formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPage.waitForReportContent().then(function() {
                 //click on add record button
-                reportServicePage.clickAddRecordOnStage() .then(function() {
-
-                    //get the fields from the table and generate a record
-                    for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                        formsPage.enterFormValues(fieldTypeClassNames[i]);
+                reportServicePage.clickAddRecordOnStage();
+            }).then(function() {
+                //get the fields from the table and generate a record
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    formsPage.enterFormValues(fieldTypeClassNames[i]);
+                }
+            }).then(function() {
+                //Save the form
+                formsPage.clickFormSaveBtn();
+            }).then(function() {
+                reportContentPage.assertNotificationMessage('Record added');
+            }).then(function() {
+                //reload the report to verify the row edited
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPage.waitForReportContent();
+            }).then(function() {
+                reportServicePage.agGridRecordElList.then(function(records) {
+                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
                     }
-                }).then(function() {
-                    //Save the form
-                    formsPage.clickFormSaveBtn();
-                }).then(function() {
-                    //reload the report to verify the row edited
-                    e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-                    reportContentPage.waitForReportContent();
-                }).then(function() {
-                    reportServicePage.agGridRecordElList.then(function(records) {
-                        for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                            formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
-                        }
-                        done();
-                    });
+                    done();
                 });
             });
         });

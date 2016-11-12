@@ -24,7 +24,7 @@
     var sDate = date[1] + '-' + date[2] + '-' + date[0];
 
     var FormsPage = function() {
-        this.formTrowserHeader = element(by.className('trowserHeader'));
+        this.formTrowserHeader = element.all(by.className('trowserHeader')).first();
         //form help button
         this.formHelpBtn = this.formTrowserHeader.element(by.className('iconTableUISturdy-help'));
         //form close button
@@ -92,32 +92,31 @@
         this.clickFormSaveBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
-                self.clickSaveBtnWithName('Save');
-                reportContentPage.waitForReportContent();
-                // Check that the edit notification is displayed
-                return reportServicePage.waitForElement(reportServicePage.editSuccessPopup);
+                return self.clickSaveBtnWithName('Save');
             });
         };
 
         this.clickFormSaveAndAddAnotherBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
-                self.clickSaveBtnWithName('Save & Add Another');
+                return self.clickSaveBtnWithName('Save & Add Another');
+            }).then(function() {
                 // Check that the edit notification is displayed
-                return reportServicePage.waitForElement(reportServicePage.editSuccessPopup).then(function() {
-                    return reportServicePage.waitForElement(self.formEditContainerEl);
-                });
+                return reportContentPage.assertNotificationMessage('Record added');
+            }).then(function() {
+                return reportServicePage.waitForElement(self.formEditContainerEl);
             });
         };
 
         this.clickFormSaveAndNextBtn = function() {
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
-                self.clickSaveBtnWithName('Save & Next');
+                return self.clickSaveBtnWithName('Save & Next');
+            }).then(function() {
                 // Check that the edit notification is displayed
-                return reportServicePage.waitForElement(reportServicePage.editSuccessPopup).then(function() {
-                    return reportServicePage.waitForElement(self.formEditContainerEl);
-                });
+                return reportContentPage.assertNotificationMessage('Record saved');
+            }).then(function() {
+                return reportServicePage.waitForElement(self.formEditContainerEl);
             });
         };
 
@@ -224,7 +223,6 @@
 
         this.verifyErrorMessages = function(expectedErrorMessages) {
             var self = this;
-            var errorMsgs = [];
             return reportServicePage.waitForElement(self.formErrorMessageContent).then(function() {
                 return reportServicePage.waitForElement(self.formErrorMessage).then(function() {
                     self.formErrorMessageContent.all(by.className('qbErrorMessageItem')).filter(function(elm) {
@@ -301,6 +299,7 @@
         };
 
         this.verifyFieldsNotPresentOnForm = function(formTableElement, expectedFieldsNotPresentOnForm) {
+            var self = this;
             return formTableElement.all(by.className('fieldLabel')).filter(function(elm) {
                 return elm;
             }).map(function(elm) {

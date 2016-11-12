@@ -289,7 +289,7 @@
          * Function returns the date input cells for the record being edited in agGrid
          * @returns An array of element locators
          */
-        //TODO: Extend for editing multiple records at a time
+            //TODO: Extend for editing multiple records at a time
         this.getNumericFieldInputCells = function() {
             return this.agGridRecordElList.filter(function(elem) {
                 // Return only the row with 'editing' in the class
@@ -306,7 +306,7 @@
          * Function returns the date input cells for the record being edited in agGrid
          * @returns An array of element locators
          */
-        //TODO: Extend for editing multiple records at a time
+            //TODO: Extend for editing multiple records at a time
         this.getDateFieldInputCells = function() {
             return this.agGridRecordElList.filter(function(elem) {
                 // Return only the row with 'editing' in the class
@@ -519,7 +519,7 @@
         // Notification window assertion
         this.assertNotificationMessage = function(notificationMessage) {
             var self = this;
-            this.waitForElement(self.notificationWindow).then(function() {
+            self.waitForElementToBePresent(self.notificationWindow).then(function() {
                 expect(self.notificationWindow.getText()).toMatch(notificationMessage.toString());
                 return self.waitForElementToBeInvisible(self.notificationWindow);
             });

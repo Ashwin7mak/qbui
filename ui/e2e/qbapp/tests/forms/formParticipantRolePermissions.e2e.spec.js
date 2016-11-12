@@ -138,9 +138,12 @@
                 //Save the form
                 formsPage.clickFormSaveBtn();
             }).then(function() {
+                reportContentPO.assertNotificationMessage('Record added');
+            }).then(function() {
                 //Reload the report to verify record Added
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
                 reportContentPO.waitForReportContent();
+            }).then(function() {
                 //Verify record added
                 reportServicePage.agGridRecordElList.then(function(records) {
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
@@ -149,7 +152,6 @@
                     done();
                 });
             });
-
         });
 
         it('Verify can edit a record since table rights canModify set to "ALL_RECORDS', function(done) {
@@ -172,6 +174,8 @@
             }).then(function() {
                 //Save the form
                 formsPage.clickFormSaveBtn();
+            }).then(function() {
+                reportContentPO.assertNotificationMessage('Record saved');
                 done();
             });
 

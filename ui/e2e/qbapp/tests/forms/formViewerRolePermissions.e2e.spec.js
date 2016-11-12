@@ -17,7 +17,7 @@
     var reportContentPO = new ReportContentPO();
     var formsPage = new FormsPage();
 
-    describe('Form Permission Tests: ', function() {
+    describe('Form Viewer Permission Tests: ', function() {
 
         var realmName;
         var realmId;
