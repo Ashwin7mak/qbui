@@ -100,15 +100,16 @@
             }).then(function() {
                 //go to edit mode
                 reportServicePage.waitForElementToBeClickable(reportServicePage.reportEditRecordBtnOnStage).then(function() {
-                    return reportServicePage.reportEditRecordBtnOnStage.click().then(function() {
+                    reportServicePage.reportEditRecordBtnOnStage.click().then(function() {
                         reportServicePage.waitForElement(element(by.className('editForm')));
                         //wait for trowser to animate
                         e2eBase.sleep(browser.params.smallSleep);
                         //Verify cannot see any text fields on the form in edit mode as modify access set to false
                         formsPage.verifyFieldsNotPresentOnForm(formsPage.formTable, ['Text Field', 'Phone Number Field', 'Email Address Field', 'URL Field']);
-                        done();
                     });
                 });
+            }).then(function() {
+                done();
             });
         });
 
@@ -135,6 +136,7 @@
                 reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
             }).then(function() {
                 formsPage.closeSaveChangesDialogue();
+            }).then(function() {
                 done();
             });
         });
@@ -166,6 +168,7 @@
                 //reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
             }).then(function() {
                 formsPage.closeSaveChangesDialogue();
+            }).then(function() {
                 done();
             });
         });

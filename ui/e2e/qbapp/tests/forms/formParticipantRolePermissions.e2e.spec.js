@@ -103,15 +103,16 @@
             }).then(function() {
                 //go to edit mode
                 reportServicePage.waitForElementToBeClickable(reportServicePage.reportEditRecordBtnOnStage).then(function() {
-                    return reportServicePage.reportEditRecordBtnOnStage.click().then(function() {
+                    reportServicePage.reportEditRecordBtnOnStage.click().then(function() {
                         reportServicePage.waitForElement(element(by.className('editForm')));
                         //wait for trowser to animate
                         e2eBase.sleep(browser.params.smallSleep);
                         //Verify cannot see any text fields on the form in edit mode as modify access set to false
                         formsPage.verifyFieldsNotPresentOnForm(formsPage.formTable, expectedNumericFieldsWhichHasNoFieldRights);
-                        done();
                     });
                 });
+            }).then(function() {
+                done();
             });
         });
 
@@ -149,8 +150,9 @@
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
                         formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
                     }
-                    done();
                 });
+            }).then(function() {
+                done();
             });
         });
 

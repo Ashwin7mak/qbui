@@ -521,7 +521,8 @@
             var self = this;
             self.waitForElementToBePresent(self.notificationWindow).then(function() {
                 expect(self.notificationWindow.getText()).toMatch(notificationMessage.toString());
-                return self.waitForElementToBeInvisible(self.notificationWindow);
+                //wait for growl to slide away
+                e2eBase.sleep(browser.params.mediumSleep);
             });
         };
 

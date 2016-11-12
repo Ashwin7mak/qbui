@@ -76,6 +76,7 @@
             }).then(function() {
                 //close dirty form
                 formsPage.closeSaveChangesDialogue();
+            }).then(function() {
                 done();
             });
         });
@@ -113,6 +114,7 @@
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
                     formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
                 }
+            }).then(function() {
                 done();
             });
         });

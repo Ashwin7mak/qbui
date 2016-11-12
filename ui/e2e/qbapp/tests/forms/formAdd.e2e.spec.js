@@ -62,8 +62,9 @@
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
                         formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
                     }
-                    done();
                 });
+            }).then(function() {
+                done();
             });
         });
 

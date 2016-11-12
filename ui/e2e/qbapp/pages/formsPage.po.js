@@ -15,13 +15,11 @@
     var ReportContentPage = requirePO('reportContent');
     var reportContentPage = new ReportContentPage();
 
-    var date = new Array();
-    date = new Date().toJSON().slice(0, 10).split('-');
     var sText = '9782341234';
     var sNumeric = rawValueGenerator.generateInt(1, 100);
     var sTime = "12:00 am";
-
-    var sDate = date[1] + '-' + date[2] + '-' + date[0];
+    var date = new Date();
+    var sDate = ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2) + '-' + date.getFullYear();
 
     var FormsPage = function() {
         this.formTrowserHeader = element.all(by.className('trowserHeader')).first();
