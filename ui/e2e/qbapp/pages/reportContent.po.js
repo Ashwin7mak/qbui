@@ -520,7 +520,7 @@
         this.assertNotificationMessage = function(notificationMessage) {
             var self = this;
             self.waitForElementToBePresent(self.notificationWindow).then(function() {
-                expect(self.notificationWindow.getText()).toMatch(notificationMessage.toString());
+                expect(self.notificationWindow.getAttribute('textContent')).toMatch(notificationMessage.toString());
                 //wait for growl to slide away
                 e2eBase.sleep(browser.params.mediumSleep);
             });
