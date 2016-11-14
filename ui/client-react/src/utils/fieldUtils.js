@@ -37,6 +37,28 @@ class FieldUtils {
     }
 
     /**
+     * Gets the name for the unique identifier row from grid data
+     * even if the Record ID # field has been renamed
+     * @param {object} rowData
+     *    {
+     *        fieldName: {
+     *            id: 3 // this is the field id
+     *            value: 2
+     *            display: "2"
+     *        }
+     *    }
+     * @returns {string}
+     */
+    static getUniqueIdentifierFieldNameFromData(rowData) {
+        let recordIdField = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
+        if (recordIdField) {
+            return recordIdField;
+        } else {
+            return SchemaConsts.DEFAULT_RECORD_KEY;
+        }
+    }
+
+    /**
      * gets the maxlength from the field def if specified
      * @param fieldDef - the field definition
      * @returns maxlenght or undefined
@@ -48,28 +70,6 @@ class FieldUtils {
             maxLength =  fieldDef.datatypeAttributes.clientSideAttributes.max_chars;
         }
         return maxLength;
-    }
-
-    /**
-    * Gets the name for the unique identifier row from grid data
-    * even if the Record ID # field has been renamed
-    * @param {object} rowData
-    *    {
-    *        fieldName: {
-    *            id: 3 // this is the field id
-    *            value: 2
-    *            display: "2"
-    *        }
-    *    }
-    * @returns {string}
-    */
-    static getUniqueIdentifierFieldNameFromData(rowData) {
-        let recordIdField = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
-        if (recordIdField) {
-            return recordIdField;
-        } else {
-            return SchemaConsts.DEFAULT_RECORD_KEY;
-        }
     }
 
     /**
