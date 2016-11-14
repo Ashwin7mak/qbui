@@ -505,11 +505,11 @@ let AGGrid = React.createClass({
             this.editRow();
             logger.debug('edit completed');
         }
-        // we have a new inserted row put ite.data && node.data[SchemaConsts.DEFAULT_RECORD_KEY]  in edit mode
+        // we have a new inserted row put ite.data && node.data[Record Key Field]  in edit mode
         if (typeof (this.props.editingIndex) !== 'undefined') {
             let found = false;
             this.api.forEachNode((node) => {
-                if (!found && node.data && node.data[SchemaConsts.DEFAULT_RECORD_KEY] && this.props.editingId === node.data[SchemaConsts.DEFAULT_RECORD_KEY].value) {
+                if (!found && node.data && node.data[FieldUtils.getUniqueIdentifierFieldName(node.data)] && this.props.editingId === node.data[FieldUtils.getUniqueIdentifierFieldNameFromData(node.data)].value) {
                     this.startEditRow(this.props.editingId, node);
                     found = true;
                 }

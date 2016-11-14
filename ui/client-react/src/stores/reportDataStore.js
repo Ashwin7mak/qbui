@@ -455,6 +455,7 @@ let reportModel = {
         const newRecords = this.model.records ? this.model.records.slice(0) : null;
         let recordDeleted = false;
         let filteredRecordDeleted = false;
+
         if (this.model.hasGrouping) {
             filteredRecordDeleted = ReportUtils.removeGroupedRecordById(newFilteredRecords, recId, this.model.keyField.name);
             recordDeleted = ReportUtils.removeGroupedRecordById(newRecords, recId, this.model.keyField.name);
