@@ -19,7 +19,7 @@
         var realmId;
         var app;
         var recordList;
-        var expectedNumericErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field'];
+        var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
 
         beforeAll(function(done) {
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
@@ -46,12 +46,12 @@
         beforeEach(function(done) {
             //go to report page directly.
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPage.waitForReportContent();
             done();
         });
 
         it('Save Button - Validate errors ', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
-            reportContentPage.waitForReportContent();
             //click edit record from the grid recordActions
             reportServicePage.clickRecordEditPencil(2);
 
@@ -64,7 +64,7 @@
             formsPage.clickSaveBtnWithName('Save');
 
             //verify validation
-            formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+            formsPage.verifyErrorMessages(expectedErrorMessages);
 
             //verify clicking on alert button brings up the error message popup
             formsPage.clickFormAlertBtn();
@@ -81,7 +81,6 @@
 
         it('Save and Next Button - Validate errors and correct the errors by editing new record', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
-            reportContentPage.waitForReportContent();
             //click edit record from the grid recordActions
             reportServicePage.clickRecordEditPencil(3);
 
@@ -94,7 +93,7 @@
             formsPage.clickSaveBtnWithName('Save & Next');
 
             //verify validation
-            formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+            formsPage.verifyErrorMessages(expectedErrorMessages);
             // Needed to get around stale element error
             e2eBase.sleep(browser.params.smallSleep);
 
@@ -105,8 +104,6 @@
 
             //Save the form by clicking on 'Save and Next' btn
             formsPage.clickFormSaveAndNextBtn();
-
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent();
 
             for (var k = 0; k < fieldTypeClassNames.length; k++) {

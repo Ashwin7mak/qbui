@@ -72,9 +72,6 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
-
-            //reload the report to verify the row edited
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
             reportCardViewPage.waitForReportReady();
 
             //Verify there are 8 records after adding 1
@@ -95,10 +92,6 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
-
-            //reload the report to verify the row edited
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
-            //verify the edited record
             reportCardViewPage.waitForReportReady();
 
             //Select record 1
@@ -122,10 +115,6 @@
 
             //Save the form
             formsPage.clickFormSaveAndNextBtn();
-
-            //reload the report to verify the row edited
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
-            //verify the edited record
             reportCardViewPage.waitForReportReady();
 
             reportCardViewPage.clickRecord(4);

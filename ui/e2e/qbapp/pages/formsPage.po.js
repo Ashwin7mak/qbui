@@ -148,14 +148,14 @@
                         return elm;
                     }).map(function(elm) {
                         //TODO typing in date is failing adding a record
-                        //return elm.element(by.className('date')).click().then(function() {
-                        //    return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
-                        //});
-
-                        //Select the date from the date picker.
-                        return elm.element(by.className('date')).element(by.tagName('input')).sendKeys(protractor.Key.BACK_SPACE).then(function() {
-                            return self.selectTodaysDateFromDatePicker(elm);
+                        return elm.element(by.className('date')).click().then(function() {
+                            return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
                         });
+
+                        ////Select the date from the date picker.
+                        //return elm.element(by.className('date')).element(by.tagName('input')).sendKeys(protractor.Key.BACK_SPACE).then(function() {
+                        //    return self.selectTodaysDateFromDatePicker(elm);
+                        //});
                     });
                 } else if (fieldLabel === 'textField') {
                     //enter text fields
@@ -202,7 +202,7 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return elm.clear().sendKeys("9782311213");
+                        return elm.clear().sendKeys("");
                     });
                 } else if (fieldLabel === 'numericField') {
                     //enter numeric fields

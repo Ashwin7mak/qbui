@@ -136,15 +136,12 @@
 
                 //Save the form
                 formsPage.clickFormSaveBtn();
-
-                //Reload the report to verify record Added
-                e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
                 reportContentPO.waitForReportContent();
 
                 //Verify record added
                 reportServicePage.agGridRecordElList.then(function(records) {
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
+                        formsPage.verifyFieldValuesInReportTable(0, fieldTypeClassNames[j]);
                     }
                     done();
                 });
@@ -171,6 +168,7 @@
 
                 //Save the form
                 formsPage.clickFormSaveBtn();
+                reportContentPO.waitForReportContent();
 
                 //Verify edited record
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {

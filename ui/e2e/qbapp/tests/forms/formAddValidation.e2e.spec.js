@@ -19,6 +19,7 @@
         var realmId;
         var app;
         var recordList;
+        var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
 
         beforeAll(function(done) {
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
@@ -52,7 +53,6 @@
         });
 
         it('Validate all required fields by not entering anything into them on form', function(done) {
-            var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
             formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
                 //click on add record button
                 reportServicePage.clickAddRecordOnStage();
@@ -79,7 +79,6 @@
                 {
                     message: 'all numeric fields',
                     fieldTypeClassNames: 'numericField',
-                    expectedErrorMessages : ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field']
                 },
             ];
         }
@@ -97,7 +96,7 @@
                     formsPage.clickSaveBtnWithName('Save');
 
                     //verify field validations
-                    formsPage.verifyErrorMessages(testcase.expectedErrorMessages);
+                    formsPage.verifyErrorMessages(expectedErrorMessages);
 
                     //verify clicking on alert button brings up the error message popup
                     formsPage.clickFormAlertBtn();
@@ -116,7 +115,6 @@
 
         it('Save and add another Button - Validate errors and correct the errors by adding new record', function(done) {
             var validFieldClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
-            var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
 
             //click on add record button
             reportServicePage.clickAddRecordOnStage();
@@ -139,15 +137,12 @@
 
             //Save the form by clicking on 'Save and add another' btn
             formsPage.clickFormSaveAndAddAnotherBtn();
-
-            //reload the report to verify the row edited
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent();
 
             //reload the report to verify the row edited
             reportServicePage.agGridRecordElList.then(function(records) {
                 for (var j = 0; j < validFieldClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(records.length - 1, validFieldClassNames[j]);
+                    formsPage.verifyFieldValuesInReportTable(0, validFieldClassNames[j]);
                 }
                 done();
             });

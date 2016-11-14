@@ -130,6 +130,7 @@
 
                 //Save the form
                 formsPage.clickSaveBtnWithName('Save');
+                reportContentPO.waitForReportContent();
 
                 //Verify record has no permission message shows up.
                 reportContentPO.assertNotificationMessage("You are not authorized to create or access this record");
@@ -159,6 +160,7 @@
 
                 //Save the form
                 formsPage.clickSaveBtnWithName('Save');
+                reportContentPO.waitForReportContent();
 
                 //Verify record has no permission message shows up.
                 reportContentPO.assertNotificationMessage("Record not saved");

@@ -53,14 +53,12 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
-
-            //reload the report to verify the row edited
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent();
 
+            //Verify record is added on top row in a table
             reportServicePage.agGridRecordElList.then(function(records) {
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
+                    formsPage.verifyFieldValuesInReportTable(0, fieldTypeClassNames[j]);
                 }
                 done();
             });
