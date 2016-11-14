@@ -44,31 +44,28 @@
             //Open the report
             //reload the report to verify the row edited
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPage.waitForReportContent().then(function() {
-                //click edit record from the grid recordActions
-                reportServicePage.clickRecordEditPencil(2);
-            }).then(function() {
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                formsPage.clickFormSaveBtn();
-            }).then(function() {
-                reportContentPage.assertNotificationMessage('Record saved');
-            }).then(function() {
-                //reload the report to verify the row edited
-                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-                reportContentPage.waitForReportContent();
-            }).then(function() {
-                //verify the edited record
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
-                }
-            }).then(function() {
-                done();
-            });
+            reportContentPage.waitForReportContent();
+
+            //click edit record from the grid recordActions
+            reportServicePage.clickRecordEditPencil(2);
+
+            //get the fields from the table and generate a record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                formsPage.enterFormValues(fieldTypeClassNames[i]);
+            }
+
+            //Save the form
+            formsPage.clickFormSaveBtn();
+
+            //reload the report to verify the row edited
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPage.waitForReportContent();
+
+            //verify the edited record
+            for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+            }
+            done();
         });
 
         xit('Edit a record via stage pageActions edit pencil using report with sorting', function(done) {
@@ -77,61 +74,54 @@
             //Open the report
             //reload the report to verify the row edited
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 3);
-            reportContentPage.waitForReportContent().then(function() {
-                //click edit record from the grid recordActions
-                reportServicePage.clickEditPencilOnStage(3);
-            }).then(function() {
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                formsPage.clickFormSaveBtn();
-            }).then(function() {
-                reportContentPage.assertNotificationMessage('Record saved');
-            }).then(function() {
-                //reload the report to verify the row edited
-                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 3);
-                reportContentPage.waitForReportContent();
-            }).then(function() {
-                //verify the edited record
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
-                }
-            }).then(function() {
-                done();
-            });
+            reportContentPage.waitForReportContent();
+            //click edit record from the grid recordActions
+            reportServicePage.clickEditPencilOnStage(3);
+
+            //get the fields from the table and generate a record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                formsPage.enterFormValues(fieldTypeClassNames[i]);
+            }
+
+            //Save the form
+            formsPage.clickFormSaveBtn();
+
+            //reload the report to verify the row edited
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 3);
+            reportContentPage.waitForReportContent();
+
+            //verify the edited record
+            for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
+            }
+            done();
         });
 
         it('Edit a record from the tableActions Container using report with facets', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
             //Open the report
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);
-            reportContentPage.waitForReportContent().then(function() {
-                //click on add record button
-                reportServicePage.clickEditPencilOnReportActions(1);
-            }).then(function() {
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                formsPage.clickFormSaveBtn();
-            }).then(function() {
-                reportContentPage.assertNotificationMessage('Record saved');
-            }).then(function() {
-                //reload the report to verify the row edited
-                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);
-                reportContentPage.waitForReportContent();
-            }).then(function() {
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(1, fieldTypeClassNames[j]);
-                }
-            }).then(function() {
-                done();
-            });
+            reportContentPage.waitForReportContent();
+
+            //click on add record button
+            reportServicePage.clickEditPencilOnReportActions(1);
+
+            //get the fields from the table and generate a record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                formsPage.enterFormValues(fieldTypeClassNames[i]);
+            }
+
+            //Save the form
+            formsPage.clickFormSaveBtn();
+
+            //reload the report to verify the row edited
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 4);
+            reportContentPage.waitForReportContent();
+
+            for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                formsPage.verifyFieldValuesInReportTable(1, fieldTypeClassNames[j]);
+            }
+            done();
         });
     });
 }());

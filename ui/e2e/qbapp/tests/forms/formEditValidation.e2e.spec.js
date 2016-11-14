@@ -51,72 +51,68 @@
 
         it('Save Button - Validate errors ', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
-            reportContentPage.waitForReportContent().then(function() {
-                //click edit record from the grid recordActions
-                reportServicePage.clickRecordEditPencil(2);
-            }).then(function() {
-                //enter invalid values into fields on form
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterInvalidFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                formsPage.clickSaveBtnWithName('Save');
-            }).then(function() {
-                //verify validation
-                formsPage.verifyErrorMessages(expectedNumericErrorMessages);
-            }).then(function() {
-                //verify clicking on alert button brings up the error message popup
-                formsPage.clickFormAlertBtn();
-                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
-            }).then(function() {
-                //verify clicking on alert again hides the error message popup
-                formsPage.clickFormAlertBtn();
-                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
-            }).then(function() {
-                //close dirty form
-                formsPage.closeSaveChangesDialogue();
-            }).then(function() {
-                done();
-            });
+            reportContentPage.waitForReportContent();
+            //click edit record from the grid recordActions
+            reportServicePage.clickRecordEditPencil(2);
+
+            //enter invalid values into fields on form
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                formsPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+            }
+
+            //Save the form
+            formsPage.clickSaveBtnWithName('Save');
+
+            //verify validation
+            formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+
+            //verify clicking on alert button brings up the error message popup
+            formsPage.clickFormAlertBtn();
+            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
+
+            //verify clicking on alert again hides the error message popup
+            formsPage.clickFormAlertBtn();
+            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
+
+            //close dirty form
+            formsPage.closeSaveChangesDialogue();
+            done();
         });
 
         it('Save and Next Button - Validate errors and correct the errors by editing new record', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
-            reportContentPage.waitForReportContent().then(function() {
-                //click edit record from the grid recordActions
-                reportServicePage.clickRecordEditPencil(3);
-            }).then(function() {
-                //get the fields from the table and generate a record
-                for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                    formsPage.enterInvalidFormValues(fieldTypeClassNames[i]);
-                }
-            }).then(function() {
-                //Save the form
-                formsPage.clickSaveBtnWithName('Save & Next');
-            }).then(function() {
-                //verify validation
-                formsPage.verifyErrorMessages(expectedNumericErrorMessages);
-                // Needed to get around stale element error
-                e2eBase.sleep(browser.params.smallSleep);
-            }).then(function() {
-                //correct the errors and add the record
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.enterFormValues(fieldTypeClassNames[j]);
-                }
-            }).then(function() {
-                //Save the form by clicking on 'Save and Next' btn
-                formsPage.clickFormSaveAndNextBtn();
-            }).then(function() {
-                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-                reportContentPage.waitForReportContent();
-            }).then(function() {
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
-                }
-            }).then(function() {
-                done();
-            });
+            reportContentPage.waitForReportContent();
+            //click edit record from the grid recordActions
+            reportServicePage.clickRecordEditPencil(3);
+
+            //get the fields from the table and generate a record
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                formsPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+            }
+
+            //Save the form
+            formsPage.clickSaveBtnWithName('Save & Next');
+
+            //verify validation
+            formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+            // Needed to get around stale element error
+            e2eBase.sleep(browser.params.smallSleep);
+
+            //correct the errors and add the record
+            for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                formsPage.enterFormValues(fieldTypeClassNames[j]);
+            }
+
+            //Save the form by clicking on 'Save and Next' btn
+            formsPage.clickFormSaveAndNextBtn();
+
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPage.waitForReportContent();
+
+            for (var k = 0; k < fieldTypeClassNames.length; k++) {
+                formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[k]);
+            }
+            done();
         });
 
     });

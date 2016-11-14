@@ -117,41 +117,39 @@
         it('Save and add another Button - Validate errors and correct the errors by adding new record', function(done) {
             var validFieldClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
             var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
-            formsPage.waitForElement(reportServicePage.reportStageContentEl).then(function() {
-                //click on add record button
-                reportServicePage.clickAddRecordOnStage();
 
-                //enter invalid values into fields
-                formsPage.enterInvalidFormValues('numericField');
+            //click on add record button
+            reportServicePage.clickAddRecordOnStage();
 
-                //Save the form
-                formsPage.clickSaveBtnWithName('Save & Add Another');
+            //enter invalid values into fields
+            formsPage.enterInvalidFormValues('numericField');
 
-                //verify validation
-                formsPage.verifyErrorMessages(expectedErrorMessages);
-                // Needed to get around stale element error
-                e2eBase.sleep(browser.params.smallSleep);
-            }).then(function() {
-                //correct the errors and add the record
-                for (var i = 0; i < validFieldClassNames.length; i++) {
-                    formsPage.enterFormValues(validFieldClassNames[i]);
+            //Save the form
+            formsPage.clickSaveBtnWithName('Save & Add Another');
+
+            //verify validation
+            formsPage.verifyErrorMessages(expectedErrorMessages);
+            // Needed to get around stale element error
+            e2eBase.sleep(browser.params.smallSleep);
+
+            //correct the errors and add the record
+            for (var i = 0; i < validFieldClassNames.length; i++) {
+                formsPage.enterFormValues(validFieldClassNames[i]);
+            }
+
+            //Save the form by clicking on 'Save and add another' btn
+            formsPage.clickFormSaveAndAddAnotherBtn();
+
+            //reload the report to verify the row edited
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPage.waitForReportContent();
+
+            //reload the report to verify the row edited
+            reportServicePage.agGridRecordElList.then(function(records) {
+                for (var j = 0; j < validFieldClassNames.length; j++) {
+                    formsPage.verifyFieldValuesInReportTable(records.length - 1, validFieldClassNames[j]);
                 }
-            }).then(function() {
-                //Save the form by clicking on 'Save and add another' btn
-                formsPage.clickFormSaveAndAddAnotherBtn();
-            }).then(function() {
-                //reload the report to verify the row edited
-                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-                reportContentPage.waitForReportContent();
-            }).then(function() {
-                //reload the report to verify the row edited
-                reportServicePage.agGridRecordElList.then(function(records) {
-                    for (var j = 0; j < validFieldClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(records.length - 1, validFieldClassNames[j]);
-                    }
-                }).then(function() {
-                    done();
-                });
+                done();
             });
         });
 

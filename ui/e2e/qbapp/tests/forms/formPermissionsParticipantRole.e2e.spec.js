@@ -94,13 +94,13 @@
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
                 reportContentPO.waitForReportContent();
-            }).then(function() {
+
                 //Open a record
                 reportServicePage.openRecord(2);
-            }).then(function() {
+
                 //Verify cannot see any text fields on the form in view mode as readaccess set to false
                 formsPage.verifyFieldsNotPresentOnForm(formsPage.formViewModeTable, expectedNumericFieldsWhichHasNoFieldRights);
-            }).then(function() {
+
                 //go to edit mode
                 reportServicePage.waitForElementToBeClickable(reportServicePage.reportEditRecordBtnOnStage).then(function() {
                     reportServicePage.reportEditRecordBtnOnStage.click().then(function() {
@@ -109,50 +109,45 @@
                         e2eBase.sleep(browser.params.smallSleep);
                         //Verify cannot see any text fields on the form in edit mode as modify access set to false
                         formsPage.verifyFieldsNotPresentOnForm(formsPage.formTable, expectedNumericFieldsWhichHasNoFieldRights);
+                        done();
                     });
                 });
-            }).then(function() {
-                done();
             });
         });
 
 
         it('Verify can add a record since table rights canAdd set to true and no fieldRights to Numeric fields', function(done) {
             var fieldTypeClassNames = ['textField'];
-            RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint)).then(function() {
-            }).then(function() {
-                //get user authentication
-                formsPage.getUserAuthentication(userId);
-            }).then(function() {
+
+            //get user authentication
+            formsPage.getUserAuthentication(userId).then(function() {
+
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
                 reportContentPO.waitForReportContent();
-            }).then(function() {
+
                 //click on add record button
                 reportServicePage.clickAddRecordOnStage();
-            }).then(function() {
+
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
-            }).then(function() {
+
                 //Save the form
                 formsPage.clickFormSaveBtn();
-            }).then(function() {
-                reportContentPO.assertNotificationMessage('Record added');
-            }).then(function() {
+
                 //Reload the report to verify record Added
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
                 reportContentPO.waitForReportContent();
-            }).then(function() {
+
                 //Verify record added
                 reportServicePage.agGridRecordElList.then(function(records) {
                     for (var j = 0; j < fieldTypeClassNames.length; j++) {
                         formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
                     }
+                    done();
                 });
-            }).then(function() {
-                done();
             });
         });
 
@@ -161,23 +156,26 @@
 
             //get user authentication
             formsPage.getUserAuthentication(userId).then(function() {
-            }).then(function() {
+
                 //Open the report
                 e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
                 reportContentPO.waitForReportContent();
-            }).then(function() {
+
                 //click edit record from the grid recordActions
                 reportServicePage.clickRecordEditPencil(2);
-            }).then(function() {
+
                 //get the fields from the table and generate a record
                 for (var i = 0; i < fieldTypeClassNames.length; i++) {
                     formsPage.enterFormValues(fieldTypeClassNames[i]);
                 }
-            }).then(function() {
+
                 //Save the form
                 formsPage.clickFormSaveBtn();
-            }).then(function() {
-                reportContentPO.assertNotificationMessage('Record saved');
+
+                //Verify edited record
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                }
                 done();
             });
 

@@ -83,9 +83,6 @@
                 });
             }).then(function(filteredSaveBtn) {
                 return filteredSaveBtn[0].click();
-            }).then(function() {
-                //check if there are any console errors after clicking the button.
-                return self.checkConsoleErrors();
             });
         };
 
@@ -104,9 +101,6 @@
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
                 return self.clickSaveBtnWithName('Save & Add Another');
             }).then(function() {
-                // Check that the edit notification is displayed
-                return reportContentPage.assertNotificationMessage('Record added');
-            }).then(function() {
                 return reportServicePage.waitForElement(self.formEditContainerEl);
             });
         };
@@ -115,9 +109,6 @@
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formSaveBtn).then(function() {
                 return self.clickSaveBtnWithName('Save & Next');
-            }).then(function() {
-                // Check that the edit notification is displayed
-                return reportContentPage.assertNotificationMessage('Record saved');
             }).then(function() {
                 return reportServicePage.waitForElement(self.formEditContainerEl);
             });
@@ -313,22 +304,6 @@
                 });
             });
 
-        };
-
-        this.checkConsoleErrors = function() {
-            browser.manage().logs().get('browser').then(function(browserLog) {
-                if (browserLog.length) {
-                    browserLog.forEach(function(log) {
-                        var error = log.level.value > 900;
-                        if (error) {
-                            console.error('ERROR: ', log.message);
-                            if (log.timestamp > timestamp) {
-                                expect(error).toBeFalsy(); //only check for errors after the button click
-                            }
-                        }
-                    });
-                }
-            });
         };
 
     };
