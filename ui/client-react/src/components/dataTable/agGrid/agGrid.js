@@ -12,7 +12,6 @@ import Loader  from 'react-loader';
 import Fluxxor from 'fluxxor';
 import * as query from '../../../constants/query';
 import ReportUtils from '../../../utils/reportUtils';
-import FieldUtils from '../../../utils/fieldUtils';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 import {
@@ -73,7 +72,7 @@ let AGGrid = React.createClass({
     rowHeight: consts.DEFAULT_HEADER_HEIGHT,
 
     propTypes: {
-        uniqueIdentifier: React.PropTypes.string,
+        uniqueIdentifier: React.PropTypes.string.isRequired,
         selectionActions: React.PropTypes.element,
         reportHeader: React.PropTypes.element,
         reportFooter: React.PropTypes.element,
@@ -470,7 +469,6 @@ let AGGrid = React.createClass({
         this.gridOptions.context.validateFieldValue = this.handleValidateFieldValue;
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
-        this.gridOptions.context.keyField = this.props.keyField;
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
         this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
         this.gridOptions.context.onAttach = this.onAttach;
@@ -505,11 +503,11 @@ let AGGrid = React.createClass({
             this.editRow();
             logger.debug('edit completed');
         }
-        // we have a new inserted row put ite.data && node.data[Record Key Field]  in edit mode
+        // we have a new inserted row put ite.data && node.data[uniqueIdentifier]  in edit mode
         if (typeof (this.props.editingIndex) !== 'undefined') {
             let found = false;
             this.api.forEachNode((node) => {
-                if (!found && node.data && node.data[FieldUtils.getUniqueIdentifierFieldName(node.data)] && this.props.editingId === node.data[FieldUtils.getUniqueIdentifierFieldName(node.data)].value) {
+                if (!found && node.data && node.data[this.props.uniqueIdentifier] && this.props.editingId === node.data[this.props.uniqueIdentifier].value) {
                     this.startEditRow(this.props.editingId, node);
                     found = true;
                 }
@@ -722,9 +720,8 @@ let AGGrid = React.createClass({
         let rows = [];
         if (this.api) {
             this.api.getSelectedRows().forEach(row => {
-                let recordIdField = FieldUtils.getUniqueIdentifierFieldName(row);
-                if (row[recordIdField]) {
-                    rows.push(row[recordIdField].value);
+                if (row[this.props.uniqueIdentifier]) {
+                    rows.push(row[this.props.uniqueIdentifier].value);
                 }
             });
         }
