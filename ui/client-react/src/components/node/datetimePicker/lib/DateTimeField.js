@@ -546,7 +546,6 @@ var DateTimeField = (function (_Component) {
           addMinute: this.addMinute,
           addMonth: this.addMonth,
           addYear: this.addYear,
-          onEscape: this.onEscape,
           daysOfWeekDisabled: this.props.daysOfWeekDisabled,
           maxDate: this.props.maxDate,
           minDate: this.props.minDate,
