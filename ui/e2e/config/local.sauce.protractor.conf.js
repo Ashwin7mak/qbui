@@ -41,11 +41,13 @@
         sauceUser           : 'QuickBaseNS',
         sauceKey            : process.env.SAUCE_KEY,
         // We have to specify the selenium address to point locally so that we use the tunnel properly
-        sauceSeleniumAddress: 'localhost:4445/wd/hub',
+        // sauceSeleniumAddress: 'localhost:4445/wd/hub',
         // list of files / patterns to load in the browser
         specs: [
             baseE2EPath + 'qbapp/tests/reports/reportFacets.e2e.spec.js',
-            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js'
+            baseE2EPath + 'qbapp/tests/reports/reportSortingViaColumnHeader.e2e.spec.js',
+            //baseE2EPath + 'qbapp/tests/forms/formAdd.e2e.spec.js',
+            //baseE2EPath + 'qbapp/tests/forms/formEdit.e2e.spec.js'
         ],
         // Patterns to exclude.
         exclude: [

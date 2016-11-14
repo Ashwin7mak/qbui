@@ -29,7 +29,7 @@
             maxDuration: 10800,
             breakpointSize: 'large',
             shardTestFiles: true,
-            maxInstances: 2
+            maxInstances: 4
         },
         {
             platform: 'OS X 10.11',
@@ -42,7 +42,7 @@
             maxDuration: 10800,
             breakpointSize: 'xlarge',
             shardTestFiles: true,
-            maxInstances: 2
+            maxInstances: 4
         },
         //{
         //    platform: 'OS X 10.11',

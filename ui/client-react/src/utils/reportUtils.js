@@ -3,6 +3,7 @@
  */
 
 import constants from '../../../common/src/constants';
+import _ from 'lodash';
 
 const listDelimiter = constants.REQUEST_PARAMETER.LIST_DELIMITER;
 const groupDelimiter = constants.REQUEST_PARAMETER.GROUP_DELIMITER;
@@ -266,6 +267,126 @@ class ReportUtils {
         return null;
     }
 
+    /*
+     * find first leaf record in a grouped records report
+     *
+     * @param node node in grouped record tree
+     * @param recId record id to find
+     * @param keyName key field name
+     */
+    static findFirstGroupedRecord(node) {
+
+        if (Array.isArray(node)) {
+            return ReportUtils.findFirstGroupedRecord({children: node});
+        }
+        if (node.children) {
+            let result = null;
+
+            for (let i = 0; result === null && i < node.children.length; i++) {
+                result = ReportUtils.findFirstGroupedRecord(node.children[i]);
+            }
+            return result;
+        } else {
+            return node;
+        }
+    }
+
+    /**
+     * Add a record to a group after a specified record id.
+     * @param group
+     * @param node
+     * @param recId
+     * @param keyName
+     * @param newRec
+     * @returns {*}
+     */
+
+    static addGroupedRecordAfterRecId(node, recId, keyName, newRec) {
+
+        if (node.children) {
+            return ReportUtils.addGroupedRecordAfterRecId(node.children, recId, keyName, newRec);
+        }
+        if (Array.isArray(node)) {
+            let index = _.findIndex(node, child => child[keyName] && child[keyName].value === recId);
+            if (index !== -1) {
+                node.splice(index + 1, 0, newRec);
+                return true;
+            } else {
+                let found = false;
+                for (let i = 0; !found && i < node.length; i++) {
+                    found = ReportUtils.addGroupedRecordAfterRecId(node[i], recId, keyName, newRec);
+                }
+                return found;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Find index of a record by recId from a flat array of records
+     * @param array
+     * @param recId
+     * @param keyName
+     * @returns {*}
+     */
+    static findRecordIndex(records, recId, keyName) {
+        if (Array.isArray(records)) {
+            return records.findIndex(record => {
+                return record[keyName] ? record[keyName].value === recId : false;
+            });
+        }
+        return -1;
+    }
+
+    /**
+     * Remove a record by recId from a flat array of records
+     * @param records
+     * @param recId
+     * @param keyName
+     * @returns {Array}
+     */
+    static removeRecordFromArray(records, recId, keyName) {
+        if (Array.isArray(records)) {
+            return _.remove(records, (record) => {
+                return record[keyName] ? record[keyName].value === recId : false;
+            });
+        }
+        return [];
+    }
+
+    /**
+     * Remove a record from a grouped set of records.
+     * @param group
+     * @param node
+     * @param recId
+     * @param keyName
+     * @returns true if record was successfully found and deleted.
+     */
+    static removeGroupedRecordById(node, recId, keyName) {
+
+        let group = node;
+        if (Array.isArray(node)) {
+            group = node = {children: node};
+        }
+        return _removeGroupedRec(group, node);
+
+        function _removeGroupedRec(_group, _node) {
+            if (_node.children) {
+                let found = false;
+
+                for (let i = 0; !found && i < _node.children.length; i++) {
+                    if (_node.children[i].children) {
+                        found = _removeGroupedRec(_node.children, _node.children[i]);
+                    } else {
+                        let removedRecs = ReportUtils.removeRecordFromArray(_node.children, recId, keyName);
+                        found = removedRecs.length > 0;
+                    }
+                }
+                return found;
+            }
+            return false;
+        }
+    }
 }
 
 ReportUtils.listDelimiter = listDelimiter;

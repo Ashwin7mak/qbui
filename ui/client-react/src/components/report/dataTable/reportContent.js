@@ -19,6 +19,8 @@ import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
+import DTSErrorModal from '../../dts/dtsErrorModal';
+import UrlUtils from '../../../utils/urlUtils';
 
 let logger = new Logger();
 
@@ -146,38 +148,45 @@ export let ReportContent = React.createClass({
      * @param recId
      */
     handleEditRecordStart(recId) {
-        const flux = this.getFlux();
-        let origRec = null;
-        let changes = {};
+        if (_.has(this.props, 'reportData.data')) {
+            const flux = this.getFlux();
+            let origRec = null;
+            let changes = {};
 
-        if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
-            origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
-        } else {
-            //add each non null value as to the new record as a change
-            let newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
-                return rec[this.props.uniqueIdentifier].value === recId;
-            });
-            if (newRec) {
-                changes = {};
-                // loop thru the values in the new rec add any non nulls to change set
-                // so it will be treated as dirty/not saved
-                Object.keys(newRec).forEach((key) => {
-                    let field = newRec[key];
-                    let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;
-                    if (fieldDef && !fieldDef.builtIn) {
-                        let change = {
-                            //the + before field.id is needed turn the field id from string into a number
-                            oldVal: {value: undefined, id: +field.id},
-                            newVal: {value: field.value},
-                            fieldName: key,
-                            fieldDef : fieldDef
-                        };
-                        changes[field.id] = change;
-                    }
-                });
+            if (recId !== SchemaConsts.UNSAVED_RECORD_ID) {
+                origRec = this.props.reportData.data.hasGrouping ? this.getOrigGroupedRec(recId) : this.getOrigRec(recId);
+            } else {
+                //add each non null value as to the new record as a change
+                let newRec = null;
+                if (this.props.reportData.data.hasGrouping) {
+                    newRec = ReportUtils.findGroupedRecord(this.props.reportData.data.filteredRecords, recId, this.props.uniqueIdentifier);
+                } else {
+                    newRec = _.find(this.props.reportData.data.filteredRecords, (rec) => {
+                        return rec[this.props.uniqueIdentifier].value === recId;
+                    });
+                }
+                if (newRec) {
+                    changes = {};
+                    // loop thru the values in the new rec add any non nulls to change set
+                    // so it will be treated as dirty/not saved
+                    Object.keys(newRec).forEach((key) => {
+                        let field = newRec[key];
+                        let fieldDef = _.has(this.props, 'reportData.data.fieldsMap') ? this.props.reportData.data.fieldsMap.get(+field.id) : null;
+                        if (fieldDef && !fieldDef.builtIn) {
+                            let change = {
+                                //the + before field.id is needed turn the field id from string into a number
+                                oldVal: {value: undefined, id: +field.id},
+                                newVal: {value: field.value},
+                                fieldName: key,
+                                fieldDef: fieldDef
+                            };
+                            changes[field.id] = change;
+                        }
+                    });
+                }
             }
+            flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
         }
-        flux.actions.recordPendingEditsStart(this.props.appId, this.props.tblId, recId, origRec, changes, true);
     },
 
     /**
@@ -355,7 +364,7 @@ export let ReportContent = React.createClass({
 
     isDateDataType(dataType) {
         return dataType === SchemaConsts.DATE_TIME ||
-               dataType === SchemaConsts.DATE;
+            dataType === SchemaConsts.DATE;
     },
 
     parseTimeOfDay(timeOfDay) {
@@ -409,7 +418,7 @@ export let ReportContent = React.createClass({
 
                 //  Recursive call get to the last grouping field, and then update the grouping
                 //  labels as we work our way back to the top of the stack.
-                if (lvl < groupFields.length - 1) {
+                if (lvl < groupFields.length - 1 && groupDataRecords[group].children) {
                     this.localizeGroupingHeaders(groupFields, groupDataRecords[group].children, lvl + 1);
                 }
 
@@ -423,6 +432,9 @@ export let ReportContent = React.createClass({
                     //  that have already been localized.
                     groupData.localized = true;
 
+                    if (groupData.group === undefined) {
+                        continue;
+                    }
                     //  If no grouping header, use the empty label
                     if (groupData.group === null || groupData.group === '') {
                         groupData.group = Locales.getMessage('groupHeader.empty');
@@ -642,8 +654,8 @@ export let ReportContent = React.createClass({
      */
     startPerfTiming(nextProps) {
         if (_.has(this.props, 'reportData.loading') &&
-                !this.props.reportData.loading &&
-                nextProps.reportData.loading) {
+            !this.props.reportData.loading &&
+            nextProps.reportData.loading) {
             let flux = this.getFlux();
             flux.actions.mark('component-ReportContent start');
         }
@@ -657,8 +669,8 @@ export let ReportContent = React.createClass({
         let timingContextData = {numReportCols:0, numReportRows:0};
         let flux = this.getFlux();
         if (_.has(this.props, 'reportData.loading') &&
-                !this.props.reportData.loading &&
-                prevProps.reportData.loading) {
+            !this.props.reportData.loading &&
+            prevProps.reportData.loading) {
             flux.actions.measure('component-ReportContent', 'component-ReportContent start');
 
             // note the size of the report with the measure
@@ -712,6 +724,7 @@ export let ReportContent = React.createClass({
         } else {
             addPadding = "reportContent";
         }
+        let showDTSErrorModal = this.props.pendEdits ? this.props.pendEdits.showDTSErrorModal : false;
         const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
 
         let reportContent;
@@ -722,6 +735,7 @@ export let ReportContent = React.createClass({
             reportContent = (
                 <div className="loadedContent">
                     <div className={addPadding}>
+                        <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
