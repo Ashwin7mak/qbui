@@ -946,8 +946,6 @@ module.exports = function(grunt) {
         ]);
     });
 
-
-
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-webpack');
     grunt.loadNpmTasks('grunt-sauce-connect-launcher');
