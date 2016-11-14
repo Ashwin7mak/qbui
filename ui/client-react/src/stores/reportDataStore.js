@@ -13,6 +13,7 @@ import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormat
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
 import * as userFormatter from '../../../common/src/formatter/userFormatter';
+import reportDataActions from '../actions/reportDataActions'
 import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
@@ -516,6 +517,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.nextOrPreviousEdit = "";
 
         this.navigateAfterSave = false;
+        this.isRecordDeleted = false;
 
         this.bindActions(
             actions.LOAD_REPORT, this.onLoadReport,
@@ -642,6 +644,7 @@ let ReportDataStore = Fluxxor.createStore({
         this.loading = false;
         this.editingIndex = undefined;
         this.editingId = undefined;
+        this.isRecordDeleted = false;
 
         this.reportModel.updateFilteredRecords(response.recordData);
         this.reportModel.setMetaData(response.metaData);
@@ -886,6 +889,8 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onDeleteReportRecordSuccess(recId) {
         this.reportModel.deleteRecordsFromLists(recId);
+
+        this.isRecordDeleted = true;
         this.emit('change');
     },
 
@@ -1133,7 +1138,8 @@ let ReportDataStore = Fluxxor.createStore({
             nextEditRecordId: this.nextEditRecordId,
             previousEditRecordId: this.previousEditRecordId,
             nextOrPreviousEdit: this.nextOrPreviousEdit,
-            navigateAfterSave: this.navigateAfterSave
+            navigateAfterSave: this.navigateAfterSave,
+            isRecordDeleted: this.isRecordDeleted
         };
     }
 });

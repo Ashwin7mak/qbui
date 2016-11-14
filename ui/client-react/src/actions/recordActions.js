@@ -137,6 +137,10 @@ let recordActions = {
                     response => {
                         logger.debug('RecordService deleteRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.DELETE_RECORD_SUCCESS, recId);
+                        //Do another dispatch to loadDynamic
+                            //based off of a parameter
+                            //reloadReport === true;
+                            //reportData needs to be passed into here
                         NotificationManager.success(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.deleted')}`, Locale.getMessage('success'), 2000);
                         resolve();
                     },

@@ -110,6 +110,10 @@ const ReportToolsAndContent = React.createClass({
     },
 
     componentDidUpdate(prevProps) {
+        console.log('this.props.reportData: ', this.props.reportData);
+        // if (this.props.reportData.isRecordDeleted) {
+        //     this.getPageUsingOffsetMultiplicant(1);
+        // }
         this.capturePerfTiming(prevProps);
     },
 
