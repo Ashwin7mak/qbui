@@ -71,8 +71,8 @@ export let Nav = React.createClass({
         const flux = this.getFlux();
 
         if (Breakpoints.isSmallBreakpoint()) {
-            setTimeout( () => {
-                // prevent navigation by toggling left nav in timeout
+            setTimeout(() => {
+                // left nav css transition seems to interfere with event handling without this
                 flux.actions.toggleLeftNav(false);
             }, 0);
         }
