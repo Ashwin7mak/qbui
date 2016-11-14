@@ -80,6 +80,39 @@ var DateTimeField = (function (_Component) {
       isFocused: false
     };
 
+
+    /**
+     * CUSTOMIZED change added to base library
+     * Listen to keydown events on capture phase.
+     */
+    this.componentWillMount = function () {
+        document.addEventListener("keydown", _this.onKeyDown, true);
+    };
+
+    /**
+     * CUSTOMIZED change added to base library
+     * Remove keydown event listener.
+     */
+    this.componentWillUnmount = function () {
+        document.removeEventListener("keydown", _this.onKeyDown, true);
+    };
+
+    /**
+     * CUSTOMIZED change added to base library
+     * Handler for Escape key used to hide the datepicker. This needs to be a keydown handler and
+     * not a keypress handler since we need to intercept the Escape keydown event before the
+     * event reaches the trowser's keydown handler.
+     * @param {Event} event keydown event
+     */
+    this.onKeyDown = function (event) {
+      // keyCode 27 : Escape key
+      // Close the datepicker when the Escape key is pressed. Do nothing if the datepicker is hidden
+      if (event.keyCode === 27 && _this.state.showPicker) {
+        event.stopPropagation();
+        _this.closePicker();
+      }
+    };
+
     /**
      * CUSTOMIZED to accomodate Quickbase requirements
      *
@@ -470,19 +503,6 @@ var DateTimeField = (function (_Component) {
         showPicker: false,
         widgetStyle: style
       });
-    };
-
-    /**
-     * NB: Custom change added to base library
-     * Handler for closing the datepicker when the Escape key is pressed. Do nothing if the
-     * datepicker is hidden.
-     * @param  {Event} event keydown event
-     */
-    this.onEscape = function (event) {
-        if (_this.state.showPicker) {
-            event.stopPropagation();
-            _this.closePicker();
-        }
     };
 
     this.size = function () {

@@ -53,8 +53,7 @@ var DateTimePickerDate = (function (_Component) {
       addDecade: _react.PropTypes.func.isRequired,
       subtractDecade: _react.PropTypes.func.isRequired,
       minDate: _react.PropTypes.object,
-      maxDate: _react.PropTypes.object,
-      onEscape: _react.PropTypes.func
+      maxDate: _react.PropTypes.object
     },
     enumerable: true
   }]);
@@ -128,33 +127,6 @@ var DateTimePickerDate = (function (_Component) {
       } else {
         return null;
       }
-    };
-
-    /**
-     * NB: Custom change added to base library
-     * Listen to keydown events on capture phase.
-     */
-    this.componentWillMount = function () {
-        document.addEventListener("keydown", _this.onKeyDown, true);
-    };
-
-    /**
-     * NB: Custom change added to base library
-     * Remove keydown event listener.
-     */
-    this.componentWillUnmount = function () {
-        document.removeEventListener("keydown", _this.onKeyDown, true);
-    };
-
-    /**
-     * NB: Custom change added to base library
-     * Handler for Escape key used to hide the datepicker.
-     */
-    this.onKeyDown = function (event) {
-        // keyCode 27 : Escape key
-        if (event.keyCode === 27 && _this.props.onEscape) {
-            _this.props.onEscape(event);
-        }
     };
 
     this.renderYears = function () {
