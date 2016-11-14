@@ -7,6 +7,7 @@ let component;
 let domComponent;
 
 let qbModalClass = '.qbModal';
+let testLink = 'TestLink';
 
 let testTitle = 'Modal Title';
 let testBodyMessage = 'I am a modal!';
@@ -104,6 +105,49 @@ describe('QbModal', () => {
 
         expect(primaryButton.textContent).toEqual(testPrimaryText);
         expect(mockParent.onPrimaryClick).toHaveBeenCalled();
+    });
+
+    it('can have a primary button with an anchor tag', () => {
+        let mockParent = {
+            onPrimaryClick() {}
+        };
+        component = TestUtils.renderIntoDocument(<QbModal show={true}
+                                                          title={testTitle}
+                                                          primaryButtonName={testPrimaryText}
+                                                          primaryButtonOnClick={mockParent.onPrimaryClick}
+                                                          link={testLink}/>);
+        let anchorTag = document.querySelector(`${qbModalClass} a`);
+        expect(anchorTag.pathname).toEqual('/' + testLink);
+    });
+
+    it('can have a middle button with an anchor tag', () => {
+        let mockParent = {
+            onMiddleClick() {}
+        };
+
+        component = TestUtils.renderIntoDocument(<QbModal show={true}
+                                                          title={testTitle}
+                                                          primaryButtonName={testPrimaryText}
+                                                          middleButtonName={testMiddleText}
+                                                          middleButtonOnClick={mockParent.onMiddleClick}
+                                                          link={testLink}/>);
+        let anchorTag = document.querySelector(`${qbModalClass} a`);
+        expect(anchorTag.pathname).toEqual('/' + testLink);
+    });
+
+    it('can have a left button with an anchor tag', () => {
+        let mockParent = {
+            onLeftClick() {}
+        };
+
+        component = TestUtils.renderIntoDocument(<QbModal show={true}
+                                                          title={testTitle}
+                                                          primaryButtonName={testPrimaryText}
+                                                          leftButtonName={testLeftText}
+                                                          leftButtonOnClick={mockParent.onLeftClick}
+                                                          link={testLink}/>);
+        let anchorTag = document.querySelector(`${qbModalClass} a`);
+        expect(anchorTag.pathname).toEqual('/' + testLink);
     });
 
     it('can have no buttons', () => {

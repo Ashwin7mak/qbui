@@ -37,6 +37,13 @@ export default {
             modalDoNotSaveButton: "Don't Save",
             modalSaveButton: "Save"
         },
+        dtsErrorModal: {
+            dtsErrorTitle: "Sorry to interrupt your work",
+            dtsErrorBodyMessage: "Mercury can’t continue running your app today, but will resume tomorrow.",
+            dtsErrorSecondErrorBodyMessage: "Your app is still available in QuickBase Classic.",
+            dtsErrorTID: "Transaction ID:",
+            dtsErrorPrimaryButtonText: "Open my app in Classic"
+        },
         reports : {
             emailReportTooltip: "Share these records with someone else",
             emailSubject: "'{reportName}' report from the QuickBase app '{appName}'",

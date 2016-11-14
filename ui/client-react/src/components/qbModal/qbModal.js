@@ -8,14 +8,32 @@ const QB_MODAL_ALERT = 'alert';
 const QB_MODAL_STANDARD = 'standard';
 const QB_MODAL_SUCCESS = 'success';
 const QB_MODAL_ISBUSY = 'isBusy';
-const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_ISBUSY];
+const QB_MODAL_DTS_APP_DELETED = 'dtsAppDeleted';
+/**
+ * qbModal's size automatically defaults to small, QB_MODAL_SIZE will be left as an array,
+ * so in the future when there are specs for a 'medium' size it can be added here
+ */
+const QB_MODAL_SIZE = ['large'];
+const QB_MODAL_TYPES = [QB_MODAL_ALERT, QB_MODAL_STANDARD, QB_MODAL_SUCCESS, QB_MODAL_ISBUSY, QB_MODAL_DTS_APP_DELETED];
 
 const QBModal = React.createClass({
     propTypes: {
         /**
+         * Pass in a unique className, to make the qbModals easier to uniquely style and to test
+         * */
+        uniqueClassName: React.PropTypes.string,
+        /**
          * This boolean sets whether or not the modal should be shown
          */
         show: React.PropTypes.bool,
+        /**
+         * Pass in a string of "small" or "large" to resize your modal, if no size is pass it defaults to "small"
+         * */
+        size: React.PropTypes.oneOf(QB_MODAL_SIZE),
+        /**
+         * Pass in a link to have a button reroute to a new url
+         * */
+        link: React.PropTypes.string,
         /**
          *This is the message for the modal body
          */
@@ -86,6 +104,11 @@ const QBModal = React.createClass({
             icon = 'check-reversed';
         }
 
+        if (this.props.type === QB_MODAL_DTS_APP_DELETED) {
+            classes.push('modalIcon--alert');
+            icon = 'favicon';
+        }
+
         return (
             <div className={classes.join(' ')}>
                 <QbIcon icon={icon} />
@@ -125,13 +148,20 @@ const QBModal = React.createClass({
         let buttons = [
             <Button key={0} className="primaryButton" onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</Button>
         ];
+        if (this.props.link) {
+            buttons = [
+                <a key={0} className="anchorButton  primaryButton" href={this.props.link} onClick={this.props.primaryButtonOnClick}>{this.props.primaryButtonName}</a>
+            ];
+        }
 
         if (this.props.middleButtonName) {
-            buttons.unshift(<Button key={buttons.length} className="secondaryButton middleButton" onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
+            buttons.unshift(<Button key={buttons.length} className="secondaryButton middleButton"
+                                    onClick={this.props.middleButtonOnClick}>{this.props.middleButtonName}</Button>);
         }
 
         if (this.props.leftButtonName) {
-            buttons.unshift(<Button key={buttons.length} className="secondaryButton leftButton" onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>);
+            buttons.unshift(<Button key={buttons.length} className="secondaryButton leftButton"
+                                    onClick={this.props.leftButtonOnClick}>{this.props.leftButtonName}</Button>);
         }
 
         return (
@@ -142,10 +172,19 @@ const QBModal = React.createClass({
             </Modal.Footer>
         );
     },
+    /**
+     * this.props.children is being passed to Modal.body
+     * this allows jsx to be passed in, instead of a string
+    */
     render() {
+        let classNames = ['qbModal'];
+        if (this.props.uniqueClassName) {
+            classNames.push(this.props.uniqueClassName);
+        }
+        classNames.push(this.props.size || '');
         return (
             <div>
-                <Modal className="qbModal" show={this.props.show}>
+                <Modal className={classNames.join(' ')} show={this.props.show}>
                     <div className="bodyContainer">
                         {this.renderQBIcon()}
                         <div>
@@ -154,13 +193,13 @@ const QBModal = React.createClass({
                             </Modal.Title>
                             <Modal.Body>
                                 {this.renderBody()}
+                                {this.props.children}
                             </Modal.Body>
                         </div>
                     </div>
                     {this.renderButtons()}
                 </Modal>
-            </div>
-        );
+            </div>);
     }
 });
 

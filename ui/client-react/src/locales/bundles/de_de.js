@@ -34,6 +34,13 @@ export default {
             modalDoNotSaveButton: "Nicht speichern",
             modalSaveButton: "Sparen"
         },
+        dtsErrorModal: {
+            dtsErrorTitle: "Es tut uns Leid, Ihre Arbeit zu unterbrechen",
+            dtsErrorBodyMessage: "Quecksilber kann nicht fortgesetzt werden Ihre App heute läuft, aber es wird morgen fortgesetzt.",
+            dtsErrorSecondErrorBodyMessage: "Ihre Anwendung ist in Quickbase-Klassiker noch zur Verfügung.",
+            dtsErrorTID: "Transaktions-ID:",
+            dtsErrorPrimaryButtonText: "Öffne meine app in der klassischen"
+        },
         reports : {
             emailReportTooltip: "Teilen Sie diese Datensätze mit einer anderen Person",
             emailSubject: "'{reportName}' bericht der QuickBase app '{appName}'",

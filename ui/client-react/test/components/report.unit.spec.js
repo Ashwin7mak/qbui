@@ -13,7 +13,7 @@ var i18n = Locale.getI18nBundle();
 
 describe('Report functions', () => {
     'use strict';
-
+    const pendEdits = {showDTSErrorModal: false};
     let component;
     let reportDataParams = {reportData: {data: {columns: [{field: "col_num", headerName: "col_num", fieldDef: {}}]}}};
 
@@ -78,17 +78,17 @@ describe('Report functions', () => {
 
     it('test flux action loadReport is called with app data', () => {
         var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} />, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} pendEdits={pendEdits} />, div);
         expect(flux.actions.loadReport).toHaveBeenCalledWith(reportParams.appId, reportParams.tblId, reportParams.rptId, reportParams.format, reportParams.offSet, reportParams.numRows);
     });
 
     it('test flux action loadReport is not called on 2nd called with same app data', () => {
         var div = document.createElement('div');
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} />, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>, div);
         expect(flux.actions.loadReport).toHaveBeenCalled();
 
         //  on subsequent call with same parameter data, the loadReport function is not called
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}/>, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalledWith();
     });
 
@@ -96,7 +96,7 @@ describe('Report functions', () => {
         var div = document.createElement('div');
 
         reportParams.appId = null;
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}/>, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams}  pendEdits={pendEdits}/>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 
@@ -105,7 +105,7 @@ describe('Report functions', () => {
         var div = document.createElement('div');
 
         reportDataParams.reportData.loading = true;
-        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} />, div);
+        ReactDOM.render(<Report {...i18n} flux={flux} params={reportParams} {...reportDataParams} pendEdits={pendEdits}/>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 

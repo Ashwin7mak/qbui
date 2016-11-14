@@ -778,7 +778,7 @@ xdescribe('ReportContent grouping functions exception handling', () => {
 
 describe('ReportContent functions', () => {
     'use strict';
-
+    var dtsErrorModalClass = ".dtsErrorModal";
     var component;
 
     beforeEach(() => {
@@ -809,6 +809,32 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
     });
 
+    it('test render of dtsErrorModal component', () => {
+        var mockPendEdits = {showDTSErrorModal: true};
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={mockPendEdits}/>);
+        var dtsErrorModal = document.querySelector(dtsErrorModalClass);
+        expect(dtsErrorModal).not.toBeNull();
+        if (dtsErrorModal) {
+            dtsErrorModal.parentNode.removeChild(dtsErrorModal);
+        }
+    });
+
+    it('test hide of dtsErrorModal component', () => {
+        var mockPendEdits = {showDTSErrorModal: false};
+        component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
+                                                                reportData={fakeReportData_empty}
+                                                                reportHeader={header_empty}
+                                                                reportFooter={fakeReportFooter}
+                                                                pendEdits={mockPendEdits}/>);
+        var dtsErrorModal = document.querySelector(dtsErrorModalClass);
+        expect(dtsErrorModal).toBeNull();
+    });
+
+
     it('test hide of footer on row selection', () => {
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
                                                                 pendEdits={{}}
@@ -817,7 +843,7 @@ describe('ReportContent functions', () => {
                                                                 reportFooter={fakeReportFooter}
                                                                 selectedRows={selectedRowIds}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
-        let reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
+        var reportNavigation = TestUtils.scryRenderedDOMComponentsWithClass(component, "reportNavigation");
         expect(reportNavigation.length).toEqual(0);
     });
 
@@ -1179,21 +1205,21 @@ describe('ReportContent functions', () => {
                 newVal: {value:"hi", display:"there"},
             },
         },
-                originalRecord: {fids:{
-                    4: {value: 'older'},
-                    8: {value: null}
-                }
-                }
+            originalRecord: {fids:{
+                4: {value: 'older'},
+                8: {value: null}
+            }
+            }
         };
         component = TestUtils.renderIntoDocument(
             <ReportContent flux={flux}
-                            appId="123"
-                            tblId="456"
-                            reportData={fakeReportData_simple}
-                            fields={fakeReportDataFields_simple}
-                            pendEdits={edits}
-                            reportHeader={header_empty}
-                            reportFooter={fakeReportFooter}
+                           appId="123"
+                           tblId="456"
+                           reportData={fakeReportData_simple}
+                           fields={fakeReportDataFields_simple}
+                           pendEdits={edits}
+                           reportHeader={header_empty}
+                           reportFooter={fakeReportFooter}
                            uniqueIdentifier={keyField}
                            keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
@@ -1261,4 +1287,3 @@ describe('ReportContent functions', () => {
     });
 
 });
-
