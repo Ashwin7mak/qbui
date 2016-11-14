@@ -64,7 +64,8 @@
         this.formsSaveChangesDialogHeader = this.formsSaveChangesDialog.element(by.className('modal-body'));
         this.formsSaveChangesDialogFooter = this.formsSaveChangesDialog.element(by.className('modal-footer'));
         this.clickButtonOnSaveChangesDialog = function(btnName) {
-            this.formsSaveChangesDialogFooter.element(by.className('buttons')).all(by.tagName('button')).filter(function(elm) {
+            var self = this;
+            return self.formsSaveChangesDialogFooter.element(by.className('buttons')).all(by.tagName('button')).filter(function(elm) {
                 return elm.getAttribute('textContent').then(function(text) {
                     return text  === btnName;
                 });
@@ -75,12 +76,16 @@
 
         //Save buttons function
         this.clickSaveBtnWithName = function(btnName) {
-            this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveButtons')).all(by.tagName('button')).filter(function(elm) {
+            var self = this;
+            return self.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveButtons')).all(by.tagName('button')).filter(function(elm) {
                 return elm.getAttribute('textContent').then(function(text) {
                     return text  === btnName;
                 });
             }).then(function(filteredSaveBtn) {
                 return filteredSaveBtn[0].click();
+            }).then(function() {
+                //check if there are any console errors after clicking the button.
+                return self.checkConsoleErrors();
             });
         };
 
@@ -223,7 +228,7 @@
             var self = this;
             return reportServicePage.waitForElement(self.formErrorMessageContent).then(function() {
                 return reportServicePage.waitForElement(self.formErrorMessage).then(function() {
-                    self.formErrorMessageContent.all(by.className('qbErrorMessageItem')).filter(function(elm) {
+                    return self.formErrorMessageContent.all(by.className('qbErrorMessageItem')).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
                         return elm.getAttribute('textContent');
@@ -240,7 +245,7 @@
             var self = this;
             return self.clickFormCloseBtn().then(function() {
                 //come out of dirty form state
-                reportServicePage.waitForElement(self.formsSaveChangesDialog).then(function() {
+                return reportServicePage.waitForElement(self.formsSaveChangesDialog).then(function() {
                     expect(self.formsSaveChangesDialogHeader.getText()).toBe('Save changes before leaving?');
                     //close the dialogue by clicking on dont save
                     return self.clickButtonOnSaveChangesDialog("Don't Save");
@@ -308,6 +313,22 @@
                 });
             });
 
+        };
+
+        this.checkConsoleErrors = function() {
+            browser.manage().logs().get('browser').then(function(browserLog) {
+                if (browserLog.length) {
+                    browserLog.forEach(function(log) {
+                        var error = log.level.value > 900;
+                        if (error) {
+                            console.error('ERROR: ', log.message);
+                            if (log.timestamp > timestamp) {
+                                expect(error).toBeFalsy(); //only check for errors after the button click
+                            }
+                        }
+                    });
+                }
+            });
         };
 
     };

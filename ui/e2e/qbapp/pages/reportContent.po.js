@@ -519,10 +519,12 @@
         // Notification window assertion
         this.assertNotificationMessage = function(notificationMessage) {
             var self = this;
-            self.waitForElementToBePresent(self.notificationWindow).then(function() {
-                expect(self.notificationWindow.getAttribute('textContent')).toMatch(notificationMessage.toString());
-                //wait for growl to slide away
-                e2eBase.sleep(browser.params.mediumSleep);
+            return self.waitForReportContent().then(function() {
+                return self.waitForElementToBePresent(self.notificationWindow).then(function() {
+                    expect(self.notificationWindow.getAttribute('textContent')).toMatch(notificationMessage.toString());
+                    //wait for growl to slide away
+                    return e2eBase.sleep(browser.params.mediumSleep);
+                });
             });
         };
 
