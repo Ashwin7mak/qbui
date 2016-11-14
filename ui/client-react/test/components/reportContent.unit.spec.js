@@ -1075,6 +1075,7 @@ describe('ReportContent functions', () => {
     it('test handleRecordNewBlank on dirty', () => {
         let appId = '123';
         let tbleId = '456';
+        let recordId = 101;
 
         let keyField = "id";
         let edits = {
@@ -1102,10 +1103,10 @@ describe('ReportContent functions', () => {
         spyOn(flux.actions, 'saveRecord').and.callThrough();
         spyOn(flux.actions, 'newBlankReportRecord').and.callThrough();
 
-        component.handleRecordNewBlank({value: 101});
+        component.handleRecordNewBlank({value: recordId});
 
         expect(flux.actions.saveRecord.calls.mostRecent().args.pop()).toEqual(true);
-        expect(flux.actions.newBlankReportRecord).toHaveBeenCalledWith("123", "456", 101);
+        expect(flux.actions.newBlankReportRecord).toHaveBeenCalledWith(appId, tbleId, recordId);
     });
 
     it('test handleRecordAdd', () => {
