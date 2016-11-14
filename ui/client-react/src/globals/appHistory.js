@@ -143,7 +143,11 @@ class AppHistory {
         self.tableId = self.pendEdits.currentEditingTableId;
         self.recordId = self.pendEdits.currentEditingRecordId;
 
-        self.fields = self.flux.store('FieldsStore').getState().fields.data;
+        if (self.pendEdits.recordEditOpen) {
+            self.fields = self.flux.store('FormStore').getState().formData.fields;
+        } else {
+            self.fields = self.flux.store('FieldsStore').getState().fields.data;
+        }
 
         if (self.pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
             self._handleRecordAdd();

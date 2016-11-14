@@ -43,34 +43,33 @@ describe('AppHistory', () => {
         });
     }
 
-    function buildMockFlux(options = {isPendingEdit: false, currentEditingRecordId: UNSAVED_RECORD_ID, hasErrorOnSave: false, done: null}) {
+    function buildMockFlux(options = {isPendingEdit: false, currentEditingRecordId: UNSAVED_RECORD_ID, hasErrorOnSave: false, recordEditOpen: false}) {
         return {
             actions: {
                 recordPendingEditsCommit() {},
                 saveNewRecord(_appId, _tableId, _recordChanges, _fields) {
-                    return new Promise((resolve, reject) => {
-                        if (options.hasErrorOnSave) {
-                            reject();
-                        } else {
-                            resolve();
+                    return {
+                        then(callbackSuccess, callbackFail) {
+                            if (options.hasErrorOnSave) {
+                                callbackFail();
+                            } else {
+                                callbackSuccess();
+                            }
                         }
-
-                        if (options.done) {done();}
-                    });
+                    };
                 },
                 saveRecord(_appId, _tableId, _recordChanges, _fields) {
-                    return new Promise((resolve, reject) => {
-                        if (options.hasErrorOnSave) {
-                            reject();
-                        } else {
-                            resolve();
+                    return {
+                        then(callbackSuccess, callbackFail) {
+                            if (options.hasErrorOnSave) {
+                                callbackFail();
+                            } else {
+                                callbackSuccess();
+                            }
                         }
-
-                        if (options.done) {options.done();}
-                    });
+                    };
                 },
                 recordPendingEditsCancel(_appId, _tableId, _recordId) {
-                    if (options.done) {done();}
                 }
             },
             store(storeName) {
@@ -79,11 +78,16 @@ describe('AppHistory', () => {
                         if (storeName === 'RecordPendingEditsStore') {
                             return {
                                 isPendingEdit: options.isPendingEdit,
-                                currentEditingRecordId: options.currentEditingRecordId
+                                currentEditingRecordId: options.currentEditingRecordId,
+                                recordEditOpen: options.recordEditOpen
                             };
-                        } else {
+                        } else if (storeName === 'FieldsStore') {
                             return {
-                                fields: {data: {}}
+                                fields: {data: "reportFields"}
+                            };
+                        } else if (storeName === 'FormStore') {
+                            return {
+                                formData: {fields: "formFields"}
                             };
                         }
                     }
@@ -199,8 +203,8 @@ describe('AppHistory', () => {
             expect(AppHistory.showPendingEditsConfirmationModal).toHaveBeenCalled();
         });
 
-        it('saves any pending edits before navigating away (existing record)', done => {
-            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingAppId: 1, currentEditingRecordId: 1, done: done});
+        it('saves any pending edits before navigating away (edit from form)', () => {
+            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, recordEditOpen: true});
             AppHistory.setup(mockFluxWithPendingEdit);
 
             spyOn(mockFluxWithPendingEdit.actions, 'saveRecord').and.callThrough();
@@ -209,12 +213,26 @@ describe('AppHistory', () => {
             goToNewPage();
             mockActions.clickSaveButton();
 
-            expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalled();
+
+            expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalledWith(undefined, undefined, 1, {isPendingEdit: true, currentEditingRecordId: 1, recordEditOpen: true}, "formFields");
             expect(AppHistory._continueToDestination).toHaveBeenCalled();
         });
 
-        it('halts a route change if there was a problem saving the changes', done => {
-            let mockWithError = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, hasErrorOnSave: true, done: done});
+        it('saves any pending edits before navigating away (existing record)', () => {
+            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1});
+            AppHistory.setup(mockFluxWithPendingEdit);
+
+            spyOn(mockFluxWithPendingEdit.actions, 'saveRecord').and.callThrough();
+            spyOn(AppHistory, '_continueToDestination').and.callThrough();
+
+            goToNewPage();
+            mockActions.clickSaveButton();
+            expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalledWith(undefined, undefined, 1, {isPendingEdit: true, currentEditingRecordId: 1, recordEditOpen: undefined}, "reportFields");
+            expect(AppHistory._continueToDestination).toHaveBeenCalled();
+        });
+
+        it('halts a route change if there was a problem saving the changes', () => {
+            let mockWithError = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, hasErrorOnSave: true});
 
             AppHistory.setup(mockWithError);
 
@@ -229,7 +247,7 @@ describe('AppHistory', () => {
         });
 
         it('cancels changes an continues to destination if user chooses to discard changes', () => {
-            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingAppId: 1, currentEditingRecordId: 1});
+            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1});
             AppHistory.setup(mockFluxWithPendingEdit);
 
             spyOn(mockFluxWithPendingEdit.actions, 'recordPendingEditsCancel').and.callThrough();
@@ -245,7 +263,7 @@ describe('AppHistory', () => {
         });
 
         it('halts route change if uses chooses to stay on the pay', () => {
-            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingAppId: 1, currentEditingRecordId: 1});
+            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1});
             AppHistory.setup(mockFluxWithPendingEdit);
 
             spyOn(AppHistory, '_haltRouteChange').and.callThrough();
