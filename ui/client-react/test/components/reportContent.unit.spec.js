@@ -1001,6 +1001,7 @@ describe('ReportContent functions', () => {
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordDelete(origRec);
+        component.deleteRecord();
         expect(flux.actions.deleteRecord).toHaveBeenCalled();
     });
 
