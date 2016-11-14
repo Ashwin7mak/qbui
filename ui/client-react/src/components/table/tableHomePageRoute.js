@@ -56,9 +56,17 @@ let TableHomePageRoute = React.createClass({
         }
     },
 
+    /**
+     * Add a new record in trowser
+     */
+    editNewRecord() {
+        const flux = this.getFlux();
+        flux.actions.editNewRecord();
+    },
+
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord'},
+            {msg: 'pageActions.addRecord', icon:'add', className:'addRecord', onClick: this.editNewRecord},
             {msg: 'unimplemented.makeFavorite', icon:'star', disabled: true},
             {msg: 'unimplemented.print', icon:'print', disabled: true},
         ];
