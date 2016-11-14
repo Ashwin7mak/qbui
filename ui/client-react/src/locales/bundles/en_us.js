@@ -34,7 +34,7 @@ export default {
         pendingEditModal: {
             modalBodyMessage: "Save changes before leaving?",
             modalStayButton: "Stay and keep working",
-            modalDoNotSaveButton: "Don\'t Save",
+            modalDoNotSaveButton: "Don't Save",
             modalSaveButton: "Save"
         },
         reports : {
@@ -120,7 +120,11 @@ export default {
             recordNotSaved :"Record not saved",
             deleted : "deleted",
             notDeleted : "not deleted",
-            cannotLoad : "Cannot load record"
+            cannotLoad : "Cannot load record",
+            error: {
+                403: "You are not authorized to create or access this record",
+                500: "Unexpected error rendering this record"
+            }
         },
         header: {
             menu: {

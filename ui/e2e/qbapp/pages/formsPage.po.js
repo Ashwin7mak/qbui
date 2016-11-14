@@ -29,7 +29,7 @@
 
         this.formTrowserFooter = element(by.className('recordTrowser')).element(by.className('trowserFooter'));
         //save button
-        this.formSaveBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.tagName('button'));
+        this.formSaveBtn = this.formTrowserFooter.element(by.className('rightIcons')).all(by.tagName('button')).first();
         //alert button
         this.formErrorMsgAlertBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveAlertButton'));
 
@@ -114,18 +114,33 @@
             });
         };
 
+        this.selectTodaysDateFromDatePicker = function(fieldDateIconElement) {
+            return fieldDateIconElement.element(by.className('glyphicon-calendar')).click().then(function() {
+                reportServicePage.waitForElement(fieldDateIconElement.element(by.className('datepicker'))).then(function() {
+                    return reportServicePage.waitForElement(fieldDateIconElement.element(by.className('datepicker')).element(by.className('active'))).then(function() {
+                        return fieldDateIconElement.element(by.className('datepicker')).element(by.className('active')).click();
+                    });
+                });
+            });
+        };
+
         this.enterFormValues = function(fieldLabel) {
             var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
-            return reportServicePage.waitForElement(self.formEditContainerEl).then(function() {
-                if (fieldLabel === 'dateCell') {
+            return reportServicePage.waitForElement(self.formTable).then(function() {
+                if (fieldLabel === 'dateCell' && browserName !== 'safari') {
                     //enter date fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        //Do the click below to make it user editable
-                        return elm.element(by.className('date')).click().then(function() {
-                            return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
+                        //TODO Enable below when the bug that enters date into date field is fixed
+                        //return elm.element(by.className('date')).click().then(function() {
+                        //    return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
+                        //});
+
+                        //Select the date from the date picker untill above is fixed
+                        return elm.element(by.className('date')).element(by.tagName('input')).sendKeys(protractor.Key.BACK_SPACE).then(function() {
+                            return self.selectTodaysDateFromDatePicker(elm);
                         });
                     });
                 } else if (fieldLabel === 'textField') {
@@ -149,7 +164,7 @@
                     }).map(function(elm) {
                         return elm.element(by.className('label')).click();
                     });
-                } else if (fieldLabel === 'timeCell') {
+                } else if (fieldLabel === 'timeCell' && browserName !== 'safari') {
                     //enter time of day fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
@@ -218,12 +233,12 @@
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 5)).toBe(sNumeric.toString());
                     //numeric duration field
                     // expect(reportServicePage.getRecordValues(records[7], 9)).toBe('2.0337302E-7 weeks');
-                } if (fieldType === 'dateCell') {
+                } if (fieldType === 'dateCell' && browserName !== 'safari') {
                     //date field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 6)).toBe(sDate);
                     //date Time field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 7)).toBe(sDate + ' ' + sTime);
-                }if (fieldType === 'timeCell') {
+                }if (fieldType === 'timeCell' && browserName !== 'safari') {
                     //time of day field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 8)).toBe(sTime);
                 }if (fieldType === 'checkbox') {

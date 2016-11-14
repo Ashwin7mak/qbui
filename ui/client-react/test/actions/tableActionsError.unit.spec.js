@@ -121,7 +121,7 @@ describe('Table Actions table negative tests -- exception condition', () => {
             () => {
                 expect(mockTableService.prototype.getHomePage).toHaveBeenCalled();
                 expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(1);
-                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId, tblId, rptId:'0'}]);
+                expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId, tblId, rptId:'0', offset:undefined, numRows:undefined}]);
                 expect(mockLogger.prototype.logException).toHaveBeenCalled();
                 done();
             }

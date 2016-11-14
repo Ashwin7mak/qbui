@@ -274,7 +274,9 @@ let CardViewListHolder = React.createClass({
                             <div className="spacer"></div>
                         }
 
-                        <CardViewList ref="cardViewList" node={recordNodes}
+                        <CardViewList ref="cardViewList"
+                                      node={recordNodes}
+                                      columns={_.has(this.props, "reportData.data.columns") ? this.props.reportData.data.columns : []}
                                       uniqueIdentifier={this.props.uniqueIdentifier}
                                       groupId=""
                                       groupLevel={-1}
