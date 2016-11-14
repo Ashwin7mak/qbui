@@ -43,7 +43,7 @@ describe('AppHistory', () => {
         });
     }
 
-    function buildMockFlux(options = {isPendingEdit: false, currentEditingRecordId: UNSAVED_RECORD_ID, hasErrorOnSave: false, recordEditOpen: false}) {
+    function buildMockFlux(options = {isPendingEdit: false, currentEditingRecordId: UNSAVED_RECORD_ID, hasErrorOnSave: false, isInlineEditOpen: false}) {
         return {
             actions: {
                 recordPendingEditsCommit() {},
@@ -79,7 +79,7 @@ describe('AppHistory', () => {
                             return {
                                 isPendingEdit: options.isPendingEdit,
                                 currentEditingRecordId: options.currentEditingRecordId,
-                                recordEditOpen: options.recordEditOpen
+                                isInlineEditOpen: options.isInlineEditOpen
                             };
                         } else if (storeName === 'FieldsStore') {
                             return {
@@ -87,7 +87,7 @@ describe('AppHistory', () => {
                             };
                         } else if (storeName === 'FormStore') {
                             return {
-                                formData: {fields: "formFields"}
+                                editFormData: {fields: "formFields"}
                             };
                         }
                     }
@@ -204,21 +204,6 @@ describe('AppHistory', () => {
         });
 
         it('saves any pending edits before navigating away (edit from form)', () => {
-            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, recordEditOpen: true});
-            AppHistory.setup(mockFluxWithPendingEdit);
-
-            spyOn(mockFluxWithPendingEdit.actions, 'saveRecord').and.callThrough();
-            spyOn(AppHistory, '_continueToDestination').and.callThrough();
-
-            goToNewPage();
-            mockActions.clickSaveButton();
-
-
-            expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalledWith(undefined, undefined, 1, {isPendingEdit: true, currentEditingRecordId: 1, recordEditOpen: true}, "formFields");
-            expect(AppHistory._continueToDestination).toHaveBeenCalled();
-        });
-
-        it('saves any pending edits before navigating away (existing record)', () => {
             let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1});
             AppHistory.setup(mockFluxWithPendingEdit);
 
@@ -227,7 +212,22 @@ describe('AppHistory', () => {
 
             goToNewPage();
             mockActions.clickSaveButton();
-            expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalledWith(undefined, undefined, 1, {isPendingEdit: true, currentEditingRecordId: 1, recordEditOpen: undefined}, "reportFields");
+
+
+            expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalledWith(undefined, undefined, 1, {isPendingEdit: true, currentEditingRecordId: 1, isInlineEditOpen: undefined}, "formFields");
+            expect(AppHistory._continueToDestination).toHaveBeenCalled();
+        });
+
+        it('saves any pending edits before navigating away (existing record)', () => {
+            let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1, isInlineEditOpen: true});
+            AppHistory.setup(mockFluxWithPendingEdit);
+
+            spyOn(mockFluxWithPendingEdit.actions, 'saveRecord').and.callThrough();
+            spyOn(AppHistory, '_continueToDestination').and.callThrough();
+
+            goToNewPage();
+            mockActions.clickSaveButton();
+            expect(mockFluxWithPendingEdit.actions.saveRecord).toHaveBeenCalledWith(undefined, undefined, 1, {isPendingEdit: true, currentEditingRecordId: 1, isInlineEditOpen: true}, "reportFields");
             expect(AppHistory._continueToDestination).toHaveBeenCalled();
         });
 

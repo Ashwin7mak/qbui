@@ -133,6 +133,24 @@ class AppHistory {
     }
 
     /*
+     * Helper method to get fields from the right store.
+     * For inline edit on reports get fields from FieldsStore
+     * For edit form get fields from FormStore.
+     */
+    getFields() {
+        if (self.pendEdits.isInlineEditOpen) {
+            let fieldsStore = self.flux.store('FieldsStore').getState();
+            if (_.has(fieldsStore, 'fields.data')) {
+                self.fields = fieldsStore.fields.data;
+            }
+        } else {
+            let formsStore = self.flux.store('FormStore').getState();
+            if (_.has(formsStore, 'editFormData.fields')) {
+                self.fields = formsStore.editFormData.fields;
+            }
+        }
+    }
+    /*
     * All functions below reference 'self' instead of 'this' because of a context change
     * after being called from the modal
     */
@@ -143,11 +161,7 @@ class AppHistory {
         self.tableId = self.pendEdits.currentEditingTableId;
         self.recordId = self.pendEdits.currentEditingRecordId;
 
-        if (self.pendEdits.recordEditOpen) {
-            self.fields = self.flux.store('FormStore').getState().formData.fields;
-        } else {
-            self.fields = self.flux.store('FieldsStore').getState().fields.data;
-        }
+        self.getFields();
 
         if (self.pendEdits.currentEditingRecordId === UNSAVED_RECORD_ID) {
             self._handleRecordAdd();
