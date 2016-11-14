@@ -776,6 +776,7 @@ export let ReportContent = React.createClass({
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 onFieldChange={this.handleFieldChange}
+                                onGridReady={this.props.onGridReady}
                                 onRecordChange={this.handleRecordChange}
                                 onRecordAdd={this.handleRecordAdd}
                                 onRecordNewBlank={this.handleRecordNewBlank}
@@ -835,7 +836,8 @@ ReportContent.contextTypes = {
 };
 
 ReportContent.propTypes = {
-    pendEdits: React.PropTypes.object.isRequired
+    pendEdits: React.PropTypes.object.isRequired,
+    onGridReady: React.PropTypes.func,
 };
 
 export let ReportContentWithRouter = withRouter(ReportContent);
