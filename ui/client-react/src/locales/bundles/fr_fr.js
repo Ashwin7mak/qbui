@@ -12,7 +12,7 @@ export default {
                 welcomeText: "Pendant que vous apprenez votre chemin, utilisez cette zone à la place de votre page d'accueil d'application. " +
                 "C'est votre application réelle dans Mercury. Vous ne verrez pas encore la page d'accueil de votre application, mais " +
                 "données sont ici. Les travaux effectués ici s'affichent immédiatement en mode Classique.",
-                launchVideoLink: "Lancez une tournée vidéo (3:00)",
+                launchVideoLink: "Lancez une tournée vidéo (2:58)",
                 guideMeLink: "Guide-moi par Mercury",
                 guideTitle: "Guide d'accueil",
                 guideText: "Apprenez tout sur le programme Mercury Beta. Voyez quelles fonctionnalités sont actuellement disponibles et comment votre équipe peut obtenir le travail plus rapidement, à travers les périphériques, en utilisant Mercury.",
@@ -117,7 +117,11 @@ export default {
             recordNotSaved :"Enregistrement non enregistré",
             deleted : "supprimé",
             notDeleted : "non supprimés",
-            cannotLoad : "Impossible de charger la fiche"
+            cannotLoad : "Impossible de charger la fiche",
+            error: {
+                403: "Vous n'êtes pas autorisé à créer ou à accéder à cette fiche",
+                500: "Erreur inattendue rendant cette fiche"
+            }
         },
         header: {
             menu: {

@@ -7,6 +7,7 @@ import Logger from '../utils/logger';
 import LogLevel from '../utils/logLevels';
 import Promise from 'bluebird';
 import Locale from '../locales/locales';
+import _ from 'lodash';
 import {NotificationManager} from 'react-notifications';
 
 let logger = new Logger();
@@ -28,7 +29,7 @@ let recordActions = {
     /**
      * save a new record
      */
-    saveNewRecord(appId, tblId, recordChanges, fields) {
+    saveNewRecord(appId, tblId, recordChanges, fields, addNewRecordAfterSave = false) {
         function getRecord(_recordChanges, _fields) {
             //save changes in record
             let payload = [];
@@ -73,13 +74,24 @@ let recordActions = {
                         if (response !== undefined && response.data !== undefined && response.data.body !== undefined) {
                             let resJson = JSON.parse(response.data.body);
                             this.dispatch(actions.ADD_RECORD_SUCCESS, {appId, tblId, record, recId: resJson.id});
-                            NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+
+                            if (!addNewRecordAfterSave) {
+                                NotificationManager.success(Locale.getMessage('recordNotifications.recordAdded'), Locale.getMessage('success'), 1500);
+                            }
                             resolve(resJson.id);
                         } else {
                             logger.error('RecordService createRecord call error: no response data value returned');
                             this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: new Error('no response data member')});
-                            // Remove this notification since Micah Z thinks we should not display it here.
-                            // NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                            if (error.response.status === 403) {
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
+                            }
+                            if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
+                                const {status} = error.response.data.response;
+                                if (status !== 422) {
+                                    // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
+                                    NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'), 1500);
+                                }
+                            }
                             reject();
                         }
                     },
@@ -87,8 +99,16 @@ let recordActions = {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
                         this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
-                        // Remove this notification since Micah Z thinks we should not display it here.
-                        // NotificationManager.error(Locale.getMessage('recordNotifications.recordNotAdded'), Locale.getMessage('failed'), 1500);
+                        if (error.response.status === 403) {
+                            NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
+                        }
+                        if (error.response.status === 500 && _.has(error.response, 'data.response.status')) {
+                            const {status} = error.response.data.response;
+                            if (status !== 422) {
+                                // HTTP data response status 422 means server "validation error" under the general HTTP 500 error
+                                NotificationManager.error(Locale.getMessage('recordNotifications.error.500'), Locale.getMessage('failed'), 1500);
+                            }
+                        }
                         reject();
                     }
                 );
@@ -190,7 +210,7 @@ let recordActions = {
     /**
      * save a record
      */
-    saveRecord(appId, tblId, recId, pendEdits, fields) {
+    saveRecord(appId, tblId, recId, pendEdits, fields, addNewRecordAfterSave = false) {
         function createColChange(value, display, field, payload) {
             let colChange = {};
             colChange.fieldName = field.name;
@@ -269,8 +289,15 @@ let recordActions = {
                     response => {
                         logger.debug('RecordService saveRecord success:' + JSON.stringify(response));
                         this.dispatch(actions.SAVE_RECORD_SUCCESS, {appId, tblId, recId, changes});
-                        NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
-                        resolve();
+
+                        // When adding a new record immediately after saving, the success message should appear
+                        // after the new record row is added so that it appears correctly and for the correct duration
+                        // See method addNewRowAfterRecordSaveSuccess in reportContent for when the mesage is displayed.
+                        if (!addNewRecordAfterSave) {
+                            NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+                        }
+
+                        resolve(recId);
                     },
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x

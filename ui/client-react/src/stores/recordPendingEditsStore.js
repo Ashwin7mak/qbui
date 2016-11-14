@@ -51,6 +51,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
+        this.saving = false;
     },
 
     /**
@@ -188,6 +189,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingRecordId = payload.recId;
         let changes = payload.changes;
         logger.debug('saving changes: ' + JSON.stringify(payload));
+        this.saving = true;
+        this.emit('change');
     },
 
     /**
@@ -209,6 +212,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
+        this.saving = false;
         this.emit('change');
 
     },
@@ -244,6 +248,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         }
         this.getServerErrs(payload);
         this.recordEditOpen = true;
+        this.saving = false;
         this.emit('change');
     },
 
@@ -257,7 +262,9 @@ let RecordPendingEditsStore = Fluxxor.createStore({
         this.currentEditingTableId = payload.tblId;
         this.currentEditingRecordId = null;
         this.recordChanges = payload.changes;
+        this.saving = true;
         logger.debug('saving added record: ' + JSON.stringify(payload));
+        this.emit('change');
     },
 
     /**
@@ -289,8 +296,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             ok: true,
             errors:[]
         };
+        this.saving = false;
         this.emit('change');
-
     },
 
     /**
@@ -309,7 +316,7 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             this.commitChanges[entry].status = actions.ADD_RECORD_FAILED;
         }
         this.getServerErrs(payload);
-
+        this.saving = false;
         this.emit('change');
     },
 
@@ -339,7 +346,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             originalRecord : this.originalRecord,
             recordChanges : this.recordChanges,
             commitChanges : this.commitChanges,
-            editErrors: this.editErrors
+            editErrors: this.editErrors,
+            saving: this.saving
         };
     },
 });

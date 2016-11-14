@@ -12,10 +12,26 @@ function i18nKey(subkey) {
     return `app.homepage.${subkey}`;
 }
 
-const videoTourLink = 'https://heycool.wistia.com/medias/rase8bl4ws';
+const videoTourLink = 'https://quickbase.wistia.com/medias/zl4za7cf5e';
 const welcomeGuideLink = 'https://d2qhvajt3imc89.cloudfront.net/customers/QuickBase/MercuryBeta_WelcomeGuide-v1.0.pdf';
 const feedbackLink = 'https://quickbase.uservoice.com/forums/378045-mercury';
 
+/**
+ * Scripts for Wistia video popover
+ * These script tags are only relevant to this temporary homepage
+ * They load script from a video hosting service called Wistia and allow the walk-through video to load as a popover
+ */
+const wistiaScriptPart1 = document.createElement("script");
+wistiaScriptPart1.src = "//fast.wistia.com/embed/medias/zl4za7cf5e.jsonp";
+wistiaScriptPart1.async = true;
+
+const wistiaScriptPart2 = document.createElement("script");
+wistiaScriptPart2.src = "//fast.wistia.com/assets/external/E-v1.js";
+wistiaScriptPart2.async = true;
+
+/**
+ * Temporary homepage for M5 Beta
+ */
 const M5AppHomePage = React.createClass({
     launchGuideMe() {
         try {
@@ -23,6 +39,14 @@ const M5AppHomePage = React.createClass({
         } catch (err) {
             NotificationManager.info(Locale.getMessage(i18nKey('missingWalkMe')), '', 1500);
         }
+    },
+    componentWillMount() {
+        document.body.appendChild(wistiaScriptPart1);
+        document.body.appendChild(wistiaScriptPart2);
+    },
+    componentWillUnmount() {
+        document.body.removeChild(wistiaScriptPart1);
+        document.body.removeChild(wistiaScriptPart2);
     },
     render() {
         return (
@@ -34,7 +58,11 @@ const M5AppHomePage = React.createClass({
                             <p><I18nMessage message={i18nKey('welcomeText')} /></p>
                         </div>
                         <div className="topPanelLinks">
-                            <a className="linkWithImage" href={videoTourLink} target="_blank"><img className="launchTourImage" /><span><I18nMessage message={i18nKey('launchVideoLink')} /></span></a>
+                            <span className="wistia_embed wistia_async_zl4za7cf5e popover=true popoverContent=link">
+                                <a className="linkWithImage" href={videoTourLink} target="_blank">
+                                    <img className="launchTourImage" /><span><I18nMessage message={i18nKey('launchVideoLink')} /></span>
+                                </a>
+                            </span>
                             <a className="linkWithImage" onClick={this.launchGuideMe}><img className="guideMeImage" /><span><I18nMessage message={i18nKey('guideMeLink')} /></span></a>
                         </div>
                     </div>
