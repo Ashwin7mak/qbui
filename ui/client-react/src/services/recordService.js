@@ -61,6 +61,15 @@ class RecordService extends BaseService {
         return super.get(url, {params:params});
     }
 
+    /**
+     * Get record by recordId. Optionally pass the clist to specify which fields should be returned
+     * @param appId
+     * @param tableId
+     * @param recId
+     * @param clist list of fids delimited by '.'
+     * @returns {*}
+     */
+
     getRecord(appId, tableId, recId, clist) {
         let params = {};
         if (StringUtils.isNonEmptyString(clist)) {
