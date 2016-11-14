@@ -872,3 +872,10 @@ $page-header-border-color:    $gray-lighter !default;
 $dl-horizontal-offset:        $component-offset-horizontal !default;
 //** Horizontal line color.
 $hr-border:                   $gray-lighter !default;
+
+//== Card view
+//
+//##
+// this is the space on the left of the card view which is saved for the normally offscreen checkbox
+// the checkbox is visible when you swipe right on a touch device
+$card-view-checkbox-width: 40px;

@@ -1202,7 +1202,11 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordChange({value:100});
         expect(flux.actions.recordPendingEditsCommit).toHaveBeenCalled();
-        expect(flux.actions.saveRecord).toHaveBeenCalled();
+        let colList = [];
+        fakeReportDataFields_simple.fields.data.forEach((field) => {
+            colList.push(field.id);
+        });
+        expect(flux.actions.saveRecord).toHaveBeenCalledWith("123", "456", 100, edits, fakeReportDataFields_simple.fields.data, colList, false);
     });
 
 
