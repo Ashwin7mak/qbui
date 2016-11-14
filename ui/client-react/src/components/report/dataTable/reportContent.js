@@ -19,7 +19,6 @@ import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
-import FieldUtils from '../../../utils/fieldUtils';
 
 let logger = new Logger();
 
@@ -280,7 +279,7 @@ export let ReportContent = React.createClass({
      */
     handleRecordDelete(record) {
         const flux = this.getFlux();
-        var recId = record[FieldUtils.getUniqueIdentifierFieldName(record)].value;
+        var recId = record[this.props.uniqueIdentifier].value;
         //this.props.nameForRecords
         flux.actions.deleteRecord(this.props.appId, this.props.tblId, recId, this.props.nameForRecords);
     },
@@ -695,12 +694,6 @@ export let ReportContent = React.createClass({
     render() {
         let isSmall = Breakpoints.isSmallBreakpoint();
         let recordsCount = 0;
-        let keyField = FieldUtils.getUniqueIdentifierFieldName(this.props);
-        if (this.props.keyField) {
-            keyField = this.props.keyField;
-        } else if (this.props.fields && this.props.fields.keyField && this.props.fields.keyField.name) {
-            keyField = this.props.fields.keyField.name;
-        }
 
         if (this.props.reportData && this.props.reportData.data) {
             let reportData = this.props.reportData.data;
@@ -736,8 +729,7 @@ export let ReportContent = React.createClass({
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                uniqueIdentifier={this.props.uniqueIdentifier ||  SchemaConsts.DEFAULT_RECORD_KEY}
-                                keyField={this.props.keyField}
+                                uniqueIdentifier={this.props.uniqueIdentifier}
                                 selectedRows={this.props.selectedRows}
                                 onRowClick={this.openRow}
                                 onEditRecordStart={this.handleEditRecordStart}
@@ -766,8 +758,7 @@ export let ReportContent = React.createClass({
                                 editingId={this.props.reportData.editingId}
                                 records={this.props.reportData.data ? _.cloneDeep(this.props.reportData.data.filteredRecords) : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}
-                                uniqueIdentifier={this.props.uniqueIdentifier || SchemaConsts.DEFAULT_RECORD_KEY}
-                                keyField={keyField}
+                                uniqueIdentifier={this.props.uniqueIdentifier}
                                 appId={this.props.reportData.appId}
                                 appUsers={this.props.appUsers}
                                 isInlineEditOpen={isInlineEditOpen}
@@ -805,8 +796,7 @@ export let ReportContent = React.createClass({
                         {isSmall &&
                         <CardViewListHolder reportData={this.props.reportData}
                                             appUsers={this.props.appUsers}
-                                            uniqueIdentifier={SchemaConsts.DEFAULT_RECORD_KEY}
-                                            keyField={keyField}
+                                            uniqueIdentifier={this.props.uniqueIdentifier}
                                             reportHeader={this.props.reportHeader}
                                             selectionActions={<ReportActions selection={this.props.selectedRows}/>}
                                             onScroll={this.onScrollRecords}
@@ -836,7 +826,8 @@ ReportContent.contextTypes = {
 };
 
 ReportContent.propTypes = {
-    pendEdits: React.PropTypes.object.isRequired
+    pendEdits: React.PropTypes.object.isRequired,
+    uniqueIdentifier: React.PropTypes.string.isRequired
 };
 
 export let ReportContentWithRouter = withRouter(ReportContent);
