@@ -79,7 +79,7 @@ const RowEditActions = React.createClass({
             );
         } else {
             saveButton = (
-                <QBToolTip  rootClose={true} location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
+                <QBToolTip location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
                     <Button>
                         <Loader loaded={!saving} options={SpinnerConfigurations.RECORD_COUNT}>
                             <QBIcon icon="alert" onClick={this.onClickSave} className="invalidRecord"/>
