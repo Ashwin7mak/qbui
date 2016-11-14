@@ -509,7 +509,7 @@ let AGGrid = React.createClass({
         if (typeof (this.props.editingIndex) !== 'undefined') {
             let found = false;
             this.api.forEachNode((node) => {
-                if (!found && node.data && node.data[FieldUtils.getUniqueIdentifierFieldName(node.data)] && this.props.editingId === node.data[FieldUtils.getUniqueIdentifierFieldNameFromData(node.data)].value) {
+                if (!found && node.data && node.data[FieldUtils.getUniqueIdentifierFieldName(node.data)] && this.props.editingId === node.data[FieldUtils.getUniqueIdentifierFieldName(node.data)].value) {
                     this.startEditRow(this.props.editingId, node);
                     found = true;
                 }
