@@ -71,7 +71,10 @@ export let Nav = React.createClass({
         const flux = this.getFlux();
 
         if (Breakpoints.isSmallBreakpoint()) {
-            flux.actions.toggleLeftNav(false);
+            setTimeout( () => {
+                // prevent navigation by toggling left nav in timeout
+                flux.actions.toggleLeftNav(false);
+            }, 0);
         }
         flux.actions.showTrowser(TrowserConsts.TROWSER_REPORTS);
         flux.actions.loadReports(this.state.apps.selectedAppId, tableId);
