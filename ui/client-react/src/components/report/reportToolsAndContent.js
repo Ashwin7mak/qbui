@@ -110,10 +110,6 @@ const ReportToolsAndContent = React.createClass({
     },
 
     componentDidUpdate(prevProps) {
-        console.log('this.props.reportData: ', this.props.reportData);
-        // if (this.props.reportData.isRecordDeleted) {
-        //     this.getPageUsingOffsetMultiplicant(1);
-        // }
         this.capturePerfTiming(prevProps);
     },
 
@@ -307,6 +303,11 @@ const ReportToolsAndContent = React.createClass({
             if (this.props.selectedRows.length === 1) {
                 classes += " singleSelection";
             }
+        }
+
+        console.log('componentWillReceiveProps: ', this.props.reportData.isRecordDeleted);
+        if (this.props.reportData.isRecordDeleted) {
+            this.getPageUsingOffsetMultiplicant(1);
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;

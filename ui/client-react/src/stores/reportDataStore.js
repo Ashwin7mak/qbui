@@ -596,6 +596,7 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onLoadReportSuccess(response) {
+        this.isRecordDeleted = false;
         this.loading = false;
         this.editingIndex = undefined;
         this.editingId = undefined;
@@ -613,6 +614,8 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onLoadRecords(payload) {
+        this.isRecordDeleted = false;
+        console.log('HELLLLLLOOOOOO!!!!!!');
         this.loading = true;
         this.editingIndex = undefined;
         this.editingId = undefined;
@@ -641,10 +644,12 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onLoadRecordsSuccess(response) {
+        this.isRecordDeleted = false;
         this.loading = false;
         this.editingIndex = undefined;
         this.editingId = undefined;
-        this.isRecordDeleted = false;
+        //line 647
+
 
         this.reportModel.updateFilteredRecords(response.recordData);
         this.reportModel.setMetaData(response.metaData);
@@ -889,7 +894,7 @@ let ReportDataStore = Fluxxor.createStore({
      */
     onDeleteReportRecordSuccess(recId) {
         this.reportModel.deleteRecordsFromLists(recId);
-
+        //line 892
         this.isRecordDeleted = true;
         this.emit('change');
     },
