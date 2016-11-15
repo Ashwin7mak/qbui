@@ -98,7 +98,6 @@
                 display:flex;
                 justify-content: flex-end;
                 align-items: center;
-                width: 50%;
 
                 .loadedContent {
                     display:block;
@@ -124,14 +123,8 @@
             }
 
             .reportNavigation {
-                flex-grow: 1;
                 display:flex;
                 align-items: center;
-                width: 50%;
-            }
-            .spacer {
-                min-width:1px;
-                flex-grow: 1;
             }
             .loadedContent {
                 flex-grow: 1;
@@ -165,6 +158,9 @@
             font-size: 16px;
             cursor: pointer;
         }
+    }
+    .spacer {
+        width: 15px;
     }
 
     .reportFooter {
