@@ -2,7 +2,7 @@ import * as actions from '../../src/constants/actions';
 
 import Store from '../../src/stores/recordPendingEditsStore';
 import Fluxxor from 'fluxxor';
-import HttpStatusCode from '../../../common/src/constants';
+import Constants from '../../../common/src/constants';
 
 describe('Test recordPendingEdits Store ', () => {
     'use strict';
@@ -15,7 +15,7 @@ describe('Test recordPendingEdits Store ', () => {
         appId : 'a',
         tblId : 'b',
         recId : 4,
-        error: {tid: '', statusCode: HttpStatusCode.INTERNAL_SERVER_ERROR, errorMessages: [{code: "LegacyStackOperationOrDataSyncError"}]}
+        error: {tid: '', statusCode: Constants.HttpStatusCode.INTERNAL_SERVER_ERROR, errorMessages: [{code: "LegacyStackOperationOrDataSyncError"}]}
     };
 
     beforeEach(() => {
