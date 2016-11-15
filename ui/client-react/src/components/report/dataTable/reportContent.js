@@ -19,6 +19,8 @@ import ValidationMessage from "../../../utils/validationMessage";
 import _ from 'lodash';
 import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
+import DTSErrorModal from '../../dts/dtsErrorModal';
+import UrlUtils from '../../../utils/urlUtils';
 
 let logger = new Logger();
 
@@ -370,7 +372,7 @@ export let ReportContent = React.createClass({
 
     isDateDataType(dataType) {
         return dataType === SchemaConsts.DATE_TIME ||
-               dataType === SchemaConsts.DATE;
+            dataType === SchemaConsts.DATE;
     },
 
     parseTimeOfDay(timeOfDay) {
@@ -660,8 +662,8 @@ export let ReportContent = React.createClass({
      */
     startPerfTiming(nextProps) {
         if (_.has(this.props, 'reportData.loading') &&
-                !this.props.reportData.loading &&
-                nextProps.reportData.loading) {
+            !this.props.reportData.loading &&
+            nextProps.reportData.loading) {
             let flux = this.getFlux();
             flux.actions.mark('component-ReportContent start');
         }
@@ -675,8 +677,8 @@ export let ReportContent = React.createClass({
         let timingContextData = {numReportCols:0, numReportRows:0};
         let flux = this.getFlux();
         if (_.has(this.props, 'reportData.loading') &&
-                !this.props.reportData.loading &&
-                prevProps.reportData.loading) {
+            !this.props.reportData.loading &&
+            prevProps.reportData.loading) {
             flux.actions.measure('component-ReportContent', 'component-ReportContent start');
 
             // note the size of the report with the measure
@@ -730,6 +732,7 @@ export let ReportContent = React.createClass({
         } else {
             addPadding = "reportContent";
         }
+        let showDTSErrorModal = this.props.pendEdits ? this.props.pendEdits.showDTSErrorModal : false;
         const editErrors = (this.props.pendEdits && this.props.pendEdits.editErrors) ? this.props.pendEdits.editErrors : null;
 
         let reportContent;
@@ -740,6 +743,7 @@ export let ReportContent = React.createClass({
             reportContent = (
                 <div className="loadedContent">
                     <div className={addPadding}>
+                        <DTSErrorModal show={showDTSErrorModal} tid={this.props.pendEdits.dtsErrorModalTID} link={UrlUtils.getQuickBaseClassicLink(this.props.selectedAppId)} />
                         {!isSmall && this.props.reactabular &&
                         <QBGrid records={this.props.reportData.data ? this.props.reportData.data.filteredRecords : []}
                                 columns={this.props.reportData.data ? this.props.reportData.data.columns : []}

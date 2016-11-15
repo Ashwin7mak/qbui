@@ -113,7 +113,7 @@ module.exports = function(grunt) {
         if (endOfImport < 0) {
             grunt.log.error(IMPORT_COMMENT + ' comment missing from index.js. Import may be misplaced.');
         }
-        indexFileArray.splice(endOfImport, 0, 'import ' + componentData.componentName + "Doc from './docs/" + componentData.componentFileName + "';")
+        indexFileArray.splice(endOfImport, 0, 'import ' + componentData.componentName + "Doc from './docs/" + componentData.componentFileName + "';");
 
         // Extra spacing here to match indentation
         var endOfRoutes = indexFileArray.indexOf('        </Route>');
@@ -134,7 +134,7 @@ module.exports = function(grunt) {
         grunt.file.write(componentData.routesFile, routesFileArray.join("\n"));
     }
 
-    grunt.registerTask('addComponentToLibrary', 'Add a React component to the component library', function(){
+    grunt.registerTask('addComponentToLibrary', 'Add a React component to the component library', function() {
         // Current Component Info
         var componentName = grunt.option('name');
         var componentPath = grunt.option('path');
@@ -176,4 +176,4 @@ module.exports = function(grunt) {
         grunt.log.writeln('1) Double check the placement of the link in the nav menu in ' + componentData.routesFile);
         grunt.log.writeln('2) Improve your example in ' + componentData.exampleFile);
     });
-}
+};

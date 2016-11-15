@@ -4,8 +4,9 @@ import IconActions from '../actions/iconActions';
 import Fluxxor from 'fluxxor';
 import Logger from '../../utils/logger';
 import M5AppHomePage from './m5AppHomePage';
-
-import AppNotFound from './appNotFound';
+import {I18nMessage} from '../../utils/i18nMessage';
+import AlertBanner from '../alertBanner/alertBanner';
+import AppUtils from '../../utils/appUtils';
 
 import './appHomePage.scss';
 
@@ -104,7 +105,6 @@ let AppHomePageRoute = React.createClass({
     render() {
         return (
             <div className="appHomePageContainer">
-                <AppNotFound appsLoading={this.props.appsLoading} selectedAppId={this.props.selectedAppId} apps={this.props.apps} />
                 <M5AppHomePage />
             </div>
         );
