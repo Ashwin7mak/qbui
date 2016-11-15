@@ -3,6 +3,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var exec = require('child_process').exec;
+var styleLintPlugin = require('stylelint-webpack-plugin');
 
 // node modules
 var nodeModulesPath = path.resolve(__dirname, 'node_modules');
@@ -158,10 +159,19 @@ var config = {
         //  run-time environment for our application
         envPlugin
     ] :  [
+        // The stylelint-webpack-plugin ends up outputting errors despite failOnError and the NoErrorsPlugin
+        // From what I can gather, NoErrors only ensures that no bad assets are emitted but will still emit
+        // errors.
+        new styleLintPlugin({
+            configFile: '.stylelintrc',
+            files: 'client-react/src/**/*.scss',
+            failOnError: false,
+            syntax: 'scss',
+            quiet: false
+        }),
         // When there are compilation errors, this plugin skips the emitting (and recording) phase.
         // This means there are no assets emitted that include errors.
         new webpack.NoErrorsPlugin(),
-
         //  run-time environment for our application
         envPlugin,
 
