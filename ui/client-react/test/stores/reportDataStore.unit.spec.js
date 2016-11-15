@@ -320,6 +320,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).searchStringForFiltering).toEqual('abc');
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
+        expect(flux.store(STORE_NAME).isRecordDeleted).toBe(false);
     });
 
     it('test load records failed action', () => {
