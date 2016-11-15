@@ -190,7 +190,6 @@ const ReportToolbar = React.createClass({
         }
         // Conditional marking display of filter box. Show when records have been loaded. This box does not depend on the record counting call
         let showFilterSearchBox = !isLoading && isPageLoaded && !isError;
-console.log(this.props.width);
         let reportToolbar = (
             <div className={"reportToolbar " + (hasFacets ? "" : "noFacets")}>
                 <div className="leftReportToolbar">

@@ -59,8 +59,7 @@ const ReportToolsAndContent = React.createClass({
     },
     getInitialState: function() {
         return {
-            reactabular: false,
-            width: 2000,
+            reactabular: false
         };
     },
     componentWillMount() {
@@ -185,7 +184,8 @@ const ReportToolsAndContent = React.createClass({
     },
 
     /**
-     *
+     * This function should be called only once when AGGrid is initialized. Find the full width of
+     * the table so the ReportToolbar can adjust its width to match the table.
      */
     onGridSizeSet() {
         let agGridBody = document.getElementsByClassName('ag-body-container');
@@ -217,7 +217,8 @@ const ReportToolsAndContent = React.createClass({
                               pageStart={this.pageStart}
                               pageEnd={this.pageEnd}
                               recordsCount={this.recordsCount}
-                              width={this.state.gridWidth}/>;
+                              width={this.state.gridWidth}
+               />;
     },
     getSelectionActions() {
         return (<ReportActions selection={this.props.selectedRows} appId={this.props.params.appId} tblId={this.props.params.tblId} rptId={this.props.params.rptId} nameForRecords={this.props.nameForRecords}/>);
@@ -308,13 +309,13 @@ const ReportToolsAndContent = React.createClass({
     },
 
     render() {
-        let classes = ["reportToolsAndContentContainer"];
+        let classes = ['reportToolsAndContentContainer'];
         if (this.props.selectedRows) {
             if (this.props.selectedRows.length > 0) {
-                classes.push("activeSelection");
+                classes.push('activeSelection');
             }
             if (this.props.selectedRows.length === 1) {
-                classes.push("singleSelection");
+                classes.push('singleSelection');
             }
         }
 
@@ -356,7 +357,8 @@ const ReportToolsAndContent = React.createClass({
                                          pageStart={this.pageStart}
                                          pageEnd={this.pageEnd}
                                          recordsCount={this.recordsCount}
-                                         thing={666}/>;
+                                         width={this.state.gridWidth}
+                          />;
 
             let reportFooter = <ReportFooter
                                 reportData={this.props.reportData}
