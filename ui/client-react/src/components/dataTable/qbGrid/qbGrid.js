@@ -125,7 +125,7 @@ const QBGrid = React.createClass({
     selectAllRows() {
         let selected = []; // array of record ids to select
         this.props.records.forEach(rec => {
-            selected.push(rec[this.props.keyField].value);
+            selected.push(rec[this.props.uniqueIdentifier].value);
         });
         this.getFlux().actions.selectedRows(selected);
     },
@@ -281,7 +281,7 @@ const QBGrid = React.createClass({
      */
     getContext() {
         return {
-            keyField: this.props.keyField,
+            uniqueIdentifier: this.props.uniqueIdentifier,
             flux: this.getFlux(),
             onEditRecordCancel: () => {
                 this.setState({editRow: -1});
@@ -414,7 +414,7 @@ const QBGrid = React.createClass({
         if (event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            this.props.onEditRecordStart(data[this.props.keyField].value);
+            this.props.onEditRecordStart(data[this.props.uniqueIdentifier].value);
             this.setState({editRow: rowIndex});
             return;
         }
