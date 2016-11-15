@@ -1,3 +1,6 @@
+/**
+ * E2E tests for error and invalid field validation when adding a new record via a Form.
+ */
 (function() {
     'use strict';
 
@@ -11,7 +14,6 @@
     var reportServicePage = new ReportServicePage();
     var reportContentPage = new ReportContentPage();
     var formsPage = new FormsPage();
-    var tableGenerator = require('../../../../test_generators/table.generator');
 
     describe('Add Form Validation Tests: ', function() {
 
@@ -78,8 +80,8 @@
             return [
                 {
                     message: 'all numeric fields',
-                    fieldTypeClassNames: 'numericField',
-                },
+                    fieldTypeClassNames: 'numericField'
+                }
             ];
         }
 
@@ -127,8 +129,6 @@
 
             //verify validation
             formsPage.verifyErrorMessages(expectedErrorMessages);
-            // Needed to get around stale element error
-            e2eBase.sleep(browser.params.smallSleep);
 
             //correct the errors and add the record
             for (var i = 0; i < validFieldClassNames.length; i++) {
@@ -137,16 +137,13 @@
 
             //Save the form by clicking on 'Save and add another' btn
             formsPage.clickFormSaveAndAddAnotherBtn();
-            reportContentPage.waitForReportContent();
-
-            //reload the report to verify the row edited
-            reportServicePage.agGridRecordElList.then(function(records) {
+            reportContentPage.waitForReportContent().then(function() {
                 for (var j = 0; j < validFieldClassNames.length; j++) {
                     formsPage.verifyFieldValuesInReportTable(0, validFieldClassNames[j]);
                 }
+            }).then(function() {
                 done();
             });
         });
-
     });
 }());

@@ -142,7 +142,7 @@
             var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
             return reportServicePage.waitForElement(self.formTable).then(function() {
-                return e2eBase.sleep(browser.params.tinySleep);
+                return e2eBase.sleep(browser.params.smallSleep);
             }).then(function() {
                 if (fieldLabel === 'dateCell' && browserName !== 'safari') {
                     //enter date fields
@@ -199,6 +199,8 @@
             var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
             return reportServicePage.waitForElement(self.formEditContainerEl).then(function() {
+                return e2eBase.sleep(browser.params.smallSleep);
+            }).then(function() {
                 if (fieldLabel === 'textField') {
                     //enter text fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
