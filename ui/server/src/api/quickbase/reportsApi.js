@@ -560,16 +560,14 @@
                     //  make the api request to get the table homepage report id
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            // parse out the id and use to fetch the report meta data.  Process the meta data
-                            // to fetch and return the report content.
-                            let homepageReportId = '1'; // assume 1st report List All
+                            //  fetch the specified report or the default if one is not defined
+                            let homepageReportId = constants.DEFAULT_TABLE_REPORT.ID;
                             let responseBodyParsed;
-                            if (response.body && ('0' !== (responseBodyParsed = JSON.parse(response.body)))) {
-                                //if had a default report defined use that
+                            if (response.body && (constants.DEFAULT_TABLE_REPORT.ID !== (responseBodyParsed = JSON.parse(response.body)))) {
                                 homepageReportId = responseBodyParsed;
                             }
 
-                            //  have a homepage id; fetch the report
+                            //  fetch the report
                             this.fetchReport(req, homepageReportId, true).then(
                                     (reportResponse) => {
                                         resolve(reportResponse);

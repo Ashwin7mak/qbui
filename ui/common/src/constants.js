@@ -45,6 +45,10 @@
         USER            : 'USER',
         FILE_ATTACHMENT : 'FILE_ATTACHMENT',
 
+        DEFAULT_TABLE_REPORT: {
+            ID: '0'
+        },
+
         NUMERIC_SEPARATOR: {
             PERIOD: '.',
             COMMA: ','
