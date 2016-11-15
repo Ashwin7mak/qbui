@@ -83,6 +83,7 @@ const TextFieldValueEditor = React.createClass({
     renderInputBox(classes) {
         let maxLength = FieldUtils.getMaxLength(this.props.fieldDef);
 
+        // use the raw value as the input value, not the formatted display value that may include escaped content
         return <input ref="textInput"
                       className={classes}
                       value={this.props.value === null ? "" : this.props.value}

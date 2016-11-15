@@ -127,7 +127,7 @@ const MultiLineTextFieldValueEditor = React.createClass({
                                         className="cellEdit borderOnError"
                                         rows={rows}
                                         cols={cols}
-                                        value={this.props.display ? this.props.display : this.props.value}
+                                        value={this.props.value === null ? "" : this.props.value}
                                         type="text" />;
     }
 });
