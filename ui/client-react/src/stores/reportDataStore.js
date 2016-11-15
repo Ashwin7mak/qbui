@@ -921,6 +921,7 @@ let ReportDataStore = Fluxxor.createStore({
             this.reportModel.deleteRecordsFromLists(recIds[i]);
         }
         this.selectedRows = [];
+        this.isRecordDeleted = true;
         this.emit('change');
     },
 
