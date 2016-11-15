@@ -64,7 +64,7 @@
         display: flex;
         flex-direction: row;
         flex: 1 0 auto;
-        align-items: center;
+        align-items: flex-start;
         color: $icon-color;
 
 
@@ -81,7 +81,7 @@
             display: flex;
             flex-direction: row;
             flex: 1 1 auto;
-            align-items: center;
+            align-items: flex-start;
         }
 
         .rightReportToolbar {
@@ -278,7 +278,7 @@
 
     .navigationButton {
         text-decoration: none;
-        padding-top:10px;
+        padding-top:5px;
         .disabled {
             pointer-events: none;
         }

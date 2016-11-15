@@ -4,23 +4,33 @@
 .facetsMenuContainer {
   margin-left: 10px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 
   .selectedFacets {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
+    padding-top: 8px;
+    order: 20;
   }
 
   //under the generated wrapper on facetMenuPopup
   > div:not(.facetsMenuButton) > div.facetsRelativePos {
     position: relative;
   }
+
+  // this is the div that contains the react-bootstrap Overlay
+  > div:not(.facetsMenuButton):not(.selectedFacets) {
+    position: relative;
+    top: 30px;
+    order: 1;
+  }
 }
 
 .facetsMenuButton {
   display: inline-block;
   cursor: pointer;
+  margin-top: 6px;
+  order: 10;
   &.withoutSelections {
     margin-bottom: 4px;
   }
@@ -213,7 +223,7 @@
 }
 
 .facetToken {
-    padding: 3px;
+    padding: 0 3px 3px 3px;
 
   .facetNameToken {
     margin-right: .5em;
