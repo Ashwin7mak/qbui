@@ -70,7 +70,7 @@ describe('RowEditActions', () => {
             expectedFunction: saveFunctionName
         },
         {
-            description: 'calls the save method when the save button is clicked with the correct ID',
+            description: 'calls the save method when the save button is clicked with the correct ID (renamed primary key field)',
             data: dataWithDifferentRecordKeyName,
             buttonClass: saveButtonClass,
             expectedFunction: saveFunctionName
@@ -82,7 +82,7 @@ describe('RowEditActions', () => {
             expectedFunction: cancelFunctionName
         },
         {
-            description: 'calls the cancel method when the cancel button is clicked with the correct ID',
+            description: 'calls the cancel method when the cancel button is clicked with the correct ID (renamed primary key field)',
             data: dataWithDifferentRecordKeyName,
             buttonClass: cancelButtonClass,
             expectedFunction: cancelFunctionName
@@ -94,7 +94,7 @@ describe('RowEditActions', () => {
             expectedFunction: saveAndAddFunctionName
         },
         {
-            description: 'calls the save and add method when the save and add button is clicked with the correct ID',
+            description: 'calls the save and add method when the save and add button is clicked with the correct ID (renamed primary key field)',
             data: dataWithDifferentRecordKeyName,
             buttonClass: saveAndAddButtonClass,
             expectedFunction: saveAndAddFunctionName
