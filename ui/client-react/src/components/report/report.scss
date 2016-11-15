@@ -78,7 +78,6 @@
         }
 
         .leftReportToolbar {
-            width:50%;
             display: flex;
             flex-direction: row;
             flex: 1 1 auto;
@@ -86,10 +85,8 @@
         }
 
         .rightReportToolbar {
-            width:50%;
             display: flex;
             flex-direction: row;
-            flex: 1 1 auto;
             justify-content: flex-end;
             color: $pagination-iconfont-normal-color;
 

@@ -3,6 +3,14 @@
 
 .facetsMenuContainer {
   margin-left: 10px;
+  display: flex;
+  align-items: center;
+
+  .selectedFacets {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
 
   //under the generated wrapper on facetMenuPopup
   > div:not(.facetsMenuButton) > div.facetsRelativePos {
@@ -204,11 +212,7 @@
     }
 }
 
-.selectedFacets {
-  display: inline;
-}
 .facetToken {
-    display : inline-block;
     padding: 3px;
 
   .facetNameToken {
@@ -225,7 +229,8 @@
     font-weight:500;
     background-color: $facetMenu-facetTokenBackgroundColor;
     color: $facetMenu-facetTokenTextColor;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
 
     .selectedTokenName {
       white-space: normal;
@@ -252,7 +257,7 @@
 }
 
 @include small-breakpoint {
-    .selectedFacets {
+    .facetsMenuContainer .selectedFacets {
         display:none;
     }
     .reportContainer .reportToolsAndContentContainer .reportToolbar {
