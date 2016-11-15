@@ -305,7 +305,7 @@ const ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
-        let primaryKeyName = FieldUtils.getUniqueIdentifierFieldName(this.props.fields);
+        let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.fields);
 
         // Define the page start. Page offset is zero indexed. For display purposes, add one.
         this.pageStart = this.props.reportData.pageOffset + 1;

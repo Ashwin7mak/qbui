@@ -34,7 +34,7 @@ class CellRendererFactory  {
             _.has(props.params, 'data') &&
             _.has(props.params, 'rowIndex')) {
 
-            recId = props.params.data[FieldUtils.getUniqueIdentifierFieldName(props.params.data)].value;
+            recId = props.params.data[FieldUtils.getPrimaryKeyFieldName(props.params.data)].value;
             key = props.params.rowIndex + "-fid" + props.params.value.id + '-recId' + recId ;
         }
         return key;
@@ -259,7 +259,7 @@ const CellRenderer = React.createClass({
             _.has(this.props.params, 'column.colId') &&
             _.has(this.props.params, 'colDef.id')) {
 
-            let primaryKeyName = FieldUtils.getUniqueIdentifierFieldName(this.props.params.data);
+            let primaryKeyName = FieldUtils.getPrimaryKeyFieldName(this.props.params.data);
 
             let change = {
                 values: {

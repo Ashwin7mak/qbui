@@ -450,7 +450,7 @@ let reportModel = {
      */
     deleteRecordsFromLists(recId) {
         var recordValueToMatch = {};
-        recordValueToMatch[FieldUtils.getUniqueIdentifierFieldName(recordValueToMatch)] = {value: recId};
+        recordValueToMatch[FieldUtils.getPrimaryKeyFieldName(recordValueToMatch)] = {value: recId};
         const newFilteredRecords = this.model.filteredRecords ? this.model.filteredRecords.slice(0) : null;
         const newRecords = this.model.records ? this.model.records.slice(0) : null;
         let recordDeleted = false;

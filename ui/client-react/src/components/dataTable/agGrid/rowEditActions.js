@@ -25,14 +25,14 @@ const RowEditActions = React.createClass({
 
     onClickSave() {
         //get the current record id
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getPrimaryKeyFieldName(this.props.data)];
         this.props.params.context.onRecordSaveClicked(id);
         this.props.api.deselectAll();
     },
 
     onClickCancel() {
         //get the original unchanged values in data to rerender
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getPrimaryKeyFieldName(this.props.data)];
 
         if (this.props.params.node) {
             //ag-grid
@@ -46,7 +46,7 @@ const RowEditActions = React.createClass({
 
     onClickAdd() {
         //get the current record id
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+        const id = this.props.data[FieldUtils.getPrimaryKeyFieldName(this.props.data)];
         this.props.params.context.onRecordNewBlank(id);
         this.props.api.deselectAll();
     },

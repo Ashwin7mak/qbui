@@ -9,11 +9,11 @@ class FieldUtils {
     * @returns {string}
     *
     */
-    static getUniqueIdentifierFieldName(data) {
+    static getPrimaryKeyFieldName(data) {
         if (_.has(data, 'fields')) {
-            return FieldUtils.getUniqueIdentifierFieldNameFromFields(data);
+            return FieldUtils.getPrimaryKeyFieldNameFromFields(data);
         } else {
-            return FieldUtils.getUniqueIdentifierFieldNameFromData(data);
+            return FieldUtils.getPrimaryKeyFieldNameFromData(data);
         }
     }
 
@@ -23,7 +23,7 @@ class FieldUtils {
     * @param {object} fields
     * @returns {string}
     */
-    static getUniqueIdentifierFieldNameFromFields(fields) {
+    static getPrimaryKeyFieldNameFromFields(fields) {
         if (requiredFieldsArePresent(fields)) {
             let uniqueIdentifierField = _.find(fields.fields.data, {keyField: true});
             if (uniqueIdentifierField) {
@@ -49,7 +49,7 @@ class FieldUtils {
      *    }
      * @returns {string}
      */
-    static getUniqueIdentifierFieldNameFromData(rowData) {
+    static getPrimaryKeyFieldNameFromData(rowData) {
         let recordIdField = _.findKey(rowData, {id: SchemaConsts.DEFAULT_RECORD_KEY_ID});
         if (recordIdField) {
             return recordIdField;
