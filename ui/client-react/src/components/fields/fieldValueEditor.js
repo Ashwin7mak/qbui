@@ -155,7 +155,7 @@ const FieldValueEditor = React.createClass({
         };
 
         // Do not allow keyFields to be modified (only view as a renderer)
-        if (this.props.fieldDef.keyField) {
+        if (this.props.fieldDef && this.props.fieldDef.keyField) {
             return <NumberFieldValueRenderer isEditable={false} type="number" {...commonProps} />;
         }
 
