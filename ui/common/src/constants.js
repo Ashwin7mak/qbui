@@ -100,6 +100,9 @@
             DATE_CREATED: "Date Created",
             RECORD_OWNER: "Record Owner"
         },
+        ERROR_CODE:{
+            DTS_ERROR_CODE: "DataOperationOrSyncError"
+        },
         HttpStatusCode: {
             'CONTINUE': 100,
             'SWITCHING_PROTOCOLS': 101,
