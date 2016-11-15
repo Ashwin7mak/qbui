@@ -377,8 +377,6 @@ const ReportToolsAndContent = React.createClass({
                                    reportHeader={toolbar}
                                    reportFooter={reportFooter}
                                    cardViewPagination={cardViewPagination }
-                                   keyField={this.props.fields && this.props.fields.keyField ?
-                                       this.props.fields.keyField.name : FieldUtils.getUniqueIdentifierFieldName(this.props) }
                                    uniqueIdentifier={uniqueIdentifier}
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
