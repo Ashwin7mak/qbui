@@ -7,6 +7,19 @@ import './invisibleBackdrop.scss';
  * to disallow additional input
  */
 const InvisibleBackdrop = React.createClass({
+    propTypes: {
+        /**
+         * Show the backdrop and disables all user input until show is false
+         * */
+        show: React.PropTypes.bool,
+    },
+
+    getDefaultProps() {
+        return {
+            show: false
+        };
+    },
+
     render() {
         return (
                 <Modal
