@@ -53,9 +53,9 @@ describe('Table Actions functions', () => {
                     done();
                     let model = reportModel.set(responseData.reportMetaData, responseData.reportData);
                     expect(flux.dispatchBinder.dispatch.calls.count()).toEqual(3);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId: DEFAULT_HOMEPAGE_ID}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId: responseData.reportMetaData.data.id}]);
-                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT_SUCCESS, model]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(0)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId:DEFAULT_HOMEPAGE_ID, offset:test.offset, numRows:test.numRows}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(1)).toEqual([actions.LOAD_REPORT, {appId: 'appId', tblId: 'tblId', rptId:responseData.reportMetaData.data.id, offset:test.offset, numRows:test.numRows}]);
+                    expect(flux.dispatchBinder.dispatch.calls.argsFor(2)).toEqual([actions.LOAD_REPORT_SUCCESS, model]);
                 },
                 () => {
                     done();

@@ -7,7 +7,7 @@ import FacetSelections  from '../../src/components/facet/facetSelections';
 
 describe('ReportRoute functions', () => {
     'use strict';
-
+    const pendEdits = {showDTSErrorModal: false};
     let component;
     let reportDataSearchStore = Fluxxor.createStore({
         getState() {
@@ -47,27 +47,27 @@ describe('ReportRoute functions', () => {
     });
 
     it('test render of component with url params', () => {
-        component = TestUtils.renderIntoDocument(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}/>);
+        component = TestUtils.renderIntoDocument(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}/>);
         expect(TestUtils.isCompositeComponent(component)).toBeTruthy();
     });
 
     it('test flux action loadTableHomePage is called with app data', () => {
-        component = TestUtils.renderIntoDocument(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></ReportRoute>);
+        component = TestUtils.renderIntoDocument(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}></ReportRoute>);
         expect(flux.actions.loadReport).toHaveBeenCalledWith(routeParams.appId, routeParams.tblId, routeParams.rptId, routeParams.format, routeParams.pageOffSet, routeParams.numRows);
     });
 
     it('test flux action loadTableHomePage is not called on 2nd called with same app data', () => {
         var div = document.createElement('div');
-        ReactDOM.render(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></ReportRoute>, div);
+        ReactDOM.render(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}></ReportRoute>, div);
         expect(flux.actions.loadReport).toHaveBeenCalled();
         //  on subsequent call with same parameter data, the loadReport function is not called
-        ReactDOM.render(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></ReportRoute>, div);
+        ReactDOM.render(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}></ReportRoute>, div);
         expect(flux.actions.loadReport).not.toHaveBeenCalledWith();
     });
 
     it('test flux action loadTableHomePage is not called with missing app data', () => {
         routeParams.appId = null;
-        component = TestUtils.renderIntoDocument(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux}></ReportRoute>);
+        component = TestUtils.renderIntoDocument(<ReportRoute params={routeParams} reportData={reportDataParams.reportData} flux={flux} pendEdits={pendEdits}></ReportRoute>);
         expect(flux.actions.loadReport).not.toHaveBeenCalled();
     });
 

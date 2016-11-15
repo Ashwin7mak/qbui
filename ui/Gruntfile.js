@@ -8,6 +8,8 @@ module.exports = function(grunt) {
     'use strict';
 
     var currentDateTime = new Date().getTime();
+    // Select a random port number for sauce labs to launch selenium at (prevents concurrency issues in CI builds)
+    var seleniumPort = Math.floor(Math.random() * 100) + 4400;
 
     var baseUrl = grunt.option('baseUrl') || 'http://localhost:9000';
     var buildDir = path.join(__dirname, '/build');
@@ -441,54 +443,27 @@ module.exports = function(grunt) {
         },
 
         protractor: {
-            sauce_osx_chrome : {
-                options: {
-                    configFile: './e2e/config/sauceLabs/sauce.chrome.osx.protractor.conf.js',
-                    args: {
-                        baseUrl   : testJsConfig.DOMAIN
-                    }
-                }
-            },
-            sauce_win7_chrome : {
-                options: {
-                    configFile: './e2e/config/sauceLabs/sauce.chrome.win7.protractor.conf.js',
-                    args: {
-                        baseUrl   : testJsConfig.DOMAIN
-                    }
-                }
-            },
-            sauce_linux_chrome : {
-                options: {
-                    configFile: './e2e/config/sauceLabs/sauce.chrome.linux.protractor.conf.js',
-                    args: {
-                        baseUrl   : testJsConfig.DOMAIN
-                    }
-                }
-            },
-            sauce_linux_firefox : {
-                options: {
-                    configFile: './e2e/config/sauceLabs/sauce.firefox.linux.protractor.conf.js',
-                    args: {
-                        baseUrl   : testJsConfig.DOMAIN
-                    }
-                }
-            },
+            // Used for the try-ui-e2e CI job
             sauce_multi_browser : {
                 options: {
                     configFile: './e2e/config/sauceLabs/sauce.multi.browser.protractor.conf.js',
                     args: {
-                        baseUrl   : testJsConfig.DOMAIN
+                        baseUrl   : testJsConfig.DOMAIN,
+                        sauceSeleniumAddress : 'localhost:' + seleniumPort + '/wd/hub'
                     }
                 }
             },
+            // Used for the production smoke test CI job
             sauce_production : {
                 options: {
                     configFile: './e2e/config/sauceLabs/sauce.production.protractor.conf.js',
                     args: {
-                        baseUrl   : testJsConfig.DOMAIN
+                        baseUrl   : testJsConfig.DOMAIN,
+                        sauceSeleniumAddress : 'localhost:' + seleniumPort + '/wd/hub'
                     }
                 }
             },
+            // Used for running e2e tests locally
             local              : {
                 options: {
                     configFile: './e2e/config/local.protractor.conf.js',
@@ -497,14 +472,17 @@ module.exports = function(grunt) {
                     }
                 }
             },
+            // Used for running e2e tests in sauce labs against your local dev env
             local_sauce              : {
                 options: {
                     configFile: './e2e/config/local.sauce.protractor.conf.js',
                     args: {
-                        baseUrl   : e2eJsConfig.DOMAIN
+                        baseUrl   : e2eJsConfig.DOMAIN,
+                        sauceSeleniumAddress : 'localhost:' + seleniumPort + '/wd/hub'
                     }
                 }
             },
+            // Used for running dataGen scripts on your local dev env
             local_data_gen : {
                 options: {
                     configFile: './e2e/config/local.dataGen.protractor.conf.js',
@@ -557,7 +535,8 @@ module.exports = function(grunt) {
                     tunnelIdentifier: tunnelIdentifier,
                     verbose         : true,
                     logger          : console.log,
-                    dns             : sauceDns
+                    dns             : sauceDns,
+                    port            : seleniumPort
                 }
             },
             aws: {
@@ -568,11 +547,11 @@ module.exports = function(grunt) {
                     tunnelIdentifier: tunnelIdentifier,
                     //proxyTunnel     : true,
                     verbose         : true,
-                    logfile         : 'sauceConnect.log'
+                    logfile         : 'sauceConnect.log',
+                    port            : seleniumPort
                 }
             }
         },
-
         shell: {
             lint: {
                 // Make sure code styles are up to par and there are no obvious mistakes
@@ -682,7 +661,7 @@ module.exports = function(grunt) {
 
     // Load and register custom external grunt scripts
     // All grunt tasks in ../scripts/gruntTasks will be loaded/registered
-    grunt.loadTasks('../scripts/gruntTasks');
+    grunt.loadTasks('./gruntTasks');
 
     // Production build
     grunt.registerTask('webpackbuild', ['webpack:build']);
@@ -790,7 +769,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('codeStandards', [
-        'lint'
+        'lint',
+        'lintStyles'
     ]);
 
     grunt.registerTask('testClientOnly', function() {
@@ -960,9 +940,9 @@ module.exports = function(grunt) {
         'build'
     ]);
 
-    grunt.registerTask('lint', 'Run eslint on code', function() {
+    grunt.registerTask('lint', 'Run eslint and stylelint on code', function() {
         return grunt.task.run([
-            'shell:lint',
+            'shell:lint'
         ]);
     });
 

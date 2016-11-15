@@ -89,11 +89,11 @@
         this.reportStageArea = this.reportStageContentEl.element(by.className('collapse'));
 
         //Report page actions on stage
-        this.reportActions = this.reportStageContentEl.element(by.className('pageActions'));
+        this.reportActions = this.reportStageContentEl.all(by.className('pageActions')).first();
         //Add record btn
         this.reportAddRecordBtn = this.reportActions.element(by.className('iconTableUISturdy-add'));
         //Edit button
-        this.reportEditRecordBtnOnStage = this.recordContainer.element(by.className('layout-stage')).element(by.className('pageActions')).element(by.className('iconTableUISturdy-edit'));
+        this.reportEditRecordBtnOnStage = this.recordContainer.element(by.className('layout-stage')).all(by.className('pageActions')).first().element(by.className('iconTableUISturdy-edit'));
 
 
         //stage heading

@@ -6,6 +6,8 @@
     var RequestAppsPage = requirePO('requestApps');
     var RequestSessionTicketPage = requirePO('requestSessionTicket');
     var reportServicePage = new ReportServicePage();
+    var ReportContentPage = requirePO('reportContent');
+    var reportContentPage = new ReportContentPage();
     var FormsPage = requirePO('formsPage');
     var formsPage = new FormsPage();
 
@@ -41,7 +43,7 @@
             //go to report page directly.
             RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
             // Wait until report loaded
-            reportServicePage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+            reportContentPage.waitForReportContent().then(function() {
                 done();
             });
         });
@@ -64,7 +66,7 @@
             }).then(function() {
                 //reload the report to verify the row edited
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-                return formsPage.waitForElement(reportServicePage.loadedContentEl).then(function() {
+                return reportContentPage.waitForReportContent().then(function() {
                     e2eBase.sleep(browser.params.smallSleep);
                     reportServicePage.agGridRecordElList.then(function(records) {
                         for (var j = 0; j < fieldTypeClassNames.length; j++) {
