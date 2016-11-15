@@ -1106,7 +1106,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });
 
-    fit('test onDeleteReportRecordSuccess with valid recId', () => {
+    it('test onDeleteReportRecordSuccess with valid recId', () => {
         //populate the model
         let reportPayload = {
             metaData: {},
