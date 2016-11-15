@@ -30,18 +30,6 @@ const RowEditActions = React.createClass({
         this.props.api.deselectAll();
     },
 
-    /**
-     * delete icon is not included but may come back shortly
-     */
-    onClickDelete() {
-        const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
-        this.props.api.deselectAll();
-
-        this.props.flux.actions.deleteRecord(id);
-        setTimeout(()=> {
-            NotificationManager.info('Record deleted', 'Deleted', 1500);
-        }, 1000);
-    },
     onClickCancel() {
         //get the original unchanged values in data to rerender
         const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
@@ -70,7 +58,7 @@ const RowEditActions = React.createClass({
         if (validRow) {
             saveButton = (
                 <QBToolTip tipId="saveRecord" location="bottom" i18nMessageKey="pageActions.saveRecord">
-                    <Button onClick={this.onClickSave}>
+                    <Button className="rowEditActionsSave" onClick={this.onClickSave}>
                         <Loader loaded={!saving} options={SpinnerConfigurations.RECORD_COUNT}>
                             <QBIcon icon="check" className="saveRecord"/>
                         </Loader>
@@ -120,13 +108,13 @@ const RowEditActions = React.createClass({
         return (
             <div className="editTools">
                 <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
-                    <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
+                    <Button className="rowEditActionsCancel" onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
                 </QBToolTip>
 
                 {this.renderSaveRecordButton(validRow, saving)}
 
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
-                    <Button onClick={validRow ? this.onClickAdd : null}><QBIcon icon="add" className={addRecordClass}/></Button>
+                    <Button className="rowEditActionsSaveAndAdd" onClick={validRow ? this.onClickAdd : null}><QBIcon icon="add" className={addRecordClass}/></Button>
                 </QBToolTip>
             </div>
         );
