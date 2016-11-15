@@ -382,7 +382,9 @@ export default {
             favorites: "Der Zugriff auf Favoriten ist noch nicht verfügbar",
             makeFavorite: "Kennzeichnung als Favorit ist noch nicht verfügbar",
             print: "Der Druck ist noch nicht verfügbar",
-            copy: "Kopieren ist noch nicht verfügbar"
+            copy: "Kopieren ist noch nicht verfügbar",
+            email: "E-Mail ist noch nicht verfügbar",
+            delete: "Das Löschen ist noch nicht verfügbar"
         },
         quickBaseClassic: "QuickBase Klassik"
     }
