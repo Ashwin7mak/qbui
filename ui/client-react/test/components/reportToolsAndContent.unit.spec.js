@@ -1,18 +1,14 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import ReactDOM from 'react-dom';
 import ReportToolsAndContent  from '../../src/components/report/reportToolsAndContent';
 import FacetSelections  from '../../src/components/facet/facetSelections';
-
-import Locale from '../../src/locales/locales';
-var i18n = Locale.getI18nBundle();
 
 describe('ReportToolsAndContent functions', () => {
     'use strict';
 
     let component;
 
-    let flux = {
+    const flux = {
         actions:{
             selectTableId() {return;},
             loadReport() {return;},
@@ -26,10 +22,32 @@ describe('ReportToolsAndContent functions', () => {
         }
     };
 
-    let reportParams = {appId:1, tblId:2, rptId:3, format:true, offset:1, numRows: 10};
-    let reportDataParams = {reportData: {loading:true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
+    const rptId = '3';
+    const reportParams = {appId: '1', tblId: '2', rptId: rptId, format: true, offset: 1, numRows: 10};
+    const reportDataParams = {reportData: {loading:true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
 
-    let ReportContentMock = React.createClass({
+    const keyFieldName = 'Employee Number';
+    const reportFields = {
+        fields: {
+            data: [
+                {
+                    id: 3,
+                    keyField: true,
+                    name: keyFieldName,
+                },
+                {
+                    id: 1,
+                    name: 'First Name'
+                },
+                {
+                    id: 2,
+                    name: 'Last Name'
+                }
+            ]
+        }
+    };
+
+    const ReportContentMock = React.createClass({
         render() {
             return <div className="report-content-mock" />;
         }
@@ -63,7 +81,7 @@ describe('ReportToolsAndContent functions', () => {
 
     it('test render of report widget', () => {
         var div = document.createElement('div');
-        component = ReactDOM.render(<ReportToolsAndContent flux={flux} params={reportParams} {...reportDataParams} />, div);
+        component = TestUtils.renderIntoDocument(<ReportToolsAndContent flux={flux} params={reportParams} {...reportDataParams} />, div);
 
         //  test that the reportContentMock is rendered
         expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(1);
@@ -71,10 +89,25 @@ describe('ReportToolsAndContent functions', () => {
 
     it('test report is not rendered with missing app data', () => {
         var div = document.createElement('div');
-        reportParams.appId = undefined;
-        component = ReactDOM.render(<ReportToolsAndContent flux={flux} params={reportParams} {...reportDataParams} />, div);
+        let reportParamsWithUndefinedAppId = Object.assign({}, reportParams, {appId: undefined});
+        component = TestUtils.renderIntoDocument(<ReportToolsAndContent flux={flux} params={reportParamsWithUndefinedAppId} {...reportDataParams} />, div);
 
         //  test that the reportContentMock is rendered
         expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(0);
+    });
+
+    it('passes the uniqueIdentifier to child components', () => {
+        let renderer = TestUtils.createRenderer();
+        renderer.render(<ReportToolsAndContent rptId={rptId} fields={reportFields} flux={flux} params={reportParams} {...reportDataParams} />);
+
+        let result = renderer.getRenderOutput();
+
+        let reportContent = result.props.children.find(individualComponent => {
+            return typeof individualComponent.type === 'function';
+        });
+
+        expect(reportContent).not.toBeNull();
+        expect(reportContent).not.toBeUndefined();
+        expect(reportContent.props.uniqueIdentifier).toEqual(keyFieldName);
     });
 });

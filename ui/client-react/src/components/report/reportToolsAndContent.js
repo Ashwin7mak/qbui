@@ -74,7 +74,6 @@ const ReportToolsAndContent = React.createClass({
         this.mapFacetFields();
     },
 
-
     //when report changed from not loading to loading start measure of components performance
     startPerfTiming(nextProps) {
         if (_.has(this.props, 'reportData.loading') &&
