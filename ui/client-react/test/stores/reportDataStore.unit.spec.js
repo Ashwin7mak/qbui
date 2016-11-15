@@ -1106,7 +1106,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });
 
-    it('test onDeleteReportRecordSuccess with valid recId', () => {
+    fit('test onDeleteReportRecordSuccess with valid recId', () => {
         //populate the model
         let reportPayload = {
             metaData: {},
@@ -1173,6 +1173,7 @@ describe('Test ReportData Store', () => {
         flux.dispatcher.dispatch(onDeleteReportRecordSuccess);
         expect(flux.store(STORE_NAME).reportModel.model.filteredRecords.length).toBe(1);
         expect(flux.store(STORE_NAME).reportModel.model.recordsCount).toBe(1);
+        expect(flux.store(STORE_NAME).isRecordDeleted).toBe(true);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(3);
     });
