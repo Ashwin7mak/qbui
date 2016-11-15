@@ -83,6 +83,9 @@
                 });
             }).then(function(filteredSaveBtn) {
                 return filteredSaveBtn[0].click();
+            }).then(function() {
+                //Need this for growl to come and go off
+                return e2eBase.sleep(browser.params.smallSleep);
             });
         };
 

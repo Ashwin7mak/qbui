@@ -62,8 +62,6 @@
             var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
             //click on add record button
             reportCardViewPage.clickAddRecord();
-            // Check that the add form container is displayed
-            expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
 
             //get the fields from the table and generate a record
             for (var i = 0; i < fieldTypeClassNames.length; i++) {
@@ -83,6 +81,8 @@
             var fieldTypeClassNames = ['textField', 'numericField'];
             //Select record 1
             reportCardViewPage.clickRecord(1);
+
+            //Click edit record
             reportCardViewPage.clickEditRecord();
 
             //get the fields from the table and generate a record
@@ -92,21 +92,19 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
-            reportCardViewPage.waitForReportReady();
-
-            //Select record 1
-            reportCardViewPage.clickRecord(1);
 
             for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
+                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(reportCardViewPage.formTableForRecord, fieldTypeClassNames[j]);
             }
             done();
         });
 
         it('Edit a record from the form and Verify Save And Next functionality', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell'];
-            //Select record 1
+            //Select record
             reportCardViewPage.clickRecord(4);
+
+            //Click on edit record
             reportCardViewPage.clickEditRecord();
             //get the fields from the table and generate a record
             for (var i = 0; i < fieldTypeClassNames.length; i++) {
@@ -115,12 +113,19 @@
 
             //Save the form
             formsPage.clickFormSaveAndNextBtn();
+
+            //reload the report
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
             reportCardViewPage.waitForReportReady();
 
+            //select the record
             reportCardViewPage.clickRecord(4);
+
+            //verify editing a record worked
             for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
+                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(reportCardViewPage.formTable, fieldTypeClassNames[j]);
             }
+
             done();
         });
 

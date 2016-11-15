@@ -24,7 +24,6 @@
         var recordList;
         var RECORDS_COUNT = '8 records';
         var expectedErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field', 'Phone Number Field', 'Email Address Field', 'URL Field'];
-        var expectedNumericErrorMessages = ['Numeric Field', 'Numeric Percent Field', 'Duration Field'];
 
         beforeAll(function(done) {
             e2eBase.fullReportsSetup(5).then(function(appAndRecords) {
@@ -59,11 +58,9 @@
         it('Validate all required fields on the form', function(done) {
             //click on add record button
             reportCardViewPage.clickAddRecord();
-            // Check that the add form container is displayed
-            expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
 
-            //Save the form without entering any field values on form
-            formsPage.clickSaveBtnWithName('Save');
+            //Save the form
+            formsPage.clickFormSaveBtn();
 
             //verify validation
             formsPage.verifyErrorMessages(expectedErrorMessages);
@@ -71,11 +68,9 @@
         });
 
         it('Save Btn - Validate Add form', function(done) {
-            var fieldTypeClassNames = ['numericField'];
+            var fieldTypeClassNames = ['textField', 'numericField'];
             //click on add record button
             reportCardViewPage.clickAddRecord();
-            // Check that the add form container is displayed
-            expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
 
             //get the fields from the table and generate a record
             for (var i = 0; i < fieldTypeClassNames.length; i++) {
@@ -83,46 +78,51 @@
             }
 
             //Save the form
-            formsPage.clickSaveBtnWithName('Save');
+            formsPage.clickFormSaveBtn();
 
             //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages);
-
-            //verify clicking on alert button brings up the error message popup
-            formsPage.clickFormAlertBtn();
-            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
-
-            //verify clicking on alert again hides the error message popup
-            formsPage.clickFormAlertBtn();
-            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
-            done();
+            formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
+                //verify clicking on alert button brings up the error message popup
+                formsPage.clickFormAlertBtn();
+                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
+                //verify clicking on alert again hides the error message popup
+                formsPage.clickFormAlertBtn();
+                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
+                //close dirty form
+                formsPage.closeSaveChangesDialogue();
+                done();
+            });
 
         });
 
         it('Save Btn -Validate Edit form', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
-            //Select record 1
+            //Select record
             reportCardViewPage.clickRecord(1);
+
+            //Click edit button
             reportCardViewPage.clickEditRecord();
+
             //get the fields from the table and generate a record
             for (var i = 0; i < fieldTypeClassNames.length; i++) {
                 reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
             }
+
             //Save the form
-            formsPage.clickSaveBtnWithName('Save');
+            formsPage.clickFormSaveBtn();
 
             //verify validation
-            formsPage.verifyErrorMessages(expectedNumericErrorMessages);
-
-            //verify clicking on alert button brings up the error message popup
-            formsPage.clickFormAlertBtn();
-            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
-
-            //verify clicking on alert again hides the error message popup
-            formsPage.clickFormAlertBtn();
-            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
-            done();
-
+            formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
+                //verify clicking on alert button brings up the error message popup
+                formsPage.clickFormAlertBtn();
+                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
+                //verify clicking on alert again hides the error message popup
+                formsPage.clickFormAlertBtn();
+                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
+                //close dirty form
+                formsPage.closeSaveChangesDialogue();
+                done();
+            });
         });
 
         it('Save And Next - Validate edit form and Edit a record successfully after errors', function(done) {
@@ -132,33 +132,36 @@
             reportCardViewPage.clickEditRecord();
 
             //get the fields from the table and generate a record
-            reportCardViewPage.enterInvalidFormValues('numericField');
+            for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+            }
 
             //Save the form
             formsPage.clickSaveBtnWithName('Save & Next');
 
             //verify validation
-
-            formsPage.verifyErrorMessages(expectedNumericErrorMessages);
+            formsPage.verifyErrorMessages(expectedErrorMessages);
+            // Needed to get around stale element error
+            e2eBase.sleep(browser.params.smallSleep);
 
             //correct the errors and add the record
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                reportCardViewPage.enterFormValues(fieldTypeClassNames[i]);
+            for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                reportCardViewPage.enterFormValues(fieldTypeClassNames[j]);
             }
 
             //Save the form
-            formsPage.clickSaveBtnWithName('Save & Next');
-            reportServicePage.waitForElement(element(by.className('editForm')));
+            formsPage.clickFormSaveAndNextBtn();
 
-
-            //reload the report to verify the row edited
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1));
-            //verify the edited record
+            //reload the report
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
             reportCardViewPage.waitForReportReady();
 
+            //select the record
             reportCardViewPage.clickRecord(3);
-            for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(fieldTypeClassNames[j]);
+
+            //verify editing a record worked
+            for (var k = 0; k < fieldTypeClassNames.length; k++) {
+                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(reportCardViewPage.formTable, fieldTypeClassNames[k]);
             }
             done();
         });

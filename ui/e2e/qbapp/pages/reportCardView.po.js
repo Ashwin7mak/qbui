@@ -90,6 +90,11 @@
         //form table
         this.formTable = this.reportFormContainerEl.element(by.className('formTable'));
 
+        //record container
+        this.reportRecordContainerEl = element(by.className('recordContainer'));
+        //form table
+        this.formTableForRecord = this.reportRecordContainerEl.element(by.className('formTable'));
+
         /*
          * Generic interaction function for clicking on paging nav buttons
          * @param Any paging button element that you want to click
@@ -104,6 +109,16 @@
             });
         };
 
+        this.clickReturnToReportBtn = function() {
+            var self = this;
+            return e2ePageBase.waitForElementToBeClickable(self.recordFormActionReturnToReportBtn).then(function() {
+                return self.recordFormActionReturnToReportBtn.click().then(function() {
+                    // Wait for the report to load before proceeding with control flow
+                    return self.waitForReportReady();
+                });
+            });
+        };
+
         /**
          * Click Add Record button on Loaded Report Content for small BP
          *
@@ -112,7 +127,7 @@
             var self = this;
             return e2ePageBase.waitForElementToBeClickable(self.addNewRecordBtn).then(function() {
                 return self.addNewRecordBtn.click().then(function() {
-                    e2ePageBase.waitForElement(element(by.className('editForm')));
+                    return e2ePageBase.waitForElement(element(by.className('editForm')));
                 });
             });
         };
@@ -124,7 +139,7 @@
         this.clickRecord = function(recordId) {
             var self = this;
             return e2ePageBase.waitForElement(self.loadedContentEl).then(function() {
-                self.reportCards.all(by.className('top-card-row')).then(function(records) {
+                return self.reportCards.all(by.className('top-card-row')).then(function(records) {
                     return records[recordId - 1].click().then(function() {
                         return e2ePageBase.waitForElement(self.recordEditBtn);
                         //card-expander
@@ -230,7 +245,7 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return elm.clear().sendKeys("9782311213");
+                        return elm.clear().sendKeys("");
                     });
                 } else if (fieldLabel === 'numericField') {
                     //enter numeric fields
@@ -247,9 +262,9 @@
          * Verify field values on small breakpoint report table
          *
          */
-        this.verifyFieldValuesInReportTableSmallBP = function(fieldType) {
+        this.verifyFieldValuesInReportTableSmallBP = function(formTableElement, fieldType) {
             var self = this;
-            self.formTable.all(by.className(fieldType)).map(function(elm) {
+            return formTableElement.all(by.className(fieldType)).map(function(elm) {
                 return elm.getAttribute('textContent').then(function(text) {
                     if (fieldType === 'numericField') {
                         expect(text.replace(/[!@#$%^&*]/g, "")).toBe(sNumeric.toString());
