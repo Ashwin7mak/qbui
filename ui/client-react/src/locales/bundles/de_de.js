@@ -12,7 +12,7 @@ export default {
                 welcomeText: "Während Sie Ihren Weg lernen, verwenden Sie diesen Bereich anstelle der App-Homepage. " +
                 "Dies ist Ihre echte App in Mercury. Sie werden Ihre App-Homepage noch nicht sehen, aber alle Ihre " +
                 "daten sind hier. Die Arbeit, die Sie hier vornehmen, wird auch in der klassischen Ansicht angezeigt.",
-                launchVideoLink: "Starten Sie Video-Tour (3:00)",
+                launchVideoLink: "Starten Sie Video-Tour (2:58)",
                 guideMeLink: "Führ mich durch Quecksilber",
                 guideTitle: "Begrüßungsführer",
                 guideText: "Erfahren Sie alles über das Mercury-Beta-Programm. Sehen Sie, welche Funktionen zurzeit verfügbar sind und wie Ihr Team die Arbeit schneller erledigen kann, über Geräte hinweg mit Hilfe von Mercury.",
@@ -24,7 +24,8 @@ export default {
                 tipText: "Dies ist in Arbeit, so dass, wenn Sie auf eine Schaltfläche klicken und es macht nichts, keine Sorgen. Wir arbeiten noch an dieser Funktion.",
                 helpTitle: "Brauche Hilfe?",
                 helpText: "Wir wollen, dass Sie erfolgreich sind; Deshalb sind wir immer hier, um zu helfen.",
-                helpLinkPreText: "Bitte kontaktieren Sie uns unter",
+                helpLinkPreText: "Bitte ",
+                helpLinkText: "wenden Sie sich an unser Care-Team",
                 missingWalkMe: "Tutorial ist nicht verfügbar"
             }
         },
@@ -33,6 +34,13 @@ export default {
             modalStayButton: "Bleiben Sie und halten Sie arbeiten",
             modalDoNotSaveButton: "Nicht speichern",
             modalSaveButton: "Sparen"
+        },
+        dtsErrorModal: {
+            dtsErrorTitle: "Es tut uns Leid, Ihre Arbeit zu unterbrechen",
+            dtsErrorBodyMessage: "Quecksilber kann nicht fortgesetzt werden Ihre App heute läuft, aber es wird morgen fortgesetzt.",
+            dtsErrorSecondErrorBodyMessage: "Ihre Anwendung ist in Quickbase-Klassiker noch zur Verfügung.",
+            dtsErrorTID: "Transaktions-ID:",
+            dtsErrorPrimaryButtonText: "Öffne meine app in der klassischen"
         },
         reports : {
             emailReportTooltip: "Teilen Sie diese Datensätze mit einer anderen Person",

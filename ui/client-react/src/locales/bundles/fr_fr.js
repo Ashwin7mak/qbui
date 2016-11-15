@@ -12,7 +12,7 @@ export default {
                 welcomeText: "Pendant que vous apprenez votre chemin, utilisez cette zone à la place de votre page d'accueil d'application. " +
                 "C'est votre application réelle dans Mercury. Vous ne verrez pas encore la page d'accueil de votre application, mais " +
                 "données sont ici. Les travaux effectués ici s'affichent immédiatement en mode Classique.",
-                launchVideoLink: "Lancez une tournée vidéo (3:00)",
+                launchVideoLink: "Lancez une tournée vidéo (2:58)",
                 guideMeLink: "Guide-moi par Mercury",
                 guideTitle: "Guide d'accueil",
                 guideText: "Apprenez tout sur le programme Mercury Beta. Voyez quelles fonctionnalités sont actuellement disponibles et comment votre équipe peut obtenir le travail plus rapidement, à travers les périphériques, en utilisant Mercury.",
@@ -24,7 +24,8 @@ export default {
                 tipText: "Il s'agit de travaux en cours, donc si vous cliquez sur un bouton et il ne fait rien, pas de soucis. Nous travaillons encore sur cette fonctionnalité.",
                 helpTitle: "Besoin d'aide?",
                 helpText: "Nous voulons que vous réussissiez; C'est pourquoi nous sommes toujours là pour vous aider.",
-                helpLinkPreText: "Veuillez nous contacter au",
+                helpLinkPreText: "Veuillez ",
+                helpLinkText: "contacter notre équipe de soins",
                 missingWalkMe: "Le didacticiel n'est pas disponible"
             }
         },
@@ -33,6 +34,13 @@ export default {
             modalStayButton: "Restez et continuer à travailler",
             modalDoNotSaveButton: "Ne pas enregistrer",
             modalSaveButton: "Sauvegarder"
+        },
+        dtsErrorModal: {
+            dtsErrorTitle: "Désolé d'interrompre votre travail",
+            dtsErrorBodyMessage: "Mercury ne peut pas continuer à exécuter votre application aujourd'hui, mais reprendra demain. ",
+            dtsErrorSecondErrorBodyMessage: "Votre application est toujours disponible dans QuickBase Classic.",
+            dtsErrorTID: "Identifiant de transaction:",
+            dtsErrorPrimaryButtonText: "Ouvrez mon application en Classique"
         },
         reports : {
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",

@@ -57,7 +57,7 @@ let recordActions = {
             }
             return payload;
         }
-            // promise is returned in support of unit testing only
+        // promise is returned in support of unit testing only
         return new Promise((resolve, reject) => {
             let record = getRecord(recordChanges, fields);
 
@@ -98,7 +98,7 @@ let recordActions = {
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.createRecord:');
-                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error.response});
+                        this.dispatch(actions.ADD_RECORD_FAILED, {appId, tblId, record, error: error});
                         if (error.response.status === 403) {
                             NotificationManager.error(Locale.getMessage('recordNotifications.error.403'), Locale.getMessage('failed'), 1500);
                         }
@@ -114,7 +114,7 @@ let recordActions = {
                 );
             } else {
                 var errMessage = 'Missing one or more required input parameters to recordActions.addRecord. AppId:' +
-                        appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
+                    appId + '; TblId:' + tblId + '; recordChanges:' + JSON.stringify(recordChanges) + '; fields:' + JSON.stringify(fields);
                 logger.error(errMessage);
                 this.dispatch(actions.ADD_RECORD_FAILED, {error: errMessage});
                 reject();
@@ -146,7 +146,7 @@ let recordActions = {
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecord:');
-                        this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error.response});
+                        this.dispatch(actions.DELETE_RECORD_FAILED, {appId, tblId, recId, error: error});
                         NotificationManager.error(`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`, Locale.getMessage('failed'), 3000);
                         reject();
                     }
@@ -188,7 +188,7 @@ let recordActions = {
                     },
                     error => {
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.deleteRecordBulk:');
-                        this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error.response});
+                        this.dispatch(actions.DELETE_RECORD_BULK_FAILED, {appId, tblId, recIds, error: error});
                         let message = recIds.length === 1 ? (`1 ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`) : (`${recIds.length} ${nameForRecords} ${Locale.getMessage('recordNotifications.notDeleted')}`);
                         NotificationManager.error(message, Locale.getMessage('failed'), 3000);
                         reject();
@@ -306,7 +306,7 @@ let recordActions = {
                     error => {
                         //  axios upgraded to an error.response object in 0.13.x
                         logger.parseAndLogError(LogLevel.ERROR, error.response, 'recordService.saveRecord:');
-                        this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error.response});
+                        this.dispatch(actions.SAVE_RECORD_FAILED, {appId, tblId, recId, changes, error: error});
                         NotificationManager.error(Locale.getMessage('recordNotifications.recordNotSaved'), Locale.getMessage('failed'), 1500);
                         reject();
                     }
@@ -323,3 +323,4 @@ let recordActions = {
 };
 
 export default recordActions;
+

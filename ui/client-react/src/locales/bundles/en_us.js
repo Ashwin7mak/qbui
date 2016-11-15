@@ -15,7 +15,7 @@ export default {
                 welcomeText: "While you learn your way around, use this area in place of your app homepage. " +
                 "This is your real app in Mercury. You won’t see your app homepage yet, but all your " +
                 "data is here. Work you do here displays immediately in Classic view, too.",
-                launchVideoLink: "Launch video tour (3:00)",
+                launchVideoLink: "Launch video tour (2:58)",
                 guideMeLink: "Guide me through Mercury",
                 guideTitle: "Welcome guide",
                 guideText: "Learn all about the Mercury Beta program. See what features are currently available and how your team can get work done faster, across devices, using Mercury.",
@@ -27,7 +27,8 @@ export default {
                 tipText: "This is work in progress, so if you click a button and it doesn’t do anything, no worries. We’re still working on that feature.",
                 helpTitle: "Need help?",
                 helpText: "We want you to be successful; that’s why we’re always here to help.",
-                helpLinkPreText: "Please contact us at",
+                helpLinkPreText: "Please ",
+                helpLinkText: "contact our Care team",
                 missingWalkMe: "Tutorial is not available."
             }
         },
@@ -36,6 +37,13 @@ export default {
             modalStayButton: "Stay and keep working",
             modalDoNotSaveButton: "Don't Save",
             modalSaveButton: "Save"
+        },
+        dtsErrorModal: {
+            dtsErrorTitle: "Sorry to interrupt your work",
+            dtsErrorBodyMessage: "Mercury can’t continue running your app today, but will resume tomorrow.",
+            dtsErrorSecondErrorBodyMessage: "Your app is still available in QuickBase Classic.",
+            dtsErrorTID: "Transaction ID:",
+            dtsErrorPrimaryButtonText: "Open my app in Classic"
         },
         reports : {
             emailReportTooltip: "Share these records with someone else",

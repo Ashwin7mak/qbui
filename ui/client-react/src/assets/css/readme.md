@@ -1,83 +1,45 @@
 # Introduction
-The purpose of this document is to layout best practices when writing CSS for QuickBase. As part of the re-architecture project QuickBase is now built atop of Bootstrap for React using a Sass preprocessor.
+The purpose of this document is to layout best practices when writing CSS for QuickBase. QuickBase is now built with some Bootstrap for React components using a Sass preprocessor for the re-architecture project.
+
+# Lint Tools
+
+The CSS/Sass linting tool will run as part of the normal code standards grunt tasks (`$ grunt test` or `$ grunt codeStandards`).
+The CSS/Sass linting tool can be run separately by running `$ grunt linStyles`.
+
+The CSS/Sass linting tool will only report errors and will not display warnings. If you need to see both errors and warnings
+in the console output, you can use `$ grunt lintStyles:all`.
 
 # Architecture
-The file structure is an adapted (for QuickBase) version of the the [7-1 Pattern](http://sass-guidelin.es/#architecture) (see below). Basically, all the partials for QuickBase are contained in seven folders (open to revising based on our needs) and compiled together using a single `main.scss` file. This provides a couple of benefits:
-  - Control over source ordering. For instance, the current build applies Normalize and Bootstrap styles **last**.
-  - A better home for styles that aren't directly tied to a component. For instance, `body` and `html` styles are found in the `nav.scss` file.
-  - A single source of truth for shared variables and the ability to see how they relate to each other
-  - A home for vendor based styles
-  - A single CSS file that can be minified and cached for users. The current build sends all the CSS down with the `bundle.js` file and then is injected into the DOM using JavaScript.
-  - This is an organization scheme that a lot of developers are used to seeing
 
+Sass files are stored in the same folder as the related component. For example, inside of the `fieldValueEditor` folder
+there is a `fieldValueEditor.js` (the component) and the `fieldValueEditor.scss`. Remember to import the .scss file
+into the js component file so the styles are used.
+
+```
+assets/
+│
+├─ css/
+│   ├─ _qbVariables.scss # Sass Variables (I'm open to splitting this if it gets too big)
+│   ├─ _qbColorVariables # Sass Variables for semantic color names
+│   ├─ _typography.scss  # Typography rules
+│   ├─ _main.scss        # Main entry point for scss files. It contains styling for 'body' and 'html' styles. It is currently imported in nav.js (parent component)
+│   ├─ /utils            # This folder reserved for helper classes (`.left` or `.hide-on-mobile`), mixins (`@include foobar()`) and functions (`calc-space()`).
+│   └─ /vendor           # This is for third-party libraries such as Bootstrap and Animate.css; however, most libraries should be imported and used via the package.json and imported where they are used
+│   …                    # Etc.
+└─
 ````
-sass/
-│
-│– base/
-│   ├─ _qbVariables.scss   # Sass Variables (I'm open to splitting this if it gets too big)
-│   ├─ _grid.scss        # Grid system
-│   └─ _typography.scss  # Typography rules
-│   …                    # Etc.
-│
-├─ components/
-│   ├─ _buttons.scss     # Buttons
-│   ├─ _trowser.scss     # Trowser
-│   ├─ _cover.scss       # Cover
-│   ├─ _dropdown.scss    # Dropdown
-│   └─ _forms.scss       # Forms
-│   …                    # Etc.
-│
-├─ shell/
-│   ├─ _global-bar.scss  # Global bar
-│   ├─ _footer.scss      # Footer
-│   └─ _leftNav.scss     # Left Nav
-│   …                    # Etc.
-│
-├─ pages/
-│   ├─ _home.scss        # Home specific styles
-│   └─ _contact.scss     # Contact specific styles
-│   …                    # Etc.
-│
-├─ utils/
-│   ├─ _functions.scss   # Sass Functions
-│   ├─ _mixins.scss      # Sass Mixins
-│   └─ _helpers.scss     # Class & placeholders helpers
-│
-├─ vendors/
-│   ├─ _bootstrap.scss   # Bootstrap
-│   ├─ _ceaser.scss      # Easing functions
-│   └─ _animate.scss     # Animate.css
-│   …                    # Etc.
-│
-└─ main.scss             # Main Sass file (does not import Bootstrap)
-````
-
-## Folder Details
-See below for notes on what goes into each folder.
-
-### Base
-These are styles and variables that should always be present on every page of the product. Most of this is actually already available in Bootstrap but I'm leaving it in as we add in our own base styles.
-
-### Components
-I know that this is going to be conflated with the idea that everything is a component in React but this is reserved for things that are truly a reusable component. See [Bootstrap](http://getbootstrap.com/components/), [Foundation](http://foundation.zurb.com/) or the [Harmony UI Component Library](http://fmsscm.corp.intuit.net/deploy-harmony-ui-component-gallery/origin/master/#typography) for examples of "component libraries". Items in here will eventually feed into our UI Component Library (TBD).
-
-### Shell
-This is for React components that build the generic shell of our product (see the Nav component) such as the Global Nav and Left Nav. Arguably, this could be put into the components library but I'd argue for keeping them separate because the shell 'glues' all the parts of the components together.
-
-### Pages
-This is for React components that make up specific parts of the product. For example the ReportRoute, RecordRoute and TableHomePageRoute components.
-
-### Utils
-This is reserved for helper classes (`.left` or `.hide-on-mobile`), mixins (`@include foobar()`) and functions (`calc-space()`).
-
-### Vendors
-This is for third-party libraries such as Bootstrap and Animate.css.
 
 ## About Inlining Styles
 Don't inline styles in React. Inlined styles are difficult to override (thereby breaking the specificity graph), make it hard to share styles and can't make use of pseudo-selectors/media queries.
 
-# Formating
+# Formatting
 For the most part our formating guide will be enforced by the Sass linting tool but here's a full writeup on how it all works.
+
+For automatic formatting of a file based on the rules indicated in `stylint.config.js`, you can run the stylefmt command.
+
+(From the ui directory)
+
+`$ node_modules/.bin/stylefmt -R client-react/src` -> Will format all css/sass files in the src directory. Alternatively, you can specific a specific file as the last paramter.
 
 ## Spacing
 * Where possible, limit CSS files width to 80 characters. There will be unavoidable exceptions to this rule, such as URLs, or gradient syntax. Don’t worry.
@@ -302,59 +264,23 @@ color: #FFF;
 
 # Naming & Specificity
 
-## Block Element Modifier (BEM)
+Naming convention for css follows the variable naming rules for javascript to promote consistency across the codebase.
+For example, a `fieldValueEditor` component may have a main `<div>` with a class of `fieldValueEditor`.
 
-We use a modified version of BEM that follows the Bootstrap convention. It still uses blocks, sections within blocks and modifiers, but doesn’t use as long a syntax.
+Classes should be scoped to their related component. E.g.,
 
-- use the Block Element Modifier (BEM) naming convention for naming components.
-- The name of block elements should match with their React component name.
-- Use your best judgment when deciding what needs to follow the BEM convention. If you're creating utility classes like `.left { ... }` they obviously don't have to follow the BEM convention.
-- If you want an good reference, look at Bootstraps `_navbar.scss` implementation.
-
-```sass
-.block {} // Name of the React component
-.block-element {} // Element contained in the component
-.block-modifier {} // State change or variation
-
-/** Examples **/
-// block
-.trowser {
-    position: absolute;
-}
-
-// element
-.trowser-content {
-    padding: 3em;
-}
-
-// modifier
-
-.trowser-is-open {
-    display: block;
-}
-
-// Protip
-.trowser-progress {
-    key: value
-    &-progress-stage {
-        display: block;
+``` sass
+.fieldValueEditor {
+    .border {
+        border: 1px solid $input-border-color;
     }
 }
-
-// Outputs
-.trowser-progress { key: value }
-.trowser-progress-stage { display: block }
-
 ```
 
 > PROTIP: You can use the `&` operator in Sass to [create new classes](http://alwaystwisted.com/articles/2014-02-27-even-easier-bem-ing-with-sass-33) when nested within a selector.
 
-Additional reading:
-- [article explaining BEM](http://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/)
-- [BEM website](https://en.bem.info/method/)
-
 ## Naming
-Additionally, along with naming components using the BEM method be sure to follow these guidelines:
+Additionally, consider the following when naming classes.
 - Name things clearly.
 - Write classes semantically. Name its function not its appearance.
 - Avoid presentation- or location-specific words in names, as this will cause problems when we (invariably) need to change the color, width, or feature later.
@@ -363,9 +289,6 @@ Additionally, along with naming components using the BEM method be sure to follo
 // Bad
 // Avoid uppercase
 .ClassNAME { }
-
-// Avoid camel case
-.commentForm { }
 
 // What is a c1-xr? Use a more explicit name.
 .c1-xr { }
@@ -379,6 +302,9 @@ Additionally, along with naming components using the BEM method be sure to follo
 .warning
 .primary
 .lg-box
+
+// Use camel case
+.commentForm { }
 ```
 
 - Be wary of naming components based on content, as this limits the use of the class.
@@ -421,7 +347,6 @@ Additionally, along with naming components using the BEM method be sure to follo
 ```
 
 ## Specificity
-- Pro Tip: Using the BEM convention should ameliorate most specificity problems
 - IDs are reserved for when you are absolutely certain that there will only ever be one of the thing on the page.
 
 ```sass
@@ -483,7 +408,7 @@ div, nav, li {
 }
 
 // Good
-.trowser__item {
+.trowserItem {
     background: red;
 }
 
@@ -506,6 +431,19 @@ Additional Reading:
   - The value is repeated twice
   - The value is likely to be updated at least once
   - **All occurrences of the value are tied to the variable (i.e. not by coincidence)** *(this is for you Drew)*
+
+- Variables should always start with a letter and can use all lowercase letters, numbers, and/or dashes.
+
+```sass
+// Bad
+$thisIsCamelCase: 1px;
+$*&%!(&*)Variable: 1px;
+$191variable: 1px;
+
+// Good
+$a-variable-93: 1px;
+$avriable: 1px;
+```
 
 - Use the `!default` flag to allow overriding when setting variables.
   - [Further Reading](https://robots.thoughtbot.com/sass-default)
