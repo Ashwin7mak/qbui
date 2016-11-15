@@ -65,7 +65,7 @@
             });
         });
 
-        xit('Edit a record via stage pageActions edit pencil using report with sorting', function(done) {
+        it('Edit a record via stage pageActions edit pencil using report with sorting', function(done) {
             //TODO MB-1339 - Test won't work in Firefox and Safari as edit opens 2 forms in view and edit mode one behind the other.
             //TODO After hitting save instead of showing report grid it has the view mode open.
             var fieldTypeClassNames = ['dateField'];
@@ -82,7 +82,13 @@
             }
 
             //Save the form
-            formsPage.clickFormSaveBtn();
+            formsPage.clickFormSaveBtn().then(function() {
+                //verify it landed in record viewMode since record edited in record open mode. If edited at table level should land in table.
+                reportServicePage.waitForElement(formsPage.formViewContainerEl);
+            });
+
+            //go to report page
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 3);
             reportContentPage.waitForReportContent().then(function() {
                 //Verify record is added on top row in a table
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
