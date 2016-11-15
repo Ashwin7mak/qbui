@@ -181,7 +181,7 @@
             var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
             return e2ePageBase.waitForElement(element(by.className('editForm'))).then(function() {
-                if (fieldLabel === 'dateCell') {
+                if (fieldLabel === 'dateCell' && browserName !== 'safari') {
                     //enter date fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
@@ -217,7 +217,7 @@
                     }).map(function(elm) {
                         return elm.element(by.className('label')).click();
                     });
-                } else if (fieldLabel === 'timeCell') {
+                } else if (fieldLabel === 'timeCell' && browserName !== 'safari') {
                     //enter time of day fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
