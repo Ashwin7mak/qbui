@@ -62,14 +62,15 @@
                 expect(formsPage.formEditContainerEl.isPresent()).toBeTruthy();
 
                 //Save the form without entering any field values
-                formsPage.clickSaveBtnWithName('Save');
-
-                //verify validation
-                formsPage.verifyErrorMessages(expectedErrorMessages);
-
-                //close forms
-                formsPage.clickFormCloseBtn();
-                done();
+                formsPage.clickSaveBtnWithName('Save').then(function() {
+                    //verify validation
+                    formsPage.verifyErrorMessages(expectedErrorMessages);
+                }).then(function() {
+                    //close forms
+                    formsPage.clickFormCloseBtn();
+                }).then(function() {
+                    done();
+                });
             });
         });
 

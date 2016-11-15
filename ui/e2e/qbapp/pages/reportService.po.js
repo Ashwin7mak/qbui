@@ -197,7 +197,9 @@
                     for (var i = 0; i < cells.length; i++) {
                         fetchCellValuesPromises.push(self.getRecordCellValue(cells[i]));
                     }
-                    return Promise.all(fetchCellValuesPromises).then(function(results) {
+                    return Promise.each(fetchCellValuesPromises, function(results) {
+                        return results;
+                    }).then(function(results) {
                         // Do post processing
                         for (var j = 0; j < results.length; j++) {
                             results[j] = self.formatRecordValue(results[j]);
