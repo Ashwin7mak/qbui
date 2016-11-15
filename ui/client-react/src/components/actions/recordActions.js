@@ -33,23 +33,25 @@ let RecordActions = React.createClass({
         // prevent navigation to records
         e.stopPropagation();
     },
+    getEmailAction() {
+        //TODO Email action is disabled for now until its implemented.
+        //return <EmailReportLink tip={this.getSelectionTip("selection.email") + " " + record}
+        //                        subject={this.getEmailSubject()}
+        //                        body={this.getEmailBody()}/>;
+        return <ActionIcon icon="mail" tip={Locale.getMessage("unimplemented.email")} disabled={true}/>;
+    },
     render() {
 
         const record = Locale.getMessage('records.singular');
-
         return (
             <div className={'recordActions'} onClick={this.onClick}>
 
                 <div className="actionIcons">
                     <ActionIcon icon="edit" tip={this.getSelectionTip("selection.edit") + " " + record} onClick={this.props.onEditAction}/>
                     <ActionIcon icon="print" tip={Locale.getMessage("unimplemented.print")} disabled={true}/>
-
-                    <EmailReportLink tip={this.getSelectionTip("selection.email") + " " + record}
-                                     subject={this.getEmailSubject()}
-                                     body={this.getEmailBody()}/>
-
+                    {this.getEmailAction()}
                     <ActionIcon icon="duplicate" tip={Locale.getMessage("unimplemented.copy")} disabled={true}/>
-                    <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record}/>
+                    <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record} onClick={this.props.onDeleteAction}/>
                 </div>
 
             </div>
