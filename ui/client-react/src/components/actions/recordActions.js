@@ -51,7 +51,7 @@ let RecordActions = React.createClass({
                     <ActionIcon icon="print" tip={Locale.getMessage("unimplemented.print")} disabled={true}/>
                     {this.getEmailAction()}
                     <ActionIcon icon="duplicate" tip={Locale.getMessage("unimplemented.copy")} disabled={true}/>
-                    <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record} onClick={this.props.onDeleteAction}/>
+                    <ActionIcon icon="delete" tip={this.getSelectionTip("selection.delete") + " " + record}/>
                 </div>
 
             </div>
