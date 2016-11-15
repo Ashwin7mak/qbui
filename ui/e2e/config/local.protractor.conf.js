@@ -11,7 +11,7 @@
     // Add a screenshot reporter for errors when testing locally
     var HtmlScreenshotReporter = require('protractor-jasmine2-screenshot-reporter');
     var reporter = new HtmlScreenshotReporter({
-        dest: './build/reports/e2e/',
+        dest: './ui/build/reports/e2e/',
         filename: 'e2e-test-report.html',
         ignoreSkippedSpecs: false,
         reportOnlyFailedSpecs: false,

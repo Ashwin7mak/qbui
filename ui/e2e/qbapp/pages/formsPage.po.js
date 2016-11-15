@@ -142,6 +142,8 @@
             var self = this;
             //TODO this function covers all fields in dataGen. We will extend as we add more fields to dataGen.
             return reportServicePage.waitForElement(self.formTable).then(function() {
+                return e2eBase.sleep(browser.params.tinySleep);
+            }).then(function() {
                 if (fieldLabel === 'dateCell' && browserName !== 'safari') {
                     //enter date fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
@@ -245,7 +247,7 @@
         };
 
         this.verifyFieldValuesInReportTable = function(recordRowNo, fieldType) {
-            reportServicePage.agGridRecordElList.then(function(records) {
+            return reportServicePage.agGridRecordElList.then(function(records) {
                 if (fieldType === 'numericField') {
                     //numeric field
                     expect(reportServicePage.getRecordValues(records[recordRowNo], 2)).toBe(sNumeric.toString());

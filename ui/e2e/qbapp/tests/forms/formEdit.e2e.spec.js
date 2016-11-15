@@ -42,7 +42,6 @@
         it('Edit a record via recordActions edit pencil using basic report', function(done) {
             var fieldTypeClassNames = ['textField', 'dateCell', 'timeCell', 'numericField'];
             //Open the report
-            //reload the report to verify the row edited
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent();
 
@@ -56,13 +55,14 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
-            reportContentPage.waitForReportContent();
-
-            //verify the edited record
-            for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
-            }
-            done();
+            reportContentPage.waitForReportContent().then(function() {
+                //Verify record is added on top row in a table
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                }
+            }).then(function() {
+                done();
+            });
         });
 
         xit('Edit a record via stage pageActions edit pencil using report with sorting', function(done) {
@@ -83,13 +83,14 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
-            reportContentPage.waitForReportContent();
-
-            //verify the edited record
-            for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
-            }
-            done();
+            reportContentPage.waitForReportContent().then(function() {
+                //Verify record is added on top row in a table
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[j]);
+                }
+            }).then(function() {
+                done();
+            });
         });
 
         it('Edit a record from the tableActions Container using report with facets', function(done) {
@@ -108,12 +109,14 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
-            reportContentPage.waitForReportContent();
-
-            for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                formsPage.verifyFieldValuesInReportTable(1, fieldTypeClassNames[j]);
-            }
-            done();
+            reportContentPage.waitForReportContent().then(function() {
+                //Verify record is added on top row in a table
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.verifyFieldValuesInReportTable(1, fieldTypeClassNames[j]);
+                }
+            }).then(function() {
+                done();
+            });
         });
     });
 }());

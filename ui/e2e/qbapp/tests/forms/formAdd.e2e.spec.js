@@ -53,16 +53,14 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
-            reportContentPage.waitForReportContent();
-
-            //Verify record is added on top row in a table
-            reportServicePage.agGridRecordElList.then(function(records) {
+            reportContentPage.waitForReportContent().then(function() {
+                //Verify record is added on top row in a table
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
                     formsPage.verifyFieldValuesInReportTable(0, fieldTypeClassNames[j]);
                 }
+            }).then(function() {
                 done();
             });
         });
-
     });
 }());
