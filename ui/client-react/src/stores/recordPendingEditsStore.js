@@ -7,7 +7,7 @@ import ValidationMessage from '../utils/validationMessage';
 import Constants from '../../../common/src/constants';
 var logger = new Logger();
 
-const [DTS_ERR0R_CODE, DTS_ERROR_MESSAGES_CODE] = [Constants.HttpStatusCode.INTERNAL_SERVER_ERROR, 'DataOperationOrSyncError'];
+const [DTS_ERR0R_CODE, DTS_ERROR_MESSAGES_CODE] = [Constants.HttpStatusCode.INTERNAL_SERVER_ERROR, Constants.ERROR_CODE.DTS_ERROR_CODE];
 
 /**
    RecordPendingEditsStore keeps track of inline edits in progress made on a record    before they are committed to database
