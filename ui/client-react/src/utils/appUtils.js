@@ -8,6 +8,12 @@ const AppUtils = {
 
         let foundApp = _.find(apps, {id: selectedAppId});
         return (foundApp ? foundApp : false);
+    },
+
+    getAppTables(appId, apps = []) {
+        let app = _.find(apps, {id: appId});
+
+        return (app && app.tables) ? app.tables : [];
     }
 };
 

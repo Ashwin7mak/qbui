@@ -342,6 +342,15 @@ export default {
         },
         editErrors :"{numErrors, plural, \n  =0 {Keine Fehler}\n =1 {Bitte beheben Sie dieses Feld}\n other {Bitte korrigieren Sie diese # Felder}\n} ",
         errors: {
+            appNotFound: {
+                notFound: "Die App ist im Moment nicht verfügbar in Mercury. ",
+                inQuickBaseClassic: " in Quickbase Classic. ",
+                clickHere: "Öffnen Sie die App"
+            },
+            noApps: {
+                noApps: "Es gibt keine Apps in Mercury. ",
+                addApps: " hinzuzufügen Apps."
+            },
             errorLoadingReport: {
                 message: "Dieser Bericht ist nicht verfügbar",
                 helpText: "Denn jetzt können Sie versuchen, einen anderen Bericht auswählen.",
@@ -351,6 +360,13 @@ export default {
                 stopGraphic: "Hör auf zu spielen",
                 showAdditionalInfo: "Details anzeigen",
                 hideAdditionalInfo: "Details ausblenden"
+            },
+            noTables: {
+                noTables: "Es gibt keine Tabellen. ",
+                createTablesInQuickBaseClassic: "Erstellen von Tabellen in "
+            },
+            supportLink: {
+                text: "Wenden Sie sich an unser Care-Team"
             }
         },
         invalidMsg : {
@@ -360,17 +376,6 @@ export default {
             maxChars: 'Verwenden Sie bis zu {maxNum} Zeichen',
             choiceMaxLength :"Wählen Sie eine Wahl mit {maxNum} Zeichen oder weniger"
         },
-        createInQuickBaseClassicMessage: {
-            noTables: "Es gibt keine Tabellen.",
-            createInQuickBaseClassic: "Erstellen Sie einige in ",
-            noApps: "Es gibt keine Apps in Mercury.",
-            addApps: "Apps durch Kontaktaufnahme hinzufügen "
-        },
-        appNotFoundError: {
-            notFound: "Die App ist im Moment nicht verfügbar in Mercury. ",
-            quickBaseClassic: " in Quickbase Classic. ",
-            clickHere: "Öffnen Sie die App"
-        },
         noneOption: "\<Keiner\>",
         unimplemented: {
             search: "Die Suche ist noch nicht verfügbar",
@@ -378,6 +383,7 @@ export default {
             makeFavorite: "Kennzeichnung als Favorit ist noch nicht verfügbar",
             print: "Der Druck ist noch nicht verfügbar",
             copy: "Kopieren ist noch nicht verfügbar"
-        }
+        },
+        quickBaseClassic: "QuickBase Klassik"
     }
 };
