@@ -1,0 +1,14 @@
+@import '../../assets/css/_qbVariables';
+
+  .invisibleBackdropModal-backdrop.in {
+    opacity: 0;
+  }
+
+  .invisibleBackdropModal-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $zindex-modal-background;
+  }

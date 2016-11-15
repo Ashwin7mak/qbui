@@ -633,7 +633,10 @@ let AGGrid = React.createClass({
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            this.startEditRow(params.data[this.props.uniqueIdentifier].value, params.node);
+            //edit if not already editing a row
+            if (!this.state.editingRowNode) {
+                this.startEditRow(params.data[this.props.uniqueIdentifier].value, params.node);
+            }
             return;
         }
         if (this.clickTimeout) {

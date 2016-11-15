@@ -59,7 +59,16 @@ const RowEditActions = React.createClass({
     onClickAdd() {
         //get the current record id
         const id = this.props.data[FieldUtils.getUniqueIdentifierFieldName(this.props.data)];
+
         this.props.params.context.onRecordNewBlank(id);
+        if (this.props.flux && this.props.flux.store) {
+            let recordPendingEdits = this.props.flux.store('RecordPendingEditsStore').getState();
+            if (recordPendingEdits && (recordPendingEdits.isPendingEdit || id === null)) {
+                //to show saving in spinner
+                this.forceUpdate();
+            }
+        }
+
         this.props.api.deselectAll();
     },
 
@@ -71,7 +80,7 @@ const RowEditActions = React.createClass({
             saveButton = (
                 <QBToolTip tipId="saveRecord" location="bottom" i18nMessageKey="pageActions.saveRecord">
                     <Button onClick={this.onClickSave}>
-                        <Loader loaded={!saving} options={SpinnerConfigurations.RECORD_COUNT}>
+                        <Loader loaded={!saving} options={SpinnerConfigurations.INLINE_SAVING}>
                             <QBIcon icon="check" className="saveRecord"/>
                         </Loader>
                     </Button>
@@ -81,7 +90,7 @@ const RowEditActions = React.createClass({
             saveButton = (
                 <QBToolTip location="bottom" tipId="invalidRecord" delayHide={300} i18nMessageKey={errorMessage} numErrors={this.props.params.context.rowEditErrors.errors.length}>
                     <Button>
-                        <Loader loaded={!saving} options={SpinnerConfigurations.RECORD_COUNT}>
+                        <Loader loaded={!saving} options={SpinnerConfigurations.INLINE_SAVING}>
                             <QBIcon icon="alert" onClick={this.onClickSave} className="invalidRecord"/>
                         </Loader>
                     </Button>
