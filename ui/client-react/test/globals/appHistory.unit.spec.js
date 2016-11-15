@@ -262,7 +262,7 @@ describe('AppHistory', () => {
             expect(AppHistory._continueToDestination).toHaveBeenCalled();
         });
 
-        it('halts route change if uses chooses to stay on the pay', () => {
+        it('halts route change if uses chooses to stay on the page', () => {
             let mockFluxWithPendingEdit = buildMockFlux({isPendingEdit: true, currentEditingRecordId: 1});
             AppHistory.setup(mockFluxWithPendingEdit);
 
