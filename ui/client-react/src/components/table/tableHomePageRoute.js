@@ -97,6 +97,7 @@ let TableHomePageRoute = React.createClass({
             <ReportToolsAndContent
                 params={this.props.params}
                 reportData={this.props.reportData}
+                appUsers={this.props.appUsers}
                 routeParams={this.props.routeParams}
                 selectedAppId={this.props.selectedAppId}
                 fields={this.props.fields}
