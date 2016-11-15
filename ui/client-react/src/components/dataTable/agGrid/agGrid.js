@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import {AgGridReact} from 'ag-grid-react';
 import {Button, Dropdown, MenuItem} from 'react-bootstrap';
 import QBicon from '../../qbIcon/qbIcon';
-import IconActions from '../../actions/iconActions';
 import {reactCellRendererFactory} from 'ag-grid-react';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import Locale from '../../../locales/locales';
@@ -15,7 +14,6 @@ import ReportUtils from '../../../utils/reportUtils';
 import * as SpinnerConfigurations from "../../../constants/spinnerConfigurations";
 
 import {
-    CellRenderer,
     CheckBoxCellRenderer,
     CurrencyCellRenderer,
     DateCellRenderer,
@@ -72,7 +70,7 @@ let AGGrid = React.createClass({
     rowHeight: consts.DEFAULT_HEADER_HEIGHT,
 
     propTypes: {
-        uniqueIdentifier: React.PropTypes.string.isRequired,
+        primaryKeyName: React.PropTypes.string.isRequired,
         selectionActions: React.PropTypes.element,
         reportHeader: React.PropTypes.element,
         reportFooter: React.PropTypes.element,
@@ -378,7 +376,7 @@ let AGGrid = React.createClass({
      */
     openRecordForEdit(data) {
 
-        const recordId = data[this.props.uniqueIdentifier].value;
+        const recordId = data[this.props.primaryKeyName].value;
 
         const flux = this.getFlux();
 
@@ -470,7 +468,7 @@ let AGGrid = React.createClass({
         this.gridOptions.context.onRecordDelete = this.props.onRecordDelete;
 
         this.gridOptions.context.rowEditErrors = this.state.rowEditErrors;
-        this.gridOptions.context.uniqueIdentifier = this.props.uniqueIdentifier;
+        this.gridOptions.context.primaryKeyName = this.props.primaryKeyName;
         this.gridOptions.context.onAttach = this.onAttach;
         this.gridOptions.context.onDetach = this.onDetach;
         this.gridOptions.context.getAppUsers = this.getAppUsers;
@@ -503,11 +501,11 @@ let AGGrid = React.createClass({
             this.editRow();
             logger.debug('edit completed');
         }
-        // we have a new inserted row put ite.data && node.data[uniqueIdentifier]  in edit mode
+        // we have a new inserted row put ite.data && node.data[props.primaryKeyName]  in edit mode
         if (typeof (this.props.editingIndex) !== 'undefined') {
             let found = false;
             this.api.forEachNode((node) => {
-                if (!found && node.data && node.data[this.props.uniqueIdentifier] && this.props.editingId === node.data[this.props.uniqueIdentifier].value) {
+                if (!found && node.data && node.data[this.props.primaryKeyName] && this.props.editingId === node.data[this.props.primaryKeyName].value) {
                     this.startEditRow(this.props.editingId, node);
                     found = true;
                 }
@@ -631,7 +629,7 @@ let AGGrid = React.createClass({
         if (params.event.detail === 2) {
             clearTimeout(this.clickTimeout);
             this.clickTimeout = null;
-            this.startEditRow(params.data[this.props.uniqueIdentifier].value, params.node);
+            this.startEditRow(params.data[this.props.primaryKeyName].value, params.node);
             return;
         }
         if (this.clickTimeout) {
@@ -720,8 +718,8 @@ let AGGrid = React.createClass({
         let rows = [];
         if (this.api) {
             this.api.getSelectedRows().forEach(row => {
-                if (row[this.props.uniqueIdentifier]) {
-                    rows.push(row[this.props.uniqueIdentifier].value);
+                if (row[this.props.primaryKeyName]) {
+                    rows.push(row[this.props.primaryKeyName].value);
                 }
             });
         }

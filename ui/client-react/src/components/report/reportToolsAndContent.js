@@ -305,7 +305,7 @@ const ReportToolsAndContent = React.createClass({
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
-        let uniqueIdentifier = FieldUtils.getUniqueIdentifierFieldName(this.props.fields);
+        let primaryKeyName = FieldUtils.getUniqueIdentifierFieldName(this.props.fields);
 
         // Define the page start. Page offset is zero indexed. For display purposes, add one.
         this.pageStart = this.props.reportData.pageOffset + 1;
@@ -376,7 +376,7 @@ const ReportToolsAndContent = React.createClass({
                                    reportHeader={toolbar}
                                    reportFooter={reportFooter}
                                    cardViewPagination={cardViewPagination }
-                                   uniqueIdentifier={uniqueIdentifier}
+                                   primaryKeyName={primaryKeyName}
                                    flux={this.getFlux()}
                                    reactabular={this.state.reactabular}
                                    gridOptions={this.props.gridOptions}

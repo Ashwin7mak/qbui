@@ -26,14 +26,14 @@ describe('ReportToolsAndContent functions', () => {
     const reportParams = {appId: '1', tblId: '2', rptId: rptId, format: true, offset: 1, numRows: 10};
     const reportDataParams = {reportData: {loading:true, selections: new FacetSelections(), data: {columns: [{field: "col_num", headerName: "col_num"}]}}};
 
-    const keyFieldName = 'Employee Number';
+    const primaryKeyName = 'Employee Number';
     const reportFields = {
         fields: {
             data: [
                 {
                     id: 3,
                     keyField: true,
-                    name: keyFieldName,
+                    name: primaryKeyName,
                 },
                 {
                     id: 1,
@@ -96,7 +96,7 @@ describe('ReportToolsAndContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(0);
     });
 
-    it('passes the uniqueIdentifier to child components', () => {
+    it('passes the primaryKeyName to child components', () => {
         let renderer = TestUtils.createRenderer();
         renderer.render(<ReportToolsAndContent rptId={rptId} fields={reportFields} flux={flux} params={reportParams} {...reportDataParams} />);
 
@@ -108,6 +108,6 @@ describe('ReportToolsAndContent functions', () => {
 
         expect(reportContent).not.toBeNull();
         expect(reportContent).not.toBeUndefined();
-        expect(reportContent.props.uniqueIdentifier).toEqual(keyFieldName);
+        expect(reportContent.props.primaryKeyName).toEqual(primaryKeyName);
     });
 });

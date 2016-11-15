@@ -888,8 +888,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                uniqueIdentifier={keyField}
-                                                                keyField={keyField}/>);
+                                                                primaryKeyName={keyField} />);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let result = component.getOrigRec(modifiedRec[keyField].value);
         expect(result).toEqual(origRecExpect);
@@ -907,7 +906,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                keyField={keyField}/>);
+                                                                primaryKeyName={keyField} />);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalled();
@@ -928,8 +927,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_unsaved}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                uniqueIdentifier={keyField}
-                                                                keyField={keyField}/>);
+                                                                primaryKeyName={keyField} />);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordStart(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsStart).toHaveBeenCalledWith(
@@ -950,7 +948,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                keyField={keyField}/>);
+                                                                primaryKeyName={keyField} />);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleEditRecordCancel(origRec[keyField].value);
         expect(flux.actions.recordPendingEditsCancel).toHaveBeenCalled();
@@ -979,7 +977,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                keyField={keyField}/>);
+                                                                primaryKeyName={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleFieldChange({recId: 100, fid:4});
         expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
@@ -995,10 +993,9 @@ describe('ReportContent functions', () => {
                                                                 appId="123"
                                                                 tblId="456"
                                                                 reportData={fakeReportData_simple}
-                                                                uniqueIdentifier="col_text"
+                                                                primaryKeyName="col_text"
                                                                 reportHeader={header_empty}
-                                                                reportFooter={fakeReportFooter}
-                                                                keyField={keyField}/>);
+                                                                reportFooter={fakeReportFooter} />);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordDelete(origRec);
         expect(flux.actions.deleteRecord).toHaveBeenCalled();
@@ -1041,8 +1038,7 @@ describe('ReportContent functions', () => {
                                                                 fields={fieldsData}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                uniqueIdentifier={keyField}
-                                                                keyField={keyField}/>);
+                                                                primaryKeyName={keyField} />);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         let result = component.handleRecordSaveClicked({value: SchemaConsts.UNSAVED_RECORD_ID});
         expect(flux.actions.saveNewRecord).toHaveBeenCalled();
@@ -1068,7 +1064,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                keyField={keyField}/>);
+                                                                primaryKeyName={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleFieldChange({recId: 100, fid:4});
         expect(flux.actions.recordPendingEditsChangeField).toHaveBeenCalled();
@@ -1094,7 +1090,7 @@ describe('ReportContent functions', () => {
                                                                 reportData={fakeReportData_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                keyField={keyField}/>);
+                                                                primaryKeyName={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordNewBlank(101);
         expect(flux.actions.newBlankReportRecord).toHaveBeenCalled();
@@ -1122,8 +1118,7 @@ describe('ReportContent functions', () => {
                                                                 fields={fakeReportDataFields_simple}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                uniqueIdentifier={keyField}
-                                                                keyField={keyField}/>);
+                                                                primaryKeyName={keyField} />);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
 
         component.handleRecordNewBlank({value: 101});
@@ -1185,7 +1180,7 @@ describe('ReportContent functions', () => {
                                                                 fields={fieldsData}
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
-                                                                keyField={keyField}/>);
+                                                                primaryKeyName={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordAdd(edits.recordChanges);
         expect(flux.actions.saveNewRecord).toHaveBeenCalledWith('123', '456', edits.recordChanges, fieldsData.fields.data, false);
@@ -1220,8 +1215,7 @@ describe('ReportContent functions', () => {
                            pendEdits={edits}
                            reportHeader={header_empty}
                            reportFooter={fakeReportFooter}
-                           uniqueIdentifier={keyField}
-                           keyField={keyField}/>);
+                           primaryKeyName={keyField} />);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordChange({value:100});
         expect(flux.actions.recordPendingEditsCommit).toHaveBeenCalled();
@@ -1277,7 +1271,7 @@ describe('ReportContent functions', () => {
                                                                 tblId="456"
                                                                 rptId="2"
                                                                 reportData={fakeReportData_simple}
-                                                                uniqueIdentifier="RecId"
+                                                                primaryKeyName="RecId"
                                                                 reportHeader={header_empty}
                                                                 reportFooter={fakeReportFooter}
                                                                 router={[]}
