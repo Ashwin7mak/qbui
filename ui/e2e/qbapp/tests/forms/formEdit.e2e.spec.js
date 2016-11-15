@@ -66,7 +66,8 @@
         });
 
         xit('Edit a record via stage pageActions edit pencil using report with sorting', function(done) {
-            //TODO This id BUG - wont work in firefox and safari as edit opens forms in view and edit mode also one over the other. After hiting save instead of grid it has view mode open behind.
+            //TODO This is a BUG - wont work in firefox and safari as edit opens 2 forms in view and edit mode one behind the other.
+            //TODO After hitting save instead of report grid it has view mode open behind.
             var fieldTypeClassNames = ['dateField'];
             //Open the report
             //reload the report to verify the row edited
