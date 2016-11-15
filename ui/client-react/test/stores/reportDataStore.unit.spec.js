@@ -318,9 +318,9 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).selections).toEqual({});
         expect(flux.store(STORE_NAME).facetExpression).toEqual('');
         expect(flux.store(STORE_NAME).searchStringForFiltering).toEqual('abc');
+        expect(flux.store(STORE_NAME).isRecordDeleted).toBe(false);
         expect(flux.store(STORE_NAME).emit).toHaveBeenCalledWith('change');
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(1);
-        expect(flux.store(STORE_NAME).isRecordDeleted).toBe(false);
     });
 
     it('test load records failed action', () => {
@@ -1107,7 +1107,7 @@ describe('Test ReportData Store', () => {
         expect(flux.store(STORE_NAME).emit.calls.count()).toBe(2);
     });
 
-    it('test onDeleteReportRecordSuccess with valid recId', () => {
+    fit('test onDeleteReportRecordSuccess with valid recId', () => {
         //populate the model
         let reportPayload = {
             metaData: {},
