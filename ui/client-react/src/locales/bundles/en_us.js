@@ -379,7 +379,9 @@ export default {
             favorites: "Accessing favorites is not available yet",
             makeFavorite: "Marking as a favorite is not available yet",
             print: "Printing is not available yet",
-            copy: "Copying is not available yet"
+            copy: "Copying is not available yet",
+            email: "Emailing is not available yet",
+            delete: "Deleting is not available yet"
         }
     }
 };
