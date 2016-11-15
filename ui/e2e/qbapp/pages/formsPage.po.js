@@ -55,7 +55,7 @@
         this.formErrorMessage = element.all(by.className('loadedContent')).first().element(by.className('qbErrorMessage'));
         this.formErrorMessageVisisble = element.all(by.className('loadedContent')).first().element(by.className('qbErrorMessageVisible'));
         this.formErrorMessageHeader = this.formErrorMessage.element(by.className('qbErrorMessageHeader'));
-        this.formErrorMessageHeaderCloseBtn = this.formErrorMessageHeader.element(by.className('rightIcons')).element(by.tagName('button'));
+        this.formErrorMessageHeaderCloseBtn = this.formErrorMessageHeader.element(by.className('rightIcons')).element(by.className('iconTableUISturdy-x-secondary'));
         this.formErrorMessageHeaderAlertBtn = this.formErrorMessageHeader.element(by.className('leftIcons')).element(by.className('iconTableUISturdy-alert'));
         this.formErrorMessageContent = this.formErrorMessage.element(by.className('qbErrorMessageContent'));
 
@@ -234,6 +234,9 @@
                         expect(text).toEqual(expectedErrorMessages);
                         //close the alert
                         return self.formErrorMessageHeaderCloseBtn.click();
+                    }).then(function() {
+                        //give some time for the popup to slide in after closing
+                        return e2eBase.sleep(browser.params.smallSleep);
                     });
                 });
             });
