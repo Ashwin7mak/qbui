@@ -24,7 +24,8 @@ export default {
                 tipText: "Dies ist in Arbeit, so dass, wenn Sie auf eine Schaltfläche klicken und es macht nichts, keine Sorgen. Wir arbeiten noch an dieser Funktion.",
                 helpTitle: "Brauche Hilfe?",
                 helpText: "Wir wollen, dass Sie erfolgreich sind; Deshalb sind wir immer hier, um zu helfen.",
-                helpLinkPreText: "Bitte kontaktieren Sie uns unter",
+                helpLinkPreText: "Bitte ",
+                helpLinkText: "wenden Sie sich an unser Care-Team",
                 missingWalkMe: "Tutorial ist nicht verfügbar"
             }
         },
@@ -33,6 +34,13 @@ export default {
             modalStayButton: "Bleiben Sie und halten Sie arbeiten",
             modalDoNotSaveButton: "Nicht speichern",
             modalSaveButton: "Sparen"
+        },
+        dtsErrorModal: {
+            dtsErrorTitle: "Es tut uns Leid, Ihre Arbeit zu unterbrechen",
+            dtsErrorBodyMessage: "Quecksilber kann nicht fortgesetzt werden Ihre App heute läuft, aber es wird morgen fortgesetzt.",
+            dtsErrorSecondErrorBodyMessage: "Ihre Anwendung ist in Quickbase-Klassiker noch zur Verfügung.",
+            dtsErrorTID: "Transaktions-ID:",
+            dtsErrorPrimaryButtonText: "Öffne meine app in der klassischen"
         },
         reports : {
             emailReportTooltip: "Teilen Sie diese Datensätze mit einer anderen Person",

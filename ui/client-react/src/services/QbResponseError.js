@@ -2,6 +2,12 @@ import _ from 'lodash';
 
 class QbResponseError {
     constructor(responseError) {
+        this.statusCode = null; //this goes up at the top
+        if (_.has(this.response, 'data')) {
+            this.data = this.response.data;
+            this.statusCode = this.data.statusCode;
+        }
+
         if (!responseError) {
             return responseError;
         }

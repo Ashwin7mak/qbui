@@ -552,7 +552,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-
         shell: {
             lint: {
                 // Make sure code styles are up to par and there are no obvious mistakes
@@ -662,7 +661,7 @@ module.exports = function(grunt) {
 
     // Load and register custom external grunt scripts
     // All grunt tasks in ../scripts/gruntTasks will be loaded/registered
-    grunt.loadTasks('../scripts/gruntTasks');
+    grunt.loadTasks('./gruntTasks');
 
     // Production build
     grunt.registerTask('webpackbuild', ['webpack:build']);
@@ -770,7 +769,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('codeStandards', [
-        'lint'
+        'lint',
+        'lintStyles'
     ]);
 
     grunt.registerTask('testClientOnly', function() {
@@ -940,9 +940,9 @@ module.exports = function(grunt) {
         'build'
     ]);
 
-    grunt.registerTask('lint', 'Run eslint on code', function() {
+    grunt.registerTask('lint', 'Run eslint and stylelint on code', function() {
         return grunt.task.run([
-            'shell:lint',
+            'shell:lint'
         ]);
     });
 

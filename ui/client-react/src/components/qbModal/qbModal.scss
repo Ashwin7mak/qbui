@@ -2,8 +2,13 @@
 @import '../../assets/css/_qbColorVariables';
 
 .qbModal {
+
     // Modal should always appear on the top layer, even above the trowser
-    z-index: 9999;
+    z-index: $zindex-modal;
+
+    a {
+        text-decoration: none;
+    }
 
     .bodyContainer {
         display: flex;
@@ -28,10 +33,21 @@
     .modal-dialog {
         margin: 200px auto;
         width: 450px;
-
+        z-index: 9999;
         @include small-breakpoint {
             margin: 0 auto;
             width: 100%;
+        }
+    }
+
+    &.large .modal-content{
+        padding-top: 20px;
+        height: 300px;
+        width: 510px;
+
+        @include small-breakpoint {
+            width: inherit;
+            height: auto;
         }
     }
 
@@ -41,30 +57,6 @@
 
     .modal-backdrop {
         background-color: $color-black-800;
-    }
-
-    .modal-content {
-        border-bottom: none;
-        border-left: 30px white solid;
-        border-radius: 2px;
-        border-right: 30px white solid;
-        border-top: none;
-
-        @include small-breakpoint {
-            border-left: 10px white solid;
-            border-radius: 0px;
-            border-right: 10px white solid;
-        }
-    }
-
-    .modal-dialog {
-        margin: 200px auto;
-        width: 450px;
-
-      @include small-breakpoint {
-          margin: 0 auto;
-          width: 100%;
-      }
     }
 
     .modal-body {
@@ -87,11 +79,13 @@
         font-size: $font-size-h2;
         margin-top: 10px;
         margin-bottom: 20px;
+        padding-left: 10px;
     }
 
     .text {
         font-size: $font-size-h4;
         margin-top: 30px;
+        color: $default-text-onlight-color;
 
         @include small-breakpoint{
             font-size: $font-size-h4;
@@ -105,10 +99,13 @@
         padding-top: 90px;
         margin-bottom: 10px;
         font-size: 44px;
+        color: $default-text-onlight-color;
     }
 
     .textWithTitle {
         font-size: $font-size-p;
+        padding-left: 10px;
+        color: $default-text-onlight-color;
     }
 
     .modalIcon {
@@ -124,7 +121,7 @@
     }
 
     .modalIcon--alert {
-        color: $color-orange-500;
+        color: $modal-icon-color;
     }
 
     .modalIcon--success {
@@ -149,6 +146,21 @@
                   margin-bottom: 20px;
               }
             }
+        }
+    }
+//style for anchor tag
+    .anchorButton {
+        display: block;
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px;
+
+        @include small-breakpoint {
+            display: block;
+            margin-left: 0;
+            margin-right: 0;
+            width: 100%;
+            margin-bottom: 20px;
         }
     }
 

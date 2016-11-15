@@ -24,7 +24,8 @@ export default {
                 tipText: "Il s'agit de travaux en cours, donc si vous cliquez sur un bouton et il ne fait rien, pas de soucis. Nous travaillons encore sur cette fonctionnalité.",
                 helpTitle: "Besoin d'aide?",
                 helpText: "Nous voulons que vous réussissiez; C'est pourquoi nous sommes toujours là pour vous aider.",
-                helpLinkPreText: "Veuillez nous contacter au",
+                helpLinkPreText: "Veuillez ",
+                helpLinkText: "contacter notre équipe de soins",
                 missingWalkMe: "Le didacticiel n'est pas disponible"
             }
         },
@@ -33,6 +34,13 @@ export default {
             modalStayButton: "Restez et continuer à travailler",
             modalDoNotSaveButton: "Ne pas enregistrer",
             modalSaveButton: "Sauvegarder"
+        },
+        dtsErrorModal: {
+            dtsErrorTitle: "Désolé d'interrompre votre travail",
+            dtsErrorBodyMessage: "Mercury ne peut pas continuer à exécuter votre application aujourd'hui, mais reprendra demain. ",
+            dtsErrorSecondErrorBodyMessage: "Votre application est toujours disponible dans QuickBase Classic.",
+            dtsErrorTID: "Identifiant de transaction:",
+            dtsErrorPrimaryButtonText: "Ouvrez mon application en Classique"
         },
         reports : {
             emailReportTooltip: "Partager ces documents avec quelqu'un d'autre",
