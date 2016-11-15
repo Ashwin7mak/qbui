@@ -252,10 +252,15 @@ describe("Validate recordsApi", function() {
         });
 
         it('success return count when query is set', function(done) {
+            req.params[constants.REQUEST_PARAMETER.SORT_LIST] = '1:' + groupTypes.COMMON.equals;
+            req.params[constants.REQUEST_PARAMETER.QUERY] = '{1.EX.2}';
+
             req.url = '/apps/1/tables/2/records/countQuery';
-            req.url += '&' + constants.REQUEST_PARAMETER.SORT_LIST + '=1:' + groupTypes.COMMON.equals;
-            req.url += '&' + constants.REQUEST_PARAMETER.QUERY + '=1.EX.2';
+            req.url += '?' + constants.REQUEST_PARAMETER.SORT_LIST + '=' + req.params[constants.REQUEST_PARAMETER.SORT_LIST];
+            req.url += '&' + constants.REQUEST_PARAMETER.QUERY + '=' + req.params[constants.REQUEST_PARAMETER.QUERY];
+
             executeReqStub.onCall(0).returns(Promise.resolve({'body': '10'}));
+
             var promise = recordsApi.fetchCountForRecords(req);
             promise.then(
                 function(response) {
