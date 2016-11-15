@@ -643,8 +643,6 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onLoadRecordsSuccess(response) {
-        console.log('onLoadRecordsSuccess');
-        this.isRecordDeleted = false;
         this.loading = false;
         this.editingIndex = undefined;
         this.editingId = undefined;
