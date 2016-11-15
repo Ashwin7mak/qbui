@@ -305,9 +305,10 @@ const ReportToolsAndContent = React.createClass({
             }
         }
 
-        console.log('componentWillReceiveProps: ', this.props.reportData.isRecordDeleted);
-        if (this.props.reportData.isRecordDeleted) {
-            this.getPageUsingOffsetMultiplicant(1);
+        if (this.props.reportData) {
+            if (this.props.reportData.isRecordDeleted) {
+                this.getPageUsingOffsetMultiplicant(0);
+            }
         }
 
         let {appId, tblId, rptId, reportData:{selections, ...otherReportData}} = this.props;
