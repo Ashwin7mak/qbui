@@ -11,7 +11,7 @@ describe('ReportToolsAndContent functions', () => {
     'use strict';
 
     let component;
-
+    // function getFlux() {return {actions: {loadDynamicReport() {return;}}};}
     let flux = {
         actions:{
             selectTableId() {return;},
@@ -23,6 +23,9 @@ describe('ReportToolsAndContent functions', () => {
             filterSelectionsPending() {return;},
             getNextReportPage() {return;},
             getPreviousReportPage() {return;},
+            getPageUsingOffsetMultiplicant() {return;},
+            loadDynamicReport() {return;},
+            // successfulDelete() {return;}
         }
     };
 
@@ -59,6 +62,9 @@ describe('ReportToolsAndContent functions', () => {
         flux.actions.filterSelectionsPending.calls.reset();
         flux.actions.getNextReportPage.calls.reset();
         flux.actions.getPreviousReportPage.calls.reset();
+        // flux.actions.getPageUsingOffsetMultiplicant.calls.reset();
+        // flux.actions.loadDynamicReport.calls.reset();
+        // flux.actions.successfulDelete.calls.reset();
     });
 
     it('test render of report widget', () => {
@@ -76,5 +82,28 @@ describe('ReportToolsAndContent functions', () => {
 
         //  test that the reportContentMock is rendered
         expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(0);
+    });
+
+    fit('test to check if page fetches records on successful delete', () => {
+        let MockParent = React.createClass({
+            getInitialState() {
+                return {
+                    isRecordDeleted: false
+                };
+            },
+            isRecordDeleted() {
+                this.setState({isRecordDeleted: true});
+            },
+            render() {
+                const modifiedReport = Object.assign({}, reportDataParams)
+                modifiedReport.reportData.isRecordDeleted = this.state.isRecordDeleted;
+                return <ReportToolsAndContent ref="reportTools" flux={flux} params={reportParams} {...modifiedReport} />;
+            }
+        });
+
+        component = TestUtils.renderIntoDocument(<MockParent />);
+        spyOn(component.refs.reportTools, 'getPageUsingOffsetMultiplicant');
+        component.isRecordDeleted();
+        expect(component.refs.reportTools.getPageUsingOffsetMultiplicant).toHaveBeenCalled();
     });
 });
