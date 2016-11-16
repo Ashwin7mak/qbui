@@ -17,6 +17,7 @@ let AppsRoute = React.createClass({
         flux.actions.showTopNav();
         flux.actions.setTopTitle();
     },
+
     render: function() {
         return <M5AppHomePage />;
     }

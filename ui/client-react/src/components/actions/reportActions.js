@@ -86,7 +86,7 @@ let ReportActions = React.createClass({
      * render a QBModal
      * @returns {XML}
      */
-    getConfimDialog() {
+    getConfirmDialog() {
 
         let msg;
 
@@ -133,7 +133,7 @@ let ReportActions = React.createClass({
 
                     </div>
                 </div>
-                {this.getConfimDialog()}
+                {this.getConfirmDialog()}
             </div>
         );
     }
