@@ -38,6 +38,7 @@ var ComponentLibraryWrapper = React.createClass({
                         </ul>
                         <h4 className="header">Generic Components</h4>
                         <ul>
+                            <li><Link to="/qbase/components/alertBanner" activeClassName="active">AlertBanner</Link></li>
                             <li><Link to="/qbase/components/qbpanel" activeClassName="active">QBPanel</Link></li>
                             <li><Link to="/qbase/components/qbicon" activeClassName="active">QBIcon</Link></li>
                             <li><Link to="/qbase/components/trowser" activeClassName="active">Trowser</Link></li>

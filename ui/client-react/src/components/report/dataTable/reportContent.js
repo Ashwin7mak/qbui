@@ -296,10 +296,14 @@ export let ReportContent = React.createClass({
         const flux = this.getFlux();
 
         let fields = {};
+        let colList = [];
         if (_.has(this.props, 'fields.fields.data')) {
             fields = this.props.fields.fields.data;
+            fields.forEach((field) => {
+                colList.push(field.id);
+            });
         }
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, addNewRecordAfterSave);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave);
     },
 
     /**
@@ -309,9 +313,13 @@ export let ReportContent = React.createClass({
      */
     handleRecordChange(recId, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
+        let colList = [];
         if (_.has(this.props, 'fields.fields.data')) {
+            this.props.fields.fields.data.forEach((field) => {
+                colList.push(field.id);
+            });
             flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, addNewRecordAfterSave);
+            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
         }
     },
 

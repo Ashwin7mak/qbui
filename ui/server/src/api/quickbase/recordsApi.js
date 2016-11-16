@@ -257,7 +257,7 @@
                 // Set the query parameter
                 if (requestHelper.hasQueryParameter(req, constants.REQUEST_PARAMETER.QUERY)) {
                     let queryParam = requestHelper.getQueryParameterValue(req, constants.REQUEST_PARAMETER.QUERY);
-                    opts.url += '?' + constants.REQUEST_PARAMETER.QUERY + '=' + queryParam;
+                    opts.url += '?' + constants.REQUEST_PARAMETER.QUERY + '=' + encodeURIComponent(queryParam);
                 }
 
                 return requestHelper.executeRequest(req, opts);

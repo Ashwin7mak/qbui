@@ -28,6 +28,7 @@ import QBPanelMetadata from 'component-metadata!../../../client-react/src/compon
 import TrowserMetadata from 'component-metadata!../../../client-react/src/components/trowser/trowser.js';
 import QBModalMetadata from 'component-metadata!../../../client-react/src/components/qbModal/qbModal.js';
 import InvisibleBackdropMetadata from 'component-metadata!../../../client-react/src/components/qbModal/invisibleBackdrop.js';
+import AlertBannerMetadata from 'component-metadata!../../../client-react/src/components/alertBanner/alertBanner.js';
 // END OF IMPORT STATEMENTS
 // above comment used for grunt task, please do not delete
 
@@ -57,6 +58,7 @@ var Metadata = _.merge(
     QBIconMetadata,
     QBPanelMetadata,
     QBModalMetadata,
+    AlertBannerMetadata,
     InvisibleBackdropMetadata
     // END OF METADATA MERGE
     // above comment used for grunt task, please do not delete
