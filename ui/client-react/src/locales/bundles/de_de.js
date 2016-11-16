@@ -384,6 +384,7 @@ export default {
             print: "Der Druck ist noch nicht verfügbar",
             copy: "Kopieren ist noch nicht verfügbar"
         },
+        pageTitleSeparator: " - ",
         quickBaseClassic: "QuickBase Klassik"
     }
 };

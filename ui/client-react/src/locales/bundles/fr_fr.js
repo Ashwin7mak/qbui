@@ -383,6 +383,7 @@ export default {
             print: "L'impression n'est pas encore disponible",
             copy: "La copie n'est pas encore disponible"
         },
+        pageTitleSeparator: ", ",
         quickBaseClassic: "QuickBase Classique"
     }
 };

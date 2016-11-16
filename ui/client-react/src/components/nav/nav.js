@@ -18,7 +18,7 @@ import WindowLocationUtils from '../../utils/windowLocationUtils';
 import "../../assets/css/animate.min.css";
 import * as TrowserConsts from "../../constants/trowserConstants";
 import * as UrlConsts from "../../constants/urlConstants";
-
+import PageTitle from '../pageTitle/pageTitle';
 import AppQbModal from '../qbModal/appQbModal';
 
 let FluxMixin = Fluxxor.FluxMixin(React);
@@ -204,6 +204,7 @@ export let Nav = React.createClass({
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
+                <PageTitle/>
                 <TopNav title={this.state.nav.topTitle}
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}

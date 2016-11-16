@@ -388,6 +388,7 @@ export default {
             print: "Printing is not available yet",
             copy: "Copying is not available yet"
         },
+        pageTitleSeparator: " - ",
         quickBaseClassic: "QuickBase Classic"
     }
 };
