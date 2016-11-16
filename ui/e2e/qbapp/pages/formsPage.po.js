@@ -198,7 +198,7 @@
                         });
                     });
                 }
-                return Promise.each(fetchEnterCellValuesPromises);
+                return Promise.all(fetchEnterCellValuesPromises);
             });
         };
 
@@ -224,7 +224,7 @@
                         return fetchEnterCellValuesPromises.push(elm.clear().sendKeys("@!!^&*%$#"));
                     });
                 }
-                return Promise.each(fetchEnterCellValuesPromises);
+                return Promise.all(fetchEnterCellValuesPromises);
             });
         };
 
