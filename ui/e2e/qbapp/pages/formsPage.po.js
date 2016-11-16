@@ -150,13 +150,14 @@
             return reportServicePage.waitForElement(self.formTable).then(function() {
                 return e2eBase.sleep(browser.params.smallSleep);
             }).then(function() {
+                var fetchEnterCellValuesPromises = [];
                 if (fieldLabel === 'dateCell' && browserName !== 'safari') {
                     //enter date fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
                         return elm.element(by.className('date')).click().then(function() {
-                            return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
+                            return fetchEnterCellValuesPromises.push(elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate));
                         });
 
                         ////Select the date from the date picker.
@@ -169,21 +170,21 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return elm.clear().sendKeys(sText);
+                        return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sText));
                     });
                 } else if (fieldLabel === 'numericField') {
                     //enter numeric fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return elm.clear().sendKeys(sNumeric);
+                        return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(sNumeric));
                     });
                 } else if (fieldLabel === 'checkbox') {
                     //select checkbox field
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return elm.element(by.className('label')).click();
+                        return fetchEnterCellValuesPromises.push(elm.element(by.className('label')).click());
                     });
                 } else if (fieldLabel === 'timeCell' && browserName !== 'safari') {
                     //enter time of day fields
@@ -193,10 +194,11 @@
                         //Do the click below to make it user editable
                         return elm.element(by.className('Select-control')).click().then(function() {
                             e2eBase.sleep(browser.params.smallSleep);
-                            browser.actions().sendKeys(sTime, protractor.Key.ENTER).perform();
+                            fetchEnterCellValuesPromises.push(browser.actions().sendKeys(sTime, protractor.Key.ENTER).perform());
                         });
                     });
                 }
+                return Promise.each(fetchEnterCellValuesPromises);
             });
         };
 
@@ -206,21 +208,23 @@
             return reportServicePage.waitForElement(self.formEditContainerEl).then(function() {
                 return e2eBase.sleep(browser.params.smallSleep);
             }).then(function() {
+                var fetchEnterCellValuesPromises = [];
                 if (fieldLabel === 'textField') {
                     //enter text fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return elm.clear().sendKeys("");
+                        return fetchEnterCellValuesPromises.push(elm.clear().sendKeys(""));
                     });
                 } else if (fieldLabel === 'numericField') {
                     //enter numeric fields
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        return elm.clear().sendKeys("@!!^&*%$##@#%%^^");
+                        return fetchEnterCellValuesPromises.push(elm.clear().sendKeys("@!!^&*%$#"));
                     });
                 }
+                return Promise.each(fetchEnterCellValuesPromises);
             });
         };
 
