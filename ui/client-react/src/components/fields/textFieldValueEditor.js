@@ -86,7 +86,7 @@ const TextFieldValueEditor = React.createClass({
         // use the raw value as the input value, not the formatted display value that may include escaped content
         return <input ref="textInput"
                       className={classes}
-                      value={this.props.value === null ? "" : this.props.value}
+                      value={this.props.value || ''}
                       maxLength={maxLength}
                       type={this.props.inputType}
                       key={'inp' + this.props.idKey}
