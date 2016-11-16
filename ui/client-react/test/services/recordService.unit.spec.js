@@ -21,7 +21,7 @@ describe('RecordService functions', () => {
     it('test getRecords function with reqd parameters', () => {
         var appId = 1;
         var tblId = 2;
-        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+        var url = recordService.constructUrl(recordService.API.GET_RECORDS, [appId, tblId]);
         recordService.getRecords(appId, tblId);
 
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {}});
@@ -33,7 +33,7 @@ describe('RecordService functions', () => {
         let params = {};
         params[query.FORMAT_PARAM] = true;
 
-        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+        var url = recordService.constructUrl(recordService.API.GET_RECORDS, [appId, tblId]);
         recordService.getRecords(appId, tblId, params);
 
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {format : query.DISPLAY_FORMAT}});
@@ -42,7 +42,7 @@ describe('RecordService functions', () => {
     it('test getRecords function with valid optional parameters', () => {
         var appId = 1;
         var tblId = 2;
-        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+        var url = recordService.constructUrl(recordService.API.GET_RECORDS, [appId, tblId]);
 
         let params = {};
         params[query.FORMAT_PARAM] = true;
@@ -66,7 +66,7 @@ describe('RecordService functions', () => {
     it('test getRecords function with invalid clist', () => {
         var appId = 1;
         var tblId = 2;
-        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+        var url = recordService.constructUrl(recordService.API.GET_RECORDS, [appId, tblId]);
 
         let inputparams = {};
         inputparams[query.FORMAT_PARAM] = true;
@@ -85,7 +85,7 @@ describe('RecordService functions', () => {
     it('test getRecords function with invalid slist', () => {
         var appId = 1;
         var tblId = 2;
-        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+        var url = recordService.constructUrl(recordService.API.GET_RECORDS, [appId, tblId]);
 
         let inputparams = {};
         inputparams[query.FORMAT_PARAM] = true;
@@ -104,7 +104,7 @@ describe('RecordService functions', () => {
     it('test getRecords function with invalid query', () => {
         var appId = 1;
         var tblId = 2;
-        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+        var url = recordService.constructUrl(recordService.API.GET_RECORDS, [appId, tblId]);
 
         let inputparams = {};
         inputparams[query.FORMAT_PARAM] = false;
@@ -123,7 +123,7 @@ describe('RecordService functions', () => {
     it('test getRecords function with invalid offset', () => {
         var appId = 1;
         var tblId = 2;
-        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+        var url = recordService.constructUrl(recordService.API.GET_RECORDS, [appId, tblId]);
 
         let inputparams = {};
         inputparams[query.FORMAT_PARAM] = false;
@@ -140,7 +140,7 @@ describe('RecordService functions', () => {
     it('test getRecords function with invalid rows', () => {
         var appId = 1;
         var tblId = 2;
-        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId]);
+        var url = recordService.constructUrl(recordService.API.GET_RECORDS, [appId, tblId]);
 
         let inputparams = {};
         inputparams[query.FORMAT_PARAM] = false;
@@ -149,6 +149,29 @@ describe('RecordService functions', () => {
         recordService.getRecords(appId, tblId, inputparams);
 
         expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params : {}});
+    });
+
+    it('test getRecord function with no params', () => {
+        var appId = 1;
+        var tblId = 2;
+        var recId = 3;
+        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId, recId]);
+        recordService.getRecord(appId, tblId, recId);
+
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: {}});
+    });
+
+    it('test getRecord function with clist params', () => {
+        var appId = 1;
+        var tblId = 2;
+        var recId = 3;
+        var clist = '2.3';
+        var inputParams = {};
+        inputParams[query.COLUMNS_PARAM] = clist;
+        var url = recordService.constructUrl(recordService.API.GET_RECORD, [appId, tblId, recId]);
+        recordService.getRecord(appId, tblId, recId, clist);
+
+        expect(BaseService.prototype.get).toHaveBeenCalledWith(url, {params: inputParams});
     });
 
     it('test createRecord function', () => {

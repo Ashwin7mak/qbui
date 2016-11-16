@@ -386,17 +386,14 @@ const flux = {
         recordPendingEditsCommit: ()=> {
         },
         newBlankReportRecord: ()=> {
-            return new Promise((resolve, reject) => {
-                resolve();
-                if (doneFunction) {
-                    doneFunction();
-                }
-            });
+            return {
+                then: function(callback) {return callback(101);}
+            };
         },
         saveRecord: ()=> {
-            return new Promise((resolve, reject) => {
-                resolve(101);
-            });
+            return {
+                then: function(callback) {return callback(101);}
+            };
         },
         saveNewRecord: ()=> {
         },
@@ -1001,6 +998,7 @@ describe('ReportContent functions', () => {
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordDelete(origRec);
+        component.deleteRecord();
         expect(flux.actions.deleteRecord).toHaveBeenCalled();
     });
 
@@ -1096,12 +1094,16 @@ describe('ReportContent functions', () => {
                                                                 reportFooter={fakeReportFooter}
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
+
         component.handleRecordNewBlank(101);
         expect(flux.actions.newBlankReportRecord).toHaveBeenCalled();
     });
 
-    it('test handleRecordNewBlank on dirty', (done) => {
-        doneFunction = done;
+    it('test handleRecordNewBlank on dirty', () => {
+        let appId = '123';
+        let tbleId = '456';
+        let recordId = 101;
+
         let keyField = "id";
         let edits = {
             isPendingEdit: true,
@@ -1112,11 +1114,9 @@ describe('ReportContent functions', () => {
             }
         };
 
-        spyOn(flux.actions, 'newBlankReportRecord').and.callThrough();
-
         component = TestUtils.renderIntoDocument(<ReportContent flux={flux}
-                                                                appId="123"
-                                                                tblId="456"
+                                                                appId={appId}
+                                                                tblId={tbleId}
                                                                 pendEdits={edits}
                                                                 reportData={fakeReportData_simple}
                                                                 fields={fakeReportDataFields_simple}
@@ -1126,9 +1126,14 @@ describe('ReportContent functions', () => {
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
 
-        component.handleRecordNewBlank({value: 101});
+        spyOn(component, 'getFlux').and.returnValue(flux);
+        spyOn(flux.actions, 'saveRecord').and.callThrough();
+        spyOn(flux.actions, 'newBlankReportRecord').and.callThrough();
 
-        expect(flux.actions.newBlankReportRecord).not.toHaveBeenCalled();
+        component.handleRecordNewBlank({value: recordId});
+
+        expect(flux.actions.saveRecord.calls.mostRecent().args.pop()).toEqual(true);
+        expect(flux.actions.newBlankReportRecord).toHaveBeenCalledWith(appId, tbleId, recordId);
     });
 
     it('test handleRecordAdd', () => {
@@ -1188,7 +1193,7 @@ describe('ReportContent functions', () => {
                                                                 keyField={keyField}/>);
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordAdd(edits.recordChanges);
-        expect(flux.actions.saveNewRecord).toHaveBeenCalledWith('123', '456', edits.recordChanges, fieldsData.fields.data, false);
+        expect(flux.actions.saveNewRecord).toHaveBeenCalledWith('123', '456', edits.recordChanges, fieldsData.fields.data, [4, 5], false);
     });
 
     it('test handleRecordChange', () => {
@@ -1225,7 +1230,11 @@ describe('ReportContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, AGGridMock).length).toEqual(1);
         component.handleRecordChange({value:100});
         expect(flux.actions.recordPendingEditsCommit).toHaveBeenCalled();
-        expect(flux.actions.saveRecord).toHaveBeenCalled();
+        let colList = [];
+        fakeReportDataFields_simple.fields.data.forEach((field) => {
+            colList.push(field.id);
+        });
+        expect(flux.actions.saveRecord).toHaveBeenCalledWith("123", "456", 100, edits, fakeReportDataFields_simple.fields.data, colList, false);
     });
 
 
