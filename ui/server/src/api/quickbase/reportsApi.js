@@ -487,7 +487,12 @@
                                 if (report.type === constants.RECORD_TYPE.GROUP) {
                                     //  the fetchFields response includes all fields on the table. Want to populate the
                                     //  response object fields entry to only include those fields on the report
-                                    let groupedRecords = report.groups[0] ? report.groups[0].records : null;
+                                    let groupedRecords = null;
+                                    if (Array.isArray(report.groups)) {
+                                        if (report.groups[0]) {
+                                            groupedRecords = report.groups[0].records;
+                                        }
+                                    }
                                     responseObject[FIELDS] = getFieldsOnReport(groupedRecords, fields);
 
                                     //  Organize the grouping data for the client
@@ -525,8 +530,8 @@
                                     } else {
                                         //  Parse the facet response and format into an object that the client can consume and process
                                         //  IE: Facet objects of type {id, name, type, hasBlanks, [values]} using fields array.
-                                        if (facets.body && facets.body.length > 0) {
-                                            //  jsonBigNum.parse throws exception if the input is empty array
+                                        if (Array.isArray(facets.body) && facets.body.length > 0) {
+                                            //  jsonBigNum.parse throws exception if the input is empty array..hence the test for content
                                             let facetRecords = jsonBigNum.parse(facets.body);
                                             responseObject[FACETS] = facetRecordsFormatter.formatFacetRecords(facetRecords, fields);
                                         }
@@ -561,26 +566,30 @@
                     //  make the api request to get the table homepage report id
                     requestHelper.executeRequest(req, opts).then(
                         (response) => {
-                            //  fetch the specified report or the default if one is not defined
+                            //  fetch the specified report or use the default if one is not defined
                             let homepageReportId = constants.DEFAULT_TABLE_REPORT.ID;
-                            let responseBodyParsed;
-                            if (response.body && (constants.DEFAULT_TABLE_REPORT.ID !== (responseBodyParsed = JSON.parse(response.body)))) {
-                                homepageReportId = responseBodyParsed;
+                            if (response.body) {
+                                let responseBodyParsed = JSON.parse(response.body);
+                                if (responseBodyParsed) {
+                                    homepageReportId = responseBodyParsed;
+                                }
                             }
+
+                            homepageReportId = 1;
 
                             //  fetch the report
                             this.fetchReport(req, homepageReportId, true).then(
-                                    (reportResponse) => {
-                                        resolve(reportResponse);
-                                    },
-                                    (reportError) => {
-                                        log.error({req:req}, 'Error fetching table homepage report content in fetchTableHomePageReport.');
-                                        reject(reportError);
-                                    }
-                                    ).catch((ex) => {
-                                        requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
-                                        reject(ex);
-                                    });
+                                (reportResponse) => {
+                                    resolve(reportResponse);
+                                },
+                                (reportError) => {
+                                    log.error({req:req}, 'Error fetching table homepage report content in fetchTableHomePageReport.');
+                                    reject(reportError);
+                                }
+                            ).catch((ex) => {
+                                requestHelper.logUnexpectedError('reportsAPI..unexpected error fetching table homepage report content in fetchTableHomePageReport', ex, true);
+                                reject(ex);
+                            });
 
                         },
                         (error) => {
@@ -594,6 +603,7 @@
                 });
             }
         };
+
         return reportsApi;
     };
 }());
