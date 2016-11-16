@@ -13,6 +13,7 @@
         var message = "User is signing out";
         var hostname = (req.headers.host.match(/:/g)) ? req.headers.host.slice(0, req.headers.host.indexOf(":")) : req.headers.host;
         res.cookie(cookies.TICKET, "", {domain: hostname, expires: new Date(0)});
+        res.clearCookie(cookies.TICKET);
         processAuthentication(req, res, viewFilePath, statusCode, message);
     };
 
