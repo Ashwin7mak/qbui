@@ -252,7 +252,7 @@ export let ReportContent = React.createClass({
         newBlankReportPromise.then(() => {
             // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
             // due to the speed of re-rendering
-            NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+            NotificationManager.success(Locales.getMessage('recordNotifications.recordSaved'), Locales.getMessage('success'), 1500);
         });
     },
 
