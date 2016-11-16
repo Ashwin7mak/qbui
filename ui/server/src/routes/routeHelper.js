@@ -85,10 +85,18 @@
         return (reportId === constants.DEFAULT_TABLE_REPORT.ID ? DEFAULT_REPORT : reportId);
     }
 
+    /**
+     * Modify the report route if rendering the default report
+     *
+     * @param route
+     * @returns {*}
+     */
     function updateReportRouteIdentifier(route) {
         if (route) {
+            //  does the route end with the default report id
             const reportRouteSuffix = REPORTS + '/' + constants.DEFAULT_TABLE_REPORT.ID;
             if (route.endsWith(reportRouteSuffix)) {
+                //  this is a default route; change the report id with the default report suffix
                 const defaultReportRouteSuffix = REPORTS + '/' + DEFAULT_REPORT;
                 return route.replace(reportRouteSuffix, defaultReportRouteSuffix);
             }

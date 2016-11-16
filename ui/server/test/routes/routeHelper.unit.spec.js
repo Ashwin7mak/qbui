@@ -185,8 +185,8 @@ describe('Validate RouteHelper unit tests', function() {
             {name: 'test valid url 2', url: '/apps/123/tables/456/reports/789/results', expectation: '/apps/123/tables/456/reports/789/count'},
             {name: 'test valid url with id', url: '/apps/123/tables/234/reports/5', id: 5, expectation: '/apps/123/tables/234/reports/5/count'},
             {name: 'test valid default url', url: '/apps/123/tables/234/reports/' + constants.DEFAULT_TABLE_REPORT.ID, id: null, expectation: '/apps/123/tables/234/reports/default/count'},
+            {name: 'test invalid default url with default id', url: '/apps/123', id: constants.DEFAULT_TABLE_REPORT.ID, expectation: '/apps/123'},
             {name: 'test valid default url with default id', url: '/apps/123/tables/234/reports/' + constants.DEFAULT_TABLE_REPORT.ID, id: constants.DEFAULT_TABLE_REPORT.ID, expectation: '/apps/123/tables/234/reports/default/count'},
-
         ];
 
         testCases.forEach(function(testCase) {
