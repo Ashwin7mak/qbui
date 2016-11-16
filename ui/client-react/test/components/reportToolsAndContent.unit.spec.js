@@ -106,4 +106,27 @@ describe('ReportToolsAndContent functions', () => {
         component.isRecordDeleted();
         expect(component.refs.reportTools.getPageUsingOffsetMultiplicant).toHaveBeenCalled();
     });
+
+    it('test to check if page does not fetch records on failed delete', () => {
+        let MockParent = React.createClass({
+            getInitialState() {
+                return {
+                    isRecordDeleted: true
+                };
+            },
+            isRecordDeleted() {
+                this.setState({isRecordDeleted: false});
+            },
+            render() {
+                const modifiedReport = Object.assign({}, reportDataParams)
+                modifiedReport.reportData.isRecordDeleted = this.state.isRecordDeleted;
+                return <ReportToolsAndContent ref="reportTools" flux={flux} params={reportParams} {...modifiedReport} />;
+            }
+        });
+
+        component = TestUtils.renderIntoDocument(<MockParent />);
+        spyOn(component.refs.reportTools, 'getPageUsingOffsetMultiplicant');
+        component.isRecordDeleted();
+        expect(component.refs.reportTools.getPageUsingOffsetMultiplicant).not.toHaveBeenCalled();
+    });
 });
