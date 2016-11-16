@@ -13,7 +13,6 @@ import * as dateTimeFormatter from '../../../common/src/formatter/dateTimeFormat
 import * as timeOfDayFormatter from '../../../common/src/formatter/timeOfDayFormatter';
 import * as numericFormatter from '../../../common/src/formatter/numericFormatter';
 import * as userFormatter from '../../../common/src/formatter/userFormatter';
-import reportDataActions from '../actions/reportDataActions'
 import _ from 'lodash';
 
 const serverTypeConsts = require('../../../common/src/constants');
