@@ -17,7 +17,9 @@ let CardViewList = React.createClass({
         onRowClicked: React.PropTypes.func,
         isRowSelected: React.PropTypes.func,
         onSwipe: React.PropTypes.func,
-        columns: React.PropTypes.array
+        columns: React.PropTypes.array,
+        appId: React.PropTypes.string,
+        tblId: React.PropTypes.string
     },
 
     getInitialState() {
@@ -48,6 +50,8 @@ let CardViewList = React.createClass({
                                      groupId={groupId}
                                      groupLevel={groupLevel}
                                      node={node}
+                                     appId={this.props.appId}
+                                     tblId={this.props.tblId}
                                      columns={this.props.columns}
                                      uniqueIdentifier={this.props.uniqueIdentifier}
                                      allowCardSelection={this.props.allowCardSelection}
@@ -89,6 +93,8 @@ let CardViewList = React.createClass({
                               onRowClicked={this.props.onRowClicked}
                               isRowSelected={this.props.isRowSelected}
                               onSwipe={this.props.onSwipe}
+                              appId={this.props.appId}
+                              tblId={this.props.tblId}
                               onEditAction={this.onEditRecord} />
                 }
             </div>
