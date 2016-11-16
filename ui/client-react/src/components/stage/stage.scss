@@ -34,10 +34,6 @@ $breadCrumbsSeparatorColor: #c7c7c7;
             .iconActions {
                 margin-right:0px;
                 font-size:20px;
-                margin-left: -10px;
-            }
-            .qbIcon {
-                color:$stage-headline-color;
             }
 
             h3 {
@@ -67,12 +63,6 @@ $breadCrumbsSeparatorColor: #c7c7c7;
                 color: $breadCrumbsSeparatorColor;
             }
         }
-
-        .iconActionButton:not([disabled]):hover {
-            .qbIcon {
-                color: $nav-hover-fg;
-            }
-        }
     }
 
     .stageRight {
@@ -80,6 +70,7 @@ $breadCrumbsSeparatorColor: #c7c7c7;
         flex:0 0 auto;
 
         .iconActionButton {
+            font-size:18px;
             color:$page-actions-icon-color;
         }
         .iconActionButton.disabled {
