@@ -5,7 +5,8 @@ class A11Utils {
 
     static isA11yClick(event) {
 
-        if (event.nativeEvent.type === 'click') {
+        // check for clicks and also touchend (react-fastclick creates the latter)
+        if (event.nativeEvent.type === 'click' || event.nativeEvent.type === 'touchend') {
             return true;
         } else if (event.nativeEvent.type === 'keydown') {
             var code = event.charCode || event.keyCode;
