@@ -95,7 +95,7 @@ describe('ReportToolsAndContent functions', () => {
                 this.setState({isRecordDeleted: true});
             },
             render() {
-                const modifiedReport = Object.assign({}, reportDataParams)
+                const modifiedReport = Object.assign({}, reportDataParams);
                 modifiedReport.reportData.isRecordDeleted = this.state.isRecordDeleted;
                 return <ReportToolsAndContent ref="reportTools" flux={flux} params={reportParams} {...modifiedReport} />;
             }
@@ -118,7 +118,7 @@ describe('ReportToolsAndContent functions', () => {
                 this.setState({isRecordDeleted: false});
             },
             render() {
-                const modifiedReport = Object.assign({}, reportDataParams)
+                const modifiedReport = Object.assign({}, reportDataParams);
                 modifiedReport.reportData.isRecordDeleted = this.state.isRecordDeleted;
                 return <ReportToolsAndContent ref="reportTools" flux={flux} params={reportParams} {...modifiedReport} />;
             }
