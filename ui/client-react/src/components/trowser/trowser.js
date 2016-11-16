@@ -47,7 +47,7 @@ let Trowser = React.createClass({
 
     handleKey(e) {
         // close trowser when Esc is pressed
-        if (e.keyCode === 27) {
+        if (this.props.visible && e.keyCode === 27) {
             this.props.onCancel();
         }
     },

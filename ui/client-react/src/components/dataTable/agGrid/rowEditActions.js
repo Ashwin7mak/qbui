@@ -3,6 +3,7 @@ import * as SchemaConsts from "../../../constants/schema";
 import {Button, OverlayTrigger, Tooltip} from 'react-bootstrap';
 import QBIcon from '../../qbIcon/qbIcon';
 import {NotificationManager} from 'react-notifications';
+import closeOnEscape from '../../hoc/catchEscapeKey';
 import {I18nMessage} from '../../../utils/i18nMessage';
 import FieldUtils from '../../../utils/fieldUtils';
 import QBToolTip from '../../qbToolTip/qbToolTip';
@@ -117,8 +118,20 @@ const RowEditActions = React.createClass({
             addRecordClass += ' disabled';
         }
 
+        // wrap this component, also gets wrapped by the catchEscapeKey HOC to allow cancelling
+        // inline edit by hitting Escape
+        const RowEditWrapper = React.createClass({
+            render() {
+                return <div
+                    {...this.props}>
+                </div>;
+            }
+        });
+        const ClosableRowEditActions = closeOnEscape(RowEditWrapper);
+
         return (
-            <div className="editTools">
+            <ClosableRowEditActions
+                className="editTools" onClose={this.onClickCancel} capturePhase={true}>
                 <QBToolTip tipId="cancelSelection" location="bottom" i18nMessageKey="pageActions.cancelSelection">
                     <Button onClick={this.onClickCancel}><QBIcon icon="close" className="cancelSelection"/></Button>
                 </QBToolTip>
@@ -128,7 +141,7 @@ const RowEditActions = React.createClass({
                 <QBToolTip tipId="addRecord" location="bottom" i18nMessageKey="pageActions.saveAndAddRecord">
                     <Button onClick={validRow ? this.onClickAdd : null}><QBIcon icon="add" className={addRecordClass}/></Button>
                 </QBToolTip>
-            </div>
+            </ClosableRowEditActions>
         );
     }
 });

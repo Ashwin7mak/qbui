@@ -15,7 +15,10 @@ var catchEscapeKeyWrapper = (Component) =>{
         wrapped  : Component,
 
         propTypes: {
-            onClose  : React.PropTypes.func
+            onClose  : React.PropTypes.func,
+            // Used as the 3rd argument accepted by addEventListener, single boolean for whether to
+            // use the capture phase which happens before the bubble phase.
+            capturePhase  : React.PropTypes.bool,
         },
 
         handleKey(e) {
@@ -27,13 +30,13 @@ var catchEscapeKeyWrapper = (Component) =>{
 
         componentWillMount() {
             if (document && document.addEventListener) {
-                document.addEventListener("keydown", this.handleKey, false);
+                document.addEventListener("keydown", this.handleKey, this.props.capturePhase);
             }
         },
 
         componentWillUnmount() {
             if (document && document.removeEventListener) {
-                document.removeEventListener("keydown", this.handleKey, false);
+                document.removeEventListener("keydown", this.handleKey, this.props.capturePhase);
             }
         },
 
