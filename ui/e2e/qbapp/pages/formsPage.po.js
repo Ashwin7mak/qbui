@@ -314,8 +314,9 @@
             }).map(function(elm) {
                 return elm.getText();
             }).then(function(fieldsPresentOnForm) {
-                expectedFieldsNotPresentOnForm.filter(function(elem) {
-                    return fieldsPresentOnForm.indexOf(elem) > -1;
+                expectedFieldsNotPresentOnForm.filter(function(field) {
+                    //Verify that fieldsOnForm array don't contain expectedFieldsNotPresentOnForm items
+                    expect(fieldsPresentOnForm.indexOf(field)).toBe(-1);
                 });
             });
 
