@@ -421,6 +421,13 @@ describe('Test recordPendingEdits Store ', () => {
                 newDisplayValue: 'can you hear me?',
                 oldValue: originalValue,
                 oldDisplayValue: originalDisplayValue
+            },
+            {
+                description: 'adds pendingEdits if the newValue is different than the original, even if it is the same as the old value (this affects forms)',
+                newValue: "it's me",
+                newDisplayValue: "it's me",
+                oldValue: 'from the other side',
+                oldDisplayValue: 'from the other side'
             }
         ];
 
@@ -463,7 +470,7 @@ describe('Test recordPendingEdits Store ', () => {
                 newDisplayValue: originalDisplayValue,
                 oldValue: originalDisplayValue,
                 oldDisplayValue: 'from the other side'
-            },
+            }
         ];
 
         shouldNotHavePendingEditsTestCases.forEach(testCase => {

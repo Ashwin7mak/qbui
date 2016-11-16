@@ -147,13 +147,13 @@ let RecordPendingEditsStore = Fluxxor.createStore({
     },
 
     /**
-     * If there were previously changes, but now the user has removed those changes or put the values back to the original
+     * If there were previously changes, but user put the values back to the original
      * then we need to remove those from pendingEdits.
      * @param payload
      * @private
      */
     _removePriorChangesIfTheyExist(payload) {
-        if (this.recordChanges && this.recordChanges[payload.changes.fid]) {
+        if (this.recordChanges && this.recordChanges[payload.changes.fid] && !this._isDifferentThanOriginalFieldValue(payload)) {
             delete this.recordChanges[payload.changes.fid];
 
             // If there are no remaining changes, then the record is not pending edits anymore
