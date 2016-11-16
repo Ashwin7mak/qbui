@@ -1,69 +1,31 @@
 import React, {PropTypes} from 'react';
-import Fluxxor from 'fluxxor';
-import _ from 'lodash';
 
 import Locale from '../../locales/locales';
 import HtmlUtils from '../../utils/htmlUtils';
 import {DEFAULT_PAGE_TITLE} from '../../constants/urlConstants';
 
-let FluxMixin = Fluxxor.FluxMixin(React);
-let StoreWatchMixin = Fluxxor.StoreWatchMixin;
-
 const PageTitle = React.createClass({
-    mixins: [FluxMixin, StoreWatchMixin('AppsStore', 'ReportDataStore', 'FormStore')],
-
-    getStateFromFlux() {
-        let flux = this.getFlux();
-        return {
-            apps: flux.store('AppsStore').getState(),
-            reportData: flux.store('ReportDataStore').getState(),
-            form: flux.store('FormStore').getState()
-        };
-    },
-
-    anAppIsSelected() {
-        return (this.state.apps.apps.length && this.state.apps.selectedAppId);
-    },
-
-    selectedApp() {
-        if (this.anAppIsSelected()) {
-            if (!this.app) {
-                this.app = _.find(this.state.apps.apps, {id: this.state.apps.selectedAppId})
-            }
-            return this.app;
-        }
-
-        return null;
+    propTypes: {
+        app: PropTypes.object,
+        table: PropTypes.object,
+        report: PropTypes.object
     },
 
     addAppNameToTheTitleIfSelected() {
-        if (this.selectedApp()) {
-            this.pageTitles.unshift(this.selectedApp().name);
+        if (this.props.app) {
+            this.pageTitles.unshift(this.props.app.name);
         }
-    },
-
-    aReportIsSelected() {
-        let reportData = this.state.reportData;
-        return (reportData.rptId && reportData.data && reportData.data.name);
     },
 
     addReportNameToTheTitleIfSelected() {
-        if (this.aReportIsSelected()) {
-            this.pageTitles.unshift(this.state.reportData.data.name);
+        if (this.props.report) {
+            this.pageTitles.unshift(this.props.report.name);
         }
     },
 
-    aTableIsSelected() {
-        return (this.state.apps.selectedTableId);
-    },
-
     addTableNameToTitleIfSelected() {
-        if (this.aTableIsSelected()) {
-            let table = _.find(this.app.tables, {id: this.state.apps.selectedTableId});
-
-            if (table) {
-                this.pageTitles.unshift(table.name);
-            }
+        if (this.props.table) {
+            this.pageTitles.unshift(this.props.table.name);
         }
     },
 
@@ -71,7 +33,7 @@ const PageTitle = React.createClass({
         // QuickBase is the default page title
         this.pageTitles = [DEFAULT_PAGE_TITLE];
 
-        if (this.anAppIsSelected()) {
+        if (this.props.app) {
             this.addAppNameToTheTitleIfSelected();
             this.addTableNameToTitleIfSelected();
             this.addReportNameToTheTitleIfSelected();

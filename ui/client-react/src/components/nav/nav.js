@@ -80,13 +80,13 @@ export let Nav = React.createClass({
 
     getSelectedApp() {
         if (this.state.apps.selectedAppId) {
-
             return _.find(this.state.apps.apps, (a) => a.id === this.state.apps.selectedAppId);
         }
         return null;
     },
+
     /**
-     * get table object for currently selecte table (or null if no table selected);
+     * get table object for currently selected table (or null if no table selected)
      *
      */
     getSelectedTable() {
@@ -99,6 +99,22 @@ export let Nav = React.createClass({
     },
 
 
+    aReportIsSelected() {
+        let app = this.getSelectedApp();
+        let reportData = this.state.reportData;
+
+        return (app && reportData && reportData.rptId && reportData.data && reportData.data.name);
+    },
+
+    /**
+     * get the report for the currently selected report (or null if no report selected)
+     */
+    getSelectedReport() {
+        if (this.aReportIsSelected()) {
+            return this.state.reportData.data;
+        }
+        return null;
+    },
 
     /* toggle apps list - if on collapsed nav, open left nav and display apps */
     toggleAppsList(open) {
@@ -163,6 +179,7 @@ export let Nav = React.createClass({
         }
 
         return (<div className={classes}>
+            <PageTitle app={this.getSelectedApp()} table={this.getSelectedTable()} report={this.getSelectedReport()} />
             <NotificationContainer/>
             {/* AppQbModal is an app-wide modal that can be called from non-react classes*/}
             <AppQbModal/>
@@ -204,7 +221,6 @@ export let Nav = React.createClass({
                 onNavClick={this.toggleNav}/>
 
             <div className="main" >
-                <PageTitle/>
                 <TopNav title={this.state.nav.topTitle}
                         globalActions={this.getTopGlobalActions()}
                         onNavClick={this.toggleNav}
