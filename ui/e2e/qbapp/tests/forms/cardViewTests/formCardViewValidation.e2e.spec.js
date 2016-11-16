@@ -63,8 +63,17 @@
             formsPage.clickFormSaveBtn();
 
             //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages);
-            done();
+            formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
+                //verify clicking on alert button brings up the error message popup
+                formsPage.clickFormAlertBtn();
+                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
+            }).then(function() {
+                //verify clicking on alert again hides the error message popup
+                formsPage.clickFormAlertBtn();
+                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
+            }).then(function() {
+                done();
+            });
         });
 
         it('Save Btn - Validate Add form', function(done) {
@@ -84,6 +93,7 @@
             formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
                 //close dirty form
                 formsPage.closeSaveChangesDialogue();
+            }).then(function() {
                 done();
             });
 
@@ -109,6 +119,7 @@
             formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
                 //close dirty form
                 formsPage.closeSaveChangesDialogue();
+            }).then(function() {
                 done();
             });
         });
@@ -150,6 +161,7 @@
                 for (var k = 0; k < fieldTypeClassNames.length; k++) {
                     reportCardViewPage.verifyFieldValuesInReportTableSmallBP(reportCardViewPage.formTable, fieldTypeClassNames[k]);
                 }
+            }).then(function() {
                 done();
             });
         });

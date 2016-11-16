@@ -28,7 +28,7 @@
                 RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
                 RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
-
+            }).then(function() {
                 // Wait for the leftNav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     done();

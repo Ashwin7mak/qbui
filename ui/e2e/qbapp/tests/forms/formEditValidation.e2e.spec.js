@@ -33,6 +33,7 @@
                 RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
                 RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            }).then(function() {
                 // Wait for the leftNav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     done();
@@ -61,11 +62,10 @@
             }
 
             //Save the form
-            formsPage.clickSaveBtnWithName('Save');
-
-            //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
-
+            formsPage.clickSaveBtnWithName('Save').then(function() {
+                //verify validation
+                formsPage.verifyErrorMessages(expectedErrorMessages);
+            }).then(function() {
                 //close dirty form
                 formsPage.closeSaveChangesDialogue();
                 done();
@@ -83,30 +83,31 @@
             }
 
             //Save the form
-            formsPage.clickSaveBtnWithName('Save & Next');
+            formsPage.clickSaveBtnWithName('Save & Next').then(function() {
 
-            //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages);
-            // Needed to get around stale element error
-            e2eBase.sleep(browser.params.smallSleep);
-
-            //correct the errors and add the record
-            for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                formsPage.enterFormValues(fieldTypeClassNames[j]);
-            }
-
-            //Save the form by clicking on 'Save and Next' btn
-            formsPage.clickFormSaveAndNextBtn();
-
-            //reload the report
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPage.waitForReportContent().then(function() {
-
-                for (var k = 0; k < fieldTypeClassNames.length; k++) {
-                    formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[k]);
+                //verify validation
+                formsPage.verifyErrorMessages(expectedErrorMessages);
+                // Needed to get around stale element error
+                e2eBase.sleep(browser.params.smallSleep);
+            }).then(function() {
+                //correct the errors and add the record
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    formsPage.enterFormValues(fieldTypeClassNames[j]);
                 }
             }).then(function() {
-                done();
+                //Save the form by clicking on 'Save and Next' btn
+                formsPage.clickFormSaveAndNextBtn();
+            }).then(function() {
+                //reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPage.waitForReportContent().then(function() {
+
+                    for (var k = 0; k < fieldTypeClassNames.length; k++) {
+                        formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[k]);
+                    }
+                }).then(function() {
+                    done();
+                });
             });
         });
 

@@ -57,7 +57,7 @@
         this.formErrorMessageHeader = this.formErrorMessage.element(by.className('qbErrorMessageHeader'));
         this.formErrorMessageHeaderCloseBtn = this.formErrorMessageHeader.element(by.className('rightIcons')).element(by.className('iconTableUISturdy-x-secondary'));
         this.formErrorMessageHeaderAlertBtn = this.formErrorMessageHeader.element(by.className('leftIcons')).element(by.className('iconTableUISturdy-alert'));
-        this.formErrorMessageContent = this.formErrorMessage.element(by.className('qbErrorMessageContent'));
+        this.formErrorMessageContent = this.formErrorMessageVisisble.element(by.className('qbErrorMessageContent'));
 
         //Save changes before leaving dialogue
         this.formsSaveChangesDialog = element(by.className('modal-dialog'));
@@ -230,20 +230,19 @@
 
         this.verifyErrorMessages = function(expectedErrorMessages) {
             var self = this;
-            return reportServicePage.waitForElement(self.formErrorMessageContent).then(function() {
-                return reportServicePage.waitForElement(self.formErrorMessage).then(function() {
-                    return self.formErrorMessageContent.all(by.className('qbErrorMessageItem')).filter(function(elm) {
-                        return elm;
-                    }).map(function(elm) {
-                        return elm.getAttribute('textContent');
-                    }).then(function(text) {
-                        expect(text).toEqual(expectedErrorMessages);
-                        //close the alert
-                        return self.formErrorMessageHeaderCloseBtn.click();
-                    }).then(function() {
-                        //give some time for the popup to slide in after closing
-                        return e2eBase.sleep(browser.params.smallSleep);
-                    });
+            //give some time for the popup to slide out after error occurs
+            return reportServicePage.waitForElement(self.formErrorMessageVisisble).then(function() {
+                return self.formErrorMessageContent.all(by.className('qbErrorMessageItem')).filter(function(elm) {
+                    return elm;
+                }).map(function(elm) {
+                    return elm.getAttribute('textContent');
+                }).then(function(text) {
+                    expect(text).toEqual(expectedErrorMessages);
+                    //close the alert
+                    return self.formErrorMessageHeaderCloseBtn.click();
+                }).then(function() {
+                    //give some time for the popup to slide in after closing
+                    return e2eBase.sleep(browser.params.smallSleep);
                 });
             });
         };

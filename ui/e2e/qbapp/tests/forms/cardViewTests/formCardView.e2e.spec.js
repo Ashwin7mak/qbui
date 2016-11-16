@@ -57,8 +57,6 @@
         });
 
         it('Add a record from the form', function(done) {
-            //TODO textField.Right now even phone no field says textField. So can't enter values and save record
-            //TODO 'dateCell', 'timeCell' in small breakpoints dosent work typing in date and time.
             var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
             //click on add record button
             reportCardViewPage.clickAddRecord();
@@ -70,9 +68,13 @@
 
             //Save the form
             formsPage.clickFormSaveBtn();
+
+            //reload the report
+            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
             reportCardViewPage.waitForReportReady().then(function() {
                 //Verify there are 8 records after adding 1
                 expect(reportCardViewPage.reportRecordsCount.getText()).toBe('8 records');
+            }).then(function() {
                 done();
             });
         });
@@ -95,6 +97,7 @@
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
                     reportCardViewPage.verifyFieldValuesInReportTableSmallBP(reportCardViewPage.formTableForRecord, fieldTypeClassNames[j]);
                 }
+            }).then(function() {
                 done();
             });
         });
@@ -124,6 +127,7 @@
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
                     reportCardViewPage.verifyFieldValuesInReportTableSmallBP(reportCardViewPage.formTable, fieldTypeClassNames[j]);
                 }
+            }).then(function() {
                 done();
             });
         });

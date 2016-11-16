@@ -35,6 +35,7 @@
                 RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
                 RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            }).then(function() {
                 // Wait for the leftNav to load
                 reportServicePage.waitForElement(reportServicePage.appsListDivEl).then(function() {
                     done();
@@ -104,11 +105,10 @@
                     formsPage.enterInvalidFormValues(testcase.fieldTypeClassNames);
 
                     //Save the form
-                    formsPage.clickSaveBtnWithName('Save');
-
-                    //verify field validations
-                    formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
-
+                    formsPage.clickSaveBtnWithName('Save').then(function() {
+                        //verify field validations
+                        formsPage.verifyErrorMessages(expectedErrorMessages);
+                    }).then(function() {
                         //close dirty form
                         formsPage.closeSaveChangesDialogue();
                         done();
@@ -127,29 +127,31 @@
             formsPage.enterInvalidFormValues('numericField');
 
             //Save the form
-            formsPage.clickSaveBtnWithName('Save & Add Another');
-
-            //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages);
-
-            //correct the errors and add the record
-            for (var i = 0; i < validFieldClassNames.length; i++) {
-                formsPage.enterFormValues(validFieldClassNames[i]);
-            }
-
-            //Save the form by clicking on 'Save and add another' btn
-            formsPage.clickFormSaveAndAddAnotherBtn();
-
-            //reload the report
-            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPage.waitForReportContent().then(function() {
-                reportServicePage.agGridRecordElList.then(function(records) {
-                    for (var j = 0; j < validFieldClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(records.length - 1, validFieldClassNames[j]);
-                    }
-                });
+            formsPage.clickSaveBtnWithName('Save & Add Another').then(function() {
+                //verify validation
+                formsPage.verifyErrorMessages(expectedErrorMessages);
+                // Needed to get around stale element error
+                e2eBase.sleep(browser.params.smallSleep);
             }).then(function() {
-                done();
+                //correct the errors and add the record
+                for (var i = 0; i < validFieldClassNames.length; i++) {
+                    formsPage.enterFormValues(validFieldClassNames[i]);
+                }
+            }).then(function() {
+                //Save the form by clicking on 'Save and add another' btn
+                formsPage.clickFormSaveAndAddAnotherBtn();
+            }).then(function() {
+                //reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+                reportContentPage.waitForReportContent().then(function() {
+                    reportServicePage.agGridRecordElList.then(function(records) {
+                        for (var j = 0; j < validFieldClassNames.length; j++) {
+                            formsPage.verifyFieldValuesInReportTable(records.length - 1, validFieldClassNames[j]);
+                        }
+                    });
+                }).then(function() {
+                    done();
+                });
             });
         });
     });
