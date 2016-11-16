@@ -247,9 +247,11 @@ let reportModel = {
      *  edit until they reload
      * @param oldRecId - the record with the id to be modified
      * @param newRecId - optional if its a new record the record this is the new record id
-     * @param changes - the changes to make to the record form is [{id: fieldid, display: dispVal, value: raw, fieldName: name}, ...]
+     * @param newRecord - The record that was just updated - fresh copy of this has been pulled from server ( to bring over derived fields etc )
+     * @param fields - Set of fields related to the record.
      */
-    updateARecord(oldRecId, newRecId, changes) {
+
+    updateARecord(oldRecId, newRecId, newRecord, fields) {
         let record = null;
         let filtRecord = null;
 
@@ -270,22 +272,32 @@ let reportModel = {
                 filtRecord[this.model.keyField.name].value = newRecId;
             }
         }
-        // change the data values
-        changes.forEach(change => {
-            if (change.display === undefined) {
-                //format value for display
-                this.formatFieldValue(change);
+
+        // update rec from format [{id, value}] to [fieldName: {id, value}] so it can be consumed by formatRecordValues
+        // formatRecordValues will add all display values
+        // patch the previously created skeleton of record with the newRecord values
+        let formattedRec = {};
+        newRecord.forEach(rec => {
+            let matchingField = _.find(fields, (field) => {
+                return rec.id === field.id;
+            });
+            if (matchingField) {
+                formattedRec[matchingField.name] = _.clone(rec);
             }
-            if (record && record[change.fieldName]) {
-                record[change.fieldName].value = change.value;
-                if (change.display !== undefined) {
-                    record[change.fieldName].display = change.display;
+        });
+
+        this.formatRecordValues(formattedRec);
+        Object.keys(formattedRec).forEach((fieldName) => {
+            if (record && record[fieldName] && formattedRec[fieldName]) {
+                record[fieldName].value = formattedRec[fieldName].value;
+                if (formattedRec[fieldName].display !== undefined) {
+                    record[fieldName].display = formattedRec[fieldName].display;
                 }
             }
-            if (filtRecord && filtRecord[change.fieldName]) {
-                filtRecord[change.fieldName].value = change.value;
-                if (change.display !== undefined) {
-                    filtRecord[change.fieldName].display = change.display;
+            if (filtRecord && filtRecord[fieldName] && formattedRec[fieldName]) {
+                filtRecord[fieldName].value = formattedRec[fieldName].value;
+                if (formattedRec[fieldName].display !== undefined) {
+                    filtRecord[fieldName].display = formattedRec[fieldName].display;
                 }
             }
         });
@@ -936,7 +948,9 @@ let ReportDataStore = Fluxxor.createStore({
         // update the  record values
 
         this.editingIndex = undefined;
-        this.reportModel.updateARecord(payload.recId, null, payload.changes);
+        let record = payload.record ? payload.record.record : [];
+        let fields = payload.record ? payload.record.fields : [];
+        this.reportModel.updateARecord(payload.recId, null, record, fields);
         this.emit("change");
     },
 
@@ -962,7 +976,9 @@ let ReportDataStore = Fluxxor.createStore({
                 this.createNewRecord(payload.recId);
             }
         }
-        this.reportModel.updateARecord(SchemaConsts.UNSAVED_RECORD_ID, payload.recId, payload.record);
+        let record = payload.record ? payload.record.record : [];
+        let fields = payload.record ? payload.record.fields : [];
+        this.reportModel.updateARecord(SchemaConsts.UNSAVED_RECORD_ID, payload.recId, record, fields);
 
         this.emit("change");
     },

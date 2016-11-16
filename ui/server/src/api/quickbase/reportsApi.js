@@ -238,7 +238,7 @@
 
                                     //  remove the current query request parameter and update with the new expression
                                     requestHelper.removeRequestParameter(req2, constants.REQUEST_PARAMETER.QUERY);
-                                    requestHelper.addQueryParameter(req2, constants.REQUEST_PARAMETER.QUERY, query);
+                                    requestHelper.addQueryParameter(req2, constants.REQUEST_PARAMETER.QUERY, encodeURIComponent(query));
                                 }
 
                                 recordsApi.fetchCountForRecords(req2).then(
@@ -487,7 +487,8 @@
                                 if (report.type === constants.RECORD_TYPE.GROUP) {
                                     //  the fetchFields response includes all fields on the table. Want to populate the
                                     //  response object fields entry to only include those fields on the report
-                                    responseObject[FIELDS] = getFieldsOnReport(report.groups[0].records, fields);
+                                    let groupedRecords = report.groups[0] ? report.groups[0].records : null;
+                                    responseObject[FIELDS] = getFieldsOnReport(groupedRecords, fields);
 
                                     //  Organize the grouping data for the client
                                     let sortList = parseSortList(metaData.sortList);

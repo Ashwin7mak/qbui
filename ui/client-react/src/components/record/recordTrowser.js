@@ -170,7 +170,15 @@ let RecordTrowser = React.createClass({
     handleRecordChange() {
         const flux = this.getFlux();
         flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, this.props.recId);
-        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.form.editFormData.fields);
+        let colList = [];
+        // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
+        // with the right column list from the server
+        if (_.has(this.props, 'reportData.data.fields')) {
+            this.props.reportData.data.fields.forEach((field) => {
+                colList.push(field.id);
+            });
+        }
+        return flux.actions.saveRecord(this.props.appId, this.props.tblId, this.props.recId, this.props.pendEdits, this.props.form.editFormData.fields, colList);
     },
 
     /**
@@ -180,7 +188,15 @@ let RecordTrowser = React.createClass({
      */
     handleRecordAdd(recordChanges) {
         const flux = this.getFlux();
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.editFormData.fields);
+        let colList = [];
+        // we need to pass in cumulative fields' fid list from report - because after form save report needs to be updated and we need to get the record
+        // with the right column list from the server
+        if (_.has(this.props, 'reportData.data.fields')) {
+            this.props.reportData.data.fields.forEach((field) => {
+                colList.push(field.id);
+            });
+        }
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, this.props.form.editFormData.fields, colList);
     },
 
     /**

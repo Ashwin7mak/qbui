@@ -2,7 +2,7 @@
 
 $error-background-color: $color-black-100;
 
-.appNotFound {
+.alertBanner {
     border: 1px solid $error-color;
     background-color: $error-background-color;
     border-radius: 2px;
@@ -10,13 +10,13 @@ $error-background-color: $color-black-100;
     margin: 5px;
     padding: 15px;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
 
-    .appNotFoundText, .qbIcon {
+    .mainText, .qbIcon {
         font-size: $font-size-h4;
     }
 
-    .appNotFoundText {
+    .mainText {
         display: inline-block;
         margin-bottom: 0;
         margin-left: 20px;
@@ -28,11 +28,11 @@ $error-background-color: $color-black-100;
         max-height: 0;
     }
 
-    &-enter.appNotFound-enter-active {
+    &-enter.alertBanner-enter-active {
         opacity: 1;
         max-height: 800px;
 
-        transition: opacity 1s ease-in, max-height 1s ease-in;
+        transition: opacity 0.5s ease-in, max-height 0.5s ease-in;
     }
 
     &-leave {
@@ -40,10 +40,10 @@ $error-background-color: $color-black-100;
         max-height: 800px;
     }
 
-    &-leave.appNotFound-leave-active {
+    &-leave.alertBanner-leave-active {
         opacity: 0;
         max-height: 0;
 
-        transition: opacity 1s ease-in, max-height 1s ease-in;
+        transition: opacity 0.5s ease-in 0.7s, max-height 0.5s linear;
     }
 }

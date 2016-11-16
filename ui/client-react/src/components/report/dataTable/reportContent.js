@@ -1,7 +1,6 @@
 import React from "react";
 import ReactIntl from "react-intl";
 import {NotificationManager} from 'react-notifications';
-import Locale from '../../../locales/locales';
 import CardViewListHolder from "../../../components/dataTable/cardView/cardViewListHolder";
 import AGGrid from "../../../components/dataTable/agGrid/agGrid";
 import QBGrid from "../../../components/dataTable/qbGrid/qbGrid";
@@ -21,6 +20,7 @@ import {withRouter} from 'react-router';
 import ReportContentError from './reportContentError';
 import DTSErrorModal from '../../dts/dtsErrorModal';
 import UrlUtils from '../../../utils/urlUtils';
+import QBModal from '../../qbModal/qbModal';
 
 let logger = new Logger();
 
@@ -29,6 +29,12 @@ let FluxMixin = Fluxxor.FluxMixin(React);
 
 export let ReportContent = React.createClass({
     mixins: [FluxMixin, IntlMixin],
+
+    getInitialState() {
+        return {
+            confirmDeletesDialogOpen: false
+        };
+    },
 
     // row was clicked once, navigate to record
     openRow(data) {
@@ -252,7 +258,7 @@ export let ReportContent = React.createClass({
         newBlankReportPromise.then(() => {
             // When adding a new record, the success message has to be displayed later otherwise it will appear to be chopped
             // due to the speed of re-rendering
-            NotificationManager.success(Locale.getMessage('recordNotifications.recordSaved'), Locale.getMessage('success'), 1500);
+            NotificationManager.success(Locales.getMessage('recordNotifications.recordSaved'), Locales.getMessage('success'), 1500);
         });
     },
 
@@ -280,10 +286,41 @@ export let ReportContent = React.createClass({
      * @param record
      */
     handleRecordDelete(record) {
+        this.setState({selectedRecordId: record[SchemaConsts.DEFAULT_RECORD_KEY].value});
+        this.setState({confirmDeletesDialogOpen: true});
+    },
+
+    /**
+     * Delete a record, after getting confirmation
+     * @returns {{confirmDeletesDialogOpen: boolean}}
+     */
+    deleteRecord() {
         const flux = this.getFlux();
-        var recId = record[this.props.primaryKeyName].value;
-        //this.props.nameForRecords
-        flux.actions.deleteRecord(this.props.appId, this.props.tblId, recId, this.props.nameForRecords);
+        flux.actions.deleteRecord(this.props.appId, this.props.tblId, this.state.selectedRecordId, this.props.nameForRecords);
+        this.setState({confirmDeletesDialogOpen: false});
+    },
+
+    cancelRecordDelete() {
+        this.setState({confirmDeletesDialogOpen: false});
+    },
+
+    /**
+     * render a QBModal
+     * @returns {XML}
+     */
+    getConfirmationDialog() {
+
+        let msg = Locales.getMessage('selection.deleteThisRecord');
+
+        return (
+            <QBModal
+                show={this.state.confirmDeletesDialogOpen}
+                primaryButtonName={Locales.getMessage('selection.delete')}
+                primaryButtonOnClick={this.deleteRecord}
+                leftButtonName={Locales.getMessage('selection.dontDelete')}
+                leftButtonOnClick={this.cancelRecordDelete}
+                bodyMessage={msg}
+                type="alert"/>);
     },
 
     /**
@@ -296,10 +333,14 @@ export let ReportContent = React.createClass({
         const flux = this.getFlux();
 
         let fields = {};
+        let colList = [];
         if (_.has(this.props, 'fields.fields.data')) {
             fields = this.props.fields.fields.data;
+            fields.forEach((field) => {
+                colList.push(field.id);
+            });
         }
-        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, addNewRecordAfterSave);
+        return flux.actions.saveNewRecord(this.props.appId, this.props.tblId, recordChanges, fields, colList, addNewRecordAfterSave);
     },
 
     /**
@@ -309,9 +350,13 @@ export let ReportContent = React.createClass({
      */
     handleRecordChange(recId, addNewRecordAfterSave = false) {
         const flux = this.getFlux();
+        let colList = [];
         if (_.has(this.props, 'fields.fields.data')) {
+            this.props.fields.fields.data.forEach((field) => {
+                colList.push(field.id);
+            });
             flux.actions.recordPendingEditsCommit(this.props.appId, this.props.tblId, recId.value);
-            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, addNewRecordAfterSave);
+            return flux.actions.saveRecord(this.props.appId, this.props.tblId, recId.value, this.props.pendEdits, this.props.fields.fields.data, colList, addNewRecordAfterSave);
         }
     },
 
@@ -772,6 +817,7 @@ export let ReportContent = React.createClass({
                                 onEditRecordStart={this.handleEditRecordStart}
                                 onEditRecordCancel={this.handleEditRecordCancel}
                                 onFieldChange={this.handleFieldChange}
+                                onGridReady={this.props.onGridReady}
                                 onRecordChange={this.handleRecordChange}
                                 onRecordAdd={this.handleRecordAdd}
                                 onRecordNewBlank={this.handleRecordNewBlank}
@@ -812,6 +858,7 @@ export let ReportContent = React.createClass({
                                             getPreviousReportPage={this.props.cardViewPagination.props.getPreviousReportPage}/>
                         }
                     </div>
+                    {this.getConfirmationDialog()}
                 </div>
             );
         }
@@ -831,7 +878,8 @@ ReportContent.contextTypes = {
 
 ReportContent.propTypes = {
     pendEdits: React.PropTypes.object.isRequired,
-    primaryKeyName: React.PropTypes.string.isRequired
+    primaryKeyName: React.PropTypes.string.isRequired,
+    onGridReady: React.PropTypes.func
 };
 
 export let ReportContentWithRouter = withRouter(ReportContent);
