@@ -82,12 +82,6 @@
 
             //verify validation
             formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
-                //verify clicking on alert button brings up the error message popup
-                formsPage.clickFormAlertBtn();
-                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
-                //verify clicking on alert again hides the error message popup
-                formsPage.clickFormAlertBtn();
-                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
                 //close dirty form
                 formsPage.closeSaveChangesDialogue();
                 done();
@@ -113,12 +107,6 @@
 
             //verify validation
             formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
-                //verify clicking on alert button brings up the error message popup
-                formsPage.clickFormAlertBtn();
-                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
-                //verify clicking on alert again hides the error message popup
-                formsPage.clickFormAlertBtn();
-                expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
                 //close dirty form
                 formsPage.closeSaveChangesDialogue();
                 done();
@@ -150,20 +138,20 @@
             }
 
             //Save the form
-            formsPage.clickFormSaveAndNextBtn();
-
-            //reload the report
-            RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
-            reportCardViewPage.waitForReportReady();
-
-            //select the record
-            reportCardViewPage.clickRecord(3);
-
-            //verify editing a record worked
-            for (var k = 0; k < fieldTypeClassNames.length; k++) {
-                reportCardViewPage.verifyFieldValuesInReportTableSmallBP(reportCardViewPage.formTable, fieldTypeClassNames[k]);
-            }
-            done();
+            formsPage.clickFormSaveAndNextBtn().then(function() {
+                //reload the report
+                RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
+                reportCardViewPage.waitForReportReady();
+            }).then(function() {
+                //select the record
+                reportCardViewPage.clickRecord(3);
+            }).then(function() {
+                //verify editing a record worked
+                for (var k = 0; k < fieldTypeClassNames.length; k++) {
+                    reportCardViewPage.verifyFieldValuesInReportTableSmallBP(reportCardViewPage.formTable, fieldTypeClassNames[k]);
+                }
+                done();
+            });
         });
 
     });

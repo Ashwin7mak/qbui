@@ -66,6 +66,14 @@
                     //verify validation
                     formsPage.verifyErrorMessages(expectedErrorMessages);
                 }).then(function() {
+                    //verify clicking on alert button brings up the error message popup
+                    formsPage.clickFormAlertBtn();
+                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
+                }).then(function() {
+                    //verify clicking on alert again hides the error message popup
+                    formsPage.clickFormAlertBtn();
+                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
+                }).then(function() {
                     //close forms
                     formsPage.clickFormCloseBtn();
                 }).then(function() {
@@ -99,19 +107,12 @@
                     formsPage.clickSaveBtnWithName('Save');
 
                     //verify field validations
-                    formsPage.verifyErrorMessages(expectedErrorMessages);
+                    formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
 
-                    //verify clicking on alert button brings up the error message popup
-                    formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
-
-                    //verify clicking on alert again hides the error message popup
-                    formsPage.clickFormAlertBtn();
-                    expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
-
-                    //close dirty form
-                    formsPage.closeSaveChangesDialogue();
-                    done();
+                        //close dirty form
+                        formsPage.closeSaveChangesDialogue();
+                        done();
+                    });
                 });
             });
         });

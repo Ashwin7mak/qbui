@@ -64,19 +64,12 @@
             formsPage.clickSaveBtnWithName('Save');
 
             //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages);
+            formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
 
-            //verify clicking on alert button brings up the error message popup
-            formsPage.clickFormAlertBtn();
-            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
-
-            //verify clicking on alert again hides the error message popup
-            formsPage.clickFormAlertBtn();
-            expect(formsPage.formErrorMessageVisisble.isPresent()).toBeFalsy();
-
-            //close dirty form
-            formsPage.closeSaveChangesDialogue();
-            done();
+                //close dirty form
+                formsPage.closeSaveChangesDialogue();
+                done();
+            });
         });
 
         it('Save and Next Button - Validate errors and correct the errors by editing new record', function(done) {
