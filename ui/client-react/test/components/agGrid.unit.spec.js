@@ -279,6 +279,22 @@ describe('AGGrid functions', () => {
         let selectAllCheckbox = gridElement[0].getElementsByClassName("selectAllCheckbox");
         expect(selectAllCheckbox.length).toEqual(1);
     });
+
+    it('test props.onGridReady is called when AGGrid is ready', () => {
+        const onGridReady = jasmine.createSpy();
+        AGGrid.__ResetDependency__('AgGridReact');
+        component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}
+                                                         records={fakeReportData_before.data.records}
+                                                         columns={fakeReportData_before.data.columns}
+                                                         flux={flux}
+                                                         showGrouping={true}
+                                                         loading={false}
+                                                         onGridReady={onGridReady}
+                                                         />);
+        expect(onGridReady).toHaveBeenCalled();
+        expect(onGridReady.calls.count()).toEqual(1);
+    });
+
     it('test selects all rows', () => {
         AGGrid.__ResetDependency__('AgGridReact');
         component = TestUtils.renderIntoDocument(<AGGrid actions={TableActionsMock}

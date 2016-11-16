@@ -52,12 +52,6 @@ let LeftNav = React.createClass({
                 </div>);
     },
 
-    getAppTables(appId) {
-        let app = _.find(this.props.apps, {id: appId});
-
-        return app ? app.tables : [];
-    },
-
     onSelectApp() {
         this.props.onToggleAppsList(false);
     },
@@ -71,7 +65,7 @@ let LeftNav = React.createClass({
         if (this.props.appsListOpen || !AppUtils.appExists(this.props.selectedAppId, this.props.apps)) {
             return <AppsList key={"apps"} {...this.props} onSelectApp={this.onSelectApp}  />;
         } else {
-            return <TablesList key={"tables"} expanded={this.props.expanded} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={this.getAppTables} {...this.props} />;
+            return <TablesList key={"tables"} expanded={this.props.expanded} showReports={(id)=>{this.props.onSelectReports(id);} } getAppTables={AppUtils.getAppTables} {...this.props} />;
         }
     },
 

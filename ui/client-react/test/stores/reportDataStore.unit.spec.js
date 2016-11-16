@@ -773,7 +773,7 @@ describe('Test ReportData Store', () => {
 
         let addReportRecordSuccessAction = {
             type: actions.ADD_RECORD_SUCCESS,
-            payload: {recId : 1234, record: [{fieldName:"loc", value:"test", display:"test"}]}
+            payload: {recId : 1234, record: {record: [{fieldName:"loc", value:"test", display:"test"}], fields: []}}
         };
 
         flux.dispatcher.dispatch(addReportRecordSuccessAction);
@@ -838,7 +838,7 @@ describe('Test ReportData Store', () => {
 
         let addReportRecordSuccessAction = {
             type: actions.ADD_RECORD_SUCCESS,
-            payload: {recId : 1234, record: [{fieldName:"loc", value:"test"}]}
+            payload: {recId : 1234, record: {record: [{fieldName:"loc", value:"test"}], fields: []}}
         };
 
         flux.dispatcher.dispatch(addReportRecordSuccessAction);
@@ -965,7 +965,7 @@ describe('Test ReportData Store', () => {
 
                 let addReportRecordSuccessAction = {
                     type: actions.ADD_RECORD_SUCCESS,
-                    payload: {recId: 1234, record: [{fieldName: "loc", value: "test"}]}
+                    payload: {recId: 1234, record: {record: [{fieldName: "loc", value: "test"}], fields: []}}
                 };
 
                 flux.dispatcher.dispatch(addReportRecordSuccessAction);
