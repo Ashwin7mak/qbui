@@ -33,9 +33,12 @@
                 // Gather the necessary values to make the requests via the browser
                 realmName = e2eBase.recordBase.apiBase.realm.subdomain;
                 realmId = e2eBase.recordBase.apiBase.realm.id;
-                RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
+                return RequestSessionTicketPage.get(e2eBase.getSessionTicketRequestEndpoint(realmName, realmId, e2eBase.ticketEndpoint));
+            }).then(function() {
                 // Load the requestAppsPage (shows a list of all the apps and tables in a realm)
-                RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+                return RequestAppsPage.get(e2eBase.getRequestAppsPageEndpoint(realmName));
+            }).then(function() {
                 return e2eBase.resizeBrowser(e2eConsts.SMALL_BP_WIDTH, e2eConsts.DEFAULT_HEIGHT).then(function() {
                     e2eBase.sleep(browser.params.smallSleep);
                     done();
@@ -57,13 +60,13 @@
 
         it('Validate all required fields on the form', function(done) {
             //click on add record button
-            reportCardViewPage.clickAddRecord();
-
-            //Save the form
-            formsPage.clickFormSaveBtn();
-
-            //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
+            reportCardViewPage.clickAddRecord().then(function() {
+                //Save the form
+                formsPage.clickFormSaveBtn();
+            }).then(function() {
+                //verify validation
+                formsPage.verifyErrorMessages(expectedErrorMessages);
+            }).then(function() {
                 //verify clicking on alert button brings up the error message popup
                 formsPage.clickFormAlertBtn();
                 expect(formsPage.formErrorMessageVisisble.isPresent()).toBeTruthy();
@@ -79,18 +82,19 @@
         it('Save Btn - Validate Add form', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
             //click on add record button
-            reportCardViewPage.clickAddRecord();
+            reportCardViewPage.clickAddRecord().then(function() {
 
-            //get the fields from the table and generate a record
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
-            }
-
-            //Save the form
-            formsPage.clickFormSaveBtn();
-
-            //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
+                //get the fields from the table and generate a record
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+                }
+            }).then(function() {
+                //Save the form
+                formsPage.clickFormSaveBtn();
+            }).then(function() {
+                //verify validation
+                formsPage.verifyErrorMessages(expectedErrorMessages);
+            }).then(function() {
                 //close dirty form
                 formsPage.closeSaveChangesDialogue();
             }).then(function() {
@@ -102,21 +106,21 @@
         it('Save Btn -Validate Edit form', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
             //Select record
-            reportCardViewPage.clickRecord(1);
-
-            //Click edit button
-            reportCardViewPage.clickEditRecord();
-
-            //get the fields from the table and generate a record
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
-            }
-
-            //Save the form
-            formsPage.clickFormSaveBtn();
-
-            //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages).then(function() {
+            reportCardViewPage.clickRecord(1).then(function() {
+                //Click edit button
+                reportCardViewPage.clickEditRecord();
+            }).then(function() {
+                //get the fields from the table and generate a record
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+                }
+            }).then(function() {
+                //Save the form
+                formsPage.clickFormSaveBtn();
+            }).then(function() {
+                //verify validation
+                formsPage.verifyErrorMessages(expectedErrorMessages);
+            }).then(function() {
                 //close dirty form
                 formsPage.closeSaveChangesDialogue();
             }).then(function() {
@@ -127,29 +131,30 @@
         it('Save And Next - Validate edit form and Edit a record successfully after errors', function(done) {
             var fieldTypeClassNames = ['textField', 'numericField'];
             //Select record 1
-            reportCardViewPage.clickRecord(3);
-            reportCardViewPage.clickEditRecord();
-
-            //get the fields from the table and generate a record
-            for (var i = 0; i < fieldTypeClassNames.length; i++) {
-                reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
-            }
-
-            //Save the form
-            formsPage.clickSaveBtnWithName('Save & Next');
-
-            //verify validation
-            formsPage.verifyErrorMessages(expectedErrorMessages);
-            // Needed to get around stale element error
-            e2eBase.sleep(browser.params.smallSleep);
-
-            //correct the errors and add the record
-            for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                reportCardViewPage.enterFormValues(fieldTypeClassNames[j]);
-            }
-
-            //Save the form
-            formsPage.clickFormSaveAndNextBtn().then(function() {
+            reportCardViewPage.clickRecord(3).then(function() {
+                reportCardViewPage.clickEditRecord();
+            }).then(function() {
+                //get the fields from the table and generate a record
+                for (var i = 0; i < fieldTypeClassNames.length; i++) {
+                    reportCardViewPage.enterInvalidFormValues(fieldTypeClassNames[i]);
+                }
+            }).then(function() {
+                //Save the form
+                formsPage.clickSaveBtnWithName('Save & Next');
+            }).then(function() {
+                //verify validation
+                formsPage.verifyErrorMessages(expectedErrorMessages);
+                // Needed to get around stale element error
+                e2eBase.sleep(browser.params.smallSleep);
+            }).then(function() {
+                //correct the errors and add the record
+                for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                    reportCardViewPage.enterFormValues(fieldTypeClassNames[j]);
+                }
+            }).then(function() {
+                //Save the form
+                formsPage.clickFormSaveAndNextBtn();
+            }).then(function() {
                 //reload the report
                 RequestAppsPage.get(e2eBase.getRequestReportsPageEndpoint(realmName, app.id, app.tables[e2eConsts.TABLE1].id, "1"));
                 reportCardViewPage.waitForReportReady();
