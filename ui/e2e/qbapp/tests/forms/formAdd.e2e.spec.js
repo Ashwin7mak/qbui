@@ -38,25 +38,40 @@
 
 
         it('Add a record from the form', function(done) {
+            var origRecordCount;
             var fieldTypeClassNames = ['textField', 'numericField', 'dateCell', 'timeCell', 'checkbox'];
 
+            // Load the List All report
             e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
-            reportContentPage.waitForReportContent();
+            reportContentPage.waitForReportContent().then(function() {
+                // Count the number of records before adding
+                reportContentPage.agGridRecordElList.then(function(records) {
+                    origRecordCount = records.length;
+                });
+            });
 
-            //click on add record button
+            // Click on add record button
             reportServicePage.clickAddRecordOnStage();
 
-            //get the fields from the table and generate a record
+            // Get the fields from the from and create a new record
             for (var i = 0; i < fieldTypeClassNames.length; i++) {
                 formsPage.enterFormValues(fieldTypeClassNames[i]);
             }
 
-            //Save the form
+            // Save the form
             formsPage.clickFormSaveBtn();
+
+            // Reload the report
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent().then(function() {
-                //Verify record is added on top row in a table
+                // Check the record count
+                reportContentPage.agGridRecordElList.then(function(records) {
+                    expect(records.length).toBe(origRecordCount + 1);
+                });
+            }).then(function() {
+                // Verify new record is now the last row in a table
                 for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(0, fieldTypeClassNames[j]);
+                    formsPage.verifyFieldValuesInReportTable(7, fieldTypeClassNames[j]);
                 }
             }).then(function() {
                 done();
