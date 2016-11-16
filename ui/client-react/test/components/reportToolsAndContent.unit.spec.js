@@ -84,7 +84,7 @@ describe('ReportToolsAndContent functions', () => {
         expect(TestUtils.scryRenderedComponentsWithType(component, ReportContentMock).length).toEqual(0);
     });
 
-    fit('test to check if page fetches records on successful delete', () => {
+    it('test to check if page fetches records on successful delete', () => {
         let MockParent = React.createClass({
             getInitialState() {
                 return {
