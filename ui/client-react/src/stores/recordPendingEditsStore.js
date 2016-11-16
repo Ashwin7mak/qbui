@@ -112,7 +112,8 @@ let RecordPendingEditsStore = Fluxxor.createStore({
             );
         }
 
-        // Default to true, which was the original behavior, if required objects are not provided primarily for testing purposes.
+        // Assume there was a change if not all required properties are present.
+        // This is primarily for testing purposes.
         return true;
     },
 

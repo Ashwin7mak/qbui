@@ -451,13 +451,6 @@ describe('Test recordPendingEdits Store ', () => {
                 oldDisplayValue: originalDisplayValue
             },
             {
-                description: 'does not add pendingEdits if there are no changes to the underlying value or the display value',
-                newValue: originalValue,
-                newDisplayValue: originalDisplayValue,
-                oldValue: originalValue,
-                oldDisplayValue: originalDisplayValue
-            },
-            {
                 description: 'does not add pendingEdits if the new value is the same as the original one',
                 newValue: originalValue,
                 newDisplayValue: originalDisplayValue,
