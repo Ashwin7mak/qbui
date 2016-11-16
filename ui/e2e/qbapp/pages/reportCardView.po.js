@@ -186,7 +186,6 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        //TODO Enable below when the bug that enters date into date field is fixed
                         //return elm.element(by.className('date')).click().then(function() {
                         //    return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
                         //});
@@ -284,7 +283,7 @@
         this.waitForReportReady = function() {
             var self = this;
             return e2ePageBase.waitForElement(self.reportRecordsCount).then(function() {
-                e2eBase.sleep(browser.params.smallSleep);
+                return e2eBase.sleep(browser.params.smallSleep);
             });
         };
 

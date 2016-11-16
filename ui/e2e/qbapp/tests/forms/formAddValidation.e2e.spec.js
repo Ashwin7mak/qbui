@@ -139,10 +139,15 @@
 
             //Save the form by clicking on 'Save and add another' btn
             formsPage.clickFormSaveAndAddAnotherBtn();
+
+            //reload the report
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
             reportContentPage.waitForReportContent().then(function() {
-                for (var j = 0; j < validFieldClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(0, validFieldClassNames[j]);
-                }
+                reportServicePage.agGridRecordElList.then(function(records) {
+                    for (var j = 0; j < validFieldClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(records.length - 1, validFieldClassNames[j]);
+                    }
+                });
             }).then(function() {
                 done();
             });

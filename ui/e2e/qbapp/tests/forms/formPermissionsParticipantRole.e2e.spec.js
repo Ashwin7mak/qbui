@@ -136,13 +136,18 @@
 
                 //Save the form
                 formsPage.clickFormSaveBtn();
-                reportContentPO.waitForReportContent();
 
-                //Verify record added
-                reportServicePage.agGridRecordElList.then(function(records) {
-                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                        formsPage.verifyFieldValuesInReportTable(0, fieldTypeClassNames[j]);
-                    }
+                //reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
+                reportContentPO.waitForReportContent().then(function() {
+
+                    //Verify record added
+                    reportServicePage.agGridRecordElList.then(function(records) {
+                        for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                            formsPage.verifyFieldValuesInReportTable(records.length - 1, fieldTypeClassNames[j]);
+                        }
+                    });
+                }).then(function() {
                     done();
                 });
             });
@@ -168,13 +173,18 @@
 
                 //Save the form
                 formsPage.clickFormSaveBtn();
-                reportContentPO.waitForReportContent();
 
-                //Verify edited record
-                for (var j = 0; j < fieldTypeClassNames.length; j++) {
-                    formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
-                }
-                done();
+                //reload the report
+                e2eBase.reportService.loadReportByIdInBrowser(realmName, appId, tableId, reportId);
+                reportContentPO.waitForReportContent().then(function() {
+
+                    //Verify edited record
+                    for (var j = 0; j < fieldTypeClassNames.length; j++) {
+                        formsPage.verifyFieldValuesInReportTable(2, fieldTypeClassNames[j]);
+                    }
+                }).then(function() {
+                    done();
+                });
             });
 
         });

@@ -97,12 +97,17 @@
 
             //Save the form by clicking on 'Save and Next' btn
             formsPage.clickFormSaveAndNextBtn();
-            reportContentPage.waitForReportContent();
 
-            for (var k = 0; k < fieldTypeClassNames.length; k++) {
-                formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[k]);
-            }
-            done();
+            //reload the report
+            e2eBase.reportService.loadReportByIdInBrowser(realmName, app.id, app.tables[e2eConsts.TABLE1].id, 1);
+            reportContentPage.waitForReportContent().then(function() {
+
+                for (var k = 0; k < fieldTypeClassNames.length; k++) {
+                    formsPage.verifyFieldValuesInReportTable(3, fieldTypeClassNames[k]);
+                }
+            }).then(function() {
+                done();
+            });
         });
 
     });

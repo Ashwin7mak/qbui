@@ -32,7 +32,7 @@
         //save button
         this.formSaveBtn = this.formTrowserFooter.element(by.className('rightIcons')).all(by.tagName('button')).first();
         //alert button
-        this.formErrorMsgAlertBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('saveAlertButton'));
+        this.formErrorMsgAlertBtn = this.formTrowserFooter.element(by.className('rightIcons')).element(by.className('iconTableUISturdy-alert'));
 
         this.formBodyEl = element(by.tagName('body'));
         this.recordContainerEl = element(by.className('recordContainer')).all(by.className('loadedContent')).first();
@@ -121,6 +121,9 @@
             var self = this;
             return reportServicePage.waitForElementToBeClickable(self.formErrorMsgAlertBtn).then(function() {
                 return self.formErrorMsgAlertBtn.click();
+            }).then(function() {
+                //need this for message content to come up and slide down
+                return e2eBase.sleep(browser.params.smallSleep);
             });
         };
 
@@ -152,7 +155,6 @@
                     return self.formTable.all(by.className(fieldLabel)).filter(function(elm) {
                         return elm;
                     }).map(function(elm) {
-                        //TODO typing in date is failing adding a record
                         return elm.element(by.className('date')).click().then(function() {
                             return elm.element(by.className('date')).element(by.tagName('input')).clear().sendKeys(sDate);
                         });
