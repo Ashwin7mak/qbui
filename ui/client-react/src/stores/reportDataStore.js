@@ -613,7 +613,6 @@ let ReportDataStore = Fluxxor.createStore({
     },
 
     onLoadRecords(payload) {
-        console.log('onLoadRecords');
         this.isRecordDeleted = false;
         this.loading = true;
         this.editingIndex = undefined;
