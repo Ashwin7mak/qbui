@@ -126,7 +126,7 @@ const ReportToolsAndContent = React.createClass({
 
     getPageActions(maxButtonsBeforeMenu) {
         const actions = [
-            {msg: 'pageActions.addRecord', icon:'add'},
+            {msg: 'pageActions.addRecord', icon:'add', onClick: this.editNewRecord},
             {msg: 'pageActions.favorite', icon:'star', disabled: true},
             {msg: 'pageActions.print', icon:'print', disabled: true},
         ];

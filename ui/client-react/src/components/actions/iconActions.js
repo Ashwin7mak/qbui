@@ -107,10 +107,10 @@ let IconActions = React.createClass({
             const tooltip = (<Tooltip id="more"><I18nMessage message="selection.more"/></Tooltip>);
 
             dropdownTrigger = <OverlayTrigger bsRole="toggle" key="more" placement="bottom" overlay={tooltip}>
-                <Button ref="dropDownMenu" tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>
+                <button ref="dropDownMenu" tabIndex="0"  className={"btn dropdownToggle iconActionButton"}><QBicon icon="fries"/> </button>
             </OverlayTrigger>;
         } else {
-            dropdownTrigger = <Button bsRole="toggle" tabIndex="0"  className={"dropdownToggle iconActionButton"}><QBicon icon="fries"/> </Button>;
+            dropdownTrigger = <button bsRole="toggle" tabIndex="0"  className={"btn dropdownToggle iconActionButton"}><QBicon icon="fries"/> </button>;
         }
 
         return (

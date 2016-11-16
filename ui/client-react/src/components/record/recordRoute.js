@@ -205,7 +205,7 @@ export let RecordRoute = React.createClass({
             {msg: 'pageActions.edit', icon:'edit', onClick: this.openRecordForEdit},
             {msg: 'pageActions.email', icon:'mail'},
             {msg: 'unimplemented.print', icon:'print', disabled:true},
-            {msg: 'pageActions.delete', icon:'delete'}];
+            {msg: 'pageActions.delete', icon:'delete', disabled:true}];
 
         return (<IconActions className="pageActions" actions={actions} {...this.props}/>);
     },
